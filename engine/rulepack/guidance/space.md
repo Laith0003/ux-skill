@@ -19,11 +19,15 @@ Space sets the distances inside and between things: the padding of a control, th
 - `space.control.gap`: between adjacent controls in a row, such as chips, toggles or a pair of buttons, and between an icon and its label inside a control; never below 8px.
 - `space.control.padding-inline`: inside a control, between its edge and its content along the line.
 - `space.control.padding-block`: inside a control, between its edge and its content across the line.
-- `space.text.gap`: between blocks of text in one flow, such as a label and its field, a heading and its paragraph, or two paragraphs.
+- `space.text.gap`: between blocks of text in one flow, such as a heading and its paragraph, or two paragraphs.
 - `space.list.gap`: between stacked rows of a list, a table or a menu.
 - `space.group.gap`: between groups of related content inside one region, such as sections of a form.
 - `space.card.padding`: inside a container such as a card, a panel, a banner or a dialog.
-- `space.region.gap`: between major regions of a page, such as a hero and the content after it.
+- `space.region.gap`: between major regions of a page at the widest tier; per breakpoint use layout.region-gap.
+- `space.field.label-gap`: between a field's label and the field.
+- `space.field.message-gap`: between a field and its helper text or error message.
+- `space.table.cell-padding-inline`: inside a table cell, along the line.
+- `space.table.cell-padding-block`: inside a table cell, across the line.
 
 ## Choosing
 
@@ -31,11 +35,14 @@ Space sets the distances inside and between things: the padding of a control, th
 |---|---|
 | Buttons, chips or icons side by side | space.control.gap |
 | Inside a button or a field | space.control.padding-inline and space.control.padding-block |
-| A label above its field, a heading above its text | space.text.gap |
+| A label above its field | space.field.label-gap |
+| A field above its helper text or error message | space.field.message-gap |
+| A heading above its text | space.text.gap |
+| Inside a table cell | space.table.cell-padding-inline and space.table.cell-padding-block |
 | Rows of a list or a table | space.list.gap |
 | Sections of a form, groups of settings | space.group.gap |
 | Inside a card, panel, banner or dialog | space.card.padding |
-| Between the hero and the content, the content and the footer | space.region.gap |
+| Between the hero and the content, the content and the footer | layout.region-gap for the tier, space.region.gap at the widest |
 | Page margins and grid gutters | layout.margin-inline and layout.gutter for the tier |
 
 When two neighbors could take either of two roles, take the one for the larger relationship: a heading that opens a group uses the group gap above it and the text gap below it.

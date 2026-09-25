@@ -1,5 +1,6 @@
 """Layout foundation: breakpoints, grid columns and gutters, page margins,
-container and reading widths, and the minimum target size.
+the gap between regions and the padding of the header, hero and footer per
+breakpoint, container and reading widths, and the minimum target size.
 
 Gutters and margins alias the spacing scale (space.<n>), so layout and
 spacing move together; the density axis places them and compact takes one
@@ -24,6 +25,13 @@ COLUMNS = {"phone": 4, "tablet": 8, "laptop": 12, "desktop": 12}
 # tier -> (space units when the density axis is 0, when it is 1)
 GUTTER = {"phone": (4, 3), "tablet": (6, 4), "laptop": (8, 5), "desktop": (8, 6)}
 MARGIN = {"phone": (5, 4), "tablet": (8, 6), "laptop": (12, 8), "desktop": (16, 10)}
+# Page regions per tier, in space units: the gap between regions and the
+# block padding of the hero grow with the viewport, so a phone never shows
+# a screen of empty space.
+REGION_GAP = {"phone": (12, 8), "tablet": (16, 12), "laptop": (24, 16), "desktop": (32, 20)}
+HERO_PADDING = {"phone": (16, 10), "tablet": (20, 12), "laptop": (24, 16), "desktop": (32, 20)}
+# Header and footer block padding, the same at every width.
+HEADER_PADDING, FOOTER_PADDING = (4, 3), (16, 10)
 COMPACT_FLOOR = 2  # space units, 8px
 CONTAINERS = (1120, 1280, 1440)
 MEASURE_REM = {"text": 38, "form": 32}
@@ -61,12 +69,18 @@ def generate_layout(axes: AxisValues) -> Generated:
     for tier in TIERS:
         ts.add(Token(f"layout.columns.{tier}", "number",
                      "{layout.column-count.%d}" % COLUMNS[tier], layer="semantic"))
-    for group, table in (("gutter", GUTTER), ("margin-inline", MARGIN)):
+    for group, table in (("gutter", GUTTER), ("margin-inline", MARGIN),
+                         ("region-gap", REGION_GAP), ("hero.padding-block", HERO_PADDING)):
         for tier in TIERS:
             comfortable, compact = _units(table[tier], d)
             modes = {"density:compact": "{space.%d}" % compact} if compact != comfortable else {}
             ts.add(Token(f"layout.{group}.{tier}", "dimension", "{space.%d}" % comfortable,
                          modes=modes, layer="semantic"))
+    for name, pair in (("header", HEADER_PADDING), ("footer", FOOTER_PADDING)):
+        comfortable, compact = _units(pair, d)
+        modes = {"density:compact": "{space.%d}" % compact} if compact != comfortable else {}
+        ts.add(Token(f"layout.{name}.padding-block", "dimension", "{space.%d}" % comfortable,
+                     modes=modes, layer="semantic"))
     ts.add(Token("layout.container.max", "dimension", "{layout.width.%d}" % container_px(d),
                  layer="semantic"))
     for name, rem in MEASURE_REM.items():
@@ -85,6 +99,9 @@ ROLE_TYPES: Dict[str, str] = {
     **{f"layout.columns.{t}": "number" for t in TIERS},
     **{f"layout.gutter.{t}": "dimension" for t in TIERS},
     **{f"layout.margin-inline.{t}": "dimension" for t in TIERS},
+    **{f"layout.region-gap.{t}": "dimension" for t in TIERS},
+    **{f"layout.hero.padding-block.{t}": "dimension" for t in TIERS},
+    "layout.header.padding-block": "dimension", "layout.footer.padding-block": "dimension",
     "layout.container.max": "dimension",
     **{f"layout.measure.{name}": "dimension" for name in MEASURE_REM},
     "layout.target.min": "dimension",
@@ -186,6 +203,20 @@ def _measure(ts: TokenSet, mode: str) -> List[str]:
     return []
 
 
+def _regions(ts: TokenSet, mode: str) -> List[str]:
+    """The region gap and the hero padding never shrink as the viewport
+    grows."""
+    out = []
+    for group in ("region-gap", "hero.padding-block"):
+        present = [f"layout.{group}.{t}" for t in TIERS if _typed(ts, f"layout.{group}.{t}")]
+        for a, b in zip(present, present[1:]):
+            va, vb, w = _px(ts, a, mode), _px(ts, b, mode), _where(mode)
+            if vb < va and not _repeat(ts, (a, b), mode, _px):
+                out.append(f"{b} ({vb:g}px{w}) is smaller than {a} ({va:g}px{w}); a wider "
+                           "viewport never tightens the page, so point it at a larger space step")
+    return out
+
+
 # Every check reads the density axis, so a compact override is checked too.
 CHECKS: Tuple[Check, ...] = (
     Check("layout-breakpoints", "system", _breakpoints, axes=("density",)),
@@ -193,6 +224,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("target-size-minimum", "2.5.8", _target_minimum, axes=("density",)),
     Check("target-size-comfortable", "2.5.5", _target_comfortable, axes=("density",)),
     Check("text-measure", "1.4.8", _measure, axes=("density",)),
+    Check("layout-regions", "system", _regions, axes=("density",)),
 )
 
 

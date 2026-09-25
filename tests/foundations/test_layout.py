@@ -254,3 +254,28 @@ def test_without_widths_the_target_fix_falls_back_to_a_space_step():
         "layout.target.min (density:comfortable) is 40px; WCAG 2.5.5 (AAA) asks for targets of "
         "at least 44 by 44 CSS px, and we apply it at comfortable density, so point it at "
         "space.12 (48px) or a larger step"]
+
+
+@pytest.mark.parametrize("density, gaps, hero", [
+    (0.0, [48, 64, 96, 128], [64, 80, 96, 128]),
+    (0.5, [40, 64, 80, 96], [48, 64, 80, 96]),
+    (1.0, [32, 48, 64, 80], [40, 48, 64, 80]),
+])
+def test_region_spacing_grows_with_the_viewport(density, gaps, hero):
+    ts = build_system(AxisValues(0.5, 0.5, density, 0.5, 0.5, 0.5, 0.5), "#3366FF").tokens
+    tiers = ("phone", "tablet", "laptop", "desktop")
+    assert [ts.resolve(f"layout.region-gap.{t}")["value"] for t in tiers] == gaps
+    assert [ts.resolve(f"layout.hero.padding-block.{t}")["value"] for t in tiers] == hero
+    for t in tiers:
+        assert ts.resolve(f"layout.region-gap.{t}", "density:compact")["value"] <= gaps[
+            tiers.index(t)]
+
+
+def test_a_region_gap_that_shrinks_with_the_viewport_fails():
+    from engine.foundations.layout import CHECKS
+    ts = build_system(AxisValues(*[0.5] * 7), "#3366FF").tokens
+    ts.get("layout.region-gap.desktop").value = "{space.4}"
+    check = next(c for c in CHECKS if c.id == "layout-regions")
+    assert check.run(ts, "") == [
+        "layout.region-gap.desktop (16px) is smaller than layout.region-gap.laptop (80px); a "
+        "wider viewport never tightens the page, so point it at a larger space step"]

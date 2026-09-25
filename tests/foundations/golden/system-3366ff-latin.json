@@ -2694,6 +2694,58 @@
         }
       }
     },
+    "field": {
+      "label-gap": {
+        "$type": "dimension",
+        "$value": "{space.2}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.1}"
+            }
+          }
+        }
+      },
+      "message-gap": {
+        "$type": "dimension",
+        "$value": "{space.2}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.1}"
+            }
+          }
+        }
+      }
+    },
+    "table": {
+      "cell-padding-inline": {
+        "$type": "dimension",
+        "$value": "{space.4}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.3}"
+            }
+          }
+        }
+      },
+      "cell-padding-block": {
+        "$type": "dimension",
+        "$value": "{space.3}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.2}"
+            }
+          }
+        }
+      }
+    },
     "text": {
       "gap": {
         "$type": "dimension",
@@ -4694,6 +4746,136 @@
         }
       },
       "desktop": {
+        "$type": "dimension",
+        "$value": "{space.12}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.10}"
+            }
+          }
+        }
+      }
+    },
+    "region-gap": {
+      "phone": {
+        "$type": "dimension",
+        "$value": "{space.10}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.8}"
+            }
+          }
+        }
+      },
+      "tablet": {
+        "$type": "dimension",
+        "$value": "{space.16}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.12}"
+            }
+          }
+        }
+      },
+      "laptop": {
+        "$type": "dimension",
+        "$value": "{space.20}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.16}"
+            }
+          }
+        }
+      },
+      "desktop": {
+        "$type": "dimension",
+        "$value": "{space.24}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.20}"
+            }
+          }
+        }
+      }
+    },
+    "hero": {
+      "padding-block": {
+        "phone": {
+          "$type": "dimension",
+          "$value": "{space.12}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "density:compact": "{space.10}"
+              }
+            }
+          }
+        },
+        "tablet": {
+          "$type": "dimension",
+          "$value": "{space.16}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "density:compact": "{space.12}"
+              }
+            }
+          }
+        },
+        "laptop": {
+          "$type": "dimension",
+          "$value": "{space.20}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "density:compact": "{space.16}"
+              }
+            }
+          }
+        },
+        "desktop": {
+          "$type": "dimension",
+          "$value": "{space.24}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "density:compact": "{space.20}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "header": {
+      "padding-block": {
+        "$type": "dimension",
+        "$value": "{space.4}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.3}"
+            }
+          }
+        }
+      }
+    },
+    "footer": {
+      "padding-block": {
         "$type": "dimension",
         "$value": "{space.12}",
         "$extensions": {

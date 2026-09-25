@@ -32,7 +32,9 @@ def test_primitives_are_multiples_of_the_base_unit():
 def test_mid_density_values():
     ts = generate_space(axes(0.5)).tokens
     want = {"space.control.gap": (12, 8), "space.control.padding-inline": (16, 12),
-            "space.control.padding-block": (12, 8), "space.text.gap": (12, 8),
+            "space.control.padding-block": (12, 8), "space.field.label-gap": (8, 4),
+            "space.field.message-gap": (8, 4), "space.table.cell-padding-inline": (16, 12),
+            "space.table.cell-padding-block": (12, 8), "space.text.gap": (12, 8),
             "space.list.gap": (12, 8), "space.group.gap": (24, 20),
             "space.card.padding": (24, 20), "space.region.gap": (96, 80)}
     got = {r: (px(ts, r, "density:comfortable"), px(ts, r, "density:compact")) for r in ROLES}

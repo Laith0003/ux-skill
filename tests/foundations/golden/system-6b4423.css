@@ -172,6 +172,10 @@
   --space-control-gap: var(--space-2);
   --space-control-padding-inline: var(--space-3);
   --space-control-padding-block: var(--space-2);
+  --space-field-label-gap: var(--space-1);
+  --space-field-message-gap: var(--space-1);
+  --space-table-cell-padding-inline: var(--space-3);
+  --space-table-cell-padding-block: var(--space-2);
   --space-text-gap: var(--space-2);
   --space-list-gap: var(--space-2);
   --space-group-gap: var(--space-4);
@@ -302,6 +306,16 @@
   --layout-margin-inline-tablet: var(--space-6);
   --layout-margin-inline-laptop: var(--space-8);
   --layout-margin-inline-desktop: var(--space-10);
+  --layout-region-gap-phone: var(--space-8);
+  --layout-region-gap-tablet: var(--space-12);
+  --layout-region-gap-laptop: var(--space-16);
+  --layout-region-gap-desktop: var(--space-20);
+  --layout-hero-padding-block-phone: var(--space-10);
+  --layout-hero-padding-block-tablet: var(--space-12);
+  --layout-hero-padding-block-laptop: var(--space-16);
+  --layout-hero-padding-block-desktop: var(--space-20);
+  --layout-header-padding-block: var(--space-3);
+  --layout-footer-padding-block: var(--space-10);
   --layout-container-max: var(--layout-width-1440);
   --layout-measure-text: var(--layout-rem-38);
   --layout-measure-form: var(--layout-rem-32);
@@ -749,6 +763,8 @@
 :root[data-density="compact"] {
   --space-control-padding-inline: var(--space-2);
   --space-control-padding-block: var(--space-1);
+  --space-table-cell-padding-inline: var(--space-2);
+  --space-table-cell-padding-block: var(--space-1);
   --space-text-gap: var(--space-1);
   --space-list-gap: var(--space-1);
   --space-group-gap: var(--space-3);
@@ -762,6 +778,16 @@
   --layout-margin-inline-tablet: var(--space-5);
   --layout-margin-inline-laptop: var(--space-6);
   --layout-margin-inline-desktop: var(--space-8);
+  --layout-region-gap-phone: var(--space-6);
+  --layout-region-gap-tablet: var(--space-10);
+  --layout-region-gap-laptop: var(--space-12);
+  --layout-region-gap-desktop: var(--space-16);
+  --layout-hero-padding-block-phone: var(--space-8);
+  --layout-hero-padding-block-tablet: var(--space-10);
+  --layout-hero-padding-block-laptop: var(--space-12);
+  --layout-hero-padding-block-desktop: var(--space-16);
+  --layout-header-padding-block: var(--space-2);
+  --layout-footer-padding-block: var(--space-8);
   --layout-target-min: var(--layout-width-32);
 }
 

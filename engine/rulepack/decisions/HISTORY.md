@@ -19,6 +19,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Elevation is four shadows and a stacking order; surfaces are color](elevation-roles.md)
 - [Motion has seven interaction roles and reduced motion is a mode](motion-roles.md)
 - [Layout tokens cover the page grid; regions and panes belong to page patterns](layout-scope.md)
+- [Layout tokens cover the page grid and its regions; panes belong to page patterns](page-regions.md)
 - [Nine text styles as composites, faces chosen per script](type-roles.md)
 - [Twelve text styles in three faces, display, text and mono](type-three-faces.md)
 - [The axes choose whether the brand fills the action, marks words or draws edges](brand-roles.md)
@@ -27,6 +28,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Code blocks and tables have their own surfaces](code-and-table-colors.md)
 - [The axes choose each face from a catalog by distance, never by keyword](face-choice.md)
 - [Arabic is set larger by a ratio the two faces' metrics give](arabic-proportional.md)
+- [Fields and tables have their own inner spacing](field-and-table-spacing.md)
 
 ## Contrast and the gate
 

@@ -1,10 +1,10 @@
 ---
 id: layout-scope
 title: Layout tokens cover the page grid; regions and panes belong to page patterns
-status: active
+status: superseded
 areas: [layout]
 supersedes: null
-superseded_by: null
+superseded_by: page-regions
 ---
 
 # Layout tokens cover the page grid; regions and panes belong to page patterns

@@ -2,7 +2,7 @@
 
 ## Summary
 
-Layout sets the page grid: three breakpoints that start four tiers (phone, tablet, laptop, desktop), columns, gutters and inline margins per tier, the widest container, two reading measures and the minimum target size. Gutters and margins alias the spacing scale, so layout and spacing move together. Regions and panes are page patterns built on these tokens, not tokens of their own (decisions/layout-scope.md).
+Layout sets the page grid and the page regions: three breakpoints that start four tiers (phone, tablet, laptop, desktop), columns, gutters, inline margins, the gap between regions and the hero's block padding per tier, the header and footer padding, the widest container, two reading measures and the minimum target size. Gutters, margins and region spacing alias the spacing scale, so layout and spacing move together. Panes and how they collapse are page patterns built on these tokens, not tokens of their own (decisions/page-regions.md).
 
 ## Principles
 
@@ -23,6 +23,10 @@ Layout sets the page grid: three breakpoints that start four tiers (phone, table
 - `layout.columns.<tier>`: the number of grid columns in the <tier> tier.
 - `layout.gutter.<tier>`: the gap between grid columns in the <tier> tier.
 - `layout.margin-inline.<tier>`: the space between the viewport edge and the grid in the <tier> tier.
+- `layout.region-gap.<tier>`: the gap between major regions of a page, such as sections of a landing page, in the <tier> tier.
+- `layout.hero.padding-block.<tier>`: the space above and below the content of a hero in the <tier> tier.
+- `layout.header.padding-block`: the space above and below the content of the page header.
+- `layout.footer.padding-block`: the space above and below the content of the page footer.
 - `layout.container.max`: the widest the page content grows.
 - `layout.measure.text`: the widest a block of running text grows, about 80 characters.
 - `layout.measure.form`: the widest a form or a dialog grows.
@@ -68,6 +72,7 @@ Audits the grid tokens in both densities: breakpoint order, column order, target
 - `target-size-minimum`: the minimum target is at least 24px in every density (WCAG 2.5.8).
 - `target-size-comfortable`: the minimum target is at least 44px at comfortable density (WCAG 2.5.5, AAA, applied at comfortable density by our choice).
 - `text-measure`: the reading measure is 40rem or less, our approximation of 80 characters (WCAG 1.4.8, AAA).
+- `layout-regions`: the region gap and the hero padding never shrink as the viewport grows.
 
 ## Beyond the gate
 
