@@ -1,11 +1,11 @@
 {
   "_meta": {
     "version": "4.0.0",
-    "entries": 8,
+    "entries": 10,
     "last_updated": "2026-09-25",
     "source": "ux-skill 4.0 page-level section sequences",
     "schema_version": "2.0",
-    "purpose": "Whole-page templates the picker chooses from a 4.0 brief (engine.page_sequence.select_for_brief): an explicit page_sequence first, then stage, then the industry, product_type and project_type fields and the brief's phrases. A single call-to-action verb never keys a sequence. A section with a proof kind renders only with the client's real proof of that kind; the picker drops it with a stated reason when the brief's proof list lacks it. mechanism_needs names what each conversion mechanism needs (a proof kind or a contact route)."
+    "purpose": "Whole-page templates the picker chooses from a 4.0 brief (engine.page_sequence.select_for_brief), in tiers: an explicit page_sequence, then stage, then product_type, then project_type, then industry, then the brief's own phrases, and general-landing when nothing points elsewhere; the picker never returns nothing. industries and product_types hold only values the look engine reads; product_type is the one vocabulary the engine and the picker share. A call-to-action verb never keys a sequence. A section with a proof kind renders only with the client's real proof of that kind. mechanism_needs names what each conversion mechanism needs (a proof kind or a contact route); without_phone is a section's text when the client has no phone."
   },
   "entries": [
     {
@@ -18,7 +18,7 @@
         "local service", "commercial service", "consultation", "free estimate", "coverage area"
       ],
       "section_sequence": [
-        {"section": "Hero (with inline quote/contact form)", "purpose": "Capture the lead at first paint. Text left (headline + one-line value + phone affordance), inline quote or contact form right. The form is the wow moment and the conversion path -- never buried below."},
+        {"section": "Hero (with inline quote/contact form)", "purpose": "Capture the lead at first paint. Text left (headline + one-line value + phone affordance), inline quote or contact form right. The form is the wow moment and the conversion path -- never buried below.", "without_phone": "Capture the lead at first paint. Text left (headline + one-line value), inline quote or contact form right. The form is the wow moment and the conversion path, never buried below."},
         {"section": "Proof/stats bar", "purpose": "A thin band of 3-5 real, organic numbers (jobs completed, years operating, response time, coverage radius) directly under the hero -- instant credibility before the scroll.", "proof": "stats"},
         {"section": "Value cards", "purpose": "3-5 cards naming the concrete reasons to choose this service (speed, price transparency, licensing, same-day). Each card has a tight heading and one sentence."},
         {"section": "Category pills", "purpose": "Every service category / sector the business covers, rendered as a scannable row of pills. Map EVERY sector from the source into a pill -- do not trim to a tidy few."},
@@ -26,8 +26,8 @@
         {"section": "Split feature rows", "purpose": "2-column zig-zag rows that expand the marquee differentiators with depth -- alternating media/text, each row earning its own visual. Not a 3-equal-card grid."},
         {"section": "Coverage", "purpose": "Where the service operates -- a map, a region list, or a coverage statement. For a local/commercial service this answers the 'do you cover me?' question that gates the lead."},
         {"section": "Social proof / pull-quote", "purpose": "A named, quantified testimonial or a strong pull-quote with attribution (name, role/company). One strong quote beats fifteen vibes-only blurbs.", "proof": "testimonials"},
-        {"section": "CTA band", "purpose": "A focused conversion band repeating the primary action (get a quote / call now) with the phone affordance, after the page has earned the click."},
-        {"section": "Rich footer", "purpose": "A sitemap footer: services, coverage areas, company, contact (phone + hours), legal. Generosity after the page's restraint -- never a thin one-row strip."}
+        {"section": "CTA band", "purpose": "A focused conversion band repeating the primary action (get a quote / call now) with the phone affordance, after the page has earned the click.", "without_phone": "A focused conversion band repeating the primary action (get a quote), after the page has earned the click."},
+        {"section": "Rich footer", "purpose": "A sitemap footer: services, coverage areas, company, contact (phone + hours), legal. Generosity after the page's restraint -- never a thin one-row strip.", "without_phone": "A sitemap footer: services, coverage areas, company, contact (the routes the client offers, and hours), legal. Generosity after the page's restraint, never a thin one-row strip."}
       ],
       "cta_placement": "Primary lead-capture in the hero (inline form) and repeated in a dedicated CTA band before the footer; phone number persistent in header and CTA band.",
       "conversion_mechanisms": [
@@ -41,12 +41,16 @@
       ],
       "footer": "Rich sitemap footer: Services, Coverage areas, Company, Contact (phone + hours), Legal.",
       "notes": "The inline hero form is the conversion path. Proof and the phone come from the client: a proof section renders only with the client's real numbers or named quotes, and the phone affordance only with a real number; without them the picker drops them and says why. Map every sector into a pill, every size or package into an item card, every benefit into a value card. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
-      "industries": [],
+      "industries": [
+        "healthcare", "hospitality-travel", "education", "automotive", "construction"
+      ],
       "product_types": [
-        "service", "local-service"
+        "local-service"
       ],
       "project_types": [],
-      "mechanism_needs": {"proof/stats bar": "stats", "named testimonial": "testimonials", "phone affordance": "phone"}
+      "mechanism_needs": {"proof/stats bar": "stats", "named testimonial": "testimonials", "phone affordance": "phone"},
+      "cta_placement_without_phone": "Primary lead-capture in the hero (inline form) and repeated in a dedicated CTA band before the footer.",
+      "footer_without_phone": "Rich sitemap footer: Services, Coverage areas, Company, Contact (routes + hours), Legal."
     },
     {
       "id": "saas-marketing",
@@ -83,7 +87,7 @@
         "saas", "developer-tools", "productivity", "ai-ml"
       ],
       "product_types": [
-        "saas", "software", "platform", "developer-tool", "api"
+        "software", "app"
       ],
       "project_types": [],
       "mechanism_needs": {"logo strip": "logos", "outcome metrics band": "stats", "named case quote": "testimonials"}
@@ -92,9 +96,9 @@
       "id": "ecommerce-product",
       "goal": "ecommerce-product",
       "keywords": [
-        "ecommerce", "e-commerce", "product page", "store", "add to cart", "checkout",
-        "retail", "dtc", "d2c", "merch", "catalog", "product detail", "shipping", "returns",
-        "in stock", "variants"
+        "ecommerce", "e-commerce", "product page", "store", "add to cart", "checkout", "retail",
+        "dtc", "d2c", "merch", "catalog", "product detail", "shipping", "returns", "in stock",
+        "variants"
       ],
       "section_sequence": [
         {"section": "Product hero (gallery + buy box)", "purpose": "Product imagery gallery on one side, buy box (title, price, variant pickers, add-to-cart) on the other. The buy box is the conversion path, above the fold."},
@@ -124,7 +128,7 @@
         "ecommerce", "consumer-lifestyle", "luxury"
       ],
       "product_types": [
-        "store", "shop", "ecommerce", "physical-product"
+        "commerce"
       ],
       "project_types": [],
       "mechanism_needs": {"attributed reviews": "reviews"}
@@ -160,9 +164,7 @@
       "footer": "Sitemap footer: Work, Services, About, Contact, social.",
       "notes": "The work is the proof; description is supplementary. Use varied image ratios and an irregular grid -- never a tidy 3-equal-card row. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
       "industries": [],
-      "product_types": [
-        "portfolio", "agency", "studio"
-      ],
+      "product_types": [],
       "project_types": [],
       "mechanism_needs": {"client logo wall": "logos", "named testimonial": "testimonials"}
     },
@@ -200,7 +202,7 @@
         "editorial-media"
       ],
       "product_types": [
-        "editorial", "publication", "media", "blog", "newsletter"
+        "editorial"
       ],
       "project_types": [],
       "mechanism_needs": {}
@@ -235,9 +237,11 @@
       ],
       "footer": "Sitemap footer: App, Support, Company, Legal, store links.",
       "notes": "Conversion is the store badge. Use real device-framed screenshots with varied crops. Map every feature into a split row and every screen into the gallery. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item.",
-      "industries": [],
+      "industries": [
+        "gaming"
+      ],
       "product_types": [
-        "mobile-app"
+        "app"
       ],
       "project_types": [
         "mobile-app"
@@ -248,17 +252,15 @@
       "id": "b2b-marketplace",
       "goal": "b2b-marketplace",
       "keywords": [
-        "b2b marketplace", "marketplace", "wholesale", "wholesaler", "suppliers", "supplier",
-        "distributors", "distributor", "procurement", "trade accounts", "trade account",
-        "bulk orders", "bulk ordering", "in bulk", "sourcing", "pharmacy supply",
-        "drug warehouses", "warehouses", "building materials", "b2b ordering", "reorder",
-        "catalog of suppliers"
+        "b2b marketplace", "wholesale", "wholesaler", "suppliers", "distributors", "distributor",
+        "procurement", "trade accounts", "trade account", "bulk orders", "bulk ordering",
+        "in bulk", "pharmacy supply", "drug warehouses", "building materials", "b2b ordering"
       ],
       "industries": [
-        "b2b-marketplace", "marketplace", "pharmacy-supply"
+        "b2b-marketplace", "pharmacy", "construction"
       ],
       "product_types": [
-        "marketplace", "b2b-marketplace"
+        "marketplace", "commerce"
       ],
       "project_types": [],
       "section_sequence": [
@@ -270,8 +272,9 @@
         {"section": "Delivery, coverage and payment terms", "purpose": "Where it delivers, how fast, and the payment terms (credit, cash on delivery, invoices). This answers the questions a trade buyer asks before an account."},
         {"section": "Numbers band", "proof": "stats", "purpose": "Real numbers from the client (buyers, suppliers, orders, cities). Only numbers the client has measured."},
         {"section": "Buyer or supplier quote", "proof": "testimonials", "purpose": "One named quote from a real buyer or supplier, with the business name and city."},
-        {"section": "CTA band (open an account, or join as a supplier)", "purpose": "The primary action repeated, with the supplier path as a secondary link."},
+        {"section": "Brands and suppliers carried", "proof": "logos", "purpose": "The real brands or suppliers on the catalog, as one mono row of their marks. The usual trade proof when there are no numbers yet; only marks the client may show."},
         {"section": "FAQ (terms, minimum order, delivery, returns)", "purpose": "The objections that stop a trade account: minimum order, delivery windows, returns, credit, who can register."},
+        {"section": "CTA band (open an account, or join as a supplier)", "purpose": "The primary action repeated, with the supplier path as a secondary link."},
         {"section": "Rich footer", "purpose": "Sitemap footer: For buyers, For suppliers, Categories, Company, Contact, Legal, app store links when there is an app."}
       ],
       "cta_placement": "Open an account (or request access) in the hero and the CTA band; the supplier path as a secondary link in both; the app store links in the footer when there is an app.",
@@ -288,6 +291,47 @@
       "mechanism_needs": {"proof/stats bar": "stats", "named testimonial": "testimonials"},
       "footer": "Rich sitemap footer: For buyers, For suppliers, Categories, Company, Contact, Legal.",
       "notes": "A marketplace sells to two sides at once; the page names both and leads with the side the brief names as the main audience. Show the real catalog and ordering screens. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
+    },
+    {
+      "id": "trust-led",
+      "goal": "trust-led",
+      "keywords": [
+        "security", "cybersecurity", "encryption", "compliance", "fraud", "risk", "banking",
+        "banks", "payments", "trading", "custody", "regulated", "audit", "zero trust",
+        "security review"
+      ],
+      "industries": [
+        "fintech-banking", "fintech-payments", "fintech-trading", "crypto", "security"
+      ],
+      "product_types": [
+        "software", "app"
+      ],
+      "project_types": [],
+      "section_sequence": [
+        {"section": "Hero (claim + demo request)", "purpose": "What the product protects or runs, for whom, in one headline; the primary action requests a demo or a call with the team. A real product view or a plain architecture drawing on the other side."},
+        {"section": "Certifications and standards", "proof": "certifications", "purpose": "The certificates, audits and regulators the client really holds, each named with its scope. Only ones held; never a badge the client has not earned."},
+        {"section": "The problem and the stakes", "purpose": "What goes wrong without it, in the buyer's words, with figures only the client has measured."},
+        {"section": "How it works", "purpose": "Three to five steps or a labelled architecture: where it sits, what it touches, what it never sees."},
+        {"section": "Split feature rows", "purpose": "The marquee capabilities, each a row with a real screen or a real output."},
+        {"section": "Where it deploys", "purpose": "The systems it integrates with and the deployment options (cloud, on premises, region), stated plainly."},
+        {"section": "Client logos", "proof": "logos", "purpose": "One mono row of the institutions that use it, only with their permission."},
+        {"section": "Named quote", "proof": "testimonials", "purpose": "One named quote from a real buyer, with role and institution."},
+        {"section": "FAQ (security, compliance, deployment, data)", "purpose": "The questions a security or procurement review asks: data residency, access, audits, uptime, contract terms."},
+        {"section": "CTA band (request a demo)", "purpose": "The demo request repeated, with who replies and how fast."},
+        {"section": "Rich footer", "purpose": "Sitemap footer: Product, Security or trust center, Company, Contact, Legal."}
+      ],
+      "cta_placement": "Request a demo in the hero and the CTA band; the nav carries the same action.",
+      "conversion_mechanisms": [
+        "demo request in hero",
+        "certifications band",
+        "client logo row",
+        "named testimonial",
+        "security FAQ",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {"certifications band": "certifications", "client logo row": "logos", "named testimonial": "testimonials"},
+      "footer": "Rich sitemap footer: Product, Security, Company, Contact, Legal.",
+      "notes": "Trust-led: a buyer who must defend the choice to a review board reads the proof first, so the held certifications sit under the hero. Every proof section comes from the client or is dropped. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
     },
     {
       "id": "pre-launch",
@@ -321,6 +365,34 @@
       "mechanism_needs": {},
       "footer": "Compact footer: contact, legal, social.",
       "notes": "No proof section before there is proof. A page that shows invented numbers, quotes or client marks spends the trust it is asking for. When a pilot gives real results, move to the live sequence for the business. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
+    },
+    {
+      "id": "general-landing",
+      "goal": "general-landing",
+      "keywords": [],
+      "industries": [],
+      "product_types": [],
+      "project_types": [],
+      "section_sequence": [
+        {"section": "Hero (claim + primary action)", "purpose": "What it is and for whom in one headline, one lede, one primary action, and a real image of the product, the place or the people."},
+        {"section": "What it does", "purpose": "Three to five concrete reasons to choose it, each a heading and one sentence."},
+        {"section": "How it works", "purpose": "Three to five honest steps from first contact to the result."},
+        {"section": "Split feature rows", "purpose": "The two or three things that matter most, each a row with its own real visual."},
+        {"section": "Named quote", "proof": "testimonials", "purpose": "One named quote from a real customer, with role and company."},
+        {"section": "FAQ", "purpose": "The questions that stop the action: price, time, where, what happens next."},
+        {"section": "CTA band", "purpose": "The primary action repeated, after the page has earned it."},
+        {"section": "Rich footer", "purpose": "Sitemap footer: what it offers, company, contact, legal."}
+      ],
+      "cta_placement": "One primary action in the hero, repeated in the CTA band and the nav.",
+      "conversion_mechanisms": [
+        "primary action in hero",
+        "named testimonial",
+        "FAQ objection handling",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {"named testimonial": "testimonials"},
+      "footer": "Rich sitemap footer: Offer, Company, Contact, Legal.",
+      "notes": "The picker's answer when no field or phrase points elsewhere, so a brief always has a skeleton. Set page_sequence when the user names a kind of page. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
     }
   ]
 }

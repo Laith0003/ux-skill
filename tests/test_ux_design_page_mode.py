@@ -137,3 +137,86 @@ def test_one_icon_rule():
     for word in ("type.icon.stroke", "type.icon.size", "emoji", "distinct"):
         assert word in rule, word
     assert "commands/ux-design.md" in agent and "Icons" in agent
+
+
+# ---------------------------------------------------------------- round 1
+
+
+def test_the_agent_runs_the_same_single_path():
+    agent = AGENT.read_text(encoding="utf-8")
+    for old in ("saturation < 80", "Zinc-950", "#f9fafb", "text-gray-600", "recommendation's palette",
+                "#ffffff", "rounded-[2.5rem]", "text-4xl md:text-6xl", "NEVER purple/blue"):
+        assert old not in agent, old
+    assert "tokens.css" in agent
+    assert "decisions/client-identity-wins.md" in agent
+
+
+def test_step_2_5_names_the_steering_fields_and_every_outcome():
+    step = _section(_doc(), "### Step 2.5")
+    for value in ("app", "software", "marketing-site", "editorial", "commerce", "marketplace", "local-service"):
+        assert f"`{value}`" in step, value
+    assert "/ux-system" in step and "industry" in step
+    assert "general-landing" in step
+    assert "never empty" in step.lower() or "always returns" in step.lower()
+
+
+def test_page_mode_has_one_ordered_path():
+    sec = _section(_doc(), "### Page mode, in order")
+    order = ["last-discovery.json", "system-brief.json", "hex", "system detect", "system build",
+             "Suggestions", "select_for_brief", "Build"]
+    at = [sec.index(word) for word in order]
+    assert at == sorted(at), order
+    assert "last-frame.json" not in _section(_doc(), "### 1. Run the discovery protocol")
+
+
+def test_no_leftover_mandatory_subagent_wording():
+    doc = _doc()
+    assert "Re-dispatch" not in doc
+    assert "Give `frontend-engineer`" not in doc
+
+
+def test_step_2_reads_the_same_brief_and_is_guarded():
+    step = _section(_doc(), "### Step 2:")
+    assert "system detect" in step
+    assert "system-brief.json" in step
+
+
+def test_bare_ux_system_3x_rules_are_scoped():
+    text = (ROOT / "commands" / "ux-system.md").read_text(encoding="utf-8")
+    assert "\n## Hard rules" not in text
+    assert "(3.x flow only)" in text
+    assert "page mode" in text.lower() and "system build" in text
+
+
+def test_the_pure_black_row_yields_to_the_client():
+    slop = SLOP.read_text(encoding="utf-8")
+    line = next(ln for ln in slop.splitlines() if ln.startswith("| Pure black"))
+    assert "client-identity-wins" in line
+
+
+def test_the_identity_record_closes_its_loopholes():
+    text = RECORD.read_text(encoding="utf-8")
+    decision = text[text.index("## Decision"):text.index("## Why")]
+    assert "predates the build" in decision
+    assert "exact value" in decision and "equals" in decision
+    assert "generated art" in decision and "this session" in decision
+    assert "a hex alone" not in text
+    consequences = text[text.index("## Consequences"):]
+    assert "no client material behind it" in consequences
+
+
+def test_the_landing_sizes_have_one_answer():
+    land = (ROOT / "references" / "surfaces" / "landing.md").read_text(encoding="utf-8")
+    assert "py-32 md:py-48" not in land
+    assert "layout.landing-gap" in land and "type.text.display" in land
+    assert "scaling with `clamp()`" not in land
+
+
+def test_no_em_dash_on_the_lines_this_round_opened():
+    agent = AGENT.read_text(encoding="utf-8")
+    slop = SLOP.read_text(encoding="utf-8")
+    sys_doc = (ROOT / "commands" / "ux-system.md").read_text(encoding="utf-8")
+    for text, needle in ((slop, "Treat each ban as a hard rule"), (slop, "Imagery as backdrop, not just an icon"),
+                         (agent, "Imagery as backdrop, not just an icon"), (sys_doc, "foundation MDs")):
+        line = next(ln for ln in text.splitlines() if needle in ln)
+        assert "—" not in line, needle

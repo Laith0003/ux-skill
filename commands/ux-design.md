@@ -136,7 +136,7 @@ The `command` value stays `ux-component` so `/ux-next` keeps reading it.
 | Sub-agent returns the wrong stack | Catch in review, redo |
 | Sub-agent says "I avoided X" but the code uses X | Grep the output. Reject and redo |
 | Over-scope: a full page for a single button, or a spec that implies a full page | Trim to the requested component; offer page mode as the follow-up |
-| No motion when motion was specified | Re-dispatch with an explicit motion brief |
+| No motion when motion was specified | Redo the build with an explicit motion brief |
 | `.ux/last-frame.json` absent and voice not provided | Ask the one-line voice question above |
 
 ### Dashboard mode (`--dashboard`)
@@ -161,7 +161,7 @@ If anything's missing, ask once: *"One line: data shape, key metrics, audience (
 
 **Build (step 4).** The build (or the optional `frontend-engineer` subagent) gets the brief verbatim, data shape + key metrics + audience, stack, dials, the 3-5 patterns, the full `references/styles/anti-slop.md`, the full `references/surfaces/dashboard.md` (the playbook step 1c picks for this mode), and an explicit instruction to follow the playbook's rules on tabular numbers, live indicators and semantic state colors. A `motion-engineer` subagent may run in parallel for live indicators and state transitions. A `copy-writer` subagent may run in parallel for empty states, error messages, and metric labels.
 
-**Generation (engine step 4).** The page-sequence step (engine step 2.5) does not apply: no section sequence, no conversion mechanisms, no hero. Filter `components` from the recommendation for dashboard patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid on the system's tokens in dark mode. Give `frontend-engineer` the `chart-types.json` picks scoped to the data the user described. With a client brand, dark mode still holds, but the brand primary (not the house pick) is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor.
+**Generation (engine step 4).** The page-sequence step (engine step 2.5) does not apply: no section sequence, no conversion mechanisms, no hero. Filter `components` from the recommendation for dashboard patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid on the system's tokens in dark mode. The build gets the `chart-types.json` picks scoped to the data the user described. With a client brand, dark mode still holds, but the brand primary (not the house pick) is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor.
 
 **Output (step 5).**
 
@@ -305,11 +305,23 @@ The 10 required fields are:
 **Skip conditions** (the only ones):
 - User passes `--skip-discovery` flag.
 - User's first message already covers ALL 10 fields. Verify it does; if anything's missing, ask only for the missing fields.
-- User is iterating on a prior design (read `.ux/last-frame.json`; ask only what's changed).
+- User is iterating on a prior design (read `.ux/last-discovery.json`; ask only what's changed).
 
-**After collecting answers**: write `.ux/last-frame.json` with the full discovery payload. Echo a 2-sentence summary back to the user before generating — let them stop you if their intent didn't land.
+**After collecting answers**: write `.ux/last-discovery.json` with the full discovery payload (the file /ux-discover writes). Echo a 2-sentence summary back to the user before generating, so they can stop you if their intent did not land.
 
 NEVER proceed to step 2 without the wow moment field populated. If the user says "anything's fine", push back: "Give me one concrete moment, even tiny — something a visitor would remember."
+
+### Page mode, in order
+
+Page mode runs these steps in this order; the sections below give the detail of each.
+
+1. **Discovery** (Process step 1) writes `.ux/last-discovery.json`.
+2. **The system brief.** Write `.ux/system-brief.json`: the discovery answers plus the structured fields /ux-system reads (`industry`, `brand_role`, `product_type` and the others it lists, filled from what the user said) and the page fields engine step 2.5 reads (`proof`, `contact`, `stage`). Every later step reads this file.
+3. **Brand** (engine step 1.5): extract it from the client's material, or, with no brand material, ask for one hex, as /ux-system create mode does.
+4. **System**: `system detect` (step 1a); when it finds none, `system build` from that hex and that brief (step 1b).
+5. **Suggestions** (engine step 2), only when no system existed before step 4.
+6. **Sequence**: `select_for_brief` (engine step 2.5).
+7. **Build** (Process steps 2 to 4, engine steps 3 and 4), then the gates (engine step 5), the output and the state (Process steps 5 and 6).
 
 ### 1a. An existing design system is fixed input
 
@@ -323,7 +335,7 @@ Before any engine pick, run `python3 -m engine.cli.main --no-pretty system detec
 
 ### 1b. The design system is the contract
 
-When step 1a found a system (a hand-written `DESIGN.md` counts), that system is the contract. When it found none, build one before any page code, the /ux-system way: `uxskill --no-pretty system build --brand '<hex>' --brief .ux/system-brief.json --out design-system --rule-pack`. Take the hex from the client's own material (engine step 1.5); fill the brief's structured fields as /ux-system describes, including `brand_role` from how the client's own material uses the brand. Link `design-system/tokens.css` and `fonts.css`, and load the rule-pack files `design-system/rule-pack/README.md` names for a landing page. The built tokens are the only tokens (engine step 3).
+When step 1a found a system (a hand-written `DESIGN.md` counts), that system is the contract. When it found none, build one before any page code, the /ux-system way: `uxskill --no-pretty system build --brand '<hex>' --brief .ux/system-brief.json --out design-system --rule-pack`. Take the hex from the client's own material (engine step 1.5), or the one hex the user gave when there is no brand material; fill the brief's structured fields as /ux-system describes, including `brand_role` from how the client's own material uses the brand. Link `design-system/tokens.css` and `fonts.css`, and load the rule-pack files `design-system/rule-pack/README.md` names for a landing page. The built tokens are the only tokens (engine step 3).
 
 ### 1c. Pick exactly one surface playbook
 
@@ -427,7 +439,7 @@ Page mode only; component and dashboard modes skip this section. For any landing
 
 ## Hard rules (non-negotiable)
 
-These guard against model defaults. Where the client's own system or identity (its tokens, logo, site, app or brand book) does what a rule bans, the client wins and the build notes name the evidence (decisions/client-identity-wins.md).
+These guard against model defaults. Where the client's own system or identity (its tokens, logo, site, app or brand book) does what a rule bans, the client wins: the build notes name the material and its exact value, and the page uses that value (decisions/client-identity-wins.md).
 
 - NEVER reach for the default purple-to-blue gradient or an oversaturated accent. A client's own brand gradient, saturated brand, blue or pure white stays as the client uses it.
 - NEVER use generic names ("John Doe", "Acme", "Nexus") in placeholder content.
@@ -503,48 +515,59 @@ If the brief names a reference site/URL or provides a screenshot, the output MUS
    Writes `.ux/brand.json` (travels through the engine) and `.ux/brand.md` (the human-readable anchor). `ux brand` also reads the project (`--project-root`, default here): a primary declared in its token files beats the logo pixels (both are reported, as `primary` and `logo_primary`), the text color is kept out of the secondaries, and the language comes from the project's HTML.
 3. **CONFIRM before locking (do not skip).** Show the user the extracted `brand.md` — primary color, type direction, logo — in one short message and get a yes. A wrong auto-read (clay instead of amber) poisons the entire build; the 5-second check is the guardrail. If they correct it, edit `.ux/brand-signals.json` and re-run step 2.
 
-If there is NO reference brand, skip this step (pure synthesis from the brief).
+If there is NO reference brand, skip the extraction and ask the user for one hex, as /ux-system create mode does; the system is built from it.
 
 ### Step 2: Suggestions, only when no design system exists
 
-`recommend` and `synthesize` never set a token. When the project has no design system yet, their picks (style, patterns, motion presets, components, exemplars) are suggestions for the brief and the build; `system build` sets the tokens. When a system exists, run neither for color, type or space; their palette and type pair come back as `"status": "suggestion"` and stay unused.
+`recommend` and `synthesize` never set a token. When the project had no design system before this run, their picks (style, patterns, motion presets, components, exemplars) are suggestions for the brief and the build; `system build` sets the tokens. When `system detect` found a system, run neither.
 
 ```bash
-BRAND=""; [ -f .ux/brand.json ] && BRAND="--brand-file=.ux/brand.json"
-python3 -m engine.cli.main --no-pretty recommend \
-  --brief-file=.ux/last-discovery.json $BRAND > .ux/last-recommendation.json
+if python3 -m engine.cli.main --no-pretty system detect --root . | grep -q '"found": false'; then
+  BRAND=""; [ -f .ux/brand.json ] && BRAND="--brand-file=.ux/brand.json"
+  python3 -m engine.cli.main --no-pretty recommend \
+    --brief-file=.ux/system-brief.json $BRAND > .ux/last-recommendation.json
+fi
 ```
+
+Run it before step 1b writes `design-system/`, since detect then finds the new system.
 
 ### Step 2.5: Pick the page-level section sequence
 
 Page mode only. Component and dashboard modes skip this step.
 
-The sequence is the page skeleton. `select_for_brief` reads the 4.0 brief: an explicit `page_sequence` id first, then `stage`, then the `industry`, `product_type` and `project_type` fields, then the brief's phrases. A call-to-action verb such as "book" never picks one. Fill these fields from what the user said, and leave out any the user did not say:
+The sequence is the page skeleton. `select_for_brief` always returns a sequence, never empty. It decides in this order, and `why` in its result says which rule decided:
+
+1. `page_sequence`, when the user names the kind of page: that sequence.
+2. `stage: pre-launch`: the `pre-launch` sequence (early access, the team, no proof section).
+3. `product_type` narrows the choice, then `project_type`, then `industry`; the brief's own phrases (goal, audience, description) choose among what is left. A call-to-action verb such as "book" never counts.
+4. With none of these, `general-landing`: hero, what it does, how it works, feature rows, one named quote, FAQ, closing band. When `why` starts with "general", tell the user which sequence you are building and offer the others by id.
+
+Fill the fields from what the user said, and leave out any the user did not say:
 
 | Field | Values | Fill it when |
 |---|---|---|
+| `product_type` | `app`, `software`, `marketing-site`, `editorial`, `commerce`, `marketplace`, `local-service`: the one list /ux-system and the picker share. Aliases are mapped and reported in `why` (`saas` and `web-app` to `software`, `mobile-app` to `app`, `shop` and `store` to `commerce`, `b2b-marketplace` and `b2c-marketplace` to `marketplace`, `service` to `local-service`); any other value is refused | what the product is. A B2B marketplace is `marketplace`; `commerce` points to the shop, `app` and `software` to the software sequences, `editorial` to the publication, `local-service` to the service page; `marketing-site` narrows nothing |
+| `industry` | the /ux-system industry list only, or one of its other names (`building-materials`, `wholesale`, `cybersecurity`, `medical-supply`) | the same value the system brief carries. Every industry leads to a sequence: `b2b-marketplace`, `pharmacy` and `construction` to the marketplace (construction also to the service page), the fintech ids, `crypto` and `security` to `trust-led`, `healthcare`, `hospitality-travel`, `education` and `automotive` to `lead-gen-service` |
 | `proof` | any of `stats`, `testimonials`, `logos`, `reviews`, `case-studies`, `certifications`, `press`; `[]` for none | the client gives real numbers, named quotes, client logos and so on. `[]` when it has none |
 | `contact` | any of `phone`, `whatsapp`, `email`, `form`, `chat`, `address` | the routes the client really offers |
 | `stage` | `live`, `pre-launch` | `pre-launch` when there are no customers yet |
-| `page_sequence` | a sequence id | the user names the kind of page outright |
+| `page_sequence` | `lead-gen-service`, `saas-marketing`, `ecommerce-product`, `portfolio-agency`, `content-publication`, `app-mobile-landing`, `b2b-marketplace`, `trust-led`, `pre-launch`, `general-landing` | the user names the kind of page outright |
 
 ```bash
 python3 -c "
 import json
 from engine.page_sequence import select_for_brief
-path = '.ux/system-brief.json'
-try: brief = json.load(open(path))
-except FileNotFoundError: brief = json.load(open('.ux/last-discovery.json'))
-print(json.dumps(select_for_brief(brief), indent=2))
+print(json.dumps(select_for_brief(json.load(open('.ux/system-brief.json'))), indent=2))
 "
 ```
+
+A field outside its values stops the script with an error that names the field and the values; fix the field in `.ux/system-brief.json` and run it again.
 
 Build it this way:
 
 - Render the sections of `section_sequence` in order, and map all the client's content into them: every sector, size, package and benefit gets its element.
 - A section that carries a `proof` kind renders only with the client's real proof of that kind. The picker has already dropped the ones the brief's `proof` list lacks; each entry in `dropped` gives its reason, and the self-review repeats it. When `proof_unknown` is true, ask for the proof, or drop the section and say why. Never invent a number, a quote or a logo to fill one.
-- Ship the `conversion_mechanisms` it returns; one the client cannot back is already in `dropped`.
-- A pre-launch brief gets the `pre-launch` sequence: early access, the team, no proof section.
+- Ship the `conversion_mechanisms` it returns; one the client cannot back is already in `dropped`, and a section's text no longer mentions a phone the client does not have.
 
 ### Step 3: The system's tokens are the only tokens
 

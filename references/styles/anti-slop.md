@@ -2,7 +2,7 @@
 
 Default model output has measurable, predictable failure modes. This file catalogues them. Every entry here exists because the unconstrained generator reaches for it reflexively, and the result reads as machine-made.
 
-Treat each ban as a hard rule unless a brief explicitly overrides it, or the client's own system or identity does otherwise (principles 9 and 10). The goal is not stylistic preference — it is the elimination of fingerprints that mark output as generated.
+Treat each ban as a hard rule unless a brief explicitly overrides it, or the client's own system or identity does otherwise (principles 9 and 10). The goal is not stylistic preference: it is the elimination of fingerprints that mark output as generated.
 
 ---
 
@@ -26,7 +26,7 @@ Treat each ban as a hard rule unless a brief explicitly overrides it, or the cli
 
 9. **A client's existing design system wins.** When the project already has its own system (tokens, foundation CSS, a hand-written MASTER.md or DESIGN.md), every generic rule in this file yields to it: its colors, saturation, gradients, type, label tracking and case stand as they are. These bans guard against model defaults, never against a client's deliberate identity; a mark beside a label still needs the recorded waiver (decisions/eyebrow-is-text.md). Find it with `ux system detect` before applying any rule below.
 
-10. **A client's own identity wins, even with no full system.** When there are no token files but the client has a logo, a site, an app or a brand book, the same holds for what that material shows: its saturated brand, its brand gradient, its pure white or pure black canvas, its blue or violet hue stay as the client uses them (decisions/client-identity-wins.md, which extends decisions/existing-system-wins.md to identities with no full system). Name the evidence (the file or the screen); a word in the brief is not an identity. The contrast gate still holds: keep the color and solve the text on it.
+10. **A client's own identity wins, even with no full system.** When there are no token files but the client has a logo, a site, an app or a brand book, the same holds for what that material shows: its saturated brand, its brand gradient, its pure white or pure black canvas, its blue or violet hue stay as the client uses them (decisions/client-identity-wins.md, which extends decisions/existing-system-wins.md to identities with no full system). The evidence is client material that predates the build, named with its exact value (the hex, the gradient stops), and the page uses that exact value; the engine's generated art, anything made in this session and a word in the brief are not evidence. The contrast gate still holds: keep the color and solve the text on it.
 
 ---
 
@@ -42,7 +42,7 @@ Mobile is not the small version of the desktop — it is where most of the traff
 
 4. **Never ship a literal placeholder token.** `{TODO_FILL...}`, `{{ var }}` mustache left in markup, "lorem ipsum" — none of these reach the rendered UI. If a value is genuinely absent (no phone number, no OG image), OMIT that element gracefully — drop the affordance, don't print the token. A visible `{TODO_FILL: phone}` in a sticky header is the rawest draft-state leak there is.
 
-5. **Imagery as backdrop, not just an icon.** Where it adds depth — hero, location/coverage cards, feature tiles — use a REAL image as the section or card background with text overlaid and a readable scrim, not a flat card with one lone icon. A single centered icon on a bare card is a slop tell precisely where a backdrop image would have carried the surface. (Icons on list items follow the one icon rule in `commands/ux-design.md`; this is about sections and feature/coverage cards that read as empty without imagery.)
+5. **Imagery as backdrop, not just an icon.** Where it adds depth (hero, location or coverage cards, feature tiles), use a REAL image as the section or card background with text overlaid and a readable scrim, not a flat card with one lone icon. A single centered icon on a bare card is a slop tell precisely where a backdrop image would have carried the surface. (Icons on list items follow the one icon rule in `commands/ux-design.md`; this is about sections and feature/coverage cards that read as empty without imagery.)
 
 6. **Never repeat one icon across differentiated items.** Every skip size, every plan, every sector rendered with the same box/grid/check icon reads as the generator giving up. If you cannot source a DISTINCT, meaningful icon per item, drop the icons there entirely and differentiate with TYPOGRAPHY (scale, weight, the number itself), color, or layout. A repeated icon is worse than no icon — it actively says "these are the same" about things you are claiming are different.
 
@@ -55,7 +55,7 @@ Mobile is not the small version of the desktop — it is where most of the traff
 | Don't | Do instead |
 |---|---|
 | Default `box-shadow` glows, neon outer glows | Inner border (`border-white/10`) + tinted inner shadow (`shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]`) |
-| Pure black (`#000000`) | Zinc-950, charcoal, off-black — `#0a0a0a`, `#111111` are correct |
+| Pure black (`#000000`) | Zinc-950, charcoal, off-black: `#0a0a0a`, `#111111` are correct. A client whose identity is set in pure black keeps it (decisions/client-identity-wins.md) |
 | Pure white (`#FFFFFF`) on premium marketing | Warm off-white in the `#FAFAF8` to `#F7F6F3` range; pure white reads as default. A client whose identity is set on pure white keeps it (decisions/client-identity-wins.md) |
 | Oversaturated accents (>80% saturation) | Desaturate. High contrast comes from value, not saturation. A client's own saturated brand stays exact (decisions/client-identity-wins.md) |
 | Text-fill gradients on large headers | Solid color + weight hierarchy. One word in gradient per page is the absolute maximum |
