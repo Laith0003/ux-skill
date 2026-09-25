@@ -294,3 +294,56 @@ def test_the_page_passes_the_render_check(site, direction):
     except RenderUnavailable as exc:
         pytest.skip(str(exc))
     assert report.findings == [], [f"{f.rule_id}: {f.excerpt}" for f in report.findings]
+
+
+REGIONS = """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Regions</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+  body { margin: 0; }
+  main { display: flex; flex-direction: column; row-gap: var(--layout-region-gap); }
+  .hero { padding-block: var(--layout-hero-padding-block); }
+  section { min-block-size: 10px; }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">Hero</section>
+  <section>Features</section>
+</main>
+</body>
+</html>
+"""
+
+
+@pytest.mark.parametrize("width, tier", [(375, "phone"), (800, "tablet"), (1100, "laptop"),
+                                         (1440, "desktop")])
+def test_the_region_gap_follows_the_viewport_from_one_property(site, tokens, width, tier):
+    (site / "regions.html").write_text(REGIONS, encoding="utf-8")
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as pw:
+        browser = None
+        for kwargs in ({"channel": "chrome"}, {}):
+            try:
+                browser = pw.chromium.launch(**kwargs)
+                break
+            except Exception:
+                continue
+        if browser is None:
+            pytest.skip("no browser for the render test")
+        pg = browser.new_page(viewport={"width": width, "height": 800})
+        pg.goto((site / "regions.html").as_uri())
+        for density in (None, "compact"):
+            _set(pg, **{"data-density": density})
+            mode = "density:compact" if density else ""
+            gap = float(_style(pg, "main", "row-gap").removesuffix("px"))
+            hero = float(_style(pg, ".hero", "padding-top").removesuffix("px"))
+            assert gap == tokens.resolve(f"layout.region-gap.{tier}", mode)["value"]
+            assert hero == tokens.resolve(f"layout.hero.padding-block.{tier}", mode)["value"]
+            if width == 375:
+                assert gap <= 40, f"a phone shows a {gap:g}px gap between regions"
+        browser.close()

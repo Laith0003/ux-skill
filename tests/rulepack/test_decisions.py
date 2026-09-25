@@ -30,7 +30,7 @@ EXPECTED = {
     "controls-on-brand-surfaces", "warmth-through-grey", "grey-brands-steer-no-hue",
     "exact-fill-states", "ring-room", "brief-fields-checked", "font-files",
     "strong-under-high-contrast", "grey-brand-support-hue", "art-composition",
-    "motion-check-owners",
+    "motion-check-owners", "space-relationship-roles", "page-regions-by-tier", "layout-aliases",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -38,7 +38,9 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "strong-weight": "strong-under-high-contrast",
               "layout-scope": "page-regions", "neutral-tint": "warmth-through-grey",
               "font-loading": "font-files", "generated-art": "art-composition",
-              "expressive-motion": "motion-check-owners"}
+              "expressive-motion": "motion-check-owners",
+              "space-roles": "space-relationship-roles", "page-regions": "page-regions-by-tier",
+              "breakpoints-are-reference-values": "layout-aliases"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

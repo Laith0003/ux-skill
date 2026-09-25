@@ -11,6 +11,7 @@ import itertools
 import json
 from typing import Any, Dict, List, Tuple
 
+from engine.foundations.layout import responsive_css
 from engine.foundations.modes import AXES, CSS_AXES, join, parse
 from engine.foundations.tokens import Token, TokenSet
 from engine.foundations.values import css_entries, decode, encode
@@ -136,7 +137,8 @@ def to_css(ts: TokenSet, scheme: str = "system") -> str:
     A set with a scheme axis in use writes color-scheme with each scheme,
     so native controls follow it. A rule over more axes has higher
     specificity, so a combined override wins over single-axis ones in every
-    case."""
+    case. Last come the layout's responsive aliases (layout.responsive_css),
+    one property per tiered role that follows the viewport."""
     if scheme not in SCHEME_DEFAULTS:
         raise ValueError(f"scheme is {scheme!r}; use one of {list(SCHEME_DEFAULTS)}")
     schemed = "scheme" in ts.axes and any(
@@ -162,4 +164,5 @@ def to_css(ts: TokenSet, scheme: str = "system") -> str:
                         *("  " + line for line in lines), "  }", "}"]
             else:
                 out += ["", f"{selector} {{", *lines, "}"]
+    out += responsive_css(ts)
     return "\n".join(out) + "\n"

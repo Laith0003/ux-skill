@@ -30,7 +30,7 @@ from engine.foundations.composition import choose as choose_composition
 from engine.foundations.color import brand_fidelity
 from engine.foundations.color_math import hex_to_rgb, rgb_to_hex
 from engine.foundations.export import dump_dtcg, to_css
-from engine.foundations.art import FILES as ART_FILES
+from engine.foundations.art import FILES as ART_FILES  # noqa: F401 (re-exported)
 from engine.foundations.art import art_files
 from engine.foundations.art import report_lines as art_lines
 from engine.foundations.fonts import fonts_css, link_tags, loading_lines, self_host_css

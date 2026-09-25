@@ -1,10 +1,10 @@
 ---
 id: space-roles
 title: Spacing roles name a relationship, and there are eight of them
-status: active
+status: superseded
 areas: [space]
 supersedes: null
-superseded_by: null
+superseded_by: space-relationship-roles
 ---
 
 # Spacing roles name a relationship, and there are eight of them

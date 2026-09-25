@@ -4894,12 +4894,12 @@
       },
       "desktop": {
         "$type": "dimension",
-        "$value": "{space.20}",
+        "$value": "{space.16}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "density:compact": "{space.16}"
+              "density:compact": "{space.12}"
             }
           }
         }

@@ -7,7 +7,10 @@ spacing move together; the density axis places them and compact takes one
 step less, never below 8px. Breakpoints are minimum viewport widths; a
 phone is everything below the tablet breakpoint. CSS cannot read custom
 properties inside a media query, so the breakpoint tokens are reference
-values for exporters and docs.
+values; responsive_css writes one alias per tiered role (RESPONSIVE),
+--layout-<role>, that takes the phone value and switches to each tier's
+value under a media query on the literal breakpoint, so a page reads one
+property and gets the right tier at every width.
 """
 from __future__ import annotations
 
@@ -16,7 +19,7 @@ from typing import Any, Callable, Dict, List, Sequence, Tuple
 from engine.foundations import space
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
 from engine.foundations.gate import Check
-from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.tokens import Token, TokenSet, css_property
 from engine.synthesizer.axes import AxisValues
 
 TIERS = ("phone", "tablet", "laptop", "desktop")
@@ -28,10 +31,14 @@ MARGIN = {"phone": (5, 4), "tablet": (8, 6), "laptop": (12, 8), "desktop": (16, 
 # Page regions per tier, in space units: the gap between regions and the
 # block padding of the hero grow with the viewport, so a phone never shows
 # a screen of empty space.
-REGION_GAP = {"phone": (12, 8), "tablet": (16, 12), "laptop": (24, 16), "desktop": (32, 20)}
+# The desktop gap is space.region.gap's pair, so the two tokens agree at
+# every density.
+REGION_GAP = {"phone": (12, 8), "tablet": (16, 12), "laptop": (24, 16), "desktop": (32, 16)}
 HERO_PADDING = {"phone": (16, 10), "tablet": (20, 12), "laptop": (24, 16), "desktop": (32, 20)}
 # Header and footer block padding, the same at every width.
 HEADER_PADDING, FOOTER_PADDING = (4, 3), (16, 10)
+# Tiered roles with a responsive alias in CSS (responsive_css).
+RESPONSIVE = ("columns", "gutter", "margin-inline", "region-gap", "hero.padding-block")
 COMPACT_FLOOR = 2  # space units, 8px
 CONTAINERS = (1120, 1280, 1440)
 MEASURE_REM = {"text": 38, "form": 32}
@@ -108,6 +115,30 @@ def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
                  "{layout.width.%d}" % (targets["comfortable"] + LARGE_EXTRA_PX),
                  layer="semantic"))
     return Generated(tokens=ts, notes=[f"layout: container {container_px(d)}px"])
+
+
+def responsive_css(ts: TokenSet) -> List[str]:
+    """CSS lines that give each tiered role in RESPONSIVE one alias,
+    --layout-<role>: the phone value at :root, then each tier's value from
+    its breakpoint up, under @media (min-width) with the breakpoint's
+    literal px (CSS cannot read a custom property in a media query). A
+    density override reaches the alias through var(). Empty when the set
+    lacks a breakpoint or every tier of a role."""
+    groups = [g for g in RESPONSIVE if all(ts.has(f"layout.{g}.{t}") for t in TIERS)]
+    tiers = [t for t in TIERS[1:] if ts.has(f"layout.breakpoint.{t}")]
+    if not groups or len(tiers) != len(TIERS) - 1:
+        return []
+
+    def lines(tier: str, indent: str) -> List[str]:
+        return [f"{indent}{css_property(f'layout.{g}')}: var({css_property(f'layout.{g}.{tier}')});"
+                for g in groups]
+
+    out = ["", ":root {", *lines(TIERS[0], "  "), "}"]
+    for tier in tiers:
+        px = _px(ts, f"layout.breakpoint.{tier}")
+        out += ["", f"@media (min-width: {px:g}px) {{", "  :root {", *lines(tier, "    "), "  }",
+                "}"]
+    return out
 
 
 # Role path -> the token type the checks read; the build's role-types

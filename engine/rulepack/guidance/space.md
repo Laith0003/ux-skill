@@ -23,7 +23,7 @@ Space sets the distances inside and between things: the padding of a control, th
 - `space.list.gap`: between stacked rows of a list, a table or a menu.
 - `space.group.gap`: between groups of related content inside one region, such as sections of a form.
 - `space.card.padding`: inside a container such as a card, a panel, a banner or a dialog.
-- `space.region.gap`: between major regions of a page at the widest tier; per breakpoint use layout.region-gap.
+- `space.region.gap`: between major regions of a page; it equals layout.region-gap.desktop at every density. A page that spaces its regions by viewport reads var(--layout-region-gap), which follows the tier.
 - `space.control.padding-inline-large`: inside a large control, such as the call to action of a hero, along the line.
 - `space.control.padding-block-large`: inside a large control, across the line.
 - `space.field.label-gap`: between a field's label and the field.
@@ -44,7 +44,7 @@ Space sets the distances inside and between things: the padding of a control, th
 | Rows of a list or a table | space.list.gap |
 | Sections of a form, groups of settings | space.group.gap |
 | Inside a card, panel, banner or dialog | space.card.padding |
-| Between the hero and the content, the content and the footer | layout.region-gap for the tier, space.region.gap at the widest |
+| Between the hero and the content, the content and the footer | var(--layout-region-gap), which follows the viewport's tier |
 | Page margins and grid gutters | layout.margin-inline and layout.gutter for the tier |
 
 When two neighbors could take either of two roles, take the one for the larger relationship: a heading that opens a group uses the group gap above it and the text gap below it.

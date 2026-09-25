@@ -34,7 +34,7 @@ Border sets the width of every stroke: separators, the edges of containers and c
 | A card, panel or field needs a visible edge | border.outline |
 | Related controls should read as one set | border.outline around them, or space.group.gap if proximity is enough |
 | Two sections touch and need a stronger boundary | a surface change plus space before a heavier line |
-| Major page regions | a surface change and space.region.gap |
+| Major page regions | a surface change and var(--layout-region-gap), the region gap for the viewport's tier |
 | A selected item or row | border.active with color.line.selected |
 | Keyboard focus | the focus ring (width and offset roles) with color.focus.ring |
 | One boundary must outrank its neighbors | border.emphasis |

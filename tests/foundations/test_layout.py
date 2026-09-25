@@ -259,7 +259,7 @@ def test_without_widths_the_target_fix_falls_back_to_a_space_step():
 @pytest.mark.parametrize("density, gaps, hero", [
     (0.0, [48, 64, 96, 128], [64, 80, 96, 128]),
     (0.5, [40, 64, 80, 96], [48, 64, 80, 96]),
-    (1.0, [32, 48, 64, 80], [40, 48, 64, 80]),
+    (1.0, [32, 48, 64, 64], [40, 48, 64, 80]),
 ])
 def test_region_spacing_grows_with_the_viewport(density, gaps, hero):
     ts = build_system(AxisValues(0.5, 0.5, density, 0.5, 0.5, 0.5, 0.5), "#3366FF").tokens
@@ -279,3 +279,46 @@ def test_a_region_gap_that_shrinks_with_the_viewport_fails():
     assert check.run(ts, "") == [
         "layout.region-gap.desktop (16px) is smaller than layout.region-gap.laptop (80px); a "
         "wider viewport never tightens the page, so point it at a larger space step"]
+
+
+@pytest.mark.parametrize("density", [i / 10 for i in range(11)])
+@pytest.mark.parametrize("refuse_compact", [False, True])
+def test_the_space_region_gap_is_the_widest_tiers_gap(density, refuse_compact):
+    a = AxisValues(0.5, 0.5, density, 0.5, 0.5, 0.5, 0.5)
+    ts = TokenSet()
+    for t in generate_space(a, refuse_compact=refuse_compact).tokens.tokens():
+        ts.add(t)
+    for t in generate_layout(a, refuse_compact=refuse_compact).tokens.tokens():
+        ts.add(t)
+    for mode in ("", "density:compact"):
+        assert ts.resolve("space.region.gap", mode) == ts.resolve("layout.region-gap.desktop",
+                                                                  mode), (density, mode)
+
+
+def _media_block(css, px):
+    m = re.search(r"@media \(min-width: %dpx\) \{\n  :root \{\n(.*?)\n  \}\n\}" % px, css,
+                  re.S)
+    assert m, f"no @media (min-width: {px}px) block"
+    return m.group(1).splitlines()
+
+
+def test_tokens_css_switches_every_tiered_role_by_viewport():
+    css = to_css(build_system(AxisValues(*[0.5] * 7), "#3366FF").tokens)
+    assert layout.RESPONSIVE == ("columns", "gutter", "margin-inline", "region-gap",
+                                 "hero.padding-block")
+    groups = [g.replace(".", "-") for g in layout.RESPONSIVE]
+    base = re.search(r"\n:root \{\n((?:  --layout-[a-z-]+: var\(--layout-[a-z-]+-phone\);\n)+)\}",
+                     css)
+    assert base, "no :root block of responsive aliases"
+    assert base.group(1).splitlines() == [
+        f"  --layout-{g}: var(--layout-{g}-phone);" for g in groups]
+    for tier, px in (("tablet", 640), ("laptop", 1024), ("desktop", 1280)):
+        assert _media_block(css, px) == [
+            f"    --layout-{g}: var(--layout-{g}-{tier});" for g in groups]
+    # The breakpoints come from the set's own breakpoint tokens.
+    assert layout.VIEWPORTS == {"tablet": 640, "laptop": 1024, "desktop": 1280}
+
+
+def test_a_set_without_the_tiered_roles_gets_no_alias():
+    css = to_css(generate_space(AxisValues(*[0.5] * 7)).tokens)
+    assert "@media (min-width" not in css and "-phone)" not in css

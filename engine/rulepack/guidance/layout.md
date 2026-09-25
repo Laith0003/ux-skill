@@ -2,7 +2,7 @@
 
 ## Summary
 
-Layout sets the page grid and the page regions: three breakpoints that start four tiers (phone, tablet, laptop, desktop), columns, gutters, inline margins, the gap between regions and the hero's block padding per tier, the header and footer padding, the widest container, two reading measures and the minimum target size. Gutters, margins and region spacing alias the spacing scale, so layout and spacing move together. Panes and how they collapse are page patterns built on these tokens, not tokens of their own (decisions/page-regions.md).
+Layout sets the page grid and the page regions: three breakpoints that start four tiers (phone, tablet, laptop, desktop), columns, gutters, inline margins, the gap between regions and the hero's block padding per tier, the header and footer padding, the widest container, two reading measures and the minimum target size. Gutters, margins and region spacing alias the spacing scale, so layout and spacing move together. Panes and how they collapse are page patterns built on these tokens, not tokens of their own (decisions/page-regions-by-tier.md).
 
 ## Principles
 
@@ -53,7 +53,7 @@ A block spans a whole number of columns and starts and ends on column lines.
 
 ## Modes
 
-Layout varies on density: gutters and margins take one step less in compact, never below 8px, and the minimum target is 44px in comfortable and 32px in compact. Breakpoints, columns, the container and the measures are the same in every mode. Breakpoints cannot be read by media queries from CSS custom properties, so stylesheets copy their values (decisions/breakpoints-are-reference-values.md).
+Layout varies on density: gutters, margins, the region gap and the hero, header and footer padding take one step less in compact, never below 8px, and the minimum target is 44px in comfortable and 32px in compact. Breakpoints, columns, the container and the measures are the same in every mode. Layout varies on the viewport through the aliases: tokens.css switches each tiered role at the literal breakpoints, since a media query cannot read a custom property, and a density override reaches the alias (decisions/layout-aliases.md).
 
 ## Changing the system
 
@@ -64,7 +64,7 @@ Layout varies on density: gutters and margins take one step less in compact, nev
 
 ## Audit scope
 
-Audits the grid tokens in both densities: breakpoint order, column order, target size and the reading measure. The WCAG risks are reflow at narrow widths (1.4.10: content works at 320 CSS px without scrolling in two directions), target size (2.5.8, 24 by 24 CSS px; 2.5.5, 44 by 44 CSS px, AAA) and line length (1.4.8, AAA, about 80 characters). It does not audit color, type size or the spacing inside regions.
+Audits the grid tokens in both densities: breakpoint order, column order, the region gap and hero padding growing with the viewport, target size and the reading measure. The WCAG risks are reflow at narrow widths (1.4.10: content works at 320 CSS px without scrolling in two directions), target size (2.5.8, 24 by 24 CSS px; 2.5.5, 44 by 44 CSS px, AAA) and line length (1.4.8, AAA, about 80 characters). It does not audit color, type size or the spacing inside a region.
 
 ## Checks
 
@@ -86,8 +86,10 @@ Audits the grid tokens in both densities: breakpoint order, column order, target
 
 ## Handoff notes
 
-- Page grid: display grid with grid-template-columns: repeat(var(--layout-columns-phone), 1fr), column-gap from the tier's gutter, padding-inline from the tier's margin, and max-inline-size from layout.container.max with margin-inline: auto.
-- Media queries copy the breakpoint values: @media (min-width: 640px) for tablet when layout.breakpoint.tablet is 640px, and inside it the tablet columns, gutter and margin.
+- Aliases: tokens.css gives each tiered role one property that takes the value of the viewport's tier: --layout-columns, --layout-gutter, --layout-margin-inline, --layout-region-gap and --layout-hero-padding-block (decisions/layout-aliases.md).
+- Page grid: display grid with grid-template-columns: repeat(var(--layout-columns), 1fr), column-gap: var(--layout-gutter), padding-inline: var(--layout-margin-inline), and max-inline-size from layout.container.max with margin-inline: auto. The aliases switch at the breakpoints on their own; no media query is needed for them.
+- Page regions: gap or margin-block var(--layout-region-gap) between sections, padding-block var(--layout-hero-padding-block) in the hero.
+- A media query of your own for anything else copies the breakpoint value: @media (min-width: 640px) when layout.breakpoint.tablet is 640px.
 - Reading and form areas use max-inline-size from layout.measure.text and layout.measure.form.
 - Every target uses min-block-size and min-inline-size from layout.target.min.
 - Use logical properties throughout, so the grid mirrors under dir="rtl".
@@ -99,3 +101,4 @@ Audits the grid tokens in both densities: breakpoint order, column order, target
 - Letting text run the full width of a large screen.
 - Adding breakpoints per screen instead of using the tiers.
 - Reading a breakpoint custom property inside a media query: it does not work; copy the value.
+- Spacing page sections with one tier's token, such as --layout-region-gap-desktop, at every width: a phone gets a screen of empty space; use var(--layout-region-gap).

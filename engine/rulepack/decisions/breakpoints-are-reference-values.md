@@ -1,10 +1,10 @@
 ---
 id: breakpoints-are-reference-values
 title: Breakpoints are reference values, and type does not change by breakpoint
-status: active
+status: superseded
 areas: [layout, type, output]
 supersedes: null
-superseded_by: null
+superseded_by: layout-aliases
 ---
 
 # Breakpoints are reference values, and type does not change by breakpoint
