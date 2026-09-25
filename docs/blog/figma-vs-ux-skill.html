@@ -55,6 +55,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0f1115;
@@ -191,7 +193,7 @@
       color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) {
       font-family: var(--display);
       color: var(--ink);
       margin: 0;
@@ -235,7 +237,7 @@
       margin: 56px 0 16px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
       font-size: 19px;
@@ -291,7 +293,8 @@
       border-radius: 14px;
       padding: 26px 28px;
     }
-    .flow-cell h4 {
+    .flow-cell h4,
+    .flow-cell h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
       font-size: 20px;
@@ -339,7 +342,8 @@
       text-transform: uppercase; color: var(--scene-accent);
       margin-bottom: 10px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
       font-size: 18px;
@@ -735,7 +739,7 @@
 
       <div class="flow-grid">
         <div class="flow-cell">
-          <h4>Greenfield project (no Figma yet)</h4>
+          <h3 class="h4">Greenfield project (no Figma yet)</h3>
           <ol class="arrow-list">
             <li>Run <code>/ux-frame</code> for the 10-field discovery.</li>
             <li>Run <code>/ux-recommend</code>, get style, palette, type, motion, components.</li>
@@ -745,7 +749,7 @@
           </ol>
         </div>
         <div class="flow-cell">
-          <h4>Existing Figma file (designed first)</h4>
+          <h3 class="h4">Existing Figma file (designed first)</h3>
           <ol class="arrow-list">
             <li>Load Figma MCP. Point at the file URL.</li>
             <li>Read frames, variables, code-connect into the session.</li>

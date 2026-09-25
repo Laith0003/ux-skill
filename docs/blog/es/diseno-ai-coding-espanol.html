@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body {
@@ -557,6 +561,8 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         Aquí va un bloque de héroe simplificado de un starter de Next.js, fallando en tres reglas, y la versión reescrita que sale con exit 0. Misma intención de conversión, huella distinta.
       </p>
+      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
+      <!-- ux-lint-disable -->
       <pre class="code"><span class="c">// Antes: 3 hallazgos high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
@@ -587,6 +593,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       title=<span class="s">"Ranking de transportistas"</span> /&gt;
   &lt;/div&gt;
 &lt;/section&gt;</pre>
+      <!-- ux-lint-enable -->
       <p>
         Tres reglas disparan en el antes: Inter a <code>text-7xl</code>, el degradado canónico de IA, y la cuadrícula de tres tarjetas iguales. En el después se empareja Fraunces (display) con Inter (cuerpo), se usa una superficie plana, y se adopta una cuadrícula asimétrica 7-y-5. Misma intención, sin huella.
       </p>
@@ -626,7 +633,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
 
       <div class="honesty">
         <div class="label">Alcance honesto</div>
-        <h4>Las reglas atrapan estructura. No atrapan gusto.</h4>
+        <h3 class="h4">Las reglas atrapan estructura. No atrapan gusto.</h3>
         <p>El linter nunca va a atrapar «esta sección tiene mal ritmo» o «esta copia se siente fría». Eso lo hace una persona o un modelo en revisión. Lo que la regex <em>sí</em> atrapa es cada huella con un token literal, un patrón o una forma, es decir, la mayor parte de los defectos de IA, porque el modelo recurre al mismo artefacto cada vez.</p>
         <p>Deliberadamente no corremos un juez LLM en CI. Si tu vara es «parece hecho por un diseñador», eso es revisión de código, no lint. ux-skill provee <code>ux critique</code> para esa pasada, pero corre en el editor bajo demanda, no en CI.</p>
       </div>
@@ -648,9 +655,9 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· o ·</div>
+        <div class="row row--note">· o ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· o ·</div>
+        <div class="row row--note">· o ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

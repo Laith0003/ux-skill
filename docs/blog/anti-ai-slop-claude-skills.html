@@ -37,6 +37,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0f1115;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) {
       font-family: var(--display);
       color: var(--ink);
       margin: 0;
@@ -230,7 +232,7 @@
       margin: 56px 0 16px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
       font-size: 19px;
@@ -259,7 +261,8 @@
       color: var(--scene-accent);
       margin-bottom: 8px;
     }
-    .fingerprint h4 {
+    .fingerprint h4,
+    .fingerprint h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
       font-size: 18px;
@@ -282,7 +285,7 @@
       background: var(--surface-2);
       border-color: var(--scene-accent);
     }
-    .tool-card h3 {
+    .tool-card h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
       font-size: 24px;
@@ -299,7 +302,8 @@
     }
     .tool-card .stars strong { color: var(--ink); font-weight: 600; }
     .tool-card.ours .stars strong { color: var(--scene-accent); }
-    .tool-card h4 {
+    .tool-card h4,
+    .tool-card h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600;
       font-size: 14px;
@@ -385,7 +389,8 @@
       color: var(--scene-accent);
       margin-bottom: 10px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
       font-size: 18px;
@@ -709,31 +714,31 @@
 
       <div class="fingerprint">
         <div class="tag">Fingerprint 01, typography</div>
-        <h4>Inter as display</h4>
+        <h3 class="h4">Inter as display</h3>
         <p>Inter is a UI body font. AI defaults use it at 72px, 90px, 120px with line-height 1.0. Real display work uses a contrasting serif, a geometric grotesque, or Inter at 32px max. Linter rule: <code>font-size &gt; 64px &amp;&amp; font-family: Inter</code>.</p>
       </div>
 
       <div class="fingerprint">
         <div class="tag">Fingerprint 02, color</div>
-        <h4>The indigo-to-blue gradient</h4>
+        <h3 class="h4">The indigo-to-blue gradient</h3>
         <p>Purple-to-blue diagonal gradient at 135deg. It's in every AI demo, every landing page generation, every dashboard mock. Tailwind's default "indigo to blue" combo is the lazy default. Linter rule: regex matches the recognizable hex pair inside a linear gradient call.</p>
       </div>
 
       <div class="fingerprint">
         <div class="tag">Fingerprint 03, layout</div>
-        <h4>Three identical card grids</h4>
+        <h3 class="h4">Three identical card grids</h3>
         <p>Hero, then a three-card row with identical heights, identical icons in the top-left, identical button placement at the bottom. Visual rhythm is dead on arrival. Linter rule: detects <code>grid-cols-3</code> with three near-identical card components in sequence.</p>
       </div>
 
       <div class="fingerprint">
         <div class="tag">Fingerprint 04, copy</div>
-        <h4>Placeholder identities + "Beautiful experiences"</h4>
+        <h3 class="h4">Placeholder identities + "Beautiful experiences"</h3>
         <p>Generic stock names, fake test emails, classic filler paragraphs, "Beautiful experiences", "Build something amazing", "Seamless and intuitive", "Reimagine the future of." The copy gives the model away. Linter rule: regex pass over rendered text.</p>
       </div>
 
       <div class="fingerprint">
         <div class="tag">Fingerprint 05, motion</div>
-        <h4>fade-in-up everything, 0.3s ease-out</h4>
+        <h3 class="h4">fade-in-up everything, 0.3s ease-out</h3>
         <p>Every element fades in from below with the same duration and easing. No staggering, no variance, no purpose. Real motion has hierarchy: hero opens, supporting content cascades, body content settles. Linter rule: scans CSS for repeated <code>fadeInUp 0.3s ease-out</code> across siblings.</p>
       </div>
 
@@ -902,7 +907,7 @@
 
       <div class="honesty">
         <div class="label">Pick by use case</div>
-        <h4>Three reasonable picks depending on your stage</h4>
+        <h3 class="h4">Three reasonable picks depending on your stage</h3>
         <p><strong>Hackathon / weekend project</strong>, pick taste-skill or hallmark. Zero setup, prompt loads in one paste, output is "better than default." Don't overbuild.</p>
         <p><strong>Production interface with a known brand</strong>, pick ux-skill v2 for the brand specs (Apple, Stripe, Linear, Figma, etc.) and the deterministic lint pass. The recommender locks the system; the linter rejects drift.</p>
         <p><strong>You want the most-installed tool with active community</strong>, pick ui-ux-pro-max. 84k stars, weekly updates, real momentum. Pair it with ux-skill's linter if you want CI defense on top.</p>

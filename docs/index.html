@@ -467,6 +467,10 @@
   .foot{border-top:1px solid var(--hair-2);padding-block:30px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.04em}
 
   @media(prefers-reduced-motion:reduce){.cue span{animation:none;}.rev,.msg{transition:none;opacity:1;transform:none;}body{transition:none;}}
+  /* one-off section tweaks, kept out of inline styles */
+  .sec.sec--flush{padding-block:0}
+  .rev.rev--gap{margin-top:clamp(56px,8vh,96px)}
+  .lead.lead--close{font-size:clamp(2rem,5.4vw,3.4rem)}
 </style>
 </head>
 <body data-bg="dark">
@@ -627,7 +631,7 @@
   </div>
 
   <!-- ============ BEAT 4, HOW IT WORKS (dark) ============ -->
-  <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="how"></span><section class="sec" id="how" style="padding-block:0">
+  <div class="zone zone--lite" data-bg="light"><span class="zone__bloom" aria-hidden="true" data-bloom="how"></span><section class="sec sec--flush" id="how">
     <!-- SCROLL-PIN: 7 beats (title + 5 steps), each full-viewport, large centered. Mobile stacks. -->
     <div class="pin-wrap" id="pinWrap">
       <div class="pin-inner" id="pinInner" data-step="0">
@@ -749,9 +753,9 @@
         <div class="stat"><div class="n">17</div><div class="l">IDE integrations</div></div>
       </div>
 
-      <div class="rev" style="margin-top:clamp(56px,8vh,96px)">
+      <div class="rev rev--gap">
         <span class="eyebrow"><span class="dot c-blue"></span>Install</span>
-        <h2 class="lead" style="font-size:clamp(2rem,5.4vw,3.4rem)">One line. <em>Then build.</em></h2>
+        <h2 class="lead lead--close">One line. <em>Then build.</em></h2>
       </div>
       <div class="install" data-stagger>
         <div class="cmd"><span class="cl">Python</span><code><span class="pf">pip install</span> uxskill</code></div>

@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <style>
     html, body {
       overflow-x: clip;
@@ -561,6 +565,8 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         A seguir, um bloco de herói simplificado tirado de um starter Next.js que cai em três regras, e a versão reescrita que sai com exit 0. Mesma intenção de conversão, digital diferente.
       </p>
+      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
+      <!-- ux-lint-disable -->
       <pre class="code"><span class="c">// Antes: 3 achados high</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
@@ -591,6 +597,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       title=<span class="s">"Ranking de transportadoras"</span> /&gt;
   &lt;/div&gt;
 &lt;/section&gt;</pre>
+      <!-- ux-lint-enable -->
       <p>
         No «antes» disparam três regras: Inter em <code>text-7xl</code>, o gradiente canônico de IA, e o grid de três cartões iguais. No «depois» a fonte de display Fraunces se emparelha com Inter no corpo, a superfície fica plana, e o grid vira 7-e-5 assimétrico. Intenção igual, digital sumiu.
       </p>
@@ -644,7 +651,7 @@ $ /plugin install ux@ux-skill</pre>
 
       <div class="honesty">
         <div class="label">Escopo honesto</div>
-        <h4>As regras pegam estrutura. Não pegam gosto.</h4>
+        <h3 class="h4">As regras pegam estrutura. Não pegam gosto.</h3>
         <p>O linter nunca vai sinalizar «essa seção tem ritmo errado» ou «esse copy soa frio». Isso é trabalho humano, ou de um LLM na hora da revisão. O que a regex <em>captura com confiança</em> é toda digital que pode ser expressa por token literal, padrão ou forma, ou seja, a maior parte dos defaults de IA, porque o modelo volta sempre ao mesmo artefato.</p>
         <p>De propósito não rodamos um LLM-juiz no CI. Se a sua régua é «parece feito por designer», isso é code review, não lint. O ux-skill oferece o <code>ux critique</code> para esse passe, mas roda sob demanda no editor, não no CI.</p>
       </div>
@@ -668,9 +675,9 @@ $ /plugin install ux@ux-skill</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· ou ·</div>
+        <div class="row row--note">· ou ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· ou ·</div>
+        <div class="row row--note">· ou ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

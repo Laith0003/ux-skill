@@ -72,6 +72,8 @@
 </script>
 
 <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
   /* ============================================================
      Instant Skip Hire - Commercial Skip Hire
      Brand anchor (from the logo): primary AMBER #f0890f; secondary GREEN #1c3829
@@ -133,10 +135,10 @@
     *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
   }
 
-  h1, h2, h3, h4 { font-family: "Figtree", system-ui, sans-serif; color: var(--ink); margin: 0; letter-spacing: -0.02em; line-height: 1.06; font-weight: 800; }
+  h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) { font-family: "Figtree", system-ui, sans-serif; color: var(--ink); margin: 0; letter-spacing: -0.02em; line-height: 1.06; font-weight: 800; }
   h1 { font-size: clamp(2.4rem, 5.4vw, 4rem); letter-spacing: -0.03em; }
   h2 { font-size: clamp(1.8rem, 3.4vw, 2.7rem); }
-  h3 { font-size: 1.18rem; letter-spacing: -0.01em; line-height: 1.2; }
+  h3:where(:not(.h4)) { font-size: 1.18rem; letter-spacing: -0.01em; line-height: 1.2; }
   p  { margin: 0 0 1rem; max-width: 65ch; }
   a  { color: inherit; text-decoration: none; }
   img { display: block; max-width: 100%; height: auto; }
@@ -310,7 +312,7 @@
   .quote-card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-lg); box-shadow: var(--shadow-lift); padding: clamp(22px, 3vw, 30px); position: relative; }
   .quote-card .qhead { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 18px; }
   .quote-card .qhead .tag { background: var(--amber-tint); color: var(--amber-press); border-radius: 12px; width: 42px; height: 42px; display: grid; place-items: center; flex: none; }
-  .quote-card h3, .quote-card .qtitle { font-size: 1.3rem; line-height: 1.15; }
+  .quote-card h3:where(:not(.h4)), .quote-card .qtitle { font-size: 1.3rem; line-height: 1.15; }
   .quote-card .qsub { color: var(--muted); font-size: 0.92rem; margin: 2px 0 0; }
   .field { margin-bottom: 14px; }
   .field label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
@@ -344,7 +346,7 @@
   .quote-card.done .form-body { display: none; }
   .quote-card.done .form-success { display: block; }
   .form-success .tick { width: 54px; height: 54px; border-radius: 999px; background: rgba(47,107,52,0.12); color: var(--green-leaf); display: grid; place-items: center; margin: 0 auto 12px; }
-  .form-success h3 { margin-bottom: 6px; }
+  .form-success h3:where(:not(.h4)) { margin-bottom: 6px; }
   .form-success p { color: var(--muted); margin-inline: auto; }
 
   /* Proof / stats bar ---------------------------------------------------- */
@@ -385,10 +387,10 @@
   }
   .vcard .vico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--amber-tint); color: var(--amber-press); margin-bottom: 16px; }
   .vcard .vico .ico { width: 26px; height: 26px; }
-  .vcard h3 { margin-bottom: 8px; }
+  .vcard h3:where(:not(.h4)) { margin-bottom: 8px; }
   .vcard p { font-size: 0.96rem; color: var(--muted); margin: 0; }
   .vcard.feature { grid-row: span 2; background: linear-gradient(160deg, var(--green) 0%, var(--green-2) 100%); color: #fff; display: flex; flex-direction: column; }
-  .vcard.feature h3 { color: #fff; font-size: 1.5rem; }
+  .vcard.feature h3:where(:not(.h4)) { color: #fff; font-size: 1.5rem; }
   .vcard.feature p { color: var(--on-dark-soft); }
   .vcard.feature .vico { background: rgba(240,137,15,0.18); color: var(--amber); }
   .vcard.feature .spacer { flex: 1 1 auto; min-height: 18px; }
@@ -429,7 +431,7 @@
   .item .yards { font-size: clamp(2rem, 4.4vw, 2.6rem); font-weight: 800; line-height: 1; letter-spacing: -0.03em; color: var(--amber-deep); font-variant-numeric: tabular-nums; }
   .item .yards .yd { display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green-leaf); margin-top: 7px; }
   .item .yards.tag-style { font-size: 0.92rem; font-weight: 800; letter-spacing: -0.01em; color: var(--green-leaf); }
-  .item h3 { font-size: 1.18rem; }
+  .item h3:where(:not(.h4)) { font-size: 1.18rem; }
   .item .desc { font-size: 0.9rem; color: var(--muted); margin: 0; }
   .item .suit { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 8px; }
   .item .suit span { font-size: 0.76rem; color: var(--body); background: var(--surface-warm); border-radius: 8px; padding: 4px 9px; }
@@ -538,7 +540,8 @@
   .foot-brand .brand img { width: 44px; height: 44px; }
   .foot-brand .brand .wm b { color: #fff; }
   .foot-brand p { font-size: 0.92rem; margin: 16px 0 0; max-width: 34ch; }
-  .fcol h4 { color: #fff; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+  .fcol h4,
+  .fcol h3:where(.h4) { color: #fff; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
   .fcol a { display: block; font-size: 0.92rem; padding: 6px 0; color: rgba(255,255,255,0.66); transition: color 0.15s; }
   .fcol a:hover { color: var(--amber); }
   .foot-contact a { display: inline-flex; align-items: center; gap: 9px; color: #fff; font-weight: 600; }
@@ -563,6 +566,9 @@
 
   .skip-link { position: absolute; left: -999px; top: 0; background: var(--amber); color: #1c1206; padding: 10px 16px; border-radius: 0 0 8px 0; z-index: 100; font-weight: 700; }
   .skip-link:focus { left: 0; }
+  /* demo credit bar, outside the redesigned page */
+  .demo-credit { background: #14110d; color: #9a9088; font: 12px/1.6 system-ui, -apple-system, sans-serif; text-align: center; padding: 12px 16px; border-top: 1px solid rgba(255,255,255,.08); }
+  .demo-credit a { color: #f0890f; text-decoration: none; }
 </style>
 <noscript><style>.reveal,.reveal[data-stagger]>*,.hero-load{opacity:1 !important;transform:none !important}</style></noscript>
 </head>
@@ -1031,7 +1037,7 @@
         <p>Commercial waste solutions without the middleman. We connect UK businesses directly with trusted local skip hire suppliers, free to use, with no commission or hidden mark-ups.</p>
       </div>
       <nav class="fcol" aria-label="Skip sizes">
-        <h4>Skip sizes</h4>
+        <h3 class="h4">Skip sizes</h3>
         <a href="#sizes">Mini &amp; midi skips</a>
         <a href="#sizes">Builders skips</a>
         <a href="#sizes">Large commercial</a>
@@ -1039,7 +1045,7 @@
         <a href="#sizes">Compactor skips</a>
       </nav>
       <nav class="fcol" aria-label="Sectors">
-        <h4>Sectors</h4>
+        <h3 class="h4">Sectors</h3>
         <a href="#sectors">Construction</a>
         <a href="#sectors">Demolition</a>
         <a href="#sectors">Retail &amp; offices</a>
@@ -1047,7 +1053,7 @@
         <a href="#sectors">Facilities management</a>
       </nav>
       <nav class="fcol" aria-label="Company">
-        <h4>Company</h4>
+        <h3 class="h4">Company</h3>
         <a href="#trade">Trade accounts</a>
         <a href="#coverage">Areas we cover</a>
         <a href="#quote">Get a quote</a>
@@ -1055,7 +1061,7 @@
         <a href="https://instantskiphire.com/privacy-policy/">Privacy</a>
       </nav>
       <div class="fcol foot-contact">
-        <h4>Connect</h4>
+        <h3 class="h4">Connect</h3>
         <a href="mailto:sales@instantskiphire.com">
           <svg class="ico ico-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
           sales@instantskiphire.com
@@ -1231,8 +1237,8 @@
     });
   })();
 </script>
-<div style="background:#14110d;color:#9a9088;font:12px/1.6 system-ui,-apple-system,sans-serif;text-align:center;padding:12px 16px;border-top:1px solid rgba(255,255,255,.08)">
-  Demo generated by <a href="https://uxskill.laithjunaidy.com" style="color:#f0890f;text-decoration:none">ux-skill</a>, an unaffiliated redesign concept of instantskiphire.com to show brand-anchored output. Sample content; not a live page.
+<div class="demo-credit">
+  Demo generated by <a href="https://uxskill.laithjunaidy.com">ux-skill</a>, an unaffiliated redesign concept of instantskiphire.com to show brand-anchored output. Sample content; not a live page.
 </div>
 </body>
 </html>

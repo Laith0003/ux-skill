@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,13 +188,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -257,7 +260,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -350,7 +354,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body { overflow-x: clip; max-width: 100%; }
@@ -662,7 +667,7 @@
 
       <div class="honesty">
         <div class="label">Phạm vi trung thực</div>
-        <h4>Regex bắt dấu vân tay cấu trúc, không bắt taste.</h4>
+        <h3 class="h4">Regex bắt dấu vân tay cấu trúc, không bắt taste.</h3>
         <p>Linter sẽ không bao giờ nói "section này sai nhịp" hoặc "copy này đọc lạnh". Cần con người hoặc một model cho việc đó. Cái mà regex thật sự bắt là mọi dấu vân tay có token, pattern hoặc hình dạng theo nghĩa đen, và đó là phần lớn các mặc định AI, vì model luôn quay về cùng một artifact.</p>
         <p>Chúng tôi cố ý không chạy LLM-judge trong CI. Nếu chuẩn mực của bạn là "trông như designer làm", đó là code review, không phải lint. ux-skill ship lệnh <code>/ux-critique</code> cho lượt taste, nhưng nó chạy trong IDE, không phải CI.</p>
       </div>
@@ -689,9 +694,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· hoặc ·</div>
+        <div class="row row--note">· hoặc ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· hoặc ·</div>
+        <div class="row row--note">· hoặc ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

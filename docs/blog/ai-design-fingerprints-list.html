@@ -21,7 +21,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/blog/ai-design-fingerprints-list.html">
   <meta property="og:title" content="The 35 AI design fingerprints every AI coding tool ships by default">
-  <meta property="og:description" content="Inter as display, indigo-to-blue gradients, three equal cards, John Doe placeholders. The full taxonomy with detection regex and fixes.">
+  <!-- ux-lint-disable --><meta property="og:description" content="Inter as display, indigo-to-blue gradients, three equal cards, John Doe placeholders. The full taxonomy with detection regex and fixes."><!-- ux-lint-enable -->
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/ai-design-fingerprints-list.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -30,7 +30,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="The 35 AI design fingerprints">
-  <meta name="twitter:description" content="Inter as display, indigo-to-blue gradients, three equal cards, John Doe placeholders. Full list with regex.">
+  <!-- ux-lint-disable --><meta name="twitter:description" content="Inter as display, indigo-to-blue gradients, three equal cards, John Doe placeholders. Full list with regex."><!-- ux-lint-enable -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -66,6 +66,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0d0f12;
@@ -222,7 +224,7 @@
       color: var(--ink); margin: 64px 0 18px;
     }
     h2 .accent { color: var(--primary); font-style: italic; font-weight: 600; }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: 'Inter', sans-serif;
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em;
@@ -299,7 +301,8 @@
       letter-spacing: 0.08em;
       color: var(--muted);
     }
-    .fp-card h4 {
+    .fp-card h4,
+    .fp-card h3:where(.h4) {
       font-family: 'Inter', sans-serif;
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -358,7 +361,8 @@
       text-transform: uppercase; color: var(--primary);
       margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: 'Inter', sans-serif;
       font-weight: 600; font-size: 17px;
       color: var(--ink); margin-bottom: 10px;
@@ -424,7 +428,8 @@
       font-size: 22px; line-height: 1.45;
       color: var(--ink); font-style: italic;
     }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -597,8 +602,8 @@
       <span class="eyebrow">Blog · Reference · 2026-05-28</span>
       <h1>The 35 AI design fingerprints every AI coding tool ships <span class="accent">by default</span>.</h1>
       <p class="lede">
-        Every AI coding tool (Claude Code, Cursor, Windsurf, Copilot, Aider, v0, Bolt) produces the same recognizable defaults when you ask it to design something. Inter at 90px. Indigo-to-blue gradients. Three identical cards. "John Doe" placeholders. fade-in-up on everything. This is the full taxonomy. <strong>35 fingerprints, grouped by category, with the regex that detects each one.</strong>
-      </p>
+        <!-- ux-lint-disable -->        Every AI coding tool (Claude Code, Cursor, Windsurf, Copilot, Aider, v0, Bolt) produces the same recognizable defaults when you ask it to design something. Inter at 90px. Indigo-to-blue gradients. Three identical cards. "John Doe" placeholders. fade-in-up on everything. This is the full taxonomy. <strong>35 fingerprints, grouped by category, with the regex that detects each one.</strong>
+      <!-- ux-lint-enable --></p>
       <p class="byline">By the ux-skill team · 14 min read · Sourced from data/anti-patterns.json</p>
       <figure class="docfig">
         <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
@@ -634,13 +639,15 @@
 
   <div class="wrap-wide">
     <article>
+      <!-- The taxonomy quotes each fingerprint it describes. ux-lint skips it. -->
+      <!-- ux-lint-disable -->
       <h2 class="cat-header" id="typography">Typography <span class="count">3 fingerprints</span></h2>
       <p class="cat-blurb">Type is the single highest-signal surface in any design. The fingerprints below cover face choice, size, and the system-font escape hatch.</p>
 
       <div class="fp-card">
         <div class="head">
           <span class="id">inter-as-display</span>
-          <h4>Inter used as display font</h4>
+          <h3 class="h4">Inter used as display font</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">font-family:\s*['"]?Inter['"]?[^;}]*[;}][^{]*(?:font-size:\s*([4-9]\d|\d{3,})px|\btext-(5xl|6xl|7xl|8xl|9xl)\b)</div>
@@ -651,7 +658,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">font-system-only</span>
-          <h4>System font stack with no chosen typeface</h4>
+          <h3 class="h4">System font stack with no chosen typeface</h3>
           <span class="sev low">low</span>
         </div>
         <div class="regex">font-family:\s*(?:-apple-system|BlinkMacSystemFont)[^;]*;</div>
@@ -662,7 +669,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">hero-text-arbitrary-90px</span>
-          <h4>Arbitrary hero font size</h4>
+          <h3 class="h4">Arbitrary hero font size</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">text-\[(?:9[0-9]|1[0-9]{2})px\]|font-size:\s*(?:9[0-9]|1[0-9]{2})px\b</div>
@@ -676,7 +683,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">purple-to-blue-gradient</span>
-          <h4>Default purple-to-blue AI gradient</h4>
+          <h3 class="h4">Default purple-to-blue AI gradient</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">bg-gradient-to-[a-z]+\s+from-(purple|violet|fuchsia|indigo)-(400|500|600)\s+(?:via-[a-z]+-[0-9]+\s+)?to-(blue|sky|cyan)-(400|500|600)</div>
@@ -687,7 +694,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">gradient-text-rainbow</span>
-          <h4>Multi-stop gradient text</h4>
+          <h3 class="h4">Multi-stop gradient text</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">(?:bg-clip-text|background-clip:\s*text)[^"';]*(?:bg-gradient-to-[a-z]+\s+from-[a-z]+-[0-9]+\s+via-[a-z]+-[0-9]+\s+to-[a-z]+-[0-9]+)</div>
@@ -698,7 +705,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">card-glow-purple-shadow</span>
-          <h4>Purple glow shadow on cards</h4>
+          <h3 class="h4">Purple glow shadow on cards</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">box-shadow:[^;]*rgba?\(\s*(?:12[0-9]|13[0-9]|14[0-9])[^)]*\)|shadow-(?:purple|violet|fuchsia|indigo)-(?:400|500|600)</div>
@@ -709,7 +716,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">tailwind-color-named-vague</span>
-          <h4>Named Tailwind colors with no semantic token</h4>
+          <h3 class="h4">Named Tailwind colors with no semantic token</h3>
           <span class="sev low">low</span>
         </div>
         <div class="regex">\b(?:bg|text|border|ring|from|to|via)-(?:blue|red|green|yellow|purple|pink|indigo|orange)-(?:400|500|600)\b</div>
@@ -720,7 +727,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">gradient-mesh-purple-pink</span>
-          <h4>Purple-pink mesh gradient hero</h4>
+          <h3 class="h4">Purple-pink mesh gradient hero</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">radial-gradient\([^)]*(?:purple|fuchsia|pink|violet)[^)]*\)|conic-gradient\([^)]*(?:purple|fuchsia|pink|violet)[^)]*\)</div>
@@ -731,7 +738,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">dark-text-on-dark-card</span>
-          <h4>Low-contrast text on card</h4>
+          <h3 class="h4">Low-contrast text on card</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">(?:bg-zinc-[89]00|bg-slate-[89]00|bg-gray-[89]00|bg-black)[^"';]*(?:text-zinc-[5-7]00|text-slate-[5-7]00|text-gray-[5-7]00)</div>
@@ -745,7 +752,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">three-equal-card-grid</span>
-          <h4>Three equal cards in a row</h4>
+          <h3 class="h4">Three equal cards in a row</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">(?:grid-cols-3|grid-template-columns:\s*repeat\(\s*3\s*,\s*(?:1fr|minmax))[^>]*&gt;(?:\s*&lt;[^&gt;]*card[^&gt;]*&gt;[\s\S]*?&lt;/[^&gt;]+&gt;\s*){3}</div>
@@ -756,7 +763,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">centered-everything-hero</span>
-          <h4>Centered hero composition</h4>
+          <h3 class="h4">Centered hero composition</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">&lt;(?:section|div|header)[^&gt;]*class="[^"]*\bhero\b[^"]*"[^&gt;]*&gt;[\s\S]{0,800}?&lt;h1[^&gt;]*class="[^"]*\btext-center\b[^"]*"</div>
@@ -767,7 +774,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">avatar-stack-overlapping</span>
-          <h4>Generic overlapping avatar stack</h4>
+          <h3 class="h4">Generic overlapping avatar stack</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">class="[^"]*-space-x-[0-9]+[^"]*"[^&gt;]*&gt;(?:\s*&lt;(?:img|div)[^&gt;]*class="[^"]*(?:avatar|rounded-full)[^"]*"[^&gt;]*/?&gt;\s*){3,}</div>
@@ -778,7 +785,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">pill-rounded-full-everywhere</span>
-          <h4>rounded-full applied to everything</h4>
+          <h3 class="h4">rounded-full applied to everything</h3>
           <span class="sev low">low</span>
         </div>
         <div class="regex">&lt;button[^&gt;]*class="[^"]*\brounded-full\b[^"]*"|&lt;(?:input|textarea)[^&gt;]*class="[^"]*\brounded-full\b</div>
@@ -789,7 +796,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">nav-equal-hamburger-desktop</span>
-          <h4>Hamburger menu on desktop</h4>
+          <h3 class="h4">Hamburger menu on desktop</h3>
           <span class="sev low">low</span>
         </div>
         <div class="regex">&lt;(?:button|div)[^&gt;]*aria-label="(?:menu|navigation|hamburger)"[^&gt;]*&gt;(?![\s\S]*?(?:md:hidden|lg:hidden))</div>
@@ -803,7 +810,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">fake-name-john-doe</span>
-          <h4>Generic placeholder names</h4>
+          <h3 class="h4">Generic placeholder names</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">\b(?:John\s+Doe|Jane\s+Doe|John\s+Smith|Sarah\s+Chan|Test\s+User|Demo\s+User|Foo\s+Bar)\b</div>
@@ -814,7 +821,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">lorem-ipsum-leak</span>
-          <h4>L&#111;rem ipsum in shipping code</h4>
+          <h3 class="h4">L&#111;rem ipsum in shipping code</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">\b(?:Lorem\s+ipsum|consectetur\s+adipiscing|sed\s+do\s+eiusmod)\b</div>
@@ -825,7 +832,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">emoji-in-ui</span>
-          <h4>Emoji used as UI element</h4>
+          <h3 class="h4">Emoji used as UI element</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">&lt;(?:button|a|h[1-6]|span|div|p|li)[^&gt;]*&gt;[^&lt;]*[emoji-range]</div>
@@ -836,7 +843,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">icon-emoji-stamp</span>
-          <h4>Emoji used as icon stamp</h4>
+          <h3 class="h4">Emoji used as icon stamp</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">class="[^"]*(?:icon|stamp|badge|achievement|reward)[^"]*"[^&gt;]*&gt;\s*[emoji-range]</div>
@@ -847,7 +854,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">testimonial-fake-five-stars</span>
-          <h4>Hardcoded five-star testimonial</h4>
+          <h3 class="h4">Hardcoded five-star testimonial</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">(?:&#9733;{5}|&#9733;{5}|\*{5})|&lt;(?:span|div|p)[^&gt;]*class="[^"]*stars?[^"]*"[^&gt;]*&gt;\s*(?:&#9733;){4,}</div>
@@ -861,7 +868,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">timing-300ms-default</span>
-          <h4>Default 300ms transition timing</h4>
+          <h3 class="h4">Default 300ms transition timing</h3>
           <span class="sev low">low</span>
         </div>
         <div class="regex">(?:transition(?:-duration)?|animation-duration):\s*300ms\b|duration-300\b</div>
@@ -872,7 +879,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">cubic-bezier-material-only</span>
-          <h4>Material default easing everywhere</h4>
+          <h3 class="h4">Material default easing everywhere</h3>
           <span class="sev low">low</span>
         </div>
         <div class="regex">cubic-bezier\(\s*0?\.4\s*,\s*0\s*,\s*0?\.2\s*,\s*1\s*\)</div>
@@ -883,7 +890,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">cta-arrow-rightward-bouncing</span>
-          <h4>Bouncing arrow on CTA</h4>
+          <h3 class="h4">Bouncing arrow on CTA</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">&lt;(?:button|a)[^&gt;]*&gt;[^&lt;]*(?:→|-&gt;|&amp;rarr;)[^&lt;]*&lt;/(?:button|a)&gt;|class="[^"]*\banimate-bounce\b</div>
@@ -897,7 +904,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">inline-svg-no-aria</span>
-          <h4>SVG without aria-label or aria-hidden</h4>
+          <h3 class="h4">SVG without aria-label or aria-hidden</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">&lt;svg(?![^&gt;]*\baria-label=)(?![^&gt;]*\baria-hidden=)(?![^&gt;]*\brole="presentation")[^&gt;]*&gt;</div>
@@ -908,7 +915,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">button-no-type</span>
-          <h4>Button missing type attribute</h4>
+          <h3 class="h4">Button missing type attribute</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">&lt;button(?![^&gt;]*\btype=)[^&gt;]*&gt;</div>
@@ -919,7 +926,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">img-no-alt</span>
-          <h4>Image missing alt attribute</h4>
+          <h3 class="h4">Image missing alt attribute</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">&lt;img(?![^&gt;]*\balt=)[^&gt;]*/?&gt;</div>
@@ -930,7 +937,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">link-onclick-no-href</span>
-          <h4>Anchor with onClick but no href</h4>
+          <h3 class="h4">Anchor with onClick but no href</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">&lt;a(?![^&gt;]*\bhref=)[^&gt;]*\b(?:onClick|onclick)=</div>
@@ -941,7 +948,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">heading-skip-h1-h3</span>
-          <h4>Skipped heading level</h4>
+          <h3 class="h4">Skipped heading level</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">&lt;h1[^&gt;]*&gt;[\s\S]*?&lt;/h1&gt;[\s\S]*?&lt;h3[^&gt;]*&gt;(?![\s\S]*?&lt;h2)</div>
@@ -952,7 +959,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">infinite-scroll-no-pagination</span>
-          <h4>Infinite scroll without keyboard fallback</h4>
+          <h3 class="h4">Infinite scroll without keyboard fallback</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">(?:IntersectionObserver|useInfiniteScroll)[\s\S]{0,500}?(?:loadMore|fetchMore)(?![\s\S]{0,800}?&lt;button[^&gt;]*&gt;(?:Load|Show|More))</div>
@@ -966,7 +973,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">inline-style-attribute</span>
-          <h4>Inline style attribute</h4>
+          <h3 class="h4">Inline style attribute</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">&lt;(?:div|span|p|section|article|h[1-6]|button|a|img)[^&gt;]*\sstyle="[^"]+"</div>
@@ -977,7 +984,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">console-log-leak</span>
-          <h4>console.log in component code</h4>
+          <h3 class="h4">console.log in component code</h3>
           <span class="sev high">high</span>
         </div>
         <div class="regex">console\.(?:log|warn|debug|info)\s*\(</div>
@@ -988,7 +995,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">todo-fixme-comment</span>
-          <h4>TODO or FIXME in shipping code</h4>
+          <h3 class="h4">TODO or FIXME in shipping code</h3>
           <span class="sev low">low</span>
         </div>
         <div class="regex">(?://|/\*|&lt;!--)\s*(?:TODO|FIXME|XXX|HACK|WIP|REFACTOR)\b</div>
@@ -999,7 +1006,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">any-type-leak</span>
-          <h4>TypeScript any type</h4>
+          <h3 class="h4">TypeScript any type</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">:\s*any(?:\s*[;,)=\]&gt;]|\s*$)|&lt;any[,&gt;]|as\s+any\b</div>
@@ -1010,7 +1017,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">blur-bg-only-decoration</span>
-          <h4>Backdrop blur with no glass surface</h4>
+          <h3 class="h4">Backdrop blur with no glass surface</h3>
           <span class="sev low">low</span>
         </div>
         <div class="regex">(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\s*blur\([^)]+\))(?![^"';]*(?:bg-white/[0-9]|bg-black/[0-9]))</div>
@@ -1021,7 +1028,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">shadcn-default-everywhere</span>
-          <h4>Default shadcn token block unmodified</h4>
+          <h3 class="h4">Default shadcn token block unmodified</h3>
           <span class="sev low">low</span>
         </div>
         <div class="regex">--background:\s*0\s+0%\s+100%[\s\S]{0,200}--foreground:\s*222\.2\s+84%\s+4\.9%|--radius:\s*0\.5rem;</div>
@@ -1032,7 +1039,7 @@
       <div class="fp-card">
         <div class="head">
           <span class="id">arbitrary-z-index-9999</span>
-          <h4>Lazy z-index value</h4>
+          <h3 class="h4">Lazy z-index value</h3>
           <span class="sev medium">medium</span>
         </div>
         <div class="regex">z-index:\s*(?:9999+|99999+|2147483647)\b|\bz-\[(?:9999+|99999+)\]</div>
@@ -1040,6 +1047,7 @@
         <p class="fix"><strong>Fix:</strong> Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999.</p>
       </div>
 
+      <!-- ux-lint-enable -->
       <h2>How to run all 35 against your codebase</h2>
       <p>
         The full taxonomy ships in ux-skill v2's anti-pattern linter. The CLI runs every rule against your source files and exits non-zero if any high-severity fingerprint matches. Drop it into a pre-commit hook or a CI step.
@@ -1058,7 +1066,7 @@
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>35 fingerprints isn't every fingerprint.</h4>
+        <h3 class="h4">35 fingerprints isn't every fingerprint.</h3>
         <p>The list above catches the most recognizable patterns we've seen across Claude Code, Cursor, Windsurf, v0, Bolt, and Aider output. It doesn't catch tone-of-voice slop, microcopy slop, or the layout patterns we haven't quantified yet.</p>
         <p>The list grows. We add a rule whenever we spot a pattern we can write a regex for and a fix we can recommend. <a href="https://github.com/Laith0003/ux-skill/blob/main/data/anti-patterns.json" class="link">The source file is on GitHub</a> and PRs are open.</p>
       </div>
@@ -1106,10 +1114,10 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> ux lint <span class="arg">. --threshold high</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha lint .</span></div>
       </div>
     </section>

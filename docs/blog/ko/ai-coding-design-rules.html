@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -176,13 +178,14 @@
       color: var(--ink); margin: 64px 0 18px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 18px;
       color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 16px;
       color: var(--ink);
@@ -247,7 +250,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 16px; color: var(--ink);
       margin-bottom: 10px;
@@ -341,7 +345,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body {
@@ -637,7 +642,7 @@
 
       <div class="honesty">
         <div class="label">범위에 대한 솔직함</div>
-        <h4>정규식이 잡는 것은 구조적 지문이지 취향이 아닙니다.</h4>
+        <h3 class="h4">정규식이 잡는 것은 구조적 지문이지 취향이 아닙니다.</h3>
         <p>린트가 "이 섹션의 리듬이 틀렸어"나 "카피가 차갑게 읽혀"를 판정하는 일은 없습니다. 그것은 리뷰의 몫입니다. 정규식이 확실히 잡아내는 것은 문자열 토큰, 클래스 이름, 16진값, DOM 형태를 가진 모든 지문 (즉 AI 디폴트의 대부분) 입니다. 모델이 매번 같은 결과물에 손을 뻗기 때문입니다.</p>
         <p>린트 위에 취향 검토를 얹고 싶다면 같은 패키지에 <code>/ux-critique</code>가 함께 들어 있고, 에디터 안에서 필요할 때 돕니다. 이것을 의도적으로 CI에 넣지 않습니다, CI는 결정론적 바닥의 자리이기 때문입니다.</p>
       </div>
@@ -679,9 +684,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 또는 ·</div>
+        <div class="row row--note">· 또는 ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 또는 ·</div>
+        <div class="row row--note">· 또는 ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

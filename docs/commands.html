@@ -715,7 +715,10 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
-<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}    /* moved out of inline style attributes */
+    a.link-accent-u { color:var(--scene-accent); text-underline-offset:3px; }
+    p.note-muted { font-size:14px; color:var(--muted); margin-bottom:8px; }
+  </style>
 </head>
 <body>
 
@@ -812,7 +815,7 @@
       to its summary or follow the source link for the full markdown.
     </p>
 
-    <p style="font-size:14px;color:var(--muted);margin-bottom:8px;">New to ux-skill? Start with <a href="/how-to-add-a-design-system-to-claude-code.html" style="color:var(--scene-accent);text-underline-offset:3px;">how to add a design system to Claude Code</a>, then come back for the full command reference.</p>
+    <p class="note-muted">New to ux-skill? Start with <a href="/how-to-add-a-design-system-to-claude-code.html" class="link-accent-u">how to add a design system to Claude Code</a>, then come back for the full command reference.</p>
 
     <figure class="docfig">
       <img src="/screenshots/terminal-ux-recommend.webp" width="1600" height="1000" alt="A terminal running the uxskill /ux-recommend command, compiling a design system from a brief: style, palette, type pair, and motion resolved into one token set." loading="lazy">

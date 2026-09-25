@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <style>
     html, body {
       overflow-x: clip;
@@ -561,6 +565,8 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         아래는 Next.js 스타터에서 잘라낸 단순화된 히어로 블록입니다. 세 규칙에 걸리고, exit 0으로 통과하는 재작성본이 그 아래 있습니다. 전환 의도는 같지만, 지문은 다릅니다.
       </p>
+      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
+      <!-- ux-lint-disable -->
       <pre class="code"><span class="c">// Before: high 3건</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
@@ -591,6 +597,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       title=<span class="s">"운송사 랭킹"</span> /&gt;
   &lt;/div&gt;
 &lt;/section&gt;</pre>
+      <!-- ux-lint-enable -->
       <p>
         Before에서는 세 규칙이 발동합니다. <code>text-7xl</code>로 쓰인 Inter, AI 표준 그라데이션, 동일 카드 3개 그리드. After는 Fraunces(디스플레이)와 Inter(본문)을 짝짓고, 플랫 표면을 채택하며, 7-5 비대칭 그리드로 갈아탔습니다. 의도는 같고 지문은 사라졌습니다.
       </p>
@@ -644,7 +651,7 @@ $ /plugin install ux@ux-skill</pre>
 
       <div class="honesty">
         <div class="label">정직한 범위</div>
-        <h4>규칙은 구조를 잡는다. 취향은 못 잡는다.</h4>
+        <h3 class="h4">규칙은 구조를 잡는다. 취향은 못 잡는다.</h3>
         <p>린터는 「이 섹션은 리듬이 안 맞아」나 「이 카피는 차갑게 느껴져」를 절대로 잡지 못합니다. 그건 사람의 일이거나, 리뷰 단계의 LLM이 할 일입니다. 정규식이 <em>확실히</em> 잡아내는 건 문자열 토큰, 패턴, 형태로 표현되는 모든 지문입니다. 그게 AI 디폴트의 대부분이죠. 모델은 매번 같은 산출물로 회귀하니까요.</p>
         <p>CI에서는 의도적으로 LLM 평가자를 돌리지 않습니다. 기준이 「디자이너가 만든 것 같은가」라면, 그건 코드 리뷰지 lint가 아닙니다. ux-skill에는 그 패스를 위한 <code>ux critique</code>가 따로 있지만, 편집기에서 온디맨드로만 돌고 CI엔 들어가지 않습니다.</p>
       </div>
@@ -668,9 +675,9 @@ $ /plugin install ux@ux-skill</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 또는 ·</div>
+        <div class="row row--note">· 또는 ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 또는 ·</div>
+        <div class="row row--note">· 또는 ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

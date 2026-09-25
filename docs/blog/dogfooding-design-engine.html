@@ -66,6 +66,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -188,13 +190,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -259,7 +262,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -340,7 +344,8 @@
       color: var(--lose-fg);
       margin-bottom: 6px;
     }
-    .bug-card h4 {
+    .bug-card h4,
+    .bug-card h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink); margin-bottom: 10px;
@@ -359,7 +364,8 @@
       color: var(--win-fg);
       margin-right: 10px;
     }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -579,7 +585,7 @@
 
       <div class="bug-card">
         <div class="bug-id">ux-skill #engine-67</div>
-        <h4>The "editorial" tone tag biases Cormorant over Fraunces</h4>
+        <h3 class="h4">The "editorial" tone tag biases Cormorant over Fraunces</h3>
         <p>
           Tracing the recommender's lane on the <em>type</em> search: with <code>tone: editorial</code> in the brief, the type-pair scorer added a <code>+0.18</code> bonus to any pair where the display face was a humanist garalde serif (Cormorant, Sabon, Adobe Garamond). Fraunces, which is a contemporary variable revival with a <code>SOFT</code> axis, was tagged as "geometric-revival serif" in the type manifest, missing the editorial bonus entirely. Result: Cormorant ranked first by 0.21, even though Fraunces had a higher score on every other dimension (variable axes, modern proof, multi-script support).
         </p>
@@ -596,7 +602,7 @@
 
       <div class="bug-card">
         <div class="bug-id">ux-skill #engine-68</div>
-        <h4>"Calm" routed to warm-cream palettes, ignoring near-black charcoal options</h4>
+        <h3 class="h4">"Calm" routed to warm-cream palettes, ignoring near-black charcoal options</h3>
         <p>
           The palette scorer treated <code>tone: calm</code> as a near-synonym for "warm pastels": cream, ivory, sand, oat. It correctly excluded the "loud" cluster (neon, deep saturation, high contrast) but it also excluded the "calm dark" cluster of charcoal canvases with restrained accents, the language of nighttime cinema, art-house posters, late-issue Apple keynotes. Those palettes exist in the manifest (<code>charcoal-amber</code>, <code>obsidian-mint</code>, <code>graphite-citrine</code>) but the <code>calm</code> tag was binary-coded as "light canvas required."
         </p>
@@ -669,7 +675,7 @@ $ uxskill lint docs/index.html --threshold medium
 
       <div class="honesty">
         <div class="label">Honest scope</div>
-        <h4>Two bugs is one snapshot. There are more.</h4>
+        <h3 class="h4">Two bugs is one snapshot. There are more.</h3>
         <p>The recommender's tagging assumptions came from our own taste, and our taste has blind spots. We expect to find more bugs as we run the engine on more briefs. We file them publicly when we find them, and we fix them in the manifests (not the code) so the fixes are auditable as diffs to JSON, not as changes to recommendation logic.</p>
         <p>If you find a bug in the manifest tagging (a tag that's too narrow, a coupling that's too tight, a missing facet), the project is open. <a href="https://github.com/Laith0003/ux-skill/issues" class="link">File an issue</a>, ideally with a brief that reproduces.</p>
       </div>
@@ -701,9 +707,9 @@ $ uxskill lint docs/index.html --threshold medium
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

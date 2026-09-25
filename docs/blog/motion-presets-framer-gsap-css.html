@@ -66,6 +66,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -188,13 +190,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -259,7 +262,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -336,7 +340,7 @@
       display: flex; justify-content: space-between; align-items: baseline;
       margin-bottom: 16px; flex-wrap: wrap; gap: 8px;
     }
-    .preset-card h3 {
+    .preset-card h3:where(:not(.h4)) {
       margin: 0;
       font-family: var(--display);
       font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 580;
@@ -365,7 +369,8 @@
       padding: 22px 26px;
       margin: 24px 0;
     }
-    .engine-pick h4 {
+    .engine-pick h4,
+    .engine-pick h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 600;
       font-weight: 600; font-size: 22px;
@@ -401,7 +406,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -471,7 +477,12 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
-<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}    /* moved out of inline style attributes */
+    h4.preset-h.preset-h--first ,
+    h3:where(.h4).preset-h.preset-h--first { margin-top: 18px; margin-bottom: 8px; font-size: 14px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    h4.preset-h ,
+    h3:where(.h4).preset-h { margin-top: 22px; margin-bottom: 8px; font-size: 14px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  </style>
 </head>
 <body>
   
@@ -642,7 +653,7 @@
           <span><strong>transform + opacity</strong></span>
         </div>
 
-        <h4 style="margin-top: 18px; margin-bottom: 8px; font-size: 14px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);">Framer Motion</h4>
+        <h4 class="preset-h preset-h--first">Framer Motion</h4>
 <pre class="code"><span class="k">import</span> { motion } <span class="k">from</span> <span class="s">'framer-motion'</span>;
 
 &lt;<span class="k">motion.div</span>
@@ -653,7 +664,7 @@
   &lt;Card /&gt;
 &lt;/<span class="k">motion.div</span>&gt;</pre>
 
-        <h4 style="margin-top: 22px; margin-bottom: 8px; font-size: 14px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);">GSAP</h4>
+        <h4 class="preset-h">GSAP</h4>
 <pre class="code"><span class="k">import</span> { gsap } <span class="k">from</span> <span class="s">'gsap'</span>;
 
 gsap.from(el, {
@@ -663,7 +674,7 @@ gsap.from(el, {
   ease: <span class="s">'expo.out'</span>
 });</pre>
 
-        <h4 style="margin-top: 22px; margin-bottom: 8px; font-size: 14px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);">CSS</h4>
+        <h4 class="preset-h">CSS</h4>
 <pre class="code"><span class="k">@keyframes</span> fade-up-12 {
   <span class="k">from</span> { transform: <span class="s">translateY(12px)</span>; opacity: <span class="n">0</span>; }
   <span class="k">to</span>   { transform: <span class="s">translateY(0)</span>;    opacity: <span class="n">1</span>; }
@@ -697,19 +708,19 @@ gsap.from(el, {
       <h2>When to pick each engine</h2>
 
       <div class="engine-pick">
-        <h4>Pick CSS when</h4>
-        <p>The motion is declarative, doesn't need to be controlled by state, and the duration is under 1.2 seconds. CSS keyframes are the cheapest to ship (no JS, no library, no runtime cost) and the most performant: the browser runs them on the compositor thread. Use CSS for Entry animations, Hover lifts, Press states, basic Attention, and most Exit animations.</p>
+        <h3 class="h4">Pick CSS when</h3>
+        <p>The motion is declarative, doesn't need to be controlled by state, and the duration is under 1.2 seconds. CSS keyframes are the cheapest to ship (no JS, no library, no runtime cost) and the most performant: the browser runs them on the compositor thread. Use CSS for Entry animations, Hover states, Press states, basic Attention, and most Exit animations.</p>
         <p><strong>Bytes shipped:</strong> zero. <strong>Composite cost:</strong> minimal. <strong>Control surface:</strong> minimal.</p>
       </div>
 
       <div class="engine-pick">
-        <h4>Pick Framer Motion when</h4>
+        <h3 class="h4">Pick Framer Motion when</h3>
         <p>The animation is bound to React state: a route change, a tab switch, a drawer open, a layout shift. Framer Motion's <code>AnimatePresence</code> and <code>layoutId</code> patterns are unmatched for component-tree animations. Also pick it when you need gestures (drag, hover with imperative control) or layout animations (FLIP).</p>
         <p><strong>Bytes shipped:</strong> ~35KB gzipped (tree-shakeable). <strong>Composite cost:</strong> low. <strong>Control surface:</strong> deep React integration.</p>
       </div>
 
       <div class="engine-pick">
-        <h4>Pick GSAP when</h4>
+        <h3 class="h4">Pick GSAP when</h3>
         <p>The animation is a timeline: multiple elements with overlapping cues, scroll-driven scrubbing, complex easing, or staggers. GSAP's ScrollTrigger is the canonical tool for scroll-pinned cinema (the <code>scroll-pin-hold</code> preset). It's also the right pick when the motion needs to run outside React (vanilla JS, Svelte, Astro islands).</p>
         <p><strong>Bytes shipped:</strong> ~40KB gzipped core, +15KB ScrollTrigger. <strong>Composite cost:</strong> moderate (runs on rAF). <strong>Control surface:</strong> timeline-first.</p>
       </div>
@@ -778,7 +789,7 @@ const preset = <span class="k">await</span> mcp.call(<span class="s">"ux_motion_
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>57 presets is not "every animation ever."</h4>
+        <h3 class="h4">57 presets is not "every animation ever."</h3>
         <p>For bespoke product moments (a custom data viz, a branded loader, a one-off marketing micro-interaction) you'll still write motion yourself. The manifest covers the 90% case where the motion is recognizable across the industry, and the goal is to use the right one instead of inventing a worse one. The remaining 10% is where the brand earns its identity, and that's the right place to spend effort.</p>
         <p>The Framer Motion snippets target v11+. The GSAP snippets target v3+. The CSS snippets are evergreen.</p>
       </div>
@@ -810,9 +821,9 @@ const preset = <span class="k">await</span> mcp.call(<span class="s">"ux_motion_
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or</div>
+        <div class="row row--note">or</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

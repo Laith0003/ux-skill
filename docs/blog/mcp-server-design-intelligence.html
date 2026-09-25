@@ -66,6 +66,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -188,13 +190,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -259,7 +262,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -360,7 +364,8 @@
       font-weight: 600;
       white-space: nowrap;
     }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -758,7 +763,7 @@ if (findings.length &gt; 0) {
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>MCP is young. The protocol moves.</h4>
+        <h3 class="h4">MCP is young. The protocol moves.</h3>
         <p>The Model Context Protocol shipped late 2024 and is still version-pinning aggressively. Anthropic's Python SDK is the canonical implementation; the spec stabilized into 1.0 in early 2025. Our server tracks the SDK closely but if you're running an older Claude Desktop build (anything before December 2024) the tool list may not appear, upgrade the host first.</p>
         <p>The 14 tools are also still alpha-tier. Names are stable; argument shapes may grow new optional fields. We don't break the contract on existing arguments.</p>
       </div>
@@ -791,9 +796,9 @@ if (findings.length &gt; 0) {
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill[mcp]</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha mcp</span></div>
       </div>
     </section>

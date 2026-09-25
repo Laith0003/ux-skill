@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <style>
     html, body {
       overflow-x: clip;
@@ -561,6 +565,8 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       <p>
         以下は、Next.js のスターターから切り出した簡略化されたヒーローブロックで、3 つのルールに引っかかります。下が exit 0 で通る書き換え版です。コンバージョンの意図は同じ、指紋は別物です。
       </p>
+      <!-- A code sample of the slop this post describes. ux-lint skips it. -->
+      <!-- ux-lint-disable -->
       <pre class="code"><span class="c">// Before, 3 件の high 検出</span>
 &lt;section className=<span class="s">"bg-gradient-to-br
   from-purple-500 via-violet-500
@@ -591,6 +597,7 @@ $ uxskill lint apps/web/src --json | jq '.summary'
       title=<span class="s">"キャリアランキング"</span> /&gt;
   &lt;/div&gt;
 &lt;/section&gt;</pre>
+      <!-- ux-lint-enable -->
       <p>
         Before では 3 つのルールが発火します。Inter を <code>text-7xl</code> で使う、AI 定番のグラデーション、3 枚同一カードのグリッド。After では Fraunces（ディスプレイ）と Inter（ボディ）をペアにし、フラットなサーフェスを採用し、7 と 5 の非対称グリッドに切り替えています。意図は同じ、指紋はもう残っていません。
       </p>
@@ -644,7 +651,7 @@ $ /plugin install ux@ux-skill</pre>
 
       <div class="honesty">
         <div class="label">正直なスコープ</div>
-        <h4>正規表現は構造を捕まえる。趣味は捕まえない。</h4>
+        <h3 class="h4">正規表現は構造を捕まえる。趣味は捕まえない。</h3>
         <p>リンターは「このセクションのリズムが悪い」「コピーが冷たく感じる」を検出できません。それは人間か、レビュー時の LLM の仕事です。一方で、正規表現が <em>確実に</em> 捕まえるのは、リテラルトークン、パターン、形状で表現できるすべての指紋です。これが AI のデフォルトの大半を占めます。モデルは毎回同じ成果物に戻ってくるからです。</p>
         <p>CI で LLM ジャッジを走らせるのは意図的に避けています。「デザイナーが作ったように見えるか」が基準なら、それはコードレビューであって lint ではありません。ux-skill にはエディタからオンデマンドで実行する <code>ux critique</code> もありますが、CI では走らせません。</p>
       </div>
@@ -668,9 +675,9 @@ $ /plugin install ux@ux-skill</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, または, </div>
+        <div class="row row--note">, または, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, または, </div>
+        <div class="row row--note">, または, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

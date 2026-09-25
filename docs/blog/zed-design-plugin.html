@@ -57,6 +57,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -179,13 +181,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -250,7 +253,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -330,7 +334,7 @@
       color: var(--scene-accent); line-height: 1;
       margin-bottom: 4px;
     }
-    .install-step h3 {
+    .install-step h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 88, 'opsz' 80, 'wght' 580;
       font-weight: 580; font-size: 22px;
@@ -387,7 +391,8 @@
     .ba-cell.after .tag { color: var(--win-fg); }
     .ba-cell ul { margin: 8px 0 0 18px; }
     .ba-cell ul li { margin-bottom: 6px; font-size: 14px; color: var(--body); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -709,7 +714,7 @@
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>About the 14-star claim</h4>
+        <h3 class="h4">About the 14-star claim</h3>
         <p>ux-skill v2 is new (v2.0.0-alpha.1 shipped recently) and solo-maintained. We do not have the install base ui-ux-pro-max-skill has. The case for installing in Zed is architecture (an MCP server with 18 tools, a 145-rule deterministic linter, 160 brand specs, cross-IDE distribution), not awareness.</p>
           <p>Install it for the MCP server and the linter. If you only need a prompt-only taste primer, taste-skill (25,359 stars) is also reasonable. Both are MIT.</p>
       </div>
@@ -740,9 +745,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pipx install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> which <span class="arg">ux-mcp</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">then paste into ~/.config/zed/settings.json</div>
+        <div class="row row--note">then paste into ~/.config/zed/settings.json</div>
         <div class="row"><span class="arg">"context_servers": &#123; "uxskill": &#123; "command": "ux-mcp" &#125; &#125;</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or as a Claude Code plugin</div>
+        <div class="row row--note">or as a Claude Code plugin</div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>
     </section>

@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 18px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body {
@@ -606,7 +610,7 @@ $ uxskill lint apps/web/src --threshold high
 
       <div class="honesty">
         <div class="label">正直なスコープ</div>
-        <h4>CLI は床と天井を作る。センスは作らない。</h4>
+        <h3 class="h4">CLI は床と天井を作る。センスは作らない。</h3>
         <p>このツールが解決するのは「指紋」と呼ばれる構造的な既定値だ。Inter を見出しに使う、紫から青へのグラデーション、3 つの同一カード, , これらはどの AI も同じように到達する場所で、正規表現で検出できる。リンターはここを止める。</p>
         <p>「このセクションのリズムが悪い」「このコピーが冷たい」, , これは正規表現の管轄ではない。これは人間か、モデルの判断が要る。ux-skill はクリティーク用のコマンド（<code>ux critique</code>）も持っているが、それは CI ではなくエディタの中で、必要なときに呼ばれる。</p>
       </div>
@@ -628,9 +632,9 @@ $ uxskill lint apps/web/src --threshold high
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

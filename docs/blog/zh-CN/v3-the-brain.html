@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -196,7 +198,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 18px;
       color: var(--ink);
@@ -256,7 +258,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
     }
@@ -331,7 +334,8 @@
       color: var(--scene-accent);
       margin-bottom: 8px;
     }
-    .mode-card h4 {
+    .mode-card h4,
+    .mode-card h3:where(.h4) {
       font-size: 18px;
       margin-bottom: 8px;
       color: var(--ink);
@@ -428,7 +432,8 @@
       nav.crumbs { gap: 18px; flex-wrap: wrap; }
       .wrap { padding: 40px 20px 72px; }
     }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <style>
     html, body { overflow-x: clip; max-width: 100%; }
     section, header, footer, main, article { max-width: 100vw; }
@@ -498,7 +503,9 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
-<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}    /* moved out of inline style attributes */
+    p.post-footnote { margin-top: 28px; font-size: 14px; }
+  </style>
 </head>
 <body>
   
@@ -731,19 +738,19 @@ sys = synthesize(brief)
 
       <div class="mode-card">
         <div class="mode-name">strict_brand &middot; 最快</div>
-        <h4>100% 指定品牌</h4>
+        <h3 class="h4">100% 指定品牌</h3>
         <p><code>reference_brands=[stripe]</code> 加 <code>strict=True</code>,直接返回 Stripe 规范的原样。不解读、不混合、不合成。适合品牌已存在、规范有权威、brief 只想要 token 的场景。当你手上有一份 Figma 文件和一套写好的系统、需要不即兴的代码时,走这条路。</p>
       </div>
 
       <div class="mode-card">
         <div class="mode-name">brand_anchor &middot; 70 / 30</div>
-        <h4>以品牌为锚,按 brief 的轴做调适</h4>
+        <h3 class="h4">以品牌为锚,按 brief 的轴做调适</h3>
         <p><code>reference_brands=[stripe]</code> 但不带 <code>strict=True</code>,返回 70% 的 Stripe token 与按轴距挑选出的 4 个姐妹品牌 30% 的轴差融合。输出仍然一眼就是 Stripe,只是朝 brief 的语气微微弯曲,给消费者功能时是更俏皮一点的 Stripe,给企业级仪表盘时是更正式一点的 Stripe。锚定品牌在所有冲突里都胜出。</p>
       </div>
 
       <div class="mode-card">
         <div class="mode-name">pure_synthesis &middot; 无穷空间</div>
-        <h4>未指定品牌,每次调用都是新的语言</h4>
+        <h3 class="h4">未指定品牌,每次调用都是新的语言</h3>
         <p>brief 里没有 <code>reference_brands</code> 时,合成器从 brief 给 7 个轴打分,在目录里按轴距找到 8 个最近的范例,蒸馏它们共有的结构,产出全新的 palette + type + spacing + radius + motion 一整套。不同 brief 落在同一空间的不同区域,每个输出都内部自洽、且具有可识别的自我。</p>
       </div>
 
@@ -927,7 +934,7 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
 
       <div class="honesty">
         <div class="label">坦白边界</div>
-        <h4>v3 是地基,不是终点。</h4>
+        <h3 class="h4">v3 是地基,不是终点。</h3>
         <p>七轴合成器是我们已经放出证据的工作。第 8、第 9 个轴 (saturation_strategy、surface_depth) 草案在,未发布,它们会让 dark / light 分流和渐变策略更深一层。决策账本目前只被推荐器的重排消费,我们预计 v3.1 会让评估器和 lint 打分也开始读它。我们拒掉的那份极端化方案并没有消失,当我们能证明某些点确实有帮助时,它们会在以后慢慢进来。</p>
         <p>如果你发现某份 brief 的输出让你不满意,或者矩阵里某个结论和你的品味打架,请开 issue。矩阵在仓库里,测试在仓库里,脑也在你的仓库里。从现在起,争论都发生在一个你可以读得到的基底上。</p>
       </div>
@@ -956,13 +963,13 @@ $ uxskill synthesize <span class="n">--industry</span> fintech-payments <span cl
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 或 ·</div>
+        <div class="row row--note">· 或 ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 或 ·</div>
+        <div class="row row--note">· 或 ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@latest init</span></div>
       </div>
 
-      <p style="margin-top: 28px; font-size: 14px;">
+      <p class="post-footnote">
         GitHub 源码:<a class="link" href="https://github.com/Laith0003/ux-skill">Laith0003/ux-skill</a> &middot;
         npm:<a class="link" href="https://www.npmjs.com/package/uxskill">uxskill</a> &middot;
         PyPI:<a class="link" href="https://pypi.org/project/uxskill/">uxskill</a> &middot;

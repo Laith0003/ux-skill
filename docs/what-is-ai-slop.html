@@ -37,6 +37,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0f1115;
@@ -89,7 +91,7 @@
       color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) {
       font-family: var(--display);
       color: var(--ink);
       margin: 0;
@@ -133,7 +135,7 @@
       margin: 56px 0 16px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
       font-size: 19px;
@@ -184,7 +186,7 @@
       line-height: 1;
       opacity: 0.85;
     }
-    .sign-card h3 {
+    .sign-card h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
       font-size: 22px;
@@ -272,7 +274,8 @@
       color: var(--scene-accent);
       margin-bottom: 10px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
       font-size: 18px;
@@ -294,7 +297,7 @@
       padding: 28px 0;
     }
     .faq-item:last-child { border-bottom: 1px solid var(--hairline); }
-    .faq-item h3 {
+    .faq-item h3:where(:not(.h4)) {
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 640;
       font-size: 18px;
       color: var(--ink);
@@ -529,7 +532,9 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
-<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}    /* moved out of inline style attributes */
+    p.page-meta { margin-top:24px; margin-bottom:0; font-family:var(--mono); font-size:12.5px; color:var(--muted); }
+  </style>
 </head>
 <body>
   <a class="skip-link sr-only" href="#main">Go to content</a>
@@ -783,7 +788,7 @@
 
       <div class="honesty">
         <div class="label">What this cannot do</div>
-        <h4>Detecting slop is not the same as fixing it</h4>
+        <h3 class="h4">Detecting slop is not the same as fixing it</h3>
         <p>Naming the fingerprint tells you what to correct, not how to correct it. Knowing that Inter is the default font does not automatically tell you what the right typeface pair is for a fintech dashboard or a fitness app. That judgment requires either a trained designer or a deterministic system that maps a project brief to a specific recommendation.</p>
         <p>uxskill handles the second half: a <a class="link" href="/">brief-to-constraint pipeline</a> that returns a specific palette, type pair, density target, and radius for your project, then lints the generated output against 152 rules before it ships. It does not replace taste  -  it replaces the absence of any constraint at all.</p>
       </div>
@@ -850,7 +855,7 @@
         <div class="row row-divider">then, in your editor</div>
         <div class="row"><span class="prompt">$</span> <span class="arg">/ux-audit</span> &lt;path-to-your-page&gt;</div>
       </div>
-      <p style="margin-top:24px;margin-bottom:0;font-family:var(--mono);font-size:12.5px;color:var(--muted);">
+      <p class="page-meta">
         Repository: <a class="link" href="https://github.com/Laith0003/ux-skill">github.com/Laith0003/ux-skill</a>
       </p>
     </section>

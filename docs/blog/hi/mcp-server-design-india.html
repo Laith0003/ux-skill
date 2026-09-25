@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 18px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -409,7 +412,9 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
-<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}    /* moved out of inline style attributes */
+    .row.row--tight { margin-top:6px; }
+  </style>
 </head>
 <body>
   
@@ -613,7 +618,7 @@
 
       <div class="honesty">
         <div class="label">ईमानदार दायरा</div>
-        <h4>MCP एक प्रोटोकॉल है, उत्तर नहीं।</h4>
+        <h3 class="h4">MCP एक प्रोटोकॉल है, उत्तर नहीं।</h3>
         <p>MCP केवल बातचीत का एक चैनल खोलता है। ux-skill के 14 टूल्स अब भी निष्क्रिय हैं अगर एजेंट उन्हें नहीं बुलाता। अच्छी प्रॉम्प्ट इंजीनियरिंग और एक स्पष्ट सिस्टम संदेश ज़रूरी है ताकि एजेंट सही समय पर सही टूल चुने।</p>
         <p>स्ट्रक्चरल टूल्स (lint_files, list_styles) डिटरमिनिस्टिक हैं और हर बार वही उत्तर देंगे। मूल्यांकन-आधारित टूल्स (critique_surface) मॉडल की समझ पर निर्भर हैं और रन-दर-रन बदल सकते हैं। दोनों की सीमाएँ अलग हैं।</p>
       </div>
@@ -634,7 +639,7 @@
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:6px;">
+        <div class="row row--tight">
           <span class="arg"># Claude Desktop, Cursor, Windsurf कॉन्फ़िग में जोड़ें:</span>
         </div>
         <div class="row"><span class="prompt">$</span> uxskill <span class="arg">mcp-config --target claude</span></div>

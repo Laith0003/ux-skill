@@ -57,6 +57,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -179,13 +181,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -250,7 +253,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -349,7 +353,8 @@
       font-size: 12.5px;
       color: var(--scene-accent);
     }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -789,7 +794,7 @@ repos:
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>A JetBrains plugin is on the roadmap.</h4>
+        <h3 class="h4">A JetBrains plugin is on the roadmap.</h3>
         <p>The current integration is CLI plus MCP. A native JetBrains Marketplace plugin would let us surface the recommender inside the AI Assistant chat without leaving the IDE. That is on the roadmap for v2.3 but not shipped yet.</p>
         <p>The CLI plus MCP approach covers the full functionality today, you just live in the integrated terminal more than you might in a plugin-first world. That terminal is fast and right there.</p>
       </div>
@@ -821,9 +826,9 @@ repos:
         <div class="row"><span class="prompt">$</span> pipx install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> uxskill <span class="arg">init --target jetbrains</span></div>
         <div class="row"><span class="prompt">$</span> uxskill <span class="arg">lint src/ --threshold high</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or via npx if Python is not installed</div>
+        <div class="row row--note">or via npx if Python is not installed</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init --target jetbrains</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or as a Claude Code plugin alongside JetBrains</div>
+        <div class="row row--note">or as a Claude Code plugin alongside JetBrains</div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>
     </section>
