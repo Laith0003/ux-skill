@@ -1,6 +1,6 @@
 # Landing page playbook
 
-The surface playbook for marketing pages. `/ux-design` loads this file, and no other surface playbook, in page mode when the page explains, sells or converts. It holds every rule that is specific to landing pages: layout archetypes, section flow, hero, header, proof, pricing, CTA, footer, and Arabic and RTL delivery. Cross-surface rules (color, type, spacing, motion, content, responsive mechanics, component contracts) stay in `references/styles/anti-slop.md`, `references/styles/arsenal.md` and `references/foundations/`; a landing page with a form or a comparison table also reads the contracts in `references/foundations/component-behaviors.md`.
+The surface playbook for marketing pages. `/ux-design` loads this file, and no other surface playbook, in page mode when the page explains, sells or converts. It holds every rule that is specific to landing pages: layout archetypes, the five compositions the engine chooses from, section flow, hero, header, proof, pricing, CTA, footer, and Arabic and RTL delivery. Cross-surface rules (color, type, spacing, motion, content, responsive mechanics, component contracts) stay in `references/styles/anti-slop.md`, `references/styles/arsenal.md` and `references/foundations/`; a landing page with a form or a comparison table also reads the contracts in `references/foundations/component-behaviors.md`.
 
 ---
 
@@ -75,6 +75,62 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 | Creator-tool landing | Product demo led | Interactive demo hero + bento grid + per-section accent colors + tilted product frames + tinted shadows |
 | Premium consumer brand | Cinematic brand | Cinematic center hero + double-bezel containers + mesh gradient + scroll-pinned product walks |
 | Mobile app landing | Split-hero product page | Morphing status pill nav + dock-style magnification CTA + parallax tilt feature card |
+
+---
+
+## Compositions
+
+Every system the engine builds names one of five compositions: the layout a landing page starts from. The Page composition section of `system-report.md` gives the winner, the runner-up and the two terms that decided it, and the JSON result carries all five scores (decisions/page-composition.md). Start from the winner. The client's own site, or a brief that says otherwise, can overrule it; the build notes say which and why. With an existing design system and no report, pick by the same terms below and say so.
+
+The composition is the layout; the archetype above is the argument the page makes. They pair naturally: split with the Split-hero product page or Service lead generation, stacked with Thesis statement or Single-field conversion, bento with Product demo led, editorial-column with Editorial long form, full-bleed-media with Cinematic brand. Another pairing is allowed when the build notes give the reason.
+
+What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.desktop` columns inside `layout.container.max`) and at 375 (the phone tier: `layout.columns.phone` columns inside `layout.margin-inline.phone`). Regions sit the region gap apart (`layout.region-gap.<tier>`, or the system's landing region gap where it has one). The headline takes the hero style (`type.text.hero`, or the system's landing display step where it has one) and steps down on phones by `type.phone.hero`. Numbers take `type.text.figure`. The primary action is a filled button at `layout.target.large`. A proof section with no real proof behind it is dropped with its reason (/ux-design engine step 2.5); the layouts below close up around the gap rather than hold an empty band.
+
+### split
+
+**Structure.** The message on one side and one image or proof object on the other, then sections that alternate sides.
+**The engine picks it** when the brief is formal, the contrast is balanced rather than extreme, and the temperature is cool: formality, balanced contrast and coolness are its three terms. It suits business software, finance, security, and a marketplace with a real product view.
+**At 1440.** Hero: the copy spans 7 of the 12 columns and the media 5, or 5 and 7 when the media carries the value; headline, one lede, the primary action and at most one secondary link. Proof: one full-width band directly under the hero, either a logo row or three to five figures with their labels. Sections below alternate the media side, each 7 and 5. Call to action: a full-width closing band on `color.surface.brand` with one filled action.
+**At 375.** One column: copy, then the action at full width, then the media at full width at `imagery.ratio.card` or the media's own ratio, cropped clear of any mark. The proof band becomes two figures per row, or a logo row that wraps to two rows. Every alternating section stacks the same way, media first. The closing band keeps one full-width action.
+**Arabic.** Under `dir="rtl"` the copy column takes the start side, the right, and the media the left, through logical grid placement, not reordered markup. The alternation mirrors with it. Figures keep Western digits and the media itself never flips.
+**It fails when.** The split drifts to an even 6 and 6, every section repeats copy on the same side, or the media is a generic illustration where the product should be.
+
+### stacked
+
+**Structure.** One centered column of large, calm sections, one idea each, read top to bottom.
+**The engine picks it** when the audience is older or of mixed age (the age field weighs most), the density is airy and the contrast is muted: the audience's age, airiness and muted contrast are its terms. It suits patient-facing healthcare, public services and local businesses whose visitors read on a phone.
+**At 1440.** Hero: headline, lede and one action centered within `layout.measure.text`, with the image below the action across the container, never beside it. Pair it with the Thesis statement archetype so the centered hero is deliberate; otherwise align the hero to the start of the same column. Proof: one row of figures or one named quote, inside the measure. Each later section is one idea in the measure, its media across the container, and every second region sits on `color.surface.band` so the column has a rhythm. Call to action: a centered closing band that repeats the hero's action.
+**At 375.** Almost nothing moves, since the column already fits: the headline steps down, actions go full width, and the region gap takes its phone value.
+**Arabic.** Centered lines stay centered. Lists, forms and captions inside the column align to the start, the right.
+**It fails when.** Every region is the same centered block at the same weight and the page reads as a slide deck, or it is kept for a product people have to compare side by side.
+
+### bento
+
+**Structure.** A grid of tiles of different sizes, each a feature or a number, scanned at a glance.
+**The engine picks it** for a dense, high-contrast brief with geometric type, and more strongly when the brief's reading context is glance: density, contrast, geometric type and glance reading are its terms. It suits developer tools, status and monitoring products, and apps whose value is several capabilities at once.
+**At 1440.** Hero: a start-aligned or split hero above the grid; the grid is never the hero. Grid: five to eight tiles on the 12 columns, spanning 3, 4, 6 or 8 columns and one or two rows, with one lead tile (6 or 8 columns, two rows) holding the real product view. Tiles sit `layout.gutter.desktop` apart, not the region gap. Proof: figures live inside tiles with their labels, and one tile may hold a named quote. Call to action: a closing band after the grid, never a tile.
+**At 375.** One column in reading order, lead tile first, each tile at full width with its height set by its content. Two figure tiles may share a row when each is a number and a short label.
+**Arabic.** Grid placement mirrors, so the lead tile starts at the right edge. Tile content aligns to the start; digits keep their order.
+**It fails when.** The tiles are equal, a three by three of identical cards, there are fewer than five, or a tile holds a decorative shape instead of a feature or a number.
+
+### editorial-column
+
+**Structure.** A narrow reading column with a large display title, pull quotes and images set into the text.
+**The engine picks it** for humanist type, a formal tone and an airy density, and more strongly when the reading context is long reading: humanist type, formality, airiness and long reading are its terms. It suits research, editorial products, consultancies that sell judgment and long product explainers.
+**At 1440.** Hero: the display title start-aligned across up to 8 columns, a standfirst in the body style within `layout.measure.text`, a line of metadata in `type.text.label`, then one image at `imagery.ratio.hero` across the container. Body: the text column at `layout.measure.text`, offset from the start by one or two columns; images break out to the container; pull quotes sit in the wide margin beside the paragraph they come from. Proof: the pull quotes, each attributed with name, role and company. Call to action: an inline action where the argument ends, then a closing band.
+**When the client has no pull quotes:** use one of the client's own sentences as a callout, set large with no quotation marks and no attribution, since it is the page's own claim; or a real figure with its source in a caption; or a captioned image of the real product or place. Never an invented quote, and never quotation marks around words nobody said.
+**At 375.** The column takes the full width inside the margins, the title steps down, images run the full width, and margin callouts become blocks between paragraphs.
+**Arabic.** The column starts at the right, so margin callouts move to the left margin. The display title takes the Arabic display face with no letter spacing, and body text keeps the system's reading line height.
+**It fails when.** The column runs wider than the measure, the page has little to read (a tool with three features), or a quote is made up to fill the margin.
+
+### full-bleed-media
+
+**Structure.** Edge-to-edge images or generated art with the headline on a scrim, then bands of media and short copy.
+**The engine picks it** for a warm, playful brief with lively motion: warmth, playfulness and motion are its terms. It suits hospitality, food, consumer products, events and lifestyle brands with real photography.
+**At 1440.** Hero: the image runs to both viewport edges at `imagery.ratio.hero`, with the headline and action inside the container on `imagery.scrim` in `imagery.on-scrim`, the scrim measured on the worst part of the image (decisions/scrim-worst-image.md). Proof: a band of short attributed lines or a rating between the media bands, on the page surface, never on a photo. Below, full-bleed image bands alternate with contained text bands. Call to action: a closing band over an image on the scrim, or on `color.surface.brand`.
+**At 375.** The hero takes an art-directed portrait crop at `imagery.ratio.portrait` (a separate source through `<picture>`), subject clear of the text; the headline sits on the scrim in the lower third and the action runs full width. Each band stacks image then text.
+**Arabic.** The text block moves to the start side, the right, and the crop keeps the subject away from it, so the right-to-left crop may differ from the left-to-right one. Photos never flip.
+**It fails when.** The images are stock, text sits on a photo without the scrim, or the client has no real imagery; then start from the runner-up the report names instead.
 
 ---
 
