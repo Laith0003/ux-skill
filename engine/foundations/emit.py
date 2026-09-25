@@ -947,7 +947,7 @@ def note_rule_pack(system: SystemOutput, out_dir: Path, *,
                        report=report)
     report = system.report + "\n".join([
         "", "## Rule pack", "",
-        f"The {RULE_PACK_DIR}/ folder beside these files was not built from this tokens.json "
+        f"The {RULE_PACK_DIR}/ folder beside these files cannot be matched to this tokens.json "
         f"({reason}), so its values, pairings and rules may describe another system. It was "
         f"left as it is. Build again with --rule-pack to write a pack for these tokens, or "
         f"remove {RULE_PACK_DIR}/."]) + "\n"
@@ -975,7 +975,8 @@ def write_outcome(system: SystemOutput, out_dir: Path, *, force: bool = False,
                 conflicts: Sequence[str] = (), message: str = "") -> Dict[str, Any]:
         named = stale if status in ("written", "unchanged") else None
         if named:
-            message += (f" {named} holds a rule pack built from other tokens ({reason}); it "
+            message += (f" {named} holds a rule pack that cannot be matched to this tokens.json "
+                        f"({reason}); it "
                         f"was left as it is. Build again with --rule-pack to replace it, or "
                         f"remove {named}.")
         return {"status": status, "written": list(written), "unchanged": list(unchanged),

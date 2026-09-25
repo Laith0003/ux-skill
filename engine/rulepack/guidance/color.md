@@ -83,7 +83,7 @@ Status colors report outcomes only: danger for failure and destruction, warning 
 
 ## Modes
 
-Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). Under high contrast the surfaces move to the ends of the ramp: in light all four surfaces are white, and in dark the sunken surface and the page are both black. A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
+Color varies on scheme (light, dark) and contrast (standard, high). Every semantic role has a value in all four contexts; primitives never change. Dark is not an inversion: each role is chosen for dark and measured there. Under high contrast, text pairings rise to 7:1 and non-text pairings to our 4.5:1 floor, unless a pairing pins its own high-contrast minimum, as the ring on tinted fills (decisions/ring-on-tinted-fills.md) and the disabled label (decisions/disabled-contrast.md) do (decisions/high-contrast-non-text-floor.md). Under high contrast the surfaces move toward the ends of the ramp: in light all four surfaces are white, and in dark the sunken surface and the page are both black. A container whose fill then measures below our 1.2:1 floor against the surface under it draws an edge (decisions/container-edge.md).
 
 ## Changing the system
 

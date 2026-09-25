@@ -328,7 +328,8 @@ def test_a_pack_left_beside_other_tokens_is_reported_stale_and_kept(tmp_path):
     assert result.exit_code == 0 and payload["status"] == "written"
     folder = out / "rule-pack"
     assert payload["stale_rule_pack"] == str(folder)
-    assert f"{folder} holds a rule pack built from other tokens" in payload["message"]
+    assert f"{folder} holds a rule pack that cannot be matched to this tokens.json" in \
+        payload["message"]
     assert "Build again with --rule-pack to replace it, or remove" in payload["message"]
     report = (out / "system-report.md").read_text(encoding="utf-8")
     assert "## Rule pack" in report and "remove rule-pack/" in report
