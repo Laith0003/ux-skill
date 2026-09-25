@@ -198,7 +198,7 @@ Call `design-system-architect` via Task. Pass:
 - Full content of `references/styles/anti-slop.md`
 - Instruction to produce:
   1. **Token JSON** — colors (with semantic + brand layers), type scale, spacing scale, radius scale, shadow scale, motion duration + easing, breakpoints
-  2. **5-10 foundation MDs** — color principles, type rules, spacing logic, motion principles, accessibility floor, dark mode strategy, voice tone, iconography (Material Symbols default), imagery rules, data viz palette
+  2. **5-10 foundation MDs** — color principles, type rules, spacing logic, motion principles, accessibility floor, dark mode strategy, voice tone, iconography (the one icon rule in `commands/ux-design.md`), imagery rules, data viz palette
   3. **6-8 component contracts** — button, input, modal, card, table, navbar, badge, alert (at minimum). Each contract: anatomy, states, variants, accessibility notes, do/don't
   4. **Dark-mode pairings** — every light token has a dark counterpart, not just inverted
   5. **Theme switcher pattern** — CSS variable swap on `[data-theme]`, no JS for the toggle beyond setting the attribute
@@ -260,7 +260,7 @@ Write to `.ux/last-system.json`:
 
 - No purple/blue AI gradient as the brand accent. Single high-contrast accent, saturation < 80%.
 - No pure black (`#000`) anywhere in the neutral scale. Start at Zinc-950 or darker-but-not-black.
-- Material Symbols is the default icon set; the system MUST specify font-variation-settings for it.
+- Icons follow the one icon rule in `commands/ux-design.md` (Hard rules, Icons): the client's own set, else inline SVG line icons stroked and sized by the type.icon roles.
 - Dark mode is mandatory. Every semantic token has a dark counterpart.
 - Type scale uses a modular ratio, not arbitrary px jumps.
 - Spacing scale is a single unit-based scale (4 or 8), not mixed.
