@@ -247,19 +247,34 @@ def test_a_mapping_file_that_cannot_be_read_names_the_flag_and_the_fix(tmp_path)
      "roles, for example color.text.default"),
     ({"version": 1, "roles": {"color.text.default": "x"}},
      "mapping.json role color.text.default is \"x\"; write {\"token\": \"<your token>\", \"by\": "
-     "\"owner\"}"),
+     "\"owner\"}, or {\"token\": null, \"by\": \"owner\"} to keep it out of the check"),
     ({"version": 1, "roles": {"color.text.default": {"token": "x", "by": "me"}}},
      "mapping.json role color.text.default is {\"token\": \"x\", \"by\": \"me\"}; write "
-     "{\"token\": \"<your token>\", \"by\": \"owner\"}"),
+     "{\"token\": \"<your token>\", \"by\": \"owner\"}, or {\"token\": null, \"by\": \"owner\"} "
+     "to keep it out of the check"),
+    ({"version": 1, "roles": {"color.text.default": {"token": None, "by": "name"}}},
+     "mapping.json role color.text.default is {\"token\": null, \"by\": \"name\"}; write "
+     "{\"token\": \"<your token>\", \"by\": \"owner\"}, or {\"token\": null, \"by\": \"owner\"} "
+     "to keep it out of the check"),
+    ({"version": 1, "roles": {"color.text.default": {"by": "owner"}}},
+     "mapping.json role color.text.default is {\"by\": \"owner\"}; write "
+     "{\"token\": \"<your token>\", \"by\": \"owner\"}, or {\"token\": null, \"by\": \"owner\"} "
+     "to keep it out of the check"),
     ({"version": 1, "roles": ["color.text.default"]},
      "mapping.json roles is [\"color.text.default\"]; write it as an object of role to "
-     "{\"token\": \"<your token>\", \"by\": \"owner\"}"),
+     "{\"token\": \"<your token>\", \"by\": \"owner\"}, or {\"token\": null, \"by\": \"owner\"} "
+     "to keep it out of the check"),
     ({"version": 1, "axes": {"theme": {"from": "x", "values": {}, "by": "owner"}}},
      "mapping.json maps the axis theme, which is not one of the engine's axes; use scheme, "
      "contrast, density, direction or motion"),
     ({"version": 1, "axes": {"scheme": "class-night"}},
      "mapping.json axis scheme is \"class-night\"; write {\"from\": \"<your mode axis>\", "
-     "\"values\": {\"light\": \"...\", \"dark\": \"...\"}, \"by\": \"owner\"}"),
+     "\"values\": {\"light\": \"...\", \"dark\": \"...\"}, \"by\": \"owner\"}, or "
+     "{\"from\": null, \"by\": \"owner\"} to keep it out of the check"),
+    ({"version": 1, "axes": {"scheme": {"from": None, "by": "name"}}},
+     "mapping.json axis scheme is {\"from\": null, \"by\": \"name\"}; write {\"from\": "
+     "\"<your mode axis>\", \"values\": {\"light\": \"...\", \"dark\": \"...\"}, \"by\": "
+     "\"owner\"}, or {\"from\": null, \"by\": \"owner\"} to keep it out of the check"),
     ([1], "mapping.json is not a JSON object; write {\"version\": 1, \"axes\": {}, "
           "\"roles\": {}}"),
 ])
@@ -396,7 +411,12 @@ def test_merge_keeps_what_the_owner_wrote_and_fills_only_the_rest():
                "color.surface.page": RoleMap("old-page", "name"),
                "color.line.danger": RoleMap("error-edge", "owner")},
         axes={"scheme": AxisMap("class-night", {"light": "off", "dark": "on"}, "owner")})
-    merged = merge(proposed, existing)
+    merged, notes = merge(proposed, existing)
+    assert notes == [
+        "mapping.json did not map space.control.gap, so it was proposed as gap by name; to keep "
+        "it out of the check, write {\"token\": null, \"by\": \"owner\"} for it",
+        "mapping.json did not map the axis density, so it was proposed from class-compact by "
+        "name; to keep it out of the check, write {\"from\": null, \"by\": \"owner\"} for it"]
     assert merged.roles == {"color.text.default": RoleMap("text-body", "owner"),
                             "color.surface.page": RoleMap("surface-page", "name"),
                             "color.line.danger": RoleMap("error-edge", "owner"),
@@ -404,10 +424,14 @@ def test_merge_keeps_what_the_owner_wrote_and_fills_only_the_rest():
     assert list(merged.roles) == [r for r in ROLE_TYPES if r in merged.roles]
     assert merged.axes == {"scheme": existing.axes["scheme"],
                            "density": proposed.axes["density"]}
-    assert merge(proposed, Mapping()) == proposed
-    assert merge(Mapping(), existing) == Mapping(
+    assert merge(proposed, Mapping())[0] == proposed
+    assert merge(proposed, Mapping())[1][0] == (
+        "mapping.json did not map color.surface.page, color.text.default and "
+        "space.control.gap, so they were proposed by name; to keep one out of the check, write "
+        "{\"token\": null, \"by\": \"owner\"} for it")
+    assert merge(Mapping(), existing) == (Mapping(
         roles={r: m for r, m in existing.roles.items() if m.by == "owner"},
-        axes=existing.axes)
+        axes=existing.axes), [])
 
 
 def test_an_axis_named_as_one_of_ours_is_that_axis_whatever_its_values():
@@ -429,3 +453,86 @@ def test_findings_name_their_mode_beside_ours():
     # A context every axis of which the system names as we do is left as it is.
     assert their_names("x (contrast:high) and y (scheme:light)", mapping) == (
         "x (contrast:high) and y (scheme:light; your class-night:off)")
+
+
+# The owner keeps a role or an axis out of the check with an explicit
+# "not mapped" entry, which a new import never fills again.
+
+NOT_MAPPED_ROLE = RoleMap(None, "owner")
+NOT_MAPPED_AXIS = AxisMap(None, {}, "owner")
+
+
+def test_a_not_mapped_entry_reads_writes_and_is_never_proposed():
+    doc = {"version": 1,
+           "axes": {"scheme": {"from": None, "by": "owner"}},
+           "roles": {"color.text.default": {"token": None, "by": "owner"},
+                     "color.surface.page": {"token": None}}}
+    mapping = parse_mapping(json.dumps(doc), "mapping.json")
+    assert mapping == Mapping(roles={"color.text.default": NOT_MAPPED_ROLE,
+                                     "color.surface.page": NOT_MAPPED_ROLE},
+                              axes={"scheme": NOT_MAPPED_AXIS})
+    assert json.loads(dump_mapping(mapping)) == {
+        "version": 1, "axes": {"scheme": {"from": None, "by": "owner"}},
+        "roles": {"color.text.default": {"token": None, "by": "owner"},
+                  "color.surface.page": {"token": None, "by": "owner"}}}
+    proposed = propose(_css(to_css(build_system(NEUTRAL, "#3366FF").tokens), "tokens.css"))
+    assert all(m.token and m.by == "name" for m in proposed.roles.values())
+    assert all(m.source and m.by == "name" for m in proposed.axes.values())
+
+
+def test_a_not_mapped_role_or_axis_is_out_of_the_view_with_a_note():
+    ts = _css(FOREIGN)
+    mapping = Mapping(roles={"color.text.default": NOT_MAPPED_ROLE,
+                             "color.surface.page": RoleMap("page", "owner")},
+                      axes={"scheme": NOT_MAPPED_AXIS})
+    checked, notes = view(ts, mapping, "mapping.json")
+    assert [t.path for t in checked.tokens()] == ["color.surface.page"]
+    assert dict(checked.axes) == {}
+    assert checked.get("color.surface.page").value == "#FDFDFB"
+    assert notes == [
+        "the axis scheme is not checked: the owner left it out in mapping.json, so every role "
+        "is read at the system's base",
+        "color.text.default is not checked: the owner left it out in mapping.json"]
+    assert their_names("color.text.default (scheme:dark)", mapping) == (
+        "color.text.default (scheme:dark)")
+    # Under our own names too, a not mapped role is out and the set is not
+    # checked as a whole.
+    own = build_system(NEUTRAL, "#3366FF", foundations=("color",)).tokens
+    mapping = propose(own)
+    mapping.roles["color.text.default"] = NOT_MAPPED_ROLE
+    checked, notes = view(own, mapping)
+    assert checked is not own and not checked.has("color.text.default")
+    assert notes == ["color.text.default is not checked: the owner left it out in the mapping"]
+
+
+def test_a_reimport_keeps_what_the_owner_left_out_and_proposes_what_is_missing(tmp_path):
+    ts = _css(to_css(build_system(NEUTRAL, "#3366FF", foundations=("color",)).tokens),
+              "tokens.css")
+    first = propose(ts)
+    f = tmp_path / "mapping.json"
+    f.write_text(dump_mapping(first), encoding="utf-8")
+    # The owner keeps one role and the contrast axis out, and deletes the
+    # line for another role.
+    doc = json.loads(f.read_text(encoding="utf-8"))
+    doc["roles"]["color.text.default"] = {"token": None, "by": "owner"}
+    doc["axes"]["contrast"] = {"from": None, "by": "owner"}
+    del doc["roles"]["color.surface.page"]
+    f.write_text(json.dumps(doc, indent=2), encoding="utf-8")
+    # A new import proposes again and merges with the owner's file.
+    merged, notes = merge(propose(ts), load_mapping(f), f.name)
+    assert merged.roles["color.text.default"] == NOT_MAPPED_ROLE
+    assert merged.axes["contrast"] == NOT_MAPPED_AXIS
+    assert merged.roles["color.surface.page"] == RoleMap("color-surface-page", "name")
+    assert notes == [
+        "mapping.json did not map color.surface.page, so it was proposed as color-surface-page "
+        "by name; to keep it out of the check, write {\"token\": null, \"by\": \"owner\"} for it"]
+    f.write_text(dump_mapping(merged), encoding="utf-8")
+    again = load_mapping(f)
+    assert again == merged and merge(propose(ts), again, f.name) == (merged, [])
+    checked, notes = view(ts, again, f.name)
+    assert not checked.has("color.text.default") and checked.has("color.surface.page")
+    assert "contrast" not in checked.axes and "scheme" in checked.axes
+    assert notes == [
+        "the axis contrast is not checked: the owner left it out in mapping.json, so every role "
+        "is read at the system's base",
+        "color.text.default is not checked: the owner left it out in mapping.json"]
