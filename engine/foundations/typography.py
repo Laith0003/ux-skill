@@ -199,7 +199,10 @@ def hold_phone_order(start: Dict[str, float], scripts: List[List[float]]) -> Dic
 
     A style at its own size that still cannot clear the style below in a
     script keeps factor 1, and the styles below it come down instead, each
-    to 1px under the one above. Scales whose steps rise by whole pixels
+    to 1px under the one above. That fallback does not check heading-2
+    again, so on a scale too compressed to hold the order a style can end
+    at heading-2's size; the phone-hierarchy gate check then names that
+    order, and the build refuses it. Scales whose steps rise by whole pixels
     never get there, since a style's size is then at least 1px above the
     next style's size, and so above its phone size. Rounding to four
     places moves a phone size by at most half of 1e-4 of the size, so two
