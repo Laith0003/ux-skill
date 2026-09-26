@@ -482,3 +482,13 @@ def test_a_deleted_axis_is_named_once_not_asked_about_again():
     text = report.markdown()
     assert "mapping.json leaves out the axis scheme" in " ".join(text.split())
     assert "The system has no dark mode in the mapping" not in text
+
+
+def test_a_padding_is_not_matched_to_a_text_size(tmp_path):
+    imported = _system(":root { --space-4: 16px; --text-base: 16px; --leading-loose: 16px; }\n")
+    (tmp_path / "app.css").write_text(".a { padding: 16px; font-size: 16px; }\n",
+                                      encoding="utf-8")
+    d = drift(imported.tokens, scan([tmp_path], imported.tokens))
+    held = {(r.uses[0].family, r.value): r.tokens for r in d.raw_with_token}
+    assert held == {("space", "16px"): ["space-4"],
+                    ("type-size", "16px"): ["text-base", "leading-loose"]}

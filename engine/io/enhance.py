@@ -69,9 +69,11 @@ SPACE_WORDS = ("space", "spacing", "gap", "padding", "margin", "gutter", "inset"
 RADIUS_WORDS = ("radius", "rounded", "corner")
 # Words that name a family: a raw value is matched only to tokens named for
 # its own family or for none of the others (a z-index of 400 is not a
-# weight token that holds 400, nor a 16px padding a radius token).
+# weight token that holds 400, nor a 16px padding a radius or text size).
+TYPE_WORDS = ("text", "font", "size", "leading", "tracking")
 FAMILY_WORDS = {"space": SPACE_WORDS, "radius": RADIUS_WORDS, "border": LINE_WORDS,
-                "weight": ("weight", "bold"), "z": ("z", "layer", "zindex")}
+                "type-size": TYPE_WORDS, "weight": ("weight", "bold"),
+                "z": ("z", "layer", "zindex")}
 # The state a name promises. Only hover is held against the code: the
 # scanner reads it from :hover and hover: wherever it is set. Active,
 # pressed, selected and current it reads from pseudo-classes, the common
