@@ -747,14 +747,21 @@ def test_a_regions_theme_attribute_is_not_the_dark_scheme(tmp_path):
 
 
 def test_an_unknown_class_names_the_namespaces_it_looked_in_and_a_near_token(tmp_path):
-    ts = _tokens()
+    ts = TokenSet({})
+    ts.add(Token("color-ink", "color", "#111111"))
     ts.add(Token("accent", "color", "#3366FF"))
     ts.add(Token("gutter", "dimension", {"value": 1, "unit": "rem"}))
-    html = '<p class="md:flex bg-accent bg-brand m-gutter"></p>\n'
+    ts.add(Token("border-width-1", "dimension", {"value": 1, "unit": "px"}))
+    ts.add(Token("space-4", "dimension", {"value": 1, "unit": "rem"}))
+    html = '<p class="md:flex bg-accent bg-brand m-gutter p-1 p-4"></p>\n'
     result = _one(tmp_path, "a.html", html, ts)
     assert [tuple(u) for u in result.unknown_classes] == [
-        ("a.html", 1, "bg-accent"), ("a.html", 1, "bg-brand"), ("a.html", 1, "m-gutter")]
-    assert [(u.looked_in, u.near) for u in result.unknown_classes] == [
-        (("color", "colors", "backgroundColor"), "accent"),
-        (("color", "colors", "backgroundColor"), ""),
-        (("spacing",), "gutter")]
+        ("a.html", 1, "bg-accent"), ("a.html", 1, "bg-brand"), ("a.html", 1, "m-gutter"),
+        ("a.html", 1, "p-1"), ("a.html", 1, "p-4")]
+    # A step number is near only a token named for the class's family: a
+    # border width is no padding.
+    assert [(u.looked_in, u.near, u.name) for u in result.unknown_classes] == [
+        (("color", "colors", "backgroundColor"), "accent", "accent"),
+        (("color", "colors", "backgroundColor"), "", "brand"),
+        (("spacing",), "gutter", "gutter"), (("spacing",), "", "1"),
+        (("spacing",), "space-4", "4")]

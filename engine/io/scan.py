@@ -645,7 +645,7 @@ class _Scanner:
         self._unknown: List[Tuple[int, int, int, UnknownClass]] = []
         self._missed: List[Tuple[int, int, int, NotMeasured]] = []
         self._declared: List[str] = []
-        self._near: Dict[Tuple[str, Tuple[str, ...]], str] = {}
+        self._near: Dict[Tuple[str, _Namespaces], str] = {}
         self._seq = 0
         self.file = ""
         # Tailwind: whether the code shows it, and the class uses kept only if so.
@@ -693,25 +693,31 @@ class _Scanner:
         self._unknown.append((at[0], at[1], self._seq,
                               UnknownClass(self.file, at[0], cls, looked_in, near, name)))
 
-    def near(self, name: str, kinds: Dict[str, str]) -> str:
+    def near(self, name: str, spaces: _Namespaces, kinds: Dict[str, str]) -> str:
         """A token of a type the class takes whose name is `name`, or ends
-        with it, outside the class's namespaces ("" for none)."""
+        with it, outside the class's namespaces ("" for none). A token whose
+        name also says the class's family comes first; a step number (p-4)
+        is near only such a token, since a bare 4 names nothing."""
         want = _norm(name)
-        key = (want, tuple(kinds))
+        key = (want, spaces)
         if key not in self._near:
-            self._near[key] = self._find_near(want, kinds)
+            self._near[key] = self._find_near(want, spaces, kinds)
         return self._near[key]
 
-    def _find_near(self, want: str, kinds: Dict[str, str]) -> str:
+    def _find_near(self, want: str, spaces: _Namespaces, kinds: Dict[str, str]) -> str:
         if not want:
             return ""
+        words = {w for space, family in spaces for w in (_norm(space), family)}
         exact = self.index.get(want)
-        if exact is not None and exact[1] in kinds:
+        if exact is not None and exact[1] in kinds and not _NUMERIC.fullmatch(want):
             return exact[0]
+        loose = ""
         for key, (path, kind) in self.index.items():
             if key.endswith("." + want) and kind in kinds:
-                return path
-        return ""
+                if words & set(key.split(".")[:-1]):
+                    return path
+                loose = loose or path
+        return "" if _NUMERIC.fullmatch(want) else loose
 
     def note(self, at: Tuple[int, int], kind: str, text: str, why: str) -> None:
         self._seq += 1
@@ -999,8 +1005,8 @@ class _Scanner:
         if _KEYWORD_CLASS.fullmatch(utility.lstrip("-")) or (
                 _NUMERIC.fullmatch(name) and spaces == _C):
             return
-        self.unknown(at, cls, tuple(space for space, family in spaces
-                                    if name or family != "color"), self.near(name, kinds), name)
+        looked = tuple(space for space, family in spaces if name or family != "color")
+        self.unknown(at, cls, looked, self.near(name, spaces, kinds), name)
 
     @staticmethod
     def _bare(prefix: str, name: str, spaces: _Namespaces) -> Optional[Tuple[str, str]]:
