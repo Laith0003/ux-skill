@@ -135,6 +135,8 @@ def _pill(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _scale_order(ts: TokenSet, mode: str) -> List[str]:
+    # The numbered steps only: radius.round is the pill, off the scale.
+    # space-scale-order keeps its other primitives; see space._scale_order.
     steps = numbered_steps(ts, "radius.", others=False)
     return [f"{b} is not larger than {a}; keep the radius scale strictly increasing"
             for a, b in zip(steps, steps[1:]) if _px(ts, a) >= _px(ts, b)]

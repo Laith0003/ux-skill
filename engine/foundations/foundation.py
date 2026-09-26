@@ -8,6 +8,8 @@ advice on the findings it owns.
 """
 from __future__ import annotations
 
+import re
+
 from dataclasses import dataclass, field
 from typing import Callable, List, Mapping, Optional, Sequence, Tuple
 
@@ -80,9 +82,9 @@ def typed(ts: TokenSet, path: str, role_types: Mapping[str, str]) -> bool:
 
 
 def is_step(path: str, prefix: str) -> bool:
-    """True for a numbered scale step: `prefix` followed by a number only
-    (space.4, radius.0)."""
-    return path.startswith(prefix) and path[len(prefix):].isdigit()
+    """True for a numbered scale step: `prefix` followed by ASCII digits
+    only (space.4, radius.0), the digits int() reads."""
+    return path.startswith(prefix) and re.fullmatch(r"[0-9]+", path[len(prefix):]) is not None
 
 
 def numbered_steps(ts: TokenSet, prefix: str, others: bool = True) -> List[str]:
@@ -97,12 +99,26 @@ def numbered_steps(ts: TokenSet, prefix: str, others: bool = True) -> List[str]:
 
 
 def direct_alias(ts: TokenSet, path: str, mode: str) -> Optional[str]:
-    """The token `path` aliases in one context, or None when it is absent or
-    holds its value directly."""
+    """The token `path` reaches through its aliases in one context: the
+    last one in the chain, the one that holds the value (radius.dialog ->
+    radius.card -> radius.3 gives radius.3), so a role aliasing another
+    role of its foundation is judged at the step it reaches. None when
+    `path` is absent or holds its value directly. A chain that loops, or
+    reaches a token that is not defined, stops at the last token it read."""
     if not ts.has(path):
         return None
     raw = ts.raw(path, mode)
-    return alias_target(raw) if is_alias(raw) else None
+    if not is_alias(raw):
+        return None
+    seen = {path}
+    target = alias_target(raw)
+    while ts.has(target) and target not in seen:
+        seen.add(target)
+        raw = ts.raw(target, mode)
+        if not is_alias(raw):
+            break
+        target = alias_target(raw)
+    return target
 
 
 def role_types_check(foundations: Sequence[Foundation]) -> Check:

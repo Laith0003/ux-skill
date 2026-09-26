@@ -135,12 +135,13 @@ def test_layout_spacing_roles_stay_on_the_spacing_scale():
     ts = _built("space", "layout")
     ts = _replace(ts, "layout.gutter.laptop", value="{layout.width.44}")
     ts = _replace(ts, "layout.region-gap.phone", value="{layout.width.44}")
+    ts = _replace(ts, "layout.landing-gap.desktop", value="{layout.width.44}")
     ts = _replace(ts, "layout.footer.padding-block", value="{layout.width.44}")
     assert _failures(ts, layout.CHECKS, "layout-on-space") == [
         f"{role} (density:comfortable) points at layout.width.44, which is not a step of the "
         "spacing scale; layout spacing comes from space.<n>, so point it at a space step"
         for role in ("layout.gutter.laptop", "layout.region-gap.phone",
-                     "layout.footer.padding-block")]
+                     "layout.landing-gap.desktop", "layout.footer.padding-block")]
 
 
 def test_a_radius_role_on_another_foundations_step_is_named():
@@ -149,6 +150,37 @@ def test_a_radius_role_on_another_foundations_step_is_named():
     assert _failures(ts, radius.CHECKS, "radius-on-scale") == [
         "radius.card points at space.3, which is not a step of the radius scale; corners come "
         "from radius.<n> or radius.round, so point it at one of those"]
+
+
+def test_a_role_aliasing_a_role_of_its_own_foundation_is_judged_at_the_step_it_reaches():
+    # An imported set often chains roles: radius.dialog -> radius.card ->
+    # radius.<n> is on the scale, and is not reported.
+    ts = _replace(_built("radius"), "radius.dialog", value="{radius.card}")
+    assert _failures(ts, radius.CHECKS, "radius-on-scale") == []
+    ts = _replace(_built("space"), "space.control.gap", value="{space.list.gap}")
+    assert _failures(ts, space.CHECKS, "space-on-scale") == []
+    # A chain that ends off the scale names the step it reaches.
+    ts = _replace(_built("space", "radius"), "radius.card", value="{space.3}")
+    ts = _replace(ts, "radius.dialog", value="{radius.card}")
+    assert _failures(ts, radius.CHECKS, "radius-on-scale") == [
+        f"{role} points at space.3, which is not a step of the radius scale; corners come "
+        "from radius.<n> or radius.round, so point it at one of those"
+        for role in ("radius.card", "radius.dialog")]
+
+
+def test_a_step_number_is_ascii_digits_only():
+    from engine.foundations.foundation import is_step, numbered_steps
+    assert is_step("space.12", "space.") and not is_step("space.\u00b2", "space.")
+    ts = _built("space")
+    ts.add(Token("space.\u00b2", "dimension", {"value": 99, "unit": "px"}))
+    assert "space.\u00b2" not in numbered_steps(ts, "space.", others=False)
+
+
+def test_distinct_reads_px_through_the_shared_conversion(monkeypatch):
+    from engine.foundations import distinct, values
+    assert distinct._px({"value": 2, "unit": "rem"}) == dimension_px({"value": 2, "unit": "rem"})
+    monkeypatch.setattr(values, "REM_PX", 10)
+    assert distinct._px({"value": 2, "unit": "rem"}) == 20
 
 
 def test_generated_sets_pass_the_scale_checks():
