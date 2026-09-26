@@ -609,3 +609,20 @@ def test_a_hover_token_shared_with_focus_in_one_rule_is_not_a_stray(tmp_path):
     assert [(x.token, x.message) for x in d.strays] == [
         ("primary-hover", "is named for hover but is used outside hover at app.css:2; 2 of its "
                           "3 uses match its name")]
+
+
+def test_a_mistyped_role_is_fixed_in_the_mapping_not_with_a_hex():
+    ts = TokenSet({})
+    ts.add(Token("gap", "dimension", {"value": 8, "unit": "px"}))
+    ts.add(Token("paper", "color", "#FFFFFF"))
+    imported = Imported(ts, ImportReport.of(Source("tokens.json", "dtcg", "ab" * 32, 10), ts, 2))
+    mapping = Mapping({"color.text.default": RoleMap("gap", "owner"),
+                       "color.surface.page": RoleMap("paper", "owner")})
+    report = enhance(imported, mapping)
+    assert report.findings == [
+        "color.text.default (your gap) is a dimension but its role expects a color; map the "
+        "role to one of your color tokens in mapping.json"]
+    gate = " ".join(report.markdown().split("## Gate")[1].split("## What the code")[0].split())
+    assert ("No contrast pair was measured, since color.text.default is not of the type its "
+            "role expects (see below), so the verdict covers the rule checks only: WCAG gate "
+            "failed on the rule checks:") in gate
