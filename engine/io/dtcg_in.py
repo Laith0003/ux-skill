@@ -23,17 +23,24 @@ gradient) are not read, each with the fix. Nothing is dropped without a
 line: an older token form (`value` without `$value`), a bare value, a name
 DTCG forbids and a property DTCG does not define are each listed.
 
+A reference to a token the file does not define is not read, with the fix,
+as the CSS reader does; it is never kept dangling.
+
 A dark scheme is read wherever systems keep it, and paired by token path
 into scheme:dark: a sibling file named for dark (tokens.dark.json,
-x.dark.tokens.json beside x.tokens.json, x.dark.json beside x.light.json,
-dark.json beside a file named for light, or the same name in a dark/
-folder), another tool's `dark` or
-`modes` {light, dark} entry in a token's $extensions, or the Light and
-Dark themes of a Tokens Studio file. A bare dark.json beside a file not
-named for light is not paired; the report names it as a candidate, with
-the rename that pairs it. The report names every pairing, and every token
-found in only one scheme. Other tools' $extensions are
-otherwise left out and the report says so.
+x.dark.tokens.json beside x.tokens.json, x.dark-mode.json beside
+x.light-mode.json, dark.json beside a file named for light, or the same
+name in a dark/ folder), another tool's `dark` or `modes` entry in a
+token's $extensions, or the themes of a Tokens Studio file. Mode and theme
+names are placed by the importers' shared matcher: Dark Mode is
+scheme:dark, High contrast is contrast:high, and Light or Default is the
+base. A bare dark.json beside a file not named for light is not paired;
+the report names it as a candidate, with the rename that pairs it. The
+report names every pairing, and every semantic token with no value in a
+paired file, folded into one line per file. A mode or theme whose name
+places into no axis, and a value that could not be read, are listed under
+Not read. Other tools' $extensions are otherwise left out and the report
+says so.
 """
 from __future__ import annotations
 
@@ -53,6 +60,7 @@ from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.foundations.validate import LAYERS
 from engine.foundations.values import TYPES, TYPOGRAPHY_FIELDS
 from engine.io.graph import cycles
+from engine.io.mode_words import axis_of, is_base, mode_of, words
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
 from engine.io.values_in import GamutMapped, NotRead, read_value
 
@@ -75,12 +83,15 @@ UNHELD = {
 # key is left out, and the report says so.
 _DTCG_KEYS = ("$type", "$value", "$description", "$extensions", "$deprecated", "$schema",
               "$root", "$ref")
-_SCHEME = ("light", "dark")
 DARK = "scheme:dark"
 _BAD_NAME = ".{}"
 _HEX6 = re.compile(r"#[0-9A-Fa-f]{6}")
 _LEGACY = "uses value, the form before DTCG 2025.10; write $value and $type"
 _BARE = 'a bare value; write it as {"$value": ..., "$type": ...}'
+
+
+def _and(items: List[str]) -> str:
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
 
 
 def _number(x: Any) -> bool:
@@ -431,7 +442,8 @@ class _Entry:
 
     @property
     def where(self) -> str:
-        return f"{self.file} {self.src}"
+        """The file; the report names the token by its path beside it."""
+        return self.file
 
 
 class _Log:
@@ -519,7 +531,7 @@ def _walk(log: _Log, root: Dict[str, Any], file: str, src0: List[str],
 
     def walk(node: Dict[str, Any], src: List[str], dst: List[str], group_type: Any) -> None:
         pos, gname = log.next(), ".".join(src)
-        where = f"{file} {gname or '(root)'}"
+        where = file
         if "$type" in node:
             if isinstance(node["$type"], str):
                 group_type = node["$type"]
@@ -541,7 +553,7 @@ def _walk(log: _Log, root: Dict[str, Any], file: str, src0: List[str],
                                                             "ones")))
         for key, val in node.items():
             s, d = src + [key], dst + [_segment(key)]
-            path, at = ".".join(s), f"{file} {'.'.join(s)}"
+            path, at = ".".join(s), file
             if key.startswith("$") and key != "$root":
                 if key not in _DTCG_KEYS and not (not src and key in skip):
                     log.notes.append((log.next(), None, Item(at, path, "is not a DTCG property; "
@@ -585,25 +597,61 @@ def _walk(log: _Log, root: Dict[str, Any], file: str, src0: List[str],
     return [e for e in entries if e.dst not in groups], groups
 
 
+def _ctx(axis: str) -> str:
+    """The context of an axis's non-base value: scheme:dark."""
+    return f"{axis}:{AXES[axis][1]}"
+
+
+def _word(ctx: str) -> str:
+    """How a message names a context's value: dark for scheme:dark."""
+    return "dark" if ctx == DARK else ctx
+
+
+def _both(ctx: str) -> str:
+    axis = ctx.split(":")[0]
+    return "both schemes" if axis == "scheme" else f"both {axis} modes"
+
+
+def _base_word(ctx: str) -> str:
+    axis = ctx.split(":")[0]
+    return AXES[axis][0] if axis in AXES else "base"
+
+
+@dataclass
+class _Side:
+    """The other mode of a pairing: its context, its tokens by path, how a
+    message names it and where the pairing note sits."""
+    ctx: str
+    entries: List[_Entry]
+    label: str
+    where: str
+
+    def __post_init__(self) -> None:
+        self.index = {e.dst: e for e in self.entries}
+
+
 def _studio(doc: Dict[str, Any], name: str, log: _Log) \
-        -> Optional[Tuple[List[str], List[str], str, str]]:
-    """The token sets of a Tokens Studio file's Light and Dark themes, in
-    the file's set order, and the two theme names; None when the file
-    names no such pair."""
+        -> Optional[Tuple[List[str], str, List[Tuple[str, List[str], str]]]]:
+    """A Tokens Studio file's themes, placed by the importers' shared
+    matcher: (the base theme's sets, its name, and for each theme that
+    names a mode (Dark, Dark Mode, High contrast) its context, its sets and
+    its name), the sets in the file's set order. None when no theme names
+    a mode opposite a base. A theme or a set that is not read is listed."""
     themes = doc.get("$themes")
     if themes is None:
         return None
     pos = log.next()
-    named: Dict[str, Dict[str, Any]] = {}
-    for theme in themes if isinstance(themes, list) else []:
-        if isinstance(theme, dict) and isinstance(theme.get("name"), str) \
-                and isinstance(theme.get("selectedTokenSets"), dict) \
-                and theme["name"].strip().lower() in _SCHEME:
-            named.setdefault(theme["name"].strip().lower(), theme)
-    if set(named) != set(_SCHEME):
-        log.notes.append((pos, None, Item(f"{name} $themes", "$themes",
-                                          "names no themes called light and dark, so its sets "
-                                          "were read as groups")))
+    valid = [t for t in (themes if isinstance(themes, list) else [])
+             if isinstance(t, dict) and isinstance(t.get("name"), str)
+             and isinstance(t.get("selectedTokenSets"), dict)]
+    placed = [(t, mode_of(t["name"])) for t in valid]
+    unplaced = [t for t, axis in placed if axis is None]
+    base = next((t for t in unplaced if is_base(t["name"])),
+                unplaced[0] if len(unplaced) == 1 else None)
+    if base is None or len(unplaced) == len(placed):
+        log.notes.append((pos, None, Item(name, "$themes", (
+            "names no base theme and mode theme, such as Light and Dark, so its sets were read "
+            "as groups"))))
         return None
     sets = [k for k, v in doc.items() if not k.startswith("$") and isinstance(v, dict)]
     meta = doc.get("$metadata")
@@ -615,14 +663,31 @@ def _studio(doc: Dict[str, Any], name: str, log: _Log) \
         picked = theme["selectedTokenSets"]
         return [s for s in sets if picked.get(s) in ("enabled", "source")]
 
-    light, dark = chosen(named["light"]), chosen(named["dark"])
+    held: Dict[str, str] = {}
+    sides: List[Tuple[str, List[str], str]] = []
+    for theme, axis in placed:
+        tname = theme["name"]
+        if axis is None:
+            if theme is not base:
+                log.not_read.append((log.next(), None, Item(name, tname, (
+                    f"is a theme whose name places into no mode axis beside {base['name']}, so "
+                    "it was not read; name it for a mode, such as Dark or High contrast"))))
+        elif axis in held:
+            log.not_read.append((log.next(), None, Item(name, tname, (
+                f"is a second theme for the {axis} axis, which {held[axis]} holds, so it was "
+                "not read; keep one theme per axis"))))
+        else:
+            held[axis] = tname
+            sides.append((_ctx(axis), chosen(theme), tname))
+    base_sets = chosen(base)
+    read = set(base_sets).union(*[set(s) for _, s, _ in sides])
+    names = [base["name"]] + [t for _, _, t in sides]
     for s in sets:
-        if s not in light and s not in dark:
-            log.notes.append((log.next(), None, Item(f"{name} {s}", s, "is a set in neither the "
-                                                                       "light nor the dark "
-                                                                       "theme; it was left "
-                                                                       "out")))
-    return light, dark, named["light"]["name"], named["dark"]["name"]
+        if s not in read:
+            log.not_read.append((log.next(), None, Item(name, s, (
+                f"is a set in none of the themes read ({_and(names)}), so it was not read; "
+                "enable it in one of them"))))
+    return base_sets, base["name"], sides
 
 
 def _merge(log: _Log, sets: List[str],
@@ -642,21 +707,98 @@ def _merge(log: _Log, sets: List[str],
     return list(out.values()), groups
 
 
-def _tool_dark(value: Any) -> Tuple[Optional[str], Any, List[str]]:
-    """(the key that holds a dark value, the value, other mode names) for
-    one tool's $extensions entry. Only an exact scheme counts: a `dark` key,
-    or a `modes` object whose names are light and dark."""
+def _tool_modes(value: Any) -> Tuple[Optional[str], Dict[str, Any], List[Tuple[str, str]]]:
+    """(the key that holds modes, context -> raw value, [(mode name, why it
+    was not read)]) for one tool's $extensions entry: a `dark` key, or a
+    `modes` object whose names the importers' shared matcher places (Dark
+    Mode is scheme:dark, high-contrast is contrast:high; a base name such
+    as Light is the token's own value)."""
     if not isinstance(value, dict):
-        return None, None, []
+        return None, {}, []
     if "dark" in value:
-        return "dark", value["dark"], []
+        return "dark", {DARK: value["dark"]}, []
     modes = value.get("modes")
-    if isinstance(modes, dict) and modes:
-        names = {str(n).strip().lower(): n for n in modes}
-        if set(names) == set(_SCHEME):
-            return "modes", modes[names["dark"]], []
-        return None, None, [str(n) for n in modes]
-    return None, None, []
+    if not (isinstance(modes, dict) and modes):
+        return None, {}, []
+    placed: Dict[str, Any] = {}
+    left: List[Tuple[str, str]] = []
+    held: Dict[str, str] = {}
+    for raw_name, raw in modes.items():
+        mode = str(raw_name)
+        axis = mode_of(mode)
+        if axis is None:
+            if not is_base(mode):
+                left.append((mode, "its name places into no mode axis; name it for a mode, such "
+                                   "as Dark or High contrast"))
+        elif axis in held:
+            left.append((mode, f"it is a second mode for the {axis} axis, which {held[axis]} "
+                               "holds; keep one"))
+        else:
+            held[axis] = mode
+            placed[_ctx(axis)] = raw
+    return "modes", placed, left
+
+
+@dataclass(frozen=True)
+class _Folded(Item):
+    """Report lines of one kind folded into one: the line says how many and
+    names a few; to_dict() keeps every one under items."""
+    items: Tuple[Item, ...] = ()
+
+    def to_dict(self) -> Dict[str, Any]:
+        out: Dict[str, Any] = dict(super().to_dict())
+        out["items"] = [i.to_dict() for i in self.items]
+        return out
+
+
+_OLDER = "the form before DTCG 2025.10; read as "
+_FEW = 3
+
+
+def _few(names: List[str]) -> str:
+    shown = names if len(names) <= _FEW + 1 else names[:_FEW] + [f"{len(names) - _FEW} more"]
+    return _and(shown)
+
+
+def _fold_key(item: Item) -> Optional[Tuple[str, ...]]:
+    if _OLDER in item.message:
+        return ("older", item.where)
+    if item.message.startswith("has no ") and "; it keeps this value in " in item.message:
+        return ("missing", item.where, item.message)
+    return None
+
+
+def _fold(items: List[Item]) -> List[Item]:
+    """The notes with each repeated per-token kind folded into one line at
+    the place of its first: the older value forms of one file, and the
+    tokens one paired file gives no value."""
+    groups: Dict[Tuple[str, ...], List[Item]] = {}
+    for i in items:
+        key = _fold_key(i)
+        if key is not None:
+            groups.setdefault(key, []).append(i)
+    out: List[Item] = []
+    for i in items:
+        key = _fold_key(i)
+        group = groups.get(key) if key is not None else None
+        if group is None or len(group) < 2:
+            out.append(i)
+            continue
+        if group[0] is not i:
+            continue
+        n = len(group)
+        if key[0] == "older":
+            sample = _few([f"{g.name} ({g.message.rsplit(_OLDER, 1)[1]})" for g in group])
+            message = (f"{n} tokens are written in forms before DTCG 2025.10 (strings where "
+                       f"2025.10 writes objects) and were read as those values: {sample}; "
+                       "write each as a 2025.10 $value object to drop this note")
+        else:
+            said = i.message.removeprefix("has no ").split("; it keeps this value in ")
+            message = (f"{n} semantic tokens have no {said[0]} and keep their value in "
+                       f"{said[1]}: {_few([g.name for g in group])}; give each its value there "
+                       "to change it")
+        out.append(_Folded(i.where, "", message, tuple(group)))
+    return out
 
 
 def import_dtcg(text: str, source: Source,
@@ -670,36 +812,42 @@ def import_dtcg(text: str, source: Source,
     log = _Log()
     also: List[Source] = []
     if dark is not None and axes is not None:
-        log.first.append(Item(Path(dark[1].path).name, "", f"is named as the dark half of "
-                                                          f"{name}, which carries its own "
-                                                          "modes, so it was not read"))
+        log.not_read.append((0, None, Item(Path(dark[1].path).name, "", (
+            f"is named as the dark half of {name}, which carries its own modes, so it was not "
+            f"read; import it on its own, or write its values as {DARK} modes in {name}"))))
         dark = None
 
-    # Pass 1: the tokens in document order, the light (base) ones and any
-    # dark ones, with their declared or group type.
-    dark_entries: Optional[List[_Entry]] = None
-    light_label = dark_label = pair_where = name
+    # Pass 1: the tokens in document order, the base ones and those of each
+    # other mode, with their declared or group type.
+    sides: List[_Side] = []
+    light_label = name
     studio = _studio(doc, name, log) if axes is None and dark is None else None
     if studio is not None:
-        light_sets, dark_sets, light_name, dark_name = studio
-        cache = {s: _walk(log, doc[s], name, [s]) for s in dict.fromkeys(light_sets + dark_sets)}
-        base, groups = _merge(log, light_sets, cache)
-        dark_entries, dark_groups = _merge(log, dark_sets, cache)
-        groups |= dark_groups
-        light_label, dark_label = f"the theme {light_name}", f"the theme {dark_name}"
-        pair_where = f"{name} $themes"
+        base_sets, base_name, theme_sides = studio
+        cache = {s: _walk(log, doc[s], name, [s])
+                 for s in dict.fromkeys(base_sets + [s for _, sets, _ in theme_sides
+                                                     for s in sets])}
+        base, groups = _merge(log, base_sets, cache)
+        for ctx, sets, tname in theme_sides:
+            entries, found = _merge(log, sets, cache)
+            groups |= found
+            sides.append(_Side(ctx, entries, f"the theme {tname}", f"{name} $themes"))
+        light_label = f"the theme {base_name}"
     else:
         base, groups = _walk(log, doc, name, [], ("$themes",))
         if dark is not None:
             dark_text, dark_source = dark
-            dark_label = pair_where = Path(dark_source.path).name
-            dark_entries, dark_groups = _walk(log, _parse(dark_text, dark_label), dark_label, [])
-            groups |= dark_groups
+            dark_label = Path(dark_source.path).name
+            entries, found = _walk(log, _parse(dark_text, dark_label), dark_label, [])
+            groups |= found
+            sides.append(_Side(DARK, entries, dark_label, dark_label))
             also.append(dark_source)
 
     index = {e.dst: e for e in base}
-    dark_index = {e.dst: e for e in dark_entries or []}
-    union = {**dark_index, **index}
+    union: Dict[str, _Entry] = {}
+    for side in reversed(sides):
+        union.update(side.index)
+    union.update(index)
     types = {d: e.kind for d, e in union.items() if isinstance(e.kind, str) and e.kind}
     mode_axes = axes if axes is not None else AXES
     memo: Dict[str, Tuple[str, Optional[List[str]]]] = {}
@@ -730,14 +878,11 @@ def import_dtcg(text: str, source: Source,
             memo.setdefault(n, (found[0], None))
         return memo[path]
 
-    # Pass 2: decode each token, and its dark value where one is kept.
+    # Pass 2: decode each token, and its value in each other mode.
     tokens: List[Token] = []
     uses_our_modes = False
-    pairs: Dict[str, List[Any]] = {}  # label -> [where, taken, same]
-
-    def pair(key: str, where: str, same: bool) -> None:
-        row = pairs.setdefault(key, [where, 0, 0])
-        row[2 if same else 1] += 1
+    # (the note's where, context, token path, whether the value is the same)
+    events: List[Tuple[str, str, str, bool]] = []
 
     for e in base:
         where = e.where
@@ -807,57 +952,56 @@ def import_dtcg(text: str, source: Source,
             continue
         uses_our_modes = uses_our_modes or bool(modes)
 
-        # The dark value: the paired file or theme first, then another
-        # tool's scheme entry; our own modes win over both.
+        # The other modes: the paired files or themes first, then another
+        # tool's modes; our own modes win over both.
         tools = sorted(k for k in exts if k != EXT)
         left_out: List[str] = []
-        dark_raw: Any = None
-        dark_from: Optional[Tuple[str, str, str, int]] = None  # key, where, src, pos
-        dark_notes: List[Tuple[int, Optional[str], Item]] = []
-        paired = dark_index.get(e.dst) if dark_entries is not None else None
-        if paired is not None and DARK not in modes:
+        # context -> (raw value, the note's where, where it sits, its name there, position)
+        taken: Dict[str, Tuple[Any, str, str, str, int]] = {}
+        missing: List[_Side] = []
+        side_notes: List[Tuple[int, Optional[str], Item]] = []
+        for side in sides:
+            if side.ctx in modes:
+                continue
+            paired = side.index.get(e.dst)
+            if paired is None:
+                missing.append(side)
+                continue
             clash = paired.kind if isinstance(paired.kind, str) and paired.kind else ""
             if paired is e:
-                pair("file", pair_where, True)
+                events.append((side.where, side.ctx, e.dst, True))
             elif clash and clash != kind:
                 log.not_read.append((paired.pos, None, Item(
-                    paired.where, paired.src, f"is a {clash} in {dark_label} but a {kind} in "
+                    paired.where, paired.src, f"is a {clash} in {side.label} but a {kind} in "
                                               f"{light_label}; give both one type")))
             else:
-                dark_raw = paired.node.get("$value")
-                dark_from = ("file", paired.where, paired.src, paired.pos)
-        elif dark_entries is not None and paired is None:
-            reader.notes.append(f"has no dark value in {dark_label}; it keeps this value in both "
-                                "schemes")
+                taken[side.ctx] = (paired.node.get("$value"), side.where, paired.where,
+                                   paired.src, paired.pos)
+        sided = {side.ctx for side in sides if side.index.get(e.dst) is not None}
         for tool in tools:
-            held, raw, names = _tool_dark(exts[tool])
-            if held and dark_from is None and paired is None and DARK not in modes:
-                dark_raw, dark_from = raw, (tool, where, e.src, e.pos)
-                if set(exts[tool]) - {held}:
-                    left_out.append(tool)
-            elif names:
-                reader.notes.append(f"carries the modes {', '.join(names)} under {tool}, which "
-                                    "are not light and dark, so the engine left them out")
-            else:
+            held, placed, left = _tool_modes(exts[tool])
+            for mode, why in left:
+                log.not_read.append((e.pos, None, Item(where, e.src, (
+                    f"its mode {mode} under {tool} was not read, since {why}"))))
+            fresh = [c for c in placed if c not in taken and c not in modes and c not in sided]
+            for c in fresh:
+                taken[c] = (placed[c], f"{name} $extensions {tool}", where, e.src, e.pos)
+            if held is None or (placed and not fresh) or set(exts[tool]) - {held}:
                 left_out.append(tool)
-        if dark_from is not None:
-            key, dark_where, dark_src, dark_pos = dark_from
-            dark_reader = _Reader(types, groups)
+        for c, (raw, label, at, src, pos) in taken.items():
+            other = _Reader(types, groups)
             try:
-                dark_value = dark_reader.value(kind, dark_raw)
+                got = other.value(kind, raw)
             except NotRead as exc:
-                log.not_read.append((dark_pos, None, Item(
-                    dark_where, dark_src, f"its dark value was not read: {exc}; it keeps its "
-                                          "light value in both schemes")))
-            else:
-                label = pair_where if key == "file" else f"{name} $extensions {key}"
-                pair(key, label, dark_value == value)
-                if dark_value != value:
-                    modes[DARK] = dark_value
-                    gamut += [Mapped.of(f"{dark_where} ({DARK})", e.src, g)
-                              for g in dark_reader.take_mapped()]
-                dark_notes = [(dark_pos, e.dst, Item(dark_where, dark_src, n))
-                              for n in dark_reader.notes]
+                log.not_read.append((pos, None, Item(at, src, (
+                    f"its {_word(c)} value was not read: {exc}; it keeps its {_base_word(c)} "
+                    f"value in {_both(c)}"))))
+                continue
+            events.append((label, c, e.dst, got == value))
+            if got != value:
+                modes[c] = got
+                gamut += [Mapped.of(f"{at} ({c})", e.src, g) for g in other.take_mapped()]
+            side_notes += [(pos, e.dst, Item(at, src, n)) for n in other.notes]
 
         deprecated = e.node.get("$deprecated")
         if deprecated:
@@ -869,11 +1013,6 @@ def import_dtcg(text: str, source: Source,
         refs = [r for v in [value, *modes.values()] for r in _refs(v)]
         for context, v in [("", value), *modes.items()]:
             reader.notes += _literals_inside(v, context)
-        outside = sorted({r for r in refs if r not in union})
-        if outside:
-            reader.notes.append(f"references {', '.join(outside)}, which this file does not "
-                                "hold; the reference is kept as written and resolves only "
-                                "where the file that defines it is read too")
         description = e.node.get("$description", "")
         if not isinstance(description, str):
             reader.notes.append("its $description is not text; it was left out")
@@ -885,23 +1024,30 @@ def import_dtcg(text: str, source: Source,
                 reader.notes.append(f"its layer {layer!r} is not one of {list(LAYERS)}; it was "
                                     f"read as {inferred} by its references")
             layer = inferred
+        # A primitive with one value in every mode is the usual case; only a
+        # semantic token without a value in a paired mode is named.
+        if layer == "semantic":
+            reader.notes += [f"has no {_word(s.ctx)} value in {s.label}; it keeps this value in "
+                             f"{_both(s.ctx)}" for s in missing]
         tokens.append(Token(e.dst, kind, value, modes=modes, layer=layer,
                             description=description))
-        log.notes += [(e.pos, e.dst, Item(where, e.src, n)) for n in reader.notes] + dark_notes
+        log.notes += [(e.pos, e.dst, Item(where, e.src, n)) for n in reader.notes] + side_notes
         log.mapped += [(e.pos, e.dst, g) for g in gamut]
 
-    # A dark token with no light one is not read.
-    for d in dark_entries or []:
-        if d.dst not in index:
-            log.not_read.append((d.pos, None, Item(d.where, d.src, f"is only in {dark_label}, "
-                                                                   "with no light value in "
-                                                                   f"{light_label}, so it was "
-                                                                   "not read; add it to "
-                                                                   f"{light_label}")))
+    # A token in another mode with no base one is not read.
+    reported: Set[int] = set()
+    for side in sides:
+        for d in side.entries:
+            if d.dst not in index and id(d) not in reported:
+                reported.add(id(d))
+                log.not_read.append((d.pos, None, Item(d.where, d.src, (
+                    f"is only in {side.label}, with no {_base_word(side.ctx)} value in "
+                    f"{light_label}, so it was not read; add it to {light_label}"))))
 
-    # Pass 3: a token that references one that was not read is not read,
-    # and neither is a token on a reference loop. One pass over reverse
-    # references, so a long chain costs its length.
+    # Pass 3: a token that references one this file does not define, or one
+    # that was not read, is not read, and neither is a token on a reference
+    # loop. One pass over reverse references, so a long chain costs its
+    # length.
     kept = {t.path: t for t in tokens}
     sources = {e.dst: e for e in base}
     refs_of = {p: [r for v in [t.value, *t.modes.values()] for r in _refs(v)]
@@ -928,6 +1074,11 @@ def import_dtcg(text: str, source: Source,
                     queue.append(p)
 
     for p in list(kept):
+        outside = next((r for r in refs_of[p] if r not in union), None)
+        if outside is not None:
+            drop(p, f"references {outside}, which this file does not define; import it together "
+                    "with the file that defines it, or write the value")
+    for p in list(kept):
         gone = next((r for r in refs_of[p] if r in union and r not in kept), None)
         if gone is not None and p in kept:
             drop(p, f"references {gone}, which was not read; fix {gone} and import again")
@@ -949,9 +1100,12 @@ def import_dtcg(text: str, source: Source,
                 "point one of them at a value")
     spread([p for p in looped])
 
-    if dark_entries is not None or any(k != "file" for k in pairs):
+    used = {c for _, c, _, _ in events} | {s.ctx for s in sides}
+    if used:
         axes = dict(axes or {})
-        axes.setdefault("scheme", _SCHEME)
+        for axis in AXES:
+            if _ctx(axis) in used:
+                axes.setdefault(axis, AXES[axis])
     elif axes is None:
         axes = dict(AXES) if uses_our_modes else {}
     try:
@@ -961,50 +1115,79 @@ def import_dtcg(text: str, source: Source,
     for t in tokens:
         if t.path in kept:
             ts.add(t)
-    report = ImportReport.of(source, ts, entries=len(base) + sum(
-        1 for d in dark_entries or [] if d.dst not in index))
-    for key, (where, taken, same) in pairs.items():
-        takes = "token takes its" if taken == 1 else "tokens take their"
-        log.first.append(Item(where, "", f"paired with {light_label} by token path into "
-                                         f"scheme:dark; {taken} {takes} dark value from here "
-                                         f"and {same} {'is' if same == 1 else 'are'} the same "
-                                         "in both schemes"))
+    report = ImportReport.of(source, ts, entries=len(base) + len({
+        d.dst for side in sides for d in side.entries if d.dst not in index}))
+    # One line per pairing, counting the tokens that were read.
+    counts: Dict[Tuple[str, str], List[int]] = {}
+    for label, c, path, same in events:
+        if path in kept:
+            counts.setdefault((label, c), [0, 0])[1 if same else 0] += 1
+    for (label, c), (taken_n, same_n) in counts.items():
+        takes = "token takes its" if taken_n == 1 else "tokens take their"
+        log.first.append(Item(label, "", f"paired with {light_label} by token path into {c}; "
+                                         f"{taken_n} {takes} {_word(c)} value from here and "
+                                         f"{same_n} {'is' if same_n == 1 else 'are'} the same "
+                                         f"in {_both(c)}"))
     report.renamed = _Log.done(log.renamed, dropped)
-    report.notes = log.first + _Log.done(log.notes, dropped)
+    report.notes = log.first + _fold(_Log.done(log.notes, dropped))
     report.not_read = _Log.done(log.not_read, dropped)
     report.mapped = _Log.done(log.mapped, dropped)
     report.also_read = also
     return Imported(ts, report)
 
 
+# Words a file or folder name may hold beside the scheme word.
+_NAME_WORDS = frozenset(("mode", "theme", "scheme", "tokens"))
+
+
+def _dark_word(part: str) -> bool:
+    """True when a part of a file name, or a folder name, names the dark
+    scheme by the shared matcher and says nothing else: dark, dark-mode,
+    darkMode; not darkness, and not a folder that only mentions dark."""
+    return axis_of([part]) == ("scheme", -1) and words(part) - _NAME_WORDS == {"dark"}
+
+
+def _light_word(part: str) -> bool:
+    return words(part) - _NAME_WORDS == {"light"}
+
+
 def _dark_named(path: Path) -> bool:
-    return "dark" in [w.lower() for w in path.name.split(".")] \
-        or path.parent.name.lower() == "dark"
+    return any(_dark_word(w) for w in path.name.split(".")[:-1]) or _dark_word(path.parent.name)
+
+
+def _to_dark(part: str) -> str:
+    """A light-named part with its light word turned to dark, case kept:
+    light-mode to dark-mode, Light to Dark, lightMode to darkMode."""
+    if not _light_word(part):
+        return part
+    return re.sub(r"light", lambda m: "Dark" if m.group(0)[0] == "L" else "dark", part,
+                  flags=re.I)
 
 
 def _dark_sibling(path: Path) -> Optional[Path]:
     """The file beside `path` that holds its dark scheme, by name: the
-    light file's name with light turned to dark, the name with .dark after
-    its first part (tokens.json, tokens.dark.json), dark.json when `path`
-    is named for light (light.json, theme.light.json) or sits in a light/
-    folder, or the same name in a dark/ folder. None when `path` itself is
-    the dark one. A bare dark.json beside a file not named for light is
-    only a candidate (see _bare_dark)."""
-    words = [w.lower() for w in path.name.split(".")]
+    light file's name with light turned to dark (tokens.light-mode.json,
+    tokens.dark-mode.json), the name with .dark after its first part
+    (tokens.json, tokens.dark.json), dark.json when `path` is named for
+    light (light.json, theme.light.json) or sits in a light/ folder, or
+    the same name in a dark/ folder. None when `path` itself is the dark
+    one. A bare dark.json beside a file not named for light is only a
+    candidate (see _bare_dark)."""
+    parts = path.name.split(".")
     if _dark_named(path):
         return None
     first, _, rest = path.name.partition(".")
     options = []
-    if "light" in words[:-1]:
-        options.append(path.with_name(".".join("dark" if w.lower() == "light" else w
-                                               for w in path.name.split("."))))
+    lit = any(_light_word(w) for w in parts[:-1])
+    if lit:
+        options.append(path.with_name(".".join([_to_dark(w) for w in parts[:-1]] + parts[-1:])))
     if rest:
         options.append(path.with_name(f"{first}.dark.{rest}"))
-    if "light" in words[:-1] or path.parent.name.lower() == "light":
+    if lit or _light_word(path.parent.name):
         options.append(path.with_name("dark.json"))
     options.append(path.parent / "dark" / path.name)
-    if path.parent.name.lower() == "light":
-        options.append(path.parent.parent / "dark" / path.name)
+    if _light_word(path.parent.name):
+        options.append(path.parent.parent / _to_dark(path.parent.name) / path.name)
     return next((o for o in options if o != path and o.is_file()), None)
 
 

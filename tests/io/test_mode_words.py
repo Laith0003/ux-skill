@@ -4,7 +4,7 @@ axis's own name is written beside them."""
 import pytest
 
 from engine import io
-from engine.io import adapter, figma_in, markdown_in
+from engine.io import adapter, dtcg_in, figma_in, markdown_in
 from engine.io.mode_words import axis_of, is_base, mode_of, words
 
 
@@ -66,8 +66,8 @@ def test_a_base_name_is_a_base_value_or_a_base_word(name, want):
     assert is_base(name) is want
 
 
-def test_the_adapter_uses_the_shared_matcher():
-    assert adapter.axis_of is axis_of
+def test_every_importer_and_the_adapter_use_the_shared_matcher():
+    assert dtcg_in.axis_of is axis_of and adapter.axis_of is axis_of
 
 
 def test_both_importers_use_the_shared_matcher():
