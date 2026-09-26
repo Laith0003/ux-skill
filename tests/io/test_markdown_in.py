@@ -98,6 +98,8 @@ def test_the_report_names_each_file_and_line(tmp_path):
     assert report.entries == 12 and report.tokens == 9
     assert _rows(report.notes) == [
         ("color.md:5", "", PAIRED),
+        ("color.md:14", "", "the Do and Don't table (line 14) holds guidance, not values, and "
+                            "was kept as a rule"),
         ("space.md:9", "", "a css code block was not read; import the stylesheet itself with "
                            "--from and a .css file")]
     assert _rows(report.not_read) == [
@@ -230,29 +232,29 @@ def test_tables_without_outer_pipes_are_read():
     assert _import(text).tokens.get("corner.tight").value == {"value": 4, "unit": "px"}
 
 
-def test_a_second_value_column_is_left_out_with_a_note():
+def test_a_second_value_column_is_not_read():
     text = "| Token | Px | Rem |\n|---|---|---|\n| `space.4` | 16px | 1rem |\n"
     imported = _import(text)
     assert imported.tokens.get("space.4").value == {"value": 16, "unit": "px"}
-    assert _rows(imported.report.notes) == [
-        ("rules.md:1", "", "a table with the value columns Px and Rem; Px was read and Rem was "
-                           "left out; keep one value column, or head the columns with mode names "
-                           "such as Light and Dark if they differ by mode")]
+    assert imported.report.notes == []
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:1", "Rem", "is a second value column beside Px, so it was not read; keep one "
+                              "value column, or head the columns with mode names such as Light "
+                              "and Dark if they differ by mode")]
 
 
-def test_a_table_with_more_mode_columns_than_one_axis_is_noted():
+def test_a_table_with_more_mode_columns_than_its_axes_reads_the_rest():
     text = ("| Token | Light | Dark | Dim |\n|---|---|---|---|\n| `bg` | #fff | #000 | #111 |\n")
     imported = _import(text)
-    assert imported.report.tokens == 0 and imported.report.entries == 0
-    assert _rows(imported.report.notes) == [
-        ("rules.md:1", "", "a table with the columns Light, Dark and Dim was not read; the "
-                           "engine reads one value column, or two columns for a base and one "
-                           "mode, so split it into tables of that shape")]
+    assert imported.report.tokens == 1 and imported.report.entries == 1
+    assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+    assert [(i.name, i.message.split(",")[0]) for i in imported.report.not_read] == [
+        ("Dim", "names no mode")]
 
 
-def test_mode_columns_that_cannot_name_an_axis_are_noted():
+def test_mode_columns_that_cannot_name_an_axis_are_not_read():
     text = "| Token | 100% | 200% |\n|---|---|---|\n| `z` | 1 | 2 |\n"
-    assert _rows(_import(text).report.notes) == [
+    assert _rows(_import(text).report.not_read) == [
         ("rules.md:1", "", "a table with the columns 100% and 200% was not read, since a mode "
                            "is named with letters; head them with mode names such as Light and "
                            "Dark")]
@@ -321,9 +323,9 @@ def test_a_row_with_an_empty_name_cell_names_the_column():
         ("rules.md:3", "", "has no name; write the token's name in the Token column")]
 
 
-def test_two_columns_naming_the_same_mode_are_noted():
+def test_two_columns_naming_the_same_mode_are_not_read():
     text = "| Token | Dark | Dark mode |\n|---|---|---|\n| `bg` | #000 | #111 |\n"
-    assert _rows(_import(text).report.notes) == [
+    assert _rows(_import(text).report.not_read) == [
         ("rules.md:1", "", "a table with the columns Dark and Dark mode was not read, since both "
                            "name the mode dark; head them with two mode names such as Light and "
                            "Dark")]
@@ -441,14 +443,15 @@ def test_a_usage_map_is_noted_once_not_per_row():
                            "tokens; head the value column Value, Hex or Size to read it")]
 
 
-def test_a_column_beside_the_value_that_names_no_mode_is_noted():
+def test_a_column_beside_the_value_that_names_no_mode_is_not_read():
     text = "| Token | Value | Hover |\n|---|---|---|\n| `accent` | #c2410c | #9a3412 |\n"
     imported = _import(text)
     assert imported.tokens.get("accent").modes == {}
-    assert _rows(imported.report.notes) == [
-        ("rules.md:1", "", "a table with the columns Token, Value and Hover: Hover names no mode "
-                           "and was left out; head a column with a mode name such as Dark to "
-                           "read it as that mode, or put it in its own table")]
+    assert imported.report.notes == []
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:1", "Hover", "names no mode, so its column was not read; head it with a mode "
+                                "name such as Dark or High contrast, or put it in a table of its "
+                                "own with a base column")]
 
 
 def test_a_name_set_again_after_an_unreadable_first_value_says_so():
@@ -585,7 +588,8 @@ def test_a_lone_high_or_reduced_column_needs_the_axis_name():
     text = "| Token | Value | High |\n|---|---|---|\n| `gap` | 8px | 4px |\n"
     imported = _import(text)
     assert dict(imported.tokens.axes) == {}
-    assert "High names no mode" in imported.report.notes[0].message
+    assert [(i.name, i.message.split(",")[0]) for i in imported.report.not_read] == [
+        ("High", "names no mode")]
     text = "| Token | Value | Reduced motion |\n|---|---|---|\n| `t` | 200ms | 0ms |\n"
     assert dict(_import(text).tokens.axes) == {"motion": ("standard", "reduced")}
 
@@ -603,3 +607,211 @@ def test_an_indented_line_right_after_a_heading_is_code_as_in_commonmark():
 def test_an_indented_line_after_a_setext_heading_a_fence_or_a_break_is_code(before):
     text = f"{before}    - `a`: 4px\n\n- `b`: 8px\n"
     assert [t.path for t in _import(text).tokens.tokens()] == ["b"]
+
+
+# One column per axis: a base column and a column for each axis a header
+# names. Whatever is left out is listed under Not read, never only noted,
+# so the report cannot say nothing was left unread after dropping a value.
+def test_a_value_column_reads_one_mode_column_per_axis():
+    text = ("| Token | Value | Dark | High contrast |\n|---|---|---|---|\n"
+            "| `ink` | #333333 | #eeeeee | #000000 |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark"), "contrast": ("standard", "high")}
+    assert (ts.get("ink").value, ts.get("ink").modes) == (
+        "#333333", {"scheme:dark": "#EEEEEE", "contrast:high": "#000000"})
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "a table with Value, Dark and High contrast columns; Value was read "
+                           "as the base, Dark as scheme:dark and High contrast as contrast:high")]
+    assert imported.report.not_read == []
+
+
+def test_three_mode_columns_on_two_axes_read_all_three():
+    text = ("| Token | Light | Dark | High contrast |\n|---|---|---|---|\n"
+            "| `ink` | #333333 | #eeeeee | #000000 |\n")
+    ts = _import(text).tokens
+    assert (ts.get("ink").value, ts.get("ink").modes) == (
+        "#333333", {"scheme:dark": "#EEEEEE", "contrast:high": "#000000"})
+
+
+def test_a_second_column_for_one_axis_is_not_read_and_says_why():
+    text = ("| Token | Light | Dark | Dim |\n|---|---|---|---|\n| `bg` | #fff | #000 | #111 |\n\n"
+            "| Token | Value | Dark | Dark hex |\n|---|---|---|---|\n"
+            "| `fg` | #111 | #eee | #ddd |\n")
+    imported = _import(text)
+    assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:1", "Dim", "names no mode, so its column was not read; head it with a mode "
+                              "name such as Dark or High contrast, or put it in a table of its "
+                              "own with a base column"),
+        ("rules.md:5", "Dark hex", "is a second column for the scheme axis, which Dark holds, so "
+                                   "it was not read; keep one column per axis, or put it in a "
+                                   "table of its own")]
+    assert "Nothing was left unread." not in imported.report.markdown()
+
+
+def test_many_columns_the_matcher_cannot_place_read_the_base():
+    text = ("| Token | Brand | Partner | Retail |\n|---|---|---|---|\n"
+            "| `accent` | #ff0000 | #00ff00 | #0000ff |\n")
+    imported = _import(text)
+    assert (imported.tokens.get("accent").value, imported.tokens.get("accent").modes) == (
+        "#FF0000", {})
+    assert [(i.name, i.message.split(",")[0]) for i in imported.report.not_read] == [
+        ("Partner", "names no mode"), ("Retail", "names no mode")]
+
+
+def test_a_default_column_is_the_base_opposite_a_mode():
+    text = "| Token | Default | Dark |\n|---|---|---|\n| `bg` | #ffffff | #000000 |\n"
+    ts = _import(text).tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert ts.get("bg").modes == {"scheme:dark": "#000000"}
+
+
+# A unit in the header, or in the heading above, is the unit of a bare
+# number; a size with no unit anywhere is never read as a plain number.
+@pytest.mark.parametrize("header, want", [
+    ("Value (px)", {"value": 16, "unit": "px"}), ("Size [rem]", {"value": 16, "unit": "rem"}),
+    ("Px", {"value": 16, "unit": "px"}), ("Duration (ms)", {"value": 16, "unit": "ms"}),
+])
+def test_a_unit_in_the_header_is_the_unit_of_a_bare_number(header, want):
+    text = f"| Token | {header} |\n|---|---|\n| `step` | 16 |\n| `half` | 8.5px |\n"
+    imported = _import(text)
+    assert imported.tokens.get("step").value == want
+    assert imported.tokens.get("half").value == {"value": 8.5, "unit": "px"}
+    assert imported.report.not_read == []
+
+
+def test_a_unit_in_the_heading_is_the_unit_of_a_bare_number():
+    text = ("## Spacing (px)\n\n| Token | Value |\n|---|---|\n| `space.4` | 16 |\n\n"
+            "- `space.2`: 8\n\n## Motion, in ms\n\n- `motion.fast`: 120\n")
+    ts = _import(text).tokens
+    assert ts.get("space.4").value == {"value": 16, "unit": "px"}
+    assert ts.get("space.2").value == {"value": 8, "unit": "px"}
+    assert ts.get("motion.fast").value == {"value": 120, "unit": "ms"}
+
+
+def test_a_size_with_no_unit_anywhere_is_not_read():
+    text = ("| Token | Value |\n|---|---|\n| `space.4` | 16 |\n| `radius.card` | 12 |\n"
+            "| `line-height.body` | 1.5 |\n| `weight.bold` | 700 |\n| `space.0` | 0 |\n\n"
+            "- `shadow.offset`: 2\n- `motion.duration.fast`: 120\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert [t.path for t in ts.tokens()] == ["line-height.body", "weight.bold", "space.0"]
+    assert ts.get("line-height.body").value == 1.5 and ts.get("weight.bold").value == 700
+    assert ts.get("space.0").value == {"value": 0, "unit": "px"}
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:3", "space.4", "16 has no unit, and space.4 is a size; write the unit in "
+                                  "the cell, such as 16px, or in the column header, such as "
+                                  "Value (px)"),
+        ("rules.md:4", "radius.card", "12 has no unit, and radius.card is a size; write the "
+                                      "unit in the cell, such as 12px, or in the column header, "
+                                      "such as Value (px)"),
+        ("rules.md:9", "shadow.offset", "2 has no unit, and shadow.offset is a size; write the "
+                                        "unit, such as 2px, or name it in the heading above, "
+                                        "such as ## Sizes (px)"),
+        ("rules.md:10", "motion.duration.fast", "120 has no unit, and motion.duration.fast is "
+                                                "a duration; write the unit, such as 120ms, or "
+                                                "name it in the heading above, such as "
+                                                "## Motion (ms)")]
+
+
+# A palette keyed by step reads as family.step primitives.
+def test_a_palette_table_keyed_by_step_reads_family_dot_step():
+    text = ("| Step | Blue | Warm gray | Notes |\n|---|---|---|---|\n"
+            "| 50 | #eff6ff | #fafaf9 | lightest |\n| 100 | #dbeafe | | |\n"
+            "| 900 | #1e3a8a | #1c1917 | text |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert [t.path for t in ts.tokens()] == [
+        "blue.50", "warm-gray.50", "blue.100", "blue.900", "warm-gray.900"]
+    assert ts.get("blue.50").value == "#EFF6FF" and ts.get("blue.50").layer == "primitive"
+    assert imported.report.entries == 5 and imported.report.not_read == []
+
+
+def test_a_palette_table_with_steps_across_the_top_reads_too():
+    text = ("| Family | 50 | 500 |\n|---|---|---|\n| Blue | #eff6ff | #3b82f6 |\n"
+            "| Red | #fef2f2 | #ef4444 |\n| | #000 | #111 |\n")
+    imported = _import(text)
+    assert [t.path for t in imported.tokens.tokens()] == ["blue.50", "blue.500", "red.50",
+                                                          "red.500"]
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:5", "", "a palette row with no family name; write the family in the Family "
+                           "column, such as Blue")]
+
+
+def test_a_palette_column_with_no_family_name_is_not_read():
+    text = "| Step | Blue | |\n|---|---|---|\n| 50 | #eff6ff | #fafaf9 |\n"
+    imported = _import(text)
+    assert [t.path for t in imported.tokens.tokens()] == ["blue.50"]
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:1", "", "a palette column (column 3) has no family name, so it was not "
+                           "read; head it with the family, such as Blue")]
+
+
+# Do and Avoid tables are guidance: no axis, and the rule note holds them.
+@pytest.mark.parametrize("head", ["| Do | Avoid |", "| Do | Don't |", "| Use | Avoid |",
+                                  "| Good | Bad |", "| Token | Do | Avoid |"])
+def test_a_do_and_avoid_table_is_guidance_not_a_mode(head):
+    cells = "|".join([" `accent` "] + [" #c2410c "] * (head.count("|") - 2))
+    text = f"{head}\n|{'---|' * (head.count('|') - 1)}\n|{cells}|\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {} and imported.report.tokens == 0
+    assert imported.report.not_read == []
+    [note] = imported.report.notes
+    columns = " and ".join(c.strip() for c in head.strip("|").split("|")
+                           if c.strip() != "Token")
+    assert note.message == (f"the {columns} table (line 1) holds guidance, not values, and was "
+                            "kept as a rule")
+
+
+def test_guidance_joins_the_rules_of_its_file():
+    text = "- `accent`: for links\n\n| Do | Avoid |\n|---|---|\n| a | b |\n"
+    [note] = _import(text).report.notes
+    assert note.message == (
+        "1 line holds a rule, not a value, and was kept as a rule: `accent` (line 1); to make it "
+        "a token, write only its value after the colon or in the cell, and put the rule on its "
+        "own line; the Do and Avoid table (line 3) holds guidance, not values, and was kept as "
+        "a rule")
+
+
+# A column that names each token's alias reads as its value.
+@pytest.mark.parametrize("head", ["Alias", "References", "Maps to"])
+def test_an_alias_column_reads_a_reference_or_a_backticked_name(head):
+    text = (f"| Token | {head} |\n|---|---|\n| `gray.900` | #111111 |\n"
+            "| `text.body` | `gray.900` |\n| `text.muted` | {gray.900} |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert ts.get("text.body").value == "{gray.900}" and ts.get("text.muted").value == \
+        "{gray.900}"
+    assert ts.get("text.body").layer == "semantic" and imported.report.not_read == []
+
+
+def test_a_token_column_beside_a_name_column_is_the_alias():
+    text = ("| Name | Token |\n|---|---|\n| `gray.900` | #111111 |\n"
+            "| `text.body` | `gray.900` |\n")
+    ts = _import(text).tokens
+    assert ts.get("text.body").value == "{gray.900}"
+
+
+def test_an_alias_column_beside_a_value_column_wins_where_it_holds_a_reference():
+    text = ("| Token | Value | Alias |\n|---|---|---|\n| `gray.900` | #111111 | |\n"
+            "| `text.body` | #111111 | `gray.900` |\n| `text.link` | #2255cc | n/a |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert ts.get("text.body").value == "{gray.900}" and ts.get("text.link").value == "#2255CC"
+    assert imported.report.not_read == []
+
+
+def test_an_alias_cell_that_is_not_a_reference_gives_the_accurate_fix():
+    text = "| Token | Alias |\n|---|---|\n| `gray.900` | #111111 |\n| `text.body` | gray.900 |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:4", "text.body", "in the Alias column, gray.900 is not written as a "
+                                    "reference; write it in braces, {gray.900}, or in "
+                                    "backticks")]
+
+
+def test_entries_count_the_names_of_a_table_that_was_not_read():
+    text = "| Token | 100% | 200% |\n|---|---|---|\n| `z` | 1 | 2 |\n| `y` | 3 | 4 |\n"
+    report = _import(text).report
+    assert report.entries == 2 and report.tokens == 0
+    assert [i.where for i in report.not_read] == ["rules.md:1"]
