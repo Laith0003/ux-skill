@@ -131,7 +131,8 @@ def test_gate_failure_names_skipped_pairings():
         gate(failing_set(), [TEXT_ON_PAGE, LINK_ON_PAGE])
     text = str(exc.value)
     assert "color.text.default on color.surface.page (scheme:light,contrast:standard)" in text
-    assert "Skipped 1 pairing because a token is not defined: color.text.link on color.surface.page" in text
+    assert ("Skipped 1 pairing because a token is not defined: color.text.link on "
+            "color.surface.page") in text
 
 
 def test_no_skip_line_when_nothing_skipped():
@@ -224,3 +225,17 @@ def test_a_raising_check_names_the_exception():
     assert [f.message for f in report.failures] == [
         "check broken could not read the token set (KeyError: 'offsetY'); a token it reads has "
         "an unexpected shape; run validate and fix the named token"]
+
+
+def test_the_summary_names_which_part_of_the_gate_failed():
+    from engine.foundations.gate import CheckFailure, GateFinding, GateReport
+    rule = CheckFailure("role-types", "system", "", "x is a dimension; fix it")
+    assert GateReport(checked=3, rules_checked=2).summary().startswith("WCAG gate passed: ")
+    assert GateReport(checked=3, rules_checked=2, failures=[rule]).summary().startswith(
+        "WCAG gate failed on the rule checks: 3 checks, 0 failing")
+    finding = GateFinding("color.text.default", "color.surface.page", "", 3.0, 4.5, "1.4.3")
+    report = GateReport(findings=[finding], checked=3, rules_checked=2)
+    assert report.summary().splitlines()[0].startswith("WCAG gate failed on contrast: ")
+    report.failures.append(rule)
+    assert report.summary().splitlines()[0].startswith(
+        "WCAG gate failed on contrast and the rule checks: ")
