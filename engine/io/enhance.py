@@ -537,8 +537,16 @@ class Enhanced:
         head = report.summary().splitlines()[0]
         line = f"Checked {_and(self.check.foundations)}: {head}"
         unresolved = _and_few(self.unresolved, FEW) if self.unresolved else ""
-        why = (f"{unresolved} could not be resolved (see Structure)" if unresolved
-               else "each needs both of its roles mapped")
+        mistyped = [f.message.split(" ", 1)[0] for f in report.failures
+                    if f.check == "role-types"]
+        if unresolved:
+            why = f"{unresolved} could not be resolved (see Structure)"
+        elif mistyped:
+            why = (f"{_and_few(mistyped, FEW)} {'is' if len(mistyped) == 1 else 'are'} not of "
+                   f"the type {'its role expects' if len(mistyped) == 1 else 'their roles expect'}"
+                   " (see below)")
+        else:
+            why = "each needs both of its roles mapped"
         if report.checked == 0:
             line = (f"Checked {_and(self.check.foundations)}. No contrast pair was measured, "
                     f"since {why}, so the verdict covers the rule checks only: {head}")
@@ -941,6 +949,20 @@ def _by_name(mapping: Mapping, name: str) -> List[str]:
     return lines
 
 
+_ROLE_TYPE_FIX = re.compile(r"; point it at a (\w+) token(, for example .*)?$")
+
+
+def _mapped_fix(failure: Any, name: str) -> Any:
+    """A role-types failure with the fix an imported set takes: map the role
+    to one of the owner's tokens of that type in the mapping file, never a
+    literal value."""
+    if failure.check != "role-types":
+        return failure
+    message = _ROLE_TYPE_FIX.sub(
+        lambda m: f"; map the role to one of your {m.group(1)} tokens in {name}", failure.message)
+    return type(failure)(failure.check, failure.criterion, failure.mode, message)
+
+
 def _finding(text: str, mapping: Mapping) -> str:
     """A gate message in the system's names; a set with no mode axis
     prints an empty context, which is dropped."""
@@ -967,7 +989,7 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     report = result.report
     findings = [_finding(_MOVE.sub(_THEIR_FIX, f.message()), mapping) for f in report.findings]
     findings += [_finding(f"{c.message} (in {c.mode})" if c.mode else c.message, mapping)
-                 for c in report.failures]
+                 for c in (_mapped_fix(c, mapping_name) for c in report.failures)]
     decisions = _by_name(mapping, mapping_name)
     for axis, m in mapping.axes.items():
         if m.by == "name" and m.source is not None:
