@@ -18,21 +18,27 @@ under the font weight scope alone, and otherwise a plain number, noted; a
 STRING is a font family under the font family scope alone. Figma keeps
 numbers as 32-bit floats (0.2 comes back as 0.20000000298023224), so a
 number is read to four decimals. Booleans and other strings are not read.
-An alias to a variable in this export is an alias; one to another file's
-variable, or to a variable that was not read, is not read. The export
-also holds the library variables the file uses, marked remote: those
-belong to another file and are not read as this file's tokens; each
-library collection is noted, and an alias to one of its variables is not
-read, with the fix.
+An alias to a variable in this export is an alias; one to a variable that
+was not read is not read. The export also holds the library variables the
+file uses, marked remote: those belong to another file and are not read as
+this file's tokens, and each library collection is noted. An alias to a
+library variable reads the value the export holds for it (a resolvedValue
+on the alias, or the library variable's value in its default mode), with a
+note that it is a snapshot; with no value held, it is not read, with what
+the owner can do in Figma.
 
 Modes: a collection with one mode gives values with no axis. One with two
-gives one axis. Modes named for a known axis (Light and Dark, or a name
-holding either word, such as Dark mode) read into it, the light one the
-base and the dark one scheme:dark, as the other importers read a dark
-scheme; any other pair gives an axis named after both modes (Main and
-Partner give main-partner), the default mode the base. Each such
-collection is noted. A collection with more modes gives its default mode;
-second_modes names the other mode to read for it.
+gives one axis. Mode names are placed by the importers' shared matcher:
+Light and Dark, Default and Dark, or Dark mode read into the scheme axis,
+the light or default one the base and the dark one scheme:dark, as the
+other importers read a dark scheme; any other pair gives an axis named
+after both modes (Main and Partner give main-partner), the default mode
+the base. Each such collection is noted. A collection whose modes are
+viewport tiers (Mobile, Tablet and Desktop, or SM to XL, or a collection
+named Breakpoints) is never a mode axis: its default tier is read, and one
+note names the other tiers' values, which the engine sets itself. A
+collection with more modes gives its default mode; second_modes names the
+other mode to read for it.
 """
 from __future__ import annotations
 
@@ -48,7 +54,7 @@ from engine.foundations.errors import InputError
 from engine.foundations.modes import AXES
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.graph import cycles
-from engine.io.mode_words import axis_of
+from engine.io.mode_words import axis_of, words
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
 
 # The FLOAT scopes that size something in px.
@@ -57,6 +63,12 @@ SIZE_SCOPES = ("CORNER_RADIUS", "WIDTH_HEIGHT", "GAP", "STROKE_FLOAT", "FONT_SIZ
                "PARAGRAPH_INDENT")
 # Where a person exports a file's variables.
 REST_ENDPOINT = "GET /v1/files/<file key>/variables/local"
+# Words that name a viewport tier in a mode's name, and a collection's.
+VIEWPORT_WORDS = frozenset((
+    "mobile", "phone", "tablet", "laptop", "desktop", "wide", "widescreen", "ultrawide", "watch",
+    "tv", "xxs", "xs", "sm", "md", "lg", "xl", "xxl", "2xl", "3xl"))
+VIEWPORT_COLLECTIONS = frozenset(("viewport", "viewports", "breakpoint", "breakpoints", "device",
+                                  "devices", "screen", "screens", "responsive"))
 _BAD = re.compile(r"[^A-Za-z0-9_-]+")
 _AXIS_WORD = re.compile(r"[a-z][a-z0-9-]*")
 _DECIMALS = 4
@@ -68,8 +80,10 @@ class _Bad(ValueError):
 
 @dataclass(frozen=True)
 class _Ref:
-    """An alias to another variable, by its id."""
+    """An alias to another variable, by its id, with the value the export
+    resolved it to when it holds one (a library variable's snapshot)."""
     id: str
+    resolved: Any = field(default=None, compare=False)
 
 
 @dataclass
@@ -84,6 +98,8 @@ class _Plan:
     note: str = ""
     # A library collection another file owns (remote in the export).
     remote: bool = False
+    # A collection of viewport tiers: its other tiers, read for the note only.
+    tiers: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -102,6 +118,11 @@ class _Entry:
     renamed: List[Item] = field(default_factory=list)
     notes: List[Item] = field(default_factory=list)
     mapped: List[Mapped] = field(default_factory=list)
+    # A viewport collection's other tiers: tier name -> the raw value there,
+    # where it differs from the default tier's.
+    tiers: Dict[str, Any] = field(default_factory=dict)
+    # The collection's id.
+    collection: Any = None
 
 
 def _and(items: Sequence[str]) -> str:
@@ -136,6 +157,16 @@ def _decimals(raw: float) -> Any:
     return int(value) if value.is_integer() else value
 
 
+def _viewport(col: Dict[str, Any], names: Sequence[str]) -> bool:
+    """True when a collection's modes are viewport tiers: every mode is
+    named for one (Mobile, Tablet, SM, LG), or the collection is named for
+    viewports (Breakpoints, Devices)."""
+    if len(names) < 2:
+        return False
+    return bool(words(str(col.get("name", ""))) & VIEWPORT_COLLECTIONS) \
+        or all(words(n) & VIEWPORT_WORDS for n in names)
+
+
 def _modes_of(col: Dict[str, Any]) -> Tuple[Dict[str, str], Optional[str]]:
     modes = {str(m.get("modeId")): str(m.get("name", "")) for m in col.get("modes") or []
              if isinstance(m, dict)}
@@ -158,6 +189,10 @@ def _plan(col: Dict[str, Any], want: Optional[str],
     base_only = _Plan(cname, modes, [(default, "")])
     if not others:
         return base_only
+    if _viewport(col, names):
+        # A viewport is never a mode axis: the default tier is the value,
+        # and the other tiers are named in one note once they are read.
+        return _Plan(cname, modes, [(default, "")], tiers=others)
     if len(modes) > 2 and want is None:
         # Suggest the mode that makes a known axis with the default, if one does.
         example = next((m for m in others if _known_axis(modes[default], modes[m], cname)),
@@ -228,16 +263,25 @@ def _wants(second_modes: Any, collections: Dict[str, Any]) -> Dict[str, str]:
                          '{"Type": "SM"}; pass it in that form')
     counts: Dict[str, int] = {}
     library = set()
+    tiers: Dict[str, List[str]] = {}
     for col in collections.values():
         if isinstance(col, dict) and col.get("remote") is True:
             library.add(str(col.get("name", "")))
         elif isinstance(col, dict):
-            counts.setdefault(str(col.get("name", "")), len(_modes_of(col)[0]))
-    large = [n for n, c in counts.items() if c > 2]
+            names = list(_modes_of(col)[0].values())
+            counts.setdefault(str(col.get("name", "")), len(names))
+            if _viewport(col, names):
+                tiers.setdefault(str(col.get("name", "")), names)
+    large = [n for n, c in counts.items() if c > 2 and n not in tiers]
     for cname in second_modes:
         if cname in library and cname not in counts:
             raise InputError(f"second_modes names {cname}, a library collection from another "
                              "file, whose variables are not read as this file's tokens; leave "
+                             f"{cname} out of second_modes")
+        if cname in tiers:
+            raise InputError(f"second_modes names {cname}, whose modes {_and(tiers[cname])} are "
+                             "viewport tiers, not a mode axis; its default tier is read and the "
+                             "engine sets per-tier values itself, so leave "
                              f"{cname} out of second_modes")
         if cname not in counts:
             fix = (f"pass a collection with more than two modes: {_or(large)}" if large else
@@ -376,13 +420,15 @@ def import_figma(text: str, source: Source,
     entries: Dict[str, _Entry] = {}
     # Library variables the export holds: id -> (name, library collection).
     library: Dict[str, Tuple[str, str]] = {}
+    # A viewport collection's first variable, where its note sits.
+    first: Dict[Any, int] = {}
     used: Dict[Any, int] = {}
     library_note: Dict[Any, int] = {}
 
     for vid in order:
         v = variables[vid]
         if not isinstance(v, dict):
-            not_read.append((position[vid], Item(f"{name} {vid}", vid, "is not a variable "
+            not_read.append((position[vid], Item(name, vid, "is not a variable "
                                                  "object; export the variables again")))
             continue
         vname = str(v.get("name") or vid)
@@ -393,35 +439,41 @@ def import_figma(text: str, source: Source,
             if plan is None:
                 # Its collection is not in the export: named by its own name.
                 library[vid] = (vname, "")
-                col_notes.append((position[vid], 0, Item(f"{name} {vname}", vname,
+                col_notes.append((position[vid], 0, Item(name, vname,
                                                          _UNKNOWN_LIBRARY)))
                 continue
             library[vid] = (vname, cname)
             if ("library", cid) not in noted:
                 noted.add(("library", cid))
                 library_note[cid] = len(col_notes)
-                col_notes.append((position[vid], 0, Item(f"{name} {cname}", cname, "")))
+                col_notes.append((position[vid], 0, Item(name, cname, "")))
             used[cid] = used.get(cid, 0) + 1
             continue
-        where = f"{name} {cname}/{vname}"
+        where = f"{name} {cname}"
         if plan is not None and plan.note and cid not in noted:
             noted.add(cid)
-            col_notes.append((position[vid], 0, Item(f"{name} {cname}", cname, plan.note)))
+            col_notes.append((position[vid], 0, Item(name, cname, plan.note)))
+        first.setdefault(cid, position[vid])
         try:
             entries[vid] = _read(v, vname, where, plan, cid)
         except _Bad as exc:
             not_read.append((position[vid], Item(where, vname, str(exc))))
     for cid, plan in plans.items():
+        if plan.tiers:
+            found = [e for e in entries.values() if e.collection == cid]
+            col_notes.append((first.get(cid, len(order)), 0,
+                              Item(name, plan.name, _tier_note(plan, found, variables))))
         if plan.note and cid not in noted:
-            col_notes.append((len(order), 0, Item(f"{name} {plan.name}", plan.name, plan.note)))
+            col_notes.append((len(order), 0, Item(name, plan.name, plan.note)))
     # A library collection's note, with the count of its variables here,
     # counted by collection id: two libraries may share a name.
     for cid, at in library_note.items():
         p, k, i = col_notes[at]
         col_notes[at] = (p, k, Item(i.where, i.name, _library_note(used[cid])))
 
+    snapshots = _snapshots(library, variables, collections)
     while True:
-        _check_aliases(entries, variables, library, position, not_read)
+        _check_aliases(entries, variables, library, snapshots, position, not_read)
         if not _drop_repeated_paths(entries, position, not_read):
             break
 
@@ -480,7 +532,7 @@ def _read(v: Dict[str, Any], vname: str, where: str, plan: Optional[_Plan],
     path = ".".join(_BAD.sub("-", s).strip("-") or "_" for s in vname.split("/"))
     by_mode = v.get("valuesByMode") if isinstance(v.get("valuesByMode"), dict) else {}
     entry = _Entry(where, vname, path, kind, {}, str(v.get("description") or ""),
-                   label=f"{plan.name}/{vname}")
+                   label=f"{plan.name}/{vname}", collection=cid)
     for mode_id, ctx in plan.read:
         at = f"the mode {plan.modes[mode_id]} of {plan.name}"
         entry.at[ctx] = at
@@ -488,7 +540,7 @@ def _read(v: Dict[str, Any], vname: str, where: str, plan: Optional[_Plan],
         if raw is None:
             raise _Bad(f"has no value for {at}; set one in Figma and export again")
         if isinstance(raw, dict) and raw.get("type") == "VARIABLE_ALIAS":
-            entry.values[ctx] = _Ref(str(raw.get("id")))
+            entry.values[ctx] = _Ref(str(raw.get("id")), _resolved(v, mode_id, raw))
             continue
         value, outside = _literal(kind, raw, at)
         entry.values[ctx] = value
@@ -496,6 +548,11 @@ def _read(v: Dict[str, Any], vname: str, where: str, plan: Optional[_Plan],
             # With more than one mode read, the report says which one was mapped.
             spot = f"{where} in the mode {plan.modes[mode_id]}" if len(plan.read) > 1 else where
             entry.mapped.append(Mapped(spot, vname, *outside))
+    base_raw = by_mode.get(plan.read[0][0])
+    for mode_id in plan.tiers:
+        raw = by_mode.get(mode_id)
+        if raw is not None and raw != base_raw:
+            entry.tiers[plan.modes[mode_id]] = raw
     if path != vname.replace("/", "."):
         entry.renamed.append(Item(where, vname, f"read as {path}; a slash reads as a dot, and a "
                                   "path segment holds only letters, digits, '_' and '-'"))
@@ -506,12 +563,99 @@ def _read(v: Dict[str, Any], vname: str, where: str, plan: Optional[_Plan],
     return entry
 
 
+def _resolved(v: Dict[str, Any], mode_id: str, raw: Dict[str, Any]) -> Any:
+    """The value an export resolved an alias to, when it holds one: the
+    alias's own resolvedValue, or the variable's resolvedValuesByMode."""
+    if "resolvedValue" in raw:
+        return raw["resolvedValue"]
+    table = v.get("resolvedValuesByMode")
+    got = table.get(mode_id) if isinstance(table, dict) else None
+    if isinstance(got, dict) and "resolvedValue" in got:
+        return got["resolvedValue"]
+    if got is None or (isinstance(got, dict) and got.get("type") == "VARIABLE_ALIAS"):
+        return None
+    return got
+
+
+def _snapshots(library: Dict[str, Tuple[str, str]], variables: Dict[str, Any],
+               collections: Dict[str, Any]) -> Dict[str, Tuple[Any, str]]:
+    """Each library variable whose value the export holds: id -> (the value
+    in its collection's default mode, that mode's name when the collection
+    has more than one). With its collection missing, a value is held only
+    when every mode has the same one. An alias inside the library is not a
+    value."""
+    out: Dict[str, Tuple[Any, str]] = {}
+    for vid in library:
+        v = variables.get(vid)
+        by_mode = v.get("valuesByMode") if isinstance(v, dict) else None
+        if not isinstance(by_mode, dict) or not by_mode:
+            continue
+        col = collections.get(v.get("variableCollectionId"))
+        if isinstance(col, dict):
+            modes, default = _modes_of(col)
+            raw, mode = by_mode.get(default), (modes.get(default, "") if len(modes) > 1 else "")
+        else:
+            values = list(by_mode.values())
+            raw = values[0] if all(x == values[0] for x in values) else None
+            mode = ""
+        if raw is not None and not (isinstance(raw, dict) and raw.get("type") == "VARIABLE_ALIAS"):
+            out[vid] = (raw, mode)
+    return out
+
+
+def _show(value: Any) -> str:
+    """A literal as a person reads it: #FFFFFF, 16px, 600, Inter."""
+    if isinstance(value, dict) and set(value) == {"value", "unit"}:
+        return f"{value['value']}{value['unit']}"
+    if isinstance(value, list):
+        return ", ".join(str(x) for x in value)
+    return str(value)
+
+
+_FEW = 3
+
+
+def _tier_note(plan: _Plan, found: List[_Entry], variables: Dict[str, Any]) -> str:
+    """The one note on a viewport collection: its tiers, the default one
+    read, and each other tier's values where they differ."""
+    names = list(plan.modes.values())
+    default = plan.modes[plan.read[0][0]]
+    rest = [plan.modes[m] for m in plan.tiers]
+    note = (f"has the modes {_and(names)}, which are viewport tiers, not a mode axis: its "
+            f"default tier {default} was read as each variable's value, and "
+            f"{_and(rest)} {'was' if len(rest) == 1 else 'were'} not read")
+
+    def shown(e: _Entry, raw: Any) -> str:
+        if isinstance(raw, dict) and raw.get("type") == "VARIABLE_ALIAS":
+            target = variables.get(str(raw.get("id")))
+            return str(target.get("name")) if isinstance(target, dict) else str(raw.get("id"))
+        try:
+            return _show(_literal(e.kind, raw, "")[0])
+        except _Bad:
+            return json.dumps(raw)
+
+    differ = [e for e in found if e.tiers]
+    if differ:
+        parts = [f"{e.name} is " + _and([f"{shown(e, raw)} at {tier}"
+                                         for tier, raw in e.tiers.items()])
+                 for e in differ[:_FEW]]
+        more = len(differ) - _FEW
+        tail = f", and {more} more variable{'s' if more > 1 else ''} differ" if more > 0 else ""
+        note += f" ({'; '.join(parts)}{tail})"
+    else:
+        note += " (they hold the same values)"
+    return note + "; the engine sets per-tier values itself, so there is nothing to pass for them"
+
+
 def _check_aliases(entries: Dict[str, _Entry], variables: Dict[str, Any],
-                   library: Dict[str, Tuple[str, str]], position: Dict[str, int],
+                   library: Dict[str, Tuple[str, str]],
+                   snapshots: Dict[str, Tuple[Any, str]], position: Dict[str, int],
                    not_read: List[Tuple[int, Item]]) -> None:
     """Drop every entry whose alias points outside what was read (another
     file's variable, or one not read), or runs in a loop, until what is
-    left holds together. Each message names the mode and the fix."""
+    left holds together. An alias to a library variable whose value the
+    export holds reads that value, with a note that it is a snapshot. Each
+    message names the mode and the fix."""
     def drop(vid: str, why: str) -> None:
         e = entries.pop(vid)
         not_read.append((position[vid], Item(e.where, e.name, why)))
@@ -530,19 +674,47 @@ def _check_aliases(entries: Dict[str, _Entry], variables: Dict[str, Any],
                 continue
             ctx, target = gone
             at = e.at.get(ctx, "")
+            ref = e.values[ctx]
+            if target in variables and target not in library:
+                drop(vid, f"references {label(target)} in {at}, which was not read; fix "
+                          f"{label(target)} and import again")
+                changed = True
+                continue
+            # A variable of another file: read its value when the export
+            # holds one, as a snapshot; otherwise say what the owner can do.
             if target in library:
                 tname, cname = library[target]
                 which = f"the library collection {cname}" if cname else _UNKNOWN_COLLECTION
-                drop(vid, f"references {tname} in {at}, a variable of {which} in another "
-                          "file; import that library's export too, or detach the variable in "
-                          "Figma")
-            elif target in variables:
-                drop(vid, f"references {label(target)} in {at}, which was not read; fix "
-                          f"{label(target)} and import again")
+                origin = f"a variable of {which} in another file"
             else:
+                tname, origin = target, "a variable from another file"
+            snap = (ref.resolved, "") if isinstance(ref, _Ref) and ref.resolved is not None \
+                else snapshots.get(target)
+            if snap is None and target in library:
+                drop(vid, f"references {tname} in {at}, {origin}, and the export holds no "
+                          "value for it; detach the variable in Figma to keep its value here, "
+                          "publish the library so the export carries its values, or export "
+                          "the library and import it on its own")
+            elif snap is None:
                 drop(vid, f"references {target} in {at}, a variable from another file that "
-                          "this export does not hold; import that library's export too, or "
-                          "detach the variable in Figma")
+                          "this export does not hold; detach the variable in Figma to keep its "
+                          "value here, or export that library and import it on its own")
+            else:
+                try:
+                    value, outside = _literal(e.kind, snap[0], at)
+                except _Bad as exc:
+                    drop(vid, f"references {tname} in {at}, {origin}, whose value in the export "
+                              f"cannot be read: it {exc}")
+                else:
+                    e.values[ctx] = value
+                    if outside is not None:
+                        e.mapped.append(Mapped(e.where, e.name, *outside))
+                    mode = f" in its mode {snap[1]}" if snap[1] else ""
+                    e.notes.append(Item(e.where, e.name, (
+                        f"aliases {tname} in {at}, {origin}; the export holds its value{mode}, "
+                        f"so it was read as {_show(value)}, a snapshot that does not follow "
+                        "later changes to the library; to keep the link, export the library "
+                        "and import it on its own")))
             changed = True
         if changed:
             continue
