@@ -781,3 +781,31 @@ def test_a_selector_list_in_different_states_records_the_use_once_per_state(tmp_
     html = '<p class="md:flex"></p>\n<style>.x, .x:hover { @apply bg-brand; }</style>\n'
     assert [tuple(u) for u in _one(tmp_path / "w", "a.html", html).unknown_classes] == [
         ("a.html", 2, "bg-brand")]
+
+
+def test_scan_to_dict_carries_every_reason_and_the_public_names_are_exported(tmp_path):
+    from engine import io
+    for name in ("NotMeasured", "UnknownClass", "Rule", "Lie", "RawWithToken", "read_any"):
+        assert name in io.__all__ and hasattr(io, name), name
+    html = ('<p class="md:flex bg-brand" style="margin: calc(1px + 2px); '
+            'color: var(--color-ink)"></p>\n')
+    result = _one(tmp_path, "a.html", html)
+    (tmp_path / "b.min.css").write_text(".a{}", encoding="utf-8")
+    result = scan([tmp_path], _tokens())
+    data = result.to_dict()
+    assert list(data) == ["files", "usages", "unknown_classes", "not_read", "skipped",
+                          "declared"]
+    assert data["files"] == 1
+    assert data["usages"] == [{"file": "a.html", "line": 1, "prop": "color", "family": "color",
+                               "kind": "token", "value": "color-ink",
+                               "text": "var(--color-ink)", "state": ""}]
+    assert data["unknown_classes"] == [
+        {"file": "a.html", "line": 1, "class": "bg-brand", "name": "brand",
+         "looked_in": ["color", "colors", "backgroundColor"], "near": ""}]
+    why = result.not_read[0].why
+    assert why and data["not_read"] == [
+        {"file": "a.html", "line": 1, "kind": "value", "text": "calc(1px + 2px)", "why": why}]
+    assert result.not_read[0]._asdict()["why"] == why
+    assert data["skipped"] == [
+        {"file": "b.min.css", "why": "is a minified build file; scan its source instead"}]
+    json.dumps(data)
