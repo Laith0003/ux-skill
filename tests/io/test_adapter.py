@@ -3,6 +3,7 @@ the owner can edit says which of its tokens plays each of our roles and
 which of its modes is each of our axes. The engine checks a view in our
 names and reports findings in both."""
 import json
+from pathlib import Path
 
 import pytest
 
@@ -16,11 +17,15 @@ from engine.io.adapter import (
     propose, their_names, view)
 from engine.io.css_in import import_css
 from engine.io.dtcg_in import import_dtcg
+from engine.io.figma_in import read_figma
+from engine.io.markdown_in import read_markdown
 from engine.io.report import Source
+from engine.io.tailwind_in import read_tailwind
 from engine.synthesizer.axes import AxisValues
 
 NEUTRAL = AxisValues(*[0.5] * 7)
 SCHEME = AxisMap("scheme", {"light": "light", "dark": "dark"}, "owner")
+SCHEME_BY_NAME = AxisMap("scheme", {"light": "light", "dark": "dark"}, "name")
 
 
 def _source(text, name, fmt):
@@ -601,3 +606,50 @@ def test_merge_and_the_loop_finder_are_exported():
     from engine.io.graph import cycles, loop
     assert engine.io.merge is merge and engine.io.cycles is cycles and engine.io.loop is loop
     assert {"merge", "cycles", "loop"} <= set(engine.io.__all__)
+
+
+# One propose-and-view pass per importer, on its own fixture: the axes
+# the names say are proposed, the owner maps two roles, and the view is
+# checked in the engine's roles with the system's own values.
+FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
+
+
+def _owner_view(ts, text, page, axes):
+    mapping = propose(ts)
+    assert mapping.axes == axes
+    mapping.roles.update({"color.text.default": RoleMap(text), "color.surface.page": RoleMap(page)})
+    checked, notes = view(ts, mapping)
+    assert notes == []
+    assert check_system(checked, structure=False).passed
+    return mapping, checked
+
+
+def test_a_tailwind_4_stylesheet_is_proposed_and_viewed_in_our_roles():
+    ts = read_tailwind(FIXTURES / "tailwind" / "v4" / "app.css").tokens
+    _, checked = _owner_view(ts, "on-surface", "surface", {"scheme": SCHEME_BY_NAME})
+    assert checked.get("color.text.default").modes == {"scheme:dark": ts.resolve("color-ink-50")}
+
+
+def test_a_tailwind_3_theme_is_proposed_and_viewed_in_our_roles():
+    ts = read_tailwind(FIXTURES / "tailwind" / "v3" / "tailwind-theme.json").tokens
+    _, checked = _owner_view(ts, "colors.moss.950", "colors.moss.50", {})
+    assert dict(checked.axes) == {}
+    assert checked.get("color.surface.page").value == ts.get("colors.moss.50").value
+
+
+def test_markdown_rules_are_proposed_and_viewed_in_our_roles():
+    ts = read_markdown(FIXTURES / "markdown_rules").tokens
+    mapping, checked = _owner_view(ts, "ink.body", "color.surface.page",
+                                   {"scheme": SCHEME_BY_NAME})
+    # A token named as the role is proposed by name.
+    assert propose(ts).roles == {"color.surface.page": RoleMap("color.surface.page", "name")}
+    assert checked.get("color.surface.page").modes == {"scheme:dark": "#141821"}
+    assert their_names("color.text.default on color.surface.page", mapping) == (
+        "color.text.default (your ink.body) on color.surface.page")
+
+
+def test_a_figma_export_is_proposed_and_viewed_in_our_roles():
+    ts = read_figma(FIXTURES / "figma" / "variables.json").tokens
+    _, checked = _owner_view(ts, "text.body", "surface.page", {"scheme": SCHEME_BY_NAME})
+    assert checked.get("color.text.default").modes == {"scheme:dark": "#FAFAF7"}
+    assert [t.path for t in checked.tokens()] == ["color.text.default", "color.surface.page"]
