@@ -552,3 +552,47 @@ def test_an_unknown_class_fix_names_the_namespace_and_a_near_token(tmp_path):
     assert ("- a.html:1 uses the class bg-brand, which names no token in the color, colors or "
             "backgroundColor namespaces; add color-brand to the system, or use a class that "
             "names a token it has.") in text
+
+
+# ---------------------------------------------------------------- size
+
+
+def _big_repo(root, files=3000):
+    root.mkdir()
+    for i in range(files):
+        (root / f"page{i}.html").write_text(
+            f'<div class="md:flex bg-gray-{100 * (i % 9 + 1)} text-slate-700 p-{i % 12} '
+            f'rounded-lg shadow-md bg-brand{i % 40}">\n'
+            f'<p style="margin: calc(100% - {i}px); color: var(--nope-{i % 300})">x</p>\n'
+            f'<i style="padding: {i % 7}em"></i></div>\n', encoding="utf-8")
+    for i in range(100):
+        (root / f"vendor{i}.min.css").write_text(".a{color:red}", encoding="utf-8")
+    return root
+
+
+def test_a_big_repo_keeps_the_report_small_and_the_json_complete(tmp_path):
+    from engine.foundations import build_system
+    from engine.foundations.export import to_css
+    from engine.synthesizer.axes import AxisValues
+    ts = build_system(AxisValues(*[0.5] * 7), "#3366FF", arabic=False).tokens
+    imported = import_css(to_css(ts), Source("tokens.css", "css", "ab" * 32, 1))
+    scanned = scan([_big_repo(tmp_path / "repo")], imported.tokens)
+    report = enhance(imported, propose(imported.tokens), scanned)
+    text = report.markdown()
+    assert len(text.encode("utf-8")) < 200_000, len(text)
+    data = report.to_dict()
+    assert len(data["drift"]["skipped"]) == 100
+    assert len(data["drift"]["unknown_classes"]) == len(scanned.unknown_classes) > 3000
+    assert len(data["drift"]["not_read"]) == len(scanned.not_read) >= 3000
+    assert len(data["drift"]["missing"]) == 3000
+    assert len(data["mapping"]["by_name"]) > 100
+    # Each folded line says how many and shows a few.
+    assert "- 100 files were not read (vendor0.min.css, vendor1.min.css, vendor10.min.css and " \
+           "97 more): each is a minified build file; scan its source instead." in text
+    assert "- The code references 300 names the system does not have, 3000 times:" in text
+    assert " roles are mapped by name only" in text
+    decisions = text.split("## Decisions made without you")[1]
+    assert ("- 71 color roles are mapped by name only, each to the token of the same name: "
+            "color.surface.page, color.surface.card, color.surface.sunken and 68 more; confirm "
+            "them in mapping.json.") in decisions
+    assert decisions.count(" by name only") < 20

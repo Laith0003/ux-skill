@@ -32,7 +32,8 @@ code {{ background: {v('color.surface.code')}; color: {v('color.syntax.plain')};
 a {{ color: {v('color.text.link')}; }}
 .accent {{ color: {v('color.text.accent')}; }}
 .support {{ color: {v('color.text.support')}; }}
-.btn {{ background: {v('color.action.primary')}; color: {v('color.text.on-action')}; border-color: {v('color.action.primary-edge')}; }}
+.btn {{ background: {v('color.action.primary')}; color: {v('color.text.on-action')}; }}
+.btn-edge {{ border-color: {v('color.action.primary-edge')}; }}
 .btn:hover {{ background: {v('color.action.primary-hover')}; }}
 .btn:active {{ background: {v('color.action.primary-pressed')}; }}
 .btn:disabled {{ background: {v('color.action.disabled')}; color: {v('color.text.disabled')}; }}
@@ -40,7 +41,8 @@ a {{ color: {v('color.text.link')}; }}
 .danger:hover {{ background: {v('color.action.danger-hover')}; }}
 .danger:active {{ background: {v('color.action.danger-pressed')}; }}
 .brand {{ background: {v('color.surface.brand')}; color: {v('color.text.on-brand')}; }}
-.brand .btn {{ background: {v('color.action.on-brand')}; color: {v('color.text.on-brand-action')}; }}
+.brand .btn {{ background: {v('color.action.on-brand')}; }}
+.brand .btn span {{ color: {v('color.text.on-brand-action')}; }}
 .brand .btn:hover {{ background: {v('color.action.on-brand-hover')}; }}
 .brand .btn:active {{ background: {v('color.action.on-brand-pressed')}; }}
 @media (prefers-color-scheme: dark) {{
