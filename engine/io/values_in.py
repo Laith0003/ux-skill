@@ -331,6 +331,28 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
     if not text:
         raise NotRead("the value is empty; write a value or remove the entry")
     lower = text.lower()
+    refs = re.findall(r"var\(\s*(--[A-Za-z0-9_-]+)", text)
+    head = _FUNC.match(text)
+    if refs and not (head and (head.group(1).lower() in _COMPUTED
+                               or head.group(2).lstrip().lower().startswith("from "))):
+        # A theme that reads its values from a stylesheet (a shadcn-style
+        # hsl(var(--x))) keeps its semantic layer there: the fix is to read
+        # that stylesheet with it, never to flatten the reference.
+        names = list(dict.fromkeys(refs))
+        shown = names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+        them = names[0] if len(names) == 1 else "them"
+        if text.startswith("var("):
+            raise NotRead(f"{text} reads {shown}, which a stylesheet defines; import the "
+                          f"stylesheet that defines {them} together with the theme, so the "
+                          "value it holds can be read")
+        raise NotRead(f"{text} builds a color from {shown}, which a stylesheet defines; import "
+                      f"the stylesheet that defines {them} together with the theme, so the "
+                      "color can be read"
+                      if lower.startswith(("rgb", "hsl", "oklch", "oklab", "lab", "lch",
+                                           "hwb", "color("))
+                      else f"{text} uses {shown}, which a stylesheet defines; import the "
+                      f"stylesheet that defines {them} together with the theme, so the value "
+                      "can be read")
     if lower == "currentcolor":
         raise NotRead(f"{text} has no fixed value; it takes the color of the element it sits "
                       "on, so write the color as hex")

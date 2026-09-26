@@ -355,3 +355,23 @@ def test_a_font_with_a_duration_like_word_needs_a_generic_family_or_quotes():
         "curve as separate tokens, or, if it is a font list, quote each font name or end the "
         "list with a generic family such as sans-serif")
     assert read_value('"Font 2s", Inter') == ("fontFamily", ["Font 2s", "Inter"])
+
+
+@pytest.mark.parametrize("text,message", [
+    ("var(--gray-900)",
+     "var(--gray-900) reads --gray-900, which a stylesheet defines; import the stylesheet that "
+     "defines --gray-900 together with the theme, so the value it holds can be read"),
+    ("hsl(var(--background))",
+     "hsl(var(--background)) builds a color from --background, which a stylesheet defines; "
+     "import the stylesheet that defines --background together with the theme, so the color "
+     "can be read"),
+    ("rgb(var(--r) var(--g) var(--b) / 0.5)",
+     "rgb(var(--r) var(--g) var(--b) / 0.5) builds a color from --r, --g and --b, which a "
+     "stylesheet defines; import the stylesheet that defines them together with the theme, "
+     "so the color can be read"),
+])
+def test_a_var_in_a_theme_names_the_property_and_the_import_fix(text, message):
+    with pytest.raises(NotRead) as exc:
+        read_value(text)
+    assert str(exc.value) == message
+    assert "plain value" not in str(exc.value)
