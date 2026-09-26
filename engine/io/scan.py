@@ -40,7 +40,9 @@ color-ink from a v4 @theme, or colors.ink from a v3 theme exported as
 JSON); a numeric spacing class reads the v4 --spacing step. An arbitrary
 class (p-[13px]) is a raw value, and a bare value Tailwind writes as it is
 (z-10, duration-150, border-2) is raw too. A value class that names no
-token is listed apart in unknown_classes; a class that sets a keyword
+token is listed apart in unknown_classes, with the namespaces it was
+looked up in and a token of its name outside them (bg-primary against a
+bare --primary); a class that sets a keyword
 (text-center, border-solid) is not a value. Raw class values and unknown
 classes are kept only when the code shows it uses Tailwind: a variant
 (hover:, dark:, md:), an arbitrary class, a Tailwind at-rule (@import
@@ -358,12 +360,38 @@ class NotMeasured(_Seen):
         return f"{self.file}:{self.line}"
 
 
+class _Class(NamedTuple):
+    file: str
+    line: int
+    cls: str
+
+
+class UnknownClass(_Class):
+    """A value class that names no token: a (file, line, class) tuple,
+    with, beside it, `name` (the value part of the class, gutter in
+    m-gutter), the theme namespaces it was looked up in (`looked_in`, v4
+    @theme names first, then v3 theme keys) and `near`, a token of the
+    system with that name outside those namespaces ("" for none)."""
+
+    def __new__(cls, file: str, line: int, class_: str, looked_in: Tuple[str, ...] = (),
+                near: str = "", name: str = "") -> "UnknownClass":
+        self = super().__new__(cls, file, line, class_)
+        self.looked_in = tuple(looked_in)
+        self.near = near
+        self.name = name
+        return self
+
+    def where(self) -> str:
+        return f"{self.file}:{self.line}"
+
+
 @dataclass
 class Scan:
     usages: List[Usage] = field(default_factory=list)
     files: int = 0
-    # (file, line, class) for value classes that name no token
-    unknown_classes: List[Tuple[str, int, str]] = field(default_factory=list)
+    # (file, line, class) for value classes that name no token; each entry
+    # is an UnknownClass, which carries the namespaces looked in beside it
+    unknown_classes: List[UnknownClass] = field(default_factory=list)
     # (file, why it was not read, with the fix)
     skipped: List[Tuple[str, str]] = field(default_factory=list)
     # (file, line, kind, text) for what was seen and could not be measured;
@@ -614,9 +642,10 @@ class _Scanner:
             self.index.setdefault(_norm(t.path), (t.path, t.type))
         self.result = Scan()
         self._found: List[Tuple[int, int, int, Usage]] = []
-        self._unknown: List[Tuple[int, int, int, Tuple[str, int, str]]] = []
+        self._unknown: List[Tuple[int, int, int, UnknownClass]] = []
         self._missed: List[Tuple[int, int, int, NotMeasured]] = []
         self._declared: List[str] = []
+        self._near: Dict[Tuple[str, Tuple[str, ...]], str] = {}
         self._seq = 0
         self.file = ""
         # Tailwind: whether the code shows it, and the class uses kept only if so.
@@ -658,9 +687,31 @@ class _Scanner:
             self.class_raw.add(id(usage))
         self._found.append((at[0], at[1], self._seq, usage))
 
-    def unknown(self, at: Tuple[int, int], cls: str) -> None:
+    def unknown(self, at: Tuple[int, int], cls: str, looked_in: Tuple[str, ...] = (),
+                near: str = "", name: str = "") -> None:
         self._seq += 1
-        self._unknown.append((at[0], at[1], self._seq, (self.file, at[0], cls)))
+        self._unknown.append((at[0], at[1], self._seq,
+                              UnknownClass(self.file, at[0], cls, looked_in, near, name)))
+
+    def near(self, name: str, kinds: Dict[str, str]) -> str:
+        """A token of a type the class takes whose name is `name`, or ends
+        with it, outside the class's namespaces ("" for none)."""
+        want = _norm(name)
+        key = (want, tuple(kinds))
+        if key not in self._near:
+            self._near[key] = self._find_near(want, kinds)
+        return self._near[key]
+
+    def _find_near(self, want: str, kinds: Dict[str, str]) -> str:
+        if not want:
+            return ""
+        exact = self.index.get(want)
+        if exact is not None and exact[1] in kinds:
+            return exact[0]
+        for key, (path, kind) in self.index.items():
+            if key.endswith("." + want) and kind in kinds:
+                return path
+        return ""
 
     def note(self, at: Tuple[int, int], kind: str, text: str, why: str) -> None:
         self._seq += 1
@@ -948,7 +999,8 @@ class _Scanner:
         if _KEYWORD_CLASS.fullmatch(utility.lstrip("-")) or (
                 _NUMERIC.fullmatch(name) and spaces == _C):
             return
-        self.unknown(at, cls)
+        self.unknown(at, cls, tuple(space for space, family in spaces
+                                    if name or family != "color"), self.near(name, kinds), name)
 
     @staticmethod
     def _bare(prefix: str, name: str, spaces: _Namespaces) -> Optional[Tuple[str, str]]:

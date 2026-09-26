@@ -744,3 +744,17 @@ def test_a_regions_theme_attribute_is_not_the_dark_scheme(tmp_path):
            '[data-color-scheme="dark"] .x { color: #222222; }\n')
     rows = [(r[1], r[6]) for r in _rows(_one(tmp_path, "a.css", css))]
     assert rows == [(1, ""), (2, "scheme:dark")]
+
+
+def test_an_unknown_class_names_the_namespaces_it_looked_in_and_a_near_token(tmp_path):
+    ts = _tokens()
+    ts.add(Token("accent", "color", "#3366FF"))
+    ts.add(Token("gutter", "dimension", {"value": 1, "unit": "rem"}))
+    html = '<p class="md:flex bg-accent bg-brand m-gutter"></p>\n'
+    result = _one(tmp_path, "a.html", html, ts)
+    assert [tuple(u) for u in result.unknown_classes] == [
+        ("a.html", 1, "bg-accent"), ("a.html", 1, "bg-brand"), ("a.html", 1, "m-gutter")]
+    assert [(u.looked_in, u.near) for u in result.unknown_classes] == [
+        (("color", "colors", "backgroundColor"), "accent"),
+        (("color", "colors", "backgroundColor"), ""),
+        (("spacing",), "gutter")]
