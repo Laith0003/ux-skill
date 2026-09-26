@@ -48,7 +48,7 @@ from engine.foundations.validate import validate
 from engine.io.adapter import (
     AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, Mapping, deleted_axes, their_names, view)
 from engine.io.report import Imported
-from engine.io.scan import Scan, Usage, canonical
+from engine.io.scan import Scan, Usage, _norm, canonical
 
 # Family of a use -> the token types that can hold its value. A
 # line-height is a number, or a length when written with a unit.
@@ -490,8 +490,10 @@ class Enhanced:
                 "missing": [{"value": x.value, "where": x.where} for x in d.missing],
                 "own": [{"name": n, "uses": list(w)} for n, w in d.own.items()],
                 "skipped": [{"file": f, "why": w} for f, w in d.skipped],
-                "unknown_classes": [{"where": f"{f}:{n}", "class": c}
-                                    for f, n, c in d.unknown_classes],
+                "unknown_classes": [{"where": f"{u[0]}:{u[1]}", "class": u[2],
+                                     "looked_in": list(getattr(u, "looked_in", ())),
+                                     "near": getattr(u, "near", "")}
+                                    for u in d.unknown_classes],
                 "not_read": [{"where": f"{f}:{n}", "kind": k, "text": t, "why": w}
                              for f, n, k, t, w in d.not_read]},
             "confirm": list(self.confirm),
@@ -665,8 +667,7 @@ class Enhanced:
             lines += ["", "What the scan did not read or measure:", ""]
         return lines + unread
 
-    @staticmethod
-    def _unread(d: Drift) -> List[str]:
+    def _unread(self, d: Drift) -> List[str]:
         """What the scan did not read or measure, each with the fix."""
         lines = []
         for file, why in d.skipped:
@@ -680,11 +681,37 @@ class Enhanced:
                 lines.append(f"- {file}:{line} writes {_brief(written)} ({kind}), which the "
                              "scan does not measure; check it by hand, or write it in a form "
                              "the scan reads (a longhand property or a var() to a token).")
-        for file, line, cls in d.unknown_classes:
-            lines.append(f"- {file}:{line} uses the class {cls}, which names no token in the "
-                         "system; add the token to the system, or use a class that names one "
-                         "it has.")
+        for entry in d.unknown_classes:
+            lines.append(f"- {entry[0]}:{entry[1]} uses the class {entry[2]}"
+                         f"{self._class_fix(entry)}")
         return lines
+
+    def _class_fix(self, entry: Any) -> str:
+        """Why a class names no token, and the fix: the namespaces it was
+        looked up in, and a token of its name the system has outside them
+        or holds in the source without reading it."""
+        looked = tuple(getattr(entry, "looked_in", ()))
+        name = getattr(entry, "name", "")
+        if not looked or not name:
+            return (", which names no token in the system; add the token to the system, or use "
+                    "a class that names one it has.")
+        where = (f"the {looked[0]} namespace" if len(looked) == 1 else
+                 f"the {', '.join(looked[:-1])} or {looked[-1]} namespaces")
+        head = f", which names no token in {where}"
+        near = getattr(entry, "near", "")
+        if near:
+            return (f"{head}; the system has {near}, outside {'it' if len(looked) == 1 else 'them'}"
+                    f": rename it {looked[0]}-{name} so the class reads it, or use a class that "
+                    "names a token the system has.")
+        wanted = {_norm(f"{space}.{name}") for space in looked}
+        for item in self.imported.report.not_read:
+            key = _norm(item.name)
+            if key in wanted or key == _norm(name) or key.endswith("." + _norm(name)):
+                return (f"{head}; {self.imported.report.source.path} holds {item.name} at "
+                        f"{item.where}, which was not read (the import report says how to "
+                        "write it): fix that entry so the class reads it.")
+        return (f"{head}; add {looked[0]}-{name} to the system, or use a class that names a "
+                "token it has.")
 
 
 def _reading_face(checked: TokenSet, role: str) -> Optional[str]:

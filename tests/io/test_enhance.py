@@ -533,3 +533,22 @@ def test_an_unresolved_chain_is_one_clause_per_hop_and_measured_pairs_still_say_
     assert report.check.report.checked > 0
     assert ("The pairs and rules that need color.text.default were not measured, since it "
             "could not be resolved (see Structure).") in gate
+
+
+def test_an_unknown_class_fix_names_the_namespace_and_a_near_token(tmp_path):
+    imported = _system(":root { --accent: #3366ff; --spacing-gutter: 1.5em; }\n")
+    (tmp_path / "a.html").write_text('<p class="md:flex bg-accent m-gutter bg-brand"></p>\n',
+                                     encoding="utf-8")
+    text = " ".join(enhance(imported, Mapping(), scan([tmp_path], imported.tokens))
+                    .markdown().split())
+    assert ("- a.html:1 uses the class bg-accent, which names no token in the color, colors or "
+            "backgroundColor namespaces; the system has accent, outside them: rename it "
+            "color-accent so the class reads it, or use a class that names a token the system "
+            "has.") in text
+    assert ("- a.html:1 uses the class m-gutter, which names no token in the spacing "
+            "namespace; tokens.css holds --spacing-gutter at tokens.css:1, which was not read "
+            "(the import report says how to write it): fix that entry so the class reads "
+            "it.") in text
+    assert ("- a.html:1 uses the class bg-brand, which names no token in the color, colors or "
+            "backgroundColor namespaces; add color-brand to the system, or use a class that "
+            "names a token it has.") in text
