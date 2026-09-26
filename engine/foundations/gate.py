@@ -156,7 +156,10 @@ class GateReport:
                 f"defined: {names}; define those tokens or leave those pairings out.")
 
     def summary(self) -> str:
-        head = (f"WCAG gate {'passed' if self.passed else 'failed'}: {self.checked} checks, "
+        parts = [part for part, failed in (("contrast", self.findings),
+                                           ("the rule checks", self.failures)) if failed]
+        status = "passed" if self.passed else "failed on " + " and ".join(parts)
+        head = (f"WCAG gate {status}: {self.checked} checks, "
                 f"{len(self.findings)} failing, {self.skipped} "
                 f"pairing{'' if self.skipped == 1 else 's'} skipped; {self.rules_checked} "
                 f"rule checks, {len(self.failures)} failing.")

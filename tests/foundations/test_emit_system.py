@@ -63,7 +63,7 @@ def test_gate_failure_returns_findings_and_no_files(monkeypatch):
     assert first.context == "scheme:light,contrast:standard"
     assert "WCAG 1.4.3 needs 4.5:1" in first.message
     assert "Move color.text.on-action" in first.message
-    assert "WCAG gate failed: " in out.report
+    assert "WCAG gate failed on contrast: " in out.report
     assert "so nothing was written." in out.report
     assert ("- color.text.on-action on color.action.primary (light mode, standard contrast) "
             "is 1.91:1; WCAG 1.4.3 needs 4.5:1.\n") in out.report
@@ -183,9 +183,10 @@ def test_notes_are_rewritten_in_plain_words():
         "color.neutral.300: on color.surface.raised it measured 3.76:1, now 5.21:1, and WCAG "
         "1.4.3 needs 4.5:1.",
         "- In light mode, standard contrast, for the color.action.primary button the engine "
-        "changed color.action.primary from color.brand.500 to color.brand.700 and color.text.on-action "
-        "from color.base.white to color.base.black. It now measures 4.97:1 for text on the "
-        "fill, 4.63:1 for the fill on the page and 6.21:1 for the focus ring on the surface.",
+        "changed color.action.primary from color.brand.500 to color.brand.700 and "
+        "color.text.on-action from color.base.white to color.base.black. It now measures "
+        "4.97:1 for text on the fill, 4.63:1 for the fill on the page and 6.21:1 for the "
+        "focus ring on the surface.",
         # A shape the report does not know keeps the engine's words, modes in words.
         "- color.action.danger group (dark mode, high contrast): no combination within the "
         "ramps clears every requirement; kept the closest, text/fill 3.10:1, fill/page 3.00:1",
@@ -231,7 +232,6 @@ def test_a_validation_error_without_problems_still_fails(monkeypatch):
 
 
 def test_report_bytes_do_not_depend_on_the_hash_seed():
-    import hashlib
     import os
     import subprocess
     import sys

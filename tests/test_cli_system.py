@@ -105,7 +105,7 @@ def test_gate_failure_exits_1_writes_nothing_and_prints_every_finding(tmp_path, 
     result, payload = _run("--brand", "#FFD400", "--out", str(out))
     assert result.exit_code == 1
     assert payload["status"] == "failed" and payload["passed"] is False
-    assert payload["gate"].startswith("WCAG gate failed: ")
+    assert payload["gate"].startswith("WCAG gate failed on contrast: ")
     assert payload["findings"], payload
     for f in payload["findings"]:
         assert set(f) == {"subject", "context", "message"}

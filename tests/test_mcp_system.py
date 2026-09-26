@@ -61,7 +61,7 @@ def test_gate_failure_returns_findings_and_no_system(monkeypatch):
     result = handle_ux_system_build({"brand": "#FFD400", "include_files": True})
     assert result["passed"] is False and result["css"] == "" and result["dtcg"] == ""
     assert result["status"] == "failed" and result["files"] == []
-    assert result["gate"].startswith("WCAG gate failed: ")
+    assert result["gate"].startswith("WCAG gate failed on contrast: ")
     assert result["findings"] and "Findings" in result["report"]
     assert all(set(f) == {"subject", "context", "message"} for f in result["findings"])
 
