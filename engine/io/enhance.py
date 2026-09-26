@@ -424,6 +424,9 @@ class Enhanced:
     decisions: List[str]
     findings: List[str]
     merge_notes: List[str] = field(default_factory=list)
+    # Mapped roles whose token cannot be resolved, so the gate could not
+    # measure them; Structure says why.
+    unresolved: List[str] = field(default_factory=list)
 
     def mapped(self) -> List[str]:
         return [r for r, m in self.mapping.roles.items() if m.token is not None]
@@ -468,6 +471,7 @@ class Enhanced:
                      "passed": report.passed if self.measured else None,
                      "pairs_checked": report.checked,
                      "rules_checked": report.rules_checked,
+                     "unresolved": list(self.unresolved),
                      "findings": list(self.findings),
                      "foundations": list(self.check.foundations)},
             "drift": None if d is None else {
@@ -525,10 +529,16 @@ class Enhanced:
         report = self.check.report
         head = report.summary().splitlines()[0]
         line = f"Checked {_and(self.check.foundations)}: {head}"
+        unresolved = _and_few(self.unresolved, FEW) if self.unresolved else ""
+        why = (f"{unresolved} could not be resolved (see Structure)" if unresolved
+               else "each needs both of its roles mapped")
         if report.checked == 0:
             line = (f"Checked {_and(self.check.foundations)}. No contrast pair was measured, "
-                    "since each needs both of its roles mapped, so the verdict covers the rule "
-                    f"checks only: {head}")
+                    f"since {why}, so the verdict covers the rule checks only: {head}")
+        elif unresolved:
+            it = "it" if len(self.unresolved) == 1 else "they"
+            line += (f" The pairs and rules that need {unresolved} were not measured, since "
+                     f"{it} could not be resolved (see Structure).")
         if self.findings:
             line += f" Each finding names our role, then your token in {source}."
         out = textwrap.wrap(line, WIDTH, break_long_words=False, break_on_hyphens=False)
@@ -731,6 +741,51 @@ def _owner_notes(mapping: Mapping, name: str) -> List[str]:
            for a, m in mapping.axes.items() if m.source is None]
 
 
+def _break(ts: TokenSet, path: str, chain: Tuple[str, ...] = ()) -> Optional[List[str]]:
+    """Why a token does not resolve, one clause per hop, following its base
+    value and every mode override; None when it resolves."""
+    if path in chain:
+        return ["which closes a loop"]
+    if not ts.has(path):
+        return ["which is not defined"]
+    t = ts.get(path)
+    for value in [t.value, *t.modes.values()]:
+        for target in _alias_leaves(value):
+            rest = _break(ts, target, chain + (path,))
+            if rest is not None:
+                return [f"{path} aliases {target}"] + rest
+    return None
+
+
+def _alias_leaves(value: Any) -> List[str]:
+    if isinstance(value, dict):
+        return [x for v in value.values() for x in _alias_leaves(v)]
+    if isinstance(value, list):
+        return [x for v in value for x in _alias_leaves(v)]
+    return [alias_target(value)] if is_alias(value) else []
+
+
+def _unresolved(ts: TokenSet, checked: TokenSet, mapping: Mapping, source: str,
+                name: str) -> Dict[str, str]:
+    """Each mapped role view() left out because its token cannot be
+    resolved, with the reason in the system's names and the fix."""
+    out: Dict[str, str] = {}
+    if checked is ts:
+        return out
+    for role, m in mapping.roles.items():
+        if m.token is None or checked.has(role) or not ts.has(m.token):
+            continue
+        clauses = _break(ts, m.token)
+        if clauses is None:
+            continue
+        missing = clauses[-2].rsplit(" ", 1)[-1] if clauses[-1] == "which is not defined" else ""
+        fix = (f"define {missing} in {source}, or map {role} to a token that resolves in {name}"
+               if missing else f"point one of them at a value in {source}, or map {role} to a "
+               f"token that resolves in {name}")
+        out[role] = (f"{role} (your {m.token}) cannot be resolved: {', '.join(clauses)}; {fix}")
+    return out
+
+
 def _finding(text: str, mapping: Mapping) -> str:
     """A gate message in the system's names; a set with no mode axis
     prints an empty context, which is dropped."""
@@ -749,6 +804,11 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     result = check_system(checked, structure=checked is ts)
     structure = ([p.message for p in validate(ts)] if checked is not ts
                  else [p.message for p in result.problems])
+    unresolved = _unresolved(ts, checked, mapping, imported.report.source.path, mapping_name)
+    structure += list(unresolved.values())
+    notes = [n for n in notes if not any(
+        n.startswith(f"{r} reads {mapping.roles[r].token}, which cannot be resolved (")
+        for r in unresolved)]
     report = result.report
     findings = [_finding(_MOVE.sub(_THEIR_FIX, f.message()), mapping) for f in report.findings]
     findings += [_finding(f"{c.message} (in {c.mode})" if c.mode else c.message, mapping)
@@ -777,4 +837,4 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
                     drift(ts, scanned) if scanned is not None else None,
                     _confirm(mapping, checked, result.foundations, list(deleted_axes(ts, mapping))),
                     decisions, findings,
-                    list(merge_notes))
+                    list(merge_notes), list(unresolved))
