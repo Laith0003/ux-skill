@@ -765,3 +765,19 @@ def test_an_unknown_class_names_the_namespaces_it_looked_in_and_a_near_token(tmp
         (("color", "colors", "backgroundColor"), "", "brand"),
         (("spacing",), "gutter", "gutter"), (("spacing",), "", "1"),
         (("spacing",), "space-4", "4")]
+
+
+def test_a_selector_list_in_different_states_records_the_use_once_per_state(tmp_path):
+    css = (".btn:hover, .btn:focus-visible { background: var(--color-primary-hover); "
+           "margin: calc(1px + 2px); }\n"
+           ".a, .a:hover { color: var(--color-ink); }\n"
+           ".b:hover, .c:hover { color: var(--color-ink); }\n")
+    result = _one(tmp_path, "a.css", css)
+    assert [(r[1], r[5], r[6]) for r in _rows(result)] == [
+        (1, "color-primary-hover", "hover"), (1, "color-primary-hover", "focus"),
+        (2, "color-ink", ""), (2, "color-ink", "hover"), (3, "color-ink", "hover")]
+    # What was not measured is listed once, whatever the states.
+    assert _not_read(result) == [(1, "value", "calc(1px + 2px)")]
+    html = '<p class="md:flex"></p>\n<style>.x, .x:hover { @apply bg-brand; }</style>\n'
+    assert [tuple(u) for u in _one(tmp_path / "w", "a.html", html).unknown_classes] == [
+        ("a.html", 2, "bg-brand")]
