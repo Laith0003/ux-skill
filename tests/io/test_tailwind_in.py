@@ -181,8 +181,11 @@ def test_the_v4_fixture_reads_the_theme_the_layers_and_both_dark_forms():
     assert [(i.where, i.name) for i in report.notes] == [
         ("app.css:10", "--color-*"), ("app.css:11", "--font-*"), ("app.css:55", ".dark"),
         ("app.css:68", ":root @variant dark")]
+    # The variant on :root is :root.dark, written back under the file's own
+    # .dark rule.
     assert report.notes[3].message == ("is the dark scheme; 1 property was paired by name with "
-                                       "the root's and read as scheme:dark (--accent)")
+                                       "the root's and read as scheme:dark (--accent); it is "
+                                       "written back as .dark")
     assert [(m.where, m.name, m.hex) for m in report.mapped] == [
         ("app.css:15", "--color-moss-500", "#00A440")]
     assert [(i.where, i.name) for i in report.not_read] == [
@@ -276,7 +279,7 @@ def test_a_nested_dark_variant_is_read_on_the_custom_selector():
     ts = imported.tokens
     assert [t.path for t in ts.tokens()] == ["accent", "paper"]
     assert ts.get("accent").modes == {"scheme:dark": "#E3EFE4"}
-    assert imported.forms == {"scheme": (".theme-night", "")}
+    assert imported.forms == {"scheme": (":root.theme-night", "")}
     assert [(i.where, i.name) for i in imported.report.notes] == [
         ("app.css:5", ":root @variant dark")]
 
@@ -352,7 +355,7 @@ def test_a_nested_dark_class_joins_the_root_selector():
     imported = _css(":root {\n  --a: #fff;\n  &.dark {\n    --a: #000;\n  }\n  --b: 2px;\n}\n")
     assert [t.path for t in imported.tokens.tokens()] == ["a", "b"]
     assert imported.tokens.get("a").modes == {"scheme:dark": "#000000"}
-    assert imported.forms == {"scheme": (".dark", "")}
+    assert imported.forms == {"scheme": (":root.dark", "")}
 
 
 @pytest.mark.parametrize("variant", [
@@ -429,7 +432,7 @@ def test_a_dark_variant_with_a_negated_part_reads_its_dark_selector(variant):
     text = f"{variant}\n:root {{\n  --bg: #111;\n  @variant dark {{\n    --bg: #000;\n  }}\n}}\n"
     imported = _css(text)
     assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
-    assert imported.forms == {"scheme": (".dark", "")}
+    assert imported.forms == {"scheme": (":root.dark", "")}
 
 
 def test_the_block_form_of_a_negated_variant_is_named_by_its_selector():

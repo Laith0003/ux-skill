@@ -13,7 +13,7 @@ from engine.foundations.errors import InputError
 from engine.io.adapter import (
     ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mapping, load_mapping, merge, parse_mapping,
     propose, their_names, view)
-from engine.io.css_in import Rule, import_css, parse_css, read_css
+from engine.io.css_in import Rule, import_css, parse_css, read_css, write_css
 from engine.io.dtcg_in import import_dtcg, read_dtcg
 from engine.io.enhance import Drift, Enhanced, Lie, RawWithToken, drift, enhance
 from engine.io.figma_in import REST_ENDPOINT, SIZE_SCOPES, import_figma, read_figma
@@ -38,7 +38,7 @@ __all__ = [
     "import_tailwind_json", "load_mapping", "loop", "merge",
     "parse_css", "parse_mapping", "propose", "read_css", "read_dtcg", "read_figma",
     "read_any", "read_markdown", "read_source", "read_tailwind", "read_value", "scan",
-    "split_top",
+    "split_top", "write_css",
     "their_names", "view",
 ]
 

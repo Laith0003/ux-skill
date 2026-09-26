@@ -3,6 +3,7 @@ and preference media queries, read in their own names; everything else
 reported. Our own tokens.css comes back byte for byte apart from the
 viewport layer, which is derived from tokens it reads, and a foreign file
 round trips through the same exporter with its own selectors."""
+import json
 from pathlib import Path
 
 import pytest
@@ -10,8 +11,8 @@ import pytest
 from engine.foundations import export
 from engine.foundations.build import build_system
 from engine.foundations.emit import InputError
-from engine.foundations.export import to_css
-from engine.io.css_in import import_css, parse_css, read_css
+from engine.foundations.export import dump_dtcg, from_dtcg, to_css
+from engine.io.css_in import import_css, parse_css, read_css, write_css
 from engine.io.report import Source
 from engine.synthesizer.axes import AxisValues
 
@@ -132,7 +133,10 @@ def test_a_foreign_file_keeps_its_names_and_reads_its_modes():
         "ease-out", "shadow-card", "text-body", "surface-page", "focus-ring"]
     assert dict(ts.axes) == {"scheme": ("light", "dark"), "motion": ("standard", "reduced"),
                              "density": ("comfortable", "compact")}
-    assert imported.forms == {"scheme": (".dark", "")}
+    # Each form the file uses is recorded: the dark class as written, and
+    # reduced motion under its media query alone.
+    assert imported.forms == {"scheme": (".dark", ""),
+                              "motion": ("", "(prefers-reduced-motion: reduce)")}
     assert imported.scheme == "light"
     assert ts.get("ink-100").value == "#ECEEF2"
     assert ts.get("paper").value == "#FFFFFF"
@@ -180,7 +184,8 @@ def test_the_report_names_every_entry_it_did_not_read():
 def test_a_foreign_file_round_trips_through_its_own_selectors():
     first = _import(FOREIGN)
     text = to_css(first.tokens, scheme=first.scheme, forms=first.forms)
-    assert ':root.dark {\n  color-scheme: dark;\n  --text-body: var(--paper);\n' in text
+    assert '\n\n.dark {\n  color-scheme: dark;\n  --text-body: var(--paper);\n' in text
+    assert ":root.dark" not in text and "data-motion" not in text
     second = _import(text)
     assert second.forms == first.forms
     assert [(t.path, t.type, t.value, t.modes, t.layer) for t in second.tokens.tokens()] == [
@@ -251,7 +256,7 @@ def test_unbalanced_braces_are_named_with_the_line():
 # engine does not write is reported with its pairing.
 @pytest.mark.parametrize("opens, form, forms, scheme, where, label", [
     (".dark {", "", {"scheme": (".dark", "")}, "light", 6, ".dark"),
-    ("html.dark {", "", {"scheme": (".dark", "")}, "light", 6, "html.dark"),
+    ("html.dark {", "", {"scheme": ("html.dark", "")}, "light", 6, "html.dark"),
     ('[data-mode="dark"] {', "", {"scheme": ('[data-mode="dark"]', "")}, "light", 6,
      '[data-mode="dark"]'),
     ('[data-theme="dark"] {', "", {}, "light", 6, '[data-theme="dark"]'),
@@ -261,11 +266,14 @@ def test_unbalanced_braces_are_named_with_the_line():
      "[data-mode=dark]"),
     ('[data-color-scheme="dark"] {', "", {"scheme": ('[data-color-scheme="dark"]', "")},
      "light", 6, '[data-color-scheme="dark"]'),
-    ("@media screen and (prefers-color-scheme: dark) {\n  :root {", "}", {}, "system", 7,
+    ("@media screen and (prefers-color-scheme: dark) {\n  :root {", "}",
+     {"scheme": ("", "(prefers-color-scheme: dark)")}, "system", 7,
      "@media screen and (prefers-color-scheme: dark) :root"),
-    ("@media (prefers-color-scheme: dark) {\n  :root {", "}", {}, "system", 7,
+    ("@media (prefers-color-scheme: dark) {\n  :root {", "}",
+     {"scheme": ("", "(prefers-color-scheme: dark)")}, "system", 7,
      "@media (prefers-color-scheme: dark) :root"),
-    ('@media (prefers-color-scheme:dark) {\n  :root {', "}", {}, "system", 7,
+    ('@media (prefers-color-scheme:dark) {\n  :root {', "}",
+     {"scheme": ("", "(prefers-color-scheme: dark)")}, "system", 7,
      "@media (prefers-color-scheme:dark) :root"),
 ])
 def test_every_dark_form_pairs_into_scheme_dark(opens, form, forms, scheme, where, label):
@@ -300,7 +308,7 @@ def test_a_dark_class_and_the_media_query_write_back_in_both_forms():
     assert first.forms == {"scheme": (".dark", "(prefers-color-scheme: dark)")}
     assert first.scheme == "system"
     out = to_css(first.tokens, scheme=first.scheme, forms=first.forms)
-    assert ":root.dark {\n  color-scheme: dark;\n  --ink: #EEEEEE;\n}" in out
+    assert "\n\n.dark {\n  color-scheme: dark;\n  --ink: #EEEEEE;\n}" in out
     assert ("@media (prefers-color-scheme: dark) {\n  :root {\n    color-scheme: dark;\n"
             "    --ink: #EEEEEE;\n  }\n}") in out
     second = _import(out)
@@ -410,7 +418,8 @@ def test_the_compiled_stylesheet_pairs_the_app_dark_theme_into_the_foundation():
     ts, report = imported.tokens, imported.report
     assert (report.entries, report.tokens) == (70, 52)
     assert dict(ts.axes) == {"scheme": ("light", "dark"), "motion": ("standard", "reduced")}
-    assert (imported.forms, imported.scheme) == ({"scheme": (".dark", "")}, "light")
+    assert (imported.forms, imported.scheme) == (
+        {"scheme": (".dark", ""), "motion": ("", "(prefers-reduced-motion: reduce)")}, "light")
     assert [t.path for t in ts.tokens() if "scheme:dark" in t.modes] == [
         "shadow-raised", "surface-page", "surface-raised", "text-primary", "text-muted",
         "border-subtle", "action-primary"]
@@ -442,7 +451,7 @@ def test_the_compiled_stylesheet_pairs_the_app_dark_theme_into_the_foundation():
 def test_the_compiled_stylesheet_round_trips_through_its_own_dark_class():
     first = read_css(FIXTURE / "compiled" / "app.css")
     text = to_css(first.tokens, scheme=first.scheme, forms=first.forms)
-    assert ":root.dark {\n  color-scheme: dark;\n" in text
+    assert "\n\n.dark {\n  color-scheme: dark;\n" in text
     second = _import(text, "app.css")
     assert (second.forms, second.scheme) == (first.forms, first.scheme)
     assert [(t.path, t.type, t.value, t.modes, t.layer) for t in second.tokens.tokens()] == [
@@ -477,7 +486,7 @@ def test_a_nested_dark_class_and_a_nested_dark_query_are_the_dark_scheme():
     assert [t.path for t in ts.tokens()] == ["ink", "gap"]
     assert ts.get("ink").modes == {"scheme:dark": "#EEEEEE"}
     assert (imported.forms, imported.scheme) == (
-        {"scheme": (".dark", "(prefers-color-scheme: dark)")}, "system")
+        {"scheme": (":root.dark", "(prefers-color-scheme: dark)")}, "system")
     assert report.entries == 5
     assert [(i.where, i.name) for i in report.not_read] == [("nested.css:5", "--card-pad")]
     assert [(i.where, i.name) for i in report.notes] == [
@@ -532,7 +541,7 @@ def test_the_root_listed_with_its_light_attribute_is_the_base():
                                  "the root's and read as scheme:dark (--ui-body-color, "
                                  "--ui-body-bg)")]
     text = to_css(ts, scheme=imported.scheme, forms=imported.forms)
-    assert ":root[data-ui-theme=dark] {\n  color-scheme: dark;\n" in text
+    assert "\n\n[data-ui-theme=dark] {\n  color-scheme: dark;\n" in text
     again = _import(text)
     assert (again.forms, again.scheme) == (imported.forms, imported.scheme)
 
@@ -747,3 +756,71 @@ def test_a_spelling_note_does_not_hide_the_scaled_note_on_the_same_property():
     notes = [i.message for i in _import(text).report.notes if i.name == "--t"]
     assert any("two spellings of one value" in n for n in notes)
     assert any(n.startswith("is calc(var(--size-a) * var(--s)), and --s scales it") for n in notes)
+
+
+# The write-back gives each form the file used back as it was written.
+@pytest.mark.parametrize("query, attribute", [
+    ("(prefers-color-scheme: dark)", "data-theme"),
+    ("(prefers-contrast: more)", "data-contrast"),
+    ("(prefers-reduced-motion: reduce)", "data-motion"),
+])
+def test_an_axis_kept_only_in_its_media_query_is_written_back_there_alone(query, attribute):
+    text = (":root {\n  --ink: #111111;\n  --ease: cubic-bezier(0.2, 0, 0, 1);\n}\n"
+            f"@media {query} {{\n  :root {{\n"
+            + ("    --ease: linear;\n" if "motion" in query else "    --ink: #EEEEEE;\n")
+            + "  }\n}\n")
+    first = _import(text)
+    axis = next(iter(first.forms))
+    assert first.forms == {axis: ("", query)}
+    out = to_css(first.tokens, scheme=first.scheme, forms=first.forms)
+    assert attribute not in out and ":not(" not in out
+    assert f"@media {query} {{\n  :root {{\n" in out
+    second = _import(out)
+    assert (second.forms, second.scheme) == (first.forms, first.scheme)
+    assert to_css(second.tokens, scheme=second.scheme, forms=second.forms) == out
+
+
+@pytest.mark.parametrize("selector", [".dark", ":root.dark", "html.dark"])
+def test_a_dark_class_is_written_back_on_the_root_it_was_written_on(selector):
+    first = _import(f":root {{\n  --ink: #111111;\n}}\n{selector} {{\n  --ink: #EEEEEE;\n}}\n")
+    assert first.forms == {"scheme": (selector, "")}
+    out = to_css(first.tokens, scheme=first.scheme, forms=first.forms)
+    assert f"\n\n{selector} {{\n  color-scheme: dark;\n  --ink: #EEEEEE;\n}}" in out
+    assert out.count(".dark") == 1
+
+
+GAMUT = (":root {\n  --brand: oklch(0.7 0.3 150);\n  --ink: #111111;\n  --gap: 1.5em;\n}\n"
+         ".dark {\n  --brand: oklch(0.8 0.35 150);\n}\n")
+
+
+def test_a_color_mapped_into_srgb_keeps_its_own_spelling_in_the_token():
+    imported = _import(GAMUT)
+    brand = imported.tokens.get("brand")
+    assert brand.value == imported.report.mapped[0].hex
+    assert brand.extensions == {
+        "original": {"": "oklch(0.7 0.3 150)", "scheme:dark": "oklch(0.8 0.35 150)"},
+        "read_as": {"": brand.value, "scheme:dark": brand.modes["scheme:dark"]}}
+    assert imported.tokens.get("ink").extensions == {}
+    # DTCG carries the spelling in the token's extensions, both ways.
+    doc = json.loads(dump_dtcg(imported.tokens))
+    ext = doc["brand"]["$extensions"]["io.github.laith0003.ux-skill"]
+    assert ext["original"] == brand.extensions["original"]
+    assert from_dtcg(doc).get("brand").extensions == brand.extensions
+
+
+def test_the_write_back_gives_the_spelling_back_and_lists_what_was_not_read():
+    imported = _import(GAMUT)
+    out = write_css(imported)
+    head = out.split("*/", 1)[0]
+    assert head.startswith("/*\n * Written back from theme.css.\n")
+    assert (" * 1 entry was not read on the way in and is not below; each with how to write "
+            "it so it can be read:\n *   theme.css:4 --gap: 1.5em is relative to the parent's "
+            "font size, so it has no fixed value; write it in px or rem\n") in head
+    assert " *   theme.css:2 --brand: oklch(0.7 0.3 150), read as #" in head
+    body = out.split("*/\n", 1)[1]
+    assert "  --brand: oklch(0.7 0.3 150);\n" in body
+    assert "\n\n.dark {\n  color-scheme: dark;\n  --brand: oklch(0.8 0.35 150);\n}" in body
+    again = _import(out)
+    assert [(t.path, t.value, t.modes, t.extensions) for t in again.tokens.tokens()] == [
+        (t.path, t.value, t.modes, t.extensions) for t in imported.tokens.tokens()]
+    assert (again.forms, again.scheme) == (imported.forms, imported.scheme)
