@@ -22,7 +22,7 @@ gate_module = importlib.import_module("engine.foundations.gate")
 
 
 def test_build_returns_tokens_notes_and_the_gate_report():
-    # R27 I3: the gate report used to be thrown away.
+    # The gate report is kept on the result, never thrown away.
     result = build_color(AXES, "#FFD400")
     assert isinstance(result, BuildResult)
     assert isinstance(result.report, GateReport) and result.report.passed
@@ -53,7 +53,7 @@ def _no_solver(monkeypatch):
 
 
 def test_generator_recheck_raises_gate_failure_with_the_seed_hint(monkeypatch):
-    # R27 I3: the generator's own re-check goes through gate(), so a
+    # The generator's own re-check goes through gate(), so a
     # failing generated system reaches callers as GateFailure, never a
     # plain ValueError. An amber seed, which fills its action
     # (decisions/brand-leads-the-role.md), with the action solver switched
@@ -113,7 +113,7 @@ def test_public_api():
     assert not hasattr(export_module, "build_color")
 
 
-# R27 M9: build_color checks its inputs before generating, naming the input and the fix.
+# build_color checks its inputs before generating, naming the input and the fix.
 
 @pytest.mark.parametrize("brand_hex", [None, 0x3366FF, b"#3366FF"])
 def test_brand_hex_must_be_a_string(brand_hex):
@@ -166,7 +166,7 @@ def test_axes_must_be_axis_values():
         build_color({"warmth": 0.5}, "#3366FF")
 
 
-# M2 kickoff: one pipeline, generators never gate themselves.
+# One pipeline: generators never gate themselves.
 
 def test_package_attributes_gate_and_validate_are_the_submodules():
     import engine.foundations as f
@@ -235,7 +235,7 @@ def test_check_failures_block_and_carry_their_message():
 def test_seed_hint_direction_follows_the_other_side(monkeypatch):
     # With the solver off, dark mode keeps white text on a light amber
     # button. White is lighter than the button, so only a darker seed can
-    # help; the M1 hint said "lighter" for every dark-mode finding.
+    # help; the hint must not say "lighter" for every dark-mode finding.
     _no_solver(monkeypatch)
     with pytest.raises(GateFailure) as exc:
         build_color(AXES, "#EAB308")

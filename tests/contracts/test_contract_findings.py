@@ -1,7 +1,7 @@
 """The form, display and navigation contracts hold what they rely on.
 
-Each test below pins one review finding on the twelve contracts from
-Tasks 17 and 18: shapes that never turn round, targets that wrap the glyph
+Each test below pins one finding on the twelve form, display and
+navigation contracts: shapes that never turn round, targets that wrap the glyph
 and its label, one edge per field group, the prefix's direction, focus on
 every part a person operates, and every edge, ring and track measured on
 every surface the contract names, in every color context, over the seed
@@ -60,7 +60,7 @@ def _color_contexts(ts):
     return contexts([a for a in ("scheme", "contrast") if a in ts.axes], ts.axes)
 
 
-# T17 I1: shapes and targets ------------------------------------------------
+# Shapes and targets ------------------------------------------------
 
 @pytest.mark.parametrize("axes", AXES + (SOFT,))
 def test_a_check_box_stays_square_and_a_field_of_lines_never_becomes_a_stadium(axes):
@@ -98,7 +98,7 @@ def test_every_line_under_a_field_keeps_its_gap_from_the_field_and_its_ring():
                     (c.name, part)
 
 
-# T17 I2, I3 and radius.md:35: the field with a prefix ----------------------
+# The field with a prefix (radius.md:35) ----------------------
 
 @pytest.mark.parametrize("position", ["start", "end"])
 @pytest.mark.parametrize("state", ["default", "hover", "focus", "error", "disabled"])
@@ -142,7 +142,7 @@ def test_radius_guidance_and_the_contracts_agree():
     assert not any(b.role == "radius.joined" for b in SEEDS["input-prefix"].tokens)
 
 
-# T17 I4, T18 I5, I6: focus on every part a person operates ----------------
+# Focus on every part a person operates ----------------
 
 def test_every_part_a_person_operates_shows_focus():
     # A part sized to the target is one a person presses; it draws its own
@@ -226,7 +226,7 @@ def test_the_open_menu_is_a_raised_layer_measured_where_it_sits():
         assert word in text, word
 
 
-# T17 I5, T18 I1: control edges on every surface, in every context ----------
+# Control edges on every surface, in every context ----------
 
 def test_every_control_edge_and_ring_is_paired_with_every_surface():
     # An edge or a ring on the component's outer part sits on the surfaces
@@ -281,7 +281,7 @@ def test_edges_that_mark_a_control_clear_three_to_one_on_every_named_surface(bra
                     assert ratio >= 3, (brand, name, fg, s, mode, round(ratio, 2))
 
 
-# T18 I2: the progress value keeps the page's direction ---------------------
+# The progress value keeps the page's direction ---------------------
 
 def test_the_progress_value_is_words_in_the_page_direction():
     parts = {p.name: p.rtl_behavior for p in SEEDS["progress"].parts}
@@ -289,7 +289,7 @@ def test_the_progress_value_is_words_in_the_page_direction():
     assert any("never wrap the whole value" in line for line in SEEDS["progress"].do)
 
 
-# T18 I3: stripes and hover on the surfaces the table names ---------------
+# Stripes and hover on the surfaces the table names ---------------
 
 def test_stripes_and_a_hovered_striped_row_show_on_every_surface_the_table_names():
     table = SEEDS["table"]
@@ -309,7 +309,7 @@ def test_stripes_and_a_hovered_striped_row_show_on_every_surface_the_table_names
     assert worst > 1.0
 
 
-# T18 I4: the phone layout is bound -----------------------------------------
+# The phone layout is bound -----------------------------------------
 
 def test_the_phone_layout_is_bound():
     table = SEEDS["table"]
@@ -339,7 +339,7 @@ def test_the_phone_layout_is_bound():
         assert words in text, words
 
 
-# T18 I7: guidance lines the contracts contradicted -------------------------
+# Guidance lines the contracts contradicted -------------------------
 
 def test_table_rows_follow_border_guidance():
     border = (GUIDANCE / "border.md").read_text(encoding="utf-8")
@@ -369,7 +369,7 @@ def test_a_chip_is_not_called_a_tag():
     assert not re.search(r"\btag\b", SEEDS["chip"].description)
 
 
-# T17 I6: the record states each control's own rules -----------------------
+# The record states each control's own rules -----------------------
 
 def _record_rows(record):
     text = (DECISIONS / f"{record}.md").read_text(encoding="utf-8")

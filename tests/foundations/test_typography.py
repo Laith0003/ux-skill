@@ -478,7 +478,7 @@ def test_the_static_arabic_case_is_exercised():
     assert ts.resolve("type.text.ui", "contrast:high,direction:rtl")["fontWeight"] == 700
 
 
-# M3.5c item 1: the three largest display styles step down on phones, by a
+# The three largest display styles step down on phones, by a
 # factor from a gentler phone ratio, and keep their order above heading-2.
 PHONE_ROLES = ("hero", "heading-1", "section-title")
 

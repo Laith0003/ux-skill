@@ -48,7 +48,7 @@ def _dtcg(primary) -> str:
     return json.dumps({"brand": {"$type": "color", "primary": {"$value": primary}}})
 
 
-# ---------------------------------------------------------------- M1: source over build output
+# ---------------------------------------------------------------- source over build output
 
 
 def test_the_file_a_build_script_reads_is_the_source(tmp_path: Path) -> None:
@@ -73,7 +73,7 @@ def test_a_generated_header_marks_built_output(tmp_path: Path) -> None:
     assert found["found"] is True
 
 
-# ---------------------------------------------------------------- M2: weak signals, modern color
+# ---------------------------------------------------------------- weak signals, modern color
 
 
 @pytest.mark.parametrize("files", [
@@ -122,7 +122,7 @@ def test_an_unreadable_primary_is_reported_raw(tmp_path: Path) -> None:
     assert "primary_note" in declared
 
 
-# ---------------------------------------------------------------- M3 and M4: ownership
+# ---------------------------------------------------------------- ownership
 
 
 def test_a_hand_edited_persist_file_is_not_overwritten(tmp_path: Path) -> None:
@@ -170,7 +170,7 @@ def test_design_md_reruns_on_its_own_non_default_path(client: Path) -> None:
     assert is_ux_skill_file(out)
 
 
-# ---------------------------------------------------------------- M5: every command reads it
+# ---------------------------------------------------------------- every command reads it
 
 
 def test_mcp_recommend_reads_the_project(client: Path) -> None:

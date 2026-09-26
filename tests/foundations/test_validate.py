@@ -64,7 +64,7 @@ def test_alias_cycle_reported_for_semantic_pointing_into_a_cycle():
 
 
 def test_missing_target_reached_through_a_primitive_is_alias_missing():
-    # R27 M3: s.x -> p.a -> p.missing is a missing target, not a cycle.
+    # s.x -> p.a -> p.missing is a missing target, not a cycle.
     ts = TokenSet()
     ts.add(Token("color.p.a", "color", "{color.p.missing}"))
     ts.add(Token("color.text.z", "color", "{color.p.a}", layer="semantic"))
@@ -73,8 +73,8 @@ def test_missing_target_reached_through_a_primitive_is_alias_missing():
 
 
 def test_unknown_layer_rejected():
-    # R27 I1: a layer typo used to read as semantic in validate and as
-    # "not semantic" in to_css, so the dark override silently vanished.
+    # A layer typo would read as semantic in validate and as "not
+    # semantic" in to_css, so the dark override would silently vanish.
     ts = TokenSet()
     ts.add(Token("color.neutral.50", "color", "#FAFAFA"))
     ts.add(Token("color.surface.page", "color", "{color.neutral.50}", layer="Semantic"))
@@ -93,7 +93,7 @@ def test_layer_typo_through_dtcg_is_caught():
 
 
 def test_unknown_type_rejected():
-    # R27 I2: Token.type was never checked.
+    # Token.type is checked against the known types.
     ts = TokenSet()
     ts.add(Token("color.x.500", "colour", "#111111"))
     found = validate(ts)
@@ -110,7 +110,7 @@ BAD_COLOR_VALUES = [
 
 @pytest.mark.parametrize("value", BAD_COLOR_VALUES)
 def test_bad_color_literal_rejected(value):
-    # R27 I2 and M5: a color literal must be #RGB or #RRGGBB, so nothing
+    # A color literal must be #RGB or #RRGGBB, so nothing
     # else (a malformed hex, a CSS function, a DTCG object, CSS injection)
     # reaches the gate or the CSS.
     ts = TokenSet()
@@ -159,7 +159,7 @@ def test_value_rules_are_table_driven():
     ("color.brand;x.500", "brand;x"),
 ])
 def test_bad_name_rejected(path, segment):
-    # R27 M5: path segments go into CSS property names unescaped.
+    # Path segments go into CSS property names unescaped.
     ts = TokenSet()
     ts.add(Token(path, "color", "#111111"))
     found = [p for p in validate(ts) if p.rule == "bad-name"]
@@ -170,8 +170,8 @@ def test_bad_name_rejected(path, segment):
 
 @pytest.mark.parametrize("order", [("radius", "radius.card"), ("radius.card", "radius")])
 def test_path_conflict_rejected_in_either_order(order):
-    # R27 I4: DTCG cannot hold a token and a group at the same path, so
-    # to_dtcg dropped one of them silently.
+    # DTCG cannot hold a token and a group at the same path, so to_dtcg
+    # would drop one of them silently.
     ts = TokenSet()
     for path in order:
         ts.add(Token(path, "color", "#111111"))
@@ -191,7 +191,7 @@ def test_deep_path_conflict_names_each_prefix():
 
 
 def test_css_collision_rejected():
-    # R27 I4: two paths that map to one custom property; the last one won.
+    # Two paths that map to one custom property; the last one would win.
     ts = TokenSet()
     ts.add(Token("color.text-default", "color", "#111111"))
     ts.add(Token("color.text.default", "color", "#222222"))

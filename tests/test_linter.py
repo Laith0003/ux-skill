@@ -69,7 +69,7 @@ def test_lint_catches_lorem_ipsum(tmp_path: Path):
 
 
 def test_lint_catches_johndoe_placeholder(tmp_path: Path):
-    """John Doe / Jane Doe fingerprint must fire (added in round 4)."""
+    """John Doe / Jane Doe fingerprint must fire."""
     html = tmp_path / "names.html"
     html.write_text(
         '<div>Sign in as <span>John Doe</span></div>',

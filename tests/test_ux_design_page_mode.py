@@ -139,7 +139,7 @@ def test_one_icon_rule():
     assert "commands/ux-design.md" in agent and "Icons" in agent
 
 
-# ---------------------------------------------------------------- round 1
+# ---------------------------------------------------------------- one path, old rules gone
 
 
 def test_the_agent_runs_the_same_single_path():

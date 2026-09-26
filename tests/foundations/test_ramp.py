@@ -30,7 +30,7 @@ def test_seed_just_outside_band_that_round_trips_is_not_retuned():
     # #00D5EF's L (~0.80006) sits a hair above BAND[1] (0.80), but clamping
     # it to 0.80 and converting back to hex round-trips to the exact same
     # #00D5EF: nothing about the color actually changed, so this must not
-    # be reported as a retune (R16 fix round 1, item 6).
+    # be reported as a retune.
     r = ramp("#00D5EF")
     assert r.retuned is False
     assert r.note == ""
@@ -46,7 +46,7 @@ def test_malformed_hex_raises_value_error():
         ramp("#12345")
 
 
-# Fix round 1 (controller ruling R14)
+# The anchor, its canonical hex and the band it sits in
 
 
 def test_anchor_is_normalized_to_canonical_uppercase_hex():
@@ -122,7 +122,7 @@ def test_min_step_sweep_keeps_intended_lightness_apart(monkeypatch):
             # candidate differs from the seed and ramp() keeps it (retuned
             # is True): that candidate's own L, at full float precision, is
             # what the rest of the ramp is built from, so it is what this
-            # test must diff. Occasionally (R16 item 6) the candidate's
+            # test must diff. Occasionally the candidate's
             # 8-bit hex round-trips back to the seed unchanged, and ramp()
             # reports retuned=False and reverts to the seed's own unclamped
             # L for everything else, even though the discarded candidate

@@ -1,4 +1,4 @@
-"""R27 M11: output is byte-identical across processes, not only within one.
+"""Output is byte-identical across processes, not only within one.
 
 Each run builds three seeds in a fresh interpreter under a different
 PYTHONHASHSEED, so any set or hash ordering that leaks into the CSS or the

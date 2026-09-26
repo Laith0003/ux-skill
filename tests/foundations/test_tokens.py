@@ -106,7 +106,7 @@ def test_an_axis_needs_exactly_two_values(values):
 
 
 def test_get_unknown_path_names_the_fix():
-    # R27 M1: a bare KeyError('color.nope') names no fix.
+    # A bare KeyError('color.nope') would name no fix.
     with pytest.raises(KeyError, match=r"color\.nope is not defined; add it or check the spelling"):
         make().get("color.nope")
 
@@ -117,13 +117,13 @@ def test_raw_unknown_path_names_the_fix():
 
 
 def test_unknown_mode_message_names_the_fix():
-    # R27 M2: the message listed the allowed modes but never said what to do.
+    # The message lists the allowed modes and says what to do.
     with pytest.raises(ValueError, match=r"write it as axis:value, one of scheme: light, dark"):
         make().raw("color.surface.page", "dakr")
 
 
 def test_alias_error_carries_its_cause():
-    # R27 M3: callers branch on .cause, never on the message text.
+    # Callers branch on .cause, never on the message text.
     cyc = TokenSet()
     cyc.add(Token("a", "color", "{b}", layer="semantic"))
     cyc.add(Token("b", "color", "{a}", layer="semantic"))

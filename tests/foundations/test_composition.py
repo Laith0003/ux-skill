@@ -63,7 +63,7 @@ def test_the_report_opens_with_one_character_sentence_per_system():
     assert len(set(sentences.values())) == 4
 
 
-# M3.5c item 8: an Arabic-first page renders its display type in the Arabic
+# An Arabic-first page renders its display type in the Arabic
 # display face, so the character sentence names that face first.
 def test_an_arabic_first_sentence_names_the_arabic_display_face():
     from engine.foundations import build_system

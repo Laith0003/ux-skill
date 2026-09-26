@@ -355,7 +355,7 @@ def test_a_grey_brands_built_accent_is_a_neutral_step_that_reads_as_no_status(wa
     assert hex_to_oklch(ts.resolve("color.support.500"))[1] <= 0.01
 
 
-# M3.5c item 4: a tone word's formality weight also reaches geometry and
+# A tone word's formality weight also reaches geometry and
 # type personality, continuously: playful words round the corners and
 # humanize the type, formal words sharpen the corners.
 @pytest.mark.parametrize("word", ["playful", "casual", "friendly", "irreverent"])

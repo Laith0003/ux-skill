@@ -26,7 +26,7 @@ def test_every_pairing_passes_in_every_mode(seed):
             assert ratio >= required(p, mode)[0], f"{p.fg} on {p.bg} ({mode}) = {ratio:.2f}"
 
 
-# R16 item 5: a fast, broad sweep independent of the six brief seeds. Every
+# A fast, broad sweep independent of the six brief seeds. Every
 # 30 degrees of hue, three lightnesses, two chromas, plus three flat grays.
 _SWEEP_HUES = range(0, 360, 30)
 _SWEEP_LS = (0.35, 0.55, 0.75)
@@ -174,7 +174,7 @@ def test_unsatisfiable_action_group_keeps_the_closest_and_the_gate_blocks_it(mon
                for f in exc.value.report.findings)
 
 
-# R17 minor: pinned to the exact field shapes each note format uses, not
+# Pinned to the exact field shapes each note format uses, not
 # just "a colon followed by a digit somewhere" (":\d" would also match a
 # mangled "was X:15" with the wrong number of decimals, or survive a
 # mutant that drops "now X:1" entirely as long as some other colon-digit
@@ -189,14 +189,14 @@ _BARE_RATIO_RE = re.compile(r"\d+\.\d\d:1")
 
 @pytest.mark.parametrize("seed", ["#FFD400", "#6B4423"])
 def test_notes_are_complete(seed):
-    # R16 item 2 / R17 minor: every note the retune loop (generate_color,
+    # Every note the retune loop (generate_color,
     # not ramp()) writes must be traceable back to a specific role, in a
     # specific mode, moving between two full primitive paths, for a ratio
     # that was measured and a ratio it achieved. Filtered to notes carrying
     # "(scheme:light)"/"(scheme:dark)": that marker is exactly what separates a
     # retune-loop note from _primitives' own "color.<family>: <seed> is too
     # light/dark..." ramp-anchor note (a different, mode-independent kind
-    # of note, owned by ramp.py's Task 3 format, not this task's retune
+    # of note, in ramp.py's own format, not the retune loop's
     # bookkeeping).
     #
     # Two note shapes exist: the ordinary one-pairing move ("<role>
@@ -263,7 +263,7 @@ def test_sweep_pairings_pass_and_hover_is_distinct(seed):
 
 
 def test_public_tables_are_immutable():
-    # R27 M8: one caller's PAIRINGS.append or SEMANTIC[...] = ... used to
+    # One caller's PAIRINGS.append or SEMANTIC[...] = ... used to
     # change the gate and the generator for the whole process.
     from types import MappingProxyType
     assert isinstance(PAIRINGS, tuple)
