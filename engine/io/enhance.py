@@ -399,8 +399,13 @@ def _lie(path: str, uses: List[Usage]) -> Optional[Tuple[str, bool]]:
     state = next((STATE_WORDS[w] for w in words if w in STATE_WORDS), None)
     if state:
         seen = [w for w, _, _ in wrong]
+        # A rule whose selector list also names the state (.btn:hover,
+        # .btn:focus-visible) gives its other uses the same style on
+        # purpose; they keep the name's promise.
+        beside = {(u.file, u.line, u.prop) for u in uses if state in u.state.split(",")}
         wrong += [(u, state, f"used outside {state}") for u in uses
-                  if state not in u.state.split(",") and u not in seen]
+                  if state not in u.state.split(",") and u not in seen
+                  and (u.file, u.line, u.prop) not in beside]
     if not wrong:
         return None
     first, named, how = wrong[0]
