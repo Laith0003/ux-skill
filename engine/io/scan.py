@@ -55,8 +55,10 @@ scheme as the importers name it, scheme:dark. CSS records the same from
 its selectors and queries, and reads active, pressed, selected and current
 from a class (.active, .is-selected) or an ARIA attribute
 ([aria-pressed=true], [aria-selected=true], [aria-current]) too, a
-pseudo-class winning in the same selector. A state joins the scheme first:
-"scheme:dark,hover".
+pseudo-class winning in the same selector. A selector list whose members
+are in different states records each use once per state (.btn:hover,
+.btn:focus-visible is a hover use and a focus use). A state joins the
+scheme first: "scheme:dark,hover".
 
 The scanner only reads files and never runs code. It walks folders sorted,
 skips SKIP_DIRS and hidden folders, the paths in `exclude` (files or
@@ -434,18 +436,30 @@ def _join_state(scheme: str, state: str) -> str:
     return ",".join(s for s in (scheme, state) if s)
 
 
-def _selector_state(selector: str, media: Tuple[str, ...]) -> str:
-    """The state a rule applies in: its scheme and its interaction state,
-    each taken only when every selector in the list has it (what a :not()
-    names is where the rule is not)."""
+def _selector_states(selector: str, media: Tuple[str, ...]) -> List[str]:
+    """The states a rule applies in, one per distinct interaction state of
+    the selectors in its list, in the order first written, each joined to
+    the scheme; the scheme is dark only when every selector (or a media
+    query) says so. What a :not() names is where the rule is not.
+    `.btn:hover, .btn:focus-visible` applies on hover and on focus."""
     members = [_without_not(m) for m in split_top(selector, ",")] or [""]
     dark = any(_DARK_MEDIA.search(m) or m == "@variant dark" for m in media) \
         or all(_DARK_SELECTOR.search(m) for m in members)
-    states = set()
+    states: List[str] = []
     for m in members:
         found = _CSS_STATE.search(m) or _CLASS_STATE.search(m)
-        states.add(_STATES[next(g for g in found.groups() if g)] if found else "")
-    return _join_state(DARK if dark else "", states.pop() if len(states) == 1 else "")
+        state = _STATES[next(g for g in found.groups() if g)] if found else ""
+        if state not in states:
+            states.append(state)
+    return [_join_state(DARK if dark else "", s) for s in states]
+
+
+def _selector_state(selector: str, media: Tuple[str, ...]) -> str:
+    """The one state a rule applies in: its scheme, and its interaction
+    state when every selector in the list has the same one."""
+    states = _selector_states(selector, media)
+    return states[0] if len(states) == 1 else _join_state(
+        DARK if all(DARK in s.split(",") for s in states) else "", "")
 
 
 def _variants(cls: str) -> Tuple[List[str], str]:
@@ -646,6 +660,9 @@ class _Scanner:
         self._missed: List[Tuple[int, int, int, NotMeasured]] = []
         self._declared: List[str] = []
         self._near: Dict[Tuple[str, _Namespaces], str] = {}
+        # Set while a rule is read again for a second state of its selector
+        # list, so what was not measured is listed once.
+        self._quiet = False
         self._seq = 0
         self.file = ""
         # Tailwind: whether the code shows it, and the class uses kept only if so.
@@ -689,6 +706,8 @@ class _Scanner:
 
     def unknown(self, at: Tuple[int, int], cls: str, looked_in: Tuple[str, ...] = (),
                 near: str = "", name: str = "") -> None:
+        if self._quiet:
+            return
         self._seq += 1
         self._unknown.append((at[0], at[1], self._seq,
                               UnknownClass(self.file, at[0], cls, looked_in, near, name)))
@@ -720,6 +739,8 @@ class _Scanner:
         return "" if _NUMERIC.fullmatch(want) else loose
 
     def note(self, at: Tuple[int, int], kind: str, text: str, why: str) -> None:
+        if self._quiet:
+            return
         self._seq += 1
         self._missed.append((at[0], at[1], self._seq,
                              NotMeasured(self.file, at[0], kind, " ".join(text.split()), why)))
@@ -917,9 +938,13 @@ class _Scanner:
         if _TAILWIND_CSS.search(_blank_comments(text)):
             self.tailwind = True
         for rule in parse_css(text, self.file, every=True):
-            state = _selector_state(rule.selector, rule.media)
-            for d in rule.declarations:
-                self.declaration((d.line + first_line, pos), d.name, d.value, state)
+            # A selector list in several states records each use once per
+            # state; what was not measured is listed once.
+            for i, state in enumerate(_selector_states(rule.selector, rule.media)):
+                self._quiet = i > 0
+                for d in rule.declarations:
+                    self.declaration((d.line + first_line, pos), d.name, d.value, state)
+            self._quiet = False
 
     def css_part(self, text: str, first_line: int, pos: int, line_comments: bool,
                  what: str) -> None:
