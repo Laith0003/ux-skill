@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import itertools
 import json
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+import re
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations.layout import responsive_css
 from engine.foundations.typography import phone_roles, responsive_lines, scale_property
@@ -18,6 +19,8 @@ from engine.foundations.tokens import Token, TokenSet
 from engine.foundations.values import css_entries, decode, encode
 
 EXT = "io.github.laith0003.ux-skill"
+# Token.extensions keys the DTCG document carries under EXT.
+KEPT = ("original", "read_as")
 # The extension keys earlier builds wrote; a document that still carries
 # them is refused, since reading it would drop its layers and modes.
 LEGACY_EXT = ("ux.layer", "ux.modes")
@@ -46,6 +49,7 @@ def to_dtcg(ts: TokenSet) -> Dict[str, Any]:
         ext: Dict[str, Any] = {"layer": t.layer}
         if t.modes:
             ext["modes"] = {m: encode(t.type, v, f"{t.path} ({m})") for m, v in t.modes.items()}
+        ext.update(t.extensions)
         entry: Dict[str, Any] = {"$type": t.type, "$value": encode(t.type, t.value, t.path),
                                  "$extensions": {EXT: ext}}
         if t.description:
@@ -85,10 +89,12 @@ def from_dtcg(doc: Dict[str, Any]) -> TokenSet:
                         "this file was written by an older build; re-export it with the "
                         "current version")
                 ext = exts.get(EXT) or {}
+                modes = ext.get("modes") or {}
                 ts.add(Token(".".join(path + [key]), type_, decode(type_, val["$value"]),
-                             modes={m: decode(type_, v) for m, v in (ext.get("modes") or {}).items()},
+                             modes={m: decode(type_, v) for m, v in modes.items()},
                              layer=ext.get("layer", "primitive"),
-                             description=val.get("$description", "")))
+                             description=val.get("$description", ""),
+                             extensions={k: ext[k] for k in KEPT if k in ext}))
             else:
                 walk(val, path + [key], group_type)
 
@@ -96,12 +102,18 @@ def from_dtcg(doc: Dict[str, Any]) -> TokenSet:
     return ts
 
 
-def _lines(t: Token, value: Any, indent: str = "  ", phone: Tuple[str, ...] = ()) -> List[str]:
+def _lines(t: Token, value: Any, indent: str = "  ", phone: Tuple[str, ...] = (),
+           context: str = "") -> List[str]:
     """The declarations of one token value. A type style in `phone` scales
     its size and letter spacing by its --<style>-scale property, which
     tokens.css sets to the phone factor below the tablet breakpoint and to
-    1 from it up."""
+    1 from it up. A value an importer kept in its own spelling (a color
+    outside sRGB, Token.extensions) is written as the file wrote it while
+    it still holds the value it was read as."""
     entries = css_entries(t.path, t.type, value)
+    original = (t.extensions.get("original") or {}).get(context)
+    if original is not None and (t.extensions.get("read_as") or {}).get(context) == value:
+        entries = [(prop, original) for prop, _ in entries]
     if t.path in phone:
         scale = scale_property(t.path)
         entries = [(prop, f"calc({text} * var({scale}))"
@@ -121,6 +133,8 @@ SCHEME_DEFAULTS = ("system", "light", "dark")
 # an Arabic lang, so an Arabic block inside a left to right page gets the
 # Arabic faces, sizes and travel sign too. The root keeps its own form.
 NESTED_RTL = ':is([dir="rtl"], [lang|="ar"])'
+# The root an imported form is written on, when it names one.
+_FORM_ROOT = re.compile(r"(:root|html|:host)(?![\w-])")
 
 
 def _rules(ts: TokenSet, key: str, scheme: str = "system",
@@ -133,35 +147,56 @@ def _rules(ts: TokenSet, key: str, scheme: str = "system",
     at rtl has a second form, a subtree inside the root (NESTED_RTL), with
     every other axis still read from the root, so a combined override
     reaches the subtree with the same specificity it has on the root. An
-    axis named in `forms` is set by the selector (and media query, when one
-    is given) recorded there, as an imported stylesheet set it."""
+    axis named in `forms` is set only by the selector and the media query
+    recorded there, as an imported stylesheet set it: a selector with no
+    root (`.dark`) is written as it is when every axis of the key is set
+    that way, and on the root otherwise; one written on a root (`html.dark`)
+    keeps that root; an empty selector is the media query alone."""
     options = []
+    # Each choice: (media query, selector part, nested part, root), where
+    # root is the root the part is written on, "" for a form with none, or
+    # None for no preference.
     for axis, value in parse(key, ts.axes).items():
         if forms and axis in forms:
             selector, media = forms[axis]
-            options.append([("", selector, "")] + ([(media, "", "")] if media else []))
+            found = _FORM_ROOT.match(selector)
+            root, part = (found.group(1), selector[found.end():]) if found else ("", selector)
+            options.append(([("", part, "", root)] if selector else [])
+                           + ([(media, "", "", None)] if media else []))
             continue
         attr, media = CSS_AXES.get(axis, (f"data-{axis}", ""))
         if axis == "scheme" and scheme == "dark":
-            options.append([("", f':not([{attr}="{ts.axes[axis][0]}"])', "")])
+            options.append([("", f':not([{attr}="{ts.axes[axis][0]}"])', "", ":root")])
             continue
-        choices = [("", f'[{attr}="{value}"]', "")]
+        choices = [("", f'[{attr}="{value}"]', "", ":root")]
         if media and not (axis == "scheme" and scheme == "light"):
-            choices.append((media, f':not([{attr}="{ts.axes[axis][0]}"])', ""))
+            choices.append((media, f':not([{attr}="{ts.axes[axis][0]}"])', "", ":root"))
         if axis == "direction" and value == "rtl":
-            choices.append(("", "", NESTED_RTL))
+            choices.append(("", "", NESTED_RTL, ":root"))
         options.append(choices)
     out = []
     for combo in itertools.product(*options):
-        media = " and ".join(m for m, _, _ in combo if m)
-        nested = "".join(n for _, _, n in combo)
-        out.append((media, ":root" + "".join(sel for _, sel, _ in combo)
+        media = " and ".join(m for m, _, _, _ in combo if m)
+        nested = "".join(n for _, _, n, _ in combo)
+        roots = [r for _, _, _, r in combo if r is not None]
+        named = [r for r in roots if r and r != ":root"]
+        root = named[0] if named else ("" if roots and all(r == "" for r in roots)
+                                       else ":root")
+        out.append((media, root + "".join(sel for _, sel, _, _ in combo)
                     + (f" {nested}" if nested else "")))
     return out
 
 
+def _comment(lines: Sequence[str]) -> List[str]:
+    """A comment block holding `lines`, or nothing when there are none."""
+    if not lines:
+        return []
+    return ["/*", *(f" * {line}".rstrip().replace("*/", "* /") for line in lines), " */"]
+
+
 def to_css(ts: TokenSet, *, scheme: str = "system",
-           forms: Optional[Mapping[str, Tuple[str, str]]] = None) -> str:
+           forms: Optional[Mapping[str, Tuple[str, str]]] = None,
+           header: Sequence[str] = ()) -> str:
     """Custom properties on :root, then one rule per override key and form.
     Axes are set on the root element (data-theme, data-contrast,
     data-density, dir, data-motion) or by the matching media query when the
@@ -172,8 +207,9 @@ def to_css(ts: TokenSet, *, scheme: str = "system",
     case. `forms` gives an imported system's own selector for an axis
     (css_in records it), so the system is written back the way it came. An
     imported set with a scheme axis gets color-scheme too; on :root it
-    outranks an app's own `html { color-scheme: light dark }`.
-    Last come the layout's responsive aliases (layout.responsive_css), one
+    outranks an app's own `html { color-scheme: light dark }`. `header`
+    lines open the file as a comment (an import's write-back lists there
+    what it did not read). Last come the layout's responsive aliases (layout.responsive_css), one
     property per tiered role that follows the viewport."""
     if scheme not in SCHEME_DEFAULTS:
         raise ValueError(f"scheme is {scheme!r}; use one of {list(SCHEME_DEFAULTS)}")
@@ -181,8 +217,8 @@ def to_css(ts: TokenSet, *, scheme: str = "system",
         "scheme" in parse(k, ts.axes) for t in ts.tokens() for k in t.modes)
     base = [f"  color-scheme: {ts.axes['scheme'][0]};"] if schemed else []
     phone = tuple(phone_roles(ts))
-    out = [":root {", *base, *(line for t in ts.tokens() for line in _lines(t, t.value,
-                                                                             phone=phone)), "}"]
+    out = [*_comment(header), ":root {", *base,
+           *(line for t in ts.tokens() for line in _lines(t, t.value, phone=phone)), "}"]
     keys: List[str] = []
     for t in ts.tokens():
         for key in t.modes:
@@ -194,7 +230,7 @@ def to_css(ts: TokenSet, *, scheme: str = "system",
     for key in keys:
         lines = [line for t in ts.tokens() for mk, v in t.modes.items()
                  if join(parse(mk, ts.axes), ts.axes) == key
-                 for line in _lines(t, v, phone=phone)]
+                 for line in _lines(t, v, phone=phone, context=mk)]
         if schemed and parse(key, ts.axes).get("scheme") not in (None, ts.axes["scheme"][0]):
             lines = [f"  color-scheme: {parse(key, ts.axes)['scheme']};"] + lines
         for media, selector in _rules(ts, key, scheme, forms):
