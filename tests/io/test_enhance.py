@@ -492,3 +492,44 @@ def test_a_padding_is_not_matched_to_a_text_size(tmp_path):
     held = {(r.uses[0].family, r.value): r.tokens for r in d.raw_with_token}
     assert held == {("space", "16px"): ["space-4"],
                     ("type-size", "16px"): ["text-base", "leading-loose"]}
+
+
+def _unresolved_system(ink="{base.ink}"):
+    ts = TokenSet({})
+    ts.add(Token("mid", "color", "{base.ink}", layer="semantic"))
+    ts.add(Token("ink", "color", ink, layer="semantic"))
+    ts.add(Token("paper", "color", "#FFFFFF"))
+    ts.add(Token("line", "color", "#1B1D22"))
+    return Imported(ts, ImportReport.of(Source("tokens.json", "dtcg", "ab" * 32, 10), ts, 4))
+
+
+def test_a_mapped_role_that_cannot_be_resolved_goes_to_structure_with_its_reason():
+    mapping = Mapping({"color.text.default": RoleMap("ink", "owner"),
+                       "color.surface.page": RoleMap("paper", "owner")})
+    report = enhance(_unresolved_system(), mapping)
+    text = report.markdown()
+    structure = text.split("## Structure")[1].split("## Gate")[0]
+    assert ("- color.text.default (your ink) cannot be resolved: ink aliases base.ink, which is "
+            "not defined; define base.ink in tokens.json, or map color.text.default to a "
+            "token that resolves in mapping.json.") in structure
+    gate = " ".join(text.split("## Gate")[1].split("## What the code")[0].split())
+    assert ("No contrast pair was measured, since color.text.default could not be resolved "
+            "(see Structure), so the verdict covers the rule checks only:") in gate
+    assert "since each needs both of its roles mapped" not in gate
+    decisions = text.split("## Decisions made without you")[1]
+    assert "cannot be resolved" not in decisions and "(resolving" not in text
+    assert report.to_dict()["gate"]["unresolved"] == ["color.text.default"]
+
+
+def test_an_unresolved_chain_is_one_clause_per_hop_and_measured_pairs_still_say_it():
+    mapping = Mapping({"color.text.default": RoleMap("ink", "owner"),
+                       "color.surface.page": RoleMap("paper", "owner"),
+                       "color.text.muted": RoleMap("line", "owner")})
+    report = enhance(_unresolved_system("{mid}"), mapping)
+    text = report.markdown()
+    assert ("cannot be resolved: ink aliases mid, mid aliases base.ink, which is not defined; "
+            "define base.ink in tokens.json") in text
+    gate = " ".join(text.split("## Gate")[1].split("## What the code")[0].split())
+    assert report.check.report.checked > 0
+    assert ("The pairs and rules that need color.text.default were not measured, since it "
+            "could not be resolved (see Structure).") in gate
