@@ -179,9 +179,10 @@ class ImportReport:
 class Imported:
     """An imported system: its tokens in the source's own names, the
     report, and for a CSS source how each mode axis was switched there
-    (axis -> (selector for the non-base value, media query or "")) and
+    (axis -> (the selector for the non-base value as the file writes it,
+    or "" when only the media query sets it; the media query, or "")) and
     which scheme it opens (system, light or dark), so the system can be
-    written back the way it came."""
+    written back in the forms it came in (css_in.write_css)."""
     tokens: TokenSet
     report: ImportReport
     forms: Mapping[str, Tuple[str, str]] = field(default_factory=dict)

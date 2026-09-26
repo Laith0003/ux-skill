@@ -35,9 +35,24 @@ value reads the same; two spellings of one value (#fff, #FFFFFF) are
 noted, and values that differ are all listed under "Not read".
 Each property a dark rule sets is paired by name with the one on the root
 and read as scheme:dark; a dark rule written in a form this engine does not
-write is named under notes with the pairing, and Imported.forms records its
-selector (with the media query when the file uses both) so the exporter
-writes the scheme back the way it came.
+write is named under notes with the pairing.
+
+What the write-back gives back: Imported.forms records, for each axis the
+file switches in a form this engine does not write, the selector as the
+file writes it (`.dark` alone, `:root.dark`, `html.dark`), with the media
+query when the file uses that too, or the media query alone (an empty
+selector) when the file sets the axis only there; Imported.scheme records
+which scheme it opens. export.to_css given both writes each such axis in
+exactly those forms and adds no selector of its own for it. A color
+mapped into sRGB keeps its spelling in Token.extensions and is written
+back in it while the token holds the value it was read as. write_css
+does all this and opens the file with a comment that lists every entry
+not read, with its fix, and every such color. Not given back: comments,
+component rules, the order and grouping of rules, and the file's own
+forms for this engine's attributes (data-theme and the rest are written
+on :root); color-scheme is added to each scheme rule, and a key that
+joins a form with no root to one of this engine's attributes is written
+on :root.
 
 Tailwind's dark variant is read where the stylesheet declares it:
 `@custom-variant dark (...)` names the selectors its dark: utilities switch
@@ -82,6 +97,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
 from engine.foundations.errors import InputError
+from engine.foundations.export import to_css
 from engine.foundations.modes import AXES, CSS_AXES, join
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
@@ -325,6 +341,8 @@ class _Modes:
         self.unpinned: List[str] = []
         # Axes set by a preference media query.
         self.by_media: List[str] = []
+        # Axes set outside a media query by an attribute this engine writes.
+        self.attributed: List[str] = []
         # The last value refused for an imported axis: (axis, its value, refused).
         self.refused: Optional[Tuple[str, str, str]] = None
 
@@ -332,12 +350,15 @@ class _Modes:
     def parse(sel: str, dark: Tuple[str, ...] = ()) -> Optional[List[Tuple[str, str, str]]]:
         """(axis, value, form) for each part of one selector: form "" for
         an attribute this engine writes, ":not" for one set by
-        :not([attr="base"]), and the selector text for any other; None when
+        :not([attr="base"]), and the selector text for any other, with the
+        root it is written on when there is one (`.dark` alone, `:root.dark`
+        or `html.dark`), so it is written back as the file has it; None when
         it is not a root or theme selector."""
-        rest, rooted = sel, False
+        rest, rooted, prefix = sel, False, ""
         for root in ROOTS:
             if rest.startswith(root):
                 rest, rooted = rest[len(root):], root != "@theme"
+                prefix = root if rooted else ""
                 break
         parts: List[Tuple[str, str, str]] = []
         while rest:
@@ -350,10 +371,11 @@ class _Modes:
             if not m:
                 return None
             token = m.group(0)
+            own = prefix + token
             if m.re is _CLASS:
-                parts.append(("scheme", SCHEME_SELECTORS.get(token, "dark"), token)
+                parts.append(("scheme", SCHEME_SELECTORS.get(token, "dark"), own)
                              if token in SCHEME_SELECTORS or token in dark
-                             else (f"class-{m.group(1)}", "on", token))
+                             else (f"class-{m.group(1)}", "on", own))
             elif m.re is _LANG:
                 parts.append(("direction", "rtl", ""))
             else:
@@ -365,15 +387,15 @@ class _Modes:
                         return None
                     parts.append((axis, AXES[axis][1], ":not"))
                 elif f'[{attr}="{value}"]' in dark:
-                    parts.append(("scheme", "dark", token))
+                    parts.append(("scheme", "dark", own))
                 elif axis is not None and value in AXES[axis]:
                     parts.append((axis, value, ""))
                 elif value in AXES["scheme"]:
                     if not (rooted or THEME_ATTR.fullmatch(attr)):
                         return None
-                    parts.append(("scheme", value, token))
+                    parts.append(("scheme", value, own))
                 else:
-                    parts.append((attr, value, token))
+                    parts.append((attr, value, own))
             rest = rest[len(token):]
         return parts
 
@@ -395,6 +417,8 @@ class _Modes:
                         continue
                     if axis not in self.unpinned:
                         self.unpinned.append(axis)
+                elif form == "" and value != AXES[axis][0] and axis not in self.attributed:
+                    self.attributed.append(axis)
                 if value != AXES[axis][0]:
                     pairs[axis] = value
                     if form not in ("", ":not"):
@@ -446,9 +470,16 @@ class _Modes:
 
     def finish(self) -> None:
         """A scheme kept in a selector of the file's own that the file also
-        sets under prefers-color-scheme is written back in both forms."""
+        sets under prefers-color-scheme is written back in both forms. An
+        axis the file sets only under its preference media query is
+        recorded with no selector, so it is written back under the query
+        alone."""
         if "scheme" in self.forms and "scheme" in self.by_media:
             self.forms["scheme"] = (self.forms["scheme"][0], CSS_AXES["scheme"][1])
+        for axis in self.by_media:
+            if axis not in self.forms and axis not in self.attributed \
+                    and axis not in self.unpinned:
+                self.forms[axis] = ("", CSS_AXES[axis][1])
 
 
 def dark_variant(text: str) -> Optional[Tuple[str, int, str, Tuple[str, ...]]]:
@@ -869,6 +900,8 @@ def import_css(text: str, source: Source) -> Imported:
     # path -> [(context key, kind or "alias", value, line)] in the order read
     values: Dict[str, List[Tuple[str, str, Any, int]]] = {}
     mapped: List[Tuple[int, Mapped]] = []
+    # path -> context -> a color outside sRGB as the file writes it
+    originals: Dict[str, Dict[str, str]] = {}
     for prop, by_key in found.items():
         path = prop[2:]
         line = min(line for _, line in by_key.values())
@@ -885,6 +918,7 @@ def import_css(text: str, source: Source) -> Imported:
             continue
         read: List[Tuple[str, str, Any, int]] = []
         own_mapped: List[Tuple[int, Mapped]] = []
+        own_original: Dict[str, str] = {}
         # One note on the scaled value per property, beside any spelling note.
         scaled_noted = False
         try:
@@ -912,18 +946,23 @@ def import_css(text: str, source: Source) -> Imported:
                     kind, value = read_value(value_text, gamut)
                     read.append((join(dict(key), axes), kind, value, at))
                     own_mapped += [(at, Mapped.of(f"{name}:{at}", prop, g)) for g in gamut]
+                    if gamut and kind == "color":
+                        own_original[join(dict(key), axes)] = value_text.strip()
         except NotRead as exc:
             not_read.append((line, Item(f"{name}:{line}", prop, str(exc))))
             continue
         values[path] = read
         notes += own_notes
         mapped += own_mapped
+        if own_original:
+            originals[path] = own_original
 
     def drop(path: str, at: int, why: str) -> None:
         nonlocal notes, mapped
         not_read.append((at, Item(f"{name}:{at}", f"--{path}", why)))
         notes = [n for n in notes if n[1].name != f"--{path}"]
         mapped = [m for m in mapped if m[1].name != f"--{path}"]
+        originals.pop(path, None)
         del values[path]
 
     # A reference to a property that was not read, or not defined, is not read.
@@ -964,8 +1003,15 @@ def import_css(text: str, source: Source) -> Imported:
         written = {ctx: ("{" + v + "}" if k == "alias" else v) for ctx, k, v, _ in read}
         mode_values = {ctx: v for ctx, v in written.items() if ctx}
         aliased = any(k == "alias" for _, k, _, _ in read)
-        ts.add(Token(path, kind, written[""], modes=mode_values,
-                     layer="semantic" if aliased or mode_values else "primitive"))
+        token = Token(path, kind, written[""], modes=mode_values,
+                      layer="semantic" if aliased or mode_values else "primitive")
+        if path in originals:
+            # The spelling the file used, and what it was read as, so the
+            # write-back gives the spelling back while the value holds.
+            token.extensions = {"original": originals[path],
+                                "read_as": {ctx: token.modes[ctx] if ctx else token.value
+                                            for ctx in originals[path]}}
+        ts.add(token)
     written_as = modes.forms.get("scheme")
     for line, label, props, form in paired:
         read_here = [p for p in props if ts.has(p[2:])]
@@ -983,6 +1029,27 @@ def import_css(text: str, source: Source) -> Imported:
     report.not_read = [i for _, i in sorted(not_read, key=lambda x: x[0])]
     report.mapped = [i for _, i in sorted(mapped, key=lambda x: x[0])]
     return Imported(ts, report, dict(modes.forms), modes.scheme())
+
+
+def write_css(imported: Imported) -> str:
+    """An imported stylesheet written back as CSS in the forms the file
+    used (Imported.forms and Imported.scheme; see export.to_css), with a
+    header comment that lists every entry the import did not read, with
+    how to write it so it can be read, and every color outside sRGB, which
+    is written in the file's own spelling. Nothing is dropped silently."""
+    report = imported.report
+    lines = [f"Written back from {Path(report.source.path).name}."]
+    if report.not_read:
+        n = len(report.not_read)
+        lines.append(f"{n} {'entry was' if n == 1 else 'entries were'} not read on the way in "
+                     f"and {'is' if n == 1 else 'are'} not below; each with how to write it so "
+                     "it can be read:")
+        lines += [f"  {i.where} {i.name}: {i.message}" for i in report.not_read]
+    if report.mapped:
+        lines.append("Colors outside sRGB are written below as the file wrote them; the checks "
+                     "read each as the sRGB color named:")
+        lines += [f"  {m.where} {m.name}: {m.original}, read as {m.hex}" for m in report.mapped]
+    return to_css(imported.tokens, scheme=imported.scheme, forms=imported.forms, header=lines)
 
 
 def read_css(path: Any, label: str = "--from") -> Imported:
