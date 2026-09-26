@@ -2,11 +2,13 @@
 tokens, the modes, and every entry that was renamed, read with a note or
 not read, each with where it sits and the fix."""
 import hashlib
+import json
 
 import pytest
 
 from engine.foundations.emit import InputError
 from engine.foundations.tokens import Token, TokenSet
+from engine.io import read_any
 from engine.io.report import (FORMATS, Imported, ImportReport, Item, Mapped, Source,
                               read_source)
 
@@ -137,3 +139,42 @@ def test_a_color_mapped_into_srgb_is_listed_with_both_values_and_the_distance():
             "outside sRGB and was read at its own lightness and hue with the chroma "
             "lowered until it fits.\n\n" + line + "\n\n## Not read") in text_md
     assert text_md.index("## Read with a note") < text_md.index("## Mapped into sRGB")
+
+
+_FIGMA = {"meta": {
+    "variableCollections": {"c:1": {"id": "c:1", "name": "Color", "defaultModeId": "m:1",
+                                    "modes": [{"modeId": "m:1", "name": "Value"}],
+                                    "variableIds": ["v:1"]}},
+    "variables": {"v:1": {"id": "v:1", "name": "ink", "variableCollectionId": "c:1",
+                          "resolvedType": "COLOR", "scopes": ["ALL_SCOPES"],
+                          "valuesByMode": {"m:1": {"r": 0, "g": 0, "b": 0, "a": 1}},
+                          "description": "", "hiddenFromPublishing": False,
+                          "remote": False}}}}
+_FILES = {
+    "dtcg": ("tokens.json", json.dumps({"ink": {"$type": "color", "$value": "#111111"}})),
+    "css": ("tokens.css", ":root { --ink: #111111; }\n"),
+    "tailwind": ("app.css", "@theme { --color-ink: #111111; }\n"),
+    "tailwind-json": ("theme.json", json.dumps({"colors": {"ink": "#111111"}})),
+    "markdown": ("tokens.md", "| Token | Value |\n|---|---|\n| ink | #111111 |\n"),
+    "figma": ("figma.json", json.dumps(_FIGMA)),
+}
+
+
+@pytest.mark.parametrize("fmt", FORMATS)
+def test_read_any_reads_each_format_with_its_own_reader(tmp_path, fmt):
+    name, text = _FILES[fmt]
+    (tmp_path / name).write_text(text, encoding="utf-8")
+    imported = read_any(tmp_path / name, fmt)
+    assert imported.report.source.format == fmt
+    assert imported.report.tokens == 1
+
+
+def test_read_any_names_the_format_and_the_fix(tmp_path):
+    (tmp_path / "tokens.css").write_text(":root { --ink: #111; }\n", encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        read_any(tmp_path / "tokens.css", "scss", label="--from")
+    assert str(exc.value) == ("--from format 'scss' is not one of dtcg, css, tailwind, "
+                              "tailwind-json, markdown and figma; pass one of those")
+    with pytest.raises(InputError) as exc:
+        read_any(tmp_path / "tokens.css", "tailwind-json")
+    assert "is not a .json file, which tailwind-json reads" in str(exc.value)
