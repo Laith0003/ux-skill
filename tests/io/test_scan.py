@@ -809,3 +809,9 @@ def test_scan_to_dict_carries_every_reason_and_the_public_names_are_exported(tmp
     assert data["skipped"] == [
         {"file": "b.min.css", "why": "is a minified build file; scan its source instead"}]
     json.dumps(data)
+
+
+def test_a_color_built_from_a_var_is_a_use_of_it_and_not_a_value_left_out(tmp_path):
+    result = _one(tmp_path, "a.css", ".a { color: hsl(var(--color-ink)); }\n")
+    assert [(r[4], r[5]) for r in _rows(result)] == [("token", "color-ink")]
+    assert result.not_read == []

@@ -908,7 +908,9 @@ class _Scanner:
                 for chunk in split_top(f.group(1)):
                     for part in split_top(chunk, " "):
                         self.raw(at, prop, part, state, colors_only=True)
-            elif note and text.lower() not in _KEYWORDS:
+            elif note and text.lower() not in _KEYWORDS and not _top_vars(text):
+                # A value built from a var() (hsl(var(--x))) is a use of
+                # that token, recorded already.
                 self.note(at, "value", text, str(exc))
             return
         if colors_only and kind != "color":
