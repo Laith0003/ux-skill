@@ -16,7 +16,8 @@ measures what the code actually does against it:
   ever used as text, a hover token never used on hover), and names with
   stray uses, where some uses match the name and some do not. A name with
   "on" before a word (on-surface, onPrimary) is a foreground, the color on
-  that surface, by the common convention;
+  that surface, by the common convention, unless a background or fill word
+  comes before it (action-on-brand is a fill for use on a brand surface);
 - references to tokens the system does not have (a var() to a custom
   property the code declares itself is the code's own, listed apart with
   a count), and what the scan could not measure (files it skipped, values
@@ -60,6 +61,9 @@ FAMILY_TYPES: Dict[str, Tuple[str, ...]] = {
 # Name words and the use they promise.
 TEXT_WORDS = ("text", "fg", "foreground")
 BG_WORDS = ("bg", "background", "surface", "canvas", "backdrop")
+# Words that name a fill: before "on" they make the name a background for
+# use on that surface (action-on-brand, the button fill on a brand band).
+FILL_WORDS = ("action", "button", "btn", "fill", "cta")
 LINE_WORDS = ("border", "line", "stroke", "outline", "divider", "ring", "separator")
 SPACE_WORDS = ("space", "spacing", "gap", "padding", "margin", "gutter", "inset")
 RADIUS_WORDS = ("radius", "rounded", "corner")
@@ -356,10 +360,13 @@ def _color_promise(named: str, against: Tuple[str, ...], how: str) -> _Promise:
 def _promise(words: List[str]) -> Optional[_Promise]:
     """What a token's name promises about how it is used. "on" before a
     word names the color on that surface: a foreground, whatever follows,
-    unless a background word comes first (bg-on-dark is a background for
-    use on dark)."""
+    unless a background or fill word comes first (bg-on-dark is a
+    background for use on dark, action-on-brand the fill of a button on a
+    brand surface)."""
     on = words.index("on") if "on" in words[:-1] else -1
-    if on != -1 and not any(w in BG_WORDS for w in words[:on]):
+    if on != -1:
+        if any(w in BG_WORDS + FILL_WORDS for w in words[:on]):
+            return _color_promise("backgrounds", ("text",), "used for {} color")
         return _color_promise("the color on a surface", ("background",), "used as a {}")
     if any(w in words for w in TEXT_WORDS):
         return _color_promise("text", ("background",), "used as a {}")
