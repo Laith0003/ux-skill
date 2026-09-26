@@ -9,6 +9,7 @@ import pytest
 from engine.foundations.build import FOUNDATIONS, build_system, check_system
 from engine.foundations.errors import InputError
 from engine.foundations.export import to_css
+from engine.foundations.modes import AXES
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.adapter import (
     ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mapping, load_mapping, merge, parse_mapping,
@@ -305,6 +306,38 @@ def test_findings_name_their_token_beside_our_role():
     assert their_names("color.text.default-hover and color.surface.page.raised",
                        mapping) == "color.text.default-hover and color.surface.page.raised"
     assert their_names("anything", Mapping()) == "anything"
+
+
+def test_a_token_named_as_its_role_gets_no_second_name():
+    mapping = Mapping(roles={"radius.card": RoleMap("radius.card", "name"),
+                             "color.text.default": RoleMap("color-text-default", "name"),
+                             "color.surface.page": RoleMap("page", "owner")}, axes={})
+    assert their_names("radius.card, color.text.default on color.surface.page", mapping) == (
+        "radius.card, color.text.default on color.surface.page (your page)")
+
+
+@pytest.mark.parametrize("axis, values, ours", [
+    ("default-dark", ("default", "dark"), "scheme"),
+    ("value-dark", ("value", "dark"), "scheme"),
+    ("base-compact", ("base", "compact"), "density"),
+    ("data-motion", ("base", "reduce"), "motion"),
+    ("data-contrast", ("base", "more"), "contrast"),
+    ("class-high-contrast", ("off", "on"), "contrast"),
+    ("class-dark", ("off", "on"), "scheme"),
+    ("standard-high", ("standard", "high"), None),
+    ("brand-partner", ("brand", "partner"), None),
+    ("dark-light", ("dark", "light"), None),
+])
+def test_an_axis_is_ours_by_the_shared_matcher(axis, values, ours):
+    ts = TokenSet({axis: values})
+    ts.add(Token("gap", "dimension", {"value": 8, "unit": "px"},
+                 modes={f"{axis}:{values[1]}": {"value": 4, "unit": "px"}}, layer="semantic"))
+    got = propose(ts).axes
+    if ours is None:
+        assert got == {}
+    else:
+        assert got == {ours: AxisMap(axis, {AXES[ours][0]: values[0], AXES[ours][1]: values[1]},
+                                     "name")}
 
 
 def test_a_role_that_resolves_nowhere_in_a_context_is_left_out_with_a_note():

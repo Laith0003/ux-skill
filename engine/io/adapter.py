@@ -39,6 +39,7 @@ from engine.foundations.errors import InputError
 from engine.foundations.modes import AXES, ModeError, compress, contexts, join, parse
 from engine.foundations.tokens import AliasError, Token, TokenSet
 from engine.foundations.values import TYPOGRAPHY_FIELDS
+from engine.io.mode_words import axis_of, mode_of
 
 # Every role a check or pairing reads, with the type it needs.
 ROLE_TYPES: Dict[str, str] = {path: kind for f in FOUNDATIONS
@@ -50,12 +51,6 @@ _ROLE_FIX = ("{\"token\": \"<your token>\", \"by\": \"owner\"}, or {\"token\": n
              "\"owner\"} to keep it out of the check")
 _ROLE_OUT = "{\"token\": null, \"by\": \"owner\"}"
 _AXIS_OUT = "{\"from\": null, \"by\": \"owner\"}"
-# Words a theme selector or mode name uses for a non-base value of our axes.
-_AXIS_WORDS: Dict[str, str] = {
-    "dark": "scheme", "rtl": "direction", "compact": "density", "high": "contrast",
-    "high-contrast": "contrast", "contrast-high": "contrast", "more": "contrast",
-    "reduced": "motion", "reduce": "motion", "reduced-motion": "motion",
-}
 # The notes view() gives for an owner's "not mapped" entry, shared so a
 # report that lists those entries itself can tell the notes apart.
 ROLE_LEFT_OUT = "{role} is not checked: the owner left it out in {name}"
@@ -65,8 +60,6 @@ AXIS_DELETED = ("{name} leaves out the axis {axis}, which the imported system ha
                 "so it was not checked and every role is read at the system's base; map it to "
                 "check it, or write " + _AXIS_OUT.replace("{", "{{").replace("}", "}}")
                 + " for it to keep it out on purpose")
-_BASE_WORDS = ("light", "ltr", "comfortable", "standard", "default", "base", "off",
-               "no-preference")
 
 
 @dataclass(frozen=True)
@@ -136,15 +129,15 @@ def _propose_axes(ts: TokenSet) -> Dict[str, AxisMap]:
 
 def _our_axis(name: str, base: str, other: str) -> Optional[str]:
     """The axis of ours a mode axis is: the one it is named for, whatever
-    its values, or the one its values or class name say."""
+    its values, or the one its values say by the importers' shared matcher
+    (its name is the context contrast and motion need). A class that is on
+    or off (class-compact) is the axis its name says."""
     if name in AXES:
         return name
-    if base not in _BASE_WORDS and not name.startswith(base + "-"):
-        return None
-    word = other
     if (base, other) == ("off", "on"):
-        word = name.split("-", 1)[1] if "-" in name else name
-    return _AXIS_WORDS.get(word)
+        return mode_of(name)
+    hit = axis_of([base, other], [name])
+    return hit[0] if hit is not None and hit[1] == 0 else None
 
 
 def merge(proposed: Mapping, existing: Mapping,
@@ -422,9 +415,14 @@ def their_names(text: str, mapping: Mapping) -> str:
     if roles:
         pattern = re.compile(r"(?<![\w.-])(" + "|".join(re.escape(r) for r in roles)
                              + r")(?![\w-]|\.[\w-])")
-        text = pattern.sub(lambda m: f"{m.group(1)} (your {mapping.roles[m.group(1)].token})",
-                           text)
+        text = pattern.sub(lambda m: _yours(m.group(1), mapping.roles[m.group(1)].token), text)
     return _CONTEXT.sub(lambda m: _their_context(m.group(0), m.group(1), mapping), text)
+
+
+def _yours(role: str, token: Optional[str]) -> str:
+    """The role, and the system's name beside it unless the name is the
+    role's own written with other separators."""
+    return role if token is None or _norm(token) == _norm(role) else f"{role} (your {token})"
 
 
 def _their_context(whole: str, key: str, mapping: Mapping) -> str:
