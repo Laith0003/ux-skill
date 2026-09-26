@@ -338,6 +338,11 @@ class Usage:
     def where(self) -> str:
         return f"{self.file}:{self.line}"
 
+    def to_dict(self) -> Dict[str, Any]:
+        return {"file": self.file, "line": self.line, "prop": self.prop,
+                "family": self.family, "kind": self.kind, "value": self.value,
+                "text": self.text, "state": self.state}
+
 
 class _Seen(NamedTuple):
     file: str
@@ -360,6 +365,13 @@ class NotMeasured(_Seen):
 
     def where(self) -> str:
         return f"{self.file}:{self.line}"
+
+    def _asdict(self) -> Dict[str, Any]:
+        return {**super()._asdict(), "why": self.why}
+
+    def to_dict(self) -> Dict[str, Any]:
+        """The entry with its reason, as JSON takes it."""
+        return dict(self._asdict())
 
 
 class _Class(NamedTuple):
@@ -386,6 +398,10 @@ class UnknownClass(_Class):
     def where(self) -> str:
         return f"{self.file}:{self.line}"
 
+    def to_dict(self) -> Dict[str, Any]:
+        return {"file": self.file, "line": self.line, "class": self.cls, "name": self.name,
+                "looked_in": list(self.looked_in), "near": self.near}
+
 
 @dataclass
 class Scan:
@@ -402,6 +418,23 @@ class Scan:
     # The custom properties the code declares itself (--name), each once in
     # the order first seen: a var() to one is the code's own, not a token.
     declared: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Everything the scan found, as JSON takes it: each entry not
+        measured with its reason and fix, each unknown class with the
+        namespaces it was looked up in."""
+        def entry(x: Any, keys: Tuple[str, ...]) -> Dict[str, Any]:
+            if hasattr(x, "to_dict"):
+                return x.to_dict()
+            return {**dict(zip(keys, x)), **({"why": ""} if "kind" in keys else {})}
+        return {"files": self.files,
+                "usages": [u.to_dict() for u in self.usages],
+                "unknown_classes": [entry(u, ("file", "line", "class"))
+                                    for u in self.unknown_classes],
+                "not_read": [entry(n, ("file", "line", "kind", "text"))
+                             for n in self.not_read],
+                "skipped": [{"file": f, "why": w} for f, w in self.skipped],
+                "declared": list(self.declared)}
 
 
 def _norm(name: str) -> str:
