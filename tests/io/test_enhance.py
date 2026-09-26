@@ -596,3 +596,16 @@ def test_a_big_repo_keeps_the_report_small_and_the_json_complete(tmp_path):
             "color.surface.page, color.surface.card, color.surface.sunken and 68 more; confirm "
             "them in mapping.json.") in decisions
     assert decisions.count(" by name only") < 20
+
+
+def test_a_hover_token_shared_with_focus_in_one_rule_is_not_a_stray(tmp_path):
+    (tmp_path / "app.css").write_text(
+        ".btn:hover, .btn:focus-visible { background: var(--primary-hover); }\n"
+        ".x:focus { background: var(--primary-hover); }\n", encoding="utf-8")
+    imported = _system()
+    d = drift(imported.tokens, scan([tmp_path], imported.tokens))
+    assert d.lies == []
+    # The use on focus alone, with no hover beside it, is still outside hover.
+    assert [(x.token, x.message) for x in d.strays] == [
+        ("primary-hover", "is named for hover but is used outside hover at app.css:2; 2 of its "
+                          "3 uses match its name")]
