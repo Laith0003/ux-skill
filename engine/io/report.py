@@ -15,7 +15,7 @@ from __future__ import annotations
 import hashlib
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from engine.foundations.errors import InputError, _brief_text
 from engine.foundations.tokens import TokenSet
@@ -122,21 +122,29 @@ class ImportReport:
     # Other files read with the source (a sibling dark file), each with its
     # digest, so a later write can tell whether any of them changed.
     also_read: List[Source] = field(default_factory=list)
+    # Values read for a mode beside the base (a dark value), counted apart
+    # from the entries, so an entry means a name in every format.
+    mode_values: int = 0
 
     @classmethod
-    def of(cls, source: Source, ts: TokenSet, entries: int) -> "ImportReport":
+    def of(cls, source: Source, ts: TokenSet, entries: int,
+           mode_values: Optional[int] = None) -> "ImportReport":
         """A report on `ts` as read from `source`, which held `entries`
-        entries that could be tokens. Types are counted in sorted order."""
+        names that could be tokens. `mode_values` defaults to the mode
+        values the tokens hold. Types are counted in sorted order."""
         counts: Dict[str, int] = {}
         for t in ts.tokens():
             counts[t.type] = counts.get(t.type, 0) + 1
+        if mode_values is None:
+            mode_values = sum(len(t.modes) for t in ts.tokens())
         return cls(source, entries, len(ts.tokens()), dict(sorted(counts.items())),
-                   {a: list(v) for a, v in ts.axes.items()})
+                   {a: list(v) for a, v in ts.axes.items()}, mode_values=mode_values)
 
     def to_dict(self) -> Dict[str, Any]:
         return {"source": self.source.to_dict(),
                 "also_read": [a.to_dict() for a in self.also_read],
                 "entries": self.entries, "tokens": self.tokens,
+                "mode_values": self.mode_values,
                 "by_type": dict(self.by_type), "axes": {a: list(v) for a, v in self.axes.items()},
                 "renamed": [i.to_dict() for i in self.renamed],
                 "notes": [i.to_dict() for i in self.notes],
@@ -148,6 +156,7 @@ class ImportReport:
         lines = ["# Import report", "",
                  f"Read {s.path} ({s.format}, {s.size} bytes, sha256 {s.sha256[:12]}): "
                  f"{self.entries} entries, {self.tokens} tokens.", "",
+                 f"{self.mode_values} mode value{'' if self.mode_values == 1 else 's'}.", "",
                  *[f"Also read {a.path} ({a.format}, {a.size} bytes, sha256 {a.sha256[:12]})."
                    for a in self.also_read], *([""] if self.also_read else []),
                  "## What was read", "", "| Type | Tokens |", "|---|---|"]

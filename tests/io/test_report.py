@@ -78,7 +78,7 @@ def test_the_report_counts_tokens_by_type_and_lists_the_modes():
                            "size": 120}
     assert d["not_read"] == [{"where": "tokens.css:5", "name": "--measure",
                               "message": report.not_read[0].message}]
-    assert list(d) == ["source", "also_read", "entries", "tokens", "by_type", "axes",
+    assert list(d) == ["source", "also_read", "entries", "tokens", "mode_values", "by_type", "axes",
                        "renamed", "notes", "mapped", "not_read"]
     assert d["also_read"] == []
     assert d["mapped"] == []
@@ -89,6 +89,7 @@ def test_the_report_reads_as_markdown_in_a_fixed_order():
     assert report.markdown() == (
         "# Import report\n\n"
         "Read design/tokens.css (css, 120 bytes, sha256 abababababab): 6 entries, 4 tokens.\n\n"
+        "1 mode value.\n\n"
         "## What was read\n\n"
         "| Type | Tokens |\n|---|---|\n| color | 3 |\n| dimension | 1 |\n\n"
         "Modes: scheme (light is the base, dark).\n\n"
@@ -178,3 +179,47 @@ def test_read_any_names_the_format_and_the_fix(tmp_path):
     with pytest.raises(InputError) as exc:
         read_any(tmp_path / "tokens.css", "tailwind-json")
     assert "is not a .json file, which tailwind-json reads" in str(exc.value)
+
+
+def _var(i, name, kind, light, dark, scopes=("ALL_SCOPES",)):
+    return {"id": f"v:{i}", "name": name, "variableCollectionId": "c:1", "resolvedType": kind,
+            "valuesByMode": {"m:l": light, "m:d": dark}, "scopes": list(scopes),
+            "description": "", "hiddenFromPublishing": False, "remote": False}
+
+
+_RGB = {"ink": ({"r": 0, "g": 0, "b": 0, "a": 1}, {"r": 1, "g": 1, "b": 1, "a": 1})}
+_SMALL = {
+    "css": (":root {\n  --ink: #000000;\n  --paper: #FFFFFF;\n  --gap: 8px;\n}\n"
+            ".dark {\n  --ink: #FFFFFF;\n  --paper: #000000;\n}\n"),
+    "tailwind": ("@theme {\n  --ink: #000000;\n  --paper: #FFFFFF;\n  --gap: 8px;\n}\n"
+                 ".dark {\n  --ink: #FFFFFF;\n  --paper: #000000;\n}\n"),
+    "dtcg": json.dumps({
+        "ink": {"$type": "color", "$value": "#000000",
+                "$extensions": {"modes": {"dark": "#FFFFFF"}}},
+        "paper": {"$type": "color", "$value": "#FFFFFF",
+                  "$extensions": {"modes": {"dark": "#000000"}}},
+        "gap": {"$type": "dimension", "$value": {"value": 8, "unit": "px"}}}),
+    "markdown": ("| Token | Value | Dark |\n|---|---|---|\n| ink | #000000 | #FFFFFF |\n"
+                 "| paper | #FFFFFF | #000000 |\n| gap | 8px | |\n"),
+    "figma": json.dumps({"meta": {
+        "variableCollections": {"c:1": {
+            "id": "c:1", "name": "Theme", "defaultModeId": "m:l",
+            "modes": [{"modeId": "m:l", "name": "Light"}, {"modeId": "m:d", "name": "Dark"}],
+            "variableIds": ["v:1", "v:2", "v:3"]}},
+        "variables": {"v:1": _var(1, "ink", "COLOR", *_RGB["ink"]),
+                      "v:2": _var(2, "paper", "COLOR", *reversed(_RGB["ink"])),
+                      "v:3": _var(3, "gap", "FLOAT", 8, 8, ("GAP",))}}}),
+}
+
+
+@pytest.mark.parametrize("fmt", list(_SMALL))
+def test_one_small_system_counts_the_same_entries_and_mode_values_in_every_format(fmt):
+    from engine.io import (import_css, import_dtcg, import_figma, import_markdown,
+                           import_tailwind_css)
+    read = {"css": import_css, "tailwind": import_tailwind_css, "dtcg": import_dtcg,
+            "figma": import_figma,
+            "markdown": lambda text, source: import_markdown([("tokens.md", text)], source)}
+    report = read[fmt](_SMALL[fmt], Source("tokens", fmt, "0" * 64, 1)).report
+    assert (report.entries, report.tokens, report.mode_values) == (3, 3, 2)
+    assert report.to_dict()["mode_values"] == 2
+    assert "3 entries, 3 tokens.\n\n2 mode values.\n" in report.markdown()

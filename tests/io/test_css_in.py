@@ -155,7 +155,7 @@ def test_a_foreign_file_keeps_its_names_and_reads_its_modes():
 
 def test_the_report_names_every_entry_it_did_not_read():
     report = _import(FOREIGN).report
-    assert report.entries == 22 and report.tokens == 12
+    assert report.entries == 17 and report.tokens == 12
     assert [(i.where, i.name, i.message) for i in report.notes] == [
         ("theme.css:14", "--focus-ring", "its fallback #36f was left out; the reference holds "
                                          "the value"),
@@ -379,7 +379,7 @@ SEMANTIC = ["surface-page", "surface-raised", "text-primary", "text-muted", "bor
 def test_the_foundation_file_reads_its_primitives_and_semantic_layer():
     imported = read_css(FIXTURE / "tokens" / "foundation.css")
     ts, report = imported.tokens, imported.report
-    assert (report.entries, report.tokens) == (47, 43)
+    assert (report.entries, report.tokens) == (45, 43)
     assert dict(ts.axes) == {"motion": ("standard", "reduced")}
     assert [t.path for t in ts.tokens() if t.layer == "semantic"] == [
         "ease-standard"] + SEMANTIC
@@ -416,7 +416,7 @@ def test_the_app_globals_alone_name_what_the_foundation_holds():
 def test_the_compiled_stylesheet_pairs_the_app_dark_theme_into_the_foundation():
     imported = read_css(FIXTURE / "compiled" / "app.css")
     ts, report = imported.tokens, imported.report
-    assert (report.entries, report.tokens) == (70, 52)
+    assert (report.entries, report.tokens) == (59, 52)
     assert dict(ts.axes) == {"scheme": ("light", "dark"), "motion": ("standard", "reduced")}
     assert (imported.forms, imported.scheme) == (
         {"scheme": (".dark", ""), "motion": ("", "(prefers-reduced-motion: reduce)")}, "light")
@@ -487,7 +487,7 @@ def test_a_nested_dark_class_and_a_nested_dark_query_are_the_dark_scheme():
     assert ts.get("ink").modes == {"scheme:dark": "#EEEEEE"}
     assert (imported.forms, imported.scheme) == (
         {"scheme": (":root.dark", "(prefers-color-scheme: dark)")}, "system")
-    assert report.entries == 5
+    assert report.entries == 3
     assert [(i.where, i.name) for i in report.not_read] == [("nested.css:5", "--card-pad")]
     assert [(i.where, i.name) for i in report.notes] == [
         ("nested.css:3", ":root.dark"),
