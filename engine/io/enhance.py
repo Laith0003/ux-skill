@@ -642,10 +642,7 @@ class Enhanced:
         for lie in d.lies:
             lines.append(f"- {lie.token} {lie.message}; rename it for how it is used, or use a "
                          "token named for that use there.")
-        for miss in d.missing:
-            lines.append(f"- {miss.where} references {miss.value}, which the system does not "
-                         "have; add it to the system, or point the reference at a token it "
-                         "has.")
+        lines += _missing(d.missing)
         if d.own:
             k, n = len(d.own), sum(len(w) for w in d.own.values())
             names = _few([f"{name} ({_few(w, 3)})" for name, w in d.own.items()])
@@ -668,50 +665,154 @@ class Enhanced:
         return lines + unread
 
     def _unread(self, d: Drift) -> List[str]:
-        """What the scan did not read or measure, each with the fix."""
-        lines = []
+        """What the scan did not read or measure, each with the fix. Repeats
+        fold: files skipped for one reason, places not measured of one kind
+        and classes looked up in one namespace each become one line with a
+        count and a few examples; to_dict() keeps every entry."""
+        lines: List[str] = []
+        skipped: Dict[str, List[str]] = {}
         for file, why in d.skipped:
+            skipped.setdefault(why, []).append(file)
+        groups = list(skipped.items())
+        for why, files in groups[:FEW]:
             # The scanner writes a reason as what the file is or cannot do.
-            lines.append(f"- {file} {_sentence(why)}" if why[:1].islower()
-                         else f"- {file} was not read: {_sentence(why)}")
-        for file, line, kind, written, why in d.not_read:
-            if why:
-                lines.append(f"- {file}:{line} was not measured ({kind}): {_sentence(why)}")
+            if len(files) == 1:
+                lines.append(f"- {files[0]} {_sentence(why)}" if why[:1].islower()
+                             else f"- {files[0]} was not read: {_sentence(why)}")
             else:
-                lines.append(f"- {file}:{line} writes {_brief(written)} ({kind}), which the "
-                             "scan does not measure; check it by hand, or write it in a form "
-                             "the scan reads (a longhand property or a var() to a token).")
-        for entry in d.unknown_classes:
-            lines.append(f"- {entry[0]}:{entry[1]} uses the class {entry[2]}"
-                         f"{self._class_fix(entry)}")
+                lines.append(f"- {len(files)} files were not read ({_few(files, 3)}): "
+                             + (f"each {_sentence(why)}" if why[:1].islower()
+                                else _sentence(why)))
+        if len(groups) > FEW:
+            rest = sum(len(f) for _, f in groups[FEW:])
+            lines.append(f"- {_count(rest, 'more file was', 'more files were')} not read for "
+                         f"{_count(len(groups) - FEW, 'other reason', 'other reasons')}; the "
+                         "JSON report lists each file with its reason and fix.")
+        kinds: Dict[str, List[Tuple[str, int, str, str, str]]] = {}
+        for entry in d.not_read:
+            kinds.setdefault(entry[2], []).append(entry)
+        for kind, entries in kinds.items():
+            file, line, _, written, why = entries[0]
+            if len(entries) == 1:
+                lines.append(_unmeasured(file, line, kind, written, why))
+                continue
+            wheres = _few([f"{f}:{n}" for f, n, _, _, _ in entries], 3)
+            example = (_sentence(why) if why else
+                       f"it writes {_brief(written)}, which the scan does not measure.")
+            lines.append(f"- {len(entries)} places were not measured ({kind}), at {wheres}. "
+                         f"At {file}:{line}, {example} Check each by hand, or write it in a "
+                         "form the scan reads; the JSON report gives each one's reason and "
+                         "fix.")
+        lines += self._classes(d)
         return lines
 
-    def _class_fix(self, entry: Any) -> str:
-        """Why a class names no token, and the fix: the namespaces it was
-        looked up in, and a token of its name the system has outside them
-        or holds in the source without reading it."""
-        looked = tuple(getattr(entry, "looked_in", ()))
-        name = getattr(entry, "name", "")
+    def _classes(self, d: Drift) -> List[str]:
+        """Unknown classes, one line per namespace and reason: a lone class
+        says where it is used; more say how many and show a few."""
+        reasons: Dict[Tuple[Tuple[str, ...], str, str], Tuple[str, str, str]] = {}
+        # (namespaces, reason) -> class -> (its reason, where it is used)
+        groups: Dict[Tuple[Tuple[str, ...], str],
+                     Dict[str, Tuple[Tuple[str, str, str], List[str]]]] = {}
+        for entry in d.unknown_classes:
+            key = (tuple(getattr(entry, "looked_in", ())), getattr(entry, "name", ""),
+                   getattr(entry, "near", ""))
+            if key not in reasons:
+                reasons[key] = self._class_reason(*key)
+            reason = reasons[key]
+            uses = groups.setdefault((key[0], reason[0]), {})
+            uses.setdefault(entry[2], (reason, []))[1].append(f"{entry[0]}:{entry[1]}")
+        lines = []
+        for uses in groups.values():
+            if len(uses) == 1:
+                cls, ((_, single, _), wheres) = next(iter(uses.items()))
+                at = (wheres[0] if len(wheres) == 1
+                      else f"{wheres[0]} and {len(wheres) - 1} more places")
+                lines.append(f"- {at} {'uses' if len(wheres) == 1 else 'use'} the class "
+                             f"{cls}{single}")
+                continue
+            total = sum(len(w) for _, w in uses.values())
+            (_, _, plural), _ = next(iter(uses.values()))
+            shown = _few([f"{c} ({w[0]}{f' and {len(w) - 1} more' if len(w) > 1 else ''})"
+                          for c, (_, w) in uses.items()], FEW)
+            lines.append(f"- {total} uses of {len(uses)} classes"
+                         + plural.replace("{shown}", shown))
+        return lines
+
+    def _class_reason(self, looked: Tuple[str, ...], name: str,
+                      near: str) -> Tuple[str, str, str]:
+        """(reason, the fix for one class, the fix for many): why a class
+        names no token, with the namespaces it was looked up in and a token
+        of its name the system has outside them or holds in the source
+        without reading it. The plural form takes {shown}, the classes."""
         if not looked or not name:
-            return (", which names no token in the system; add the token to the system, or use "
-                    "a class that names one it has.")
+            return ("system",
+                    ", which names no token in the system; add the token to the system, or "
+                    "use a class that names one it has.",
+                    " name no token in the system: {shown}; add a token for each value the "
+                    "design keeps, or use classes that name tokens it has. The JSON report "
+                    "lists every use.")
         where = (f"the {looked[0]} namespace" if len(looked) == 1 else
                  f"the {', '.join(looked[:-1])} or {looked[-1]} namespaces")
+        them = "it" if len(looked) == 1 else "them"
         head = f", which names no token in {where}"
-        near = getattr(entry, "near", "")
+        many = f" name no token in {where}: {{shown}}"
         if near:
-            return (f"{head}; the system has {near}, outside {'it' if len(looked) == 1 else 'them'}"
-                    f": rename it {looked[0]}-{name} so the class reads it, or use a class that "
-                    "names a token the system has.")
+            return ("near", f"{head}; the system has {near}, outside {them}: rename it "
+                    f"{looked[0]}-{name} so the class reads it, or use a class that names a "
+                    "token the system has.",
+                    f"{many}; the system has each under a name outside {them} (such as {near} "
+                    f"for {name}): rename each into {where} so the "
+                    "class reads it, or use classes that name tokens the system has. The JSON "
+                    "report lists every use.")
         wanted = {_norm(f"{space}.{name}") for space in looked}
+        source = self.imported.report.source.path
         for item in self.imported.report.not_read:
             key = _norm(item.name)
             if key in wanted or key == _norm(name) or key.endswith("." + _norm(name)):
-                return (f"{head}; {self.imported.report.source.path} holds {item.name} at "
-                        f"{item.where}, which was not read (the import report says how to "
-                        "write it): fix that entry so the class reads it.")
-        return (f"{head}; add {looked[0]}-{name} to the system, or use a class that names a "
-                "token it has.")
+                return ("unread", f"{head}; {source} holds {item.name} at {item.where}, which was "
+                        "not read (the import report says how to write it): fix that entry so "
+                        "the class reads it.",
+                        f"{many}; {source} holds each in an entry that was not read (such as "
+                        f"{item.name} at {item.where}; the import report says how to write "
+                        "each): fix those entries so the classes read them. The JSON report "
+                        "lists every use.")
+        return ("none", f"{head}; add {looked[0]}-{name} to the system, or use a class that "
+                "names a token it has.",
+                f"{many}; add a token for each value the design keeps (such as "
+                f"{looked[0]}-{name}), or use classes that name tokens the system has. The "
+                "JSON report lists every use.")
+
+
+def _missing(missing: Sequence[Missing]) -> List[str]:
+    """References to tokens the system lacks: one line per name, or, past
+    FEW names, one line for all with a count and a few."""
+    names: Dict[str, List[str]] = {}
+    for miss in missing:
+        names.setdefault(miss.value, []).append(miss.where)
+    if len(names) > FEW:
+        shown = _few([f"{n} ({w[0]}{f' and {len(w) - 1} more' if len(w) > 1 else ''})"
+                      for n, w in names.items()], FEW)
+        return [f"- The code references {len(names)} names the system does not have, "
+                f"{_count(len(missing), 'time', 'times')}: {shown}; add each to the system, or "
+                "point the references at tokens it has. The JSON report lists every use."]
+    lines = []
+    for name, wheres in names.items():
+        if len(wheres) == 1:
+            lines.append(f"- {wheres[0]} references {name}, which the system does not have; add "
+                         "it to the system, or point the reference at a token it has.")
+        else:
+            lines.append(f"- {name} is referenced {len(wheres)} times ({_few(wheres, 3)}), and "
+                         "the system does not have it; add it to the system, or point the "
+                         "references at a token it has.")
+    return lines
+
+
+def _unmeasured(file: str, line: int, kind: str, written: str, why: str) -> str:
+    if why:
+        return f"- {file}:{line} was not measured ({kind}): {_sentence(why)}"
+    return (f"- {file}:{line} writes {_brief(written)} ({kind}), which the scan does not "
+            "measure; check it by hand, or write it in a form the scan reads (a longhand "
+            "property or a var() to a token).")
 
 
 def _reading_face(checked: TokenSet, role: str) -> Optional[str]:
@@ -813,6 +914,28 @@ def _unresolved(ts: TokenSet, checked: TokenSet, mapping: Mapping, source: str,
     return out
 
 
+def _by_name(mapping: Mapping, name: str) -> List[str]:
+    """The roles mapped by name only, one line per foundation: a lone role
+    by itself, more with a count and a few (the JSON report lists each)."""
+    per: Dict[str, List[Tuple[str, str]]] = {}
+    for role, m in mapping.roles.items():
+        if m.by == "name" and m.token is not None:
+            per.setdefault(role.split(".", 1)[0], []).append((role, m.token))
+    lines = []
+    for foundation, pairs in per.items():
+        if len(pairs) == 1:
+            role, token = pairs[0]
+            lines.append(f"{role} is mapped to {token} by name only; confirm it in {name}.")
+            continue
+        same = sum(1 for r, t in pairs if _norm(r) == _norm(t))
+        shown = _few([r if _norm(r) == _norm(t) else f"{r} to {t}" for r, t in pairs], 3)
+        each = (", each to the token of the same name" if same == len(pairs) else
+                f", {same} of them to the token of the same name" if same else "")
+        lines.append(f"{len(pairs)} {foundation} roles are mapped by name only{each}: {shown}; "
+                     f"confirm them in {name}. The JSON report lists each.")
+    return lines
+
+
 def _finding(text: str, mapping: Mapping) -> str:
     """A gate message in the system's names; a set with no mode axis
     prints an empty context, which is dropped."""
@@ -840,8 +963,7 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     findings = [_finding(_MOVE.sub(_THEIR_FIX, f.message()), mapping) for f in report.findings]
     findings += [_finding(f"{c.message} (in {c.mode})" if c.mode else c.message, mapping)
                  for c in report.failures]
-    decisions = [f"{r} is mapped to {m.token} by name only; confirm it in {mapping_name}."
-                 for r, m in mapping.roles.items() if m.by == "name" and m.token is not None]
+    decisions = _by_name(mapping, mapping_name)
     for axis, m in mapping.axes.items():
         if m.by == "name" and m.source is not None:
             values = ""
