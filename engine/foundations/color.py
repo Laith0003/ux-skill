@@ -467,7 +467,7 @@ JUST_VISIBLE = 0.02
 # reads as another color; the report says so.
 IDENTITY_DISTANCE = 0.12
 
-# M1 name for the generator's result; every foundation now returns Generated.
+# The color generator's earlier name for its result; every foundation now returns Generated.
 ColorResult = Generated
 
 

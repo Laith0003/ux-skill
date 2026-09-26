@@ -86,8 +86,8 @@ def test_minimums_print_without_a_trailing_zero(minimum, criterion, want):
 
 
 def test_unvalidated_bad_value_names_the_token():
-    # R27 I2: the gate used to raise the bare color_math error with no token path.
-    # M4a Task 2 I2: it reports the pairing as unresolved in each context and
+    # A bad value never raises the bare color_math error with no token path:
+    # the gate reports the pairing as unresolved in each context and
     # goes on, so check_system never raises on a color it cannot read.
     ts = TokenSet()
     ts.add(Token("color.gray.300", "color", "#GGGGGG"))
@@ -108,7 +108,7 @@ TEXT_ON_PAGE = Pairing("color.text.default", "color.surface.page", 4.5, "1.4.3")
 
 
 def test_skipped_pairings_are_listed():
-    # R27 M7: a skipped pairing used to be a bare count.
+    # Each skipped pairing is named, not only counted.
     report = gate(failing_set(), PAIRINGS, raise_on_fail=False)
     assert report.skipped == len(report.skipped_pairings) > 0
     assert LINK_ON_PAGE in report.skipped_pairings

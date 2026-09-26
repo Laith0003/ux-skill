@@ -192,7 +192,7 @@ def test_the_build_still_raises_on_a_failing_gate_with_hints(monkeypatch):
 def _core_set() -> TokenSet:
     """A system written by hand, as an import would be: the core color,
     space, radius, layout and type roles on the scheme axis only, and none
-    of the roles M3.5 and the fixes after it added (brand and band surfaces
+    of the later roles (brand and band surfaces
     and buttons, the primary edge, the landing gap, the display step and its
     fit factors, the phone scale)."""
     ts = TokenSet({"scheme": ("light", "dark")})

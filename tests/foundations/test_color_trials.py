@@ -1,4 +1,4 @@
-"""Color findings from the site trial specimens (M3.5c): dark bands and the
+"""Color findings from trial site specimens: dark bands and the
 dark sunken surface, table headers, status soft fills that follow the
 character, the brand fill under high contrast, and a veil for generated art
 with a role for a control on it."""

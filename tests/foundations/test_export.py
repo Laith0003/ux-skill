@@ -42,7 +42,7 @@ def test_byte_identical_output():
 
 
 def test_css_emits_mode_overrides_whatever_the_layer():
-    # R27 I1: the gate reads modes regardless of layer, so the exporter must too.
+    # The gate reads modes regardless of layer, so the exporter must too.
     from engine.foundations.tokens import Token, TokenSet
     ts = TokenSet()
     ts.add(Token("color.a", "color", "#FFFFFF"))
@@ -53,7 +53,7 @@ def test_css_emits_mode_overrides_whatever_the_layer():
 
 
 def test_from_dtcg_tolerates_null_extensions():
-    # R27 M4: "$extensions": null used to raise AttributeError.
+    # "$extensions": null is read as no extensions, never an AttributeError.
     doc = {"color": {"base": {
         "white": {"$type": "color", "$value": "#FFFFFF", "$extensions": None},
         "black": {"$type": "color", "$value": "#000000", "$extensions": {EXT: {"modes": None}}},
@@ -66,7 +66,7 @@ def test_from_dtcg_tolerates_null_extensions():
 
 
 def test_from_dtcg_inherits_group_type():
-    # R27 M4: DTCG lets a group declare $type for every token below it; the
+    # DTCG lets a group declare $type for every token below it; the
     # nearest declaration wins and a token's own $type wins over all.
     doc = {
         "$type": "color",
@@ -129,7 +129,7 @@ def test_css_carries_the_high_contrast_variant():
     assert ':root[data-theme="dark"][data-contrast="high"] {' in css
 
 
-# M3.5c item 7: a right to left or Arabic subtree gets the Arabic type
+# A right to left or Arabic subtree gets the Arabic type
 # anywhere on the page, not only on the root.
 NESTED = ':is([dir="rtl"], [lang|="ar"])'
 

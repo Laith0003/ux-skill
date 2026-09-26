@@ -352,7 +352,7 @@ def test_the_region_gap_follows_the_viewport_from_one_property(site, tokens, wid
         browser.close()
 
 
-# M3.5c items 1 and 7: the hero steps down on phones from one property,
+# The hero steps down on phones from one property,
 # and an Arabic block inside a left to right page gets the Arabic type.
 TYPE_PAGE = """<!doctype html>
 <html lang="en">

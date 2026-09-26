@@ -433,7 +433,7 @@ def test_a_few_thousand_small_files_scan_in_a_few_seconds(tmp_path):
     assert elapsed < 5, f"3000 files took {elapsed:.1f}s"
 
 
-# Fix round 1 ------------------------------------------------------------------
+# Named colors, shorthands, what is not measured and edge cases ----------------
 
 def _not_read(result, file=None):
     return [(n.line, n.kind, n.text) for n in result.not_read if file in (None, n.file)]
@@ -618,7 +618,7 @@ def test_several_roots_name_files_apart_and_read_each_file_once(tmp_path):
     assert [u.file for u in result.usages] == ["web/index.css"]
 
 
-# Fix round 2 ------------------------------------------------------------------
+# CSS-in-JS objects, several roots, Tailwind signals and states -------------------
 
 def test_emotion_css_objects_are_read_like_style_objects(tmp_path):
     jsx = """const a = <b css={{ color: 'red', padding: 8, '&:hover': { color: '#00ff00' } }} />;

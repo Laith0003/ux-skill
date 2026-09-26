@@ -414,7 +414,7 @@ def test_the_pack_is_the_same_under_every_hash_seed():
         assert out == here.hexdigest(), seed
 
 
-# Fix round 1: role uses per role, surface order per context, direction
+# Role uses per role, surface order per context, direction
 # from the tokens, the screen route.
 from engine.foundations.color_math import luminance  # noqa: E402
 from engine.rulepack.guidance import load_guidance  # noqa: E402

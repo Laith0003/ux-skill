@@ -1,4 +1,4 @@
-"""Fix round BF7a: the words, the type and the sizes a landing page needs.
+"""The words, the type and the sizes a landing page needs.
 
 Words: common tone words move the axes by what they say, four industries
 seed the axes (never a look), and a brief's character object passes what an

@@ -3,17 +3,18 @@ client engagement, or leaks a confidential term.
 
 The guards:
 1. Shingle test against the private Ds/ corpus. Runs only on a machine that has
-   the private source (CI skips). Per R24, a shingle only counts when it is
+   the private source (CI skips). A shingle only counts when it is
    mostly prose (see MIN_ALPHA_WORDS below) so public numeric vocabulary
    (cubic-bezier curves, rgba offsets, WCAG criterion titles) does not trip
    the guard.
-2. A CI-safe unit test proving that R24 filter: a prose sentence still yields
+2. A CI-safe unit test proving that prose filter: a prose sentence still yields
    counted shingles, a numeric/token run does not. Needs no private source.
 3. Name guard for the client company name and the vendor domain (plus its common
    misspelling). Runs everywhere, including CI, over every file `git ls-files`
    tracks. The forbidden names are assembled at runtime so this file never
    carries them as literals.
-4. Private-term guard against `~/Code/ux-skill/ds-source/private-terms.txt`.
+4. Private-term guard against private-terms.txt in the private source folder
+   (PRIVATE_SOURCE below).
    Skips cleanly when that file is absent (CI, or any machine without the
    private source).
 5. Licensed token-name guard: no dotted name the private docs put in
@@ -27,9 +28,24 @@ from pathlib import Path
 
 import pytest
 
-PRIVATE = Path(os.path.expanduser("~/Code/ux-skill/ds-source/Ds"))
-PRIVATE_TERMS = Path(os.path.expanduser("~/Code/ux-skill/ds-source/private-terms.txt"))
 REPO = Path(__file__).resolve().parents[2]
+
+
+def _private_source() -> Path:
+    """The private source folder: $UXSKILL_PRIVATE_SOURCE when set, else the
+    folder beside this checkout that holds private-terms.txt. A path that
+    does not exist when there is none, so the private guards skip."""
+    named = os.environ.get("UXSKILL_PRIVATE_SOURCE")
+    if named:
+        return Path(named).expanduser()
+    siblings = sorted(REPO.parent.iterdir()) if REPO.parent.is_dir() else []
+    return next((d for d in siblings if (d / "private-terms.txt").is_file()),
+                REPO.parent / "no-private-source")
+
+
+PRIVATE_SOURCE = _private_source()
+PRIVATE = PRIVATE_SOURCE / "Ds"
+PRIVATE_TERMS = PRIVATE_SOURCE / "private-terms.txt"
 THIS_FILE = Path(__file__).resolve()
 SCAN = (
     "engine", "commands", "references", "agents", "docs", "README.md",
@@ -44,7 +60,7 @@ BINARY_SUFFIXES = {
 }
 
 
-# R24: a shingle only counts when most of it is prose. Cubic-bezier numbers,
+# A shingle only counts when most of it is prose. Cubic-bezier numbers,
 # rgba shadow offsets, and WCAG criterion titles ("2.3.1 ...") are public
 # vocabulary, not licensed phrasing, so require the majority of an 8-gram's
 # words to be real alphabetic terms before treating it as a match.
@@ -177,7 +193,7 @@ def test_no_private_terms_anywhere():
 # Licensed token names: every dotted name the private docs put in backticks
 # (for example a role path or a style name). Our taxonomy must not reuse
 # them. Ramp names such as color.<family>.<step> are the common convention
-# M1 fixed on purpose and are allowed; names that start with a capital are
+# the engine chose on purpose and are allowed; names that start with a capital are
 # platform APIs, not token names.
 _TOKEN_NAME = re.compile(r"`([a-z][A-Za-z0-9-]*(?:[./][A-Za-z0-9-]+)+)`")
 _RAMP = re.compile(r"color\.[a-z]+\.\d+$")
