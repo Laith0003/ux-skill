@@ -177,7 +177,7 @@ def test_the_v4_fixture_reads_the_theme_the_layers_and_both_dark_forms():
             "on-surface": ("{color-ink-900}", {"scheme:dark": "{color-ink-50}"}),
             "accent": ("{color-moss-700}", {"scheme:dark": "{color-moss-100}"})}
     report = imported.report
-    assert (report.entries, report.tokens) == (32, 24)
+    assert (report.entries, report.tokens) == (29, 24)
     assert [(i.where, i.name) for i in report.notes] == [
         ("app.css:10", "--color-*"), ("app.css:11", "--font-*"), ("app.css:55", ".dark"),
         ("app.css:68", ":root @variant dark")]

@@ -94,7 +94,7 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
 from engine.foundations.errors import InputError
 from engine.foundations.export import to_css
@@ -812,6 +812,7 @@ def import_css(text: str, source: Source) -> Imported:
     # property -> context -> every (value, line) set there, in the order read.
     seen: Dict[str, Dict[Tuple[Tuple[str, str], ...], List[Tuple[str, int]]]] = {}
     entries = 0
+    named: Set[str] = set()
     for rule in rules:
         if not rule.declarations:  # a rule with no custom property sets no mode
             continue
@@ -840,7 +841,11 @@ def import_css(text: str, source: Source) -> Imported:
                         "@media" if "scheme" in (media or {}) else "")
             paired.append((rule.line, label, [d.name for d in dark], form))
         for d in rule.declarations:
-            entries += 1
+            # An entry is a name that could become a token; a value set
+            # again under a mode is a mode value, counted in the report.
+            if d.name not in named:
+                named.add(d.name)
+                entries += 1
             if d.name in switches:
                 continue
             if d.name.endswith("*"):
