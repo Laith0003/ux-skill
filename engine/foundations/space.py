@@ -123,6 +123,11 @@ def _control_gap(ts: TokenSet, mode: str) -> List[str]:
 
 
 def _scale_order(ts: TokenSet, mode: str) -> List[str]:
+    # Unlike radius-scale-order, which reads the numbered steps only (its
+    # radius.round is a pill value off the scale), this keeps any other
+    # spacing primitive after the numbered steps, as the check read every
+    # primitive before steps were sorted by number: an imported space.px
+    # listed there must be larger than the largest step.
     steps = numbered_steps(ts, "space.")
     return [f"{b} is not larger than {a}; keep the scale strictly increasing"
             for a, b in zip(steps, steps[1:]) if _value(ts, a, mode) >= _value(ts, b, mode)]

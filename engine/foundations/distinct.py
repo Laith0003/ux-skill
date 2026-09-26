@@ -34,6 +34,7 @@ from typing import Any, Dict, Mapping, Tuple
 from engine.foundations.character import STATUS_HUES, hue_delta
 from engine.foundations.color_math import hex_to_oklch
 from engine.foundations.tokens import TokenSet
+from engine.foundations.values import dimension_px
 
 LIGHT = "scheme:light,contrast:standard"
 # A mid grey leads nothing (decisions/brand-leads-the-role.md): its role
@@ -76,7 +77,7 @@ PILL_PX = 60.0
 
 
 def _px(v: Dict[str, Any]) -> float:
-    return v["value"] * (16 if v.get("unit") == "rem" else 1)
+    return dimension_px(v)
 
 
 def _lab(hx: str) -> Tuple[float, float, float]:
