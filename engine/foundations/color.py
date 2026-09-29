@@ -579,6 +579,31 @@ def _with_chroma(hx: str, share: float = 1.0, cap: float = 1.0) -> str:
 SOFT_STEPS = (50, 100, 900, 950)
 
 
+def _band_cap(scheme: str, axes: AxisValues) -> float:
+    """The most chroma a brand-tinted surface takes in a scheme."""
+    return character.light_band_chroma(axes) if scheme == "light" \
+        else character.dark_band_chroma(axes)
+
+
+def _tint(page: str, brand: Mapping[int, str], scheme: str, axes: AxisValues) -> str:
+    """The quiet tint for a page: the hue and chroma of the brand's 50
+    (light) or 950 (dark), at no more than the scheme's band cap, at the
+    lightness nearest the page that stands TINT_FLOOR off it."""
+    _, c, h = hex_to_oklch(brand[50 if scheme == "light" else 950])
+    return stand_off(page, min(c, _band_cap(scheme, axes)), h, TINT_FLOOR)
+
+
+def _band(page: str, brand: Mapping[int, str], scheme: str, axes: AxisValues) -> str:
+    """The section band for a page: the brand's 100 (light) or 900 (dark)
+    at no more than the scheme's band cap, moved to stand BAND_FLOOR off
+    the page when it sits nearer."""
+    band = _with_chroma(brand[100 if scheme == "light" else 900], cap=_band_cap(scheme, axes))
+    if contrast(page, band) < BAND_FLOOR:
+        _, c, h = hex_to_oklch(band)
+        band = stand_off(page, c, h, BAND_FLOOR)
+    return band
+
+
 def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str, str]:
     prims = {"color.base.white": "#FFFFFF", "color.base.black": "#000000"}
     seeds = {"brand": brand_hex, "neutral": _neutral_seed(brand_hex, axes)}
@@ -602,22 +627,10 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             # Each tint's chroma stays at or under its scheme's band cap, so the
             # quiet surface is never louder than the band.
             pages = ramp(seeds["neutral"]).stops
-            caps = {"light": character.light_band_chroma(axes),
-                    "dark": character.dark_band_chroma(axes)}
-            for scheme, step, page in (("light", 50, pages[50]), ("dark", 950, pages[950])):
-                _, c, h = hex_to_oklch(r.stops[step])
-                prims[f"color.brand.tint-{scheme}"] = stand_off(page, min(c, caps[scheme]), h,
-                                                                TINT_FLOOR)
-            band = _with_chroma(r.stops[100], cap=character.light_band_chroma(axes))
-            if contrast(pages[50], band) < BAND_FLOOR:
-                _, c, h = hex_to_oklch(band)
-                band = stand_off(pages[50], c, h, BAND_FLOOR)
-            prims["color.brand.band-light"] = band
-            band = _with_chroma(r.stops[900], cap=caps["dark"])
-            if contrast(pages[950], band) < BAND_FLOOR:
-                _, c, h = hex_to_oklch(band)
-                band = stand_off(pages[950], c, h, BAND_FLOOR)
-            prims["color.brand.band-dark"] = band
+            for scheme, page in (("light", pages[50]), ("dark", pages[950])):
+                prims[f"color.brand.tint-{scheme}"] = _tint(page, r.stops, scheme, axes)
+            for scheme, page in (("light", pages[50]), ("dark", pages[950])):
+                prims[f"color.brand.band-{scheme}"] = _band(page, r.stops, scheme, axes)
             for path, need in NATURAL_FILLS.items():
                 fill, hover, pressed = natural_fill(brand_hex, need)
                 prims[path], prims[path + "-hover"], prims[path + "-pressed"] = \
@@ -823,7 +836,8 @@ def natural_cost(fill_hex: str, on: str, mode: str = "") -> float:
 
 def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
                  pick: Dict[str, Dict[str, str]], notes: List[str],
-                 ring_floor: float = 0.0) -> None:
+                 ring_floor: float = 0.0, pinned: Mapping[str, str] = MappingProxyType({}),
+                 brand_role: str = "fill") -> None:
     """Choose one fill group for one context.
 
     Search order (deterministic):
@@ -866,17 +880,24 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
                                                below the standard ring's lowest (ring_floor)
     When nothing clears, the closest candidate is kept and noted; the gate
     then reports the failing pairings. The generator never raises here.
+
+    A role in `pinned` (role -> the path of a color the system being
+    extended already has) is held there: the search only moves the roles
+    around it, and a pinned fill's states and edge walk the ramp its
+    role starts on.
     """
     roles = (g.fill,) + g.states + (g.on,) + ((g.edge,) if g.edge else ()) \
         + ((g.ring,) if g.ring else ())
     defaults = {r: pick[mode][r] for r in roles}
-    family = defaults[g.fill].rsplit(".", 1)[0]
+    family = (_default(g.fill, mode, brand_role) if g.fill in pinned
+              else defaults[g.fill]).rsplit(".", 1)[0]
     conv = +1 if _scheme(mode) == "light" else -1
     need_text = _need(g.on, g.fill, mode)
     grounds = [(prims[pick[mode][r]], _need(g.edge or g.fill, r, mode)) for r in g.grounds]
     fill_grounds = [] if g.edge else grounds
     label = _label(g.grounds)
-    rings = _ring_candidates(mode, defaults[g.ring]) if g.ring else []
+    rings = ([pinned[g.ring]] if g.ring in pinned else _ring_candidates(mode, defaults[g.ring])) \
+        if g.ring else []
     ring_bgs = [(prims[pick[mode][bg]], _need(g.ring, bg, mode))
                 for bg in _paired_with(g.ring)] if g.ring else []
 
@@ -887,6 +908,8 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
         band = prims[pick[mode]["color.surface.brand"]]
         ons = sorted((f"color.brand.{s}" for s in STEPS),
                      key=lambda p: (round(oklab_distance(prims[p], band), 6), p)) + ons
+    if g.on in pinned:
+        ons = [pinned[g.on]]
 
     def ring_low(ring: str) -> float:
         return min(contrast(prims[ring], hx) for hx, _ in ring_bgs)
@@ -898,7 +921,7 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
     def finish(choice: Tuple[str, ...], hexes: List[str], on: str, solved: bool) -> None:
         summary = f"text/fill {contrast(prims[on], hexes[0]):.2f}:1"
         if g.edge:
-            edge = _choose_edge(choice[0], family, grounds, prims)
+            edge = pinned.get(g.edge) or _choose_edge(choice[0], family, grounds, prims)
             choice += (edge,)
             low = min((contrast(prims[edge], hx) / need, contrast(prims[edge], hx))
                       for hx, need in grounds)
@@ -915,7 +938,8 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
         _apply(g, mode, pick, defaults, roles, choice, summary, notes, solved=solved)
 
     best: Optional[Tuple[float, Tuple[str, ...], List[str], str]] = None
-    candidates = _fill_candidates(g, defaults[g.fill], conv, prims, mode)
+    candidates = [pinned[g.fill]] if g.fill in pinned \
+        else _fill_candidates(g, defaults[g.fill], conv, prims, mode)
 
     def ring_shortfall(fill_path: str) -> float:
         """How far the best ring that clears every surface falls short of
@@ -948,8 +972,12 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
             if fill_path in NATURAL_FILLS:
                 # the natural fill steps from itself, darker, in its own hue
                 paths_for = [(fill_path + "-hover", fill_path + "-pressed")[:len(g.states)]]
+            elif all(s in pinned for s in g.states):
+                paths_for = [tuple(pinned[s] for s in g.states)]
             else:
-                paths_for = _state_paths(prims[fill_path], family, conv, len(g.states), prims)
+                paths_for = [tuple(pinned.get(s, p) for s, p in zip(g.states, states))
+                             for states in _state_paths(prims[fill_path], family, conv,
+                                                        len(g.states), prims)]
             for states in paths_for:
                 if len(passing) > kept:
                     break
@@ -958,10 +986,16 @@ def _solve_group(g: _Group, mode: str, prims: Dict[str, str],
                 if len(set(hexes)) != len(hexes):
                     continue
                 for on in ons:
-                    score = min([contrast(prims[on], h) / need_text for h in hexes]
+                    # A pairing of two pinned colors is the system's own: no
+                    # choice here changes it, so it does not rank the choices.
+                    score = min([contrast(prims[on], h) / need_text
+                                 for r, h in zip((g.fill,) + g.states, hexes)
+                                 if not (g.on in pinned and r in pinned)]
                                 + [contrast(h, hx) / need
-                                   for h in (hexes if g.states_on_grounds else hexes[:1])
-                                   for hx, need in fill_grounds])
+                                   for r, h in zip((g.fill,) + g.states,
+                                                   hexes if g.states_on_grounds else hexes[:1])
+                                   for (hx, need), bg in zip(fill_grounds, g.grounds)
+                                   if not (r in pinned and bg in pinned)], default=1.0)
                     choice = tuple(paths) + (on,)
                     if best is None or score > best[0]:
                         best = (score, choice, hexes, on)
@@ -1327,7 +1361,60 @@ def _start_on_band(g: _Group, mode: str, prims: Dict[str, str],
     pick[mode][g.fill] = "color.neutral.50" if light else "color.neutral.950"
 
 
-def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] = None) -> Generated:
+# Surfaces the engine draws at the page's own step in some contexts (the
+# stripe and the header in light, the stripe in dark): where it does, and
+# the page is anchored, they are the anchored page.
+FOLLOW_PAGE: Tuple[str, ...] = ("color.surface.stripe", "color.surface.header")
+_PAGE = "color.surface.page"
+
+
+def _anchor(anchor: Mapping[str, Mapping[str, str]], axes: AxisValues, prims: Dict[str, str],
+            pick: Dict[str, Dict[str, str]]) -> Dict[str, Dict[str, str]]:
+    """Hold each anchored role at the color given for it, context by
+    context, as a color.anchor primitive, and derive the page's surfaces
+    from the anchored page as the engine derives them from its own: the
+    tint and the band from its lightness and the brand's hue (_tint,
+    _band), the stripe and the header at the page itself where the engine
+    draws them at its page's step. Returns the pinned paths per context
+    (role -> primitive path), the stripe and header included where they
+    are the page."""
+    pinned: Dict[str, Dict[str, str]] = {mode: {} for mode in COLOR_CONTEXTS}
+    paths: Dict[str, str] = {}
+    brand = {step: prims[f"color.brand.{step}"] for step in STEPS}
+    surfaces: Dict[Tuple[str, str], str] = {}
+    for mode in COLOR_CONTEXTS:
+        for role, hx in anchor.get(mode, {}).items():
+            if role not in SEMANTIC:
+                continue
+            hx = rgb_to_hex(hex_to_rgb(hx))
+            path = paths.setdefault(hx, f"color.anchor.value-{len(paths) + 1}")
+            prims[path] = hx
+            pinned[mode][role] = path
+        if _PAGE in pinned[mode]:
+            for role in FOLLOW_PAGE:
+                if role not in pinned[mode] and pick[mode][role] == pick[mode][_PAGE]:
+                    pinned[mode][role] = pinned[mode][_PAGE]
+            page, scheme = prims[pinned[mode][_PAGE]], _scheme(mode)
+            for role, kind, make in (("color.surface.tint", "tint", _tint),
+                                     ("color.surface.band", "band", _band)):
+                if role in pinned[mode]:
+                    continue
+                # One surface per page: a context whose anchored page differs
+                # from the scheme's first gets its own primitive.
+                path = surfaces.get((kind, page))
+                if path is None:
+                    path = f"color.brand.{kind}-{scheme}"
+                    if any(k == kind and p == path for (k, _), p in surfaces.items()):
+                        path += "-" + parse(mode).get("contrast", "standard")
+                    surfaces[(kind, page)] = path
+                    prims[path] = make(page, brand, scheme, axes)
+                pick[mode][role] = path
+        pick[mode].update(pinned[mode])
+    return pinned
+
+
+def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] = None,
+                   anchor: Optional[Mapping[str, Mapping[str, str]]] = None) -> Generated:
     """Low-level call: build_system (and build_color, its color-only
     shortcut) wraps it with input checks, validate and the gate, so prefer
     those unless you need the raw generator.
@@ -1338,6 +1425,17 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
     role is `brand_role` when given (a brief can name it), else the one the
     brand color and the axes score highest (character.brand_role with
     character.brand_fill_evidence).
+
+    `anchor` is for adding color to a system that already has some of it:
+    context -> {role: opaque hex} for the roles that system plays (its
+    page, its text, its brand fill). Each anchored role keeps that color
+    and every generated role is solved around it, so the tint, band and
+    stripe come from that page, the text on fills from those fills and the
+    ring from those surfaces, and each passes against what renders. An
+    anchored role aliases a color.anchor primitive, and so does a role
+    that lands on its color (the stripe at the page, text on media at the
+    text); the caller points those at the system's own tokens. Without an
+    anchor the output is the engine's own.
     """
     notes: List[str] = []
     prims = _primitives(axes, brand_hex.upper(), notes)
@@ -1356,6 +1454,8 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
     for mode in COLOR_CONTEXTS:
         if parse(mode).get("contrast") != "high":
             pick[mode]["color.line.subtle"] = subtle[0 if _scheme(mode) == "light" else 1]
+    pinned = _anchor(anchor, axes, prims, pick) if anchor \
+        else {mode: {} for mode in COLOR_CONTEXTS}
 
     def value(mode: str, role: str) -> str:
         return prims[pick[mode][role]]
@@ -1365,6 +1465,8 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
         for _pass in range(len(generic_pairings) * len(STEPS) + 1):
             changed = False
             for p in generic_pairings:
+                if p.fg in pinned[mode]:
+                    continue
                 for _ in range(len(STEPS)):
                     ratio = contrast(value(mode, p.fg), value(mode, p.bg))
                     minimum, criterion = required(p, mode)
@@ -1389,14 +1491,25 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
         # standard ring's lowest in the same scheme.
         floor = _ring_floor(mode, prims, pick)
         for g in GROUPS:
-            if g.grounds == ("color.surface.brand",):
+            if g.grounds == ("color.surface.brand",) and g.fill not in pinned[mode]:
                 _start_on_band(g, mode, prims, pick)
-            _solve_group(g, mode, prims, pick, notes, ring_floor=floor if g.ring else 0.0)
+            _solve_group(g, mode, prims, pick, notes, ring_floor=floor if g.ring else 0.0,
+                         pinned=pinned[mode], brand_role=role)
 
     for mode in COLOR_CONTEXTS:
         # Text on generated art is the page's text, and the veil is the
         # page's color at the least alpha that lets it read over the art.
-        pick[mode]["color.text.on-media"] = pick[mode]["color.text.default"]
+        if "color.text.on-media" not in pinned[mode]:
+            pick[mode]["color.text.on-media"] = pick[mode]["color.text.default"]
+            if "color.text.default" in pinned[mode] and contrast(
+                    value(mode, "color.text.default"), value(mode, "color.surface.page")) \
+                    < _need("color.text.default", "color.surface.page", mode):
+                # Anchored text that does not read on its own page cannot
+                # carry text on art; the engine's own text for the context
+                # does, over a veil of that page.
+                pick[mode]["color.text.on-media"] = _default("color.text.default", mode, role)
+        if "color.media.veil" in pinned[mode]:
+            continue
         path = pick[mode]["color.media.veil"]
         page = value(mode, "color.surface.page")
         alpha = veil_alpha(value(mode, "color.text.on-media"), page,

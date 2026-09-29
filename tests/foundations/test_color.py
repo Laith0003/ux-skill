@@ -1180,3 +1180,49 @@ def test_the_ring_on_the_brand_band_is_named_and_reads_there():
     for text in (guide, record):
         assert "color.text.on-brand" in text and "focus ring" in text
     assert ("color.text.on-brand", "color.surface.brand") in {(p.fg, p.bg) for p in PAIRINGS}
+
+
+# ---------------------------------------------------------------- an anchor
+
+
+LIGHT = [m for m in COLOR_CONTEXTS if "scheme:light" in m]
+PAGE, TEXT, FILL, ON = ("color.surface.page", "color.text.default", "color.action.primary",
+                        "color.text.on-action")
+
+
+def _anchored(page="#F7F5F0", text="#1B1D22", fill="#3B6FD4", on="#FFFFFF"):
+    anchor = {m: {PAGE: page, TEXT: text, FILL: fill, ON: on} for m in LIGHT}
+    return generate_color(AxisValues(*[0.5] * 7), fill, anchor=anchor).tokens
+
+
+def test_without_an_anchor_the_output_is_the_engines_own():
+    axes = AxisValues(*[0.5] * 7)
+    one, two = generate_color(axes, "#3366FF").tokens, generate_color(axes, "#3366FF",
+                                                                      anchor=None).tokens
+    assert [(t.path, t.value, t.modes) for t in one.tokens()] == \
+        [(t.path, t.value, t.modes) for t in two.tokens()]
+    assert not any(t.path.startswith("color.anchor.") for t in one.tokens())
+
+
+def test_an_anchored_role_keeps_the_color_given_and_the_surfaces_come_from_that_page():
+    ts = _anchored()
+    for mode in LIGHT:
+        assert ts.resolve(PAGE, mode) == "#F7F5F0" and ts.resolve(FILL, mode) == "#3B6FD4"
+        assert ts.raw(PAGE, mode).startswith("{color.anchor.")
+        # The tint is the least step off the anchored page, the band beyond it.
+        tint, band = ts.resolve("color.surface.tint", mode), ts.resolve("color.surface.band", mode)
+        assert 1.1 <= contrast(tint, "#F7F5F0") < 1.12 and contrast(band, "#F7F5F0") >= 1.2
+    # In light at standard contrast the stripe is the page, as the engine draws it.
+    assert ts.raw("color.surface.stripe", LIGHT[0]) == ts.raw(PAGE, LIGHT[0])
+
+
+def test_roles_around_an_anchored_fill_pass_against_it():
+    ts = _anchored()
+    for mode in LIGHT:
+        need = 7.0 if "high" in mode else 4.5
+        for state in ("color.action.primary-hover", "color.action.primary-pressed"):
+            assert ts.resolve(state, mode) != "#3B6FD4"
+            assert contrast("#FFFFFF", ts.resolve(state, mode)) >= need
+        ring_need = 4.5 if "high" in mode else 3.0
+        assert contrast(ts.resolve("color.focus.ring", mode), "#F7F5F0") >= ring_need
+        assert contrast(ts.resolve("color.text.muted", mode), "#F7F5F0") >= need

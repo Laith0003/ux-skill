@@ -19,6 +19,7 @@ from engine.contracts.library import SEED_DIR
 from engine.existing import is_ux_skill_text, stamp_digest
 from engine.existing.record import read_record
 from engine.foundations.build import build_system
+from engine.foundations.color_math import contrast
 from engine.foundations.emit import InputError, brief_audience, unread_lines
 from engine.foundations.export import dump_dtcg, from_dtcg
 from engine.io.adapter import AxisMap, Mapping, RoleMap, parse_mapping, propose
@@ -377,14 +378,117 @@ def test_a_role_the_owner_kept_out_gets_no_token_from_a_foundation():
     assert not any("color.focus.ring " in p for p in result.problems)
 
 
-def test_an_added_role_that_fails_against_the_owners_page_names_a_fix_the_owner_can_take():
-    result = extend(_foreign(), MAPPING, foundations=("color",))
+def test_an_added_role_that_fails_against_the_owners_fill_names_a_fix_the_owner_can_take():
+    # No text reaches 7:1 on the owner's mid-blue fill, so the text the
+    # color foundation adds on it cannot pass in high contrast.
+    mapping = Mapping(roles={r: m for r, m in OFF_WHITE_MAPPING.roles.items()
+                             if r != "color.text.on-action"}, axes={})
+    result = extend(_foreign(OFF_WHITE), mapping, foundations=("color",))
     assert result.problems[0] == (
-        "color.surface.tint measures 1.044:1 against color.surface.page (your page) "
-        "(scheme:dark,contrast:standard); our floor is 1.1:1. Map color.surface.tint in "
-        "mapping.json to one of your tokens, which the color foundation then uses instead of "
-        "adding its own, or leave color out.")
-    assert not any("step further" in p for p in result.problems)
+        "color.text.on-action on color.action.primary (your action) (contrast:high) is 4.76:1; "
+        "WCAG 1.4.6 needs 7:1. Map color.text.on-action in mapping.json to one of your tokens, "
+        "which the color foundation then uses instead of adding its own, or leave color out.")
+    assert not any("step further" in p or "Move " in p for p in result.problems)
+
+
+# ---------------------------------------------------------------- color fits the owner's page
+
+
+# A light-only system with an off-white page and a mid-blue brand fill.
+OFF_WHITE = """:root {
+  --ink: #1b1d22;
+  --paper: #f7f5f0;
+  --blue: #3b6fd4;
+  --white: #ffffff;
+  --text-body: var(--ink);
+  --page: var(--paper);
+  --action: var(--blue);
+  --on-action: var(--white);
+}
+"""
+OFF_WHITE_MAPPING = Mapping(roles={"color.text.default": RoleMap("text-body", "owner"),
+                                   "color.surface.page": RoleMap("page", "owner"),
+                                   "color.action.primary": RoleMap("action", "owner"),
+                                   "color.text.on-action": RoleMap("on-action", "owner")},
+                            axes={})
+SURFACES = ("color-surface-tint", "color-surface-band", "color-surface-stripe",
+            "color-focus-ring")
+
+
+def _ratio(result, a, b, mode=""):
+    return contrast(result.tokens.resolve(a, mode), result.tokens.resolve(b, mode))
+
+
+def test_added_color_on_a_light_only_system_passes_against_its_own_page():
+    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, foundations=("color",))
+    assert result.problems == [] and result.existing == [] and result.inherited == []
+    assert all(p in result.added for p in SURFACES)
+    # The tint stands our floor off the owner's page and no further than it
+    # must; the band stands beyond it; the stripe is the owner's page.
+    assert 1.1 <= _ratio(result, "color-surface-tint", "page") < 1.12
+    assert _ratio(result, "color-surface-band", "page") >= 1.2
+    assert result.tokens.get("color-surface-stripe").value == "{page}"
+    assert "--color-surface-stripe: var(--page);" in result.files["theme-ext.css"]
+    for mode in ("", "contrast:high"):
+        need = 4.5 if mode else 3.0
+        assert _ratio(result, "color-focus-ring", "page", mode) >= need
+        assert _ratio(result, "text-body", "color-surface-band", mode) >= 4.5
+    # The owner's own fill and text are never added again.
+    assert not any(p in result.added for p in ("color-action-primary", "color-surface-page",
+                                               "color-text-default", "color-text-on-action"))
+    assert ("color was generated from every axis at 0.5 and the brand color #3B6FD4, read from "
+            "your action (color.action.primary).") in result.decisions
+
+
+def test_a_light_only_system_gets_no_dark_additions_and_is_told_so():
+    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, foundations=("color",))
+    ext = result.files["theme-ext.css"]
+    assert "scheme" not in result.tokens.axes
+    assert "dark" not in ext and "prefers-color-scheme" not in ext
+    assert ("Your system has one scheme, light (mapping.json reads no scheme from it), so the "
+            "additions hold light values only and add no dark ones. To add them, map scheme in "
+            "mapping.json to the switch your dark scheme uses.") in result.decisions
+    # The owner's fill can carry white text at 4.5:1 but not 7:1: that is
+    # its own finding in a mode the additions bring, not the additions'.
+    assert result.unmeasured == [
+        "color.text.on-action (your on-action) on color.action.primary (your action) "
+        "(contrast:high) is 4.76:1; WCAG 1.4.6 needs 7:1. Change the value of one of them in "
+        "your system, or map the role to a token with more contrast."]
+
+
+def test_a_dark_capable_system_gets_dark_additions_on_its_own_dark_page():
+    result = extend(_foreign(), MAPPING, foundations=("color",))
+    assert result.problems == []
+    dark = "scheme:dark"
+    assert result.tokens.resolve("page", dark).lower() == "#1b1d22"
+    assert 1.1 <= _ratio(result, "color-surface-tint", "page", dark) < 1.12
+    assert _ratio(result, "color-surface-band", "page", dark) >= 1.2
+    assert _ratio(result, "color-focus-ring", "page", dark) >= 3.0
+    # The stripe points at the owner's page, which switches with the scheme.
+    stripe = result.tokens.get("color-surface-stripe")
+    assert stripe.value == "{page}" and "scheme:dark" not in stripe.modes
+    assert result.tokens.resolve("color-surface-stripe", dark).lower() == "#1b1d22"
+    ext = result.files["theme-ext.css"]
+    assert ".dark {" in ext and "--color-surface-tint: var(--color-brand-tint-dark);" in ext
+
+
+def test_a_system_whose_text_fails_keeps_its_finding_and_the_additions_still_pass():
+    result = extend(_foreign(_light("#9a9a9a")), LIGHT, foundations=("color",))
+    assert result.problems == []
+    assert len(result.existing) == 1 and "on color.surface.page (your page)" in \
+        result.existing[0] and "is 2.76:1; WCAG 1.4.3 needs 4.5:1" in result.existing[0]
+    assert 1.1 <= _ratio(result, "color-surface-tint", "page") < 1.12
+    assert _ratio(result, "color-focus-ring", "page") >= 3.0
+    assert result.inherited and all(
+        m.startswith("color.text.default (your text-body) on ") and m.endswith(
+            "color.text.default already fails this on your page, so the finding is your "
+            "text-body's, not the added surface's; change text-body in your system.")
+        for m in result.inherited)
+    report = result.files["extend-report.md"]
+    assert "These pair a color of yours that already fails on your own page" in report
+    assert "## What blocks it" not in report
+    # Text on art does not take the failing text: it reads over its veil.
+    assert result.tokens.resolve("color-text-on-media") != "#9a9a9a"
 
 
 
@@ -503,6 +607,27 @@ def _figma_export():
 FIGMA_MAPPING = Mapping(roles={"color.text.default": RoleMap("ink"),
                                "color.surface.page": RoleMap("paper")},
                         axes={"scheme": AxisMap("scheme", {"light": "light", "dark": "dark"})})
+
+
+def test_added_color_points_at_the_owners_page_in_a_figma_or_tokens_file(tmp_path):
+    (tmp_path / "variables.json").write_text(json.dumps(_figma_export()), encoding="utf-8")
+    figma = extend(read_figma(tmp_path / "variables.json"), FIGMA_MAPPING,
+                   foundations=("color",))
+    assert figma.problems == []
+    assert figma.tokens.get("color.surface.stripe").value == "{paper}"
+    doc = {"ink": {"$type": "color", "$value": "#1b1d22"},
+           "paper": {"$type": "color", "$value": "#f4f1ea"},
+           "text": {"$type": "color", "$value": "{ink}"},
+           "page": {"$type": "color", "$value": "{paper}"}}
+    text = json.dumps(doc)
+    tokens = extend(import_dtcg(text, _source("tokens.json", "dtcg", text)),
+                    Mapping(roles={"color.text.default": RoleMap("text"),
+                                   "color.surface.page": RoleMap("page")}),
+                    foundations=("color",))
+    assert tokens.problems == []
+    ext = json.loads(tokens.files["tokens-ext.json"])
+    assert ext["color"]["surface"]["stripe"]["$value"] == "{page}"
+    assert 1.1 <= contrast(tokens.tokens.resolve("color.surface.tint"), "#f4f1ea") < 1.12
 
 
 def test_a_foreign_figma_export_gets_an_extension_script(tmp_path):
