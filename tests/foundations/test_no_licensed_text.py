@@ -31,21 +31,64 @@ import pytest
 REPO = Path(__file__).resolve().parents[2]
 
 
-def _private_source() -> Path:
-    """The private source folder: $UXSKILL_PRIVATE_SOURCE when set, else the
-    folder beside this checkout that holds private-terms.txt. A path that
-    does not exist when there is none, so the private guards skip."""
-    named = os.environ.get("UXSKILL_PRIVATE_SOURCE")
+def _main_checkout(repo: Path):
+    """The main checkout that owns `repo`: the parent of git's common dir. For
+    a linked or detached worktree it is a different folder, often far away.
+    None when `repo` is not in git or git is not on the path."""
+    try:
+        out = subprocess.run(
+            ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
+            cwd=repo, capture_output=True, text=True, check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return Path(out).resolve().parent if out else None
+
+
+def _find_private_source(repo: Path, env):
+    """Where the private source is, and the folders searched for it.
+
+    $UXSKILL_PRIVATE_SOURCE comes first and is taken as given. Otherwise the
+    first folder that holds private-terms.txt beside `repo`, then beside the
+    main checkout `repo` belongs to. Returns (folder or None, folders searched).
+    """
+    named = env.get("UXSKILL_PRIVATE_SOURCE")
     if named:
-        return Path(named).expanduser()
-    siblings = sorted(REPO.parent.iterdir()) if REPO.parent.is_dir() else []
-    return next((d for d in siblings if (d / "private-terms.txt").is_file()),
-                REPO.parent / "no-private-source")
+        return Path(named).expanduser(), []
+    repo = Path(repo).resolve()
+    looked = []
+    for checkout in (repo, _main_checkout(repo)):
+        if checkout is None or checkout.parent in looked:
+            continue
+        looked.append(checkout.parent)
+        siblings = sorted(checkout.parent.iterdir()) if checkout.parent.is_dir() else []
+        for d in siblings:
+            if (d / "private-terms.txt").is_file():
+                return d, looked
+    return None, looked
 
 
-PRIVATE_SOURCE = _private_source()
+def _skip_reason(looked):
+    """Why a private guard skipped: every folder searched, and how to point it."""
+    where = " and ".join(str(d) for d in looked) or "nowhere"
+    return (f"no private source: no folder holding private-terms.txt in {where}; "
+            "set UXSKILL_PRIVATE_SOURCE to the private source folder to run this guard")
+
+
+_FOUND, _LOOKED = _find_private_source(REPO, os.environ)
+PRIVATE_SOURCE = _FOUND or REPO.parent / "no-private-source"
 PRIVATE = PRIVATE_SOURCE / "Ds"
 PRIVATE_TERMS = PRIVATE_SOURCE / "private-terms.txt"
+
+
+def _missing(part: Path) -> str:
+    """The skip reason for a guard that needs `part` of the private source."""
+    if _FOUND is None:
+        return _skip_reason(_LOOKED)
+    return (f"no {part.name} in {PRIVATE_SOURCE}; set UXSKILL_PRIVATE_SOURCE to the "
+            f"private source folder that holds {part.name} to run this guard")
+
+
 THIS_FILE = Path(__file__).resolve()
 SCAN = (
     "engine", "commands", "references", "agents", "docs", "README.md",
@@ -79,7 +122,7 @@ def shingles(text, n=8):
     return result
 
 
-@pytest.mark.skipif(not PRIVATE.exists(), reason="private source not on this machine")
+@pytest.mark.skipif(not PRIVATE.exists(), reason=_missing(PRIVATE))
 def test_no_eight_word_run_from_licensed_docs():
     licensed = set()
     for md in PRIVATE.glob("*/*.md"):
@@ -166,7 +209,7 @@ def test_no_confidential_names_anywhere():
     )
 
 
-@pytest.mark.skipif(not PRIVATE_TERMS.exists(), reason="private term list not on this machine")
+@pytest.mark.skipif(not PRIVATE_TERMS.exists(), reason=_missing(PRIVATE_TERMS))
 def test_no_private_terms_anywhere():
     terms = []
     for line in PRIVATE_TERMS.read_text(encoding="utf-8", errors="ignore").splitlines():
@@ -210,7 +253,7 @@ def _licensed_token_names():
     return names
 
 
-@pytest.mark.skipif(not PRIVATE.exists(), reason="private source not on this machine")
+@pytest.mark.skipif(not PRIVATE.exists(), reason=_missing(PRIVATE))
 def test_no_licensed_token_names_anywhere():
     names = _licensed_token_names()
     assert len(names) > 100, "the private docs should yield hundreds of names; check the pattern"
@@ -235,3 +278,4 @@ def test_token_name_pattern_skips_ramps_and_files():
         "spacing.stack.md", "color.brand.500", "tokens.json"]
     assert _RAMP.match("color.brand.500") and not _RAMP.match("space.control.gap")
     assert _FILE_NAME.search("tokens.json") and not _FILE_NAME.search("radius.card")
+
