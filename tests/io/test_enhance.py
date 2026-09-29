@@ -179,7 +179,7 @@ def test_an_empty_mapping_never_passes_silently():
     report = enhance(_system(), Mapping(), None)
     text = report.markdown()
     assert f"Mapped 0 of {len(ROLE_TYPES)} roles" in text
-    assert "No role is mapped, so the gate had nothing to measure" in text
+    assert "Not measured: no role is mapped, so the gate had nothing to measure" in text
     assert "gate passed" not in text
     gate = report.to_dict()["gate"]
     assert gate["measured"] is False and gate["passed"] is None

@@ -435,6 +435,8 @@ class Enhanced:
     # Mapped roles whose token cannot be resolved, so the gate could not
     # measure them; Structure says why.
     unresolved: List[str] = field(default_factory=list)
+    # The mapping file, as the messages name it.
+    mapping_name: str = "mapping.json"
 
     def mapped(self) -> List[str]:
         return [r for r, m in self.mapping.roles.items() if m.token is not None]
@@ -452,9 +454,21 @@ class Enhanced:
 
     @property
     def measured(self) -> bool:
-        """Whether the gate measured anything: a mapping that maps no role
-        leaves it nothing, and that is never a pass."""
-        return bool(self.check.foundations)
+        """Whether the gate measured anything: a mapping that maps no role,
+        mapped roles none of which could be checked, or checks that found
+        nothing to apply to leave it nothing, and that is never a pass."""
+        return not self.why_not_measured()
+
+    def why_not_measured(self) -> str:
+        """Why the gate measured nothing, or "" when it measured something."""
+        if not self.mapped():
+            return "no role is mapped"
+        if not self.check.foundations:
+            return "no mapped role could be checked"
+        report = self.check.report
+        if report.checked + report.rules_checked == 0:
+            return "no check applied to the mapped roles"
+        return ""
 
     def to_dict(self) -> Dict[str, Any]:
         d = self.drift
@@ -480,6 +494,7 @@ class Enhanced:
                         "merge_notes": list(self.merge_notes)},
             "structure": list(self.structure),
             "gate": {"measured": self.measured,
+                     "why": self.why_not_measured(),
                      "passed": report.passed if self.measured else None,
                      "pairs_checked": report.checked,
                      "rules_checked": report.rules_checked,
@@ -543,9 +558,19 @@ class Enhanced:
         return [*self._how(), "", *self._gate(source, findings=False)]
 
     def _gate(self, source: str, findings: bool = True) -> List[str]:
-        if not self.measured:
-            return [("No role is mapped, so the gate had nothing to measure and nothing here "
-                     "passed; map roles to your tokens in mapping.json to check them.")]
+        why = self.why_not_measured()
+        if why == "no role is mapped":
+            return [("Not measured: no role is mapped, so the gate had nothing to measure and "
+                     f"nothing here passed; map roles to your tokens in {self.mapping_name} to "
+                     "check them.")]
+        if why:
+            n = len(self.mapped())
+            roles = "the 1 mapped role" if n == 1 else f"none of the {n} mapped roles"
+            could = "could not be checked" if n == 1 else "could be checked"
+            if why != "no mapped role could be checked":
+                could = "gave the gate no check to apply"
+            return [(f"Not measured: {roles} {could} (see Structure and the decisions), so the "
+                     "gate had nothing to measure and nothing here passed.")]
         report = self.check.report
         head = report.summary().splitlines()[0]
         line = f"Checked {_and(self.check.foundations)}: {head}"
@@ -1082,4 +1107,4 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
                              _reduced_motion(ts, mapping, scanned, imported.report.source.path,
                                              mapping_name)),
                     decisions, findings,
-                    list(merge_notes), list(unresolved))
+                    list(merge_notes), list(unresolved), mapping_name)
