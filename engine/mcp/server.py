@@ -294,6 +294,244 @@ class UxSystemBuildInput(BaseModel):
                     "that differ.")
 
 
+# A system a project already has (engine.io.commands, shared with the CLI)
+
+_PATH = "the absolute path of"
+
+
+class UxSystemImportInput(BaseModel):
+    source: Any = Field(default=None, description=f"Required. {_PATH} the system: tokens.json, a "
+                        "stylesheet, a Tailwind theme, a markdown file or folder, a Figma "
+                        "variables export, or a project folder. A list reads several files as "
+                        "one system: the system first, then each stylesheet that adds to it "
+                        "(its dark values, say).")
+    format: Any = Field(default="auto", description="Optional: auto (default, told from the "
+                        "file), dtcg, css, tailwind, tailwind-json, markdown or figma.")
+    out: Any = Field(default=None, description=f"Optional. {_PATH} a folder to write into, after "
+                     "every source is checked and backed up under .uxskill/ there.")
+    force: Any = Field(default=False, description="Optional true or false: with out, replace "
+                       "files ux-skill wrote that differ (each is backed up first).")
+    figma_modes: Any = Field(default=None, description="Optional object: for a Figma collection "
+                             "with more than two modes, the second mode to read, for example "
+                             "{\"Type\": \"SM\"}.")
+
+
+class UxSystemEnhanceInput(UxSystemImportInput):
+    mapping: Any = Field(default=None, description=f"Optional. {_PATH} mapping.json; without it "
+                         "the mapping.json in out (or beside the source) is read, merged with a "
+                         "mapping proposed from names.")
+    scan: Any = Field(default=None, description="Optional list of absolute paths of product "
+                      "code folders or files to measure.")
+
+
+class UxSystemExtendInput(UxSystemEnhanceInput):
+    add: Any = Field(default=None, description="Optional list of foundations to add: color, "
+                     "type, space, radius, border, elevation, motion, layout, imagery.")
+    add_role: Any = Field(default=None, description="Optional list of role=token pairs that "
+                          "point the engine's roles at the system's own tokens, for example "
+                          "color.focus.ring=brand-700.")
+    contracts: Any = Field(default=None, description="Optional list of absolute paths of "
+                           "contract .yaml files to check and add.")
+    brand: Any = Field(default=None, description="Optional brand color as hex for added color; "
+                       "without it the system's own primary fill is used.")
+    axes: Any = Field(default=None, description="Optional seven numbers from 0 to 1 that shape "
+                      "an added foundation. Do not combine with brief.")
+    brief: Any = Field(default=None, description="Optional brief object (industry, tone, "
+                       "audience, must_have, forbidden, headline) that places the axes for an "
+                       "added foundation. Do not combine with axes. " + BRIEF_FIELDS_HELP)
+    latin_only: Any = Field(default=False, description="Optional true or false: add type "
+                            "without the Arabic face.")
+
+
+class UxSystemExportInput(UxSystemImportInput):
+    to: Any = Field(default=None, description="Required: css (tokens.css), tailwind (a "
+                    "Tailwind 4 theme), figma (Figma variables and the script that applies "
+                    "them) or dtcg (tokens.json).")
+    scheme: Any = Field(default=None, description="Optional: system, light or dark, the scheme "
+                        "the css or tailwind file opens in. A stylesheet keeps its own; "
+                        "tokens.json holds none, so it opens in system when left out.")
+    include_files: Any = Field(default=False, description="Optional true or false: return the "
+                               "file texts too. Prefer out.")
+
+
+class UxContractsCheckInput(BaseModel):
+    folder: Any = Field(default=None, description=f"Required. {_PATH} a folder of contract "
+                        ".yaml files.")
+    tokens: Any = Field(default=None, description=f"Required. {_PATH} the system, in any format "
+                        "the import reads.")
+    format: Any = Field(default="auto", description="Optional: auto (default), dtcg, css, "
+                        "tailwind, tailwind-json, markdown or figma.")
+    mapping: Any = Field(default=None, description=f"Optional. {_PATH} mapping.json; without it "
+                         "the one beside the system is read when there is one.")
+
+
+# How the command layer names each input in a message: the MCP fields.
+_MCP_LABELS = {"from": "source", "format": "format", "out": "out", "force": "force: true",
+               "replace_client": "the command line's --replace-client-files",
+               "mapping": "mapping", "add": "add", "add_role": "add_role", "to": "to",
+               "brand": "brand", "axes": "axes", "brief": "brief", "tokens": "tokens",
+               "latin_only": "latin_only", "scheme": "scheme", "figma_mode": "figma_modes"}
+
+
+def _abs_path(value: Any, label: str, example: str, required: bool = False) -> Optional[str]:
+    """An absolute path as text, or None when optional and left out.
+    Raises InputError naming `label` and the fix."""
+    from engine.foundations.emit import InputError
+    if value is None or (isinstance(value, str) and not value.strip()):
+        if required:
+            raise InputError(f"{label} is missing; pass {_PATH} it, for example "
+                             f"/Users/you/project/{example}")
+        return None
+    if not isinstance(value, str):
+        raise InputError(f"{label} is {value!r}; pass {_PATH} it as text, for example "
+                         f"/Users/you/project/{example}")
+    p = Path(value).expanduser()
+    if not p.is_absolute():
+        raise InputError(f"{label} is {value!r}, a relative path; the MCP server runs in its own "
+                         f"folder, so pass an absolute path, for example "
+                         f"/Users/you/project/{example}")
+    return str(p)
+
+
+def _paths(value: Any, label: str, example: str) -> List[str]:
+    from engine.foundations.emit import InputError
+    items = [] if value is None else ([value] if isinstance(value, str) else value)
+    if not isinstance(items, list):
+        raise InputError(f"{label} is {value!r}; pass a list of absolute paths, for example "
+                         f"[\"/Users/you/project/{example}\"]")
+    return [str(_abs_path(v, label, example, required=True)) for v in items]
+
+
+def _words(value: Any, label: str) -> List[str]:
+    from engine.foundations.emit import InputError
+    items = [] if value is None else ([value] if isinstance(value, str) else value)
+    if not (isinstance(items, list) and all(isinstance(v, str) for v in items)):
+        raise InputError(f"{label} is {value!r}; pass a list of words")
+    return items
+
+
+def _source(value: Any, example: str, label: str = "source") -> Any:
+    """One absolute path, or a list of them (several files read as one system)."""
+    if isinstance(value, list) and value:
+        return _paths(value, label, example)
+    return _abs_path(value, label, example, required=True)
+
+
+def _io_call(fn: Callable[[], Dict[str, Any]]) -> Dict[str, Any]:
+    from engine.foundations.emit import InputError
+    try:
+        return fn()
+    except InputError as exc:
+        return {"status": "invalid", "error": str(exc)}
+
+
+def _common(payload: Any) -> Dict[str, Any]:
+    """format, out, force and figma_modes, checked, as the command layer takes them."""
+    from engine.foundations.emit import InputError, parse_switch
+    modes = payload.figma_modes
+    if modes is not None and not (isinstance(modes, dict) and all(
+            isinstance(k, str) and isinstance(v, str) for k, v in modes.items())):
+        raise InputError(f"figma_modes is {modes!r}; pass an object such as "
+                         "{\"Type\": \"SM\"}, collection to mode, or leave it out")
+    fmt = payload.format if payload.format is not None else "auto"
+    if not isinstance(fmt, str):
+        raise InputError(f"format is {fmt!r}; pass auto, dtcg, css, tailwind, tailwind-json, "
+                         "markdown or figma")
+    return {"fmt": fmt, "out": _abs_path(payload.out, "out", "design-system"),
+            "force": parse_switch(payload.force, "force", "replace files in out that differ",
+                                  "write nothing when a file differs"),
+            "second_modes": modes, "labels": _MCP_LABELS}
+
+
+def handle_ux_system_import(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Read an existing system in its own names and report what was read.
+    The result holds counts, the proposed mapping's counts and the import
+    report; `not_read` is a count, the report lists each entry."""
+    from engine.io.commands import run_import
+    payload = UxSystemImportInput.model_validate(args or {})
+
+    def run() -> Dict[str, Any]:
+        result = run_import(_source(payload.source, "theme.css"), **_common(payload))
+        result["not_read"] = result.pop("not_read_count")
+        return result
+    return _io_call(run)
+
+
+def handle_ux_system_enhance(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Measure an existing system and the code that uses it: a report,
+    written as enhance-report.md only with out."""
+    from engine.io.commands import run_enhance
+    payload = UxSystemEnhanceInput.model_validate(args or {})
+
+    def run() -> Dict[str, Any]:
+        source = _source(payload.source, "theme.css")
+        return run_enhance(source, mapping=_abs_path(payload.mapping, "mapping", "mapping.json"),
+                           scan=_paths(payload.scan, "scan", "src"), **_common(payload))
+    return _io_call(run)
+
+
+def handle_ux_system_extend(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Add to an existing system without changing a token it has: an
+    extension file beside a system ux-skill did not write, or its own
+    system rewritten in place after a backup."""
+    from engine.foundations.emit import InputError, parse_latin_only
+    from engine.io.commands import run_extend
+    payload = UxSystemExtendInput.model_validate(args or {})
+
+    def run() -> Dict[str, Any]:
+        source = _source(payload.source, "theme.css")
+        common = _common(payload)
+        if common["out"] is None:
+            raise InputError(f"out is missing; pass {_PATH} the folder for mapping.json and "
+                             "extend-report.md, for example /Users/you/project/design-system")
+        if payload.brief is not None and not isinstance(payload.brief, dict):
+            raise InputError(f"brief is {payload.brief!r}; pass an object such as "
+                             '{"industry": "saas"}, or leave it out')
+        return run_extend(
+            source, mapping=_abs_path(payload.mapping, "mapping", "mapping.json"),
+            add=_words(payload.add, "add"), add_role=_words(payload.add_role, "add_role"),
+            contracts=_paths(payload.contracts, "contracts", "chip.yaml"),
+            brand=payload.brand, axes=payload.axes, brief=payload.brief,
+            latin_only=parse_latin_only(payload.latin_only, "latin_only"), **common)
+    return _io_call(run)
+
+
+def handle_ux_system_export(args: Dict[str, Any]) -> Dict[str, Any]:
+    """A system in another format, written only into out; the file texts
+    come back only with include_files."""
+    from engine.foundations.emit import InputError, parse_switch
+    from engine.io.commands import run_export
+    payload = UxSystemExportInput.model_validate(args or {})
+
+    def run() -> Dict[str, Any]:
+        source = _source(payload.source, "tokens.json")
+        if payload.to is None:
+            raise InputError("to is missing; pass css, tailwind, figma or dtcg")
+        include = parse_switch(payload.include_files, "include_files", "return the file texts",
+                               "return only their sizes")
+        return run_export(source, to=payload.to, include_files=include, scheme=payload.scheme,
+                          **_common(payload))
+    return _io_call(run)
+
+
+def handle_ux_contracts_check(args: Dict[str, Any]) -> Dict[str, Any]:
+    """Check a folder of component contracts against a system."""
+    from engine.foundations.emit import InputError
+    from engine.io.commands import run_contracts_check
+    payload = UxContractsCheckInput.model_validate(args or {})
+
+    def run() -> Dict[str, Any]:
+        fmt = payload.format if payload.format is not None else "auto"
+        if not isinstance(fmt, str):
+            raise InputError(f"format is {fmt!r}; pass auto, dtcg, css, tailwind, "
+                             "tailwind-json, markdown or figma")
+        return run_contracts_check(
+            _abs_path(payload.folder, "folder", "contracts", required=True),
+            _source(payload.tokens, "tokens.json", "tokens"), fmt=fmt,
+            mapping=_abs_path(payload.mapping, "mapping", "mapping.json"), labels=_MCP_LABELS)
+    return _io_call(run)
+
+
 # ---------------------------------------------------------------------------
 # Filter helpers
 # ---------------------------------------------------------------------------
@@ -774,6 +1012,45 @@ TOOLS: Dict[str, ToolEntry] = {
         "tokens.css, fonts.css, fonts-self-host.css, system-report.md and art/ there, refused "
         "when a file differs unless force is true; pass include_files true to get the css and "
         "dtcg text back instead. Without out it writes nothing. " + BRIEF_FIELDS_HELP,
+    ),
+    "ux_system_import": (
+        handle_ux_system_import,
+        UxSystemImportInput,
+        "Read a design system a project already has (DTCG tokens.json, CSS custom properties, "
+        "a Tailwind theme, markdown rule files, a Figma variables export, or several files as "
+        "one) in its own names. Returns the counts, how many entries were not read, a proposed "
+        "mapping to the engine's roles and the import report. Pass out (an absolute folder) to "
+        "write import-report.md and mapping.json there.",
+    ),
+    "ux_system_enhance": (
+        handle_ux_system_enhance,
+        UxSystemEnhanceInput,
+        "Measure a system a project already has and, with scan, the code that uses it: unused "
+        "tokens, raw values a token holds, values written several ways, names every use "
+        "contradicts, and the WCAG gate read through the mapping. A report only; no token or "
+        "code is rewritten. Pass out to write enhance-report.md.",
+    ),
+    "ux_system_extend": (
+        handle_ux_system_extend,
+        UxSystemExtendInput,
+        "Add foundations, roles or contracts to a system a project already has without "
+        "changing a token it has. A system ux-skill did not write gets an extension file beside "
+        "it; its own is rewritten in place after a backup. The report goes into out. A result "
+        "that does not pass writes only its report and returns status blocked.",
+    ),
+    "ux_system_export": (
+        handle_ux_system_export,
+        UxSystemExportInput,
+        "Write a system as tokens.css, a Tailwind 4 theme, Figma variables with the script "
+        "that applies them, or tokens.json, into out only, never over the source. Without out "
+        "it returns each file's size; include_files returns the texts.",
+    ),
+    "ux_contracts_check": (
+        handle_ux_contracts_check,
+        UxContractsCheckInput,
+        "Check a folder of component contracts against a system: the schema, every role they "
+        "bind and every pairing they declare, measured in every mode, read through the "
+        "mapping.",
     ),
 }
 

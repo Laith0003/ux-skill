@@ -1,0 +1,189 @@
+"""The MCP tools for a system a project already has: ux_system_import,
+ux_system_enhance, ux_system_extend, ux_system_export and
+ux_contracts_check. Plain dict handlers over engine.io.commands, which the
+CLI shares: small results (counts, statuses, problems, the report text),
+file texts only on request, absolute paths only, and a bad input as status
+invalid naming the field by its MCP name and the fix."""
+import re
+from pathlib import Path
+
+from engine.contracts.library import SEED_DIR
+from engine.foundations.build import build_system
+from engine.foundations.export import dump_dtcg
+from engine.io.commands import EXIT
+from engine.mcp import TOOLS
+from engine.mcp.server import (
+    UxSystemExtendInput, UxSystemImportInput, handle_ux_contracts_check,
+    handle_ux_system_enhance, handle_ux_system_export, handle_ux_system_extend,
+    handle_ux_system_import)
+from engine.synthesizer.axes import AxisValues
+
+THEME = ":root { --ink: #1b1d22; --paper: #fdfdfb; --text-body: var(--ink); }\n"
+DARK = ("@media (prefers-color-scheme: dark) { :root { --ink: #f2f2ee; --paper: #15171b; } }\n")
+NAMES = ("ux_system_import", "ux_system_enhance", "ux_system_extend", "ux_system_export",
+         "ux_contracts_check")
+
+
+def _theme(tmp_path: Path) -> str:
+    f = tmp_path / "theme.css"
+    f.write_text(THEME, encoding="utf-8")
+    return str(f)
+
+
+def _tokens(tmp_path: Path) -> str:
+    f = tmp_path / "tokens.json"
+    f.write_text(dump_dtcg(build_system(AxisValues(*[0.5] * 7), "#3366FF").tokens),
+                 encoding="utf-8")
+    return str(f)
+
+
+def test_the_tools_are_registered_with_short_plain_descriptions():
+    for name in NAMES:
+        handler, model, description = TOOLS[name]
+        assert callable(handler) and model.model_json_schema()["properties"]
+        assert len(description) < 600, name
+        assert "4.1" not in description and "\u2014" not in description, name
+        assert not re.search(r"\s--\s", description), name
+
+
+def test_the_format_field_lists_every_format_the_readers_take():
+    from engine.io import CHOICES
+    text = UxSystemImportInput.model_json_schema()["properties"]["format"]["description"]
+    assert all(fmt in text for fmt in CHOICES), text
+    assert "tailwind-json" in text and "auto" in text
+
+
+def test_import_returns_counts_and_the_report_not_every_entry(tmp_path):
+    result = handle_ux_system_import({"source": _theme(tmp_path)})
+    assert result["status"] == "read" and result["tokens"] == 3
+    assert result["not_read"] == 0 and isinstance(result["not_read"], int)
+    assert "not_read_count" not in result and result["report"]
+    assert "texts" not in result
+
+
+def test_import_with_out_writes_the_report_and_mapping(tmp_path):
+    out = tmp_path / "intake"
+    result = handle_ux_system_import({"source": _theme(tmp_path), "out": str(out)})
+    assert result["status"] == "written"
+    assert (out / "import-report.md").is_file() and (out / "mapping.json").is_file()
+    assert Path(result["source"]["path"]).is_absolute()
+
+
+def test_import_reads_several_sources_as_one_system(tmp_path):
+    dark = tmp_path / "dark.css"
+    dark.write_text(DARK, encoding="utf-8")
+    result = handle_ux_system_import({"source": [_theme(tmp_path), str(dark)]})
+    assert result["status"] == "read" and len(result["also_read"]) == 1
+    assert result["mode_values"] > 0
+
+
+def test_enhance_scans_and_writes_only_with_out(tmp_path):
+    code = tmp_path / "code"
+    code.mkdir()
+    (code / "a.css").write_text(".x { color: var(--text-body); }\n", encoding="utf-8")
+    result = handle_ux_system_enhance({"source": _theme(tmp_path), "scan": [str(code)]})
+    assert result["status"] == "reported" and result["summary"]["unused"] == 1
+    assert not (tmp_path / "enhance-report.md").exists()
+    out = tmp_path / "out"
+    written = handle_ux_system_enhance({"source": _theme(tmp_path), "out": str(out)})
+    assert written["status"] == "written" and (out / "enhance-report.md").is_file()
+
+
+def test_extend_writes_an_extension_beside_a_foreign_source(tmp_path):
+    source = _theme(tmp_path)
+    out = tmp_path / "out"
+    result = handle_ux_system_extend({"source": source, "add": ["radius"], "out": str(out)})
+    assert result["status"] == "written", result.get("message")
+    assert (tmp_path / "theme-ext.css").is_file() and (out / "extend-report.md").is_file()
+    assert Path(source).read_text(encoding="utf-8") == THEME
+    assert (out / ".uxskill" / "files.json").is_file()
+
+
+def test_extend_names_the_brief_fields_and_reads_them(tmp_path):
+    from engine.foundations.audience import FIELDS
+    text = UxSystemExtendInput.model_json_schema()["properties"]["brief"]["description"]
+    assert all(name in text for name in FIELDS)
+    assert "imagery" in UxSystemExtendInput.model_json_schema()["properties"]["add"][
+        "description"]
+    result = handle_ux_system_extend({"source": _theme(tmp_path), "add": ["type"],
+                                      "brief": {"primary_script": "arabic"},
+                                      "latin_only": True, "out": str(tmp_path / "out")})
+    assert result["status"] == "invalid"
+    assert result["error"] == ("latin_only leaves Arabic out, but the brief's primary_script "
+                               "is arabic; drop latin_only, or set primary_script to latin")
+
+
+def test_extend_needs_out(tmp_path):
+    result = handle_ux_system_extend({"source": _theme(tmp_path), "add": ["radius"]})
+    assert result["status"] == "invalid" and result["error"].startswith("out is missing")
+
+
+def test_export_returns_texts_only_on_request(tmp_path):
+    tokens = _tokens(tmp_path)
+    small = handle_ux_system_export({"source": tokens, "to": "tailwind"})
+    assert small["status"] == "built" and "texts" not in small
+    assert small["files"][0]["name"] == "tailwind-theme.css" and small["files"][0]["bytes"] > 0
+    full = handle_ux_system_export({"source": tokens, "to": "tailwind", "include_files": True})
+    assert "@theme" in full["texts"]["tailwind-theme.css"]
+    dark = handle_ux_system_export({"source": tokens, "to": "css", "scheme": "dark",
+                                    "include_files": True})
+    assert ':root:not([data-theme="light"]) {' in dark["texts"]["tokens.css"]
+    bad = handle_ux_system_export({"source": tokens, "to": "css", "scheme": "dim"})
+    assert bad == {"status": "invalid", "error": "scheme is dim; pass light, dark or system"}
+
+
+def test_export_with_out_writes_and_never_touches_the_source(tmp_path):
+    tokens = _tokens(tmp_path)
+    before = Path(tokens).read_bytes()
+    out = tmp_path / "export"
+    result = handle_ux_system_export({"source": tokens, "to": "figma", "out": str(out)})
+    assert result["status"] == "written"
+    assert Path(tokens).read_bytes() == before and any(out.iterdir())
+
+
+def test_the_contract_check(tmp_path):
+    result = handle_ux_contracts_check({"folder": str(SEED_DIR), "tokens": _tokens(tmp_path)})
+    assert result["status"] == "passed"
+    assert len(result["contracts"]) == len(list(SEED_DIR.glob("*.yaml")))
+
+
+def test_every_status_the_tools_return_is_one_the_cli_knows(tmp_path):
+    statuses = {handle_ux_system_import({"source": _theme(tmp_path)})["status"],
+                handle_ux_system_export({"source": _tokens(tmp_path), "to": "css"})["status"]}
+    assert statuses <= set(EXIT)
+
+
+def test_bad_inputs_are_invalid_and_name_the_field(tmp_path):
+    relative = handle_ux_system_import({"source": "theme.css"})
+    assert relative["status"] == "invalid"
+    assert relative["error"] == (
+        "source is 'theme.css', a relative path; the MCP server runs in its own folder, so "
+        "pass an absolute path, for example /Users/you/project/theme.css")
+    one_relative = handle_ux_system_import({"source": [_theme(tmp_path), "dark.css"]})
+    assert one_relative["status"] == "invalid" and one_relative["error"].startswith(
+        "source is 'dark.css', a relative path")
+    missing = handle_ux_system_import({})
+    assert missing["status"] == "invalid" and missing["error"].startswith("source is missing")
+    no_to = handle_ux_system_export({"source": _tokens(tmp_path)})
+    assert no_to["status"] == "invalid" and no_to["error"].startswith("to is missing")
+    role = handle_ux_system_extend({"source": _theme(tmp_path), "add_role": ["ink"],
+                                    "out": str(tmp_path / "o")})
+    assert role["status"] == "invalid"
+    assert role["error"].startswith("add_role ink needs the form role=token")
+    scan = handle_ux_system_enhance({"source": _theme(tmp_path), "scan": ["src"]})
+    assert scan["status"] == "invalid" and scan["error"].startswith("scan is 'src', a relative")
+    force = handle_ux_system_import({"source": _theme(tmp_path), "force": "maybe"})
+    assert force["status"] == "invalid" and "force" in force["error"]
+    modes = handle_ux_system_import({"source": _theme(tmp_path), "figma_modes": "SM"})
+    assert modes["status"] == "invalid" and modes["error"].startswith("figma_modes is 'SM'")
+
+
+def test_a_bad_format_is_named_by_its_mcp_field(tmp_path):
+    unknown = handle_ux_system_import({"source": _theme(tmp_path), "format": "yaml"})
+    assert unknown["status"] == "invalid" and unknown["error"].startswith("format is yaml;")
+    assert "tailwind-json" in unknown["error"]
+    wrong = handle_ux_system_import({"source": _theme(tmp_path), "format": "dtcg"})
+    assert wrong["status"] == "invalid"
+    assert wrong["error"] == ("format dtcg reads JSON and theme.css is a stylesheet; pass "
+                              "format css or tailwind, or leave format out")
+    assert "--" not in unknown["error"] + wrong["error"]

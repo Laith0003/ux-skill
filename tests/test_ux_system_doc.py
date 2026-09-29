@@ -111,11 +111,12 @@ def test_it_says_nothing_loads_the_fonts_and_names_every_family():
     assert "system faces" in CREATE
 
 
-def test_the_existing_system_modes_say_what_works_now():
+def test_the_existing_system_modes_point_at_their_sections():
     modes = _section(DOC, "## Modes")
-    for mode in ("enhance --from", "extend --from"):
+    for mode, section in (("enhance --from", "enhance mode"), ("extend --from", "extend mode")):
         row = next(line for line in modes.splitlines() if mode in line)
-        assert "4.1" not in row and "work now" in row and "being added" in row
+        assert f'"{section}"' in row, row
+        assert "4.1" not in row and "being added" not in row and "Coming in" not in row
     assert "4.1" not in modes and "does not read an existing one" not in DOC
     assert "3.x" in modes and "`/ux-system create`" in modes
     existing = _section(DOC, "## An existing system")
@@ -124,6 +125,96 @@ def test_the_existing_system_modes_say_what_works_now():
     for fmt in ("`dtcg`", "`css`", "`tailwind`", "`tailwind-json`", "`markdown`", "`figma`"):
         assert fmt in existing, fmt
     assert "\u2014" not in existing and "\u2013" not in existing
+
+
+ENHANCE = _section(DOC, "## enhance mode")
+EXTEND = _section(DOC, "## extend mode")
+IO_TOOLS = ("ux_system_import", "ux_system_enhance", "ux_system_extend", "ux_system_export",
+            "ux_contracts_check")
+
+
+def _io_flags():
+    system = cli.commands["system"]
+    names = ("import", "enhance", "extend", "export", "detect")
+    flags = {opt for n in names for p in system.commands[n].params for opt in p.opts}
+    check = cli.commands["contracts"].commands["check"]
+    return flags | {opt for p in check.params for opt in p.opts} | {"--no-pretty", "--help"}
+
+
+def test_every_flag_the_enhance_and_extend_modes_name_exists():
+    used = set(re.findall(r"(?<![\w(-])(--[a-z][a-z-]*)", ENHANCE + EXTEND))
+    assert {"--from", "--mapping", "--scan", "--out", "--add", "--add-role", "--to",
+            "--brief", "--scheme", "--contract", "--force", "--format",
+            "--figma-mode"} <= used
+    assert used <= _io_flags(), sorted(used - _io_flags())
+
+
+def test_the_commands_and_tools_they_name_are_the_real_ones():
+    for command in ("uxskill --no-pretty system import --from",
+                    "uxskill --no-pretty system enhance --from",
+                    "uxskill --no-pretty system extend --from",
+                    "uxskill --no-pretty system export --from",
+                    "uxskill --no-pretty contracts check"):
+        assert command in ENHANCE + EXTEND, command
+    for tool in IO_TOOLS:
+        assert f"`{tool}`" in ENHANCE + EXTEND and tool in TOOLS, tool
+
+
+def test_the_mcp_fields_they_name_are_the_tools_fields():
+    from engine.mcp.server import (
+        UxContractsCheckInput, UxSystemExportInput, UxSystemExtendInput)
+    fields = {f for model in (UxSystemExtendInput, UxSystemExportInput, UxContractsCheckInput)
+              for f in model.model_json_schema()["properties"]}
+    named = set(re.findall(r"`([a-z_]+)`", _paragraph(ENHANCE + EXTEND, "Over MCP")))
+    named -= set(IO_TOOLS) | {"invalid"}
+    assert named and named <= fields, sorted(named - fields)
+
+
+def _paragraph(text, start):
+    return "\n".join(p for p in text.split("\n\n") if p.startswith(start))
+
+
+def test_the_io_status_table_matches_the_exit_codes():
+    from engine.io.commands import EXIT
+    rows = re.findall(r"^\| `([a-z]+)` \| (\d) \|", ENHANCE, re.M)
+    assert dict(rows) == {status: str(code) for status, code in EXIT.items()}
+    assert "`invalid`" in ENHANCE and "Exit code 2" in ENHANCE
+
+
+def test_extend_names_the_brief_fields_the_font_files_and_the_phone_styles():
+    from engine.foundations.audience import FIELDS
+    assert all(f"`{name}`" in EXTEND for name in FIELDS)
+    assert "fonts.css" in EXTEND and "fonts-self-host.css" in EXTEND
+    assert "`text-hero-phone`" in EXTEND and "imagery" in EXTEND
+
+
+def test_the_modes_say_what_works_now():
+    text = ENHANCE + EXTEND
+    for part in ("Measure before defining", "never rewrites", "theme-ext.css", "tokens-ext.json",
+                 "rewritten in place", ".uxskill/files.json", ".uxskill/backup/",
+                 "Tailwind 4", "Figma", "high-contrast", "several files",
+                 '{"token": null, "by": "owner"}', '"fields"', "prefix",
+                 "Do not pass --force", "Decisions made without you", "one source"):
+        assert part in text, part
+
+
+def test_the_modes_carry_no_version_label_and_no_measured_example():
+    text = ENHANCE + EXTEND
+    assert "4.1" not in text and "(4." not in text
+    assert "eleven ways" not in text and "11 ways" not in text
+    assert not re.search(r"\bM4|\bR\d|ruling", text)
+
+
+def test_ux_design_points_a_gap_at_extend():
+    design = (ROOT / "commands" / "ux-design.md").read_text(encoding="utf-8")
+    step = design[design.index("### 1a. An existing design system"):design.index("### 1a.1.")]
+    assert "/ux-system extend --from" in step and "theme-ext.css" in step
+
+
+def test_the_readme_says_the_existing_system_modes_work():
+    assert "does not read an existing one yet" not in README
+    assert f"{len(TOOLS)} MCP tools" in README
+    assert "/ux-system enhance --from" in README and "/ux-system extend --from" in README
 
 
 def test_the_readers_the_doc_names_are_the_engines():
@@ -136,7 +227,7 @@ def test_the_readers_the_doc_names_are_the_engines():
 
 
 def test_new_prose_has_no_em_dashes_or_double_hyphen_punctuation():
-    for text in (CREATE, _section(DOC, "## Modes"),
+    for text in (CREATE, _section(DOC, "## Modes"), ENHANCE, EXTEND,
                  _section(AGENT, "## When the 4.0 engine already built the tokens")):
         assert "—" not in text and "–" not in text
         assert not re.search(r"\s--\s", text)

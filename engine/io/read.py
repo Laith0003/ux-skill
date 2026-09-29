@@ -78,7 +78,7 @@ def _project(p: Path) -> List[Tuple[str, str]]:
     return out
 
 
-def detect_format(path: Any, label: str = "--from") -> str:
+def detect_format(path: Any, label: str = "--from", format_label: str = "--format") -> str:
     """dtcg, css, tailwind, tailwind-json, markdown, figma or project, from
     the file's name and, for .css and .json, its content (see the module
     docstring). Raises InputError naming `label` and the fix for a file
@@ -109,24 +109,26 @@ def detect_format(path: Any, label: str = "--from") -> str:
             return "dtcg"
         return "dtcg" if _has_value(doc) or _studio(doc) else "tailwind-json"
     names = ", ".join(CHOICES[1:-1]) + " or " + CHOICES[-1]
-    raise InputError(f"{label} {p} is not a format uxskill reads by its name; pass --format "
-                     f"{names}")
+    raise InputError(f"{label} {p} is not a format uxskill reads by its name; pass "
+                     f"{format_label} {names}")
 
 
 def read_system(path: Any, fmt: str = "auto", label: str = "--from",
                 second_modes: Optional[Mapping[str, str]] = None,
-                modes_label: str = "--figma-mode") -> Imported:
+                modes_label: str = "--figma-mode",
+                format_label: str = "--format") -> Imported:
     """Read one system with the importer for its format (engine.io.read_any).
     `second_modes` (collection -> mode) is for a Figma export only. A
-    project folder is read as the set system detect proposes."""
+    project folder is read as the set system detect proposes. Messages name
+    the inputs by the caller's labels."""
     if fmt not in CHOICES:
         names = ", ".join(CHOICES[:-1]) + " or " + CHOICES[-1]
-        raise InputError(f"--format is {fmt}; pass {names}")
-    found = detect_format(path, label) if fmt == "auto" else fmt
-    _check_format(Path(path).expanduser(), fmt)
+        raise InputError(f"{format_label} is {fmt}; pass {names}")
+    found = detect_format(path, label, format_label) if fmt == "auto" else fmt
+    _check_format(Path(path).expanduser(), fmt, format_label)
     if found == "project":
         return read_sources(_proposed(Path(path).expanduser(), label), "auto", label,
-                            second_modes, modes_label)
+                            second_modes, modes_label, format_label)
     if second_modes and found != "figma":
         raise InputError(f"{modes_label} is for a Figma variables export, and {label} "
                          f"{Path(path).name} is read as {found}; drop {modes_label}")
@@ -137,17 +139,17 @@ def read_system(path: Any, fmt: str = "auto", label: str = "--from",
     return imported
 
 
-def _check_format(p: Path, fmt: str) -> None:
+def _check_format(p: Path, fmt: str, flag: str = "--format") -> None:
     """A --format that cannot read the file, by its name: JSON formats on a
     stylesheet and stylesheet formats on JSON. Raises InputError naming the
     flag and the fix."""
     suffix = p.suffix.lower()
     if fmt in ("dtcg", "figma", "tailwind-json") and suffix == ".css":
-        raise InputError(f"--format {fmt} reads JSON and {p.name} is a stylesheet; pass "
-                         "--format css or tailwind, or leave --format out")
+        raise InputError(f"{flag} {fmt} reads JSON and {p.name} is a stylesheet; pass "
+                         f"{flag} css or tailwind, or leave {flag} out")
     if fmt in ("css", "tailwind") and suffix == ".json":
-        raise InputError(f"--format {fmt} reads a stylesheet and {p.name} is JSON; pass "
-                         "--format dtcg, figma or tailwind-json, or leave --format out")
+        raise InputError(f"{flag} {fmt} reads a stylesheet and {p.name} is JSON; pass "
+                         f"{flag} dtcg, figma or tailwind-json, or leave {flag} out")
 
 
 def _proposed(root: Path, label: str) -> List[Path]:
@@ -167,10 +169,11 @@ def _proposed(root: Path, label: str) -> List[Path]:
 
 def read_sources(paths: Any, fmt: str = "auto", label: str = "--from",
                  second_modes: Optional[Mapping[str, str]] = None,
-                 modes_label: str = "--figma-mode") -> Imported:
+                 modes_label: str = "--figma-mode",
+                 format_label: str = "--format") -> Imported:
     """Read one source, or several as one system (see the module
     docstring). `paths` is a path or a list of them; `fmt` applies to the
-    first. Raises InputError naming `label` and the fix."""
+    first. Raises InputError naming `label` (or `format_label`) and the fix."""
     if isinstance(paths, (str, Path)):
         paths = [paths]
     paths = [Path(p).expanduser() for p in paths]
@@ -183,12 +186,12 @@ def read_sources(paths: Any, fmt: str = "auto", label: str = "--from",
         if key in seen:
             raise InputError(f"{label} {p} is given twice; pass each file once")
         seen.add(key)
-    first = read_system(paths[0], fmt, label, second_modes, modes_label)
+    first = read_system(paths[0], fmt, label, second_modes, modes_label, format_label)
     if len(paths) == 1:
         return first
     sheets: List[Tuple[Source, str]] = []
     for p in paths[1:]:
-        kind = detect_format(p, label)
+        kind = detect_format(p, label, format_label)
         if kind not in ("css", "tailwind") or p.suffix.lower() != ".css":
             raise InputError(f"{label} {p.name} is read as {kind}; a second {label} adds a "
                              f"stylesheet's values (its dark scheme, say) to the first, so pass "

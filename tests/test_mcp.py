@@ -29,8 +29,9 @@ def test_server_imports():
     assert callable(run_server)
     assert isinstance(TOOLS, dict)
     assert isinstance(MCP_AVAILABLE, bool)
-    # All 19 tools are registered (15 v2.0 + 3 v2.1 intelligence-loop tools
-    # + the 4.0 beta foundations engine).
+    # All 25 tools are registered (15 v2.0 + 3 v2.1 intelligence-loop tools
+    # + the foundations engine and system detect + the five tools for a
+    # system a project already has).
     expected_tools = {
         "ux_recommend",
         "ux_lint",
@@ -54,7 +55,14 @@ def test_server_imports():
         # 4.0 beta foundations engine
         "ux_system_build",
         "ux_system_detect",
+        # a system a project already has
+        "ux_system_import",
+        "ux_system_enhance",
+        "ux_system_extend",
+        "ux_system_export",
+        "ux_contracts_check",
     }
+    assert len(TOOLS) == 25
     assert set(TOOLS.keys()) == expected_tools, (
         f"missing: {expected_tools - set(TOOLS.keys())}; "
         f"extra: {set(TOOLS.keys()) - expected_tools}"

@@ -64,7 +64,8 @@ def parse_modes(pairs: Sequence[str], label: str = "--figma-mode") -> Dict[str, 
 
 def _read(source: Any, fmt: str, second_modes: Optional[Mapping[str, str]],
           labels: Mapping[str, str], label: str = "from") -> Imported:
-    return read_sources(source, fmt, labels[label], second_modes, labels["figma_mode"])
+    return read_sources(source, fmt, labels[label], second_modes, labels["figma_mode"],
+                        labels["format"])
 
 
 def _write(out: Any, files: Dict[str, str], imported: Imported, force: bool,

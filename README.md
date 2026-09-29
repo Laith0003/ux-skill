@@ -14,7 +14,7 @@ pip install uxskill
 
 *Before: generic stock-photo SEO slop. After: real construction-photo hero under a dark scrim, editorial headline with an amber accent, quote form in the hero. Same AI coding tool, same prompt, different result when ux-skill supplies the constraints.*
 
-> **v4.0 beta, FOUNDATIONS: one command builds a complete, WCAG-gated design system, with Arabic and right to left built in.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 12 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 152 anti-pattern rules, 25 tech stacks, 160 brand specs), 18 slash commands, 5 sub-agents, 20 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
+> **v4.0 beta, FOUNDATIONS: one command builds a complete, WCAG-gated design system, with Arabic and right to left built in.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 12 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 152 anti-pattern rules, 25 tech stacks, 160 brand specs), 18 slash commands, 5 sub-agents, 25 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
 > **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -53,7 +53,7 @@ pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` st
 - **Safe by default.** It never overwrites a file that differs. `--force` replaces files only when you ask.
 - **Arabic.** Under `dir="rtl"` text switches to an Arabic face with its own sizes and line height; spacing uses logical properties and motion mirrors. `--latin-only` leaves it out.
 
-This beta builds new systems; it does not read an existing one yet. 4.1 adds importers (Figma variables, CSS variables, Tailwind config, DTCG tokens), `/ux-system enhance` and `extend`, and Figma both ways. 4.2 adds the trust layer (lint on every write, a finish reviewer) and the launch. See the [changelog](CHANGELOG.md).
+**A system you already have.** `/ux-system enhance --from` reads it in its own names (DTCG tokens, CSS custom properties, a Tailwind theme, markdown rule files or a Figma variables export), checks it through the same gate and measures what your code actually does with it; nothing is rewritten. `/ux-system extend --from` adds foundations, roles or contracts without changing a token it has, in an extension file beside it, and `uxskill system export` writes it as tokens.css, a Tailwind 4 theme or Figma variables. 4.2 adds the trust layer (lint on every write, a finish reviewer) and the launch. See the [changelog](CHANGELOG.md).
 
 **Fewer commands.** 25 slash commands become 18. `/ux-discover` takes `--frame` and `--recommend`, `/ux-design` takes `--component`, `--dashboard` and `--from-image`, `/ux-polish` loops lint, fix, re-lint until the score reaches 90 or three rounds pass, and `/ux-init` takes `--stats`. The seven old names still work as aliases and go away in 4.1; see [the aliases](#aliases-removed-in-41).
 
@@ -401,7 +401,7 @@ Commands are grouped into seven buckets: **bootstrap & inventory**, **discovery 
 - **What:** Proposes a complete starter design system for a project that doesn't have one, tokens (color, type, space, motion, radius, shadow), foundation docs, component contracts, dark-mode pairings, theme switcher. Dispatches `design-system-architect`.
 - **When to use:** "We don't have a design system", "build us a system", "propose tokens", "what should our theme be", "set up our DS".
 - **When to skip:** The project already has a design system, use `/ux-design --component` against the existing system instead. Backend or infrastructure.
-- **Invocation:** `/ux-system` (runs discovery first if not already on file).
+- **Invocation:** `/ux-system create` (the foundations engine), `/ux-system enhance --from <file>` (measure a system you already have), `/ux-system extend --from <file> --add <foundation>` (add to it without changing it), or `/ux-system` (the 3.x flow; runs discovery first if not already on file).
 - **Output:** `tokens.json`, `foundations.md`, `components/*.md` contracts, optional Tailwind / vanilla / SCSS emit. Writes `.ux/last-system.json` for chain context.
 - **Chains to:** `/ux-design --component` → build against the new system. `/ux-design` → generate a surface using the new tokens.
 

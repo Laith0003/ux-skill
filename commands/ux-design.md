@@ -332,7 +332,7 @@ Before any engine pick, run `python3 -m engine.cli.main --no-pretty system detec
 1. The page's tokens come from that system. Link its built CSS; if the build output is missing, run its build script. Use its custom properties by their own names.
 2. Skip the engine's palette, type pair and every `recommend` pick for color and type (Step 3 reads them as suggestions only). Skip `ux design-md`; with `--from-system` it only mirrors the system.
 3. Never edit, overwrite or re-derive the system's files. `ux persist save` writes beside a hand-written MASTER.md.
-4. A gap the page needs (a token the system lacks) goes in a separate extension file next to the page CSS, named after the system, such as `<system>-ext.css`. Name each new token in the system's own naming, and log one comment per token: what it is and why the system lacked it.
+4. A gap the page needs (a token the system lacks) goes in a separate extension file beside the system, never in its files. `/ux-system extend --from <the system's file> --add <foundation>` writes it for you (a stylesheet `theme.css` gets `theme-ext.css`, loaded after it) in the system's own naming, and `/ux-system enhance --from` first measures what the code already uses. By hand, name the file after the system, such as `<system>-ext.css`, name each new token in the system's own naming, and log one comment per token: what it is and why the system lacked it.
 5. Pass `detect`'s `declared` block into the brand step: the declared primary beats logo pixels.
 
 ### 1a.1. The brand's own pages set the page style

@@ -1,5 +1,5 @@
 ---
-description: Build a design system. `/ux-system create` runs the 4.0 foundations engine: a WCAG-gated token system (tokens.json, tokens.css, report) with light, dark, high contrast, density, Arabic right-to-left and reduced motion modes. With no mode it runs the 3.x starter flow. Triggers on "we don't have a design system", "build us a system", "propose tokens", "what should our theme be". Skip when the project already has a complete design system (use ux-design --component to build against it), backend or infrastructure.
+description: Build a design system. `/ux-system create` runs the 4.0 foundations engine: a WCAG-gated token system (tokens.json, tokens.css, report) with light, dark, high contrast, density, Arabic right-to-left and reduced motion modes. `/ux-system enhance --from` measures a system the project already has and the code that uses it; `/ux-system extend --from` adds to one without changing what it has. With no mode it runs the 3.x starter flow. Triggers on "we don't have a design system", "build us a system", "propose tokens", "what should our theme be", "measure our tokens", "extend our design system". Skip for backend or infrastructure.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
@@ -12,7 +12,7 @@ You are running the `/ux-system` command from the `ux` plugin. The job is to pro
 
 Triggers: "we don't have a design system", "build us a system", "propose tokens", "what should our theme be", "set up our DS", "we need a token JSON", "design our brand foundations".
 
-If the project already has a design system, do not build a new one: read it as it is (see "An existing system" below), and build components against it with `/ux-component`.
+If the project already has a design system, do not build a new one: measure it with `enhance` or add to it with `extend` (see "enhance mode" and "extend mode" below), and build components against it with `/ux-component`.
 
 ## Modes
 
@@ -20,10 +20,10 @@ If the project already has a design system, do not build a new one: read it as i
 |---|---|---|
 | `/ux-system create` | Builds a WCAG-gated token system with the 4.0 foundations engine. See "create mode" below. | 4.0 beta |
 | `/ux-system` (no mode) | The 3.x starter flow: discovery, recommendation, then the design-system-architect agent writes tokens, foundation docs and component contracts. See "3.x starter flow" below. | 3.x, kept until 4.0 final |
-| `/ux-system enhance --from <src>` | Measure an existing system against its own code and report what to improve, keeping its token names. | The engine steps work now from Python (see "An existing system"); the command form is being added |
-| `/ux-system extend --from <src> --add <...>` | Add foundations or roles to an existing system in a separate extension file beside it, without touching the rest. | The readers and the mapping work now; the command form is being added |
+| `/ux-system enhance --from <src>` | Read an existing system in its own names, check it, and measure the code that uses it. A report; nothing is rewritten. See "enhance mode" below. | Works now |
+| `/ux-system extend --from <src> --add <...>` | Add foundations, roles or contracts to an existing system without changing a token it has. See "extend mode" below. | Works now |
 
-If the user asks for `enhance` or `extend`, run the steps under "An existing system" below and give the user the enhance report. Never rewrite the client's files.
+Never rewrite a system ux-skill did not write: `extend` puts what it adds in an extension file beside it.
 
 ## An existing system
 
@@ -43,7 +43,7 @@ print(report.markdown())
 "
 ```
 
-What the command forms add: `system enhance --from`, `system extend --from` and `system export` run these steps from the command line, check and back up every source before any write, and write whatever they add to a client's system as a separate extension file in the source's own format, loaded after it, with the report naming the file and how to load it. `--from` takes several files read as one system (the tokens file first, then each stylesheet that adds to it, such as the app's own globals holding the dark values), or a project folder, read as the set `system detect` finds. When the system has no high-contrast mode, `extend --add color` adds one for the tokens it adds, and its report measures the system's own colors in it under "Already in the system"; those findings never block the extension.
+The commands in "enhance mode" and "extend mode" below run these steps for you, check and back up every source before any write, and write whatever they add to a system ux-skill did not write as a separate extension file in the source's own format. Use the Python calls only when the commands cannot run.
 
 ## create mode (4.0 beta)
 
@@ -175,6 +175,111 @@ On `written` or `unchanged`, write `.ux/last-system.json` so `/ux-next` can chai
 ```
 
 Then offer the next step: `/ux-component` to build components on the new tokens, or `/ux-design` for a page.
+
+## enhance mode
+
+Measure before defining. `enhance` reads the system the project already has in its own names, checks it through the engine's gate, and measures what the product's code actually does with it. It never rewrites a token or a line of code; the owner decides what changes.
+
+### 1. Find the system
+
+```bash
+uxskill --no-pretty system detect --root .
+```
+
+`sources` lists the system's files by kind. Pass the token file as `--from`. When the dark values live in a stylesheet of their own (the app's globals, say), pass several files as one system: the token file first, then each stylesheet that adds to it, each with its own `--from`. A project folder as `--from` is read as the set detect finds. If `uxskill system import` is missing (`uxskill system --help` does not list it), give the user the install line from create step 1 and stop.
+
+### 2. Import it and read the report
+
+```bash
+uxskill --no-pretty system import --from design/theme.css --out design-system/intake
+```
+
+The format is told from the file: DTCG tokens.json, a stylesheet of custom properties, a Tailwind 4 theme, a resolved Tailwind config exported as JSON, markdown rule files, or a Figma variables export. Pass `--format` only when the file does not say. A Tailwind 3 config is JavaScript, which uxskill never runs: the error gives the one-line command that writes its resolved theme as JSON, and that JSON is what to pass. A Figma file is read from a variables export (the REST API's local variables endpoint, or `figma-read-variables.js` run through the Figma tool); for a collection with more than two modes, `--figma-mode Collection=Mode` names the second mode to read.
+
+Tell the user, from `import-report.md`, how many entries became tokens, and list every entry under "Not read" with its fix. Nothing there was guessed; a long list is folded by file and message, with a count on each line.
+
+### 3. Confirm the mapping
+
+`mapping.json` says which of the system's tokens plays each of the engine's roles and which of its modes is each axis. The import proposes it from names alone and marks each such line `"by": "name"`; names are read with or without a prefix most of the system's color names share, and the entry remembers that prefix. Read the token names and how the code uses them, propose lines to the user, and write a line only when the user confirms it, as `"by": "owner"`.
+
+- A role or axis the owner wants out of the check gets `{"token": null, "by": "owner"}` (an axis: `{"from": null, "by": "owner"}`). It is never filled again.
+- A typography role can map field by field, for a system that keeps each part of its type in its own token: `"fields"` holds `fontFamily`, `fontSize`, `fontWeight`, `lineHeight` and `letterSpacing`, each with its own `token` and `by`. A field left out is not checked, and the report names it.
+- A mapping.json already in the out folder is what the next command reads, merged with the proposal, the owner's lines winning. It is never replaced; the result lists what the proposal would add.
+
+### 4. Measure
+
+```bash
+uxskill --no-pretty system enhance --from design/theme.css --mapping design-system/intake/mapping.json --scan src --out design-system/intake
+```
+
+Repeat `--scan` for every folder of product code (CSS, HTML, Blade, JSX and Tailwind classes are read). Without `--mapping`, the mapping.json in the out folder is read, or the one beside the source when there is no out folder. The command prints JSON and, with `--out`, writes `enhance-report.md` and `enhance.json`.
+
+Every system command prints JSON whose `status` says what happened:
+
+| status | exit code | meaning |
+|---|---|---|
+| `read` | 0 | The system was read; nothing was written (import without `--out`). |
+| `reported` | 0 | The report was made; nothing was written (enhance without `--out`). |
+| `built` | 0 | The files were made; nothing was written (export without `--out`). |
+| `passed` | 0 | Every contract checked clean. |
+| `written` | 0 | Files were written, after every source was backed up. |
+| `unchanged` | 0 | The folder already held these files. |
+| `blocked` | 1 | The extension did not pass; only `extend-report.md` was written. |
+| `failed` | 1 | A contract has a problem; `problems` names each one. |
+| `refused` | 1 | A file in the way differs; nothing was written. `message` names each file. |
+| `error` | 1 | A source changed after it was read, or a folder could not be written; nothing changed. |
+
+Exit code 2 is a bad input; the message names the flag and the fix. Over MCP the same bad input comes back as status `invalid` with an `error` naming the field.
+
+### 5. Explain it, measurements first
+
+Lead with what the code does: tokens it never reads, raw values a token already holds, values written several ways (for example a card corner written as 6px, 0.375rem and a token in three components), names every use contradicts, and references to tokens the system lacks. Then the gate, each finding with the system's own name beside the role. Then "For the owner to confirm" and "Decisions made without you", word for word, so the owner can reverse any of them. Do not edit tokens or code in this mode.
+
+Over MCP, call `ux_system_import` and `ux_system_enhance` with absolute paths: `source` (one path, or a list for several files), `out`, `mapping` and `scan` (a list). `format`, `figma_modes` and `force` do what their flags do. Results stay small: counts, statuses and the report text.
+
+## extend mode
+
+`extend` adds foundations, roles or contracts to a system the project already has and changes nothing it has: every token comes back with its name, value and modes.
+
+### 1. Look before writing
+
+Import and confirm the mapping first (enhance steps 1 to 3), and list the folders. Who owns the source decides where the additions go, and it is read from the ownership record, never from token names:
+
+- A system ux-skill did not write never rewrites: the additions go in an extension file beside it, in its own format and naming, holding only what was added. A stylesheet gets `theme-ext.css`, loaded after `theme.css`; a Tailwind 4 theme gets an extension stylesheet with an `@theme` block of its own; a tokens file gets `tokens-ext.json`, whose tokens alias the source's; a Figma export gets an extension file and the script that applies it. The result's `load` line says how to load it.
+- A system ux-skill wrote (its folder's `.uxskill/files.json` record lists the file at its digest, or the file carries the engine's digest stamp) is rewritten in place after a backup, and tokens.css and the font files beside it are rebuilt when they are the engine's and unchanged. system-report.md and art/ are not rebuilt; run create again for those.
+
+Before any write the command checks that every source is still the file that was imported, copies each one into `.uxskill/backup/` in the folder it writes, backs up every file it replaces by its content, and records what it wrote in `.uxskill/files.json`. It refuses to replace a file that differs. Do not pass --force until the user says to replace the named files; `--force` replaces only files ux-skill wrote, and `--replace-client-files` exists only for a user who asks to replace one of their own.
+
+### 2. Run it
+
+```bash
+uxskill --no-pretty system extend --from design/theme.css --mapping design-system/intake/mapping.json --add motion --out design-system/intake
+```
+
+- `--add` adds a foundation (color, type, space, layout, radius, border, elevation, motion or imagery), generated from `--axes` or `--brief` (every axis at 0.5 without them). Added color takes `--brand`, or the system's own primary fill without it, and its tints and surfaces are derived from the system's own page colors so they pass against what renders. When the system has no high-contrast mode, `--add color` adds a high-contrast mode for the tokens it adds and measures the system's own colors in it under "Already in the system"; those findings never block the extension.
+- The brief works as it does for `create`: fill its structured fields (`age`, `languages`, `primary_script`, `default_scheme`, `reading_context`, `brand_role`, `product_type`) from the user's words, since the engine reads no free text for them. The report says what each field changed and lists every word it did not read. `--latin-only` with a brief whose primary script is Arabic is refused.
+- Adding type writes `fonts.css` and `fonts-self-host.css` beside the system; link them as in create step 7, or the faces never load. Adding imagery adds its tokens only: no art is written.
+- `--add-role color.focus.ring=brand-700` points one of the engine's roles at one of the system's own tokens.
+- `--contract chip.yaml` checks a contract through the mapping and copies it into `contracts/` in the out folder.
+
+The result keeps the source's format, so there is one source of truth, not two copies. A system read from markdown or a Tailwind 3 theme comes back as tokens.json, and the report says so under "Decisions made without you".
+
+### 3. Read the result
+
+`written`: tell the user what was added, the file to load (the `load` line) and that everything else is unchanged. `blocked` (exit 1): only `extend-report.md` was written; read its "What blocks it" lines to the user, each with its fix. Findings that were already in the system are listed apart; the extension did not cause them. Always end with the report's "Decisions made without you".
+
+### 4. Export and check contracts
+
+```bash
+uxskill --no-pretty system export --from design-system/tokens.json --to tailwind --out design-system/export
+uxskill --no-pretty contracts check design-system/contracts --tokens design-system/tokens.json --mapping design-system/intake/mapping.json
+```
+
+`--to` takes css, tailwind, figma or dtcg. An export writes into its out folder only, never over the source. tailwind is a Tailwind 4 theme whose breakpoints come from the tokens, with a phone style such as `text-hero-phone` beside each text style that steps down on a phone, used as `text-hero-phone tablet:text-hero`. tokens.json does not record which scheme opens first, so for a system that opens dark pass `--scheme dark` (or `light`); a stylesheet keeps the scheme it opens. For Figma, run `figma-variables.js` through the Figma tool in the file that owns the system: one collection per foundation with its modes, primitives hidden, roles aliasing them, matched by name so a second run updates in place. Without `--out` the export writes nothing and reports each file and its size.
+
+`contracts check` reads the system in any format the import reads, through `--mapping` or the mapping.json beside the system, and checks each contract's schema, every role it binds and every pairing it declares, in every mode.
+
+Over MCP, call `ux_system_extend`, `ux_system_export` and `ux_contracts_check` with absolute paths. Extend takes `source`, `out` (required), `mapping`, `add`, `add_role`, `contracts`, `brand`, `axes` or `brief` (an object), `latin_only` and `force`; export takes `to`, `scheme` and `include_files`, which returns the texts, but prefer `out`; the check takes `folder`, `tokens` and `mapping`.
 
 ## 3.x starter flow (no mode)
 
