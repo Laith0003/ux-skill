@@ -19,11 +19,13 @@ same gate the build uses; a pairing the gate cannot resolve (a broken
 alias in a set nobody validated) is reported once per pairing and cause.
 validate_contracts adds the checks across a set
 of contracts: unique names, and a deprecated contract's replacement exists
-and is not deprecated itself.
+and is not deprecated itself. A role the set leaves out for a reason given
+in `absent` (a mapping that keeps it out of the check) is named with that
+reason instead of as a role the set does not define.
 """
 from __future__ import annotations
 
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 from engine.contracts.schema import (
     CRITERIA, INTERACTIVE, PLACEMENT, PROPERTY_TYPES, Binding, Contract, ContractProblem)
@@ -45,8 +47,12 @@ def _problem(contract: Contract, rule: str, message: str) -> ContractProblem:
     return ContractProblem(contract.name, rule, f"{contract.name}: {message}")
 
 
-def _role_problem(contract: Contract, ts: TokenSet, role: str, want: str,
-                  where: str) -> Optional[ContractProblem]:
+def _role_problem(contract: Contract, ts: TokenSet, role: str, want: str, where: str,
+                  absent: Optional[Mapping[str, Tuple[str, str]]] = None
+                  ) -> Optional[ContractProblem]:
+    if not ts.has(role) and absent and role in absent:
+        rule, why = absent[role]
+        return _problem(contract, rule, f"{where} binds {role}, {why}")
     if not ts.has(role):
         return _problem(contract, "unknown-role",
                         f"{where} binds {role}, which the token set does not define; bind an "
@@ -233,24 +239,29 @@ def _unresolved_problems(contract: Contract,
     return out
 
 
-def binding_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
-    """Every problem binding one contract to a built token set."""
+def binding_problems(contract: Contract, ts: TokenSet,
+                     absent: Optional[Mapping[str, Tuple[str, str]]] = None
+                     ) -> List[ContractProblem]:
+    """Every problem binding one contract to a built token set. `absent`
+    gives, for a role the set leaves out on purpose, the rule and the
+    reason a message names (the words after "binds <role>, ")."""
     out: List[ContractProblem] = []
     for b in contract.tokens:
-        p = _role_problem(contract, ts, b.role, PROPERTY_TYPES[b.property], b.label())
+        p = _role_problem(contract, ts, b.role, PROPERTY_TYPES[b.property], b.label(), absent)
         if p:
             out.append(p)
     for s in contract.surfaces:
-        p = _role_problem(contract, ts, s, "color", "surfaces")
+        p = _role_problem(contract, ts, s, "color", "surfaces", absent)
         if p:
             out.append(p)
     for rule in contract.contrast:
         for role in (rule.fg,) + (() if rule.bg == "surfaces" else (rule.bg,)):
-            p = _role_problem(contract, ts, role, "color", "contrast")
+            p = _role_problem(contract, ts, role, "color", "contrast", absent)
             if p and p.message not in {o.message for o in out}:
                 out.append(p)
     if contract.a11y.target != "none":
-        p = _role_problem(contract, ts, contract.a11y.target, "dimension", "a11y.target")
+        p = _role_problem(contract, ts, contract.a11y.target, "dimension", "a11y.target",
+                          absent)
         if p and p.message not in {o.message for o in out}:
             out.append(p)
     if out:
@@ -263,10 +274,11 @@ def binding_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
                                                  "run validate on the token set and fix it")]
 
 
-def validate_contracts(contracts: Sequence[Contract],
-                       ts: Optional[TokenSet] = None) -> List[ContractProblem]:
+def validate_contracts(contracts: Sequence[Contract], ts: Optional[TokenSet] = None,
+                       absent: Optional[Mapping[str, Tuple[str, str]]] = None
+                       ) -> List[ContractProblem]:
     """Checks across a set of contracts, then each contract's bindings when
-    a token set is given."""
+    a token set is given (`absent` as binding_problems takes it)."""
     out: List[ContractProblem] = []
     by_name = {}
     for c in contracts:
@@ -288,7 +300,7 @@ def validate_contracts(contracts: Sequence[Contract],
                                 "people can move to"))
     if ts is not None:
         for c in contracts:
-            out += binding_problems(c, ts)
+            out += binding_problems(c, ts, absent)
     return out
 
 
