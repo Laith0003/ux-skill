@@ -12,13 +12,15 @@ and before anything else it:
    below the folder the sources share;
 3. when forced to replace a file that differs, copies that file, byte for
    byte, into <out>/.uxskill/backup/<its own digest>/replaced/, so a
-   backup is never overwritten by a later one. Force replaces a file the
-   engine wrote; a file in a folder that holds a client's design system is
-   replaced only when the caller also passes replace_client, unless it
-   carries the engine's digest and still matches it;
+   backup is never overwritten by a later one. Force replaces only a file
+   that carries the engine's digest and still matches it; any other file
+   is replaced only when the caller also passes replace_client;
 4. records the sources, the files written and the backups in
    <out>/.uxskill/intake/<intake id>.json, adding to the record a
    write from the same sources made before.
+
+Every file name must be a plain path below the out folder and outside
+.uxskill/ (emit.check_name).
 
 Everything, backups included, goes through emit.write_files: all or
 nothing, and identical files left alone. The intake id of one source is
@@ -35,7 +37,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Tuple, Union
 
-from engine.existing import client_files_in, is_ux_skill_file
+from engine.existing import is_ux_skill_file
 from engine.foundations.errors import InputError
 from engine.io.report import ImportReport, Source
 
@@ -68,18 +70,33 @@ def source_digest(source: Source) -> str:
     return h.hexdigest()
 
 
-def _flatten(sources: Sources) -> List[Source]:
-    """Every Source in `sources`: a report gives its source and also_read,
-    in that order; a path read twice is kept once."""
-    items = [sources] if isinstance(sources, (Source, ImportReport)) else list(sources)
+def _flatten(sources: Any) -> List[Source]:
+    """Every Source in `sources`, in order: a report gives its source and
+    its also_read. Raises InputError naming what was passed and the fix."""
+    fix = ("pass the import's report, its Source, or a list of them (read_source and every "
+           "importer give one)")
+    if isinstance(sources, (Source, ImportReport)):
+        items: List[Any] = [sources]
+    elif isinstance(sources, (str, bytes, os.PathLike)) or not hasattr(sources, "__iter__"):
+        raise InputError(f"sources is {sources!r}, not a Source; {fix}")
+    else:
+        items = list(sources)
     found: List[Source] = []
     for item in items:
         if isinstance(item, ImportReport):
             found.extend([item.source, *item.also_read])
-        else:
+        elif isinstance(item, Source):
             found.append(item)
+        else:
+            raise InputError(f"sources holds {item!r}, not a Source; {fix}")
+    return found
+
+
+def _once(sources: List[Source]) -> List[Source]:
+    """`sources` with a path given twice kept once; the digest check runs
+    on every one first, so the copies agree."""
     seen: Dict[str, Source] = {}
-    for s in found:
+    for s in sources:
         seen.setdefault(os.path.abspath(Path(s.path).expanduser()), s)
     return list(seen.values())
 
@@ -119,18 +136,19 @@ def _earlier(path: Path) -> Dict[str, Any]:
     """The record a write from the same sources left, or an empty one.
     Raises InputError naming the file and the fix when it cannot be read."""
     if not path.exists():
-        return {"writes": [], "replaced": {}}
+        return {"sources": [], "backed_up": {}, "writes": [], "replaced": {}}
     try:
         record = json.loads(path.read_bytes().decode("utf-8"))
     except (OSError, ValueError) as exc:
         reason = getattr(exc, "strerror", None) or "it is not JSON"
         raise InputError(f"{path} cannot be read as an intake record ({reason}), so nothing was "
                          "written; move it away and repeat the step") from None
-    if not isinstance(record, dict) or not isinstance(record.get("writes"), list) \
-            or not isinstance(record.get("replaced"), dict):
-        raise InputError(f"{path} is not an intake record (it needs a writes list and a "
-                         "replaced object), so nothing was written; move it away and repeat "
-                         "the step")
+    shape = {"sources": list, "backed_up": dict, "writes": list, "replaced": dict}
+    if not isinstance(record, dict) or any(not isinstance(record.get(k), t)
+                                           for k, t in shape.items()):
+        raise InputError(f"{path} is not an intake record (it needs sources and writes lists "
+                         "and backed_up and replaced objects), so nothing was written; move it "
+                         "away and repeat the step")
     return record
 
 
@@ -145,10 +163,13 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
     inputs in messages. Returns status (a key of emit.STATUS_EXIT),
     written, unchanged, conflicts, message, the backup folder of the
     sources and replaced (each replaced file and where its backup is)."""
-    from engine.foundations.emit import conflict_message, plan_writes, write_files
+    from engine.foundations.emit import check_name, conflict_message, plan_writes, write_files
 
     out = Path(out_dir).expanduser()
-    every = _flatten(sources)
+    try:
+        every = _flatten(sources)
+    except InputError as exc:
+        return _outcome("error", str(exc))
     if not every:
         return _outcome("error", "sources is empty, so nothing was written; pass the import's "
                                  "report or every Source the files were built from")
@@ -162,12 +183,12 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
         if now != source.sha256:
             return _outcome("error", f"{source.path} changed after it was read, so nothing was "
                                      "written; import it again and repeat the step")
-    inside = [n for n in files if Path(n).parts[:1] == (INTAKE_DIR,)]
-    if inside:
-        return _outcome("error", f"files names {', '.join(inside)}, inside {INTAKE_DIR}/, which "
-                                 "holds the intake backups, so nothing was written; write "
-                                 f"{'that file' if len(inside) == 1 else 'those files'} under "
-                                 "another name")
+    every = _once(every)
+    try:
+        for name in files:
+            check_name(out, name, (INTAKE_DIR,))
+    except InputError as exc:
+        return _outcome("error", str(exc))
     sid, layout = _layout(every)
     backup = f"{INTAKE_DIR}/backup/{sid}"
     try:
@@ -182,18 +203,17 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
         return _outcome("refused", conflict_message(out, plan, force_label, out_label),
                         unchanged=plan.unchanged, conflicts=plan.conflicts)
     if plan.conflicts and not replace_client:
-        # A client's file, unless it carries the engine's own digest and
-        # still matches it: an extension file the engine wrote beside it.
-        theirs = [n for n in client_files_in(out, {n: files[n] for n in plan.conflicts})
-                  if not is_ux_skill_file(out / n)]
+        # Force replaces only a file that carries the engine's own digest
+        # and still matches it; any other file is somebody's own.
+        theirs = [n for n in plan.conflicts if not is_ux_skill_file(out / n)]
         if theirs:
             one = len(theirs) == 1
             return _outcome("refused", (
-                f"Nothing was written: {out} holds a design system ux-skill did not build, and "
-                f"{', '.join(str(out / n) for n in theirs)} would be replaced. An existing "
-                f"design system is fixed input: pass a different {out_label} folder, or pass "
-                f"{replace_label} as well as {force_label} to replace "
-                f"{'it' if one else 'them'} after a backup."),
+                f"Nothing was written: {', '.join(str(out / n) for n in theirs)} "
+                f"{'was' if one else 'were'} not written by ux-skill, or changed since, and "
+                f"{force_label} replaces only files ux-skill wrote. Pass {replace_label} as well "
+                f"as {force_label} to replace {'it' if one else 'them'} after a backup, or pass "
+                f"a different {out_label} folder."),
                 unchanged=plan.unchanged, conflicts=theirs)
     extra: Dict[str, Union[str, bytes]] = {}
     backed_up: Dict[str, str] = {}
@@ -223,16 +243,25 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
         earlier = _earlier(out / record_name)
     except InputError as exc:
         return _outcome("error", str(exc))
-    record = {"sources": [s.to_dict() for s in every], "backed_up": backed_up,
+    now = [s.to_dict() for s in every]
+    record = {"sources": [*earlier["sources"], *[d for d in now if d not in earlier["sources"]]],
+              "backed_up": {**earlier["backed_up"], **backed_up},
               "writes": list(dict.fromkeys([*earlier["writes"], *files])),
               "replaced": {**earlier["replaced"], **replaced}}
     extra[record_name] = json.dumps(record, indent=2) + "\n"
     try:
-        # Every file of `files` that differs was allowed above; the record
-        # may differ from an earlier one, which it extends.
-        done = write_files(out, {**extra, **files}, force=True)
+        # Only the files allowed above and the record, which extends an
+        # earlier one, may be replaced; a file that changed since is not.
+        done = write_files(out, {**extra, **files}, force=True,
+                           replace={*plan.conflicts, record_name})
     except InputError as exc:
         return _outcome("error", str(exc))
+    if done.conflicts:
+        one = len(done.conflicts) == 1
+        return _outcome("refused", (
+            f"Nothing was written: {', '.join(str(out / n) for n in done.conflicts)} "
+            f"changed while the step ran, so {'it' if one else 'they'} could not be backed up; "
+            "repeat the step."), unchanged=done.unchanged, conflicts=done.conflicts)
     names = ", ".join(n for n in done.write if n in files)
     them = "the source is" if len(every) == 1 else "the sources are"
     message = f"Wrote {names} to {out}; {them} backed up in {out / backup}"

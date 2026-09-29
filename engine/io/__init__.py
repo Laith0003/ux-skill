@@ -5,9 +5,10 @@ the value reader they share, the naming adapter that checks an imported
 system in the engine's roles while it keeps its own names, the scanner
 that measures what a codebase actually uses, and the enhance report that
 sets the two side by side. read_any reads a file in any of FORMATS, and
-write_with_intake is the one way to write into a folder: it checks and
-backs up every source first. Importing the package never loads the
-writer; write_with_intake loads it when it runs.
+write_with_intake is the step every write into a folder someone already
+has goes through: it checks and backs up every source first. Importing
+the package never loads the writer; write_with_intake loads it when it
+runs.
 """
 from pathlib import Path
 from typing import Any

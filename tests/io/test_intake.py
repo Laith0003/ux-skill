@@ -7,9 +7,12 @@ unless the second flag is given as well."""
 import ast
 import hashlib
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
+
+import pytest
 
 from engine.existing import stamp_digest
 from engine.io.dtcg_in import read_dtcg
@@ -121,13 +124,14 @@ def test_the_refusal_names_the_callers_own_labels(tmp_path):
         "Pass force: true to replace it, or pass a different out folder.")
 
 
-def test_with_force_the_replaced_file_is_backed_up_by_its_content(tmp_path):
+def test_with_force_the_engines_file_is_backed_up_by_its_content(tmp_path):
     source = _source(tmp_path)
     out = tmp_path / "out"
     out.mkdir()
-    (out / "theme.css").write_text("theirs\n", encoding="utf-8")
+    ours = stamp_digest("ours\n")
+    (out / "theme.css").write_text(ours, encoding="utf-8")
     outcome = write_with_intake(out, {"theme.css": "new\n"}, source, force=True)
-    old = _digest(b"theirs\n")
+    old = _digest(ours.encode("utf-8"))
     sid = source.sha256[:12]
     where = f"{INTAKE_DIR}/backup/{old}/replaced/theme.css"
     assert outcome["status"] == "written"
@@ -136,7 +140,7 @@ def test_with_force_the_replaced_file_is_backed_up_by_its_content(tmp_path):
         f"Wrote theme.css to {out}; the source is backed up in "
         f"{out / INTAKE_DIR / 'backup' / sid} and each replaced file under "
         f"{out / INTAKE_DIR / 'backup'}.")
-    assert (out / where).read_text() == "theirs\n"
+    assert (out / where).read_text() == ours
     assert _record(out, sid)["replaced"] == {"theme.css": where}
     assert (out / "theme.css").read_text() == "new\n"
 
@@ -188,13 +192,13 @@ def test_files_in_a_subfolder_are_written_and_backed_up_under_the_same_path(tmp_
     source = _source(tmp_path)
     out = tmp_path / "out"
     (out / "art").mkdir(parents=True)
-    (out / "art" / "pattern.svg").write_text("<svg/>\n", encoding="utf-8")
+    ours = stamp_digest("<svg/>\n")
+    (out / "art" / "pattern.svg").write_text(ours, encoding="utf-8")
     outcome = write_with_intake(out, {"art/pattern.svg": "<svg></svg>\n",
                                       "art/shapes.svg": "<svg/>\n"}, source, force=True)
-    old = _digest(b"<svg/>\n")
+    old = _digest(ours.encode("utf-8"))
     assert outcome["status"] == "written"
-    assert (out / f"{INTAKE_DIR}/backup/{old}/replaced/art/pattern.svg").read_text() == \
-        "<svg/>\n"
+    assert (out / f"{INTAKE_DIR}/backup/{old}/replaced/art/pattern.svg").read_text() == ours
     assert (out / "art" / "shapes.svg").read_text() == "<svg/>\n"
 
 
@@ -300,13 +304,20 @@ def test_a_replaced_file_that_is_not_utf8_is_backed_up_byte_for_byte(tmp_path):
     out.mkdir()
     old = b"/* caf\xe9 */\n"
     (out / "theme.css").write_bytes(old)
-    outcome = write_with_intake(out, {"theme.css": "new\n"}, source, force=True)
+    outcome = write_with_intake(out, {"theme.css": "new\n"}, source, force=True,
+                                replace_client=True)
     assert outcome["status"] == "written"
     assert (out / f"{INTAKE_DIR}/backup/{_digest(old)}/replaced/theme.css").read_bytes() == old
 
 
-# --force replaces only a file the engine wrote. A folder that holds a
-# client's design system keeps its files unless the second flag is given.
+# --force replaces only a file that carries the engine's digest and still
+# matches it. Any other file, in any folder, needs the second flag as well.
+def _refusal(out, name, force="--force", replace="--replace-client-files", out_label="--out"):
+    return (f"Nothing was written: {out / name} was not written by ux-skill, or changed since, "
+            f"and {force} replaces only files ux-skill wrote. Pass {replace} as well as {force} "
+            f"to replace it after a backup, or pass a different {out_label} folder.")
+
+
 def test_force_alone_never_replaces_a_clients_file(tmp_path):
     source = _source(tmp_path)
     out = tmp_path / "out"
@@ -315,12 +326,45 @@ def test_force_alone_never_replaces_a_clients_file(tmp_path):
     before = _snapshot(out)
     outcome = write_with_intake(out, {"tokens.json": "{}\n"}, source, force=True)
     assert outcome["status"] == "refused" and outcome["conflicts"] == ["tokens.json"]
-    assert outcome["message"] == (
-        f"Nothing was written: {out} holds a design system ux-skill did not build, and "
-        f"{out / 'tokens.json'} would be replaced. An existing design system is fixed input: "
-        "pass a different --out folder, or pass --replace-client-files as well as --force to "
-        "replace it after a backup.")
+    assert outcome["message"] == _refusal(out, "tokens.json")
     assert _snapshot(out) == before
+
+
+def test_force_alone_never_replaces_a_hand_written_file_in_a_plain_folder(tmp_path):
+    source = _source(tmp_path)
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "README.md").write_text("# mine\n", encoding="utf-8")
+    before = _snapshot(out)
+    outcome = write_with_intake(out, {"README.md": "# new\n"}, source, force=True)
+    assert outcome["status"] == "refused" and outcome["conflicts"] == ["README.md"]
+    assert outcome["message"] == _refusal(out, "README.md")
+    assert _snapshot(out) == before
+
+
+def test_force_alone_never_replaces_a_hand_written_rule_file_beside_the_source(tmp_path):
+    rules = tmp_path / "rules"
+    rules.mkdir()
+    (rules / "a.md").write_text("- `a`: 1px\n", encoding="utf-8")
+    (rules / "ext.md").write_text("- `b`: 2px\n", encoding="utf-8")
+    source = read_markdown(rules).report.source
+    before = _snapshot(rules)
+    outcome = write_with_intake(rules, {"ext.md": "- `c`: 3px\n"}, source, force=True)
+    assert outcome["status"] == "refused" and outcome["conflicts"] == ["ext.md"]
+    assert outcome["message"] == _refusal(rules, "ext.md")
+    assert _snapshot(rules) == before
+
+
+def test_a_file_with_the_engines_key_but_no_stamp_needs_the_second_flag(tmp_path):
+    """Only the digest stamp marks a file as the engine's; a key inside the
+    file does not."""
+    source = _source(tmp_path)
+    out = tmp_path / "out"
+    out.mkdir()
+    ours = json.dumps({"$extensions": {ENGINE_KEY: {"axes": {}}}, **CLIENT_TOKENS})
+    (out / "tokens.json").write_text(ours, encoding="utf-8")
+    outcome = write_with_intake(out, {"tokens.json": "{}\n"}, source, force=True)
+    assert outcome["status"] == "refused" and outcome["conflicts"] == ["tokens.json"]
 
 
 def test_the_second_flag_replaces_a_clients_file_after_a_backup(tmp_path):
@@ -337,7 +381,7 @@ def test_the_second_flag_replaces_a_clients_file_after_a_backup(tmp_path):
     assert (out / "tokens.json").read_text() == "{}\n"
 
 
-def test_the_client_refusal_names_the_callers_labels(tmp_path):
+def test_the_refusal_names_the_callers_labels(tmp_path):
     source = _source(tmp_path)
     out = tmp_path / "out"
     out.mkdir()
@@ -345,26 +389,11 @@ def test_the_client_refusal_names_the_callers_labels(tmp_path):
     outcome = write_with_intake(out, {"tokens.json": "{}\n"}, source, force=True,
                                 force_label="force: true", out_label="out",
                                 replace_label="replace_client_files: true")
-    assert outcome["message"].endswith(
-        "pass a different out folder, or pass replace_client_files: true as well as force: true "
-        "to replace it after a backup.")
+    assert outcome["message"] == _refusal(out, "tokens.json", "force: true",
+                                          "replace_client_files: true", "out")
 
 
-def test_force_replaces_a_file_in_the_engines_own_system_after_a_backup(tmp_path):
-    source = _source(tmp_path)
-    out = tmp_path / "out"
-    out.mkdir()
-    ours = json.dumps({"$extensions": {ENGINE_KEY: {"axes": {}}}, **CLIENT_TOKENS})
-    (out / "tokens.json").write_text(ours, encoding="utf-8")
-    outcome = write_with_intake(out, {"tokens.json": "{}\n"}, source, force=True)
-    old = _digest(ours.encode("utf-8"))
-    assert outcome["status"] == "written"
-    assert outcome["replaced"] == {"tokens.json": f"{INTAKE_DIR}/backup/{old}/replaced/tokens.json"}
-
-
-def test_a_file_the_engine_wrote_beside_a_clients_system_is_replaced_with_force(tmp_path):
-    """A file carrying the engine's digest is the engine's while it still
-    matches; once a person edits it, it is theirs."""
+def test_a_file_the_engine_wrote_is_replaced_with_force_until_a_person_edits_it(tmp_path):
     source = _source(tmp_path)
     out = tmp_path / "out"
     out.mkdir()
@@ -377,19 +406,102 @@ def test_a_file_the_engine_wrote_beside_a_clients_system_is_replaced_with_force(
     assert outcome["status"] == "refused" and outcome["conflicts"] == ["notes.md"]
 
 
-def test_a_backed_up_client_source_does_not_make_the_folder_a_clients(tmp_path):
-    """The backup of a client's tokens file sits inside the out folder; the
-    folder is still the engine's, so an extension file it wrote can be
-    replaced with --force alone."""
-    folder = tmp_path / "src"
-    folder.mkdir()
-    (folder / "tokens.json").write_text(json.dumps(CLIENT_TOKENS), encoding="utf-8")
-    source = read_source(folder / "tokens.json", "dtcg", "--from")[0]
+# Every name is a plain path below the out folder and outside .uxskill/.
+@pytest.mark.parametrize("name, message", [
+    ("../x.css", "files names ../x.css, which is outside {out}, so nothing was written; name it "
+                 "by its path below that folder, for example x.css"),
+    ("/abs/x.css", "files names /abs/x.css, an absolute path, so nothing was written; name it "
+                   "by its path below {out}, for example x.css"),
+    ("z/../.uxskill/intake/x.json", "files names z/../.uxskill/intake/x.json, inside .uxskill/, "
+                                    "which holds the intake backups, so nothing was written; "
+                                    "write that file under another name"),
+    (".UXSKILL/x", "files names .UXSKILL/x, inside .uxskill/, which holds the intake backups, "
+                   "so nothing was written; write that file under another name"),
+    ("z/../x.css", "files names z/../x.css, which is not a plain path below {out}, so nothing "
+                   "was written; write it as x.css"),
+])
+def test_a_name_that_is_not_a_plain_path_below_the_folder_is_refused(tmp_path, name, message):
+    source = _source(tmp_path)
     out = tmp_path / "out"
-    assert write_with_intake(out, {"tokens.ext.css": "a\n"}, source)["status"] == "written"
-    outcome = write_with_intake(out, {"tokens.ext.css": "b\n"}, source, force=True)
-    assert outcome["status"] == "written"
-    assert (out / "tokens.ext.css").read_text() == "b\n"
+    out.mkdir()
+    outcome = write_with_intake(out, {name: "x\n", "ok.css": "ok\n"}, source, force=True,
+                                replace_client=True)
+    assert outcome["status"] == "error"
+    assert outcome["message"] == message.format(out=out)
+    assert list(out.iterdir()) == [] and sorted(p.name for p in tmp_path.iterdir()) == [
+        "out", "theme.css"]
+
+
+def test_a_link_inside_the_folder_that_points_outside_is_refused(tmp_path):
+    source = _source(tmp_path)
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "ext").symlink_to(outside, target_is_directory=True)
+    outcome = write_with_intake(out, {"ext/x.css": "x\n"}, source, force=True,
+                                replace_client=True)
+    assert outcome["status"] == "error"
+    assert outcome["message"] == (
+        f"{out / 'ext'} is a file or a link where a folder should be, so ext/x.css cannot be "
+        "written; move it away or write the system into a different folder")
+    assert list(outside.iterdir()) == []
+
+
+# The record and the sources.
+def test_the_same_step_into_two_folders_writes_the_same_bytes(tmp_path):
+    folder, report = _pair(tmp_path)
+    write_with_intake(tmp_path / "one", {"a.css": "a\n"}, report)
+    write_with_intake(tmp_path / "two", {"a.css": "a\n"}, report)
+    assert _snapshot(tmp_path / "one") == _snapshot(tmp_path / "two")
+
+
+def test_sources_with_the_same_bytes_share_a_record_that_keeps_both(tmp_path):
+    a = _source(tmp_path)
+    (tmp_path / "copy").mkdir()
+    (tmp_path / "copy" / "theme.css").write_bytes((tmp_path / "theme.css").read_bytes())
+    b = read_source(tmp_path / "copy" / "theme.css", "css", "--from")[0]
+    out = tmp_path / "out"
+    write_with_intake(out, {"a.css": "a\n"}, a)
+    write_with_intake(out, {"b.css": "b\n"}, b)
+    record = _record(out, a.sha256[:12])
+    assert record["sources"] == [a.to_dict(), b.to_dict()]
+    assert list(record["backed_up"]) == [a.path, b.path]
+    assert record["writes"] == ["a.css", "b.css"]
+
+
+def test_sources_that_share_no_folder_each_keep_their_digest(tmp_path, monkeypatch):
+    import engine.io.intake as intake
+
+    def no_common(paths):
+        raise ValueError("Paths don't have the same drive")
+
+    folder, report = _pair(tmp_path)
+    monkeypatch.setattr(intake.os.path, "commonpath", no_common)
+    out = tmp_path / "out"
+    assert write_with_intake(out, {"a.css": "a\n"}, report)["status"] == "written"
+    record = json.loads(next((out / INTAKE_DIR / "intake").iterdir()).read_text())
+    light = str(folder / "tokens.json")
+    assert record["backed_up"][light].endswith(
+        f"/source/{_digest(os.path.abspath(light).encode('utf-8'))}/tokens.json")
+
+
+def test_a_path_is_not_a_source(tmp_path):
+    source = _source(tmp_path)
+    outcome = write_with_intake(tmp_path / "out", {"x.css": "x\n"}, source.path)
+    assert outcome["status"] == "error"
+    assert outcome["message"] == (
+        f"sources is {source.path!r}, not a Source; pass the import's report, its Source, or a "
+        "list of them (read_source and every importer give one)")
+
+
+def test_one_path_read_twice_is_checked_both_times(tmp_path):
+    first = _source(tmp_path)
+    second = _source(tmp_path, ":root { --ink: #222; }\n")
+    # The later read matches the file; the earlier one is still checked.
+    outcome = write_with_intake(tmp_path / "out", {"x.css": "x\n"}, [second, first])
+    assert outcome["status"] == "error"
+    assert outcome["message"].startswith(f"{tmp_path / 'theme.css'} changed after it was read")
 
 
 # The package: reading a system never loads the writer, and every name the

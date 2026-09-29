@@ -447,8 +447,39 @@ def test_a_link_where_a_subfolder_goes_is_named_and_never_written_through(tmp_pa
 
 def test_bytes_are_written_and_compared_as_they_are(tmp_path):
     """A backup keeps a file's own bytes, whatever its encoding."""
-    data = "café\n".encode("utf-16")
+    data = "caf\u00e9\n".encode("utf-16")
     assert write_files(tmp_path, {"old.css": data}).write == ("old.css",)
     assert (tmp_path / "old.css").read_bytes() == data
     assert plan_writes(tmp_path, {"old.css": data}).unchanged == ("old.css",)
     assert plan_writes(tmp_path, {"old.css": b"other"}).conflicts == ("old.css",)
+
+
+@pytest.mark.parametrize("name, fix", [
+    ("../x.css", "which is outside {out}, so nothing was written; name it by its path below "
+                 "that folder, for example x.css"),
+    ("/abs/x.css", "an absolute path, so nothing was written; name it by its path below {out}, "
+                   "for example x.css"),
+    ("a//b.css", "which is not a plain path below {out}, so nothing was written; write it as "
+                 "a/b.css"),
+    ("a\\b.css", "which is not a plain path below {out}, so nothing was written; write it as "
+                 "a/b.css"),
+])
+def test_every_writer_refuses_a_name_that_is_not_a_plain_path_below_the_folder(
+        tmp_path, name, fix):
+    out = tmp_path / "out"
+    with pytest.raises(InputError) as exc:
+        write_files(out, {"tokens.css": ":root {}\n", name: "x\n"}, force=True)
+    assert str(exc.value) == f"files names {name}, " + fix.format(out=out)
+    assert sorted(p.name for p in tmp_path.iterdir()) == []
+
+
+def test_with_a_replace_set_only_those_files_are_replaced(tmp_path):
+    (tmp_path / "a.css").write_text("old a\n", encoding="utf-8")
+    (tmp_path / "b.css").write_text("old b\n", encoding="utf-8")
+    plan = write_files(tmp_path, {"a.css": "a\n", "b.css": "b\n", "c.css": "c\n"}, force=True,
+                       replace={"a.css"})
+    assert plan.conflicts == ("b.css",)
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["a.css", "b.css"]
+    assert (tmp_path / "a.css").read_text(encoding="utf-8") == "old a\n"
+    assert write_files(tmp_path, {"a.css": "a\n", "c.css": "c\n"}, force=True,
+                       replace={"a.css"}).write == ("c.css", "a.css")

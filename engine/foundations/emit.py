@@ -15,12 +15,14 @@ import hashlib
 import json
 import math
 import os
+import posixpath
 import re
 import shutil
 import tempfile
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Union
+from typing import (Any, Collection, Dict, List, Mapping, Optional, Sequence, Tuple,
+                    Union)
 
 from engine.foundations.audience import (
     FIELDS as AUDIENCE_FIELDS, HOW_TO_PASS, Audience, AudienceError, effects, read_audience,
@@ -1036,15 +1038,46 @@ def _file_bytes(content: Union[str, bytes]) -> bytes:
     return content if isinstance(content, bytes) else content.encode("utf-8")
 
 
+def check_name(out_dir: Path, name: str, reserved: Sequence[str] = ()) -> None:
+    """Refuse a file name that is not a plain relative path below out_dir:
+    an absolute name, one that climbs out with .., one not written in its
+    plain form (z/../x.css, a/./b, a//b, a backslash), and one whose first
+    folder, once the name is made plain, is in `reserved` (the intake
+    folder), in any case. A link on the way is refused by plan_writes.
+    Raises InputError naming the file and the fix."""
+    plain = posixpath.normpath(name.replace("\\", "/")) if name else "."
+    example = posixpath.basename(plain) if plain not in (".", "..", "/") else "tokens.css"
+    if name.startswith(("/", "\\")) or Path(name).is_absolute() or Path(name).drive:
+        raise InputError(f"files names {name}, an absolute path, so nothing was written; name "
+                         f"it by its path below {out_dir}, for example {example}")
+    if plain == ".." or plain.startswith("../"):
+        raise InputError(f"files names {name}, which is outside {out_dir}, so nothing was "
+                         f"written; name it by its path below that folder, for example "
+                         f"{example}")
+    first = plain.split("/", 1)[0].casefold()
+    for folder in reserved:
+        if first == folder.casefold():
+            raise InputError(f"files names {name}, inside {folder}/, which holds the intake "
+                             "backups, so nothing was written; write that file under another "
+                             "name")
+    if plain != name or plain == ".":
+        raise InputError(f"files names {name or 'an empty name'}, which is not a plain path "
+                         f"below {out_dir}, so nothing was written; write it as "
+                         f"{plain if plain != '.' else 'a file name, for example tokens.css'}")
+
+
 def plan_writes(out_dir: Path, files: Mapping[str, Union[str, bytes]]) -> WritePlan:
     """Compare each file with what is on disk, without writing. A link in
     place of a file is never written through or replaced: an identical one
     is left alone, any other is refused. A name may sit in subfolders; a
     file or link where one of them should be is named. A file's content is
-    text, written as UTF-8, or bytes, written as they are."""
+    text, written as UTF-8, or bytes, written as they are. Every name is
+    checked with check_name first, so nothing is written outside out_dir."""
     write: List[str] = []
     unchanged: List[str] = []
     conflicts: List[str] = []
+    for name in files:
+        check_name(out_dir, name)
     for name, text in files.items():
         target = out_dir / name
         data = _file_bytes(text)
@@ -1139,7 +1172,7 @@ def _restore(out_dir: Path, placed: Sequence[Tuple[str, Optional[Path]]]) -> Lis
 
 
 def write_files(out_dir: Path, files: Mapping[str, Union[str, bytes]], *,
-                force: bool = False) -> WritePlan:
+                force: bool = False, replace: Optional[Collection[str]] = None) -> WritePlan:
     """Write the files that are new or, when forced, different. Without
     force, one conflicting file stops every write. Identical files are
     never rewritten. All or nothing: every file is staged in a folder
@@ -1148,12 +1181,19 @@ def write_files(out_dir: Path, files: Mapping[str, Union[str, bytes]], *,
     on, so the folder never holds a mix of two systems. Returns the plan
     it acted on; `conflicts` is non-empty only when nothing was written.
     Every filesystem error is an InputError naming the path and the fix;
-    any other exception is raised as it was, once the folder is back."""
+    any other exception is raised as it was, once the folder is back.
+    With force, `replace` (when given) holds the only names that may be
+    replaced: any other file that differs refuses the write, and the plan
+    returned names just those."""
     if not files:
         return WritePlan((), (), ())
     plan = plan_writes(out_dir, files)
     if plan.conflicts and not force:
         return plan
+    if replace is not None:
+        stray = tuple(n for n in plan.conflicts if n not in replace)
+        if stray:
+            return WritePlan(plan.write, plan.unchanged, stray)
     names = plan.write + plan.conflicts
     if not names:
         return WritePlan((), plan.unchanged, ())
