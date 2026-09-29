@@ -11,6 +11,7 @@ import re
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
+from engine.existing import survey
 from engine.foundations.color_math import oklab_to_oklch
 
 # The frontmatter key and value ux-skill writes into a MASTER.md it owns.
@@ -54,13 +55,15 @@ _GENERATED_RE = re.compile(r"generated\b.{0,200}?\bdo not edit|do not edit.{0,20
                            re.I | re.S)
 _FOUNDATION_CSS_RE = re.compile(r"(?:^|[-_.])(?:foundations?|tokens|variables|theme)\.css$", re.I)
 _CUSTOM_PROP_RE = re.compile(r"(--[A-Za-z0-9_-]+)\s*:\s*([^;{}]+)")
-_HTML_LANG_RE = re.compile(r"<html\b[^>]*\blang\s*=\s*['\"]([A-Za-z]{2,3})(?:-[A-Za-z0-9-]+)?['\"]", re.I)
-_HTML_RTL_RE = re.compile(r"<html\b[^>]*\bdir\s*=\s*['\"]rtl['\"]", re.I)
 _HEX_RE = re.compile(r"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$")
 _FUNC_RE = re.compile(r"^(rgba?|hsla?|oklch|oklab|color)\(\s*(.*?)\s*\)$", re.I | re.S)
 _DIMENSION_RE = re.compile(r"^-?\d+(?:\.\d+)?(?:px|rem|em|%|pt|vw|vh|ms|s)$")
 
 _PRIMARY_WORDS = {"primary", "brand"}
+# Names an action color goes by when no name says primary or brand.
+_ACTION_WORDS = {"accent", "action", "cta", "interactive"}
+# Leading words that say a token fills something (bg-brand, color-accent).
+_FILL_WORDS = {"color", "colors", "bg", "background", "fill"}
 _NOT_PRIMARY = {
     "hover", "pressed", "active", "focus", "disabled", "on", "subtle", "muted", "soft",
     "container", "text", "fg", "foreground", "ink", "border", "outline", "inverse", "weak",
@@ -83,6 +86,8 @@ _TEXT_MAX_CHROMA = 0.35    # a text color is near-neutral
 _TEXT_MIN_CONTRAST = 4.5   # on white or the declared canvas
 _DISPLAY_WORDS = {"display", "heading", "headline", "head", "title"}
 _BODY_WORDS = {"body", "base", "text", "sans", "default", "ui", "copy"}
+# Platform keywords a font list may open with: the face is the system's own.
+_PLATFORM_FAMILIES = {"-apple-system", "blinkmacsystemfont", "system-ui", "ui-sans-serif"}
 
 # Kinds that make a system on their own; the rest are hints.
 _STRONG_KINDS = {"tokens-source", "tokens", "built-output", "css-foundation", "master-md",
@@ -160,29 +165,26 @@ def normalize_hex(value: Any) -> str:
     """A color as #RRGGBB upper case, or "" when it is not a color this can
     read. Reads hex, rgb(), hsl(), oklch(), oklab(), color(srgb ...) and the
     DTCG color object (hex, or components in srgb, hsl, oklch or oklab)."""
-    if isinstance(value, dict):
-        hx = value.get("hex")
-        if isinstance(hx, str):
-            return normalize_hex(hx)
-        comps = value.get("components")
-        space = str(value.get("colorSpace") or "srgb").lower()
-        if isinstance(comps, list) and len(comps) >= 3:
-            try:
-                c = [0.0 if x in (None, "none") else float(x) for x in comps[:3]]
-            except (TypeError, ValueError):
-                return ""
-            try:
-                if space == "srgb":
-                    return _rgb_hex(*(x * 255 for x in c))
-                if space == "hsl":
-                    return _from_hsl(c[0], c[1] / 100.0, c[2] / 100.0)
-                if space == "oklch":
-                    return _oklch_hex(*c)
-                if space == "oklab":
-                    return _oklch_hex(*oklab_to_oklch(*c))
-            except (ValueError, ImportError):
-                return ""
+    return normalize_color(value)[:7]
+
+
+def _alpha_suffix(alpha: Any) -> str:
+    """The AA of #RRGGBBAA for an alpha from 0 to 1 (or a percentage), or ""
+    when it is opaque or not a number."""
+    try:
+        a = _num(str(alpha), 1.0)
+    except ValueError:
         return ""
+    a = max(0.0, min(1.0, a))
+    return "" if a >= 1 else "%02X" % round(a * 255)
+
+
+def normalize_color(value: Any) -> str:
+    """A color as #RRGGBB, or #RRGGBBAA when it is translucent (an rgba()
+    keeps its alpha), upper case; "" when it is not a color this can read."""
+    if isinstance(value, dict):
+        hx = _normalize_opaque(value)
+        return hx + _alpha_suffix(value.get("alpha", 1)) if hx else ""
     if not isinstance(value, str):
         return ""
     s = value.strip()
@@ -196,10 +198,44 @@ def normalize_hex(value: Any) -> str:
     try:
         kind, hx = read_value(s)
         if kind == "color":
-            return hx[:7]
+            return hx
     except NotRead:
         pass
-    return _function_hex(m.group(1).lower(), m.group(2)) if m else ""
+    if not m:
+        return ""
+    hx = _function_hex(m.group(1).lower(), m.group(2))
+    if not hx:
+        return ""
+    parts = [p for p in re.split(r"[\s,/]+", m.group(2).strip()) if p]
+    at = 4 if m.group(1).lower() == "color" else 3
+    return hx + (_alpha_suffix(parts[at]) if len(parts) > at else "")
+
+
+def _normalize_opaque(value: Any) -> str:
+    """A DTCG color object as #RRGGBB: its hex, or its components in srgb,
+    hsl, oklch or oklab."""
+    hx = value.get("hex")
+    if isinstance(hx, str):
+        return normalize_hex(hx)
+    comps = value.get("components")
+    space = str(value.get("colorSpace") or "srgb").lower()
+    if isinstance(comps, list) and len(comps) >= 3:
+        try:
+            c = [0.0 if x in (None, "none") else float(x) for x in comps[:3]]
+        except (TypeError, ValueError):
+            return ""
+        try:
+            if space == "srgb":
+                return _rgb_hex(*(x * 255 for x in c))
+            if space == "hsl":
+                return _from_hsl(c[0], c[1] / 100.0, c[2] / 100.0)
+            if space == "oklch":
+                return _oklch_hex(*c)
+            if space == "oklab":
+                return _oklch_hex(*oklab_to_oklch(*c))
+        except (ValueError, ImportError):
+            return ""
+    return ""
 
 
 def _segments(path: str) -> List[str]:
@@ -356,20 +392,58 @@ def _is_design_token(tok: Dict[str, Any]) -> bool:
     return isinstance(value, str) and bool(_DIMENSION_RE.match(value.strip()))
 
 
-def _rank_primary(names: Iterable[Tuple[str, str]]) -> Tuple[str, str]:
-    best: Optional[Tuple[Tuple[int, int, int], str, str]] = None
+def _primary_candidates(names: Iterable[Tuple[str, str]]) -> List[Tuple[str, str, str]]:
+    """Every color a name marks as the primary, best named first, as
+    (name, hex, the word that marks it): a name that says primary or brand,
+    then one that says accent, action, cta or interactive. A leading fill
+    word (bg-brand, color-accent) is allowed; a state, a role other than the
+    fill, a ramp step or a translucent color is not."""
+    ranked: List[Tuple[Tuple[int, int, int, int], str, str, str]] = []
     for order, (name, hx) in enumerate(names):
         segs = _segments(name)
-        if not hx or not segs or segs[-1].isdigit():
+        if not hx or (hx.startswith("#") and len(hx) > 7) or not segs or segs[-1].isdigit():
             continue
-        words = set(segs)
+        lead = 0
+        while lead < len(segs) - 1 and segs[lead] in _FILL_WORDS:
+            lead += 1
+        words = set(segs[lead:])
         hits = words & _PRIMARY_WORDS
+        tier = 0 if hits else 1
+        hits = hits or words & _ACTION_WORDS
         if not hits or words & _NOT_PRIMARY:
             continue
-        score = (-len(hits), len(segs), order)
-        if best is None or score < best[0]:
-            best = (score, name, hx)
-    return (best[1], best[2]) if best else ("", "")
+        ranked.append(((tier, -len(hits), len(segs), order), name, hx, min(hits)))
+    ranked.sort()
+    return [(name, hx, word) for _, name, hx, word in ranked]
+
+
+def _rank_primary(names: Iterable[Tuple[str, str]]) -> Tuple[str, str]:
+    found = _primary_candidates(names)
+    return (found[0][0], found[0][1]) if found else ("", "")
+
+
+def _choose_primary(cands: List[Tuple[str, str, str]], files: List[Path]
+                    ) -> Tuple[Tuple[str, str], str, List[Dict[str, Any]]]:
+    """(the chosen (name, hex), why, every candidate with its paint count).
+    One candidate is taken by its name. Of several, the one the code paints
+    buttons and links with most wins; with no such use, the best name."""
+    name, hx, word = cands[0]
+    how = ("its name says %s" % word if word in _PRIMARY_WORDS
+           else "its name says %s, an action color" % word)
+    if len(cands) == 1:
+        return (name, hx), "%s is the only primary candidate; %s." % (name, how), []
+    paints = survey.button_paints([c[0] for c in cands], files)
+    listed = [{"token": n, "value": h, "paints": paints[n]} for n, h, _ in cands]
+    best = max(cands, key=lambda c: paints[c[0]])
+    others = ", ".join("%s (%d)" % (n, paints[n]) for n, _, _ in cands if n != best[0])
+    if paints[best[0]]:
+        n = paints[best[0]]
+        why = ("%s is the color the code paints buttons and links with: %d use%s in button and "
+               "link styles and markup, over %s." % (best[0], n, "" if n == 1 else "s", others))
+        return (best[0], best[1]), why, listed
+    return (name, hx), ("%s was chosen because %s; the code paints no button or link with it or "
+                        "with %s, so confirm it is the action color." % (
+                            name, how, ", ".join(n for n, _, _ in cands[1:]))), listed
 
 
 def _luminance(hx: str) -> float:
@@ -401,7 +475,7 @@ def _rank_text(names: Iterable[Tuple[str, str]], canvas: str = "") -> Tuple[str,
     grounds = ["#FFFFFF"] + ([canvas] if canvas else [])
     for order, (name, hx) in enumerate(names):
         segs = _segments(name)
-        if not hx or not segs or segs[-1].isdigit():
+        if not hx or len(hx) > 7 or not segs or segs[-1].isdigit():
             continue
         words = set(segs)
         if not words & _TEXT_WORDS or words & _NOT_TEXT:
@@ -419,32 +493,56 @@ def _rank_text(names: Iterable[Tuple[str, str]], canvas: str = "") -> Tuple[str,
 def _canvas(names: Iterable[Tuple[str, str]]) -> str:
     for name, hx in names:
         segs = _segments(name)
-        if segs and segs[-1] in ("canvas", "page", "background"):
+        if segs and segs[-1] in ("canvas", "page", "background") and len(hx) == 7:
             return hx
     return ""
 
 
-def _first_family(value: Any) -> str:
+def _first_family(value: Any, props: Optional[Dict[str, str]] = None) -> str:
+    """The face a font list opens with. A var() member is followed through
+    ``props`` or passed over for the named families after it; a list that
+    opens with a platform keyword (-apple-system, system-ui) is the
+    platform's own face, system-ui."""
     if isinstance(value, list):
-        value = value[0] if value else ""
+        value = ", ".join(str(v) for v in value)
     if not isinstance(value, str):
         return ""
-    return value.split(",")[0].strip().strip('"').strip("'")
+    from engine.io.values_in import split_top  # engine.io imports this package
+    for part in (p.strip() for p in split_top(value, ",")):
+        if not part:
+            continue
+        if part.startswith("var("):
+            face = _first_family(resolve_css_var(part, props), None) if props else ""
+            if face:
+                return face
+            continue
+        name = part.strip('"').strip("'")
+        return "system-ui" if name.lower() in _PLATFORM_FAMILIES else name
+    return ""
 
 
 def _fonts_from(names: Iterable[Tuple[str, str]]) -> Dict[str, str]:
-    display = body = ""
+    """{display, body} from font tokens by name, and data: a face whose
+    name says it sets data, figures or code (mono, numeric, tabular), kept
+    as a face of its own and never taken for the body."""
+    display = body = data = ""
     for name, family in names:
         if not family:
             continue
         words = set(_segments(name))
-        if not display and words & _DISPLAY_WORDS:
+        if words & survey.DATA_WORDS:
+            data = data or family
+        elif not display and words & _DISPLAY_WORDS:
             display = family
         elif not body and (words & _BODY_WORDS or not words & _DISPLAY_WORDS):
             body = family
+    if not (display or body):
+        display = body = data
     fonts: Dict[str, str] = {}
     if display or body:
         fonts = {"display": display or body, "body": body or display}
+    if data and data != fonts.get("body"):
+        fonts["data"] = data
     return fonts
 
 
@@ -557,24 +655,6 @@ def _package_token_scripts(root: Path) -> List[str]:
                   or "style-dictionary" in str(v) or "token-transformer" in str(v))
 
 
-def _html_languages(files: List[Path]) -> List[str]:
-    counts: Dict[str, List[int]] = {}
-    for order, path in enumerate(files):
-        if path.suffix.lower() not in (".html", ".htm"):
-            continue
-        head = _read_text(path, 20_000)
-        m = _HTML_LANG_RE.search(head)
-        if not m:
-            continue
-        lang = m.group(1).lower()
-        rec = counts.setdefault(lang, [0, 0, order])
-        rec[0] += 1
-        if _HTML_RTL_RE.search(head):
-            rec[1] += 1
-    return [lang for lang, _ in sorted(counts.items(),
-                                       key=lambda kv: (-kv[1][0], -kv[1][1], kv[1][2]))]
-
-
 def _read_colors(docs: List[Any]) -> Tuple[List[Tuple[str, str]], List[Tuple[str, str]],
                                            List[Tuple[str, str]]]:
     """(colors read as hex, font families, color values that could not be read)."""
@@ -585,7 +665,7 @@ def _read_colors(docs: List[Any]) -> Tuple[List[Tuple[str, str]], List[Tuple[str
         for name, tok in flatten_dtcg(doc).items():
             typ = str(tok.get("type") or "").lower()
             if typ == "color" or (not typ and normalize_hex(tok["value"])):
-                hx = normalize_hex(tok["value"])
+                hx = normalize_color(tok["value"])
                 if hx:
                     colors.append((name, hx))
                 elif isinstance(tok["value"], str):
@@ -614,12 +694,37 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     system: commands write beside it instead of over it. A folder, a build script or a
     package script alone is reported under ``hints`` and is not a system.
 
+    Beyond the conventional folders, a token file is also found by what it
+    holds, anywhere in the same bounded walk outside docs, examples and
+    tests: a stylesheet whose rules are mostly custom properties on the
+    root or a theme selector (or a main stylesheet, such as app.css or
+    globals.css, with a theme block of its own), and a DTCG file under any
+    name. Built output found that way is left out.
+
     ``declared`` is read from the token source first, then other token
     files, then built output, then foundation CSS: ``primary`` and
     ``primary_token`` (or ``primary_raw`` and ``primary_note`` when the value
     cannot be read), ``text`` and ``text_token``, ``fonts`` ({display,
-    body}), ``colors`` (every named, non-ramp color in the client's naming)
-    and ``languages`` (from the project's HTML, most used first).
+    body}, plus ``data`` for a face kept for figures, tables or code, with
+    ``data_font_from`` when the code, not a token name, says so), ``colors``
+    (every named, non-ramp color in the client's naming, a translucent one
+    as #RRGGBBAA), ``languages`` (from the project's pages and templates:
+    HTML, Blade, JSX and TSX, Vue, Svelte, Astro, ERB and Twig, by their
+    html lang and by Arabic script in their text, most used first) and
+    ``direction`` (rtl when any of them sets dir="rtl").
+
+    The primary is a color whose name says primary or brand, else one that
+    says accent, action, cta or interactive (a leading fill word, as in
+    bg-brand, is allowed). Of several, the one the code paints buttons and
+    links with most wins; ``primary_candidates`` lists each with its count
+    and ``primary_why`` says which was chosen and why.
+
+    ``disagreements`` lists each token two sources set to different values:
+    two stylesheets (an app file that imports the system's file and sets a
+    token again undoes the system's value), a token file, and a
+    hand-written MASTER.md or DESIGN.md palette. Each names the token, every
+    file with its value, the file that wins in the cascade ("" when these
+    files do not decide it) and why.
     """
     base = Path(root).expanduser()
     result: Dict[str, Any] = {"found": False,
@@ -660,11 +765,14 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
                if (_BUILD_SCRIPT_RE.match(p.name) and "token" in p.relative_to(base).as_posix().lower())
                or _SD_CONFIG_RE.match(p.name)]
     source_docs: List[Any] = []
+    # Each hand-written token file with its document, for the disagreements.
+    doc_paths: List[Tuple[Path, Any]] = []
     for script in scripts:
         for src in _script_sources(script, base):
             doc = _token_doc(src)
             if doc is not None:
                 source_docs.append(doc)
+                doc_paths.append((src, doc))
                 add("tokens-source", src)
 
     token_docs: List[Any] = []
@@ -684,6 +792,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
                     add("built-output", path)
                 else:
                     token_docs.append(doc)
+                    doc_paths.append((path, doc))
                     add("tokens", path)
                 continue
         if path in scripts:
@@ -699,6 +808,29 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
                     else:
                         css_files.append(path)
                         add("css-foundation", path)
+
+    # Token sources found by what they hold, anywhere in the walk outside
+    # docs, examples and tests: an assets/ folder beside the system, the
+    # app's own token stylesheets, the theme block of its main stylesheet
+    # and a site's globals, and a DTCG file under any name.
+    for path in html_files:
+        rel = path.relative_to(base).as_posix()
+        low = path.name.lower()
+        if any(s["path"] == rel for s in sources) or not survey.in_product(path, base) \
+                or low.endswith(".min.css") or _is_built(path, base):
+            continue
+        if low.endswith(".css"):
+            if survey.css_token_file(path.name, _read_text(path)):
+                css_files.append(path)
+                add("css-foundation", path)
+        elif low.endswith(".json") and low != "package.json" \
+                and '"$value"' in _read_text(path, 400_000):
+            doc = _token_doc(path)
+            if doc is not None and sum(1 for t in flatten_dtcg(doc).values()
+                                       if _is_design_token(t)) >= 3:
+                token_docs.append(doc)
+                doc_paths.append((path, doc))
+                add("tokens", path)
 
     if _package_token_scripts(base):
         add("build-script", base / "package.json")
@@ -740,24 +872,28 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     css_fonts: List[Tuple[str, str]] = []
     for name, value in css_props.items():
         resolved = resolve_css_var(value, css_props)
-        hx = normalize_hex(resolved)
+        hx = normalize_color(resolved)
         if hx:
             css_colors.append((name.lstrip("-"), hx))
-        elif "font" in name and ("family" in name or "face" in name or name.endswith("font")):
-            css_fonts.append((name.lstrip("-"), _first_family(resolved)))
+        elif ("font" in name and ("family" in name or "face" in name or name.endswith("font"))) \
+                or (_FONT_TOKEN_RE.match(name) and _font_list(resolved)):
+            css_fonts.append((name.lstrip("-"), _first_family(resolved, css_props)))
 
     declared: Dict[str, Any] = {}
-    p_name, p_hex = _rank_primary(colors)
+    cands = _primary_candidates(colors)
     p_from = "tokens"
-    if not p_hex:
-        p_name, p_hex = _rank_primary(css_colors)
+    if not cands:
+        cands = [("--" + n, h, w) for n, h, w in _primary_candidates(css_colors)]
         p_from = "css"
-        if p_name:
-            p_name = "--" + p_name
-    if p_hex:
+    if cands:
+        (p_name, p_hex), why, listed = _choose_primary(cands, html_files)
         declared["primary"] = p_hex
         declared["primary_token"] = p_name
         declared["primary_from"] = p_from
+        if listed or cands[0][2] not in _PRIMARY_WORDS:
+            declared["primary_why"] = why
+        if listed:
+            declared["primary_candidates"] = listed
     else:
         r_name, r_value = _rank_primary((n, v) for n, v in raw_colors)
         if r_name:
@@ -775,6 +911,13 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
         declared["text"] = t_hex
         declared["text_token"] = t_name
     fonts = _fonts_from(font_tokens) or _fonts_from(css_fonts)
+    if "data" not in fonts:
+        face, where = survey.data_face(css_files, html_files,
+                                       lambda v: _first_family(v, css_props))
+        if face and face != fonts.get("body"):
+            fonts = {**fonts, "data": face} if fonts else {"display": face, "body": face}
+            if fonts.get("body") != face:
+                declared["data_font_from"] = where
     if fonts:
         declared["fonts"] = fonts
     named: Dict[str, str] = {}
@@ -784,14 +927,45 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
             named.setdefault("-".join(segs), hx)
     if named:
         declared["colors"] = named
-    langs = _html_languages(html_files)
+    langs, rtl = survey.languages(html_files)
     if langs:
         declared["languages"] = langs
+    if rtl:
+        declared["direction"] = "rtl"
+    disagree = survey.disagreements(
+        base, css_files, doc_paths,
+        [base / s["path"] for s in sources if s["kind"] in ("master-md", "design-md")],
+        html_files, _reading, flatten_dtcg)
+    if disagree:
+        declared["disagreements"] = disagree
 
     result["sources"] = sources
     result["declared"] = declared
     result["found"] = True
     return result
+
+
+_FONT_TOKEN_RE = re.compile(r"^--font-(?!size|weight|feature|variation|style|stretch|"
+                            r"optical|kerning|smoothing|synthesis)[a-z]", re.I)
+
+
+def _font_list(value: str) -> bool:
+    """True when a value reads as a font list, the var() members it may
+    open with left aside."""
+    from engine.io.values_in import NotRead, read_value, split_top  # engine.io imports this
+    parts = split_top(value, ",")
+    while parts and parts[0].strip().startswith("var("):
+        parts = parts[1:]
+    try:
+        return bool(parts) and read_value(", ".join(parts))[0] == "fontFamily"
+    except NotRead:
+        return False
+
+
+def _reading(value: str, props: Dict[str, str]) -> str:
+    """What a value reads as, for telling two values from two spellings of one."""
+    resolved = resolve_css_var(value, props)
+    return normalize_color(resolved) or " ".join(resolved.split()).lower()
 
 
 def mark_suggestions(payload: Dict[str, Any], found: Optional[Dict[str, Any]]) -> Dict[str, Any]:
