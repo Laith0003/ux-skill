@@ -7,11 +7,13 @@ that measures what a codebase actually uses, and the enhance report that
 sets the two side by side, and the Tailwind 4 and Figma variables
 exporters, which write beside a source they did not build and never over
 it (the Figma one with the scripts that apply and read variables through
-Figma's plugin API). read_any reads a file in any of FORMATS, and
-write_with_intake is the step every write into a folder someone already
-has goes through: it checks and backs up every source first. Importing
-the package never loads the writer; write_with_intake loads it when it
-runs.
+Figma's plugin API), and extend, which adds foundations, roles or
+contracts to a system without changing what it has (in an extension file
+beside a system the engine did not write). read_any reads a file in any
+of FORMATS, and write_with_intake is the step every write into a folder
+someone already has goes through: it checks and backs up every source
+first. Importing the package never loads the writer; write_with_intake
+loads it when it runs.
 """
 from pathlib import Path
 from typing import Any
@@ -23,6 +25,7 @@ from engine.io.adapter import (
 from engine.io.css_in import Rule, import_css, parse_css, read_css, write_css
 from engine.io.dtcg_in import import_dtcg, read_dtcg
 from engine.io.enhance import Drift, Enhanced, Lie, RawWithToken, drift, enhance
+from engine.io.extend import Extended, extend, write_extended
 from engine.io.figma_in import REST_ENDPOINT, SIZE_SCOPES, import_figma, read_figma
 from engine.io.figma_out import (ADDITIONS, APPLY_SCRIPT, READ_SCRIPT, as_export,
                                  figma_extension, figma_files, to_figma, write_figma)
@@ -37,7 +40,7 @@ from engine.io.tailwind_in import (
     EXPORT_COMMAND, import_tailwind_css, import_tailwind_json, read_tailwind)
 from engine.io.tailwind_out import (
     RESETS, export_tailwind, extension_name, in_roles, tailwind_extension, tailwind_name,
-    to_tailwind, write_tailwind)
+    to_tailwind, unread_properties, write_tailwind)
 from engine.io.values_in import (CSS_KEYWORDS, GamutMapped, NotRead, css_alias, read_value,
                                  split_top)
 
@@ -58,6 +61,7 @@ __all__ = [
     "tailwind_name", "to_tailwind", "write_tailwind",
     "ADDITIONS", "APPLY_SCRIPT", "READ_SCRIPT", "as_export", "figma_extension", "figma_files",
     "to_figma", "write_figma",
+    "Extended", "extend", "unread_properties", "write_extended",
 ]
 
 

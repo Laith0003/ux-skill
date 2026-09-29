@@ -529,7 +529,13 @@ class Enhanced:
         lines += [f"- {_sentence(c)}" for c in self.decisions] or ["None."]
         return "\n".join(lines) + "\n"
 
-    def _gate(self, source: str) -> List[str]:
+    def check_lines(self, source: str) -> List[str]:
+        """How the system was checked and the gate's verdict, without the
+        findings: the mapping per foundation, then the verdict line, or
+        that nothing was measured. `source` is the system's file."""
+        return [*self._how(), "", *self._gate(source, findings=False)]
+
+    def _gate(self, source: str, findings: bool = True) -> List[str]:
         if not self.measured:
             return [("No role is mapped, so the gate had nothing to measure and nothing here "
                      "passed; map roles to your tokens in mapping.json to check them.")]
@@ -554,10 +560,10 @@ class Enhanced:
             it = "it" if len(self.unresolved) == 1 else "they"
             line += (f" The pairs and rules that need {unresolved} were not measured, since "
                      f"{it} could not be resolved (see Structure).")
-        if self.findings:
+        if self.findings and findings:
             line += f" Each finding names our role, then your token in {source}."
         out = textwrap.wrap(line, WIDTH, break_long_words=False, break_on_hyphens=False)
-        if self.findings:
+        if self.findings and findings:
             out.append("")
             for f in self.findings:
                 out += textwrap.wrap(f, WIDTH, initial_indent="- ", subsequent_indent="  ",

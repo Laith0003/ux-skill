@@ -235,7 +235,7 @@ def _shown(t: Token) -> str:
     return f"{text(t.value)} ({modes})" if modes else text(t.value)
 
 
-def _unread(imported: Imported) -> Dict[str, str]:
+def unread_properties(imported: Imported) -> Dict[str, str]:
     """Every custom property the source declares that the import did not
     make a token (an entry under Not read, a component's property, a
     viewport switch), each with what the report says of it."""
@@ -256,7 +256,7 @@ def _additions(imported: Imported, ts: TokenSet) -> TokenSet:
     source would replace its value, and an extension only adds."""
     source = imported.report.source.path
     held = {css_property(t.path): t for t in imported.tokens.tokens()}
-    unread = _unread(imported)
+    unread = unread_properties(imported)
     out = TokenSet(ts.axes)
     for t in ts.tokens():
         name = css_property(t.path)
