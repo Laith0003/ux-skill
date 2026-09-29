@@ -84,6 +84,19 @@ def mode_of(name: str, context: Iterable[str] = ()) -> Optional[str]:
     return hit[0] if hit is not None and hit[1] == -1 else None
 
 
+def axes_named(name: str, context: Iterable[str] = ()) -> Tuple[str, ...]:
+    """Every axis whose non-base value `name` names on its own, in the
+    engine's axis order: High contrast dark names scheme and contrast. A
+    mode that names two is a combined mode, which no one axis holds."""
+    found = _values(name)
+    around = set(found)
+    for text in context:
+        around |= words(text)
+    return tuple(axis for axis, (base, other) in AXES.items()
+                 if (axis not in NEEDS_AXIS_WORD or axis in around)
+                 and other in found and base not in found)
+
+
 def is_base(name: str) -> bool:
     """True when `name` is a base: an axis's base value (Light, LTR) or a
     base word (Default, Value), and no non-base value beside it."""

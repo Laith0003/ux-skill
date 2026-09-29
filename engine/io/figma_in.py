@@ -31,13 +31,18 @@ Modes: a collection with one mode gives values with no axis. One with two
 gives one axis. Mode names are placed by the importers' shared matcher:
 Light and Dark, Default and Dark, or Dark mode read into the scheme axis,
 the light or default one the base and the dark one scheme:dark, as the
-other importers read a dark scheme; any other pair gives an axis named
-after both modes (Main and Partner give main-partner), the default mode
-the base. Each such collection is noted. A collection whose modes are
+other importers read a dark scheme; a pair where one mode names an axis on
+its own (Light and High contrast, Brand and Dark) reads into that axis;
+any other pair gives an axis named after both modes (Main and Partner
+give main-partner), the default mode the base. Each such collection is noted. A collection whose modes are
 viewport tiers (Mobile, Tablet and Desktop, or SM to XL, or a collection
 named Breakpoints) is never a mode axis: its default tier is read, and one
 note names the other tiers' values, which the engine sets itself. A
-collection with more modes gives its default mode; second_modes names the
+collection with more modes is read one mode per axis, as the other
+importers read one column or theme per axis: Light, Dark and High contrast
+give the base, scheme:dark and contrast:high, and a mode left over (Dim, or
+a combined High contrast dark) is listed under Not read with its fix. When
+no mode names an axis, the default mode is read and second_modes names the
 other mode to read for it.
 """
 from __future__ import annotations
@@ -54,7 +59,7 @@ from engine.foundations.errors import InputError
 from engine.foundations.modes import AXES
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.graph import cycles
-from engine.io.mode_words import axis_of, words
+from engine.io.mode_words import axes_named, axis_of, is_base, words
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
 
 # The FLOAT scopes that size something in px.
@@ -72,6 +77,7 @@ VIEWPORT_COLLECTIONS = frozenset(("viewport", "viewports", "breakpoint", "breakp
 _BAD = re.compile(r"[^A-Za-z0-9_-]+")
 _AXIS_WORD = re.compile(r"[a-z][a-z0-9-]*")
 _DECIMALS = 4
+_COUNT = {2: "two", 3: "three", 4: "four", 5: "five"}
 
 
 class _Bad(ValueError):
@@ -96,6 +102,10 @@ class _Plan:
     read: List[Tuple[str, str]]
     axis: Optional[Tuple[str, Tuple[str, str]]] = None
     note: str = ""
+    # Modes whose values were not read, each with why and the fix.
+    unread: List[str] = field(default_factory=list)
+    # The axes a collection read one mode per axis makes, beside `axis`.
+    more_axes: List[Tuple[str, Tuple[str, str]]] = field(default_factory=list)
     # A library collection another file owns (remote in the export).
     remote: bool = False
     # A collection of viewport tiers: its other tiers, read for the note only.
@@ -193,6 +203,9 @@ def _plan(col: Dict[str, Any], want: Optional[str],
         # A viewport is never a mode axis: the default tier is the value,
         # and the other tiers are named in one note once they are read.
         return _Plan(cname, modes, [(default, "")], tiers=others)
+    per_axis = _per_axis(cname, modes, default) if len(modes) > 2 else None
+    if per_axis is not None and want is None:
+        return per_axis
     if len(modes) > 2 and want is None:
         # Suggest the mode that makes a known axis with the default, if one does.
         example = next((m for m in others if _known_axis(modes[default], modes[m], cname)),
@@ -218,9 +231,18 @@ def _plan(col: Dict[str, Any], want: Optional[str],
                              f"{modes[default]}")
     else:
         other = others[0]
+    if per_axis is not None and any(m == other for m, _ in per_axis.read):
+        # The chosen mode places into an axis: read every mode that does.
+        return per_axis
     left = [modes[m] for m in others if m != other]
     unread = f"; {_and(left)} {'was' if len(left) == 1 else 'were'} not read" if left else ""
     known = _known_axis(modes[default], modes[other], cname)
+    if known is None and len(modes) == 2:
+        # One mode that names an axis on its own (Dark, High contrast)
+        # beside one that names none (Brand): read the way three modes are.
+        pair = _per_axis(cname, modes, default)
+        if pair is not None and not pair.unread:
+            return pair
     if known is not None:
         axis, default_is_base = known
         base, second = (default, other) if default_is_base else (other, default)
@@ -250,6 +272,64 @@ def _plan(col: Dict[str, Any], want: Optional[str],
             f"default mode, is the base and {modes[other]} is {axis}:{second}{unread}")
     return _Plan(cname, modes, [(default, ""), (other, f"{axis}:{second}")],
                  (axis, (first, second)), note)
+
+
+def _value_words(axis: str) -> str:
+    """An axis's non-base value as a mode would be named: dark, high contrast."""
+    value = AXES[axis][1]
+    return value if axis == "scheme" else f"{value} {axis}"
+
+
+def _per_axis(cname: str, modes: Dict[str, str], default: str) -> Optional[_Plan]:
+    """A collection of more than two modes read one mode per axis, the way
+    the other importers read one column or theme per axis: Light, Dark and
+    High contrast give the base, scheme:dark and contrast:high. The base is
+    the default mode, or the one base-named mode (Light, Default) when the
+    default mode itself names an axis. Each mode left over is listed as
+    unread, with why. None when no mode places into an axis."""
+    names = list(modes.values())
+    bases = [m for m in modes if is_base(modes[m])]
+    if default in bases or not axes_named(modes[default], [cname]):
+        base = default
+    elif len(bases) == 1:
+        base = bases[0]
+    else:
+        return None
+    read: List[Tuple[str, str]] = [(base, "")]
+    made: List[Tuple[str, Tuple[str, str]]] = []
+    held: Dict[str, str] = {}
+    unread: List[str] = []
+    for m, mname in modes.items():
+        if m == base:
+            continue
+        named = axes_named(mname, [cname])
+        if len(named) > 1:
+            each = _and([_value_words(a) for a in named])
+            unread.append(f"has the mode {mname}, which names the {_and(named)} axes at once, so "
+                          "its values were not read; the engine reads one mode per axis, so "
+                          f"keep {each} as {_COUNT[len(named)]} modes")
+        elif not named:
+            unread.append(f"has the mode {mname}, whose name places into no mode axis beside "
+                          f"{modes[base]}, so its values were not read; name it for a mode in "
+                          "Figma, such as Dark or High contrast, or move it to a collection of "
+                          "its own")
+        elif named[0] in held:
+            unread.append(f"has the mode {mname}, a second mode for the {named[0]} axis, which "
+                          f"{held[named[0]]} holds, so its values were not read; keep one mode "
+                          "per axis, or move it to a collection of its own")
+        else:
+            axis = named[0]
+            held[axis] = mname
+            read.append((m, f"{axis}:{AXES[axis][1]}"))
+            made.append((axis, (AXES[axis][0], AXES[axis][1])))
+    if not made:
+        return None
+    parts = [f"{modes[base]} is the base"] + [f"{modes[m]} is {ctx}" for m, ctx in read[1:]]
+    note = f"has the modes {_and(names)}, read one mode per axis: {_and(parts)}"
+    if base != default:
+        note += (f"; the default mode in Figma is {modes[default]}, and the engine's base is "
+                 f"{modes[base]}")
+    return _Plan(cname, modes, read, made[0], note, unread=unread, more_axes=made[1:])
 
 
 def _wants(second_modes: Any, collections: Dict[str, Any]) -> Dict[str, str]:
@@ -405,8 +485,8 @@ def import_figma(text: str, source: Source,
             plans[cid] = _Plan(str(col.get("name", "")), _modes_of(col)[0], [], remote=True)
             continue
         plan = _plan(col, wants.get(str(col.get("name", ""))), axes)
-        if plan.axis is not None:
-            axes.setdefault(*plan.axis)
+        for made in ([plan.axis] if plan.axis is not None else []) + plan.more_axes:
+            axes.setdefault(*made)
         plans[cid] = plan
 
     order = list(dict.fromkeys(
@@ -453,6 +533,9 @@ def import_figma(text: str, source: Source,
         if plan is not None and plan.note and cid not in noted:
             noted.add(cid)
             col_notes.append((position[vid], 0, Item(name, cname, plan.note)))
+        if plan is not None and plan.unread and ("unread", cid) not in noted:
+            noted.add(("unread", cid))
+            not_read += [(position[vid], Item(name, cname, why)) for why in plan.unread]
         first.setdefault(cid, position[vid])
         try:
             entries[vid] = _read(v, vname, where, plan, cid)
@@ -465,6 +548,8 @@ def import_figma(text: str, source: Source,
                               Item(name, plan.name, _tier_note(plan, found, variables))))
         if plan.note and cid not in noted:
             col_notes.append((len(order), 0, Item(name, plan.name, plan.note)))
+        if plan.unread and ("unread", cid) not in noted:
+            not_read += [(len(order), Item(name, plan.name, why)) for why in plan.unread]
     # A library collection's note, with the count of its variables here,
     # counted by collection id: two libraries may share a name.
     for cid, at in library_note.items():

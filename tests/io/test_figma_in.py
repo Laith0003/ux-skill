@@ -517,19 +517,67 @@ def test_standard_and_high_are_contrast_only_where_contrast_is_named():
     assert axes("Theme", ["Standard", "High contrast"]) == {"contrast": ("standard", "high")}
 
 
-def test_light_and_dark_among_more_modes_read_the_scheme_when_chosen():
-    col = _collection("c:1", "Theme", ["Light", "Dark", "Dim"], ["v:1"])
-    doc = _one(col, [_var("v:1", "bg", "c:1", "COLOR", {
-        "c:1:Light": {"r": 1, "g": 1, "b": 1, "a": 1},
-        "c:1:Dark": {"r": 0, "g": 0, "b": 0, "a": 1},
-        "c:1:Dim": {"r": 0.2, "g": 0.2, "b": 0.2, "a": 1}})])
-    assert "for example {\"Theme\": \"Dark\"}" in _import(doc).report.notes[0].message
-    imported = _import(doc, second_modes={"Theme": "Dark"})
-    assert dict(imported.tokens.axes) == {"scheme": ("light", "dark")}
+def _theme(modes, values):
+    col = _collection("c:1", "Theme", modes, ["v:1"])
+    return _one(col, [_var("v:1", "bg", "c:1", "COLOR", {
+        f"c:1:{m}": {"r": v, "g": v, "b": v, "a": 1} for m, v in zip(modes, values)})])
+
+
+def test_light_dark_and_high_contrast_in_one_collection_read_one_mode_per_axis():
+    doc = _theme(["Light", "Dark", "High contrast"], [1, 0, 0.2])
+    imported = _import(doc)
+    ts, report = imported.tokens, imported.report
+    assert dict(ts.axes) == {"scheme": ("light", "dark"), "contrast": ("standard", "high")}
+    assert ts.get("bg").value == "#FFFFFF"
+    assert ts.get("bg").modes == {"scheme:dark": "#000000", "contrast:high": "#333333"}
+    assert _rows(report.notes) == [
+        ("Theme", "has the modes Light, Dark and High contrast, read one mode per axis: Light "
+                  "is the base, Dark is scheme:dark and High contrast is contrast:high")]
+    assert report.not_read == []
+
+
+def test_second_modes_never_makes_a_combined_axis_from_a_mode_the_matcher_places():
+    doc = _theme(["Light", "Dark", "High contrast"], [1, 0, 0.2])
+    for want in ("High contrast", "Dark"):
+        ts = _import(doc, second_modes={"Theme": want}).tokens
+        assert dict(ts.axes) == {"scheme": ("light", "dark"),
+                                 "contrast": ("standard", "high")}
+        assert "light-high-contrast" not in dict(ts.axes)
+
+
+def test_a_mode_left_over_beside_the_axes_is_not_read_and_says_why():
+    doc = _theme(["Light", "Dark", "Dim", "High contrast dark"], [1, 0, 0.2, 0.1])
+    imported = _import(doc)
     assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
-    assert _rows(imported.report.notes) == [
-        ("Theme", "has the modes Light, Dark and Dim, read as the scheme axis: Light is the "
-                  "base and Dark is scheme:dark; Dim was not read")]
+    assert _rows(imported.report.not_read) == [
+        ("Theme", "has the mode Dim, whose name places into no mode axis beside Light, so its "
+                  "values were not read; name it for a mode in Figma, such as Dark or High "
+                  "contrast, or move it to a collection of its own"),
+        ("Theme", "has the mode High contrast dark, which names the scheme and contrast axes "
+                  "at once, so its values were not read; the engine reads one mode per axis, "
+                  "so keep dark and high contrast as two modes")]
+    assert "Nothing was left unread" not in imported.report.markdown()
+
+
+def test_two_modes_where_one_names_an_axis_on_its_own_read_into_that_axis():
+    ts = _import(_theme(["Light", "High contrast"], [1, 0.2])).tokens
+    assert dict(ts.axes) == {"contrast": ("standard", "high")}
+    assert ts.get("bg").modes == {"contrast:high": "#333333"}
+    ts = _import(_theme(["Brand", "Dark"], [1, 0])).tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert ts.get("bg").modes == {"scheme:dark": "#000000"}
+
+
+def test_light_and_dark_among_more_modes_read_the_scheme_and_list_the_rest():
+    doc = _theme(["Light", "Dark", "Dim"], [1, 0, 0.2])
+    for kw in ({}, {"second_modes": {"Theme": "Dark"}}):
+        imported = _import(doc, **kw)
+        assert dict(imported.tokens.axes) == {"scheme": ("light", "dark")}
+        assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+        assert _rows(imported.report.notes) == [
+            ("Theme", "has the modes Light, Dark and Dim, read one mode per axis: Light is the "
+                      "base and Dark is scheme:dark")]
+        assert [n for n, _ in _rows(imported.report.not_read)] == ["Theme"]
 
 
 def test_a_mapped_color_names_its_mode_and_keeps_its_alpha():
