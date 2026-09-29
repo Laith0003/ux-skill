@@ -1226,3 +1226,22 @@ def test_roles_around_an_anchored_fill_pass_against_it():
         ring_need = 4.5 if "high" in mode else 3.0
         assert contrast(ts.resolve("color.focus.ring", mode), "#F7F5F0") >= ring_need
         assert contrast(ts.resolve("color.text.muted", mode), "#F7F5F0") >= need
+
+
+def test_two_anchored_roles_of_one_color_keep_their_own_primitives():
+    ts = _anchored(page="#FFFFFF", on="#FFFFFF")
+    for mode in LIGHT:
+        assert ts.raw(PAGE, mode) != ts.raw(ON, mode)
+        assert ts.resolve(PAGE, mode) == ts.resolve(ON, mode) == "#FFFFFF"
+
+
+def test_the_recess_is_the_engines_own_step_below_the_page():
+    axes = AxisValues(*[0.5] * 7)
+    engine = generate_color(axes, "#3366FF").tokens
+    page = engine.resolve(PAGE)
+    assert color_module._recess(page, engine.resolve("color.surface.card"), "light") == \
+        engine.resolve("color.surface.sunken")
+    dark = "scheme:dark,contrast:standard"
+    assert color_module._recess(engine.resolve(PAGE, dark),
+                                engine.resolve("color.surface.card", dark), "dark") == \
+        engine.resolve("color.surface.sunken", dark)

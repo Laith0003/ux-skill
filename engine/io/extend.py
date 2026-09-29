@@ -88,6 +88,7 @@ from __future__ import annotations
 
 import dataclasses
 import json
+import math
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -99,7 +100,7 @@ from engine.contracts.schema import ContractError, load_contract
 from engine.existing import stamp_digest
 from engine.foundations.audience import Audience, effects
 from engine.foundations.build import FOUNDATIONS, SystemCheck, build_system
-from engine.foundations.color import COLOR_CONTEXTS, generate_color
+from engine.foundations.color import COLOR_CONTEXTS, TEXT_WINS, generate_color
 from engine.foundations.color_math import luminance
 from engine.foundations.errors import InputError
 from engine.foundations.export import dump_dtcg, from_dtcg, to_css
@@ -110,7 +111,8 @@ from engine.foundations.tokens import (
     AliasError, Token, TokenSet, alias_target, css_property, is_alias)
 from engine.foundations.validate import validate
 from engine.foundations.values import TYPOGRAPHY_FIELDS, css_entries
-from engine.io.adapter import ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mapping, view
+from engine.io.adapter import (
+    ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mapping, their_names, view)
 from engine.io.css_in import import_css
 from engine.io.enhance import enhance
 from engine.io.figma_out import (
@@ -214,11 +216,12 @@ def _copy(t: Token, path: Optional[str] = None, rename: Optional[Callable[[str],
 
 def _generated(names: Sequence[str], axes: AxisValues, brand: str,
                arabic: bool, audience: Audience,
-               anchor: Optional[Dict[str, Dict[str, str]]] = None) -> TokenSet:
+               anchor: Optional[Dict[str, Dict[str, str]]] = None) -> Tuple[TokenSet, List[str]]:
     """The named foundations and the ones they need, in build order, for
-    the brief's audience. With an anchor (_owner_colors), color is
-    generated around the colors the system plays and is not gated here:
-    extend checks it against the system itself."""
+    the brief's audience, and the color generator's notes when an anchor is
+    given. With an anchor (_owner_colors), color is generated around the
+    colors the system plays and is not gated here: extend checks it
+    against the system itself."""
     wanted = set(names)
     for f in FOUNDATIONS:
         if f.name in names:
@@ -226,14 +229,15 @@ def _generated(names: Sequence[str], axes: AxisValues, brand: str,
     order = tuple(n for n in _NAMES if n in wanted)
     if not anchor or "color" not in order:
         return build_system(axes, brand, arabic=arabic, foundations=order,
-                            audience=audience).tokens
-    out = generate_color(axes, brand, audience.brand_role, anchor=anchor).tokens
+                            audience=audience).tokens, []
+    made = generate_color(axes, brand, audience.brand_role, anchor=anchor)
+    out = made.tokens
     rest = tuple(n for n in order if n != "color")
     if rest:
         for t in build_system(axes, brand, arabic=arabic, foundations=rest,
                               audience=audience).tokens.tokens():
             out.add(t)
-    return out
+    return out, list(made.notes)
 
 
 _PAGE, _TEXT, _FILL = "color.surface.page", "color.text.default", "color.action.primary"
@@ -249,24 +253,27 @@ def _two_schemes(mapping: Mapping) -> bool:
 
 
 def _owner_colors(base: TokenSet, mapping: Mapping, skip: Sequence[str],
-                  mapping_name: str) -> Tuple[Dict[str, Dict[str, str]], str]:
+                  mapping_name: str) -> Tuple[Dict[str, Dict[str, str]], str, str]:
     """What the color foundation is generated around: the opaque color each
     color role the mapping sends to the system's tokens resolves to, in
-    each of the engine's color contexts (context -> {role: hex}), and the
-    one scheme the additions take when the system has only one ("" when it
-    has both). A system with one scheme is light unless its page is darker
-    than its text; its colors anchor that scheme's contexts only. Roles in
-    `skip` (the import could not read their token) are left out."""
+    each of the engine's color contexts (context -> {role: hex}); the one
+    scheme the additions take when the system has only one ("" when it has
+    both), whatever foundations are added; and why the colors could not be
+    read ("" when they could). A system with one scheme is light unless its
+    page is darker than its text; its colors anchor that scheme's contexts
+    only. Roles in `skip` (the import could not read their token) are left
+    out."""
     two = _two_schemes(mapping)
     roles = {r: m for r, m in mapping.roles.items()
              if m.token is not None and m.fields is None and r not in skip
              and ROLE_TYPES.get(r) == "color" and base.has(m.token)
              and base.get(m.token).type == "color"}
     axes = {a: m for a, m in mapping.axes.items() if a in ("scheme", "contrast")}
+    error = ""
     try:
         checked, _ = view(base, Mapping(roles, axes), mapping_name) if roles else (None, [])
-    except (InputError, AliasError, ModeError):
-        checked = None
+    except (InputError, AliasError, ModeError) as exc:
+        checked, error = None, str(exc).rstrip(".")
 
     def at(role: str, ctx: str) -> str:
         if checked is None or not checked.has(role):
@@ -289,7 +296,7 @@ def _owner_colors(base: TokenSet, mapping: Mapping, skip: Sequence[str],
         found = {r: at(r, ctx) for r in roles}
         if any(found.values()):
             anchor[ctx] = {r: hx for r, hx in found.items() if hx}
-    return anchor, scheme
+    return anchor, scheme, error
 
 
 _ANCHOR = "color.anchor."
@@ -302,11 +309,10 @@ def _on_theirs(generated: TokenSet, anchor: Dict[str, Dict[str, str]],
     media at its text, the primary edge on its fill) pointing at the
     system's token for that role instead, context by context, so it
     follows that token; and the paths so pointed. The anchor primitives
-    are left out. Where two roles play one color, the page and then the
-    text are named first."""
+    are left out; each holds one role's color, so it names one token."""
     to: Dict[str, Dict[str, str]] = {}
     for ctx, colors in anchor.items():
-        for role in sorted(colors, key=lambda r: (r != _PAGE, r != _TEXT)):
+        for role in colors:
             raw = generated.raw(role, ctx)
             if is_alias(raw) and alias_target(raw).startswith(_ANCHOR):
                 to.setdefault(ctx, {}).setdefault(alias_target(raw),
@@ -335,7 +341,8 @@ def _on_theirs(generated: TokenSet, anchor: Dict[str, Dict[str, str]],
 def _in_one_scheme(generated: TokenSet, scheme: str) -> TokenSet:
     """The generated set with the values it has in one scheme only, and
     without the primitives only the other scheme's values pointed at (the
-    dark tint, say); a ramp is kept whole."""
+    dark tint, the dark shadow steps); a ramp one of whose steps is still
+    pointed at is kept whole."""
     def refs(ts: TokenSet) -> set:
         return {r for t in ts.tokens() for v in [t.value, *t.modes.values()] for r in _refs(v)}
 
@@ -345,10 +352,16 @@ def _in_one_scheme(generated: TokenSet, scheme: str) -> TokenSet:
         one.add(_one_scheme(t, scheme) if any("scheme" in parse(k, AXES) for k in t.modes)
                 else t)
     still = refs(one)
+
+    def ramp(path: str) -> str:
+        family, _, step = path.rpartition(".")
+        return family if step.isdigit() else ""
+
+    kept_ramps = {ramp(r) for r in still} - {""}
     out = TokenSet(generated.axes)
     for t in one.tokens():
         if t.path in used and t.path not in still and t.layer == "primitive" \
-                and not t.path.rsplit(".", 1)[-1].isdigit():
+                and ramp(t.path) not in kept_ramps:
             continue
         out.add(t)
     return out
@@ -766,20 +779,26 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
     axis_trouble: List[str] = []
     generated = TokenSet()
     pointed: List[str] = []
+    near: set = set()
     # Roles the system plays: never added, and nothing is pulled in for them.
     theirs = {r for r, m in mapping.roles.items() if m.token is not None}
     if foundations:
         skip = [r for r, m in mapping.roles.items() if m.token is not None
                 and (css_property(m.token) if sheet else m.token) in declared]
-        anchor, scheme = _owner_colors(base, mapping, skip, mapping_name) \
-            if "color" in foundations else ({}, "" if _two_schemes(mapping) else "light")
+        anchor, scheme, unreadable_colors = _owner_colors(base, mapping, skip, mapping_name)
+        if "color" not in foundations:
+            anchor = {}
         seed, seed_from = brand or "#3366FF", ""
         if brand is None:
             fill = next((ctx[_FILL] for ctx in anchor.values() if _FILL in ctx), "")
-            if fill:
-                seed, seed_from = fill, f", read from your {mapping.roles[_FILL].token} ({_FILL})"
+            seed_from = (f", read from your {mapping.roles[_FILL].token} ({_FILL})" if fill
+                         else f", the engine's default, since {mapping_name} maps no {_FILL}; "
+                              "map it there, or pass the brand color")
+            seed = fill or seed
+        color_notes: List[str] = []
         try:
-            generated = _generated(foundations, axes, seed, arabic, audience, anchor)
+            generated, color_notes = _generated(foundations, axes, seed, arabic, audience,
+                                                anchor)
         except GateFailure as exc:
             problems += [line for line in str(exc).splitlines() if line]
         if anchor:
@@ -794,6 +813,18 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
             decisions.append(f"The added colors were solved around your {_and(yours)}, as "
                              f"{mapping_name} maps them, so each addition is measured against "
                              "what your system renders.")
+        elif "color" in foundations and unreadable_colors:
+            decisions.append(f"The colors {mapping_name} sends to your tokens could not be read "
+                             f"({unreadable_colors}), so the added colors were generated around "
+                             "the engine's own page and text, not yours; fix that entry in "
+                             f"{mapping_name} to have them fit your page.")
+        # Where the system's text needed a surface nearer its page than our
+        # own floors, the text won: one line names each such surface.
+        wins = _text_wins(color_notes, mapping)
+        near = {surface for surface, _ in wins}
+        if wins:
+            decisions.append("Your text wins over our own distance floors: "
+                             + "; ".join(line for _, line in wins) + ".")
         if scheme and any("scheme" in parse(k, AXES) for t in generated.tokens()
                           for k in t.modes):
             generated = _in_one_scheme(generated, scheme)
@@ -1016,17 +1047,24 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                    for t, origin in adding if t.path in ROLE_TYPES}
     # A color of the system's that already fails on its own page fails on
     # the surfaces the additions bring too: that finding is the color's.
-    on_page = {(f.fg, f.mode) for f in before.check.report.findings if f.bg == _PAGE}
+    on_page = {(f.fg, f.mode): f.ratio for f in before.check.report.findings
+               if f.bg == _PAGE}
     gate = after.check.report.findings
+    fails = after.check.report.failures
     caused: List[str] = []
     inherited: List[str] = []
     for i, m in enumerate(after.findings):
         if m in before.findings:
             continue
         f = gate[i] if i < len(gate) else None
+        c = fails[i - len(gate)] if f is None and i - len(gate) < len(fails) else None
+        if c is not None and c.check == "surfaces-stand-apart" \
+                and any(c.message.startswith(s + " ") for s in near):
+            continue   # the text won there; the decision line says so
         if f is not None and f.bg in roles_added and f.fg in checking.roles \
                 and (f.fg, f.mode) in on_page:
-            inherited.append(_theirs_fix(m, f.fg, str(checking.roles[f.fg].token)))
+            inherited.append(_theirs_fix(m, f.fg, str(checking.roles[f.fg].token),
+                                         on_page[(f.fg, f.mode)]))
         else:
             caused.append(_owner_fix(m, roles_added, mapping_name))
     problems += caused
@@ -1137,18 +1175,37 @@ def _owner_fix(finding: str, roles: Dict[str, str], mapping_name: str) -> str:
     return f"{head}. {fix}."
 
 
-def _theirs_fix(finding: str, role: str, token: str) -> str:
+def _text_wins(notes: Sequence[str], mapping: Mapping) -> List[Tuple[str, str]]:
+    """(surface, clause) for each surface the color generator kept nearer
+    the page so the system's text keeps its minimum (color.TEXT_WINS
+    notes), at its least ratio off the page, in the system's names."""
+    least: Dict[str, Tuple[float, str]] = {}
+    for note in notes:
+        if not note.startswith(TEXT_WINS):
+            continue
+        rest = note[len(TEXT_WINS):]
+        surface = rest.split(" ", 1)[0]
+        ratio = float(re.search(r"stands ([\d.]+):1", rest).group(1))
+        clause = re.sub(r" \([a-z]+:[a-z]+(?:,[a-z]+:[a-z]+)*\)", "", rest, count=1)
+        if surface not in least or ratio < least[surface][0]:
+            least[surface] = (ratio, their_names(clause, mapping))
+    return [(s, line) for s, (_, line) in least.items()]
+
+
+def _theirs_fix(finding: str, role: str, token: str, ratio: float) -> str:
     """A finding on one of the system's colors against a surface the
     extension adds, where that color already fails on the system's page:
-    the fix is the owner's color."""
+    the fix is the owner's color. Both ratios are named, so a surface that
+    makes it worse still shows."""
     head = finding
     for cut in _THEIR_FIXES:
         at = head.find(cut)
         if at != -1:
             head = head[:at]
             break
-    return (f"{head.rstrip(' .;')}. {role} already fails this on your page, so the finding is "
-            f"your {token}'s, not the added surface's; change {token} in your system.")
+    shown = math.floor(ratio * 100) / 100
+    return (f"{head.rstrip(' .;')}. {role} already fails this on your page, at {shown:.2f}:1 "
+            f"there, so the finding starts with your {token}; change {token} in your system.")
 
 
 def _check_roles(roles: Dict[str, str], mapping: Mapping, base: TokenSet,
@@ -1459,8 +1516,8 @@ def _report(imported: Imported, result: Extended, foundations: List[str],
     if result.inherited:
         lines += ([""] if result.existing or result.unmeasured else []) + [
             "These pair a color of yours that already fails on your own page with a surface "
-            "the additions bring. The surfaces pass their own checks; each finding is your "
-            "color's, and none blocks the extension.", ""]
+            "the additions bring. Each line gives the ratio on the added surface and on your "
+            "page; the fix is your color, and none blocks the extension.", ""]
         lines += [f"- {m}" for m in result.inherited]
     lines += ["", "## Decisions made without you", ""]
     lines += [f"- {d}" for d in result.decisions] or ["None."]

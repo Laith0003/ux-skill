@@ -593,6 +593,13 @@ def _tint(page: str, brand: Mapping[int, str], scheme: str, axes: AxisValues) ->
     return stand_off(page, min(c, _band_cap(scheme, axes)), h, TINT_FLOOR)
 
 
+def _recess(page: str, card: str, scheme: str) -> str:
+    """The sunken surface for a page: RECESS_L below it in light, so it
+    reads as a well; in dark halfway between the page and the card in
+    OKLab, so a well in a card never reads as a hole."""
+    return _shift(page, -RECESS_L) if scheme == "light" else _midpoint(page, card)
+
+
 def _band(page: str, brand: Mapping[int, str], scheme: str, axes: AxisValues) -> str:
     """The section band for a page: the brand's 100 (light) or 900 (dark)
     at no more than the scheme's band cap, moved to stand BAND_FLOOR off
@@ -639,8 +646,8 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             # Kept beside the ramp, so a DTCG round trip keeps the order. The
             # dark recess sits halfway between the page (950) and the card
             # (900) in OKLab.
-            prims["color.neutral.recess-light"] = _shift(r.stops[50], -RECESS_L)
-            prims["color.neutral.recess-dark"] = _midpoint(r.stops[950], r.stops[900])
+            prims["color.neutral.recess-light"] = _recess(r.stops[50], r.stops[900], "light")
+            prims["color.neutral.recess-dark"] = _recess(r.stops[950], r.stops[900], "dark")
             _, c50, h50 = hex_to_oklch(r.stops[50])
             card = prims[_SEMANTIC["color.surface.card"][0]]
             prims["color.neutral.code-light"] = stand_off(card, c50, h50, CODE_EDGE)
@@ -1368,47 +1375,144 @@ FOLLOW_PAGE: Tuple[str, ...] = ("color.surface.stripe", "color.surface.header")
 _PAGE = "color.surface.page"
 
 
+# The surfaces text sits on that the engine derives off the page. When the
+# page and text are anchored, each stands no further off the page than lets
+# every anchored text keep its minimum on it: the text wins over our own
+# distance floors (TINT_FLOOR, BAND_FLOOR), and a note starting TEXT_WINS
+# says where.
+NEAR_PAGE: Tuple[str, ...] = ("color.surface.tint", "color.surface.band",
+                              "color.surface.sunken", "color.surface.selected",
+                              "color.surface.stripe", "color.surface.header") + tuple(
+    f"color.status.{s}.soft" for s in STATUS_HUES)
+TEXT_WINS = "color: text wins: "
+_FLOORS = {"color.surface.tint": TINT_FLOOR, "color.surface.band": BAND_FLOOR}
+
+
+def _near_page(page: str, hx: str, texts: List[Tuple[str, float]]) -> str:
+    """`hx` when every (text, minimum) reads on it; else its hue and chroma
+    at the OKLCH lightness furthest from the page's, on its side, where
+    they all do, found by bisection; the page itself when none does."""
+    def reads(c: str) -> bool:
+        return all(contrast(t, c) >= need for t, need in texts)
+
+    if reads(hx):
+        return hx
+    lp = hex_to_oklch(page)[0]
+    lightness, chroma, hue = hex_to_oklch(hx)
+    lo, hi = 0.0, 1.0
+    for _ in range(40):
+        mid = (lo + hi) / 2
+        if reads(oklch_to_hex(lp + mid * (lightness - lp), chroma, hue)):
+            lo = mid
+        else:
+            hi = mid
+    while lo > 0 and not reads(oklch_to_hex(lp + lo * (lightness - lp), chroma, hue)):
+        lo = max(0.0, lo - 0.01)
+    out = oklch_to_hex(lp + lo * (lightness - lp), chroma, hue)
+    return out if reads(out) else page
+
+
 def _anchor(anchor: Mapping[str, Mapping[str, str]], axes: AxisValues, prims: Dict[str, str],
-            pick: Dict[str, Dict[str, str]]) -> Dict[str, Dict[str, str]]:
+            pick: Dict[str, Dict[str, str]], notes: List[str]) -> Dict[str, Dict[str, str]]:
     """Hold each anchored role at the color given for it, context by
-    context, as a color.anchor primitive, and derive the page's surfaces
-    from the anchored page as the engine derives them from its own: the
-    tint and the band from its lightness and the brand's hue (_tint,
-    _band), the stripe and the header at the page itself where the engine
-    draws them at its page's step. Returns the pinned paths per context
-    (role -> primitive path), the stripe and header included where they
-    are the page."""
+    context, as a color.anchor primitive of its own, and derive the page's
+    surfaces from the anchored page as the engine derives them from its
+    own: the tint and the band from its lightness and the brand's hue
+    (_tint, _band), the sunken surface below it (_recess), the stripe and
+    the header at the page itself where the engine draws them at its
+    page's step. Then every surface in NEAR_PAGE comes no further off the
+    page than lets each anchored text that reads on the page keep its
+    minimum on it (_near_page), with a TEXT_WINS note, and the band stays
+    beyond the tint. Returns the pinned paths per context (role ->
+    primitive path), the stripe and header included where they are the
+    page."""
     pinned: Dict[str, Dict[str, str]] = {mode: {} for mode in COLOR_CONTEXTS}
-    paths: Dict[str, str] = {}
+    paths: Dict[Tuple[str, str], str] = {}
     brand = {step: prims[f"color.brand.{step}"] for step in STEPS}
-    surfaces: Dict[Tuple[str, str], str] = {}
+    made: Dict[Tuple[str, str], str] = {}
+    pairs = {(p.fg, p.bg) for p in PAIRINGS}
+
+    def put(name: str, value: str, mode: str) -> str:
+        """The primitive for a derived color: `name` for its first value, and
+        the context's contrast after it for another."""
+        path = made.get((name, value))
+        if path is None:
+            path = name if name not in made.values() \
+                else f"{name}-{parse(mode).get('contrast', 'standard')}"
+            made[(name, value)] = path
+            prims[path] = value
+        return path
+
     for mode in COLOR_CONTEXTS:
         for role, hx in anchor.get(mode, {}).items():
             if role not in SEMANTIC:
                 continue
             hx = rgb_to_hex(hex_to_rgb(hx))
-            path = paths.setdefault(hx, f"color.anchor.value-{len(paths) + 1}")
+            # Keyed by role, so two roles of one color stay two links.
+            path = paths.setdefault((role, hx), f"color.anchor.value-{len(paths) + 1}")
             prims[path] = hx
             pinned[mode][role] = path
-        if _PAGE in pinned[mode]:
-            for role in FOLLOW_PAGE:
-                if role not in pinned[mode] and pick[mode][role] == pick[mode][_PAGE]:
-                    pinned[mode][role] = pinned[mode][_PAGE]
-            page, scheme = prims[pinned[mode][_PAGE]], _scheme(mode)
-            for role, kind, make in (("color.surface.tint", "tint", _tint),
-                                     ("color.surface.band", "band", _band)):
-                if role in pinned[mode]:
-                    continue
-                # One surface per page: a context whose anchored page differs
-                # from the scheme's first gets its own primitive.
-                path = surfaces.get((kind, page))
-                if path is None:
-                    path = f"color.brand.{kind}-{scheme}"
-                    if any(k == kind and p == path for (k, _), p in surfaces.items()):
-                        path += "-" + parse(mode).get("contrast", "standard")
-                    surfaces[(kind, page)] = path
-                    prims[path] = make(page, brand, scheme, axes)
-                pick[mode][role] = path
+        if _PAGE not in pinned[mode]:
+            pick[mode].update(pinned[mode])
+            continue
+        for role in FOLLOW_PAGE:
+            if role not in pinned[mode] and pick[mode][role] == pick[mode][_PAGE]:
+                pinned[mode][role] = pinned[mode][_PAGE]
+        page, scheme = prims[pinned[mode][_PAGE]], _scheme(mode)
+        card = prims[pinned[mode].get("color.surface.card", pick[mode]["color.surface.card"])]
+        for role, kind, make in (("color.surface.tint", "tint", _tint),
+                                 ("color.surface.band", "band", _band)):
+            if role not in pinned[mode]:
+                pick[mode][role] = put(f"color.brand.{kind}-{scheme}",
+                                       make(page, brand, scheme, axes), mode)
+        sunken = "color.surface.sunken"
+        if sunken not in pinned[mode] and pick[mode][sunken].startswith("color.neutral.recess-"):
+            pick[mode][sunken] = put(f"color.neutral.recess-{scheme}",
+                                     _recess(page, card, scheme), mode)
+        # Each anchored text keeps what it reaches on the page, up to this
+        # context's minimum: under high contrast, text that reads at the
+        # standard minimum on its page keeps that on every surface.
+        std = mode.replace("contrast:high", "contrast:standard")
+        texts = [r for r in TEXT_ROLES if r in pinned[mode]
+                 and contrast(prims[pinned[mode][r]], page) >= _need(r, _PAGE, std)]
+
+        def keeps(r: str, role: str) -> float:
+            here = contrast(prims[pinned[mode][r]], page)
+            need = _need(r, role, mode)
+            return need if here >= _need(r, _PAGE, mode) else _need(r, role, std)
+
+        kept: Dict[str, Tuple[str, List[str], float]] = {}
+        for role in NEAR_PAGE:
+            on = [r for r in texts if (r, role) in pairs]
+            if role in pinned[mode] or not on:
+                continue
+            was = prims[pick[mode][role]]
+            now = _near_page(page, was, [(prims[pinned[mode][r]], keeps(r, role)) for r in on])
+            if now != was:
+                kept[role] = (now, on, max(keeps(r, role) for r in on))
+        tint, band = "color.surface.tint", "color.surface.band"
+        if (tint in kept or band in kept) and tint not in pinned[mode] \
+                and band not in pinned[mode]:
+            t_hex = kept[tint][0] if tint in kept else prims[pick[mode][tint]]
+            b_hex = kept[band][0] if band in kept else prims[pick[mode][band]]
+            if contrast(page, b_hex) <= contrast(page, t_hex):
+                # The band marks a section beyond the tint: the tint takes
+                # half the band's step off the page.
+                lp = hex_to_oklch(page)[0]
+                lb = hex_to_oklch(b_hex)[0]
+                _, c, h = hex_to_oklch(t_hex)
+                on = kept[tint][1] if tint in kept else kept[band][1]
+                kept[tint] = (oklch_to_hex((lp + lb) / 2, c, h), on,
+                              max(keeps(r, tint) for r in on))
+        for role, (now, on, need) in kept.items():
+            pick[mode][role] = put(pick[mode][role] + "-kept", now, mode)
+            ratio = math.floor(contrast(page, now) * 1000) / 1000
+            floor = _FLOORS.get(role)
+            where = (f", under our {floor:g}:1 floor" if floor and ratio < floor
+                     else ", nearer than the engine's own step")
+            notes.append(f"{TEXT_WINS}{role} ({mode}) stands {ratio:.3f}:1 off {_PAGE}{where}, "
+                         f"so {' and '.join(on)} keep{'s' if len(on) == 1 else ''} {need:g}:1 "
+                         "on it")
         pick[mode].update(pinned[mode])
     return pinned
 
@@ -1454,7 +1558,7 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
     for mode in COLOR_CONTEXTS:
         if parse(mode).get("contrast") != "high":
             pick[mode]["color.line.subtle"] = subtle[0 if _scheme(mode) == "light" else 1]
-    pinned = _anchor(anchor, axes, prims, pick) if anchor \
+    pinned = _anchor(anchor, axes, prims, pick, notes) if anchor \
         else {mode: {} for mode in COLOR_CONTEXTS}
 
     def value(mode: str, role: str) -> str:

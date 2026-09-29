@@ -11,6 +11,7 @@ intake step."""
 import dataclasses
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 import pytest
@@ -19,7 +20,7 @@ from engine.contracts.library import SEED_DIR
 from engine.existing import is_ux_skill_text, stamp_digest
 from engine.existing.record import read_record
 from engine.foundations.build import build_system
-from engine.foundations.color_math import contrast
+from engine.foundations.color_math import contrast, luminance
 from engine.foundations.emit import InputError, brief_audience, unread_lines
 from engine.foundations.export import dump_dtcg, from_dtcg
 from engine.io.adapter import AxisMap, Mapping, RoleMap, parse_mapping, propose
@@ -481,8 +482,8 @@ def test_a_system_whose_text_fails_keeps_its_finding_and_the_additions_still_pas
     assert _ratio(result, "color-focus-ring", "page") >= 3.0
     assert result.inherited and all(
         m.startswith("color.text.default (your text-body) on ") and m.endswith(
-            "color.text.default already fails this on your page, so the finding is your "
-            "text-body's, not the added surface's; change text-body in your system.")
+            "color.text.default already fails this on your page, at 2.76:1 there, so the "
+            "finding starts with your text-body; change text-body in your system.")
         for m in result.inherited)
     report = result.files["extend-report.md"]
     assert "These pair a color of yours that already fails on your own page" in report
@@ -607,6 +608,101 @@ def _figma_export():
 FIGMA_MAPPING = Mapping(roles={"color.text.default": RoleMap("ink"),
                                "color.surface.page": RoleMap("paper")},
                         axes={"scheme": AxisMap("scheme", {"light": "light", "dark": "dark"})})
+
+
+# A light-only system whose text passes AA by a little (4.63:1) and whose
+# muted text sits under 5:1 (4.98:1), on an off-white page.
+NEAR_AA = """:root {
+  --paper: #faf7f0;
+  --grey: #707070;
+  --soft-grey: #6b6b6b;
+  --bg: var(--paper);
+  --fg: var(--grey);
+  --fg-muted: var(--soft-grey);
+}
+"""
+NEAR_AA_MAPPING = Mapping(roles={"color.surface.page": RoleMap("bg", "owner"),
+                                 "color.text.default": RoleMap("fg", "owner"),
+                                 "color.text.muted": RoleMap("fg-muted", "owner")}, axes={})
+TEXT_SURFACES = ("color-surface-tint", "color-surface-band", "color-surface-sunken",
+                 "color-surface-selected") + tuple(
+    f"color-status-{s}-soft" for s in ("danger", "warning", "success", "info"))
+
+
+def test_owner_text_that_passes_by_a_little_keeps_its_minimum_on_every_added_surface():
+    result = extend(_foreign(NEAR_AA), NEAR_AA_MAPPING, foundations=("color",))
+    assert result.problems == []
+    for surface in TEXT_SURFACES:
+        assert surface in result.added
+        for mode in ("", "contrast:high"):
+            for text in ("fg", "fg-muted"):
+                assert _ratio(result, text, surface, mode) >= 4.5, (surface, mode, text)
+            # Nearer the page than the engine's own step, never past it.
+            assert result.tokens.resolve(surface, mode) != result.tokens.resolve("bg")
+    line = next(d for d in result.decisions if d.startswith("Your text wins over our own "
+                                                              "distance floors: "))
+    assert "color.surface.band stands " in line and "under our 1.2:1 floor" in line
+    assert "color.text.default (your fg)" in line and "color.surface.page (your bg)" in line
+    # The band still sits beyond the tint.
+    assert _ratio(result, "color-surface-band", "bg") > _ratio(result, "color-surface-tint", "bg")
+
+
+@pytest.mark.parametrize("page", ["#ececec", "#e3e8ef", "#f0e6d2"])
+def test_the_sunken_surface_recedes_from_the_owners_page(page):
+    text = OFF_WHITE.replace("--paper: #f7f5f0", f"--paper: {page}")
+    result = extend(_foreign(text), OFF_WHITE_MAPPING, foundations=("color",))
+    assert result.problems == []
+    sunken = result.tokens.resolve("color-surface-sunken")
+    assert luminance(sunken) < luminance(page)
+    assert 1.08 <= contrast(sunken, page) <= 1.15
+
+
+DARK_ONLY = """:root {
+  --fg: #f2f2f2;
+  --bg: #111317;
+}
+"""
+DARK_ONLY_MAPPING = Mapping(roles={"color.text.default": RoleMap("fg", "owner"),
+                                   "color.surface.page": RoleMap("bg", "owner")}, axes={})
+
+
+def test_a_dark_only_system_adding_elevation_gets_dark_shadows_and_is_told_dark():
+    result = extend(_foreign(DARK_ONLY), DARK_ONLY_MAPPING, foundations=("elevation",))
+    assert result.problems == []
+    dark = build_system(NEUTRAL, "#3366FF", foundations=("elevation",)).tokens
+    card = result.tokens.get("elevation-card")
+    assert not card.modes
+    assert result.tokens.resolve("elevation-card") == dark.resolve("elevation.card", "scheme:dark")
+    assert any(d.startswith("Your system has one scheme, dark ") for d in result.decisions)
+    ext = result.files["theme-ext.css"]
+    assert "shadow-light" not in ext
+
+
+def test_a_light_only_system_writes_no_dark_shadow_steps():
+    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, foundations=("elevation",))
+    assert result.problems == []
+    assert "shadow-dark" not in result.files["theme-ext.css"]
+
+
+def test_the_default_brand_color_is_named_as_the_engines_default():
+    result = extend(_foreign(DARK_ONLY), DARK_ONLY_MAPPING, foundations=("color",))
+    assert ("color was generated from every axis at 0.5 and the brand color #3366FF, the "
+            "engine's default, since mapping.json maps no color.action.primary; map it there, "
+            "or pass the brand color.") in result.decisions
+
+
+def test_colors_that_cannot_be_read_are_said_and_the_engines_page_is_used(monkeypatch):
+    extend_module = sys.modules["engine.io.extend"]
+
+    def broken(*args, **kwargs):
+        raise InputError("page reads nothing; fix it")
+
+    monkeypatch.setattr(extend_module, "view", broken)
+    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, foundations=("color",))
+    assert ("The colors mapping.json sends to your tokens could not be read (page reads "
+            "nothing; fix it), so the added colors were generated around the engine's own page "
+            "and text, not yours; fix that entry in mapping.json to have them fit your page.") \
+        in result.decisions
 
 
 def test_added_color_points_at_the_owners_page_in_a_figma_or_tokens_file(tmp_path):
