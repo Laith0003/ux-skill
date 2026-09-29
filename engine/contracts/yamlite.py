@@ -11,6 +11,10 @@ refuses everything else by line number, with the fix:
 - one-line flow collections: ``[a, b]`` and ``{key: value}``, nested;
 - scalars: ``null`` and ``~``, ``true`` and ``false``, integers, decimals
   such as 0.5, single or double quoted text, and plain text;
+- block text: ``|`` keeps each line break and ``>`` folds a break between
+  two lines of text into a space, each with its chomping (``-`` drops the
+  final line break, ``+`` keeps every trailing one) and an indentation
+  digit, as the value of a key, of a list item, or of the document;
 - comments after ``#`` at the start of a line or after a space. A quote
   opens a quoted value only where a value starts; inside plain text it is a
   character, so ``Say "Item #3"`` is the text ``Say "Item`` and a comment,
@@ -18,7 +22,7 @@ refuses everything else by line number, with the fix:
   the edges of a plain value; a no-break or ideographic space is kept.
 
 Refused, each with a message: tabs outside quotes, anchors, aliases,
-tags, multi-line scalars (``|`` and ``>``), document markers, duplicate
+tags, multi-line plain or quoted scalars, document markers, duplicate
 keys, a plain value holding ``": "``, plain keys that are not simple names,
 control characters, and every plain value or key another YAML reader
 would read differently: the YAML 1.1 words yes, no, on, off, y and n,
@@ -165,10 +169,95 @@ def _strip_comment(text: str, source: str, number: int) -> str:
     return text.rstrip(" ")
 
 
+# A block scalar's header, the whole value of a line: | or >, then its
+# chomping (- strips the final line break, + keeps every trailing one) and
+# an indentation digit, in either order, after "key: ", "- " or "- key: ".
+_BLOCK = re.compile(r"(?P<head>(?:- )?(?:[^:\"'\[{#]*?: )?)(?P<style>[|>])"
+                    r"(?:(?P<chomp1>[-+])(?P<digit1>[1-9])?|(?P<digit2>[1-9])(?P<chomp2>[-+])?)?")
+
+
+def _block_scalar(raws: List[str], at: int, indent: int, head: str, m: "re.Match[str]",
+                  source: str) -> Tuple[str, int]:
+    """(the text of the block scalar whose header is on raws[at], the index
+    of the first line after it). Its lines are those after the header
+    indented deeper than the node it is the value of (the key, the list
+    item, or nothing at the document's root), and blank lines among and
+    after them; | keeps each line break, > folds a break between two lines
+    of text into a space."""
+    style = m.group("style")
+    chomp = m.group("chomp1") or m.group("chomp2") or ""
+    digit = m.group("digit1") or m.group("digit2")
+    if not head:
+        parent = -1
+    elif head.startswith("- ") and len(head) > 2:
+        parent = indent + 2    # the key of a map that opens on a list item's line
+    else:
+        parent = indent
+    width = parent + int(digit) if digit else None
+    lines: List[str] = []
+    i = at + 1
+    while i < len(raws):
+        raw = raws[i]
+        if not raw.strip(" "):
+            lines.append("")
+            i += 1
+            continue
+        lead = len(raw) - len(raw.lstrip(" "))
+        if width is None:
+            if lead <= parent:
+                break
+            width = lead
+        if lead < width:
+            if lead > parent:
+                raise _fail(source, i + 1, "this line of the block text is indented less than "
+                                           "its first line; line it up with the first")
+            break
+        if _CONTROL.search(raw):
+            raise _fail(source, i + 1, "the block text holds a control character; remove it")
+        lines.append(raw[width:])
+        i += 1
+    body = list(lines)
+    trailing = 0
+    while body and body[-1] == "":
+        body.pop()
+        trailing += 1
+    chunks: List[str] = []
+    breaks, first, last_plain = 0, True, False
+    for line in body:
+        if line == "":
+            breaks += 1
+            continue
+        plain = not line.startswith((" ", "\t"))
+        if first:
+            chunks.append("\n" * breaks)
+        elif style == ">" and last_plain and plain:
+            chunks.append("\n" * breaks if breaks else " ")
+        else:
+            chunks.append("\n" * (breaks + 1))
+        chunks.append(line)
+        first, breaks, last_plain = False, 0, plain
+    text = "".join(chunks)
+    if chomp == "+":
+        text += "\n" * ((1 if body else 0) + trailing)
+    elif chomp == "" and body:
+        text += "\n"
+    return text, i
+
+
+def _as_quoted(text: str) -> str:
+    """Text as one double-quoted scalar this reader reads back as it is."""
+    return '"' + (text.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+                  .replace("\t", "\\t")) + '"'
+
+
 def _lines(text: str, source: str) -> List[_Line]:
     out: List[_Line] = []
     text = text.removeprefix("\ufeff").replace("\r\n", "\n").replace("\r", "\n")
-    for number, raw in enumerate(text.split("\n"), 1):
+    raws = text.split("\n")
+    number = 0
+    while number < len(raws):
+        raw = raws[number]
+        number += 1
         control = _CONTROL.search(raw)
         if control:
             raise _fail(source, number, f"character U+{ord(control.group()):04X} is a control "
@@ -182,7 +271,15 @@ def _lines(text: str, source: str) -> List[_Line]:
         if content in ("---", "...") or content.startswith("%"):
             raise _fail(source, number, f"{content!r} is a document marker or directive; "
                                         "a contract is one document, so remove the line")
-        out.append(_Line(number, len(raw) - len(body), content))
+        indent = len(raw) - len(body)
+        block = _BLOCK.fullmatch(content)
+        if block and (block.group("head") or indent == 0):
+            head = block.group("head")
+            value, after = _block_scalar(raws, number - 1, indent, head, block, source)
+            out.append(_Line(number, indent, head + _as_quoted(value)))
+            number = after
+            continue
+        out.append(_Line(number, indent, content))
     return out
 
 

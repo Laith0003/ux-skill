@@ -115,7 +115,9 @@ def test_scalars_and_shapes(text, expected):
     ("a: &anchor x", "x.yaml line 1: '&anchor x' starts with '&', which marks an anchor, alias, "
                      "tag or multi-line text this reader does not support; quote the value or "
                      "keep it on one line"),
-    ("a: |", "x.yaml line 1: '|' starts with '|'"),
+    ("a: [|]", "x.yaml line 1: '|' starts with '|'"),
+    ("a: >\n    one\n  two", "x.yaml line 3: this line of the block text is indented less "
+                           "than its first line; line it up with the first"),
     ("a: yes", "x.yaml line 1: the plain word 'yes' reads as a yes or no in other YAML readers; "
                "write true or false, or quote it as 'yes'"),
     ("a: b: c", "x.yaml line 1: 'b: c' holds ': ' inside a plain value; quote the value"),
@@ -433,3 +435,20 @@ def test_a_space_between_a_quoted_key_and_its_colon_is_named(text, line):
         loads(text, source="x.yaml")
     assert str(err.value).startswith(f"x.yaml line {line}: key ")
     assert str(err.value).endswith("has a space before its ':'; remove the space")
+
+
+@pytest.mark.parametrize("text,expected", [
+    ("a: |\n  one\n  two\nb: 1\n", {"a": "one\ntwo\n", "b": 1}),
+    ("a: >\n  one\n  two\n\n  three\n    more\n  end\n", {"a": "one two\nthree\n  more\nend\n"}),
+    ("a: |-\n  x\n\n", {"a": "x"}),
+    ("a: |+\n  x\n\n\nb: 1\n", {"a": "x\n\n\n", "b": 1}),
+    ("- |\n  x\n- >-\n  y\n  z\n", ["x\n", "y z"]),
+    ("k:\n  - a: |\n      t\n    b: 2\n", {"k": [{"a": "t\n", "b": 2}]}),
+    ("a: |\nb: 1\n", {"a": "", "b": 1}),
+    ("a: >2\n    lead\n  x\n", {"a": "  lead\nx\n"}),
+    ("a: | # a comment\n  # text, not a comment\n  x: y\n", {"a": "# text, not a comment\nx: y\n"}),
+    ("description: >\n  A chip names one filter.\n  Tap it to clear it.\n",
+     {"description": "A chip names one filter. Tap it to clear it.\n"}),
+])
+def test_block_text_is_read_as_standard_yaml_reads_it(text, expected):
+    assert loads(text, "x.yaml") == expected
