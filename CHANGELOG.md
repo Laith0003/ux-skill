@@ -42,6 +42,16 @@ project adheres to [Semantic Versioning](https://semver.org/).
   uses those components. The five live-product archetypes move to
   `styles/arsenal.md`, since dashboards, components and AI landing heroes
   all use them.
+- Stock photography follows the brand's own avoid list in `brand.md`. An
+  entry that mentions stock or lifestyle photography anywhere bans stock,
+  however it is worded ("no stock", "stock photos are not allowed",
+  "never allow stock photos"); only an entry that allows it outright, with
+  no negation ("curated stock allowed"), keeps it. With stock banned, the
+  engine suggests no stock search terms and pages use the brand's own
+  product screens and photographs. The line earlier versions wrote when a
+  brand stated no rules, "random/generic stock, AI-slop clutter", is the
+  engine's old default, not a ban: it is ignored, and a new `brand.md`
+  writes "random placeholder images, AI-slop clutter" instead.
 - A test fails when a rule sentence, exact or near (0.9 similarity), sits
   in a playbook and in a file it moved out of, in `commands/ux-design.md`,
   or in two playbooks, and when a file pointer does not resolve.

@@ -65,6 +65,21 @@ def test_a_wordmark_in_any_usual_place_is_not_imagery(body):
     assert res["ok"] is False and res["kind"] == "logo-only", res
 
 
+@pytest.mark.parametrize("body", [
+    # A short path in the page body is any page, not a language home.
+    '<main><a href="/go"><img src="/hero.jpg" width="800" height="500" alt="The market at dawn"></a></main>',
+    # A section named brand holds the brand's story, not its logo.
+    ('<section class="brand"><img src="/team.jpg" width="800" height="500" alt="The team"></section>'),
+])
+def test_only_the_logos_own_shape_is_taken_as_the_logo(body):
+    assert score_imagery(_page(body), logo_url=LOGO)["kind"] == "image"
+
+
+def test_a_bare_brand_class_in_the_header_is_the_logo():
+    body = '<header><span class="brand"><svg viewBox="0 0 240 64"><path d="M0 0z"/></svg></span></header>'
+    assert score_imagery(_page(body), logo_url=LOGO)["kind"] == "logo-only"
+
+
 def test_a_photo_that_mentions_a_logo_in_its_alt_is_still_a_photo():
     body = ('<main><img src="img/storefront.jpg" width="800" height="500" '
             'alt="Our new logo above the storefront at dusk"></main>')
@@ -174,23 +189,38 @@ def test_the_default_avoid_line_still_allows_curated_stock():
     assert image_search_terms(p)
 
 
-@pytest.mark.parametrize("avoid", [
-    ["No stock photos or generic smiling people"],
-    ["stock and generic imagery"],
-    ["Stock imagery; generic illustrations"],
-    ["random/generic stock"],
-    ["posed lifestyle shots"],
+@pytest.mark.parametrize("entry,allowed", [
+    # Bans, however they are worded.
+    ("No stock photos or generic smiling people", False),
+    ("stock and generic imagery", False),
+    ("Stock imagery; generic illustrations", False),
+    ("posed lifestyle shots", False),
+    ("Never allow stock photos", False),
+    ("stock photos are not allowed", False),
+    ("stock photography is not permitted", False),
+    ("no stock", False),
+    ("avoid stock", False),
+    ("Don't use stock, even if it looks fine", False),
+    ("stock is never fine", False),
+    ("random/generic stock", False),
+    # An explicit allowance with no negation keeps stock.
+    ("generic stock; curated stock allowed", True),
+    ("curated stock is fine when nothing real exists", True),
+    ("watermarks", True),
 ])
-def test_an_entry_that_mentions_stock_anywhere_bans_it(avoid):
-    p = build_profile({"photography": {"avoid": avoid}})
-    assert stock_allowed(p) is False, avoid
-    assert image_search_terms(p) == []
+def test_stock_is_banned_unless_an_entry_allows_it_outright(entry, allowed):
+    p = build_profile({"photography": {"avoid": [entry]}})
+    assert stock_allowed(p) is allowed, entry
+    assert bool(image_search_terms(p)) is allowed, entry
 
 
-@pytest.mark.parametrize("avoid", [
-    ["watermarks", "AI renders"],
-    ["generic stock; curated stock allowed"],
-])
-def test_only_an_entry_that_says_so_allows_stock(avoid):
-    assert stock_allowed(build_profile({"photography": {"avoid": avoid}})) is True, avoid
-
+def test_the_engines_old_default_avoid_line_is_not_a_ban():
+    legacy = ("---\nname: Northfield\nversion: 1\nlanguage: en\n---\n\n# Northfield\n\n## Visual\n\n"
+              "### Photography\n\n- **Avoid:** random/generic stock, AI-slop clutter\n")
+    p = parse_brand_md(legacy)
+    assert p.photography["avoid"] == ["random/generic stock", "AI-slop clutter"]
+    assert stock_allowed(p) is True
+    assert image_search_terms(p)
+    more = build_profile({"photography": {"avoid": ["random/generic stock", "AI-slop clutter",
+                                                    "posed lifestyle shots"]}})
+    assert stock_allowed(more) is False, "a ban the brand added beside the old line still bans"

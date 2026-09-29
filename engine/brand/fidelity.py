@@ -596,13 +596,16 @@ _LOGO_ATTRS = ("class", "id", "src", "srcset", "data-src", "href")
 _LABEL_ATTRS = ("alt", "aria-label", "title")
 _LABEL_LOGO_RE = re.compile(
     r"^\s*(?:\S+\s+){0,3}(?:logo(?:type|mark)?|wordmark|brandmark)\s*$", re.IGNORECASE)
-# The wrapper a navbar puts its logo in.
-_BRAND_CLASS_RE = re.compile(r"(?<![\w-])(?:navbar-|site-|header-)?brand(?![\w-])", re.IGNORECASE)
-# A link to the page's own home: the image it wraps first is the logo. A
-# language home (/en/, /ar) and an absolute link to a site's root count.
-_HOME_HREF_RE = re.compile(
-    r"^(?:https?://[^/?#]+)?(?:/|/?index\.html?|#top|\./|/[a-z]{2}(?:-[a-z]{2,4})?/?)?$",
-    re.IGNORECASE)
+# The wrapper a navbar puts its logo in. A bare "brand" class counts only
+# inside the site's header or nav, where it names the logo, not a section.
+_BRAND_CLASS_RE = re.compile(r"(?<![\w-])(?:navbar|site|header)-brand(?![\w-])", re.IGNORECASE)
+_BARE_BRAND_RE = re.compile(r"(?<![\w-])brand(?![\w-])", re.IGNORECASE)
+# A link to the page's own root: the image it wraps first is the logo.
+_HOME_HREF_RE = re.compile(r"^(?:https?://[^/?#]+)?(?:/|/?index\.html?|#top|\./)?$", re.IGNORECASE)
+# A language home (/en/, /ar): a home link only inside the header or nav,
+# since a short path elsewhere is any page (/go, /us).
+_LANG_HOME_RE = re.compile(r"^(?:https?://[^/?#]+)?/[a-z]{2}(?:-[a-z]{2,4})?/?$", re.IGNORECASE)
+_CHROME = ("header", "nav")
 _VOID = frozenset(("area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta",
                    "param", "source", "track", "wbr"))
 _MEDIA = ("img", "video")
@@ -652,7 +655,9 @@ class _Visuals(HTMLParser):
         values = {k.lower(): (v or "") for k, v in attrs}
         own = any(_LOGO_WORD_RE.search(values[k]) for k in _LOGO_ATTRS
                   if k in values and not (k == "href" and tag != "a"))
-        own = own or bool(_BRAND_CLASS_RE.search(values.get("class", "")))
+        chrome = any(t in _CHROME for t, _ in self.stack)
+        own = own or bool(_BRAND_CLASS_RE.search(values.get("class", ""))) \
+            or (chrome and bool(_BARE_BRAND_RE.search(values.get("class", ""))))
         for k in _LABEL_ATTRS:
             label = " ".join(values.get(k, "").lower().split())
             if label and (_LABEL_LOGO_RE.match(label) or label == self.brand_name):
@@ -666,7 +671,9 @@ class _Visuals(HTMLParser):
         logo = self._is_logo(tag, attrs)
         if tag == "a":
             href = (dict(attrs).get("href") or "").strip()
-            home = href != "" and bool(_HOME_HREF_RE.match(href))
+            chrome = any(t in _CHROME for t, _ in self.stack)
+            home = href != "" and (bool(_HOME_HREF_RE.match(href))
+                                   or (chrome and bool(_LANG_HOME_RE.match(href))))
             self.home_link_open = home and not self.home_link_seen
             self.home_link_seen = self.home_link_seen or home
             self.home_link_used = False

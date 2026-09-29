@@ -162,9 +162,26 @@ class BrandProfile:
 STRATEGY_FIELDS = ("positioning", "personality", "promise", "guardrails")
 # Words in photography.avoid that ban stock or lifestyle photography.
 _STOCK_BAN_RE = re.compile(r"\b(?:stock|lifestyle)\b", re.IGNORECASE)
-# Words that say an entry allows stock outright ("curated stock allowed").
-_STOCK_ALLOW_RE = re.compile(r"\b(?:allowed|allow|allows|permitted|fine|welcome|may use|can use)\b",
-                             re.IGNORECASE)
+# Words that grant permission, and the words that negate it.
+_STOCK_ALLOW_RE = re.compile(r"\b(?:allowed|allow|allows|permitted|fine|welcome|ok|okay|may use|"
+                             r"can use)\b", re.IGNORECASE)
+_NEGATION_RE = re.compile(r"\b(?:not|never|no|none|nor|without|don't|dont|do not|doesn't|"
+                          r"isn't|aren't|cannot|can't|mustn't|avoid|ban|bans|banned)\b|n't\b",
+                          re.IGNORECASE)
+_CLAUSE_RE = re.compile(r"[;,.:]|\bbut\b|\bexcept\b|\bunless\b", re.IGNORECASE)
+# The avoid line the engine itself wrote into brand.md before 4.0, when a
+# brand stated no photography rules. It is the engine's default, not the
+# brand's ban, so it neither bans nor allows stock.
+LEGACY_DEFAULT_AVOID = ("random/generic stock", "ai-slop clutter")
+
+
+def _allows_stock(entry: str) -> bool:
+    """True when one clause of the entry names stock and grants it with no
+    negation anywhere in that clause ("curated stock allowed"). "Never
+    allow stock photos", "stock photos are not allowed" and "no stock" do
+    not."""
+    return any(_STOCK_BAN_RE.search(c) and _STOCK_ALLOW_RE.search(c) and not _NEGATION_RE.search(c)
+               for c in _CLAUSE_RE.split(entry))
 
 
 def stock_allowed(profile: "BrandProfile") -> bool:
@@ -172,11 +189,16 @@ def stock_allowed(profile: "BrandProfile") -> bool:
     photography: the page then uses the brand's own product screens and
     photographs, or no picture at all, never a stock fallback. An avoid
     entry that mentions stock or lifestyle anywhere bans it ("No stock
-    photos or generic smiling people", "stock and generic imagery"); only
-    an entry that says outright that stock is allowed keeps it."""
-    avoid = (getattr(profile, "photography", None) or {}).get("avoid") or []
-    return not any(_STOCK_BAN_RE.search(str(a)) and not _STOCK_ALLOW_RE.search(str(a))
-                   for a in avoid)
+    photos or generic smiling people", "stock and generic imagery", "Never
+    allow stock photos"); only an entry with an unnegated allowance keeps
+    it ("generic stock; curated stock allowed"). The engine's own pre-4.0
+    default line is ignored."""
+    avoid = [str(a).strip() for a in
+             ((getattr(profile, "photography", None) or {}).get("avoid") or [])]
+    lowered = [" ".join(a.lower().split()) for a in avoid]
+    if all(d in lowered for d in LEGACY_DEFAULT_AVOID):
+        avoid = [a for a, low in zip(avoid, lowered) if low not in LEGACY_DEFAULT_AVOID]
+    return not any(_STOCK_BAN_RE.search(a) and not _allows_stock(a) for a in avoid)
 
 
 def build_profile(signals: Dict[str, Any]) -> BrandProfile:
