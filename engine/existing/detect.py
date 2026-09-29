@@ -458,7 +458,7 @@ def _holds_text(name: str, hx: str, named: Dict[str, str], canvas: str) -> str:
 
 
 def _choose_primary(cands: List[Tuple[str, str, str]], files: List[Path],
-                    named: Dict[str, str], canvas: str
+                    named: Dict[str, str], canvas: str, theme: Any = None
                     ) -> Tuple[Tuple[str, str], str, List[Dict[str, Any]]]:
     """(the chosen (name, hex), why, every candidate with its paint count
     when there are several). A name that says primary or brand wins; an
@@ -471,7 +471,8 @@ def _choose_primary(cands: List[Tuple[str, str, str]], files: List[Path],
     when no candidate can carry text."""
     refused = {c[0]: _holds_text(c[0], c[1], named, canvas) if c[2] in _ACTION_WORDS else ""
                for c in cands}
-    paints = survey.button_paints([c[0] for c in cands], files) if len(cands) > 1 else {}
+    paints = survey.button_paints([c[0] for c in cands], files, theme) \
+        if len(cands) > 1 else {}
     listed = [{"token": n, "value": h, "paints": paints[n]} for n, h, _ in cands] \
         if len(cands) > 1 else []
     left = ["%s was left out: %s" % (n, refused[n]) for n, _, _ in cands if refused[n]]
@@ -499,7 +500,9 @@ def _choose_primary(cands: List[Tuple[str, str, str]], files: List[Path],
                         best[0], n, "" if n == 1 else "s", others, tail)), listed
             return (name, hx), (
                 "%s was chosen because %s; the code paints no button or link with it or with %s "
-                "at rest, so confirm it is the action color%s." % (
+                "at rest (by var(), by a utility that names it, through the Tailwind theme "
+                "too, or by a class string in a component), so confirm it is the action "
+                "color%s." % (
                     name, how, ", ".join(c[0] for c in ok[1:]), tail)), listed
         rest = [c[0] for c in cands if c[0] != name and not refused[c[0]]]
         over = ("; a name that says primary or brand wins over %s" % ", ".join(rest)
@@ -979,10 +982,13 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
         if hx:
             css_colors.append((name.lstrip("-"), hx))
         elif ("font" in name and ("family" in name or "face" in name or name.endswith("font"))) \
-                or (_FONT_TOKEN_RE.match(name) and _font_list(resolved)):
+                or ((_FONT_TOKEN_RE.match(name) or re.search(r"family|typeface", name))
+                    and _font_list(resolved)):
             css_fonts.append((name.lstrip("-"), _first_family(resolved, css_props)))
 
     declared: Dict[str, Any] = {}
+    from engine.io.tailwind_config import read_theme  # engine.io imports this package
+    theme = read_theme([base], [p for p in html_files if survey.is_style(p)], base=base)
     cands = _primary_candidates(colors)
     p_from, pool = "tokens", colors
     if not cands:
@@ -991,7 +997,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     if cands:
         named_pool = {"-".join(_segments(n)): h for n, h in pool}
         (p_name, p_hex), why, listed = _choose_primary(cands, html_files, named_pool,
-                                                       _canvas(pool))
+                                                       _canvas(pool), theme)
         if p_hex:
             declared["primary"] = p_hex
             declared["primary_token"] = p_name
@@ -1021,7 +1027,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     fonts = _fonts_from(font_tokens) or _fonts_from(css_fonts)
     if "data" not in fonts:
         face, where = survey.data_face(css_files, html_files,
-                                       lambda v: _first_family(v, css_props))
+                                       lambda v: _first_family(v, css_props), theme)
         if face and face != fonts.get("body"):
             fonts = {**fonts, "data": face} if fonts else {"display": face, "body": face}
             if fonts.get("body") != face:

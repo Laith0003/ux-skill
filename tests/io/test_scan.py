@@ -123,7 +123,8 @@ def test_blade_and_html_style_attributes_classes_and_style_blocks(tmp_path):
         ("views/card.blade.php", 1, "margin-block", "space", "raw", "16px", ""),
         ("views/card.blade.php", 5, "gap", "space", "raw", "4px", "")]
     unknown = [u for u in result.unknown_classes if u[0] == "views/card.blade.php"]
-    assert unknown == [("views/card.blade.php", 2, "disabled:text-muted")]
+    # The state prefix is context, not part of the class.
+    assert unknown == [("views/card.blade.php", 2, "text-muted")]
 
 
 def test_skipped_folders_and_excluded_files_are_not_read(tmp_path):
@@ -794,7 +795,7 @@ def test_scan_to_dict_carries_every_reason_and_the_public_names_are_exported(tmp
     result = scan([tmp_path], _tokens())
     data = result.to_dict()
     assert list(data) == ["files", "usages", "unknown_classes", "not_read", "skipped",
-                          "declared", "reduced_motion", "dark", "standalone"]
+                          "declared", "reduced_motion", "dark", "standalone", "theme_files"]
     assert data["files"] == 1
     assert data["usages"] == [{"file": "a.html", "line": 1, "prop": "color", "family": "color",
                                "kind": "token", "value": "color-ink",

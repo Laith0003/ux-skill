@@ -231,25 +231,43 @@ def _class_calls(text: str) -> List[Tuple[int, str]]:
     return out
 
 
-def button_paints(names: Sequence[str], files: Sequence[Path]) -> Dict[str, int]:
+_COLOR_SPACES = ("colors", "backgroundColor", "textColor", "color")
+
+
+def _prop_name(name: str) -> str:
+    return re.sub(r"[^A-Za-z0-9-]+", "-", name.lstrip("-")).strip("-")
+
+
+def button_paints(names: Sequence[str], files: Sequence[Path],
+                  theme: Any = None) -> Dict[str, int]:
     """For each color token name, how often the code paints a button or a
     link with it at rest: a background (and, on a link, a color) set with
     var() in a rule for a button or a link with no state pseudo-class, and
     a bg- utility (a text- one on a link) with no state variant, in the
     class of a button or a link element or in a cva, clsx or cn call of a
-    button or link component. Hover and focus paints are not counted."""
+    button or link component. A utility counts when it names the token or
+    a name the project's Tailwind theme (`theme`, a tailwind_config
+    ThemeMap) maps to it with var(), such as bg-primary for
+    colors.primary: 'var(--brand-primary)'. Hover and focus paints are not
+    counted."""
     counts = {n: 0 for n in names}
-    stems = {n: _stem(n) for n in names}
-    vars_ = {n: re.compile(r"var\(\s*--" + re.escape(
-        re.sub(r"[^A-Za-z0-9-]+", "-", n.lstrip("-")).strip("-")) + r"\s*[,)]", re.I)
-        for n in names}
+    stems: Dict[str, List[str]] = {}
+    for n in names:
+        stems[n] = [_stem(n)]
+        if theme is not None:
+            stems[n] += [name for ns, name in theme.names_for(_prop_name(n))
+                         if ns in _COLOR_SPACES and name not in stems[n]]
+    vars_ = {n: re.compile(r"var\(\s*--" + re.escape(_prop_name(n)) + r"\s*[,)]", re.I)
+             for n in names}
 
     def utilities(classes: str, link: bool) -> None:
         for util in _resting(classes):
-            for n, stem in stems.items():
-                own = stem if stem.startswith(("bg-", "text-")) else ""
-                if util in (f"bg-{stem}", own) or (link and util == f"text-{stem}"):
-                    counts[n] += 1
+            for n, forms in stems.items():
+                for stem in forms:
+                    own = stem if stem.startswith(("bg-", "text-")) else ""
+                    if util in (f"bg-{stem}", own) or (link and util == f"text-{stem}"):
+                        counts[n] += 1
+                        break
 
     for path in files:
         low = path.name.lower()
@@ -382,12 +400,14 @@ _FONT_CLASS = re.compile(r"(?<![\w-])font-([a-z][\w-]*)")
 
 
 def data_face(styles: Sequence[Path], files: Sequence[Path],
-              family: Callable[[str], str]) -> Tuple[str, str]:
+              family: Callable[[str], str], theme: Any = None) -> Tuple[str, str]:
     """(the face the code sets on tables, figures and metrics, where it is
     set) or ("", ""). Read from a font-family in a rule whose selector names
     a table cell or a numeric class, then from a font-* utility on a table
-    or a metric element whose --font-* token the system defines. `family`
-    turns a value (a var() or a list) into the face's name."""
+    or a metric element: through the project's Tailwind theme (`theme`)
+    when it names the font (fontFamily.data: 'var(--type-family-mono)'),
+    else the --font-* token of its name. `family` turns a value (a var() or
+    a list) into the face's name."""
     for path in styles:
         for rule in _rules(read_text(path)):
             if not _DATA_SEL.search(rule.selector):
@@ -405,7 +425,11 @@ def data_face(styles: Sequence[Path], files: Sequence[Path],
             if not (_DATA_TAG.match(m.group(1)) or _DATA_CLASS.search(cls)):
                 continue
             for f in _FONT_CLASS.finditer(cls):
-                face = family(f"var(--font-{f.group(1)})")
+                entry = None
+                if theme is not None:
+                    entry = theme.get("fontFamily", f.group(1)) or theme.get("font", f.group(1))
+                face = family(entry.value if entry is not None
+                              else f"var(--font-{f.group(1)})")
                 if face:
                     return face, f"font-{f.group(1)} on <{m.group(1)}> in {path.name}"
     return "", ""

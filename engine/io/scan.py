@@ -87,6 +87,7 @@ from engine.foundations.errors import InputError, _brief_text
 from engine.foundations.tokens import AliasError, TokenSet
 from engine.foundations.values import STROKE_STYLES, TYPES, dimension_px, duration_ms
 from engine.io.css_in import THEME_ATTR, _blank_comments, _without_not, parse_css
+from engine.io.tailwind_config import ThemeMap, read_theme
 from engine.io.values_in import CSS_KEYWORDS, NotRead, read_value, split_top
 
 SKIP_DIRS = ("node_modules", ".git", "dist", "build", "vendor", ".next", "out", "coverage",
@@ -287,6 +288,8 @@ _VARIANT = re.compile(r"(?:(?:group|peer)-)?(?:" + _KNOWN_VARIANTS + r")(?:/[\w-
 # A class with an arbitrary value (w-[13px], grid-cols-[1fr_2fr], bg-(--x)).
 _ARBITRARY_CLASS = re.compile(r"-?[a-z][a-z0-9-]*-(\[[^\]]+\]|\([^)]+\))(/\S+)?")
 _UTILITY_START = re.compile(r"[!-]?[a-z\[(]")
+# A rule on one class alone (.bg-navy-deep): the project's own class.
+_OWN_CLASS = re.compile(r"\.((?:[A-Za-z_-]|\\.)(?:[\w-]|\\.)*)")
 # At-rules only Tailwind stylesheets write.
 _TAILWIND_CSS = re.compile(r"""@tailwind\b|@import\s+["']tailwindcss|@theme\b|@apply\b"""
                            r"""|@config\b|@custom-variant\b|@utility\b""")
@@ -450,6 +453,9 @@ class Scan:
     # (file, why) for each error page or email template read (see
     # standalone): shown where the app's stylesheet may not load.
     standalone: List[Tuple[str, str]] = field(default_factory=list)
+    # The Tailwind config, presets and @theme stylesheets the classes were
+    # read through.
+    theme_files: List[str] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         """Everything the scan found, as JSON takes it: each entry not
@@ -470,7 +476,8 @@ class Scan:
                 "reduced_motion": [{"file": f, "line": n, "selector": sel}
                                    for f, n, sel in self.reduced_motion],
                 "dark": [{"name": p, "file": f, "line": n} for p, f, n in self.dark],
-                "standalone": [{"file": f, "why": w} for f, w in self.standalone]}
+                "standalone": [{"file": f, "why": w} for f, w in self.standalone],
+                "theme_files": list(self.theme_files)}
 
 
 def _norm(name: str) -> str:
@@ -488,6 +495,30 @@ def canonical(kind: str, value: Any) -> str:
     if kind == "fontFamily":
         return ", ".join(value)
     return TYPES[kind].css(value)
+
+
+def _with_alpha(value: str, alpha: str) -> str:
+    """A #RRGGBB color with a Tailwind opacity modifier (/80, /[0.35],
+    /[35%]) as #RRGGBBAA: a translucent white is not white."""
+    if not re.fullmatch(r"#[0-9A-Fa-f]{6}", value):
+        return value
+    try:
+        if alpha.startswith("["):
+            inner = alpha[1:-1].strip()
+            share = float(inner[:-1]) / 100 if inner.endswith("%") else float(inner)
+        else:
+            share = float(alpha) / 100
+    except ValueError:
+        return value
+    share = min(max(share, 0.0), 1.0)
+    return value.upper() + ("" if share >= 1 else f"{round(share * 255):02X}")
+
+
+def _signed(value: str, negative: bool) -> str:
+    """A value a negative class sets (-z-10, -mt-4): its sign kept."""
+    if not negative or value.startswith("-") or not re.match(r"\d|\.\d", value):
+        return value
+    return "-" + value
 
 
 def _read(text: str) -> Tuple[str, Any]:
@@ -719,8 +750,12 @@ class _Lines:
 
 
 class _Scanner:
-    def __init__(self, ts: TokenSet) -> None:
+    def __init__(self, ts: TokenSet, theme: Optional[ThemeMap] = None) -> None:
         self.ts = ts
+        # The project's Tailwind theme: names its config and presets map.
+        self.theme = theme or ThemeMap()
+        # Classes the project's own stylesheets define (.bg-navy-deep).
+        self.defined: Set[str] = set()
         self.index: Dict[str, Tuple[str, str]] = {}
         for t in ts.tokens():
             self.index.setdefault(_norm(t.path), (t.path, t.type))
@@ -764,6 +799,10 @@ class _Scanner:
         if not self.tailwind:
             self.result.usages = [u for u in self.result.usages if id(u) not in self.class_raw]
             self.result.unknown_classes = []
+        # A class the project's own CSS defines is a component class, not a
+        # token the system lacks.
+        self.result.unknown_classes = [u for u in self.result.unknown_classes
+                                       if u.cls not in self.defined]
         return self.result
 
     def add(self, at: Tuple[int, int], prop: str, family: str, kind: str, value: str,
@@ -1032,6 +1071,10 @@ class _Scanner:
         if _TAILWIND_CSS.search(_blank_comments(text)):
             self.tailwind = True
         for rule in parse_css(text, self.file, every=True):
+            for member in split_top(rule.selector, ","):
+                own = _OWN_CLASS.fullmatch(member.strip())
+                if own and rule.declarations:
+                    self.defined.add(own.group(1).replace("\\", ""))
             if any(_REDUCED_MEDIA.search(m) for m in rule.media) and rule.declarations:
                 self.result.reduced_motion.append((self.file, rule.line + first_line,
                                                    " ".join(rule.selector.split())))
@@ -1091,18 +1134,30 @@ class _Scanner:
     def value_class(self, at: Tuple[int, int], cls: str, utility: str, prefix: str,
                     rest: str, spaces: _Namespaces, kinds: Dict[str, str],
                     state: str) -> None:
+        # The class as written, without its variants: md:px-6 and px-6 are
+        # one spelling in two contexts, the state carries the context.
+        # Its sign and its opacity stay: -z-10 is not z-10, bg-white/80 is
+        # not white.
+        text = utility
+        alpha = ""
+        cut = re.fullmatch(r"(.+?)/(\d+(?:\.\d+)?|\[[^\]]*\])", rest)
+        if cut and not rest.startswith("("):
+            rest, alpha = cut.group(1), cut.group(2)
+        negative = utility.startswith("-")
+        named = utility[:len(utility) - len(alpha) - 1] if alpha else utility
         if rest.startswith("(") and rest.endswith(")"):
             ref = re.fullmatch(r"\(\s*(?:([a-z-]+):)?--([A-Za-z0-9_-]+)\s*\)", rest)
             if ref:
                 self.tailwind = True
-                self.var(at, utility, ref.group(2), rest, state,
+                self.var(at, utility, ref.group(2), text, state,
                          family=self._family_for(kinds, ref.group(2), ref.group(1) or ""))
             return
         if rest.startswith("[") and rest.endswith("]"):
             self.tailwind = True
-            self.arbitrary(at, cls, utility, rest[1:-1].replace("_", " "), kinds, state)
+            self.arbitrary(at, text, utility, rest[1:-1].replace("_", " "), kinds, state,
+                           alpha, negative)
             return
-        name = re.sub(r"/(\d+|\[[^\]]*\])$", "", rest)
+        name = rest
         if not _REST.fullmatch(name) or not name and not _BARE.fullmatch(prefix):
             return
         for space, family in spaces:
@@ -1112,23 +1167,47 @@ class _Scanner:
                               else (space, f"{space}.DEFAULT")):
                 found = self.token(candidate)
                 if found is not None:
-                    self.add(at, utility, family, "token", found[0], cls, state)
+                    self.add(at, utility, family, "token", found[0], text, state)
                     return
+        entry = next((e for e in (self.theme.get(space, name) for space, _ in spaces) if e),
+                     None) if name else None
+        if entry is not None:
+            # A name the project's Tailwind config maps: var(--x) reaches
+            # the token x; a plain value is a raw value of the class's family.
+            self.tailwind = True
+            if entry.var:
+                self.var(at, utility, entry.var, text, state,
+                         family=self._family_for(kinds, entry.var))
+                return
+            try:
+                kind, literal = _read(entry.value)
+            except NotRead:
+                return
+            family = kinds.get(kind, "")
+            if family:
+                value = canonical(kind, literal)
+                if family == "color" and alpha:
+                    value = _with_alpha(value, alpha)
+                self.add(at, utility, family, "raw", _signed(value, negative), text, state,
+                         from_class=True)
+            return
         if ("spacing", "space") in spaces and _NUMERIC.fullmatch(name) \
                 and self.token("spacing"):
-            self.add(at, utility, "space", "token", self.token("spacing")[0], cls, state)
+            self.add(at, utility, "space", "token", self.token("spacing")[0], text, state)
             return
         literal = self._bare(prefix, name, spaces)
         if literal is not None:
             kind, value = literal
-            self.add(at, utility, kinds.get(kind, ""), "raw", value, cls, state,
-                     from_class=True)
+            if kind == "color" and alpha:
+                value = _with_alpha(value, alpha)
+            self.add(at, utility, kinds.get(kind, ""), "raw", _signed(value, negative), text,
+                     state, from_class=True)
             return
         if _KEYWORD_CLASS.fullmatch(utility.lstrip("-")) or (
                 _NUMERIC.fullmatch(name) and spaces == _C):
             return
         looked = tuple(space for space, family in spaces if name or family != "color")
-        self.unknown(at, cls, looked, self.near(name, spaces, kinds), name)
+        self.unknown(at, named, looked, self.near(name, spaces, kinds), name)
 
     @staticmethod
     def _bare(prefix: str, name: str, spaces: _Namespaces) -> Optional[Tuple[str, str]]:
@@ -1164,7 +1243,8 @@ class _Scanner:
         return families.pop() if len(families) == 1 else ""
 
     def arbitrary(self, at: Tuple[int, int], cls: str, utility: str, text: str,
-                  kinds: Dict[str, str], state: str) -> None:
+                  kinds: Dict[str, str], state: str, alpha: str = "",
+                  negative: bool = False) -> None:
         hint = _TYPE_HINT.match(text)
         if hint and not text.startswith("var("):
             text = text[hint.end():]
@@ -1180,7 +1260,10 @@ class _Scanner:
             return
         family = kinds.get(kind, "")
         if family:
-            self.add(at, utility, family, "raw", canonical(kind, literal), cls, state,
+            value = canonical(kind, literal)
+            if family == "color" and alpha:
+                value = _with_alpha(value, alpha)
+            self.add(at, utility, family, "raw", _signed(value, negative), cls, state,
                      from_class=True)
 
     # Markup and scripts --------------------------------------------------
@@ -1380,13 +1463,21 @@ def _files(roots: Sequence[Path], skip: Set[Path]) -> Iterator[Tuple[Path, str]]
                     yield p, label(p, root)
 
 
-def scan(roots: Sequence[Any], ts: TokenSet, exclude: Iterable[Any] = ()) -> Scan:
+def scan(roots: Sequence[Any], ts: TokenSet, exclude: Iterable[Any] = (),
+         theme: Optional[ThemeMap] = None, also: Iterable[Any] = ()) -> Scan:
     """Every use of a value under `roots` (files or folders) that the
     scanner can measure, matched against the tokens of `ts`, with what it
     saw and could not measure in Scan.not_read. Folders in SKIP_DIRS and
     hidden folders are not read; nor is any file or folder in `exclude`
-    (the system's own source). Raises InputError for a root that does not
-    exist."""
+    (the system's own source). A class is also read through the project's
+    Tailwind theme (`theme`, else read_theme finds the config and presets
+    for the roots and reads each @theme block among the files): a name it
+    maps to var(--x) reaches the token x, and what the config computes is
+    listed as not measured. `also` names stylesheets read for what they use
+    wherever they are (a system's own stylesheet passed as a source: its
+    rules' var() uses count, its definitions do not), each named by its
+    path from the folder the roots share. Raises InputError for a root
+    that does not exist."""
     paths: List[Path] = []
     for r in roots:
         p = Path(r).expanduser()
@@ -1396,9 +1487,32 @@ def scan(roots: Sequence[Any], ts: TokenSet, exclude: Iterable[Any] = ()) -> Sca
         if all(p.resolve() != q.resolve() for q in paths):
             paths.append(p)
     skip = {Path(e).expanduser().resolve() for e in exclude}
-    scanner = _Scanner(ts)
+    files = list(_files(paths, skip))
+    have = {p.resolve() for p, _ in files}
+    dirs = [p if p.is_dir() else p.parent for p in paths]
+    try:
+        shared = os.path.commonpath([os.path.abspath(d) for d in dirs])
+    except ValueError:
+        shared = ""
+    for extra in also:
+        p = Path(extra).expanduser()
+        if p.is_file() and p.resolve() not in have:
+            have.add(p.resolve())
+            try:
+                shown = Path(os.path.relpath(os.path.abspath(p), shared)).as_posix() \
+                    if shared else p.name
+            except ValueError:
+                shown = p.name
+            files.append((p, shown))
+    if theme is None:
+        theme = read_theme(paths, [p for p, _ in files if p.name.lower().endswith(".css")])
+    scanner = _Scanner(ts, theme)
     result = scanner.result
-    for path, rel in _files(paths, skip):
+    result.theme_files = list(theme.files)
+    for file, line, text, why in theme.not_read:
+        result.not_read.append(NotMeasured(file, line, "tailwind theme", text,
+                                           f"{text} {why}"))
+    for path, rel in files:
         name = path.name.lower()
         if name.startswith("tailwind.config."):
             scanner.tailwind = True

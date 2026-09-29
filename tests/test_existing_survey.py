@@ -171,7 +171,8 @@ def test_without_any_use_the_best_action_name_is_chosen_and_the_owner_is_asked(
     assert declared["primary_why"] == (
         "--accent was chosen because its name says accent, an action color, and no color is "
         "named primary or brand; the code paints no button or link with it or with --action at "
-        "rest, so confirm it is the action color.")
+        "rest (by var(), by a utility that names it, through the Tailwind theme too, or by a "
+        "class string in a component), so confirm it is the action color.")
 
 
 @pytest.mark.parametrize("css", [

@@ -199,8 +199,12 @@ def run_enhance(source: Any, *, fmt: str = "auto", mapping: Any = None,
     here = check_out_dir(out, labels["out"]) if out is not None else _source_folder(imported)
     maps, notes, name, used = _mapping(imported, mapping, labels, here)
     report = imported.report
+    # The system's own stylesheets are read for what their rules use (a
+    # token reached through another is used); its token files are not code.
+    sources = [report.source.path, *(a.path for a in report.also_read)]
+    sheets = [p for p in sources if str(p).lower().endswith((".css", ".scss", ".less"))]
     scanned = scan_code(list(scan), imported.tokens,
-                        exclude=[report.source.path, *(a.path for a in report.also_read)]) \
+                        exclude=[p for p in sources if p not in sheets], also=sheets) \
         if scan else None
     done = enhance(imported, maps, scanned, merge_notes=notes, mapping_name=name)
     data = done.to_dict()
@@ -214,8 +218,16 @@ def run_enhance(source: Any, *, fmt: str = "auto", mapping: Any = None,
             "unused": _count(d, "unused"),
             "raw_values": None if d is None else sum(len(v) for v in d["distinct"].values()),
             "raw_with_token": _count(d, "raw_with_token"),
-            "spellings": _count(d, "spellings"), "lies": _count(d, "lies"),
-            "missing": _count(d, "missing"), "unknown_classes": _count(d, "unknown_classes"),
+            "spellings": _count(d, "spellings"),
+            # Every name the report says lies: those every use contradicts
+            # and those some uses do (strays), as the report lists both.
+            "lies": None if d is None else len(d["lies"]) + len(d["strays"]),
+            "lies_every_use": _count(d, "lies"), "strays": _count(d, "strays"),
+            # Names the code references that the system lacks, as the
+            # report lists them, and how many times.
+            "missing": None if d is None else len({m["value"] for m in d["missing"]}),
+            "missing_uses": _count(d, "missing"),
+            "unknown_classes": _count(d, "unknown_classes"),
             "not_measured": _count(d, "not_read")},
         "mapping_file": used, "mapping_notes": list(notes),
         "report": done.markdown()})

@@ -98,3 +98,55 @@ def test_a_dark_scheme_under_the_media_query_is_reported(tmp_path: Path) -> None
 def test_a_system_with_no_dark_values_reports_none(tmp_path: Path) -> None:
     _write(tmp_path, "styles/tokens.css", ":root { --ink: #111; --paper: #fff; --gap: 4px }")
     assert "dark" not in detect_existing_system(tmp_path)["declared"]
+
+
+# ---------------------------------------------------------------- through the Tailwind theme
+
+
+PRESET = ("module.exports = {\n  theme: {\n    extend: {\n"
+          "      colors: { cta: 'var(--color-brand)' },\n"
+          "      fontFamily: { tabular: 'var(--type-family-alt)' },\n"
+          "    },\n  },\n};\n")
+
+
+def _themed(tmp_path: Path) -> Path:
+    _write(tmp_path, "styles/tokens.css",
+           ':root {\n  --color-primary: #0B5F4A;\n  --color-brand: #7C3AED;\n'
+           '  --paper: #FFFFFF;\n  --type-family-display: "Newsreader", serif;\n'
+           '  --type-family-body: "Inter", sans-serif;\n'
+           '  --type-family-alt: "IBM Plex Mono", monospace;\n}\n')
+    _write(tmp_path, "tailwind.config.js", "module.exports = { presets: [require('./preset')] }\n")
+    _write(tmp_path, "preset.js", PRESET)
+    return tmp_path
+
+
+def test_a_utility_the_theme_maps_counts_as_a_button_paint(tmp_path: Path) -> None:
+    _themed(tmp_path)
+    _write(tmp_path, "src/Button.tsx",
+           'export const Button = () => <button className="bg-cta px-4">Go</button>;\n')
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["primary_token"] == "--color-brand"
+    assert {c["token"]: c["paints"] for c in declared["primary_candidates"]} == {
+        "--color-primary": 0, "--color-brand": 1}
+
+
+def test_a_font_class_the_theme_maps_on_a_table_is_the_data_face(tmp_path: Path) -> None:
+    _themed(tmp_path)
+    _write(tmp_path, "src/Stats.tsx",
+           'export const Stats = () => <table><td className="font-tabular">4</td></table>;\n')
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["fonts"]["data"] == "IBM Plex Mono"
+    assert declared["data_font_from"] == "font-tabular on <td> in Stats.tsx"
+
+
+def test_a_mature_system_reports_its_data_face_languages_and_direction(tmp_path: Path) -> None:
+    shutil.copytree(FIXTURE, tmp_path / "p")
+    declared = detect_existing_system(tmp_path / "p")["declared"]
+    assert declared["fonts"]["data"] == "IBM Plex Mono"
+    assert declared["languages"] == ["ar", "en", "fr"]
+    assert declared["direction"] == "rtl"
+    [primary] = [d for d in declared["disagreements"] if d["token"] == "--brand-primary"]
+    assert primary["wins"] == "site/app/globals.css"
+    assert {v["path"]: v["line"] for v in primary["values"]} == {
+        "styles/foundations.css": 8, "site/app/globals.css": 13, "tokens/tokens.json": 9,
+        "DESIGN.md": 7}
