@@ -49,10 +49,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
   however an entry is worded ("no stock", "stock photos are not allowed",
   "never allow stock photos"); only a clause that allows a kind outright,
   with no negation ("curated stock allowed"), is not an exclusion. A ban
-  narrows the choice and never removes photography. Only a rule of no
-  photography at all (`engine.brand.photography_forbidden`, or
-  `photography.forbidden` in the brand signals) lets a page ship without
-  photographs, and the gate reports it. The line earlier versions wrote
+  narrows the choice and never removes photography. Only a rule against
+  photographs as a whole ("no photography", "illustration only, never
+  photos"; `engine.brand.photography_rule`, or `photography.forbidden` in
+  the brand signals) lets a page ship without photographs: the evaluator
+  then passes the page with a note naming that rule, and fails a page that
+  carries a photograph anyway, naming the image and the rule. The line earlier versions wrote
   when a brand stated no rules, "random/generic stock, AI-slop clutter",
   is the engine's old default and excludes nothing; a new `brand.md`
   writes "random placeholder images, AI-slop clutter" instead.

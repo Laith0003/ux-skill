@@ -175,7 +175,7 @@ _PHOTO_WORD_RE = re.compile(r"\b(?:photography|photographs?|photos?|pictures?|im
                             re.IGNORECASE)
 _FILLER_RE = re.compile(r"\b(?:at|all|of|any|kind|kinds|ever|use|used|using|is|are|be|we|our|on|"
                         r"this|the|a|in|pages?|site|allowed|permitted|whatsoever|anywhere|"
-                        r"real|either)\b", re.IGNORECASE)
+                        r"real|either|drawn|hand-drawn)\b", re.IGNORECASE)
 # The avoid line the engine itself wrote into brand.md before 4.0, when a
 # brand stated no photography rules. It is the engine's default, not the
 # brand's rule, so it excludes nothing.
@@ -192,11 +192,45 @@ def _allowance(clause: str) -> bool:
                 and not _NEGATION_RE.search(clause))
 
 
+# A statement that pictures are drawn instead of photographed.
+_DRAWN_ONLY_RE = re.compile(
+    r"\b(?:illustrations?|illustrated|drawings?|drawn|vector (?:art|graphics)|graphics|icons?)\s+"
+    r"(?:only|instead of (?:photos?|photographs?|photography|pictures?))\b"
+    r"|\bonly\s+(?:illustrations?|drawings?|vector (?:art|graphics))\b", re.IGNORECASE)
+# Words that carve an exception out of a rule: "no photography except
+# product shots" narrows, it does not forbid.
+_EXCEPTION_RE = re.compile(r"\b(?:except|unless|but|other than|apart from|besides|outside)\b",
+                           re.IGNORECASE)
+_PARTS_RE = re.compile(r"[;,.:!]|\band\b", re.IGNORECASE)
+
+
+def _empty(text: str) -> bool:
+    return not re.sub(r"[\W_]+", "", _FILLER_RE.sub(" ", text))
+
+
 def _forbids_photography(entry: str) -> bool:
-    if not (_NEGATION_RE.search(entry) and _PHOTO_WORD_RE.search(entry)):
+    """True when the entry excludes photographs as a whole: every part of it
+    either negates photos with no kind named ("no photography", "we never
+    use photos", "no real photos") or says pictures are drawn instead
+    ("illustration only", "illustrations instead of photos"), and at least
+    one part says so. A kind ("no stock", "no photography of people") or an
+    exception ("no photography except product shots") only narrows."""
+    if _EXCEPTION_RE.search(entry):
         return False
-    rest = _FILLER_RE.sub(" ", _PHOTO_WORD_RE.sub(" ", _NEGATION_RE.sub(" ", entry)))
-    return not re.sub(r"[\W_]+", "", rest)
+    said = False
+    for part in _PARTS_RE.split(entry):
+        if _empty(part):
+            continue
+        drawn = _DRAWN_ONLY_RE.search(part)
+        if drawn and _empty(_PHOTO_WORD_RE.sub(" ", part[:drawn.start()] + part[drawn.end():])):
+            said = True
+            continue
+        if _NEGATION_RE.search(part) and _PHOTO_WORD_RE.search(part) and \
+                _empty(_PHOTO_WORD_RE.sub(" ", _NEGATION_RE.sub(" ", part))):
+            said = True
+            continue
+        return False
+    return said
 
 
 def _avoid_entries(profile: "BrandProfile") -> List[str]:
@@ -208,11 +242,18 @@ def _avoid_entries(profile: "BrandProfile") -> List[str]:
     return avoid
 
 
+def photography_rule(profile: "BrandProfile") -> str:
+    """The brand's own words that forbid photography as a whole, or "":
+    "no photography", "we never use photos", "illustration only, never
+    photos". A ban on a kind of photo is never this."""
+    return next((a for a in _avoid_entries(profile) if _forbids_photography(a)), "")
+
+
 def photography_forbidden(profile: "BrandProfile") -> bool:
-    """True only when the brand's rules say no photography at all ("no
-    photography", "never use photos"): the page then carries none, and the
-    gate reports the rule. A ban on a kind of photo never says this."""
-    return any(_forbids_photography(a) for a in _avoid_entries(profile))
+    """True only when the brand's rules forbid photography as a whole
+    (photography_rule): the page then carries none, and the gate reports
+    the rule."""
+    return bool(photography_rule(profile))
 
 
 def photo_exclusions(profile: "BrandProfile") -> List[str]:

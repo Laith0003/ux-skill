@@ -15,6 +15,7 @@ from engine.brand import (
     parse_brand_md,
     photo_exclusions,
     photography_forbidden,
+    photography_rule,
     render_md,
     score_imagery,
 )
@@ -217,16 +218,68 @@ def test_an_unnegated_allowance_is_not_an_exclusion(entry, excluded):
 
 
 @pytest.mark.parametrize("entry,forbidden", [
+    # Photographs excluded as a whole.
     ("no photography", True), ("No photos at all", True), ("never use photographs", True),
-    ("no photography whatsoever", True), ("no stock photography", False),
-    ("no photos of people", False), ("photography", False),
+    ("no photography whatsoever", True), ("we never use photography", True),
+    ("no photographs", True), ("photos are not allowed", True),
+    ("illustration only, never photos", True), ("Illustrations only, no photographs", True),
+    ("No real photos, illustration only", True), ("illustrations instead of photos", True),
+    ("only illustrations", True), ("drawn illustrations only", True),
+    # One kind only: it narrows.
+    ("no stock", False), ("no staged people", False), ("no stock photography", False),
+    ("no photos of people", False), ("no lifestyle photography", False),
+    ("no photography except product shots", False), ("illustration only for icons", False),
+    ("photography", False), ("No stock photos or generic smiling people", False),
 ])
-def test_only_a_rule_of_no_photography_at_all_forbids_it(entry, forbidden):
+def test_only_a_rule_against_photos_as_a_whole_forbids_them(entry, forbidden):
     p = build_profile({"photography": {"avoid": [entry]}})
     assert photography_forbidden(p) is forbidden, entry
+    assert photography_rule(p) == (entry if forbidden else ""), entry
     assert bool(image_search_terms(p)) is (not forbidden), entry
     if forbidden:
         assert photo_exclusions(p) == []
+    else:
+        assert photo_exclusions(p) == [entry]
+
+
+def _forbidding_profile(rule: str = "illustration only, never photos") -> BrandProfile:
+    return BrandProfile(name="Northfield", primary="#0B6E4F", logo={"url": LOGO, "alt": "Northfield"},
+                        photography={"avoid": [rule]})
+
+
+_BODY = ('<header><img src="' + LOGO + '" alt="Northfield"></header>'
+         '<main><h1>Northfield</h1><a style="background:#0B6E4F" href="#go">Go</a>{}</main>')
+
+
+def test_the_gate_reports_the_rule_it_honors():
+    from engine.evaluator import evaluate
+    html = _page(_BODY.format('<svg viewBox="0 0 640 400"><path d="M0 0z"/></svg>'))
+    ev = evaluate(html=html, brand_profile=_forbidding_profile())
+    assert ev.brand_passed is True, ev.notes
+    note = next(n for n in ev.notes if n.startswith("IMAGERY:"))
+    assert '"illustration only, never photos"' in note and "no photograph" in note
+
+
+def test_a_photograph_under_a_rule_against_photos_fails_naming_both():
+    from engine.evaluator import evaluate
+    html = _page(_BODY.format('<img src="img/market-stall.jpg" width="800" height="500" alt="A stall">'))
+    ev = evaluate(html=html, brand_profile=_forbidding_profile())
+    assert ev.brand_passed is False
+    note = next(n for n in ev.notes if "imagery" in n)
+    assert "img/market-stall.jpg" in note and '"illustration only, never photos"' in note
+    res = score_imagery(html, logo_url=LOGO, photography_rule="no photography")
+    assert res["kind"] == "photo-under-ban"
+
+
+@pytest.mark.parametrize("img", ['<img alt="A stall">', '<img src="" alt="A stall">',
+                                 '<img src="  " alt="A stall">'])
+def test_an_img_with_no_source_is_not_a_photograph(img):
+    assert score_imagery(_page("<main>" + img + "</main>"))["ok"] is False
+
+
+def test_the_gate_says_any_raster_counts_until_the_grade_check():
+    doc = " ".join(score_imagery.__doc__.split())
+    assert "Any raster counts, screenshots and raster drawings included" in doc
 
 
 def test_a_forbidden_flag_round_trips_through_brand_md():
@@ -235,7 +288,7 @@ def test_a_forbidden_flag_round_trips_through_brand_md():
     assert photography_forbidden(parse_brand_md(render_md(p))) is True
 
 
-def test_the_gate_honors_a_brand_that_forbids_photography():
+def test_the_gate_honors_a_brand_that_forbids_photography_by_name():
     from engine.evaluator import evaluate
     profile = BrandProfile(name="Northfield", primary="#0B6E4F", logo={"url": LOGO, "alt": "Northfield"},
                            photography={"avoid": ["no photography"]})

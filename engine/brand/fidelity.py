@@ -625,11 +625,10 @@ def _svg_is_illustration(open_tag: str) -> bool:
 _VECTOR_SRC_RE = re.compile(r"(?:\.svgz?(?:[?#].*)?$|^data:image/svg)", re.IGNORECASE)
 
 
-def _raster(attrs: Dict[str, Optional[str]]) -> bool:
-    """An <img> that can hold a photograph: any source but a vector file."""
+def _source(attrs: Dict[str, Optional[str]]) -> str:
+    """The file an <img> or <video> shows, or "" when it names none."""
     src = (attrs.get("src") or attrs.get("data-src") or attrs.get("srcset") or "").strip()
-    src = src.split(",")[0].split()[0] if src else ""
-    return not _VECTOR_SRC_RE.search(src)
+    return src.split(",")[0].split()[0] if src else ""
 
 
 def _same_file(src: str, logo_url: str) -> bool:
@@ -654,7 +653,7 @@ class _Visuals(HTMLParser):
         self.home_link_open = False
         self.home_link_used = False
         self.home_link_seen = False
-        self.media: List[Tuple[bool, bool]] = []  # (is_logo, is_photo) per img/video
+        self.media: List[Tuple[bool, bool, str]] = []  # (is_logo, is_photo, source)
         self.svgs: List[Tuple[str, bool]] = []    # (open tag, is_logo)
         self._svg: Optional[List[Any]] = None     # [open tag, is_logo, depth]
 
@@ -690,7 +689,11 @@ class _Visuals(HTMLParser):
                 logo = True
                 self.home_link_used = True
         if tag in _MEDIA and self._svg is None:
-            self.media.append((logo, tag == "video" or _raster(dict(attrs))))
+            source = _source(dict(attrs))
+            # An <img> with no source shows nothing: it is not a picture.
+            if tag == "video" or source:
+                self.media.append((logo, tag == "video" or not _VECTOR_SRC_RE.search(source),
+                                   source or "<video>"))
         if tag == "svg" and self._svg is None:
             self._svg = [self.get_starttag_text() or "<svg>", logo, len(self.stack)]
         if tag in _VOID:
@@ -734,20 +737,27 @@ class _Visuals(HTMLParser):
 
 
 def score_imagery(html_text: str, logo_url: str = "", brand_name: str = "",
-                  photography_forbidden: bool = False) -> Dict[str, Any]:
+                  photography_forbidden: bool = False,
+                  photography_rule: str = "") -> Dict[str, Any]:
     """Does a FULL page carry a photograph? Deterministic.
 
     Returns ``{ok, kind, score, detail}`` with ``kind`` in {fragment, image,
-    bg-photo, no-photography, illustration-only, logo-only, icons-only,
-    none}. A page passes with a raster image, a picture, a video or a raster
-    background that is not the logo. Component fragments (no <body>/<html>)
-    are exempt. An illustration, icons or the logo alone fail: the brand's
-    logo file (``logo_url``), an element marked as a logo, wordmark, logo
-    row or navbar brand, one whose label is the brand's name
-    (``brand_name``), or the first image in the page's first link to its
-    home page is identity. Only a brand whose rules forbid photography
-    outright (``photography_forbidden``) passes with no photograph, and the
-    detail reports the rule.
+    bg-photo, no-photography, photo-under-ban, illustration-only, logo-only,
+    icons-only, none}. A page passes with a raster image, a picture, a video
+    or a raster background that is not the logo. Any raster counts,
+    screenshots and raster drawings included, until a grade check can tell
+    a photograph from other pictures; an <img> with no source counts as
+    nothing. Component fragments (no <body>/<html>) are exempt. An
+    illustration, icons or the logo alone fail: the brand's logo file
+    (``logo_url``), an element marked as a logo, wordmark, logo row or
+    navbar brand, one whose label is the brand's name (``brand_name``), or
+    the first image in the page's first link to its home page is identity.
+
+    A brand whose rules forbid photography as a whole
+    (``photography_forbidden``, or ``photography_rule``, the rule in the
+    brand's words) inverts the check: the page passes with no photograph,
+    as no-photography, and fails as photo-under-ban when it carries one;
+    both details name the rule, and the failure names the image.
     """
     html = html_text or ""
     if not _FULLPAGE_RE.search(html):
@@ -756,23 +766,32 @@ def score_imagery(html_text: str, logo_url: str = "", brand_name: str = "",
     parser = _Visuals(logo_url, brand_name)
     parser.feed(html)
     parser.close()
-    logos = sum(1 for is_logo, _ in parser.media if is_logo) \
+    logos = sum(1 for is_logo, _, _ in parser.media if is_logo) \
         + sum(1 for _, is_logo in parser.svgs if is_logo)
+    photos = [src for is_logo, photo, src in parser.media if photo and not is_logo]
+    photos += [m.group(1) for m in _REAL_BG_RE.finditer(html)
+               if not _LOGO_WORD_RE.search(m.group(1).rsplit("/", 1)[-1])
+               and not _same_file(m.group(1), logo_url)]
     fix = ("Add photographs: the client's own first, else sourced ones (stock included) that fit "
            "the photo direction and none of the kinds the brand's rules exclude.")
-    if photography_forbidden:
+    if photography_forbidden or photography_rule:
+        rule = ('"%s"' % photography_rule) if photography_rule else "no photography"
+        if photos:
+            return {"ok": False, "kind": "photo-under-ban", "score": 0,
+                    "detail": ("The page carries a photograph (%s) and the brand's rules forbid "
+                               "photography (%s). Replace it with the brand's own illustration "
+                               "or remove it." % (", ".join(photos[:3]), rule))}
         return {"ok": True, "kind": "no-photography", "score": 100,
-                "detail": ("The brand's rules forbid photography, so the page needs none; the "
-                           "rule is honored. Check that no picture on the page is a photograph.")}
-    if any(not is_logo and photo for is_logo, photo in parser.media):
+                "detail": ("The brand's rules forbid photography (%s); the page carries no "
+                           "photograph, as the rule asks." % rule)}
+    if any(not is_logo and photo for is_logo, photo, _ in parser.media):
         return {"ok": True, "kind": "image", "score": 100,
                 "detail": "Page carries a photograph (a raster image, picture or video)."}
-    if any(not _LOGO_WORD_RE.search(m.group(1).rsplit("/", 1)[-1])
-           and not _same_file(m.group(1), logo_url) for m in _REAL_BG_RE.finditer(html)):
+    if photos:
         return {"ok": True, "kind": "bg-photo", "score": 100,
                 "detail": "Page carries a background photograph."}
     own = [tag for tag, is_logo in parser.svgs if not is_logo]
-    vectors = any(not is_logo and not photo for is_logo, photo in parser.media)
+    vectors = any(not is_logo and not photo for is_logo, photo, _ in parser.media)
     if vectors or any(_svg_is_illustration(tag) for tag in own):
         return {"ok": False, "kind": "illustration-only", "score": 0,
                 "detail": "The page carries illustrations but no photograph. " + fix}
