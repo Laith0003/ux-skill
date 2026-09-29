@@ -298,7 +298,7 @@ Breaks to prevent: links wrapping to a second row, the wordmark stacking mid-nam
 
 ### Sticky-header budget on mobile
 
-Total sticky or fixed top chrome is about one row: target 72px or less, hard ceiling about 96px. Only the primary nav and its single CTA persist on scroll. A decorative or utility bar (ratings, announcement) is not sticky; it sits at the top and scrolls away. If the summed height of everything pinned exceeds the ceiling, cut what sticks until only the nav row remains. The sticky element wraps the nav alone: a sticky element is bounded by its containing block, so a utility bar left inside the sticky `<header>` both inflates the budget and lets the nav unstick once that box scrolls past.
+Total sticky or fixed top chrome is about one row: target 72px or less, hard ceiling about 96px. The budget covers everything that loads over the page, not only the top: a consent banner, a promo bar, a chat launcher and a sticky bar at the bottom take the same phone screen, and together they routinely take a third of it. With all of them present at load, the primary action still shows on the first phone screen, uncovered (/ux-design responsive gate, check (f)). Only the primary nav and its single CTA persist on scroll. A decorative or utility bar (ratings, announcement) is not sticky; it sits at the top and scrolls away. If the summed height of everything pinned exceeds the ceiling, cut what sticks until only the nav row remains. The sticky element wraps the nav alone: a sticky element is bounded by its containing block, so a utility bar left inside the sticky `<header>` both inflates the budget and lets the nav unstick once that box scrolls past.
 
 ### Utility and announcement topbar
 
@@ -369,8 +369,9 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 | Generic "Get Started" / "Learn More" as the only CTA | Specific verbs naming what happens next: "Run the demo", "See the dashboard", "Open account", "Start free", "Deploy", "Run a query" |
 | Multiple primary CTAs above the fold | One primary, optionally one secondary. Two filled CTAs of equal weight dilute the primary path |
 | Form fields asking for too much in the first interaction | Each field names what reads it (routing, a report, the person who calls back); a field nothing reads is cut. One field the visitor has to go and look up costs more than three they know, and a required field that invites a made-up value is worse than none |
-| Modal popups for newsletter signup on a timer | Newsletter signup goes in the footer or a sidebar component, not in a time-triggered interstitial |
-| Floating chat widgets overlapping the primary CTA | Position chat where it can't compete, or hide it on the hero |
+| Modal popups for newsletter signup on a timer | Newsletter signup goes in the footer or a sidebar component, not in a time-triggered interstitial. A timed modal that opens before the offer could be read interrupts the reading it depends on |
+| Floating chat widgets overlapping the primary CTA | Position chat where it can't compete, or hide it on the hero. A chat launcher never takes the same corner as a sticky CTA; the bottom corner nearest the thumb belongs to the ask |
+| Two overlays on screen together on a phone (a consent banner and a chat launcher, a promo bar and a sticky bar) | Two overlays on a phone at once is a blocker: show one, and let the next wait until the first is dismissed. An overlay that covers the primary action is a defect, not a trade-off |
 | Sticky chatbot bubbles in the corner on first load | None. Wait for engagement |
 | Cookie banners blocking first paint | Slim, monochrome, bottom-bar or sidebar treatment that respects the page |
 
@@ -424,6 +425,7 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 ### Critical
 - [ ] No `h-screen` on the hero; `min-h-[100dvh]` instead
 - [ ] Nav stays one row at 360px and the sticky top chrome is 96px or less
+- [ ] At 390 and 360, with every fixed element present at load, the primary action shows on the first screen and nothing covers it
 - [ ] Under `dir="rtl"`, letter-spacing is 0 and layout uses logical properties
 
 ### High

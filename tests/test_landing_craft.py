@@ -245,3 +245,29 @@ def test_both_lint_rules_are_documented_with_their_records():
     history = _read("engine/rulepack/decisions/HISTORY.md")
     for record in ("phone-accepts-local-input", "one-label-per-action"):
         assert f"({record}.md)" in history, record
+
+
+# ---------------------------------------------------------------- the first phone screen
+
+
+def test_the_gate_checks_the_primary_action_under_all_fixed_chrome():
+    doc = _read(DESIGN)
+    gate = doc[doc.index("**Responsive gate: HARD"):doc.index("### Fallback")]
+    assert "(a) to (f) in page mode" in gate
+    f = next(ln for ln in gate.splitlines() if ln.startswith("- **(f)"))
+    for need in ("consent banner", "first viewport", "covers", "two overlays"):
+        assert need in f, need
+    assert "const PRIMARY = " in gate
+    assert "elementFromPoint" in gate
+    row = next(ln for ln in doc.splitlines() if ln.startswith("| Responsive gate (b)"))
+    assert "(f)" in row and row.endswith("| yes | no | no |")
+
+
+def test_the_chrome_budget_counts_top_and_bottom():
+    text = _read(LANDING)
+    budget = _section(text, "### Sticky-header budget on mobile")
+    assert "bottom" in budget and "consent banner" in budget
+    cta = _section(text, "## CTA", "## ")
+    assert "same corner" in cta and "Two overlays" in cta
+    critical = _section(text, "### Critical", "### ")
+    assert "primary action" in critical
