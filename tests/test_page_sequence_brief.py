@@ -104,7 +104,7 @@ def test_marketing_site_says_how_to_choose():
 @pytest.mark.parametrize("action,expect", [
     ("quote", "lead-gen-service"), ("book", "lead-gen-service"), ("contact", "lead-gen-service"),
     ("buy", "ecommerce-product"), ("subscribe", "content-publication"), ("demo", "trust-led"),
-    ("open-account", "b2b-marketplace"), ("sign-up", "saas-marketing"),
+    ("sign-up", "saas-marketing"),
 ])
 def test_primary_action_alone_picks(action, expect):
     seq = select_for_brief({"primary_action": action})
@@ -313,3 +313,25 @@ def test_a_bad_stage_is_refused():
     with pytest.raises(ValueError) as err:
         select_for_brief({"stage": "beta"})
     assert "stage" in str(err.value) and "pre-launch" in str(err.value)
+
+
+@pytest.mark.parametrize("action", ["open-account", "sign-up", "book", "buy", "contact", "quote",
+                                    "subscribe", "demo"])
+def test_no_action_alone_picks_a_two_sided_marketplace(action):
+    seq = select_for_brief({"primary_action": action})
+    assert seq["id"] not in ("b2b-marketplace", "marketplace-supply"), (action, seq["id"])
+
+
+def test_open_account_without_a_product_type_asks_for_it():
+    seq = select_for_brief({"primary_action": "open-account"})
+    assert seq["id"] == "general-landing"
+    assert "product_type" in seq["why"] and "marketplace" in seq["why"]
+    market = select_for_brief({"product_type": "marketplace", "primary_action": "open-account"})
+    assert market["id"] == "b2b-marketplace"
+    assert select_for_brief({"primary_side": "demand"})["id"] == "b2b-marketplace"
+
+
+def test_platforms_unread_beside_an_action_are_named():
+    seq = select_for_brief({"primary_action": "sign-up", "platforms": ["ios"]})
+    assert "platforms ios not read" in seq["why"] and "product_type app" in seq["why"]
+

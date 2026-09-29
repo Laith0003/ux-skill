@@ -57,8 +57,10 @@ brand-fidelity hard floor are unchanged.
    the logo never counts as imagery. When the brand book bans stock or lifestyle
    photography, nothing from stock fills a gap: the brand's own product screens and
    photographs, or no picture.
-9. **Richness via a page-level section sequence.** Pick a whole-page pattern by goal
-   and expand the FULL sequence with completeness and a per-item icon. For lead-gen:
+9. **Richness via a page-level section sequence.** Pick a whole-page pattern from
+   the brief's structured fields (`product_type`, `primary_action`, `primary_side`,
+   `platforms`, `page`, `stage`; /ux-design engine step 2.5), never its industry or
+   prose, and expand the FULL sequence with completeness and a per-item icon. For lead-gen:
    Hero (+form) -> Proof/stats bar -> value cards -> category pills -> item cards ->
    split feature rows -> coverage -> social proof / pull-quote -> CTA band -> rich
    footer. Map ALL source content into it (every sector -> pill, every size -> card,

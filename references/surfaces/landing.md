@@ -156,7 +156,7 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 - **Desire (motion, media).** Pinned sections, horizontal scroll, scroll-driven reveals, customer outcomes.
 - **Action (pricing, footer).** Massive high-contrast CTA, clean footer.
 
-The section order comes from the archetype above and from the engine's page sequence for the brief's goal. Section orders observed by cohort (B2B, editorial, developer tooling, creative) are catalogued in `references/styles/exemplars.md` (Section-flow patterns).
+The section order comes from the archetype above and from the engine's page sequence, which the brief's structured fields pick (`product_type`, `primary_action`, `primary_side`, `platforms`, `page`, `stage`; /ux-design engine step 2.5), never its industry or its prose. Section orders observed by cohort (B2B, editorial, developer tooling, creative) are catalogued in `references/styles/exemplars.md` (Section-flow patterns).
 
 ### When to include a section
 

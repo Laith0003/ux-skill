@@ -389,7 +389,7 @@
     {
       "id": "b2b-marketplace",
       "goal": "b2b-marketplace",
-      "picked_by": "product_type marketplace, primary_side demand or unset, or primary_action open-account",
+      "picked_by": "product_type marketplace with primary_side demand or unset, or primary_side alone",
       "section_sequence": [
         {
           "section": "Hero (two-sided promise + account request)",

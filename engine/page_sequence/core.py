@@ -71,11 +71,12 @@ DEMO = "trust-led"
 BY_PRODUCT: Mapping[str, str] = {
     "marketplace": MARKETPLACE, "commerce": "ecommerce-product",
     "editorial": "content-publication", "local-service": "lead-gen-service", "software": SAAS}
-# The page an action makes when the brief names no product type.
+# The page an action makes when the brief names no product type. No action
+# alone makes a two-sided marketplace: that needs its sides in the brief.
 BY_ACTION: Mapping[str, str] = {
     "quote": "lead-gen-service", "book": "lead-gen-service", "contact": "lead-gen-service",
     "buy": "ecommerce-product", "subscribe": "content-publication", "demo": DEMO,
-    "open-account": MARKETPLACE, "sign-up": SAAS}
+    "sign-up": SAAS}
 _PLATFORMS_FIX = ("set platforms to where it runs (web, ios, android, desktop): a store platform "
                   "gives app-mobile-landing, web without one gives web-app")
 
@@ -251,11 +252,20 @@ def _live(b: _Brief) -> Tuple[str, str]:
         return _general(b, "product_type marketing-site: a company with no product of its own "
                            "has no sequence of its own; set page_sequence (portfolio-agency for "
                            "a portfolio or an agency)")
+    if b.action == "open-account":
+        return _general(b, "primary_action open-account needs product_type: marketplace for a "
+                           "trade account on a two-sided market (with primary_side), app or "
+                           "software for a bank, a wallet or a broker")
     if b.action:
         if b.action in ("sign-in", "download") or (
                 b.platforms is not None and b.action not in BY_ACTION):
             return _app(b, f"primary_action {b.action}")
-        return BY_ACTION[b.action], f"primary_action {b.action}"
+        why = f"primary_action {b.action}"
+        if b.platforms is not None:
+            listed = ", ".join(b.platforms) or "none"
+            why += (f"; platforms {listed} not read without product_type: set product_type "
+                    f"app to let platforms pick")
+        return BY_ACTION[b.action], why
     if b.platforms is not None or b.mobile_project:
         return _app(b, "platforms " + ", ".join(b.platforms or ["from project_type"]))
     return _general(b, "no structured field says what the page is; set product_type (app, "
