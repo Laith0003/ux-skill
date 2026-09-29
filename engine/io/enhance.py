@@ -462,7 +462,9 @@ class Enhanced:
             "import": {"entries": self.imported.report.entries,
                        "tokens": self.imported.report.tokens,
                        "not_read": len(self.imported.report.not_read)},
-            "mapping": {"roles": {r: x.token for r, x in m.roles.items()},
+            "mapping": {"roles": {r: (x.token if x.fields is None else
+                                      {k: f.token for k, f in x.fields.items()})
+                                  for r, x in m.roles.items()},
                         "axes": {a: x.source for a, x in m.axes.items()},
                         "mapped": len(self.mapped()), "of": len(ROLE_TYPES),
                         "by_name": [r for r, x in m.roles.items()

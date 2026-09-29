@@ -12,6 +12,14 @@ never writes one. An axis deleted from the file instead, one the system
 has and propose() would read, is left out too, with a note that names it
 and the "not mapped" entry that keeps it out on purpose.
 
+A typography role maps to one composite token, or field by field:
+{"fields": {"fontSize": {"token": "text-size-lg", "by": "owner"}, ...}},
+for a system that keeps each field of its type in a token of its own
+(fontFamily, fontSize, fontWeight, lineHeight, letterSpacing). view()
+reads each field from its own token; a role with a field left out is not
+checked, with a note that names the field, since the engine never picks
+one for it.
+
 propose() maps a role only when a token's name is the role's own path
 written with other separators (color.text.default, color-text-default,
 color/text/default), and a typography role to the five field properties
@@ -63,11 +71,36 @@ AXIS_DELETED = ("{name} leaves out the axis {axis}, which the imported system ha
 
 
 @dataclass(frozen=True)
-class RoleMap:
-    """The token that plays a role, and who said so. A token of None is
-    the owner's "not mapped": the role stays out of the check."""
+class FieldMap:
+    """The token one field of a typography role reads, and who said so. A
+    token of None is the owner's "not mapped" for that field."""
     token: Optional[str]
     by: str = "owner"
+
+
+@dataclass(frozen=True)
+class RoleMap:
+    """The token that plays a role, and who said so. A token of None is
+    the owner's "not mapped": the role stays out of the check. A
+    typography role may map field by field instead (fields, made with
+    per_field): its token is then the fields and their tokens written out,
+    for the messages that name it."""
+    token: Optional[str]
+    by: str = "owner"
+    fields: Optional[Dict[str, FieldMap]] = field(default=None, hash=False)
+
+    @classmethod
+    def per_field(cls, fields: Dict[str, FieldMap]) -> "RoleMap":
+        """A typography role mapped one field at a time, in the engine's
+        field order; the role is the owner's when any field is."""
+        ordered = {k: fields[k] for k in TYPOGRAPHY_FIELDS if k in fields}
+        by = "owner" if any(f.by == "owner" for f in ordered.values()) else "name"
+        return cls(_field_label(ordered), by, ordered)
+
+
+def _field_label(fields: Dict[str, FieldMap]) -> str:
+    """The mapped fields and their tokens, as a message names them."""
+    return _and([f"{k} {f.token}" for k, f in fields.items() if f.token is not None] or ["none"])
 
 
 @dataclass(frozen=True)
@@ -163,8 +196,12 @@ def merge(proposed: Mapping, existing: Mapping,
     the engine proposed before is replaced by the new proposal, or dropped
     when names no longer say it. A role or axis the file does not have at
     all is proposed and named in a note, so the owner can write "not
-    mapped" for it. Roles and axes come in the engine's order."""
-    roles = {r: m for r, m in existing.roles.items() if m.by == "owner"}
+    mapped" for it. A role mapped field by field keeps the fields the owner
+    wrote; a field the engine proposed before is dropped unless the new
+    proposal maps it field by field too. Roles and axes come in the
+    engine's order."""
+    roles = {r: _owners(m, proposed.roles.get(r)) for r, m in existing.roles.items()
+             if m.by == "owner"}
     for r, m in proposed.roles.items():
         roles.setdefault(r, m)
     axes = {a: m for a, m in existing.axes.items() if m.by == "owner"}
@@ -187,6 +224,18 @@ def merge(proposed: Mapping, existing: Mapping,
     return merged, notes
 
 
+def _owners(m: RoleMap, proposed: Optional[RoleMap]) -> RoleMap:
+    """An owner's role entry as a merge keeps it: whole, or for one mapped
+    field by field, the owner's fields and the new proposal's for the
+    rest."""
+    if m.fields is None:
+        return m
+    fields = {k: f for k, f in m.fields.items() if f.by == "owner"}
+    for k, f in ((proposed.fields or {}) if proposed is not None else {}).items():
+        fields.setdefault(k, f)
+    return RoleMap.per_field(fields)
+
+
 # ---------------------------------------------------------------- file
 
 
@@ -195,8 +244,51 @@ def dump_mapping(mapping: Mapping) -> str:
            "axes": {a: ({"from": m.source, "values": dict(m.values), "by": m.by}
                         if m.source is not None else {"from": None, "by": m.by})
                     for a, m in mapping.axes.items()},
-           "roles": {r: {"token": m.token, "by": m.by} for r, m in mapping.roles.items()}}
+           "roles": {r: _dump_role(m) for r, m in mapping.roles.items()}}
     return json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
+
+
+def _dump_role(m: RoleMap) -> Dict[str, Any]:
+    if m.fields is None:
+        return {"token": m.token, "by": m.by}
+    return {"fields": {k: {"token": f.token, "by": f.by} for k, f in m.fields.items()}}
+
+
+_FIELD_FIX = "{\"token\": \"<your token>\", \"by\": \"owner\"}"
+
+
+def _parse_fields(role: str, entry: Dict[str, Any], name: str) -> RoleMap:
+    """A typography role mapped field by field (see RoleMap)."""
+    if ROLE_TYPES[role] != "typography":
+        raise InputError(f"{name} role {role} maps fields, but only a typography role takes "
+                         f"them; write {_FIELD_FIX} for a {ROLE_TYPES[role]} role")
+    if "token" in entry:
+        raise InputError(f"{name} role {role} has both token and fields; keep token for one "
+                         "composite token, or fields for one token per field")
+    extra = [k for k in entry if k != "fields"]
+    if extra:
+        raise InputError(f"{name} role {role} has the key {extra[0]}, which a role mapped "
+                         "field by field does not use; keep only fields")
+    raw = entry["fields"]
+    if not isinstance(raw, dict):
+        raise InputError(f"{name} role {role} fields is {json.dumps(raw)}; write it as an "
+                         f"object of field to {_FIELD_FIX}")
+    fields: Dict[str, FieldMap] = {}
+    for key, value in raw.items():
+        if key not in TYPOGRAPHY_FIELDS:
+            raise InputError(f"{name} role {role} maps the field {key}, which a typography "
+                             f"role does not have; use {_or(list(TYPOGRAPHY_FIELDS))}")
+        by = value.get("by", "owner") if isinstance(value, dict) else None
+        token = value.get("token", "") if isinstance(value, dict) else ""
+        if not (by in BY and (isinstance(token, str) and token
+                              or token is None and by == "owner")):
+            raise InputError(f"{name} role {role} field {key} is {json.dumps(value)}; write "
+                             f"{_FIELD_FIX}")
+        fields[key] = FieldMap(token, by)
+    if not any(f.token is not None for f in fields.values()):
+        raise InputError(f"{name} role {role} has no field in fields; map at least one field, "
+                         f"for example \"fontSize\": {_FIELD_FIX}")
+    return RoleMap.per_field(fields)
 
 
 def parse_mapping(text: str, name: str) -> Mapping:
@@ -233,6 +325,9 @@ def parse_mapping(text: str, name: str) -> Mapping:
                        else "for example color.text.default")
             raise InputError(f"{name} maps {role}, which is not a role the engine checks; use "
                              f"one of its roles, {example}")
+        if isinstance(entry, dict) and "fields" in entry:
+            roles[role] = _parse_fields(role, entry, name)
+            continue
         by = entry.get("by", "owner") if isinstance(entry, dict) else None
         token = entry.get("token", "") if isinstance(entry, dict) else ""
         if not (by in BY and (isinstance(token, str) and token
@@ -278,6 +373,13 @@ def load_mapping(path: Any, label: str = "--mapping") -> Mapping:
 
 def _check(ts: TokenSet, mapping: Mapping, name: str) -> None:
     for role, m in mapping.roles.items():
+        for key, f in (m.fields or {}).items():
+            if f.token is not None and not ts.has(f.token):
+                raise InputError(f"{name} sends {role} field {key} to {f.token}, which the "
+                                 "imported system does not have; point it at one of its "
+                                 "tokens, or remove the field")
+        if m.fields is not None:
+            continue
         if m.token is not None and not ts.has(m.token) and not (ROLE_TYPES[role] == "typography"
                                         and _has_fields(ts, m.token)):
             raise InputError(f"{name} sends {role} to {m.token}, which the imported system "
@@ -325,6 +427,10 @@ def _identity(ts: TokenSet, mapping: Mapping) -> bool:
 
 def _and(names: List[str]) -> str:
     return names[0] if len(names) == 1 else f"{', '.join(names[:-1])} and {names[-1]}"
+
+
+def _or(names: List[str]) -> str:
+    return names[0] if len(names) == 1 else f"{', '.join(names[:-1])} or {names[-1]}"
 
 
 def _few(names: List[str]) -> str:
@@ -377,10 +483,34 @@ def _root_axis_note(axis: str, values: Tuple[str, ...], name: str) -> str:
             f"to check it, write in {name} {entry}")
 
 
-def _resolve(ts: TokenSet, role: str, token: str, context: str) -> Any:
+def _resolve(ts: TokenSet, role: str, token: str, context: str,
+             fields: Optional[Dict[str, FieldMap]] = None) -> Any:
+    if fields is not None:
+        return {key: ts.resolve(f.token, context) for key, f in fields.items()}
     if ROLE_TYPES[role] == "typography" and not ts.has(token):
         return {key: ts.resolve(path, context) for key, path in _field_names(token).items()}
     return ts.resolve(token, context)
+
+
+def _fields_unfit(ts: TokenSet, role: str, fields: Dict[str, FieldMap],
+                  name: str) -> str:
+    """Why a role mapped field by field cannot be checked ("" when it can):
+    a field left out, which is never guessed, or a field token of another
+    type."""
+    missing = [k for k in TYPOGRAPHY_FIELDS if fields.get(k) is None or fields[k].token is None]
+    if missing:
+        mapped = [k for k in TYPOGRAPHY_FIELDS if k not in missing]
+        return (f"{role} maps {_and(mapped)} field by field in {name} but not {_and(missing)}, "
+                "so it was not checked; add " + _and([f'"{k}": {_FIELD_FIX}' for k in missing])
+                + " to its fields")
+    for key, f in fields.items():
+        want = TYPOGRAPHY_FIELDS[key][0]
+        kind = ts.get(f.token).type
+        weight = want == "fontWeight" and kind == "number"
+        if kind != want and not weight:
+            return (f"{role} field {key} reads {f.token}, a {kind}, but the field needs a {want}; "
+                    f"point it at one of your {want} tokens in {name}")
+    return ""
 
 
 def view(ts: TokenSet, mapping: Mapping,
@@ -406,6 +536,11 @@ def view(ts: TokenSet, mapping: Mapping,
             notes.append(ROLE_LEFT_OUT.format(role=role, name=name))
             continue
         want = ROLE_TYPES[role]
+        if m.fields is not None:
+            why = _fields_unfit(ts, role, m.fields, name)
+            if why:
+                notes.append(why)
+                continue
         values: Dict[str, Any] = {}
         try:
             for ctx in contexts(list(axes), axes):
@@ -413,12 +548,13 @@ def view(ts: TokenSet, mapping: Mapping,
                           for a, v in parse(ctx, axes).items()}
                 their_ctx = join({a: v for a, v in theirs.items()
                                   if v != ts.axes[a][0]}, ts.axes)
-                values[ctx] = _resolve(ts, role, m.token, their_ctx)
+                values[ctx] = _resolve(ts, role, m.token, their_ctx, m.fields)
         except (AliasError, ModeError) as exc:
             notes.append(f"{role} reads {m.token}, which cannot be resolved ({exc}); it was left "
                          "out of the check")
             continue
-        kind = want if want == "typography" and not ts.has(m.token) else ts.get(m.token).type
+        kind = (want if want == "typography" and (m.fields is not None or not ts.has(m.token))
+                else ts.get(m.token).type)
         if want == "fontWeight" and kind == "number" and all(
                 isinstance(v, (int, float)) and not isinstance(v, bool) and 1 <= v <= 1000
                 for v in values.values()):
