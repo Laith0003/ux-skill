@@ -33,6 +33,9 @@ class BrandInputs:
     # The letters of the page's longest headline word per script ("latin",
     # "arabic"), when known; the type foundation fits the headline to it.
     words: Optional[Mapping[str, int]] = field(default=None, hash=False)
+    # The system has a dark scheme (it builds color), so type may set its
+    # dark mode lighter; a set built without color never gains one.
+    dark_scheme: bool = False
 
 
 @dataclass

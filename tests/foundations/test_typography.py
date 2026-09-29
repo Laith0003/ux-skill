@@ -187,7 +187,7 @@ def test_every_axis_mix_is_valid_and_passes(contrast, density, personality, form
     ts = generate_type(a).tokens
     assert validate(ts) == []
     report = gate(ts, [], CHECKS)
-    assert report.passed and report.rules_checked == 31
+    assert report.passed and report.rules_checked == 43
 
 
 def _hand():
@@ -271,7 +271,7 @@ def test_only_the_leading_rule_cites_wcag():
                    "strong-weight": "system", "phone-hierarchy": "system",
                    "display-fits": "system", "type-tracking-order": "system",
                    "line-height-floor": "system", "display-clearance": "system",
-                   "code-face": "system"}
+                   "code-face": "system", "dark-weights": "system"}
 
 
 def test_a_role_of_the_wrong_type_is_named_once_not_a_crash():
@@ -442,7 +442,7 @@ def test_the_strong_check_names_the_context_and_the_fix():
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     found = [f.message for f in report.failures if f.check == "strong-weight"]
     assert found and found[0].startswith(
-        "type.strong (contrast:high,direction:ltr) is weight 600, only 100 above "
+        "type.strong (scheme:light,contrast:high,direction:ltr) is weight 600, only 100 above "
         "type.text.body at 500; bold words must stay at least 200 above body text under high "
         "contrast, so point its contrast:high value at type.weight.700 or heavier")
 

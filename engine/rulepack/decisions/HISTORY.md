@@ -110,6 +110,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The standard focus ring stops one step below the widest, so high contrast can widen it](ring-room.md)
 - [The logo keeps the brand color, and decoration has a visibility floor of ours](logo-and-decoration.md)
 - [High contrast sets text one weight heavier](high-contrast-weights.md)
+- [In dark mode a variable face sets text a little lighter, and high contrast keeps its own weights](dark-text-sets-lighter.md)
 - [Links read on every status soft fill](links-on-status-soft-fills.md)
 - [A contrast pairing the gate cannot resolve is a failure it reports, and contracts report it too](unresolved-pairing.md)
 

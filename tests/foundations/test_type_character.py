@@ -291,3 +291,61 @@ def test_every_brief_still_validates_and_passes_the_type_gate():
     for a in (CALM, MID, LOUD, AxisValues(*[1.0] * 7), AxisValues(*[0.0] * 7)):
         ts = generate_type(a).tokens
         assert validate(ts) == [] and gate(ts, [], CHECKS).passed
+
+
+# Dark mode sets a variable face lighter.
+
+DARK, LIGHT = "scheme:dark,contrast:standard,direction:ltr", \
+    "scheme:light,contrast:standard,direction:ltr"
+
+
+def test_dark_body_text_in_a_variable_face_is_20_to_50_lighter():
+    ts = build_system(MID, "#3366FF").tokens
+    assert fonts.BY_FAMILY[ts.resolve("type.face.text")[0]].variable
+    light = ts.resolve("type.text.body", LIGHT)["fontWeight"]
+    dark = ts.resolve("type.text.body", DARK)["fontWeight"]
+    assert 20 <= light - dark <= 50
+    big = ts.resolve("type.text.display", LIGHT)["fontWeight"] - \
+        ts.resolve("type.text.display", DARK)["fontWeight"]
+    assert 0 < big <= 20
+
+
+def test_a_static_face_keeps_its_weights_in_dark_mode():
+    face = fonts.BY_FAMILY["IBM Plex Sans Arabic"]
+    from engine.foundations.typography import dark_weight
+    assert not face.variable and dark_weight(400, 16, face) == 400
+    ts = build_system(CALM, "#3366FF").tokens
+    rtl = ts.resolve("type.face.arabic")[0]
+    if not fonts.BY_FAMILY[rtl].variable:
+        for role in ("type.text.body", "type.text.heading-3"):
+            assert ts.resolve(role, "scheme:dark,contrast:standard,direction:rtl")[
+                "fontWeight"] == ts.resolve(role, "scheme:light,contrast:standard,"
+                                                  "direction:rtl")["fontWeight"]
+
+
+def test_high_contrast_wins_over_the_dark_adjustment():
+    ts = build_system(MID, "#3366FF").tokens
+    for role in ROLES:
+        high_dark = ts.resolve(role, "scheme:dark,contrast:high,direction:ltr")["fontWeight"]
+        assert high_dark >= ts.resolve(role, LIGHT)["fontWeight"]
+        assert high_dark == ts.resolve(role, "scheme:light,contrast:high,direction:ltr")[
+            "fontWeight"]
+
+
+def test_a_dark_weight_heavier_than_light_is_named():
+    ts = build_system(MID, "#3366FF").tokens
+    heavy = TokenSet(ts.axes)
+    for t in ts.tokens():
+        if t.path == "type.text.body":
+            modes = dict(t.modes, **{"scheme:dark": dict(t.value, fontWeight="{type.weight.700}")})
+            t = Token(t.path, t.type, t.value, modes=modes, layer="semantic")
+        heavy.add(t)
+    msgs = [f.message for f in gate(heavy, [], CHECKS, raise_on_fail=False).failures
+            if f.check == "dark-weights"]
+    assert msgs and msgs[0].startswith("type.text.body (scheme:dark,direction:ltr) is weight "
+                                       "700, heavier than its 400 in light mode")
+
+
+def test_a_set_without_color_gets_no_dark_weights():
+    ts = build_system(MID, "#3366FF", foundations=("space", "layout", "type")).tokens
+    assert not any("scheme" in k for t in ts.tokens() for k in t.modes)

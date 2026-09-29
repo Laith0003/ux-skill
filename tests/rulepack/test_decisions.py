@@ -55,6 +55,7 @@ EXPECTED = {
     "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",
     "sections-meet-by-a-seam",
     "motion-roles-by-pace", "moves-answer-at-once", "press-scale-and-glide",
+    "dark-text-sets-lighter",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

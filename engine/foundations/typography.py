@@ -583,6 +583,27 @@ def emphasis_italic(axes: AxisValues, face: fonts.Face) -> bool:
     return face.italic and character.emphasis_contrast(axes) >= ITALIC_FROM
 
 
+# In dark mode light text on a dark page reads heavier, so a variable face
+# sets it lighter: by DARK_LIGHTER[0] at body size, falling on a log scale
+# to DARK_LIGHTER[1] at DARK_LIGHTER_PX and above, never under the face's
+# lightest weight or DARK_FLOOR. A static face keeps its weights; high
+# contrast keeps its own, heavier weights.
+DARK_LIGHTER = (40.0, 10.0)
+DARK_LIGHTER_PX = 96.0
+DARK_FLOOR = 300
+
+
+def dark_weight(weight: int, px: float, face: fonts.Face, body_px: float = BODY_PX) -> int:
+    """The weight a style takes in dark mode at standard contrast: lighter
+    by DARK_LIGHTER in a variable face, in tens, never heavier and never
+    under the face's lightest weight or DARK_FLOOR."""
+    if not face.variable:
+        return weight
+    t = character.log_position(max(px, body_px), body_px, DARK_LIGHTER_PX)
+    less = DARK_LIGHTER[0] + (DARK_LIGHTER[1] - DARK_LIGHTER[0]) * t
+    return min(weight, max(round((weight - less) / 10) * 10, face.weights[0], DARK_FLOOR))
+
+
 def tracking_em(axes: AxisValues, px: float, hero_px: float) -> float:
     """Letter spacing in em for a heading size: 0 at 20px and below, the
     full display tracking at the hero size."""
@@ -617,13 +638,16 @@ def _face_list(face: fonts.Face, *rest: str) -> List[str]:
 def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
                   leading_extra: float = 0.0, book_depth: Optional[float] = None,
                   columns: Optional[int] = None,
-                  words: Optional[Mapping[str, float]] = None) -> Generated:
+                  words: Optional[Mapping[str, float]] = None,
+                  dark_scheme: bool = False) -> Generated:
     """The type tokens. `book_depth` is the product's book depth from the
     brief's product_type (fonts.choose), None when the brief does not say.
     `columns` is the columns of twelve the landing headline spans (its
     composition's, HEADLINE_COLUMNS; 12 when not given) and `words` the
     letters of the page's longest headline word per script, when known
-    (FIT_WORD otherwise)."""
+    (FIT_WORD otherwise). With `dark_scheme` (the system builds color, so
+    it has a dark scheme) the styles take lighter weights there
+    (dark_weight)."""
     choice = fonts.choose(axes, book_depth)
     columns = GRID_COLUMNS if columns is None else columns
     fit_words = dict(FIT_WORD, **(words or {}))
@@ -649,9 +673,32 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
         return face.clamp(w)
 
     strong = _strong(std, high, choice, in_arabic if arabic else None)
+    arabic_sizes_all = arabic_px(latin, scale) if arabic else None
+    label_kind = "mono" if character.technical(axes) >= MONO_LABEL_FROM else "text"
+
+    def face_of(role: str, rtl: bool) -> fonts.Face:
+        kind = ROLES[role][1]
+        kind = label_kind if kind == "label" else kind
+        if rtl and role not in KEEP_FACE:
+            return choice.arabic_display if kind == "display" else choice.arabic
+        return {"display": choice.display, "text": choice.text, "mono": choice.mono}[kind]
+
+    def dark(role: str, weight: int, rtl: bool) -> int:
+        sizes = arabic_sizes_all if rtl and role not in KEEP_FACE else latin
+        return dark_weight(weight, sizes[_step(role, axes) - 1], face_of(role, rtl), body_px)
+
+    std_dark = {r: dark(r, w, False) if dark_scheme else w for r, w in std.items()}
+    rtl_dark = {r: dark(r, in_arabic(r, w) if r not in KEEP_FACE else w, True)
+                if dark_scheme else (in_arabic(r, w) if r not in KEEP_FACE else w)
+                for r, w in std.items()} if arabic else {}
+    strong_dark = {k.replace("contrast:standard", "contrast:dark-standard"):
+                   dark_weight(w, body_px, choice.arabic if "rtl" in k else choice.text,
+                               body_px) if dark_scheme else w
+                   for k, w in strong.items() if "contrast:standard" in k}
     used = sorted(set(std.values()) | set(high.values()) | set(strong.values())
                   | ({in_arabic(r, w) for r, w in list(std.items()) + list(high.items())}
-                     if arabic else set()))
+                     if arabic else set())
+                  | set(std_dark.values()) | set(rtl_dark.values()) | set(strong_dark.values()))
     for w in used:
         ts.add(Token(f"type.weight.{w}", "fontWeight", w))
     for n, px in zip(STEPS, latin):
@@ -713,19 +760,31 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
         heavy_rtl = "{type.weight.%d}" % (in_arabic(role, high[role]) if arabic_rtl
                                           else high[role])
         per_context = {
-            "contrast:standard,direction:ltr": value,
-            "contrast:high,direction:ltr": dict(value, fontWeight=heavy),
-            "contrast:standard,direction:rtl": rtl,
-            "contrast:high,direction:rtl": dict(rtl, fontWeight=heavy_rtl),
+            "scheme:light,contrast:standard,direction:ltr": value,
+            "scheme:light,contrast:high,direction:ltr": dict(value, fontWeight=heavy),
+            "scheme:light,contrast:standard,direction:rtl": rtl,
+            "scheme:light,contrast:high,direction:rtl": dict(rtl, fontWeight=heavy_rtl),
+            "scheme:dark,contrast:standard,direction:ltr":
+                dict(value, fontWeight="{type.weight.%d}" % std_dark[role]),
+            "scheme:dark,contrast:high,direction:ltr": dict(value, fontWeight=heavy),
+            "scheme:dark,contrast:standard,direction:rtl": dict(
+                rtl, fontWeight="{type.weight.%d}" % rtl_dark[role]) if arabic_rtl else
+            dict(rtl, fontWeight="{type.weight.%d}" % std_dark[role]),
+            "scheme:dark,contrast:high,direction:rtl": dict(rtl, fontWeight=heavy_rtl),
         }
         if not arabic:
-            per_context = {k: v for k, v in per_context.items() if "rtl" not in k}
-            per_context = {k.split(",")[0]: v for k, v in per_context.items()}
+            per_context = {k.replace(",direction:ltr", ""): v for k, v in per_context.items()
+                           if "rtl" not in k}
         base, modes = compress(per_context)
         ts.add(Token(role, "typography", base, modes=modes, layer="semantic"))
-    per_strong = {k: "{type.weight.%d}" % w for k, w in strong.items()}
+    per_strong = {}
+    for k, w in strong.items():
+        per_strong["scheme:light," + k] = "{type.weight.%d}" % w
+        dark_w = strong_dark.get(k.replace("contrast:standard", "contrast:dark-standard"), w)
+        per_strong["scheme:dark," + k] = "{type.weight.%d}" % dark_w
     if not arabic:
-        per_strong = {k.split(",")[0]: v for k, v in per_strong.items() if "rtl" not in k}
+        per_strong = {k.replace(",direction:ltr", ""): v for k, v in per_strong.items()
+                      if "rtl" not in k}
     base, modes = compress(per_strong)
     ts.add(Token("type.strong", "fontWeight", base, modes=modes, layer="semantic"))
     for run, face in RUNS.items():
@@ -1294,6 +1353,20 @@ def _high_weights(ts: TokenSet, mode: str) -> List[str]:
             if ts.resolve(role, mode)["fontWeight"] < ts.resolve(role, std)["fontWeight"]]
 
 
+def _dark_weights(ts: TokenSet, mode: str) -> List[str]:
+    """In dark mode at standard contrast no style is heavier than in light
+    mode, in the same direction."""
+    if "scheme:dark" not in mode:
+        return []
+    light = mode.replace("scheme:dark", "scheme:light")
+    return [f"{role} ({mode}) is weight {ts.resolve(role, mode)['fontWeight']:g}, heavier than "
+            f"its {ts.resolve(role, light)['fontWeight']:g} in light mode; light text on a dark "
+            "page already reads heavier, so point its scheme:dark fontWeight at a step no "
+            "heavier"
+            for role in _roles(ts, ROLES)
+            if ts.resolve(role, mode)["fontWeight"] > ts.resolve(role, light)["fontWeight"]]
+
+
 def _strong_gap(ts: TokenSet, mode: str) -> List[str]:
     """Under high contrast, bold words stay STRONG_GAP above body text, so
     emphasis survives the heavier body the mode gives."""
@@ -1333,9 +1406,11 @@ def _fits_check(ts: TokenSet, mode: str) -> List[str]:
     return fit_problems(ts)
 
 
-# High contrast changes only weights; every other check reads direction.
+# High contrast and dark mode change only weights; every other check reads
+# direction.
 _WEIGHT_ONLY = (("contrast", "high contrast changes only weights, which high-contrast-weights "
-                 "reads"),)
+                 "reads"),
+                ("scheme", "dark mode changes only weights, which dark-weights reads"))
 CHECKS: Tuple[Check, ...] = (
     Check("type-sizes", "system", _sizes, axes=("direction",), exempt_axes=_WEIGHT_ONLY),
     Check("reading-leading", "1.4.8", _leading, axes=("direction",), exempt_axes=_WEIGHT_ONLY),
@@ -1349,7 +1424,8 @@ CHECKS: Tuple[Check, ...] = (
           exempt_axes=_WEIGHT_ONLY),
     Check("display-fits", "system", _fits_check,
           exempt_axes=(("direction", "it reads both directions itself"),
-                       ("contrast", "fit factors never carry modes"))),
+                       ("contrast", "fit factors never carry modes"),
+                       ("scheme", "fit factors never carry modes"))),
     Check("type-tracking-order", "system", _tracking_order, axes=("direction",),
           exempt_axes=_WEIGHT_ONLY),
     Check("line-height-floor", "system", _line_height_floor, axes=("direction",),
@@ -1360,12 +1436,18 @@ CHECKS: Tuple[Check, ...] = (
           exempt_axes=(("direction", "the mono face is a primitive, the same in both "
                                      "directions"),
                        ("contrast", "the mono face is a primitive, the same in both "
-                                    "contrasts"))),
-    Check("high-contrast-weights", "system", _high_weights, axes=("contrast", "direction")),
-    Check("strong-weight", "system", _strong_gap, axes=("contrast", "direction")),
+                                    "contrasts"),
+                       ("scheme", "the mono face is a primitive, the same in both schemes"))),
+    Check("high-contrast-weights", "system", _high_weights,
+          axes=("scheme", "contrast", "direction")),
+    Check("strong-weight", "system", _strong_gap, axes=("scheme", "contrast", "direction")),
+    Check("dark-weights", "system", _dark_weights, axes=("scheme", "direction"),
+          exempt_axes=(("contrast", "high contrast keeps its own weights, which "
+                                    "high-contrast-weights reads"),)),
     Check("icon-sizes", "system", _icons,
           exempt_axes=(("direction", "icon sizes and the stroke never carry modes"),
-                       ("contrast", "icon sizes and the stroke never carry modes"))),
+                       ("contrast", "icon sizes and the stroke never carry modes"),
+                       ("scheme", "icon sizes and the stroke never carry modes"))),
 )
 
 
@@ -1373,7 +1455,8 @@ def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     a = inputs.audience
     return generate_type(axes, arabic=inputs.arabic, body_px=a.body_px,
                          leading_extra=a.leading_extra, book_depth=a.book_depth,
-                         columns=headline_columns(axes, a), words=inputs.words)
+                         columns=headline_columns(axes, a), words=inputs.words,
+                         dark_scheme=inputs.dark_scheme)
 
 
 FOUNDATION = Foundation(name="type", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

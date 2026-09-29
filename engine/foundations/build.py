@@ -275,7 +275,8 @@ def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
     audience = audience or Audience()
     _check_words(words)
     inputs = BrandInputs(brand_hex=brand_hex, arabic=arabic, brand_role=audience.brand_role,
-                         audience=audience, words=dict(words) if words else None)
+                         audience=audience, words=dict(words) if words else None,
+                         dark_scheme=any(f.name == "color" for f in chosen))
     ts = TokenSet()
     notes: List[str] = []
     for f in chosen:

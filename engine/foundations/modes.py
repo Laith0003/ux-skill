@@ -34,7 +34,7 @@ FOUNDATION_AXES: Mapping[str, Tuple[str, ...]] = MappingProxyType({
     "elevation": ("scheme",),
     "space": ("density",),
     "layout": ("density",),
-    "type": ("direction", "contrast"),
+    "type": ("direction", "contrast", "scheme"),
     "motion": ("motion", "direction"),
     "radius": (),
     "border": ("contrast",),

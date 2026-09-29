@@ -398,7 +398,9 @@ def test_fonts_self_host_css_loads_every_face_with_per_weight_local_names():
 def test_the_report_says_how_to_load_the_fonts():
     report = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE).report
     fonts = report.split("## Fonts\n\n", 1)[1].split("\n## ", 1)[0]
-    assert "- Outfit (display), weights 300, 400, 500, 550, 600, 700, OFL-1.1." in fonts
+    # the dark weights of the variable faces are listed too
+    assert "- Outfit (display), weights 300, 360, 400, 460, 480, 490, 500, 520, 530, 550, 560, " \
+        "570, 600, 700, OFL-1.1." in fonts
     assert '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=' in fonts
     assert "fonts-self-host.css" in fonts and "edit neither file" in fonts
     assert "remove" not in fonts
