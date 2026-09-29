@@ -748,6 +748,42 @@ def test_a_mode_set_with_contrast_reads_it_and_lists_what_it_cannot_place():
                 "mode for the scheme axis, which dark holds; keep one")]
 
 
+
+def test_a_mode_object_under_a_tool_key_reads_every_mode_it_can_place():
+    # One common token tool writes its modes straight under its key, with no
+    # `modes` object: light is the token's own value, the rest are modes.
+    doc = {"c": {"$type": "color", "a": {"$value": "#777777", "$extensions": {"mode": {
+        "light": "#777777", "dark": "#888888", "high-contrast": "#000000",
+        "dim": "#444444"}}}}}
+    imported = _import(doc)
+    report = imported.report
+    assert imported.tokens.get("c.a").modes == {"scheme:dark": "#888888",
+                                                "contrast:high": "#000000"}
+    assert _lines(report.not_read) == [
+        ("c.a", "its mode dim under mode was not read, since its name places into no mode "
+                "axis; name it for a mode, such as Dark or High contrast")]
+    assert not [m for _, m in _lines(report.notes) if "carries $extensions" in m]
+    assert "Nothing was left unread" not in report.markdown()
+
+
+def test_a_modes_key_with_no_tool_key_reads_its_modes():
+    doc = {"c": {"$type": "color", "a": {"$value": "#ffffff", "$extensions": {"modes": {
+        "Light Mode": "#ffffff", "Dark Mode": "#000000"}}}}}
+    imported = _import(doc)
+    assert imported.tokens.get("c.a").modes == {"scheme:dark": "#000000"}
+    assert dict(imported.tokens.axes) == {"scheme": ("light", "dark")}
+    assert not [m for _, m in _lines(imported.report.notes) if "carries $extensions" in m]
+
+
+def test_a_mode_a_tool_key_holds_that_cannot_be_placed_is_never_only_a_note():
+    doc = {"c": {"$type": "color", "a": {"$value": "#ffffff", "$extensions": {"modes": {
+        "Light Mode": "#ffffff", "Dark Mode": "#000000", "Sepia": "#f4ecd8"}}}}}
+    report = _import(doc).report
+    assert _lines(report.not_read) == [
+        ("c.a", "its mode Sepia under modes was not read, since its name places into no "
+                "mode axis; name it for a mode, such as Dark or High contrast")]
+    assert "Nothing was left unread" not in report.markdown()
+
 STUDIO = {
     "global": {"colors": {"white": {"$type": "color", "$value": "#ffffff"},
                           "ink": {"$type": "color", "$value": "#111111"}},

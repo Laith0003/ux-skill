@@ -30,8 +30,9 @@ A dark scheme is read wherever systems keep it, and paired by token path
 into scheme:dark: a sibling file named for dark (tokens.dark.json,
 x.dark.tokens.json beside x.tokens.json, x.dark-mode.json beside
 x.light-mode.json, dark.json beside a file named for light, or the same
-name in a dark/ folder), another tool's `dark` or `modes` entry in a
-token's $extensions, or the themes of a Tokens Studio file. Mode and theme
+name in a dark/ folder), another tool's entry in a token's $extensions
+(its keys are mode names, such as light, dark and high-contrast, or its
+`modes` object holds them), or the themes of a Tokens Studio file. Mode and theme
 names are placed by the importers' shared matcher: Dark Mode is
 scheme:dark, High contrast is contrast:high, and Light or Default is the
 base. A bare dark.json beside a file not named for light is not paired;
@@ -707,36 +708,61 @@ def _merge(log: _Log, sets: List[str],
     return list(out.values()), groups
 
 
-def _tool_modes(value: Any) -> Tuple[Optional[str], Dict[str, Any], List[Tuple[str, str]]]:
-    """(the key that holds modes, context -> raw value, [(mode name, why it
-    was not read)]) for one tool's $extensions entry: a `dark` key, or a
-    `modes` object whose names the importers' shared matcher places (Dark
-    Mode is scheme:dark, high-contrast is contrast:high; a base name such
-    as Light is the token's own value)."""
-    if not isinstance(value, dict):
-        return None, {}, []
-    if "dark" in value:
-        return "dark", {DARK: value["dark"]}, []
-    modes = value.get("modes")
-    if not (isinstance(modes, dict) and modes):
-        return None, {}, []
+_NO_AXIS = ("its name places into no mode axis; name it for a mode, such as Dark or High "
+            "contrast")
+
+
+def _place_modes(modes: Dict[Any, Any]) -> Tuple[Dict[str, Any], List[Tuple[str, str, Any]]]:
+    """(context -> raw value, [(mode name, why it was not read, raw value)])
+    for a mapping of mode names to values, placed by the importers' shared
+    matcher: Dark Mode is scheme:dark, high-contrast is contrast:high, and a
+    base name such as Light is the token's own value."""
     placed: Dict[str, Any] = {}
-    left: List[Tuple[str, str]] = []
+    left: List[Tuple[str, str, Any]] = []
     held: Dict[str, str] = {}
     for raw_name, raw in modes.items():
         mode = str(raw_name)
         axis = mode_of(mode)
         if axis is None:
             if not is_base(mode):
-                left.append((mode, "its name places into no mode axis; name it for a mode, such "
-                                   "as Dark or High contrast"))
+                left.append((mode, _NO_AXIS, raw))
         elif axis in held:
             left.append((mode, f"it is a second mode for the {axis} axis, which {held[axis]} "
-                               "holds; keep one"))
+                               "holds; keep one", raw))
         else:
             held[axis] = mode
             placed[_ctx(axis)] = raw
-    return "modes", placed, left
+    return placed, left
+
+
+def _tool_modes(value: Any) -> Tuple[Set[str], Dict[str, Any], List[Tuple[str, str, Any]], bool]:
+    """(the keys that hold modes, context -> raw value, [(mode name, why it
+    was not read, raw value)], whether the entry itself is the modes) for one
+    tool's $extensions entry. The entry is the modes when one of its keys is
+    a mode name (dark, Dark Mode, high-contrast); otherwise its `modes`
+    object holds them. A key beside the modes that places into no axis is
+    listed with the rest, and the caller tells a value from a tool's own
+    field (an id) by whether it reads as the token's type."""
+    if not isinstance(value, dict):
+        return set(), {}, [], False
+    if any(mode_of(str(k)) is not None for k in value):
+        placed, left = _place_modes(value)
+        return {str(k) for k in value}, placed, left, True
+    modes = value.get("modes")
+    if not (isinstance(modes, dict) and modes):
+        return set(), {}, [], False
+    placed, left = _place_modes(modes)
+    return {"modes"}, placed, left, False
+
+
+def _reads_as(types: Dict[str, str], groups: Set[str], kind: str, raw: Any) -> bool:
+    """True when `raw` reads as a value of `kind`: a mode's value, not a
+    tool's own field such as an id."""
+    try:
+        _Reader(types, groups).value(kind, raw)
+    except NotRead:
+        return False
+    return True
 
 
 @dataclass(frozen=True)
@@ -979,14 +1005,17 @@ def import_dtcg(text: str, source: Source,
                                    paired.src, paired.pos)
         sided = {side.ctx for side in sides if side.index.get(e.dst) is not None}
         for tool in tools:
-            held, placed, left = _tool_modes(exts[tool])
-            for mode, why in left:
+            held, placed, left, direct = _tool_modes(exts[tool])
+            for mode, why, raw in left:
+                if direct and why == _NO_AXIS and not _reads_as(types, groups, kind, raw):
+                    held.discard(mode)
+                    continue
                 log.not_read.append((e.pos, None, Item(where, e.src, (
                     f"its mode {mode} under {tool} was not read, since {why}"))))
             fresh = [c for c in placed if c not in taken and c not in modes and c not in sided]
             for c in fresh:
                 taken[c] = (placed[c], f"{name} $extensions {tool}", where, e.src, e.pos)
-            if held is None or (placed and not fresh) or set(exts[tool]) - {held}:
+            if not held or (placed and not fresh) or set(exts[tool]) - held:
                 left_out.append(tool)
         for c, (raw, label, at, src, pos) in taken.items():
             other = _Reader(types, groups)
