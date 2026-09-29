@@ -158,6 +158,10 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 
 The section order comes from the archetype above and from the engine's page sequence, which the brief's structured fields pick (`product_type`, `primary_action`, `primary_side`, `platforms`, `page`, `stage`; /ux-design engine step 2.5), never its industry or its prose. Section orders observed by cohort (B2B, editorial, developer tooling, creative) are catalogued in `references/styles/exemplars.md` (Section-flow patterns).
 
+### The ask sets how much the page argues
+
+Length is not the variable; what the page answers before it asks is. A light ask (an email, a phone number, a free download) can sit in the hero, which is the Single-field conversion archetype. A heavy ask (card details, a call, a purchase, a signed contract) is repeated only below a section that answers an objection or shows proof; the picker enforces this from the brief's `commitment`. When most visitors arrive cold and the ask is heavy, offer a lighter step the client really has as a text link, never a second button of equal weight. Every section has a job for the reader: the ask, proof, an answered objection, or an explanation the reader needs. A section with none of these is cut, however short the page.
+
 ### When to include a section
 
 - **Animated counters**: when the metric is the proof. Skip when the number is incidental.
@@ -269,7 +273,7 @@ Stack to one column: copy and CTA first, media below. Or put the media behind th
 
 ### Form in the hero
 
-When the quote or contact form lives in the hero, the form is the primary CTA. Do not add a separate hero button that scrolls to that same form. A CTA points to an action that is not already on the screen, so a button targeting the visible in-hero form is a dead, redundant control. Let the headline and lede lead into the form. A CTA in the nav or in a later section that points back to the hero form is correct, because there the form is off-screen. A button beside an in-hero form needs a real job (focus the first field), never a scroll to itself.
+When the quote or contact form lives in the hero, the form is the primary CTA. Do not add a separate hero button that scrolls to that same form. A CTA points to an action that is not already on the screen, so a button targeting the visible in-hero form is a dead, redundant control. Let the headline and lede lead into the form. A CTA in the nav or in a later section that points back to the hero form is correct, because there the form is off-screen. A button beside an in-hero form needs a real job (focus the first field), never a scroll to itself. What the page shows after submit follows the success-state contract in `references/foundations/component-behaviors.md` (Form).
 
 ---
 
@@ -286,6 +290,8 @@ When the quote or contact form lives in the hero, the form is the primary CTA. D
 - The drawer is a real overlay: focus-trapped, closed by `Esc` and by the backdrop, body scroll locked, links at least 44px tall.
 
 Breaks to prevent: links wrapping to a second row, the wordmark stacking mid-name, a phone number plus label plus CTA crammed until the bar is two or three rows tall.
+
+**Campaign page.** A page whose only job is one ask (`page: campaign`: a paid campaign, a launch, a waitlist) gives a stranger no way to wander off before the offer: the bar holds the logo and the one primary action, and no nav links.
 
 ### Sticky-header budget on mobile
 
@@ -310,6 +316,8 @@ Breaks to prevent: claims wrapping mid-phrase into ragged lines with dangling `|
 ## Proof
 
 Proof is what makes the claims above it believable. It is specific, attributed and quiet.
+
+**Proof sits beside the objection it answers.** A delivery figure goes next to the delivery question, a named quote about switching next to the worry about switching. The self-review reports where each proof item sits, not only that the page has it.
 
 ### Monochrome logo wall
 
@@ -361,8 +369,13 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 
 - **The final CTA band repeats the primary action**, with the same verb as the hero CTA, on a full-width band with the page's strongest contrast: a tinted band, a full-dark band, or the brand's strongest color. One line restates the value proposition above a single filled CTA. The hero held back; the closer does not.
 - **A FAQ, when present, sits above the final CTA**, never below it.
+- **FAQ questions come from the customer.** Each one is an objection from the brief, in the customer's wording turned into a question, never rewritten into the brand's voice. With no objections supplied, the FAQ answers only the operational questions the client's own material answers (price, delivery, what happens next), and the self-review says the FAQ was not built from customer words.
 - **A CTA never points at itself.** A button that scrolls to a form already on screen is redundant (see Form in the hero).
 - **On long pages, the primary CTA is reachable at every scroll depth** through the sticky nav's single CTA, not through a floating button that covers content.
+
+### At the ask
+
+At the field where they commit, a cautious visitor wants to know who runs this, what happens to their data, what happens if it goes wrong, when someone will contact them, and whether they can get their money back. The answers the client's material supports sit next to the form or the payment field, not in the footer: a refund policy three screens away does not answer a hesitation at the card field. The heavier the `commitment`, the more of them the page needs (the picker lists them in `at_the_ask`): a missing company name is minor beside a newsletter field and disqualifying beside a checkout. An answer the client cannot give is listed for the owner, never invented.
 
 ---
 
@@ -376,6 +389,7 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 - **The footer carries** the legal links, the contact route, the language switcher on multilingual sites, the wordmark, social links, a status indicator for operational products, and the newsletter field if the page has one. The newsletter field sits above the sitemap columns, not at the absolute foot.
 - **Each column holds 4 to 8 links.** The footer takes a slightly darker or lighter band than the page.
 - **Footer on mobile.** Link columns stack to a single column, or collapse into accordion sections. Legible spacing, never a cramped 4-column grid squeezed into 360px.
+- **A campaign page keeps a reduced footer**: the legal links and the contact routes, nothing else. The sitemap is for a homepage and the pages that receive organic and branded visitors; on a page with one ask, twenty links are twenty exits. A link out from proof (a press article, a review site) opens in a new tab and says so.
 
 ---
 
@@ -410,7 +424,8 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 - [ ] No hero button that scrolls to a form already visible in the hero
 - [ ] No customer logos in original full color
 - [ ] Specific CTAs, not "Get Started" / "Learn More" reflexively
-- [ ] Footer is a sitemap, not a one-row strip
+- [ ] Footer is a sitemap, not a one-row strip, except on a campaign page (legal and contact only)
+- [ ] A heavy ask is repeated only below a section that answers an objection or shows proof
 - [ ] Arabic copy tested at real length; numerals Western; currency after the amount
 
 ### Medium

@@ -21,6 +21,16 @@ kind is missing is dropped with a stated reason, never filled with invented
 proof; a conversion mechanism that needs a missing proof kind or contact route
 is dropped the same way.
 
+Every section names its job (ask, proof, objection, explanation or
+navigation). Three fields shape the page around its ask without changing the
+pick: ``commitment`` (what the visitor gives; a heavy one is repeated only
+below a section that answers an objection or shows proof), ``arrival`` (what
+the visitor knows on landing; branded drops the case for the category, cold
+with a heavy ask adds a lighter step as a text link) and ``objections`` (the
+customer's own words, typed, each placed in the section that answers it).
+``page: campaign`` closes the page's exits. Every change is reported in
+``why`` or ``dropped``.
+
 Pure ``dict -> dict``. No LLM, no network, fully deterministic.
 
 Public surface
@@ -41,8 +51,33 @@ PROOF_KINDS: Tuple[str, ...] = ("case-studies", "certifications", "logos", "pres
 CONTACT_KINDS: Tuple[str, ...] = ("address", "chat", "email", "form", "phone", "whatsapp")
 STAGES: Tuple[str, ...] = ("live", "pre-launch")
 PRE_LAUNCH = "pre-launch"
-# What the page is for: the product's home, or one feature of it.
-PAGES: Tuple[str, ...] = ("home", "feature")
+# What the page is for: the product's home, one feature of it, or one campaign
+# whose only job is one ask.
+PAGES: Tuple[str, ...] = ("home", "feature", "campaign")
+# What the visitor gives at the ask. The last four are heavy: card details, a
+# call, a purchase or a signed contract need their objections answered above
+# the first place the ask is repeated.
+COMMITMENTS: Tuple[str, ...] = ("email", "phone", "account", "trial", "card", "call",
+                                "purchase", "contract")
+HEAVY_COMMITMENTS: Tuple[str, ...] = ("card", "call", "purchase", "contract")
+# What the visitor knows on landing.
+ARRIVALS: Tuple[str, ...] = ("cold", "warm", "branded", "returning")
+# The kinds of objection a customer raises; approval is the reader who is not
+# the buyer and needs something to take to whoever approves.
+OBJECTION_TYPES: Tuple[str, ...] = ("function", "risk", "price", "payback", "timing",
+                                    "approval")
+# What each section does for the ask.
+JOBS: Tuple[str, ...] = ("ask", "proof", "objection", "explanation", "navigation")
+# What a visitor needs answered next to the ask, growing with the commitment.
+_AT_THE_ASK_LIGHT: Tuple[str, ...] = (
+    "what happens next, and when",
+    "what happens to the data the visitor gives")
+_AT_THE_ASK_ACCOUNT: Tuple[str, ...] = (
+    "what it costs later, and how to cancel or close it",)
+_AT_THE_ASK_HEAVY: Tuple[str, ...] = (
+    "who runs this: the legal name and a way to reach them",
+    "what happens if it goes wrong: the refund, cancellation or guarantee terms")
+OBJECTION_SECTION = "FAQ (objections)"
 # Where the product runs, and how its users sign in.
 PLATFORMS: Tuple[str, ...] = ("web", "ios", "android", "desktop")
 STORE_PLATFORMS: Tuple[str, ...] = ("ios", "android")
@@ -141,6 +176,38 @@ def _choice(fields: Mapping[str, Any], name: str, choices: Tuple[str, ...], fix:
     return value
 
 
+def _objections(fields: Mapping[str, Any]) -> List[Dict[str, str]]:
+    """The customer's objections, each ``{quote, type, source}``, checked. The
+    quote is kept exactly as given: it is the customer's wording."""
+    raw = fields.get("objections")
+    if raw is None:
+        return []
+    shape = ("give a list of {quote, type, source} objects, one per objection in the "
+             "customer's own words, or leave it out")
+    if not isinstance(raw, (list, tuple)):
+        raise ValueError(f"objections: {shape}; got {raw!r}")
+    out: List[Dict[str, str]] = []
+    for i, item in enumerate(raw):
+        at = f"objections[{i}]"
+        if not isinstance(item, Mapping):
+            raise ValueError(f"{at}: give an object with quote, type and source; got {item!r}")
+        quote = item.get("quote")
+        if not isinstance(quote, str) or not quote.strip():
+            raise ValueError(f"{at}.quote: paste the customer's own words (a review, a call "
+                             f"note, a support ticket); it is empty")
+        kind = "-".join(str(item.get("type") or "").strip().lower().split())
+        if kind not in OBJECTION_TYPES:
+            raise ValueError(f"{at}.type: {item.get('type')!r} is not one of "
+                             f"{', '.join(OBJECTION_TYPES)}; use approval when the reader is "
+                             f"not the one who approves the purchase")
+        source = item.get("source")
+        if not isinstance(source, str) or not source.strip():
+            raise ValueError(f"{at}.source: name where the words come from (a review, a sales "
+                             f"call, a support ticket, a comment); it is empty")
+        out.append({"quote": quote, "type": kind, "source": source.strip()})
+    return out
+
+
 def _field_value(fields: Mapping[str, Any], name: str) -> str:
     return "-".join(str(fields.get(name) or "").strip().lower().split())
 
@@ -179,7 +246,13 @@ class _Brief:
                               + (f" (from {written})" if written and written != self.product
                                  else ""))
         self.page = _choice(fields, "page", PAGES, "use feature for a page about one feature of "
-                            "the product, home for its main page")
+                            "the product, campaign for a page whose only job is one ask, home "
+                            "for its main page")
+        self.commitment = _choice(fields, "commitment", COMMITMENTS, "name what the visitor "
+                                  "gives at the ask, or leave it out")
+        self.arrival = _choice(fields, "arrival", ARRIVALS, "name what most visitors know on "
+                               "landing, or leave it out")
+        self.objections = _objections(fields)
         self.side = _choice(fields, "primary_side", SIDES, "use supply when the page speaks to "
                             "the side that lists, sells, delivers or hosts, demand when it "
                             "speaks to buyers")
@@ -347,6 +420,126 @@ def _drop_unproven(seq: Dict[str, Any], proof: Optional[List[str]],
     return dropped
 
 
+def _closing_ask(secs: List[Dict[str, Any]]) -> int:
+    """Index of the closing ask band: the last ask before the footer."""
+    return max(i for i, s in enumerate(secs) if s["job"] == "ask")
+
+
+def _objection_section(seq: Dict[str, Any], notes: List[str]) -> int:
+    """Index of the page's FAQ, else of a new FAQ inserted before the closing
+    band (reported once in ``notes``)."""
+    secs = seq["section_sequence"]
+    for i, s in enumerate(secs):
+        if s["job"] == "objection" and s["section"].startswith("FAQ"):
+            return i
+    at = _closing_ask(secs)
+    secs.insert(at, {"section": OBJECTION_SECTION, "job": "objection", "purpose": (
+        "The objections that stop the action, answered above the closing band. Its questions "
+        "come from the brief's objections, each in the customer's own words turned into a "
+        "question; with no objections in the brief, it answers only the operational questions "
+        "the client's own material answers: price, delivery, what happens next.")})
+    notes.append(f"{OBJECTION_SECTION} added before {secs[at + 1]['section']}: nothing else on "
+                 f"the page answers the objections in the brief")
+    return at
+
+
+def _place_the_ask(seq: Dict[str, Any], b: _Brief, dropped: List[Dict[str, str]]) -> List[str]:
+    """Shape the page around what the visitor gives at the ask and what they
+    know on landing. Returns the notes for ``why``; drops go to ``dropped``."""
+    notes: List[str] = []
+    secs = seq["section_sequence"]
+    if b.arrival == "branded":
+        for s in [s for s in secs if s.get("explains_category")]:
+            secs.remove(s)
+            dropped.append({"section": s["section"], "reason": (
+                f"{s['section']} argues for the category, and with arrival branded the visitor "
+                f"searched the brand's name and knows what it is; dropped.")})
+            notes.append(f"arrival branded: dropped {s['section']}")
+    if b.commitment and b.commitment not in HEAVY_COMMITMENTS:
+        notes.append(f"commitment {b.commitment}: a light ask, so it stays in the hero")
+    elif b.commitment:
+        heavy = f"commitment {b.commitment}: a heavy ask"
+        answers = [i for i, s in enumerate(secs) if i > 0 and s["job"] in ("proof", "objection")]
+        first = answers[0] if answers else _objection_section(seq, notes)
+        while True:
+            repeat = next(i for i, s in enumerate(secs) if i > 0 and s["job"] == "ask")
+            if repeat > first:
+                break
+            moved = secs.pop(repeat)
+            first -= 1
+            secs.insert(first + 1, moved)
+            heavy += f"; moved {moved['section']} below {secs[first]['section']}"
+        if secs[first + 1]["job"] != "ask":
+            secs.insert(first + 1, {"section": "Mid-page ask", "job": "ask", "purpose": (
+                "The primary action again, with the hero's verb, right after the first section "
+                "that answers an objection or shows proof: the visitor who has read that far "
+                "can act without scrolling back.")})
+            heavy += (f"; Mid-page ask after {secs[first]['section']}, the first section that "
+                      f"answers an objection or shows proof")
+        notes.append(heavy)
+        seq["cta_placement"] += (" The ask is heavy: the hero's action says what it takes, and "
+                                 "it is repeated only below a section that answers an "
+                                 "objection or shows proof.")
+        if b.arrival == "cold":
+            seq["cta_placement"] += (
+                " Most visitors arrive cold: a lighter step the client really offers (a price "
+                "list, a sample, a recorded demo, a question by a contact route) sits beside "
+                "the primary action as a text link, never a second button; with none, leave "
+                "it out and list it for the owner.")
+            seq["conversion_mechanisms"] = list(seq.get("conversion_mechanisms") or []) + [
+                "lighter step (text link)"]
+            notes.append("arrival cold with a heavy ask: a lighter step as a text link")
+    return notes
+
+
+def _at_the_ask(commitment: str) -> List[str]:
+    """What the page answers next to the form or payment field."""
+    if not commitment:
+        return []
+    out = list(_AT_THE_ASK_LIGHT)
+    if commitment in ("account", "trial") or commitment in HEAVY_COMMITMENTS:
+        out += _AT_THE_ASK_ACCOUNT
+    if commitment in HEAVY_COMMITMENTS:
+        out += _AT_THE_ASK_HEAVY
+    return out
+
+
+def _map_objections(seq: Dict[str, Any], objections: List[Dict[str, str]],
+                    notes: List[str]) -> List[Dict[str, str]]:
+    """Place each objection in the section that answers it: function in the
+    page's how-it-works section, price in its pricing section, payback next to
+    its first proof, everything else (and any type with no such section) in
+    its FAQ."""
+    out: List[Dict[str, str]] = []
+    for o in objections:
+        secs = seq["section_sequence"]
+        target: Optional[Dict[str, Any]] = None
+        if o["type"] == "function":
+            target = next((s for s in secs if s["job"] == "explanation"
+                           and s["section"].startswith("How ")), None)
+        elif o["type"] == "price":
+            target = next((s for s in secs if "pricing" in s["section"].lower()), None)
+        elif o["type"] == "payback":
+            target = next((s for s in secs if s["job"] == "proof"), None)
+        if target is None:
+            target = secs[_objection_section(seq, notes)]
+        out.append({**o, "section": target["section"]})
+    return out
+
+
+def _campaign(seq: Dict[str, Any]) -> None:
+    """A campaign page closes its exits: logo and one action in the header, a
+    footer with the legal links and the contact routes only."""
+    foot = seq["section_sequence"][-1]
+    foot["section"] = "Compact footer"
+    foot["purpose"] = ("A reduced footer: the legal links and the contact routes the client "
+                       "offers, nothing else; no link columns and no social row.")
+    seq["footer"] = "Compact footer: legal links and the contact routes the client offers."
+    seq["cta_placement"] += (" A campaign page: the header holds the logo and the one primary "
+                             "action, no nav links; a link out from a proof item opens in a new "
+                             "tab and says so.")
+
+
 def select_for_brief(brief: Mapping[str, Any]) -> Dict[str, Any]:
     """Pick the page sequence for a 4.0 brief, and say why. Always returns one.
 
@@ -361,6 +554,10 @@ def select_for_brief(brief: Mapping[str, Any]) -> Dict[str, Any]:
     ``proof`` left out, proof sections stay, marked by kind, and
     ``proof_unknown`` is true. A field outside its choices raises
     ``ValueError`` naming the field and the choices.
+
+    ``objection_map`` lists each objection with the section that answers it;
+    ``at_the_ask`` lists what the page answers next to the form or payment
+    field for the brief's ``commitment`` (empty without one).
     """
     b = _Brief(_fields(brief or {}))
     entries = load_sequences()
@@ -404,6 +601,14 @@ def select_for_brief(brief: Mapping[str, Any]) -> Dict[str, Any]:
         why += "; sign_in phone: every sign-in is a phone number field"
     if seq["id"] != PRE_LAUNCH:
         dropped += _drop_unproven(seq, b.proof, b.contact)
+    if b.page == "campaign":
+        _campaign(seq)
+        why += ("; page campaign: one ask, so the header drops its links and the footer keeps "
+                "the legal links and contact routes only")
+    notes = _place_the_ask(seq, b, dropped)
+    seq["objection_map"] = _map_objections(seq, b.objections, notes)
+    seq["at_the_ask"] = _at_the_ask(b.commitment)
+    why += "".join("; " + n for n in notes)
     seq["why"] = why
     seq["dropped"] = dropped
     seq["proof_unknown"] = b.proof is None and any(s.get("proof") for s in seq["section_sequence"])

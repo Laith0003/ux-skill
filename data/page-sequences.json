@@ -5,7 +5,7 @@
     "last_updated": "2026-09-29",
     "source": "ux-skill 4.0 page-level section sequences",
     "schema_version": "3.0",
-    "purpose": "Whole-page templates the picker chooses from a 4.0 brief (engine.page_sequence.select_for_brief) by its structured fields only: page_sequence, then stage, then page, then product_type refined by platforms, primary_side and primary_action, then primary_action or platforms alone, then project_type mobile-app, and general-landing when none says what the page is, with why naming the field to set. No industry and no word of the brief's prose picks a sequence. picked_by says which fields reach each entry. A section with a proof kind renders only with the client's real proof of that kind. mechanism_needs names what each conversion mechanism needs (a proof kind or a contact route); without_phone is a section's text when the client has no phone; with_phone_sign_in is its text when the product signs users in by phone (sign_in)."
+    "purpose": "Whole-page templates the picker chooses from a 4.0 brief (engine.page_sequence.select_for_brief) by its structured fields only: page_sequence, then stage, then page, then product_type refined by platforms, primary_side and primary_action, then primary_action or platforms alone, then project_type mobile-app, and general-landing when none says what the page is, with why naming the field to set. No industry and no word of the brief's prose picks a sequence. picked_by says which fields reach each entry. A section with a proof kind renders only with the client's real proof of that kind. mechanism_needs names what each conversion mechanism needs (a proof kind or a contact route); without_phone is a section's text when the client has no phone; with_phone_sign_in is its text when the product signs users in by phone (sign_in). job names what each section does for the ask: ask, proof, objection, explanation or navigation; explains_category marks a section that argues for the category, which a visitor who arrives by the brand's name does not need."
   },
   "entries": [
     {
@@ -15,46 +15,56 @@
       "section_sequence": [
         {
           "section": "Hero (with inline quote/contact form)",
+          "job": "ask",
           "purpose": "Capture the lead at first paint. Text left (headline + one-line value + phone affordance), inline quote or contact form right. The form is the wow moment and the conversion path, never buried below.",
           "without_phone": "Capture the lead at first paint. Text left (headline + one-line value), inline quote or contact form right. The form is the wow moment and the conversion path, never buried below."
         },
         {
           "section": "Proof/stats bar",
+          "job": "proof",
           "purpose": "A thin band of 3-5 real, organic numbers (jobs completed, years operating, response time, coverage radius) directly under the hero: instant credibility before the scroll.",
           "proof": "stats"
         },
         {
           "section": "Value cards",
+          "job": "explanation",
           "purpose": "3-5 cards naming the concrete reasons to choose this service (speed, price transparency, licensing, same-day). Each card has a tight heading and one sentence."
         },
         {
           "section": "Category pills",
+          "job": "explanation",
           "purpose": "Every service category / sector the business covers, rendered as a scannable row of pills. Map EVERY sector from the source into a pill. Do not trim to a tidy few."
         },
         {
           "section": "Item cards",
+          "job": "explanation",
           "purpose": "Every concrete offering (every skip size, every package, every product line) as its own card with a spec line and an action. Completeness over neatness: one source item -> one card."
         },
         {
           "section": "Split feature rows",
+          "job": "explanation",
           "purpose": "2-column zig-zag rows that expand the marquee differentiators with depth: alternating media/text, each row earning its own visual. Not a 3-equal-card grid."
         },
         {
           "section": "Coverage",
+          "job": "objection",
           "purpose": "Where the service operates: a map, a region list, or a coverage statement. For a local/commercial service this answers the 'do you cover me?' question that gates the lead."
         },
         {
           "section": "Social proof / pull-quote",
+          "job": "proof",
           "purpose": "A named, quantified testimonial or a strong pull-quote with attribution (name, role/company). One strong quote beats fifteen vibes-only blurbs.",
           "proof": "testimonials"
         },
         {
           "section": "CTA band",
+          "job": "ask",
           "purpose": "A focused conversion band repeating the primary action (get a quote / call now) with the phone affordance, after the page has earned the click.",
           "without_phone": "A focused conversion band repeating the primary action (get a quote), after the page has earned the click."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "A sitemap footer: services, coverage areas, company, contact (phone + hours), legal. Generosity after the page's restraint, never a thin one-row strip.",
           "without_phone": "A sitemap footer: services, coverage areas, company, contact (the routes the client offers, and hours), legal. Generosity after the page's restraint, never a thin one-row strip."
         }
@@ -86,45 +96,55 @@
       "section_sequence": [
         {
           "section": "Hero (product mock + primary CTA)",
+          "job": "ask",
           "purpose": "Asymmetric hero: value headline + one-line lede + primary CTA on one side, a real product mock (screenshot or interactive demo) on the other. The mock is the proof."
         },
         {
           "section": "Logo / trust strip",
+          "job": "proof",
           "purpose": "A single monochrome customer-logo row near the hero: social proof before the feature tour. Skip if there are no real logos.",
           "proof": "logos"
         },
         {
           "section": "Value cards",
+          "job": "explanation",
           "purpose": "3-5 outcome-led cards (not feature lists), each with a concrete claim with a number where possible."
         },
         {
           "section": "Split feature rows",
+          "job": "explanation",
           "purpose": "3-5 marquee feature sections, each a 2-column zig-zag with a deep visual (annotated screenshot, before/after, synthetic UI). Depth over a dense feature grid."
         },
         {
           "section": "Integrations / ecosystem",
+          "job": "explanation",
           "purpose": "The integrations or ecosystem the product plugs into, as a labelled grid of marks. Maps EVERY integration the source lists."
         },
         {
           "section": "Metrics / outcomes band",
+          "job": "proof",
           "purpose": "A stats band of real outcomes (latency, time saved, adoption), organic numbers, not round marketing figures.",
           "proof": "stats"
         },
         {
           "section": "Social proof / case quote",
+          "job": "proof",
           "purpose": "A named, quantified customer quote or mini case study with attribution and a real metric.",
           "proof": "testimonials"
         },
         {
           "section": "Pricing teaser",
+          "job": "objection",
           "purpose": "A 'starts at $X' teaser linking out to full pricing, never a full pricing table on the homepage."
         },
         {
           "section": "CTA band",
+          "job": "ask",
           "purpose": "A focused sign-up / start-free band repeating the single primary action."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer by audience: Product, Solutions, Resources, Company, Legal."
         }
       ],
@@ -153,43 +173,53 @@
       "section_sequence": [
         {
           "section": "Product hero (gallery + buy box)",
+          "job": "ask",
           "purpose": "Product imagery gallery on one side, buy box (title, price, variant pickers, add-to-cart) on the other. The buy box is the conversion path, above the fold."
         },
         {
           "section": "Trust / shipping bar",
+          "job": "objection",
           "purpose": "A thin band of trust signals: free shipping threshold, returns window, secure checkout, in-stock status."
         },
         {
           "section": "Key benefits / spec cards",
+          "job": "explanation",
           "purpose": "Cards covering the concrete reasons to buy (materials, warranty, what's in the box) and a spec line."
         },
         {
           "section": "Variant / option grid",
+          "job": "explanation",
           "purpose": "Every variant, size, or option as a selectable card/swatch. Map EVERY option the source lists: one variant, one tile."
         },
         {
           "section": "Split feature rows",
+          "job": "explanation",
           "purpose": "Zig-zag rows telling the product story with real photography or detail shots: craft, use, results."
         },
         {
           "section": "Reviews / social proof",
+          "job": "proof",
           "purpose": "Real, attributed reviews with a rating distribution: named, specific, not 'amazing!'.",
           "proof": "reviews"
         },
         {
           "section": "Related / cross-sell",
+          "job": "explanation",
           "purpose": "A small, curated set of related products, not an endless grid."
         },
         {
           "section": "FAQ / shipping & returns",
-          "purpose": "The objection-handling section: shipping, returns, sizing, care. Answers the questions that block checkout."
+          "job": "objection",
+          "purpose": "The objection-handling section: shipping, returns, sizing, care. Answers the questions that block checkout. Its questions come from the brief's objections, each in the customer's own words turned into a question; with no objections in the brief, it answers only the operational questions the client's own material answers."
         },
         {
           "section": "CTA band (add to cart)",
+          "job": "ask",
           "purpose": "A sticky or repeated add-to-cart band so the conversion action is always reachable."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: Shop, Help (shipping/returns), Company, Legal, contact."
         }
       ],
@@ -216,39 +246,48 @@
       "section_sequence": [
         {
           "section": "Hero (statement + selected work peek)",
+          "job": "ask",
           "purpose": "A confident positioning statement with a peek of selected work. Editorial, asymmetric: the work carries the page."
         },
         {
           "section": "Selected work grid",
+          "job": "proof",
           "purpose": "An irregular, editorial grid of case studies (varied aspect ratios, generous gaps). Each tile is a real project, not a card box."
         },
         {
           "section": "Services / capabilities",
+          "job": "explanation",
           "purpose": "What the studio does, as capability cards or a list. Map EVERY discipline the source lists."
         },
         {
           "section": "Split feature rows (case depth)",
+          "job": "explanation",
           "purpose": "1-3 deep case studies as zig-zag rows: problem, approach, result with a real metric."
         },
         {
           "section": "Process / approach",
+          "job": "explanation",
           "purpose": "How the studio works: a few honest steps, not numbered chapter signposting for its own sake."
         },
         {
           "section": "Client logos / proof",
+          "job": "proof",
           "purpose": "A monochrome client-logo wall or named testimonials with attribution.",
           "proof": "logos"
         },
         {
           "section": "About / team",
+          "job": "objection",
           "purpose": "Who's behind the work: real people, real photos or styled portraits."
         },
         {
           "section": "CTA band (start a project)",
+          "job": "ask",
           "purpose": "A direct 'start a project / let's talk' band with a real contact path."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: Work, Services, About, Contact, social."
         }
       ],
@@ -276,38 +315,47 @@
       "section_sequence": [
         {
           "section": "Hero (lead story + masthead)",
+          "job": "ask",
           "purpose": "A masthead with the lead story given editorial weight: big headline, real image, byline. Sets the publication's voice."
         },
         {
           "section": "Featured stories grid",
+          "job": "explanation",
           "purpose": "An editorial grid of featured pieces with varied prominence (one dominant, several secondary), not equal cards."
         },
         {
           "section": "Category pills / sections",
+          "job": "explanation",
           "purpose": "Every section/topic the publication covers, as a row of pills. Map EVERY category from the source."
         },
         {
           "section": "Latest articles list",
+          "job": "explanation",
           "purpose": "A scannable list of recent pieces with byline, date, and reading time, typographic, not boxed."
         },
         {
           "section": "Editor's pick / pull-quote",
+          "job": "explanation",
           "purpose": "A highlighted piece or a pull-quote that carries the editorial point of view, with attribution."
         },
         {
           "section": "Newsletter signup",
+          "job": "ask",
           "purpose": "An inline newsletter capture (not a timed modal) with a clear value line and a single email field."
         },
         {
           "section": "Contributors / about",
+          "job": "objection",
           "purpose": "Who writes here: real contributors with names and roles."
         },
         {
           "section": "CTA band (subscribe)",
+          "job": "ask",
           "purpose": "A focused subscribe band repeating the newsletter or membership action."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: Sections, Archive, About, Subscribe, legal."
         }
       ],
@@ -332,40 +380,49 @@
       "section_sequence": [
         {
           "section": "Hero (device mock + store badges)",
+          "job": "ask",
           "purpose": "A device mock (real app screen) beside a value headline and app-store badges. The store badges are the conversion path, above the fold."
         },
         {
           "section": "Proof/stats bar",
+          "job": "proof",
           "purpose": "A thin band of real numbers (downloads, rating, active users), organic, not round marketing figures.",
           "proof": "stats"
         },
         {
           "section": "Value cards",
+          "job": "explanation",
           "purpose": "3-5 cards naming what the app does for the user, each with a concrete benefit."
         },
         {
           "section": "Screenshot carousel / gallery",
+          "job": "explanation",
           "purpose": "Real app screenshots in device frames showing the key flows: varied, not all clipped to one ratio."
         },
         {
           "section": "Split feature rows",
+          "job": "explanation",
           "purpose": "Zig-zag rows expanding the marquee features with a screenshot each, depth over a dense grid."
         },
         {
           "section": "Social proof / reviews",
+          "job": "proof",
           "purpose": "Named, specific app-store reviews or a rating breakdown, not 'great app!'.",
           "proof": "reviews"
         },
         {
           "section": "How it works / onboarding",
+          "job": "explanation",
           "purpose": "A short, honest set of steps from install to value."
         },
         {
           "section": "CTA band (download)",
+          "job": "ask",
           "purpose": "A focused download band repeating the store badges and the single primary action."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: App, Support, Company, Legal, store links."
         }
       ],
@@ -393,53 +450,65 @@
       "section_sequence": [
         {
           "section": "Hero (two-sided promise + account request)",
+          "job": "ask",
           "purpose": "Who buys from whom, in one headline, and the primary action: open an account or request access. A real product view (the catalog, an order, the app) on the other side. The supplier path is a secondary link, never a second filled button."
         },
         {
           "section": "Buyer and supplier paths",
+          "job": "explanation",
           "purpose": "Two panels side by side, one per side of the market, each with what that side gets and its own action. Unequal widths when one side is the main audience."
         },
         {
           "section": "Categories",
+          "job": "explanation",
           "purpose": "Every category the catalog carries, as a scannable list or pills. Counts only when the client gives real ones."
         },
         {
           "section": "How ordering works",
+          "job": "explanation",
           "purpose": "Three to five steps from search to delivery: search, compare, order, receive, pay. Real screens where the client has them."
         },
         {
           "section": "Split feature rows (real app screens)",
+          "job": "explanation",
           "purpose": "The marquee capabilities (reorder, price comparison, credit, tracking), each a row with a real screen."
         },
         {
           "section": "Delivery, coverage and payment terms",
+          "job": "objection",
           "purpose": "Where it delivers, how fast, and the payment terms (credit, cash on delivery, invoices). This answers the questions a trade buyer asks before an account."
         },
         {
           "section": "Numbers band",
+          "job": "proof",
           "proof": "stats",
           "purpose": "Real numbers from the client (buyers, suppliers, orders, cities). Only numbers the client has measured."
         },
         {
           "section": "Buyer or supplier quote",
+          "job": "proof",
           "proof": "testimonials",
           "purpose": "One named quote from a real buyer or supplier, with the business name and city."
         },
         {
           "section": "Brands and suppliers carried",
+          "job": "proof",
           "proof": "logos",
           "purpose": "The real brands or suppliers on the catalog, as one mono row of their marks. The usual trade proof when there are no numbers yet; only marks the client may show."
         },
         {
           "section": "FAQ (terms, minimum order, delivery, returns)",
-          "purpose": "The objections that stop a trade account: minimum order, delivery windows, returns, credit, who can register."
+          "job": "objection",
+          "purpose": "The objections that stop a trade account: minimum order, delivery windows, returns, credit, who can register. Its questions come from the brief's objections, each in the customer's own words turned into a question; with no objections in the brief, it answers only the operational questions the client's own material answers."
         },
         {
           "section": "CTA band (open an account, or join as a supplier)",
+          "job": "ask",
           "purpose": "The primary action repeated, with the supplier path as a secondary link."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: For buyers, For suppliers, Categories, Company, Contact, Legal, app store links when there is an app."
         }
       ],
@@ -468,49 +537,61 @@
       "section_sequence": [
         {
           "section": "Hero (claim + demo request)",
+          "job": "ask",
           "purpose": "What the product protects or runs, for whom, in one headline; the primary action requests a demo or a call with the team. A real product view or a plain architecture drawing on the other side."
         },
         {
           "section": "Certifications and standards",
+          "job": "proof",
           "proof": "certifications",
           "purpose": "The certificates, audits and regulators the client really holds, each named with its scope. Only ones held; never a badge the client has not earned."
         },
         {
           "section": "The problem and the stakes",
-          "purpose": "What goes wrong without it, in the buyer's words, with figures only the client has measured."
+          "job": "explanation",
+          "purpose": "What goes wrong without it, in the buyer's words, with figures only the client has measured.",
+          "explains_category": true
         },
         {
           "section": "How it works",
+          "job": "explanation",
           "purpose": "Three to five steps or a labelled architecture: where it sits, what it touches, what it never sees."
         },
         {
           "section": "Split feature rows",
+          "job": "explanation",
           "purpose": "The marquee capabilities, each a row with a real screen or a real output."
         },
         {
           "section": "Where it deploys",
+          "job": "objection",
           "purpose": "The systems it integrates with and the deployment options (cloud, on premises, region), stated plainly."
         },
         {
           "section": "Client logos",
+          "job": "proof",
           "proof": "logos",
           "purpose": "One mono row of the institutions that use it, only with their permission."
         },
         {
           "section": "Named quote",
+          "job": "proof",
           "proof": "testimonials",
           "purpose": "One named quote from a real buyer, with role and institution."
         },
         {
           "section": "FAQ (security, compliance, deployment, data)",
-          "purpose": "The questions a security or procurement review asks: data residency, access, audits, uptime, contract terms."
+          "job": "objection",
+          "purpose": "The questions a security or procurement review asks: data residency, access, audits, uptime, contract terms. Its questions come from the brief's objections, each in the customer's own words turned into a question; with no objections in the brief, it answers only the operational questions the client's own material answers."
         },
         {
           "section": "CTA band (request a demo)",
+          "job": "ask",
           "purpose": "The demo request repeated, with who replies and how fast."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: Product, Security or trust center, Company, Contact, Legal."
         }
       ],
@@ -538,34 +619,43 @@
       "section_sequence": [
         {
           "section": "Hero (promise + early-access form)",
+          "job": "ask",
           "purpose": "What the product will do and for whom, in one headline. The early-access form is the call to action. The launch status is stated plainly: a date, a season, or in private pilot."
         },
         {
           "section": "The problem",
-          "purpose": "The problem the product solves, in the audience's own words. No figure the client has not measured."
+          "job": "explanation",
+          "purpose": "The problem the product solves, in the audience's own words. No figure the client has not measured.",
+          "explains_category": true
         },
         {
           "section": "How it will work",
+          "job": "explanation",
           "purpose": "Three to five honest steps, or a real prototype screen labelled as a prototype."
         },
         {
           "section": "What early access gets you",
+          "job": "explanation",
           "purpose": "What joining now gives: first access, founding pricing, a say in what gets built. Only what the client will honor."
         },
         {
           "section": "Who is building it",
+          "job": "objection",
           "purpose": "The real team or founder, named, and why they are building it. Before there are customers, the people are the reason to believe."
         },
         {
           "section": "FAQ",
-          "purpose": "When it launches, what it will cost, where it works, what happens to the email address."
+          "job": "objection",
+          "purpose": "When it launches, what it will cost, where it works, what happens to the email address. Its questions come from the brief's objections, each in the customer's own words turned into a question; with no objections in the brief, it answers only the operational questions the client's own material answers."
         },
         {
           "section": "CTA band (join early access)",
+          "job": "ask",
           "purpose": "The early-access form repeated, with the launch status."
         },
         {
           "section": "Compact footer",
+          "job": "navigation",
           "purpose": "Contact, legal, social. Short, since there is little to map yet."
         }
       ],
@@ -589,35 +679,43 @@
       "section_sequence": [
         {
           "section": "Hero (claim + primary action)",
+          "job": "ask",
           "purpose": "What it is and for whom in one headline, one lede, one primary action, and a real image of the product, the place or the people."
         },
         {
           "section": "What it does",
+          "job": "explanation",
           "purpose": "Three to five concrete reasons to choose it, each a heading and one sentence."
         },
         {
           "section": "How it works",
+          "job": "explanation",
           "purpose": "Three to five honest steps from first contact to the result."
         },
         {
           "section": "Split feature rows",
+          "job": "explanation",
           "purpose": "The two or three things that matter most, each a row with its own real visual."
         },
         {
           "section": "Named quote",
+          "job": "proof",
           "proof": "testimonials",
           "purpose": "One named quote from a real customer, with role and company."
         },
         {
           "section": "FAQ",
-          "purpose": "The questions that stop the action: price, time, where, what happens next."
+          "job": "objection",
+          "purpose": "The questions that stop the action: price, time, where, what happens next. Its questions come from the brief's objections, each in the customer's own words turned into a question; with no objections in the brief, it answers only the operational questions the client's own material answers."
         },
         {
           "section": "CTA band",
+          "job": "ask",
           "purpose": "The primary action repeated, after the page has earned it."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: what it offers, company, contact, legal."
         }
       ],
@@ -641,41 +739,50 @@
       "section_sequence": [
         {
           "section": "Hero (the feature named + the product's own action)",
+          "job": "ask",
           "purpose": "Name the feature and what it does for someone who already uses the product, beside a real screen of that feature. The primary action is the one the product really uses for its users (sign in, open the app, or start), never an early-access form: the product has users.",
           "with_phone_sign_in": "Name the feature and what it does for someone who already uses the product, beside a real screen of that feature. The primary action is the product's own phone sign-in: one phone number field and a continue button, the code step on the next screen. Never an early-access form: the product has users."
         },
         {
           "section": "The job it does",
+          "job": "explanation",
           "purpose": "The task the feature takes over, before and after, in the user's own terms. One idea per screen."
         },
         {
           "section": "How it works",
+          "job": "explanation",
           "purpose": "Three to five steps inside the real product, each with the screen it happens on."
         },
         {
           "section": "Split feature rows (real screens)",
+          "job": "explanation",
           "purpose": "The feature's parts, one row each with a real screen. No stock photo stands in for the product."
         },
         {
           "section": "Where it fits",
+          "job": "explanation",
           "purpose": "How the feature connects to the rest of the product, with a link back to the product's home page and to related features."
         },
         {
           "section": "Named quote",
+          "job": "proof",
           "proof": "testimonials",
           "purpose": "One named quote from a real user about this feature: name, role, and business or city."
         },
         {
           "section": "FAQ (availability, limits, plans)",
-          "purpose": "Who has the feature, what it costs, where it works and where it stops. Answers only the questions the client can answer truthfully."
+          "job": "objection",
+          "purpose": "Who has the feature, what it costs, where it works and where it stops. Answers only the questions the client can answer truthfully. Its questions come from the brief's objections, each in the customer's own words turned into a question; with no objections in the brief, it answers only the operational questions the client's own material answers."
         },
         {
           "section": "CTA band (use it now)",
+          "job": "ask",
           "purpose": "Repeats the hero's action for a user who has read the page: the same verb, one filled button.",
           "with_phone_sign_in": "Repeats the hero's phone sign-in for a user who has read the page: the same phone field and verb, one filled button."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: Product (each feature), Support, Company, Legal."
         }
       ],
@@ -702,37 +809,45 @@
       "section_sequence": [
         {
           "section": "Hero (claim + the sign-in action)",
+          "job": "ask",
           "purpose": "What the product does for its user in one headline, the sign-in or start action the product really uses, and a real screen of the product in the browser. No store badges and no download: it runs on the web.",
           "with_phone_sign_in": "What the product does for its user in one headline, then the phone sign-in itself: one phone number field and a continue button, the code step on the next screen. A real screen of the product in the browser beside it. No store badges and no download: it runs on the web."
         },
         {
           "section": "What you can do",
+          "job": "explanation",
           "purpose": "The three to five things a user does in the product, each named with its concrete result."
         },
         {
           "section": "How it works",
+          "job": "explanation",
           "purpose": "The steps from the first visit to the first result, in the order the product asks for them."
         },
         {
           "section": "Split feature rows (real screens)",
+          "job": "explanation",
           "purpose": "The marquee capabilities, one row each with a real browser screen, depth over a dense grid."
         },
         {
           "section": "Named quote",
+          "job": "proof",
           "proof": "testimonials",
           "purpose": "One named quote from a real user: name, and role, business or city."
         },
         {
           "section": "FAQ (account, data, cost)",
-          "purpose": "How sign-in works, what the product keeps about the user, what it costs, which browsers and phones it runs on."
+          "job": "objection",
+          "purpose": "How sign-in works, what the product keeps about the user, what it costs, which browsers and phones it runs on. Its questions come from the brief's objections, each in the customer's own words turned into a question; with no objections in the brief, it answers only the operational questions the client's own material answers."
         },
         {
           "section": "CTA band (sign in)",
+          "job": "ask",
           "purpose": "Repeats the hero's action with the same verb, one filled button.",
           "with_phone_sign_in": "Repeats the phone sign-in: the same phone field and verb, one filled button."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: Product, Support, Company, Legal."
         }
       ],
@@ -758,44 +873,54 @@
       "section_sequence": [
         {
           "section": "Hero (what the supply side gets + join)",
+          "job": "ask",
           "purpose": "What joining gives the supply side (the orders, customers or bookings it reaches) in one headline, and the supply side's own action: apply, list, or join. A real screen of the supplier's view beside it. The buyer path is a text link at most."
         },
         {
           "section": "What suppliers get",
+          "job": "explanation",
           "purpose": "The reach, the orders and the tools the supply side gets, each with its concrete result."
         },
         {
           "section": "How selling works",
+          "job": "explanation",
           "purpose": "Three to five steps from joining to getting paid: apply, list, receive orders, deliver, get paid. Real supplier screens where the client has them."
         },
         {
           "section": "Split feature rows (the supplier's screens)",
+          "job": "explanation",
           "purpose": "The supplier tools (orders, catalog, payouts, reports), one row each with a real screen."
         },
         {
           "section": "Terms for suppliers",
+          "job": "objection",
           "purpose": "Fees, payout timing, coverage and the requirements to join, stated plainly. This answers what a supplier asks before applying."
         },
         {
           "section": "Numbers band",
+          "job": "proof",
           "proof": "stats",
           "purpose": "Real numbers the supply side cares about (buyers reached, orders a month, cities), measured by the client."
         },
         {
           "section": "Supplier quote",
+          "job": "proof",
           "proof": "testimonials",
           "purpose": "One named quote from a real supplier, with the business name and city."
         },
         {
           "section": "FAQ (fees, onboarding, payouts)",
-          "purpose": "What it costs to join, how long onboarding takes, when payouts land, what happens with returns."
+          "job": "objection",
+          "purpose": "What it costs to join, how long onboarding takes, when payouts land, what happens with returns. Its questions come from the brief's objections, each in the customer's own words turned into a question; with no objections in the brief, it answers only the operational questions the client's own material answers."
         },
         {
           "section": "CTA band (join as a supplier)",
+          "job": "ask",
           "purpose": "Repeats the supply side's action with the same verb, one filled button."
         },
         {
           "section": "Rich footer",
+          "job": "navigation",
           "purpose": "Sitemap footer: For suppliers, For buyers, Company, Legal."
         }
       ],

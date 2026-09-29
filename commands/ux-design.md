@@ -317,7 +317,7 @@ A page is not built without a wow moment: the user's, the one the brand's pages 
 Page mode runs these steps in this order; the sections below give the detail of each.
 
 1. **Discovery** (Process step 1) writes `.ux/last-discovery.json`.
-2. **The system brief.** Write `.ux/system-brief.json`: the discovery answers plus the structured fields /ux-system reads (`industry`, `brand_role`, `product_type` and the others it lists, filled from what the user said) and the page fields engine step 2.5 reads (`proof`, `contact`, `stage`, `page`, `platforms`, `sign_in`, `primary_side`, `primary_action`). Every later step reads this file.
+2. **The system brief.** Write `.ux/system-brief.json`: the discovery answers plus the structured fields /ux-system reads (`industry`, `brand_role`, `product_type` and the others it lists, filled from what the user said) and the page fields engine step 2.5 reads (`proof`, `contact`, `stage`, `page`, `platforms`, `sign_in`, `primary_side`, `primary_action`, `commitment`, `arrival`, `objections`). Every later step reads this file.
 3. **Brand** (engine step 1.5): extract it from the client's material, or, with no brand material, ask for one hex, as /ux-system create mode does.
 4. **System**: `system detect` (step 1a); when it finds none, `system build` from that hex and that brief (step 1b).
 4a. **Page style** (step 1a.1): the brand's own pages and content register, read before any look is chosen.
@@ -430,6 +430,8 @@ Register:  <the file every public string followed, or: none found>
 === self-review ===
 <anti-slop bans avoided, and any waived for the client's identity with the evidence>
 <sections dropped from the sequence, each with its reason>
+<one line per section naming its job (ask, proof, objection, explanation, navigation); any section with none, cut>
+<where the FAQ's questions came from: the brief's objections, or the client's operational answers>
 <which arsenal patterns they used and why>
 
 === next ===
@@ -504,7 +506,7 @@ If you find yourself reaching for any of these, stop. Re-read `anti-slop.md`. Pi
 | Stack auto-detection fails or conflicts | Ask the user explicitly which stack to target |
 | The build shows slop tells (a model-default gradient, "Acme", a face the system does not name) | Redo against anti-slop.md; keep whatever the client's own identity shows |
 | The build ships code in the wrong stack | Catch in review, redo |
-| `select_for_brief` raises on a field (`proof`, `contact`, `stage`, `page`, `platforms`, `sign_in`, `primary_side`, `primary_action`, `page_sequence`) | The message names the field and its choices; fix that field in the brief and run it again |
+| `select_for_brief` raises on a field (`proof`, `contact`, `stage`, `page`, `platforms`, `sign_in`, `primary_side`, `primary_action`, `commitment`, `arrival`, `objections`, `page_sequence`) | The message names the field and its choices; fix that field in the brief and run it again |
 | SEO foundation missing on a public-web output | Reject; the output is incomplete without head surface, OG/Twitter, JSON-LD, semantic HTML, image discipline, CWV targets |
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
@@ -577,6 +579,14 @@ The sequence is the page skeleton. `select_for_brief` always returns a sequence,
 
 `sign_in` with `phone` works on every sequence: the hero's sign-in, the header sign-in and the closing band become a phone number field, and `why` says so. The industry still informs the copy and which proof to ask for, in prose, never the sequence.
 
+Three more fields shape the page around its ask without changing the pick, and `why` or `dropped` reports each change:
+
+- `commitment`, what the visitor gives at the ask. A light ask (`email`, `phone`, `account`, `trial`) stays in the hero. A heavy ask (`card`, `call`, `purchase`, `contract`) is repeated only below a section that answers an objection or shows proof: an ask placed before that section moves below it, a mid-page ask follows the first such section, and a page with none gets a FAQ before the closing band. `at_the_ask` lists what the page answers next to the form or payment field, more for a heavier ask.
+- `arrival`, what the visitor knows on landing. `branded` drops the section that argues for the category; `cold` with a heavy ask adds a lighter step the client really offers, as a text link beside the primary action, never a second button.
+- `objections`, the customer's own words: a list of `{quote, type, source}`. `objection_map` places each one in the section that answers it (function in how it works, price in the pricing section, payback beside the first proof, the rest in the FAQ).
+
+`page: campaign` is for a page whose only job is one ask: the header keeps the logo and the one action, the footer keeps the legal links and the contact routes.
+
 Fill the fields from what the user said, and leave out any the user did not say:
 
 | Field | Values | Fill it when |
@@ -586,9 +596,12 @@ Fill the fields from what the user said, and leave out any the user did not say:
 | `proof` | any of `stats`, `testimonials`, `logos`, `reviews`, `case-studies`, `certifications`, `press`; `[]` for none | the client gives real numbers, named quotes, client logos and so on. `[]` when it has none |
 | `contact` | any of `phone`, `whatsapp`, `email`, `form`, `chat`, `address` | the routes the client really offers |
 | `stage` | `live`, `pre-launch` | `pre-launch` when there are no customers yet; `live` when it has users |
-| `page` | `home`, `feature` | `feature` when the page is about one feature of the product, not its main page |
+| `page` | `home`, `feature`, `campaign` | `feature` when the page is about one feature of the product, not its main page; `campaign` when the page exists for one ask (a paid campaign, a launch, a waitlist) |
 | `platforms` | any of `web`, `ios`, `android`, `desktop` | where the product really runs; store badges appear only with `ios` or `android` |
 | `sign_in` | any of `phone`, `email`, `password`, `sso`, `social` | how the product's users really sign in |
+| `commitment` | `email`, `phone`, `account`, `trial`, `card`, `call`, `purchase`, `contract` | what the visitor gives at the ask; leave it out when the user did not say |
+| `arrival` | `cold`, `warm`, `branded`, `returning` | what most visitors know on landing: `cold` from an ad or a search for the problem, `branded` from a search for the brand's name; leave it out when the user did not say |
+| `objections` | a list of `{"quote", "type", "source"}`; `type` is one of `function`, `risk`, `price`, `payback`, `timing`, `approval` (the reader is not the one who approves) | the user pasted what stops people saying yes: reviews, call notes, support tickets, comments. The quote stays in the customer's words; never invent one |
 | `primary_side` | `demand`, `supply` | a two-sided marketplace only: `supply` when the page speaks to the side that lists, sells, delivers or hosts, `demand` when it speaks to buyers |
 | `page_sequence` | `lead-gen-service`, `saas-marketing`, `ecommerce-product`, `portfolio-agency`, `content-publication`, `app-mobile-landing`, `b2b-marketplace`, `trust-led`, `pre-launch`, `general-landing`, `feature-page`, `web-app`, `marketplace-supply` | the user names the kind of page outright |
 
@@ -607,6 +620,9 @@ Build it this way:
 - Render the sections of `section_sequence` in order, and map all the client's content into them: every sector, size, package and benefit gets its element.
 - A section that carries a `proof` kind renders only with the client's real proof of that kind. The picker has already dropped the ones the brief's `proof` list lacks; each entry in `dropped` gives its reason, and the self-review repeats it. When `proof_unknown` is true, ask for the proof, or drop the section and say why. Never invent a number, a quote or a logo to fill one.
 - Ship the `conversion_mechanisms` it returns; one the client cannot back is already in `dropped`, and a section's text no longer mentions a phone the client does not have.
+- Every section carries a `job`: `ask`, `proof`, `objection`, `explanation` or `navigation`. The self-review gives one line per section naming what it does for the reader; a section that does nothing is listed and cut.
+- Build each FAQ from `objection_map`, each question in the customer's words, not rewritten into the brand's voice. With no objections in the brief, the FAQ answers only the operational questions the client's own material answers, and the self-review says the FAQ was not built from customer words.
+- Answer every item of `at_the_ask` next to the form or payment field from the client's own material. One the client cannot answer is listed for the owner, never invented.
 
 ### Step 3: The system's tokens are the only tokens
 

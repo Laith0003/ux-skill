@@ -82,6 +82,7 @@ that sequence is the page skeleton. Build all of it, not a hero plus a few cards
 - **Map all source content into it.** Every sector the brief lists becomes a Category pill; every size or package becomes an Item card; every benefit becomes a Value card or a checklist item. One source item, one element. Do not trim a long list to a tidy three.
 - **Proof is the client's or it is absent.** A section with a `proof` kind renders only with the client's real numbers, named quotes, logos or reviews. Never invent one to fill a section; drop the section and say why.
 - **Ship the conversion mechanisms** the sequence returns. One the client cannot back (no phone, no quotes) is already in `dropped`.
+- **Each section has a job** (`ask`, `proof`, `objection`, `explanation`, `navigation`); name it per section in your self-review. FAQ questions come from `objection_map` in the customer's words, and every item of `at_the_ask` is answered next to the form or payment field from the client's material, or listed for the owner.
 - **Icons** follow the one icon rule in `commands/ux-design.md` (Hard rules, Icons).
 
 A sparse page that ignores the sequence is a richness failure.

@@ -22,6 +22,8 @@ Reflow the column count with `auto-fit minmax`, ending at 1 column on phones (2 
 
 Single column, full-width fields, label above input, controls at least 44px tall, submit button full-width. Inline per-field errors named to the field. Never a multi-column form on a phone.
 
+**Success state.** After submit, the confirmation is the moment the person pays most attention. It says what happens next, who does it and through which channel (in a phone-first product, the number the call or message will come from), within what time, and one thing to have ready. A second ask or an upsell comes after that, never in its place.
+
 ## Data table
 
 A table never sets the page's width. It lives inside a scroll container or becomes cards. Below a breakpoint (typically 768px or 1024px), the table does one of:
