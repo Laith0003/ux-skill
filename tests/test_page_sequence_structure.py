@@ -170,14 +170,58 @@ def test_a_consumer_app_is_not_sent_to_a_demo_request_page_by_its_industry():
 def test_structural_sequences_are_reached_only_by_their_field():
     entries = {e["id"]: e for e in load_sequences()}
     for sid in STRUCTURAL:
-        entry = entries[sid]
-        assert entry.get("picked_by"), sid
-        assert not entry["keywords"] and not entry["industries"] and not entry["product_types"], sid
+        assert entries[sid].get("picked_by"), sid
     for text in ("feature page for our web app", "a marketplace supply side page", "web app"):
-        seq = select_sequence(text)
-        assert seq is None or seq["id"] not in STRUCTURAL, (text, seq and seq["id"])
+        assert select_sequence(text) is None, text
     for brief in ({"description": "a web app feature page"}, {"primary_goal": "supply side sign up"}):
         assert select_for_brief(brief)["id"] not in STRUCTURAL, brief
+
+
+@pytest.mark.parametrize("brief", [
+    {"product_type": "web-app", "platforms": ["web"], "sign_in": ["phone"]},
+    {"product_type": "software", "platforms": ["web"], "sign_in": ["phone"]},
+    {"platforms": ["web"], "sign_in": ["phone"]},
+    {"product_type": "commerce", "sign_in": ["phone"]},
+    {"product_type": "local-service", "sign_in": ["phone"]},
+    {"product_type": "marketplace", "primary_side": "supply", "sign_in": ["phone"]},
+    {"sign_in": ["phone"]},
+])
+def test_phone_sign_in_works_for_any_product_type(brief):
+    seq = select_for_brief(brief)
+    assert "sign_in phone" in seq["why"], (brief, seq["why"])
+    assert "phone number field" in seq["section_sequence"][0]["purpose"], brief
+    assert "phone" in seq["cta_placement"].lower(), brief
+    assert "email field" not in seq["section_sequence"][0]["purpose"].replace("never an email field", "")
+
+
+def test_a_web_app_with_phone_sign_in_off_the_app_path_lands_on_the_web_sequence():
+    assert select_for_brief({"platforms": ["web"], "sign_in": ["phone"]})["id"] == "web-app"
+    seq = select_for_brief({"product_type": "software", "primary_action": "sign-in",
+                            "platforms": ["web"], "sign_in": ["phone"]})
+    assert seq["id"] == "web-app"
+
+
+def test_a_desktop_app_never_gets_store_badges():
+    seq = select_for_brief({"product_type": "app", "platforms": ["desktop"]})
+    assert seq["id"] != "app-mobile-landing"
+    assert "store" in seq["why"]
+
+
+def test_a_side_on_a_feature_page_is_named_as_unread():
+    seq = select_for_brief({"page": "feature", "product_type": "marketplace", "primary_side": "supply"})
+    assert seq["id"] == "feature-page"
+    assert "primary_side supply is not read" in seq["why"]
+
+
+@pytest.mark.parametrize("brief", [
+    {"industry": "fintech-payments"},
+    {"description": "a stored value wallet for payments at shops"},
+    {"industry": "consumer-lifestyle", "audience": "shoppers who collect points"},
+])
+def test_a_wallet_or_loyalty_brief_without_fields_asks_for_them(brief):
+    seq = select_for_brief(brief)
+    assert seq["id"] == "general-landing"
+    assert "product_type" in seq["why"]
 
 
 def test_picked_by_is_not_in_the_result():
