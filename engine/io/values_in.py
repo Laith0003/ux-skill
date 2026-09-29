@@ -319,6 +319,30 @@ def _shadow_layer(text: str, mapped: Optional[List[GamutMapped]]) -> dict:
     return layer
 
 
+def shadow_with_unit(text: str, unit: str = "px") -> Optional[str]:
+    """`text` with `unit` added to each bare offset when it is a shadow
+    whose offsets have no unit (0 2 8 #0000001A is 0 2px 8px #0000001A),
+    or None when it has no bare offset or does not read as a shadow with
+    them. A bare 0 needs no unit and keeps none."""
+    changed = False
+    layers = []
+    for layer in split_top(text.strip()):
+        words = []
+        for w in split_top(layer, " "):
+            if _NUM.match(w) and float(w) != 0:
+                w, changed = w + unit, True
+            words.append(w)
+        layers.append(" ".join(words))
+    if not changed:
+        return None
+    fixed = ", ".join(layers)
+    try:
+        kind, _ = read_value(fixed)
+    except NotRead:
+        return None
+    return fixed if kind == "shadow" else None
+
+
 def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[str, Any]:
     """(token type, internal literal) for a value written as text. Raises
     NotRead with the reason and the fix when the text has no single
@@ -441,6 +465,11 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
                       "height as separate tokens")
     if re.fullmatch(_NUMBER + r"\s+" + _NUMBER + r"%\s+" + _NUMBER + "%", text):
         raise NotRead(f"{text} is hsl channels without hsl(); write hsl({text}) or hex")
+    if len(words) > 2:
+        fixed = shadow_with_unit(text)
+        if fixed is not None:
+            raise NotRead(f"{text} is a shadow whose offsets have no unit; add px to each "
+                          f"offset, such as {fixed}")
     layers = split_top(text)
     # A shadow layer has two lengths at least; a length here is 0 or any
     # length unit, so a relative one gets its own refusal from the layer.

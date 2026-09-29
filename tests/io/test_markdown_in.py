@@ -925,3 +925,21 @@ def test_a_type_field_may_reference_a_token_of_its_own_type():
     assert _rows(imported.report.not_read) == [
         ("rules.md:8", "type.bad", "in the Size column, references color.ink, a color, where a "
                                    "dimension belongs; point it at a dimension")]
+
+
+def test_a_shadow_with_bare_offsets_reads_with_the_unit_its_header_or_heading_names():
+    for text in ("| Token | Value (px) |\n|---|---|\n| `shadow.card` | 0 2 8 #0000001A |\n",
+                 "## Elevation (px)\n\n- `shadow.card`: 0 2 8 #0000001A\n"):
+        imported = _import(text)
+        assert imported.tokens.get("shadow.card").value == [{
+            "color": "#0000001A", "offsetX": {"value": 0, "unit": "px"},
+            "offsetY": {"value": 2, "unit": "px"}, "blur": {"value": 8, "unit": "px"},
+            "spread": {"value": 0, "unit": "px"}}]
+        assert imported.report.not_read == []
+
+
+def test_a_shadow_with_bare_offsets_and_no_unit_anywhere_names_the_shadow_fix():
+    report = _import("| Token | Value |\n|---|---|\n| `shadow.card` | 0 2 8 #0000001A |\n").report
+    assert _rows(report.not_read) == [
+        ("rules.md:3", "shadow.card", "0 2 8 #0000001A is a shadow whose offsets have no unit; "
+                                      "add px to each offset, such as 0 2px 8px #0000001A")]

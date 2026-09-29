@@ -30,8 +30,9 @@ transition token, so a Curve beside a Duration is listed with the fix to
 write each curve as its own token.
 
 A unit in a column header (Value (px), Size [rem]) or in the heading above
-(## Spacing (px), ## Motion, in ms) is the unit of a bare number there. A
-bare number for a size or a duration with no unit anywhere is not read.
+(## Spacing (px), ## Motion, in ms) is the unit of a bare number there,
+and of a shadow's bare offsets. A bare number for a size or a duration,
+or a shadow offset, with no unit anywhere is not read.
 Do and Avoid tables (Do and Don't, Use and Avoid, Good and Bad) are
 guidance: they make no axis and join the file's rule note.
 
@@ -61,7 +62,8 @@ from engine.foundations.tokens import Token, TokenSet
 from engine.io.mode_words import axis_of, is_base, mode_of, words as name_words
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source
 from engine.io.values_in import (COLOR_KEYWORDS, CSS_KEYWORDS, EASING_KEYWORDS, GamutMapped,
-                                 NotRead, css_alias, read_value, split_top)
+                                 NotRead, css_alias, read_value, shadow_with_unit,
+                                 split_top)
 
 NAME_HEADERS = ("token", "name", "variable", "role", "token name", "css variable")
 VALUE_HEADERS = ("value", "hex", "color", "size", "px", "rem", "ms", "duration")
@@ -666,9 +668,13 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         # size or a duration with no unit anywhere is not read.
         bare: Dict[str, str] = {}
         for ctx, v in list(values.items()):
+            unit = (units or {}).get(ctx) or section["unit"]
+            if not fields and unit in ("px", "rem") and not _BARE_NUMBER.fullmatch(v):
+                # A shadow with bare offsets takes the unit too: 0 2 8 #0000001A
+                # under Value (px) is 0 2px 8px #0000001A.
+                values[ctx] = shadow_with_unit(v, unit) or v
             if fields or not _BARE_NUMBER.fullmatch(v):
                 continue
-            unit = (units or {}).get(ctx) or section["unit"]
             need = _needs_unit(path)
             if unit:
                 values[ctx] = v + unit

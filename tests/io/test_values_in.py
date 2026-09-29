@@ -375,3 +375,15 @@ def test_a_var_in_a_theme_names_the_property_and_the_import_fix(text, message):
         read_value(text)
     assert str(exc.value) == message
     assert "plain value" not in str(exc.value)
+
+
+@pytest.mark.parametrize("text,fixed", [
+    ("0 2 8 #0000001A", "0 2px 8px #0000001A"),
+    ("0 1 2 #0000001A, 0 4 8 -2 #00000033", "0 1px 2px #0000001A, 0 4px 8px -2px #00000033"),
+    ("inset 0 1 0 rgba(0,0,0,0.1)", "inset 0 1px 0 rgba(0,0,0,0.1)"),
+])
+def test_a_shadow_with_bare_offsets_names_the_shadow_fix(text, fixed):
+    with pytest.raises(NotRead) as exc:
+        read_value(text)
+    assert str(exc.value) == (f"{text} is a shadow whose offsets have no unit; add px to each "
+                              f"offset, such as {fixed}")
