@@ -576,15 +576,24 @@ def score_brand_fidelity(html_text: str, profile: BrandProfile, css_text: str = 
 # live linter backstop; this is the structural check P7 wiring will call.)
 
 _FULLPAGE_RE = re.compile(r"<(?:body|html)\b", re.IGNORECASE)
-_REAL_IMG_RE = re.compile(r"<(?:img|picture|video)\b", re.IGNORECASE)
 _REAL_BG_RE = re.compile(
-    r"url\(\s*['\"]?[^)'\"]+\.(?:png|jpe?g|webp|avif|gif)", re.IGNORECASE)
-_SVG_OPEN_RE = re.compile(r"<svg\b[^>]*>", re.IGNORECASE)
+    r"url\(\s*['\"]?([^)'\"]+\.(?:png|jpe?g|webp|avif|gif))", re.IGNORECASE)
 _SVG_DIM_RE = re.compile(
     r"\s(?:width|height)\s*=\s*['\"]?\s*([1-9]\d{2,})", re.IGNORECASE)
 _SVG_VIEWBOX_RE = re.compile(
     r"viewBox\s*=\s*['\"]\s*[-\d.]+\s+[-\d.]+\s+([\d.]+)\s+([\d.]+)", re.IGNORECASE)
 _ICON_PX = 100  # below this an inline SVG reads as an icon, not as imagery
+# A logo, a wordmark or a row of client logos is identity, not imagery: the
+# words in an element's class, id, alt, label, title or file name.
+_LOGO_WORD_RE = re.compile(
+    r"(?<![a-z])(?:logo(?:s|types?|marks?)?|wordmarks?|brandmarks?|brand-marks?)(?![a-z])",
+    re.IGNORECASE)
+_LOGO_ATTRS = ("class", "id", "alt", "aria-label", "title", "src", "srcset", "data-src", "href")
+# A link to the page's own home: the image it wraps first is the logo.
+_HOME_HREFS = ("/", "#top", "./", "index.html", "/index.html")
+_VOID = frozenset(("area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta",
+                   "param", "source", "track", "wbr"))
+_MEDIA = ("img", "video")
 
 
 def _svg_is_illustration(open_tag: str) -> bool:
@@ -600,29 +609,133 @@ def _svg_is_illustration(open_tag: str) -> bool:
     return False
 
 
-def score_imagery(html_text: str) -> Dict[str, Any]:
+def _same_file(src: str, logo_url: str) -> bool:
+    if not src or not logo_url:
+        return False
+    a, b = src.split("?")[0].strip().lower(), logo_url.split("?")[0].strip().lower()
+    return a == b or a.rsplit("/", 1)[-1] == b.rsplit("/", 1)[-1]
+
+
+class _Visuals(HTMLParser):
+    """Every image, video and inline SVG on a page, each marked as the logo
+    (or a logo row) or not. An element is a logo when its own words say so,
+    when it sits inside an element that does, when it is the brand's logo
+    file, or when it is the first image inside the page's first link to its
+    home page."""
+
+    def __init__(self, logo_url: str) -> None:
+        super().__init__(convert_charrefs=True)
+        self.logo_url = logo_url
+        self.stack: List[Tuple[str, bool]] = []   # (tag, inside a logo)
+        self.home_link_open = False
+        self.home_link_used = False
+        self.home_link_seen = False
+        self.media: List[bool] = []               # is_logo per img/video
+        self.svgs: List[Tuple[str, bool]] = []    # (open tag, is_logo)
+        self._svg: Optional[List[Any]] = None     # [open tag, is_logo, depth]
+
+    def _is_logo(self, tag: str, attrs: List[Tuple[str, Optional[str]]]) -> bool:
+        inside = bool(self.stack and self.stack[-1][1])
+        values = {k.lower(): (v or "") for k, v in attrs}
+        own = any(_LOGO_WORD_RE.search(values[k]) for k in _LOGO_ATTRS
+                  if k in values and not (k == "href" and tag != "a"))
+        if tag == "img" and _same_file(values.get("src", ""), self.logo_url):
+            own = True
+        return inside or own
+
+    def handle_starttag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]) -> None:
+        tag = tag.lower()
+        logo = self._is_logo(tag, attrs)
+        if tag == "a":
+            href = (dict(attrs).get("href") or "").strip().lower()
+            self.home_link_open = href in _HOME_HREFS and not self.home_link_seen
+            self.home_link_seen = self.home_link_seen or href in _HOME_HREFS
+            self.home_link_used = False
+        if tag in _MEDIA or tag == "svg":
+            if self.home_link_open and not self.home_link_used and self._svg is None:
+                logo = True
+                self.home_link_used = True
+        if tag in _MEDIA and self._svg is None:
+            self.media.append(logo)
+        if tag == "svg" and self._svg is None:
+            self._svg = [self.get_starttag_text() or "<svg>", logo, len(self.stack)]
+        if tag in _VOID:
+            return
+        self.stack.append((tag, logo))
+
+    def handle_startendtag(self, tag: str, attrs: List[Tuple[str, Optional[str]]]) -> None:
+        tag = tag.lower()
+        if tag == "svg":
+            self.handle_starttag(tag, attrs)
+            self.handle_endtag(tag)
+            return
+        self.handle_starttag(tag, attrs)
+        if tag not in _VOID and self.stack and self.stack[-1][0] == tag:
+            self.stack.pop()
+
+    def handle_data(self, data: str) -> None:
+        # An SVG whose own <title> says logo is the logo.
+        if self._svg is not None and self.stack and self.stack[-1][0] == "title" \
+                and _LOGO_WORD_RE.search(data):
+            self._svg[1] = True
+
+    def handle_endtag(self, tag: str) -> None:
+        tag = tag.lower()
+        if tag == "a":
+            self.home_link_open = False
+        if tag == "svg" and self._svg is not None and \
+                (len(self.stack) - 1 <= self._svg[2] or not self.stack):
+            self.svgs.append((self._svg[0], self._svg[1]))
+            self._svg = None
+        for i in range(len(self.stack) - 1, -1, -1):
+            if self.stack[i][0] == tag:
+                del self.stack[i:]
+                break
+
+    def close(self) -> None:
+        super().close()
+        if self._svg is not None:
+            self.svgs.append((self._svg[0], self._svg[1]))
+            self._svg = None
+
+
+def score_imagery(html_text: str, logo_url: str = "") -> Dict[str, Any]:
     """Does a FULL page carry real imagery, or is it a text-wall? Deterministic.
 
     Returns ``{ok, kind, score, detail}`` with ``kind`` in {fragment, image,
-    bg-photo, illustration-svg, icons-only, none}. Component fragments (no
-    <body>/<html>) are exempt (ok=True) -- not every partial needs art. Icons are
-    NOT imagery: a page whose only visuals are sub-100px SVGs fails.
+    bg-photo, illustration-svg, logo-only, icons-only, none}. Component
+    fragments (no <body>/<html>) are exempt (ok=True) -- not every partial
+    needs art. Icons are NOT imagery: a page whose only visuals are sub-100px
+    SVGs fails. Nor is the logo: the brand's logo file (``logo_url``), an
+    element marked as a logo, wordmark or logo row, or the first image in a
+    page's first link to its home page is identity, and a page with nothing
+    else fails.
     """
     html = html_text or ""
     if not _FULLPAGE_RE.search(html):
         return {"ok": True, "kind": "fragment", "score": 100,
                 "detail": "Component fragment (no <body>); imagery check not applicable."}
-    if _REAL_IMG_RE.search(html):
+    parser = _Visuals(logo_url)
+    parser.feed(html)
+    parser.close()
+    logos = parser.media.count(True) + sum(1 for _, is_logo in parser.svgs if is_logo)
+    if parser.media.count(False):
         return {"ok": True, "kind": "image", "score": 100,
                 "detail": "Page carries a real image / picture / video."}
-    if _REAL_BG_RE.search(html):
+    if any(not _LOGO_WORD_RE.search(m.group(1).rsplit("/", 1)[-1])
+           and not _same_file(m.group(1), logo_url) for m in _REAL_BG_RE.finditer(html)):
         return {"ok": True, "kind": "bg-photo", "score": 100,
                 "detail": "Page carries a real background photo."}
-    svgs = _SVG_OPEN_RE.findall(html)
-    if any(_svg_is_illustration(tag) for tag in svgs):
+    own = [tag for tag, is_logo in parser.svgs if not is_logo]
+    if any(_svg_is_illustration(tag) for tag in own):
         return {"ok": True, "kind": "illustration-svg", "score": 100,
                 "detail": "Page carries a substantial inline SVG illustration."}
-    if svgs:
+    if logos:
+        return {"ok": False, "kind": "logo-only", "score": 0,
+                "detail": ("The only images are the logo or logo rows (%d); a logo is identity, "
+                           "not imagery. Add the brand's own product screens or photographs; "
+                           "stock only when the brand book allows it." % logos)}
+    if own:
         return {"ok": False, "kind": "icons-only", "score": 0,
                 "detail": ("Only icon-sized inline SVGs (< %dpx) and no real image -- a "
                            "wall of cards with tiny icons still reads as a text-wall. Add "

@@ -135,7 +135,7 @@ class BrandProfile:
     source: str = ""
     name: str = ""
     tagline: str = ""                                          # standard frontmatter (req in the open spec)
-    language: str = "en"                                       # standard frontmatter
+    language: str = ""                                         # frontmatter; "" until stated
     logo: Dict[str, Any] = field(default_factory=dict)         # {url, alt}
     logo_style: str = ""                                       # vision read of the wordmark
     primary: str = ""                                          # declared token, else LOGO pixels (rule 3)
@@ -147,6 +147,7 @@ class BrandProfile:
     colors_to_avoid: List[str] = field(default_factory=list)   # house colors + signals; spec "colors to avoid"
     fonts: Dict[str, str] = field(default_factory=dict)        # display/body/type_personality/display_source
     photography: Dict[str, Any] = field(default_factory=dict)  # {mood[list], subjects[list], avoid[list]}
+    strategy: Dict[str, str] = field(default_factory=dict)     # STRATEGY_FIELDS, from a brand book
     style_keywords: List[str] = field(default_factory=list)    # spec Visual>Style design keywords
     tonal: Dict[str, Any] = field(default_factory=dict)        # {rules[list], we_say[list], we_never_say[list]}
     imagery: List[str] = field(default_factory=list)
@@ -157,15 +158,36 @@ class BrandProfile:
         return asdict(self)
 
 
+# The strategy sections of the standard brand.md the engine fills from a brand book.
+STRATEGY_FIELDS = ("positioning", "personality", "promise", "guardrails")
+# Words in photography.avoid that ban stock or lifestyle photography.
+_STOCK_BAN_RE = re.compile(r"\b(?:stock|lifestyle)\b", re.IGNORECASE)
+_GENERIC_RE = re.compile(r"\b(?:random|generic)\b", re.IGNORECASE)
+
+
+def stock_allowed(profile: "BrandProfile") -> bool:
+    """False when the brand's photography rules ban stock or lifestyle
+    photography: the page then uses the brand's own product screens and
+    photographs, or no picture at all, never a stock fallback."""
+    avoid = (getattr(profile, "photography", None) or {}).get("avoid") or []
+    # "random/generic stock" bans the careless kind only; curated stock stays.
+    return not any(_STOCK_BAN_RE.search(str(a)) and not _GENERIC_RE.search(str(a))
+                   for a in avoid)
+
+
 def build_profile(signals: Dict[str, Any]) -> BrandProfile:
     """Normalize captured signals into a BrandProfile. Deterministic.
 
     Signal keys (all optional): source/url, name, logo{url/src,alt},
     logo_colors[{hex,score}] (sampled from the logo image), brand_colors/colors
     (from CSS), logo_type_style/logo_style (vision read of the wordmark),
-    fonts{display,h1,h2,body}, imagery[url], voice, language, and declared
-    (the `declared` block of `ux system detect`: primary, primary_token, text,
+    fonts{display,h1,h2,body}, imagery[url], voice, language, photography
+    {mood, subjects, avoid} and strategy {positioning, personality, promise,
+    guardrails} (both as the brand book words them), and declared (the
+    `declared` block of `ux system detect`: primary, primary_token, text,
     languages). A declared primary beats the logo pixels; both are reported.
+    The language is never assumed: with no signal and no page that states
+    one, it stays empty and a note says how to set it.
     """
     p = BrandProfile()
     p.source = signals.get("source", "") or signals.get("url", "")
@@ -252,13 +274,18 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
 
     # --- Standard-spec fields the engine can honestly fill (rest stay empty) ---
     p.tagline = signals.get("tagline", "") or ""
-    # Language: stated in the signals, else the project's own HTML, else a
-    # "<language>-first" phrase in the voice, else English.
+    # Language: stated in the signals (read from the project's templates and
+    # pages), else the project's own HTML, else a "<language>-first" phrase in
+    # the voice. Never a default: a wrong language poisons every string.
     languages = declared.get("languages") or []
     p.language = (signals.get("language")
                   or (languages[0] if languages else "")
                   or _language_from_voice(p.voice)
-                  or "en")
+                  or "")
+    if not p.language:
+        p.notes.append("Language: no signal names it and no page in the project states one "
+                       "(an html lang attribute); read it from the project's templates and "
+                       "pages and set language in the signals as a tag, such as ar or en.")
 
     # colors_to_avoid: ALWAYS list the engine's house colors that are not this
     # brand's primary (so the engine's own style can never leak in), then append
@@ -276,15 +303,27 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
         _avoid(hx)
     p.colors_to_avoid = avoid
 
-    # photography.mood: derived from the same voice + logo-style descriptor words
-    # image_search_terms mines (deterministic token/stopword pass). subjects/avoid
-    # are author-only -- fill from signals when present, else leave empty.
+    # photography: the brand book's own words for its pictures, or nothing. A
+    # mood is never made of voice words: how a brand speaks is not how its
+    # pictures look.
     photo_signals = signals.get("photography") or {}
     p.photography = {
-        "mood": _descriptor_words(p.voice, p.logo_style),
+        "mood": list(photo_signals.get("mood") or signals.get("photography_mood") or []),
         "subjects": list(photo_signals.get("subjects") or signals.get("photography_subjects") or []),
         "avoid": list(photo_signals.get("avoid") or signals.get("photography_avoid") or []),
     }
+
+    # strategy: positioning, personality, promise and guardrails as a brand
+    # book states them; none is guessed from the voice line.
+    strat_signals = signals.get("strategy") or {}
+    p.strategy = {}
+    for key in STRATEGY_FIELDS:
+        value = strat_signals.get(key) or signals.get(key) or ""
+        if isinstance(value, (list, tuple)):
+            value = "; ".join(str(v).strip() for v in value if str(v).strip())
+        value = str(value).strip()
+        if value:
+            p.strategy[key] = value
 
     # style_keywords: logo-style words (filtered, dedup) + any caller-supplied.
     style_kw: List[str] = list(_descriptor_words("", p.logo_style))
@@ -332,7 +371,7 @@ def render_md(p: BrandProfile) -> str:
         "name: %s" % name,
         "tagline: %s" % (p.tagline or ""),
         "version: 1",
-        "language: %s" % (p.language or "en"),
+        "language: %s" % (p.language or "und"),
         "type: master",
         "---",
         "",
@@ -357,16 +396,16 @@ def render_md(p: BrandProfile) -> str:
         overview.strip(),
         "",
         "### Positioning",
-        _NOT_EXTRACTED,
+        (p.strategy or {}).get("positioning") or _NOT_EXTRACTED,
         "",
         "### Personality",
-        _NOT_EXTRACTED,
+        (p.strategy or {}).get("personality") or _NOT_EXTRACTED,
         "",
         "### Promise",
-        _NOT_EXTRACTED,
+        (p.strategy or {}).get("promise") or _NOT_EXTRACTED,
         "",
         "### Guardrails",
-        _NOT_EXTRACTED,
+        (p.strategy or {}).get("guardrails") or _NOT_EXTRACTED,
         "",
     ]
 
@@ -580,7 +619,8 @@ def parse_brand_md(text: str) -> BrandProfile:
     fm = _parse_frontmatter(text)
     p.name = fm.get("name", "") or ""
     p.tagline = fm.get("tagline", "") or ""
-    p.language = fm.get("language") or "en"
+    language = (fm.get("language") or "").strip()
+    p.language = "" if language.lower() == "und" else language
     p.source = "brand-md"
 
     h2 = _split_sections(text, _H2_SPLIT_RE)
@@ -671,6 +711,15 @@ def parse_brand_md(text: str) -> BrandProfile:
             kws = _csv_after_label(style_text, "keywords")
         if kws:
             p.style_keywords = kws
+
+    # --- Strategy layer -> positioning, personality, promise, guardrails ---
+    strategy = h2.get("strategy", "")
+    if strategy:
+        strat_h3 = _split_sections(strategy, _H3_SPLIT_RE)
+        for key in STRATEGY_FIELDS:
+            value = (strat_h3.get(key, "") or "").strip()
+            if value and value != _NOT_EXTRACTED:
+                p.strategy[key] = value
 
     # --- Voice layer -> tonal rules + We Say / We Never Say table ---
     voice = h2.get("voice", "")
@@ -835,6 +884,9 @@ def image_search_terms(profile: "BrandProfile",
     an ``.axes`` attribute (e.g. a synthesized system). Unknown shapes are ignored.
     """
     terms: List[str] = []
+    if not stock_allowed(profile):
+        # The brand bans stock: its own product screens and photographs, or none.
+        return terms
 
     def _add(t: str) -> None:
         t = (t or "").strip()
