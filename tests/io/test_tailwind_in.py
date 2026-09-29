@@ -102,9 +102,9 @@ def test_v3_reads_the_resolved_theme_in_its_own_names():
         ("colors.inherit", "inherit is a CSS keyword that takes its value from elsewhere, so it "
                            "has no value of its own; leave it out, or write the value it "
                            "stands for as a token"),
-        ("boxShadow.none", "none is a CSS keyword that takes its value from elsewhere, so it "
-                           "has no value of its own; leave it out, or write the value it "
-                           "stands for as a token"),
+        ("boxShadow.none", "none is an explicit value: it turns the property off (no shadow, "
+                           "no border, no curve), and no token type holds it; leave it out, or "
+                           "write it where it is used"),
         ("width.1/2", "50% is relative to its container, so it has no fixed value; write it in "
                       "px or rem")]
 
@@ -341,7 +341,7 @@ def test_a_json_theme_maps_an_oklch_color_and_reports_it():
 
 
 @pytest.mark.parametrize("word", ["inherit", "initial", "unset", "revert", "revert-layer",
-                                  "auto", "none", "Inherit"])
+                                  "auto", "Inherit"])
 def test_css_keywords_have_no_value_of_their_own(word):
     with pytest.raises(NotRead) as exc:
         read_value(word)

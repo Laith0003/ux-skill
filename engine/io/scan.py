@@ -20,7 +20,8 @@ custom property, SCSS or Less variable set in the app's own CSS is a
 definition, not a raw use, and so is an @font-face or @property block;
 Scan.declared lists the custom properties the code declares, so a report
 can tell a var() to one of them from a token the system lacks.
-Scan.reduced_motion lists each rule a stylesheet sets under
+Scan.dark lists each custom property a stylesheet sets in the dark scheme,
+and Scan.reduced_motion each rule a stylesheet sets under
 prefers-reduced-motion: reduce, so a report can say the code turns motion
 down even where the system has no mode for it.
 
@@ -83,7 +84,7 @@ from typing import (Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, O
                     Sequence, Set, Tuple)
 
 from engine.foundations.errors import InputError, _brief_text
-from engine.foundations.tokens import TokenSet
+from engine.foundations.tokens import AliasError, TokenSet
 from engine.foundations.values import STROKE_STYLES, TYPES, dimension_px, duration_ms
 from engine.io.css_in import THEME_ATTR, _blank_comments, _without_not, parse_css
 from engine.io.values_in import CSS_KEYWORDS, NotRead, read_value, split_top
@@ -197,6 +198,21 @@ _DARK_SELECTOR = re.compile(r"""\.dark(?![\w-])|\[class~=["']?dark["']?\]|"""
                             r"""\[""" + THEME_ATTR.pattern + r"""\s*=\s*["']?dark["']?\s*\]""")
 _DARK_MEDIA = re.compile(r"prefers-color-scheme\s*:\s*dark")
 _REDUCED_MEDIA = re.compile(r"prefers-reduced-motion\s*:\s*reduce")
+
+# Words that name a family in a token's name. A raw value is offered only a
+# token named for its own family (a z-index of 400 is not a weight token
+# that holds 400, nor a 16px padding a radius or text size), and a class
+# is sent to a token outside its namespaces only when the token names no
+# other family (rounded-lg is never a text size).
+LINE_WORDS = ("border", "line", "stroke", "outline", "divider", "ring", "separator")
+SPACE_WORDS = ("space", "spacing", "gap", "padding", "margin", "gutter", "inset")
+RADIUS_WORDS = ("radius", "rounded", "corner")
+TYPE_WORDS = ("text", "font", "size", "leading", "tracking")
+FAMILY_WORDS: Dict[str, Tuple[str, ...]] = {
+    "space": SPACE_WORDS, "radius": RADIUS_WORDS, "border": LINE_WORDS, "type-size": TYPE_WORDS,
+    "weight": ("weight", "bold"), "z": ("z", "layer", "zindex")}
+# Tailwind's default spacing step: p-6 is 6 of them, 24px.
+TAILWIND_STEP_PX = 4
 
 # Tailwind: utility prefix -> the theme namespaces its value may name, with
 # the family of a token found in each (v4 @theme names first, then v3 theme
@@ -426,6 +442,10 @@ class Scan:
     # prefers-reduced-motion: reduce, so a report can say the code has
     # reduced motion even when the system has no mode for it.
     reduced_motion: List[Tuple[str, int, str]] = field(default_factory=list)
+    # (--name, file, line) for each custom property a stylesheet sets in
+    # the dark scheme, so a report can tell a system whose dark mode lives
+    # in a second file.
+    dark: List[Tuple[str, str, int]] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         """Everything the scan found, as JSON takes it: each entry not
@@ -444,7 +464,8 @@ class Scan:
                 "skipped": [{"file": f, "why": w} for f, w in self.skipped],
                 "declared": list(self.declared),
                 "reduced_motion": [{"file": f, "line": n, "selector": sel}
-                                   for f, n, sel in self.reduced_motion]}
+                                   for f, n, sel in self.reduced_motion],
+                "dark": [{"name": p, "file": f, "line": n} for p, f, n in self.dark]}
 
 
 def _norm(name: str) -> str:
@@ -694,6 +715,7 @@ class _Lines:
 
 class _Scanner:
     def __init__(self, ts: TokenSet) -> None:
+        self.ts = ts
         self.index: Dict[str, Tuple[str, str]] = {}
         for t in ts.tokens():
             self.index.setdefault(_norm(t.path), (t.path, t.type))
@@ -758,8 +780,11 @@ class _Scanner:
     def near(self, name: str, spaces: _Namespaces, kinds: Dict[str, str]) -> str:
         """A token of a type the class takes whose name is `name`, or ends
         with it, outside the class's namespaces ("" for none). A token whose
-        name also says the class's family comes first; a step number (p-4)
-        is near only such a token, since a bare 4 names nothing."""
+        name also says the class's family comes first, and one whose name
+        says another family is never near (rounded-lg is not text-body-lg).
+        A step number (p-6) is near only a token named for the family that
+        holds the step's own value in Tailwind's scale (24px), since a
+        bare 6 names nothing and the system's step 6 may be another size."""
         want = _norm(name)
         key = (want, spaces)
         if key not in self._near:
@@ -769,17 +794,34 @@ class _Scanner:
     def _find_near(self, want: str, spaces: _Namespaces, kinds: Dict[str, str]) -> str:
         if not want:
             return ""
+        families = {family for _, family in spaces}
         words = {w for space, family in spaces for w in (_norm(space), family)}
+        words |= {w for f in families for w in FAMILY_WORDS.get(f, ())}
+        other = {w for f, ws in FAMILY_WORDS.items() if f not in families for w in ws} - words
+        numeric = _NUMERIC.fullmatch(want)
         exact = self.index.get(want)
-        if exact is not None and exact[1] in kinds and not _NUMERIC.fullmatch(want):
+        if exact is not None and exact[1] in kinds and not numeric:
             return exact[0]
         loose = ""
         for key, (path, kind) in self.index.items():
             if key.endswith("." + want) and kind in kinds:
-                if words & set(key.split(".")[:-1]):
+                named = set(key.split(".")[:-1])
+                if named & other:
+                    continue
+                if named & words and (not numeric or self._step_holds(path, want, families)):
                     return path
                 loose = loose or path
-        return "" if _NUMERIC.fullmatch(want) else loose
+        return "" if numeric else loose
+
+    def _step_holds(self, path: str, step: str, families: Set[str]) -> bool:
+        """Whether a token holds a Tailwind spacing step's own value."""
+        if "space" not in families:
+            return False
+        want = canonical("dimension", {"value": float(step) * TAILWIND_STEP_PX, "unit": "px"})
+        try:
+            return canonical("dimension", self.ts.resolve(path)) == want
+        except (AliasError, KeyError, TypeError, ValueError):
+            return False
 
     def note(self, at: Tuple[int, int], kind: str, text: str, why: str) -> None:
         if self._quiet:
@@ -852,6 +894,8 @@ class _Scanner:
         value = _IMPORTANT.sub("", value.strip())
         if prop.startswith("--") and len(prop) > 2:
             self._declared.append(prop)
+            if DARK in state.split(",") and (prop, self.file, at[0]) not in self.result.dark:
+                self.result.dark.append((prop, self.file, at[0]))
         refs = _top_vars(value)
         for name, a, b in refs:
             self.var(at, prop, name, value[a:b], state)

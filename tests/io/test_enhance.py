@@ -61,7 +61,8 @@ def test_drift_finds_unused_tokens_raw_values_and_spellings(tmp_path):
     assert d.unused == ["radius-sm", "radius-lg", "border-subtle"]
     assert d.totals == {"color": (9, 8), "dimension": (2, 0)}
     assert [(r.value, r.tokens, [u.where() for u in r.uses]) for r in d.raw_with_token] == [
-        ("#FFFFFF", ["bg-page", "paper"], ["app.css:2", "app.css:5", "app.css:6"]),
+        # bg-page holds white too, but these uses are text and a border.
+        ("#FFFFFF", ["paper"], ["app.css:2", "app.css:5", "app.css:6"]),
         ("4px", ["radius-sm"], ["app.css:2", "app.css:6"])]
     assert [(s.value, s.texts) for s in d.spellings] == [
         ("#FFFFFF", ["#fff", "#FFF", "white"]), ("4px", ["4px", ".25rem"])]
@@ -99,7 +100,7 @@ def test_the_report_is_markdown_in_a_fixed_order_and_writes_nothing(tmp_path):
             "them, removing them is your call") in text
     assert "never used" not in text
     assert ("- #FFFFFF is written raw 3 times (app.css:2, app.css:5, app.css:6); the system "
-            "holds it as bg-page and paper, so use a token.") in text
+            "holds it as paper, so use a token.") in text
     assert "- radius is written as 2 raw values: 4px, 11px." in text
     assert ("- color.action.primary is mapped to primary by name only; confirm it in "
             "mapping.json.") in text
@@ -263,7 +264,7 @@ def test_the_owner_is_asked_to_confirm_the_reading_face_and_the_breakpoints():
     assert ("- type.text.body (your body) is set in Plain Serif; confirm it is a face made for "
             "running text, not a display face.") in confirm
     assert "- The breakpoints are layout.breakpoint.tablet 48rem; confirm" in confirm
-    assert "- The system has no dark mode in the mapping" in confirm
+    assert "- tokens.json, the source read, has no dark mode in the mapping" in confirm
 
 
 def test_a_hover_token_used_on_hover_in_dark_does_not_lie(tmp_path):
@@ -481,7 +482,7 @@ def test_a_deleted_axis_is_named_once_not_asked_about_again():
     report = enhance(_system(), mapping)
     text = report.markdown()
     assert "mapping.json leaves out the axis scheme" in " ".join(text.split())
-    assert "The system has no dark mode in the mapping" not in text
+    assert "has no dark mode in the mapping" not in text
 
 
 def test_a_padding_is_not_matched_to_a_text_size(tmp_path):

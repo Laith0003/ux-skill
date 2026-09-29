@@ -51,7 +51,8 @@ EASING_KEYWORDS = {
     "linear": [0, 0, 1, 1], "ease": [0.25, 0.1, 0.25, 1], "ease-in": [0.42, 0, 1, 1],
     "ease-out": [0, 0, 0.58, 1], "ease-in-out": [0.42, 0, 0.58, 1],
 }
-# CSS keywords that take a value from elsewhere: none of them is a value.
+# CSS keywords that are no value a token holds: each takes its value from
+# elsewhere, except none, an explicit value that turns the property off.
 CSS_KEYWORDS = ("inherit", "initial", "unset", "revert", "revert-layer", "currentcolor", "auto",
                 "none")
 # The three color keywords read as colors; any other bare word is ambiguous.
@@ -387,6 +388,10 @@ def read_value(text: Any, mapped: Optional[List[GamutMapped]] = None) -> Tuple[s
     if lower == "currentcolor":
         raise NotRead(f"{text} has no fixed value; it takes the color of the element it sits "
                       "on, so write the color as hex")
+    if lower == "none":
+        raise NotRead(f"{text} is an explicit value: it turns the property off (no shadow, no "
+                      "border, no curve), and no token type holds it; leave it out, or write it "
+                      "where it is used")
     if lower in CSS_KEYWORDS:
         raise NotRead(f"{text} is a CSS keyword that takes its value from elsewhere, so it has no "
                       "value of its own; leave it out, or write the value it stands for as a "

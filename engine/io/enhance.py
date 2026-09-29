@@ -7,22 +7,41 @@ measures what the code actually does against it:
 - tokens not found in the code read, directly or through a token that is
   found; when the scan skipped files or saw values it could not measure,
   the report says so beside the list, and it never tells the owner to
-  remove a token on the scan's word alone;
+  remove a token on the scan's word alone. A custom property that defines
+  one of the system's tokens is its definition, not a use;
 - raw values a token already holds (use the token), matched within the
-  family the value is written in (a z-index is never matched to a weight);
+  family the value is written in (a z-index is never matched to a
+  weight), and only to a token named for that family (an equal 12px in a
+  token named for nothing is a coincidence, not a swap); a color only to
+  a token named for how the use applies it (never a border token for a
+  background, never the color on one named surface such as on-brand).
+  Error pages and email templates are shown where the app's stylesheet
+  may not load: their raw values are not listed, and the files are named
+  once;
 - values written many ways (#fff, #FFF and white), and how many raw
-  values each family carries (a radius written eleven ways);
+  values each family carries (a corner written 3px, 4px and 6px);
 - names that lie: every use contradicts the name (a background token only
   ever used as text, a hover token never used on hover), and names with
   stray uses, where some uses match the name and some do not. A name with
   "on" before a word (on-surface, onPrimary) is a foreground, the color on
   that surface, by the common convention, unless a background or fill word
-  comes before it (action-on-brand is a fill for use on a brand surface);
+  comes before it (action-on-brand is a fill for use on a brand surface)
+  and no text word does (button-fg-on-color is a foreground). A custom
+  property that passes a token on neither keeps nor breaks its promise;
 - references to tokens the system does not have (a var() to a custom
   property the code declares itself is the code's own, listed apart with
-  a count), and what the scan could not measure (files it skipped, values
-  it saw but does not read, with the scanner's reason and fix, and classes
-  that name no token).
+  a count; one the source holds in an entry the import did not read, such
+  as a property set only under a density or theme block, is named as
+  unread, not missing), and what the scan could not measure (files it
+  skipped, values it saw but does not read, with the scanner's reason and
+  fix, and classes that name no token).
+
+Structure lists what is wrong with the system itself. How the engine
+layers its own systems (a semantic token aliases a primitive, a primitive
+holds no mode) is told at most once, as a note, since a flat system or a
+layer whose values switch by mode works as it is; the engine's rule on
+which axes each of its foundations varies on is not applied to names that
+are not its roles.
 
 The report says how many of the engine's roles the mapping covers, which
 ones the owner left out and which ones are not mapped at all, so a mapping
@@ -51,7 +70,8 @@ from engine.io.adapter import (
     AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, VOCABULARY_EXAMPLES, Mapping, deleted_axes,
     reduced_pairs, reduced_twins, their_names, view)
 from engine.io.report import Imported
-from engine.io.scan import Scan, Usage, _norm, canonical
+from engine.io.scan import (
+    FAMILY_WORDS, LINE_WORDS, RADIUS_WORDS, SPACE_WORDS, Scan, Usage, _norm, canonical)
 
 # Family of a use -> the token types that can hold its value. A
 # line-height is a number, or a length when written with a unit.
@@ -67,16 +87,8 @@ BG_WORDS = ("bg", "background", "surface", "canvas", "backdrop")
 # Words that name a fill: before "on" they make the name a background for
 # use on that surface (action-on-brand, the button fill on a brand band).
 FILL_WORDS = ("action", "button", "btn", "fill", "cta")
-LINE_WORDS = ("border", "line", "stroke", "outline", "divider", "ring", "separator")
-SPACE_WORDS = ("space", "spacing", "gap", "padding", "margin", "gutter", "inset")
-RADIUS_WORDS = ("radius", "rounded", "corner")
-# Words that name a family: a raw value is matched only to tokens named for
-# its own family or for none of the others (a z-index of 400 is not a
-# weight token that holds 400, nor a 16px padding a radius or text size).
-TYPE_WORDS = ("text", "font", "size", "leading", "tracking")
-FAMILY_WORDS = {"space": SPACE_WORDS, "radius": RADIUS_WORDS, "border": LINE_WORDS,
-                "type-size": TYPE_WORDS, "weight": ("weight", "bold"),
-                "z": ("z", "layer", "zindex")}
+# The words that name a family (LINE_WORDS, SPACE_WORDS, RADIUS_WORDS,
+# FAMILY_WORDS) live in scan, which reads class names by them too.
 # The state a name promises. Only hover is held against the code: the
 # scanner reads it from :hover and hover: wherever it is set. Active,
 # pressed, selected and current it reads from pseudo-classes, the common
@@ -94,6 +106,14 @@ _MOVE = re.compile(r" Move \S+ to a step with more contrast against \S+\.(?: .*)
 _THEIR_FIX = (" Change the value of one of them in your system, or map the role to a token "
               "with more contrast.")
 READING_ROLES = ("type.text.body", "type.text.body-small", "type.text.fine")
+# Pages shown where the app's stylesheet and custom properties may not load:
+# error pages (a folder named errors, or 404.html) and email templates (a
+# folder named emails or mail, or a file named for email). Their raw
+# values are not listed; the report names the files once.
+_STANDALONE_DIRS = ("errors", "error", "emails", "email", "mail", "mails", "newsletters",
+                    "newsletter")
+_STANDALONE_STEMS = re.compile(r"(40[0-9]|50[0-9x]|error|maintenance|offline)$|.*e-?mail",
+                               re.I)
 # How many names a folded line shows before "and N more".
 FEW = 6
 # The longest line the gate prints; a longer one wraps, a finding under its
@@ -175,13 +195,40 @@ def _kinds(u: Usage) -> Tuple[str, ...]:
 
 def _fits(path: str, family: str) -> Tuple[bool, bool]:
     """(fits, named for it): whether a token may hold a raw value of the
-    family, and whether its name says that family."""
+    family, and whether its name says that family. In a family its name
+    can say (space, radius, border, type size, weight, z), only a token
+    named for it fits: an equal value in a token named for nothing (2px,
+    0, 12px) is a coincidence, not a swap."""
     if family not in FAMILY_WORDS:
         return True, False
-    words = set(_words(path))
-    own = bool(words & set(FAMILY_WORDS[family]))
-    other = any(words & set(w) for f, w in FAMILY_WORDS.items() if f != family)
-    return own or not other, own
+    own = bool(set(_words(path)) & set(FAMILY_WORDS[family]))
+    return own, own
+
+
+def _name_class(path: str) -> str:
+    """How a color token's name says it is applied: text, background or
+    border, "pair" for the color on one named surface (on-brand,
+    text-on-brand), or "" when the name says none."""
+    words = _words(path)
+    if "on" in words[:-1]:
+        return "pair"
+    if any(w in words for w in TEXT_WORDS):
+        return "text"
+    if any(w in words for w in BG_WORDS):
+        return "background"
+    if any(w in words for w in LINE_WORDS):
+        return "border"
+    return ""
+
+
+def _color_fits(path: str, use: str) -> bool:
+    """Whether a color token may be offered for a raw color applied as
+    `use` (text, background, border or ""): one named for another
+    application never is (a border token for a transparent background),
+    nor one named for the color on a surface, since the scan cannot tell
+    which surface a value sits on (white text on a photo is not on-brand)."""
+    named = _name_class(path)
+    return named != "pair" and (not named or named == use)
 
 
 @dataclass(frozen=True)
@@ -237,6 +284,13 @@ class Drift:
     # --name -> where each var() to it is, for the custom properties the
     # code declares itself: the code's own, not tokens the system lacks.
     own: Dict[str, List[str]] = field(default_factory=dict)
+    # Error pages and email templates the scan read, whose raw values are
+    # not listed (see _standalone).
+    standalone: List[str] = field(default_factory=list)
+    # References to names the system's source holds in an entry the import
+    # did not read (a property set only under a density or theme block):
+    # --name -> (where each reference is, the entry's place and message).
+    unread_refs: Dict[str, Tuple[List[str], str, str]] = field(default_factory=dict)
 
     @property
     def complete(self) -> bool:
@@ -279,14 +333,25 @@ def _held(ts: TokenSet) -> Dict[Tuple[str, str], List[str]]:
 
 def _holders(held: Dict[Tuple[str, str], List[str]], u: Usage) -> List[str]:
     """The tokens that hold a raw use's value within its family, those
-    named for the family first."""
+    named for the family first; a color only from a token whose name fits
+    how the use applies it."""
     out: List[Tuple[bool, str]] = []
     for kind in _kinds(u):
         for path in held.get((kind, _key(u.value)), []):
             fits, own = _fits(path, u.family)
+            if u.family == "color":
+                fits = _color_fits(path, _prop_class(u.prop))
             if fits:
                 out.append((not own, path))
     return [p for _, p in sorted(out, key=lambda x: x[0])]
+
+
+def _standalone(file: str) -> bool:
+    """Whether a file is an error page or an email template."""
+    parts = re.split(r"[\\/]", file)
+    stem = parts[-1].split(".", 1)[0]
+    return any(p.lower() in _STANDALONE_DIRS for p in parts[:-1]) \
+        or bool(_STANDALONE_STEMS.fullmatch(stem))
 
 
 def _not_read(entry: Any) -> Tuple[str, int, str, str, str]:
@@ -299,7 +364,12 @@ def drift(ts: TokenSet, scanned: Scan) -> Drift:
     d = Drift(files=scanned.files, skipped=list(scanned.skipped),
               unknown_classes=list(scanned.unknown_classes),
               not_read=[_not_read(x) for x in getattr(scanned, "not_read", ())])
-    usages = scanned.usages
+    # A custom property that defines one of the system's own tokens (the
+    # system's stylesheet in the scan) is its definition, not a use: the
+    # tokens it points at are reached through it only when it is used.
+    own = {_norm(t.path) for t in ts.tokens()}
+    usages = [u for u in scanned.usages
+              if not (u.kind == "token" and u.prop.startswith("--") and _norm(u.prop[2:]) in own)]
     reached, todo = set(), [u.value for u in usages if u.kind == "token"]
     while todo:
         path = todo.pop()
@@ -314,8 +384,9 @@ def drift(ts: TokenSet, scanned: Scan) -> Drift:
 
     held = _held(ts)
     groups: Dict[Tuple[str, str], List[Usage]] = {}
+    d.standalone = sorted({u.file for u in usages if _standalone(u.file)})
     for u in usages:
-        if u.kind != "raw":
+        if u.kind != "raw" or u.file in d.standalone:
             continue
         groups.setdefault((u.family, _key(u.value)), []).append(u)
         values = d.distinct.setdefault(u.family, [])
@@ -323,9 +394,14 @@ def drift(ts: TokenSet, scanned: Scan) -> Drift:
             values.append(u.value)
             d.first_seen[(u.family, u.value)] = u.where()
     for uses in groups.values():
-        tokens = _holders(held, uses[0])
-        if tokens:
-            d.raw_with_token.append(RawWithToken(uses[0].value, tokens, uses))
+        # Uses of one color applied differently can hold different tokens:
+        # each application gets its own line when they do.
+        parts: Dict[Tuple[str, ...], List[Usage]] = {}
+        for u in uses:
+            parts.setdefault(tuple(_holders(held, u)), []).append(u)
+        for tokens, part in parts.items():
+            if tokens:
+                d.raw_with_token.append(RawWithToken(uses[0].value, list(tokens), part))
         texts: List[str] = []
         for u in uses:
             if u.text not in texts:
@@ -340,7 +416,10 @@ def drift(ts: TokenSet, scanned: Scan) -> Drift:
                  if u.kind == "missing" and u.value not in declared]
     by_token: Dict[str, List[Usage]] = {}
     for u in usages:
-        if u.kind == "token":
+        # A custom property that points at a token (--link-hover:
+        # var(--primary-hover)) passes it on; it does not apply it, so it
+        # neither keeps nor breaks the name's promise.
+        if u.kind == "token" and not u.prop.startswith("--"):
             by_token.setdefault(u.value, []).append(u)
     for t in ts.tokens():
         found = _lie(t.path, by_token.get(t.path, []))
@@ -367,10 +446,12 @@ def _promise(words: List[str]) -> Optional[_Promise]:
     word names the color on that surface: a foreground, whatever follows,
     unless a background or fill word comes first (bg-on-dark is a
     background for use on dark, action-on-brand the fill of a button on a
-    brand surface)."""
+    brand surface), and a text word before it wins over both
+    (action-fg-on-color and button-text-on-color are foregrounds)."""
     on = words.index("on") if "on" in words[:-1] else -1
     if on != -1:
-        if any(w in BG_WORDS + FILL_WORDS for w in words[:on]):
+        if any(w in BG_WORDS + FILL_WORDS for w in words[:on]) \
+                and not any(w in TEXT_WORDS for w in words[:on]):
             return _color_promise("backgrounds", ("text",), "used for {} color")
         return _color_promise("the color on a surface", ("background",), "used as a {}")
     if any(w in words for w in TEXT_WORDS):
@@ -515,7 +596,10 @@ class Enhanced:
                 "lies": [{"token": x.token, "message": x.message} for x in d.lies],
                 "strays": [{"token": x.token, "message": x.message} for x in d.strays],
                 "missing": [{"value": x.value, "where": x.where} for x in d.missing],
+                "unread_refs": [{"name": n, "uses": list(w), "where": at, "why": why}
+                                for n, (w, at, why) in d.unread_refs.items()],
                 "own": [{"name": n, "uses": list(w)} for n, w in d.own.items()],
+                "standalone": list(d.standalone),
                 "skipped": [{"file": f, "why": w} for f, w in d.skipped],
                 "unknown_classes": [{"where": f"{u[0]}:{u[1]}", "class": u[2],
                                      "looked_in": list(getattr(u, "looked_in", ())),
@@ -657,6 +741,14 @@ class Enhanced:
         if gaps:
             lines[0] += (f" {_and(gaps).capitalize()}; each is listed at the end of this "
                          "section, and what is below covers only what was read.")
+        if d.standalone:
+            k = len(d.standalone)
+            what = _count(k, "file is an error page or an email template",
+                          "files are error pages or email templates")
+            lines.append(f"- {what} ({_and_few(d.standalone, FEW)}). "
+                         f"{'It is' if k == 1 else 'They are'} "
+                         "shown where the app's stylesheet and custom properties may not load, so "
+                         f"{'its' if k == 1 else 'their'} raw values are not listed here.")
         lines.append("")
         total = sum(t for t, _ in d.totals.values())
         if d.unused:
@@ -694,6 +786,9 @@ class Enhanced:
             lines.append(f"- {lie.token} {lie.message}; rename it for how it is used, or use a "
                          "token named for that use there.")
         lines += _missing(d.missing)
+        for ref, (wheres, at, why) in d.unread_refs.items():
+            lines.append(f"- {ref} ({_few(wheres, 3)}) is in {source}, so it is not missing, but "
+                         f"it was not read as a token: at {at} it {_sentence(why)}")
         if d.own:
             k, n = len(d.own), sum(len(w) for w in d.own.values())
             names = _few([f"{name} ({_few(w, 3)})" for name, w in d.own.items()])
@@ -906,8 +1001,29 @@ def _reduced_motion(ts: TokenSet, mapping: Mapping, scanned: Optional[Scan],
             f"{name}.")
 
 
+def _dark(ts: TokenSet, scanned: Optional[Scan], source: str, name: str) -> str:
+    """What the report says when the mapping reads no dark scheme: that the
+    source read has none, and where the code sets dark values for its
+    tokens when a second source holds them."""
+    own = {_norm(t.path) for t in ts.tokens()}
+    sets = [(p, f, n) for p, f, n in getattr(scanned, "dark", ()) or ()
+            if _norm(p[2:]) in own]
+    if not sets:
+        return (f"{source}, the source read, has no dark mode in the mapping, so dark was not "
+                f"checked; if another file holds its dark values, import it with {source}, and "
+                f"if the system has a dark mode, map it as the scheme axis in {name}.")
+    files = list(dict.fromkeys(f for _, f, _ in sets))
+    names = list(dict.fromkeys(p for p, _, _ in sets))
+    where = _and_few([f"{p} at {f}:{n}" for p, f, n in sets], 3)
+    return (f"{source}, the source read, has no dark mode, but {_and_few(files, 3)} "
+            f"{'sets' if len(files) == 1 else 'set'} dark values for "
+            f"{_count(len(names), 'of its tokens', 'of its tokens')} ({where}): the dark mode is "
+            f"in a second source. Import it with {source}, then map the scheme axis in {name} "
+            "to check dark.")
+
+
 def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str],
-             deleted: Sequence[str] = (), motion: str = "") -> List[str]:
+             deleted: Sequence[str] = (), motion: str = "", dark: str = "") -> List[str]:
     out = []
     for role in READING_ROLES:
         first = _reading_face(checked, role) if checked.has(role) else None
@@ -935,10 +1051,60 @@ def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str],
     # deleted from the mapping, which the decisions already name.
     if "motion" not in mapping.axes and "motion" not in deleted and motion:
         out.append(motion)
-    if "scheme" not in mapping.axes and "scheme" not in deleted:
-        out.append("The system has no dark mode in the mapping, so dark was not checked; if it "
-                   "has one, map it as the scheme axis in mapping.json.")
+    if "scheme" not in mapping.axes and "scheme" not in deleted and dark:
+        out.append(dark)
     return out
+
+
+# How the engine layers its own systems: a semantic token aliases a
+# primitive, a primitive holds a literal and no mode, and each foundation
+# varies only on its own axes. A system it did not make is layered its own
+# way, which works as it is: these are told once, never per token.
+_LAYERING = ("semantic-literal", "semantic-to-semantic", "primitive-modes", "primitive-alias")
+_OWN_NAMING = ("axis-not-allowed",)
+
+
+def _their_structure(problems: Sequence[Any]) -> List[str]:
+    """Structure problems of an imported system: the engine's layering
+    told once as a note, its axis-per-foundation rule dropped (the
+    system's names are not the engine's roles, and a mode value that
+    differs from the base is the system working), everything else as
+    it is."""
+    out: List[str] = []
+    layered: List[str] = []
+    for p in problems:
+        if p.rule in _OWN_NAMING:
+            continue
+        if p.rule in _LAYERING:
+            if p.token not in layered:
+                layered.append(p.token)
+            continue
+        out.append(p.message)
+    if layered:
+        out.append(f"The system is layered its own way: {len(layered)} "
+                   f"{'token holds' if len(layered) == 1 else 'tokens hold'} a value of "
+                   f"{'its' if len(layered) == 1 else 'their'} own or point at another token "
+                   f"that is not a primitive (such as {_few(layered, 3)}). The engine's own "
+                   "systems alias primitives, but a flat system, or a layer whose values switch "
+                   "by mode, works as it is, so nothing here needs to change")
+    return out
+
+
+def _split_unread(d: Drift, imported: Imported) -> None:
+    """Move each reference to a name the source holds in an entry the
+    import did not read (set only under a density or theme block, or on a
+    component) out of the missing list: the system has it, unread."""
+    unread = {item.name: item for item in imported.report.not_read
+              if item.name.startswith("--")}
+    keep: List[Missing] = []
+    for miss in d.missing:
+        item = unread.get(miss.value)
+        if item is None:
+            keep.append(miss)
+            continue
+        wheres, _, _ = d.unread_refs.setdefault(miss.value, ([], item.where, item.message))
+        wheres.append(miss.where)
+    d.missing = keep
 
 
 def _owner_notes(mapping: Mapping, name: str) -> List[str]:
@@ -1070,7 +1236,7 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     ts = imported.tokens
     checked, notes = view(ts, mapping, mapping_name)
     result = check_system(checked, structure=checked is ts)
-    structure = ([p.message for p in validate(ts)] if checked is not ts
+    structure = (_their_structure(validate(ts)) if checked is not ts
                  else [p.message for p in result.problems])
     unresolved = _unresolved(ts, checked, mapping, imported.report.source.path, mapping_name)
     structure += list(unresolved.values())
@@ -1101,10 +1267,13 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
                          "import report lists each one.")
     owner = set(_owner_notes(mapping, mapping_name))
     decisions += [n for n in notes if n not in owner]
-    return Enhanced(imported, mapping, result, structure,
-                    drift(ts, scanned) if scanned is not None else None,
+    measured = drift(ts, scanned) if scanned is not None else None
+    if measured is not None:
+        _split_unread(measured, imported)
+    return Enhanced(imported, mapping, result, structure, measured,
                     _confirm(mapping, checked, result.foundations, list(deleted_axes(ts, mapping)),
                              _reduced_motion(ts, mapping, scanned, imported.report.source.path,
-                                             mapping_name)),
+                                             mapping_name),
+                             _dark(ts, scanned, imported.report.source.path, mapping_name)),
                     decisions, findings,
                     list(merge_notes), list(unresolved), mapping_name)
