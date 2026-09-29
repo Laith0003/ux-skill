@@ -18,14 +18,14 @@ FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
 
 # Invented systems whose names say no role: a ramp and a radius scale.
 SOURCES = {
-    "css": ("tokens.css", ":root {\n  --moss-500: #2f7d4f;\n  --radius-sm: 4px;\n}\n"),
+    "css": ("tokens.css", ":root {\n  --moss-500: #2f7d4f;\n  --radius-snug: 4px;\n}\n"),
     "dtcg": ("tokens.json", json.dumps({
         "moss": {"500": {"$type": "color", "$value": "#2f7d4f"}},
-        "radius": {"sm": {"$type": "dimension", "$value": {"value": 4, "unit": "px"}}}})),
+        "radius": {"snug": {"$type": "dimension", "$value": {"value": 4, "unit": "px"}}}})),
     "tailwind": ("app.css", '@import "tailwindcss";\n@theme {\n  --color-moss-500: #2f7d4f;\n'
-                            '  --radius-sm: 4px;\n}\n'),
+                            '  --radius-snug: 4px;\n}\n'),
     "tailwind-json": ("theme.json", json.dumps({"colors": {"moss": {"500": "#2f7d4f"}},
-                                                "borderRadius": {"sm": "4px"}})),
+                                                "borderRadius": {"snug": "4px"}})),
     "markdown": ("rules.md", "# Tokens\n\n- `moss.500`: #2f7d4f\n- `bend.snug`: 4px\n"),
 }
 READERS = {"css": read_css, "dtcg": read_dtcg, "tailwind": read_tailwind,

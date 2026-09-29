@@ -5,6 +5,7 @@ surface, action, border and focus roles proposed. Names only, never a
 look: each proposal says by "name" and which vocabulary matched."""
 import json
 
+from engine.foundations.tokens import Token, TokenSet
 from engine.io.adapter import RoleMap, dump_mapping, parse_mapping, propose
 from engine.io.css_in import import_css
 from engine.io.enhance import enhance
@@ -246,7 +247,9 @@ def test_a_brand_prefix_and_a_ds_color_prefix_are_read_through():
         "color.text.default": ("acme-fg-default", "bg, fg and border families", "acme"),
         "color.text.muted": ("acme-fg-muted", "bg, fg and border families", "acme"),
         "color.action.primary": ("acme-brand", "brand names", "acme"),
-        "color.line.subtle": ("acme-border-default", "bg, fg and border families", "acme")}
+        "color.line.subtle": ("acme-border-default", "bg, fg and border families", "acme"),
+        # A radius read through the prefix too: names only, of the role's type.
+        "radius.chip": ("acme-radius-sm", "scale names", "acme")}
     ds = _imported(":root {\n  --ds-color-background: #ffffff;\n  --ds-color-foreground: #111111;"
                    "\n  --ds-color-primary: #2244cc;\n  --ds-color-border: #dddddd;\n"
                    "  --ds-color-ring: #2244cc;\n}\n")
@@ -301,3 +304,37 @@ def test_merge_never_proposes_a_token_the_owner_sent_to_another_role():
     merged, _ = merge(propose(ts), owner)
     assert merged.roles["color.text.default"] == RoleMap("primary", "owner")
     assert "color.action.primary" not in merged.roles
+
+
+# ---------------------------------------------------------------- a mature system's names
+
+
+def test_a_mature_systems_core_roles_are_mapped_by_name_only():
+    from pathlib import Path
+
+    from engine.io.read import read_system
+    fixture = Path(__file__).parent.parent / "fixtures" / "mature_system" / "tokens"
+    roles = {r: m.token for r, m in propose(read_system(fixture / "tokens.json").tokens)
+             .roles.items()}
+    assert roles == {
+        "color.surface.page": "brand.canvas", "color.surface.card": "brand.surface",
+        "color.text.default": "brand.text-primary", "color.text.muted": "brand.text-secondary",
+        "color.text.on-action": "brand.on-primary", "color.action.primary": "brand.primary",
+        "color.focus.ring": "brand.focus", "color.hairline": "brand.hairline",
+        "color.status.danger.text": "status.danger",
+        "color.status.warning.text": "status.warning",
+        "color.status.success.text": "status.success",
+        "radius.chip": "radius.sm", "radius.control": "radius.md", "radius.pill": "radius.pill",
+        "motion.state.duration": "motion.duration-fast",
+        "motion.reveal.duration": "motion.duration-base",
+        "layout.breakpoint.tablet": "layout.breakpoint-md",
+        "layout.breakpoint.laptop": "layout.breakpoint-lg",
+        "type.face.display": "type.family-display", "type.face.text": "type.family-body",
+        "type.face.mono": "type.family-data"}
+
+
+def test_a_scale_name_maps_only_a_token_of_the_roles_type():
+    ts = TokenSet({})
+    ts.add(Token("radius.md", "color", "#111111"))
+    ts.add(Token("motion.duration-fast", "dimension", {"value": 4, "unit": "px"}))
+    assert propose(ts).roles == {}

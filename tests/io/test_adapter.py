@@ -89,9 +89,11 @@ def test_our_own_css_maps_every_role_by_name_and_every_axis_to_itself():
 
 def test_a_foreign_system_maps_what_its_names_say_and_leaves_the_rest_to_the_owner():
     mapping = propose(_css(FOREIGN))
-    # text-body is a name the text vocabulary knows; page is not.
+    # text-body is a name the text vocabulary knows, and page the canvas names.
     assert mapping.roles == {"color.text.default": RoleMap("text-body", "name",
-                                                           vocabulary="text names")}
+                                                           vocabulary="text names"),
+                             "color.surface.page": RoleMap("page", "name",
+                                                           vocabulary="canvas and status names")}
     assert mapping.axes == {"scheme": AxisMap("scheme", {"light": "light", "dark": "dark"},
                                               "name")}
     # A class the importer keeps as its own axis maps when its name says which.

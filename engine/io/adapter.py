@@ -227,6 +227,58 @@ VOCABULARIES: Tuple[Tuple[str, str, Tuple[Tuple[str, str], ...]], ...] = (
         ("brand-active", "color.action.primary-pressed"), ("on-brand", "color.text.on-action"),
         ("brand-foreground", "color.text.on-action"), ("brand-fg", "color.text.on-action"),
         ("brand-contrast", "color.text.on-action"))),
+    ("canvas and status names", "canvas, hairline, divider, status-success, success-soft", (
+        ("canvas", "color.surface.page"), ("page", "color.surface.page"),
+        ("divider", "color.line.subtle"), ("separator", "color.line.subtle"),
+        ("rule", "color.line.subtle"),
+        ("success", "color.status.success.text"), ("status-success", "color.status.success.text"),
+        ("success-soft", "color.status.success.soft"), ("success-bg", "color.status.success.soft"),
+        ("success-subtle", "color.status.success.soft"),
+        ("warning", "color.status.warning.text"), ("status-warning", "color.status.warning.text"),
+        ("warning-soft", "color.status.warning.soft"), ("warning-bg", "color.status.warning.soft"),
+        ("warning-subtle", "color.status.warning.soft"),
+        ("info", "color.status.info.text"), ("status-info", "color.status.info.text"),
+        ("info-soft", "color.status.info.soft"), ("info-bg", "color.status.info.soft"),
+        ("status-danger", "color.status.danger.text"), ("status-error", "color.status.danger.text"),
+        ("danger-soft", "color.status.danger.soft"), ("danger-bg", "color.status.danger.soft"),
+        ("error-soft", "color.status.danger.soft"), ("error-bg", "color.status.danger.soft"))),
+    ("scale names", "type-family-display, motion-duration-fast, radius-md, "
+                    "layout-breakpoint-md", (
+        ("family-display", "type.face.display"), ("family-heading", "type.face.display"),
+        ("font-display", "type.face.display"), ("font-heading", "type.face.display"),
+        ("font-family-display", "type.face.display"), ("typeface-display", "type.face.display"),
+        ("family-body", "type.face.text"), ("family-text", "type.face.text"),
+        ("family-sans", "type.face.text"), ("font-body", "type.face.text"),
+        ("font-text", "type.face.text"), ("font-sans", "type.face.text"),
+        ("font-family-body", "type.face.text"), ("typeface-body", "type.face.text"),
+        ("family-mono", "type.face.mono"), ("family-data", "type.face.mono"),
+        ("family-code", "type.face.mono"), ("font-mono", "type.face.mono"),
+        ("font-data", "type.face.mono"), ("font-code", "type.face.mono"),
+        ("font-family-mono", "type.face.mono"), ("typeface-mono", "type.face.mono"),
+        ("family-arabic", "type.face.arabic"), ("font-arabic", "type.face.arabic"),
+        ("duration-fast", "motion.state.duration"), ("duration-quick", "motion.state.duration"),
+        ("duration-base", "motion.reveal.duration"),
+        ("duration-normal", "motion.reveal.duration"),
+        ("duration-medium", "motion.reveal.duration"),
+        ("duration-default", "motion.reveal.duration"),
+        ("duration-slow", "motion.page.duration"),
+        ("radius-xs", "radius.joined"), ("radius-sm", "radius.chip"),
+        ("radius-md", "radius.control"), ("radius-lg", "radius.card"),
+        ("radius-xl", "radius.dialog"), ("radius-full", "radius.pill"),
+        ("radius-pill", "radius.pill"), ("radius-round", "radius.pill"),
+        ("radius-card", "radius.card"), ("radius-control", "radius.control"),
+        ("radius-button", "radius.control"), ("radius-input", "radius.control"),
+        ("rounded-sm", "radius.chip"), ("rounded-md", "radius.control"),
+        ("rounded-lg", "radius.card"), ("rounded-xl", "radius.dialog"),
+        ("rounded-full", "radius.pill"),
+        ("breakpoint-md", "layout.breakpoint.tablet"),
+        ("breakpoint-tablet", "layout.breakpoint.tablet"),
+        ("breakpoint-lg", "layout.breakpoint.laptop"),
+        ("breakpoint-laptop", "layout.breakpoint.laptop"),
+        ("breakpoint-xl", "layout.breakpoint.desktop"),
+        ("breakpoint-desktop", "layout.breakpoint.desktop"),
+        ("screen-md", "layout.breakpoint.tablet"), ("screen-lg", "layout.breakpoint.laptop"),
+        ("screen-xl", "layout.breakpoint.desktop"))),
 )
 # The vocabulary a token named as a color role without its color segment
 # (text-default, surface-raised, focus-ring) matches.
@@ -275,6 +327,10 @@ def _prefix_text(path: str, words: Tuple[str, ...]) -> str:
     return " ".join(words)
 
 
+_GROUP_WORDS = ("type", "typography", "motion", "animation", "layout", "size", "sizes", "theme",
+                "tokens", "font", "fonts")
+
+
 def _keys(path: str, prefix: Tuple[str, ...] = ()) -> List[Tuple[int, str, bool]]:
     """(tier, name, read through the prefix) for each name a token answers
     to in the vocabularies: tier 0 its own words, without a leading color
@@ -288,6 +344,11 @@ def _keys(path: str, prefix: Tuple[str, ...] = ()) -> List[Tuple[int, str, bool]
     whole: List[Tuple[Tuple[str, ...], bool]] = [(words, False)]
     derived: List[Tuple[Tuple[str, ...], bool]] = [(tuple(w for w in words if w != "color"),
                                                      False)]
+    # A family word before a scale name (type.family-display,
+    # motion.duration-fast, layout.breakpoint-md) groups it; the name after
+    # it is what the vocabularies know.
+    if len(words) > 2 and words[0] in _GROUP_WORDS:
+        derived.append((words[1:], False))
     full = _name_words(path)
     if prefix and full[:len(prefix)] == prefix and len(full) > len(prefix):
         rest = full[len(prefix):]
@@ -344,8 +405,9 @@ def propose(ts: TokenSet) -> Mapping:
     taken = {m.token for m in roles.values()}
     tables = [(ROLE_NAMES[0], tuple((r[len("color."):], r) for r in ROLE_TYPES
                                     if r.startswith("color.")))]
-    # With no background, surface is the page, not a card on it.
-    background = any("background" in index for index in tiers)
+    # With no background, canvas or page, surface is the page, not a card on it.
+    background = any(word in index for index in tiers for word in ("background", "canvas",
+                                                                   "page"))
     tables += [(name, tuple((n, "color.surface.page" if n == "surface" and not background
                              else r) for n, r in entries))
                for name, _, entries in VOCABULARIES]
