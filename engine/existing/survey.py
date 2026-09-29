@@ -1,14 +1,15 @@
 """What a project's own code says about its design system, beside the
 token files' names: token stylesheets found by what they hold, the color
-the code paints buttons and links with, the languages its templates set,
-a face kept for data and figures, and each token two sources set to
-different values.
+the code paints buttons and links with, the languages its templates and
+locale files set, a face kept for data and figures, and each token two
+sources set to different values.
 
 Deterministic and offline. Reads only the files detect's bounded walk
 found; never writes.
 """
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
@@ -26,13 +27,21 @@ _MAIN_CSS = re.compile(r"^(?:app|main|globals?|styles?|index|site|base|theme|tok
 _MIN_THEME_PROPS = 3
 _MIN_MAIN_THEME_PROPS = 6
 _ROOTS = (":root", "html", ":host", "@theme")
-# A theme selector: classes, attributes and :not()/:where() groups, on a root or alone.
-_THEME_SEL = re.compile(
-    r"^(?::root|html|:host)?(?:\.[A-Za-z][\w-]*|\[[\w-]+(?:\s*[~|^$*]?=\s*(?:\"[^\"]*\"|"
-    r"'[^']*'|[\w-]+))?\]|:not\([^()]*\)|:where\([^()]*\))+$")
+STYLE_SUFFIXES = (".css", ".scss", ".pcss")
 TEMPLATE_SUFFIXES = (".html", ".htm", ".blade.php", ".jsx", ".tsx", ".vue", ".svelte",
                      ".astro", ".erb", ".twig")
-STYLE_SUFFIXES = (".css", ".scss", ".pcss")
+# A custom property declaration, the cheap test before a stylesheet is parsed.
+_DECLARES = re.compile(r"--[A-Za-z0-9_-]+\s*:")
+# One simple selector of a compound: a class, an attribute, or a :not()
+# or :where() group.
+_SIMPLE = re.compile(r"\.([A-Za-z][\w-]*)|\[([\w-]+)(?:\s*[~|^$*]?=\s*(?:\"[^\"]*\"|'[^']*'|"
+                     r"[\w-]+))?\]|:not\([^()]*\)|:where\([^()]*\)")
+# A class that names a theme (.dark, .theme-x, .light-mode), and an
+# attribute that switches one (data-theme, data-mode, data-color-scheme,
+# the engine's own data-density, data-contrast, data-motion, dir and lang).
+_THEME_CLASS = re.compile(r"(?:^|-)(?:theme|dark|light|mode|scheme)(?:$|-)", re.I)
+_THEME_ATTR = re.compile(r"^(?:(?:data-)?(?:[a-z]+-)?(?:theme|mode|scheme)|data-density|"
+                         r"data-contrast|data-motion|dir|lang)$", re.I)
 
 
 def read_text(path: Path, limit: int = 400_000) -> str:
@@ -46,12 +55,22 @@ def is_template(path: Path) -> bool:
     return path.name.lower().endswith(TEMPLATE_SUFFIXES)
 
 
+def is_style(path: Path) -> bool:
+    low = path.name.lower()
+    return low.endswith(STYLE_SUFFIXES) and not low.endswith(".min.css")
+
+
 def in_product(path: Path, base: Path) -> bool:
     """False for a file under a folder of examples, docs or tests."""
     parts = [p.lower() for p in path.relative_to(base).parts[:-1]]
     joined = "/".join(parts)
     return not (set(parts) & NOT_PRODUCT_DIRS or any(
         joined == d or joined.startswith(d + "/") for d in NOT_PRODUCT_DIRS if "/" in d))
+
+
+def declares(text: str) -> bool:
+    """True when a stylesheet declares a custom property, not only uses one."""
+    return bool(_DECLARES.search(text))
 
 
 def _rules(text: str, every: bool = False) -> List[Any]:
@@ -68,8 +87,33 @@ def _members(selector: str) -> List[str]:
     return [m.strip() for m in split_top(selector, ",") if m.strip()]
 
 
+def _theme_member(member: str) -> bool:
+    """True for the root, or a compound of theme classes and attributes on
+    the root or alone. A class or attribute of any other name on its own
+    (.dp, [data-size]) is a component, whatever properties it holds."""
+    if member in _ROOTS:
+        return True
+    rest, rooted = member, False
+    for root in (":root", "html", ":host"):
+        if rest.startswith(root):
+            rest, rooted = rest[len(root):], True
+            break
+    if not rest:
+        return rooted
+    pos = 0
+    while pos < len(rest):
+        m = _SIMPLE.match(rest, pos)
+        if not m:
+            return False
+        if not rooted and ((m.group(1) and not _THEME_CLASS.search(m.group(1)))
+                           or (m.group(2) and not _THEME_ATTR.match(m.group(2)))):
+            return False
+        pos = m.end()
+    return True
+
+
 def _themed(selector: str) -> bool:
-    return all(m in _ROOTS or _THEME_SEL.match(m) for m in _members(selector))
+    return all(_theme_member(m) for m in _members(selector))
 
 
 def _rooted(selector: str) -> bool:
@@ -79,8 +123,9 @@ def _rooted(selector: str) -> bool:
 def css_token_file(name: str, text: str) -> bool:
     """True when a stylesheet is a token source by what it holds: mostly
     custom properties set on the root or a theme selector, or, in a file
-    named as an app's main stylesheet, a theme block of its own."""
-    if "--" not in text:
+    named as an app's main stylesheet, a theme block of its own. A widget
+    or component stylesheet (`.dp { --dp-bg: ... }`) is not one."""
+    if not declares(text):
         return False
     rules = _rules(text, every=True)
     theme = sum(1 for r in rules if _themed(r.selector)
@@ -93,13 +138,22 @@ def css_token_file(name: str, text: str) -> bool:
 
 # ------------------------------------------------------------------ buttons and links
 
-_BUTTON_SEL = re.compile(r"(?:^|[\s,>+~(])(?:a|button)(?=$|[\s,:.\[>+~)])"
-                         r"|[.#][\w-]*(?:btn|button|link|cta)[\w-]*", re.I)
+_BUTTON_SEL = re.compile(r"(?:^|[\s,>+~(])button(?=$|[\s,:.\[>+~)])"
+                         r"|[.#][\w-]*(?:btn|button|cta)[\w-]*", re.I)
+_LINK_SEL = re.compile(r"(?:^|[\s,>+~(])a(?=$|[\s,:.\[>+~)])|[.#][\w-]*link[\w-]*", re.I)
+# A state pseudo-class: what it paints is not the resting fill.
+_STATE_PSEUDO = re.compile(r":(?:hover|focus|focus-visible|focus-within|active|visited|"
+                           r"disabled|checked|target)\b", re.I)
 _TAG = re.compile(r"<([A-Za-z][\w.:-]*)\b([^<>]*?)/?>", re.S)
-_BUTTON_TAG = re.compile(r"^(?:a|button|link|x-button|x-link|nuxtlink|routerlink|"
-                         r"[\w.:-]*button)$", re.I)
+_BUTTON_TAG = re.compile(r"^(?:button|x-button|[\w.:-]*button)$", re.I)
+_LINK_TAG = re.compile(r"^(?:a|link|x-link|nuxtlink|routerlink|[\w.:-]*link)$", re.I)
 _CLASS_ATTR = re.compile(r"\bclass(?:Name)?\s*=\s*(?:\{\s*)?([\"'`])(.*?)\1", re.S)
-_UTILITIES = ("bg", "text", "border", "ring", "outline", "fill", "stroke", "decoration")
+# Calls whose string arguments are class lists: cva, clsx, cn and the like.
+_CLASS_CALL = re.compile(r"\b(?:cva|clsx|cn|cx|classnames|classNames|twMerge|twJoin|tv)\s*\(")
+_STRING = re.compile(r"\"([^\"\\\n]*)\"|'([^'\\\n]*)'|`([^`\\]*)`")
+# Variants a resting fill may carry: the viewport, the scheme and direction.
+_RESTING_VARIANTS = frozenset(("sm", "md", "lg", "xl", "2xl", "dark", "light", "rtl", "ltr",
+                               "print"))
 
 
 def _stem(name: str) -> str:
@@ -112,48 +166,90 @@ def _stem(name: str) -> str:
     return flat
 
 
-def _paint_patterns(name: str) -> Tuple[re.Pattern, re.Pattern]:
-    """(a var() reference to the token, a utility class that paints with it)."""
-    var = "--" + re.sub(r"[^A-Za-z0-9-]+", "-", name.lstrip("-")).strip("-")
-    stem = _stem(name)
-    whole = [re.escape(stem)] if stem.startswith(("bg-", "text-", "border-")) else []
-    utility = "|".join(whole + [f"(?:{'|'.join(_UTILITIES)})-{re.escape(stem)}"])
-    return (re.compile(r"var\(\s*" + re.escape(var) + r"\s*[,)]", re.I),
-            re.compile(r"(?<![\w-])(?:" + utility + r")(?![\w-])", re.I))
+def _resting(classes: str) -> List[str]:
+    """The utilities of a class list that hold at rest: without a state
+    variant (hover:, focus:, group-hover:), their opacity and ! left off."""
+    out = []
+    for token in re.split(r"[\s\"'`{}(),]+", classes):
+        if not token:
+            continue
+        *variants, util = token.split(":")
+        if any(v.lower() not in _RESTING_VARIANTS for v in variants):
+            continue
+        out.append(util.lstrip("!").split("/")[0].lower())
+    return out
+
+
+def _class_calls(text: str) -> List[Tuple[int, str]]:
+    """(offset, the class strings) of each cva, clsx or cn call in a file."""
+    out = []
+    for m in _CLASS_CALL.finditer(text):
+        depth, end = 0, len(text)
+        for i in range(m.end() - 1, min(len(text), m.end() + 20_000)):
+            depth += {"(": 1, ")": -1}.get(text[i], 0)
+            if depth == 0:
+                end = i
+                break
+        strings = [next(g for g in s.groups() if g is not None)
+                   for s in _STRING.finditer(text, m.end(), end)]
+        out.append((m.start(), " ".join(strings)))
+    return out
 
 
 def button_paints(names: Sequence[str], files: Sequence[Path]) -> Dict[str, int]:
     """For each color token name, how often the code paints a button or a
-    link with it: a var() reference or an @apply in a rule whose selector
-    names a, button, a btn, link or cta class, and a utility class or a
-    var() in the attributes of an a, a button or an element whose class
-    names btn or button."""
-    patterns = {n: _paint_patterns(n) for n in names}
+    link with it at rest: a background (and, on a link, a color) set with
+    var() in a rule for a button or a link with no state pseudo-class, and
+    a bg- utility (a text- one on a link) with no state variant, in the
+    class of a button or a link element or in a cva, clsx or cn call of a
+    button or link component. Hover and focus paints are not counted."""
     counts = {n: 0 for n in names}
+    stems = {n: _stem(n) for n in names}
+    vars_ = {n: re.compile(r"var\(\s*--" + re.escape(
+        re.sub(r"[^A-Za-z0-9-]+", "-", n.lstrip("-")).strip("-")) + r"\s*[,)]", re.I)
+        for n in names}
+
+    def utilities(classes: str, link: bool) -> None:
+        for util in _resting(classes):
+            for n, stem in stems.items():
+                own = stem if stem.startswith(("bg-", "text-")) else ""
+                if util in (f"bg-{stem}", own) or (link and util == f"text-{stem}"):
+                    counts[n] += 1
+
     for path in files:
         low = path.name.lower()
-        if low.endswith(STYLE_SUFFIXES):
+        if is_style(path):
             text = read_text(path)
             if "{" not in text:
                 continue
             for rule in _rules(text, every=True):
-                if not _BUTTON_SEL.search(rule.selector):
+                button = bool(_BUTTON_SEL.search(rule.selector))
+                link = bool(_LINK_SEL.search(rule.selector))
+                if not (button or link) or _STATE_PSEUDO.search(rule.selector):
                     continue
-                body = " ".join(f"{d.name}: {d.value}" for d in rule.declarations)
-                for n, (var, util) in patterns.items():
-                    counts[n] += len(var.findall(body)) + sum(
-                        len(util.findall(d.value)) for d in rule.declarations
-                        if d.name == "@apply")
+                for d in rule.declarations:
+                    prop = d.name.lower()
+                    if d.name == "@apply":
+                        utilities(d.value, link)
+                    elif prop in ("background", "background-color") or (link and prop == "color"):
+                        for n, var in vars_.items():
+                            counts[n] += len(var.findall(d.value))
         elif is_template(path):
             text = read_text(path)
             for m in _TAG.finditer(text):
                 tag, attrs = m.group(1), m.group(2)
                 cls = " ".join(c.group(2) for c in _CLASS_ATTR.finditer(attrs))
-                if not (_BUTTON_TAG.match(tag) or re.search(r"(?<![\w-])(?:btn|button)",
-                                                            cls, re.I)):
+                link = bool(_LINK_TAG.match(tag))
+                if not (link or _BUTTON_TAG.match(tag)
+                        or re.search(r"(?<![\w-])(?:btn|button)", cls, re.I)):
                     continue
-                for n, (var, util) in patterns.items():
-                    counts[n] += len(var.findall(attrs)) + len(util.findall(cls))
+                utilities(cls, link)
+            component = re.search(r"button|btn|link", low)
+            for at, strings in _class_calls(text):
+                named = re.search(r"(\w+)\s*=\s*$", text[max(0, at - 60):at])
+                what = (named.group(1) if named else "") + " " + low
+                if component or re.search(r"button|btn|link", what, re.I):
+                    utilities(strings, bool(re.search(r"link", what, re.I)))
     return counts
 
 
@@ -161,41 +257,79 @@ def button_paints(names: Sequence[str], files: Sequence[Path]) -> Dict[str, int]
 
 _HTML_LANG = re.compile(r"<html\b[^>]*?\blang\s*=\s*\{?\s*['\"]([A-Za-z]{2,3})(?:[-_][A-Za-z0-9-]+)?"
                         r"['\"]", re.I)
-_RTL = re.compile(r"\bdir\s*=\s*\{?\s*['\"]rtl['\"]", re.I)
+_PAGE_RTL = re.compile(r"<(?:html|body)\b(?:[^>\"']|\"[^\"]*\"|'[^']*')*?\bdir\s*=\s*\{?\s*"
+                       r"['\"]rtl['\"]", re.I)
+_ANY_RTL = re.compile(r"\bdir\s*=\s*\{?\s*['\"]rtl['\"]", re.I)
+# dir set from the locale, such as dir={isArabic ? "rtl" : "ltr"}.
+_DYNAMIC_RTL = re.compile(r"\bdir\s*=\s*\{[^{}]*['\"]rtl['\"][^{}]*\}", re.I)
 _ARABIC = re.compile("[\\u0600-\\u06FF\\u0750-\\u077F\\u08A0-\\u08FF\\uFB50-\\uFDFF\\uFE70-\\uFEFF]")
 # Arabic letters a template holds before its text counts as Arabic: a
 # language switcher's own name for Arabic is fewer.
 _MIN_ARABIC = 10
+# Folders that hold a locale's strings: lang/ar.json, messages/ar.json,
+# locales/ar/common.json, resources/lang/ar/auth.php.
+LOCALE_DIRS = frozenset(("lang", "langs", "locale", "locales", "messages", "i18n",
+                         "translations", "translation", "l10n"))
+_LOCALE = re.compile(r"^([a-z]{2,3})(?:[-_][A-Za-z]{2,4})?$")
+_LOCALE_SUFFIXES = (".json", ".php", ".yml", ".yaml", ".po", ".js", ".ts")
+
+
+def locale_of(path: Path) -> str:
+    """The language a locale file holds (ar for lang/ar.json or
+    locales/ar/common.json), or ""."""
+    parts = [p.lower() for p in path.parts]
+    if not path.name.lower().endswith(_LOCALE_SUFFIXES) or len(parts) < 2:
+        return ""
+    stem = path.name.split(".")[0].lower()
+    if parts[-2] in LOCALE_DIRS and _LOCALE.match(stem):
+        return _LOCALE.match(stem).group(1)
+    if len(parts) >= 3 and parts[-3] in LOCALE_DIRS and _LOCALE.match(parts[-2]):
+        return _LOCALE.match(parts[-2]).group(1)
+    return ""
 
 
 def languages(files: Sequence[Path]) -> Tuple[List[str], bool]:
-    """(the languages the project's pages and templates set, most used
-    first; True when any of them sets dir="rtl"). A page or template counts
-    once for the language its <html lang> names, and once for Arabic when
-    its text holds Arabic script, so a Blade view or a JSX page with a
-    dynamic lang still counts."""
+    """(the languages the project sets, most used first; True when its
+    pages read right to left). A page or template counts once for the
+    language its <html lang> names, and once for Arabic when its text holds
+    Arabic script, so a Blade view or a JSX page with a dynamic lang still
+    counts. Languages that only locale files hold (lang/ar.json) follow,
+    most files first. Right to left is dir="rtl" on <html> or <body>, on
+    anything in a page whose text is Arabic, or set from the locale when
+    Arabic is one of the languages; a language switcher's dir does not
+    count."""
     counts: Dict[str, List[int]] = {}
-    rtl_any = False
+    locales: Dict[str, List[int]] = {}
+    rtl = dynamic = False
     for order, path in enumerate(files):
+        lang = locale_of(path)
+        if lang:
+            rec = locales.setdefault(lang, [0, order])
+            rec[0] += 1
+            continue
         if not is_template(path):
             continue
         text = read_text(path, 200_000)
-        rtl = bool(_RTL.search(text))
-        rtl_any = rtl_any or rtl
         found = []
         m = _HTML_LANG.search(text[:20_000])
         if m:
             found.append(m.group(1).lower())
-        if "ar" not in found and len(_ARABIC.findall(text)) >= _MIN_ARABIC:
+        arabic = len(_ARABIC.findall(text)) >= _MIN_ARABIC
+        if "ar" not in found and arabic:
             found.append("ar")
+        here = bool(_PAGE_RTL.search(text) or (arabic and _ANY_RTL.search(text)))
+        rtl = rtl or here
+        dynamic = dynamic or bool(_DYNAMIC_RTL.search(text))
         for lang in found:
             rec = counts.setdefault(lang, [0, 0, order])
             rec[0] += 1
-            if rtl and (lang == "ar" or len(found) == 1):
+            if here and (lang == "ar" or len(found) == 1):
                 rec[1] += 1
     ranked = [lang for lang, _ in sorted(counts.items(),
                                          key=lambda kv: (-kv[1][0], -kv[1][1], kv[1][2]))]
-    return ranked, rtl_any
+    ranked += [lang for lang, _ in sorted(locales.items(), key=lambda kv: (-kv[1][0], kv[1][1]))
+               if lang not in ranked]
+    return ranked, rtl or (dynamic and "ar" in ranked)
 
 
 # ------------------------------------------------------------------ the data face
@@ -244,8 +378,13 @@ def data_face(styles: Sequence[Path], files: Sequence[Path],
 
 # ------------------------------------------------------------------ disagreements
 
-_IMPORT = re.compile(r"@import\s+(?:url\(\s*)?[\"']([^\"']+)[\"']")
+_IMPORT = re.compile(r"@import\s+(?:url\(\s*)?[\"']([^\"']+)[\"']\s*\)?([^;]*);")
 _LINK = re.compile(r"<link\b[^>]*?\bhref\s*=\s*[\"']([^\"']+\.css)(?:\?[^\"']*)?[\"']", re.I)
+_LAYER_BLOCK = re.compile(r"@layer\b[^{};]*\{")
+# (layered, specificity): a declaration outside any cascade layer beats
+# one inside a layer, whatever their order and specificity; then :root,
+# :host and @theme outrank html.
+Rank = Tuple[int, int]
 
 
 def token_key(name: str) -> str:
@@ -261,74 +400,147 @@ def _loose(key: str) -> str:
     return key
 
 
-def _css_root_values(text: str) -> Dict[str, Tuple[str, int]]:
-    """name -> (value, specificity) of each custom property set on the root
-    outside any media query; :root, :host and @theme outrank html, and a
-    later declaration of equal rank wins, as in the cascade."""
-    out: Dict[str, Tuple[str, int]] = {}
-    for rule in _rules(text):
-        if rule.media or not _rooted(rule.selector):
+def _layered_lines(text: str) -> List[Tuple[int, int]]:
+    """The line ranges inside @layer blocks."""
+    from engine.io.css_in import _blank_comments, _matching  # engine.io imports this package
+    blank = _blank_comments(text)
+    out = []
+    for m in _LAYER_BLOCK.finditer(blank):
+        try:
+            end = _matching(blank, m.end() - 1, "the stylesheet")
+        except ValueError:
             continue
-        rank = max(0 if m == "html" else 1 for m in _members(rule.selector))
-        for d in rule.declarations:
-            if d.name not in out or rank >= out[d.name][1]:
-                out[d.name] = (d.value.strip(), rank)
+        out.append((blank.count("\n", 0, m.start()) + 1, blank.count("\n", 0, end) + 1))
     return out
 
 
-def _imports(path: Path, text: str, base: Path) -> List[Path]:
-    out = []
-    for ref in _IMPORT.findall(text):
-        if re.match(r"^[a-z][a-z0-9+.-]*:", ref, re.I):
+def _context(selector: str) -> str:
+    """The theme a rule sets: "" for the root, else its selector without
+    the root, quotes or spaces ([data-theme=dark] for :root[data-theme="dark"])."""
+    if _rooted(selector):
+        return ""
+    parts = []
+    for m in _members(selector):
+        for root in (":root", "html", ":host"):
+            if m.startswith(root) and len(m) > len(root):
+                m = m[len(root):]
+                break
+        parts.append(re.sub(r"[\"'\s]", "", m))
+    return ", ".join(sorted(parts))
+
+
+def css_values(text: str, layered: bool = False) -> Dict[Tuple[str, str], Tuple[str, Rank]]:
+    """(theme, name) -> (value, rank) of each custom property a stylesheet
+    sets on the root or a theme selector outside any media query, the
+    cascade's last word within the file. `layered` when the file itself is
+    imported into a layer."""
+    if not declares(text):
+        return {}
+    layers = _layered_lines(text)
+    out: Dict[Tuple[str, str], Tuple[str, Rank]] = {}
+    for rule in _rules(text):
+        if rule.media or not rule.declarations or not _themed(rule.selector):
+            continue
+        inside = layered or any(a <= rule.line <= b for a, b in layers)
+        spec = max(0 if m == "html" else 1 for m in _members(rule.selector))
+        rank = (0 if inside else 1, spec)
+        ctx = _context(rule.selector)
+        for d in rule.declarations:
+            key = (ctx, d.name)
+            if key not in out or rank >= out[key][1]:
+                out[key] = (d.value.strip(), rank)
+    return out
+
+
+def _packages(base: Path, files: Sequence[Path]) -> Dict[str, Path]:
+    """Workspace package name -> its folder, from the package.json files
+    the walk found."""
+    out: Dict[str, Path] = {}
+    for path in files:
+        if path.name != "package.json" or path.parent == base:
             continue
         try:
-            cand = (path.parent / ref).resolve()
-            cand.relative_to(base)
-        except (OSError, ValueError):
+            name = json.loads(read_text(path, 200_000)).get("name")
+        except (ValueError, AttributeError):
             continue
-        out.append(cand)
+        if isinstance(name, str) and name:
+            out.setdefault(name, path.parent)
     return out
+
+
+def _resolve(path: Path, ref: str, base: Path, packages: Dict[str, Path]) -> Optional[Path]:
+    """The file an @import names: relative to the importing file, or a
+    package name (@scope/pkg/file.css) through node_modules or a workspace
+    package. None when it cannot be found."""
+    cands = []
+    if ref.startswith((".", "/")):
+        cands.append(path.parent / ref)
+    else:
+        bits = ref.split("/")
+        name = "/".join(bits[:2]) if ref.startswith("@") else bits[0]
+        rest = "/".join(bits[2:] if ref.startswith("@") else bits[1:])
+        folder = path.parent
+        while True:
+            cands.append(folder / "node_modules" / ref)
+            if folder == base or base not in folder.parents:
+                break
+            folder = folder.parent
+        if name in packages and rest:
+            cands.append(packages[name] / rest)
+        cands.append(path.parent / ref)
+    for cand in cands:
+        try:
+            if cand.is_file():
+                return cand.resolve()
+        except OSError:
+            continue
+    return None
 
 
 def disagreements(base: Path, css_paths: Sequence[Path], token_docs: Sequence[Tuple[Path, Any]],
-                  md_paths: Sequence[Path], pages: Sequence[Path],
+                  md_paths: Sequence[Path], files: Sequence[Path],
                   reading: Callable[[str, Dict[str, str]], str],
                   flatten: Callable[[Any], Dict[str, Dict[str, Any]]]) -> List[Dict[str, Any]]:
-    """Each token two sources set to different values: stylesheets, token
-    files and a hand-written MASTER.md or DESIGN.md palette. Each entry
-    names the token, every file with its value, the file that wins in the
-    cascade ("" when these files do not decide it) and why. `reading`
-    turns a value into what it reads as, given the properties around it;
-    `flatten` reads a token document."""
+    """Each token two sources set to different values: stylesheets (every
+    one that sets custom properties on the root or a theme, an app's main
+    stylesheet among its component rules included), token files and a
+    hand-written MASTER.md or DESIGN.md palette. Each entry names the token
+    (and the theme, for a value set under one), every file with its value,
+    the file that wins in the cascade ("" when these files do not decide
+    it) and why. `files` is the walk, for pages, package names and
+    node_modules; `reading` turns a value into what it reads as, given the
+    properties around it; `flatten` reads a token document."""
+    css_paths = [p.resolve() for p in css_paths]
     rel = {p: p.relative_to(base).as_posix() for p in [*css_paths, *(p for p, _ in token_docs),
                                                         *md_paths]}
-    css: Dict[Path, Dict[str, Tuple[str, int]]] = {}
-    texts: Dict[Path, str] = {}
-    for path in css_paths:
-        texts[path] = read_text(path)
-        css[path] = _css_root_values(texts[path])
+    texts = {p: read_text(p) for p in css_paths}
+    packages = _packages(base, files)
+    order = _load_order(css_paths, texts, files, base, packages)
+    css = {p: css_values(texts[p], p in order.layered) for p in css_paths}
     union: Dict[str, str] = {}
     for values in css.values():
-        for name, (value, _) in values.items():
-            union.setdefault(name, value)
+        for (ctx, name), (value, _) in values.items():
+            if not ctx:
+                union.setdefault(name, value)
     # key -> [(path, name as written, value as written, reading, kind, rank)]
-    found: Dict[str, List[Tuple[Path, str, str, str, str, int]]] = {}
+    found: Dict[Tuple[str, str], List[Tuple[Path, str, str, str, str, Rank]]] = {}
     for path, values in css.items():
-        own = {n: v for n, (v, _) in values.items()}
+        own = {n: v for (c, n), (v, _) in values.items() if not c}
         props = {**union, **own}
-        for name, (value, rank) in values.items():
-            found.setdefault(token_key(name), []).append(
+        for (ctx, name), (value, rank) in values.items():
+            found.setdefault((ctx, token_key(name)), []).append(
                 (path, name, value, reading(value, props), "css", rank))
     for path, doc in token_docs:
         for name, tok in flatten(doc).items():
             value = tok.get("value")
             if isinstance(value, (str, int, float)) and not isinstance(value, bool):
                 text = str(value)
-                found.setdefault(token_key(name), []).append(
-                    (path, name, text, reading(text, union), "tokens", 0))
-    loose: Dict[str, List[str]] = {}
+                found.setdefault(("", token_key(name)), []).append(
+                    (path, name, text, reading(text, union), "tokens", (0, 0)))
+    loose: Dict[str, List[Tuple[str, str]]] = {}
     for key in found:
-        loose.setdefault(_loose(key), []).append(key)
+        if not key[0]:
+            loose.setdefault(_loose(key[1]), []).append(key)
     for path in md_paths:
         from engine.io.markdown_in import import_markdown  # engine.io imports this package
         from engine.io.report import Source
@@ -341,36 +553,66 @@ def disagreements(base: Path, css_paths: Sequence[Path], token_docs: Sequence[Tu
             if tok.type != "color" or not isinstance(tok.value, str) or tok.value.startswith("{"):
                 continue
             for key in loose.get(_loose(token_key(tok.path)), []):
-                found[key].append((path, tok.path, tok.value, reading(tok.value, union), "md", 0))
+                found[key].append((path, tok.path, tok.value, reading(tok.value, union), "md",
+                                   (0, 0)))
 
-    later, imported = _load_order(css_paths, texts, pages, base)
     out: List[Dict[str, Any]] = []
-    for key, entries in found.items():
-        by_file: Dict[Path, Tuple[Path, str, str, str, str, int]] = {}
+    for (ctx, _), entries in found.items():
+        by_file: Dict[Path, Tuple[Path, str, str, str, str, Rank]] = {}
         for e in entries:
             by_file[e[0]] = e  # a file's last word on the token
         if len(by_file) < 2 or len({e[3] for e in by_file.values()}) < 2:
             continue
         rows = list(by_file.values())
-        wins, why = _winner(rows, later, imported, rel)
+        wins, why = _winner(rows, order, rel)
         name = next((e[1] for e in rows if e[4] == "css"), rows[0][1])
+        shown = f"{name} under {ctx}" if ctx else name
         listed = [f"{e[2]} in {rel[e[0]]}" for e in rows]
         said = " and ".join(listed) if len(listed) == 2 else (
             ", ".join(listed[:-1]) + " and " + listed[-1])
-        out.append({"token": name,
-                    "values": [{"path": rel[e[0]], "token": e[1], "value": e[2]} for e in rows],
-                    "wins": rel[wins] if wins else "",
-                    "why": f"{name} is {said}; {why}"})
+        entry: Dict[str, Any] = {"token": name}
+        if ctx:
+            entry["theme"] = ctx
+        entry.update({"values": [{"path": rel[e[0]], "token": e[1], "value": e[2]} for e in rows],
+                      "wins": rel[wins] if wins else "",
+                      "why": f"{shown} is {said}; {why}"})
+        out.append(entry)
     return out
 
 
-def _load_order(css_paths: Sequence[Path], texts: Dict[Path, str], pages: Sequence[Path],
-                base: Path) -> Tuple[Dict[Path, set], Dict[Path, set]]:
-    """(for each stylesheet the stylesheets it loads after: those it
-    imports at any depth and those a page links before it; for each the
-    ones it imports)."""
-    direct = {p: {q for q in _imports(p, texts[p], base) if q in texts} for p in css_paths}
-    after: Dict[Path, set] = {}
+class _Order:
+    """How the stylesheets load: for each, the ones it loads after (those
+    it imports at any depth and those a page links before it), the ones it
+    imports, the imports it names that could not be resolved, and the files
+    imported into a cascade layer."""
+
+    def __init__(self) -> None:
+        self.after: Dict[Path, set] = {}
+        self.imports: Dict[Path, set] = {}
+        self.unresolved: Dict[Path, List[str]] = {}
+        self.layered: set = set()
+
+
+def _load_order(css_paths: Sequence[Path], texts: Dict[Path, str], files: Sequence[Path],
+                base: Path, packages: Dict[str, Path]) -> _Order:
+    from engine.io.css_in import _blank_comments  # engine.io imports this package
+    order = _Order()
+    direct: Dict[Path, set] = {}
+    for p in css_paths:
+        direct[p] = set()
+        order.unresolved[p] = []
+        for ref, tail in _IMPORT.findall(_blank_comments(texts[p])):
+            if re.match(r"^[a-z][a-z0-9+.-]*:", ref, re.I):
+                continue
+            target = _resolve(p, ref, base, packages)
+            if target is None:
+                if ref.lower().endswith(STYLE_SUFFIXES):
+                    order.unresolved[p].append(ref)
+                continue
+            if target in texts:
+                direct[p].add(target)
+                if re.search(r"\blayer\b", tail):
+                    order.layered.add(target)
     for p in css_paths:
         seen, stack = set(), list(direct[p])
         while stack:
@@ -378,12 +620,12 @@ def _load_order(css_paths: Sequence[Path], texts: Dict[Path, str], pages: Sequen
             if q not in seen:
                 seen.add(q)
                 stack += list(direct.get(q, ()))
-        after[p] = set(seen)
-    imported = {p: set(s) for p, s in after.items()}
-    by_name = {}
+        order.after[p] = set(seen)
+        order.imports[p] = set(seen)
+    by_name: Dict[str, List[Path]] = {}
     for p in css_paths:
         by_name.setdefault(p.name, []).append(p)
-    for page in pages:
+    for page in files:
         if not is_template(page):
             continue
         linked: List[Path] = []
@@ -398,12 +640,12 @@ def _load_order(css_paths: Sequence[Path], texts: Dict[Path, str], pages: Sequen
             if cand in texts and cand not in linked:
                 linked.append(cand)
         for i, p in enumerate(linked):
-            after[p] |= set(linked[:i])
-    return after, imported
+            order.after[p] |= set(linked[:i])
+    return order
 
 
-def _winner(rows: List[Tuple[Path, str, str, str, str, int]], later: Dict[Path, set],
-            imported: Dict[Path, set], rel: Dict[Path, str]) -> Tuple[Optional[Path], str]:
+def _winner(rows: List[Tuple[Path, str, str, str, str, Rank]], order: _Order,
+            rel: Dict[Path, str]) -> Tuple[Optional[Path], str]:
     """The file whose value the page shows, and why; (None, why) when these
     files do not decide it."""
     styles = [e for e in rows if e[4] == "css"]
@@ -418,29 +660,42 @@ def _winner(rows: List[Tuple[Path, str, str, str, str, int]], later: Dict[Path, 
     top = max(e[5] for e in styles)
     ranked = [e for e in styles if e[5] == top]
     others = [e for e in rows if e not in ranked]
-    if len(ranked) < len(styles):
-        low = [rel[e[0]] for e in styles if e[5] < top]
-        why_rank = (f"it sets it on :root, which outranks html in {', '.join(low)} whatever "
-                    "the order")
-    else:
-        why_rank = ""
+    why_rank = ""
+    low = [e for e in styles if e[5] < top]
+    if low:
+        if any(e[5][0] < top[0] for e in low):
+            why_rank = ("it is set outside any cascade layer, which beats the value inside a "
+                        f"layer in {', '.join(rel[e[0]] for e in low if e[5][0] < top[0])} "
+                        "whatever the order")
+        else:
+            why_rank = (f"it sets it on :root, which outranks html in "
+                        f"{', '.join(rel[e[0]] for e in low)} whatever the order")
     if len(ranked) == 1:
         win = ranked[0][0]
         why = why_rank or "it is the only stylesheet that sets it; the page shows its value"
     else:
-        last = [e for e in ranked if all(o[0] in later[e[0]] for o in ranked if o is not e)]
+        last = [e for e in ranked
+                if all(o[0] in order.after[e[0]] for o in ranked if o is not e)]
         if not last:
             names = " and ".join(rel[e[0]] for e in ranked)
+            lost = [(rel[e[0]], ref) for e in ranked for ref in order.unresolved.get(e[0], [])]
+            if lost:
+                where, ref = lost[0]
+                return None, (f"{names} set it with equal weight, and {where} imports {ref}, "
+                              "which could not be resolved here, so which one the page loads "
+                              "last is not known; keep one value")
             return None, (f"{names} set it with equal weight and neither loads the other, so the "
                           "stylesheet the page loads last wins; keep one value, or import one "
                           "file from the other so the order is written down")
         win = last[0][0]
         undone = [rel[e[0]] for e in ranked if e[0] != win]
-        how = ("imports" if all(o[0] in imported[win] for o in ranked if o[0] != win)
+        how = ("imports" if all(o[0] in order.imports[win] for o in ranked if o[0] != win)
                else "loads after")
         why = (f"it {how} {', '.join(undone)} and sets it again after, which silently undoes "
                f"the value there; remove the second declaration, or change it in "
                f"{', '.join(undone)}")
+        if why_rank:
+            why = f"{why}; {why_rank}"
     tail = ""
     docs = [rel[e[0]] for e in others if e[4] == "md"]
     tokens = [rel[e[0]] for e in others if e[4] == "tokens"]

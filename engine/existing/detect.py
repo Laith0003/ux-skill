@@ -84,6 +84,9 @@ _NOT_TEXT = {
 _TEXT_BEST = {"primary", "default", "base", "strong", "body", "main"}
 _TEXT_MAX_CHROMA = 0.35    # a text color is near-neutral
 _TEXT_MIN_CONTRAST = 4.5   # on white or the declared canvas
+# A near-white (or near-canvas) tint: a hover or surface fill, never the primary.
+_TINT_CONTRAST = 1.5
+_TINT_CHROMA = 0.2
 _DISPLAY_WORDS = {"display", "heading", "headline", "head", "title"}
 _BODY_WORDS = {"body", "base", "text", "sans", "default", "ui", "copy"}
 # Platform keywords a font list may open with: the face is the system's own.
@@ -422,28 +425,80 @@ def _rank_primary(names: Iterable[Tuple[str, str]]) -> Tuple[str, str]:
     return (found[0][0], found[0][1]) if found else ("", "")
 
 
-def _choose_primary(cands: List[Tuple[str, str, str]], files: List[Path]
+def _on_color(name: str, named: Dict[str, str]) -> str:
+    """The color a token's own text sits in (on-primary, primary-foreground),
+    or ""."""
+    stem = "-".join(_segments(name))
+    for cand in ("on-" + stem, stem + "-foreground", stem + "-fg", stem + "-on",
+                 stem + "-text", "text-on-" + stem, stem + "-contrast"):
+        hx = named.get(cand, "")
+        if len(hx) == 7:
+            return hx
+    return ""
+
+
+def _holds_text(name: str, hx: str, named: Dict[str, str], canvas: str) -> str:
+    """"" when a primary candidate can carry a button's text, else why not:
+    a near-white tint of the page never can, and a fill needs 4.5:1 against
+    its own text color, or against the page when it has none."""
+    page = canvas or "#FFFFFF"
+    if _contrast(hx, page) < _TINT_CONTRAST and _chroma(hx) < _TINT_CHROMA:
+        return "%s (%s) is a tint of the page, a hover or surface fill" % (name, hx)
+    on = _on_color(name, named)
+    if max(_contrast(hx, on) if on else 0.0, _contrast(hx, page)) < _TEXT_MIN_CONTRAST:
+        return ("%s (%s) reaches under 4.5:1 against %s, so it cannot carry a button's text"
+                % (name, hx, "its text color %s" % on if on else "the page"))
+    return ""
+
+
+def _choose_primary(cands: List[Tuple[str, str, str]], files: List[Path],
+                    named: Dict[str, str], canvas: str
                     ) -> Tuple[Tuple[str, str], str, List[Dict[str, Any]]]:
-    """(the chosen (name, hex), why, every candidate with its paint count).
-    One candidate is taken by its name. Of several, the one the code paints
-    buttons and links with most wins; with no such use, the best name."""
-    name, hx, word = cands[0]
-    how = ("its name says %s" % word if word in _PRIMARY_WORDS
-           else "its name says %s, an action color" % word)
-    if len(cands) == 1:
-        return (name, hx), "%s is the only primary candidate; %s." % (name, how), []
-    paints = survey.button_paints([c[0] for c in cands], files)
-    listed = [{"token": n, "value": h, "paints": paints[n]} for n, h, _ in cands]
-    best = max(cands, key=lambda c: paints[c[0]])
-    others = ", ".join("%s (%d)" % (n, paints[n]) for n, _, _ in cands if n != best[0])
-    if paints[best[0]]:
-        n = paints[best[0]]
-        why = ("%s is the color the code paints buttons and links with: %d use%s in button and "
-               "link styles and markup, over %s." % (best[0], n, "" if n == 1 else "s", others))
-        return (best[0], best[1]), why, listed
-    return (name, hx), ("%s was chosen because %s; the code paints no button or link with it or "
-                        "with %s, so confirm it is the action color." % (
-                            name, how, ", ".join(n for n, _, _ in cands[1:]))), listed
+    """(the chosen (name, hex), why, every candidate with its paint count
+    when there are several). A name that says primary or brand wins; an
+    action color name (accent, action, cta, interactive) is read only when
+    none does. A candidate that cannot carry a button's text never wins.
+    Of several at one rank, the one the code paints buttons and links with
+    most at rest wins; with no such use, the best name. (("", ""), why, ...)
+    when no candidate can carry text."""
+    refused = {c[0]: _holds_text(c[0], c[1], named, canvas) for c in cands}
+    paints = survey.button_paints([c[0] for c in cands], files) if len(cands) > 1 else {}
+    listed = [{"token": n, "value": h, "paints": paints[n]} for n, h, _ in cands] \
+        if len(cands) > 1 else []
+    left = ["%s was left out: %s" % (n, refused[n]) for n, _, _ in cands if refused[n]]
+    tail = ("; " + "; ".join(left)) if left else ""
+    for tier_words in (_PRIMARY_WORDS, _ACTION_WORDS):
+        group = [c for c in cands if c[2] in tier_words]
+        ok = [c for c in group if not refused[c[0]]]
+        if not ok:
+            continue
+        name, hx, word = ok[0]
+        how = ("its name says %s" % word if word in _PRIMARY_WORDS
+               else "its name says %s, an action color, and no color is named primary or "
+                    "brand" % word)
+        if len(cands) == 1:
+            return (name, hx), "%s is the only primary candidate; %s." % (name, how), listed
+        if len(ok) > 1:
+            best = max(ok, key=lambda c: paints[c[0]])
+            if paints[best[0]]:
+                n = paints[best[0]]
+                others = ", ".join("%s (%d)" % (c[0], paints[c[0]]) for c in ok
+                                   if c[0] != best[0])
+                return (best[0], best[1]), (
+                    "%s is the color the code paints buttons and links with at rest: %d use%s in "
+                    "button and link styles and markup, over %s%s." % (
+                        best[0], n, "" if n == 1 else "s", others, tail)), listed
+            return (name, hx), (
+                "%s was chosen because %s; the code paints no button or link with it or with %s "
+                "at rest, so confirm it is the action color%s." % (
+                    name, how, ", ".join(c[0] for c in ok[1:]), tail)), listed
+        rest = [c[0] for c in cands if c[0] != name and not refused[c[0]]]
+        over = ("; a name that says primary or brand wins over %s" % ", ".join(rest)
+                if rest and word in _PRIMARY_WORDS else "")
+        return (name, hx), "%s was chosen because %s%s%s." % (name, how, over, tail), listed
+    return ("", ""), ("no primary candidate can carry a button's text: %s; name the action color "
+                      "primary, or pass it as the brand primary by hand."
+                      % "; ".join(refused[c[0]] for c in cands)), listed
 
 
 def _luminance(hx: str) -> float:
@@ -579,7 +634,10 @@ def resolve_css_var(value: str, props: Dict[str, str], depth: int = 0) -> str:
 # ------------------------------------------------------------------ walk
 
 
-def _walk(base: Path, depth: int, seen: set, out: List[Path]) -> None:
+def _walk(base: Path, depth: int, seen: set, out: List[Path],
+          keep: Optional[Any] = None) -> None:
+    """Files under ``base``, sorted, to the depth and count caps; with
+    ``keep``, only the files it accepts, and only they count to the cap."""
     if depth > _MAX_DEPTH or len(out) >= _MAX_FILES:
         return
     try:
@@ -590,8 +648,8 @@ def _walk(base: Path, depth: int, seen: set, out: List[Path]) -> None:
         if entry.name in _SKIP_DIRS or entry.is_symlink():
             continue
         if entry.is_dir():
-            _walk(entry, depth + 1, seen, out)
-        elif entry.is_file():
+            _walk(entry, depth + 1, seen, out, keep)
+        elif entry.is_file() and (keep is None or keep(entry)):
             key = str(entry.resolve())
             if key not in seen:
                 seen.add(key)
@@ -696,10 +754,15 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
 
     Beyond the conventional folders, a token file is also found by what it
     holds, anywhere in the same bounded walk outside docs, examples and
-    tests: a stylesheet whose rules are mostly custom properties on the
-    root or a theme selector (or a main stylesheet, such as app.css or
-    globals.css, with a theme block of its own), and a DTCG file under any
-    name. Built output found that way is left out.
+    tests (the walk counts only stylesheets, pages, templates and JSON and
+    locale files toward its cap): a stylesheet (.css, .scss or .pcss) whose
+    rules are mostly custom properties on the root or a theme selector (or a
+    main stylesheet, such as app.css or globals.css, with a theme block of
+    its own), and a DTCG file under any name. A theme selector is the root,
+    or a class or attribute that names a theme (.dark, .theme-x,
+    data-theme, data-mode); a widget's own class (.dp { --dp-bg }) is a
+    component, so a widget stylesheet alone is never a system. Built output
+    found that way is left out.
 
     ``declared`` is read from the token source first, then other token
     files, then built output, then foundation CSS: ``primary`` and
@@ -710,21 +773,34 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     (every named, non-ramp color in the client's naming, a translucent one
     as #RRGGBBAA), ``languages`` (from the project's pages and templates:
     HTML, Blade, JSX and TSX, Vue, Svelte, Astro, ERB and Twig, by their
-    html lang and by Arabic script in their text, most used first) and
-    ``direction`` (rtl when any of them sets dir="rtl").
+    html lang and by Arabic script in their text, most used first, then
+    the languages only locale files such as messages/ar.json hold) and
+    ``direction`` (rtl when <html> or <body> sets dir="rtl", when a page
+    whose text is Arabic does anywhere, or when dir is set from the locale
+    and Arabic is one of the languages; a language switcher's dir is not).
 
-    The primary is a color whose name says primary or brand, else one that
-    says accent, action, cta or interactive (a leading fill word, as in
-    bg-brand, is allowed). Of several, the one the code paints buttons and
-    links with most wins; ``primary_candidates`` lists each with its count
-    and ``primary_why`` says which was chosen and why.
+    The primary is a color whose name says primary or brand; a name that
+    says accent, action, cta or interactive is read only when none does (a
+    leading fill word, as in bg-brand, is allowed). A candidate that cannot
+    carry a button's text (a near-white tint of the page, or under 4.5:1
+    against its own text color and the page) never wins. Of several at one
+    rank, the one the code fills buttons and links with most at rest wins:
+    hover and focus paints are not counted, and class strings in cva, clsx
+    and cn calls are. ``primary_candidates`` lists each with its count and
+    ``primary_why`` says which was chosen and why; ``primary_note`` says why
+    none was, when no candidate can carry text.
 
     ``disagreements`` lists each token two sources set to different values:
-    two stylesheets (an app file that imports the system's file and sets a
-    token again undoes the system's value), a token file, and a
-    hand-written MASTER.md or DESIGN.md palette. Each names the token, every
-    file with its value, the file that wins in the cascade ("" when these
-    files do not decide it) and why.
+    any two stylesheets that set it on the root or under one theme (an app
+    stylesheet that imports the system's file and sets a token again among
+    its component rules undoes the system's value), a token file, and a
+    hand-written MASTER.md or DESIGN.md palette. Each names the token (and
+    its ``theme``), every file with its value, the file that wins in the
+    cascade and why: outside a cascade layer beats inside one, :root beats
+    html, and then the file loaded last, by its imports (a package name is
+    resolved through node_modules or the workspace packages) or a page's
+    links. The winner is "" when these files do not decide it, and an
+    import that could not be resolved is said to be so.
     """
     base = Path(root).expanduser()
     result: Dict[str, Any] = {"found": False,
@@ -757,8 +833,10 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     for rel in system_dirs:
         if (base / rel).is_dir():
             _walk(base / rel, 1, seen, files)
+    # The whole project, to the same caps, counting only the files the
+    # survey reads, so a folder of images never starves a stylesheet.
     html_files: List[Path] = []
-    _walk(base, 0, set(), html_files)
+    _walk(base, 0, set(), html_files, _surveyed)
 
     # Token sources: the .json files a token build script reads.
     scripts = [p for p in files
@@ -819,7 +897,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
         if any(s["path"] == rel for s in sources) or not survey.in_product(path, base) \
                 or low.endswith(".min.css") or _is_built(path, base):
             continue
-        if low.endswith(".css"):
+        if survey.is_style(path):
             if survey.css_token_file(path.name, _read_text(path)):
                 css_files.append(path)
                 add("css-foundation", path)
@@ -881,17 +959,22 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
 
     declared: Dict[str, Any] = {}
     cands = _primary_candidates(colors)
-    p_from = "tokens"
+    p_from, pool = "tokens", colors
     if not cands:
         cands = [("--" + n, h, w) for n, h, w in _primary_candidates(css_colors)]
-        p_from = "css"
+        p_from, pool = "css", css_colors
     if cands:
-        (p_name, p_hex), why, listed = _choose_primary(cands, html_files)
-        declared["primary"] = p_hex
-        declared["primary_token"] = p_name
-        declared["primary_from"] = p_from
-        if listed or cands[0][2] not in _PRIMARY_WORDS:
-            declared["primary_why"] = why
+        named_pool = {"-".join(_segments(n)): h for n, h in pool}
+        (p_name, p_hex), why, listed = _choose_primary(cands, html_files, named_pool,
+                                                       _canvas(pool))
+        if p_hex:
+            declared["primary"] = p_hex
+            declared["primary_token"] = p_name
+            declared["primary_from"] = p_from
+            if len(cands) > 1 or cands[0][2] not in _PRIMARY_WORDS:
+                declared["primary_why"] = why
+        else:
+            declared["primary_note"] = why
         if listed:
             declared["primary_candidates"] = listed
     else:
@@ -932,8 +1015,12 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
         declared["languages"] = langs
     if rtl:
         declared["direction"] = "rtl"
+    styles = list(css_files) + [
+        p for p in html_files if survey.is_style(p) and p not in css_files
+        and survey.in_product(p, base) and not _is_built(p, base)
+        and survey.declares(_read_text(p))]
     disagree = survey.disagreements(
-        base, css_files, doc_paths,
+        base, styles, doc_paths,
         [base / s["path"] for s in sources if s["kind"] in ("master-md", "design-md")],
         html_files, _reading, flatten_dtcg)
     if disagree:
@@ -943,6 +1030,13 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     result["declared"] = declared
     result["found"] = True
     return result
+
+
+def _surveyed(path: Path) -> bool:
+    """A file the survey reads: a stylesheet, a page or template, a JSON
+    file (tokens, a package manifest, a locale) or a locale file."""
+    return survey.is_style(path) or survey.is_template(path) \
+        or path.suffix.lower() == ".json" or bool(survey.locale_of(path))
 
 
 _FONT_TOKEN_RE = re.compile(r"^--font-(?!size|weight|feature|variation|style|stretch|"

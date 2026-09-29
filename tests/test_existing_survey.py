@@ -42,9 +42,9 @@ def test_an_assets_folder_beside_the_system_is_read(tmp_path: Path) -> None:
 
 
 def test_an_apps_own_token_stylesheet_is_read(tmp_path: Path) -> None:
-    _write(tmp_path, "resources/css/wallet-tokens.css", ROOT_TOKENS)
+    _write(tmp_path, "resources/css/app-tokens.css", ROOT_TOKENS)
     found = detect_existing_system(tmp_path)
-    assert _paths(found)["resources/css/wallet-tokens.css"] == "css-foundation"
+    assert _paths(found)["resources/css/app-tokens.css"] == "css-foundation"
     assert found["declared"]["primary"] == "#0F766E"
 
 
@@ -83,13 +83,15 @@ def test_token_files_under_docs_examples_and_tests_are_not_the_system(tmp_path: 
 # ---------------------------------------------------------------- the primary
 
 
-def test_an_action_color_named_accent_is_the_primary(tmp_path: Path) -> None:
+def test_an_action_color_named_accent_is_the_primary_when_nothing_says_primary(
+        tmp_path: Path) -> None:
     _write(tmp_path, "styles/theme.css", ":root { --ink: #111111; --accent: #0F766E; "
                                           "--accent-hover: #115E59; --paper: #FFFFFF; }")
     declared = detect_existing_system(tmp_path)["declared"]
     assert (declared["primary"], declared["primary_token"]) == ("#0F766E", "--accent")
-    assert declared["primary_why"] == ("--accent is the only primary candidate; its name says "
-                                       "accent, an action color.")
+    assert declared["primary_why"] == (
+        "--accent is the only primary candidate; its name says accent, an action color, and no "
+        "color is named primary or brand.")
 
 
 def test_a_brand_fill_name_is_a_primary_candidate(tmp_path: Path) -> None:
@@ -99,33 +101,86 @@ def test_a_brand_fill_name_is_a_primary_candidate(tmp_path: Path) -> None:
     assert (declared["primary"], declared["primary_token"]) == ("#7C3AED", "--bg-brand")
 
 
-def test_the_color_buttons_and_links_use_wins_over_a_primary_name(tmp_path: Path) -> None:
-    _write(tmp_path, "styles/theme.css", ":root { --primary: #1E2329; --accent: #0F766E; "
-                                          "--paper: #FFFFFF; }\n"
-                                          ".btn { background: var(--accent); }\n"
-                                          "a:hover { color: var(--accent); }")
-    _write(tmp_path, "resources/views/home.blade.php",
-           '<button class="rounded bg-accent text-white">Save</button>\n'
-           '<a class="text-accent" href="/next">Next</a>\n'
-           '<h1 class="text-primary">Title</h1>\n')
+# A component library's shape: a dark primary, a near-white accent used
+# only on hover, and button variants written in a cva call.
+SHADCN_SHAPE = {
+    "app/globals.css": (":root {\n  --background: #FFFFFF;\n  --foreground: #09090B;\n"
+                        "  --primary: #18181B;\n  --primary-foreground: #FAFAFA;\n"
+                        "  --accent: #F4F4F5;\n  --accent-foreground: #18181B;\n}\n"),
+    "components/ui/button.tsx": (
+        'const buttonVariants = cva("inline-flex items-center", {\n'
+        '  variants: { variant: {\n'
+        '    default: "bg-primary text-primary-foreground hover:bg-primary/90",\n'
+        '    ghost: "hover:bg-accent hover:text-accent-foreground",\n'
+        '    link: "text-primary underline-offset-4 hover:underline",\n'
+        "  } },\n});\n"),
+    "app/page.tsx": ('<Button className="hover:bg-accent">One</Button>\n'
+                     '<Button className="hover:bg-accent focus:bg-accent">Two</Button>\n'
+                     '<a className="text-primary" href="/more">More</a>\n'),
+}
+
+
+def test_a_primary_name_wins_over_a_hover_tint_named_accent(tmp_path: Path) -> None:
+    for rel, text in SHADCN_SHAPE.items():
+        _write(tmp_path, rel, text)
     declared = detect_existing_system(tmp_path)["declared"]
-    assert (declared["primary"], declared["primary_token"]) == ("#0F766E", "--accent")
+    assert (declared["primary"], declared["primary_token"]) == ("#18181B", "--primary")
     assert declared["primary_candidates"] == [
-        {"token": "--primary", "value": "#1E2329", "paints": 0},
-        {"token": "--accent", "value": "#0F766E", "paints": 4}]
+        {"token": "--primary", "value": "#18181B", "paints": 2},
+        {"token": "--accent", "value": "#F4F4F5", "paints": 0}]
     assert declared["primary_why"] == (
-        "--accent is the color the code paints buttons and links with: 4 uses in button and "
-        "link styles and markup, over --primary (0).")
+        "--primary was chosen because its name says primary; --accent was left out: --accent "
+        "(#F4F4F5) is a tint of the page, a hover or surface fill.")
 
 
-def test_without_any_use_the_best_name_is_chosen_and_the_owner_is_asked(tmp_path: Path) -> None:
-    _write(tmp_path, "styles/theme.css", ":root { --accent: #0F766E; --brand: #7C3AED; "
+def test_hover_and_focus_paints_are_not_counted(tmp_path: Path) -> None:
+    _write(tmp_path, "styles/theme.css", ":root { --paper: #FFFFFF; --action: #0F766E; "
+                                          "--cta: #7C3AED; }\n"
+                                          ".btn:hover { background: var(--cta); }\n"
+                                          ".btn { background: var(--action); }")
+    _write(tmp_path, "src/Page.jsx", '<button className="bg-action hover:bg-cta '
+                                     'focus-visible:bg-cta">Go</button>\n')
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["primary_token"] == "--action"
+    assert declared["primary_candidates"] == [
+        {"token": "--action", "value": "#0F766E", "paints": 2},
+        {"token": "--cta", "value": "#7C3AED", "paints": 0}]
+
+
+def test_among_action_colors_the_one_buttons_are_filled_with_wins(tmp_path: Path) -> None:
+    _write(tmp_path, "styles/theme.css", ":root { --paper: #FFFFFF; --accent: #0F766E; "
+                                          "--interactive: #7C3AED; }")
+    _write(tmp_path, "resources/views/home.blade.php",
+           '<button class="rounded bg-interactive text-white">Save</button>\n'
+           '<a class="text-interactive" href="/next">Next</a>\n')
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["primary_token"] == "--interactive"
+    assert declared["primary_why"] == (
+        "--interactive is the color the code paints buttons and links with at rest: 2 uses in "
+        "button and link styles and markup, over --accent (0).")
+
+
+def test_without_any_use_the_best_action_name_is_chosen_and_the_owner_is_asked(
+        tmp_path: Path) -> None:
+    _write(tmp_path, "styles/theme.css", ":root { --accent: #0F766E; --action: #7C3AED; "
                                           "--paper: #FFFFFF; }")
     declared = detect_existing_system(tmp_path)["declared"]
-    assert declared["primary_token"] == "--brand"
+    assert declared["primary_token"] == "--accent"
     assert declared["primary_why"] == (
-        "--brand was chosen because its name says brand; the code paints no button or link "
-        "with it or with --accent, so confirm it is the action color.")
+        "--accent was chosen because its name says accent, an action color, and no color is "
+        "named primary or brand; the code paints no button or link with it or with --action at "
+        "rest, so confirm it is the action color.")
+
+
+def test_a_primary_that_cannot_carry_text_is_not_declared(tmp_path: Path) -> None:
+    _write(tmp_path, "styles/theme.css", ":root { --paper: #FFFFFF; --primary: #F4F4F5; "
+                                          "--ink: #111111; }")
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert "primary" not in declared
+    assert declared["primary_note"] == (
+        "no primary candidate can carry a button's text: --primary (#F4F4F5) is a tint of the "
+        "page, a hover or surface fill; name the action color primary, or pass it as the brand "
+        "primary by hand.")
 
 
 # ---------------------------------------------------------------- languages
@@ -283,3 +338,116 @@ def test_two_spellings_of_one_value_are_no_disagreement(tmp_path: Path) -> None:
     _write(tmp_path, "styles/b-tokens.css", ":root { --brand: rgb(124 58 237); --ink: #111111; "
                                              "--gap: 4px }")
     assert "disagreements" not in detect_existing_system(tmp_path)["declared"]
+
+
+# ---------------------------------------------------------------- fix round: real shapes
+
+SYSTEM_TOKENS = ":root {\n  --brand: #7C3AED;\n  --muted: #6B7280;\n  --space-2: 8px;\n}\n"
+COMPONENTS = "".join(f".card-{i} {{ padding: 8px; border-radius: 4px; }}\n" for i in range(20))
+
+
+def test_an_app_stylesheet_that_redeclares_among_component_rules_is_named(
+        tmp_path: Path) -> None:
+    _write(tmp_path, "packages/tokens/tokens.css", SYSTEM_TOKENS)
+    _write(tmp_path, "resources/css/app.css",
+           '@import "../../packages/tokens/tokens.css";\n:root { --muted: #9CA3AF; }\n'
+           + COMPONENTS)
+    found = detect_existing_system(tmp_path)
+    assert "resources/css/app.css" not in _paths(found)  # not a token file itself
+    [entry] = found["declared"]["disagreements"]
+    assert (entry["token"], entry["wins"]) == ("--muted", "resources/css/app.css")
+    assert "it imports packages/tokens/tokens.css and sets it again after" in entry["why"]
+
+
+def test_a_theme_block_redeclared_by_the_app_is_named_with_its_theme(tmp_path: Path) -> None:
+    _write(tmp_path, "packages/tokens/tokens.css",
+           SYSTEM_TOKENS + '[data-theme="dark"] {\n  --muted: #9CA3AF;\n}\n')
+    _write(tmp_path, "src/app.css", '@import "../packages/tokens/tokens.css";\n'
+                                    "[data-theme=dark] { --muted: #A1A1AA; }\n" + COMPONENTS)
+    [entry] = detect_existing_system(tmp_path)["declared"]["disagreements"]
+    assert (entry["token"], entry["theme"], entry["wins"]) == (
+        "--muted", "[data-theme=dark]", "src/app.css")
+    assert entry["why"].startswith("--muted under [data-theme=dark] is #9CA3AF in "
+                                   "packages/tokens/tokens.css and #A1A1AA in src/app.css; ")
+
+
+def test_a_package_name_import_resolves_through_the_workspace(tmp_path: Path) -> None:
+    _write(tmp_path, "packages/tokens/package.json", json.dumps({"name": "@lantern/tokens"}))
+    _write(tmp_path, "packages/tokens/tokens.css", SYSTEM_TOKENS)
+    _write(tmp_path, "apps/web/app/globals.css",
+           '@import "@lantern/tokens/tokens.css";\n:root { --brand: #0F766E; }\n' + COMPONENTS)
+    [entry] = detect_existing_system(tmp_path)["declared"]["disagreements"]
+    assert entry["wins"] == "apps/web/app/globals.css"
+    assert "it imports packages/tokens/tokens.css" in entry["why"]
+
+
+def test_a_package_import_that_cannot_be_resolved_is_said_so(tmp_path: Path) -> None:
+    _write(tmp_path, "packages/tokens/tokens.css", SYSTEM_TOKENS)
+    _write(tmp_path, "apps/web/app/globals.css",
+           '@import "@lantern/tokens/tokens.css";\n:root { --brand: #0F766E; }\n' + COMPONENTS)
+    [entry] = detect_existing_system(tmp_path)["declared"]["disagreements"]
+    assert entry["wins"] == ""
+    assert "neither loads the other" not in entry["why"]
+    assert entry["why"].endswith(
+        "apps/web/app/globals.css imports @lantern/tokens/tokens.css, which could not be "
+        "resolved here, so which one the page loads last is not known; keep one value")
+
+
+def test_an_unlayered_system_beats_an_override_inside_a_layer(tmp_path: Path) -> None:
+    _write(tmp_path, "packages/tokens/tokens.css", SYSTEM_TOKENS)
+    _write(tmp_path, "src/app.css", '@import "../packages/tokens/tokens.css";\n'
+                                    "@layer base {\n  :root { --muted: #9CA3AF; }\n}\n"
+                                    + COMPONENTS)
+    [entry] = detect_existing_system(tmp_path)["declared"]["disagreements"]
+    assert entry["wins"] == "packages/tokens/tokens.css"
+    assert ("it is set outside any cascade layer, which beats the value inside a layer in "
+            "src/app.css whatever the order") in entry["why"]
+
+
+def test_a_widget_stylesheet_alone_is_not_a_system(tmp_path: Path) -> None:
+    _write(tmp_path, "resources/css/datepicker.css",
+           ".dp { --dp-bg: #FFFFFF; --dp-text: #222222; --dp-accent: #E11D48; --dp-radius: 6px; }")
+    _write(tmp_path, "src/button.css",
+           ".btn { --btn-bg: #0F766E; --btn-fg: #FFFFFF; --btn-pad: 8px; }")
+    assert detect_existing_system(tmp_path)["found"] is False
+
+
+def test_a_theme_named_class_still_counts(tmp_path: Path) -> None:
+    _write(tmp_path, "src/themes.css", ".theme-harbor { --accent: #0F766E; --ink: #111111; "
+                                       "--paper: #FFFFFF; }\n.dark { --ink: #F4F4F5; }")
+    assert _paths(detect_existing_system(tmp_path))["src/themes.css"] == "css-foundation"
+
+
+def test_images_never_starve_the_walk(tmp_path: Path, monkeypatch) -> None:
+    from engine.existing import detect
+    monkeypatch.setattr(detect, "_MAX_FILES", 5)
+    for i in range(12):
+        _write(tmp_path, f"public/img/photo-{i:02d}.png", "")
+    _write(tmp_path, "resources/css/app-tokens.css", ROOT_TOKENS)
+    assert detect_existing_system(tmp_path)["found"] is True
+
+
+def test_a_sass_stylesheet_with_a_root_block_is_read(tmp_path: Path) -> None:
+    _write(tmp_path, "resources/sass/app.scss", "$gap: 4px;\n" + ROOT_TOKENS)
+    assert _paths(detect_existing_system(tmp_path))["resources/sass/app.scss"] == \
+        "css-foundation"
+
+
+def test_a_language_switcher_does_not_set_the_direction(tmp_path: Path) -> None:
+    _write(tmp_path, "styles/theme.css", ROOT_TOKENS)
+    _write(tmp_path, "src/pages/index.astro",
+           '<html lang="en"><a lang="ar" dir="rtl" href="/ar">\u0639\u0631\u0628\u064a</a></html>\n')
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["languages"] == ["en"] and "direction" not in declared
+
+
+def test_locale_files_and_a_dynamic_dir_set_the_language(tmp_path: Path) -> None:
+    _write(tmp_path, "styles/theme.css", ROOT_TOKENS)
+    _write(tmp_path, "messages/ar.json", json.dumps({"hello": ARABIC}))
+    _write(tmp_path, "messages/en.json", json.dumps({"hello": "Hello"}))
+    _write(tmp_path, "app/[locale]/layout.tsx",
+           'export default ({ locale }) => <html lang={locale} '
+           'dir={locale === "ar" ? "rtl" : "ltr"}></html>\n')
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["languages"] == ["ar", "en"]
+    assert declared["direction"] == "rtl"
