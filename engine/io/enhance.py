@@ -14,7 +14,9 @@ measures what the code actually does against it:
   weight), and only to a token named for that family (an equal 12px in a
   token named for nothing is a coincidence, not a swap); a color only to
   a token named for how the use applies it (never a border token for a
-  background, never the color on one named surface such as on-brand).
+  background, never the color on one named surface such as on-brand or
+  primary-foreground: an on-color is never offered for a background, nor
+  for text, which may sit on a photo).
   Error pages and email templates are shown where the app's stylesheet
   may not load: their raw values are not listed, and the files are named
   once;
@@ -113,6 +115,10 @@ _STANDALONE_KIND = {
     ERROR_ROUTE: ("", ""),
     MAIL_FOLDER: ("an email template", "email templates"),
     MAIL_SUFFIX: ("an email template", "email templates")}
+# How the report names the inputs it asks for, on the command line and in
+# the MCP tool alike: the report is a file either may have written.
+_SCAN = "--scan on the command line, scan in the MCP tool"
+_SECOND = "another --from on the command line, the next path in source in the MCP tool"
 # How many names a folded line shows before "and N more".
 FEW = 6
 # The longest line the gate prints; a longer one wraps, a finding under its
@@ -204,12 +210,23 @@ def _fits(path: str, family: str) -> Tuple[bool, bool]:
     return own, own
 
 
+# Fills a -foreground, -fg or -contrast name is the color on: primary-
+# foreground is the text on the primary fill, an on-color.
+ON_FILL_WORDS = ("primary", "secondary", "accent", "destructive", "brand", "action", "cta",
+                 "button", "btn", "danger", "error", "success", "warning", "info", "inverse",
+                 "emphasis", "highlight", "selected", "tertiary")
+_ON_SUFFIX = ("foreground", "fg", "contrast")
+
+
 def _name_class(path: str) -> str:
     """How a color token's name says it is applied: text, background or
     border, "pair" for the color on one named surface (on-brand,
-    text-on-brand), or "" when the name says none."""
+    text-on-brand, primary-foreground, brand-fg), or "" when the name says
+    none."""
     words = _words(path)
     if "on" in words[:-1]:
+        return "pair"
+    if len(words) > 1 and words[-1] in _ON_SUFFIX and words[-2] in ON_FILL_WORDS:
         return "pair"
     if any(w in words for w in TEXT_WORDS):
         return "text"
@@ -532,7 +549,9 @@ class Enhanced:
         return not self.why_not_measured()
 
     def why_not_measured(self) -> str:
-        """Why the gate measured nothing, or "" when it measured something."""
+        """Why the gate measured nothing, or "" when it measured something.
+        Rule checks alone, with no contrast pair measured, are not a
+        measured gate: the JSON and the markdown both say so."""
         if not self.mapped():
             return "no role is mapped"
         if not self.check.foundations:
@@ -540,7 +559,23 @@ class Enhanced:
         report = self.check.report
         if report.checked + report.rules_checked == 0:
             return "no check applied to the mapped roles"
+        if report.checked == 0:
+            return f"no contrast pair was measured, since {self._no_pairs()}"
         return ""
+
+    def _no_pairs(self) -> str:
+        """Why no contrast pair could be measured."""
+        report = self.check.report
+        unresolved = _and_few(self.unresolved, FEW) if self.unresolved else ""
+        mistyped = [f.message.split(" ", 1)[0] for f in report.failures
+                    if f.check == "role-types"]
+        if unresolved:
+            return f"{unresolved} could not be resolved (see Structure)"
+        if mistyped:
+            return (f"{_and_few(mistyped, FEW)} {'is' if len(mistyped) == 1 else 'are'} not of "
+                    f"the type {'its role expects' if len(mistyped) == 1 else 'their roles expect'}"
+                    " (see below)")
+        return "each needs both of its roles mapped"
 
     def to_dict(self) -> Dict[str, Any]:
         d = self.drift
@@ -570,6 +605,7 @@ class Enhanced:
                      "passed": report.passed if self.measured else None,
                      "pairs_checked": report.checked,
                      "rules_checked": report.rules_checked,
+                     "rules_passed": not report.failures if report.rules_checked else None,
                      "unresolved": list(self.unresolved),
                      "findings": list(self.findings),
                      "foundations": list(self.check.foundations)},
@@ -605,13 +641,15 @@ class Enhanced:
     def markdown(self) -> str:
         report = self.imported.report
         s = report.source
+        also = [a.path for a in report.also_read]
+        together = (f" Read together with it, in this order: {_and(also)}." if also else "")
         lines = ["# Enhance report", "",
                  ("This report measures the system and the code as they are. It changes "
                   "nothing; the owner decides what should be."), "",
                  "## What was read", "",
                  (f"{s.path} ({s.format}, sha256 {s.sha256[:12]}): {report.tokens} tokens "
-                  f"from {report.entries} entries, {len(report.not_read)} not read. The import "
-                  "report lists each entry."), "",
+                  f"from {report.entries} entries, {len(report.not_read)} not read.{together} "
+                  "The import report lists each entry."), "",
                  "## How it was checked", ""]
         lines += self._how()
         lines += ["", "## Structure", ""]
@@ -638,6 +676,17 @@ class Enhanced:
             return [("Not measured: no role is mapped, so the gate had nothing to measure and "
                      f"nothing here passed; map roles to your tokens in {self.mapping_name} to "
                      "check them.")]
+        if why.startswith("no contrast pair was measured"):
+            head = self.check.report.summary().splitlines()[0]
+            line = (f"Not measured: {why}, so no contrast was checked and nothing here passed. "
+                    f"The rule checks on {_and(self.check.foundations)} ran alone: {head}")
+            out = textwrap.wrap(line, WIDTH, break_long_words=False, break_on_hyphens=False)
+            if self.findings and findings:
+                out.append("")
+                for f in self.findings:
+                    out += textwrap.wrap(f, WIDTH, initial_indent="- ", subsequent_indent="  ",
+                                         break_long_words=False, break_on_hyphens=False)
+            return out
         if why:
             n = len(self.mapped())
             if why == "no mapped role could be checked":
@@ -652,20 +701,7 @@ class Enhanced:
         head = report.summary().splitlines()[0]
         line = f"Checked {_and(self.check.foundations)}: {head}"
         unresolved = _and_few(self.unresolved, FEW) if self.unresolved else ""
-        mistyped = [f.message.split(" ", 1)[0] for f in report.failures
-                    if f.check == "role-types"]
         if unresolved:
-            why = f"{unresolved} could not be resolved (see Structure)"
-        elif mistyped:
-            why = (f"{_and_few(mistyped, FEW)} {'is' if len(mistyped) == 1 else 'are'} not of "
-                   f"the type {'its role expects' if len(mistyped) == 1 else 'their roles expect'}"
-                   " (see below)")
-        else:
-            why = "each needs both of its roles mapped"
-        if report.checked == 0:
-            line = (f"Checked {_and(self.check.foundations)}. No contrast pair was measured, "
-                    f"since {why}, so the verdict covers the rule checks only: {head}")
-        elif unresolved:
             it = "it" if len(self.unresolved) == 1 else "they"
             line += (f" The pairs and rules that need {unresolved} were not measured, since "
                      f"{it} could not be resolved (see Structure).")
@@ -718,12 +754,12 @@ class Enhanced:
     def _code(self, source: str) -> List[str]:
         d = self.drift
         if d is None:
-            return [("No code was scanned, so nothing here says which tokens are used; pass "
-                     "the folders that hold the product's code with --scan.")]
+            return [("No code was scanned, so nothing here says which tokens are used. To "
+                     f"measure the code, name the folders that hold it ({_SCAN}).")]
         if d.files == 0:
             return [("No file was read, so nothing was measured: no token is known to be used "
-                     "or unused. Pass the folders that hold the product's code with --scan.")] \
-                + self._unread(d)
+                     "or unused. Name the folders that hold the product's code, each an "
+                     f"existing folder with code files in it ({_SCAN}).")] + self._unread(d)
         read = f"the {_count(d.files, 'file', 'files')} read"
         gaps = []
         if d.skipped:
@@ -1012,16 +1048,17 @@ def _dark(ts: TokenSet, scanned: Optional[Scan], source: str, name: str) -> str:
             if _norm(p[2:]) in own]
     if not sets:
         return (f"{source}, the source read, has no dark mode in the mapping, so dark was not "
-                f"checked; if another file holds its dark values, import it with {source}, and "
-                f"if the system has a dark mode, map it as the scheme axis in {name}.")
+                f"checked; if another file holds its dark values, read it with {source} as a "
+                f"second source ({_SECOND}), and if the system has a dark mode, map it as the "
+                f"scheme axis in {name}.")
     files = list(dict.fromkeys(f for _, f, _ in sets))
     names = list(dict.fromkeys(p for p, _, _ in sets))
     where = _and_few([f"{p} at {f}:{n}" for p, f, n in sets], 3)
     return (f"{source}, the source read, has no dark mode, but {_and_few(files, 3)} "
             f"{'sets' if len(files) == 1 else 'set'} dark values for "
             f"{_count(len(names), 'of its tokens', 'of its tokens')} ({where}): the dark mode is "
-            f"in a second source. Import it with {source}, then map the scheme axis in {name} "
-            "to check dark.")
+            f"in a second source. Read it with {source} as a second source ({_SECOND}), then map "
+            f"the scheme axis in {name} to check dark.")
 
 
 def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str],

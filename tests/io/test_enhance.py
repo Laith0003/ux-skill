@@ -130,8 +130,10 @@ def test_every_code_line_names_where_and_the_fix(tmp_path):
 def test_without_a_scan_the_report_says_the_code_was_not_measured():
     imported = _system()
     text = enhance(imported, MAPPING, None).markdown()
-    assert ("No code was scanned, so nothing here says which tokens are used; pass the folders "
-            "that hold the product's code with --scan.") in text
+    # Worded for the command line and the MCP tool alike.
+    assert ("No code was scanned, so nothing here says which tokens are used. To measure the "
+            "code, name the folders that hold it (--scan on the command line, scan in the MCP "
+            "tool).") in text
     assert enhance(imported, MAPPING, None).to_dict()["drift"] is None
 
 
@@ -415,9 +417,15 @@ def test_a_clean_gate_names_no_findings_and_a_lone_role_says_no_pair_was_measure
     assert "Each finding names" not in text
     lone = Mapping({"color.text.default": RoleMap("text-body", "owner")})
     report = enhance(_system(), lone)
-    assert "No contrast pair was measured, since each needs both of its roles mapped" \
-        in report.markdown()
-    assert report.to_dict()["gate"]["pairs_checked"] == 0
+    text = " ".join(report.markdown().split())
+    assert ("Not measured: no contrast pair was measured, since each needs both of its roles "
+            "mapped, so no contrast was checked and nothing here passed. The rule checks on "
+            "color ran alone:") in text
+    gate = report.to_dict()["gate"]
+    # The JSON says what the markdown says: 0 pairs is never a measured gate.
+    assert (gate["measured"], gate["passed"], gate["pairs_checked"]) == (False, None, 0)
+    assert gate["why"] == "no contrast pair was measured, since each needs both of its roles mapped"
+    assert gate["rules_passed"] is True
 
 
 def test_the_not_mapped_list_is_folded_and_complete_in_the_json():
@@ -514,8 +522,9 @@ def test_a_mapped_role_that_cannot_be_resolved_goes_to_structure_with_its_reason
             "not defined; define base.ink in tokens.json, or map color.text.default to a "
             "token that resolves in mapping.json.") in structure
     gate = " ".join(text.split("## Gate")[1].split("## What the code")[0].split())
-    assert ("No contrast pair was measured, since color.text.default could not be resolved "
-            "(see Structure), so the verdict covers the rule checks only:") in gate
+    assert ("Not measured: no contrast pair was measured, since color.text.default could not be "
+            "resolved (see Structure), so no contrast was checked and nothing here passed. The "
+            "rule checks on color ran alone:") in gate
     assert "since each needs both of its roles mapped" not in gate
     decisions = text.split("## Decisions made without you")[1]
     assert "cannot be resolved" not in decisions and "(resolving" not in text
@@ -624,6 +633,7 @@ def test_a_mistyped_role_is_fixed_in_the_mapping_not_with_a_hex():
         "color.text.default (your gap) is a dimension but its role expects a color; map the "
         "role to one of your color tokens in mapping.json"]
     gate = " ".join(report.markdown().split("## Gate")[1].split("## What the code")[0].split())
-    assert ("No contrast pair was measured, since color.text.default is not of the type its "
-            "role expects (see below), so the verdict covers the rule checks only: WCAG gate "
-            "failed on the rule checks:") in gate
+    assert ("Not measured: no contrast pair was measured, since color.text.default is not of "
+            "the type its role expects (see below), so no contrast was checked and nothing here "
+            "passed. The rule checks on color ran alone: WCAG gate failed on the rule checks:") \
+        in gate

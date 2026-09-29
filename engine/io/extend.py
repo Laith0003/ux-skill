@@ -1527,7 +1527,7 @@ def _report(imported: Imported, result: Extended, foundations: List[str],
         lines += ["What the lines under What blocks it name was left out of this check; it "
                   "covers the system with the rest.", ""]
     check = after.check_lines(source.path)
-    if not after.measured:
+    if after.why_not_measured() == "no role is mapped":
         check[-1] = ("The gate was not measured: no role is mapped, so nothing was checked and "
                      f"nothing here passed; map roles to your tokens in {mapping_name} to check "
                      "them.")

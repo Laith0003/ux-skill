@@ -124,7 +124,10 @@ def test_merge_keeps_the_owners_field_entries():
     # say is dropped.
     assert merged.roles["type.text.body"].fields == {"fontSize": FieldMap("text-size-lg",
                                                                            "owner")}
-    assert notes == []
+    # The only note is on a face the scale names map by name.
+    assert notes == ["mapping.json did not map type.face.text, so it was proposed as "
+                     "font-family-sans by name; to keep it out of the check, write "
+                     "{\"token\": null, \"by\": \"owner\"} for it"]
 
 
 @pytest.mark.parametrize("fields, message", [
@@ -178,7 +181,11 @@ def test_the_enhance_report_names_each_field_and_notes_a_field_left_out():
     assert ("type.text.label maps fontFamily, fontSize, fontWeight and lineHeight field by field "
             "in mapping.json but not letterSpacing, so it was not checked; add \"letterSpacing\": "
             "{\"token\": \"<your token>\", \"by\": \"owner\"} to its fields") in result.decisions
-    assert result.measured and result.check.report.passed
+    # Type roles bring rule checks and no contrast pair: that is never a
+    # measured gate, and the rules passed.
+    gate = result.to_dict()["gate"]
+    assert (gate["measured"], gate["pairs_checked"], gate["rules_passed"]) == (False, 0, True)
+    assert gate["why"] == "no contrast pair was measured, since each needs both of its roles mapped"
 
 
 def test_a_field_the_owner_left_out_is_said_so():

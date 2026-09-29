@@ -79,3 +79,70 @@ def test_a_sites_globals_with_a_doubled_root_bring_the_dark_stage(tmp_path):
     assert note.where == "globals.css:13"
     assert "on :root at tokens.json:9" in note.message
     assert not [i for i in imported.report.not_read if "doubled" in i.message]
+
+
+# ---------------------------------------------------------------- the enhance report
+
+
+def _enhanced(tmp_path, extra=None):
+    import json
+
+    from engine.io.commands import run_enhance
+    shutil.copytree(FIXTURE, tmp_path / "p")
+    p = tmp_path / "p"
+    for rel, text in (extra or {}).items():
+        (p / rel).write_text(text, encoding="utf-8")
+    result = run_enhance([p, p / "site" / "app" / "globals.css"], scan=[p / "site"],
+                         out=tmp_path / "out")
+    return result, json.loads((tmp_path / "out" / "enhance.json").read_text())
+
+
+def test_the_summary_counts_what_the_report_body_says(tmp_path):
+    result, data = _enhanced(tmp_path, {
+        "site/components/Badge.tsx":
+            'export const Badge = () => <span className="text-surface">New</span>;\n',
+        "site/components/Note.tsx":
+            'export const Note = () => <p className="text-canvas" style={{color: "var(--x-ink)"}}>'
+            "x</p>;\n"})
+    summary, body = result["summary"], result["report"]
+    named_for = [line for line in body.splitlines() if " is named for " in line]
+    # brand.surface lies on every use; brand.canvas on some of them.
+    assert summary["lies"] == len(named_for) == 2
+    assert (summary["lies_every_use"], summary["strays"]) == (1, 1)
+    assert summary["missing"] == 1 and summary["missing_uses"] == 1
+    assert "references --x-ink, which the system does not have" in body
+    assert summary["unused"] == len(data["drift"]["unused"])
+
+
+def test_the_report_names_every_source_read_in_order(tmp_path):
+    result, _ = _enhanced(tmp_path)
+    head = result["report"].split("## How it was checked")[0]
+    assert "Read together with it, in this order:" in head
+    assert head.index("foundations.css") < head.index("globals.css")
+
+
+def test_a_mature_system_is_measured_with_pairs_through_names_alone(tmp_path):
+    result, data = _enhanced(tmp_path)
+    gate = data["gate"]
+    assert gate["measured"] and gate["pairs_checked"] > 0
+    assert result["summary"]["gate_measured"] is True
+    assert data["mapping"]["mapped"] >= 20
+
+
+def test_an_on_color_is_never_offered_for_a_background_or_for_text(tmp_path):
+    from engine.foundations.tokens import Token, TokenSet
+    from engine.io.enhance import drift
+    from engine.io.scan import scan
+    ts = TokenSet({})
+    for path in ("primary-foreground", "brand-fg", "on-primary", "text-on-brand"):
+        ts.add(Token(path, "color", "#FFFFFF"))
+    ts.add(Token("text-default", "color", "#FFFFFF"))
+    (tmp_path / "hero.html").write_text(
+        '<section style="background: #ffffff"><h1 style="color: #fff">Over the photo</h1>'
+        "</section>", encoding="utf-8")
+    d = drift(ts, scan([tmp_path], ts))
+    offered = {tuple(r.tokens) for r in d.raw_with_token}
+    # Only the text color named for text is offered, and only for the text.
+    assert offered == {("text-default",)}
+    [raw] = d.raw_with_token
+    assert [u.prop for u in raw.uses] == ["color"]

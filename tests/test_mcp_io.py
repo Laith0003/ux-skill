@@ -259,3 +259,23 @@ def test_a_second_identical_extend_is_unchanged_on_the_command_line(tmp_path):
     again = CliRunner().invoke(cli, args)
     assert again.exit_code == 0, again.output
     assert json.loads(again.output)["status"] == "unchanged"
+
+
+def test_an_unknown_field_is_reported_never_ignored(tmp_path):
+    # A misspelled scan would otherwise give a report that measured no code.
+    result = handle_ux_system_enhance({"source": _theme(tmp_path), "scna": [str(tmp_path)]})
+    assert result["status"] == "invalid"
+    assert result["error"].startswith("scna is not a field of ux_system_enhance; did you mean "
+                                      "scan? use source, format, out, force, figma_modes, "
+                                      "mapping or scan, or leave it out")
+    for handler, name in ((handle_ux_system_import, "ux_system_import"),
+                          (handle_ux_system_export, "ux_system_export"),
+                          (handle_ux_system_extend, "ux_system_extend"),
+                          (handle_ux_contracts_check, "ux_contracts_check")):
+        got = handler({"source": _theme(tmp_path), "bogus": 1, "to": "css"})
+        assert got["status"] == "invalid" and f"is not a field of {name}" in got["error"]
+
+
+def test_the_report_asks_for_code_in_words_both_callers_read(tmp_path):
+    result = handle_ux_system_enhance({"source": _theme(tmp_path)})
+    assert "(--scan on the command line, scan in the MCP tool)" in result["report"]

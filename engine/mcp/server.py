@@ -425,12 +425,33 @@ def _source(value: Any, example: str, label: str = "source") -> Any:
     return _abs_path(value, label, example, required=True)
 
 
-def _io_call(fn: Callable[[], Dict[str, Any]]) -> Dict[str, Any]:
+def _io_call(fn: Callable[[], Dict[str, Any]], args: Optional[Dict[str, Any]] = None,
+             model: Any = None, tool: str = "") -> Dict[str, Any]:
     from engine.foundations.emit import InputError
     try:
+        if model is not None:
+            _known_fields(args, model, tool)
         return fn()
     except InputError as exc:
         return {"status": "invalid", "error": str(exc)}
+
+
+def _known_fields(args: Optional[Dict[str, Any]], model: Any, tool: str) -> None:
+    """A field the tool does not have is reported, never ignored: a
+    misspelled scan would otherwise give a report with no code measured.
+    Raises InputError naming the field, the nearest field the tool has and
+    every field it takes."""
+    import difflib
+    from engine.foundations.emit import InputError
+    fields = list(model.model_fields)
+    unknown = [k for k in (args or {}) if k not in fields]
+    if not unknown:
+        return
+    near = difflib.get_close_matches(unknown[0], fields, n=1)
+    hint = f"did you mean {near[0]}? " if near else ""
+    others = f" ({', '.join(unknown[1:])} too)" if len(unknown) > 1 else ""
+    raise InputError(f"{unknown[0]}{others} is not a field of {tool}; {hint}use "
+                     f"{', '.join(fields[:-1])} or {fields[-1]}, or leave it out")
 
 
 def _format(value: Any) -> str:
@@ -496,7 +517,7 @@ def handle_ux_system_import(args: Dict[str, Any]) -> Dict[str, Any]:
         result = run_import(_source(payload.source, "theme.css"), **_common(payload))
         result["not_read"] = result.pop("not_read_count")
         return result
-    return _io_call(run)
+    return _io_call(run, args, UxSystemImportInput, "ux_system_import")
 
 
 def handle_ux_system_enhance(args: Dict[str, Any]) -> Dict[str, Any]:
@@ -509,7 +530,7 @@ def handle_ux_system_enhance(args: Dict[str, Any]) -> Dict[str, Any]:
         source = _source(payload.source, "theme.css")
         return run_enhance(source, mapping=_abs_path(payload.mapping, "mapping", "mapping.json"),
                            scan=_paths(payload.scan, "scan", "src"), **_common(payload))
-    return _io_call(run)
+    return _io_call(run, args, UxSystemEnhanceInput, "ux_system_enhance")
 
 
 def handle_ux_system_extend(args: Dict[str, Any]) -> Dict[str, Any]:
@@ -535,7 +556,7 @@ def handle_ux_system_extend(args: Dict[str, Any]) -> Dict[str, Any]:
             contracts=_paths(payload.contracts, "contracts", "chip.yaml", "file"),
             brand=payload.brand, axes=payload.axes, brief=payload.brief,
             latin_only=parse_latin_only(payload.latin_only, "latin_only"), **common)
-    return _io_call(run)
+    return _io_call(run, args, UxSystemExtendInput, "ux_system_extend")
 
 
 def handle_ux_system_export(args: Dict[str, Any]) -> Dict[str, Any]:
@@ -553,7 +574,7 @@ def handle_ux_system_export(args: Dict[str, Any]) -> Dict[str, Any]:
                                "return only their sizes")
         return run_export(source, to=payload.to, include_files=include, scheme=payload.scheme,
                           **_common(payload))
-    return _io_call(run)
+    return _io_call(run, args, UxSystemExportInput, "ux_system_export")
 
 
 def handle_ux_contracts_check(args: Dict[str, Any]) -> Dict[str, Any]:
@@ -567,7 +588,7 @@ def handle_ux_contracts_check(args: Dict[str, Any]) -> Dict[str, Any]:
             _abs_path(payload.folder, "folder", "contracts", required=True, kind="folder"),
             _source(payload.tokens, "tokens.json", "tokens"), fmt=_format(payload.format),
             mapping=_abs_path(payload.mapping, "mapping", "mapping.json"), labels=_MCP_LABELS))
-    return _io_call(run)
+    return _io_call(run, args, UxContractsCheckInput, "ux_contracts_check")
 
 
 # ---------------------------------------------------------------------------

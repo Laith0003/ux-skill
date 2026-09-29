@@ -168,12 +168,15 @@ def test_no_dark_mode_says_which_source_was_read_and_where_dark_lives(tmp_path):
     confirm = enhance(imported, Mapping(), scan([root], imported.tokens)).confirm
     assert ("tokens.css, the source read, has no dark mode, but theme-dark.css sets dark values "
             "for 2 of its tokens (--bg at theme-dark.css:2 and --fg at theme-dark.css:3): the dark "
-            "mode is in a second source. Import it with tokens.css, then map the scheme axis in "
-            "mapping.json to check dark.") in confirm
+            "mode is in a second source. Read it with tokens.css as a second source (another "
+            "--from on the command line, the next path in source in the MCP tool), then map the "
+            "scheme axis in mapping.json to check dark.") in confirm
     confirm = enhance(imported, Mapping()).confirm
     assert ("tokens.css, the source read, has no dark mode in the mapping, so dark was not "
-            "checked; if another file holds its dark values, import it with tokens.css, and if "
-            "the system has a dark mode, map it as the scheme axis in mapping.json.") in confirm
+            "checked; if another file holds its dark values, read it with tokens.css as a "
+            "second source (another --from on the command line, the next path in source in the "
+            "MCP tool), and if the system has a dark mode, map it as the scheme axis in "
+            "mapping.json.") in confirm
 
 
 @pytest.mark.parametrize("text", ["none", "None"])
