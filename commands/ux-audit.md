@@ -46,6 +46,8 @@ Check: does the surface match the audience and outcome from the framing? Is the 
 
 If the framing is missing, this lens checks: does the surface have a clear "who is this for and what changes for them?" signal — or is it generic?
 
+Two named checks run on every page: the **stranger test** (from the first screen alone, a stranger can say what it is and who it is for) and the **swap test** (with a competitor's name in the headline, the headline stops being true; if it still holds, it says nothing). Findings state counts, not adjectives: "four buttons of equal weight on the first screen", not "cluttered".
+
 #### Lens 2 — DISCOVER
 
 Reference: `references/laws/norman.md`.
@@ -87,6 +89,8 @@ For each finding, assign severity:
 
 Group findings by lens. Within each lens, sort Critical → Cosmetic.
 
+**What each finding rests on.** Tag every finding with its `evidence_kind`: `measured` (a tool read it), `counted` (the arithmetic is shown), `quoted` (a user's or the client's words, with where they come from), `observed` (seen on the surface), `heuristic` (a named, published principle), `assumed`, `hypothesis`, `unknown`, or `out-of-scope`. An assumption sits in the finding it weakens, not in a closing disclaimer. A threshold is either cited to its source for what the source says, or labelled a house default; never present one as the other. `unknown` is a valid answer. Never predict a lift in conversion or in any other number.
+
 **Brand fidelity (when a client brand is on file).** If `.ux/brand.json` exists, also judge BRAND FIDELITY: run `evaluate(html, brand_profile=...)` (or read it from a prior `uxskill evolve --brand-file` run) for `brand_fidelity` + `imagery` + `brand_passed`. Treat off-brand drift — wrong or absent brand primary, missing logo, house-style colors (clay `#cc785c` / blurple `#5e6ad2`), or a text-wall with no real imagery — as a **Critical** finding under DISCOVER: a surface that ignores the client's brand fails no matter how polished. See `references/process/brand-extraction.md`.
 
 ### 5. Format the output
@@ -105,6 +109,7 @@ FRAME
   [<severity>] <finding title>
     Principle: <which principle>
     Evidence:  <what you saw>
+    Rests on:  <evidence_kind, with its source or its arithmetic>
     Fix:       <what to do>
 
 DISCOVER
@@ -128,7 +133,7 @@ RECOVER
 3. <third move>
 ```
 
-Keep each finding to three lines. No prose paragraphs in the findings section.
+Keep each finding to four lines. No prose paragraphs in the findings section.
 
 ### 6. Persist state
 
@@ -145,6 +150,7 @@ Write `.ux/last-audit.json`:
       "severity": "Critical | High | Medium | Cosmetic",
       "title": "<short>",
       "principle": "<which principle>",
+      "evidence_kind": "measured | counted | quoted | observed | heuristic | assumed | hypothesis | unknown | out-of-scope",
       "evidence": "<what you saw>",
       "fix": "<what to do>"
     }
@@ -176,7 +182,7 @@ The audit report from step 5, followed by either fix-loop results (if `--fix`) o
 
 ## State persisted
 
-- `.ux/last-audit.json` — keys: `command`, `timestamp`, `surface`, `findings` (array of `{lens, severity, title, principle, evidence, fix}`), `severity_counts`, `dominant_lens`, `strategic_moves`.
+- `.ux/last-audit.json` keys: `command`, `timestamp`, `surface`, `findings` (array of `{lens, severity, title, principle, evidence_kind, evidence, fix}`), `severity_counts`, `dominant_lens`, `strategic_moves`.
 
 ## Next prompt
 
@@ -202,7 +208,7 @@ Other moves: /ux-audit --fix    (apply all findings)
 ## Hard rules
 
 - Never produce a finding without a citation to the relevant reference principle.
-- Never write a finding longer than three lines (Principle, Evidence, Fix). Push detail into the fix loop or a follow-up command.
+- Never write a finding longer than four lines (Principle, Evidence, Rests on, Fix). Push detail into the fix loop or a follow-up command.
 - Never skip a lens because the surface "doesn't need it." Run all six — "no findings" is itself a finding.
 - Never use vague severity ("kinda bad"). Critical / High / Medium / Cosmetic only.
 - Never start a fix loop without a clean working tree confirmation.

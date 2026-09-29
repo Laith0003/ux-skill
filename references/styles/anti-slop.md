@@ -8,7 +8,7 @@ Treat each ban as a hard rule unless a brief explicitly overrides it, or the cli
 
 ## Principles
 
-1. **Specificity beats genericity.** A generic three-card row is the strongest AI tell. Asymmetry, named brands that fit the product's market, organic numbers — these signal a human (or a careful machine). The fastest way to ship slop is to use the safest defaults the model offers.
+1. **Specificity beats genericity.** A generic three-card row is the strongest AI tell. Asymmetry, names that fit the product's market, and the client's own figures with what they count: these signal a human (or a careful machine). The fastest way to ship slop is to use the safest defaults the model offers.
 
 2. **Restraint beats decoration.** Single accent color, neutral base, intentional whitespace. Don't add a gradient because the model defaults to one. Don't add a glow because the surface needs "polish." A surface needs a job, not ornament.
 
@@ -147,7 +147,8 @@ The single fastest way to mark output as AI-generated. The design can be perfect
 | "John Doe", "Jane Smith", "Sarah Chan", "Jack Su", "Test User" | Creative and plausible names that fit the product's market |
 | "example@example.com", "user@email.com" | Realistic, contextual emails |
 | "Acme", "Nexus", "SmartFlow", "Zenith", "Stellar", "Vertex", "Apex" | Contextual brand names. A fintech is "Ledgerine" or "Tash"; a CRM is "Patio" or "Greta" |
-| Round / suspicious numbers: "99.99%", "50%", "1234567", "$10,000" | Organic, messy data: "47.2%", "63%", "$8,247.30", "+1 (312) 847-1928" |
+| Round numbers inside a product mock (a dashboard, a table, a chart): "99.99%", "50%", "1234567", "$10,000" | Plausible, irregular stand-in data that fits the screen: "47.2%", "63%", "$8,247.30". This is for data inside a UI mock only |
+| A figure the page claims, reshaped to look precise or given with nothing about what it counts | The client's own figure, as the client states it, with what it counts and as of when. A round real figure stays round; one the client cannot define or date follows the Proof bans in `references/surfaces/landing.md` |
 | Default Lucide / Heroicons egg avatars | Real/licensed photos, or distinct SVG initials with intentional styling. When you need a stand-in face, source a curated, on-brand portrait (Unsplash/Pexels) rather than an auto-rotating placeholder; the linter flags *random/unseeded* services HIGH. |
 | Lorem ipsum, "Your text here", "Placeholder content" | Generate realistic content based on the brief. If a mockup exists, extract text from it |
 | Filler verbs: "Elevate", "Seamless", "Unleash", "Next-Gen", "Empower", "Revolutionize", "Transform", "Leverage", "Robust" | Concrete verbs naming what the product actually does: "Send", "Settle", "Track", "Decide", "Ship", "Deploy", "Query" |
@@ -304,7 +305,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] One icon family at consistent stroke width
 - [ ] Eyebrow labels tracked (+0.05em to +0.10em), or as the existing design system sets them
 - [ ] Corner radii consistent (2-3 values max across the page)
-- [ ] Numbers organic, not round (47.2%, not 99.99%)
+- [ ] Mock data inside a product UI is irregular; every figure the page claims is the client's own, with what it counts and as of when
 - [ ] Color saturation tuned separately for light and dark modes
 - [ ] No naked trailing arrows on CTAs in high-end styles (button-in-button pattern instead)
 - Landing-page medium checks (press logos, unsupported trust claims) live in the checklist of `references/surfaces/landing.md`.
@@ -339,7 +340,8 @@ These are the combinations that, when they co-occur, mark the output as machine-
 ### The content fingerprint
 - "John Doe" + "Acme Corp" + "99.99% uptime" + "Elevate your workflow" + "Get Started" CTA = generated.
 - Every placeholder was filled with the model's most-frequent neighbor for that slot. The result reads as no product because it reads as every product.
-- Fix: names that fit the market, brands that fit the category, numbers that read as organic, verbs that name what the product does.
+- Fix: names that fit the market, brands that fit the category, figures the client can define and date, verbs that name what the product does.
+- The swap test for vague benefit copy: put a competitor's name in the headline. If the line still holds, it says nothing about this product; rewrite it until it would be false for the competitor.
 
 ### The motion fingerprint
 - Linear easing + 0ms instant state changes + `useState`-driven perpetual hover + autoplay video with sound + scroll-jacking on a marketing landing = generated.

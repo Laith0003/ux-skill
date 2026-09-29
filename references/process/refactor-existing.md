@@ -106,7 +106,7 @@ Run these against the existing UI. Each item is a flag, not a verdict:
 - **Generic loading spinners.** Replace with skeleton loaders that match the layout shape.
 - **No empty states or error states.** Design composed empty states. Inline error messages with the field and the fix. Never use the browser's native alert dialog.
 - **Dead anchor links.** Link to real destinations or visually disable.
-- **Placeholder content.** "John Doe," "Acme Corp," round numbers (50%, $100.00). Use diverse realistic names, contextual brand names, organic numbers (47.2%, $99.00).
+- **Placeholder content.** "John Doe," "Acme Corp," round numbers (50%, $100.00). Use diverse realistic names and contextual brand names; inside a product mock, irregular stand-in figures (47.2%, $99.00); in a claim, only the client's own figure with what it counts.
 - **Copywriting clichés.** "Elevate," "Seamless," "Unleash," "Next-Gen," "Game-changer." Write plain, specific language.
 - **Exclamation marks in success messages.** "Oops!" errors. Be confident, direct.
 - **Lorem Ipsum, identical avatars, identical blog dates.** Fill with real-shaped placeholder content.

@@ -103,9 +103,9 @@ Write `.ux/last-critique.json`:
     { "summary": "<>", "detail": "<>" }
   ],
   "misses": [
-    { "summary": "<>", "detail": "<>" },
-    { "summary": "<>", "detail": "<>" },
-    { "summary": "<>", "detail": "<>" }
+    { "summary": "<>", "detail": "<>", "evidence_kind": "<see commands/ux-audit.md step 4>" },
+    { "summary": "<>", "detail": "<>", "evidence_kind": "<>" },
+    { "summary": "<>", "detail": "<>", "evidence_kind": "<>" }
   ],
   "strategic_move": {
     "summary": "<1-line summary of the move>",
@@ -123,7 +123,7 @@ The prose critique from step 3, followed by the next-prompt block.
 
 ## State persisted
 
-- `.ux/last-critique.json` — keys: `command`, `timestamp`, `surface`, `audience`, `wins` (3 objects of `{summary, detail}`), `misses` (3 objects of `{summary, detail}`), `strategic_move` (object of `{summary, detail}`), `prose`.
+- `.ux/last-critique.json` keys: `command`, `timestamp`, `surface`, `audience`, `wins` (3 objects of `{summary, detail}`), `misses` (3 objects of `{summary, detail, evidence_kind}`), `strategic_move` (object of `{summary, detail}`), `prose`.
 
 ## Next prompt
 

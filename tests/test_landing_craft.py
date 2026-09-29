@@ -107,3 +107,108 @@ def test_a_campaign_page_closes_its_exits_in_the_playbook():
     footer = _section(text, "## Footer", "## ")
     assert "campaign page keeps a reduced footer" in footer
     assert "new tab" in footer
+
+
+# ---------------------------------------------------------------- figures on a public page
+
+SLOP = "references/styles/anti-slop.md"
+
+
+def test_no_rule_asks_for_figures_that_look_real():
+    for rel in (LANDING, SLOP, "references/foundations/copy.md",
+                "references/process/refactor-existing.md", "data/page-sequences.json"):
+        text = _read(rel).lower()
+        for phrase in ("organic-looking", "organic numbers", "organic, messy",
+                       "numbers organic", "read as organic", "organic, not round"):
+            assert phrase not in text, (rel, phrase)
+
+
+def test_mock_data_and_a_claim_are_two_rows():
+    slop = _read(SLOP)
+    mock = next(ln for ln in slop.splitlines() if ln.startswith("| Round numbers inside a product"))
+    claim = next(ln for ln in slop.splitlines() if ln.startswith("| A figure the page claims"))
+    assert "irregular" in mock
+    for need in ("client's own figure", "what it counts", "as of", "stays round"):
+        assert need in claim, need
+
+
+def test_a_claim_on_the_page_is_defined_and_dated():
+    bans = _section(_read(LANDING), "### Proof bans")
+    assert "with no definition or date" in bans and "plain fact line" in bans
+    assert "proves a relationship" in bans
+    include = _section(_read(LANDING), "### When to include a section")
+    assert "resemble the reader" in include
+    assert "outranks the strip" in include
+
+
+def test_every_stats_section_counts_something_named():
+    import json
+    data = json.loads(_read("data/page-sequences.json"))
+    for entry in data["entries"]:
+        for s in entry["section_sequence"]:
+            if s.get("proof") == "stats":
+                assert "what it counts" in s["purpose"], (entry["id"], s["section"])
+
+
+# ---------------------------------------------------------------- one argument in the hero
+
+
+def test_the_hero_makes_one_argument_to_one_reader():
+    hero = _section(_read(LANDING), "### Hero composition")
+    assert "One argument" in hero and "buying motion" in hero
+    high = _section(_read(LANDING), "### High", "### ")
+    assert "same reader and the same buying motion" in high
+    ban = next(ln for ln in _read(LANDING).splitlines()
+               if ln.startswith("| Raw data or stats dumped in the hero subhead"))
+    assert "term of the offer" in ban
+
+
+def test_the_swap_test_checks_vague_copy():
+    fingerprint = _section(_read(SLOP), "### The content fingerprint")
+    assert "swap test" in fingerprint.lower()
+
+
+def test_the_audit_frame_lens_runs_the_stranger_and_swap_tests():
+    frame = _section(_read("commands/ux-audit.md"), "#### Lens 1", "#### ")
+    assert "stranger test" in frame.lower() and "swap test" in frame.lower()
+    assert "count" in frame.lower()
+
+
+# ---------------------------------------------------------------- what a finding rests on
+
+KINDS = ("measured", "counted", "quoted", "observed", "heuristic", "assumed", "hypothesis",
+         "unknown", "out-of-scope")
+
+
+def test_audit_findings_say_what_they_rest_on():
+    audit = _read("commands/ux-audit.md")
+    assert audit.count('"evidence_kind"') == 1
+    for kind in KINDS:
+        assert kind in audit, kind
+    assert "Rests on:" in audit
+    assert "never predict" in audit.lower()
+    state = next(ln for ln in audit.splitlines() if ln.startswith("- `.ux/last-audit.json`"))
+    assert "evidence_kind" in state
+
+
+def test_critique_and_copy_tables_say_what_they_rest_on():
+    for rel in ("commands/ux-critique.md", "commands/ux-copy.md"):
+        text = _read(rel)
+        assert '"evidence_kind"' in text, rel
+        assert "commands/ux-audit.md" in text, rel
+
+
+def test_the_playbook_labels_its_own_numbers():
+    intro = _read(LANDING).split("\n---\n", 1)[0]
+    assert "house defaults" in intro
+    assert "2.5.8" in intro and "2.5.5" in intro
+
+
+# ---------------------------------------------------------------- pricing
+
+
+def test_a_price_is_a_number_a_visitor_can_multiply():
+    pricing = _section(_read(LANDING), "## Pricing", "## ")
+    for need in ("currency", "billing period", "per seat", "past the limit", "footnote",
+                 "\"From\"", "one sentence", "annual price"):
+        assert need in pricing, need

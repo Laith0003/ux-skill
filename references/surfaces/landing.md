@@ -2,6 +2,8 @@
 
 The surface playbook for marketing pages. `/ux-design` loads this file, and no other surface playbook, in page mode when the page explains, sells or converts. It holds every rule that is specific to landing pages: layout archetypes, the five compositions the engine chooses from, section flow, hero, header, proof, pricing, CTA, footer, and Arabic and RTL delivery. Cross-surface rules (color, type, spacing, motion, content, responsive mechanics, component contracts) stay in `references/styles/anti-slop.md`, `references/styles/arsenal.md` and `references/foundations/`; a landing page with a form or a comparison table also reads the contracts in `references/foundations/component-behaviors.md`.
 
+Numbers in this playbook are house defaults unless a source is named beside them: the 96px sticky ceiling, the three-line H1, six logos for a strip, five to eight bento tiles and the 4MB video loop are ours, not a standard's. Where WCAG speaks it is cited for what it says: 2.5.8 sets a 24 by 24 CSS px target at AA and 2.5.5 sets 44 by 44 at AAA; the 44px targets here follow 2.5.5.
+
 ---
 
 ## When it applies
@@ -167,7 +169,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 - **Animated counters**: when the metric is the proof. Skip when the number is incidental.
 - **Numbered "how it works"**: when the product has a clear onboarding arc. Skip if it's a single tool with no sequence.
 - **"Before / after" comparison**: when there's a clear status-quo competitor to displace. Skip in greenfield categories.
-- **Logo strip**: when 6+ recognizable customers can be named. Skip with 3 logos, it looks thin.
+- **Logo strip**: when 6+ recognizable customers can be named and the logos resemble the reader (their size, their market). Skip with 3 logos, it looks thin. When the page has room for one proof item, a named quote from the reader's own segment outranks the strip.
 - **Bento grids**: when 5-8 distinct capabilities need showcasing. Skip for 3, it looks underbuilt.
 - **Chapter-framework narrative**: when the product is large enough to feel like a journey. Skip on single-purpose tools.
 - **Ambient hero motion**: when the page is otherwise quiet. Don't stack motion on motion.
@@ -196,6 +198,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 - One headline, one supporting line, one primary CTA (filled) and at most one secondary (ghost button or text link), one product image or short motion. The CTA section below holds the button rules.
 - Above the fold, nothing else fights for attention. No carousel, no slideshow, no rotating taglines.
 - **H1 line limit.** The H1 runs 3 lines at most at every breakpoint from 375px to 1440px; a 4-line H1 fails. Meet the limit by widening the headline's container up to `layout.container.max`, and by tightening the words, never by shrinking `type.text.display` or adding a size of your own.
+- **One argument to one reader.** Read the headline, subhead, visual and CTA as one unit and name the argument each one makes. The usual break is a change of reader between headline and subhead (the operator's pain, then a line for procurement). The CTA matches the buying motion the copy implies: "Start free" under copy written for a procurement team contradicts it. Fix the one element that argues something else, not all four. Two checks: a stranger shown only the first screen can say what it is and who it is for; and with a competitor's name in the headline, the headline stops being true.
 - A "Built for X" line ("Built for finance", "Built for sales teams") under or beside the H1 pre-qualifies the visitor in one breath. It never sits above the H1; the eyebrow owns that slot.
 
 ### Hero patterns
@@ -262,7 +265,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 | `h-screen` on the hero | `min-h-[100dvh]`. The iOS Safari address-bar collapse breaks `h-screen` |
 | Floating stamp or badge icons on hero text | If the hero needs a label, use a small eyebrow tag above the H1 |
 | Pill tags scattered under the hero as decoration | Pills work as status indicators or single-eyebrow taxonomy, not as decorative confetti |
-| Raw data or stats dumped in the hero subhead ("100k users", "99.99% uptime") | Stats earn their place lower on the page with context. The hero subhead clarifies, it does not quantify |
+| Raw data or stats dumped in the hero subhead ("100k users", "99.99% uptime") | Stats earn their place lower on the page with context. The hero subhead clarifies, it does not quantify. This covers proof figures, not a concrete term of the offer: a time frame, a price or a quantity ("Delivered in 48 hours") is what makes the offer believable and belongs there |
 | A giant fake browser window tilted in 3D space as decoration | Product screenshots presented flat, or with a subtle 6-12 degree tilt where it serves a "design object" framing |
 | Hero carousels with auto-advancing slides | A single confident hero. If multiple stories must coexist, use tabs with manual control |
 | Animated typewriter on the H1 | Reserved for content that is genuinely input (a search bar, a chat). A typewriter on a headline reads as a gimmick |
@@ -331,7 +334,9 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 | Customer quotes without a name, role, or company | Name plus role plus company at minimum. Quotes with no attribution read as fabricated |
 | Generic testimonial sections of 15+ unattributed quotes | 2-3 strong, named, quantified quotes beat 15 vibes-only |
 | Auto-playing testimonial videos on page load | Opt-in. Auto-play is intrusive |
-| Stat callouts that are visibly invented ("99.99% uptime!") | Real numbers or organic-looking ones (47.2%, 280K, $8,247.30). Round numbers in stats read as marketing |
+| Stat callouts that are visibly invented ("99.99% uptime!"), or real figures reshaped to look precise | The client's figure as the client gives it, with what it counts and as of when ("1,240 repairs since March 2025"). A round real figure stays round |
+| A count with no definition or date ("10,000+ happy customers") | Render it as a plain fact line with its basis, what it counts and as of when, or drop it |
+| A logo row standing in for an outcome ("Trusted by" above logos, and no result anywhere) | A logo row proves a relationship, not a result. An outcome claim needs its own figure or a named quote |
 | "Trusted by 10,000+ developers" with no logos | Show logos or show nothing |
 | Customer logos in full color | Single mono treatment (all 70% black, all white, or all neutral ink). Mixed-color logo walls read busy |
 | Logo walls repeated 3+ times down a single page as filler | Once near the hero, optionally once before the final CTA. More reads as overcompensation and the trust signal collapses |
@@ -344,6 +349,8 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 ## Pricing
 
 - **Homepage pricing is a teaser.** Full pricing tables on the homepage feel sales-driven. Tease with a "starts at" line and a link to the pricing page.
+- **A price a visitor can multiply.** Every price states its currency, billing period, basis (per seat, per account, per unit of use) and what happens past the limit. A fee every customer pays sits in the table, not a footnote: "from 29" beside "onboarding from 500" means the entry price is 529, and the table says so. "From" with no range reads as an opening bid; give the range. Show the annual price itself, not only the discount.
+- **Adjacent plans differ in one sentence.** If two neighboring plans cannot be told apart in one sentence, the boundary between them is wrong, not the copy; say so to the owner.
 - **Two to four plans.** One plan is marked as the recommended choice with one visual device (a border, a label, or a tint), not three.
 - **Every plan states who it is for** in one line before it lists features.
 - **Prices use tabular figures** and one consistent format across plans (same decimals, same billing period label).
@@ -420,6 +427,7 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 
 ### High
 - [ ] One archetype chosen and committed; the page does not mix skeletons
+- [ ] Headline, subhead, visual and CTA address the same reader and the same buying motion
 - [ ] Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately.
 - [ ] No hero button that scrolls to a form already visible in the hero
 - [ ] No customer logos in original full color

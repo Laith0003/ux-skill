@@ -106,6 +106,7 @@ Write `.ux/last-copy.json`:
       "severity": "Critical | High | Medium | Cosmetic",
       "before": "<verbatim>",
       "after": "<rewrite>",
+      "evidence_kind": "<what the finding rests on, from commands/ux-audit.md step 4>",
       "notes": "<optional>"
     }
   ],
@@ -130,7 +131,7 @@ The voice rubric, the before/after table, the clean rewrite block, and (if `--fi
 
 ## State persisted
 
-- `.ux/last-copy.json` — keys: `command`, `timestamp`, `surface`, `voice_rubric` (array), `strings` (array of `{location, severity, before, after, notes}`), `severity_counts`, `locales_needing_translation`.
+- `.ux/last-copy.json` keys: `command`, `timestamp`, `surface`, `voice_rubric` (array), `strings` (array of `{location, severity, before, after, evidence_kind, notes}`), `severity_counts`, `locales_needing_translation`.
 
 ## Next prompt
 

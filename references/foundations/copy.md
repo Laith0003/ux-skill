@@ -358,7 +358,7 @@ Use creative, realistic-sounding names that fit the product's market.
 - 1234567
 - Round numbers used as stats
 
-Use organic, messy data: 47.2%, +1 (312) 847-1928, $8,247.30.
+A figure the page claims is the client's own, as the client states it, with what it counts and as of when; a round real figure stays round. Only stand-in data inside a product mock is made up, and there it is plausible and irregular: 47.2%, $8,247.30.
 
 ### Banned punctuation patterns
 - Exclamation points in marketing copy

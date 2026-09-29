@@ -22,7 +22,7 @@
         {
           "section": "Proof/stats bar",
           "job": "proof",
-          "purpose": "A thin band of 3-5 real, organic numbers (jobs completed, years operating, response time, coverage radius) directly under the hero: instant credibility before the scroll.",
+          "purpose": "A thin band of 3-5 of the client's real figures (jobs completed, years operating, response time, coverage radius) directly under the hero, each as the client states it with what it counts and as of when: instant credibility before the scroll.",
           "proof": "stats"
         },
         {
@@ -123,7 +123,7 @@
         {
           "section": "Metrics / outcomes band",
           "job": "proof",
-          "purpose": "A stats band of real outcomes (latency, time saved, adoption), organic numbers, not round marketing figures.",
+          "purpose": "A band of the client's real outcomes (latency, time saved, adoption), each with what it counts and as of when; a round real figure stays round.",
           "proof": "stats"
         },
         {
@@ -386,7 +386,7 @@
         {
           "section": "Proof/stats bar",
           "job": "proof",
-          "purpose": "A thin band of real numbers (downloads, rating, active users), organic, not round marketing figures.",
+          "purpose": "A thin band of the client's real figures (downloads, rating, active users), each with what it counts and as of when; a round real figure stays round.",
           "proof": "stats"
         },
         {
@@ -482,7 +482,7 @@
           "section": "Numbers band",
           "job": "proof",
           "proof": "stats",
-          "purpose": "Real numbers from the client (buyers, suppliers, orders, cities). Only numbers the client has measured."
+          "purpose": "Real numbers from the client (buyers, suppliers, orders, cities), each with what it counts and as of when. Only numbers the client has measured."
         },
         {
           "section": "Buyer or supplier quote",
@@ -900,7 +900,7 @@
           "section": "Numbers band",
           "job": "proof",
           "proof": "stats",
-          "purpose": "Real numbers the supply side cares about (buyers reached, orders a month, cities), measured by the client."
+          "purpose": "Real numbers the supply side cares about (buyers reached, orders a month, cities), measured by the client, each with what it counts and as of when."
         },
         {
           "section": "Supplier quote",
