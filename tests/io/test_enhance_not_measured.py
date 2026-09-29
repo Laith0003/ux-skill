@@ -26,7 +26,7 @@ SOURCES = {
                             '  --radius-sm: 4px;\n}\n'),
     "tailwind-json": ("theme.json", json.dumps({"colors": {"moss": {"500": "#2f7d4f"}},
                                                 "borderRadius": {"sm": "4px"}})),
-    "markdown": ("rules.md", "# Tokens\n\n- `moss.500`: #2f7d4f\n- `radius.sm`: 4px\n"),
+    "markdown": ("rules.md", "# Tokens\n\n- `moss.500`: #2f7d4f\n- `bend.snug`: 4px\n"),
 }
 READERS = {"css": read_css, "dtcg": read_dtcg, "tailwind": read_tailwind,
            "tailwind-json": read_tailwind, "markdown": read_markdown}

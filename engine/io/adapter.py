@@ -618,7 +618,7 @@ def _root_axis_note(axis: str, values: Tuple[str, ...], name: str) -> str:
 
 
 # The word a token's name carries when it holds another token's value under
-# reduced motion (duration-slow-reduced, motion.reduced.duration.slow).
+# reduced motion (duration-slow-reduced, motion.reduced.pace.calm).
 REDUCED_WORDS = ("reduced", "reduce")
 REDUCED_NOTE = ("motion:reduced is read from the separate tokens the system declares for it: "
                 "{pairs}; map the motion axis in {name} to read it from a mode instead")
@@ -633,7 +633,7 @@ def reduced_pairs(ts: TokenSet) -> Dict[str, str]:
     """Each token that has a separate reduced-motion twin, and the twin: a
     token of the same type whose name is the token's own with a reduced
     word added anywhere (duration-slow-reduced, reduced-duration-slow,
-    motion.reduced.duration.slow, or reduced-motion before the rest).
+    motion.reduced.pace.calm, or reduced-motion before the rest).
     Names only, in the set's order."""
     by_words: Dict[Tuple[str, ...], str] = {}
     for t in ts.tokens():

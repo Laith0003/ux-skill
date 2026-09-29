@@ -32,13 +32,13 @@ def _imported(text=PAIRS):
 def test_a_reduced_twin_is_found_by_its_name_in_any_position():
     assert reduced_pairs(_imported().tokens) == {"duration-slow": "duration-slow-reduced",
                                                  "duration-fast": "duration-fast-reduced"}
-    doc = {"motion": {"duration": {"slow": {"$type": "duration",
-                                            "$value": {"value": 300, "unit": "ms"}}},
-                      "reduced": {"duration": {"slow": {"$type": "duration",
-                                                        "$value": {"value": 0, "unit": "ms"}}}}}}
+    doc = {"motion": {"pace": {"calm": {"$type": "duration",
+                                        "$value": {"value": 300, "unit": "ms"}}},
+                      "reduced": {"pace": {"calm": {"$type": "duration",
+                                                    "$value": {"value": 0, "unit": "ms"}}}}}}
     text = json.dumps(doc)
     ts = import_dtcg(text, Source("tokens.json", "dtcg", "0" * 64, len(text))).tokens
-    assert reduced_pairs(ts) == {"motion.duration.slow": "motion.reduced.duration.slow"}
+    assert reduced_pairs(ts) == {"motion.pace.calm": "motion.reduced.pace.calm"}
     # A reduced token with no twin, or a twin of another type, pairs with
     # nothing.
     lone = _imported(":root { --gap: 8px; --gap-reduced: 100ms; --blur-reduced: 2px; }\n")
