@@ -38,7 +38,7 @@
 | Use weight changes (400 to 600) to signal hierarchy | Use color alone to signal hierarchy |
 | Use ALL CAPS only for eyebrows at 10 to 13px with +0.06em tracking | Use ALL CAPS for body or subheads at any size |
 | Standardize on one type ramp with four to six steps | Invent new sizes per component |
-| Enable curly quotes and em dashes in production copy | Ship straight quotes and double-hyphens |
+| Enable curly quotes in production copy; break sentences with a period, a comma or a colon | Ship straight quotes, em dashes or a double hyphen as punctuation |
 | Reserve italic for genuine emphasis or titles | Use italic as decoration |
 | Match optical size to rendered pixel size when the face supports it | Use a single optical variant across display and body |
 | Wire `font-display: swap` so text remains visible during font load | Allow invisible text (FOIT) during font load |
@@ -357,7 +357,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - [ ] Eyebrows use ALL CAPS or sentence case at 10 to 13px with positive tracking (severity: Cosmetic)
 - [ ] ALL CAPS reserved for eyebrows only — never used for body or subheads above 14px (severity: High)
 - [ ] Tabular figures enabled on data tables, dashboards, prices, timers (severity: Medium)
-- [ ] Curly quotes and em dashes used; no straight quotes or double-hyphens (severity: Cosmetic)
+- [ ] Curly quotes used; no straight quotes, em dashes or double hyphens as punctuation (severity: Cosmetic)
 - [ ] `font-display: swap` configured to avoid invisible text during load (severity: High)
 - [ ] Variable font weight respected — reduce by ~50 units in dark mode (severity: Cosmetic)
 - [ ] No more than two display fonts paired together (severity: High)
@@ -393,8 +393,8 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - Semicolons absent in marketing copy
 - Question marks only when genuinely asking
 - No exclamation marks in marketing copy
-- Em dash (—) for pauses and asides; no spaces around it
-- En dash (–) for ranges ("3–5 minutes")
+- No em dash or double hyphen for pauses and asides: a period, a comma or a colon
+- Ranges in words ("3 to 5 minutes"), never an en dash
 - Hyphen (-) for compound words
 - Curly quotes ""; never straight quotes
 - Apostrophes curly (') never straight (')

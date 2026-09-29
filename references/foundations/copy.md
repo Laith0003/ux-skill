@@ -48,7 +48,7 @@
 | Address the reader as "you" in body | Use "users" or "the platform" as abstractions |
 | Use first-person plural ("we built") sparingly in context | Lead every headline with "We help you..." |
 | Use feature names as proper nouns (Agents, Spaces, Boosts) | Use generic descriptors ("Powerful Workflows") |
-| Use em dashes (—) and en dashes (–) correctly | Use double-hyphens (--) |
+| Break a sentence with a period, a comma or a colon; write a range as "3 to 5" | Use em dashes, en dashes or a double hyphen as punctuation |
 | Use curly quotes ("") | Use straight quotes ('') |
 | Use specifics over superlatives | Use superlatives over specifics |
 
@@ -200,11 +200,11 @@ Sometimes preceded by a 6 to 8px colored dot. Replaces decorative section divide
 
 ### Pattern: Punctuation discipline
 **Use when**: Every line of copy.
-**Anti-pattern**: Straight quotes, double-hyphens, missing em-dashes, exclamation mark inflation.
+**Anti-pattern**: Straight quotes, long dashes or a double hyphen as punctuation, exclamation mark inflation.
 **How**:
 - Curly quotes: ""
-- Em-dash (—): for pauses and asides (no spaces)
-- En-dash (–): for ranges ("3–5 minutes")
+- No em dash, en dash or double hyphen: a pause or an aside takes a period, a comma or a colon
+- Ranges in words: "3 to 5 minutes"
 - Hyphen (-): for compound words
 - Period at end of two-word headlines acceptable as cadence move ("Make it.")
 - Commas freely in conversational subheads
@@ -371,8 +371,8 @@ Use organic, messy data: 47.2%, +1 (312) 847-1928, $8,247.30.
 - Brand exclamation marks in error pages ("Oops!")
 
 ### Punctuation conventions
-- Em-dash (—): pauses, asides (no spaces around)
-- En-dash (–): numeric ranges
+- Pauses and asides: a period, a comma or a colon, never an em dash or a double hyphen
+- Numeric ranges: "3 to 5", never an en dash
 - Hyphen (-): compound words
 - Curly quotes: ""
 - Apostrophes: ' (not ')
@@ -436,7 +436,7 @@ Resist the temptation to make each layer do the others' jobs.
 - [ ] Toast auto-dismisses in 3 to 5 seconds (severity: Medium)
 - [ ] Confirmation dialog before destructive actions, with both confirm and cancel visible (severity: Critical)
 - [ ] Curly quotes used; no straight quotes (severity: Cosmetic)
-- [ ] Em-dashes used correctly; no double-hyphens (severity: Cosmetic)
+- [ ] No em dashes, en dashes or double hyphens as punctuation (severity: Cosmetic)
 - [ ] Voice consistent across marketing, in-product, error, docs (severity: High)
 - [ ] Feature names are nouns / noun-phrases, not adjective-stacks (severity: Medium)
 - [ ] No "SECTION 01," "QUESTION 05" meta-labels (severity: High)

@@ -106,3 +106,29 @@ def test_no_em_dash_is_recommended_and_two_bans_are_scoped_to_generated_systems(
     for row_start in ("| Pure white", "| Arial, Roboto"):
         line = next(ln for ln in SLOP.splitlines() if ln.startswith(row_start))
         assert "generated system" in line, row_start
+
+
+def test_the_build_gets_the_page_style_and_the_register():
+    step = _section(DESIGN, "### 4. Build the page")
+    assert ".ux/page-style.json" in step and "register" in step
+    assert "which register file the copy followed" in step
+    facts = _section(DESIGN, "### 1a.1.")
+    assert "left out, never guessed" in facts
+
+
+def test_no_reference_recommends_a_long_dash():
+    pattern = re.compile(r"(?:em|en)[ -]dash(?:es)? \(|curly quotes and em dashes|"
+                         r"em dashes \([^)]*\) where", re.IGNORECASE)
+    for path in sorted((ROOT / "references").rglob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        assert not pattern.search(text), path.relative_to(ROOT)
+
+
+def test_no_use_when_line_names_an_industry():
+    arsenal = (ROOT / "references" / "styles" / "arsenal.md").read_text(encoding="utf-8")
+    words = re.compile(r"\b(?:fintech|saas|dev-tool|developer tools|infrastructure products|"
+                       r"hospitality|clinics|agencies)\b", re.IGNORECASE)
+    for text, name in ((arsenal, "arsenal.md"), (LANDING, "landing.md")):
+        for line in text.splitlines():
+            if line.startswith(("**Use when**", "**Pick it when.**", "**Terminal mockup.**")):
+                assert not words.search(line), (name, line)

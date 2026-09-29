@@ -25,7 +25,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **Cost**: low — CSS backdrop-filter + position fixed.
 
 ### Minimal split nav
-**Use when**: minimalist styles, content-led SaaS.
+**Use when**: minimalist styles, a content-led page.
 **What it is**: Logo left, primary actions right, single accent on the active item. Thin horizontal rail, no background fill, sits on canvas. Optionally a subtle backdrop blur appears after first scroll.
 **Cost**: zero — pure layout.
 
@@ -66,7 +66,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **Cost**: medium — pointer coords + radial layout.
 
 ### Status indicator in nav
-**Use when**: infrastructure products, developer tools, fintech.
+**Use when**: the product has a real status page that users check.
 **What it is**: A 6px green dot + 12px caps text saying "All systems operational" in the nav or footer. Links to a status page.
 **Why it works**: Sells reliability without saying "reliable."
 **Cost**: zero — tiny but powerful trust signal.
@@ -81,7 +81,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 ## Layout & grid patterns
 
 ### Bento grid
-**Use when**: feature sections, SaaS landings, dashboards, product overviews.
+**Use when**: feature sections, software landings, dashboards, product overviews.
 **What it is**: Asymmetric tile grouping. Different tile sizes; uses `grid-flow-dense` for tight packing. Each tile has its own micro-interaction. Tile size carries hierarchy instead of headline weight; larger tiles carry marquee features, smaller tiles carry supporting capabilities.
 **Why it works**: Implies depth + density without overwhelming. Lets each tile carry its own story.
 **Cost**: design effort medium, code low (CSS Grid).
@@ -261,7 +261,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **Cost**: low — `background-clip: text` + a `<video>` behind.
 
 ### Text scramble effect
-**Use when**: technical surfaces, command interfaces, infrastructure products.
+**Use when**: technical surfaces and command interfaces the product really has.
 **What it is**: Character-decoding effect on load or hover — random characters cycle then settle into the final string.
 **Cost**: low — JS interval cycling random chars then settling.
 
@@ -506,7 +506,7 @@ Logo wall rules live in `references/surfaces/landing.md` (Proof).
 **Cost**: zero — design discipline.
 
 ### Lifestyle hero with editorial framing
-**Use when**: brand-led products, hospitality, premium consumer hardware.
+**Use when**: brand-led pages with real photography of the product or the place.
 **What it is**: Real photography (rare in B2B premium), shot in real environments, with editorial restraint — natural lighting, no heavy retouching. Portraits at 4:5 or near-square with generous negative space.
 **Cost**: high — real production. Multiple aspect-ratio crops for responsive art direction.
 

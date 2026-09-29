@@ -36,7 +36,7 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 ### 1. Split-hero product page
 
 **Structure.** Asymmetric 7/5 hero (copy on one side, real product UI on the other). A monochrome logo wall directly under the hero. Three to five marquee feature sections, each a 7/5 or 5/7 mosaic that alternates sides. One proof band with named, quantified quotes. A pricing teaser line. A final high-contrast CTA band. A sitemap footer.
-**Pick it when.** The product has a real interface worth showing and the audience evaluates by looking at it: SaaS, productivity tools, fintech apps.
+**Pick it when.** The product has a real interface worth showing and the audience evaluates by looking at it: software or an app people sign in to, with real screens.
 **It fails when.** It collapses into the default reach: centered or 50/50 hero, left-text-right-image repeated in every section, a row of three equal cards under the hero. The asymmetry is the whole point; a 6/6 split is a different, weaker page.
 
 ### 2. Thesis statement
@@ -48,7 +48,7 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 ### 3. Product demo led
 
 **Structure.** The hero is the product itself: an interactive demo, a large product mock, a code block or a terminal. Under it, a scroll-pinned product walk through three or four states, a bento of five to eight capabilities, a monochrome logo wall, and a final CTA that repeats the command or the signup.
-**Pick it when.** The product is visual or temporal and 60+ seconds of engagement justify the build cost. Developer tools, creative tools, AI products whose output is the proof.
+**Pick it when.** The product is visual or temporal and 60+ seconds of engagement justify the build cost: a product whose output is the proof.
 **It fails when.** The "demo" is a video loop dressed as interactivity, the demo blocks first meaningful paint, or three premium effects stack on one screen (tilted window, parallax background, scrubbed video).
 
 ### 4. Editorial long form
@@ -60,19 +60,19 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 ### 5. Single-field conversion
 
 **Structure.** The hero's primary CTA is one input and one button, replacing a "Sign up" button. The hero copy implies the field is the start. Under it: a short proof strip, three feature sections, a FAQ, and the same single field repeated in the final CTA band.
-**Pick it when.** The conversion is one field: signup-led products, waitlists, fintech onboarding where the implied promise is "this is one field, not a multi-step funnel."
+**Pick it when.** The conversion is one field (an email, a phone number, an account request): a sign-up, a waitlist, a phone sign-in, where the implied promise is "this is one field, not a multi-step funnel."
 **It fails when.** The form asks for more than the one field, a separate hero button scrolls to the field that is already on screen, or the page has no proof and the field reads as a data grab.
 
 ### 6. Cinematic brand
 
 **Structure.** A full-bleed image or muted video with a dark radial wash. Centered statement, exactly two high-contrast CTAs. Image-led sections below: lifestyle photography at 4:5 or near-square, one product detail section, a short story, a closing CTA.
-**Pick it when.** Imagery carries the value: premium consumer products, hospitality, hardware, brand-led launches with real photography.
+**Pick it when.** Imagery carries the value: the brand has real photography of its product or place, and a brand book that allows it.
 **It fails when.** The archetype is picked by default rather than deliberately, which breaks the centered-hero rule: Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately. It also fails when the text sits on the image without a legible scrim, or the imagery is generic stock that could advertise anything.
 
 ### 7. Service lead generation
 
 **Structure.** The quote or contact form lives in the hero. A proof and stats bar under it. Trust signals (ratings, accreditations, years in business) and a visible phone affordance. Service or coverage cards with real backdrop images. A FAQ. A final CTA that points back to the form. This is the `lead-gen-service` page sequence in the engine.
-**Pick it when.** The business sells a service and the conversion is a call, a quote or a booking: trades, clinics, local services, agencies.
+**Pick it when.** The business sells a service and the conversion is a call, a quote or a booking (`product_type: local-service`, or `primary_action` quote, book or contact).
 **It fails when.** The ratings bar stacks into a tall sticky block, a hero button scrolls to the form that is already visible, or every service card carries the same icon.
 
 ### Pattern pairings by brief
@@ -220,7 +220,7 @@ The section order comes from the archetype above and from the engine's page sequ
 
 **Code as hero content.** For a product that ships code or runs in a terminal. Treat a code block like hero photography. Short (6-14 lines), syntax-highlighted with a custom theme that matches the page accent, inside window chrome (traffic-light dots, a title bar with the filename). Built in HTML and CSS, not a screenshot, so it scales crisply. Cost: medium, a custom syntax theme plus window chrome styling.
 
-**Terminal mockup.** For infrastructure, CLI and dev-tool marketing. Near-black window with traffic-light chrome and a `$` or `>` prompt. The command is short, declarative, and runnable exactly as written. Multi-line terminals fade older lines with reduced opacity. Output is monospace and color-coded (green success, gray chatter, bright neutral for user input). Cost: low, CSS plus content.
+**Terminal mockup.** For a product that itself runs in a terminal, with a real command to show. Near-black window with traffic-light chrome and a `$` or `>` prompt. The command is short, declarative, and runnable exactly as written. Multi-line terminals fade older lines with reduced opacity. Output is monospace and color-coded (green success, gray chatter, bright neutral for user input). Cost: low, CSS plus content.
 
 **Interactive product demo.** A real, manipulable instance of the product running inline. The user can drag, type and click, and the product responds with actual logic, not a video loop. The strongest "designed by designers" signal available. Affordances: subtle pulsing dots, ghost hand-cursor hints, a "try it" label on the first interactable element.
 
