@@ -64,7 +64,7 @@ from engine.foundations.validate import LAYERS
 from engine.foundations.values import TYPES, TYPOGRAPHY_FIELDS
 from engine.io.graph import cycles
 from engine.io.mode_words import axis_of, is_base, mode_of, words
-from engine.io.report import (Imported, ImportReport, Item, Mapped, Source, read_source,
+from engine.io.report import (Folded, Imported, ImportReport, Item, Mapped, Source, read_source,
                               recorded)
 from engine.io.values_in import GamutMapped, NotRead, read_value
 
@@ -772,16 +772,7 @@ def _reads_as(types: Dict[str, str], groups: Set[str], kind: str, raw: Any) -> b
     return True
 
 
-@dataclass(frozen=True)
-class _Folded(Item):
-    """Report lines of one kind folded into one: the line says how many and
-    names a few; to_dict() keeps every one under items."""
-    items: Tuple[Item, ...] = ()
-
-    def to_dict(self) -> Dict[str, Any]:
-        out: Dict[str, Any] = dict(super().to_dict())
-        out["items"] = [i.to_dict() for i in self.items]
-        return out
+_Folded = Folded
 
 
 _OLDER = "the form before DTCG 2025.10; read as "

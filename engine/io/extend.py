@@ -95,7 +95,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 from typing import Mapping as Mapping_
 
-from engine.contracts.bind import validate_contracts
+from engine.contracts.check import bind_contracts
 from engine.contracts.schema import ContractError, load_contract
 from engine.existing import stamp_digest
 from engine.foundations.audience import Audience, effects
@@ -216,7 +216,8 @@ def _copy(t: Token, path: Optional[str] = None, rename: Optional[Callable[[str],
 
 def _generated(names: Sequence[str], axes: AxisValues, brand: str,
                arabic: bool, audience: Audience,
-               anchor: Optional[Dict[str, Dict[str, str]]] = None) -> Tuple[TokenSet, List[str]]:
+               anchor: Optional[Dict[str, Dict[str, str]]] = None,
+               words: Optional[Dict[str, int]] = None) -> Tuple[TokenSet, List[str]]:
     """The named foundations and the ones they need, in build order, for
     the brief's audience, and the color generator's notes when an anchor is
     given. With an anchor (_owner_colors), color is generated around the
@@ -229,13 +230,13 @@ def _generated(names: Sequence[str], axes: AxisValues, brand: str,
     order = tuple(n for n in _NAMES if n in wanted)
     if not anchor or "color" not in order:
         return build_system(axes, brand, arabic=arabic, foundations=order,
-                            audience=audience).tokens, []
+                            audience=audience, words=words).tokens, []
     made = generate_color(axes, brand, audience.brand_role, anchor=anchor)
     out = made.tokens
     rest = tuple(n for n in order if n != "color")
     if rest:
         for t in build_system(axes, brand, arabic=arabic, foundations=rest,
-                              audience=audience).tokens.tokens():
+                              audience=audience, words=words).tokens.tokens():
             out.add(t)
     return out, list(made.notes)
 
@@ -687,11 +688,14 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
            axes: AxisValues = NEUTRAL, axes_source: str = "every axis at 0.5",
            brand: Optional[str] = None, arabic: bool = True,
            audience: Optional[Audience] = None, unread: Sequence[str] = (),
-           mapping_name: str = "mapping.json") -> Extended:
+           mapping_name: str = "mapping.json",
+           words: Optional[Dict[str, int]] = None) -> Extended:
     """Extend an imported system (see the module docstring). `audience`
     holds the brief's structured fields and `unread` the brief's words the
     engine did not read (emit.brief_audience and emit.unread_lines);
-    `mapping_name` is the mapping file the messages name. Raises
+    `mapping_name` is the mapping file the messages name; `words` the
+    letters of the page's longest headline word per script
+    (emit.brief_words), so an added type foundation fits it. Raises
     InputError for an addition that cannot be made as asked.
 
     Color is generated around the colors the system already plays
@@ -798,7 +802,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
         color_notes: List[str] = []
         try:
             generated, color_notes = _generated(foundations, axes, seed, arabic, audience,
-                                                anchor)
+                                                anchor, words)
         except GateFailure as exc:
             problems += [line for line in str(exc).splitlines() if line]
         if anchor:
@@ -1082,7 +1086,6 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
 
     contract_files: Dict[str, str] = {}
     if contracts:
-        checked, _ = view(merged, checking_new, mapping_name)
         loaded = []
         for c in contracts:
             path = Path(c)
@@ -1092,7 +1095,10 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                 problems += [p.message for p in exc.problems]
                 continue
             contract_files[f"contracts/{path.name}"] = path.read_text(encoding="utf-8")
-        problems += [p.message for p in validate_contracts(loaded, checked)]
+        # Bound as the contract check binds them: through the mapping, with
+        # each finding in the system's own names.
+        found, _ = bind_contracts(loaded, merged, checking_new, mapping_name)
+        problems += [p.message for p in found]
 
     by_name = [t.path for t, origin in adding
                if t.path in ROLE_TYPES and new_mapping.roles[t.path].by == "name"
@@ -1552,14 +1558,17 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
     if result.problems:
         return {**write_with_intake(target, {"extend-report.md": result.files["extend-report.md"]},
                                     imported.report, **labels), "load": ""}
+    name = Path(imported.report.source.path).name
     if out is None or target.resolve() == here.resolve():
         return _loaded(_fonts_note(write_with_intake(here, result.files, imported.report,
-                                                     **labels), result, labels), result)
+                                                     beside=name, **labels), result, labels),
+                       result)
     near = {n: result.files[n] for n in result.beside}
     rest = {n: t for n, t in result.files.items() if n not in result.beside}
     stopped = []
     for folder, files in ((here, near), (target, rest)):
-        planned = write_with_intake(folder, files, imported.report, plan_only=True, **labels)
+        planned = write_with_intake(folder, files, imported.report, plan_only=True,
+                                    beside=name if folder == here else "", **labels)
         if planned["status"] not in ("planned", "unchanged"):
             stopped.append((folder, _fonts_note(planned, result, labels)))
     if len(stopped) == 1:
@@ -1573,7 +1582,7 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
                 "message": " ".join(_stop(o["message"]) for _, o in stopped),
                 "backup": "", "replaced": {}, "load": result.load}
     saved = _snapshot(here, near)
-    first = write_with_intake(here, near, imported.report, **labels)
+    first = write_with_intake(here, near, imported.report, beside=name, **labels)
     if first["status"] not in ("written", "unchanged"):
         return {**first, "load": result.load}
     second = write_with_intake(target, rest, imported.report, **labels)

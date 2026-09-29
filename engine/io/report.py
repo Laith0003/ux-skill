@@ -13,6 +13,7 @@ is not read.
 from __future__ import annotations
 
 import hashlib
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Tuple
@@ -40,6 +41,67 @@ class Item:
     def line(self) -> str:
         name = f" `{self.name}`" if self.name else ""
         return f"- {self.where}{name}: {self.message}"
+
+
+@dataclass(frozen=True)
+class Folded(Item):
+    """Report lines of one kind folded into one: the line says how many and
+    names a few; to_dict() keeps every one under items."""
+    items: Tuple[Item, ...] = ()
+
+    def to_dict(self) -> Dict[str, Any]:
+        out: Dict[str, Any] = dict(super().to_dict())
+        out["items"] = [i.to_dict() for i in self.items]
+        return out
+
+
+# A Not read list longer than this is folded (fold); a folded line names
+# this many entries and counts the rest.
+FOLD_OVER = 12
+FEW = 3
+
+
+def _namespace(name: str) -> str:
+    """The first word of a name, as its namespace: color for --color-ink,
+    color.text.body or colorInk is not split (one word)."""
+    words = [w for w in re.split(r"[.\-/_\s]+", name.lstrip("-$")) if w]
+    return words[0] if words else ""
+
+
+def _few(names: List[str]) -> str:
+    shown = names if len(names) <= FEW + 1 else names[:FEW] + [f"{len(names) - FEW} more"]
+    return shown[0] if len(shown) == 1 else ", ".join(shown[:-1]) + " and " + shown[-1]
+
+
+def fold(items: List[Item], over: int = FOLD_OVER) -> List[Item]:
+    """A long list with the entries of one file, one namespace and one
+    message folded into one line at the place of the first: how many, a
+    few of their names, and the message they share. A list of `over`
+    entries or fewer comes back as it is, and so does an entry alone of
+    its kind. Each Folded keeps every entry it stands for."""
+    if len(items) <= over:
+        return list(items)
+
+    def key(i: Item) -> Tuple[str, str, str]:
+        return i.where.split(":")[0], _namespace(i.name), i.message
+
+    groups: Dict[Tuple[str, str, str], List[Item]] = {}
+    for i in items:
+        groups.setdefault(key(i), []).append(i)
+    out: List[Item] = []
+    for i in items:
+        group = groups[key(i)]
+        if len(group) < 2 or isinstance(i, Folded):
+            out.append(i)
+            continue
+        if group[0] is not i:
+            continue
+        ns = key(i)[1]
+        under = f" under {ns}" if ns else ""
+        out.append(Folded(i.where, "", (
+            f"{len(group)} entries{under} ({_few([g.name for g in group])}); for each: "
+            f"{i.message}"), tuple(group)))
+    return out
 
 
 @dataclass(frozen=True)
@@ -139,6 +201,9 @@ class ImportReport:
     # What the owner must see first, such as a file that holds values and
     # gave no token; written right under the count.
     headline: List[str] = field(default_factory=list)
+    # Who owns the source and which marker said so (ownership_line), when
+    # a command read it; written under the first line.
+    ownership: str = ""
 
     @classmethod
     def of(cls, source: Source, ts: TokenSet, entries: int,
@@ -164,13 +229,15 @@ class ImportReport:
                 "notes": [i.to_dict() for i in self.notes],
                 "mapped": [i.to_dict() for i in self.mapped],
                 "not_read": [i.to_dict() for i in self.not_read],
-                **({"headline": list(self.headline)} if self.headline else {})}
+                **({"headline": list(self.headline)} if self.headline else {}),
+                **({"ownership": self.ownership} if self.ownership else {})}
 
     def markdown(self) -> str:
         s = self.source
         lines = ["# Import report", "",
                  f"Read {s.path} ({s.format}, {s.size} bytes, sha256 {s.sha256[:12]}): "
                  f"{self.entries} entries, {self.tokens} tokens.", "",
+                 *([self.ownership, ""] if self.ownership else []),
                  *(line for h in self.headline for line in (h, "")),
                  f"{self.mode_values} mode value{'' if self.mode_values == 1 else 's'}.", "",
                  *[f"Also read {a.path} ({a.format}, {a.size} bytes, sha256 {a.sha256[:12]})."
@@ -197,8 +264,12 @@ class ImportReport:
                       "", *(i.line() for i in self.mapped)]
         lines += ["", "## Not read", ""]
         if self.not_read:
+            folded = fold(self.not_read)
             lines += ["Nothing below was guessed; each entry says how to write it so it can be "
-                      "read.", "", *(i.line() for i in self.not_read)]
+                      "read."
+                      + (" Entries of one file, namespace and message share one line; the JSON "
+                         "result lists each." if len(folded) < len(self.not_read) else ""),
+                      "", *(i.line() for i in folded)]
         else:
             lines.append("Nothing was left unread.")
         return "\n".join(lines) + "\n"
@@ -238,3 +309,43 @@ class Imported:
     variant: str = ""
     owned: bool = False
     figma: Mapping[str, Any] = field(default_factory=dict)
+
+
+def owned_by(imported: Imported) -> str:
+    """Which marker made `imported` the engine's own: "record" (the record
+    of the files the engine wrote lists it at the digest it was read at),
+    "stamp" (a stylesheet carrying the engine's digest stamp that still
+    matches), "extension key" (a tokens file the record does not list, with
+    the engine's extension key on its root), or "" when it is not."""
+    if not imported.owned:
+        return ""
+    source = imported.report.source
+    listed = recorded(source)
+    if listed is True:
+        return "record"
+    if source.format in ("css", "tailwind"):
+        return "stamp"
+    return "extension key" if source.format == "dtcg" and listed is None else "record"
+
+
+def ownership_line(imported: Imported) -> str:
+    """The sentence an import report gives on who owns the source and why."""
+    report = imported.report
+    name = Path(report.source.path).name
+    also = [Path(a.path).name for a in report.also_read]
+    marker = owned_by(imported)
+    if marker == "record":
+        return (f"{name} is ux-skill's own: the record of the files ux-skill wrote in its folder "
+                "(.uxskill/files.json) lists it at the digest it was read at.")
+    if marker == "stamp":
+        return f"{name} is ux-skill's own: it carries ux-skill's digest stamp, which still matches."
+    if marker == "extension key":
+        return (f"{name} is read as ux-skill's own because its root carries ux-skill's extension "
+                "key. Its folder has no record of the files ux-skill wrote, so a hand edit to it "
+                "is not seen; build the system into that folder again to write the record, or "
+                "remove the key if the file is yours.")
+    files = name if not also else ", ".join([name, *also[:-1]]) + " and " + also[-1]
+    them = "it" if not also else "them"
+    return (f"{files} {'is' if not also else 'are'} not ux-skill's own (no record, digest stamp "
+            f"or extension key says so), so ux-skill never rewrites {them}: what it adds goes "
+            f"beside {them}, and an export goes into a folder of its own.")

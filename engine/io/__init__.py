@@ -10,9 +10,10 @@ it (the Figma one with the scripts that apply and read variables through
 Figma's plugin API), and extend, which adds foundations, roles or
 contracts to a system without changing what it has (in an extension file
 beside a system the engine did not write). read_any reads a file in any
-of FORMATS, and write_with_intake is the step every write into a folder
-someone already has goes through: it checks and backs up every source
-first. Importing the package never loads the writer; write_with_intake
+of FORMATS, read_sources tells the format from the file and reads one
+source or several as one system, and write_with_intake is the step every
+write into a folder someone already has goes through: it checks and
+backs up every source first. Importing the package never loads the writer; write_with_intake
 loads it when it runs.
 """
 from pathlib import Path
@@ -34,8 +35,9 @@ from engine.io.graph import cycles, loop
 from engine.io.intake import INTAKE_DIR, source_digest, write_with_intake
 from engine.io.markdown_in import import_markdown, read_markdown
 from engine.io.mode_words import axis_of
-from engine.io.report import (FORMATS, Imported, ImportReport, Item, Mapped, Source,
-                              read_source)
+from engine.io.read import CHOICES, combine, detect_format, read_sources, read_system
+from engine.io.report import (FORMATS, Folded, Imported, ImportReport, Item, Mapped, Source,
+                              fold, owned_by, ownership_line, read_source)
 from engine.io.scan import SKIP_DIRS, NotMeasured, Scan, UnknownClass, Usage, scan
 from engine.io.tailwind_in import (
     EXPORT_COMMAND, import_tailwind_css, import_tailwind_json, read_tailwind)
@@ -64,6 +66,8 @@ __all__ = [
     "ADDITIONS", "APPLY_SCRIPT", "READ_SCRIPT", "as_export", "figma_extension", "figma_files",
     "to_figma", "write_figma",
     "Extended", "extend", "unread_properties", "write_extended",
+    "CHOICES", "combine", "detect_format", "read_sources", "read_system",
+    "Folded", "fold", "owned_by", "ownership_line",
 ]
 
 

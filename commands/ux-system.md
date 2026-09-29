@@ -43,7 +43,7 @@ print(report.markdown())
 "
 ```
 
-What the command forms add: `system enhance --from`, `system extend --from` and `system export` run these steps from the command line, check and back up every source before any write, and write whatever they add to a client's system as a separate extension file in the source's own format, loaded after it, with the report naming the file and how to load it.
+What the command forms add: `system enhance --from`, `system extend --from` and `system export` run these steps from the command line, check and back up every source before any write, and write whatever they add to a client's system as a separate extension file in the source's own format, loaded after it, with the report naming the file and how to load it. `--from` takes several files read as one system (the tokens file first, then each stylesheet that adds to it, such as the app's own globals holding the dark values), or a project folder, read as the set `system detect` finds. When the system has no high-contrast mode, `extend --add color` adds one for the tokens it adds, and its report measures the system's own colors in it under "Already in the system"; those findings never block the extension.
 
 ## create mode (4.0 beta)
 

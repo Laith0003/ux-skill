@@ -16,6 +16,11 @@ Subcommands
 ``ux stats``            -- show data manifest counts
 ``ux system build``     build a WCAG-gated design system (4.0 beta)
 ``ux system detect``    find an existing design system and what it declares
+``ux system import``    read an existing system and report what was read
+``ux system enhance``   measure an existing system and the code that uses it
+``ux system extend``    add to an existing system without changing what it has
+``ux system export``    write a system as CSS, Tailwind, Figma variables or DTCG
+``ux contracts check``  check component contracts against a system
 ``ux version``          -- print version
 """
 from __future__ import annotations
@@ -871,7 +876,8 @@ else:
 
     @cli.group("system")
     def system_grp() -> None:
-        """Build a WCAG-gated design system (4.0 foundations engine), or detect an existing one."""
+        """Build a WCAG-gated design system (4.0 foundations engine), or find, read,
+        measure, extend and export an existing one."""
 
     @system_grp.command("build")
     @click.option("--brand", required=True,
@@ -978,6 +984,176 @@ else:
                        "project folder, for example --root .", err=True)
             sys.exit(2)
         _emit(detect_existing_system(root), ctx.obj["pretty"])
+
+    # -------- ux system import|enhance|extend|export, contracts check -----
+
+    from engine.io.read import CHOICES as _FORMATS
+
+    def _io(ctx, fn, *args, figma_modes=(), **kwargs) -> None:
+        """Run a command from engine.io.commands: JSON on stdout, the exit
+        code by status, a bad input as a usage error naming the flag."""
+        from engine.foundations.emit import InputError
+        from engine.io.commands import EXIT, parse_modes
+        try:
+            if figma_modes:
+                kwargs["second_modes"] = parse_modes(figma_modes)
+            result = fn(*args, **kwargs)
+        except InputError as exc:
+            raise click.UsageError(str(exc)) from None
+        _emit(result, ctx.obj["pretty"])
+        if result["status"] in ("error", "refused"):
+            click.echo(f"Error: {result['message']}\n", err=True, nl=False)
+        if EXIT[result["status"]]:
+            sys.exit(EXIT[result["status"]])
+
+    _FROM = click.option(
+        "--from", "source", required=True, multiple=True,
+        help="The system: tokens.json, a stylesheet, a Tailwind theme, a markdown file or "
+             "folder, a Figma variables export, or a project folder (read as the set system "
+             "detect finds). Repeat it to read a stylesheet with the system, such as the app's "
+             "globals holding the dark values: the system first, each stylesheet after it.")
+    _FORMAT = click.option("--format", "fmt", type=click.Choice(_FORMATS), default="auto",
+                           help="Read the first --from as this format; auto tells it from the "
+                                "file.")
+    _FIGMA = click.option("--figma-mode", "figma_modes", multiple=True,
+                          help="For a Figma collection with more than two modes, the second "
+                               "mode to read: collection=mode.")
+    _OUT = click.option("--out", "out", default=None,
+                        help="Folder to write into, after every source is checked and backed "
+                             "up.")
+    _FORCE = click.option("--force", is_flag=True,
+                          help="Replace files in --out that ux-skill wrote and that differ; each "
+                               "is backed up first.")
+    _MAPPING = click.option("--mapping", "mapping", default=None,
+                            help="mapping.json saying which tokens play the engine's roles; it is "
+                                 "merged with a proposal from names, and its entries win.")
+
+    @system_grp.command("import")
+    @_FROM
+    @_FORMAT
+    @_FIGMA
+    @_OUT
+    @_FORCE
+    @click.pass_context
+    def system_import_cmd(ctx, source, fmt, figma_modes, out, force) -> None:
+        """Read an existing system in its own names and report what was read,
+        what was not, who owns it, and a proposed mapping to the engine's
+        roles. With --out, write import-report.md and mapping.json; a
+        mapping.json already there is kept, and the result names what the
+        proposal would add to it."""
+        from engine.io.commands import run_import
+        _io(ctx, run_import, list(source), fmt=fmt, out=out, force=force,
+            figma_modes=figma_modes)
+
+    @system_grp.command("enhance")
+    @_FROM
+    @_FORMAT
+    @_FIGMA
+    @_MAPPING
+    @click.option("--scan", "scan", multiple=True, type=click.Path(exists=True),
+                  help="A folder or file of product code to measure; repeat for more.")
+    @_OUT
+    @_FORCE
+    @click.pass_context
+    def system_enhance_cmd(ctx, source, fmt, figma_modes, mapping, scan, out, force) -> None:
+        """Measure an existing system and the code that uses it: unused tokens,
+        raw values, values written many ways, names that lie, classes no
+        token explains, and the gate through the mapping. A report only;
+        nothing is rewritten."""
+        from engine.io.commands import run_enhance
+        _io(ctx, run_enhance, list(source), fmt=fmt, mapping=mapping, scan=scan, out=out,
+            force=force, figma_modes=figma_modes)
+
+    @system_grp.command("extend")
+    @_FROM
+    @_FORMAT
+    @_FIGMA
+    @_MAPPING
+    @click.option("--add", "add", multiple=True,
+                  help="A foundation to add: color, type, space, layout, radius, border, "
+                       "elevation, motion or imagery; repeat for more.")
+    @click.option("--add-role", "add_role", multiple=True,
+                  help="role=token: point one of the engine's roles at one of your tokens.")
+    @click.option("--contract", "contracts", multiple=True, type=click.Path(exists=True),
+                  help="A contract .yaml to check and add; repeat for more.")
+    @click.option("--brand", default=None,
+                  help="Brand color for added color; without it the system's own primary "
+                       "fill is used.")
+    @click.option("--axes", "axes_text", default=None,
+                  help="Seven numbers from 0 to 1 that shape an added foundation.")
+    @click.option("--brief", "brief_path", type=click.Path(dir_okay=False), default=None,
+                  help="JSON brief that places the axes for an added foundation, as system "
+                       "build reads it. " + BRIEF_FIELDS_HELP)
+    @click.option("--latin-only", is_flag=True, help="Add type without the Arabic face.")
+    @click.option("--out", "out", required=True,
+                  help="Folder for mapping.json, extend-report.md and the contracts. The "
+                       "additions go beside the system, where they load from.")
+    @_FORCE
+    @click.option("--replace-client-files", "replace_client", is_flag=True,
+                  help="Also replace a file of yours in the way, such as your own fonts.css "
+                       "beside the system, after a backup. --force alone never does.")
+    @click.pass_context
+    def system_extend_cmd(ctx, source, fmt, figma_modes, mapping, add, add_role, contracts,
+                          brand, axes_text, brief_path, latin_only, out, force,
+                          replace_client) -> None:
+        """Add foundations, roles or contracts to an existing system without
+        changing a token it has. A system ux-skill wrote is written again in
+        place; any other gets an extension file in its own format beside it,
+        which the report says how to load. When the result does not pass,
+        only extend-report.md is written and the exit code is 1."""
+        from engine.foundations.emit import InputError, read_brief
+        from engine.io.commands import run_extend
+        try:
+            brief = read_brief(brief_path, "--brief") if brief_path else None
+        except InputError as exc:
+            raise click.UsageError(str(exc)) from None
+        _io(ctx, run_extend, list(source), fmt=fmt, mapping=mapping, add=add,
+            add_role=add_role, contracts=contracts, brand=brand, axes=axes_text, brief=brief,
+            latin_only=latin_only, out=out, force=force, replace_client=replace_client,
+            figma_modes=figma_modes)
+
+    @system_grp.command("export")
+    @_FROM
+    @_FORMAT
+    @_FIGMA
+    @click.option("--to", "to", required=True,
+                  type=click.Choice(("css", "tailwind", "figma", "dtcg")),
+                  help="css (tokens.css), tailwind (a Tailwind 4 theme), figma (variables and "
+                       "the script that applies them) or dtcg (tokens.json).")
+    @click.option("--scheme", "scheme", default=None,
+                  type=click.Choice(("system", "light", "dark")),
+                  help="The scheme the CSS or Tailwind file opens in. A stylesheet keeps its "
+                       "own; tokens.json holds none, so it opens in system when left out.")
+    @_OUT
+    @_FORCE
+    @click.pass_context
+    def system_export_cmd(ctx, source, fmt, figma_modes, to, scheme, out, force) -> None:
+        """Write a system in another format into --out, never over its source.
+        Without --out it reports the files and their sizes and writes
+        nothing."""
+        from engine.io.commands import run_export
+        _io(ctx, run_export, list(source), fmt=fmt, to=to, scheme=scheme, out=out, force=force,
+            figma_modes=figma_modes)
+
+    @cli.group("contracts")
+    def contracts_grp() -> None:
+        """Component contracts: check the ones you write."""
+
+    @contracts_grp.command("check")
+    @click.argument("folder", type=click.Path(exists=True, file_okay=False))
+    @click.option("--tokens", "tokens", required=True, multiple=True,
+                  type=click.Path(exists=True),
+                  help="The system: tokens.json or any source system import reads; repeat it "
+                       "to read a stylesheet with it.")
+    @_FORMAT
+    @_MAPPING
+    @click.pass_context
+    def contracts_check_cmd(ctx, folder, tokens, fmt, mapping) -> None:
+        """Check every contract in FOLDER against a system: the schema, every
+        role it binds, and every pairing it declares, measured in every
+        mode. Exit 1 when a contract has a problem."""
+        from engine.io.commands import run_contracts_check
+        _io(ctx, run_contracts_check, folder, list(tokens), fmt=fmt, mapping=mapping)
 
     # -------- ux version -------------------------------------------------
 

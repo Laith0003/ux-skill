@@ -159,7 +159,8 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
                       force: bool = False, replace_client: bool = False,
                       force_label: str = "--force",
                       replace_label: str = "--replace-client-files",
-                      out_label: str = "--out", plan_only: bool = False) -> Dict[str, Any]:
+                      out_label: str = "--out", plan_only: bool = False,
+                      beside: str = "") -> Dict[str, Any]:
     """Write `files` into out_dir after the intake step (see the module
     docstring). `sources` is a Source, an ImportReport (its source and every
     file in also_read) or a list of either. The labels name the caller's
@@ -169,7 +170,10 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
     With plan_only nothing is written: the outcome is the refusal or error
     the write would give, or status "planned" (or "unchanged") when it
     would go ahead, so a caller writing into two folders can check both
-    first."""
+    first. `beside` names the source when out_dir is its folder, where an
+    extension file has to sit: a refusal then says to rename the file in
+    the way rather than to pass another out folder, which would not move
+    it."""
     from engine.foundations.emit import check_name, conflict_message, plan_writes, write_files
 
     out = Path(out_dir).expanduser()
@@ -206,7 +210,23 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
         return _outcome("unchanged", f"{out} already holds these files; nothing changed.",
                         unchanged=plan.unchanged,
                         backup=backup if (out / backup).is_dir() else "")
+
+    def in_the_way(names: List[str]) -> str:
+        """Why another out folder is no fix for files beside the source."""
+        one = len(names) == 1
+        return (f"{'it sits' if one else 'they sit'} beside {beside}, where the extension has "
+                f"to load from, so {out_label} does not move {'it' if one else 'them'}")
+
     if plan.conflicts and not force:
+        if beside:
+            one = len(plan.conflicts) == 1
+            return _outcome("refused", (
+                f"Nothing was written: {', '.join(str(out / n) for n in plan.conflicts)} "
+                f"already {'exists' if one else 'exist'} with different content, and "
+                f"{in_the_way(plan.conflicts)}. Pass {force_label} to replace "
+                f"{'it' if one else 'them'} after a backup, or rename your "
+                f"file{'' if one else 's'} of that name."),
+                unchanged=plan.unchanged, conflicts=plan.conflicts)
         return _outcome("refused", conflict_message(out, plan, force_label, out_label),
                         unchanged=plan.unchanged, conflicts=plan.conflicts)
     if plan.conflicts and not replace_client:
@@ -219,8 +239,10 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
                 f"Nothing was written: {', '.join(str(out / n) for n in theirs)} "
                 f"{'was' if one else 'were'} not written by ux-skill, or changed since, and "
                 f"{force_label} replaces only files ux-skill wrote. Pass {replace_label} as well "
-                f"as {force_label} to replace {'it' if one else 'them'} after a backup, or pass "
-                f"a different {out_label} folder."),
+                f"as {force_label} to replace {'it' if one else 'them'} after a backup, or "
+                + (f"rename your file{'' if one else 's'} of that name: "
+                   f"{in_the_way(theirs)}." if beside else
+                   f"pass a different {out_label} folder.")),
                 unchanged=plan.unchanged, conflicts=theirs)
     if plan_only:
         return _outcome("planned", f"{out} can take these files.", unchanged=plan.unchanged,
