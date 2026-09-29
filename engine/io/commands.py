@@ -12,8 +12,10 @@ file beside it and the rest into out, and export writes into out only.
 Who owns the source comes from its ownership record, never its names,
 and every result says which marker decided it.
 
-A mapping.json the owner already has is merged in memory with the
-proposal (adapter.merge: the owner's entries win) and never replaced
+A mapping.json the owner already has (given, or already in the out
+folder, or beside the source when there is no out folder) is what the
+system is read through, merged in memory with the proposal
+(adapter.merge: the owner's entries win); it is never replaced
 unless the engine wrote it and force is given; the result lists what the
 proposal adds that the file does not have.
 """
@@ -91,18 +93,31 @@ def _read_result(status: str, imported: Imported) -> Dict[str, Any]:
             "owned_by": owned_by(imported), "ownership": report.ownership}
 
 
-def _mapping(imported: Imported, mapping: Any,
-             labels: Mapping[str, str]) -> Tuple[RoleMapping, List[str], str]:
-    """The mapping to read the system through, the notes on what the
-    proposal adds to the owner's file, and the file's name: the owner's
-    file merged with a proposal from names (the owner's entries win), or
-    the proposal alone."""
+def _mapping(imported: Imported, mapping: Any, labels: Mapping[str, str],
+             folder: Optional[Path] = None) -> Tuple[RoleMapping, List[str], str, str]:
+    """The mapping to read the system through, the notes on it, how
+    messages name it, and the file used ("" for none): the file given, or
+    else the mapping.json in `folder` (the out folder, or the source's
+    folder when there is none), merged with a proposal from names (the
+    owner's entries win); or the proposal alone."""
     proposed = propose(imported.tokens)
-    if not mapping:
-        return proposed, [], MAPPING
-    name = str(mapping)
-    merged, notes = merge(proposed, load_mapping(mapping, labels["mapping"]), name)
-    return merged, notes, name
+    used: Any = mapping
+    said: List[str] = []
+    if not used and folder is not None and (folder / MAPPING).is_file():
+        used = folder / MAPPING
+        said = [f"Read through {used}, the {MAPPING} already there; its entries win over "
+                f"names. Pass {labels['mapping']} to read through another."]
+    if not used:
+        return proposed, [], (f"{MAPPING} (run system import with {labels['out']} to write "
+                              "one, and pass it as " + labels["mapping"] + ")"), ""
+    name = str(used)
+    label = labels["mapping"] if mapping else f"{labels['out']} {MAPPING}"
+    merged, notes = merge(proposed, load_mapping(used, label), name)
+    return merged, [*said, *notes], name, name
+
+
+def _source_folder(imported: Imported) -> Path:
+    return Path(imported.report.source.path).expanduser().parent
 
 
 def _theirs(folder: Path, mapping: RoleMapping, text: str, force: bool,
@@ -179,7 +194,9 @@ def run_enhance(source: Any, *, fmt: str = "auto", mapping: Any = None,
     from engine.io.enhance import enhance
     from engine.io.scan import scan as scan_code
     imported = _read(source, fmt, second_modes, labels)
-    maps, notes, name = _mapping(imported, mapping, labels)
+    from engine.foundations.emit import check_out_dir
+    here = check_out_dir(out, labels["out"]) if out is not None else _source_folder(imported)
+    maps, notes, name, used = _mapping(imported, mapping, labels, here)
     report = imported.report
     scanned = scan_code(list(scan), imported.tokens,
                         exclude=[report.source.path, *(a.path for a in report.also_read)]) \
@@ -199,7 +216,7 @@ def run_enhance(source: Any, *, fmt: str = "auto", mapping: Any = None,
             "spellings": _count(d, "spellings"), "lies": _count(d, "lies"),
             "missing": _count(d, "missing"), "unknown_classes": _count(d, "unknown_classes"),
             "not_measured": _count(d, "not_read")},
-        "mapping_notes": list(notes),
+        "mapping_file": used, "mapping_notes": list(notes),
         "report": done.markdown()})
     if out is not None:
         files = {"enhance-report.md": done.markdown(),
@@ -241,7 +258,7 @@ def run_extend(source: Any, *, out: Any, fmt: str = "auto", mapping: Any = None,
     from engine.io.extend import extend, write_extended
     folder = check_out_dir(out, labels["out"])
     imported = _read(source, fmt, second_modes, labels)
-    maps, notes, name = _mapping(imported, mapping, labels)
+    maps, notes, name, used = _mapping(imported, mapping, labels, folder)
     roles = _roles(add_role, labels["add_role"])
     axis_values, axes_source = choose_axes(brief, axes, brief_label=labels["brief"],
                                            axes_label=labels["axes"])
@@ -261,7 +278,7 @@ def run_extend(source: Any, *, out: Any, fmt: str = "auto", mapping: Any = None,
     result = _read_result("blocked" if done.problems else "built", imported)
     result.update({"added": len(done.added), "problems": list(done.problems),
                    "unread": list(done.unread), "load": done.load,
-                   "mapping_kept": kept is not None,
+                   "mapping_file": used, "mapping_kept": kept is not None,
                    "mapping_notes": [*notes, *(kept[0] if kept else [])],
                    "report": done.files["extend-report.md"]})
     outcome = write_extended(done, imported, out=folder, force=force,
@@ -355,23 +372,29 @@ def run_contracts_check(folder: Any, source: Any, *, fmt: str = "auto", mapping:
                         labels: Mapping[str, str] = CLI) -> Dict[str, Any]:
     """Check a folder of contracts against a system in any format the
     importers read (told from the file, as for the system commands),
-    through `mapping` when given; a system that does not use the engine's
-    role names and has no mapping is read through one proposed from names,
-    and a note says so."""
+    through `mapping` when given, else through the mapping.json beside the
+    system when there is one (merged with a proposal, the owner's entries
+    winning); a system that does not use the engine's role names and has
+    neither is read through a mapping proposed from names, and a note says
+    so."""
     from engine.contracts.check import check_contracts
     imported = _read(source, fmt, second_modes, labels, "tokens")
     notes: List[str] = []
-    if not mapping and not any(imported.tokens.has(r) for r in ROLE_TYPES):
-        mapping = propose(imported.tokens)
+    here = _source_folder(imported)
+    name: Optional[str] = None
+    used = ""
+    if mapping or (here / MAPPING).is_file():
+        mapping, notes, name, used = _mapping(imported, mapping, labels, here)
+    elif not any(imported.tokens.has(r) for r in ROLE_TYPES):
+        mapping, name = propose(imported.tokens), MAPPING
         notes.append(f"No {labels['mapping']} was given and the system does not use the "
                      "engine's role names, so its roles were read through a mapping proposed "
                      "from names; run system import with an out folder to write it as "
                      f"{MAPPING}, confirm it, and pass it as {labels['mapping']}.")
-    done = check_contracts(folder, imported, mapping,
-                           mapping_name=str(mapping) if isinstance(mapping, (str, Path))
-                           else MAPPING if mapping else None)
+    done = check_contracts(folder, imported, mapping, mapping_name=name)
     return {"status": "passed" if done.passed else "failed",
             "contracts": [c.name for c in done.contracts],
             "problems": [{"contract": p.contract, "rule": p.rule, "message": p.message}
                          for p in done.problems],
-            "lines": list(done.lines), "notes": [*notes, *done.notes]}
+            "lines": list(done.lines), "notes": [*notes, *done.notes],
+            "mapping_file": used}

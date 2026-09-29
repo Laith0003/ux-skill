@@ -34,6 +34,8 @@ def test_the_headline_gives_its_longest_word_per_script():
                                                   "بالعالم"]}) \
         == {"latin": 4, "arabic": 7}
     assert brief_words({"answers": {"headline": "Go far"}}) == {"latin": 3}
+    # A browser does not reliably break after a slash: and/or is one word.
+    assert brief_words({"headline": "Buy and/or sell"}) == {"latin": 5}
     assert unread_lines({"tone": ["calm"], "headline": "Go far"}) == []
 
 

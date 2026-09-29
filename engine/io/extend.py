@@ -1080,6 +1080,10 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
     # owner keeps, so the engine's own layering does not apply to it.
     problems += [p.message for p in validate(engine_set) if p.token in ours
                  and not (p.rule == "semantic-to-semantic" and p.token in pointed)
+                 # A stylesheet holds --radius beside --radius-0: a token and a
+                 # group of one name clash only in a tokens file.
+                 and not (sheet and p.rule == "path-conflict"
+                          and p.message.split(" is a token", 1)[0] not in ours)
                  and not any(r in blocked for v in [engine_set.get(p.token).value,
                                                     *engine_set.get(p.token).modes.values()]
                              for r in _refs(v))]
@@ -1131,8 +1135,11 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
         result.files = {"extend-report.md": report}
         result.load = ""
         return result
-    result.beside = [*system, *fonts]
-    result.files = {**system, **fonts, "mapping.json": dump_mapping(new_mapping),
+    result.beside = list(dict.fromkeys([*system, *fonts]))
+    # The engine's own system rebuilt in place brings its font files, built
+    # from the whole system; they win over the added faces' alone.
+    result.files = {**system, **{n: t for n, t in fonts.items() if n not in system},
+                    "mapping.json": dump_mapping(new_mapping),
                     "extend-report.md": report, **contract_files}
     return result
 
@@ -1367,6 +1374,31 @@ def _figma(imported: Imported, ts: TokenSet, earlier: Optional[_Earlier],
             count)
 
 
+def _built_beside(imported: Imported, ts: TokenSet, decisions: List[str]) -> Dict[str, str]:
+    """The files a system build writes from tokens.json that sit beside
+    the engine's own tokens.json unchanged since it wrote them (tokens.css,
+    fonts.css, fonts-self-host.css), built again from the extended tokens,
+    so none is left behind. tokens.css keeps the scheme it opens."""
+    from engine.existing.record import engine_wrote
+    from engine.foundations.export import SCHEME_DEFAULTS
+    folder = _folder(imported)
+    out: Dict[str, str] = {}
+    css = folder / "tokens.css"
+    if css.is_file() and engine_wrote(folder, "tokens.css"):
+        text = css.read_text(encoding="utf-8")
+        opens = next((s for s in SCHEME_DEFAULTS if to_css(imported.tokens, scheme=s) == text),
+                     None)
+        if opens is not None:
+            out["tokens.css"] = to_css(ts, scheme=opens)
+    for name, make in (("fonts.css", fonts_css), ("fonts-self-host.css", self_host_css)):
+        if (folder / name).is_file() and engine_wrote(folder, name):
+            out[name] = make(ts)
+    if out:
+        decisions.append(f"{_and(list(out))} beside it {'is' if len(out) == 1 else 'are'} "
+                         "built again from the extended tokens, so each still matches it.")
+    return out
+
+
 def _system_files(imported: Imported, ts: TokenSet, added: Sequence[Token],
                   earlier: Optional[_Earlier], names: List[str], in_place: bool,
                   decisions: List[str]) -> Tuple[Dict[str, str], str]:
@@ -1378,7 +1410,7 @@ def _system_files(imported: Imported, ts: TokenSet, added: Sequence[Token],
     name = Path(source.path).name
     if in_place:
         if fmt == "dtcg":
-            return {name: dump_dtcg(ts)}, ""
+            return {name: dump_dtcg(ts), **_built_beside(imported, ts, decisions)}, ""
         if fmt == "css":
             return {name: stamp_digest(to_css(ts, scheme=imported.scheme, forms=imported.forms),
                                        css=True)}, ""
@@ -1559,16 +1591,19 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
         return {**write_with_intake(target, {"extend-report.md": result.files["extend-report.md"]},
                                     imported.report, **labels), "load": ""}
     name = Path(imported.report.source.path).name
+    # A refusal beside the source names the right fix: rename a file in the
+    # way of a system ux-skill did not write, or force a rewrite of its own.
+    place = dict(own=name) if imported.owned else dict(beside=name)
     if out is None or target.resolve() == here.resolve():
         return _loaded(_fonts_note(write_with_intake(here, result.files, imported.report,
-                                                     beside=name, **labels), result, labels),
+                                                     **place, **labels), result, labels),
                        result)
     near = {n: result.files[n] for n in result.beside}
     rest = {n: t for n, t in result.files.items() if n not in result.beside}
     stopped = []
     for folder, files in ((here, near), (target, rest)):
         planned = write_with_intake(folder, files, imported.report, plan_only=True,
-                                    beside=name if folder == here else "", **labels)
+                                    **(place if folder == here else {}), **labels)
         if planned["status"] not in ("planned", "unchanged"):
             stopped.append((folder, _fonts_note(planned, result, labels)))
     if len(stopped) == 1:
@@ -1579,10 +1614,10 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
                 else "refused",
                 "written": [], "unchanged": [],
                 "conflicts": [str(f / n) for f, o in stopped for n in o["conflicts"]],
-                "message": " ".join(_stop(o["message"]) for _, o in stopped),
+                "message": " ".join(dict.fromkeys(_stop(o["message"]) for _, o in stopped)),
                 "backup": "", "replaced": {}, "load": result.load}
     saved = _snapshot(here, near)
-    first = write_with_intake(here, near, imported.report, beside=name, **labels)
+    first = write_with_intake(here, near, imported.report, **place, **labels)
     if first["status"] not in ("written", "unchanged"):
         return {**first, "load": result.load}
     second = write_with_intake(target, rest, imported.report, **labels)

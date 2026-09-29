@@ -359,8 +359,9 @@ def brief_words(brief: Optional[Mapping[str, Any]],
                 label: str = "brief") -> Optional[Dict[str, int]]:
     """The letters of the longest word of the brief's headline, per script
     ({"latin": n, "arabic": m}, each script the headline writes), or None
-    when the brief gives no headline. Words are split at spaces, hyphens
-    and slashes, and only letters are counted (not marks, digits or
+    when the brief gives no headline. Words are split at spaces and
+    hyphens (a browser does not reliably break after a slash, so and/or is
+    one word), and only letters are counted (not marks, digits or
     punctuation). Raises InputError naming the
     field and the fix for a headline that is not text or has no word, or a
     word longer than the fit takes."""
@@ -378,7 +379,7 @@ def brief_words(brief: Optional[Mapping[str, Any]],
                          "a list of the page's headlines")
     longest: Dict[str, int] = {}
     for line in lines:
-        for word in re.split(r"[\s/\u2010-\u2015-]+", line):
+        for word in re.split(r"[\s\u2010-\u2015-]+", line):
             n = sum(ch.isalpha() for ch in word)
             if not n:
                 continue

@@ -57,11 +57,25 @@ def _studio(node: Any) -> bool:
 
 def _project(p: Path) -> List[Tuple[str, str]]:
     """What system detect finds in a folder: (kind, path) for each token
-    file and foundation stylesheet, built output left out."""
+    file and foundation stylesheet, built output left out, and so is what
+    ux-skill keeps or writes there itself: anything under its .uxskill
+    folder (the backups of every source), and a stylesheet it wrote (an
+    export or an extension, known by the files record or its stamp). A
+    token file the engine wrote stays: it is the engine's own system."""
     from engine.existing import detect_existing_system
+    from engine.existing.record import engine_wrote
+    from engine.io.intake import INTAKE_DIR
     found = detect_existing_system(p)
-    return [(s["kind"], s["path"]) for s in found.get("sources", [])
-            if s["kind"] in (*_TOKEN_KINDS, _SHEET_KIND)]
+    out = []
+    for s in found.get("sources", []):
+        kind, rel = s["kind"], s["path"]
+        if kind not in (*_TOKEN_KINDS, _SHEET_KIND) or INTAKE_DIR in Path(rel).parts:
+            continue
+        f = p / rel
+        if kind == _SHEET_KIND and engine_wrote(f.parent, f.name):
+            continue
+        out.append((kind, rel))
+    return out
 
 
 def detect_format(path: Any, label: str = "--from") -> str:
@@ -109,6 +123,7 @@ def read_system(path: Any, fmt: str = "auto", label: str = "--from",
         names = ", ".join(CHOICES[:-1]) + " or " + CHOICES[-1]
         raise InputError(f"--format is {fmt}; pass {names}")
     found = detect_format(path, label) if fmt == "auto" else fmt
+    _check_format(Path(path).expanduser(), fmt)
     if found == "project":
         return read_sources(_proposed(Path(path).expanduser(), label), "auto", label,
                             second_modes, modes_label)
@@ -120,6 +135,19 @@ def read_system(path: Any, fmt: str = "auto", label: str = "--from",
     imported = read_any(path, found, label, **options)
     imported.report.ownership = ownership_line(imported)
     return imported
+
+
+def _check_format(p: Path, fmt: str) -> None:
+    """A --format that cannot read the file, by its name: JSON formats on a
+    stylesheet and stylesheet formats on JSON. Raises InputError naming the
+    flag and the fix."""
+    suffix = p.suffix.lower()
+    if fmt in ("dtcg", "figma", "tailwind-json") and suffix == ".css":
+        raise InputError(f"--format {fmt} reads JSON and {p.name} is a stylesheet; pass "
+                         "--format css or tailwind, or leave --format out")
+    if fmt in ("css", "tailwind") and suffix == ".json":
+        raise InputError(f"--format {fmt} reads a stylesheet and {p.name} is JSON; pass "
+                         "--format dtcg, figma or tailwind-json, or leave --format out")
 
 
 def _proposed(root: Path, label: str) -> List[Path]:
@@ -195,7 +223,9 @@ class _Places:
     own values (dropped: they are the system's report's to tell), or a
     stylesheet and its own line."""
 
-    def __init__(self, first_lines: int, sheets: Sequence[Tuple[Source, str]]) -> None:
+    def __init__(self, first_lines: int, sheets: Sequence[Tuple[Source, str]],
+                 system: str) -> None:
+        self.system = system
         self.parts: List[Tuple[int, int, str]] = []
         at = first_lines + 1
         for source, text in sheets:
@@ -214,9 +244,17 @@ class _Places:
         """A message with each place in the text read together named by its
         stylesheet and line, or as the system's."""
         def sub(m: "re.Match[str]") -> str:
-            return self.where(int(m.group(1))) or "the system"
-        return re.sub(re.escape(_MARK) + r":(\d+)", sub, message).replace(
-            _MARK, self.parts[0][2])
+            return self.where(int(m.group(1))) or self.system
+
+        def line(m: "re.Match[str]") -> str:
+            at = self.where(int(m.group(2)))
+            if at is None:
+                return f"in {self.system}" if m.group(1) else self.system
+            file, n = at.rsplit(":", 1)
+            return f"{m.group(1) or ''}line {n} of {file}"
+        message = re.sub(re.escape(_MARK) + r":(\d+)", sub, message)
+        message = re.sub(r"\b(on )?line (\d+)", line, message)
+        return message.replace(_MARK, self.parts[0][2])
 
     def item(self, i: Any) -> Any:
         m = re.fullmatch(re.escape(_MARK) + r":(\d+)", i.where)
@@ -241,10 +279,14 @@ def combine(first: Imported, sheets: Sequence[Tuple[Source, str]], label: str) -
     except ValueError as exc:
         raise InputError(f"{label} {Path(first.report.source.path).name} cannot be read "
                          f"together with a stylesheet ({exc}); pass it on its own") from None
-    text = base + "\n" + "\n".join(t for _, t in sheets)
-    places = _Places(base.count("\n") + 1, sheets)
-    together = import_css(text, Source(_MARK, "css", "0" * 64, len(text)))
     names = {css_property(t.path)[2:]: t.path for t in first.tokens.tokens()}
+    system = Path(first.report.source.path).name
+    kept: List[Item] = []
+    sheets = [(source, _without_overrides(first, source, sheet, names, system, kept))
+              for source, sheet in sheets]
+    text = base + "\n" + "\n".join(t for _, t in sheets)
+    places = _Places(base.count("\n") + 1, sheets, system)
+    together = import_css(text, Source(_MARK, "css", "0" * 64, len(text)))
     declared = {m.group(1)[2:] for _, t in sheets for m in _DECLARED.finditer(t)}
     axes: Dict[str, Tuple[str, ...]] = {a: tuple(v) for a, v in first.tokens.axes.items()}
     for a, v in together.tokens.axes.items():
@@ -272,7 +314,7 @@ def combine(first: Imported, sheets: Sequence[Tuple[Source, str]], label: str) -
     report = ImportReport.of(old.source, ts, old.entries + own)
     report.renamed = list(old.renamed)
     report.notes = list(old.notes)
-    report.not_read = list(old.not_read)
+    report.not_read = list(old.not_read) + kept
     report.mapped = list(old.mapped)
     report.headline = list(old.headline)
     report.also_read = [*old.also_read, *(s for s, _ in sheets)]
@@ -292,6 +334,43 @@ def combine(first: Imported, sheets: Sequence[Tuple[Source, str]], label: str) -
                     resets=first.resets or together.resets,
                     variant=first.variant or together.variant, owned=False,
                     figma=first.figma)
+
+
+def _shown(value: Any) -> str:
+    return value if isinstance(value, str) else json.dumps(value, sort_keys=True)
+
+
+def _without_overrides(first: Imported, source: Source, text: str, names: Dict[str, str],
+                       system: str, kept: List[Item]) -> str:
+    """`text` with each base value it sets for a token the system holds
+    with another value blanked out (lines and places stay), each listed in
+    `kept` as not read at its own file and line: the system's value is
+    kept, and the stylesheet's dark values still pair with the token."""
+    from engine.io.css_in import _base, import_css, parse_css
+    sheet = Path(source.path).name
+    alone = import_css(text, source).tokens
+    lines = text.split("\n")
+    for rule in parse_css(text, source.path):
+        if rule.media or not (rule.selector == "@theme" or _base(rule.selector)):
+            continue
+        for d in rule.declarations:
+            key = d.name[2:]
+            if key not in names or not alone.has(key):
+                continue
+            ours = first.tokens.get(names[key]).value
+            if _rename(alone.get(key).value, names) == ours:
+                continue
+            row = lines[d.line - 1]
+            m = re.search(re.escape(d.name) + r"\s*:[^;}]*;?", row)
+            if m is None:
+                continue
+            lines[d.line - 1] = row[:m.start()] + " " * (m.end() - m.start()) + row[m.end():]
+            kept.append(Item(f"{sheet}:{d.line}", d.name, (
+                f"sets the base value {d.value}, where {system} holds {_shown(ours)}; "
+                f"{system}'s value is kept and {sheet}'s other values still pair with it. "
+                f"Remove it from {sheet}, or change it in {system} if {d.value} is the value "
+                "you mean")))
+    return "\n".join(lines)
 
 
 def _usable(ctx: str, first: Mapping[str, Sequence[str]],

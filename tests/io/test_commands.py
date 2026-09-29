@@ -120,6 +120,32 @@ def test_a_value_the_stylesheet_sets_otherwise_is_not_read_and_the_systems_stays
                for i in imported.report.not_read)
 
 
+def test_a_base_value_set_otherwise_keeps_the_systems_and_every_dark_value(tmp_path):
+    tokens, sheet = _pair(tmp_path)
+    sheet.write_text(":root {\n  --app-gap: 12px;\n  --color-ink: #000000;\n}\n" + GLOBALS,
+                     encoding="utf-8")
+    imported = read_sources([tokens, sheet])
+    assert imported.tokens.get("color.ink").value == "#1A1A1F"
+    # Every dark value still pairs, including those pointing at color.ink.
+    assert imported.tokens.get("color.surface.page").modes == {"scheme:dark": "{color.ink}"}
+    assert imported.tokens.get("color.text.body").modes == {"scheme:dark": "{color.paper}"}
+    [kept] = imported.report.not_read
+    assert (kept.where, kept.name) == ("globals.css:3", "--color-ink")
+    assert kept.message.startswith("sets the base value #000000, where tokens.json holds "
+                                   "#1A1A1F; tokens.json's value is kept")
+    assert "2 mode values added" in imported.report.notes[-1].message
+
+
+def test_places_in_messages_name_the_real_file_and_line(tmp_path):
+    tokens, sheet = _pair(tmp_path)
+    sheet.write_text(".dark {\n  --color-ink: #000;\n}\n.dark {\n  --color-ink: #111;\n}\n",
+                     encoding="utf-8")
+    imported = read_sources([tokens, sheet])
+    text = " ".join(i.where + " " + i.message for i in imported.report.not_read)
+    assert "line 2 of globals.css" in text and "line 5 of globals.css" in text
+    assert "uxskill-read-together" not in text
+
+
 def test_a_second_source_must_be_a_stylesheet_given_once(tmp_path):
     tokens, sheet = _pair(tmp_path)
     with pytest.raises(InputError) as exc:
@@ -138,6 +164,20 @@ def test_a_project_folder_is_read_as_the_set_system_detect_finds(tmp_path):
     assert imported.report.source.path == str(tokens)
     assert [a.path for a in imported.report.also_read] == [str(sheet)]
     assert imported.tokens.get("color.text.body").modes == {"scheme:dark": "{color.paper}"}
+
+
+def test_a_project_folder_leaves_out_what_ux_skill_keeps_or_wrote_there(tmp_path):
+    sheet = tmp_path / "theme.css"
+    sheet.write_text(THEME, encoding="utf-8")
+    assert run_extend(sheet, add=["radius"], out=tmp_path)["status"] == "written"
+    run_export(sheet, to="css", out=tmp_path / "exp")
+    # The owner changes the source; the backup under .uxskill and the
+    # extension ux-skill wrote are not read as the system.
+    sheet.write_text(THEME.replace("#1b1d22", "#202020"), encoding="utf-8")
+    imported = read_sources(tmp_path)
+    assert imported.report.source.path == str(sheet) and imported.report.also_read == []
+    assert imported.report.not_read == []
+    assert imported.tokens.get("ink").value == "#202020"
 
 
 def test_every_source_is_checked_and_backed_up_before_a_write(tmp_path):
@@ -238,13 +278,39 @@ def test_enhance_reports_without_writing_and_scans_what_it_is_given(tmp_path):
     assert not (tmp_path / "enhance-report.md").exists()
 
 
+OWNER = {"version": 1, "axes": {}, "roles": {
+    "color.text.default": {"token": "ink", "by": "owner"},
+    "color.surface.page": {"token": "paper", "by": "owner"}}}
+
+
 def test_enhance_merges_an_owners_mapping(tmp_path):
     f = _files(tmp_path)
-    mapping = tmp_path / "mapping.json"
-    mapping.write_text(json.dumps({"version": 1, "axes": {}, "roles": {
-        "color.text.default": {"token": "ink", "by": "owner"}}}), encoding="utf-8")
-    result = run_enhance(f / "theme.css", mapping=mapping)
-    assert result["summary"]["mapped"] >= 1
+    mapping = tmp_path / "given.json"
+    mapping.write_text(json.dumps(OWNER), encoding="utf-8")
+    result = run_enhance(f / "theme.css", mapping=mapping, out=tmp_path / "enh")
+    assert result["summary"]["mapped"] == 2 and result["mapping_file"] == str(mapping)
+    # The owner's token is the one read, not the proposal's text-body.
+    doc = json.loads((tmp_path / "enh" / "enhance.json").read_text())
+    assert doc["mapping"]["roles"]["color.text.default"] == "ink"
+    assert "color.text.default (your ink)" in result["report"]
+
+
+def test_the_mapping_in_out_is_read_when_none_is_given(tmp_path):
+    f = _files(tmp_path)
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "mapping.json").write_text(json.dumps(OWNER), encoding="utf-8")
+    proposed = run_enhance(f / "theme.css")
+    used = run_enhance(f / "theme.css", out=out)
+    assert proposed["summary"]["mapped"] == 1 and proposed["mapping_file"] == ""
+    assert used["summary"]["mapped"] == 2 and used["mapping_file"] == str(out / "mapping.json")
+    assert used["mapping_notes"][0].startswith(f"Read through {out / 'mapping.json'}")
+    extended = run_extend(f / "theme.css", add=["radius"], out=out)
+    assert extended["mapping_file"] == str(out / "mapping.json")
+    # Beside the source, for the contract check, which has no out folder.
+    (f / "mapping.json").write_text(json.dumps(OWNER), encoding="utf-8")
+    checked = run_contracts_check(SEED_DIR, f / "theme.css")
+    assert checked["mapping_file"] == str(f / "mapping.json")
 
 
 def test_extend_writes_beside_a_foreign_source_and_blocks_with_a_report(tmp_path):
@@ -264,6 +330,10 @@ def test_extend_writes_beside_a_foreign_source_and_blocks_with_a_report(tmp_path
         ".uxskill", "extend-report.md"]
     with pytest.raises(InputError, match="--add-role ink needs the form role=token"):
         run_extend(f / "theme.css", add_role=["ink"], out=out)
+    # With no mapping file, the fix says how to get one.
+    with pytest.raises(InputError, match=r"edit mapping.json \(run system import with --out "
+                                         r"to write one, and pass it as --mapping\)"):
+        run_extend(f / "theme.css", add_role=["color.text.default=paper"], out=tmp_path / "m")
 
 
 def test_extend_keeps_an_owners_mapping_in_out_instead_of_refusing(tmp_path):
@@ -286,6 +356,46 @@ def test_a_file_in_the_way_beside_the_source_is_named_with_the_right_fix(tmp_pat
     assert "sits beside theme.css, where the extension has to load from, so --out does not " \
            "move it" in result["message"]
     assert "pass a different --out folder" not in result["message"]
+
+
+def test_the_engines_own_system_is_rewritten_with_force_and_its_outputs_follow(tmp_path):
+    from engine.existing.record import record_text
+    ds = tmp_path / "ds"
+    ds.mkdir()
+    ts = build_system(NEUTRAL, "#3366FF", foundations=("color",)).tokens
+    files = {"tokens.json": dump_dtcg(ts), "tokens.css": to_css(ts)}
+    for name, text in files.items():
+        (ds / name).write_text(text, encoding="utf-8")
+    (ds / ".uxskill").mkdir()
+    (ds / RECORD).write_text(record_text(ds, files), encoding="utf-8")
+    refused = run_extend(ds / "tokens.json", add=["radius"], out=ds)
+    assert refused["status"] == "refused"
+    assert "tokens.json is the system ux-skill wrote" in refused["message"]
+    assert "pass --force to rewrite" in refused["message"]
+    assert "rename" not in refused["message"] and "sits beside" not in refused["message"]
+    done = run_extend(ds / "tokens.json", add=["radius"], out=ds, force=True)
+    assert done["status"] == "written"
+    doc = json.loads((ds / "tokens.json").read_text())
+    css = (ds / "tokens.css").read_text()
+    # tokens.css is built again from the extended tokens.json.
+    assert css == to_css(read_system(ds / "tokens.json").tokens)
+    assert "radius" in doc
+
+
+def test_a_foreign_radius_token_does_not_block_added_radius(tmp_path):
+    sheet = tmp_path / "theme.css"
+    sheet.write_text(":root { --ink: #1b1d22; --paper: #fdfdfb; --radius: 8px; }\n",
+                     encoding="utf-8")
+    result = run_extend(sheet, add=["radius"], out=tmp_path / "out")
+    assert result["status"] == "written", result["problems"][:2]
+
+
+def test_a_format_that_cannot_read_the_file_names_the_flag(tmp_path):
+    f = _files(tmp_path)
+    with pytest.raises(InputError) as exc:
+        run_import(f / "theme.css", fmt="dtcg")
+    assert str(exc.value) == ("--format dtcg reads JSON and theme.css is a stylesheet; pass "
+                              "--format css or tailwind, or leave --format out")
 
 
 def test_extend_reads_the_briefs_fields_as_a_build_does(tmp_path):

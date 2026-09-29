@@ -160,7 +160,7 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
                       force_label: str = "--force",
                       replace_label: str = "--replace-client-files",
                       out_label: str = "--out", plan_only: bool = False,
-                      beside: str = "") -> Dict[str, Any]:
+                      beside: str = "", own: str = "") -> Dict[str, Any]:
     """Write `files` into out_dir after the intake step (see the module
     docstring). `sources` is a Source, an ImportReport (its source and every
     file in also_read) or a list of either. The labels name the caller's
@@ -173,7 +173,9 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
     first. `beside` names the source when out_dir is its folder, where an
     extension file has to sit: a refusal then says to rename the file in
     the way rather than to pass another out folder, which would not move
-    it."""
+    it. `own` names the engine's own system when out_dir is its folder and
+    it is written again in place: a refusal then says force rewrites it
+    after a backup."""
     from engine.foundations.emit import check_name, conflict_message, plan_writes, write_files
 
     out = Path(out_dir).expanduser()
@@ -218,6 +220,15 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
                 f"to load from, so {out_label} does not move {'it' if one else 'them'}")
 
     if plan.conflicts and not force:
+        if own:
+            one = len(plan.conflicts) == 1
+            return _outcome("refused", (
+                f"Nothing was written: {', '.join(str(out / n) for n in plan.conflicts)} "
+                f"{'differs' if one else 'differ'} from what the extension writes. {own} is "
+                "the system ux-skill wrote, and extend writes it again in place with the files "
+                f"built from it; pass {force_label} to rewrite "
+                f"{'it' if one else 'them'} after a backup."),
+                unchanged=plan.unchanged, conflicts=plan.conflicts)
         if beside:
             one = len(plan.conflicts) == 1
             return _outcome("refused", (
