@@ -15,7 +15,7 @@ The display weight ran 300 to 800 and sat at 600 in the middle of the axes. On 3
 
 ## Decision
 
-character.display_weight is 300 plus 350 times (0.6 energy plus 0.4 playfulness) plus 100 times how small the landing display is on its log range (1 at 60px, 0 at 240px), snapped to fifties, since every display face in the catalog is variable: 400 to 650, 500 in the middle of the axes, lighter as formality rises and heavier only for a small display or a loud, informal brand. It sets the hero and the display and eases toward the text face's heading weight (500 to 700 from contrast) at heading-3 on a log scale of size, within what each face ships. The icon stroke follows it, 1.5 to 2.25 in quarters. Letter spacing is 0 at 20px and below and tightens toward the hero to character.display_tracking em; labels open up by character.label_tracking em. Reading styles keep 0.
+character.display_weight is 290 plus 350 times (0.6 energy plus 0.4 playfulness) plus 100 times how small the landing display is on its log range (1 at 60px, 0 at 240px), snapped to fifties, since every display face in the catalog is variable: 400 to 650, 500 in the middle of the axes (the base of 290 keeps the middle off a rounding tie), lighter as formality rises and heavier only for a small display or a loud, informal brand. It sets the hero and the display and eases toward the text face's heading weight (500 to 700 from contrast) at heading-3 on a log scale of size, within what each face ships. The icon stroke follows it, 1.5 to 2.25 in quarters. Letter spacing is 0 at 20px and below and tightens toward the hero to character.display_tracking em; labels open up by character.label_tracking em. Reading styles keep 0.
 
 ## Why
 

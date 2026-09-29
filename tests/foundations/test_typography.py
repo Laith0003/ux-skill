@@ -97,7 +97,7 @@ def test_sizes_are_rem_and_roles_are_composites():
 
 
 @pytest.mark.parametrize("contrast, formality, hero, heading", [
-    (0.5, 0.5, 500, 600), (1.0, 0.0, 600, 700), (0.0, 1.0, 450, 500)])
+    (0.5, 0.5, 500, 600), (1.0, 0.0, 600, 700), (0.0, 1.0, 400, 500)])
 def test_weight_eases_from_the_display_weight_to_the_heading_weight(contrast, formality, hero,
                                                                      heading):
     a = axes(contrast=contrast, formality=formality)

@@ -26,7 +26,8 @@ from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.foundations.values import duration_ms as literal_ms
 from engine.synthesizer.axes import AxisValues
 
-DURATIONS_MS = (0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 1200)
+DURATIONS_MS = (0, 50, 100, 150, 200, 240, 250, 280, 300, 350, 400, 450, 500, 600, 700, 800,
+                1200)
 REDUCED_MAX_MS = 100
 # Our floor for one cycle of a loop: shorter repeats more than three times
 # a second.

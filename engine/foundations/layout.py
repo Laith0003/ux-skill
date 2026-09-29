@@ -125,11 +125,19 @@ def landing_frame(axes: AxisValues) -> Tuple[Dict[str, float], float]:
 
 def landing_gap_units(axes: AxisValues) -> Dict[str, int]:
     """{tier: space units} for the gap between landing sections: the
-    desktop gap (character.landing_gap_px), the phone's share of it, the
+    desktop gap (character.landing_gap_px, raised to the desktop region
+    gap first), the phone's share of that (character.phone_gap_share), the
     tiers between at their steps; never below the region gap at its tier
     and never shrinking as the viewport grows."""
-    desktop = character.landing_gap_px(axes)
-    phone = desktop * character.phone_gap_share(axes)
+    region = _units(REGION_GAP["desktop"], axes.density)[0] * space.BASE_UNIT
+    desktop = space.snap(max(character.landing_gap_px(axes), region) / space.BASE_UNIT) \
+        * space.BASE_UNIT
+    share = character.phone_gap_share(axes)
+    lo, hi = character.PHONE_GAP_SHARE
+    # the scale step nearest the phone's share that keeps the share in range
+    inside = [u for u in space.UNITS if lo * desktop <= u * space.BASE_UNIT <= hi * desktop]
+    phone = min(inside or space.UNITS,
+                key=lambda u: (abs(u * space.BASE_UNIT - share * desktop), -u)) * space.BASE_UNIT
     out: Dict[str, int] = {}
     below = 0
     for tier in TIERS:

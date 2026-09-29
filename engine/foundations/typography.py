@@ -556,7 +556,8 @@ def weights(axes: AxisValues, choice: fonts.Choice, sizes: List[int]) -> Dict[st
             t = character.log_position(px, h3_px, hero_px)
             out[role] = choice.display.clamp(_snap(heading + (display - heading) * t, 50))
             if kind == "emphasis":
-                out[role] = choice.display.clamp(out[role] - emphasis_gap(axes))
+                out[role] = choice.display.clamp(max(EMPHASIS_FLOOR,
+                                                     out[role] - emphasis_gap(axes)))
         else:
             out[role] = {"heading": heading, "regular": 400, "medium": 500}[kind]
     return out
@@ -567,6 +568,8 @@ def weights(axes: AxisValues, choice: fonts.Choice, sizes: List[int]) -> Dict[st
 # the emphasis contrast at which they turn italic, in a display face that
 # ships one.
 EMPHASIS_GAP = (100, 300)
+# The emphasis voice is never lighter than this, so it holds at a phone size.
+EMPHASIS_FLOOR = 300
 ITALIC_FROM = 0.5
 
 

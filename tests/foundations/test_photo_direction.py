@@ -61,6 +61,10 @@ def test_a_ban_narrows_the_kinds_and_only_a_forbidding_system_removes_photos():
     banned = photo_direction(axes(), "#3366FF", bans=("staged lifestyle",))
     assert banned.allowed and "staged lifestyle" not in banned.kinds
     assert set(banned.kinds) == set(PHOTO_KINDS) - {"staged lifestyle"}
+    with pytest.raises(ValueError, match="ban one of"):
+        photo_direction(axes(), "#3366FF", bans=("stock",))
+    with pytest.raises(ValueError, match="never removes photography"):
+        photo_direction(axes(), "#3366FF", bans=PHOTO_KINDS)
     forbidden = photo_direction(axes(), "#3366FF", forbidden=True)
     assert not forbidden.allowed
     assert photo_lines(forbidden) == [

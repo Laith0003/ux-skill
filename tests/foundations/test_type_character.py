@@ -243,7 +243,8 @@ def test_the_emphasis_voice_is_lighter_in_the_same_face_and_keeps_the_size():
         assert voice["fontSize"] == display["fontSize"]
         face = fonts.BY_FAMILY[display["fontFamily"][0]]
         assert voice["fontWeight"] < display["fontWeight"] or \
-            voice["fontWeight"] == face.weights[0]
+            voice["fontWeight"] == max(300, face.weights[0])
+        assert voice["fontWeight"] >= 300
         assert 0 <= ts.resolve("type.emphasis.tone") <= 1
 
 

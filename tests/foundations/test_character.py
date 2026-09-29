@@ -238,8 +238,8 @@ def test_icon_stroke_never_falls_as_the_display_weight_rises():
         by_weight.setdefault(character.display_weight(axes), set()).add(character.icon_stroke(axes))
     assert all(len(s) == 1 for s in by_weight.values())
     strokes = [by_weight[w].pop() for w in sorted(by_weight)]
-    assert sorted(by_weight) == [450, 500, 550, 600]
-    assert strokes == [1.75, 1.75, 2.0, 2.0]
+    assert sorted(by_weight) == [400, 450, 500, 550, 600]
+    assert strokes == [1.5, 1.75, 1.75, 2.0, 2.0]
 
 
 def test_mix_hue_takes_the_shorter_arc_and_stays_a_hue():

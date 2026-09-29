@@ -584,7 +584,7 @@ def display_weight(axes: AxisValues) -> int:
     lighter, and falls as the landing display grows, since a small display
     needs weight to hold the page and a large one does not."""
     size = log_position(landing_display_px(axes), *LANDING_DISPLAY_PX)
-    raw = 300 + 350 * (0.6 * energy(axes) + 0.4 * (1 - axes.formality)) + 100 * (1 - size)
+    raw = 290 + 350 * (0.6 * energy(axes) + 0.4 * (1 - axes.formality)) + 100 * (1 - size)
     return round(raw / 50.0) * 50
 
 

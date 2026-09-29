@@ -27,4 +27,4 @@ character.expressiveness, LANDING_DISPLAY_PX, landing_display_px, PHONE_SHARE, P
 
 ## Consequences
 
-A landing page sets its headline in type.text.display at every width and never sizes it by hand. The report names the display size at 1440 and its most on a phone. An exporter for another platform applies the fluid size below its reference width. A nested right to left block reads its own factors.
+A landing page sets its headline in type.text.display at every width and never sizes it by hand. The report names the display size at 1440 and its most on a phone. An exporter for another platform applies the fluid size below its reference width. A nested right to left block reads its own factors. Until the brief passes the page's longest headline word, the phone display fits a 13 letter word at 320px, so it sits near 50 to 60px for most briefs whatever the desktop size, under the phone ceiling of up to 90px.

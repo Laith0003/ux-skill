@@ -52,9 +52,10 @@ def test_a_calm_brief_spaces_its_sections_far_apart_on_a_phone_too():
     assert px(calm, "layout.landing-gap.desktop") >= 180
     assert px(calm, "layout.landing-gap.phone") >= 80
     assert px(loud, "layout.landing-gap.desktop") < px(calm, "layout.landing-gap.desktop")
-    for ts in (calm, loud):
+    loudest = build_system(AxisValues(1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0), "#3366FF").tokens
+    for ts in (calm, loud, loudest):
         share = px(ts, "layout.landing-gap.phone") / px(ts, "layout.landing-gap.desktop")
-        assert 0.5 <= share <= 0.9
+        assert 0.6 <= share <= 0.9, share
         tiers = [px(ts, f"layout.landing-gap.{t}") for t in ("phone", "tablet", "laptop",
                                                               "desktop")]
         assert tiers == sorted(tiers)
@@ -71,6 +72,16 @@ def test_landing_copy_runs_42_to_56_characters_and_reading_60_to_70():
         character.landing_measure_ch(a) for a in (LOUD, MID, CALM))
     assert character.reading_measure_ch(axes(formality=0.0), long_read=True) == 60
     assert character.reading_measure_ch(axes(formality=1.0), long_read=True) == 66
+
+
+def test_the_phone_gap_keeps_its_share_everywhere():
+    import itertools
+    steps = (0.0, 0.25, 0.5, 0.75, 1.0)
+    for c, d, f, m in itertools.product(steps, repeat=4):
+        ts = build_system(AxisValues(0.5, c, d, 0.5, f, m, 0.5), "#3366FF",
+                          foundations=("space", "layout")).tokens
+        share = px(ts, "layout.landing-gap.phone") / px(ts, "layout.landing-gap.desktop")
+        assert 0.6 <= share <= 0.9, (c, d, f, m, share)
 
 
 def test_every_corner_keeps_the_character_floor():

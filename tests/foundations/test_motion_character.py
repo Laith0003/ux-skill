@@ -104,7 +104,7 @@ def test_the_entrance_role_runs_350_to_800ms_and_fades_briefly_under_reduced_mot
 def test_the_state_role_runs_about_150_to_240ms_and_stays_short_under_reduced_motion():
     still = generate_motion(axes(motion=0.0, formality=1.0)).tokens
     kinetic = generate_motion(axes(motion=1.0, formality=0.0)).tokens
-    assert ms(still, "motion.state") == 150 and 200 <= ms(kinetic, "motion.state") <= 250
+    assert ms(still, "motion.state") == 150 and 200 <= ms(kinetic, "motion.state") <= 240
     for ts in (still, kinetic):
         assert ms(ts, "motion.state", "motion:reduced") <= 100
         assert ts.resolve("motion.state.curve") == ts.resolve("motion.curve.out")
@@ -113,7 +113,7 @@ def test_the_state_role_runs_about_150_to_240ms_and_stays_short_under_reduced_mo
 def test_the_indicator_slides_by_the_motion_axis_snaps_under_reduced_motion_and_mirrors():
     for m in (0.0, 1.0):
         ts = generate_motion(axes(motion=m)).tokens
-        assert 200 <= ms(ts, "motion.indicator") <= 300
+        assert 200 <= ms(ts, "motion.indicator") <= 280
         assert ms(ts, "motion.indicator", "motion:reduced") == 0
         assert ts.resolve("motion.inline-sign", "direction:rtl") == -1
 

@@ -271,7 +271,16 @@ def photo_direction(axes: AxisValues, brand_hex: str, product_type: Optional[str
                "wide frames with room to breathe" if axes.density <= 0.4 else
                "medium frames") + (", centred and symmetric" if axes.formality >= 0.6 else
                                    ", off-centre and candid" if axes.formality <= 0.4 else "")
+    unknown = [b for b in bans if b not in PHOTO_KINDS]
+    if unknown:
+        raise ValueError(f"photo bans name {', '.join(repr(b) for b in unknown)}; ban one of "
+                         f"{', '.join(PHOTO_KINDS)}")
     kinds = tuple(k for k in PHOTO_KINDS if k not in set(bans))
+    if not kinds:
+        raise ValueError("photo bans leave no kind of photo; a ban narrows the kinds and never "
+                         "removes photography, so keep at least one of "
+                         f"{', '.join(PHOTO_KINDS)}, or pass forbidden=True when the client's "
+                         "system forbids photography")
     return PhotoDirection(not forbidden, d["lightness"], d["temperature"], d["chroma"],
                           d["contrast"], d["black_point"], d["grain"], d["energy"],
                           MappingProxyType(spread), subject, framing, kinds, _words(d))

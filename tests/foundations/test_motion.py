@@ -22,16 +22,16 @@ def axes(motion=0.5, **kw):
 
 @pytest.mark.parametrize("motion, want", [
     (0.0, {"motion.press": 150, "motion.state": 150, "motion.reveal": 350,
-           "motion.dismiss": 250, "motion.swap": 350, "motion.expand": 400, "motion.page": 500,
+           "motion.dismiss": 280, "motion.swap": 350, "motion.expand": 400, "motion.page": 500,
            "motion.indicator": 200, "motion.arrive": 450, "motion.progress": 1200,
            "motion.expressive": 300}),
     (0.5, {"motion.press": 150, "motion.state": 200, "motion.reveal": 350,
            "motion.dismiss": 250, "motion.swap": 350, "motion.expand": 400, "motion.page": 450,
-           "motion.indicator": 250, "motion.arrive": 600, "motion.progress": 1200,
+           "motion.indicator": 240, "motion.arrive": 600, "motion.progress": 1200,
            "motion.expressive": 600}),
-    (1.0, {"motion.press": 100, "motion.state": 250, "motion.reveal": 300,
-           "motion.dismiss": 250, "motion.swap": 300, "motion.expand": 350, "motion.page": 400,
-           "motion.indicator": 300, "motion.arrive": 700, "motion.progress": 800,
+    (1.0, {"motion.press": 100, "motion.state": 240, "motion.reveal": 300,
+           "motion.dismiss": 240, "motion.swap": 300, "motion.expand": 350, "motion.page": 400,
+           "motion.indicator": 280, "motion.arrive": 700, "motion.progress": 800,
            "motion.expressive": 800}),
 ])
 def test_durations_follow_pace_and_the_motion_axis(motion, want):
