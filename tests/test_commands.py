@@ -192,3 +192,66 @@ def test_the_commands_page_lists_18_commands_and_the_aliases():
         r'<script type="application/ld\+json">(.*?)</script>', page) if '"ItemList"' in m)
     assert item_list["numberOfItems"] == 18
     assert {i["name"][1:] for i in item_list["itemListElement"]} == CANONICAL
+
+
+# ------------------------------------------------------ routing between commands
+
+# Words every description uses, which say nothing about which command to pick.
+_ROUTING_STOP = frozenset((
+    "a", "an", "the", "and", "or", "of", "to", "in", "on", "for", "with", "when", "use", "skip",
+    "is", "are", "be", "it", "its", "this", "that", "as", "by", "from", "at", "not", "no", "your",
+    "you", "user", "users", "wants", "want", "any", "what", "which", "into", "than", "then",
+    "only", "per", "triggers", "surface", "work", "backend", "infrastructure",
+))
+# Two descriptions that share this share of their words leave routing to chance.
+MAX_OVERLAP = 0.35
+
+
+def _routing_words(text: str) -> set:
+    return {w for w in re.findall(r"[a-z0-9]+", text.lower())
+            if w not in _ROUTING_STOP and len(w) > 2}
+
+
+def _overlap(a: str, b: str) -> float:
+    left, right = _routing_words(a), _routing_words(b)
+    return len(left & right) / len(left | right) if left | right else 0.0
+
+
+def _real_descriptions() -> dict:
+    return {name: _frontmatter(p)["description"] for name, p in _all().items()
+            if not _is_alias(p)}
+
+
+def test_the_overlap_measure_catches_a_copied_description():
+    desc = _real_descriptions()
+    assert _overlap(desc["ux-audit"], desc["ux-audit"]) == 1.0
+    assert _overlap(desc["ux-audit"], desc["ux-audit"] + " Also motion.") > MAX_OVERLAP
+
+
+def test_no_two_command_descriptions_overlap_enough_to_confuse_routing():
+    desc = _real_descriptions()
+    close = [(a, b, round(_overlap(desc[a], desc[b]), 2))
+             for i, a in enumerate(sorted(desc)) for b in sorted(desc)[i + 1:]
+             if _overlap(desc[a], desc[b]) > MAX_OVERLAP]
+    assert not close, f"descriptions too close to route between: {close}"
+
+
+def test_no_trigger_phrase_belongs_to_two_commands():
+    owners: dict = {}
+    for name, desc in _real_descriptions().items():
+        for phrase in re.findall(r'"([^"]+)"', desc):
+            key = " ".join(re.findall(r"[a-z0-9]+", phrase.lower()))
+            owners.setdefault(key, set()).add(name)
+    shared = {k: sorted(v) for k, v in owners.items() if len(v) > 1}
+    assert not shared, f"trigger phrases claimed by two commands: {shared}"
+
+
+def test_every_skip_clause_names_the_command_to_use_instead():
+    for name, desc in _real_descriptions().items():
+        if "Skip when" not in desc:
+            continue
+        skip = desc[desc.index("Skip when"):]
+        named = set(re.findall(r"\bux-[a-z0-9-]+", skip))
+        assert named, f"{name}: its Skip when clause names no command to use instead"
+        assert named <= CANONICAL, f"{name}: Skip when points at {sorted(named - CANONICAL)}, " \
+                                   f"an alias or no command; name the command it moved to"

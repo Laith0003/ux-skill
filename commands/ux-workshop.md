@@ -1,5 +1,5 @@
 ---
-description: Run a design thinking workshop / discovery session. Five sequential phases ending in a concrete Game Plan. Triggers on "run a workshop", "facilitate a discovery", "let's do a design thinking session". Use when running a discovery workshop, facilitating a design thinking session, exploring a problem space, running an exploration → heat map → stakeholder map → game plan flow, scoping a new product opportunity. Skip when the brief is already clear and scoped, the user just wants to design a single component, the team is mid-execution rather than in discovery.
+description: Run a design thinking workshop / discovery session. Five sequential phases ending in a concrete Game Plan. Triggers on "run a workshop", "facilitate a discovery", "let's do a design thinking session". Use when running a discovery workshop, facilitating a design thinking session, exploring a problem space, running an exploration → heat map → stakeholder map → game plan flow, scoping a new product opportunity. Skip when the brief is already clear and scoped (use ux-design), the user just wants to design a single component, the team is mid-execution rather than in discovery.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
 disable-model-invocation: false
 ---

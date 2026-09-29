@@ -319,3 +319,39 @@ def test_every_mode_records_its_surface():
     text = _read("commands/ux-design.md")
     for value in ('"surface": "component"', '"surface": "dashboard"', '"surface": "<landing|none>"'):
         assert value in text, f"/ux-design state files must record {value}"
+
+
+# ---------------------------------------------------------------- worked examples
+
+_EXAMPLE = "## Worked example"
+_SUM = re.compile(r"`(\d+(?: [-+*] \d+)+) = (\d+)`")
+_SHARE = re.compile(r"`(\d+) of (\d+) is (\d+)%`")
+
+
+def _worked_example(name):
+    text = (SURFACES / name).read_text(encoding="utf-8")
+    assert _EXAMPLE in text, f"surfaces/{name} has no '{_EXAMPLE}' section; add one with real numbers, a verdict and what it refuses"
+    start = text.index(_EXAMPLE)
+    nxt = text.find("\n## ", start + len(_EXAMPLE))
+    return text[start:nxt if nxt != -1 else len(text)]
+
+
+@pytest.mark.parametrize("name", ["landing.md", "dashboard.md", "component.md"])
+def test_every_playbook_has_a_worked_example_that_refuses_something(name):
+    example = _worked_example(name)
+    assert re.search(r"\d", example), f"surfaces/{name}: the worked example states no number"
+    assert "**Verdict.**" in example, f"surfaces/{name}: the worked example gives no verdict"
+    assert "**Refused.**" in example, f"surfaces/{name}: the worked example refuses nothing"
+
+
+@pytest.mark.parametrize("name", ["landing.md", "dashboard.md", "component.md"])
+def test_every_figure_a_worked_example_computes_adds_up(name):
+    example = _worked_example(name)
+    sums = _SUM.findall(example)
+    shares = _SHARE.findall(example)
+    assert sums or shares, f"surfaces/{name}: show the arithmetic in backticks so it can be checked"
+    for expr, total in sums:
+        assert eval(expr, {"__builtins__": {}}) == int(total), f"surfaces/{name}: {expr} is not {total}"
+    for part, whole, pct in shares:
+        assert round(100 * int(part) / int(whole)) == int(pct), \
+            f"surfaces/{name}: {part} of {whole} is not {pct}%"

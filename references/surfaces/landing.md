@@ -420,6 +420,20 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 
 ---
 
+## Worked example
+
+**Brief.** The paid-campaign page of a bookkeeping service: `product_type: local-service`, `page: campaign`, `commitment: contract` (twelve months), `arrival: cold`, `proof: [stats]`, and three objections copied from sales calls, typed risk, price and approval. The client's figure is "1,240 tax returns filed since March 2025"; its old sales deck also says "10,000+ happy clients", with no source.
+
+**What the picker returns.** The service sequence with a mid-page ask right after the stats bar, the pull-quote section dropped (no testimonials in `proof`), a lighter step as a text link (the client's published price list), a FAQ before the closing band holding all three objections in the customers' words, a compact footer, and a header with the logo and the one action.
+
+**First phone screen at 360 by 780.** The sticky header is 56px and the consent banner 88px: `56 + 88 = 144` px of chrome, and `144 of 780 is 18%` of the screen. The band left for the ask runs from 56 to `780 - 88 = 692`, and the hero action sits at 540 to 588, inside it. The chat launcher would be a second overlay beside the banner, so it waits until the banner is dismissed.
+
+**Verdict.** Ships once the chat launcher waits for the banner and the approval objection is answered with the one-page summary the client already sends to the partner who signs.
+
+**Refused.** The "10,000+" count has no definition and no date, so it is not shown; the stats bar carries the 1,240 figure alone. No testimonial is written to fill the dropped section. No forecast of how many more contracts the page will win: that is measured after launch, never promised in the build notes.
+
+---
+
 ## Checklist
 
 ### Critical

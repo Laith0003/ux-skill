@@ -50,6 +50,18 @@ Load this playbook when the brief asks for a component rather than a page: a but
 
 ---
 
+## Worked example
+
+**Brief.** The sign-in form of a phone-first wallet: one phone field and a continue button, in a bottom sheet on phones and a single column on desktop.
+
+**What the rules decide.** The label sits above the field and the helper text below it ("The number you registered with"); an error replaces the helper. The field takes "079 123 4567" as typed, and the server adds the country code. On desktop the form stays inside the 40rem form ceiling: `40 * 16 = 640` px at a 16px root. On a 780px phone the sheet stops at 85% of the height, `663 of 780 is 85%`, so the page behind it still shows and the sheet reads as a layer. The field and the button are 48px tall, above the 44px floor. Default, hover, active and disabled states on both, plus loading on the button and an error on the field.
+
+**Verdict.** Ships with its six states and the error line "Phone: enter the number with its area code, such as 079 123 4567".
+
+**Refused.** No pattern that demands a plus and a country code. No email field as a fallback the product does not offer. No exclamation mark on the code-sent message.
+
+---
+
 ## Sheet (bottom drawer on mobile)
 
 **When to use.** Mobile-first overlay for actions or content. Action sheets, picker UIs, share menus.

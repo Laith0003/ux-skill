@@ -1,5 +1,5 @@
 ---
-description: Workflow conductor. Reads the latest reports from .ux/ and names the highest-leverage next command. Triggers on "what should I do next", "what's the next move", "decide for me", "/ux-next". Use when asking "what should I do next", the user wants the conductor to pick the next command, post-audit / post-fix decision-making, navigating between commands. Skip when no prior reports exist in .ux/, the user has a specific next command in mind.
+description: Workflow conductor. Reads the latest reports from .ux/ and names the highest-leverage next command. Triggers on "what should I do next", "what's the next move", "decide for me", "/ux-next". Use when asking "what should I do next", the user wants the conductor to pick the next command, post-audit / post-fix decision-making, navigating between commands. Skip when no prior reports exist in .ux/ (use ux-discover to start), the user has a specific next command in mind.
 allowed-tools: Read, Bash(ls:*), Bash(cat:*), Bash(find:*), Glob, Grep
 disable-model-invocation: false
 ---

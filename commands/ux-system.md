@@ -1,5 +1,5 @@
 ---
-description: Build a design system. `/ux-system create` runs the 4.0 foundations engine: a WCAG-gated token system (tokens.json, tokens.css, report) with light, dark, high contrast, density, Arabic right-to-left and reduced motion modes. With no mode it runs the 3.x starter flow. Triggers on "we don't have a design system", "build us a system", "propose tokens", "what should our theme be". Skip when the project already has a complete design system (use ux-component to build against it), backend or infrastructure.
+description: Build a design system. `/ux-system create` runs the 4.0 foundations engine: a WCAG-gated token system (tokens.json, tokens.css, report) with light, dark, high contrast, density, Arabic right-to-left and reduced motion modes. With no mode it runs the 3.x starter flow. Triggers on "we don't have a design system", "build us a system", "propose tokens", "what should our theme be". Skip when the project already has a complete design system (use ux-design --component to build against it), backend or infrastructure.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Bash(uxskill:*), Bash(python3:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
