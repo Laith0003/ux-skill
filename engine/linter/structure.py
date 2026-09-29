@@ -2106,46 +2106,53 @@ _ROOT_MARKERS = (".git", "package.json", "pyproject.toml", "composer.json")
 
 
 @lru_cache(maxsize=64)
-def _contract_spinner(folder: str) -> bool:
-    """Whether the button contract that governs ``folder`` lists a spinner
-    part: the project's own contract (its rule pack), else the seed
-    contract that ships with the engine."""
+def _lists_spinner(path: str, mtime: float) -> bool:
+    """Whether the contract file at ``path`` (as it was at ``mtime``) lists
+    a spinner part."""
     from engine.contracts.schema import ContractError, load_contract
+    try:
+        return any(part.name == "spinner" for part in load_contract(Path(path)).parts)
+    except (ContractError, OSError):
+        return False
+
+
+def _contract_spinner(folder: str) -> bool:
+    """Whether the project's own button contract (its rule pack) lists a
+    spinner part. A project with no contract of its own has no requirement,
+    so the default spinner stays a finding. Read fresh when the file
+    changes."""
     here = Path(folder)
     for base in [here, *here.parents]:
         for rel in _CONTRACT_PLACES:
             f = base / rel
             if f.is_file():
                 try:
-                    return any(part.name == "spinner" for part in load_contract(f).parts)
-                except (ContractError, OSError):
+                    return _lists_spinner(str(f), f.stat().st_mtime)
+                except OSError:
                     return False
         if any((base / m).exists() for m in _ROOT_MARKERS):
             break
-    from engine.contracts.library import SEED_DIR
-    try:
-        return any(part.name == "spinner" for part in load_contract(SEED_DIR / "button.yaml").parts)
-    except (ContractError, OSError):
-        return False
+    return False
 
 
 def spinner_outside_contract(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
     """The default border spinner is a finding, except on a button whose
-    contract lists a spinner part for its loading state: the contract's
-    requirement wins."""
+    project contract lists a spinner part for its loading state: the
+    contract's requirement wins. Every selector of the rule must be a
+    button's, so a list that also styles a page loader keeps the finding."""
     at = match.start()
     if view.text[at:at + 1] == ".":
         brace = view.text.find("{", at)
         at = brace + 1 if brace != -1 else at
     block = block_at(ctx, view, at)
-    if block is None or not any(_BUTTON_SELECTOR.search(s) for s in block.selectors):
+    if block is None or not block.selectors \
+            or not all(_BUTTON_SELECTOR.search(s) for s in block.selectors):
         return True
     try:
         folder = str(Path(ctx.path).resolve().parent)
     except OSError:
         folder = "."
     return not _contract_spinner(folder)
-
 
 POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
     "input-has-no-name": input_has_no_name,

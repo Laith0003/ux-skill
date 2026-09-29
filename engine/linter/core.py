@@ -426,13 +426,66 @@ def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None
     return findings
 
 
+# Sources that make up a client's system. A build script or package.json only
+# builds it; the files it reads are listed as sources of their own.
+SYSTEM_KINDS = frozenset(("tokens-source", "tokens", "built-output", "css-foundation",
+                          "master-md", "design-md"))
+# An extension file sits beside a system and holds what the page added to it.
+_EXTENSION_NAME = re.compile(r"(?:[-_.]ext|[-_.]extension|^extension)$", re.I)
+# At-rules whose blocks hold no page rules: a face, a registered property.
+_TOKEN_AT_RULES = ("@font-face", "@property")
+
+
+def _tokens_only(path: Path, text: str) -> bool:
+    """True when a stylesheet holds nothing but token blocks: every
+    declaration sets a custom property (or color-scheme), outside @font-face
+    and @property. One page rule makes it the page's own stylesheet."""
+    from engine.linter.structure import css_blocks
+    view = FileViews(path.name, text).get("css")
+    for block in css_blocks(view.text if view is not None else text):
+        if any(a.startswith(_TOKEN_AT_RULES) for a in block.atrules):
+            continue
+        for decl in block.body.split(";"):
+            name = decl.split(":", 1)[0].strip().lower()
+            if name and not name.startswith("--") and name != "color-scheme" \
+                    and not name.startswith("@"):
+                return False
+    return True
+
+
+def _engine_listed(f: Path, root: Path) -> bool:
+    """True when an engine record (.uxskill/files.json) in the file's folder
+    or any folder above it, up to the project root, lists the file."""
+    from engine.existing.record import read_record
+    for folder in [f.parent, *f.parent.parents]:
+        try:
+            rel = f.relative_to(folder).as_posix()
+        except ValueError:
+            break
+        if rel in read_record(folder):
+            return True
+        if folder == root:
+            break
+    return False
+
+
 def system_files(files: Iterable[Path], targets: Iterable[Path] = ()) -> set:
     """The resolved paths among ``files`` that belong to a client's own
-    design system: a source ``ux system detect`` reports for the file's
-    project (the nearest folder with a project marker, else the linted
-    folder that holds the file, else the file's own folder), or a file
-    inside a system folder it reports. A file ux-skill wrote and nobody has
-    changed since is generated output, never the client's system."""
+    design system, which lint reports apart. A file belongs only when all of
+    these hold:
+
+    - ``ux system detect`` reports it for the file's project (the nearest
+      folder with a project marker, else the linted folder that holds it,
+      else its own folder) as a token source, a token file, built output, a
+      foundation stylesheet or a hand-written MASTER.md or DESIGN.md, or it
+      sits inside a system folder detect reports;
+    - the engine did not write it: no digest stamp, and no engine record
+      (``.uxskill/files.json``) lists it;
+    - it is not an extension file (a name ending in ``-ext`` or
+      ``-extension``), which holds what a page added;
+    - a stylesheet holds only token blocks: one page rule beside its theme
+      block makes it the page's own stylesheet, and it is scored.
+    """
     from engine.existing import detect_existing_system, is_ux_skill_file
 
     folders = [Path(t).resolve() for t in targets if Path(t).is_dir()]
@@ -445,11 +498,22 @@ def system_files(files: Iterable[Path], targets: Iterable[Path] = ()) -> set:
         if root not in found:
             result = detect_existing_system(root)
             found[root] = ([((root / s["path"]).resolve(), s["kind"] == "system-folder")
-                            for s in result.get("sources", [])] if result.get("found") else [])
-        for src, folder in found[root]:
-            if (f == src or (folder and src in f.parents)) and not is_ux_skill_file(f):
-                out.add(f)
-                break
+                            for s in result.get("sources", [])
+                            if s["kind"] in SYSTEM_KINDS or s["kind"] == "system-folder"]
+                           if result.get("found") else [])
+        if not any(f == src or (folder and src in f.parents) for src, folder in found[root]):
+            continue
+        stem = f.name.rsplit(".", 1)[0]
+        if _EXTENSION_NAME.search(stem) or is_ux_skill_file(f) or _engine_listed(f, root):
+            continue
+        if f.name.lower().endswith(STYLE_SUFFIXES):
+            try:
+                text = f.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                continue
+            if not _tokens_only(f, text):
+                continue
+        out.add(f)
     return out
 
 

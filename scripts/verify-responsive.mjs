@@ -14,64 +14,47 @@
  *             -> you have NOT verified. Eyeball on a real device. Do NOT claim passed.
  *
  * Usage: node scripts/verify-responsive.mjs <file-or-url> [widths=360,390] [outdir=.]
- * Screenshots are named by page and width (verify-<page>-<width>.png), so
- * checking several pages into one folder never overwrites one with another.
+ * Screenshots are named by page and width (verify-<page>-<width>.png, see
+ * shot-names.mjs), so checking several pages into one folder never
+ * overwrites one with another. The script always runs when started, through
+ * any symlink, and every way it cannot verify exits 2 with the cause.
  * Chrome path override: CHROME_BIN=/path/to/chrome
  * Needs only Node 21+ (built-in fetch + WebSocket) and a Chrome/Chromium binary.
  */
 import { spawn } from 'node:child_process';
 import { mkdtempSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, relative, isAbsolute } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { join } from 'node:path';
+import { shotName } from './shot-names.mjs';
 
 const STICKY_CEILING = 96;        // px; a taller pinned header is a fail
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function degrade(msg) {
+  verdict = true;
   console.log('DEGRADED (UNVERIFIED): ' + msg);
   console.log('  A gate that cannot render has NOT verified. Eyeball on a real device; never claim passed.');
   process.exit(2);
 }
 
-/**
- * The page part of a screenshot name: a file's path under the working folder
- * (or its full path outside it), or a URL's host and path, without the
- * extension, as lowercase words joined by dashes. en/index.html and
- * ar/index.html give en-index and ar-index.
- */
-export function pageSlug(target, cwd = process.cwd()) {
-  let host = '';
-  let name = String(target || 'page');
-  const web = /^(https?):\/\/([^/?#]+)([^?#]*)/i.exec(name);
-  if (web) { host = web[2]; name = web[3]; }
-  else {
-    name = name.replace(/^file:\/\//i, '');
-    const rel = isAbsolute(name) ? relative(cwd, name) : name;
-    name = rel.startsWith('..') ? name : rel;
+// A verdict is always printed: a run that ends without one (an early exit,
+// a promise that never settled) reports DEGRADED and exits 2, never a quiet 0.
+let verdict = false;
+process.on('exit', (code) => {
+  if (!verdict && code === 0) {
+    console.log('DEGRADED (UNVERIFIED): the verifier stopped before it measured any page.');
+    process.exitCode = 2;
   }
-  name = name.replace(/\/+$/, '').replace(/\.[a-z0-9]+$/i, '');
-  const slug = (host + '/' + name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-  return slug || 'page';
-}
+});
 
-/** The screenshot file name for one page at one width. */
-export function shotName(target, width, cwd = process.cwd()) {
-  return 'verify-' + pageSlug(target, cwd) + '-' + width + '.png';
-}
-
-const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 const target = process.argv[2];
-if (isMain && !target) degrade('no target given (usage: verify-responsive.mjs <file-or-url> [widths] [outdir])');
+if (!target) degrade('no target given (usage: verify-responsive.mjs <file-or-url> [widths] [outdir])');
 const widths = (process.argv[3] || '360,390').split(',').map((n) => parseInt(n, 10)).filter(Boolean);
 const outDir = process.argv[4] || '.';
-const url = !target ? '' : /^(https?|file):/.test(target)
+const url = /^(https?|file):/.test(target)
   ? target
   : 'file://' + (target.startsWith('/') ? target : join(process.cwd(), target));
 
-if (isMain) main();
-
-function main() {
 const CHROME = process.env.CHROME_BIN ||
   ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
    '/Applications/Chromium.app/Contents/MacOS/Chromium',
@@ -178,9 +161,9 @@ function makeCdp(wsUrl) {
     if (hscroll && v.over.length) for (const o of v.over) lines.push('      overflow: <' + o.tag + ' .' + o.cls + '> right=' + o.right + '  "' + o.text + '"');
   }
   chrome.kill();
+  verdict = true;
   console.log((failed ? 'FAIL' : 'VERIFIED clean') + ' - responsive @ ' + widths.join('/') + 'px (real headless Chrome)');
   console.log(lines.join('\n'));
   console.log('  screenshots: ' + shots.join(', '));
   process.exit(failed ? 1 : 0);
 })().catch((e) => degrade('verifier crashed: ' + (e && e.message)));
-}
