@@ -45,7 +45,8 @@ CLI: Dict[str, str] = {
     "replace_client": "--replace-client-files", "mapping": "--mapping", "add": "--add",
     "add_role": "--add-role", "to": "--to", "brand": "--brand", "axes": "--axes",
     "brief": "--brief", "tokens": "--tokens", "latin_only": "--latin-only",
-    "scheme": "--scheme", "figma_mode": "--figma-mode", "import": "system import"}
+    "scheme": "--scheme", "figma_mode": "--figma-mode", "import": "system import",
+    "add_mode": "--add-mode"}
 MAPPING = "mapping.json"
 
 
@@ -251,6 +252,7 @@ def _roles(pairs: Sequence[str], label: str) -> Dict[str, str]:
 
 def run_extend(source: Any, *, out: Any, fmt: str = "auto", mapping: Any = None,
                add: Sequence[str] = (), add_role: Sequence[str] = (),
+               add_mode: Sequence[str] = (),
                contracts: Sequence[Any] = (), brand: Any = None, axes: Any = None,
                brief: Any = None, latin_only: bool = False, force: bool = False,
                replace_client: bool = False,
@@ -283,7 +285,8 @@ def run_extend(source: Any, *, out: Any, fmt: str = "auto", mapping: Any = None,
                   contracts=list(contracts), axes=axis_values, axes_source=axes_source,
                   brand=brand_hex, arabic=arabic, audience=audience,
                   unread=unread_lines(brief, labels["brief"]), mapping_name=name, words=words,
-                  add_label=labels["add"], role_label=labels["add_role"])
+                  add_label=labels["add"], role_label=labels["add_role"],
+                  modes=list(add_mode), mode_label=labels["add_mode"])
     if add and not (done.added or done.problems or add_role or contracts):
         # Asked again for what is already there: nothing new to write.
         result = _read_result("unchanged", imported)
@@ -342,6 +345,23 @@ def _header(imported: Imported) -> List[str]:
     return lines
 
 
+def _namespace_lines(placed: Sequence[Tuple[str, str]], outside: Sequence[str]) -> List[str]:
+    """What the Tailwind export's opening comment says about names: each
+    token given a variable in a theme namespace, and each left outside
+    every namespace, which no utility reads."""
+    from engine.foundations.tokens import css_property
+    lines: List[str] = []
+    if placed:
+        lines.append("Each token outside Tailwind's theme namespaces gets a variable in the one "
+                     "its name and type say, so utilities read it:")
+        lines += [f"  {css_property(p)} as --{v}" for p, v in placed]
+    if outside:
+        lines.append("Outside every Tailwind 4 theme namespace, so no utility reads them; "
+                     "rename each into one, or use it with var():")
+        lines += [f"  {css_property(p)}" for p in outside]
+    return lines
+
+
 def run_export(source: Any, *, to: str, fmt: str = "auto", out: Any = None,
                force: bool = False, include_files: bool = False, scheme: Optional[str] = None,
                second_modes: Optional[Mapping[str, str]] = None,
@@ -355,7 +375,8 @@ def run_export(source: Any, *, to: str, fmt: str = "auto", out: Any = None,
     (JSON, which holds no comment)."""
     from engine.foundations.export import SCHEME_DEFAULTS, dump_dtcg, to_css
     from engine.io.figma_out import figma_files
-    from engine.io.tailwind_out import in_roles, to_tailwind
+    from engine.foundations.tokens import css_property
+    from engine.io.tailwind_out import in_roles, namespaced, to_tailwind
     if to not in TARGETS:
         raise InputError(f"{labels['to']} is {to}; pass css, tailwind, figma or dtcg")
     if scheme is not None and scheme not in SCHEME_DEFAULTS:
@@ -367,8 +388,13 @@ def run_export(source: Any, *, to: str, fmt: str = "auto", out: Any = None,
     if to == "css":
         files = {"tokens.css": to_css(ts, scheme=opens, forms=imported.forms, header=header)}
     elif to == "tailwind":
-        text = to_tailwind(ts, imported.forms, imported.resets or None, scheme=opens,
-                           roles=in_roles(imported), variant=imported.variant)
+        roles = in_roles(imported)
+        themed, placed, outside = (ts, [], [])
+        if not roles and imported.report.source.format != "tailwind":
+            themed, placed, outside = namespaced(ts)
+            header = [*header, *_namespace_lines(placed, outside)]
+        text = to_tailwind(themed, imported.forms, imported.resets or None, scheme=opens,
+                           roles=roles, variant=imported.variant)
         head = "".join(f" * {line}".rstrip().replace("*/", "* /") + "\n" for line in header)
         files = {"tailwind-theme.css": f"/*\n{head} */\n{text}" if header else text}
     elif to == "figma":
@@ -377,6 +403,14 @@ def run_export(source: Any, *, to: str, fmt: str = "auto", out: Any = None,
         files = {"tokens.json": dump_dtcg(ts)}
     result = _read_result("built", imported)
     n = len(imported.report.not_read)
+    if to == "tailwind" and not in_roles(imported) \
+            and imported.report.source.format != "tailwind":
+        result["namespaced"] = [{"token": p, "variable": f"--{v}"} for p, v in placed]
+        result["outside_namespaces"] = [
+            {"token": p, "variable": css_property(p),
+             "fix": ("no Tailwind 4 utility reads it; rename it into a theme namespace "
+                     "(--color-*, --spacing-*, --radius-*, --text-*, --breakpoint-* and the "
+                     "rest), or use it with var()")} for p in outside]
     result.update({
         "to": to, "not_read": n,
         "files": [{"name": k, "bytes": len(t.encode("utf-8"))} for k, t in files.items()]})

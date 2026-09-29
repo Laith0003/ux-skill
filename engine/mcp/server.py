@@ -330,6 +330,9 @@ class UxSystemExtendInput(UxSystemEnhanceInput):
     add_role: Any = Field(default=None, description="Optional list of role=token pairs that "
                           "point the engine's roles at the system's own tokens, for example "
                           "color.focus.ring=brand-700.")
+    add_modes: Any = Field(default=None, description="Optional list of mode axes the system "
+                           "does not have to add with the foundations: contrast, motion or "
+                           "density. Without it none is added.")
     contracts: Any = Field(default=None, description="Optional list of absolute paths of "
                            "contract .yaml files to check and add.")
     brand: Any = Field(default=None, description="Optional brand color as hex for added color; "
@@ -371,7 +374,7 @@ _MCP_LABELS = {"from": "source", "format": "format", "out": "out", "force": "for
                "mapping": "mapping", "add": "add", "add_role": "add_role", "to": "to",
                "brand": "brand", "axes": "axes", "brief": "brief", "tokens": "tokens",
                "latin_only": "latin_only", "scheme": "scheme", "figma_mode": "figma_modes",
-               "import": "ux_system_import"}
+               "import": "ux_system_import", "add_mode": "add_modes"}
 # The most folded problem lines a contract check returns over MCP.
 _PROBLEM_CAP = 40
 
@@ -553,6 +556,7 @@ def handle_ux_system_extend(args: Dict[str, Any]) -> Dict[str, Any]:
         return run_extend(
             source, mapping=_abs_path(payload.mapping, "mapping", "mapping.json"),
             add=_words(payload.add, "add"), add_role=_words(payload.add_role, "add_role"),
+            add_mode=_words(payload.add_modes, "add_modes"),
             contracts=_paths(payload.contracts, "contracts", "chip.yaml", "file"),
             brand=payload.brand, axes=payload.axes, brief=payload.brief,
             latin_only=parse_latin_only(payload.latin_only, "latin_only"), **common)

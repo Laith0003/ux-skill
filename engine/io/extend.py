@@ -18,8 +18,11 @@ named like an entry the import did not read, since the extension would
 replace it. A stylesheet is compared by the custom properties each token
 writes, so --space-4 is the same entry whether it came in as space-4 or
 is added as space.4. Mode switches follow the mapping, so an added token
-varies on the system's own dark switch when scheme is mapped to it; an
-engine axis the mapping does not name is added as the engine writes it.
+varies on the system's own dark switch when scheme is mapped to it. A
+mode axis the system does not have (contrast, motion, density) is never
+added unless asked for (modes, --add-mode): the additions hold its base
+values, and the report says so and how to ask; an axis asked for is added
+as the engine writes it.
 
 Where the result goes. A system the engine did not write is never
 rewritten: the additions go in an extension file beside it, in its own
@@ -339,7 +342,35 @@ def _on_theirs(generated: TokenSet, anchor: Dict[str, Dict[str, str]],
     return out, pointed
 
 
-def _in_one_scheme(generated: TokenSet, scheme: str) -> TokenSet:
+# Mode axes extend adds only when asked; the scheme follows the mapping,
+# and direction follows the scripts.
+_ASKABLE = ("contrast", "motion", "density")
+
+
+def _named_primary(ts: TokenSet) -> Tuple[str, str]:
+    """(token, hex) of the color the system's names say is its primary, as
+    system detect reads it, or ("", "")."""
+    from engine.existing.detect import _rank_primary, normalize_color
+    colors = []
+    for t in ts.tokens():
+        if t.type != "color":
+            continue
+        try:
+            hx = normalize_color(ts.resolve(t.path))
+        except (AliasError, ModeError, KeyError, TypeError, ValueError):
+            continue
+        if hx:
+            colors.append((t.path, hx))
+    return _rank_primary(colors)
+
+
+def _on_one_value(generated: TokenSet, axis: str, value: str) -> TokenSet:
+    """The generated set with the values it has at one value of `axis`,
+    and without the primitives only the other values pointed at."""
+    return _in_one_scheme(generated, value, axis)
+
+
+def _in_one_scheme(generated: TokenSet, scheme: str, axis: str = "scheme") -> TokenSet:
     """The generated set with the values it has in one scheme only, and
     without the primitives only the other scheme's values pointed at (the
     dark tint, the dark shadow steps); a ramp one of whose steps is still
@@ -350,7 +381,7 @@ def _in_one_scheme(generated: TokenSet, scheme: str) -> TokenSet:
     used = refs(generated)
     one = TokenSet(generated.axes)
     for t in generated.tokens():
-        one.add(_one_scheme(t, scheme) if any("scheme" in parse(k, AXES) for k in t.modes)
+        one.add(_one_scheme(t, scheme, axis) if any(axis in parse(k, AXES) for k in t.modes)
                 else t)
     still = refs(one)
 
@@ -368,10 +399,11 @@ def _in_one_scheme(generated: TokenSet, scheme: str) -> TokenSet:
     return out
 
 
-def _one_scheme(t: Token, scheme: str) -> Token:
-    """The token with the values it has in one scheme, and no scheme modes."""
-    ours = [a for a in AXES if a != "scheme" and any(a in parse(k, AXES) for k in t.modes)]
-    values = {ctx: select(t.value, t.modes, join({**parse(ctx), "scheme": scheme}))[0]
+def _one_scheme(t: Token, scheme: str, axis: str = "scheme") -> Token:
+    """The token with the values it has at one value of an axis (a scheme,
+    by default), and no modes on that axis."""
+    ours = [a for a in AXES if a != axis and any(a in parse(k, AXES) for k in t.modes)]
+    values = {ctx: select(t.value, t.modes, join({**parse(ctx), axis: scheme}))[0]
               for ctx in contexts(ours)}
     base, modes = compress(values)
     return _copy(t, value=base, modes=modes)
@@ -690,7 +722,8 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
            audience: Optional[Audience] = None, unread: Sequence[str] = (),
            mapping_name: str = "mapping.json",
            words: Optional[Dict[str, int]] = None, add_label: str = "--add",
-           role_label: str = "--add-role") -> Extended:
+           role_label: str = "--add-role", modes: Sequence[str] = (),
+           mode_label: str = "--add-mode") -> Extended:
     """Extend an imported system (see the module docstring). `audience`
     holds the brief's structured fields and `unread` the brief's words the
     engine did not read (emit.brief_audience and emit.unread_lines);
@@ -705,8 +738,20 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
     those roles to its tokens, so the tint, band, stripe, the text on fills
     and the ring pass against what renders. The brand color is `brand`,
     else the system's own primary fill, else #3366FF. A system with one
-    scheme gets additions in that scheme only."""
+    scheme gets additions in that scheme only.
+
+    The brand color reaches what imagery generates too (its wash and
+    duotone): `brand`, else the fill the mapping sends color.action.primary
+    to, else the primary the system's names say (detect's reading), and the
+    engine's default only when none is, which the report says. A mode axis
+    the system does not have (contrast, motion or density) is never added
+    unless `modes` asks for it: the additions hold that axis's base values
+    only, and the report says so and how to ask."""
     roles = dict(roles or {})
+    for m in modes:
+        if m not in _ASKABLE:
+            raise InputError(f"{mode_label} names {m}, which is not a mode axis extend adds; "
+                             f"use {', '.join(_ASKABLE[:-1])} or {_ASKABLE[-1]}")
     audience = audience or Audience()
     source = imported.report.source
     name = Path(source.path).name
@@ -792,15 +837,25 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
         skip = [r for r, m in mapping.roles.items() if m.token is not None
                 and (css_property(m.token) if sheet else m.token) in declared]
         anchor, scheme, unreadable_colors = _owner_colors(base, mapping, skip, mapping_name)
+        # The system's own primary seeds every generated color, imagery's
+        # wash and duotone too, whether or not color is added.
+        fill = next((ctx[_FILL] for ctx in anchor.values() if _FILL in ctx), "")
         if "color" not in foundations:
             anchor = {}
         seed, seed_from = brand or "#3366FF", ""
         if brand is None:
-            fill = next((ctx[_FILL] for ctx in anchor.values() if _FILL in ctx), "")
-            seed_from = (f", read from your {mapping.roles[_FILL].token} ({_FILL})" if fill
-                         else f", the engine's default, since {mapping_name} maps no {_FILL}; "
-                              "map it there, or pass the brand color")
-            seed = fill or seed
+            named_fill = _named_primary(base) if not fill else ("", "")
+            if fill:
+                seed_from = f", read from your {mapping.roles[_FILL].token} ({_FILL})"
+            elif named_fill[1]:
+                seed_from = (f", read from your {named_fill[0]}, whose name says it is the "
+                             f"primary ({mapping_name} maps no {_FILL}; map it there to "
+                             "confirm it)")
+            else:
+                seed_from = (f", the engine's default, since {mapping_name} maps no {_FILL} "
+                             "and no color's name says primary or brand; map it there, or "
+                             "pass the brand color")
+            seed = fill or named_fill[1] or seed
         color_notes: List[str] = []
         try:
             generated, color_notes = _generated(foundations, axes, seed, arabic, audience,
@@ -811,7 +866,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
             generated, pointed = _on_theirs(generated, anchor, mapping)
         decisions.append(f"{', '.join(foundations)} was generated from {axes_source}"
                          + (f" and the brand color {seed}{seed_from}"
-                            if "color" in foundations else "")
+                            if "color" in foundations or "imagery" in foundations else "")
                          + ("" if arabic else ", Latin only") + ".")
         if anchor:
             yours = [f"{mapping.roles[r].token} ({r})" for r in dict.fromkeys(
@@ -839,6 +894,16 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                              f"scheme from it), so the additions hold {scheme} values only and "
                              f"add no {other} ones. To add them, map scheme in {mapping_name} "
                              f"to the switch your {other} scheme uses.")
+        for axis in _ASKABLE:
+            if axis in modes or axis in base.axes or _theirs(axis, mapping)[1] is not None \
+                    or not any(axis in parse(k, AXES) for t in generated.tokens()
+                               for k in t.modes):
+                continue
+            generated = _on_one_value(generated, axis, AXES[axis][0])
+            decisions.append(
+                f"Your system has no {axis} mode, so the additions hold their values at {axis} "
+                f"{AXES[axis][0]} only and add no {axis} axis; to add one, ask for it with "
+                f"{mode_label} {axis}.")
         decisions += [f"{e.line()}." for e in effects(audience, axes)]
         if "imagery" in foundations:
             decisions.append("No art was written: the art files (art/pattern.svg, "
@@ -1459,10 +1524,64 @@ def _system_files(imported: Imported, ts: TokenSet, added: Sequence[Token],
         return {ext: dump_dtcg(out)}, (
             f"Read {ext} with {name}: it is a tokens file with {count} token{_s(count)} the "
             f"system does not have, and changes nothing in {name}.")
+    pointed = _pointed_at(imported, out)
+    if not pointed:
+        how = (f"Read {ext} with {name}: its tokens hold their own values and point at none "
+               f"of {name}'s.")
+    else:
+        files = list(pointed)
+        where = _and([f"{f} ({_few_names(pointed[f])})" for f in files])
+        how = (f"Read {ext} with {_and(files)}: list {ext} after "
+               f"{'it' if len(files) == 1 else 'them'} among the token files your tools read, "
+               f"since its tokens point by name at tokens in {where}.")
+        if any(not f.lower().endswith(".json") for f in files):
+            how += (" A token it points at in a stylesheet resolves only where that stylesheet "
+                    "is read too.")
     return {ext: dump_dtcg(out)}, (
-        f"Read {ext} with {name}: list {ext} after {name} among the token files your tools "
-        f"read, since its tokens point at {name}'s by name. It holds {count} "
-        f"token{_s(count)} and changes nothing in {name}.")
+        f"{how} It holds {count} token{_s(count)} and changes nothing in {name}.")
+
+
+def _few_names(names: List[str]) -> str:
+    return ", ".join(names) if len(names) <= 4 else f"{', '.join(names[:3])} and {len(names) - 3} more"
+
+
+def _pointed_at(imported: Imported, ext: TokenSet) -> Dict[str, List[str]]:
+    """file -> the tokens of it the extension's tokens point at, in the
+    order the sources were read: exactly the files the extension needs."""
+    own = {t.path for t in ext.tokens()}
+    refs: List[str] = []
+    for t in ext.tokens():
+        for v in [t.value, *t.modes.values()]:
+            for r in _refs(v):
+                if r not in own and r not in refs:
+                    refs.append(r)
+    if not refs:
+        return {}
+    sources = [imported.report.source.path, *(a.path for a in imported.report.also_read)]
+    holds: List[Tuple[str, set]] = []
+    for f in sources:
+        p = Path(f)
+        try:
+            text = p.read_text(encoding="utf-8-sig")
+        except (OSError, UnicodeDecodeError):
+            holds.append((p.name, set()))
+            continue
+        if p.suffix.lower() == ".json":
+            from engine.existing.detect import flatten_dtcg
+            try:
+                doc = json.loads(text)
+            except ValueError:
+                doc = {}
+            holds.append((p.name, set(flatten_dtcg(doc)) if isinstance(doc, dict) else set()))
+        else:
+            holds.append((p.name, {m.group(1) for m in _DECLARED.finditer(text)}))
+    out: Dict[str, List[str]] = {}
+    for r in refs:
+        prop = css_property(r)
+        found = next((n for n, names in holds if r in names or prop in names),
+                     holds[0][0])
+        out.setdefault(found, []).append(r)
+    return {n: out[n] for n, _ in holds if n in out}
 
 
 def _s(n: int) -> str:
@@ -1502,6 +1621,12 @@ def _report(imported: Imported, result: Extended, foundations: List[str],
         lines.append("Nothing.")
     if result.load:
         lines += ["", result.load]
+        if not in_place:
+            lines += ["", (f"{_and(ext_names)} {'goes' if len(ext_names) == 1 else 'go'} "
+                           f"beside {name}, where an extension loads from, with the backups "
+                           "of every source under .uxskill there; this report and "
+                           "mapping.json go into the out folder, which holds the report and "
+                           "the mapping only.")]
     lines += ["", "## What was kept", "",
               f"All {len(imported.tokens.tokens())} tokens {name} had are unchanged, in their "
               "order and with their names."]
@@ -1633,6 +1758,18 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
                                                        "back as it was, so nothing changed."}
     status = "written" if "written" in (first["status"], second["status"]) else "unchanged"
     words = [o["message"] for o in (first, second) if o["status"] == "written"]
+    # Where each file went, and why: the extension and the backups beside
+    # the source by design, the report and the mapping in out.
+    where = {"beside": {"folder": str(here), "files": list(near),
+                        "why": f"an extension loads next to the file it extends, so it sits "
+                               f"beside {name}, with the backups of the sources under "
+                               f"{here / INTAKE_DIR}"},
+             "out": {"folder": str(target), "files": list(rest),
+                     "why": f"{out_label} holds the report and the mapping only"}}
+    words.append(f"{_and(list(near))} went beside {name} in {here}, since "
+                 f"{where['beside']['why'].split(', so', 1)[0]}; the sources' backups are "
+                 f"under {here / INTAKE_DIR} there. {_and(list(rest))} went into {target}, "
+                 f"since {where['out']['why']}.")
     outcome = {"status": status,
                "written": [str(here / n) for n in first["written"]]
                + [str(target / n) for n in second["written"]],
@@ -1645,7 +1782,7 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
                                for n, b in first["replaced"].items()},
                             **{str(target / n): str(target / b)
                                for n, b in second["replaced"].items()}},
-               "beside": first, "out": second}
+               "beside": first, "out": second, "where": where}
     return _loaded(outcome, result)
 
 

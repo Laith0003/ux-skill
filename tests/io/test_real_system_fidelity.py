@@ -146,3 +146,92 @@ def test_an_on_color_is_never_offered_for_a_background_or_for_text(tmp_path):
     assert offered == {("text-default",)}
     [raw] = d.raw_with_token
     assert [u.prop for u in raw.uses] == ["color"]
+
+
+# ---------------------------------------------------------------- extend
+
+
+def _pair_system(tmp_path):
+    import json as _json
+    (tmp_path / "tokens.json").write_text(_json.dumps({
+        "brand": {"$type": "color", "primary": {"$value": "#0B5F4A"},
+                  "canvas": {"$value": "#FBFAF7"}, "ink": {"$value": "#1B1F24"}}},
+        indent=2), encoding="utf-8")
+    (tmp_path / "site.css").write_text(":root {\n  --ring-color: #1F6FEB;\n}\n",
+                                       encoding="utf-8")
+    return read_sources([tmp_path / "tokens.json", tmp_path / "site.css"])
+
+
+def test_imagery_is_generated_from_the_systems_own_primary(tmp_path):
+    from engine.io.adapter import Mapping, RoleMap
+    from engine.io.extend import extend
+    imported = _pair_system(tmp_path)
+    mapped = extend(imported, Mapping({"color.action.primary": RoleMap("brand.primary", "owner")}),
+                    foundations=("imagery",))
+    assert str(mapped.tokens.resolve("imagery.tint")).upper().startswith("#0B5F4A")
+    # Not mapped, the primary the names say is read, and the report says so.
+    named = extend(imported, Mapping(), foundations=("imagery",))
+    assert str(named.tokens.resolve("imagery.tint")).upper().startswith("#0B5F4A")
+    assert any("read from your brand.primary, whose name says it is the primary" in d
+               for d in named.decisions)
+
+
+def test_no_mode_axis_is_added_unless_asked(tmp_path):
+    from engine.io.adapter import Mapping
+    from engine.io.extend import extend
+    imported = _pair_system(tmp_path)
+    quiet = extend(imported, Mapping(), foundations=("imagery", "motion"))
+    assert "contrast" not in quiet.tokens.axes and "motion" not in quiet.tokens.axes
+    said = [d for d in quiet.decisions if d.startswith("Your system has no ")]
+    assert said == [
+        "Your system has no contrast mode, so the additions hold their values at contrast "
+        "standard only and add no contrast axis; to add one, ask for it with --add-mode "
+        "contrast.",
+        "Your system has no motion mode, so the additions hold their values at motion "
+        "standard only and add no motion axis; to add one, ask for it with --add-mode motion."]
+    asked = extend(imported, Mapping(), foundations=("imagery",), modes=("contrast",))
+    assert "contrast" in asked.tokens.axes
+
+
+def test_an_unknown_mode_to_add_names_the_choices(tmp_path):
+    import pytest
+
+    from engine.foundations.errors import InputError
+    from engine.io.adapter import Mapping
+    from engine.io.extend import extend
+    with pytest.raises(InputError) as exc:
+        extend(_pair_system(tmp_path), Mapping(), foundations=("imagery",), modes=("dark",))
+    assert str(exc.value) == ("--add-mode names dark, which is not a mode axis extend adds; use "
+                              "contrast, motion or density")
+
+
+def test_the_load_line_names_exactly_the_files_the_extension_points_at(tmp_path):
+    from engine.io.adapter import Mapping
+    from engine.io.extend import extend
+    imported = _pair_system(tmp_path)
+    one = extend(imported, Mapping(), roles={"color.focus.ring": "brand.primary"})
+    assert one.load.startswith("Read tokens-ext.json with tokens.json: list tokens-ext.json "
+                               "after it among the token files your tools read, since its "
+                               "tokens point by name at tokens in tokens.json (brand.primary).")
+    other = extend(imported, Mapping(), roles={"color.focus.ring": "ring-color"})
+    assert other.load.startswith(
+        "Read tokens-ext.json with site.css: list tokens-ext.json after it among the token "
+        "files your tools read, since its tokens point by name at tokens in site.css "
+        "(ring-color). A token it points at in a stylesheet resolves only where that "
+        "stylesheet is read too.")
+
+
+def test_the_result_says_where_each_file_went_and_why(tmp_path):
+    from engine.io.commands import run_extend
+    _pair_system(tmp_path)
+    out = tmp_path / "out"
+    result = run_extend([tmp_path / "tokens.json", tmp_path / "site.css"], out=out,
+                        add=["imagery"])
+    where = result["where"]
+    assert where["beside"]["files"] == ["tokens-ext.json"]
+    assert where["out"]["files"] == ["mapping.json", "extend-report.md"]
+    assert where["out"]["why"] == "--out holds the report and the mapping only"
+    assert (f"tokens-ext.json went beside tokens.json in {tmp_path}, since an extension loads "
+            "next to the file it extends") in result["message"]
+    report = (out / "extend-report.md").read_text()
+    assert "tokens-ext.json goes beside tokens.json, where an extension loads from" in report

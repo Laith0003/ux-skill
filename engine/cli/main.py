@@ -1074,6 +1074,10 @@ else:
                        "elevation, motion or imagery; repeat for more.")
     @click.option("--add-role", "add_role", multiple=True,
                   help="role=token: point one of the engine's roles at one of your tokens.")
+    @click.option("--add-mode", "add_mode", multiple=True,
+                  help="A mode axis the system does not have to add with the foundations: "
+                       "contrast, motion or density; repeat for more. Without it none is "
+                       "added.")
     @click.option("--contract", "contracts", multiple=True, type=click.Path(exists=True),
                   help="A contract .yaml to check and add; repeat for more.")
     @click.option("--brand", default=None,
@@ -1093,8 +1097,8 @@ else:
                   help="Also replace a file of yours in the way, such as your own fonts.css "
                        "beside the system, after a backup. --force alone never does.")
     @click.pass_context
-    def system_extend_cmd(ctx, source, fmt, figma_modes, mapping, add, add_role, contracts,
-                          brand, axes_text, brief_path, latin_only, out, force,
+    def system_extend_cmd(ctx, source, fmt, figma_modes, mapping, add, add_role, add_mode,
+                          contracts, brand, axes_text, brief_path, latin_only, out, force,
                           replace_client) -> None:
         """Add foundations, roles or contracts to an existing system without
         changing a token it has. A system ux-skill wrote is written again in
@@ -1108,7 +1112,8 @@ else:
         except InputError as exc:
             raise click.UsageError(str(exc)) from None
         _io(ctx, run_extend, list(source), fmt=fmt, mapping=mapping, add=add,
-            add_role=add_role, contracts=contracts, brand=brand, axes=axes_text, brief=brief,
+            add_role=add_role, add_mode=add_mode, contracts=contracts, brand=brand,
+            axes=axes_text, brief=brief,
             latin_only=latin_only, out=out, force=force, replace_client=replace_client,
             figma_modes=figma_modes)
 

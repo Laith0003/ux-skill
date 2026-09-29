@@ -266,13 +266,13 @@ Before any write the command checks that every source is still the file that was
 uxskill --no-pretty system extend --from design/theme.css --mapping design-system/intake/mapping.json --add motion --out design-system/intake
 ```
 
-- `--add` adds a foundation (color, type, space, layout, radius, border, elevation, motion or imagery), generated from `--axes` or `--brief` (every axis at 0.5 without them). Added color takes `--brand`, or the system's own primary fill without it, and its tints and surfaces are derived from the system's own page colors so they pass against what renders. When the system has no high-contrast mode, `--add color` adds a high-contrast mode for the tokens it adds and measures the system's own colors in it under "Already in the system"; those findings never block the extension.
+- `--add` adds a foundation (color, type, space, layout, radius, border, elevation, motion or imagery), generated from `--axes` or `--brief` (every axis at 0.5 without them). Added color and imagery (its wash and duotone) take `--brand`, or without it the system's own primary: the fill the mapping names, else the color whose name says primary or brand; the engine's default only when there is none, and the report says which. Added tints and surfaces are derived from the system's own page colors so they pass against what renders. A mode axis the system does not have (contrast, motion, density) is never added unless asked: the additions hold that axis's base values and the report says so. `--add-mode contrast` asks for one; the system's own colors are then measured in it under "Already in the system", and those findings never block the extension.
 - The brief works as it does for `create`: fill its structured fields (`age`, `languages`, `primary_script`, `default_scheme`, `reading_context`, `brand_role`, `product_type`) from the user's words, since the engine reads no free text for them. The report says what each field changed and lists every word it did not read. `--latin-only` with a brief whose primary script is Arabic is refused.
 - Adding type writes `fonts.css` and `fonts-self-host.css` beside the system; link them as in create step 7, or the faces never load. Adding imagery adds its tokens only: no art is written.
 - `--add-role color.focus.ring=brand-700` points one of the engine's roles at one of the system's own tokens.
 - `--contract chip.yaml` checks a contract through the mapping and copies it into `contracts/` in the out folder.
 
-The source itself stays as it is; the extension file holds only what was added, and the owner merges the two by hand when they want one file. A system read from markdown or a resolved Tailwind config gets a tokens file beside it, since neither format holds generated tokens, and the report says so under "Decisions made without you".
+The source itself stays as it is. The extension file, and the backups of every source under `.uxskill/`, sit beside the source by design, since an extension loads next to the file it extends; `--out` holds the report and the mapping only, and the result's `where` says which file went where and why. The `load` line names exactly the files the extension's tokens point at. The extension file holds only what was added, and the owner merges the two by hand when they want one file. A system read from markdown or a resolved Tailwind config gets a tokens file beside it, since neither format holds generated tokens, and the report says so under "Decisions made without you".
 
 ### 3. Read the result
 
@@ -287,9 +287,11 @@ uxskill --no-pretty contracts check design-system/contracts --tokens design-syst
 
 `--to` takes css, tailwind, figma or dtcg. An export writes into its out folder only, never over the source. tailwind is a Tailwind 4 theme whose breakpoints come from the tokens, with a phone style such as `text-hero-phone` beside each text style that steps down on a phone, used as `text-hero-phone tablet:text-hero`. tokens.json does not record which scheme opens first, so for a system that opens dark pass `--scheme dark` (or `light`); a stylesheet keeps the scheme it opens. For Figma, run `figma-variables.js` through the Figma tool in the file that owns the system: one collection per foundation with its modes, primitives hidden, roles aliasing them, matched by name so a second run updates in place. Without `--out` the export writes nothing and reports each file and its size.
 
+A field a tool does not take is reported with the nearest one it does, never ignored.
+
 `contracts check` reads the system in any format the import reads, through `--mapping` or the mapping.json beside the system, and checks each contract's schema, every role it binds and every pairing it declares, in every mode.
 
-Over MCP, call `ux_system_extend`, `ux_system_export` and `ux_contracts_check` with absolute paths. Extend takes `source`, `out` (required), `mapping`, `add`, `add_role`, `contracts`, `brand`, `axes` or `brief` (an object), `latin_only` and `force`; export takes `to`, `scheme` and `include_files`, which returns the texts, but prefer `out`; the check takes `folder`, `tokens` and `mapping`.
+Over MCP, call `ux_system_extend`, `ux_system_export` and `ux_contracts_check` with absolute paths. Extend takes `source`, `out` (required), `mapping`, `add`, `add_role`, `add_modes`, `contracts`, `brand`, `axes` or `brief` (an object), `latin_only` and `force`; export takes `to`, `scheme` and `include_files`, which returns the texts, but prefer `out`; the check takes `folder`, `tokens` and `mapping`.
 
 ## 3.x starter flow (no mode)
 

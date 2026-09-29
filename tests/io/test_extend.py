@@ -167,7 +167,7 @@ def test_the_engines_own_file_is_extended_beside_it_when_the_import_left_an_entr
 
 def test_a_foreign_stylesheet_is_never_rewritten_its_additions_go_beside_it():
     imported = _foreign()
-    result = extend(imported, MAPPING, foundations=("space",))
+    result = extend(imported, MAPPING, modes=("density",), foundations=("space",))
     assert result.problems == []
     assert list(result.tokens.axes) == ["scheme", "density"]
     assert list(result.files) == ["theme-ext.css", "mapping.json", "extend-report.md"]
@@ -186,7 +186,7 @@ def test_a_foreign_stylesheet_is_never_rewritten_its_additions_go_beside_it():
 
 
 def test_added_tokens_take_the_sources_own_naming():
-    result = extend(_foreign(), MAPPING, foundations=("space",))
+    result = extend(_foreign(), MAPPING, modes=("density",), foundations=("space",))
     assert "space-control-gap" in result.added and "space.control.gap" not in result.added
     gap = result.tokens.get("space-control-gap")
     assert (gap.value, gap.modes) == ("{space-3}", {"density:compact": "{space-2}"})
@@ -342,7 +342,7 @@ LIGHT = Mapping(roles=dict(MAPPING.roles), axes={})
 
 @pytest.mark.parametrize("add", ["border", "type"])
 def test_a_mode_the_additions_bring_never_blames_the_systems_own_tokens(add):
-    result = extend(_foreign(_light("#6b6b6b")), LIGHT, foundations=(add,))
+    result = extend(_foreign(_light("#6b6b6b")), LIGHT, modes=("contrast",), foundations=(add,))
     assert result.problems == [] and result.existing == []
     assert result.unmeasured == [
         "color.text.default (your text-body) on color.surface.page (your page) "
@@ -384,7 +384,7 @@ def test_an_added_role_that_fails_against_the_owners_fill_names_a_fix_the_owner_
     # color foundation adds on it cannot pass in high contrast.
     mapping = Mapping(roles={r: m for r, m in OFF_WHITE_MAPPING.roles.items()
                              if r != "color.text.on-action"}, axes={})
-    result = extend(_foreign(OFF_WHITE), mapping, foundations=("color",))
+    result = extend(_foreign(OFF_WHITE), mapping, modes=("contrast",), foundations=("color",))
     assert result.problems[0] == (
         "color.text.on-action on color.action.primary (your action) (contrast:high) is 4.76:1; "
         "WCAG 1.4.6 needs 7:1. Map color.text.on-action in mapping.json to one of your tokens, "
@@ -421,7 +421,7 @@ def _ratio(result, a, b, mode=""):
 
 
 def test_added_color_on_a_light_only_system_passes_against_its_own_page():
-    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, foundations=("color",))
+    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, modes=("contrast",), foundations=("color",))
     assert result.problems == [] and result.existing == [] and result.inherited == []
     assert all(p in result.added for p in SURFACES)
     # The tint stands our floor off the owner's page and no further than it
@@ -442,7 +442,7 @@ def test_added_color_on_a_light_only_system_passes_against_its_own_page():
 
 
 def test_a_light_only_system_gets_no_dark_additions_and_is_told_so():
-    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, foundations=("color",))
+    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, modes=("contrast",), foundations=("color",))
     ext = result.files["theme-ext.css"]
     assert "scheme" not in result.tokens.axes
     assert "dark" not in ext and "prefers-color-scheme" not in ext
@@ -530,7 +530,9 @@ def test_a_foreign_tokens_file_gets_an_extension_whose_tokens_alias_its_own():
     ext = json.loads(result.files["tokens-ext.json"])
     assert list(ext) == ["$extensions", "color"]
     assert ext["color"]["focus"]["ring"]["$value"] == "{brand.700}"
-    assert "list tokens-ext.json after tokens.json" in result.load
+    # The load line names exactly the file the extension points at, and what in it.
+    assert ("list tokens-ext.json after it among the token files your tools read, since its "
+            "tokens point by name at tokens in tokens.json (brand.700)") in result.load
 
 
 def test_a_paired_tokens_file_and_its_dark_sibling_are_never_rewritten(tmp_path):
@@ -630,7 +632,7 @@ TEXT_SURFACES = ("color-surface-tint", "color-surface-band", "color-surface-sunk
 
 
 def test_owner_text_that_passes_by_a_little_keeps_its_minimum_on_every_added_surface():
-    result = extend(_foreign(NEAR_AA), NEAR_AA_MAPPING, foundations=("color",))
+    result = extend(_foreign(NEAR_AA), NEAR_AA_MAPPING, modes=("contrast",), foundations=("color",))
     assert result.problems == []
     for surface in TEXT_SURFACES:
         assert surface in result.added
@@ -687,8 +689,9 @@ def test_a_light_only_system_writes_no_dark_shadow_steps():
 def test_the_default_brand_color_is_named_as_the_engines_default():
     result = extend(_foreign(DARK_ONLY), DARK_ONLY_MAPPING, foundations=("color",))
     assert ("color was generated from every axis at 0.5 and the brand color #3366FF, the "
-            "engine's default, since mapping.json maps no color.action.primary; map it there, "
-            "or pass the brand color.") in result.decisions
+            "engine's default, since mapping.json maps no color.action.primary and no color's "
+            "name says primary or brand; map it there, or pass the brand color.") \
+        in result.decisions
 
 
 def test_colors_that_cannot_be_read_are_said_and_the_engines_page_is_used(monkeypatch):
