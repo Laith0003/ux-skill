@@ -10,7 +10,7 @@ card shadow, spacing and the hero image's ratio. distance(a, b) is their
 weighted mean scaled difference, 0 for identical systems and 1 for systems
 that differ in everything. The distinctness floors apply to it.
 
-The behavior set is what shows only in use: the reveal duration, the
+The behavior set is what shows only in use: the entrance duration, the
 expressive curve's overshoot, the mono face and the focus ring's width.
 behavior(a, b) measures it apart, and distance never counts it, so two
 systems that differ only in how they move or in their focus ring are not
@@ -60,7 +60,7 @@ WEIGHTS: Mapping[str, float] = MappingProxyType({
     "hero.tracking": 0.5, "shadow.alpha": 0.5, "shadow.blur": 0.5,
 })
 # What shows only in use; behavior() weighs these equally.
-BEHAVIOR: Tuple[str, ...] = ("reveal.ms", "overshoot", "ring.px", "face.mono")
+BEHAVIOR: Tuple[str, ...] = ("arrive.ms", "overshoot", "ring.px", "face.mono")
 NAMED: Tuple[str, ...] = ("face.display", "face.text", "face.mono")
 # The widest the engine goes on each numeric feature (see the docstring).
 SPAN: Mapping[str, float] = MappingProxyType({
@@ -70,7 +70,7 @@ SPAN: Mapping[str, float] = MappingProxyType({
     "hero.px": 71.0, "hero.weight": 250.0, "hero.tracking": 4.7, "body.px": 2.0,
     "shadow.alpha": 0.14, "shadow.blur": 2.0,
     "card.padding": 16.0, "region.gap": 64.0, "hero.ratio": 1.0,
-    "reveal.ms": 150.0, "overshoot": 0.8, "ring.px": 1.0,
+    "arrive.ms": 450.0, "overshoot": 0.8, "ring.px": 1.0,
 })
 # Control corners past this read as a pill; any larger radius looks the same.
 PILL_PX = 60.0
@@ -110,7 +110,7 @@ def character_of(ts: TokenSet) -> Dict[str, Any]:
         "hero.ratio": ts.resolve("imagery.ratio.hero"),
         "face.display": ts.resolve("type.face.display")[0],
         "face.text": ts.resolve("type.face.text")[0],
-        "reveal.ms": float(ts.resolve("motion.reveal.duration")["value"]),
+        "arrive.ms": float(ts.resolve("motion.arrive.duration")["value"]),
         "overshoot": max(0.0, curve[1] - 1.0, curve[3] - 1.0),
         "ring.px": _px(ts.resolve("border.focus-ring.width")),
         "face.mono": ts.resolve("type.face.mono")[0],

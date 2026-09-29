@@ -21,26 +21,32 @@ def axes(motion=0.5, **kw):
 
 
 @pytest.mark.parametrize("motion, want", [
-    (0.0, {"motion.press": 100, "motion.reveal": 150, "motion.dismiss": 100, "motion.swap": 150,
-           "motion.expand": 200, "motion.page": 250, "motion.progress": 1200,
+    (0.0, {"motion.press": 150, "motion.state": 150, "motion.reveal": 350,
+           "motion.dismiss": 250, "motion.swap": 350, "motion.expand": 400, "motion.page": 500,
+           "motion.indicator": 200, "motion.arrive": 450, "motion.progress": 1200,
            "motion.expressive": 300}),
-    (0.5, {"motion.press": 100, "motion.reveal": 250, "motion.dismiss": 150, "motion.swap": 200,
-           "motion.expand": 250, "motion.page": 400, "motion.progress": 1200,
-           "motion.expressive": 500}),
-    (1.0, {"motion.press": 100, "motion.reveal": 300, "motion.dismiss": 200, "motion.swap": 250,
-           "motion.expand": 300, "motion.page": 500, "motion.progress": 800,
+    (0.5, {"motion.press": 150, "motion.state": 200, "motion.reveal": 350,
+           "motion.dismiss": 250, "motion.swap": 350, "motion.expand": 400, "motion.page": 450,
+           "motion.indicator": 250, "motion.arrive": 600, "motion.progress": 1200,
+           "motion.expressive": 600}),
+    (1.0, {"motion.press": 100, "motion.state": 250, "motion.reveal": 300,
+           "motion.dismiss": 250, "motion.swap": 300, "motion.expand": 350, "motion.page": 400,
+           "motion.indicator": 300, "motion.arrive": 700, "motion.progress": 800,
            "motion.expressive": 800}),
 ])
-def test_durations_follow_the_motion_axis(motion, want):
-    assert {r: duration_ms(r, motion) for r in ROLES} == want
+def test_durations_follow_pace_and_the_motion_axis(motion, want):
+    """Interaction moves follow the pace (formality slows them, energy
+    speeds them); the state, indicator, entrance, loop and decoration
+    follow the motion axis."""
+    assert {r: duration_ms(r, axes(motion)) for r in ROLES} == want
     ts = generate_motion(axes(motion)).tokens
     assert {r: ts.resolve(f"{r}.duration")["value"] for r in ROLES} == want
 
 
 def test_curves_bend_continuously_with_the_overshoot():
-    assert curves(0.0)[0] == [0.25, 0.1, 0.25, 1]
+    assert curves(0.0)[0] == [0.2, 0.8, 0.2, 1]
     assert curves(1.0)[0] == [0.34, 1.56, 0.64, 1]
-    assert curves(0.5)[0] == [0.295, 0.83, 0.445, 1]
+    assert curves(0.5)[0] == [0.27, 1.18, 0.42, 1]
     assert [distance_unit(m) for m in (0.0, 0.5, 1.0)] == [4, 6, 8]
     ts = generate_motion(axes(1.0)).tokens
     # motion 1 at formality 0.5 overshoots 0.7 of the way
@@ -67,7 +73,7 @@ def test_reduced_motion_keeps_meaning_and_drops_travel(motion):
         standard = ts.resolve(f"{role}.duration")["value"]
         if role == "motion.progress":
             assert reduced == standard
-        elif role == "motion.expressive":
+        elif role in ("motion.expressive", "motion.indicator"):
             assert reduced == 0
         else:
             assert 0 < reduced <= 100 and reduced <= standard
@@ -114,12 +120,14 @@ def test_checks_name_the_token_and_the_fix():
         "direction, so it must be -1 here"]
 
 
-def test_only_motion_and_formality_move_motion():
+def test_motion_formality_and_contrast_move_motion():
+    """Contrast reaches motion through energy, which speeds the pace."""
     base = [(t.path, t.value, t.modes) for t in generate_motion(axes()).tokens.tokens()]
-    other = axes(warmth=0.0, contrast=1.0, density=1.0, geometry=0.0, type_personality=0.0)
+    other = axes(warmth=0.0, density=1.0, geometry=0.0, type_personality=0.0)
     assert [(t.path, t.value, t.modes) for t in generate_motion(other).tokens.tokens()] == base
-    formal = axes(formality=1.0)
-    assert [(t.path, t.value, t.modes) for t in generate_motion(formal).tokens.tokens()] != base
+    for moved in (axes(formality=1.0), axes(contrast=1.0)):
+        assert [(t.path, t.value, t.modes) for t in generate_motion(moved).tokens.tokens()] \
+            != base
 
 
 def test_dtcg_round_trip_and_css_for_reduced_motion_and_rtl():
@@ -191,7 +199,8 @@ def test_only_travel_removal_cites_wcag_and_distances_keep_their_unit():
         "reduced-curve": "system", "dismiss-faster": "system", "progress-linear": "system",
         "progress-keeps-pace": "system", "mirrored-motion": "system",
         "press-in-place": "system", "linear-progress-only": "system",
-        "reduced-not-longer": "system", "progress-floor": "system"}
+        "reduced-not-longer": "system", "progress-floor": "system",
+        "response-head": "system", "reduced-scroll": "2.3.3"}
     ts = _roles_set(motion__reveal__distance=("dimension", "{motion.x.a}", {}))
     report = gate(ts, [], CHECKS, raise_on_fail=False)
     assert [(f.check, f.criterion, f.message) for f in report.failures] == [
@@ -548,7 +557,7 @@ def test_a_broken_expressive_role_gives_one_finding_per_property():
          "motion.expressive.distance travels 28px under reduced motion; point its "
          "motion:reduced override at motion.distance.0"),
         ("expressive-removed", "system", "direction:ltr,motion:reduced",
-         "motion.expressive.duration lasts 800ms under reduced motion; decoration is removed "
+         "motion.expressive.duration lasts 700ms under reduced motion; decoration is removed "
          "under reduced motion, our rule, so point its motion:reduced override at "
          "motion.duration.0")]
 

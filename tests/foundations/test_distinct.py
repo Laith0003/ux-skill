@@ -68,7 +68,7 @@ def test_what_shows_only_in_use_never_counts_at_a_glance():
     """Two systems that differ only in motion, the mono face and the ring
     width look the same on a first look: glance distance 0."""
     a = character_of(build_system(AxisValues(**MID), REFERENCE_BRAND).tokens)
-    b = dict(a, **{"reveal.ms": a["reveal.ms"] + 150, "overshoot": a["overshoot"] + 0.8,
+    b = dict(a, **{"arrive.ms": a["arrive.ms"] + 450, "overshoot": a["overshoot"] + 0.8,
                    "ring.px": a["ring.px"] + 1, "face.mono": a["face.mono"] + " Other"})
     assert distance(a, b) == 0.0
     assert behavior(a, b) == 1.0

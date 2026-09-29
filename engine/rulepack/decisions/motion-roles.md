@@ -1,10 +1,10 @@
 ---
 id: motion-roles
 title: Motion has seven interaction roles and reduced motion is a mode
-status: active
+status: superseded
 areas: [motion]
 supersedes: null
-superseded_by: null
+superseded_by: motion-roles-by-pace
 ---
 
 # Motion has seven interaction roles and reduced motion is a mode

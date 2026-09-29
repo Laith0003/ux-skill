@@ -81,8 +81,8 @@ QUANTITIES = {
         ("card image ratio", lambda ts: ts.resolve("imagery.ratio.card"), 1, 0.15),),
     ("motion", "motion"): (
         ("expressive overshoot", lambda ts: ts.resolve("motion.expressive.curve")[1], 1, 0.3),
-        ("reveal duration ms", lambda ts: ts.resolve("motion.reveal.duration")["value"],
-         1, 100)),
+        ("entrance duration ms", lambda ts: ts.resolve("motion.arrive.duration")["value"],
+         1, 150)),
     ("contrast", "layout"): (
         ("desktop landing gap px", lambda ts: _px(ts.resolve("layout.landing-gap.desktop")),
          -1, 32),),

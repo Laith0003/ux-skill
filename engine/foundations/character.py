@@ -612,6 +612,34 @@ def overshoot(axes: AxisValues) -> float:
     return round(clamp(axes.motion * (1.0 - 0.6 * axes.formality)), 4)
 
 
+def motion_pace(axes: AxisValues) -> float:
+    """How long interaction moves take, 0 (quick) to 1 (unhurried):
+    formality slows them and energy speeds them, the way measured award
+    pages move (formal brands about 450ms on long curves, loud ones about
+    300ms with overshoot); 0.5 at the middle of the axes."""
+    return clamp(0.5 + 0.6 * (axes.formality - 0.5) - 0.6 * (energy(axes) - 0.5))
+
+
+def press_scale(axes: AxisValues) -> float:
+    """How far a pressed control scales down, as the scale it takes: 0.985
+    for a still, formal brand to 0.96 for a kinetic one, by the motion axis
+    held back by formality."""
+    return round(0.985 - 0.025 * clamp(axes.motion * (1.0 - 0.5 * axes.formality)), 3)
+
+
+# The motion axis value from which inertial scroll starts, and the most it
+# takes at motion 1.
+SCROLL_FROM = 0.6
+
+
+def scroll_strength(axes: AxisValues) -> float:
+    """How strongly scrolling glides after the input stops, 0 to 1: 0 up to
+    SCROLL_FROM on the motion axis, rising to 1 at motion 1, held back by
+    formality."""
+    return round(clamp((axes.motion - SCROLL_FROM) / (1.0 - SCROLL_FROM))
+                 * (1.0 - 0.5 * axes.formality), 2)
+
+
 def regularity(axes: AxisValues) -> float:
     """How regular generated art is: formal art sits on a grid, playful art
     scatters."""

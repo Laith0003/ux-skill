@@ -161,7 +161,7 @@ def test_what_figma_variables_cannot_hold_is_listed():
         "their variables have no scope.",
         "Durations are given in ms and have no scope, since no Figma field binds a duration, "
         "so they read back as plain numbers.",
-        "21 sizes have no size scope, since no Figma field binds them or no role points at "
+        "22 sizes have no size scope, since no Figma field binds them or no role points at "
         "them, so they read back as plain numbers."]
 
 
@@ -308,9 +308,9 @@ def test_an_export_read_back_gives_the_same_names_and_values():
                       if ts.get(t.path).type == "dimension" and t.type == "number")
     assert unscoped[:4] == ["border.width.0", "border.width.4", "layout.width.1120",
                             "layout.width.1440"]
-    assert len(unscoped) == 21
+    assert len(unscoped) == 22
     assert payload["notes"][-1] == (
-        "21 sizes have no size scope, since no Figma field binds them or no role points at "
+        "22 sizes have no size scope, since no Figma field binds them or no role points at "
         "them, so they read back as plain numbers.")
 
 

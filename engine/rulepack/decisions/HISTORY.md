@@ -38,6 +38,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Border roles are widths for four jobs plus the focus ring](border-roles.md)
 - [Elevation is four shadows and a stacking order; surfaces are color](elevation-roles.md)
 - [Motion has seven interaction roles and reduced motion is a mode](motion-roles.md)
+- [Motion has ten interaction roles, formality slows them, energy speeds them, and curves are long-tail ease-outs](motion-roles-by-pace.md)
 - [Layout tokens cover the page grid; regions and panes belong to page patterns](layout-scope.md)
 - [Layout tokens cover the page grid and its regions; panes belong to page patterns](page-regions.md)
 - [Page regions are spaced per tier, and one alias follows the viewport](page-regions-by-tier.md)
@@ -144,6 +145,8 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Neighbouring type levels stay at least 1.08 times apart after rounding](type-levels-apart.md)
 - [Curves bend continuously, and decoration has one role that reduced motion removes](expressive-motion.md)
 - [Curves bend continuously, decoration leaves under reduced motion by our rule, and each motion property has one check](motion-check-owners.md)
+- [Every move answers at once, a direct response half done in 70ms and an entrance in 140ms](moves-answer-at-once.md)
+- [A press scales a little and scrolling may glide, both by the motion axis, and neither runs under reduced motion](press-scale-and-glide.md)
 
 ## Components
 

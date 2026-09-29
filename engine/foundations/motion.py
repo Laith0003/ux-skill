@@ -26,7 +26,7 @@ from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.foundations.values import duration_ms as literal_ms
 from engine.synthesizer.axes import AxisValues
 
-DURATIONS_MS = (0, 50, 100, 150, 200, 250, 300, 400, 500, 800, 1200)
+DURATIONS_MS = (0, 50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600, 700, 800, 1200)
 REDUCED_MAX_MS = 100
 # Our floor for one cycle of a loop: shorter repeats more than three times
 # a second.
@@ -34,23 +34,71 @@ LOOP_MIN_MS = 334
 LINEAR = [0, 0, 1, 1]
 GENTLE = [0.4, 0, 0.6, 1]
 # The plain and the springy end of each curve (out, in, in-out, expressive);
-# character.overshoot places every curve between them.
-PLAIN = ([0.25, 0.1, 0.25, 1], [0.42, 0, 1, 1], [0.42, 0, 0.58, 1], [0.3, 0.7, 0.4, 1])
+# character.overshoot places every curve between them. The plain out and
+# expressive ends are long-tail ease-outs: most of the move happens early,
+# so a longer duration still answers at once.
+PLAIN = ([0.2, 0.8, 0.2, 1], [0.42, 0, 1, 1], [0.42, 0, 0.58, 1], [0.16, 1, 0.3, 1])
 SPRINGY = ([0.34, 1.56, 0.64, 1], [0.36, 0, 0.66, -0.56], [0.68, -0.6, 0.32, 1.6],
            [0.3, 1.8, 0.5, 1])
-# role -> (ms when the motion axis is 0, ms when it is 1, curve, distance step or None)
-ROLES: Dict[str, Tuple[int, int, str, object]] = {
-    "motion.press": (100, 100, "out", None),
-    "motion.reveal": (150, 300, "out", 1),
-    "motion.dismiss": (100, 200, "in", 1),
-    "motion.swap": (150, 250, "in-out", None),
-    "motion.expand": (200, 300, "in-out", None),
-    "motion.page": (250, 500, "out", 2),
-    "motion.progress": (1200, 800, "linear", None),
+# role -> (ms at one end, ms at the other, curve, distance step or None,
+# what moves it). "pace": character.motion_pace, from quick to unhurried;
+# "motion": the motion axis, from still to kinetic; "state": the motion
+# axis held back by formality; "arrive": the motion axis and formality.
+ROLES: Dict[str, Tuple[int, int, str, object, str]] = {
+    "motion.press": (100, 150, "out", None, "pace"),
+    # a change of visual state in place: hover, selected, pressed
+    "motion.state": (150, 240, "out", None, "state"),
+    "motion.reveal": (200, 450, "out", 1, "pace"),
+    "motion.dismiss": (150, 350, "in", 1, "pace"),
+    "motion.swap": (200, 450, "out", None, "pace"),
+    "motion.expand": (250, 500, "out", None, "pace"),
+    "motion.page": (300, 600, "out", 2, "pace"),
+    # a shared marker sliding to the current item: tabs, navigation, menus
+    "motion.indicator": (200, 280, "out", None, "motion"),
+    # a section or an element arriving as the page is read
+    "motion.arrive": (350, 800, "out", 2, "arrive"),
+    "motion.progress": (1200, 800, "linear", None, "motion"),
     # decoration: removed under reduced motion
-    "motion.expressive": (300, 800, "expressive", 3),
+    "motion.expressive": (300, 800, "expressive", 3, "motion"),
 }
 EXPRESSIVE = "motion.expressive"
+# Roles removed under reduced motion: decoration, and the indicator, which
+# snaps to the current item instead of sliding.
+REMOVED = (EXPRESSIVE, "motion.indicator")
+# How soon a move answers, our rule: a direct response (press, state, swap,
+# indicator) reaches half its travel within DIRECT_T50 ms and nine tenths
+# within DIRECT_T90 ms; an entrance (reveal, expand, arrive, page,
+# expressive) reaches half within ENTRANCE_T50 ms.
+DIRECT = ("motion.press", "motion.state", "motion.swap", "motion.indicator")
+ENTRANCES = ("motion.reveal", "motion.expand", "motion.arrive", "motion.page", EXPRESSIVE)
+DIRECT_T50, DIRECT_T90, ENTRANCE_T50 = 70.0, 220.0, 140.0
+
+
+def _bezier(p1: float, p2: float, s: float) -> float:
+    return 3 * (1 - s) ** 2 * s * p1 + 3 * (1 - s) * s * s * p2 + s ** 3
+
+
+def settle_ms(duration: float, curve: List[float], fraction: float) -> float:
+    """When a move of `duration` ms on the cubic-bezier `curve` first
+    reaches `fraction` of its travel, in ms. The curve's parameter is
+    searched in 2000 steps for the first crossing and bisected within it,
+    so an overshooting curve counts its first arrival."""
+    x1, y1, x2, y2 = curve
+    steps = 2000
+    prev = 0.0
+    for i in range(1, steps + 1):
+        s = i / steps
+        if _bezier(y1, y2, s) >= fraction:
+            lo, hi = prev, s
+            for _ in range(40):
+                mid = (lo + hi) / 2
+                if _bezier(y1, y2, mid) >= fraction:
+                    hi = mid
+                else:
+                    lo = mid
+            return duration * _bezier(x1, x2, hi)
+        prev = s
+    return float(duration)
 
 
 def curves(overshoot: float) -> List[List[float]]:
@@ -65,9 +113,23 @@ def distance_unit(motion: float) -> int:
     return 4 + int(4 * motion + 0.5)
 
 
-def duration_ms(role: str, motion: float) -> int:
-    still, kinetic = ROLES[role][0], ROLES[role][1]
-    target = still + (kinetic - still) * motion
+def _driver(role: str, axes: AxisValues) -> float:
+    kind = ROLES[role][4]
+    if kind == "pace":
+        return character.motion_pace(axes)
+    if kind == "state":
+        return character.clamp(axes.motion * (1.0 - 0.3 * axes.formality) + 0.15 * (
+            1.0 - axes.formality))
+    if kind == "arrive":
+        return character.clamp(0.6 * axes.motion + 0.4 * axes.formality)
+    return axes.motion
+
+
+def duration_ms(role: str, axes: AxisValues) -> int:
+    """The role's duration: its two ends placed by what moves it, snapped
+    to DURATIONS_MS, a tie going to the longer step."""
+    a, b = ROLES[role][0], ROLES[role][1]
+    target = a + (b - a) * _driver(role, axes)
     return min(DURATIONS_MS, key=lambda d: (abs(d - target), -d))
 
 
@@ -86,11 +148,17 @@ def generate_motion(axes: AxisValues) -> Generated:
         ts.add(Token(f"motion.distance.{step}", "dimension", {"value": unit * mult, "unit": "px"}))
     ts.add(Token("motion.sign.forward", "number", 1))
     ts.add(Token("motion.sign.backward", "number", -1))
+    scale = character.press_scale(axes)
+    for v in sorted({scale, 1.0}):
+        ts.add(Token(f"motion.scale.{int(round(v * 1000))}", "number", v))
+    glide = character.scroll_strength(axes)
+    for v in sorted({glide, 0.0}):
+        ts.add(Token(f"motion.glide.{int(round(v * 100))}", "number", v))
 
-    for role, (_, _, curve, distance) in ROLES.items():
-        ms = duration_ms(role, m)
+    for role, (_, _, curve, distance, _) in ROLES.items():
+        ms = duration_ms(role, axes)
         reduced_ms = ms if role == "motion.progress" else (
-            0 if role == EXPRESSIVE else min(ms, REDUCED_MAX_MS))
+            0 if role in REMOVED else min(ms, REDUCED_MAX_MS))
         ts.add(Token(f"{role}.duration", "duration", "{motion.duration.%d}" % ms,
                      modes={} if reduced_ms == ms else
                      {"motion:reduced": "{motion.duration.%d}" % reduced_ms},
@@ -101,10 +169,21 @@ def generate_motion(axes: AxisValues) -> Generated:
         if distance is not None:
             ts.add(Token(f"{role}.distance", "dimension", "{motion.distance.%d}" % distance,
                          modes={"motion:reduced": "{motion.distance.0}"}, layer="semantic"))
+        if role == "motion.press":
+            ts.add(Token(SCALE, "number", "{motion.scale.%d}" % int(round(scale * 1000)),
+                         modes={} if scale == 1.0 else {"motion:reduced": "{motion.scale.1000}"},
+                         layer="semantic"))
     ts.add(Token("motion.inline-sign", "number", "{motion.sign.forward}",
                  modes={"direction:rtl": "{motion.sign.backward}"}, layer="semantic"))
-    return Generated(tokens=ts, notes=[f"motion: overshoot {o:g} from motion {m:g} and formality "
-                                       f"{axes.formality:g}, {unit}px travel step"])
+    ts.add(Token("motion.scroll", "number", "{motion.glide.%d}" % int(round(glide * 100)),
+                 modes={} if glide == 0.0 else {"motion:reduced": "{motion.glide.0}"},
+                 layer="semantic"))
+    notes = [f"motion: overshoot {o:g} from motion {m:g} and formality {axes.formality:g}, "
+             f"{unit}px travel step, pace {character.motion_pace(axes):.2f} (swap "
+             f"{duration_ms('motion.swap', axes)}ms, arrive "
+             f"{duration_ms('motion.arrive', axes)}ms), press scale {scale:g}, inertial scroll "
+             f"{glide:g}"]
+    return Generated(tokens=ts, notes=notes)
 
 
 # role suffix -> the token type its checks read
@@ -113,9 +192,10 @@ SUFFIX_TYPES: Dict[str, str] = {"duration": "duration", "curve": "cubicBezier",
 SIGN = "motion.inline-sign"
 # Role path -> token type; the build's role-types check reports any other
 # type once, and the checks below skip it.
+SCALE, SCROLL = "motion.press.scale", "motion.scroll"
 ROLE_TYPES: Dict[str, str] = {
     **{f"{r}.{suffix}": t for r in ROLES for suffix, t in SUFFIX_TYPES.items()},
-    SIGN: "number",
+    SIGN: "number", SCALE: "number", SCROLL: "number",
 }
 
 
@@ -327,12 +407,29 @@ def _where(ts: TokenSet, mode: str) -> Tuple[str, str]:
     return (f" under {key}", f"its {key} override") if key else ("", "it")
 
 
+# A pressed control scales to between PRESS_SCALE[0] and PRESS_SCALE[1].
+PRESS_SCALE = (0.95, 1.0)
+
+
 def _press_in_place(ts: TokenSet, mode: str) -> List[str]:
     """A press confirms where the finger is: any press travel is 0 in every
-    context. Under reduced motion, reduced-travel already names a
+    context, and its scale sits within PRESS_SCALE, exactly 1 under reduced
+    motion. Under reduced motion, reduced-travel already names a
     travelling press role, so it is not repeated."""
     owned = set(_roles_with(ts, "distance")) if "motion:reduced" in mode else set()
     out = []
+    if _typed(ts, SCALE):
+        v = ts.resolve(SCALE, mode)
+        if "motion:reduced" in mode:
+            if v != 1 and not _seen_ltr(ts, mode, lambda m: ts.resolve(SCALE, m)):
+                under, key = _reduced_where(ts, mode)
+                out.append(f"{SCALE} is {v:g} under {under}; under reduced motion a press does "
+                           f"not change size, so point its {key} override at a scale of 1")
+        elif not PRESS_SCALE[0] <= v <= PRESS_SCALE[1] and _new_here(ts, SCALE, mode):
+            where, what = _where(ts, mode)
+            out.append(f"{SCALE} is {v:g}{where}; a press scales to between "
+                       f"{PRESS_SCALE[0]:g} and {PRESS_SCALE[1]:g}, so point {what} at a "
+                       "scale in that range")
     for t in ts.tokens():
         if not (t.path.startswith("motion.press.") and t.type == "dimension") or t.path in owned:
             continue
@@ -399,6 +496,47 @@ def _reduced_not_longer(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _response_head(ts: TokenSet, mode: str) -> List[str]:
+    """A move answers at once, our rule: a direct response reaches half its
+    travel within DIRECT_T50 ms and nine tenths within DIRECT_T90 ms, an
+    entrance half within ENTRANCE_T50 ms (settle_ms). Reduced motion keeps
+    its own caps, so this reads standard motion only."""
+    if "motion:reduced" in mode:
+        return []
+    out = []
+    for role in DIRECT + ENTRANCES:
+        d, c = f"{role}.duration", f"{role}.curve"
+        if not (_typed(ts, d) and _typed(ts, c)):
+            continue
+        if _seen_ltr(ts, mode, lambda m: (_ms(ts, d, m), ts.resolve(c, m))):
+            continue
+        ms, curve = _ms(ts, d, mode), ts.resolve(c, mode)
+        limits = ((0.5, DIRECT_T50), (0.9, DIRECT_T90)) if role in DIRECT \
+            else ((0.5, ENTRANCE_T50),)
+        for fraction, limit in limits:
+            t = settle_ms(ms, curve, fraction)
+            if t > limit + 0.5:
+                where = _where(ts, mode)[0]
+                out.append(f"{role} reaches {fraction:.0%} of its travel at {t:.0f}ms{where} "
+                           f"({ms:g}ms on {curve}); a move answers within {limit:g}ms, so "
+                           "shorten it or point its curve at a stronger ease-out such as "
+                           "motion.curve.out")
+                break
+    return out
+
+
+def _reduced_scroll(ts: TokenSet, mode: str) -> List[str]:
+    """Under reduced motion scrolling does not glide: motion.scroll is 0."""
+    if "motion:reduced" not in mode or not _typed(ts, SCROLL):
+        return []
+    v = ts.resolve(SCROLL, mode)
+    if v == 0 or _seen_ltr(ts, mode, lambda m: ts.resolve(SCROLL, m)):
+        return []
+    under, key = _reduced_where(ts, mode)
+    return [f"{SCROLL} is {v:g} under {under}; scrolling that glides on after the input is "
+            f"motion from interaction, so point its {key} override at 0"]
+
+
 def _progress_floor(ts: TokenSet, mode: str) -> List[str]:
     """The loop lasts at least LOOP_MIN_MS in every context. The floor is
     ours: WCAG 2.3.1 limits flashes, not durations, and a loop quicker than
@@ -459,6 +597,8 @@ CHECKS: Tuple[Check, ...] = (
     Check("reduced-not-longer", "system", _reduced_not_longer, axes=_BOTH),
     Check("progress-floor", "system", _progress_floor, axes=_BOTH),
     Check("expressive-removed", "system", _expressive_removed, axes=_BOTH),
+    Check("response-head", "system", _response_head, axes=_BOTH),
+    Check("reduced-scroll", "2.3.3", _reduced_scroll, axes=_BOTH),
 )
 
 

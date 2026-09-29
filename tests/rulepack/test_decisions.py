@@ -54,6 +54,7 @@ EXPECTED = {
     "two-voice-headline", "capitals-track-open", "lines-break-balanced",
     "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",
     "sections-meet-by-a-seam",
+    "motion-roles-by-pace", "moves-answer-at-once", "press-scale-and-glide",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -97,7 +98,8 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "the-full-type-ladder": "display-lines-sit-tight",
               "type-along-the-scale": "weights-stay-light",
               "landing-gap": "landing-rhythm-follows-the-brand",
-              "layout-bounds": "measures-count-characters"}
+              "layout-bounds": "measures-count-characters",
+              "motion-roles": "motion-roles-by-pace"}
 
 
 def test_every_shipped_record_is_valid_and_routed():
