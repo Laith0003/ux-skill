@@ -91,7 +91,7 @@ Worked example:
 ```
 [High] [READ] Form error names the problem but not the action
 Evidence: resources/views/auth/login.blade.php:42 — "This field has an error."
-Fix: Replace with "Phone number must be in international form. Add a country code, e.g. +962 79 786 8335."
+Fix: Replace with "Phone number must be in international form. Add a country code, e.g. +962 79 000 0000."
 ```
 
 Worked example, second:

@@ -9,7 +9,6 @@ The plugin is opinionated because the work is. Every reference in this plugin is
 ## Contact
 
 - LinkedIn: https://www.linkedin.com/in/laithaljunaidy/
-- Phone: +962 79 786 8335
 
 ## For
 
