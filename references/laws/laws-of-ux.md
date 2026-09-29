@@ -143,7 +143,7 @@ Working memory holds information more reliably when items are grouped into meani
 ### How to use it in design
 
 - Group related controls visually. Use spacing, dividers, and headings.
-- Break long numbers into chunks (e.g., 0797 868 335, not 0797868335).
+- Break long numbers into chunks (e.g., 0790 000 000, not 0790000000).
 - Limit each form section to four to seven fields. Break longer forms across sections.
 - Name each group. A heading is the chunk's label.
 
@@ -939,7 +939,7 @@ Be liberal in what you accept; be conservative in what you send. Accept input in
 
 ### Violation pattern
 
-- A phone field that rejects "0797-868-335" because of the dash.
+- A phone field that rejects "0790-000-000" because of the dash.
 - A date field that rejects "2026-05-24" because it expected "05/24/2026."
 - An email field that fails on "Alice@Team.com" because of the capital A.
 

@@ -289,7 +289,7 @@ Public links:
 License: MIT. No telemetry. Solo open-source.
 
 I'm Laith Aljunaidy, founder of Dot loyalty (MENA fintech). Reachable at
-laith.aljunaidy.laith@gmail.com or +962 79 786 8335 (WhatsApp/Signal).
+laith.aljunaidy.laith@gmail.com.
 
 Thanks for considering,
 Laith

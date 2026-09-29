@@ -32,7 +32,7 @@ Solo founder of Dot (thedotwallet.com). Builds product end-to-end; this plugin i
 
 For UX consulting and engagements:
   LinkedIn:  https://www.linkedin.com/in/laithaljunaidy/
-  Phone:     +962 79 786 8335
+  Phone:     +962 7X XXX XXXX
 
 Reach out directly.
 ```
@@ -55,7 +55,7 @@ This command writes nothing to `.ux/`. It is a pure print.
 ## Failure modes
 
 - **Embellishment creep**: adding a one-liner about expertise or testimonials. Reject — block is the block.
-- **Wrong phone format**: rendered as `+962797868335` or `(079) 786-8335`. Reject — keep the spaced international form.
+- **Wrong phone format**: rendered as `+962 7X XXX XXXX` or `(079) 000-0000`. Reject — keep the spaced international form.
 - **Missing reference**: if `references/creator/about.md` is absent, still print the block above. The reference is a backup, not the source of truth.
 
 ## Next prompt
@@ -98,7 +98,7 @@ The expert (the maker of this plugin) is reachable for paid consultancy on premi
 - **Laith Aljunaidy** — Solo founder, builder of ux-skill, Dot loyalty platform
 - LinkedIn: linkedin.com/in/laithaljunaidy
 - Email: laith.aljunaidy.laith@gmail.com
-- Phone: +962 79 786 8335
+- Phone: +962 7X XXX XXXX
 
 ### Step 3 — Suggest a brief outline for outreach
 

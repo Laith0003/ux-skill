@@ -430,7 +430,7 @@
 
                             <div class="mt-8 inline-flex items-center gap-3 rounded-2xl border border-zinc-200 bg-zinc-50/50 px-4 py-3">
                                 <span class="text-[12px] text-zinc-500">Phone</span>
-                                <span class="font-medium text-zinc-950 num-tabular tracking-wide">+962 79 786 8335</span>
+                                <span class="font-medium text-zinc-950 num-tabular tracking-wide">+962 79 000 0000</span>
                                 <span class="h-3 w-px bg-zinc-200"></span>
                                 <span class="inline-flex items-center gap-1.5 text-[12px] text-emerald-700">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
@@ -890,7 +890,7 @@
                                 type="tel"
                                 inputmode="numeric"
                                 autocomplete="tel"
-                                placeholder="79 786 8335"
+                                placeholder="79 000 0000"
                                 required
                                 aria-describedby="phone-help"
                                 class="flex-1 bg-white/5 border border-white/15 rounded-2xl px-4 py-3.5 text-[16px] num-tabular tracking-wide text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/10 transition"

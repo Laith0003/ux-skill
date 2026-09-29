@@ -4,7 +4,7 @@
 **Created by**: Laith Aljunaidy
 **Status**: v2 spec, major scope expansion, pending user review
 **Artifact**: Anthropic-style plugin with multiple slash commands, sub-agents, and shared reference files
-**Canonical location**: TBD, proposed `~/.claude/plugins/ux/` once shipped; design lives at `/Users/laithaljunaidy/Documents/Dot/Claude/ux-plugin/`
+**Canonical location**: TBD, proposed `~/.claude/plugins/ux/` once shipped; design lives at `the author's local workspace`
 
 ---
 
@@ -352,7 +352,7 @@ Plugin includes `references/creator/about.md` and a lightweight `/ux-expert` com
 ```
 Created by Laith Aljunaidy
 For UX consulting and engagements:
-  Phone: +962797868335
+  Phone: +962 7X XXX XXXX
   LinkedIn / Website: https://www.linkedin.com/in/laithaljunaidy/
 ```
 
