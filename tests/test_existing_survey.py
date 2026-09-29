@@ -7,6 +7,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from engine.existing import detect_existing_system
 
 # Arabic words, written as escapes so the file stays ASCII.
@@ -172,15 +174,36 @@ def test_without_any_use_the_best_action_name_is_chosen_and_the_owner_is_asked(
         "rest, so confirm it is the action color.")
 
 
-def test_a_primary_that_cannot_carry_text_is_not_declared(tmp_path: Path) -> None:
-    _write(tmp_path, "styles/theme.css", ":root { --paper: #FFFFFF; --primary: #F4F4F5; "
+@pytest.mark.parametrize("css", [
+    "--primary: #F97316; --primary-foreground: #FFFFFF;",
+    "--brand: #0EA5E9;",
+    "--color-primary: #22C55E; --color-on-primary: #FFFFFF;",
+    "--brand: #FACC15; --ink: #111111;",
+    "--primary: #F4F4F5;",
+], ids=["orange", "sky", "green", "yellow", "near-white"])
+def test_a_color_named_primary_or_brand_is_read_whatever_its_contrast(
+        tmp_path: Path, css: str) -> None:
+    _write(tmp_path, "styles/theme.css", ":root { --paper: #FFFFFF; --gap: 4px; %s }" % css)
+    declared = detect_existing_system(tmp_path)["declared"]
+    name, value = css.split(";")[0].split(": ")
+    assert (declared["primary_token"], declared["primary"]) == (name.strip(), value.strip())
+    assert "primary_note" not in declared
+
+
+def test_a_light_action_color_carries_dark_text(tmp_path: Path) -> None:
+    _write(tmp_path, "styles/theme.css", ":root { --paper: #FFFFFF; --gap: 4px; --accent: #FACC15; }")
+    assert detect_existing_system(tmp_path)["declared"]["primary_token"] == "--accent"
+
+
+def test_a_near_white_tint_as_the_only_action_color_is_not_declared(tmp_path: Path) -> None:
+    _write(tmp_path, "styles/theme.css", ":root { --paper: #FFFFFF; --accent: #F4F4F5; "
                                           "--ink: #111111; }")
     declared = detect_existing_system(tmp_path)["declared"]
     assert "primary" not in declared
     assert declared["primary_note"] == (
-        "no primary candidate can carry a button's text: --primary (#F4F4F5) is a tint of the "
-        "page, a hover or surface fill; name the action color primary, or pass it as the brand "
-        "primary by hand.")
+        "no color is named primary or brand, and no action color can carry a button's text: "
+        "--accent (#F4F4F5) is a tint of the page, a hover or surface fill; name the action "
+        "color primary, or pass it as the brand primary by hand.")
 
 
 # ---------------------------------------------------------------- languages
@@ -451,3 +474,23 @@ def test_locale_files_and_a_dynamic_dir_set_the_language(tmp_path: Path) -> None
     declared = detect_existing_system(tmp_path)["declared"]
     assert declared["languages"] == ["ar", "en"]
     assert declared["direction"] == "rtl"
+
+
+def test_a_theme_named_widget_is_not_a_system(tmp_path: Path) -> None:
+    _write(tmp_path, "src/toggle.css",
+           ".theme-toggle { --t-bg: #FFFFFF; --t-fg: #111111; --t-knob: #0F766E; }\n"
+           ".dark-switch { --s-bg: #111111; --s-fg: #FFFFFF; --s-gap: 4px; }\n")
+    _write(tmp_path, "src/widget.css",
+           "[data-mode=compact] { --w-gap: 4px; --w-pad: 8px; --w-edge: #D0D5DD; }\n")
+    assert detect_existing_system(tmp_path)["found"] is False
+
+
+def test_an_import_that_resolves_outside_the_compared_files_is_named(tmp_path: Path) -> None:
+    _write(tmp_path, "packages/tokens/tokens.css", SYSTEM_TOKENS)
+    _write(tmp_path, "node_modules/@lantern/tokens/tokens.css", SYSTEM_TOKENS)
+    _write(tmp_path, "apps/web/app/globals.css",
+           '@import "@lantern/tokens/tokens.css";\n:root { --brand: #0F766E; }\n' + COMPONENTS)
+    [entry] = detect_existing_system(tmp_path)["declared"]["disagreements"]
+    assert entry["wins"] == ""
+    assert ("apps/web/app/globals.css imports @lantern/tokens/tokens.css, which resolves to "
+            "node_modules/@lantern/tokens/tokens.css, not to either of these files") in entry["why"]

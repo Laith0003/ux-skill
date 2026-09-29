@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import re
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
@@ -40,6 +41,14 @@ _SIMPLE = re.compile(r"\.([A-Za-z][\w-]*)|\[([\w-]+)(?:\s*[~|^$*]?=\s*(?:\"[^\"]
 # attribute that switches one (data-theme, data-mode, data-color-scheme,
 # the engine's own data-density, data-contrast, data-motion, dir and lang).
 _THEME_CLASS = re.compile(r"(?:^|-)(?:theme|dark|light|mode|scheme)(?:$|-)", re.I)
+# Words that make a theme-named class a widget: .theme-toggle, .dark-switch.
+_WIDGET_WORDS = frozenset(("toggle", "switch", "switcher", "box", "button", "btn", "picker",
+                           "menu", "icon", "card", "panel", "modal", "badge", "tab", "tabs",
+                           "link", "label", "input", "select", "dropdown", "tooltip", "popover",
+                           "bar", "nav", "item", "banner", "preview", "sample", "swatch"))
+# A selector that names a scheme: .dark, .light-mode, [data-theme=dark].
+_SCHEME_NAMED = re.compile(r"(?:^|[.\-])(?:dark|light)(?:$|[\-.\[:\s])"
+                           r"|=\s*[\"']?(?:dark|light)\b", re.I)
 _THEME_ATTR = re.compile(r"^(?:(?:data-)?(?:[a-z]+-)?(?:theme|mode|scheme)|data-density|"
                          r"data-contrast|data-motion|dir|lang)$", re.I)
 
@@ -73,13 +82,21 @@ def declares(text: str) -> bool:
     return bool(_DECLARES.search(text))
 
 
-def _rules(text: str, every: bool = False) -> List[Any]:
+def _rules(text: str) -> Tuple[Any, ...]:
+    """Every rule of a stylesheet with all its declarations, parsed once
+    for every reader here (a stylesheet is read for tokens, paints, the
+    data face and disagreements)."""
+    return _parsed(text)
+
+
+@lru_cache(maxsize=512)
+def _parsed(text: str) -> Tuple[Any, ...]:
     from engine.foundations.errors import InputError
     from engine.io.css_in import parse_css  # engine.io imports this package
     try:
-        return parse_css(text, every=every)
+        return tuple(parse_css(text, every=True))
     except (InputError, ValueError):
-        return []
+        return ()
 
 
 def _members(selector: str) -> List[str]:
@@ -105,7 +122,8 @@ def _theme_member(member: str) -> bool:
         m = _SIMPLE.match(rest, pos)
         if not m:
             return False
-        if not rooted and ((m.group(1) and not _THEME_CLASS.search(m.group(1)))
+        if not rooted and ((m.group(1) and (not _THEME_CLASS.search(m.group(1)) or set(
+                m.group(1).lower().split("-")) & _WIDGET_WORDS))
                            or (m.group(2) and not _THEME_ATTR.match(m.group(2)))):
             return False
         pos = m.end()
@@ -127,9 +145,13 @@ def css_token_file(name: str, text: str) -> bool:
     or component stylesheet (`.dp { --dp-bg: ... }`) is not one."""
     if not declares(text):
         return False
-    rules = _rules(text, every=True)
-    theme = sum(1 for r in rules if _themed(r.selector)
-                for d in r.declarations if d.name.startswith("--"))
+    rules = _rules(text)
+    # Theme selectors off the root count only in a file that sets the root
+    # or names a scheme: a widget's [data-mode=compact] block is its own.
+    themed = [r for r in rules if _themed(r.selector)]
+    if not any(_rooted(r.selector) or _SCHEME_NAMED.search(r.selector) for r in themed):
+        return False
+    theme = sum(1 for r in themed for d in r.declarations if d.name.startswith("--"))
     if theme < _MIN_THEME_PROPS:
         return False
     total = sum(len(r.declarations) for r in rules)
@@ -222,7 +244,7 @@ def button_paints(names: Sequence[str], files: Sequence[Path]) -> Dict[str, int]
             text = read_text(path)
             if "{" not in text:
                 continue
-            for rule in _rules(text, every=True):
+            for rule in _rules(text):
                 button = bool(_BUTTON_SEL.search(rule.selector))
                 link = bool(_LINK_SEL.search(rule.selector))
                 if not (button or link) or _STATE_PSEUDO.search(rule.selector):
@@ -354,7 +376,7 @@ def data_face(styles: Sequence[Path], files: Sequence[Path],
     or a metric element whose --font-* token the system defines. `family`
     turns a value (a var() or a list) into the face's name."""
     for path in styles:
-        for rule in _rules(read_text(path), every=True):
+        for rule in _rules(read_text(path)):
             if not _DATA_SEL.search(rule.selector):
                 continue
             for d in rule.declarations:
@@ -446,6 +468,8 @@ def css_values(text: str, layered: bool = False) -> Dict[Tuple[str, str], Tuple[
         rank = (0 if inside else 1, spec)
         ctx = _context(rule.selector)
         for d in rule.declarations:
+            if not d.name.startswith("--"):
+                continue
             key = (ctx, d.name)
             if key not in out or rank >= out[key][1]:
                 out[key] = (d.value.strip(), rank)
@@ -590,6 +614,8 @@ class _Order:
         self.after: Dict[Path, set] = {}
         self.imports: Dict[Path, set] = {}
         self.unresolved: Dict[Path, List[str]] = {}
+        # Imports that resolve to a stylesheet outside the compared set.
+        self.outside: Dict[Path, List[Tuple[str, str]]] = {}
         self.layered: set = set()
 
 
@@ -601,6 +627,7 @@ def _load_order(css_paths: Sequence[Path], texts: Dict[Path, str], files: Sequen
     for p in css_paths:
         direct[p] = set()
         order.unresolved[p] = []
+        order.outside[p] = []
         for ref, tail in _IMPORT.findall(_blank_comments(texts[p])):
             if re.match(r"^[a-z][a-z0-9+.-]*:", ref, re.I):
                 continue
@@ -613,6 +640,12 @@ def _load_order(css_paths: Sequence[Path], texts: Dict[Path, str], files: Sequen
                 direct[p].add(target)
                 if re.search(r"\blayer\b", tail):
                     order.layered.add(target)
+            elif ref.lower().endswith(STYLE_SUFFIXES):
+                try:
+                    shown = target.relative_to(base).as_posix()
+                except ValueError:
+                    shown = target.name
+                order.outside[p].append((ref, shown))
     for p in css_paths:
         seen, stack = set(), list(direct[p])
         while stack:
@@ -684,6 +717,13 @@ def _winner(rows: List[Tuple[Path, str, str, str, str, Rank]], order: _Order,
                 return None, (f"{names} set it with equal weight, and {where} imports {ref}, "
                               "which could not be resolved here, so which one the page loads "
                               "last is not known; keep one value")
+            away = [(rel[e[0]], ref, target) for e in ranked
+                    for ref, target in order.outside.get(e[0], [])]
+            if away:
+                where, ref, target = away[0]
+                return None, (f"{names} set it with equal weight, and {where} imports {ref}, "
+                              f"which resolves to {target}, not to either of these files, so which one the page loads last is not "
+                              "known; keep one value, or import the file the system keeps")
             return None, (f"{names} set it with equal weight and neither loads the other, so the "
                           "stylesheet the page loads last wins; keep one value, or import one "
                           "file from the other so the order is written down")

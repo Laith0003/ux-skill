@@ -87,6 +87,8 @@ _TEXT_MIN_CONTRAST = 4.5   # on white or the declared canvas
 # A near-white (or near-canvas) tint: a hover or surface fill, never the primary.
 _TINT_CONTRAST = 1.5
 _TINT_CHROMA = 0.2
+# The dark text a light fill carries.
+_NEAR_BLACK = "#111111"
 _DISPLAY_WORDS = {"display", "heading", "headline", "head", "title"}
 _BODY_WORDS = {"body", "base", "text", "sans", "default", "ui", "copy"}
 # Platform keywords a font list may open with: the face is the system's own.
@@ -438,16 +440,20 @@ def _on_color(name: str, named: Dict[str, str]) -> str:
 
 
 def _holds_text(name: str, hx: str, named: Dict[str, str], canvas: str) -> str:
-    """"" when a primary candidate can carry a button's text, else why not:
-    a near-white tint of the page never can, and a fill needs 4.5:1 against
-    its own text color, or against the page when it has none."""
+    """"" when an action color read as a fallback can carry a button's
+    text, else why not: a near-white tint of the page never can, and a fill
+    needs 4.5:1 against the best of its own text color, white and
+    near-black text. Never asked of a color the owner named primary or
+    brand: the owner's declaration wins."""
     page = canvas or "#FFFFFF"
     if _contrast(hx, page) < _TINT_CONTRAST and _chroma(hx) < _TINT_CHROMA:
         return "%s (%s) is a tint of the page, a hover or surface fill" % (name, hx)
     on = _on_color(name, named)
-    if max(_contrast(hx, on) if on else 0.0, _contrast(hx, page)) < _TEXT_MIN_CONTRAST:
+    texts = ([on] if on else []) + ["#FFFFFF", _NEAR_BLACK]
+    if max(_contrast(hx, t) for t in texts) < _TEXT_MIN_CONTRAST:
         return ("%s (%s) reaches under 4.5:1 against %s, so it cannot carry a button's text"
-                % (name, hx, "its text color %s" % on if on else "the page"))
+                % (name, hx, "its text color %s, white and near-black" % on if on
+                   else "white and near-black text"))
     return ""
 
 
@@ -457,11 +463,14 @@ def _choose_primary(cands: List[Tuple[str, str, str]], files: List[Path],
     """(the chosen (name, hex), why, every candidate with its paint count
     when there are several). A name that says primary or brand wins; an
     action color name (accent, action, cta, interactive) is read only when
-    none does. A candidate that cannot carry a button's text never wins.
+    none does. A color named primary or brand is the owner's declaration
+    and wins whatever its contrast; an action color read as a fallback that
+    cannot carry a button's text never wins.
     Of several at one rank, the one the code paints buttons and links with
     most at rest wins; with no such use, the best name. (("", ""), why, ...)
     when no candidate can carry text."""
-    refused = {c[0]: _holds_text(c[0], c[1], named, canvas) for c in cands}
+    refused = {c[0]: _holds_text(c[0], c[1], named, canvas) if c[2] in _ACTION_WORDS else ""
+               for c in cands}
     paints = survey.button_paints([c[0] for c in cands], files) if len(cands) > 1 else {}
     listed = [{"token": n, "value": h, "paints": paints[n]} for n, h, _ in cands] \
         if len(cands) > 1 else []
@@ -496,8 +505,9 @@ def _choose_primary(cands: List[Tuple[str, str, str]], files: List[Path],
         over = ("; a name that says primary or brand wins over %s" % ", ".join(rest)
                 if rest and word in _PRIMARY_WORDS else "")
         return (name, hx), "%s was chosen because %s%s%s." % (name, how, over, tail), listed
-    return ("", ""), ("no primary candidate can carry a button's text: %s; name the action color "
-                      "primary, or pass it as the brand primary by hand."
+    return ("", ""), ("no color is named primary or brand, and no action color can carry a "
+                      "button's text: %s; name the action color primary, or pass it as the brand "
+                      "primary by hand."
                       % "; ".join(refused[c[0]] for c in cands)), listed
 
 
@@ -781,9 +791,12 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
 
     The primary is a color whose name says primary or brand; a name that
     says accent, action, cta or interactive is read only when none does (a
-    leading fill word, as in bg-brand, is allowed). A candidate that cannot
-    carry a button's text (a near-white tint of the page, or under 4.5:1
-    against its own text color and the page) never wins. Of several at one
+    leading fill word, as in bg-brand, is allowed). A color named primary or
+    brand is the owner's declaration and is read whatever its contrast (the
+    lint measures contrast); an action color read as a fallback never wins
+    when it cannot carry a button's text (a near-white tint of the page, or
+    under 4.5:1 against the best of its own text color, white and
+    near-black). Of several at one
     rank, the one the code fills buttons and links with most at rest wins:
     hover and focus paints are not counted, and class strings in cva, clsx
     and cn calls are. ``primary_candidates`` lists each with its count and
