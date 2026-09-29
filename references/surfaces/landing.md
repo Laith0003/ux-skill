@@ -169,7 +169,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 - **Animated counters**: when the metric is the proof. Skip when the number is incidental.
 - **Numbered "how it works"**: when the product has a clear onboarding arc. Skip if it's a single tool with no sequence.
 - **"Before / after" comparison**: when there's a clear status-quo competitor to displace. Skip in greenfield categories.
-- **Logo strip**: when 6+ recognizable customers can be named and the logos resemble the reader (their size, their market). Skip with 3 logos, it looks thin. When the page has room for one proof item, a named quote from the reader's own segment outranks the strip.
+- **Logo strip**: when 6+ recognizable customers can be named and the logos resemble the reader (their size, their market). Skip with 3 logos, it looks thin. With room for one proof item only, choose a named quote from a customer like the reader over the strip; it outranks the strip.
 - **Bento grids**: when 5-8 distinct capabilities need showcasing. Skip for 3, it looks underbuilt.
 - **Chapter-framework narrative**: when the product is large enough to feel like a journey. Skip on single-purpose tools.
 - **Ambient hero motion**: when the page is otherwise quiet. Don't stack motion on motion.
@@ -198,7 +198,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 - One headline, one supporting line, one primary CTA (filled) and at most one secondary (ghost button or text link), one product image or short motion. The CTA section below holds the button rules.
 - Above the fold, nothing else fights for attention. No carousel, no slideshow, no rotating taglines.
 - **H1 line limit.** The H1 runs 3 lines at most at every breakpoint from 375px to 1440px; a 4-line H1 fails. Meet the limit by widening the headline's container up to `layout.container.max`, and by tightening the words, never by shrinking `type.text.display` or adding a size of your own.
-- **One argument to one reader.** Read the headline, subhead, visual and CTA as one unit and name the argument each one makes. The usual break is a change of reader between headline and subhead (the operator's pain, then a line for procurement). The CTA matches the buying motion the copy implies: "Start free" under copy written for a procurement team contradicts it. Fix the one element that argues something else, not all four. Two checks: a stranger shown only the first screen can say what it is and who it is for; and with a competitor's name in the headline, the headline stops being true.
+- **One argument to one reader.** The first screen is a single case made to a single person. Before building it, write one line for what the page claims and one for who it claims it to; the headline, the lede, the image and the button each serve that pair, or they are rewritten. Drift shows up most between the headline and the lede, when the first speaks to the person doing the work and the second to the person who pays. The button follows how this reader buys: a self-serve verb such as "Start free" does not sit under copy aimed at a buying committee, which expects "Talk to sales" or "Book a demo". Change only the part that drifted. The first screen passes the stranger test (shown only that screen, someone new names the product and its reader) and the swap test (a rival's name in the headline makes it false).
 - A "Built for X" line ("Built for finance", "Built for sales teams") under or beside the H1 pre-qualifies the visitor in one breath. It never sits above the H1; the eyebrow owns that slot.
 
 ### Hero patterns
@@ -298,7 +298,7 @@ Breaks to prevent: links wrapping to a second row, the wordmark stacking mid-nam
 
 ### Sticky-header budget on mobile
 
-Total sticky or fixed top chrome is about one row: target 72px or less, hard ceiling about 96px. The budget covers everything that loads over the page, not only the top: a consent banner, a promo bar, a chat launcher and a sticky bar at the bottom take the same phone screen, and together they routinely take a third of it. With all of them present at load, the primary action still shows on the first phone screen, uncovered (/ux-design responsive gate, check (f)). Only the primary nav and its single CTA persist on scroll. A decorative or utility bar (ratings, announcement) is not sticky; it sits at the top and scrolls away. If the summed height of everything pinned exceeds the ceiling, cut what sticks until only the nav row remains. The sticky element wraps the nav alone: a sticky element is bounded by its containing block, so a utility bar left inside the sticky `<header>` both inflates the budget and lets the nav unstick once that box scrolls past.
+Total sticky or fixed top chrome is about one row: target 72px or less, hard ceiling about 96px. The budget covers everything that loads over the page, not only the top: a consent banner, a promo bar, a chat launcher and a sticky bar at the bottom take the same phone screen. With all of them present at load, the primary action still shows on the first phone screen, uncovered (/ux-design responsive gate, check (f)). Only the primary nav and its single CTA persist on scroll. A decorative or utility bar (ratings, announcement) is not sticky; it sits at the top and scrolls away. If the summed height of everything pinned exceeds the ceiling, cut what sticks until only the nav row remains. The sticky element wraps the nav alone: a sticky element is bounded by its containing block, so a utility bar left inside the sticky `<header>` both inflates the budget and lets the nav unstick once that box scrolls past.
 
 ### Utility and announcement topbar
 
@@ -349,7 +349,7 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 ## Pricing
 
 - **Homepage pricing is a teaser.** Full pricing tables on the homepage feel sales-driven. Tease with a "starts at" line and a link to the pricing page.
-- **A price a visitor can multiply.** Every price states its currency, billing period, basis (per seat, per account, per unit of use) and what happens past the limit. A fee every customer pays sits in the table, not a footnote: "from 29" beside "onboarding from 500" means the entry price is 529, and the table says so. "From" with no range reads as an opening bid; give the range. Show the annual price itself, not only the discount.
+- **A price a visitor can multiply.** Every price states its currency, billing period, basis (per seat, per account, per unit of use) and what happens past the limit. A fee every customer pays sits in the table, not a footnote: "from 29" beside "onboarding from 500" means the entry price is 529, and the table says so. A bare "From" price, with nothing to say where it stops, sounds like a haggle; give the range. Show the annual price itself, not only the discount.
 - **Adjacent plans differ in one sentence.** If one sentence cannot say how two neighboring plans differ, the boundary between them is wrong, not the copy; say so to the owner.
 - **Two to four plans.** One plan is marked as the recommended choice with one visual device (a border, a label, or a tint), not three.
 - **Every plan states who it is for** in one line before it lists features.
@@ -368,14 +368,14 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 |---|---|
 | Generic "Get Started" / "Learn More" as the only CTA | Specific verbs naming what happens next: "Run the demo", "See the dashboard", "Open account", "Start free", "Deploy", "Run a query" |
 | Multiple primary CTAs above the fold | One primary, optionally one secondary. Two filled CTAs of equal weight dilute the primary path |
-| Form fields asking for too much in the first interaction | Each field names what reads it (routing, a report, the person who calls back); a field nothing reads is cut. A field whose answer the visitor must fetch (an account number, a tax id) costs more than three they can type from memory, and a required field that invites a made-up value is worse than none |
+| Form fields asking for too much in the first interaction | Each field names what reads it (routing, a report, the person who calls back); a field nothing reads is cut. Weigh fields by effort, not by count: a reference the visitor has to dig out of a drawer or another tab (an account number, a tax id) is heavier than several they know by heart. A required field people fill with something made up is worse than leaving it out |
 | Modal popups for newsletter signup on a timer | Newsletter signup goes in the footer or a sidebar component, not in a time-triggered interstitial. A timed modal that opens before the offer could be read interrupts the reading it depends on |
 | Floating chat widgets overlapping the primary CTA | Position chat where it can't compete, or hide it on the hero. A chat launcher never takes the same corner as a sticky CTA; the bottom corner nearest the thumb belongs to the ask |
-| Two overlays on screen together on a phone (a consent banner and a chat launcher, a promo bar and a sticky bar) | Two overlays on a phone at once is a blocker: show one, and let the next wait until the first is dismissed. An overlay that covers the primary action is a defect, not a trade-off |
+| Two overlays on screen together on a phone (a consent banner and a chat launcher, a promo bar and a sticky bar) | A phone shows at most one overlay at a time besides the nav; the next one waits until the first is dismissed. Nothing may sit on top of the primary action: when something does, move it or remove it, whatever it is for |
 | Sticky chatbot bubbles in the corner on first load | None. Wait for engagement |
 | Cookie banners blocking first paint | Slim, monochrome, bottom-bar or sidebar treatment that respects the page |
 
-- **One action, one label.** The same action carries the same words everywhere on the page: the header, the hero, a sticky bar, the closing band (the lint rule `one-action-several-labels` checks it). The label says what happens next and promises what the form really asks: a button that offers a free audit above a form that asks for a budget breaks the promise even when every word is true. Count how many different commitments the first screen offers at the same visual weight; if it is more than one, the page has not decided. Secondary paths are text links.
+- **One action, one label.** The same action carries the same words everywhere on the page: the header, the hero, a sticky bar, the closing band (the lint rule `one-action-several-labels` checks it). The label says what happens next and promises what the form really asks: a button that offers a free audit above a form that asks for a budget breaks the promise even when every word is true. On the first screen, only one ask looks like the main one; two asks drawn at the same size and color are a page that has not chosen. Secondary paths are text links.
 - **The final CTA band repeats the primary action**, with the same verb as the hero CTA, on a full-width band with the page's strongest contrast: a tinted band, a full-dark band, or the brand's strongest color. One line restates the value proposition above a single filled CTA. The hero held back; the closer does not.
 - **A FAQ, when present, sits above the final CTA**, never below it.
 - **FAQ questions come from the customer.** Each one is an objection from the brief, in the customer's wording turned into a question, never rewritten into the brand's voice. With no objections supplied, the FAQ answers only the operational questions the client's own material answers (price, delivery, what happens next), and the self-review says the FAQ was not built from customer words.
@@ -384,7 +384,7 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 
 ### At the ask
 
-At the field where they commit, a cautious visitor wants to know who runs this, what happens to their data, what happens if it goes wrong, when someone will contact them, and whether they can get their money back. The answers the client's material supports sit next to the form or the payment field, not in the footer: a refund policy three screens away does not answer a hesitation at the card field. The heavier the `commitment`, the more of them the page needs (the picker lists them in `at_the_ask`): a missing company name is minor beside a newsletter field and disqualifying beside a checkout. An answer the client cannot give is listed for the owner, never invented.
+The place a visitor hesitates is the field that asks for something. Put the reassurance there: the company behind the page and a way to reach it, how the details they type are kept, the refund or cancellation terms, and when and how the next step reaches them (the money back, the data and the next step each answered in a line). The answers the client's material supports sit next to the form or the payment field, not in the footer: a refund policy three screens away does not answer a hesitation at the card field. The heavier the `commitment`, the more of them the page needs (the picker lists them in `at_the_ask`): a missing company name is minor beside a newsletter field and disqualifying beside a checkout. An answer the client cannot give is listed for the owner, never invented.
 
 ---
 
@@ -430,7 +430,7 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 
 **Verdict.** Ships once the chat launcher waits for the banner and the approval objection is answered with the one-page summary the client already sends to the partner who signs.
 
-**Refused.** The "10,000+" count has no definition and no date, so it is not shown; the stats bar carries the 1,240 figure alone. No testimonial is written to fill the dropped section. No forecast of how many more contracts the page will win: that is measured after launch, never promised in the build notes.
+**Refused.** The "10,000+" count says neither what it counts nor since when, so it is not shown; the stats bar carries the 1,240 figure alone. No testimonial is written to fill the dropped section. No forecast of how many more contracts the page will win: that is measured after launch, never promised in the build notes.
 
 ---
 

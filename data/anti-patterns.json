@@ -3644,7 +3644,7 @@
         "target": "markup",
         "post": "one-action-several-labels"
       },
-      "why": "The hero says \"Get started\" and the sticky bar says \"Try it now\" for the same page: the reader wonders whether they are two different things, and the clicks split across two names so neither reads as the primary action.",
+      "why": "A page that names one action three ways (a header button, a hero button and a closing band that each say something different) makes the reader stop and compare them, and the one thing the page asks for stops reading as one thing.",
       "fix": "Give every call to action that does the same thing (the same destination, the same form) the same words, the verb of the hero's button. A different next step gets a different label and, when it is secondary, a text link."
     }
   ]

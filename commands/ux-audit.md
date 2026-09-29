@@ -46,7 +46,7 @@ Check: does the surface match the audience and outcome from the framing? Is the 
 
 If the framing is missing, this lens checks: does the surface have a clear "who is this for and what changes for them?" signal — or is it generic?
 
-Two named checks run on every page: the **stranger test** (from the first screen alone, a stranger can say what it is and who it is for) and the **swap test** (with a competitor's name in the headline, the headline stops being true; if it still holds, it says nothing). Findings state counts, not adjectives: "four buttons of equal weight on the first screen", not "cluttered".
+Every page gets two named checks. The **stranger test**: show someone new only the first screen and ask them to name the product and its reader; a page that needs the scroll to answer fails. The **swap test**: put a rival's name into the headline; a headline that stays true says nothing about this product. Write findings as counts, never adjectives: "four filled buttons above the fold", not "cluttered".
 
 #### Lens 2 — DISCOVER
 

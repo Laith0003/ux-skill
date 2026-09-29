@@ -82,7 +82,7 @@ that sequence is the page skeleton. Build all of it, not a hero plus a few cards
 - **Map all source content into it.** Every sector the brief lists becomes a Category pill; every size or package becomes an Item card; every benefit becomes a Value card or a checklist item. One source item, one element. Do not trim a long list to a tidy three.
 - **Proof is the client's or it is absent.** A section with a `proof` kind renders only with the client's real numbers, named quotes, logos or reviews. Never invent one to fill a section; drop the section and say why.
 - **Ship the conversion mechanisms** the sequence returns. One the client cannot back (no phone, no quotes) is already in `dropped`.
-- **Each section has a job** (`ask`, `proof`, `objection`, `explanation`, `navigation`); name it per section in your self-review. FAQ questions come from `objection_map` in the customer's words, and every item of `at_the_ask` is answered next to the form or payment field from the client's material, or listed for the owner.
+- **Each section has a job** (`ask`, `proof`, `objection`, `explanation`, `navigation`); name it per section in your self-review. FAQ questions come from `objection_map`, worded as the customer wrote them, and every item of `at_the_ask` is answered next to the form or payment field from the client's material, or listed for the owner.
 - **Icons** follow the one icon rule in `commands/ux-design.md` (Hard rules, Icons).
 
 A sparse page that ignores the sequence is a richness failure.
@@ -183,7 +183,7 @@ Fix until all four are clean. Horizontal scroll, a wrapping nav/label, and an ov
 Placeholder content has to be GOOD, or it tells the AI tell:
 - Names: invent unique, plausible ones (not "John Doe", "Jane Smith", "Sarah Chan")
 - Brands: invent contextual names (not "Acme", "Nexus", "SmartFlow", "Zenith")
-- Numbers: organic and messy (`47.2%`, not `50%`; `+1 (312) 847-1928`, not `1234567`)
+- Numbers: stand-in data inside a product mock is irregular (`47.2%`, not `50%`). A figure the page claims is the client's own, as the client gives it, with what it counts and as of when; with no definition or date it becomes a plain fact line with its basis, or the section drops. Never make a figure look precise.
 - Avatars: real or curated on-brand portraits, or distinct styled SVG initials — NEVER Lucide user-egg icons, and never a random/unseeded placeholder service
 - Filler words banned: "Elevate", "Seamless", "Unleash", "Next-Gen", "Revolutionize"
 

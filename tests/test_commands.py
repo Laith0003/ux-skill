@@ -222,10 +222,38 @@ def _real_descriptions() -> dict:
             if not _is_alias(p)}
 
 
-def test_the_overlap_measure_catches_a_copied_description():
+# A sentence of this many words or more may not appear in two descriptions.
+MIN_SHARED_WORDS = 5
+
+
+def _sentences(text: str) -> set:
+    out = set()
+    for part in re.split(r"(?<=[.!?])\s+|;\s+", text):
+        words = re.findall(r"[a-z0-9]+", part.lower())
+        if len(words) >= MIN_SHARED_WORDS:
+            out.add(" ".join(words))
+    return out
+
+
+def _shared_sentences(desc: dict) -> list:
+    names = sorted(desc)
+    return [(a, b, s) for i, a in enumerate(names) for b in names[i + 1:]
+            for s in sorted(_sentences(desc[a]) & _sentences(desc[b]))]
+
+
+def test_one_shared_activation_sentence_is_caught():
     desc = _real_descriptions()
-    assert _overlap(desc["ux-audit"], desc["ux-audit"]) == 1.0
-    assert _overlap(desc["ux-audit"], desc["ux-audit"] + " Also motion.") > MAX_OVERLAP
+    line = ("Use when the user wants a review of the page, a check of what is wrong, or a "
+            "pass before shipping.")
+    desc["ux-copy"] += " " + line
+    desc["ux-critique"] += " " + line.upper()
+    assert _overlap(desc["ux-copy"], desc["ux-critique"]) <= MAX_OVERLAP
+    assert [(a, b) for a, b, _ in _shared_sentences(desc)] == [("ux-copy", "ux-critique")]
+
+
+def test_no_two_command_descriptions_share_a_sentence():
+    shared = _shared_sentences(_real_descriptions())
+    assert not shared, f"a sentence shared by two descriptions leaves routing to chance: {shared}"
 
 
 def test_no_two_command_descriptions_overlap_enough_to_confuse_routing():

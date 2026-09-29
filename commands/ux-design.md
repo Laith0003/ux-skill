@@ -656,7 +656,7 @@ Exit code non-zero means a high+ finding landed in your output. Fix before decla
 - **(d) Header-bar children do not collide/overlap** — `nowrap` (the fix for (c)) does not always cause horizontal scroll; inside a flex bar it can instead make the wordmark **overlap the CTA** while `scrollWidth == innerWidth` AND each label still measures one line — so (a), (b), and (c) ALL pass on a visibly-broken bar (observed). Catch it directly: no two of the header bar's one-row children's rects may intersect, i.e. each child's `right` must stay within the next child's `left` (and within the bar's content box). When the wordmark cannot fit beside the logo + CTA without colliding, the fix is to shrink it or **collapse to the logomark** (hide the words) — never overlap, never two lines.
 - **(e) The sticky/fixed top chrome is not too tall** — sum the `offsetHeight` of every **top-anchored** `position:sticky` / `position:fixed` element, **de-duped for nesting** (drop any element contained by another in the set; count the OUTERMOST only, so a sticky child inside a sticky parent is not double-counted). "Top-anchored" means it pins at the top: computed `position` is sticky/fixed AND computed `top` ≈ 0. **Do NOT also require resting `getBoundingClientRect().top` ≈ 0** — when a non-sticky utility bar sits ABOVE a `sticky; top:0` header, that header's rest `rect.top` equals the bar's height (e.g. ~26px), so a rest-rect check would wrongly EXCLUDE the very header this gate exists to measure. A bottom-fixed bar (`bottom:0`, so `top:auto`) yields `NaN` for `top` and is excluded; a `top:80px` side rail is excluded by `|top| > 1`. **FAIL if the sum exceeds ~96px (hard ceiling) OR > ~20% of `window.innerHeight`.** This is the bug observed on a real phone: a tall sticky header (~168px — a utility bar stacked to four centered lines, pinned together with the nav) crushes the viewport and reads as broken. The page TARGET is ≤72px (one nav row); the 96px is the absolute gate ceiling. An over-tall sticky header is a failure — report it and fix it (drop decorative bars out of the sticky container so only the nav stays pinned, trim padding) before declaring done. Note: a sticky element is bounded by its containing block, so the correct fix is to keep the sticky wrapper around the nav ALONE — a utility bar left inside the sticky `<header>` both inflates this number AND lets the nav unstick once the header box scrolls past.
 
-- **(f) The primary action is on the first phone screen, uncovered.** Load the page with every fixed or sticky element it ships present at load, including a consent banner, a promo bar and a chat launcher. The chrome pinned to the top and to the bottom together leaves a band of the first viewport; the primary action's box must intersect that band, and `document.elementFromPoint` at its center must return the action or something inside it, so nothing covers it. **FAIL if the action sits below the band or under an overlay, or if two overlays other than the top nav are on screen together** (a consent banner and a chat launcher, a sticky bar and a promo bar). Responsive means the layout reflows; this checks that the ask survived the reflow.
+- **(f) The primary action is on the first phone screen, uncovered.** Load the page with every fixed or sticky element it ships present at load, including a consent banner, a promo bar and a chat launcher. The chrome pinned to the top and to the bottom together leaves a band of the first viewport; the primary action's box must intersect that band, and `document.elementFromPoint` at its center must return the action or something inside it, so nothing covers it. **FAIL if the action sits below the band or under an overlay, or if two overlays other than the nav's own bar are on the first screen together** (a consent banner and a chat launcher, a promo bar at the top and a sticky bar at the bottom). Only what is on the first screen at load counts: a sticky table header further down the page is not an overlay. Responsive means the layout reflows; this checks that the ask survived the reflow.
 
 **Point the selectors at the page under test: they are named per page, NOT auto-detected.** The snippet has three constants at the top (`NAV_ROW`, `WORDMARK`, `LABELS`), defaulted to this page's (skiphire) real values as a worked example. Set them to the page you are checking: the *innermost* nav row (NOT the whole `<header>`: the utility/announcement topbar is a separate bar, so policing the whole header false-flags it as "wrapped"), the brand wordmark element, and the *isolated* label spans (a label that has been wrapped in its own `<span>` away from any icon/chip). A fourth constant, `PRIMARY`, names the page's primary action as it renders at load, for check (f). The sticky-height check (e) needs NO selector: it auto-discovers every top-anchored sticky/fixed element. Do NOT replace these with generic `header [class*=nav]` / "first link in header" structural guesses: that was tried and it mis-resolves the whole header instead of the nav row and the topbar mailto link instead of the wordmark, producing a false-positive storm. The operator running this gate just built the page and can read its markup; aiming three selectors is the contract. **Non-resolution is LOUD, not silent:** if any target resolves nothing, the snippet prints a `WARNING` and the gate is DEGRADED to horizontal-scroll-only: which is exactly the blind spot this gate exists to close, so treat a degraded run as unverified until the selectors are fixed. Any button without an isolated label span is reported "unmeasured" (never false-flagged by measuring button+chip): wrap its label in a span or eyeball it.
 
@@ -749,31 +749,40 @@ with sync_playwright() as p:
             tag: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).trim().split(/\\s+/)[0] : ''),
             h: el.offsetHeight }));
           const stickyTotal = stickyEls.reduce((s, e) => s + e.h, 0);
-          // (f) the primary action on the first phone screen, under ALL fixed chrome present at
-          //     load: top-pinned (above) plus bottom-pinned (consent banner, sticky bar). Covered
-          //     when elementFromPoint at its centre is not the action. Overlays = every visible
-          //     fixed/sticky element that is not pinned to the top.
-          const pinned = [...document.querySelectorAll('*')].filter(el => {
+          // (f) the primary action on the first phone screen, under every pinned element that is
+          //     ON the first screen at load: promo bars and the nav at the top, consent banners,
+          //     chat launchers and sticky bars at the bottom. A pinned element whose box is not in
+          //     the first viewport (a sticky table header far down the page) is not counted.
+          //     Overlays = those on-screen pinned elements, less the one that holds the nav row.
+          const onScreen = el => { const r = el.getBoundingClientRect();
+            return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth; };
+          const pinnedAll = [...document.querySelectorAll('*')].filter(el => {
             const c = getComputedStyle(el);
             return (c.position === 'sticky' || c.position === 'fixed') && shown(el); });
-          const overlays = pinned.filter(el => !sticky.includes(el))
-            .filter(el => !pinned.some(o => o !== el && o.contains(el)));
-          const bottomChrome = overlays.filter(el => Math.abs(parseFloat(getComputedStyle(el).bottom)) <= 1)
-            .reduce((s, el) => s + el.offsetHeight, 0);
+          const pinned = pinnedAll.filter(el => !pinnedAll.some(o => o !== el && o.contains(el)))
+            .filter(onScreen);
+          const navHost = navBar ? pinned.find(el => el.contains(navBar)) : null;
+          const overlays = pinned.filter(el => el !== navHost);
+          const edge = (el, side) => Math.abs(parseFloat(getComputedStyle(el)[side])) <= 1;
+          const topChrome = pinned.filter(el => edge(el, 'top'))
+            .reduce((s, el) => Math.max(s, el.getBoundingClientRect().bottom), 0);
+          const bottomChrome = pinned.filter(el => !edge(el, 'top') && edge(el, 'bottom'))
+            .reduce((s, el) => Math.max(s, window.innerHeight - el.getBoundingClientRect().top), 0);
           const primaryEl = document.querySelector(PRIMARY);
           let primary = null;
           if (primaryEl && shown(primaryEl)) {
             const r = primaryEl.getBoundingClientRect();
-            const inBand = r.bottom > stickyTotal && r.top < window.innerHeight - bottomChrome;
+            const inBand = r.bottom > topChrome && r.top < window.innerHeight - bottomChrome;
             const hit = inBand ? document.elementFromPoint(r.left + r.width / 2,
-              Math.min(Math.max(r.top + r.height / 2, stickyTotal + 1), window.innerHeight - bottomChrome - 1)) : null;
+              Math.min(Math.max(r.top + r.height / 2, topChrome + 1), window.innerHeight - bottomChrome - 1)) : null;
             primary = { top: Math.round(r.top), bottom: Math.round(r.bottom), inBand,
                         covered: inBand && !(hit && (hit === primaryEl || primaryEl.contains(hit))) };
           }
           return { iw: window.innerWidth, ih: window.innerHeight, sw: document.documentElement.scrollWidth, overflow,
                    navFound: !!navBar, nav: barWrapped(navBar), wmFound: !!wmEl, labelCount: labelEls.length,
                    labels, collide, stickyEls, stickyTotal, primaryFound: !!primaryEl, primary,
-                   bottomChrome, overlayCount: overlays.length };
+                   topChrome: Math.round(topChrome), bottomChrome: Math.round(bottomChrome),
+                   overlayCount: overlays.length };
         }""")
         hscroll = m["sw"] > m["iw"]
         navwrap = m["nav"] and m["nav"]["wrapped"]
@@ -789,7 +798,7 @@ with sync_playwright() as p:
         print(f"[{w}px] iw={m['iw']} sw={m['sw']} h-scroll={hscroll} navFound={m['navFound']} nav={m['nav']}")
         print(f"        wmFound={m['wmFound']} labelSpans={m['labelCount']} labelWraps={labelwrap or 'none'} collide={m['collide'] or 'none'}")
         print(f"        sticky-chrome={sticky_total}px (ceiling 96, target <=72) too-tall={sticky_tall} parts={m['stickyEls']}")
-        print(f"        primary={pr} bottom-chrome={m['bottomChrome']}px overlays={m['overlayCount']} ask-lost={ask_lost}")
+        print(f"        primary={pr} top-chrome={m['topChrome']}px bottom-chrome={m['bottomChrome']}px overlays={m['overlayCount']} ask-lost={ask_lost}")
         if m["overflow"]: print(f"        overflowing: {m['overflow']}")
         if degraded:
             print("        WARNING: a target (NAV_ROW / WORDMARK / LABELS / PRIMARY) resolved nothing; point it at THIS page's elements. "

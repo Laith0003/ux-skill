@@ -975,7 +975,7 @@ _PREVIEW_BODY = """
     <a class="nav-link" href="#overview">Overview</a>
     <a class="nav-link" href="#components">Components</a>
     <a class="nav-link" href="#tokens">Tokens</a>
-    <a class="btn btn-primary btn-sm" href="#start">Get started</a>
+    <a class="btn btn-primary btn-sm" href="#start">Start with the tokens</a>
   </div>
 </nav>
 
@@ -988,7 +988,7 @@ _PREVIEW_BODY = """
       <h1>{{NAME}}</h1>
       <p class="sh-hero-sub">{{DESC}}</p>
       <div class="sh-hero-actions">
-        <a class="btn btn-primary btn-lg" href="#start">Primary action</a>
+        <a class="btn btn-primary btn-lg" href="#start">Start with the tokens</a>
         <a class="btn btn-secondary btn-lg" href="#components">Documentation</a>
       </div>
     </div>

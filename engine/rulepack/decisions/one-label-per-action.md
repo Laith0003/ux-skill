@@ -11,7 +11,7 @@ superseded_by: null
 
 ## Context
 
-A landing page repeats its primary action in the header, the hero, a sticky bar and the closing band. Generated pages give each repeat its own words ("Get started" in the hero, "Try it now" in the bar), so the reader cannot tell whether they are one thing or two, and the clicks split across two names.
+A landing page repeats its primary action in the header, the hero, a sticky bar and the closing band. Generated pages word each repeat afresh, so a reader who meets the action a third time under a third name has to work out whether it is the same step.
 
 ## Decision
 
@@ -27,4 +27,4 @@ data/anti-patterns.json one-action-several-labels; engine/linter/structure.py on
 
 ## Consequences
 
-A different next step, such as watching a demo beside starting a trial, has its own destination and its own label, and it is a text link when it is secondary. A link styled as a plain text link is not compared, so a footer that names a page differently from the nav stays quiet.
+A different next step, such as watching a demo beside starting a trial, has its own destination and its own label, and it is a text link when it is secondary. A link styled as a plain text link is not compared, so a footer that names a page differently from the nav stays quiet. Buttons for different plans that share one destination ("Choose Basic" and "Choose Pro" both to /signup) fire, and the fix is to carry the plan in the link (/signup?plan=pro), not to give them one label: the label promises a plan the link must carry.

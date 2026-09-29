@@ -192,6 +192,8 @@ def _objections(fields: Mapping[str, Any]) -> List[Dict[str, str]]:
         if not isinstance(item, Mapping):
             raise ValueError(f"{at}: give an object with quote, type and source; got {item!r}")
         quote = item.get("quote")
+        if quote is not None and not isinstance(quote, str):
+            raise ValueError(f"{at}.quote: give the customer's words as text; got {quote!r}")
         if not isinstance(quote, str) or not quote.strip():
             raise ValueError(f"{at}.quote: paste the customer's own words (a review, a call "
                              f"note, a support ticket); it is empty")
@@ -201,6 +203,9 @@ def _objections(fields: Mapping[str, Any]) -> List[Dict[str, str]]:
                              f"{', '.join(OBJECTION_TYPES)}; use approval when the reader is "
                              f"not the one who approves the purchase")
         source = item.get("source")
+        if source is not None and not isinstance(source, str):
+            raise ValueError(f"{at}.source: name where the words come from, as text; got "
+                             f"{source!r}")
         if not isinstance(source, str) or not source.strip():
             raise ValueError(f"{at}.source: name where the words come from (a review, a sales "
                              f"call, a support ticket, a comment); it is empty")

@@ -749,7 +749,7 @@ const exampleUser = { name: 'Maya Iqbal', email: 'maya@northwind.co' };
 
 #### 19. Round-number stats
 
-**Why it's bad**: "99.99% uptime," "99.9% guaranteed," "100% money-back," "10x faster" — round-number statistics read as marketing fluff because real measurements rarely produce round numbers. Specific, organic numbers (74%, 3.2x, 18 days) signal that real measurement was done.
+**Why it's bad**: "99.99% uptime," "99.9% guaranteed," "100% money-back," "10x faster": round-number statistics read as marketing fluff because real measurements rarely produce round numbers. A figure the client measured, with what it counts and as of when, is believable whether or not it is round; a figure shaped to look measured is not.
 
 **How to detect**:
 

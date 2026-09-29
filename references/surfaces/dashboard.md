@@ -399,7 +399,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 
 **Brief.** The dispatch screen of a courier company, read through a shift on a 1440px monitor and on a phone at handover. VISUAL_DENSITY 8. The owner asks for nine figure tiles in the top row.
 
-**What the playbook decides.** Cockpit density, groups divided by hairlines instead of cards, tabular figures in every numeric column. A figure tile needs at least 2 of the 12 columns to hold its label and its number, so nine tiles need `9 * 2 = 18` columns and the row would wrap. Six fit: `6 * 2 = 12`. Two of the six pulse (late parcels and couriers on the road), the most this playbook allows in a viewport, and the other `6 - 2 = 4` stay still. Below 768px the row becomes a stack of cards, the late-parcels figure first.
+**What the playbook decides.** Cockpit density, groups divided by hairlines instead of cards, tabular figures in every numeric column. With 2 of the 12 columns as the narrowest a figure tile can be and still hold its label and its number (a house default, not a standard), nine tiles need `9 * 2 = 18` columns and the row would wrap. Six fit: `6 * 2 = 12`. Two of the six pulse (late parcels and couriers on the road), the most this playbook allows in a viewport, and the other `6 - 2 = 4` stay still. Below 768px the row becomes a stack of cards, the late-parcels figure first.
 
 **Verdict.** Six tiles in the top row, chosen by the decisions the dispatcher makes from them during a shift; the other three move to a second view one tap away.
 

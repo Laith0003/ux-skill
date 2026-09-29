@@ -70,7 +70,7 @@ def test_the_landing_playbook_states_the_ask_rule():
 
 def test_the_answers_sit_at_the_ask_and_are_never_invented():
     ask = _section(_read(LANDING), "### At the ask")
-    for need in ("who runs this", "data", "goes wrong", "money back", "`at_the_ask`"):
+    for need in ("company behind the page", "details they type", "refund", "money back", "`at_the_ask`"):
         assert need in ask, need
     assert "never invented" in ask
 
@@ -115,11 +115,14 @@ SLOP = "references/styles/anti-slop.md"
 
 
 def test_no_rule_asks_for_figures_that_look_real():
-    for rel in (LANDING, SLOP, "references/foundations/copy.md",
-                "references/process/refactor-existing.md", "data/page-sequences.json"):
+    rels = [LANDING, SLOP, "references/foundations/copy.md", "references/foundations/anti-patterns.md",
+            "references/process/refactor-existing.md", "data/page-sequences.json"]
+    rels += [str(p.relative_to(ROOT)) for p in sorted((ROOT / "agents").glob("*.md"))]
+    for rel in rels:
         text = _read(rel).lower()
         for phrase in ("organic-looking", "organic numbers", "organic, messy",
-                       "numbers organic", "read as organic", "organic, not round"):
+                       "numbers organic", "read as organic", "organic, not round",
+                       "organic and messy", "number where possible"):
             assert phrase not in text, (rel, phrase)
 
 
@@ -155,7 +158,7 @@ def test_every_stats_section_counts_something_named():
 
 def test_the_hero_makes_one_argument_to_one_reader():
     hero = _section(_read(LANDING), "### Hero composition")
-    assert "One argument" in hero and "buying motion" in hero
+    assert "One argument" in hero and "how this reader buys" in hero
     high = _section(_read(LANDING), "### High", "### ")
     assert "same reader and the same buying motion" in high
     ban = next(ln for ln in _read(LANDING).splitlines()

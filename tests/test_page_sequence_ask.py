@@ -89,6 +89,8 @@ def test_a_value_outside_the_choices_is_refused_naming_the_field_and_the_fix(fie
      "objections[0].type:", "approval"),
     ([{"quote": "a", "type": "risk", "source": "call"},
       {"quote": "Is it safe?", "type": "risk"}], "objections[1].source:", "where the words"),
+    ([{"quote": 42, "type": "price", "source": "review"}], "objections[0].quote:", "as text"),
+    ([{"quote": "Is it safe?", "type": "risk", "source": 7}], "objections[0].source:", "as text"),
 ])
 def test_a_malformed_objection_names_its_position_field_and_fix(objections, where, fix):
     with pytest.raises(ValueError) as err:
