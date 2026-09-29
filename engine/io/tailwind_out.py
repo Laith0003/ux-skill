@@ -29,7 +29,13 @@ spacing times the phone factor), so a page writes text-hero-phone
 tablet:text-hero.
 
 Any other system is written in its own names (roles=False; the caller
-always says which):
+always says which). An export of a system that is not a Tailwind
+stylesheet (namespaced) keeps each name and gives a token outside
+Tailwind 4's theme namespaces a variable in the one its name and type
+say, so utilities read it: brand.canvas as --color-brand-canvas,
+type.size-body as --text-body, layout.breakpoint-md as --breakpoint-md
+with its value. What fits no namespace is listed, never passed over in
+silence:
 a system imported from a Tailwind stylesheet comes back with its own
 selectors, resets, scheme and `@custom-variant dark` line, so imported and
 written again the text is the same. Whether a system is the engine's is
@@ -54,8 +60,8 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 from engine.existing import stamp_digest
 from engine.foundations.errors import InputError
 from engine.foundations.export import to_css
-from engine.foundations.modes import FOUNDATION_AXES, compress, contexts
-from engine.foundations.tokens import Token, TokenSet, css_property
+from engine.foundations.modes import FOUNDATION_AXES, ModeError, compress, contexts
+from engine.foundations.tokens import AliasError, Token, TokenSet, css_property
 from engine.foundations.typography import FACE_TOKENS, phone_roles, phone_token
 from engine.foundations.values import REM_PX, css_entries, dimension_px
 from engine.io.adapter import ROLE_TYPES
@@ -201,6 +207,78 @@ def to_tailwind(ts: TokenSet, forms: Optional[Mapping[str, Tuple[str, str]]] = N
     # :root block of its own, after the theme and before the overrides.
     own = f"\n:root {{\n{scheme_line}\n}}\n" if scheme_line else ""
     return "\n".join(head) + "\n" + own + "\n".join(after)
+
+
+# Tailwind 4's theme namespaces: a variable in one of them makes utilities.
+NAMESPACES: Tuple[str, ...] = (
+    "color", "font", "text", "font-weight", "tracking", "leading", "breakpoint", "container",
+    "spacing", "radius", "shadow", "inset-shadow", "drop-shadow", "blur", "perspective",
+    "aspect", "ease", "animate")
+_NS_WORDS: Tuple[Tuple[Tuple[str, ...], str, Tuple[str, ...]], ...] = (
+    # (words that name it, the namespace, the token types it holds)
+    (("breakpoint", "breakpoints", "screen", "screens", "bp"), "breakpoint", ("dimension",)),
+    (("size", "sizes", "fontsize"), "text", ("dimension",)),
+    (("radius", "radii", "rounded", "corner", "corners"), "radius", ("dimension",)),
+    (("tracking", "letterspacing"), "tracking", ("dimension",)),
+    (("leading", "lineheight"), "leading", ("dimension", "number")),
+    (("space", "spacing", "gap", "gutter"), "spacing", ("dimension",)),
+    (("family", "face", "typeface", "font"), "font", ("fontFamily",)),
+    (("weight",), "font-weight", ("fontWeight", "number")),
+    (("shadow", "elevation"), "shadow", ("shadow",)),
+    (("ease", "easing", "curve"), "ease", ("cubicBezier",)),
+)
+_TYPE_NS = {"color": "color", "fontFamily": "font", "fontWeight": "font-weight",
+            "shadow": "shadow", "cubicBezier": "ease"}
+
+
+def _words(path: str) -> List[str]:
+    return [w for w in path.replace("_", "-").replace(".", "-").lower().split("-") if w]
+
+
+def namespaced(ts: TokenSet) -> Tuple[TokenSet, List[Tuple[str, str]], List[str]]:
+    """A system in its own names with, beside each token outside Tailwind
+    4's theme namespaces, a variable in the namespace its name and type
+    say (brand.canvas as --color-brand-canvas, layout.breakpoint-md as
+    --breakpoint-md, type.size-body as --text-body), so utilities read it.
+    Each points at the token by var(), save a breakpoint, which holds the
+    value, since Tailwind reads no var() inside a media query. Returns
+    (the set, [(token, the variable beside it)], the tokens left outside
+    every namespace, which no utility reads)."""
+    out = TokenSet(ts.axes)
+    for t in ts.tokens():
+        out.add(t)
+    added: List[Tuple[str, str]] = []
+    outside: List[str] = []
+    for t in ts.tokens():
+        prop = css_property(t.path)[2:]
+        if any(prop.startswith(ns + "-") for ns in NAMESPACES):
+            continue
+        words = _words(t.path)
+        name = ""
+        for marks, ns, kinds in _NS_WORDS:
+            hit = next((i for i, w in enumerate(words) if w in marks), None)
+            if hit is not None and t.type in kinds and (ns != "text" or any(
+                    w in ("type", "text", "font", "typography") for w in words[:hit])
+                    or hit == 0):
+                rest = words[hit + 1:] or words[:hit][-1:]
+                name = f"{ns}-{'-'.join(rest)}" if rest else ""
+                break
+        if not name and t.type in _TYPE_NS:
+            name = f"{_TYPE_NS[t.type]}-{prop}"
+        if not name or out.has(name) or any(n == name for _, n in added):
+            outside.append(t.path)
+            continue
+        if name.startswith("breakpoint-"):
+            try:
+                value = ts.resolve(t.path)
+            except (AliasError, ModeError, KeyError):  # stays out, and is said so
+                outside.append(t.path)
+                continue
+            out.add(Token(name, t.type, value))
+        else:
+            out.add(Token(name, t.type, "{" + t.path + "}", layer="semantic"))
+        added.append((t.path, name))
+    return out, added, outside
 
 
 def in_roles(imported: Imported) -> bool:

@@ -546,3 +546,25 @@ def test_the_package_keeps_its_names_and_adds_the_exporter():
                  "RESETS", "tailwind_name", "to_tailwind", "export_tailwind",
                  "tailwind_extension", "write_tailwind", "extension_name"):
         assert name in io.__all__ and hasattr(io, name)
+
+
+def test_a_foreign_export_names_its_tokens_into_tailwind_namespaces(tmp_path):
+    from pathlib import Path
+
+    from engine.io.commands import run_export
+    fixture = Path(__file__).parent.parent / "fixtures" / "mature_system" / "tokens"
+    result = run_export(fixture / "tokens.json", to="tailwind", include_files=True)
+    text = result["texts"]["tailwind-theme.css"]
+    # Breakpoints and text sizes the system has are emitted; a breakpoint
+    # holds its value, since Tailwind reads no var() in a media query.
+    assert "  --breakpoint-md: 768px;\n" in text
+    assert "  --text-body: var(--type-size-body);\n" in text
+    assert "  --color-brand-canvas: var(--brand-canvas);\n" in text
+    # Its own names stay, so code that reads them keeps working.
+    assert "  --brand-canvas: #FBFAF7;\n" in text
+    # What no namespace holds is reported, in the file and the result.
+    assert [o["token"] for o in result["outside_namespaces"]] == [
+        "motion.duration-fast", "motion.duration-base"]
+    assert " *   --motion-duration-fast\n" in text
+    assert {"token": "layout.breakpoint-md", "variable": "--breakpoint-md"} \
+        in result["namespaced"]
