@@ -20,7 +20,7 @@ import shutil
 import tempfile
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple, Union
 
 from engine.foundations.audience import (
     FIELDS as AUDIENCE_FIELDS, HOW_TO_PASS, Audience, AudienceError, effects, read_audience,
@@ -1030,17 +1030,24 @@ def _blocked_folder(out_dir: Path, name: str) -> Optional[Path]:
     return None
 
 
-def plan_writes(out_dir: Path, files: Mapping[str, str]) -> WritePlan:
+def _file_bytes(content: Union[str, bytes]) -> bytes:
+    """A file's bytes: text is written as UTF-8, bytes (a backup of a file
+    in another encoding) exactly as they are."""
+    return content if isinstance(content, bytes) else content.encode("utf-8")
+
+
+def plan_writes(out_dir: Path, files: Mapping[str, Union[str, bytes]]) -> WritePlan:
     """Compare each file with what is on disk, without writing. A link in
     place of a file is never written through or replaced: an identical one
     is left alone, any other is refused. A name may sit in subfolders; a
-    file or link where one of them should be is named."""
+    file or link where one of them should be is named. A file's content is
+    text, written as UTF-8, or bytes, written as they are."""
     write: List[str] = []
     unchanged: List[str] = []
     conflicts: List[str] = []
     for name, text in files.items():
         target = out_dir / name
-        data = text.encode("utf-8")
+        data = _file_bytes(text)
         try:
             blocked = _blocked_folder(out_dir, name)
             if blocked is not None:
@@ -1131,7 +1138,8 @@ def _restore(out_dir: Path, placed: Sequence[Tuple[str, Optional[Path]]]) -> Lis
     return left
 
 
-def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False) -> WritePlan:
+def write_files(out_dir: Path, files: Mapping[str, Union[str, bytes]], *,
+                force: bool = False) -> WritePlan:
     """Write the files that are new or, when forced, different. Without
     force, one conflicting file stops every write. Identical files are
     never rewritten. All or nothing: every file is staged in a folder
@@ -1169,7 +1177,7 @@ def write_files(out_dir: Path, files: Mapping[str, str], *, force: bool = False)
     name = names[0]
     try:
         for name in names:
-            _stage(stage / name, files[name].encode("utf-8"))
+            _stage(stage / name, _file_bytes(files[name]))
         for name in names:
             previous = stage / f"{name}.previous" if name in plan.conflicts else None
             placed.append((name, previous))

@@ -4,7 +4,10 @@ rule files, a Figma variables export), each with a report of what it read,
 the value reader they share, the naming adapter that checks an imported
 system in the engine's roles while it keeps its own names, the scanner
 that measures what a codebase actually uses, and the enhance report that
-sets the two side by side. read_any reads a file in any of FORMATS.
+sets the two side by side. read_any reads a file in any of FORMATS, and
+write_with_intake is the one way to write into a folder: it checks and
+backs up every source first. Importing the package never loads the
+writer; write_with_intake loads it when it runs.
 """
 from pathlib import Path
 from typing import Any
@@ -18,6 +21,7 @@ from engine.io.dtcg_in import import_dtcg, read_dtcg
 from engine.io.enhance import Drift, Enhanced, Lie, RawWithToken, drift, enhance
 from engine.io.figma_in import REST_ENDPOINT, SIZE_SCOPES, import_figma, read_figma
 from engine.io.graph import cycles, loop
+from engine.io.intake import INTAKE_DIR, source_digest, write_with_intake
 from engine.io.markdown_in import import_markdown, read_markdown
 from engine.io.mode_words import axis_of
 from engine.io.report import (FORMATS, Imported, ImportReport, Item, Mapped, Source,
@@ -29,7 +33,8 @@ from engine.io.values_in import (CSS_KEYWORDS, GamutMapped, NotRead, css_alias, 
                                  split_top)
 
 __all__ = [
-    "CSS_KEYWORDS", "EXPORT_COMMAND", "FORMATS", "REST_ENDPOINT", "ROLE_TYPES", "SIZE_SCOPES",
+    "CSS_KEYWORDS", "EXPORT_COMMAND", "FORMATS", "INTAKE_DIR", "REST_ENDPOINT", "ROLE_TYPES",
+    "SIZE_SCOPES",
     "SKIP_DIRS", "AxisMap", "Drift", "Enhanced", "GamutMapped", "ImportReport", "Imported",
     "Item", "Lie", "Mapped", "Mapping", "NotMeasured", "NotRead", "RawWithToken", "RoleMap",
     "Rule", "Scan", "Source", "UnknownClass", "Usage", "axis_of", "css_alias",
@@ -38,7 +43,7 @@ __all__ = [
     "import_tailwind_json", "load_mapping", "loop", "merge",
     "parse_css", "parse_mapping", "propose", "read_css", "read_dtcg", "read_figma",
     "read_any", "read_markdown", "read_source", "read_tailwind", "read_value", "scan",
-    "split_top", "write_css",
+    "source_digest", "split_top", "write_css", "write_with_intake",
     "their_names", "view",
 ]
 

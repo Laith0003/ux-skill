@@ -443,3 +443,12 @@ def test_a_link_where_a_subfolder_goes_is_named_and_never_written_through(tmp_pa
                                      "should be")
     assert list(elsewhere.iterdir()) == [] and sorted(p.name for p in out.iterdir()) == [
         "rule-pack"]
+
+
+def test_bytes_are_written_and_compared_as_they_are(tmp_path):
+    """A backup keeps a file's own bytes, whatever its encoding."""
+    data = "café\n".encode("utf-16")
+    assert write_files(tmp_path, {"old.css": data}).write == ("old.css",)
+    assert (tmp_path / "old.css").read_bytes() == data
+    assert plan_writes(tmp_path, {"old.css": data}).unchanged == ("old.css",)
+    assert plan_writes(tmp_path, {"old.css": b"other"}).conflicts == ("old.css",)
