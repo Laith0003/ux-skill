@@ -303,8 +303,9 @@ def test_figmas_float_noise_is_read_to_four_decimals():
     assert imported.tokens.get("opacity.muted").value == 40
     assert _rows(imported.report.notes) == [
         ("opacity/muted", "is scoped to OPACITY, which Figma writes from 0 to 100, so it was "
-                          "read as the plain number 40; divide it by 100 where a value from 0 "
-                          "to 1 is wanted")]
+                          "read as the plain number 40 and keeps that unit; CSS and Tailwind "
+                          "write it from 0 to 1")]
+    assert imported.tokens.get("opacity.muted").extensions == {"unit": "percent"}
 
 
 def test_mixed_scopes_read_a_plain_number_with_a_note():
@@ -725,3 +726,139 @@ def test_where_is_the_file_and_the_collection_and_the_name_is_the_variables():
     report = _import(EXPORT).report
     [item] = [i for i in report.not_read if i.name == "flag/beta"]
     assert item.line().startswith("- variables.json Size `flag/beta`: ")
+
+
+# ------------------------------------------- the engine's own mode names
+
+
+def _engine_theme(modes, values, name="color"):
+    col = _collection("c:1", name, modes, ["v:1"])
+    return _one(col, [_var("v:1", "bg", "c:1", "COLOR", {
+        f"c:1:{m}": {"r": v, "g": v, "b": v, "a": 1} for m, v in zip(modes, values)})])
+
+
+def test_the_engines_own_mode_names_read_every_mode_on_their_axes():
+    doc = _engine_theme(["light standard", "light high", "dark standard", "dark high"],
+                        [1, 0.9, 0, 0])
+    imported = _import(doc)
+    ts = imported.tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark"), "contrast": ("standard", "high")}
+    # dark high is written: the high and the dark values would tie there.
+    assert ts.get("bg").value == "#FFFFFF"
+    assert ts.get("bg").modes == {"contrast:high": "#E6E6E6", "scheme:dark": "#000000",
+                                  "scheme:dark,contrast:high": "#000000"}
+    assert ts.resolve("bg", "scheme:dark,contrast:high") == "#000000"
+    assert _rows(imported.report.notes) == [
+        ("color", "has the modes light standard, light high, dark standard and dark high, the "
+                  "engine's own mode names, read on the scheme and contrast axes")]
+    assert imported.report.not_read == []
+
+
+def test_a_combined_mode_equal_to_the_base_is_kept():
+    doc = _engine_theme(["light standard", "light high", "dark standard", "dark high"],
+                        [1, 0.5, 0, 1])
+    ts = _import(doc).tokens
+    for ctx, want in (("", "#FFFFFF"), ("contrast:high", "#808080"), ("scheme:dark", "#000000"),
+                      ("scheme:dark,contrast:high", "#FFFFFF")):
+        assert ts.resolve("bg", ctx) == want, ctx
+
+
+def test_engine_mode_names_need_every_combination_and_the_base_as_default():
+    # Three of the four combinations: read one mode per axis, the rest named.
+    doc = _engine_theme(["light standard", "light high", "dark standard"], [1, 0.9, 0])
+    assert _import(doc).tokens.axes != {} and not any(
+        "engine's own" in i.message for i in _import(doc).report.notes)
+    # The default mode is not the base combination.
+    doc = _engine_theme(["dark", "light"], [0, 1])
+    assert "engine's own" not in json.dumps([i.message for i in _import(doc).report.notes])
+
+
+def test_standard_and_high_alone_are_contrast_only_in_a_foundation_that_varies_on_it():
+    def axes(name, modes):
+        col = _collection("c:1", name, modes, ["v:1"])
+        doc = _one(col, [_var("v:1", "w", "c:1", "FLOAT", {f"c:1:{m}": 1 for m in modes},
+                              ["STROKE_FLOAT"])])
+        return dict(_import(doc).tokens.axes)
+    assert axes("border", ["standard", "high"]) == {"contrast": ("standard", "high")}
+    assert axes("imagery", ["standard", "high"]) == {"contrast": ("standard", "high")}
+    assert axes("Density", ["standard", "high"]) == {"standard-high": ("standard", "high")}
+    assert axes("motion", ["standard", "reduced"]) == {"motion": ("standard", "reduced")}
+    assert axes("space", ["comfortable", "compact"]) == {
+        "density": ("comfortable", "compact")}
+
+
+def test_second_modes_naming_a_collection_in_the_engines_mode_names_is_named():
+    doc = _engine_theme(["light standard", "light high", "dark standard", "dark high"],
+                        [1, 0.9, 0, 0], name="Color")
+    with pytest.raises(InputError) as exc:
+        _import(doc, second_modes={"Color": "dark high"})
+    assert str(exc.value) == (
+        "second_modes names Color, whose modes light standard, light high, dark standard and "
+        "dark high are the engine's own mode names, so every one of them is read on the scheme "
+        "and contrast axes; leave Color out of second_modes")
+
+
+# ------------------------------------------------ unscoped primitives
+
+
+def test_an_unscoped_number_only_sizes_point_at_is_a_size():
+    col = _collection("c:1", "Size", ["Value"], ["v:1", "v:2", "v:3", "v:4"])
+    doc = _one(col, [_var("v:1", "num/8", "c:1", "FLOAT", {"c:1:Value": 8}, []),
+                     _var("v:2", "space/md", "c:1", "FLOAT", {"c:1:Value": _alias("v:1")},
+                          ["GAP"]),
+                     _var("v:3", "num/600", "c:1", "FLOAT", {"c:1:Value": 600}, []),
+                     _var("v:4", "weight/strong", "c:1", "FLOAT", {"c:1:Value": _alias("v:3")},
+                          ["FONT_WEIGHT"])])
+    imported = _import(doc)
+    ts = imported.tokens
+    assert (ts.get("num.8").type, ts.get("num.8").value) == (
+        "dimension", {"value": 8, "unit": "px"})
+    assert (ts.get("num.600").type, ts.get("num.600").value) == ("fontWeight", 600)
+    assert _rows(imported.report.notes) == [
+        ("num/8", "has no scope, but space/md (a size in px) points at it, so it was read as "
+                  "a size in px"),
+        ("num/600", "has no scope, but weight/strong (a font weight) points at it, so it was "
+                    "read as a font weight")]
+
+
+def test_an_unscoped_text_only_font_families_point_at_is_a_font_family():
+    col = _collection("c:1", "Type", ["Value"], ["v:1", "v:2", "v:3"])
+    doc = _one(col, [_var("v:1", "face/body", "c:1", "STRING", {"c:1:Value": "Body Sans"}, []),
+                     _var("v:2", "font/body", "c:1", "STRING", {"c:1:Value": _alias("v:1")},
+                          ["FONT_FAMILY"]),
+                     _var("v:3", "label/hello", "c:1", "STRING", {"c:1:Value": "Hello"}, [])])
+    imported = _import(doc)
+    ts = imported.tokens
+    assert (ts.get("face.body").type, ts.get("face.body").value) == ("fontFamily", ["Body Sans"])
+    assert ts.get("font.body").value == "{face.body}"
+    assert not ts.has("label.hello")
+    assert _rows(imported.report.not_read) == [
+        ("label/hello", "a text variable scoped to nothing; the engine reads text only as a "
+                        "font family, so if it names a font, give it only the Font family scope "
+                        "in Figma")]
+    assert ("face/body", "has no scope, but font/body (a font family) points at it, so it was "
+                         "read as a font family") in _rows(imported.report.notes)
+
+
+def test_an_unscoped_number_opacities_point_at_keeps_their_unit():
+    col = _collection("c:1", "Opacity", ["Value"], ["v:1", "v:2"])
+    doc = _one(col, [_var("v:1", "num/40", "c:1", "FLOAT", {"c:1:Value": 40}, []),
+                     _var("v:2", "opacity/muted", "c:1", "FLOAT", {"c:1:Value": _alias("v:1")},
+                          ["OPACITY"])])
+    ts = _import(doc).tokens
+    assert ts.get("num.40").extensions == {"unit": "percent"}
+    assert ts.get("opacity.muted").extensions == {"unit": "percent"}
+
+
+def test_an_opacity_keeps_its_unit_through_a_tokens_file(tmp_path):
+    from engine.foundations.export import dump_dtcg, from_dtcg
+    from engine.io.dtcg_in import import_dtcg
+    col = _collection("c:1", "Opacity", ["Value"], ["v:1"])
+    doc = _one(col, [_var("v:1", "opacity/muted", "c:1", "FLOAT", {"c:1:Value": 40},
+                          ["OPACITY"])])
+    ts = _import(doc).tokens
+    text = dump_dtcg(ts)
+    assert from_dtcg(json.loads(text)).get("opacity.muted").extensions == {"unit": "percent"}
+    back = import_dtcg(text, Source("tokens.json", "dtcg", "0" * 64, len(text))).tokens
+    assert back.get("opacity.muted").extensions == {"unit": "percent"}
+    assert back.get("opacity.muted").value == 40

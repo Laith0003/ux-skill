@@ -15,7 +15,13 @@ and reported, never refused); a FLOAT is a px dimension when every scope
 it has sizes something (gap, width and height, corner radius, stroke, font
 size, line height, letter spacing, effects, paragraphs), a font weight
 under the font weight scope alone, and otherwise a plain number, noted; a
-STRING is a font family under the font family scope alone. Figma keeps
+number under the opacity scope alone keeps Figma's 0 to 100 as its unit
+(Token.extensions), so CSS writes it from 0 to 1; a STRING is a font
+family under the font family scope alone. A number or a string with no
+scope at all (a primitive left for designers to reach through its roles)
+takes the kind of what points at it: a size, a weight or a font family
+when only such variables alias it, an opacity's unit when only opacities
+do; a string nothing of the kind points at is not read. Figma keeps
 numbers as 32-bit floats (0.2 comes back as 0.20000000298023224), so a
 number is read to four decimals. Booleans and other strings are not read.
 An alias to a variable in this export is an alias; one to a variable that
@@ -43,7 +49,17 @@ axis, as the other importers read one column or theme per axis: Light,
 Dark and High contrast give the base, scheme:dark and contrast:high, and a
 mode left over (Dim, or a combined High contrast dark) is listed under Not
 read with its fix. When no mode names an axis, the default mode is read
-and second_modes names the other mode to read for it.
+and second_modes names the other mode to read for it. A collection in the
+engine's own mode names (light standard, light high, dark standard, dark
+high, as its Figma export writes them; mode_words.engine_axes) reads every
+mode on those axes, the combined ones too.
+
+Imported.figma records each collection this file owns with its modes and
+the context each was read into (None for a mode not read), and each
+token's collection, variable name and scopes, so an extension can be
+written in the file's own collections, names and scopes. Imported.owned
+is what the record of the files the engine wrote says of the export,
+never its names.
 """
 from __future__ import annotations
 
@@ -56,11 +72,13 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations.color_math import gamut_map_oklch, rgb_to_hex, srgb_to_oklch
 from engine.foundations.errors import InputError
-from engine.foundations.modes import AXES
+from engine.foundations.export import PERCENT
+from engine.foundations.modes import AXES, compress, join, parse
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.graph import cycles
-from engine.io.mode_words import axes_named, axis_of, is_base, words
-from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
+from engine.io.mode_words import axes_named, axis_of, engine_axes, is_base, words
+from engine.io.report import (Imported, ImportReport, Item, Mapped, Source, read_source,
+                              recorded)
 
 # The FLOAT scopes that size something in px.
 SIZE_SCOPES = ("CORNER_RADIUS", "WIDTH_HEIGHT", "GAP", "STROKE_FLOAT", "FONT_SIZE",
@@ -133,6 +151,11 @@ class _Entry:
     tiers: Dict[str, Any] = field(default_factory=dict)
     # The collection's id.
     collection: Any = None
+    # A number or a string with no scope, whose kind what points at it sets.
+    unscoped: bool = False
+    extensions: Dict[str, Any] = field(default_factory=dict)
+    # Why it is read with a note or not read, as _kind gave it.
+    why: str = ""
 
 
 def _and(items: Sequence[str]) -> str:
@@ -186,6 +209,22 @@ def _modes_of(col: Dict[str, Any]) -> Tuple[Dict[str, str], Optional[str]]:
     return modes, default
 
 
+def _our_modes(modes: Mapping[str, str], default: str,
+               cname: str = "") -> Optional[List[Tuple[str, str]]]:
+    """(mode id, context) for every mode, the default first, when the mode
+    names are the engine's own (mode_words.engine_axes), else None."""
+    if default not in modes:
+        return None
+    axes = engine_axes(list(modes.values()), modes[default], [cname])
+    if axes is None:
+        return None
+    read = []
+    for m, name in modes.items():
+        pairs = {a: v for a, v in zip(axes, name.split(" ")) if v != AXES[a][0]}
+        read.append((m, join(pairs)))
+    return sorted(read, key=lambda r: r[0] != default)
+
+
 def _plan(col: Dict[str, Any], want: Optional[str],
           axes: Dict[str, Tuple[str, str]]) -> _Plan:
     """How one collection is read, given the second mode second_modes names
@@ -203,6 +242,18 @@ def _plan(col: Dict[str, Any], want: Optional[str],
         # A viewport is never a mode axis: the default tier is the value,
         # and the other tiers are named in one note once they are read.
         return _Plan(cname, modes, [(default, "")], tiers=others)
+    ours = _our_modes(modes, default, cname)
+    if ours is not None:
+        found = {a for _, ctx in ours for a in parse(ctx)}
+        made = [a for a in AXES if a in found]
+        named = f"the {_and(made)} ax{'is' if len(made) == 1 else 'es'}"
+        if want is not None:
+            raise InputError(f"second_modes names {cname}, whose modes {_and(names)} are the "
+                             f"engine's own mode names, so every one of them is read on "
+                             f"{named}; leave {cname} out of second_modes")
+        return _Plan(cname, modes, ours, (made[0], AXES[made[0]]),
+                     f"has the modes {_and(names)}, the engine's own mode names, read on "
+                     f"{named}", more_axes=[(a, AXES[a]) for a in made[1:]])
     per_axis = _per_axis(cname, modes, default) if len(modes) > 2 else None
     if per_axis is not None and want is None:
         return per_axis
@@ -390,9 +441,7 @@ def _kind(v: Dict[str, Any]) -> Tuple[Optional[str], str]:
         if scopes and all(s in SIZE_SCOPES for s in scopes):
             return "dimension", ""
         if scopes == ["OPACITY"]:
-            return "number", ("is scoped to OPACITY, which Figma writes from 0 to 100, so it was "
-                              "read as {value}; divide it by 100 where a value from 0 to 1 is "
-                              "wanted")
+            return "number", _OPACITY
         if not scopes or "ALL_SCOPES" in scopes:
             return "number", ("has no scope that fixes its unit, so it was read as {value}; "
                               "give it a scope in Figma (Gap, Corner radius, Font size and so "
@@ -403,14 +452,21 @@ def _kind(v: Dict[str, Any]) -> Tuple[Optional[str], str]:
     if resolved == "STRING":
         if scopes == ["FONT_FAMILY"]:
             return "fontFamily", ""
-        return None, (f"a text variable scoped to {_and(scopes) if scopes else 'nothing'}; the "
-                      "engine reads text only as a font family, so if it names a font, give it "
-                      "only the Font family scope in Figma")
+        why = (f"a text variable scoped to {_and(scopes) if scopes else 'nothing'}; the engine "
+               "reads text only as a font family, so if it names a font, give it only the Font "
+               "family scope in Figma")
+        # With no scope, what points at it may still make it a font family.
+        return ("string", why) if not scopes else (None, why)
     if resolved == "BOOLEAN":
         return None, ("a boolean, and the engine holds no boolean tokens; keep it in Figma, "
                       "where it switches components")
     return None, (f"has the type {json.dumps(resolved)}, which Figma variables do not have; "
                   "export the variables again")
+
+
+# Why a number under the opacity scope alone keeps its unit.
+_OPACITY = ("is scoped to OPACITY, which Figma writes from 0 to 100, so it was read as {value} "
+            "and keeps that unit; CSS and Tailwind write it from 0 to 1")
 
 
 def _literal(kind: str, raw: Any, at: str) -> Tuple[Any, Optional[Tuple[str, str, float]]]:
@@ -434,7 +490,7 @@ def _literal(kind: str, raw: Any, at: str) -> Tuple[Any, Optional[Tuple[str, str
         hx, distance, was_mapped = gamut_map_oklch(*srgb_to_oklch(*channels))
         written = json.dumps(dict(zip("rgb", channels)))
         return hx + suffix, ((written, hx + suffix, distance) if was_mapped else None)
-    if kind == "fontFamily":
+    if kind in ("fontFamily", "string"):
         if not (isinstance(raw, str) and raw.strip()):
             raise _Bad(f"holds {json.dumps(raw)} in {at}, not a font name; export the variables "
                        "again")
@@ -556,6 +612,7 @@ def import_figma(text: str, source: Source,
         p, k, i = col_notes[at]
         col_notes[at] = (p, k, Item(i.where, i.name, _library_note(used[cid])))
 
+    _by_users(entries, position, not_read)
     snapshots = _snapshots(library, variables, collections)
     while True:
         _check_aliases(entries, variables, library, snapshots, position, not_read)
@@ -564,17 +621,30 @@ def import_figma(text: str, source: Source,
 
     ts = TokenSet(axes)
     notes = list(col_notes)
+    figma: Dict[str, Any] = {"collections": {}, "variables": {}, "scopes": {}}
+    for cid, plan in plans.items():
+        if not plan.remote and plan.read:
+            ctx = dict(plan.read)
+            figma["collections"].setdefault(plan.name, [[n, ctx.get(m)]
+                                                         for m, n in plan.modes.items()])
     renamed: List[Tuple[int, Item]] = []
     mapped: List[Tuple[int, Mapped]] = []
     for vid, e in entries.items():
         written = {ctx: ("{" + entries[r.id].path + "}" if isinstance(r, _Ref) else r)
                    for ctx, r in e.values.items()}
-        base = written.pop("")
-        modes = {ctx: val for ctx, val in written.items() if val != base}
+        if any("," in ctx for ctx in written):
+            # Modes on several axes at once: the fewest overrides that read
+            # back every mode, so a combined mode equal to the base stays.
+            base, modes = compress(written, axes)
+        else:
+            base = written.pop("")
+            modes = {ctx: val for ctx, val in written.items() if val != base}
         aliased = any(isinstance(r, _Ref) for r in e.values.values())
         ts.add(Token(e.path, e.kind, base, modes=modes,
                      layer="semantic" if aliased or modes else "primitive",
-                     description=e.description))
+                     description=e.description, extensions=dict(e.extensions)))
+        figma["variables"][e.path] = [plans[e.collection].name, e.name]
+        figma["scopes"][e.path] = [str(x) for x in variables[vid].get("scopes") or []]
         notes += [(position[vid], 1, i) for i in e.notes + _type_notes(e, entries)]
         renamed += [(position[vid], i) for i in e.renamed]
         mapped += [(position[vid], m) for m in e.mapped]
@@ -583,7 +653,60 @@ def import_figma(text: str, source: Source,
     report.renamed = [i for _, i in renamed]
     report.mapped = [m for _, m in mapped]
     report.not_read = [i for _, i in sorted(not_read, key=lambda n: n[0])]
-    return Imported(ts, report)
+    return Imported(ts, report, owned=recorded(source) is True, figma=figma)
+
+
+# What an unscoped variable is read as when only one kind points at it.
+_AS = {"dimension": "a size in px", "fontWeight": "a font weight", "fontFamily": "a font family",
+       PERCENT: "an opacity from 0 to 100"}
+
+
+def _by_users(entries: Dict[str, _Entry], position: Dict[str, int],
+              not_read: List[Tuple[int, Item]]) -> None:
+    """Give each number or string with no scope the kind of what points at
+    it: a size, a weight or a font family when only one such kind aliases
+    it, an opacity's unit when only opacities do (see the module
+    docstring). Repeated until nothing changes, so a primitive behind
+    another takes the kind once that one has it. A string left with no kind
+    is not read, with why."""
+    def kind_of(e: _Entry) -> str:
+        return PERCENT if e.extensions.get("unit") == PERCENT else e.kind
+
+    changed = True
+    while changed:
+        changed = False
+        for vid, e in entries.items():
+            if not e.unscoped:
+                continue
+            users = sorted((u for u, x in entries.items() if u != vid and any(
+                isinstance(r, _Ref) and r.id == vid for r in x.values.values())),
+                key=position.__getitem__)
+            kinds = {kind_of(entries[u]) for u in users}
+            wanted = {"dimension", "fontWeight", PERCENT} if e.kind == "number" \
+                else {"fontFamily"}
+            if len(kinds) != 1 or not kinds <= wanted:
+                continue
+            new = kinds.pop()
+            if new == PERCENT:
+                e.extensions["unit"] = PERCENT
+            else:
+                e.kind = new
+                if new == "dimension":
+                    e.values = {c: {"value": v, "unit": "px"} if _number(v) else v
+                                for c, v in e.values.items()}
+            e.unscoped = False
+            named = _and([entries[u].name for u in users[:_FEW]])
+            more = len(users) - _FEW
+            if more > 0:
+                named += f" and {more} more"
+            point = "points" if len(users) == 1 else "point"
+            e.notes = [i for i in e.notes if not i.message.startswith("has no scope")]
+            e.notes.append(Item(e.where, e.name, f"has no scope, but {named} ({_AS[new]}) "
+                                                  f"{point} at it, so it was read as {_AS[new]}"))
+            changed = True
+    for vid in [v for v, e in entries.items() if e.kind == "string"]:
+        e = entries.pop(vid)
+        not_read.append((position[vid], Item(e.where, e.name, e.why)))
 
 
 _UNKNOWN_COLLECTION = "an unknown library collection"
@@ -617,7 +740,10 @@ def _read(v: Dict[str, Any], vname: str, where: str, plan: Optional[_Plan],
     path = ".".join(_BAD.sub("-", s).strip("-") or "_" for s in vname.split("/"))
     by_mode = v.get("valuesByMode") if isinstance(v.get("valuesByMode"), dict) else {}
     entry = _Entry(where, vname, path, kind, {}, str(v.get("description") or ""),
-                   label=f"{plan.name}/{vname}", collection=cid)
+                   label=f"{plan.name}/{vname}", collection=cid,
+                   unscoped=kind in ("number", "string") and not v.get("scopes"))
+    if why == _OPACITY:
+        entry.extensions["unit"] = PERCENT
     for mode_id, ctx in plan.read:
         at = f"the mode {plan.modes[mode_id]} of {plan.name}"
         entry.at[ctx] = at
@@ -641,10 +767,11 @@ def _read(v: Dict[str, Any], vname: str, where: str, plan: Optional[_Plan],
     if path != vname.replace("/", "."):
         entry.renamed.append(Item(where, vname, f"read as {path}; a slash reads as a dot, and a "
                                   "path segment holds only letters, digits, '_' and '-'"))
-    if why:
+    if why and kind != "string":
         base = entry.values[""]
         shown = "a plain number" if isinstance(base, _Ref) else f"the plain number {base}"
         entry.notes.append(Item(where, vname, why.format(value=shown)))
+    entry.why = why
     return entry
 
 

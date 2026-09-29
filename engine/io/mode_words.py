@@ -12,13 +12,23 @@ A base word (default, base, value, standard) names no axis alone, but
 opposite a non-base value it is that axis's base: Default and Dark are the
 scheme axis, Default the light one. The words the CSS media queries use,
 reduce and more, read as reduced and high.
+
+The engine's own mode names, as its Figma export writes them, are read
+apart (engine_axes): each name is one lowercase axis value per word, the
+same axis at each position, every combination present and the default
+the base of each (light standard, light high, dark standard, dark high).
+Those name their axes exactly, so they need no axis word, with one guard:
+a collection whose only axis is contrast or motion (standard and high)
+reads on it only when its own name or the context names the axis or a
+foundation that varies on it (border, imagery), since standard and high
+alone are as often a density.
 """
 from __future__ import annotations
 
 import re
-from typing import Iterable, Optional, Sequence, Set, Tuple
+from typing import Iterable, List, Optional, Sequence, Set, Tuple
 
-from engine.foundations.modes import AXES
+from engine.foundations.modes import AXES, FOUNDATION_AXES
 
 # Axes whose value words are read only beside the axis's own name.
 NEEDS_AXIS_WORD = ("contrast", "motion")
@@ -102,3 +112,30 @@ def is_base(name: str) -> bool:
     base word (Default, Value), and no non-base value beside it."""
     found = _values(name)
     return not found & _OTHERS and bool(found & (_BASES | BASE_WORDS))
+
+
+def engine_axes(names: Sequence[str], default: str,
+                context: Iterable[str] = ()) -> Optional[List[str]]:
+    """The axis each word position names when `names` are the engine's own
+    mode names with `default` the base of every axis (see the module
+    docstring), else None."""
+    split = [n.split(" ") for n in names]
+    width = len(default.split(" "))
+    if len(names) < 2 or default not in names or any(len(w) != width for w in split) \
+            or len(names) != 2 ** width or len({tuple(w) for w in split}) != len(names):
+        return None
+    axes: List[str] = []
+    for i in range(width):
+        seen = {w[i] for w in split}
+        axis = next((a for a, values in AXES.items() if set(values) == seen), None)
+        if axis is None or axis in axes or default.split(" ")[i] != AXES[axis][0]:
+            return None
+        axes.append(axis)
+    if all(a in NEEDS_AXIS_WORD for a in axes):
+        around: Set[str] = set()
+        for text in context:
+            around |= words(text)
+        varies = {a for root in around for a in FOUNDATION_AXES.get(root, ())}
+        if not all(a in around or a in varies for a in axes):
+            return None
+    return axes

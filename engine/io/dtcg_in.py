@@ -57,7 +57,7 @@ from typing import Any, Dict, Iterable, List, Optional, Set, Tuple
 
 from engine.foundations.color_math import gamut_map_oklch, hex_to_rgb, rgb_to_hex
 from engine.foundations.errors import InputError
-from engine.foundations.export import EXT, LEGACY_EXT
+from engine.foundations.export import EXT, LEGACY_EXT, PERCENT
 from engine.foundations.modes import AXES, ModeError, parse
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.foundations.validate import LAYERS
@@ -1066,8 +1066,11 @@ def import_dtcg(text: str, source: Source,
         if layer == "semantic":
             reader.notes += [f"has no {_word(s.ctx)} value in {s.label}; it keeps this value in "
                              f"{_both(s.ctx)}" for s in missing]
+        # A number held from 0 to 100 (an opacity read from Figma) keeps
+        # its unit, so CSS still writes it from 0 to 1.
+        unit = {"unit": PERCENT} if kind == "number" and ours.get("unit") == PERCENT else {}
         tokens.append(Token(e.dst, kind, value, modes=modes, layer=layer,
-                            description=description))
+                            description=description, extensions=unit))
         log.notes += [(e.pos, e.dst, Item(where, e.src, n)) for n in reader.notes] + side_notes
         log.mapped += [(e.pos, e.dst, g) for g in gamut]
 

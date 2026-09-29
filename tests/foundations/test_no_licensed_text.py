@@ -94,7 +94,7 @@ SCAN = (
     "engine", "commands", "references", "agents", "docs", "README.md",
     "tests", "CHANGELOG.md", "skills", "data",
 )
-SCAN_SUFFIXES = (".py", ".md", ".html", ".json", ".css", ".yaml")
+SCAN_SUFFIXES = (".py", ".md", ".html", ".json", ".css", ".yaml", ".js")
 
 # Extensions that are never text, skipped without an open/decode attempt.
 BINARY_SUFFIXES = {

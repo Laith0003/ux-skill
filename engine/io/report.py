@@ -215,7 +215,12 @@ class Imported:
     in its folder lists at the digest it was read at (recorded), or a
     stylesheet whose engine digest stamp still matches, or a tokens file
     the record does not list that carries the engine's extension key on
-    its root (one written before the record existed)."""
+    its root (one written before the record existed). `figma`, for a Figma
+    export, holds each collection the file owns with its modes in order,
+    each as [mode name, the context it was read into, or None when it was
+    not read] under "collections", each token's [collection, variable
+    name] under "variables" and its scopes under "scopes", so an extension
+    can be written in the file's own collections, names and scopes."""
     tokens: TokenSet
     report: ImportReport
     forms: Mapping[str, Tuple[str, str]] = field(default_factory=dict)
@@ -223,3 +228,4 @@ class Imported:
     resets: Tuple[str, ...] = ()
     variant: str = ""
     owned: bool = False
+    figma: Mapping[str, Any] = field(default_factory=dict)

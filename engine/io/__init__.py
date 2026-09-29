@@ -4,12 +4,14 @@ rule files, a Figma variables export), each with a report of what it read,
 the value reader they share, the naming adapter that checks an imported
 system in the engine's roles while it keeps its own names, the scanner
 that measures what a codebase actually uses, and the enhance report that
-sets the two side by side, and the Tailwind 4 exporter, which writes
-beside a source it did not build and never over it. read_any reads a file
-in any of FORMATS, and write_with_intake is the step every write into a
-folder someone already has goes through: it checks and backs up every
-source first. Importing the package never loads the writer;
-write_with_intake loads it when it runs.
+sets the two side by side, and the Tailwind 4 and Figma variables
+exporters, which write beside a source they did not build and never over
+it (the Figma one with the scripts that apply and read variables through
+Figma's plugin API). read_any reads a file in any of FORMATS, and
+write_with_intake is the step every write into a folder someone already
+has goes through: it checks and backs up every source first. Importing
+the package never loads the writer; write_with_intake loads it when it
+runs.
 """
 from pathlib import Path
 from typing import Any
@@ -22,6 +24,8 @@ from engine.io.css_in import Rule, import_css, parse_css, read_css, write_css
 from engine.io.dtcg_in import import_dtcg, read_dtcg
 from engine.io.enhance import Drift, Enhanced, Lie, RawWithToken, drift, enhance
 from engine.io.figma_in import REST_ENDPOINT, SIZE_SCOPES, import_figma, read_figma
+from engine.io.figma_out import (ADDITIONS, APPLY_SCRIPT, READ_SCRIPT, as_export,
+                                 figma_extension, figma_files, to_figma, write_figma)
 from engine.io.graph import cycles, loop
 from engine.io.intake import INTAKE_DIR, source_digest, write_with_intake
 from engine.io.markdown_in import import_markdown, read_markdown
@@ -52,6 +56,8 @@ __all__ = [
     "their_names", "view",
     "RESETS", "export_tailwind", "extension_name", "in_roles", "tailwind_extension",
     "tailwind_name", "to_tailwind", "write_tailwind",
+    "ADDITIONS", "APPLY_SCRIPT", "READ_SCRIPT", "as_export", "figma_extension", "figma_files",
+    "to_figma", "write_figma",
 ]
 
 

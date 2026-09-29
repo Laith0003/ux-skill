@@ -19,8 +19,9 @@ from engine.foundations.tokens import Token, TokenSet, css_property
 from engine.foundations.values import css_entries, decode, encode
 
 EXT = "io.github.laith0003.ux-skill"
-# Token.extensions keys the DTCG document carries under EXT.
-KEPT = ("original", "read_as")
+# Token.extensions keys the DTCG document carries under EXT, and reads
+# back: a color's spelling and the unit of a number held from 0 to 100.
+KEPT = ("original", "read_as", "unit")
 # The extension keys earlier builds wrote; a document that still carries
 # them is refused, since reading it would drop its layers and modes.
 LEGACY_EXT = ("ux.layer", "ux.modes")
