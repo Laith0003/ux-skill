@@ -890,14 +890,28 @@ def their_names(text: str, mapping: Mapping) -> str:
     each context of mapped axes followed by the system's own modes when
     they differ. A role is matched whole: a longer path that starts with it
     is left, and a period that ends a sentence after it is not part of
-    it."""
+    it. For a typography role mapped field by field, a text that names
+    one of its fields (point its fontSize at ...) names that field's token
+    alone; any other names every field's."""
     roles = sorted((r for r, m in mapping.roles.items() if m.token is not None),
                    key=len, reverse=True)
     if roles:
         pattern = re.compile(r"(?<![\w.-])(" + "|".join(re.escape(r) for r in roles)
                              + r")(?![\w-]|\.[\w-])")
-        text = pattern.sub(lambda m: _yours(m.group(1), mapping.roles[m.group(1)].token), text)
+        text = pattern.sub(lambda m: _yours(m.group(1), _named(mapping.roles[m.group(1)],
+                                                               text)), text)
     return _CONTEXT.sub(lambda m: _their_context(m.group(0), m.group(1), mapping), text)
+
+
+def _named(m: RoleMap, text: str) -> Optional[str]:
+    """The name a finding gives the system's token for a role: for a role
+    mapped field by field whose text names exactly one mapped field, that
+    field and its token; else the role's token."""
+    if m.fields is None:
+        return m.token
+    said = [k for k, f in m.fields.items()
+            if f.token is not None and re.search(rf"\b{k}\b", text)]
+    return f"{said[0]} {m.fields[said[0]].token}" if len(said) == 1 else m.token
 
 
 def _yours(role: str, token: Optional[str]) -> str:

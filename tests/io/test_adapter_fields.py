@@ -107,6 +107,14 @@ def test_findings_name_each_fields_token():
         "too small.")
 
 
+def test_a_finding_on_one_field_names_that_fields_token_alone():
+    mapping = Mapping(roles={"type.text.body": RoleMap.per_field(FIELDS)})
+    assert their_names("type.text.body (base) is 9px; it needs at least 16px to stay readable, "
+                       "so point its fontSize at a larger step", mapping) == (
+        "type.text.body (your fontSize text-size-lg) (base) is 9px; it needs at least 16px to "
+        "stay readable, so point its fontSize at a larger step")
+
+
 def test_merge_keeps_the_owners_field_entries():
     fields = {"fontSize": FieldMap("text-size-lg", "owner"),
               "lineHeight": FieldMap("text-leading-tight", "name")}
