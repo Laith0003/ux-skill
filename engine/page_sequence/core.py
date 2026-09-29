@@ -2,11 +2,16 @@
 
 Picks a whole-page template (from ``data/page-sequences.json``) for a landing
 page. ``select_for_brief`` reads a 4.0 brief in tiers: an explicit
-``page_sequence``, then ``stage``, then ``product_type``, ``project_type`` and
-``industry``, then the brief's own phrases, and ``general-landing`` when
-nothing points elsewhere, so it always returns a sequence. ``select_sequence``
-scores free text alone. A call-to-action verb ("book", "buy", "download")
-never picks a sequence: any page might say it.
+``page_sequence``, then ``stage``, then ``page``, then ``product_type``,
+``project_type`` and ``industry``, then the brief's own phrases, and
+``general-landing`` when nothing points elsewhere, so it always returns a
+sequence. The brief's structure then refines the pick: ``platforms`` without a
+store app turn the store-app sequence into the web-app one, and
+``primary_side: supply`` turns a marketplace toward its supply side.
+``sign_in`` sets the text of the sign-in action. ``select_sequence`` scores
+free text alone. A call-to-action verb ("book", "buy", "download") never picks
+a sequence: any page might say it, and no sequence is keyed on an industry
+word alone: the fields decide.
 
 A section that needs proof names its kind (``stats``, ``testimonials``,
 ``logos``...). When the brief lists the proof the client has, a section whose
@@ -51,6 +56,20 @@ PROOF_KINDS: Tuple[str, ...] = ("case-studies", "certifications", "logos", "pres
 CONTACT_KINDS: Tuple[str, ...] = ("address", "chat", "email", "form", "phone", "whatsapp")
 STAGES: Tuple[str, ...] = ("live", "pre-launch")
 PRE_LAUNCH = "pre-launch"
+# What the page is for: the product's home, or one feature of it.
+PAGES: Tuple[str, ...] = ("home", "feature")
+# Where the product runs, and how its users sign in.
+PLATFORMS: Tuple[str, ...] = ("web", "ios", "android", "desktop")
+STORE_PLATFORMS: Tuple[str, ...] = ("ios", "android")
+SIGN_IN: Tuple[str, ...] = ("phone", "email", "password", "sso", "social")
+# The side of a two-sided marketplace the page speaks to: demand buys, orders
+# or books; supply lists, sells, delivers or hosts.
+SIDES: Tuple[str, ...] = ("demand", "supply")
+FEATURE = "feature-page"
+WEB_APP = "web-app"
+STORE_APP = "app-mobile-landing"
+SUPPLY = "marketplace-supply"
+MARKETPLACE = "b2b-marketplace"
 PROOF_LABELS = {
     "stats": "numbers", "testimonials": "named quotes", "logos": "client logos",
     "reviews": "attributed reviews", "case-studies": "case studies",
@@ -68,6 +87,12 @@ def load_sequences() -> List[Dict[str, Any]]:
     payload = load("page-sequences")
     entries = payload.get("entries", [])
     return entries if isinstance(entries, list) else []
+
+
+def _by_phrase(entries: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """The entries text may reach. One with ``picked_by`` is reached only by
+    the brief field it names."""
+    return [e for e in entries if not e.get("picked_by")]
 
 
 def _tokenize(text: str) -> List[str]:
@@ -135,7 +160,7 @@ def select_sequence(goal_or_keywords: Union[str, List[str], None]) -> Optional[D
     by manifest order (first defined wins). Returns ``None`` when there are no
     entries or nothing scores above zero (no signal, no opinion).
     """
-    entries = load_sequences()
+    entries = _by_phrase(load_sequences())
     raw_query, query_tokens = _normalize_query(goal_or_keywords)
     if not entries or not raw_query:
         return None
@@ -190,6 +215,17 @@ def _choice_list(fields: Mapping[str, Any], name: str, choices: Tuple[str, ...])
     return out
 
 
+def _choice(fields: Mapping[str, Any], name: str, choices: Tuple[str, ...], fix: str) -> str:
+    """A one-word field from a fixed set, "" when the brief leaves it out."""
+    raw = fields.get(name)
+    if raw is None or (isinstance(raw, str) and not raw.strip()):
+        return ""
+    value = "-".join(str(raw).strip().lower().split()) if isinstance(raw, str) else None
+    if value not in choices:
+        raise ValueError(f"{name}: {raw!r} is not one of {', '.join(choices)}; {fix}")
+    return value
+
+
 def _field_value(fields: Mapping[str, Any], name: str) -> str:
     return "-".join(str(fields.get(name) or "").strip().lower().split())
 
@@ -233,7 +269,7 @@ def _best(entries: List[Dict[str, Any]], fields: Mapping[str, Any]) -> Tuple[Dic
     then industry; the brief's phrases choose among what is left. With no
     phrase, the first entry that lists the product_type first wins, then
     manifest order. With nothing to go on, general-landing."""
-    live = [e for e in entries if e["id"] not in (PRE_LAUNCH, GENERAL)]
+    live = [e for e in _by_phrase(entries) if e["id"] not in (PRE_LAUNCH, GENERAL)]
     cands, why = live, []
     pt, written = _product_type(fields)
     tiers = (("product_type", pt, "product_types"),
@@ -281,6 +317,50 @@ def _without_phone(seq: Dict[str, Any], contact: Optional[List[str]]) -> None:
         alt = seq.pop(f"{key}_without_phone", None)
         if no_phone and alt:
             seq[key] = alt
+
+
+def _with_phone_sign_in(seq: Dict[str, Any], sign_in: Optional[List[str]]) -> None:
+    """Swap in the phone sign-in text when the product signs users in by
+    phone, and drop the alternates from the result either way."""
+    phone = sign_in is not None and "phone" in sign_in
+    for s in seq["section_sequence"]:
+        alt = s.pop("with_phone_sign_in", None)
+        if phone and alt:
+            s["purpose"] = alt
+    alt = seq.pop("cta_placement_with_phone_sign_in", None)
+    if phone and alt:
+        seq["cta_placement"] = alt
+
+
+def _refine(entry: Dict[str, Any], why: str, by_id: Mapping[str, Dict[str, Any]],
+            platforms: Optional[List[str]], side: str,
+            product_type: str) -> Tuple[Dict[str, Any], str]:
+    """The brief's structure refines the pick: where the product runs and
+    which side of a marketplace the page speaks to."""
+    if side:
+        two_sided = entry["id"] in (MARKETPLACE, SUPPLY) or product_type == "marketplace"
+        if not two_sided:
+            raise ValueError(f"primary_side: {side!r} names a side of a two-sided marketplace, and "
+                             f"this brief picks {entry['id']}; set product_type to marketplace, "
+                             f"or leave primary_side out")
+        if side == "supply" and SUPPLY in by_id:
+            return by_id[SUPPLY], (f"{why}; primary_side supply: the supply side's path is the "
+                                   f"primary action and the buyer-only sections drop")
+        if entry["id"] != MARKETPLACE and MARKETPLACE in by_id:
+            entry = by_id[MARKETPLACE]
+        return entry, f"{why}; primary_side demand: the buyer's path leads"
+    if platforms is None or (entry["id"] != STORE_APP and product_type != "app"):
+        return entry, why
+    listed = ", ".join(platforms) or "none"
+    if set(platforms) & set(STORE_PLATFORMS):
+        if product_type == "app" and entry["id"] != STORE_APP and STORE_APP in by_id:
+            return by_id[STORE_APP], (f"{why}; platforms {listed}: an app's page follows where it "
+                                      f"runs, and it ships a store app")
+        return entry, why
+    if "web" in platforms and WEB_APP in by_id:
+        return by_id[WEB_APP], (f"{why}; platforms {listed}: no store app, so the web-app "
+                                f"sequence, with no store badges and no download band")
+    return entry, why
 
 
 def _drop_unproven(seq: Dict[str, Any], proof: Optional[List[str]],
@@ -333,6 +413,14 @@ def select_for_brief(brief: Mapping[str, Any]) -> Dict[str, Any]:
     4. The brief's own phrases choose among what is left.
     5. With nothing to go on, ``general-landing``.
 
+    Then the brief's structure refines the pick: ``page: feature`` (after
+    ``stage``) picks the feature page for a product people already use;
+    ``platforms`` (from PLATFORMS) without ios or android turn the store-app
+    sequence into ``web-app``; ``primary_side`` (demand or supply) keeps a
+    marketplace on the buyer's path or turns it to ``marketplace-supply``;
+    ``sign_in`` (from SIGN_IN) with phone makes the sign-in action a phone
+    field.
+
     ``proof`` (from PROOF_KINDS, ``[]`` for none) and ``contact`` (from
     CONTACT_KINDS) drop what the client cannot back, each with a reason; with
     ``proof`` left out, proof sections stay, marked by kind, and
@@ -348,7 +436,13 @@ def select_for_brief(brief: Mapping[str, Any]) -> Dict[str, Any]:
     if stage and stage not in STAGES:
         raise ValueError(f"stage: {fields.get('stage')!r} is not one of {', '.join(STAGES)}; use "
                          f"pre-launch when the product has no customers yet")
-    _product_type(fields)
+    pt, _ = _product_type(fields)
+    page = _choice(fields, "page", PAGES, "use feature for a page about one feature of the "
+                   "product, home for its main page")
+    side = _choice(fields, "primary_side", SIDES, "use supply when the page speaks to the side "
+                   "that lists, sells, delivers or hosts, demand when it speaks to buyers")
+    platforms = _choice_list(fields, "platforms", PLATFORMS)
+    sign_in = _choice_list(fields, "sign_in", SIGN_IN)
 
     explicit = str(fields.get("page_sequence") or "").strip()
     dropped: List[Dict[str, str]] = []
@@ -371,11 +465,18 @@ def select_for_brief(brief: Mapping[str, Any]) -> Dict[str, Any]:
                 f"The brief lists proof ({', '.join(proof)}) with stage pre-launch. If that proof is "
                 f"real, set stage to live: {live['id']} shows it in its proof sections. The pre-launch "
                 f"pattern shows none.")})
+    elif page == "feature" and FEATURE in by_id:
+        entry = by_id[FEATURE]
+        why = ("page feature: a page about one feature of a product people already use, so no "
+               "founding team and no early-access form")
     else:
         entry, why = _best(entries, fields)
+        entry, why = _refine(entry, why, by_id, platforms, side, pt)
 
     seq = copy.deepcopy(entry)
+    seq.pop("picked_by", None)
     _without_phone(seq, contact)
+    _with_phone_sign_in(seq, sign_in)
     if seq["id"] != PRE_LAUNCH:
         dropped += _drop_unproven(seq, proof, contact)
     seq["why"] = why

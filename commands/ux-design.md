@@ -316,7 +316,7 @@ NEVER proceed to step 2 without the wow moment field populated. If the user says
 Page mode runs these steps in this order; the sections below give the detail of each.
 
 1. **Discovery** (Process step 1) writes `.ux/last-discovery.json`.
-2. **The system brief.** Write `.ux/system-brief.json`: the discovery answers plus the structured fields /ux-system reads (`industry`, `brand_role`, `product_type` and the others it lists, filled from what the user said) and the page fields engine step 2.5 reads (`proof`, `contact`, `stage`). Every later step reads this file.
+2. **The system brief.** Write `.ux/system-brief.json`: the discovery answers plus the structured fields /ux-system reads (`industry`, `brand_role`, `product_type` and the others it lists, filled from what the user said) and the page fields engine step 2.5 reads (`proof`, `contact`, `stage`, `page`, `platforms`, `sign_in`, `primary_side`). Every later step reads this file.
 3. **Brand** (engine step 1.5): extract it from the client's material, or, with no brand material, ask for one hex, as /ux-system create mode does.
 4. **System**: `system detect` (step 1a); when it finds none, `system build` from that hex and that brief (step 1b).
 5. **Suggestions** (engine step 2), only when no system existed before step 4.
@@ -475,7 +475,7 @@ If you find yourself reaching for any of these, stop. Re-read `anti-slop.md`. Pi
 | Stack auto-detection fails or conflicts | Ask the user explicitly which stack to target |
 | The build shows slop tells (a model-default gradient, "Acme", a face the system does not name) | Redo against anti-slop.md; keep whatever the client's own identity shows |
 | The build ships code in the wrong stack | Catch in review, redo |
-| `select_for_brief` raises on a field (`proof`, `contact`, `stage`, `page_sequence`) | The message names the field and its choices; fix that field in the brief and run it again |
+| `select_for_brief` raises on a field (`proof`, `contact`, `stage`, `page`, `platforms`, `sign_in`, `primary_side`, `page_sequence`) | The message names the field and its choices; fix that field in the brief and run it again |
 | SEO foundation missing on a public-web output | Reject; the output is incomplete without head surface, OG/Twitter, JSON-LD, semantic HTML, image discipline, CWV targets |
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
@@ -539,19 +539,26 @@ The sequence is the page skeleton. `select_for_brief` always returns a sequence,
 
 1. `page_sequence`, when the user names the kind of page: that sequence.
 2. `stage: pre-launch`: the `pre-launch` sequence (early access, the team, no proof section).
-3. `product_type` narrows the choice, then `project_type`, then `industry`; the brief's own phrases (goal, audience, description) choose among what is left. A call-to-action verb such as "book" never counts.
-4. With none of these, `general-landing`: hero, what it does, how it works, feature rows, one named quote, FAQ, closing band. When `why` starts with "general", tell the user which sequence you are building and offer the others by id.
+3. `page: feature`: the `feature-page` sequence, for a page about one feature of a product people already use. It has no founding team and no early-access form.
+4. `product_type` narrows the choice, then `project_type`, then `industry`; the brief's own phrases (goal, audience, description) choose among what is left. A call-to-action verb such as "book" never counts.
+5. With none of these, `general-landing`: hero, what it does, how it works, feature rows, one named quote, FAQ, closing band. When `why` starts with "general", tell the user which sequence you are building and offer the others by id.
+
+Then the product's structure refines the pick, whatever its industry. An `app` follows `platforms`: a store app keeps `app-mobile-landing`, and a product that runs on the web with no store app gets `web-app`, with no store badges and no download band. `primary_side: supply` turns a marketplace to `marketplace-supply`: the supply side's action leads and the buyer-only sections drop. `sign_in` with `phone` makes the hero's action the phone field itself. `feature-page`, `web-app` and `marketplace-supply` are reached only through these fields, never by phrases.
 
 Fill the fields from what the user said, and leave out any the user did not say:
 
 | Field | Values | Fill it when |
 |---|---|---|
 | `product_type` | `app`, `software`, `marketing-site`, `editorial`, `commerce`, `marketplace`, `local-service`: the one list /ux-system and the picker share. Aliases are mapped and reported in `why` (`saas` and `web-app` to `software`, `mobile-app` to `app`, `shop` and `store` to `commerce`, `b2b-marketplace` and `b2c-marketplace` to `marketplace`, `service` to `local-service`); any other value is refused | what the product is. A B2B marketplace is `marketplace`; `commerce` points to the shop, `app` and `software` to the software sequences, `editorial` to the publication, `local-service` to the service page; `marketing-site` narrows nothing |
-| `industry` | the /ux-system industry list only, or one of its other names (`building-materials`, `wholesale`, `cybersecurity`, `medical-supply`) | the same value the system brief carries. Every industry leads to a sequence: `b2b-marketplace`, `pharmacy` and `construction` to the marketplace (construction also to the service page), the fintech ids, `crypto` and `security` to `trust-led`, `healthcare`, `hospitality-travel`, `education` and `automotive` to `lead-gen-service` |
+| `industry` | the /ux-system industry list only, or one of its other names (`building-materials`, `wholesale`, `cybersecurity`, `medical-supply`) | the same value the system brief carries. It narrows only after `product_type` and `project_type`, and the structure fields above outrank it: a wallet app that runs on the web gets `web-app` in any industry. With no other field, every industry still leads to a sequence |
 | `proof` | any of `stats`, `testimonials`, `logos`, `reviews`, `case-studies`, `certifications`, `press`; `[]` for none | the client gives real numbers, named quotes, client logos and so on. `[]` when it has none |
 | `contact` | any of `phone`, `whatsapp`, `email`, `form`, `chat`, `address` | the routes the client really offers |
 | `stage` | `live`, `pre-launch` | `pre-launch` when there are no customers yet |
-| `page_sequence` | `lead-gen-service`, `saas-marketing`, `ecommerce-product`, `portfolio-agency`, `content-publication`, `app-mobile-landing`, `b2b-marketplace`, `trust-led`, `pre-launch`, `general-landing` | the user names the kind of page outright |
+| `page` | `home`, `feature` | `feature` when the page is about one feature of the product, not its main page |
+| `platforms` | any of `web`, `ios`, `android`, `desktop` | where the product really runs; store badges appear only with `ios` or `android` |
+| `sign_in` | any of `phone`, `email`, `password`, `sso`, `social` | how the product's users really sign in |
+| `primary_side` | `demand`, `supply` | a two-sided marketplace only: `supply` when the page speaks to the side that lists, sells, delivers or hosts, `demand` when it speaks to buyers |
+| `page_sequence` | `lead-gen-service`, `saas-marketing`, `ecommerce-product`, `portfolio-agency`, `content-publication`, `app-mobile-landing`, `b2b-marketplace`, `trust-led`, `pre-launch`, `general-landing`, `feature-page`, `web-app`, `marketplace-supply` | the user names the kind of page outright |
 
 ```bash
 python3 -c "

@@ -1,11 +1,11 @@
 {
   "_meta": {
     "version": "4.0.0",
-    "entries": 10,
-    "last_updated": "2026-09-25",
+    "entries": 13,
+    "last_updated": "2026-09-29",
     "source": "ux-skill 4.0 page-level section sequences",
     "schema_version": "2.0",
-    "purpose": "Whole-page templates the picker chooses from a 4.0 brief (engine.page_sequence.select_for_brief), in tiers: an explicit page_sequence, then stage, then product_type, then project_type, then industry, then the brief's own phrases, and general-landing when nothing points elsewhere; the picker never returns nothing. industries and product_types hold only values the look engine reads; product_type is the one vocabulary the engine and the picker share. A call-to-action verb never keys a sequence. A section with a proof kind renders only with the client's real proof of that kind. mechanism_needs names what each conversion mechanism needs (a proof kind or a contact route); without_phone is a section's text when the client has no phone."
+    "purpose": "Whole-page templates the picker chooses from a 4.0 brief (engine.page_sequence.select_for_brief), in tiers: an explicit page_sequence, then stage, then page (a feature page), then product_type, then project_type, then industry, then the brief's own phrases, and general-landing when nothing points elsewhere; the picker never returns nothing. Then the brief's structure refines the pick: platforms without ios or android turn the store-app sequence into web-app, and primary_side supply turns a marketplace into marketplace-supply. An entry with picked_by is reached only by the field it names, never by phrases. industries and product_types hold only values the look engine reads; product_type is the one vocabulary the engine and the picker share. A call-to-action verb never keys a sequence. A section with a proof kind renders only with the client's real proof of that kind. mechanism_needs names what each conversion mechanism needs (a proof kind or a contact route); without_phone is a section's text when the client has no phone; with_phone_sign_in is its text when the product signs users in by phone (sign_in)."
   },
   "entries": [
     {
@@ -304,7 +304,7 @@
         "fintech-banking", "fintech-payments", "fintech-trading", "crypto", "security"
       ],
       "product_types": [
-        "software", "app"
+        "software"
       ],
       "project_types": [],
       "section_sequence": [
@@ -393,6 +393,200 @@
       "mechanism_needs": {"named testimonial": "testimonials"},
       "footer": "Rich sitemap footer: Offer, Company, Contact, Legal.",
       "notes": "The picker's answer when no field or phrase points elsewhere, so a brief always has a skeleton. Set page_sequence when the user names a kind of page. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
+    },
+    {
+      "id": "feature-page",
+      "goal": "feature-page",
+      "picked_by": "page: feature (a page about one feature of a product people already use; stage pre-launch still picks pre-launch)",
+      "keywords": [],
+      "industries": [],
+      "product_types": [],
+      "project_types": [],
+      "section_sequence": [
+        {
+          "section": "Hero (the feature named + the product's own action)",
+          "purpose": "Name the feature and what it does for someone who already uses the product, beside a real screen of that feature. The primary action is the one the product really uses for its users (sign in, open the app, or start), never an early-access form: the product has users.",
+          "with_phone_sign_in": "Name the feature and what it does for someone who already uses the product, beside a real screen of that feature. The primary action is the product's own phone sign-in: one phone number field and a continue button, the code step on the next screen. Never an early-access form: the product has users."
+        },
+        {
+          "section": "The job it does",
+          "purpose": "The task the feature takes over, before and after, in the user's own terms. One idea per screen."
+        },
+        {
+          "section": "How it works",
+          "purpose": "Three to five steps inside the real product, each with the screen it happens on."
+        },
+        {
+          "section": "Split feature rows (real screens)",
+          "purpose": "The feature's parts, one row each with a real screen. No stock photo stands in for the product."
+        },
+        {
+          "section": "Where it fits",
+          "purpose": "How the feature connects to the rest of the product, with a link back to the product's home page and to related features."
+        },
+        {
+          "section": "Named quote",
+          "proof": "testimonials",
+          "purpose": "One named quote from a real user about this feature: name, role, and business or city."
+        },
+        {
+          "section": "FAQ (availability, limits, plans)",
+          "purpose": "Who has the feature, what it costs, where it works and where it stops. Answers only the questions the client can answer truthfully."
+        },
+        {
+          "section": "CTA band (use it now)",
+          "purpose": "Repeats the hero's action for a user who has read the page: the same verb, one filled button.",
+          "with_phone_sign_in": "Repeats the hero's phone sign-in for a user who has read the page: the same phone field and verb, one filled button."
+        },
+        {
+          "section": "Rich footer",
+          "purpose": "Sitemap footer: Product (each feature), Support, Company, Legal."
+        }
+      ],
+      "cta_placement": "The product's own action in the hero and repeated in the closing band; a link to the product home in the header and in Where it fits.",
+      "cta_placement_with_phone_sign_in": "The phone sign-in field in the hero and repeated in the closing band; a link to the product home in the header and in Where it fits.",
+      "conversion_mechanisms": [
+        "the product's own action in hero",
+        "real screens of the feature",
+        "named testimonial",
+        "FAQ objection handling",
+        "link to the product home",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {
+        "named testimonial": "testimonials"
+      },
+      "footer": "Sitemap footer: Product (each feature), Support, Company, Legal.",
+      "notes": "A feature page speaks to people who know the product: no founding team, no early-access form, no launch story. Store badges appear only when the brief's platforms list ios or android. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
+    },
+    {
+      "id": "web-app",
+      "goal": "web-app",
+      "picked_by": "platforms without ios or android, where the pick would be the store-app sequence (a product people use in the browser)",
+      "keywords": [],
+      "industries": [],
+      "product_types": [],
+      "project_types": [],
+      "section_sequence": [
+        {
+          "section": "Hero (claim + the sign-in action)",
+          "purpose": "What the product does for its user in one headline, the sign-in or start action the product really uses, and a real screen of the product in the browser. No store badges and no download: it runs on the web.",
+          "with_phone_sign_in": "What the product does for its user in one headline, then the phone sign-in itself: one phone number field and a continue button, the code step on the next screen. A real screen of the product in the browser beside it. No store badges and no download: it runs on the web."
+        },
+        {
+          "section": "What you can do",
+          "purpose": "The three to five things a user does in the product, each named with its concrete result."
+        },
+        {
+          "section": "How it works",
+          "purpose": "The steps from the first visit to the first result, in the order the product asks for them."
+        },
+        {
+          "section": "Split feature rows (real screens)",
+          "purpose": "The marquee capabilities, one row each with a real browser screen, depth over a dense grid."
+        },
+        {
+          "section": "Named quote",
+          "proof": "testimonials",
+          "purpose": "One named quote from a real user: name, and role, business or city."
+        },
+        {
+          "section": "FAQ (account, data, cost)",
+          "purpose": "How sign-in works, what the product keeps about the user, what it costs, which browsers and phones it runs on."
+        },
+        {
+          "section": "CTA band (sign in)",
+          "purpose": "Repeats the hero's action with the same verb, one filled button.",
+          "with_phone_sign_in": "Repeats the phone sign-in: the same phone field and verb, one filled button."
+        },
+        {
+          "section": "Rich footer",
+          "purpose": "Sitemap footer: Product, Support, Company, Legal."
+        }
+      ],
+      "cta_placement": "The sign-in or start action in the hero and the closing band; a sign-in link in the header for returning users.",
+      "cta_placement_with_phone_sign_in": "The phone sign-in field in the hero and the closing band; a sign-in link in the header for returning users.",
+      "conversion_mechanisms": [
+        "sign-in action in hero",
+        "real browser screens",
+        "named testimonial",
+        "FAQ objection handling",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {
+        "named testimonial": "testimonials"
+      },
+      "footer": "Sitemap footer: Product, Support, Company, Legal.",
+      "notes": "The product runs in the browser, so the page has no store badges, no device mock of a store app and no download band. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
+    },
+    {
+      "id": "marketplace-supply",
+      "goal": "marketplace-supply",
+      "picked_by": "primary_side: supply on a two-sided marketplace (the side that lists, sells, delivers or hosts is the page's audience)",
+      "keywords": [],
+      "industries": [],
+      "product_types": [],
+      "project_types": [],
+      "section_sequence": [
+        {
+          "section": "Hero (what the supply side gets + join)",
+          "purpose": "What joining gives the supply side (the orders, customers or bookings it reaches) in one headline, and the supply side's own action: apply, list, or join. A real screen of the supplier's view beside it. The buyer path is a text link at most."
+        },
+        {
+          "section": "What suppliers get",
+          "purpose": "The reach, the orders and the tools the supply side gets, each with its concrete result."
+        },
+        {
+          "section": "How selling works",
+          "purpose": "Three to five steps from joining to getting paid: apply, list, receive orders, deliver, get paid. Real supplier screens where the client has them."
+        },
+        {
+          "section": "Split feature rows (the supplier's screens)",
+          "purpose": "The supplier tools (orders, catalog, payouts, reports), one row each with a real screen."
+        },
+        {
+          "section": "Terms for suppliers",
+          "purpose": "Fees, payout timing, coverage and the requirements to join, stated plainly. This answers what a supplier asks before applying."
+        },
+        {
+          "section": "Numbers band",
+          "proof": "stats",
+          "purpose": "Real numbers the supply side cares about (buyers reached, orders a month, cities), measured by the client."
+        },
+        {
+          "section": "Supplier quote",
+          "proof": "testimonials",
+          "purpose": "One named quote from a real supplier, with the business name and city."
+        },
+        {
+          "section": "FAQ (fees, onboarding, payouts)",
+          "purpose": "What it costs to join, how long onboarding takes, when payouts land, what happens with returns."
+        },
+        {
+          "section": "CTA band (join as a supplier)",
+          "purpose": "Repeats the supply side's action with the same verb, one filled button."
+        },
+        {
+          "section": "Rich footer",
+          "purpose": "Sitemap footer: For suppliers, For buyers, Company, Legal."
+        }
+      ],
+      "cta_placement": "The supply side's action (apply, list or join) in the hero and the closing band; the buyer path as a text link in the header.",
+      "conversion_mechanisms": [
+        "supplier application in hero",
+        "fees and payout terms stated",
+        "real supplier screens",
+        "proof/stats bar",
+        "named testimonial",
+        "FAQ objection handling",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {
+        "proof/stats bar": "stats",
+        "named testimonial": "testimonials"
+      },
+      "footer": "Sitemap footer: For suppliers, For buyers, Company, Legal.",
+      "notes": "The page speaks to the supply side, so the buyer-only sections (categories to shop, how ordering works, delivery to the buyer) are left out. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
     }
   ]
 }
