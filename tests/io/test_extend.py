@@ -25,13 +25,15 @@ from engine.io.adapter import AxisMap, Mapping, RoleMap, parse_mapping, propose
 from engine.io.css_in import import_css, read_css
 from engine.io.dtcg_in import import_dtcg, read_dtcg
 from engine.io.extend import extend, write_extended
-from engine.io.figma_in import read_figma
+from engine.io.figma_in import import_figma, read_figma
+from engine.io.figma_out import READ_SCRIPT
 from engine.io.intake import write_with_intake
 from engine.io.markdown_in import import_markdown
 from engine.io.report import Source
 from engine.io.tailwind_in import import_tailwind_css, import_tailwind_json, read_tailwind
 from engine.io.tailwind_out import to_tailwind
 from engine.synthesizer.axes import AxisValues
+from tests.io.test_figma_out import NODE, _run
 
 NEUTRAL = AxisValues(*[0.5] * 7)
 
@@ -357,6 +359,13 @@ def test_a_finding_the_system_had_stays_apart_whatever_axis_the_additions_bring(
         result.existing[0]
 
 
+def test_the_gate_line_says_when_every_failure_was_there_before():
+    result = extend(_foreign(_light("#9a9a9a")), LIGHT, foundations=("border",))
+    assert result.problems == []
+    assert ("Every failing check counted above is one listed under Already in the system; the "
+            "additions cause none.") in result.files["extend-report.md"]
+
+
 def test_a_role_the_owner_kept_out_gets_no_token_from_a_foundation():
     mapping = Mapping(roles={**MAPPING.roles, "color.focus.ring": RoleMap(None, "owner")},
                       axes=dict(MAPPING.axes))
@@ -568,6 +577,58 @@ def test_a_later_tailwind_extension_keeps_the_first_and_sees_a_changed_source(tm
                                         "written by an earlier extension, with other values")
 
 
+@pytest.mark.parametrize("fname,text,reader,mapping,value", [
+    ("theme.css", FOREIGN, read_css, MAPPING, "calc(1px + 1px)"),
+    ("app.css", TAILWIND, read_tailwind, TW_MAPPING, "clamp(1px, 2vw, 3px)"),
+])
+def test_a_mapped_name_the_source_now_sets_unread_names_the_value_and_the_fix(
+        tmp_path, fname, text, reader, mapping, value):
+    (tmp_path / fname).write_text(text, encoding="utf-8")
+    first = extend(reader(tmp_path / fname), mapping, foundations=("radius",))
+    assert write_extended(first, reader(tmp_path / fname))["status"] == "written"
+    own = parse_mapping(first.files["mapping.json"], "mapping.json")
+    (tmp_path / fname).write_text(text.replace("}\n", f"  --radius-card: {value};\n}}\n", 1),
+                                  encoding="utf-8")
+    again = extend(reader(tmp_path / fname), own, foundations=("motion",))
+    ext = fname.replace(".css", "-ext.css")
+    assert again.problems == [
+        f"--radius-card is declared in {fname} as a value the import could not read ({value} "
+        f"is computed by the browser; write the value it computes to), and in {ext}, written "
+        f"by an earlier extension, which loads after {fname} and replaces it; mapping.json "
+        f"sends radius.card to it, so write --radius-card in {fname} in a form the import "
+        "reads, or map radius.card to another of your tokens in mapping.json"]
+    assert list(again.files) == ["extend-report.md"]
+
+
+def test_a_mapped_name_declared_unread_blocks_on_a_first_run_too():
+    text = FOREIGN.replace("  --page: var(--paper);\n}", "  --page: var(--paper);\n"
+                           "  --ring: calc(1px + 1px);\n}")
+    mapping = Mapping(roles={**MAPPING.roles, "border.focus-ring.width": RoleMap("ring")},
+                      axes=dict(MAPPING.axes))
+    result = extend(_foreign(text), mapping, foundations=("radius",))
+    assert result.problems == [
+        "--ring is declared in theme.css as a value the import could not read (calc(1px + 1px) "
+        "is computed by the browser; write the value it computes to); mapping.json sends "
+        "border.focus-ring.width to it, so write --ring in theme.css in a form the import reads, "
+        "or map border.focus-ring.width to another of your tokens in mapping.json"]
+
+
+def test_a_figma_second_run_before_the_owner_exports_again_keeps_the_mapping(tmp_path):
+    (tmp_path / "variables.json").write_text(json.dumps(_figma_export()), encoding="utf-8")
+    first = extend(read_figma(tmp_path / "variables.json"), FIGMA_MAPPING,
+                   foundations=("radius",))
+    assert write_extended(first, read_figma(tmp_path / "variables.json"))["status"] == "written"
+    own = parse_mapping(first.files["mapping.json"], "mapping.json")
+    assert own.roles["radius.card"] == RoleMap("radius.card", "name")
+    second = extend(read_figma(tmp_path / "variables.json"), own, foundations=("motion",))
+    assert second.problems == []
+    assert second.tokens.has("radius.card")
+    payload = json.loads(second.files["variables-ext.json"])
+    names = [v["name"] for c in payload["collections"] for v in c["variables"]]
+    assert names.index("radius/card") < names.index("motion/reveal/duration")
+    assert "| radius | 9 of 9 |" in second.files["extend-report.md"]
+
+
 def test_a_later_extension_that_would_change_an_earlier_addition_blocks(tmp_path):
     (tmp_path / "theme.css").write_text(FOREIGN, encoding="utf-8")
     light = Mapping(roles=dict(MAPPING.roles), axes={})
@@ -643,6 +704,37 @@ def test_two_folders_are_written_both_or_neither(tmp_path):
     assert sorted(p.name for p in intake.iterdir()) == ["mapping.json"]
 
 
+@pytest.mark.skipif(NODE is None, reason="node is not installed")
+def test_a_second_figma_script_applies_what_both_runs_add(tmp_path):
+    (tmp_path / "variables.json").write_text(json.dumps(_figma_export()), encoding="utf-8")
+    first = extend(read_figma(tmp_path / "variables.json"), FIGMA_MAPPING,
+                   foundations=("radius",))
+    write_extended(first, read_figma(tmp_path / "variables.json"))
+    own = parse_mapping(first.files["mapping.json"], "mapping.json")
+    second = extend(read_figma(tmp_path / "variables.json"), own, foundations=("motion",))
+    got = _run(tmp_path, _figma_export(), second.files["variables-ext.js"], READ_SCRIPT)
+    result, read = got["out"]
+    assert result["conflicts"] == []
+    back = import_figma(read, Source("read.json", "figma", "0" * 64, len(read))).tokens
+    assert back.resolve("radius.card") == first.tokens.resolve("radius.card")
+    assert back.has("motion.reveal.duration") and back.get("ink").value == \
+        read_figma(tmp_path / "variables.json").tokens.get("ink").value
+
+
+def test_every_refusal_is_given_at_once(tmp_path):
+    (tmp_path / "theme.css").write_text(FOREIGN, encoding="utf-8")
+    (tmp_path / "theme-ext.css").write_text("/* mine */\n", encoding="utf-8")
+    intake = tmp_path / "intake"
+    intake.mkdir()
+    (intake / "mapping.json").write_text('{"version": 1, "roles": {}}\n', encoding="utf-8")
+    imported = read_css(tmp_path / "theme.css")
+    result = extend(imported, MAPPING, foundations=("radius",))
+    outcome = write_extended(result, imported, out=intake)
+    assert outcome["status"] == "refused"
+    assert outcome["conflicts"] == [str(tmp_path / "theme-ext.css"), str(intake / "mapping.json")]
+    assert "theme-ext.css" in outcome["message"] and "mapping.json" in outcome["message"]
+
+
 def test_a_second_folder_that_fails_puts_the_first_back(tmp_path, monkeypatch):
     import sys
     module = sys.modules["engine.io.extend"]
@@ -661,7 +753,9 @@ def test_a_second_folder_that_fails_puts_the_first_back(tmp_path, monkeypatch):
     monkeypatch.setattr(module, "write_with_intake", failing)
     outcome = write_extended(result, imported, out=tmp_path / "intake")
     assert outcome["status"] == "error"
-    assert "put back as it was" in outcome["message"]
+    assert outcome["message"] == (
+        "Nothing was written: the disk is full. What was written in "
+        f"{tmp_path} was put back as it was, so nothing changed.")
     assert sorted(p.name for p in tmp_path.iterdir()) == ["theme.css"]
 
 

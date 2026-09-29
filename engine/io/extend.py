@@ -39,9 +39,13 @@ An extension file already beside the source is read first: what it added
 is kept, counted as part of the system, and the new additions follow it.
 Where the source now sets a name the earlier extension sets too, with
 another value, the extension would replace the owner's value, so that
-blocks with the fix. A Figma extension keeps the variables of an earlier
-one the file does not have yet; the ones it has now are left as the file
-has them.
+blocks with the fix. A Figma extension is read as the file will be once
+its script runs, so a mapping that names what it adds still holds before
+the owner exports again; the variables of it the file does not have yet
+are kept, first, and the ones the file has now are left as it has them.
+A role the mapping sends to a name the system declares in a form the
+import could not read (calc(), clamp()) blocks with that value and the
+fix: write it in a form the import reads, or map the role elsewhere.
 Only the engine's own system, known from the record of the files it wrote
 (Imported.owned, never token names), is rewritten in place, and only when
 the import read every entry of it; otherwise it is extended like any
@@ -92,12 +96,13 @@ from engine.foundations.modes import AXES, ModeError, compress, contexts, join, 
 from engine.foundations.tokens import (
     AliasError, Token, TokenSet, alias_target, css_property, is_alias)
 from engine.foundations.validate import validate
-from engine.foundations.values import css_entries
+from engine.foundations.values import TYPOGRAPHY_FIELDS, css_entries
 from engine.io.adapter import ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mapping, view
 from engine.io.css_in import import_css
 from engine.io.enhance import enhance
 from engine.io.figma_out import (
     EXTENSION_HEAD, apply_script, extension_names, figma_extension, figma_files)
+from engine.io.figma_in import import_figma
 from engine.io.intake import INTAKE_DIR, write_with_intake
 from engine.io.report import Imported, read_source
 from engine.io.scan import canonical
@@ -147,14 +152,17 @@ class _Earlier:
     it adds in the source's names, the text written for them (a
     stylesheet's body, without its opening comment), the properties or
     paths it declares that could not be read back, for a Figma
-    extension its payload, and each place where it now replaces a value
-    the source sets, with the fix."""
+    extension its payload and the export as it will be once the payload
+    is applied, and each place where it now replaces a value the source
+    sets, with the fix."""
     name: str
     tokens: TokenSet
     body: str = ""
     unread: Dict[str, str] = field(default_factory=dict)
     payload: Optional[Dict[str, Any]] = None
-    clashes: List[str] = field(default_factory=list)
+    # (property, "unread" or "value", what the import said of the source's)
+    clashes: List[Tuple[str, str, str]] = field(default_factory=list)
+    combined: Optional[Imported] = None
 
 
 def _refs(value: Any) -> List[str]:
@@ -339,7 +347,7 @@ def _earlier(imported: Imported, name: str) -> Optional[_Earlier]:
         before = unread_properties(imported)
         unread = {p: m for p, m in unread_properties(both).items() if p not in before}
         return _Earlier(name, tokens, _body(text), unread,
-                        clashes=_sheet_clashes(imported, both, text, name))
+                        clashes=_sheet_clashes(imported, both, text))
     if fmt == "figma":
         try:
             payload = json.loads(text)
@@ -348,7 +356,15 @@ def _earlier(imported: Imported, name: str) -> Optional[_Earlier]:
         if not isinstance(payload, dict) or not isinstance(payload.get("collections"), list):
             raise InputError(f"{path} is not the payload an earlier extension wrote, so what it "
                              "added cannot be kept; move it away to start the extension again")
-        return _Earlier(name, TokenSet(imported.tokens.axes), payload=payload)
+        # What the file will hold once the owner runs the earlier script:
+        # its own variables, and each the payload adds that it lacks.
+        _, own = read_source(source.path, fmt, "the source")
+        both = import_figma(_applied(own, payload), source)
+        tokens = TokenSet(both.tokens.axes)
+        for t in both.tokens.tokens():
+            if not imported.tokens.has(t.path):
+                tokens.add(t)
+        return _Earlier(name, tokens, payload=payload, combined=both)
     try:
         tokens = from_dtcg(json.loads(text))
     except (ValueError, TypeError, KeyError) as exc:
@@ -361,22 +377,20 @@ def _earlier(imported: Imported, name: str) -> Optional[_Earlier]:
 _DECLARED = re.compile(r"(--[A-Za-z0-9_-]+)\s*:")
 
 
-def _sheet_clashes(imported: Imported, both: Imported, text: str, ext: str) -> List[str]:
+def _sheet_clashes(imported: Imported, both: Imported,
+                   text: str) -> List[Tuple[str, str, str]]:
     """Each custom property an earlier stylesheet extension declares that
-    the source now declares too with another value, or declares where the
-    import did not read it: the extension loads after the source, so it
-    would replace the owner's value."""
-    name = Path(imported.report.source.path).name
+    the source now declares too with another value ("value"), or declares
+    where the import did not read it ("unread", with what the import said):
+    the extension loads after the source, so it would replace the owner's
+    value."""
     own = {css_property(t.path): t for t in imported.tokens.tokens()}
     unread = unread_properties(imported)
-    out: List[str] = []
+    out: List[Tuple[str, str, str]] = []
     bare = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
     for prop in dict.fromkeys(_DECLARED.findall(bare)):
         if prop in unread:
-            out.append(f"{prop} is declared in {name}, where the import did not read it "
-                       f"({unread[prop]}), and in {ext}, written by an earlier extension, "
-                       f"which loads after {name} and replaces its value; remove {prop} from "
-                       f"{ext}, or from {name}")
+            out.append((prop, "unread", unread[prop]))
             continue
         mine = own.get(prop)
         if mine is None:
@@ -384,10 +398,80 @@ def _sheet_clashes(imported: Imported, both: Imported, text: str, ext: str) -> L
         seen = both.tokens.get(mine.path) if both.tokens.has(mine.path) else None
         if seen is None or (seen.type, seen.value, seen.modes) != (
                 mine.type, mine.value, mine.modes):
-            out.append(f"{prop} is in {name} and in {ext}, written by an earlier extension, "
-                       f"with other values, so {ext} replaces the value {name} sets; remove "
-                       f"{prop} from {ext}, or from {name}")
+            out.append((prop, "value", ""))
     return out
+
+
+def _sent_to(mapping: Mapping, token: str) -> List[str]:
+    """The roles the mapping sends to a token."""
+    return [r for r, m in mapping.roles.items() if m.token == token]
+
+
+def _unread_fix(key: str, where: str, roles: List[str], mapping_name: str) -> str:
+    """The fix for a name the import could not read in `where`: write it in
+    a form it reads, or, when the mapping sends roles to it, map them to
+    another token."""
+    fix = f"write {key} in {where} in a form the import reads"
+    if roles:
+        fix = (f"{mapping_name} sends {_and(roles)} to it, so {fix}, or map {_and(roles)} to "
+               f"another of your tokens in {mapping_name}")
+    return fix
+
+
+def _applied(text: str, payload: Dict[str, Any]) -> str:
+    """A Figma export as it will read once an extension's payload is
+    applied to the file: each collection the payload names is the file's
+    own by name, or a new one; each variable the file lacks is added with
+    its values under the collection's mode ids and its aliases by id; a
+    variable the file has keeps the file's values, as the apply script
+    leaves it."""
+    doc = json.loads(text)
+    data = doc.get("meta", doc)
+    collections = {cid: dict(c) for cid, c in data["variableCollections"].items()}
+    variables = dict(data["variables"])
+    by_name = {c.get("name"): cid for cid, c in collections.items()}
+    ids = {f"{collections[v['variableCollectionId']].get('name')}:{v.get('name')}": vid
+           for vid, v in variables.items() if v.get("variableCollectionId") in collections}
+    n = 0
+    for c in payload["collections"]:
+        cid = by_name.get(c["name"])
+        if cid is None:
+            cid = f"VariableCollectionId:added:{len(collections) + 1}"
+            modes = [{"modeId": f"{cid}:{i}", "name": m} for i, m in enumerate(c["modes"])]
+            collections[cid] = {"id": cid, "name": c["name"], "modes": modes,
+                                "defaultModeId": modes[0]["modeId"], "variableIds": [],
+                                "hiddenFromPublishing": False, "remote": False}
+            by_name[c["name"]] = cid
+        collections[cid]["variableIds"] = list(collections[cid].get("variableIds", []))
+        for v in c["variables"]:
+            if f"{c['name']}:{v['name']}" not in ids:
+                n += 1
+                ids[f"{c['name']}:{v['name']}"] = f"VariableID:added:{n}"
+    for c in payload["collections"]:
+        cid = by_name[c["name"]]
+        mode_id = {m["name"]: m["modeId"] for m in collections[cid]["modes"]}
+        for v in c["variables"]:
+            vid = ids[f"{c['name']}:{v['name']}"]
+            if vid in variables:
+                continue
+            values: Dict[str, Any] = {}
+            for mode, value in v["values"].items():
+                if mode not in mode_id:
+                    continue
+                if isinstance(value, dict) and "alias" in value:
+                    if value["alias"] not in ids:
+                        continue
+                    value = {"type": "VARIABLE_ALIAS", "id": ids[value["alias"]]}
+                values[mode_id[mode]] = value
+            variables[vid] = {"id": vid, "name": v["name"], "variableCollectionId": cid,
+                              "resolvedType": v["type"], "valuesByMode": values,
+                              "scopes": list(v.get("scopes", [])),
+                              "description": v.get("description", ""),
+                              "hiddenFromPublishing": v.get("hidden", False), "remote": False}
+            collections[cid]["variableIds"].append(vid)
+    body = {"variableCollections": collections, "variables": variables}
+    whole = {**doc, "meta": {**doc["meta"], **body}} if "meta" in doc else {**doc, **body}
+    return json.dumps(whole)
 
 
 def _union(*axes: Any) -> Dict[str, Tuple[str, str]]:
@@ -470,7 +554,19 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                             f"replaces the value {name} sets; remove {t.path} from "
                             f"{earlier.name}, or from {name}")
     if earlier is not None:
-        problems += earlier.clashes
+        for prop, kind, why in earlier.clashes:
+            if kind == "value":
+                problems.append(f"{prop} is in {name} and in {earlier.name}, written by an "
+                                f"earlier extension, with other values, so {earlier.name} "
+                                f"replaces the value {name} sets; remove {prop} from "
+                                f"{earlier.name}, or from {name}")
+                continue
+            roles_to = _sent_to(mapping, prop[2:])
+            fix = (_unread_fix(prop, name, roles_to, mapping_name) if roles_to
+                   else f"remove {prop} from {earlier.name}, or from {name}")
+            problems.append(f"{prop} is declared in {name} as a value the import could not "
+                            f"read ({why}), and in {earlier.name}, written by an earlier "
+                            f"extension, which loads after {name} and replaces it; {fix}")
     _check_roles(roles, mapping, base, mapping_name)
 
     held = _Held(sheet)
@@ -681,6 +777,31 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
         if axis not in base.axes and axis not in new_mapping.axes:
             new_mapping.axes[axis] = AxisMap(axis, {v: v for v in AXES[axis]}, "name")
 
+    # A role the mapping sends to a name the system declares in a form the
+    # import could not read cannot be checked: the line says so and names
+    # the fix, and the check leaves the role out.
+    unreadable: Dict[str, str] = {}
+    for role, m in mapping.roles.items():
+        if m.token is None or base.has(m.token) or (
+                ROLE_TYPES[role] == "typography"
+                and all(base.has(f"{m.token}-{css}") for _, css in TYPOGRAPHY_FIELDS.values())):
+            continue
+        key = css_property(m.token) if sheet else m.token
+        if key in declared:
+            unreadable[role] = key
+    covered = {prop for prop, kind, _ in (earlier.clashes if earlier else []) if kind == "unread"}
+    for key in dict.fromkeys(unreadable.values()):
+        if key in covered:
+            continue
+        where, why = declared[key]
+        problems.append(f"{key} is declared in {where} as a value the import could not read "
+                        f"({why}); "
+                        + _unread_fix(key, where, [r for r, k in unreadable.items() if k == key],
+                                      mapping_name))
+    checking = Mapping({r: m for r, m in mapping.roles.items() if r not in unreadable},
+                       dict(mapping.axes))
+    checking_new = Mapping({r: m for r, m in new_mapping.roles.items() if r not in unreadable},
+                           dict(new_mapping.axes))
     clashes = len(problems)
     # The system as it was, checked in the same contexts as the result:
     # under every axis the additions bring, so a finding it had before
@@ -691,16 +812,17 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
     for t in base.tokens():
         wide.add(t)
     before = enhance(dataclasses.replace(imported, tokens=wide),
-                     Mapping(dict(mapping.roles), {**mapping.axes,
-                                                    **{a: new_mapping.axes[a] for a in brought
-                                                       if a in new_mapping.axes}}),
+                     Mapping(dict(checking.roles), {**checking.axes,
+                                                     **{a: new_mapping.axes[a] for a in brought
+                                                        if a in new_mapping.axes}}),
                      mapping_name=mapping_name)
-    after = enhance(dataclasses.replace(imported, tokens=merged), new_mapping,
+    after = enhance(dataclasses.replace(imported, tokens=merged), checking_new,
                     mapping_name=mapping_name)
     roles_added = {t.path: "role" if origin == "role" else t.path.split(".", 1)[0]
                    for t, origin in adding if t.path in ROLE_TYPES}
-    problems += [_owner_fix(m, roles_added, mapping_name)
-                 for m in after.findings if m not in before.findings]
+    caused = [_owner_fix(m, roles_added, mapping_name)
+              for m in after.findings if m not in before.findings]
+    problems += caused
     had = [m for m in after.findings if m in before.findings]
     existing = [m for m in had if not _in_new_mode(m, brought)]
     unmeasured = [m for m in had if _in_new_mode(m, brought)]
@@ -711,7 +833,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
 
     contract_files: Dict[str, str] = {}
     if contracts:
-        checked, _ = view(merged, new_mapping, mapping_name)
+        checked, _ = view(merged, checking_new, mapping_name)
         loaded = []
         for c in contracts:
             path = Path(c)
@@ -749,7 +871,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
             problems.append(str(exc))
     report = _report(imported, result, list(foundations), roles, list(contract_files),
                      origins, after, earlier, in_place, ext_names, mapping_name, clashes,
-                     brought)
+                     brought, len(caused))
     if problems:
         result.files = {"extend-report.md": report}
         result.load = ""
@@ -912,18 +1034,28 @@ def _figma(imported: Imported, ts: TokenSet, earlier: Optional[_Earlier],
     holds that the file does not have yet kept, and how many variables it
     adds. Raises InputError when a new variable has the name of one the
     earlier extension holds with other values."""
-    payload = figma_extension(imported, ts)
+    # The file as it will be once the earlier script runs holds what that
+    # script adds, so only the new additions go in this payload.
+    held = earlier.combined if earlier is not None and earlier.combined is not None \
+        else imported
+    payload = figma_extension(held, ts)
     if earlier is not None and earlier.payload is not None:
         record = imported.figma or {}
         have = {(col, vname) for col, vname in record.get("variables", {}).values()}
+        # What the earlier script adds comes first, collection by collection
+        # and before the new variables, so each alias finds its target.
         specs = {c["name"]: c for c in payload["collections"]}
+        order: List[str] = []
         for old in earlier.payload["collections"]:
             spec = specs.get(old["name"])
             if spec is None:
                 spec = dict(old, variables=[])
-                payload["collections"].append(spec)
                 specs[old["name"]] = spec
+            elif old.get("new"):
+                spec["new"] = True
+            order.append(old["name"])
             new = {v["name"]: v for v in spec["variables"]}
+            kept: List[Dict[str, Any]] = []
             for v in old.get("variables", []):
                 if (old["name"], v["name"]) in have:
                     continue
@@ -935,8 +1067,10 @@ def _figma(imported: Imported, ts: TokenSet, earlier: Optional[_Earlier],
                             f"extension added, so run {names[1]} in Figma, export the file "
                             "again and extend that, or leave it out")
                     continue
-                spec["variables"].append(v)
-        payload["collections"] = [c for c in payload["collections"] if c["variables"]]
+                kept.append(v)
+            spec["variables"] = kept + spec["variables"]
+        order += [c["name"] for c in payload["collections"] if c["name"] not in order]
+        payload["collections"] = [specs[n] for n in order if specs[n]["variables"]]
     count = sum(len(c["variables"]) for c in payload["collections"])
     source = Path(imported.report.source.path).name
     return ({names[0]: json.dumps(payload, indent=2) + "\n",
@@ -1013,7 +1147,7 @@ def _s(n: int) -> str:
 def _report(imported: Imported, result: Extended, foundations: List[str],
             roles: Dict[str, str], contracts: List[str], origins: Dict[str, str],
             after: Any, earlier: Optional[_Earlier], in_place: bool, ext_names: List[str],
-            mapping_name: str, clashes: int, brought: List[str]) -> str:
+            mapping_name: str, clashes: int, brought: List[str], caused: int) -> str:
     source = imported.report.source
     name = Path(source.path).name
     also = [Path(a.path).name for a in imported.report.also_read]
@@ -1065,14 +1199,18 @@ def _report(imported: Imported, result: Extended, foundations: List[str],
                          "it.")
     lines += ["", "## Check", ""]
     if clashes:
-        lines += ["The additions under What blocks it that clash with the system were left "
-                  "out of this check; it covers the system with the rest.", ""]
+        lines += ["What the lines under What blocks it name was left out of this check; it "
+                  "covers the system with the rest.", ""]
     check = after.check_lines(source.path)
     if not after.measured:
         check[-1] = ("The gate was not measured: no role is mapped, so nothing was checked and "
                      f"nothing here passed; map roles to your tokens in {mapping_name} to check "
                      "them.")
     lines += check
+    if after.measured and not after.check.report.passed and not caused \
+            and (result.existing or result.unmeasured):
+        lines += ["", "Every failing check counted above is one listed under Already in the "
+                      "system; the additions cause none."]
     if result.problems:
         lines += ["", "## What blocks it", "",
                   "Nothing was written but this report; fix each line and run it again.", ""]
@@ -1131,10 +1269,21 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
                                                      **labels), result, labels), result)
     near = {n: result.files[n] for n in result.beside}
     rest = {n: t for n, t in result.files.items() if n not in result.beside}
+    stopped = []
     for folder, files in ((here, near), (target, rest)):
         planned = write_with_intake(folder, files, imported.report, plan_only=True, **labels)
         if planned["status"] not in ("planned", "unchanged"):
-            return {**_fonts_note(planned, result, labels), "load": result.load}
+            stopped.append((folder, _fonts_note(planned, result, labels)))
+    if len(stopped) == 1:
+        return {**stopped[0][1], "load": result.load}
+    if stopped:
+        # Every refusal at once, so one fix round covers both folders.
+        return {"status": "error" if any(o["status"] == "error" for _, o in stopped)
+                else "refused",
+                "written": [], "unchanged": [],
+                "conflicts": [str(f / n) for f, o in stopped for n in o["conflicts"]],
+                "message": " ".join(_stop(o["message"]) for _, o in stopped),
+                "backup": "", "replaced": {}, "load": result.load}
     saved = _snapshot(here, near)
     first = write_with_intake(here, near, imported.report, **labels)
     if first["status"] not in ("written", "unchanged"):
@@ -1143,8 +1292,8 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
     if second["status"] not in ("written", "unchanged"):
         _put_back(here, first["written"], saved)
         return {**second, "load": result.load,
-                "message": second["message"] + f" What was written in {here} was put back as it "
-                                                "was, so nothing changed."}
+                "message": _stop(second["message"]) + f" What was written in {here} was put "
+                                                       "back as it was, so nothing changed."}
     status = "written" if "written" in (first["status"], second["status"]) else "unchanged"
     words = [o["message"] for o in (first, second) if o["status"] == "written"]
     outcome = {"status": status,
@@ -1161,6 +1310,12 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
                                for n, b in second["replaced"].items()}},
                "beside": first, "out": second}
     return _loaded(outcome, result)
+
+
+def _stop(message: str) -> str:
+    """A message ending with a full stop, so another can follow it."""
+    message = message.rstrip()
+    return message if message.endswith((".", "!", "?")) else message + "."
 
 
 def _loaded(outcome: Dict[str, Any], result: Extended) -> Dict[str, Any]:
