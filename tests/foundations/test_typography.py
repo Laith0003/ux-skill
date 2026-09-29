@@ -44,9 +44,9 @@ def px(dim):
 
 
 @pytest.mark.parametrize("contrast, sizes, r", [
-    (0.0, [12, 14, 16, 18, 20, 22, 24, 27, 30, 66], 1.11),
-    (0.5, [12, 14, 16, 20, 24, 29, 36, 44, 54, 80], 1.225),
-    (1.0, [12, 14, 16, 21, 29, 38, 52, 69, 93, 101], 1.34),
+    (0.0, [12, 14, 16, 18, 20, 22, 24, 27, 30, 90], 1.11),
+    (0.5, [12, 14, 16, 20, 24, 29, 36, 44, 54, 120], 1.225),
+    (1.0, [12, 14, 16, 21, 29, 38, 52, 69, 93, 161], 1.34),
 ])
 def test_scale_ratio_follows_the_contrast_axis(contrast, sizes, r):
     assert latin_px(axes(contrast=contrast)) == sizes
@@ -59,7 +59,7 @@ def test_arabic_sizes_follow_the_faces_ratio_and_are_never_equal():
     assert scale == 1.15
     latin = latin_px(axes())
     arabic = arabic_px(latin, scale)
-    assert arabic == [14, 16, 18, 23, 28, 33, 41, 51, 62, 92]
+    assert arabic == [14, 16, 18, 23, 28, 33, 41, 51, 62, 138]
     assert all(a >= lat + 1 and a <= lat * 1.2 for a, lat in zip(arabic, latin))
 
 
@@ -97,7 +97,7 @@ def test_sizes_are_rem_and_roles_are_composites():
 
 
 @pytest.mark.parametrize("contrast, formality, hero, heading", [
-    (0.5, 0.5, 600, 600), (1.0, 0.0, 800, 700), (0.0, 1.0, 300, 500)])
+    (0.5, 0.5, 500, 600), (1.0, 0.0, 600, 700), (0.0, 1.0, 450, 500)])
 def test_weight_eases_from_the_display_weight_to_the_heading_weight(contrast, formality, hero,
                                                                      heading):
     a = axes(contrast=contrast, formality=formality)
@@ -187,7 +187,7 @@ def test_every_axis_mix_is_valid_and_passes(contrast, density, personality, form
     ts = generate_type(a).tokens
     assert validate(ts) == []
     report = gate(ts, [], CHECKS)
-    assert report.passed and report.rules_checked == 29
+    assert report.passed and report.rules_checked == 31
 
 
 def _hand():
@@ -238,12 +238,14 @@ def test_checks_name_the_token_and_the_fix():
         ("rem-sizes", "system")]
 
 
-def test_every_axis_but_motion_moves_typography():
+def test_every_axis_moves_typography():
+    """Motion reaches type too: it raises energy, and energy the landing
+    display (character.expressiveness)."""
     def dump(a):
         return [(t.path, t.value, t.modes) for t in generate_type(a).tokens.tokens()]
     base = dump(axes())
-    assert dump(axes(motion=1.0)) == base
-    for name in ("warmth", "contrast", "density", "geometry", "formality", "type_personality"):
+    for name in ("warmth", "contrast", "density", "geometry", "formality", "motion",
+                 "type_personality"):
         assert dump(axes(**{name: 0.0})) != base or dump(axes(**{name: 1.0})) != base, name
 
 
@@ -268,7 +270,8 @@ def test_only_the_leading_rule_cites_wcag():
                    "high-contrast-weights": "system", "icon-sizes": "system",
                    "strong-weight": "system", "phone-hierarchy": "system",
                    "display-fits": "system", "type-tracking-order": "system",
-                   "line-height-floor": "system", "code-face": "system"}
+                   "line-height-floor": "system", "display-clearance": "system",
+                   "code-face": "system"}
 
 
 def test_a_role_of_the_wrong_type_is_named_once_not_a_crash():
@@ -323,8 +326,8 @@ def test_a_role_without_an_rtl_override_fails_every_arabic_rule():
         "type.text.heading-1 (direction:rtl) is 44px against its Latin 44px; Arabic reads at "
         "least 1px and at most a fifth larger than the Latin size at the same step, so point "
         "it at the Arabic size for that step",
-        "type.text.heading-1 (direction:rtl) has line height 1.1, not taller than its Latin "
-        "1.1; Arabic needs room for its marks, so point it at the Arabic leading"]
+        "type.text.heading-1 (direction:rtl) has line height 1.11, not taller than its Latin "
+        "1.11; Arabic needs room for its marks, so point it at the Arabic leading"]
 
 
 def test_a_role_pointing_back_at_the_latin_face_fails():

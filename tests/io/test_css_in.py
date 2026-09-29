@@ -80,8 +80,9 @@ def test_our_own_tokens_css_comes_back_byte_for_byte(scheme, monkeypatch):
     assert to_css(imported.tokens, scheme=imported.scheme) == to_css(ts, scheme=scheme)
     report = imported.report
     assert (report.renamed, report.not_read) == ([], [])
+    voices = ("display", "display-caps", "display-emphasis")
     assert [i.name for i in report.notes] == [
-        "--type-text-display-font-size", "--type-text-display-letter-spacing",
+        *(f"--type-text-{v}-{p}" for v in voices for p in ("font-size", "letter-spacing")),
         "--type-text-hero-font-size", "--type-text-hero-letter-spacing",
         "--type-text-heading-1-font-size", "--type-text-heading-1-letter-spacing",
         "--type-text-section-title-font-size", "--type-text-section-title-letter-spacing",
@@ -89,20 +90,25 @@ def test_our_own_tokens_css_comes_back_byte_for_byte(scheme, monkeypatch):
         "--layout-columns", "--layout-gutter", "--layout-margin-inline", "--layout-region-gap",
         "--layout-landing-gap", "--layout-hero-padding-block", "--type-text-display-scale",
         "--type-text-hero-scale", "--type-text-heading-1-scale",
-        "--type-text-section-title-scale", "--type-text-figure-scale"]
-    # A scale that is not 1 from the first breakpoint up: the unscaled value.
+        "--type-text-section-title-scale", "--type-text-figure-scale",
+        "--type-text-display-caps-scale", "--type-text-display-emphasis-scale",
+        "--type-text-display-fluid",
+        *(f"--type-text-{r}-text-wrap" for r in (
+            "display", "display-caps", "display-emphasis", "hero", "heading-1", "section-title",
+            "figure", "heading-2", "heading-3", "body", "body-small", "fine"))]
+    # A fluid size reads as the size it is clamped to, with one note.
     assert report.notes[0].message == (
         "is calc(var(--type-size-latin-10) * var(--type-text-display-scale)), and "
-        "--type-text-display-scale scales it with the viewport (0.4875, then 0.7742 from "
-        "640px, then 0.7742 from 1024px, then 0.971 from 1280px), so it was read as "
-        "var(--type-size-latin-10), its unscaled value; the viewport is not a mode, so the "
-        "scale is not a token")
-    assert report.notes[3].message == (
+        "--type-text-display-scale is 1 from 640px up, so it was read as "
+        "var(--type-size-latin-10), its value from 640px up; below 640px "
+        "--type-text-display-scale scales it; within that it follows --type-text-display-fluid "
+        "in vw, never under the hero plus 1px")
+    assert report.notes[7].message == (
         "is calc(var(--type-tracking-step-9) * var(--type-text-hero-scale)), and "
         "--type-text-hero-scale is 1 from 640px up, so it was read as "
         "var(--type-tracking-step-9), its value from 640px up; below 640px "
         "--type-text-hero-scale scales it")
-    assert report.notes[11].message == (
+    assert report.notes[15].message == (
         "switches with the viewport (var(--layout-gutter-phone), then var(--layout-gutter-tablet) "
         "from 640px, then var(--layout-gutter-laptop) from 1024px, then "
         "var(--layout-gutter-desktop) from 1280px); the viewport is not a mode, so it was not "

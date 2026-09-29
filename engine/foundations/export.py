@@ -13,7 +13,8 @@ import re
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations.layout import responsive_css
-from engine.foundations.typography import phone_roles, responsive_lines, scale_property
+from engine.foundations.typography import (
+    fluid_roles, fluid_size, phone_roles, responsive_lines, scale_property)
 from engine.foundations.modes import AXES, CSS_AXES, join, parse
 from engine.foundations.tokens import Token, TokenSet, css_property
 from engine.foundations.values import css_entries, decode, encode
@@ -127,11 +128,12 @@ def from_dtcg(doc: Dict[str, Any]) -> TokenSet:
 
 
 def _lines(t: Token, value: Any, indent: str = "  ", phone: Tuple[str, ...] = (),
-           context: str = "") -> List[str]:
+           context: str = "", fluid: Tuple[str, ...] = ()) -> List[str]:
     """The declarations of one token value. A type style in `phone` scales
     its size and letter spacing by its --<style>-scale property, which
     tokens.css sets to the phone factor below the tablet breakpoint and to
-    1 from it up. A value an importer kept in its own spelling (a color
+    1 from it up. A style in `fluid` takes its fluid size within that
+    (typography.fluid_size). A value an importer kept in its own spelling (a color
     outside sRGB, Token.extensions) is written as the file wrote it while
     it still holds the value it was read as. A number held from 0 to 100
     (PERCENT) is written from 0 to 1."""
@@ -143,6 +145,9 @@ def _lines(t: Token, value: Any, indent: str = "  ", phone: Tuple[str, ...] = ()
         scale = scale_property(t.path)
         entries = [(prop, f"calc({text} * var({scale}))"
                     if prop.endswith(("-font-size", "-letter-spacing")) else text)
+                   for prop, text in entries]
+    if t.path in fluid:
+        entries = [(prop, fluid_size(t.path, text) if prop.endswith("-font-size") else text)
                    for prop, text in entries]
     return [f"{indent}{prop}: {text};" for prop, text in entries]
 
@@ -244,9 +249,12 @@ def to_css(ts: TokenSet, *, scheme: str = "system",
         "scheme" in parse(k, ts.axes) for t in ts.tokens() for k in t.modes)
     base = [f"  color-scheme: {ts.axes['scheme'][0]};"] if schemed else []
     phone = tuple(phone_roles(ts))
+    # A fluid style is one the viewport layer scales, so it follows phone.
+    fluid = tuple(r for r in fluid_roles(ts) if r in phone)
     header = [*header, *(_percent_note(t) for t in ts.tokens() if _percent(t))]
     out = [*_comment(header), ":root {", *base,
-           *(line for t in ts.tokens() for line in _lines(t, t.value, phone=phone)), "}"]
+           *(line for t in ts.tokens() for line in _lines(t, t.value, phone=phone, fluid=fluid)),
+           "}"]
     keys: List[str] = []
     for t in ts.tokens():
         for key in t.modes:
@@ -258,7 +266,7 @@ def to_css(ts: TokenSet, *, scheme: str = "system",
     for key in keys:
         lines = [line for t in ts.tokens() for mk, v in t.modes.items()
                  if join(parse(mk, ts.axes), ts.axes) == key
-                 for line in _lines(t, v, phone=phone, context=mk)]
+                 for line in _lines(t, v, phone=phone, context=mk, fluid=fluid)]
         if schemed and parse(key, ts.axes).get("scheme") not in (None, ts.axes["scheme"][0]):
             lines = [f"  color-scheme: {parse(key, ts.axes)['scheme']};"] + lines
         for media, selector in _rules(ts, key, scheme, forms):

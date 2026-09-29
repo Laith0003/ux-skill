@@ -1,10 +1,10 @@
 ---
 id: type-along-the-scale
 title: Weight and letter spacing change along the type scale
-status: active
+status: superseded
 areas: [type]
 supersedes: null
-superseded_by: null
+superseded_by: weights-stay-light
 ---
 
 # Weight and letter spacing change along the type scale

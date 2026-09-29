@@ -83,6 +83,9 @@ QUANTITIES = {
         ("expressive overshoot", lambda ts: ts.resolve("motion.expressive.curve")[1], 1, 0.3),
         ("reveal duration ms", lambda ts: ts.resolve("motion.reveal.duration")["value"],
          1, 100)),
+    ("motion", "type"): (
+        ("landing display px", lambda ts: _px(ts.resolve("type.text.display")["fontSize"]),
+         1, 30),),
     ("motion", "color"): (
         ("mean status soft fill chroma, a calm brief quieter",
          lambda ts: sum(hex_to_oklch(ts.resolve(f"color.status.{s}.soft"))[1]
@@ -159,12 +162,15 @@ def test_the_brand_role_is_the_highest_score_and_fill_wins_a_tie(axes, want):
 
 
 @pytest.mark.parametrize("fn, low, high", [
-    (character.display_weight, 300, 800), (character.heading_weight, 500, 700)])
-def test_weights_span_their_range_in_hundreds(fn, low, high):
-    corners = (AxisValues(0.5, 0.0, 0.5, 0.5, 1.0, 0.5, 0.5),
-               AxisValues(0.5, 1.0, 0.5, 0.5, 0.0, 0.5, 0.5))
+    (character.display_weight, 400, 650), (character.heading_weight, 500, 700)])
+def test_weights_span_their_range_in_whole_steps(fn, low, high):
+    """The display weight moves in fifties, since every display face is
+    variable; the heading weight in hundreds."""
+    corners = (AxisValues(0.5, 0.0, 0.5, 0.5, 1.0, 0.0, 0.5),
+               AxisValues(0.5, 1.0, 0.5, 0.5, 0.0, 1.0, 0.5))
+    step = 50 if fn is character.display_weight else 100
     seen = {fn(AxisValues(*[i / 10] * 7)) for i in range(11)} | {fn(a) for a in corners}
-    assert min(seen) == low and max(seen) == high and all(w % 100 == 0 for w in seen)
+    assert min(seen) == low and max(seen) == high and all(w % step == 0 for w in seen)
 
 
 def test_industry_words_with_spaces_read_as_the_hyphenated_industry():
@@ -223,8 +229,8 @@ def test_icon_stroke_never_falls_as_the_display_weight_rises():
         by_weight.setdefault(character.display_weight(axes), set()).add(character.icon_stroke(axes))
     assert all(len(s) == 1 for s in by_weight.values())
     strokes = [by_weight[w].pop() for w in sorted(by_weight)]
-    assert sorted(by_weight) == [300, 400, 500, 600, 700, 800]
-    assert strokes == [1.25, 1.5, 1.75, 1.75, 2.0, 2.25]
+    assert sorted(by_weight) == [450, 500, 550, 600]
+    assert strokes == [1.75, 1.75, 2.0, 2.0]
 
 
 def test_mix_hue_takes_the_shorter_arc_and_stays_a_hue():

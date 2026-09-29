@@ -1,10 +1,10 @@
 ---
 id: landing-display-step
 title: A landing display step sits above the hero, and the four largest type styles step down on phones
-status: active
+status: superseded
 areas: [type, layout, output]
 supersedes: type-steps-down-on-phones
-superseded_by: null
+superseded_by: display-follows-expressiveness
 ---
 
 # A landing display step sits above the hero, and the four largest type styles step down on phones

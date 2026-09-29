@@ -20,7 +20,7 @@ import dataclasses
 import math
 import numbers
 from dataclasses import dataclass
-from typing import Any, Iterable, List, Optional, Sequence, Set, Tuple
+from typing import Any, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
 
 from engine.foundations import (
     border, color, elevation, imagery, layout, motion, radius, space, typography)
@@ -83,6 +83,21 @@ def _check_inputs(axes: Any, brand_hex: Any, arabic: Any) -> None:
                          "use #RRGGBB or #RGB, for example #3366FF") from None
     if not isinstance(arabic, bool):
         raise TypeError(f"arabic is {arabic!r}; pass True or False")
+
+
+def _check_words(words: Any) -> None:
+    """words is None or {"latin": n, "arabic": m} with whole letter counts
+    from 1 to 40."""
+    if words is None:
+        return
+    if not isinstance(words, Mapping):
+        raise TypeError(f"words is {words!r}; pass a mapping such as {{\"latin\": 11}}")
+    for key, n in words.items():
+        if key not in ("latin", "arabic"):
+            raise ValueError(f"words names {key!r}; use \"latin\" or \"arabic\"")
+        if isinstance(n, bool) or not isinstance(n, int) or not 1 <= n <= 40:
+            raise ValueError(f"words[{key!r}] is {n!r}; give the letters of the longest "
+                             "headline word, a whole number from 1 to 40")
 
 
 def _select(foundations: Optional[Sequence[str]]) -> Tuple[Foundation, ...]:
@@ -241,7 +256,8 @@ def check_system(ts: TokenSet, foundations: Optional[Sequence[str]] = None, *,
 
 def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
                  foundations: Optional[Sequence[str]] = None,
-                 audience: Optional[Audience] = None) -> BuildResult:
+                 audience: Optional[Audience] = None,
+                 words: Optional[Mapping[str, int]] = None) -> BuildResult:
     """Generate every foundation (or the named ones, in build order),
     validate the merged set and gate it.
 
@@ -249,13 +265,17 @@ def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
     set breaks a structural rule, and GateFailure when a pairing or check
     fails (a paired role that resolves to a translucent color is such a
     failure, named by token); otherwise returns the tokens, every
-    generator's notes and the gate report.
+    generator's notes and the gate report. `words` gives the letters of the
+    page's longest headline word per script ("latin", "arabic") when the
+    copy is known, so the landing display fits it; without it the display
+    fits a long word of its own.
     """
     _check_inputs(axes, brand_hex, arabic)
     chosen = _select(foundations)
     audience = audience or Audience()
+    _check_words(words)
     inputs = BrandInputs(brand_hex=brand_hex, arabic=arabic, brand_role=audience.brand_role,
-                         audience=audience)
+                         audience=audience, words=dict(words) if words else None)
     ts = TokenSet()
     notes: List[str] = []
     for f in chosen:

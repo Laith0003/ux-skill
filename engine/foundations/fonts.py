@@ -70,6 +70,12 @@ class Face:
     # A static face: every weight it ships, one file each. Empty for a
     # variable face, which ships every weight between its two ends.
     stops: Tuple[int, ...] = ()
+    # The Latin ink: how far the tallest ascender rises above the baseline
+    # and the deepest descender falls below it, in thousandths of an em
+    # (INK_SOURCE). None for a face without Latin letters.
+    ink: Optional[Tuple[int, int]] = None
+    # The family ships a true italic on Google Fonts under the same name.
+    italic: bool = False
 
     @property
     def slug(self) -> str:
@@ -84,6 +90,13 @@ class Face:
         return max(self.weights[0], min(self.weights[1], weight))
 
 
+# The ink extents were measured in Chromium: each face loaded from Google
+# Fonts at weight 400, canvas measureText at 1000px, the highest
+# actualBoundingBoxAscent over "bdfhklt" and the deepest
+# actualBoundingBoxDescent over "gjpqy".
+INK_SOURCE = "Chromium canvas measureText at 1000px, weight 400"
+
+
 def _m(*v: Optional[float]) -> Metrics:
     return Metrics(*v)  # type: ignore[arg-type]
 
@@ -92,51 +105,52 @@ FACES: Tuple[Face, ...] = (
     # text faces
     Face("IBM Plex Sans", "text", "sans-serif", (100, 700), True,
          _m(1000, 1025, 275, 0, 516, 698, 454.1, None, None),
-         (0.8, 0.35, 0.3, 0.45, 0.45), "IBM Plex Sans Arabic"),
+         (0.8, 0.35, 0.3, 0.45, 0.45), "IBM Plex Sans Arabic", ink=(740, 212), italic=True),
     Face("Source Sans 3", "text", "sans-serif", (200, 900), True,
          _m(1000, 1024, 400, 0, 478, 660, 403.4, None, None),
-         (0.6, 0.6, 0.45, 0.8, 0.4), "Noto Naskh Arabic"),
+         (0.6, 0.6, 0.45, 0.8, 0.4), "Noto Naskh Arabic", ink=(724, 224), italic=True),
     Face("Manrope", "text", "sans-serif", (200, 800), True,
          _m(2000, 2132, 600, 0, 1080, 1440, 899.3, None, None),
-         (0.5, 0.4, 0.6, 0.1, 0.5), "Readex Pro"),
+         (0.5, 0.4, 0.6, 0.1, 0.5), "Readex Pro", ink=(735, 255)),
     Face("Nunito Sans", "text", "sans-serif", (200, 1000), True,
          _m(1000, 1011, 353, 0, 484, 705, 439.4, None, None),
-         (0.3, 0.8, 0.85, 0.55, 0.4), "Tajawal"),
+         (0.3, 0.8, 0.85, 0.55, 0.4), "Tajawal", ink=(708, 193), italic=True),
     Face("Noto Sans", "text", "sans-serif", (100, 900), True,
          _m(1000, 1069, 293, 0, 536, 714, 479.0, None, None),
-         (0.55, 0.5, 0.45, 0.5, 0.45), "Noto Sans Arabic"),
+         (0.55, 0.5, 0.45, 0.5, 0.45), "Noto Sans Arabic", ink=(765, 240), italic=True),
     # display faces
     Face("Fraunces", "display", "serif", (100, 900), True,
          _m(2000, 1956, 510, 0, 964, 1400, 1042.1, None, None),
-         (0.35, 0.9, 0.75, 0.9, 0.7), "El Messiri"),
+         (0.35, 0.9, 0.75, 0.9, 0.7), "El Messiri", ink=(738, 245), italic=True),
     Face("Playfair Display", "display", "serif", (400, 900), True,
          _m(1000, 1082, 251, 0, 514, 708, 456.4, None, None),
-         (0.9, 0.55, 0.35, 0.85, 0.85), "Amiri"),
+         (0.9, 0.55, 0.35, 0.85, 0.85), "Amiri", ink=(784, 188), italic=True),
     Face("Space Grotesk", "display", "sans-serif", (300, 700), True,
          _m(1000, 984, 292, 0, 486, 700, 497.7, None, None),
-         (0.55, 0.2, 0.3, 0.05, 0.65), "Readex Pro"),
+         (0.55, 0.2, 0.3, 0.05, 0.65), "Readex Pro", ink=(700, 200)),
     Face("Bricolage Grotesque", "display", "sans-serif", (200, 800), True,
          _m(1000, 930, 270, 0, 528, 660, 453.6, None, None),
-         (0.15, 0.7, 0.55, 0.5, 0.85), "Baloo Bhaijaan 2"),
+         (0.15, 0.7, 0.55, 0.5, 0.85), "Baloo Bhaijaan 2", ink=(704, 184)),
     Face("Sora", "display", "sans-serif", (100, 800), True,
          _m(1000, 970, 290, 0, 534, 730, 512.1, None, None),
-         (0.65, 0.35, 0.55, 0.15, 0.5), "Alexandria"),
+         (0.65, 0.35, 0.55, 0.15, 0.5), "Alexandria", ink=(734, 208)),
     Face("Outfit", "display", "sans-serif", (100, 900), True,
          _m(1000, 1000, 260, 0, 460, 676, 444.0, None, None),
-         (0.4, 0.6, 0.8, 0.3, 0.45), "Alexandria"),
+         (0.4, 0.6, 0.8, 0.3, 0.45), "Alexandria", ink=(724, 209)),
     Face("Newsreader", "display", "serif", (200, 800), True,
          _m(2000, 1470, 530, 0, 852, 1340, 816.1, None, None),
-         (0.8, 0.6, 0.4, 1.0, 0.5), "Noto Naskh Arabic"),
+         (0.8, 0.6, 0.4, 1.0, 0.5), "Noto Naskh Arabic", ink=(715, 260), italic=True),
     Face("Baloo 2", "display", "sans-serif", (400, 800), True,
          _m(1000, 1078, 524, 0, 460, 602, 435.4, None, None),
-         (0.05, 0.95, 1.0, 0.6, 0.6), "Baloo Bhaijaan 2"),
+         (0.05, 0.95, 1.0, 0.6, 0.6), "Baloo Bhaijaan 2", ink=(670, 202)),
     # mono faces
     Face("IBM Plex Mono", "mono", "monospace", (100, 700), False,
          _m(1000, 1025, 275, 0, 516, 698, 600.0, None, None),
-         (0.75, 0.45, 0.35, 0.5, 0.4), stops=(100, 200, 300, 400, 500, 600, 700)),
+         (0.75, 0.45, 0.35, 0.5, 0.4), stops=(100, 200, 300, 400, 500, 600, 700),
+         ink=(740, 212), italic=True),
     Face("JetBrains Mono", "mono", "monospace", (100, 800), True,
          _m(1000, 1020, 300, 0, 550, 730, 600.0, None, None),
-         (0.5, 0.3, 0.45, 0.1, 0.55)),
+         (0.5, 0.3, 0.45, 0.1, 0.55), ink=(730, 180), italic=True),
     # Arabic partners
     Face("IBM Plex Sans Arabic", "arabic", "sans-serif", (100, 700), False,
          _m(1000, 1085, 415, 0, 516, 698, 454.1, 675.7, 409.5),
@@ -322,15 +336,36 @@ def fallback_name(face: Face) -> str:
     return f"{face.family} Fallback"
 
 
-def css2_family(face: Face, weights: Tuple[int, ...]) -> str:
+def css2_family(face: Face, weights: Tuple[int, ...], italic: bool = False) -> str:
     """The family parameter for the Google Fonts CSS2 API: a weight range
     for a variable face; for a static one, the weights used, each snapped
     to one the face ships, since the API refuses the whole link for a
-    weight a static family does not have."""
+    weight a static family does not have. With `italic`, the upright and
+    the italic of each."""
     name = face.family.replace(" ", "+")
     if face.variable:
-        return f"{name}:wght@{face.weights[0]}..{face.weights[1]}"
-    return f"{name}:wght@" + ";".join(str(w) for w in sorted({face.clamp(w) for w in weights}))
+        span = f"{face.weights[0]}..{face.weights[1]}"
+        return f"{name}:ital,wght@0,{span};1,{span}" if italic else f"{name}:wght@{span}"
+    ws = [str(w) for w in sorted({face.clamp(w) for w in weights})]
+    if italic:
+        return f"{name}:ital,wght@" + ";".join([f"0,{w}" for w in ws] + [f"1,{w}" for w in ws])
+    return f"{name}:wght@" + ";".join(ws)
+
+
+def italic_families(ts: "TokenSet") -> Tuple[str, ...]:
+    """The families the system sets in italic: the display face when the
+    emphasised words of the headline take its italic (type.emphasis.italic
+    is 1 in any context) and the face ships one."""
+    if not ts.has("type.emphasis.italic") or not ts.has("type.face.display"):
+        return ()
+    t = ts.get("type.emphasis.italic")
+    keys = [""] + list(t.modes)
+    if not any(ts.resolve("type.emphasis.italic", k) == 1 for k in keys):
+        return ()
+    value = ts.resolve("type.face.display")
+    family = value[0] if isinstance(value, list) else value
+    face = BY_FAMILY.get(family)
+    return (family,) if face is not None and face.italic else ()
 
 
 # The style name a font file gives each weight, in its full name and its
@@ -380,7 +415,9 @@ def weights_in(ts: "TokenSet") -> Tuple[int, ...]:
 def cdn_url(ts: "TokenSet") -> str:
     """One Google Fonts CSS2 link for every face the system names."""
     used = weights_in(ts)
-    params = "&".join("family=" + css2_family(f, tuple(f.clamp(w) for w in used))
+    italic = italic_families(ts)
+    params = "&".join("family=" + css2_family(f, tuple(f.clamp(w) for w in used),
+                                              f.family in italic)
                       for _, f in faces_in(ts))
     return f"{CDN}?{params}&display=swap"
 
@@ -442,16 +479,21 @@ def self_host_css(ts: "TokenSet") -> str:
         "   file out and use the link in fonts.css.",
         "   Every face is under the SIL Open Font License 1.1. */",
     ]
+    italic = italic_families(ts)
     for _, face in faces_in(ts):
         if face.variable:
-            srcs = [(f"fonts/{face.slug}.woff2", f"{face.weights[0]} {face.weights[1]}", ())]
+            srcs = [(f"fonts/{face.slug}.woff2", f"{face.weights[0]} {face.weights[1]}", (),
+                     "normal")]
         else:
-            srcs = [(f"fonts/{face.slug}-{w}.woff2", str(w), local_names(face, w))
+            srcs = [(f"fonts/{face.slug}-{w}.woff2", str(w), local_names(face, w), "normal")
                     for w in sorted({face.clamp(w) for w in used})]
-        for url, weight, names in srcs:
+        if face.family in italic:
+            srcs += [(url.replace(".woff2", "-italic.woff2"), weight, (), "italic")
+                     for url, weight, _, _ in srcs]
+        for url, weight, names, style in srcs:
             src = ", ".join([*(f'local("{n}")' for n in names), f'url("{url}") format("woff2")'])
             lines += ["", "@font-face {", f'  font-family: "{face.family}";', f"  src: {src};",
-                      f"  font-weight: {weight};", "  font-style: normal;",
+                      f"  font-weight: {weight};", f"  font-style: {style};",
                       "  font-display: swap;"]
             if face.role == "arabic":
                 lines.append(f"  unicode-range: {ARABIC_RANGE};")

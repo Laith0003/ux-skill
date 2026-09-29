@@ -37,7 +37,7 @@ INFLUENCE: Mapping[str, Tuple[str, ...]] = MappingProxyType({
     "density": ("space", "layout", "type"),
     "geometry": ("radius", "imagery"),
     "formality": ("radius", "type", "elevation", "motion", "imagery"),
-    "motion": ("motion", "color"),
+    "motion": ("motion", "color", "type"),
     "type_personality": ("type",),
 })
 
@@ -239,19 +239,57 @@ def light_band_chroma(axes: AxisValues) -> float:
     return round(0.015 + 0.045 * axes.contrast, 4)
 
 
-# The landing display size at body 16px: LANDING_DISPLAY_PX[0] for a
-# muted, formal system, rising by up to LANDING_DISPLAY_PX[1] with contrast
-# and playfulness.
-LANDING_DISPLAY_PX = (56.0, 48.0)
+def expressiveness(axes: AxisValues) -> float:
+    """How loud the brand reads on a first look, 0 (calm) to 1 (loud):
+    energy (contrast and motion) counts seven tenths and playfulness (one
+    minus formality) three tenths. The landing page's headline, section
+    rhythm and color budget follow it, the way measured award pages do."""
+    return clamp(0.7 * energy(axes) + 0.3 * (1.0 - axes.formality))
+
+
+# The landing display size at 1440px wide and body 16px, from a calm to a
+# loud brand, on a log scale between the two.
+LANDING_DISPLAY_PX = (60.0, 240.0)
 
 
 def landing_display_px(axes: AxisValues) -> float:
-    """The headline size of a landing page at body 16px, 56 to 104px: bold
-    systems go large, and a formal one holds back a little. Contrast counts
-    three fifths and playfulness two fifths, so the size is continuous in
-    both; the type scale keeps it above the hero."""
-    low, span = LANDING_DISPLAY_PX
-    return low + span * (0.6 * axes.contrast + 0.4 * (1.0 - axes.formality))
+    """The headline size of a landing page at 1440px wide and body 16px,
+    60 to 240px: LANDING_DISPLAY_PX[0] times the ratio of the two ends to
+    the power of expressiveness, so each step of expressiveness multiplies
+    the size by the same amount. About 80px for a calm, formal brand, 120px
+    at the middle of the axes and 210px for a loud, playful one."""
+    low, high = LANDING_DISPLAY_PX
+    return low * (high / low) ** expressiveness(axes)
+
+
+# The phone display follows the desktop size: PHONE_SHARE[0] of it up to
+# PHONE_KNEE[0] px, easing in a straight line to PHONE_SHARE[1] of
+# PHONE_KNEE[1] px there, then PHONE_SHARE[1] of it above, held within
+# PHONE_DISPLAY_PX and never above the desktop size.
+PHONE_SHARE = (0.8, 0.5)
+PHONE_KNEE = (72.0, 120.0)
+PHONE_DISPLAY_PX = (36.0, 90.0)
+
+
+def phone_display_for(desktop_px: float) -> float:
+    """The landing display's size on a phone for a desktop size, before the
+    word has to fit: 0.8 of a small headline (60px gives 48px), about half
+    of a large one (120px gives 60px), rising with the desktop size
+    everywhere and held within 36 to 90px."""
+    (hi, lo), (k0, k1) = PHONE_SHARE, PHONE_KNEE
+    if desktop_px <= k0:
+        px = hi * desktop_px
+    elif desktop_px <= k1:
+        px = hi * k0 + (lo * k1 - hi * k0) * (desktop_px - k0) / (k1 - k0)
+    else:
+        px = lo * desktop_px
+    return min(desktop_px, max(PHONE_DISPLAY_PX[0], min(PHONE_DISPLAY_PX[1], px)))
+
+
+def phone_display_px(axes: AxisValues) -> float:
+    """The landing display's size on a phone at these axes, from its
+    desktop size (phone_display_for)."""
+    return phone_display_for(landing_display_px(axes))
 
 
 def axes_support_hue(axes: AxisValues) -> float:
@@ -415,10 +453,14 @@ def brand_role(axes: AxisValues, brand: Optional[float] = None) -> str:
 
 
 def display_weight(axes: AxisValues) -> int:
-    """The display face's weight, 300 to 800 in steps of 100: bold and
-    playful brands go heavy, muted and formal ones go light."""
-    raw = 300 + 500 * (0.55 * axes.contrast + 0.45 * (1 - axes.formality))
-    return int(round(raw / 100.0)) * 100
+    """The display face's weight, 400 to 650 in steps of 50. Measured
+    award pages set large headlines regular: the weight rises with energy
+    (three fifths) and playfulness (two fifths), so a formal brand is
+    lighter, and falls as the landing display grows, since a small display
+    needs weight to hold the page and a large one does not."""
+    size = log_position(landing_display_px(axes), *LANDING_DISPLAY_PX)
+    raw = 300 + 350 * (0.6 * energy(axes) + 0.4 * (1 - axes.formality)) + 100 * (1 - size)
+    return round(raw / 50.0) * 50
 
 
 def heading_weight(axes: AxisValues) -> int:
@@ -438,6 +480,28 @@ def label_tracking(axes: AxisValues) -> float:
     return round(0.01 + 0.06 * axes.formality, 4)
 
 
+def capitals_tracking(axes: AxisValues) -> float:
+    """Letter spacing of a display set in capitals, in em: always 0 or
+    open, never tight, since capitals already sit close; a formal brand
+    opens them a little more."""
+    return round(0.005 + 0.02 * axes.formality, 4)
+
+
+def capitals(axes: AxisValues) -> float:
+    """How far the brand leans to a display in capitals, 0 to 1: nothing
+    up to an expressiveness of 0.5, rising to 1 at 0.9, held back by
+    formality. Measured award pages set capital headlines on the louder
+    half only. The report calls for capitals at 0.5 and above."""
+    return round(clamp((expressiveness(axes) - 0.5) / 0.4) * (1.0 - 0.8 * axes.formality), 4)
+
+
+def emphasis_contrast(axes: AxisValues) -> float:
+    """How far the emphasised words of a two-voice headline stand from the
+    rest, 0 to 1: a humanist type personality and a bold contrast widen
+    the gap in weight, style and tone."""
+    return round(clamp(0.55 * axes.type_personality + 0.45 * axes.contrast), 4)
+
+
 def scale_ratio(axes: AxisValues) -> float:
     """The type scale ratio, 1.095 to 1.355: 1.125 for a muted, open brand
     to 1.355 for a bold one; a dense system tightens it by up to 0.03."""
@@ -445,9 +509,9 @@ def scale_ratio(axes: AxisValues) -> float:
 
 
 def icon_stroke(axes: AxisValues) -> float:
-    """Icon stroke on a 24 unit grid, 1.25 to 2.25 in quarters, never
-    lighter as the display weight rises (500 and 600 share 1.75)."""
-    return round((1.25 + (display_weight(axes) - 300) / 500.0) * 4) / 4
+    """Icon stroke on a 24 unit grid, 1.5 to 2.25 in quarters, rounded half
+    up, never lighter as the display weight rises (400 to 650)."""
+    return int((1.5 + (display_weight(axes) - 400) / 400.0) * 4 + 0.5) / 4
 
 
 def overshoot(axes: AxisValues) -> float:

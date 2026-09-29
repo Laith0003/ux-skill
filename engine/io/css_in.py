@@ -87,7 +87,10 @@ other properties: it is named under notes and not made a token, since each
 value it switches between is read where it is defined. A size written as
 calc(var(--a) * var(--scale)), where such a switch sets --scale to plain
 numbers, reads as var(--a) with a note: its value from the first
-breakpoint up when --scale is 1 there, otherwise its unscaled value.
+breakpoint up when --scale is 1 there, otherwise its unscaled value. A
+fluid size, clamp(calc(var(--hero) + 1px), calc(var(--fluid) * 1vw),
+that scaled size), where such a switch sets --fluid, reads as the scaled
+size with a note. A --type-text-<style>-text-wrap line is noted, not read.
 
 An oklch() or oklab() color outside sRGB is mapped into sRGB by CSS Color 4
 gamut mapping and listed under "Mapped into sRGB", never refused.
@@ -179,6 +182,13 @@ _MIN_WIDTH = re.compile(r"\(min-width: ?([0-9.]+(?:px|rem|em))\)")
 _WIDTH = re.compile(r"\((?:min|max)-width\s*:")
 # A size that a viewport switch scales.
 _SCALED = re.compile(r"calc\(\s*var\(--([A-Za-z0-9_-]+)\)\s*\*\s*var\(--([A-Za-z0-9_-]+)\)\s*\)")
+# A fluid size: clamp(the hero plus 1px, a switch in vw, a scaled size),
+# as the engine writes its landing display (typography.fluid_size).
+_FLUID = re.compile(r"clamp\(\s*calc\(\s*var\(--[A-Za-z0-9_-]+\)\s*\+\s*1px\s*\)\s*,\s*"
+                    r"calc\(\s*var\(--([A-Za-z0-9_-]+)\)\s*\*\s*1vw\s*\)\s*,\s*(.+)\)")
+# How a style's lines break, as the engine writes it beside each type role.
+_WRAP = re.compile(r"--type-text-[a-z0-9-]+-text-wrap")
+_WRAP_VALUES = ("balance", "pretty", "wrap", "nowrap", "stable")
 
 
 @dataclass(frozen=True)
@@ -1046,6 +1056,12 @@ def import_css(text: str, source: Source) -> Imported:
         if clashed:
             not_read += clashed
             continue
+        if _WRAP.fullmatch(prop) and set(by_key) == {()} \
+                and by_key[()][0].strip() in _WRAP_VALUES:
+            notes.append((line, Item(f"{name}:{line}", prop, (
+                f"sets how the style's lines break ({by_key[()][0].strip()}); a token holds no "
+                "line breaking, and the build writes it again beside its own type roles"))))
+            continue
         read: List[Tuple[str, str, Any, int]] = []
         own_mapped: List[Tuple[int, Mapped]] = []
         own_original: Dict[str, str] = {}
@@ -1056,13 +1072,19 @@ def import_css(text: str, source: Source) -> Imported:
                 if re.search(r"!\s*important\s*$", value_text, re.I):
                     raise NotRead("is marked !important; drop !important, since a token holds "
                                   "only the value")
+                fluid = _FLUID.fullmatch(value_text.strip())
+                if fluid and f"--{fluid.group(1)}" in factors:
+                    value_text = fluid.group(2).strip()
                 scaled = _SCALED.fullmatch(value_text.strip())
                 if scaled and f"--{scaled.group(2)}" in factors:
                     size, factor = scaled.group(1), f"--{scaled.group(2)}"
                     if not scaled_noted:
                         scaled_noted = True
                         own_notes.append((at, Item(f"{name}:{at}", prop, _scaled_note(
-                            value_text.strip(), size, factor, factors[factor]))))
+                            value_text.strip(), size, factor, factors[factor]) + (
+                            f"; within that it follows --{fluid.group(1)} in vw, never under "
+                            "the hero plus 1px" if fluid and f"--{fluid.group(1)}" in factors
+                            else ""))))
                     value_text = f"var(--{size})"
                 led = _var_led_font(value_text)
                 if led:

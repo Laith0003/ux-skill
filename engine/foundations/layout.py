@@ -77,6 +77,13 @@ def container_px(density: float) -> int:
     return space.snap(CONTAINERS[0] + (CONTAINERS[-1] - CONTAINERS[0]) * density, CONTAINERS)
 
 
+def landing_frame(axes: AxisValues) -> Tuple[Dict[str, float], float]:
+    """({tier: inline margin px}, container px) a landing page sets its
+    content in: the page margins per tier and the container."""
+    margins = {tier: _units(MARGIN[tier], axes.density)[0] * space.BASE_UNIT for tier in TIERS}
+    return margins, float(container_px(axes.density))
+
+
 def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
                     measure_rem: int = MEASURE_REM["text"],
                     refuse_compact: bool = False) -> Generated:

@@ -308,21 +308,31 @@ def test_tokens_css_switches_every_tiered_role_by_viewport():
                                  "landing-gap", "hero.padding-block")
     groups = [g.replace(".", "-") for g in layout.RESPONSIVE]
     base = re.search(r"\n:root \{\n((?:  --layout-[a-z-]+: var\(--layout-[a-z-]+-phone\);\n)+"
-                     r"(?:  --type-text-[a-z0-9-]+-scale: var\(--type-phone-[a-z0-9-]+\);\n)*)\}",
-                     css)
+                     r"(?:  --type-text-[a-z0-9-]+: var\(--type-[a-z0-9-]+\);\n)*"
+                     r"(?:  --type-text-[a-z0-9-]+-text-wrap: [a-z]+;\n)*)\}", css)
     assert base, "no :root block of responsive aliases"
     # The same blocks carry the phone factor of the four largest type
-    # styles and the figure, and each tier's fit factor, the figure taking
-    # heading-1's (decisions/landing-display-step.md).
-    styles = ("display", "hero", "heading-1", "section-title", "figure")
+    # styles, the figure and the display's two voices, each tier's fit
+    # factor, the figure taking heading-1's and the voices the display's,
+    # and the display's fluid size (decisions/landing-display-step.md).
+    styles = ("display", "hero", "heading-1", "section-title", "figure", "display-caps",
+              "display-emphasis")
+    leader = {"figure": "heading-1", "display-caps": "display", "display-emphasis": "display"}
+    reading = ("body", "body-small", "fine")
     assert base.group(1).splitlines() == [
         f"  --layout-{g}: var(--layout-{g}-phone);" for g in groups] + [
-        f"  --type-text-{s}-scale: var(--type-phone-{s});" for s in styles]
+        f"  --type-text-{s}-scale: var(--type-phone-{s});" for s in styles] + [
+        "  --type-text-display-fluid: var(--type-fluid-display-phone);"] + [
+        f"  --type-text-{r}-text-wrap: {'pretty' if r in reading else 'balance'};"
+        for r in ("display", "display-caps", "display-emphasis", "hero", "heading-1",
+                  "section-title", "figure", "heading-2", "heading-3", "body", "body-small",
+                  "fine")]
     for tier, px in (("tablet", 640), ("laptop", 1024), ("desktop", 1280)):
         assert _media_block(css, px) == [
             f"    --layout-{g}: var(--layout-{g}-{tier});" for g in groups] + [
-            f"    --type-text-{s}-scale: var(--type-fit-"
-            f"{'heading-1' if s == 'figure' else s}-{tier});" for s in styles]
+            f"    --type-text-{s}-scale: var(--type-fit-{leader.get(s, s)}-{tier});"
+            for s in styles] + [
+            f"    --type-text-display-fluid: var(--type-fluid-display-{tier});"]
     # The breakpoints come from the set's own breakpoint tokens.
     assert layout.VIEWPORTS == {"tablet": 640, "laptop": 1024, "desktop": 1280}
 

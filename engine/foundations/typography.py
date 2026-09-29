@@ -24,7 +24,9 @@ names is reported once by the build's role-types check and skipped here.
 """
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Tuple
+import math
+from dataclasses import dataclass
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations import character, fonts
 from engine.foundations.foundation import BrandInputs, Foundation, Generated, typed
@@ -37,17 +39,25 @@ from engine.synthesizer.axes import AxisValues
 STEPS = tuple(range(1, 11))
 BODY_STEP = 3
 # The landing display step: the headline of a landing page, above the hero
-# by a size from contrast and formality (character.landing_display_px), not
-# by the ratio, so a landing page reads as one in a quiet system too.
+# by a size from expressiveness (character.landing_display_px), not by the
+# ratio, so a landing page reads as one in a quiet system too.
 DISPLAY_STEP = 10
 BODY_PX = 16
 # role -> (size step, face, weight kind, leading index, tracking kind).
 # Faces: display, text, mono, label (the mono face for a technical system,
 # else the text face). Weight kinds: display (eases along the scale),
-# heading, regular, medium. Tracking kinds: scale (tightens with size),
-# label (opens up), none.
+# emphasis (the display weight less the emphasis gap), heading, regular,
+# medium. Leading index 0 is the display leading at the style's own size
+# (display_leading); 1 to 3 are fixed. Tracking kinds: scale (tightens
+# with size), caps (0 or open, for capitals), label (opens up), none.
 ROLES: Dict[str, Tuple[Any, str, str, int, str]] = {
     "type.text.display": (DISPLAY_STEP, "display", "display", 0, "scale"),
+    # The display set in capitals: the same size, weight and leading, with
+    # letter spacing at 0 or open, since capitals already sit close.
+    "type.text.display-caps": (DISPLAY_STEP, "display", "display", 0, "caps"),
+    # The emphasised words of a two-voice headline: the display at a
+    # lighter weight (character.emphasis_contrast).
+    "type.text.display-emphasis": (DISPLAY_STEP, "display", "emphasis", 0, "scale"),
     "type.text.hero": (9, "display", "display", 0, "scale"),
     "type.text.heading-1": (8, "display", "display", 0, "scale"),
     "type.text.section-title": (7, "display", "display", 1, "scale"),
@@ -65,6 +75,13 @@ ROLES: Dict[str, Tuple[Any, str, str, int, str]] = {
     "type.text.code": (2, "mono", "regular", 3, "none"),
 }
 READING = ("type.text.body", "type.text.body-small", "type.text.fine")
+# How each role's lines break: headlines and headings balance their lines,
+# running text avoids a last line of one word. tokens.css writes it as
+# --<role>-text-wrap in the root block of its viewport layer, beside the
+# phone factors (responsive_lines), since it is derived from the role.
+WRAP = {**{r: "balance" for r, spec in ROLES.items() if spec[1] == "display"},
+        "type.text.heading-2": "balance", "type.text.heading-3": "balance",
+        **{r: "pretty" for r in READING}}
 # Roles that keep the reading line height: running text and code blocks.
 LEADING_ROLES = READING + ("type.text.code",)
 # Roles that never tighten their letters: running text and labels.
@@ -72,6 +89,22 @@ TRACKING_ROLES = READING + ("type.text.ui",)
 HIERARCHY = ("type.text.display", "type.text.hero", "type.text.heading-1", "type.text.section-title",
              "type.text.heading-2", "type.text.heading-3", "type.text.body")
 MIN_BODY_PX, MIN_FINE_PX, MIN_READING_LEADING = 16, 12, 1.5
+# Display leading: DISPLAY_LEAD[0] at DISPLAY_LEAD_PX[0] and below, falling
+# on a log scale of size to DISPLAY_LEAD[1] (contrast 0) or DISPLAY_LEAD[2]
+# (contrast 1) at DISPLAY_LEAD_PX[1] and above, never below the face's ink
+# clearance (clearance). Measured award headlines sit at 1.0 or tighter.
+DISPLAY_LEAD = (1.12, 1.0, 0.92)
+DISPLAY_LEAD_PX = (40.0, 160.0)
+# Our gap between a descender and the ascender of the line below it, in em,
+# so two display lines never touch.
+INK_GAP = 0.02
+# Our floor for any display-face style's line height; every other style
+# keeps a line height above 1.
+MIN_DISPLAY_LEADING = 0.88
+# Arabic line heights sit this far above the Latin ones, and a display
+# style's at least ARABIC_DISPLAY_GAP above, for the marks above and below.
+ARABIC_LEAD_EXTRA = 0.2
+ARABIC_DISPLAY_GAP = 0.15
 # Our floor between neighbouring levels of HIERARCHY: a smaller step does
 # not read as a new level. The generator holds every step from body up to
 # it after rounding, in both scripts.
@@ -97,33 +130,52 @@ ICON_CONTROL_REM = 1.25
 ICON_STROKE_RANGE = (1.0, 3.0)
 # The styles that step down on a phone (every width below the tablet
 # breakpoint): the four largest display styles. Each takes a factor on its
-# size from a phone scale whose ratio is PHONE_RATIO_SHARE of the way from
-# 1 to the system's ratio, so a bold system still steps harder than a
-# quiet one; each phone size stays at least 1px above the style below it,
-# in the Latin and the Arabic sizes (hold_phone_order), and never above its
-# own size. tokens.css multiplies the style's size and
-# letter spacing by --<style>-scale, the factor on a phone and the tier's
-# fit factor from the tablet breakpoint up, so a page reads one property.
+# size: the display's from character.phone_display_px, the others' from a
+# phone scale whose ratio is PHONE_RATIO_SHARE of the way from 1 to the
+# system's ratio, so a bold system still steps harder than a quiet one;
+# each phone size stays at least 1px above the style below it, in the
+# Latin and the Arabic sizes (hold_phone_order), and never above its own
+# size. tokens.css multiplies the style's size and letter spacing by
+# --<style>-scale, the factor on a phone and the tier's fit factor from
+# the tablet breakpoint up, so a page reads one property.
 PHONE_ROLES = ("type.text.display", "type.text.hero", "type.text.heading-1",
                "type.text.section-title")
 PHONE_RATIO_SHARE = 0.6
 PHONE_FLOOR_ROLE = "type.text.heading-2"
 # Styles that share another's step take its factors at every width: the
-# figure steps down with heading-1, so it never outranks the headline.
-FOLLOWS = {"type.text.figure": "type.text.heading-1"}
+# figure steps down with heading-1, so it never outranks the headline, and
+# the capitals and emphasis voices of the display go with the display.
+FOLLOWS = {"type.text.figure": "type.text.heading-1",
+           "type.text.display-caps": "type.text.display",
+           "type.text.display-emphasis": "type.text.display"}
 # From the tablet breakpoint up each style in PHONE_ROLES takes a fit factor
-# per tier: at most 1, and small enough that a FIT_WORD word at the style's
-# size fits the tier's column, measured with the face's own average advance
-# (Latin and Arabic), each style still MIN_LEVEL_RATIO above the next, and
-# never smaller on a wider tier. The column is the tier's narrowest content
-# width (its breakpoint less both margins, within the container), all of it
-# on a tablet and SPLIT_SHARE of it from the laptop up, where a split
-# composition sets the headline in seven of twelve columns.
+# per tier: at most 1, and small enough that the page's longest headline
+# word (FIT_WORD letters when the brief does not give it) fits the
+# headline's column, measured with the face's own average advance (Latin
+# and Arabic), each style still MIN_LEVEL_RATIO above the next, and never
+# smaller on a wider tier. The column is the page's content width (its
+# width less both landing margins, within the landing container), all of
+# it on a phone and a tablet and, from the laptop up, the columns of
+# twelve the composition sets the headline in (HEADLINE_COLUMNS).
 FIT_TIERS = ("tablet", "laptop", "desktop")
 FIT_WORD = {"latin": 13, "arabic": 10}
-SPLIT_SHARE = 7 / 12
-
-
+HEADLINE_COLUMNS = {"split": 7, "stacked": 12, "bento": 12, "editorial-column": 8,
+                    "full-bleed-media": 12}
+GRID_COLUMNS = 12
+# Each tier's narrowest and widest width in px; the phone starts at the
+# reflow width, and the desktop tier has no end.
+TIER_WIDTHS: Dict[str, Tuple[int, Optional[int]]] = {
+    "phone": (320, 639), "tablet": (640, 1023), "laptop": (1024, 1279), "desktop": (1280, None)}
+# The display grows with the viewport: its size at REFERENCE_WIDTH is the
+# size token, and below it the size follows the width in vw (the fluid
+# roles, FLUID), never above the tier's fit factor and never below 1px
+# over the hero, so the headline scales between the laptop and the
+# reference width and a long word still fits a small phone.
+REFERENCE_WIDTH = 1440
+FLUID = ("type.text.display",)
+# What rounding the fluid size to two places can take off the display at a
+# tier's narrowest width, in px, kept spare under the hero.
+ROUNDING_PX = 0.2
 def phone_token(role: str) -> str:
     """The factor token of a style that steps down on a phone."""
     return "type.phone." + role.rsplit(".", 1)[1]
@@ -134,58 +186,179 @@ def fit_token(role: str, tier: str) -> str:
     return f"type.fit.{role.rsplit('.', 1)[1]}.{tier}"
 
 
-def tier_columns(axes: AxisValues) -> Dict[str, float]:
-    """The width in px the largest styles set in, per tier (FIT_TIERS)."""
-    from engine.foundations import layout, space
-    out = {}
-    for tier in FIT_TIERS:
-        margin = layout._units(layout.MARGIN[tier], axes.density)[0] * space.BASE_UNIT
-        content = min(layout.VIEWPORTS[tier] - 2 * margin, layout.container_px(axes.density))
-        out[tier] = content * (1.0 if tier == "tablet" else SPLIT_SHARE)
-    return out
+def fluid_token(tier: str) -> str:
+    """The token holding the display's fluid size at a tier, in vw."""
+    return f"type.fluid.display.{tier}"
 
 
-def word_px(face: fonts.Face, px: float, script: str) -> float:
-    """The width of a FIT_WORD word in `script` set in `face` at `px`."""
+@dataclass(frozen=True)
+class Frame:
+    """What the headline sets in at each tier: the inline margin and the
+    container in px, and the columns of twelve it spans from the laptop up."""
+    margins: Mapping[str, float]
+    container: float
+    columns: int
+
+    def content(self, tier: str, width: float) -> float:
+        """The content width at `width` px inside `tier`."""
+        return min(width - 2 * self.margins[tier], self.container)
+
+    def column(self, tier: str, width: float) -> float:
+        """The headline's column at `width` px inside `tier`: all of the
+        content on a phone and a tablet, its columns of twelve from the
+        laptop up."""
+        share = 1.0 if tier in ("phone", "tablet") else self.columns / GRID_COLUMNS
+        return self.content(tier, width) * share
+
+
+def headline_columns(axes: AxisValues, audience: Any = None) -> int:
+    """The columns of twelve the landing headline spans: its composition's
+    (composition.choose)."""
+    from engine.foundations import composition
+    from engine.foundations.audience import Audience
+    return HEADLINE_COLUMNS[composition.choose(axes, audience or Audience()).name]
+
+
+def frame_of(axes: AxisValues, columns: int = GRID_COLUMNS) -> Frame:
+    """The landing page's frame at these axes: the layout's landing margins
+    and container (layout.landing_frame)."""
+    from engine.foundations import layout
+    margins, container = layout.landing_frame(axes)
+    return Frame(margins, container, columns)
+
+
+def word_em(face: fonts.Face, script: str, letters: float) -> float:
+    """The width of a word of `letters` letters in `script` set in `face`,
+    in em."""
     avg = face.metrics.arabic_avg if script == "arabic" else face.metrics.latin_avg
-    return FIT_WORD[script] * (avg or 0) / face.metrics.upm * px
+    return letters * (avg or 0) / face.metrics.upm
+
+
+def word_px(face: fonts.Face, px: float, script: str, letters: Optional[float] = None) -> float:
+    """The width of a word in `script` (FIT_WORD letters unless `letters`)
+    set in `face` at `px`."""
+    return word_em(face, script, FIT_WORD[script] if letters is None else letters) * px
+
+
+def _fits(scripts: Sequence[Tuple[str, List[int], fonts.Face, float]], column: float,
+          step: int) -> float:
+    """The largest factor on step `step`'s size at which the word fits
+    `column` px in every script, at most 1."""
+    return min([1.0] + [column / (word_em(face, script, letters) * sizes[step - 1])
+                        for script, sizes, face, letters in scripts])
+
+
+def _floor4(f: float) -> float:
+    return int(f * 10000) / 10000
 
 
 def tier_factors(axes: AxisValues, choice: fonts.Choice, latin: List[int],
-                 arabic: Optional[List[int]]) -> Dict[str, Dict[str, float]]:
-    """{tier: {role: factor}} for PHONE_ROLES from the tablet up (FIT_TIERS),
-    each rounded down to four places, so the word fits and the order holds."""
-    cols = tier_columns(axes)
+                 arabic: Optional[List[int]], frame: Optional[Frame] = None,
+                 words: Optional[Mapping[str, float]] = None,
+                 script: str = "latin") -> Dict[str, Dict[str, float]]:
+    """{tier: {role: factor}} for PHONE_ROLES from the tablet up (FIT_TIERS)
+    in one script, each rounded down to four places, so a wide Arabic face
+    never shrinks the Latin headline. The hero, heading-1 and section-title
+    fit the word at the tier's narrowest width, the hero with room for the
+    display MIN_LEVEL_RATIO above it; each keeps MIN_LEVEL_RATIO over the
+    next. The display's factor is its ceiling: the word fits at the tier's
+    widest column, and the fluid size (fluid_vw) takes it below that."""
+    frame = frame or frame_of(axes)
+    one = [row for row in _scripts(choice, latin, arabic, words) if row[0] == script]
+    sizes = one[0][1]
     out: Dict[str, Dict[str, float]] = {}
     for tier in FIT_TIERS:
+        low, high = TIER_WIDTHS[tier]
+        narrow = frame.column(tier, low)
+        wide = frame.column(tier, high if high else 10 ** 6)
         row: Dict[str, float] = {}
         above = None
-        for role in PHONE_ROLES:
+        for role in PHONE_ROLES[1:]:
             n = ROLES[role][0]
-            f = min(1.0, cols[tier] / word_px(choice.display, latin[n - 1], "latin"))
-            if arabic is not None:
-                f = min(f, cols[tier] / word_px(choice.arabic_display, arabic[n - 1], "arabic"))
+            f = _fits(one, narrow, n)
+            if role == "type.text.hero":
+                # room for the display MIN_LEVEL_RATIO above it, which must fit
+                # too, with ROUNDING_PX spare for the fluid size's two places
+                f = min(f, _hero_room(one, narrow, extra=ROUNDING_PX))
             if above is not None:
-                f = min(f, above / (MIN_LEVEL_RATIO * latin[n - 1]))
-            row[role] = int(f * 10000) / 10000
-            above = latin[n - 1] * row[role]
-        out[tier] = row
+                f = min(f, above / (MIN_LEVEL_RATIO * sizes[n - 1]))
+            row[role] = _floor4(min(1.0, f))
+            above = sizes[n - 1] * row[role]
+        hero = sizes[ROLES["type.text.hero"][0] - 1] * row["type.text.hero"]
+        need = min(1.0, hero * MIN_LEVEL_RATIO / sizes[DISPLAY_STEP - 1])
+        row["type.text.display"] = _floor4(max(_fits(one, wide, DISPLAY_STEP), need))
+        out[tier] = {role: row[role] for role in PHONE_ROLES}
     for wide, narrow in zip(reversed(FIT_TIERS), list(reversed(FIT_TIERS))[1:]):
         for role in PHONE_ROLES:
             out[narrow][role] = min(out[narrow][role], out[wide][role])
     return out
 
 
+def _hero_room(scripts: Sequence[Tuple[str, List[int], fonts.Face, float]],
+               column: float, level: float = MIN_LEVEL_RATIO, extra: float = 0.0) -> float:
+    """The largest factor on the hero at which a display `level` times it
+    plus `extra` px still fits the word in `column` px, in every script."""
+    n = ROLES["type.text.hero"][0]
+    return min((column / word_em(face, script, letters) / level - extra) / sizes[n - 1]
+               for script, sizes, face, letters in scripts)
+
+
+Script = Tuple[str, List[int], fonts.Face, float]
+
+
+def _scripts(choice: fonts.Choice, latin: List[int], arabic: Optional[List[int]],
+             words: Optional[Mapping[str, float]]) -> List[Script]:
+    """(script, sizes, display face, word letters) for every script the
+    system sets."""
+    words = dict(FIT_WORD, **(words or {}))
+    out = [("latin", latin, choice.display, float(words["latin"]))]
+    if arabic is not None:
+        out.append(("arabic", arabic, choice.arabic_display, float(words["arabic"])))
+    return out
+
+
+def fluid_vw(axes: AxisValues, choice: fonts.Choice, latin: List[int],
+             arabic: Optional[List[int]], factors: Mapping[str, Mapping[str, float]],
+             frame: Optional[Frame] = None, words: Optional[Mapping[str, float]] = None,
+             script: str = "latin") -> Dict[str, float]:
+    """{tier: vw} the display's fluid size in one script: the largest share
+    of the viewport at which the word still fits the column at the tier's
+    narrowest width (the column grows at least as fast as the width up to
+    the container), and from the laptop up no more than the display's size
+    at REFERENCE_WIDTH (so the headline scales with the width up to there),
+    nor less than MIN_LEVEL_RATIO over the hero at the tier's narrowest
+    width, where the word allows. `factors` is {tier: {role: factor}} in the
+    same script, the phone included."""
+    frame = frame or frame_of(axes)
+    _, sizes, face, letters = next(r for r in _scripts(choice, latin, arabic, words)
+                                   if r[0] == script)
+    hero_n = ROLES["type.text.hero"][0]
+    out = {}
+    for tier, (low, _) in TIER_WIDTHS.items():
+        v = frame.column(tier, low) / word_em(face, script, letters) / low * 100
+        if tier in ("laptop", "desktop"):
+            reference = sizes[DISPLAY_STEP - 1] / REFERENCE_WIDTH * 100
+            order = (sizes[hero_n - 1] * factors[tier]["type.text.hero"] * MIN_LEVEL_RATIO
+                     + ROUNDING_PX) / low * 100
+            v = min(v, max(reference, order))
+        out[tier] = int(v * 100) / 100
+    return out
+
+
 def phone_px(axes: AxisValues, latin: List[int], body: int = BODY_PX) -> Dict[str, int]:
-    """The phone size in px of each style in PHONE_ROLES: the phone scale's
-    size at its step, at least 1px above the style below it on the phone
-    (heading-2 at its own size for the lowest) and at most its own size."""
+    """The phone size in px of each style in PHONE_ROLES: the display's from
+    its desktop size (character.phone_display_for), the others the
+    phone scale's size at their step; each at least 1px above the style
+    below it on the phone (heading-2 at its own size for the lowest) and at
+    most its own size."""
     r = 1 + (ratio(axes) - 1) * PHONE_RATIO_SHARE
     floor = latin[ROLES[PHONE_FLOOR_ROLE][0] - 1]
     out: Dict[str, int] = {}
     for role in reversed(PHONE_ROLES):
         n = ROLES[role][0]
-        px = min(latin[n - 1], max(int(body * r ** (n - BODY_STEP) + 0.5), floor + 1))
+        want = character.phone_display_for(latin[n - 1]) if n == DISPLAY_STEP \
+            else body * r ** (n - BODY_STEP)
+        px = min(latin[n - 1], max(int(want + 0.5), floor + 1))
         out[role] = floor = px
     return out
 
@@ -225,14 +398,43 @@ def hold_phone_order(start: Dict[str, float], scripts: List[List[float]]) -> Dic
 
 
 def phone_factors(axes: AxisValues, latin: List[int], body: int = BODY_PX,
-                  arabic: Optional[List[int]] = None) -> Dict[str, float]:
+                  arabic: Optional[List[int]] = None, choice: Optional[fonts.Choice] = None,
+                  frame: Optional[Frame] = None,
+                  words: Optional[Mapping[str, float]] = None) -> Dict[str, float]:
     """The phone factor of each style in PHONE_ROLES: the Latin phone size
     (phone_px) over the style's size, raised where the Arabic sizes, which
     round per step, would otherwise leave a style less than 1px above the
-    one below it on a phone (hold_phone_order)."""
+    one below it on a phone (hold_phone_order). With the faces, the hero
+    then comes down, and the styles under it with it, until a display 1px
+    above it still fits the word at the reflow width in every script, since
+    the fluid display (fluid_vw) never falls below that."""
     px = phone_px(axes, latin, body)
     start = {role: px[role] / latin[ROLES[role][0] - 1] for role in PHONE_ROLES}
-    return hold_phone_order(start, [latin] + ([arabic] if arabic is not None else []))
+    scripts_sizes = [latin] + ([arabic] if arabic is not None else [])
+    held = hold_phone_order(start, scripts_sizes)
+    if choice is None:
+        return held
+    frame = frame or frame_of(axes)
+    col = frame.column("phone", TIER_WIDTHS["phone"][0])
+    room = _hero_room(_scripts(choice, latin, arabic, words), col, level=1.0, extra=1.0)
+    if held["type.text.hero"] <= room:
+        return held
+    # The least factors that keep the phone order: a scale too tight for the
+    # word at 320px keeps its order, and the display may then run past a
+    # 320px screen by the rest (fit_problems measures only the fluid size).
+    least = hold_phone_order({role: 0.0 for role in PHONE_ROLES}, scripts_sizes)
+    capped = dict(held)
+    prev = None
+    for role in PHONE_ROLES[1:]:
+        n = ROLES[role][0]
+        if prev is None:
+            cap = room
+        else:
+            pn = ROLES[prev][0]
+            cap = min((sz[pn - 1] * capped[prev] - 1) / sz[n - 1] for sz in scripts_sizes)
+        capped[role] = min(capped[role], max(least[role], int(cap * 10000) / 10000))
+        prev = role
+    return capped
 
 
 # Run roles: the face a run in the other script takes inside a paragraph.
@@ -246,6 +448,8 @@ ROLE_TYPES: Dict[str, str] = {
     "type.icon.size.feature": "dimension", "type.icon.stroke": "number",
     **{phone_token(role): "number" for role in PHONE_ROLES + tuple(FOLLOWS)},
     **{fit_token(role, tier): "number" for role in PHONE_ROLES for tier in FIT_TIERS},
+    **{fluid_token(tier): "number" for tier in TIER_WIDTHS},
+    "type.emphasis.tone": "number", "type.emphasis.italic": "number",
 }
 
 
@@ -289,10 +493,39 @@ def arabic_px(latin: List[int], scale: float) -> List[int]:
 
 
 def leading(axes: AxisValues, extra: float = 0.0) -> Dict[int, float]:
-    """Line heights: display lines tighten with contrast, reading lines
-    open as density falls, and more for long reading (`extra`)."""
-    return {0: round(1.05 + 0.1 * (1 - axes.contrast), 2), 1: 1.2, 2: 1.3,
-            3: round(1.5 + 0.1 * (1 - axes.density) + extra, 2)}
+    """The fixed line heights, 1 to 3: reading lines open as density
+    falls, and more for long reading (`extra`). The display leading (0)
+    depends on each style's size (display_leading)."""
+    return {1: 1.2, 2: 1.3, 3: round(1.5 + 0.1 * (1 - axes.density) + extra, 2)}
+
+
+def clearance(face: Optional[fonts.Face]) -> float:
+    """The least line height at which a descender and the ascender of the
+    line below it keep INK_GAP apart in `face` (its measured Latin ink),
+    rounded up to two places; 1 for a face with no measured ink."""
+    if face is None or face.ink is None:
+        return 1.0
+    return math.ceil(((face.ink[0] + face.ink[1]) / 1000 + INK_GAP) * 100 - 1e-9) / 100
+
+
+def display_leading(axes: AxisValues, px: float, face: Optional[fonts.Face] = None) -> float:
+    """The line height of a display style at `px`: DISPLAY_LEAD[0] at
+    DISPLAY_LEAD_PX[0] and below, falling on a log scale of size to 1.0 for
+    a muted brand or 0.92 for a bold one at DISPLAY_LEAD_PX[1] and above,
+    and never below the face's clearance (MIN_DISPLAY_LEADING without a
+    face). Continuous in size and contrast."""
+    top, calm, bold = DISPLAY_LEAD
+    large = calm + (bold - calm) * axes.contrast
+    t = character.log_position(max(px, 1.0), *DISPLAY_LEAD_PX)
+    floor = clearance(face) if face is not None else MIN_DISPLAY_LEADING
+    return max(round(top + (large - top) * t, 2), floor)
+
+
+def lead_token(role: str, script: str) -> str:
+    """The leading token a role reads in `script`: its step's display
+    leading for index 0, else the fixed index."""
+    step, _, _, index, _ = ROLES[role]
+    return f"type.leading.{script}.step-{step}" if index == 0 else f"type.leading.{script}.{index}"
 
 
 def _rem(px: float) -> Dict[str, Any]:
@@ -304,8 +537,8 @@ def _step(role: str, axes: AxisValues) -> int:
     return (BODY_STEP if axes.density < 0.5 else 2) if step == "ui" else step
 
 
-def _snap(w: float) -> int:
-    return int(round(w / 100.0)) * 100
+def _snap(w: float, step: int = 100) -> int:
+    return int(round(w / step)) * step
 
 
 def weights(axes: AxisValues, choice: fonts.Choice, sizes: List[int]) -> Dict[str, int]:
@@ -317,14 +550,37 @@ def weights(axes: AxisValues, choice: fonts.Choice, sizes: List[int]) -> Dict[st
     hero_px = sizes[ROLES["type.text.hero"][0] - 1]
     h3_px = sizes[ROLES["type.text.heading-3"][0] - 1]
     out = {}
-    for role, (_, face, kind, _, _) in ROLES.items():
-        if kind == "display":
+    for role, (_, _, kind, _, _) in ROLES.items():
+        if kind in ("display", "emphasis"):
             px = sizes[_step(role, axes) - 1]
             t = character.log_position(px, h3_px, hero_px)
-            out[role] = choice.display.clamp(_snap(heading + (display - heading) * t))
+            out[role] = choice.display.clamp(_snap(heading + (display - heading) * t, 50))
+            if kind == "emphasis":
+                out[role] = choice.display.clamp(out[role] - emphasis_gap(axes))
         else:
             out[role] = {"heading": heading, "regular": 400, "medium": 500}[kind]
     return out
+
+
+# The weight the emphasised words of a two-voice headline drop by, from a
+# quiet gap to a wide one (character.emphasis_contrast), in hundreds; and
+# the emphasis contrast at which they turn italic, in a display face that
+# ships one.
+EMPHASIS_GAP = (100, 300)
+ITALIC_FROM = 0.5
+
+
+def emphasis_gap(axes: AxisValues) -> int:
+    """How much lighter the emphasised words are than the display, 100 to
+    300 in steps of 100."""
+    lo, hi = EMPHASIS_GAP
+    return _snap(lo + (hi - lo) * character.emphasis_contrast(axes))
+
+
+def emphasis_italic(axes: AxisValues, face: fonts.Face) -> bool:
+    """Whether the emphasised words turn italic: a wide enough emphasis
+    contrast in a display face that ships a true italic."""
+    return face.italic and character.emphasis_contrast(axes) >= ITALIC_FROM
 
 
 def tracking_em(axes: AxisValues, px: float, hero_px: float) -> float:
@@ -333,15 +589,45 @@ def tracking_em(axes: AxisValues, px: float, hero_px: float) -> float:
     return character.display_tracking(axes) * character.log_position(px, 20, hero_px)
 
 
+def _tier_scale(step: int, tier: str, script: str) -> str:
+    """The primitive holding a step's fit factor at a tier in a script."""
+    return f"type.tier-scale.{step}.{tier}" if script == "latin" \
+        else f"type.tier-scale.arabic.{step}.{tier}"
+
+
+def _vw(tier: str, script: str) -> str:
+    """The primitive holding the display's fluid size at a tier in a
+    script, in vw."""
+    return f"type.vw.{tier}" if script == "latin" else f"type.vw.arabic.{tier}"
+
+
+def _add_scripted(ts: TokenSet, path: str, latin: str, arabic: Optional[str]) -> None:
+    """A number role that reads `latin`, and `arabic` under right to left
+    when the system has Arabic and the two differ in value."""
+    modes = {}
+    if arabic is not None and ts.resolve(arabic) != ts.resolve(latin):
+        modes = {"direction:rtl": "{%s}" % arabic}
+    ts.add(Token(path, "number", "{%s}" % latin, modes=modes, layer="semantic"))
+
+
 def _face_list(face: fonts.Face, *rest: str) -> List[str]:
     return [face.family, fonts.fallback_name(face), *rest]
 
 
 def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
-                  leading_extra: float = 0.0, book_depth: Optional[float] = None) -> Generated:
+                  leading_extra: float = 0.0, book_depth: Optional[float] = None,
+                  columns: Optional[int] = None,
+                  words: Optional[Mapping[str, float]] = None) -> Generated:
     """The type tokens. `book_depth` is the product's book depth from the
-    brief's product_type (fonts.choose), None when the brief does not say."""
+    brief's product_type (fonts.choose), None when the brief does not say.
+    `columns` is the columns of twelve the landing headline spans (its
+    composition's, HEADLINE_COLUMNS; 12 when not given) and `words` the
+    letters of the page's longest headline word per script, when known
+    (FIT_WORD otherwise)."""
     choice = fonts.choose(axes, book_depth)
+    columns = GRID_COLUMNS if columns is None else columns
+    fit_words = dict(FIT_WORD, **(words or {}))
+    frame = frame_of(axes, columns)
     ts = TokenSet()
     faces = {
         "display": _face_list(choice.display, choice.display.generic),
@@ -374,13 +660,22 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
         for n, px in zip(STEPS, arabic_px(latin, scale)):
             ts.add(Token(f"type.size.arabic.{n}", "dimension", _rem(px)))
     lead = leading(axes, leading_extra)
-    for i, v in lead.items():
-        ts.add(Token(f"type.leading.latin.{i}", "number", v))
+    display_steps = sorted({spec[0] for spec in ROLES.values() if spec[3] == 0},
+                           reverse=True)
+    lead_latin = {f"step-{n}": display_leading(axes, latin[n - 1], choice.display)
+                  for n in display_steps}
+    lead_latin.update({str(i): v for i, v in lead.items()})
+    for name, v in lead_latin.items():
+        ts.add(Token(f"type.leading.latin.{name}", "number", v))
     if arabic:
-        for i, v in lead.items():
-            ts.add(Token(f"type.leading.arabic.{i}", "number", round(v + 0.2, 2)))
+        for name, v in lead_latin.items():
+            ts.add(Token(f"type.leading.arabic.{name}", "number",
+                         round(v + ARABIC_LEAD_EXTRA, 2)))
     hero_px = latin[ROLES["type.text.hero"][0] - 1]
     ts.add(Token("type.tracking.0", "dimension", {"value": 0, "unit": "px"}))
+    ts.add(Token("type.tracking.caps", "dimension",
+                 {"value": round(character.capitals_tracking(axes) * latin[DISPLAY_STEP - 1], 2),
+                  "unit": "px"}))
     scale_steps = sorted({_step(r, axes) for r, spec in ROLES.items() if spec[4] == "scale"})
     for n in scale_steps:
         px = latin[n - 1]
@@ -391,16 +686,16 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
                  {"value": round(character.label_tracking(axes) * label_px, 2), "unit": "px"}))
 
     label_face = "mono" if character.technical(axes) >= MONO_LABEL_FROM else "text"
-    for role, (_, face, _, lead_i, track) in ROLES.items():
+    for role, (_, face, _, _, track) in ROLES.items():
         face = label_face if face == "label" else face
         step = _step(role, axes)
         tracking = {"scale": "{type.tracking.step-%d}" % step, "label": "{type.tracking.label}",
-                    "none": "{type.tracking.0}"}[track]
+                    "caps": "{type.tracking.caps}", "none": "{type.tracking.0}"}[track]
         value = {"fontFamily": "{%s}" % FACE_TOKENS[face],
                  "fontSize": "{type.size.latin.%d}" % step,
                  "fontWeight": "{type.weight.%d}" % std[role],
                  "letterSpacing": tracking,
-                 "lineHeight": "{type.leading.latin.%d}" % lead_i}
+                 "lineHeight": "{%s}" % lead_token(role, "latin")}
         rtl = value
         arabic_rtl = arabic and role not in KEEP_FACE
         if arabic_rtl:
@@ -409,7 +704,7 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
                    "fontSize": "{type.size.arabic.%d}" % step,
                    "fontWeight": "{type.weight.%d}" % in_arabic(role, std[role]),
                    "letterSpacing": "{type.tracking.0}",
-                   "lineHeight": "{type.leading.arabic.%d}" % lead_i}
+                   "lineHeight": "{%s}" % lead_token(role, "arabic")}
         elif arabic:
             # Code keeps its face, size and leading, but drops letter
             # spacing for the Arabic strings it can hold.
@@ -446,20 +741,47 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
                      layer="semantic"))
     ts.add(Token("type.icon.stroke", "number", "{type.icon.stroke-width}", layer="semantic"))
     arabic_sizes = arabic_px(latin, scale) if arabic else None
-    phone = phone_factors(axes, latin, body_px, arabic_sizes)
+    phone = phone_factors(axes, latin, body_px, arabic_sizes, choice, frame, fit_words)
     for role in reversed(PHONE_ROLES):
         ts.add(Token(f"type.phone-scale.{ROLES[role][0]}", "number", phone[role]))
     for role in PHONE_ROLES + tuple(FOLLOWS):
         ts.add(Token(phone_token(role), "number", "{type.phone-scale.%d}" % ROLES[role][0],
                      layer="semantic"))
-    fits = tier_factors(axes, choice, latin, arabic_sizes)
+    scripts = {"latin": latin, **({"arabic": arabic_sizes} if arabic_sizes else {})}
+    fits = {sc: tier_factors(axes, choice, latin, arabic_sizes, frame, fit_words, sc)
+            for sc in scripts}
+    fluid = {sc: fluid_vw(axes, choice, latin, arabic_sizes, dict(fits[sc], phone=phone),
+                          frame, fit_words, sc) for sc in scripts}
+    for sc in scripts:
+        for role in PHONE_ROLES:
+            for tier in FIT_TIERS:
+                ts.add(Token(_tier_scale(ROLES[role][0], tier, sc), "number",
+                             fits[sc][tier][role]))
     for role in PHONE_ROLES:
         for tier in FIT_TIERS:
-            ts.add(Token(f"type.tier-scale.{ROLES[role][0]}.{tier}", "number", fits[tier][role]))
-    for role in PHONE_ROLES:
-        for tier in FIT_TIERS:
-            ts.add(Token(fit_token(role, tier), "number",
-                         "{type.tier-scale.%d.%s}" % (ROLES[role][0], tier), layer="semantic"))
+            _add_scripted(ts, fit_token(role, tier), _tier_scale(ROLES[role][0], tier, "latin"),
+                          _tier_scale(ROLES[role][0], tier, "arabic") if arabic_sizes else None)
+    for sc in scripts:
+        for tier in TIER_WIDTHS:
+            ts.add(Token(_vw(tier, sc), "number", fluid[sc][tier]))
+    for tier in TIER_WIDTHS:
+        _add_scripted(ts, fluid_token(tier), _vw(tier, "latin"),
+                      _vw(tier, "arabic") if arabic_sizes else None)
+    for script, letters in fit_words.items():
+        if arabic or script == "latin":
+            ts.add(Token(f"type.fit-word.{script}", "number", letters))
+    ts.add(Token("type.fit-columns", "number", columns))
+    gap_tone = round(character.emphasis_contrast(axes), 2)
+    tone = round(gap_tone * 100)
+    ts.add(Token(f"type.tone.{tone}", "number", gap_tone))
+    ts.add(Token("type.switch.off", "number", 0))
+    ts.add(Token("type.switch.on", "number", 1))
+    ts.add(Token("type.emphasis.tone", "number", "{type.tone.%d}" % tone, layer="semantic"))
+    italic = emphasis_italic(axes, choice.display)
+    ts.add(Token("type.emphasis.italic", "number",
+                 "{type.switch.%s}" % ("on" if italic else "off"),
+                 modes={"direction:rtl": "{type.switch.off}"} if arabic and italic else {},
+                 layer="semantic"))
     hero_n = ROLES["type.text.hero"][0]
     notes = [f"type: display {choice.display.family}, text {choice.text.family}, mono "
              f"{choice.mono.family}" + (f", Arabic {choice.arabic.family} and "
@@ -467,7 +789,10 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
                                         "Latin size" if arabic else "")
              + f", ratio {ratio(axes):g}, display weight {std['type.text.hero']}, hero "
              f"{latin[hero_n - 1]}px ({latin[hero_n - 1] * phone['type.text.hero']:.0f}px on a "
-             "phone)"]
+             f"phone), landing display {latin[DISPLAY_STEP - 1]}px at {REFERENCE_WIDTH}px wide "
+             f"({latin[DISPLAY_STEP - 1] * phone['type.text.display']:.0f}px on a phone at most, "
+             f"{fluid['latin']['phone']:g}vw), line height "
+             f"{lead_latin['step-%d' % DISPLAY_STEP]:g}"]
     return Generated(tokens=ts, notes=notes)
 
 
@@ -588,6 +913,12 @@ def _arabic(ts: TokenSet, mode: str) -> List[str]:
             out.append(f"{role} (direction:rtl) has line height {rtl['lineHeight']:g}, not taller "
                        f"than its Latin {ltr['lineHeight']:g}; Arabic needs room for its marks, "
                        "so point it at the Arabic leading")
+        elif _display_kind(role) and rtl["lineHeight"] < ltr["lineHeight"] \
+                + ARABIC_DISPLAY_GAP - 1e-9:
+            out.append(f"{role} (direction:rtl) has line height {rtl['lineHeight']:g}, less than "
+                       f"{ARABIC_DISPLAY_GAP:g} above its Latin {ltr['lineHeight']:g}; Arabic "
+                       "display lines need room for the marks above and below, so point it at "
+                       "the Arabic leading")
     return out
 
 
@@ -668,13 +999,46 @@ def _tracking_order(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+def _display_kind(role: str) -> bool:
+    """A style set in the display face whose leading follows its size."""
+    return ROLES[role][1] == "display" and ROLES[role][3] == 0
+
+
 def _line_height_floor(ts: TokenSet, mode: str) -> List[str]:
+    """A display style keeps a line height of MIN_DISPLAY_LEADING or more;
+    every other style a line height above 1."""
     out = []
     for role in _roles(ts, ROLES):
         lh = ts.resolve(role, mode)["lineHeight"]
-        if lh <= 1:
+        if _display_kind(role):
+            if lh < MIN_DISPLAY_LEADING:
+                out.append(f"{role} ({mode}) has line height {lh:g}; below "
+                           f"{MIN_DISPLAY_LEADING:g}, our floor for a display style, its lines "
+                           f"collide, so point it at a leading of {MIN_DISPLAY_LEADING:g} or more")
+        elif lh <= 1:
             out.append(f"{role} ({mode}) has line height {lh:g}; at 1 or less its lines touch, "
                        "so point it at a leading above 1")
+    return out
+
+
+def _clearance(ts: TokenSet, mode: str) -> List[str]:
+    """A display style set below a line height of 1 leaves room between a
+    descender and the ascender of the line below it: at least the face's
+    measured clearance (clearance). Arabic has its own rule (arabic-text)."""
+    if "direction:rtl" in mode:
+        return []
+    out = []
+    for role in _roles(ts, ROLES):
+        if not _display_kind(role):
+            continue
+        v = ts.resolve(role, mode)
+        face = fonts.BY_FAMILY.get(_first(v["fontFamily"]))
+        need = clearance(face)
+        if v["lineHeight"] < 1 and v["lineHeight"] < need - 1e-9:
+            out.append(f"{role} ({mode}) has line height {v['lineHeight']:g}, under the "
+                       f"{need:g} {face.family if face else 'its face'} needs for a descender "
+                       "to clear the ascender of the next line, so point it at a leading of "
+                       f"{need:g} or more")
     return out
 
 
@@ -739,21 +1103,59 @@ def _fit_of(ts: TokenSet, role: str, tier: str) -> Optional[str]:
     return token if ts.has(token) else None
 
 
-def tier_factor(ts: TokenSet, role: str, tier: str) -> float:
-    """The factor a style takes at a tier: its fit factor, or 1."""
+def tier_factor(ts: TokenSet, role: str, tier: str, mode: str = "") -> float:
+    """The factor a style takes at a tier in a context: its fit factor, or 1."""
     token = _fit_of(ts, role, tier)
-    return float(ts.resolve(token)) if token else 1.0
+    return float(ts.resolve(token, mode)) if token else 1.0
+
+
+# The column a set without type.fit-columns is measured in from the laptop
+# up: seven of twelve, where a split composition sets its headline.
+DEFAULT_COLUMNS = 7
+
+
+def fluid_roles(ts: TokenSet) -> List[str]:
+    """The styles tokens.css sets fluid: the display and the styles that
+    follow it, in a set that has a fluid size for every tier."""
+    if not all(ts.has(fluid_token(t)) for t in TIER_WIDTHS) or not phone_roles(ts):
+        return []
+    return [r for r in phone_roles(ts) if FOLLOWS.get(r, r) in FLUID]
+
+
+def _frame_in(ts: TokenSet, mode: str) -> Optional[Frame]:
+    """The frame a set declares: its landing margins and container when it
+    has them, else its page margins and container; None when a tier's
+    margin is missing."""
+    margins = {}
+    for tier in TIER_WIDTHS:
+        for path in (f"layout.landing.margin-inline.{tier}", f"layout.margin-inline.{tier}"):
+            if ts.has(path):
+                margins[tier] = _px(ts.resolve(path, mode))
+                break
+    if set(margins) != set(TIER_WIDTHS):
+        return None
+    box = "layout.landing.max-width" if ts.has("layout.landing.max-width") \
+        else "layout.container.max"
+    columns = int(ts.resolve("type.fit-columns")) if ts.has("type.fit-columns") \
+        else DEFAULT_COLUMNS
+    return Frame(margins, _px(ts.resolve(box, mode)), columns)
+
+
+def _letters(ts: TokenSet, script: str) -> float:
+    path = f"type.fit-word.{script}"
+    return float(ts.resolve(path)) if ts.has(path) else float(FIT_WORD[script])
 
 
 def fit_problems(ts: TokenSet, mode: str = "") -> List[str]:
-    """At each tier from the tablet up, the display style's FIT_WORD word
-    fits the tier's column in each script the set ships, and the scaled
-    display, hero, heading-1 and section-title keep falling in size,
-    MIN_LEVEL_RATIO apart, above heading-2."""
+    """At each tier, in each script the set ships, the display style's
+    longest headline word (type.fit-word, else FIT_WORD) fits the headline's
+    column (Frame) at the tier's narrowest and widest widths, the display
+    taking its fluid size where the set has one; and at each tier from the
+    tablet up the scaled display, hero, heading-1 and section-title keep
+    falling in size, MIN_LEVEL_RATIO apart, above heading-2."""
     need = ("layout.breakpoint.tablet", "layout.container.max", "type.face.display")
     if not all(ts.has(p) for p in need) or not _typed(ts, "type.text.display"):
         return []
-    from engine.foundations.layout import VIEWPORTS
     face = fonts.BY_FAMILY.get(_first(ts.resolve("type.face.display")))
     arabic = fonts.BY_FAMILY.get(_first(ts.resolve(ARABIC_DISPLAY_FACE))) \
         if _typed(ts, ARABIC_DISPLAY_FACE) else None
@@ -763,35 +1165,68 @@ def fit_problems(ts: TokenSet, mode: str = "") -> List[str]:
     std = ["contrast:standard"] if "contrast" in ts.axes else []
     ltr = ",".join(std + (["direction:ltr"] if "direction" in ts.axes else []))
     rtl = ",".join(std + ["direction:rtl"])
+    frame = _frame_in(ts, mode)
+    fluid = all(_typed(ts, fluid_token(t)) for t in TIER_WIDTHS)
+    hero_ok = _typed(ts, "type.text.hero")
+    scripts = [("latin", ltr, face)]
+    if arabic is not None and "direction" in ts.axes:
+        scripts.append(("arabic", rtl, arabic))
     out = []
-    for tier in FIT_TIERS:
-        f = tier_factor(ts, "type.text.display", tier)
-        sizes = [("latin", ltr, face)]
-        if arabic is not None and "direction" in ts.axes:
-            sizes.append(("arabic", rtl, arabic))
-        margin = f"layout.margin-inline.{tier}"
-        if not ts.has(margin):
-            sizes = []  # no column to measure at this tier; the order below still holds
-        else:
-            content = min(VIEWPORTS[tier] - 2 * _px(ts.resolve(margin, mode)),
-                          _px(ts.resolve("layout.container.max")))
-            col = content * (1.0 if tier == "tablet" else SPLIT_SHARE)
-        for script, ctx, fc in sizes:
-            width = word_px(fc, _px(ts.resolve("type.text.display", ctx)["fontSize"]) * f, script)
-            if width > col + 0.5:
-                out.append(f"type.text.display at the {tier} tier sets a {FIT_WORD[script]} "
-                           f"letter {script} word {width:.0f}px wide in a {col:.0f}px column; "
-                           f"point {fit_token('type.text.display', tier)} at a factor that "
-                           "fits it")
-        chain = [(r, _px(ts.resolve(r, ltr)["fontSize"]) * tier_factor(ts, r, tier))
-                 for r in PHONE_ROLES if _typed(ts, r)]
-        if _typed(ts, PHONE_FLOOR_ROLE):
-            chain.append((PHONE_FLOOR_ROLE, _px(ts.resolve(PHONE_FLOOR_ROLE, ltr)["fontSize"])))
-        for (a, pa), (b, pb) in zip(chain, chain[1:]):
-            if pa < pb * MIN_LEVEL_RATIO - 0.01:
-                out.append(f"{a} at the {tier} tier is {pa:.1f}px, less than {MIN_LEVEL_RATIO:g} "
-                           f"times {b} at {pb:.1f}px; point {fit_token(a, tier)} at a factor "
-                           "that keeps the order")
+    phone = fluid and all(_typed(ts, phone_token(r))
+                          for r in ("type.text.display", "type.text.hero"))
+    tiers = (("phone",) if phone else ()) + FIT_TIERS
+    for tier in tiers:
+        low, high = TIER_WIDTHS[tier]
+        widths = [low] if not fluid else [low, high or REFERENCE_WIDTH] + (
+            [1920] if high is None else [])
+        for script, ctx, fc in scripts if frame is not None else ():
+            f = ts.resolve(phone_token("type.text.display"), ctx) if tier == "phone" \
+                else tier_factor(ts, "type.text.display", tier, ctx)
+            ceiling = _px(ts.resolve("type.text.display", ctx)["fontSize"]) * f
+            hero = 0.0
+            if hero_ok and tier != "phone":
+                hf = ts.resolve(phone_token("type.text.hero"), ctx) if tier == "phone" \
+                    else tier_factor(ts, "type.text.hero", tier, ctx)
+                hero = _px(ts.resolve("type.text.hero", ctx)["fontSize"]) * hf
+            for w in widths:
+                size = ceiling
+                if fluid:
+                    size = min(float(ts.resolve(fluid_token(tier), ctx)) * w / 100, ceiling)
+                    if tier != "phone":
+                        size = max(hero + 1, size)
+                col = frame.column(tier, w)
+                width = word_em(fc, script, _letters(ts, script)) * size
+                if width > col + 0.5:
+                    factor = phone_token("type.text.display") if tier == "phone" \
+                        else fit_token("type.text.display", tier)
+                    out.append(f"type.text.display at {w}px wide ({tier}) sets a "
+                               f"{_letters(ts, script):g} letter {script} word {width:.0f}px "
+                               f"wide in a {col:.0f}px column; point {factor}"
+                               + (f" or {fluid_token(tier)}" if fluid else "")
+                               + " at a smaller value that fits it")
+                    break
+        if tier == "phone":
+            continue
+        for script, ctx, _ in scripts:
+            chain = []
+            for r in PHONE_ROLES:
+                if not _typed(ts, r):
+                    continue
+                size = _px(ts.resolve(r, ctx)["fontSize"]) * tier_factor(ts, r, tier, ctx)
+                if r == "type.text.display" and fluid:
+                    size = min(float(ts.resolve(fluid_token(tier), ctx)) * low / 100, size)
+                chain.append((r, size))
+            if _typed(ts, PHONE_FLOOR_ROLE):
+                chain.append((PHONE_FLOOR_ROLE,
+                              _px(ts.resolve(PHONE_FLOOR_ROLE, ctx)["fontSize"])))
+            where = "" if script == "latin" else f" in {script}"
+            for (a, pa), (b, pb) in zip(chain, chain[1:]):
+                if pa < pb * MIN_LEVEL_RATIO - 0.01:
+                    fix = fit_token(a, tier) + (f" or {fluid_token(tier)}"
+                                                if a == "type.text.display" and fluid else "")
+                    out.append(f"{a} at the {tier} tier{where} is {pa:.1f}px, less than "
+                               f"{MIN_LEVEL_RATIO:g} times {b} at {pb:.1f}px; point {fix} at a "
+                               "factor that keeps the order")
     return out
 
 
@@ -801,14 +1236,40 @@ def scale_property(role: str) -> str:
     return f"{css_property(role)}-scale"
 
 
+def fluid_property(role: str) -> str:
+    """The CSS property that holds a fluid style's size in vw, a number, at
+    the tier the viewport is in (the style it follows, for a follower). It
+    is set on the root, so a right to left block inside a left to right
+    page reads the root's."""
+    from engine.foundations.tokens import css_property
+    return f"{css_property(FOLLOWS.get(role, role))}-fluid"
+
+
+def fluid_size(role: str, size: str) -> str:
+    """The font-size a fluid style writes: its fluid size, never above
+    `size` (its size times its scale) and never below 1px over the hero."""
+    from engine.foundations.tokens import css_property
+    hero = css_property("type.text.hero") + "-font-size"
+    return f"clamp(calc(var({hero}) + 1px), calc(var({fluid_property(role)}) * 1vw), {size})"
+
+
 def responsive_lines(ts: TokenSet) -> Dict[str, List[str]]:
     """The declarations for the phone (:root) and from each breakpoint up
     that set each scaled style's factor: the phone factor, then the tier's
-    fit factor (or 1 where the set has none)."""
+    fit factor (or 1 where the set has none); the display's fluid size per
+    tier; and, at the root, each type role's line breaking (WRAP)."""
     from engine.foundations.tokens import css_property
     roles = phone_roles(ts)
+    leaders = [r for r in fluid_roles(ts) if r not in FOLLOWS]
+
+    def fluid(tier: str) -> List[str]:
+        return [f"{fluid_property(r)}: var({css_property(fluid_token(tier))});"
+                for r in leaders]
+
+    wrap = [f"{css_property(r)}-text-wrap: {WRAP[r]};" for r in ROLES
+            if r in WRAP and _typed(ts, r)] if roles else []
     out = {"phone": [f"{scale_property(r)}: var({css_property(phone_token(r))});"
-                     for r in roles]}
+                     for r in roles] + fluid("phone") + wrap}
     for tier in FIT_TIERS:
         lines = []
         for r in roles:
@@ -817,7 +1278,7 @@ def responsive_lines(ts: TokenSet) -> Dict[str, List[str]]:
                 lines.append(f"{scale_property(r)}: var({css_property(token)});")
             elif tier == FIT_TIERS[0]:
                 lines.append(f"{scale_property(r)}: 1;")
-        out[tier] = lines
+        out[tier] = lines + fluid(tier)
     return out
 
 
@@ -868,7 +1329,7 @@ def _icons(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
-def _fits(ts: TokenSet, mode: str) -> List[str]:
+def _fits_check(ts: TokenSet, mode: str) -> List[str]:
     return fit_problems(ts)
 
 
@@ -886,12 +1347,14 @@ CHECKS: Tuple[Check, ...] = (
           exempt_axes=_WEIGHT_ONLY),
     Check("phone-hierarchy", "system", _phone_hierarchy, axes=("direction",),
           exempt_axes=_WEIGHT_ONLY),
-    Check("display-fits", "system", _fits,
+    Check("display-fits", "system", _fits_check,
           exempt_axes=(("direction", "it reads both directions itself"),
                        ("contrast", "fit factors never carry modes"))),
     Check("type-tracking-order", "system", _tracking_order, axes=("direction",),
           exempt_axes=_WEIGHT_ONLY),
     Check("line-height-floor", "system", _line_height_floor, axes=("direction",),
+          exempt_axes=_WEIGHT_ONLY),
+    Check("display-clearance", "system", _clearance, axes=("direction",),
           exempt_axes=_WEIGHT_ONLY),
     Check("code-face", "system", _code_face,
           exempt_axes=(("direction", "the mono face is a primitive, the same in both "
@@ -909,7 +1372,8 @@ CHECKS: Tuple[Check, ...] = (
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     a = inputs.audience
     return generate_type(axes, arabic=inputs.arabic, body_px=a.body_px,
-                         leading_extra=a.leading_extra, book_depth=a.book_depth)
+                         leading_extra=a.leading_extra, book_depth=a.book_depth,
+                         columns=headline_columns(axes, a), words=inputs.words)
 
 
 FOUNDATION = Foundation(name="type", generate=_generate, checks=CHECKS, role_types=ROLE_TYPES)

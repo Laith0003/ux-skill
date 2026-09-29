@@ -1,10 +1,10 @@
 ---
 id: the-full-type-ladder
 title: Every type style keeps a size, leading and tracking floor, and code keeps a fixed width
-status: active
+status: superseded
 areas: [type]
 supersedes: null
-superseded_by: null
+superseded_by: display-lines-sit-tight
 ---
 
 # Every type style keeps a size, leading and tracking floor, and code keeps a fixed width

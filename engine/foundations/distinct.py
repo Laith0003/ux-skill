@@ -67,7 +67,7 @@ SPAN: Mapping[str, float] = MappingProxyType({
     "button": 0.37, "link": 0.13, "support": 0.25, "neutral": 0.021,
     "status.hue": 38.0, "status.chroma": 0.098,
     "radius.control": 58.0, "radius.card": 18.0,
-    "hero.px": 71.0, "hero.weight": 500.0, "hero.tracking": 4.7, "body.px": 2.0,
+    "hero.px": 71.0, "hero.weight": 250.0, "hero.tracking": 4.7, "body.px": 2.0,
     "shadow.alpha": 0.14, "shadow.blur": 2.0,
     "card.padding": 16.0, "region.gap": 64.0, "hero.ratio": 1.0,
     "reveal.ms": 150.0, "overshoot": 0.8, "ring.px": 1.0,

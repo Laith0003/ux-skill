@@ -161,14 +161,20 @@ def test_a_smaller_role_never_tracks_tighter_than_a_larger_one():
         "looser tracking")
 
 
-def test_every_role_keeps_a_line_height_above_1():
-    ts = _with(_built("type"), Token("type.leading.tight", "number", 0.9))
+def test_a_display_style_keeps_our_floor_and_every_other_style_a_line_height_above_1():
+    ts = _with(_built("type"), Token("type.leading.tight", "number", 0.86),
+               Token("type.leading.one", "number", 1.0))
     ts = _type_field(ts, "hero", lineHeight="{type.leading.tight}")
+    ts = _type_field(ts, "section-title", lineHeight="{type.leading.one}")
     assert _failures(ts, typography.CHECKS, "line-height-floor") == [
-        "type.text.hero (direction:ltr) has line height 0.9; at 1 or less its lines touch, so "
-        "point it at a leading above 1",
-        "type.text.hero (direction:rtl) has line height 0.9; at 1 or less its lines touch, so "
-        "point it at a leading above 1"]
+        "type.text.hero (direction:ltr) has line height 0.86; below 0.88, our floor for a "
+        "display style, its lines collide, so point it at a leading of 0.88 or more",
+        "type.text.section-title (direction:ltr) has line height 1; at 1 or less its lines "
+        "touch, so point it at a leading above 1",
+        "type.text.hero (direction:rtl) has line height 0.86; below 0.88, our floor for a "
+        "display style, its lines collide, so point it at a leading of 0.88 or more",
+        "type.text.section-title (direction:rtl) has line height 1; at 1 or less its lines "
+        "touch, so point it at a leading above 1"]
 
 
 def test_code_keeps_the_reading_leading_and_labels_never_tighten():

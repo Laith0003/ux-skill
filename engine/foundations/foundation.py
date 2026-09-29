@@ -30,6 +30,9 @@ class BrandInputs:
     brand_role: Optional[str] = None
     # The structured brief fields: age, languages, scheme, reading context.
     audience: Audience = Audience()
+    # The letters of the page's longest headline word per script ("latin",
+    # "arabic"), when known; the type foundation fits the headline to it.
+    words: Optional[Mapping[str, int]] = field(default=None, hash=False)
 
 
 @dataclass
