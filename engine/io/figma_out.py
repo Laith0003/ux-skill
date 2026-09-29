@@ -34,9 +34,15 @@ figma_extension() gives only the additions, each placed in the file's own
 collection that shares the most of its path and holds its modes, named and
 valued in the file's own names and modes, or in a new collection
 (ADDITIONS) when none does, and scoped as the file scopes the variable of
-the same type that shares the most of its path there (by the engine's
-rule when none does); a token the file already holds with another value is
-refused, with the fix.
+the same type and layer that shares the most of its path there (by the
+engine's rule when none does). A mode the import did not read takes the
+system's value for the context its name gives (High contrast dark), and
+a collection with a mode whose name gives none holds only additions with
+one value in every mode; either is said in the notes and the load text.
+A token the file holds with another value, and an addition named like
+any variable the export declares, read or not, library ones too, is
+refused, with the fix; the apply script in extend mode never changes a
+variable the file has, it lists it.
 """
 from __future__ import annotations
 
@@ -50,6 +56,7 @@ from engine.foundations.export import PERCENT
 from engine.foundations.modes import contexts, parse
 from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
 from engine.foundations.values import TYPOGRAPHY_FIELDS, dimension_px, duration_ms
+from engine.io.figma_in import SIZE_SCOPES
 from engine.io.intake import write_with_intake
 from engine.io.report import Imported
 
@@ -85,7 +92,7 @@ _NOTES = {
     "leading": "Line heights are unitless ratios, and Figma binds a number to line height in px, "
                "so their variables have no scope.",
     "duration": "Durations are given in ms and have no scope, since no Figma field binds a "
-                "duration.",
+                "duration, so they read back as plain numbers.",
     "percent": "Opacities held from 0 to 100 are given from 0 to 100 with the Opacity scope, as "
                "Figma holds them.",
 }
@@ -137,6 +144,9 @@ def _scopes(t: Token) -> List[str]:
         return ["CORNER_RADIUS"]
     if root == "border":
         return ["STROKE_FLOAT"]
+    if root == "motion":
+        # A distance an element travels: no Figma field binds it.
+        return []
     if root == "type" and second == "tracking":
         return ["LETTER_SPACING"]
     if root == "type" and second == "size":
@@ -239,9 +249,9 @@ def _skip(t: Token) -> Optional[Dict[str, str]]:
 
 
 def _payload(mode: str, collections: List[Dict[str, Any]], skipped: List[Dict[str, str]],
-             notes: set) -> Dict[str, Any]:
+             notes: set, more: Optional[List[str]] = None) -> Dict[str, Any]:
     return {"version": 1, "mode": mode, "collections": collections, "skipped": skipped,
-            "notes": [text for key, text in _NOTES.items() if key in notes]}
+            "notes": [text for key, text in _NOTES.items() if key in notes] + list(more or [])}
 
 
 def to_figma(ts: TokenSet) -> Dict[str, Any]:
@@ -272,7 +282,42 @@ def to_figma(ts: TokenSet) -> Dict[str, Any]:
         variables = [v for t in tokens for v in _variables(t, ts, modes, ref, notes)]
         collections.append({"name": root, "modes": [m for m, _ in modes],
                             "variables": variables})
-    return _payload("system", collections, skipped, notes)
+    unsized = _unsized(collections, {_name(t.path) for ts_tokens in roots.values()
+                                     for t in ts_tokens if t.type == "dimension"})
+    more = [f"{unsized} size{'s have' if unsized != 1 else ' has'} no size scope, since no "
+            "Figma field binds them or no role points at them, so they read back as plain "
+            "numbers."] if unsized else []
+    return _payload("system", collections, skipped, notes, more)
+
+
+def _unsized(collections: List[Dict[str, Any]], sizes: set) -> int:
+    """How many of the variables named in `sizes` a Figma import reads back
+    as plain numbers: a size is read as one when all its scopes size
+    something, or when it has no scope and only such sizes point at it."""
+    kinds: Dict[str, str] = {}
+    users: Dict[str, List[str]] = {}
+    for c in collections:
+        for v in c["variables"]:
+            key = f"{c['name']}:{v['name']}"
+            if v["type"] != "FLOAT":
+                kinds[key] = v["type"]
+            elif v["scopes"] and all(x in SIZE_SCOPES for x in v["scopes"]):
+                kinds[key] = "size"
+            else:
+                kinds[key] = "" if not v["scopes"] else "number"
+            for value in v["values"].values():
+                if isinstance(value, dict) and "alias" in value:
+                    users.setdefault(value["alias"], []).append(key)
+    changed = True
+    while changed:
+        changed = False
+        for key, kind in kinds.items():
+            found = {kinds[u] for u in users.get(key, [])}
+            if kind == "" and found == {"size"}:
+                kinds[key] = "size"
+                changed = True
+    return sum(1 for c in collections for v in c["variables"]
+               if v["name"] in sizes and kinds[f"{c['name']}:{v['name']}"] != "size")
 
 
 def _script(payload: Dict[str, Any], head: str) -> str:
@@ -367,11 +412,26 @@ def figma_extension(imported: Imported, ts: TokenSet) -> Dict[str, Any]:
     held = imported.tokens
     own: Dict[str, List[str]] = record["variables"]
     scoped: Dict[str, List[str]] = record.get("scopes", {})
-    cols: Dict[str, List[Tuple[str, str]]] = {
-        name: [(mode, ctx or "") for mode, ctx in modes]
+    declared: Dict[str, List[str]] = record.get("declared", {})
+    unread: Dict[str, Dict[str, Optional[str]]] = record.get("unread", {})
+
+    def projected(ctx: Optional[str]) -> Optional[str]:
+        # A context an unread mode's name gives, on the axes the system has.
+        if ctx is None:
+            return None
+        return ",".join(p for p in ctx.split(",") if p.split(":")[0] in ts.axes)
+
+    # Each collection's modes with the context its value comes from: the
+    # one it was read in, or the one its name gives; None when neither.
+    cols: Dict[str, List[Tuple[str, Optional[str]]]] = {
+        name: [(mode, ctx if ctx is not None else projected(unread.get(name, {}).get(mode)))
+               for mode, ctx in modes]
         for name, modes in record["collections"].items()}
-    covers = {name: {a for _, ctx in modes for a in parse(ctx, ts.axes)}
+    covers = {name: {a for _, ctx in modes if ctx for a in parse(ctx, ts.axes)}
               for name, modes in cols.items()}
+    # A collection with a mode nothing gives a value for holds only tokens
+    # with one value in every mode.
+    blind = {name for name, modes in cols.items() if any(ctx is None for _, ctx in modes)}
     members: Dict[str, List[str]] = {}
     for path, (col, _) in own.items():
         members.setdefault(col, []).append(path)
@@ -391,12 +451,20 @@ def figma_extension(imported: Imported, ts: TokenSet) -> Dict[str, Any]:
         entry = _skip(t)
         if entry is not None:
             skipped.append(entry)
-        else:
-            added.append(t)
+            continue
+        names = [f"{_name(t.path)}/{css}" for _, css in TYPOGRAPHY_FIELDS.values()] \
+            if t.type == "typography" else [_name(t.path)]
+        taken = next((n for n in names if n in declared), None)
+        if taken is not None:
+            raise InputError(f"{taken} is already a variable of {_and(declared[taken])} in "
+                             f"{source}, which the import did not read as a token; an "
+                             "extension only adds variables and never changes one the file "
+                             "has, so give the token a name the file does not use")
+        added.append(t)
 
     new_name = ADDITIONS
     n = 1
-    while new_name in cols:
+    while new_name in cols or new_name in record.get("declared_collections", []):
         n += 1
         new_name = f"{ADDITIONS} {n}"
     placed: Dict[str, str] = {}
@@ -404,7 +472,7 @@ def figma_extension(imported: Imported, ts: TokenSet) -> Dict[str, Any]:
         needs = set(_axes_of(t, ts))
         best, score = new_name, 0
         for name in cols:
-            if needs <= covers[name]:
+            if needs <= covers[name] and not (needs and name in blind):
                 got = max((_prefix(t.path, p) for p in members.get(name, [])), default=0)
                 if got > score:
                     best, score = name, got
@@ -425,10 +493,16 @@ def figma_extension(imported: Imported, ts: TokenSet) -> Dict[str, Any]:
                                           if placed[t.path] == new_name)]
     new_modes = [(_mode_name(c, ts), c) for c in contexts(new_axes, ts.axes)]
     notes: set = set()
+    more: List[str] = []
     order: Dict[str, Dict[str, Any]] = {}
     for t in added:
         name = placed[t.path]
-        modes = new_modes if name == new_name else cols[name]
+        if name == new_name:
+            modes = new_modes
+        else:
+            modes = [(m, ctx or "") for m, ctx in cols[name]]
+            if name not in order:
+                more += _unread_notes(name, unread.get(name, {}), cols[name])
         spec = order.setdefault(name, {"name": name, "modes": [m for m, _ in modes],
                                        "variables": []})
         if name == new_name:
@@ -436,10 +510,34 @@ def figma_extension(imported: Imported, ts: TokenSet) -> Dict[str, Any]:
         # The file's own scopes for its kind: those of the variable of the
         # same type that shares the most of this path in the collection.
         like = [(_prefix(t.path, p), -i, p) for i, p in enumerate(members.get(name, []))
-                if held.get(p).type == t.type and p in scoped]
+                if held.get(p).type == t.type and held.get(p).layer == t.layer
+                and p in scoped]
         scopes = scoped[max(like)[2]] if like and max(like)[0] > 0 else None
         spec["variables"] += _variables(t, ts, modes, ref, notes, scopes)
-    return _payload("extend", list(order.values()), skipped, notes)
+    return _payload("extend", list(order.values()), skipped, notes, more)
+
+
+def _unread_notes(name: str, unread: Dict[str, Optional[str]],
+                  modes: List[Tuple[str, Optional[str]]]) -> List[str]:
+    """What an extension writes in each mode of a collection that the
+    import did not read."""
+    out = []
+    for mode, ctx in modes:
+        if mode not in unread:
+            continue
+        if ctx:
+            out.append(f"{name} has the mode {mode}, which the import did not read; each "
+                       f"addition there takes the system's value for {ctx}, which the mode's "
+                       "name gives.")
+        else:
+            out.append(f"{name} has the mode {mode}, which the import did not read and whose "
+                       "name gives no mode of the system; only additions with one value in "
+                       f"every mode go in {name}, and {mode} takes that value.")
+    return out
+
+
+def _and(items: List[str]) -> str:
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
 
 
 def _extension_names(source: Path) -> Tuple[str, str]:
@@ -466,6 +564,7 @@ def write_figma(ts: TokenSet, imported: Imported, *, force: bool = False,
                          "export, so no Figma files are written beside it; pass the Figma "
                          "variables export the system was read from, or export the system to a "
                          "new folder")
+    said: List[str] = []
     if imported.owned:
         files = figma_files(ts)
         script = "figma-variables.js"
@@ -488,8 +587,12 @@ def write_figma(ts: TokenSet, imported: Imported, *, force: bool = False,
                                       css=True)}
         does = (f"it adds {count} variable{'' if count == 1 else 's'} and changes none that the "
                 "file has")
+        # What it writes in a mode the import did not read is said here too.
+        said = [n for n in payload["notes"] if "which the import did not read" in n]
     load = (f"Run {path.parent / script} in the Figma file {path.name} was exported from, "
             f"through Figma's plugin API: {does}.")
+    if said:
+        load += " " + " ".join(said)
     outcome = write_with_intake(path.parent, files, imported.report, force=force,
                                 replace_client=replace_client, force_label=force_label,
                                 replace_label=replace_label, out_label=out_label)

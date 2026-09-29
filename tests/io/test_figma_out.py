@@ -159,7 +159,10 @@ def test_what_figma_variables_cannot_hold_is_listed():
         "A font family keeps its first name; the fallbacks stay in tokens.json.",
         "Line heights are unitless ratios, and Figma binds a number to line height in px, so "
         "their variables have no scope.",
-        "Durations are given in ms and have no scope, since no Figma field binds a duration."]
+        "Durations are given in ms and have no scope, since no Figma field binds a duration, "
+        "so they read back as plain numbers.",
+        "18 sizes have no size scope, since no Figma field binds them or no role points at "
+        "them, so they read back as plain numbers."]
 
 
 def test_an_opacity_held_from_0_to_100_keeps_its_unit_and_the_opacity_scope():
@@ -170,7 +173,7 @@ def test_an_opacity_held_from_0_to_100_keeps_its_unit_and_the_opacity_scope():
     fade = _variable(_collection(payload, "imagery"), "imagery/fade")
     assert (fade["type"], fade["scopes"], fade["values"]["standard"]) == (
         "FLOAT", ["OPACITY"], 40)
-    assert payload["notes"][-1] == ("Opacities held from 0 to 100 are given from 0 to 100 "
+    assert payload["notes"][-2] == ("Opacities held from 0 to 100 are given from 0 to 100 "
                                     "with the Opacity scope, as Figma holds them.")
 
 
@@ -296,6 +299,25 @@ def test_an_export_read_back_gives_the_same_names_and_values():
         assert back.resolve("type.text.body.font-weight", ctx) == \
             ts.resolve("type.text.body", ctx)["fontWeight"]
     assert _compare(payload, back, ts.axes) > 1500
+    # Every token keeps its type, except what the notes say reads back as a
+    # plain number: durations, and sizes with no size scope.
+    same = [t for t in back.tokens() if ts.has(t.path)]
+    changed = {(ts.get(t.path).type, t.type) for t in same if ts.get(t.path).type != t.type}
+    assert changed == {("duration", "number"), ("dimension", "number")}
+    unscoped = sorted(t.path for t in same
+                      if ts.get(t.path).type == "dimension" and t.type == "number")
+    assert unscoped[:4] == ["border.width.0", "border.width.4", "layout.width.1120",
+                            "layout.width.1440"]
+    assert len(unscoped) == 18
+    assert payload["notes"][-1] == (
+        "18 sizes have no size scope, since no Figma field binds them or no role points at "
+        "them, so they read back as plain numbers.")
+
+
+def test_the_scripts_say_they_run_as_the_body_of_an_async_function():
+    for script in (APPLY_SCRIPT, READ_SCRIPT):
+        head = script.split("\nconst ")[0].replace("\n// ", " ")
+        assert "as the body of an async function" in head
 
 
 # ---------------------------------------------------------------- a source
@@ -481,6 +503,127 @@ def test_only_a_figma_source_gets_figma_files(tmp_path):
                                       "Figma variables export")
 
 
+def _with(doc, cid, name, modes, variables):
+    """`doc` with one more collection holding `variables`."""
+    doc = copy.deepcopy(doc)
+    doc["meta"]["variableCollections"][cid] = {
+        "id": cid, "name": name, "defaultModeId": f"{cid}:0",
+        "modes": [{"modeId": f"{cid}:{i}", "name": m} for i, m in enumerate(modes)],
+        "variableIds": [v["id"] for v in variables]}
+    doc["meta"]["variables"].update({v["id"]: v for v in variables})
+    return doc
+
+
+def test_an_addition_named_like_a_variable_the_import_did_not_read_is_refused(tmp_path):
+    doc = copy.deepcopy(_foreign())
+    # Palette ink/500 aliases a variable the export does not hold: not read.
+    doc["meta"]["variables"]["v:6"] = _var("v:6", "ink/500", "c:1", "COLOR",
+                                           {"1:0": {"type": "VARIABLE_ALIAS", "id": "v:gone"}},
+                                           ["ALL_SCOPES"])
+    doc["meta"]["variableCollections"]["c:1"]["variableIds"].append("v:6")
+    _, imported = _write_source(tmp_path, doc)
+    assert not imported.tokens.has("ink.500")
+    assert imported.figma["declared"]["ink/500"] == ["Palette"]
+    with pytest.raises(InputError) as exc:
+        figma_extension(imported, _extended(imported, Token("ink.500", "color", "#555555")))
+    assert str(exc.value) == (
+        "ink/500 is already a variable of Palette in variables.json, which the import did not "
+        "read as a token; an extension only adds variables and never changes one the file "
+        "has, so give the token a name the file does not use")
+
+
+def test_an_addition_named_like_a_library_variable_is_refused(tmp_path):
+    doc = copy.deepcopy(_foreign())
+    doc["meta"]["variableCollections"]["c:lib"] = {
+        "id": "c:lib", "name": "Brand library", "defaultModeId": "l:0", "remote": True,
+        "modes": [{"modeId": "l:0", "name": "Value"}], "variableIds": ["v:lib"]}
+    lib = _var("v:lib", "gap/xl", "c:lib", "FLOAT", {"l:0": 32}, ["GAP"])
+    lib["remote"] = True
+    doc["meta"]["variables"]["v:lib"] = lib
+    _, imported = _write_source(tmp_path, doc)
+    with pytest.raises(InputError) as exc:
+        figma_extension(imported, _extended(
+            imported, Token("gap.xl", "dimension", {"value": 40, "unit": "px"})))
+    assert str(exc.value).startswith("gap/xl is already a variable of Brand library in "
+                                     "variables.json, which the import did not read as a token")
+    # The new collection's name is kept clear of every collection the export names.
+    assert imported.figma["declared_collections"] == ["Palette", "Theme", "Spacing",
+                                                      "Brand library"]
+
+
+def _four_mode_theme():
+    """Theme with Light, Dark, High contrast and a combined High contrast
+    dark, which the import does not read."""
+    alias = {"type": "VARIABLE_ALIAS", "id": "v:1"}
+    return _with(_foreign(), "c:4", "Look", ["Light", "Dark", "High contrast",
+                                             "High contrast dark"],
+                 [_var("v:9", "look/bg", "c:4", "COLOR",
+                       {f"c:4:{i}": alias for i in range(4)}, ["FRAME_FILL"])])
+
+
+def test_a_mode_the_import_did_not_read_takes_the_value_its_name_gives(tmp_path):
+    _, imported = _write_source(tmp_path, _four_mode_theme())
+    assert imported.figma["unread"] == {"Look": {"High contrast dark": "scheme:dark,contrast:high"}}
+    ts = _extended(imported, Token("look.fg", "color", "#222222", modes={
+        "scheme:dark": "#DDDDDD", "contrast:high": "#000000",
+        "scheme:dark,contrast:high": "#FFFFFF"}))
+    payload = figma_extension(imported, ts)
+    fg = _variable(_collection(payload, "Look"), "look/fg")
+    assert list(fg["values"]) == ["Light", "Dark", "High contrast", "High contrast dark"]
+    assert fg["values"]["High contrast dark"] == {"r": 1.0, "g": 1.0, "b": 1.0, "a": 1}
+    assert fg["values"]["Dark"] == {"r": 0.866667, "g": 0.866667, "b": 0.866667, "a": 1}
+    note = ("Look has the mode High contrast dark, which the import did not read; each "
+            "addition there takes the system's value for scheme:dark,contrast:high, which the "
+            "mode's name gives.")
+    assert note in payload["notes"]
+    done = write_figma(ts, imported)
+    assert done["status"] == "written" and done["load"].endswith(note)
+
+
+def test_a_mode_whose_name_gives_no_value_never_takes_the_default_silently(tmp_path):
+    alias = {"type": "VARIABLE_ALIAS", "id": "v:1"}
+    doc = _with(_foreign(), "c:4", "Look", ["Light", "Dark", "Dim"],
+                [_var("v:9", "look/bg", "c:4", "COLOR", {f"c:4:{i}": alias for i in range(3)},
+                      ["FRAME_FILL"])])
+    _, imported = _write_source(tmp_path, doc)
+    assert imported.figma["unread"] == {"Look": {"Dim": None}}
+    # A token that varies by scheme cannot say what Dim holds: it goes to a
+    # collection of its own, never into Look with its light value in Dim.
+    varied = Token("look.fg", "color", "#222222", modes={"scheme:dark": "#DDDDDD"})
+    payload = figma_extension(imported, _extended(imported, varied))
+    assert [(c["name"], c["modes"]) for c in payload["collections"]] == [
+        (ADDITIONS, ["light", "dark"])]
+    # One value in every mode is the same in Dim, and says so.
+    same = Token("look.edge", "color", "#333333")
+    payload = figma_extension(imported, _extended(imported, same))
+    edge = _variable(_collection(payload, "Look"), "look/edge")
+    assert list(edge["values"]) == ["Light", "Dark", "Dim"]
+    assert edge["values"]["Dim"] == edge["values"]["Light"]
+
+
+def test_an_addition_takes_the_scopes_of_a_neighbour_on_its_own_layer(tmp_path):
+    _, imported = _write_source(tmp_path)
+    ts = _extended(imported, Token("fg.muted", "color", "{ink.900}", layer="semantic"),
+                   Token("fg.raw", "color", "#123456"))
+    payload = figma_extension(imported, ts)
+    theme = _collection(payload, "Theme")
+    assert _variable(theme, "fg/muted")["scopes"] == ["TEXT_FILL"]
+    # No primitive sits in Theme, so the new primitive takes the engine's rule.
+    assert _variable(theme, "fg/raw")["scopes"] == []
+
+
+def test_a_foreign_collection_in_lowercase_axis_values_keeps_its_own_note():
+    alias = {"type": "VARIABLE_ALIAS", "id": "v:1"}
+    doc = _with(_foreign(), "c:4", "Look", ["light", "dark"],
+                [_var("v:9", "look/bg", "c:4", "COLOR", {"c:4:0": alias, "c:4:1": alias},
+                      ["FRAME_FILL"])])
+    text = json.dumps(doc)
+    notes = [i.message for i in import_figma(text, _source(text)).report.notes]
+    assert "has the modes light and dark, read as the scheme axis: light is the base and dark " \
+           "is scheme:dark" in notes
+    assert not any("per word" in n for n in notes)
+
+
 # ---------------------------------------------------- the scripts in a mock
 
 
@@ -491,7 +634,10 @@ function mock(meta) {
   function makeVar(v) {
     const obj = {id: v.id, name: v.name, variableCollectionId: v.variableCollectionId,
       resolvedType: v.resolvedType, valuesByMode: Object.assign({}, v.valuesByMode),
-      scopes: v.scopes.slice(), description: v.description || "",
+      _scopes: v.scopes.slice(), description: v.description || "",
+      get scopes() { return this._scopes; },
+      set scopes(x) { if (x.includes("NOT_A_SCOPE")) throw new Error("invalid scope");
+        this._scopes = x; },
       hiddenFromPublishing: !!v.hiddenFromPublishing, remote: false,
       setValueForMode(modeId, value) {
         const alias = value && typeof value === "object" && value.type === "VARIABLE_ALIAS";
@@ -633,6 +779,56 @@ def test_an_extension_whose_collection_is_gone_lists_it_and_makes_nothing(tmp_pa
     assert result["conflicts"] == [
         "Spacing is not a collection in this file, so its 1 variable was not written; export "
         "the variables of this file again and repeat the extension"]
+
+
+@pytest.mark.skipif(NODE is None, reason="node is not installed")
+def test_an_extension_never_updates_a_variable_the_file_has(tmp_path):
+    _, imported = _write_source(tmp_path)
+    write_figma(_extended(imported, Token("ink.500", "color", "#555555"),
+                          Token("ink.600", "color", "#444444")), imported)
+    script = (tmp_path / "variables-ext.js").read_text(encoding="utf-8")
+    # Since the export was taken, someone added ink/500 in Figma.
+    meta = _with(_foreign(), "c:x", "Other", ["Value"], [])["meta"]
+    meta["variables"]["v:7"] = _var("v:7", "ink/500", "c:1", "COLOR",
+                                    {"1:0": {"r": 0.5, "g": 0, "b": 0, "a": 1}}, ["TEXT_FILL"])
+    meta["variableCollections"]["c:1"]["variableIds"].append("v:7")
+    got = _run(tmp_path, meta, script, READ_SCRIPT)
+    result, read = got["out"]
+    assert (result["created"], result["updated"]) == (1, 0)
+    assert result["conflicts"] == [
+        "Palette/ink/500 is already in this file, and an extension only adds variables, so it "
+        "was left as it is; give the token a name the file does not use and write the "
+        "extension again"]
+    kept = json.loads(read)["meta"]["variables"]["v:7"]
+    assert kept["valuesByMode"] == {"1:0": {"r": 0.5, "g": 0, "b": 0, "a": 1}}
+    assert kept["scopes"] == ["TEXT_FILL"]
+
+
+@pytest.mark.skipif(NODE is None, reason="node is not installed")
+def test_a_scope_figma_refuses_is_listed_and_the_run_goes_on(tmp_path):
+    payload = {"version": 1, "mode": "system", "skipped": [], "notes": [], "collections": [
+        {"name": "space", "modes": ["default"], "variables": [
+            {"name": "space/odd", "type": "FLOAT", "scopes": ["NOT_A_SCOPE"], "hidden": False,
+             "description": "", "values": {"default": 3}},
+            {"name": "space/even", "type": "FLOAT", "scopes": ["GAP"], "hidden": False,
+             "description": "", "values": {"default": 4}}]}]}
+    script = "const PAYLOAD = " + json.dumps(payload) + ";\n" + APPLY_SCRIPT
+    result = _run(tmp_path, _EMPTY, script)["out"][0]
+    assert result["created"] == 2
+    assert result["conflicts"] == [
+        "space/space/odd could not take its settings (invalid scope); set its scopes in Figma"]
+
+
+@pytest.mark.skipif(NODE is None, reason="node is not installed")
+def test_a_collection_opening_with_another_mode_is_listed(tmp_path):
+    files = figma_files(_system())
+    meta = {"variableCollections": {"c": {
+        "id": "c", "name": "radius", "defaultModeId": "c:0", "variableIds": [],
+        "modes": [{"modeId": "c:0", "name": "Mode 1"}]}}, "variables": {}}
+    result = _run(tmp_path, meta, files["figma-variables.js"])["out"][0]
+    assert ("radius opens with the mode Mode 1, not default, and Figma reads a collection's "
+            "first mode as its default; rename Mode 1 to default in Figma, or delete it once "
+            "nothing uses it, and run this again") in result["conflicts"]
 
 
 def test_the_package_ships_the_scripts():

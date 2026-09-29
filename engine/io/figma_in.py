@@ -55,9 +55,11 @@ high, as its Figma export writes them; mode_words.engine_axes) reads every
 mode on those axes, the combined ones too.
 
 Imported.figma records each collection this file owns with its modes and
-the context each was read into (None for a mode not read), and each
-token's collection, variable name and scopes, so an extension can be
-written in the file's own collections, names and scopes. Imported.owned
+the context each was read into (None for a mode not read, with the
+context its name gives under "unread"), each token's collection, variable
+name and scopes, and every variable and collection name the export
+declares, read or not, so an extension can be written in the file's own
+collections, names, modes and scopes without taking a name it uses. Imported.owned
 is what the record of the files the engine wrote says of the export,
 never its names.
 """
@@ -76,7 +78,8 @@ from engine.foundations.export import PERCENT
 from engine.foundations.modes import AXES, compress, join, parse
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.graph import cycles
-from engine.io.mode_words import axes_named, axis_of, engine_axes, is_base, words
+from engine.io.mode_words import (NEEDS_AXIS_WORD, axes_named, axis_of, engine_axes, is_base,
+                                  words)
 from engine.io.report import (Imported, ImportReport, Item, Mapped, Source, read_source,
                               recorded)
 
@@ -243,17 +246,19 @@ def _plan(col: Dict[str, Any], want: Optional[str],
         # and the other tiers are named in one note once they are read.
         return _Plan(cname, modes, [(default, "")], tiers=others)
     ours = _our_modes(modes, default, cname)
-    if ours is not None:
-        found = {a for _, ctx in ours for a in parse(ctx)}
-        made = [a for a in AXES if a in found]
+    found = {a for _, ctx in ours or [] for a in parse(ctx)}
+    made = [a for a in AXES if a in found]
+    # One axis the shared matcher reads by itself (light and dark) keeps the
+    # note every importer gives it.
+    if ours is not None and (len(made) > 1 or made[0] in NEEDS_AXIS_WORD):
         named = f"the {_and(made)} ax{'is' if len(made) == 1 else 'es'}"
         if want is not None:
-            raise InputError(f"second_modes names {cname}, whose modes {_and(names)} are the "
-                             f"engine's own mode names, so every one of them is read on "
-                             f"{named}; leave {cname} out of second_modes")
+            raise InputError(f"second_modes names {cname}, whose modes {_and(names)} name one "
+                             f"axis value per word, so every one of them is read on {named}; "
+                             f"leave {cname} out of second_modes")
         return _Plan(cname, modes, ours, (made[0], AXES[made[0]]),
-                     f"has the modes {_and(names)}, the engine's own mode names, read on "
-                     f"{named}", more_axes=[(a, AXES[a]) for a in made[1:]])
+                     f"has the modes {_and(names)}, one axis value per word, read on {named}",
+                     more_axes=[(a, AXES[a]) for a in made[1:]])
     per_axis = _per_axis(cname, modes, default) if len(modes) > 2 else None
     if per_axis is not None and want is None:
         return per_axis
@@ -323,6 +328,13 @@ def _plan(col: Dict[str, Any], want: Optional[str],
             f"default mode, is the base and {modes[other]} is {axis}:{second}{unread}")
     return _Plan(cname, modes, [(default, ""), (other, f"{axis}:{second}")],
                  (axis, (first, second)), note)
+
+
+def _named(name: str, cname: str) -> Optional[str]:
+    """The context a mode's name gives (High contrast dark gives
+    scheme:dark,contrast:high), or None when it names no axis value."""
+    named = axes_named(name, [cname])
+    return join({a: AXES[a][1] for a in named}) if named else None
 
 
 def _value_words(axis: str) -> str:
@@ -621,12 +633,32 @@ def import_figma(text: str, source: Source,
 
     ts = TokenSet(axes)
     notes = list(col_notes)
-    figma: Dict[str, Any] = {"collections": {}, "variables": {}, "scopes": {}}
+    figma: Dict[str, Any] = {"collections": {}, "variables": {}, "scopes": {}, "unread": {},
+                             "declared": {}, "declared_collections": []}
     for cid, plan in plans.items():
-        if not plan.remote and plan.read:
+        if not plan.remote and plan.read and plan.name not in figma["collections"]:
             ctx = dict(plan.read)
-            figma["collections"].setdefault(plan.name, [[n, ctx.get(m)]
-                                                         for m, n in plan.modes.items()])
+            figma["collections"][plan.name] = [[n, ctx.get(m)] for m, n in plan.modes.items()]
+            # A mode not read, with the context its name gives, if any.
+            left = {n: _named(n, plan.name) for m, n in plan.modes.items() if m not in ctx}
+            if left:
+                figma["unread"][plan.name] = left
+    # Every name the export declares, read or not, library ones too, so an
+    # extension never takes a name the file already uses.
+    for col in collections.values():
+        if isinstance(col, dict):
+            cname = str(col.get("name", ""))
+            if cname not in figma["declared_collections"]:
+                figma["declared_collections"].append(cname)
+    for vid in order:
+        v = variables[vid]
+        if isinstance(v, dict) and v.get("name"):
+            col = collections.get(v.get("variableCollectionId"))
+            cname = str(col.get("name", "")) if isinstance(col, dict) else \
+                str(v.get("variableCollectionId") or "")
+            held = figma["declared"].setdefault(str(v["name"]), [])
+            if cname not in held:
+                held.append(cname)
     renamed: List[Tuple[int, Item]] = []
     mapped: List[Tuple[int, Mapped]] = []
     for vid, e in entries.items():

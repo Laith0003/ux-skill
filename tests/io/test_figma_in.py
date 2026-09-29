@@ -749,8 +749,8 @@ def test_the_engines_own_mode_names_read_every_mode_on_their_axes():
                                   "scheme:dark,contrast:high": "#000000"}
     assert ts.resolve("bg", "scheme:dark,contrast:high") == "#000000"
     assert _rows(imported.report.notes) == [
-        ("color", "has the modes light standard, light high, dark standard and dark high, the "
-                  "engine's own mode names, read on the scheme and contrast axes")]
+        ("color", "has the modes light standard, light high, dark standard and dark high, one "
+                  "axis value per word, read on the scheme and contrast axes")]
     assert imported.report.not_read == []
 
 
@@ -767,10 +767,10 @@ def test_engine_mode_names_need_every_combination_and_the_base_as_default():
     # Three of the four combinations: read one mode per axis, the rest named.
     doc = _engine_theme(["light standard", "light high", "dark standard"], [1, 0.9, 0])
     assert _import(doc).tokens.axes != {} and not any(
-        "engine's own" in i.message for i in _import(doc).report.notes)
+        "per word" in i.message for i in _import(doc).report.notes)
     # The default mode is not the base combination.
     doc = _engine_theme(["dark", "light"], [0, 1])
-    assert "engine's own" not in json.dumps([i.message for i in _import(doc).report.notes])
+    assert "per word" not in json.dumps([i.message for i in _import(doc).report.notes])
 
 
 def test_standard_and_high_alone_are_contrast_only_in_a_foundation_that_varies_on_it():
@@ -794,7 +794,7 @@ def test_second_modes_naming_a_collection_in_the_engines_mode_names_is_named():
         _import(doc, second_modes={"Color": "dark high"})
     assert str(exc.value) == (
         "second_modes names Color, whose modes light standard, light high, dark standard and "
-        "dark high are the engine's own mode names, so every one of them is read on the scheme "
+        "dark high name one axis value per word, so every one of them is read on the scheme "
         "and contrast axes; leave Color out of second_modes")
 
 

@@ -1,5 +1,7 @@
-// Run this through Figma's plugin API to read the file's own variables in the shape
-// Figma's REST API returns for its local variables. Save the text it returns as
+// Run this through Figma's plugin API, as the body of an async function (the way the
+// plugin API tools run code), since it uses await and return at the top level; inside a
+// plugin, wrap it in an async function first. It reads the file's own variables in the
+// shape Figma's REST API returns for its local variables. Save the text it returns as
 // variables.json and import that file into ux-skill as a Figma variables export.
 // It only reads; nothing in the file changes.
 const collections = await figma.variables.getLocalVariableCollectionsAsync();

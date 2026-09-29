@@ -220,9 +220,14 @@ class Imported:
     its root (one written before the record existed). `figma`, for a Figma
     export, holds each collection the file owns with its modes in order,
     each as [mode name, the context it was read into, or None when it was
-    not read] under "collections", each token's [collection, variable
-    name] under "variables" and its scopes under "scopes", so an extension
-    can be written in the file's own collections, names and scopes."""
+    not read] under "collections", each unread mode with the context its
+    name gives (or None) under "unread", each token's [collection,
+    variable name] under "variables" and its scopes under "scopes", and
+    every variable name the export declares, read or not, with the
+    collections it sits in, under "declared", and every collection name
+    under "declared_collections", so an extension can be written in the
+    file's own collections, names, modes and scopes without taking a name
+    the file uses."""
     tokens: TokenSet
     report: ImportReport
     forms: Mapping[str, Tuple[str, str]] = field(default_factory=dict)
