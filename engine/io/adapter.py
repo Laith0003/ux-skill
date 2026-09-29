@@ -37,7 +37,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from engine.foundations.build import FOUNDATIONS
 from engine.foundations.errors import InputError
 from engine.foundations.modes import AXES, ModeError, compress, contexts, join, parse
-from engine.foundations.tokens import AliasError, Token, TokenSet
+from engine.foundations.tokens import ROOT_BASE, AliasError, Token, TokenSet
 from engine.foundations.values import TYPOGRAPHY_FIELDS
 from engine.io.mode_words import axis_of, mode_of
 
@@ -120,7 +120,7 @@ def _propose_axes(ts: TokenSet) -> Dict[str, AxisMap]:
     """The axes a first mapping reads, by the names of the set's own."""
     axes: Dict[str, AxisMap] = {}
     for name, values in ts.axes.items():
-        if len(values) != 2:  # a root-based axis of several modes: the owner maps it
+        if _root_based(name, values):  # only the owner can say which value is which
             continue
         base, other = values
         ours = _our_axis(name, base, other)
@@ -128,6 +128,17 @@ def _propose_axes(ts: TokenSet) -> Dict[str, AxisMap]:
             continue
         axes[ours] = AxisMap(name, {AXES[ours][0]: base, AXES[ours][1]: other}, "name")
     return axes
+
+
+def _root_based(name: str, values: Tuple[str, ...]) -> bool:
+    """True for an axis whose base is what :root holds and whose modes
+    include a value the engine keeps as a base (density: base, comfortable):
+    a first mapping by name would put the file's own mode on the engine's
+    other value, so only the owner maps it. A root plus one mode that is
+    one of the engine's other values (data-size: base, compact) maps by
+    name as before."""
+    return values[0] == ROOT_BASE and (
+        len(values) > 2 or name in AXES or values[1] in {v[0] for v in AXES.values()})
 
 
 def _our_axis(name: str, base: str, other: str) -> Optional[str]:
@@ -289,7 +300,7 @@ def _check(ts: TokenSet, mapping: Mapping, name: str) -> None:
         for ours, value in m.values.items():
             if value not in theirs:
                 raise InputError(f"{name} reads {axis} {ours} from {m.source} {value}, but "
-                                 f"{m.source} has the values {theirs[0]} and {theirs[1]}; use "
+                                 f"{m.source} has the values {_and(list(theirs))}; use "
                                  "those")
         if len(set(m.values.values())) < len(m.values):
             base, other = AXES[axis]
@@ -344,9 +355,26 @@ def deleted_axes(ts: TokenSet, mapping: Mapping) -> Dict[str, str]:
 
 
 def _axes_left_out(ts: TokenSet, mapping: Mapping, name: str) -> List[str]:
-    """A note on each axis deleted from the mapping: it is not checked."""
-    return [AXIS_DELETED.format(axis=axis, source=source, name=name)
-            for axis, source in deleted_axes(ts, mapping).items()]
+    """A note on each axis deleted from the mapping, and on each axis whose
+    base is the root that the mapping does not read: it is not checked."""
+    notes = [AXIS_DELETED.format(axis=axis, source=source, name=name)
+             for axis, source in deleted_axes(ts, mapping).items()]
+    used = {m.source for m in mapping.axes.values()}
+    return notes + [_root_axis_note(axis, values, name) for axis, values in ts.axes.items()
+                    if _root_based(axis, values) and axis not in used]
+
+
+def _root_axis_note(axis: str, values: Tuple[str, ...], name: str) -> str:
+    """Why an axis whose base is the root is not mapped, and the entry that
+    maps it by hand."""
+    ours = axis if axis in AXES else (mode_of(axis) or "<the engine's axis>")
+    pair = AXES.get(ours, ("<its base>", "<its other value>"))
+    choice = "<one of " + _and(list(values)) + ">"
+    entry = (f'"{ours}": {{"from": "{axis}", "values": {{"{pair[0]}": "{choice}", '
+             f'"{pair[1]}": "{choice}"}}, "by": "owner"}}')
+    return (f"the axis {axis} of the imported system ({_and(list(values))}) has what :root "
+            f"holds as its base, not a named value, so it was not mapped and is not checked; "
+            f"to check it, write in {name} {entry}")
 
 
 def _resolve(ts: TokenSet, role: str, token: str, context: str) -> Any:

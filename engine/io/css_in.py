@@ -939,7 +939,8 @@ def import_css(text: str, source: Source) -> Imported:
             notes.append((rule.line, Item(f"{name}:{rule.line}", rule.selector, (
                 f"sets values that differ from :root; the base is what :root holds, so "
                 f"[{CSS_AXES[axis][0]}] was read as one axis, {axis}, with :root as its base and "
-                f"{_and(list(modes.rebased[axis][1:]))} as its modes"))))
+                f"{_and(list(modes.rebased[axis][1:]))} as its "
+                f"{'mode' if len(modes.rebased[axis]) == 2 else 'modes'}"))))
         custom = any(axis not in AXES for o in options if o for axis, _, _ in o)
         outside = any(o is None for o in options)
         component = outside or (

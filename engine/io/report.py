@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from engine.existing.record import read_record
 from engine.foundations.errors import InputError, _brief_text
-from engine.foundations.tokens import TokenSet
+from engine.foundations.tokens import ROOT_BASE, TokenSet
 
 # Every format the importers read.
 FORMATS: Tuple[str, ...] = ("dtcg", "css", "tailwind", "tailwind-json", "markdown", "figma")
@@ -178,9 +178,11 @@ class ImportReport:
                  "## What was read", "", "| Type | Tokens |", "|---|---|"]
         lines += [f"| {t} | {n} |" for t, n in self.by_type.items()]
         if self.axes:
-            modes = "; ".join(f"{a} ({v[0]} is the base, {v[1]})" if len(v) == 2 else
-                              f"{a} (what :root holds is the base; modes {', '.join(v[1:])})"
-                              for a, v in self.axes.items())
+            modes = "; ".join(
+                f"{a} ({v[0]} is the base, {v[1]})" if v[0] != ROOT_BASE else
+                f"{a} (the values set with no mode are the base; "
+                f"{'mode' if len(v) == 2 else 'modes'} {', '.join(v[1:])})"
+                for a, v in self.axes.items())
             lines += ["", f"Modes: {modes}."]
         else:
             lines += ["", "Modes: none; every token has one value."]

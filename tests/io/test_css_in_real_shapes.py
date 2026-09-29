@@ -88,7 +88,8 @@ def test_the_base_is_what_the_root_holds_and_one_attribute_is_one_axis():
 
 def test_the_report_never_names_a_density_value_as_the_base():
     text = _import(DENSITY).report.markdown()
-    assert "Modes: density (what :root holds is the base; modes comfortable, compact)." in text
+    assert ("Modes: density (the values set with no mode are the base; modes comfortable, "
+            "compact).") in text
     assert "comfortable is the base" not in text
 
 

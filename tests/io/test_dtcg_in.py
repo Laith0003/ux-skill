@@ -169,7 +169,8 @@ def test_a_malformed_axes_block_is_named():
         _import(doc, "t.json")
     assert str(exc.value) == (
         "t.json names the mode axis scheme with ['light']; a mode axis has exactly two values, "
-        "the base first, for example \"scheme\": [\"light\", \"dark\"]")
+        "the base first, for example \"scheme\": [\"light\", \"dark\"], or \"base\" first and "
+        "then each of its modes when the root holds its base")
 
 
 def test_read_dtcg_reads_the_file(tmp_path):

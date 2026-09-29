@@ -59,7 +59,7 @@ from engine.foundations.color_math import gamut_map_oklch, hex_to_rgb, rgb_to_he
 from engine.foundations.errors import InputError
 from engine.foundations.export import EXT, LEGACY_EXT, PERCENT
 from engine.foundations.modes import AXES, ModeError, parse
-from engine.foundations.tokens import Token, TokenSet, alias_target, is_alias
+from engine.foundations.tokens import ROOT_BASE, Token, TokenSet, alias_target, is_alias
 from engine.foundations.validate import LAYERS
 from engine.foundations.values import TYPES, TYPOGRAPHY_FIELDS
 from engine.io.graph import cycles
@@ -517,11 +517,15 @@ def _axes(doc: Dict[str, Any], name: str) -> Optional[Dict[str, Tuple[str, str]]
         raise InputError(f"{name} has an axes block that is not an object; write it as "
                          '{"scheme": ["light", "dark"]}')
     for axis, values in axes.items():
-        if not (isinstance(values, list) and len(values) == 2
-                and all(isinstance(v, str) for v in values)):
+        # An axis whose base is the root ("base") may hold several modes,
+        # as the engine writes an imported one (density: base, comfortable,
+        # compact); every other axis has exactly two values.
+        if not (isinstance(values, list) and all(isinstance(v, str) for v in values)
+                and (len(values) == 2 or (len(values) > 2 and values[0] == ROOT_BASE))):
             raise InputError(f"{name} names the mode axis {axis} with {values!r}; a mode axis has "
                              "exactly two values, the base first, for example "
-                             '"scheme": ["light", "dark"]')
+                             '"scheme": ["light", "dark"], or "base" first and then each of its '
+                             "modes when the root holds its base")
     return {a: tuple(v) for a, v in axes.items()}
 
 
