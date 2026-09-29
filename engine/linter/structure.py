@@ -2154,6 +2154,149 @@ def spinner_outside_contract(ctx: FileContext, view: View, match: re.Match, star
         folder = "."
     return not _contract_spinner(folder)
 
+# ---------------------------------------------------------------------------
+# phone-field-requires-country-code
+# ---------------------------------------------------------------------------
+
+# Numbers typed the way people type their own number at home: a leading zero,
+# spaces, brackets, no country code. A phone pattern that accepts none of
+# them, and accepts an international one, refuses a correct local number.
+_LOCAL_PHONES: Tuple[str, ...] = (
+    "0791234567", "079 123 4567", "07911 123456", "07911123456", "0612345678",
+    "06 12 34 56 78", "01012345678", "030 1234567", "0301234567", "021 123 4567",
+    "5551234567", "555 123 4567", "(555) 123-4567", "555-123-4567", "91234567", "9123 4567",
+    "0501234567", "050 123 4567")
+_INTERNATIONAL_PHONES: Tuple[str, ...] = (
+    "+962791234567", "+962 79 123 4567", "+447911123456", "+44 7911 123456",
+    "+15551234567", "+1 555 123 4567", "+201012345678", "+33612345678", "+971501234567",
+    "00962791234567", "00447911123456")
+_JS_STRING = re.compile(r"""^\s*(["'`])(.*)\1\s*$""", re.S)
+
+
+def _pattern_value(ctx: FileContext, tag: Tag) -> Optional[str]:
+    """The pattern an input declares, as the browser reads it; None when it is
+    computed at run time."""
+    for a in tag.attrs:
+        if a.name.lower() != "pattern":
+            continue
+        raw = ctx.text[a.vstart:a.vend]
+        if a.kind == "str":
+            return html_unescape(raw)
+        if a.kind == "expr":
+            lit = _JS_STRING.match(raw)
+            if lit and "${" not in lit.group(2):
+                return re.sub(r"\\(.)", r"\1", lit.group(2), flags=re.S)
+        return None
+    return None
+
+
+def _requires_a_plus(pattern: str) -> bool:
+    """Read the pattern by its first token when it does not compile here."""
+    p = pattern.lstrip("^")
+    while p.startswith(("(?:", "(")):
+        p = p[3:] if p.startswith("(?:") else p[1:]
+    for lead in ("\\+", "[+]"):
+        if p.startswith(lead):
+            return p[len(lead):len(lead) + 1] not in ("?", "*") and \
+                not p[len(lead):].startswith("{0")
+    return False
+
+
+def phone_rejects_local(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """A phone field's pattern is a finding when it accepts none of the local
+    forms people type and does accept an international number: it makes the
+    country code compulsory. A field with no pattern, a computed one, or one
+    that accepts a local number passes."""
+    tag = ctx.tags_by_start().get(start)
+    if tag is None:
+        return False
+    pattern = _pattern_value(ctx, tag)
+    if not pattern:
+        return False
+    try:
+        rx = re.compile(r"(?:" + pattern + r")")
+    except re.error:
+        return _requires_a_plus(pattern)
+    local = any(rx.fullmatch(n) for n in _LOCAL_PHONES)
+    return not local and any(rx.fullmatch(n) for n in _INTERNATIONAL_PHONES)
+
+
+# ---------------------------------------------------------------------------
+# one-action-several-labels
+# ---------------------------------------------------------------------------
+
+_CTA_CLASS = re.compile(r"(?:^|[-_])(?:btn|button|cta)(?:$|[-_])", re.I)
+_NO_TARGET = ("javascript:", "mailto:", "tel:", "sms:")
+_LABEL_NOISE = re.compile(r"[^\w\s]+")
+
+
+def _cta_styled(ctx: FileContext, tag: Tag) -> bool:
+    if tag.name.lower() == "button":
+        return True
+    attrs = attr_values(ctx.text, tag)
+    if attrs.get("role", ("", ""))[1].strip("'\"").lower() == "button":
+        return True
+    return any(_CTA_CLASS.search(_bare(c)) for c in _class_list(ctx, tag))
+
+
+def _action_target(ctx: FileContext, tag: Tag) -> Optional[str]:
+    """What the control does: a link's destination, or the form a button
+    submits by its form attribute. None when it cannot be read."""
+    attrs = attr_values(ctx.text, tag)
+    if tag.name.lower() == "a" or "href" in attrs:
+        kind, value = attrs.get("href", ("none", ""))
+        if kind != "str":
+            return None
+        value = value.strip()
+        if value in ("", "#") or value.lower().startswith(_NO_TARGET):
+            return None
+        if len(value) > 1 and value.endswith("/"):
+            value = value.rstrip("/") or "/"
+        return "href:" + value.lower()
+    kind, value = attrs.get("form", ("none", ""))
+    return "form:" + value.strip() if kind == "str" and value.strip() else None
+
+
+def _action_label(ctx: FileContext, tag: Tag) -> Optional[str]:
+    """The control's visible words, normalized; None when it shows none or
+    its words are filled in at run time."""
+    inner = ctx.text[tag.end:ctx.element_end(tag)]
+    if "{" in inner:
+        return None
+    words = html_unescape(_TAGS.sub(" ", inner)).lower()
+    words = " ".join(_LABEL_NOISE.sub(" ", words).replace("_", " ").split())
+    return words or None
+
+
+def _relabelled(ctx: FileContext) -> Set[int]:
+    """Starts of the call-to-action controls whose words differ from the
+    first control in the file that does the same thing."""
+    def build() -> Set[int]:
+        first: Dict[str, str] = {}
+        out: Set[int] = set()
+        tags, _ends, _parents = ctx.tree()
+        for tag in tags:
+            if tag.name.lower() not in ("a", "button") or not _cta_styled(ctx, tag):
+                continue
+            target = _action_target(ctx, tag)
+            label = _action_label(ctx, tag) if target else None
+            if target is None or label is None:
+                continue
+            seen = first.setdefault(target, label)
+            if seen != label:
+                out.add(tag.start)
+        return out
+    return ctx.cached("relabelled", build)  # type: ignore[return-value]
+
+
+def one_action_several_labels(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """A call to action is a finding when an earlier one in the file does the
+    same thing (the same link destination, or the same form by its form
+    attribute) under other words. Plain text links, controls with no visible
+    words and phone, mail and empty links are not compared."""
+    return start in _relabelled(ctx)
+
+
 POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
     "input-has-no-name": input_has_no_name,
     "svg-not-hidden": svg_not_hidden,
@@ -2166,4 +2309,6 @@ POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
     "hamburger-on-desktop": hamburger_on_desktop,
     "multi-hue-gradient": multi_hue_gradient,
     "spinner-outside-contract": spinner_outside_contract,
+    "phone-rejects-local": phone_rejects_local,
+    "one-action-several-labels": one_action_several_labels,
 }

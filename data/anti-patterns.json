@@ -1,8 +1,8 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 157,
-    "last_updated": "2026-09-25",
+    "entries": 159,
+    "last_updated": "2026-09-29",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
   },
@@ -3600,6 +3600,52 @@
       },
       "why": "Inter or Geist alone, with no display face, scale or pairing, is the framework default. The type says nothing about the product because no one decided anything.",
       "fix": "Make one type decision on top of the default: pair the sans with a display or serif face for headings (declare it as a second font-family or --font-display token), or replace the default with a face chosen for the brand."
+    },
+    {
+      "id": "phone-field-requires-country-code",
+      "name": "Phone field that refuses a local number",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<input\\b(?=[^>]*\\btype\\s*=\\s*\\{?\\s*[\"'`]tel[\"'`])(?=[^>]*\\bpattern\\s*=)[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "phone-rejects-local"
+      },
+      "why": "A visitor who types their own number the way they always do (a leading zero, spaces, no country code) is told it is wrong. Everyone who reaches the field meant to finish; a pattern that refuses a correct number loses them at the last step.",
+      "fix": "Accept the number as people type it: drop the pattern or make the country code optional (\\+? or a choice of the local prefix), and turn it into the full international number on the server. When the country matters, add a country picker beside the field. An error names the field and the fix: \"Phone: enter the number with its area code, such as 079 123 4567\"."
+    },
+    {
+      "id": "one-action-several-labels",
+      "name": "One action under several labels",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:a|button)\\b[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "one-action-several-labels"
+      },
+      "why": "The hero says \"Get started\" and the sticky bar says \"Try it now\" for the same page: the reader wonders whether they are two different things, and the clicks split across two names so neither reads as the primary action.",
+      "fix": "Give every call to action that does the same thing (the same destination, the same form) the same words, the verb of the hero's button. A different next step gets a different label and, when it is secondary, a text link."
     }
   ]
 }

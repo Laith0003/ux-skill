@@ -368,12 +368,13 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 |---|---|
 | Generic "Get Started" / "Learn More" as the only CTA | Specific verbs naming what happens next: "Run the demo", "See the dashboard", "Open account", "Start free", "Deploy", "Run a query" |
 | Multiple primary CTAs above the fold | One primary, optionally one secondary. Two filled CTAs of equal weight dilute the primary path |
-| Form fields asking for too much in the first interaction | 3-4 fields ceiling for "book a demo" or signup flows |
+| Form fields asking for too much in the first interaction | Each field names what reads it (routing, a report, the person who calls back); a field nothing reads is cut. One field the visitor has to go and look up costs more than three they know, and a required field that invites a made-up value is worse than none |
 | Modal popups for newsletter signup on a timer | Newsletter signup goes in the footer or a sidebar component, not in a time-triggered interstitial |
 | Floating chat widgets overlapping the primary CTA | Position chat where it can't compete, or hide it on the hero |
 | Sticky chatbot bubbles in the corner on first load | None. Wait for engagement |
 | Cookie banners blocking first paint | Slim, monochrome, bottom-bar or sidebar treatment that respects the page |
 
+- **One action, one label.** The same action carries the same words everywhere on the page: the header, the hero, a sticky bar, the closing band (the lint rule `one-action-several-labels` checks it). The label says what happens next and promises what the form really asks: a button that offers a free audit above a form that asks for a budget breaks the promise even when every word is true. Count the commitments offered at equal weight on the first screen; more than one means the page has not decided. Secondary paths are text links.
 - **The final CTA band repeats the primary action**, with the same verb as the hero CTA, on a full-width band with the page's strongest contrast: a tinted band, a full-dark band, or the brand's strongest color. One line restates the value proposition above a single filled CTA. The hero held back; the closer does not.
 - **A FAQ, when present, sits above the final CTA**, never below it.
 - **FAQ questions come from the customer.** Each one is an objection from the brief, in the customer's wording turned into a question, never rewritten into the brand's voice. With no objections supplied, the FAQ answers only the operational questions the client's own material answers (price, delivery, what happens next), and the self-review says the FAQ was not built from customer words.

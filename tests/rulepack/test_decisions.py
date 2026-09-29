@@ -49,6 +49,7 @@ EXPECTED = {
     "checks-read-one-unit", "roles-on-their-scale", "spacing-on-the-4px-grid", "unresolved-pairing",
     "layout-bounds", "reflow-at-320", "spacing-within-group", "strict-radius-nesting",
     "the-full-type-ladder", "imported-sets-pass", "phone-order-in-both-scripts",
+    "phone-accepts-local-input", "one-label-per-action",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

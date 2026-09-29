@@ -212,3 +212,36 @@ def test_a_price_is_a_number_a_visitor_can_multiply():
     for need in ("currency", "billing period", "per seat", "past the limit", "footnote",
                  "\"From\"", "one sentence", "annual price"):
         assert need in pricing, need
+
+
+# ---------------------------------------------------------------- forms and labels
+
+
+def test_form_mechanics_accept_how_people_type():
+    form = _section(_read("references/foundations/component-behaviors.md"), "## Form", "## ")
+    for need in ("local format", "leading zero", "leaves the field", "first invalid field",
+                 "names the field and the fix", "phone-field-requires-country-code"):
+        assert need in form, need
+    assert "E.164" not in form
+
+
+def test_every_field_names_what_reads_it():
+    cta = _section(_read(LANDING), "## CTA", "## ")
+    assert "3-4 fields" not in cta
+    assert "names what reads it" in cta and "nothing reads is cut" in cta
+
+
+def test_one_action_one_label():
+    cta = _section(_read(LANDING), "## CTA", "## ")
+    assert "**One action, one label.**" in cta
+    assert "one-action-several-labels" in cta
+    assert "promises what the form" in cta
+
+
+def test_both_lint_rules_are_documented_with_their_records():
+    lint = _read("commands/ux-lint.md")
+    for rule in ("phone-field-requires-country-code", "one-action-several-labels"):
+        assert f"| `{rule}` |" in lint, rule
+    history = _read("engine/rulepack/decisions/HISTORY.md")
+    for record in ("phone-accepts-local-input", "one-label-per-action"):
+        assert f"({record}.md)" in history, record

@@ -154,3 +154,5 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [An eyebrow is text only, with no line, dash or dot before or after it](eyebrow-is-text.md)
 - [A field's heavier hover and error edge is drawn inside its border](edge-weight-inside.md)
 - [An FAQ accordion and a site footer have contracts, and the footer binds the logo role](faq-and-footer-contracts.md)
+- [A phone field accepts the number as people type it](phone-accepts-local-input.md)
+- [One action carries one label everywhere on the page](one-label-per-action.md)

@@ -22,6 +22,8 @@ Reflow the column count with `auto-fit minmax`, ending at 1 column on phones (2 
 
 Single column, full-width fields, label above input, controls at least 44px tall, submit button full-width. Inline per-field errors named to the field. Never a multi-column form on a phone.
 
+**Mechanics.** A phone field takes the local format the visitor types (spaces, a leading zero, no country code), and the server turns it into the full number; a pattern that demands a country code is the lint finding `phone-field-requires-country-code`. A field is checked when the visitor leaves the field, never only on submit. On a failed submit, focus moves to the first invalid field, not to the top of the page, and each error names the field and the fix.
+
 **Success state.** After submit, the confirmation is the moment the person pays most attention. It says what happens next, who does it and through which channel (in a phone-first product, the number the call or message will come from), within what time, and one thing to have ready. A second ask or an upsell comes after that, never in its place.
 
 ## Data table

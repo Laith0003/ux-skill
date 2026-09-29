@@ -24,6 +24,8 @@ SVG = "inline-svg-no-aria"
 IMP = "css-import-render-blocking"
 RUL = "decorative-accent-ruler"
 HAM = "nav-equal-hamburger-desktop"
+TEL = "phone-field-requires-country-code"
+LBL = "one-action-several-labels"
 
 EXPECT = {
     # imagery: landing versus document or app, decided by structure
@@ -288,6 +290,19 @@ EXPECT = {
     "nav/rv2-m5-ar-visible.html": {HAM: [1]},
     "nav/rv2-m6-closed.html": {HAM: [1]},
     "nav/rv2-m7-closed-state-label.html": {HAM: [1]},
+    # A phone pattern that accepts no local number and does accept an
+    # international one makes the country code compulsory. A computed pattern,
+    # an optional plus, a text field and no pattern at all pass.
+    "phone/p1-mixed.html": {TEL: [2, 5, 8, 9]},
+    "phone/p2-jsx.tsx": {TEL: [1]},
+    # A pattern Python cannot compile is read by its first token.
+    "phone/p3-not-python.html": {TEL: [1]},
+    # One destination, one label: link calls to action are grouped by href
+    # (a trailing slash aside), buttons by their form attribute. Plain links,
+    # icon-only controls and empty links are not compared.
+    "label/l1-mixed.html": {LBL: [3, 5, 7]},
+    "label/l2-no-text.html": {LBL: []},
+    "label/l3-arabic.html": {LBL: [3]},
 }
 
 # Lines that still pass although they should fire. Each is pinned at its
