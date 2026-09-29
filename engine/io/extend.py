@@ -1542,7 +1542,9 @@ def _system_files(imported: Imported, ts: TokenSet, added: Sequence[Token],
 
 
 def _few_names(names: List[str]) -> str:
-    return ", ".join(names) if len(names) <= 4 else f"{', '.join(names[:3])} and {len(names) - 3} more"
+    if len(names) <= 4:
+        return ", ".join(names)
+    return f"{', '.join(names[:3])} and {len(names) - 3} more"
 
 
 def _pointed_at(imported: Imported, ext: TokenSet) -> Dict[str, List[str]]:

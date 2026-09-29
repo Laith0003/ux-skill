@@ -23,7 +23,7 @@ def _ts() -> TokenSet:
                         ("brand.primary", "#0B5F4A"), ("brand.on-primary", "#FFFFFF"),
                         ("brand.text-primary", "#1B1F24")):
         ts.add(Token(path, "color", value))
-    ts.add(Token("radius.md", "dimension", {"value": 8, "unit": "px"}))
+    ts.add(Token("radius.medium", "dimension", {"value": 8, "unit": "px"}))
     return ts
 
 
@@ -95,7 +95,7 @@ def test_utilities_the_preset_names_reach_their_tokens(tmp_path):
     assert ("bg-primary", "brand.primary") in tokens
     assert ("text-primary-foreground", "brand.on-primary") in tokens
     assert ("bg-canvas", "brand.canvas") in tokens
-    assert ("rounded-card", "radius.md") in tokens
+    assert ("rounded-card", "radius.medium") in tokens
     assert not {u.cls for u in found.unknown_classes} & {"bg-primary", "bg-canvas",
                                                         "rounded-card", "text-ink"}
 

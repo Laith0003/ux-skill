@@ -14,7 +14,7 @@ module.exports = {
         display: ['var(--type-family-display)'],
         data: 'var(--type-family-data)',
       },
-      borderRadius: { card: 'var(--radius-md)' },
+      borderRadius: { card: 'var(--radius-medium)' },
       transitionDuration: { fast: 'var(--motion-duration-fast)' },
       screens: { tablet: '768px' },
       spacing: { gutter: gutter(4) },

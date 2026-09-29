@@ -324,7 +324,8 @@ def test_a_mature_systems_core_roles_are_mapped_by_name_only():
         "color.status.danger.text": "status.danger",
         "color.status.warning.text": "status.warning",
         "color.status.success.text": "status.success",
-        "radius.chip": "radius.sm", "radius.control": "radius.md", "radius.pill": "radius.pill",
+        "radius.chip": "radius.small", "radius.control": "radius.medium",
+        "radius.pill": "radius.pill",
         "motion.state.duration": "motion.duration-fast",
         "motion.reveal.duration": "motion.duration-base",
         "layout.breakpoint.tablet": "layout.breakpoint-md",
@@ -335,6 +336,6 @@ def test_a_mature_systems_core_roles_are_mapped_by_name_only():
 
 def test_a_scale_name_maps_only_a_token_of_the_roles_type():
     ts = TokenSet({})
-    ts.add(Token("radius.md", "color", "#111111"))
+    ts.add(Token("radius.medium", "color", "#111111"))
     ts.add(Token("motion.duration-fast", "dimension", {"value": 4, "unit": "px"}))
     assert propose(ts).roles == {}

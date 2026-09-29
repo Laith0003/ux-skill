@@ -14,7 +14,7 @@
   --type-family-display: "Newsreader", Georgia, serif;
   --type-family-body: "Inter", system-ui, sans-serif;
   --type-family-data: "IBM Plex Mono", ui-monospace, monospace;
-  --radius-md: 8px;
+  --radius-medium: 8px;
   --motion-duration-fast: 150ms;
   --surface-raised: var(--brand-surface);
 }
@@ -28,5 +28,5 @@ body {
 .card {
   background: var(--surface-raised);
   border: 1px solid var(--brand-hairline);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-medium);
 }

@@ -421,7 +421,8 @@ def _ratio(result, a, b, mode=""):
 
 
 def test_added_color_on_a_light_only_system_passes_against_its_own_page():
-    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, modes=("contrast",), foundations=("color",))
+    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, modes=("contrast",),
+                    foundations=("color",))
     assert result.problems == [] and result.existing == [] and result.inherited == []
     assert all(p in result.added for p in SURFACES)
     # The tint stands our floor off the owner's page and no further than it
@@ -442,7 +443,8 @@ def test_added_color_on_a_light_only_system_passes_against_its_own_page():
 
 
 def test_a_light_only_system_gets_no_dark_additions_and_is_told_so():
-    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, modes=("contrast",), foundations=("color",))
+    result = extend(_foreign(OFF_WHITE), OFF_WHITE_MAPPING, modes=("contrast",),
+                    foundations=("color",))
     ext = result.files["theme-ext.css"]
     assert "scheme" not in result.tokens.axes
     assert "dark" not in ext and "prefers-color-scheme" not in ext

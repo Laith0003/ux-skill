@@ -263,6 +263,8 @@ VOCABULARIES: Tuple[Tuple[str, str, Tuple[Tuple[str, str], ...]], ...] = (
         ("duration-default", "motion.reveal.duration"),
         ("duration-slow", "motion.page.duration"),
         ("radius-xs", "radius.joined"), ("radius-sm", "radius.chip"),
+        ("radius-small", "radius.chip"), ("radius-medium", "radius.control"),
+        ("radius-large", "radius.card"),
         ("radius-md", "radius.control"), ("radius-lg", "radius.card"),
         ("radius-xl", "radius.dialog"), ("radius-full", "radius.pill"),
         ("radius-pill", "radius.pill"), ("radius-round", "radius.pill"),
