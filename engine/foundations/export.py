@@ -38,6 +38,17 @@ def _fraction(value: Any) -> Any:
     return round(value / 100, 6) if isinstance(value, (int, float)) else value
 
 
+def _percent_note(t: Token) -> str:
+    """The header line of a number held from 0 to 100: each value it is
+    written as, from 0 to 1, and the value the source holds, mode by mode."""
+    def values(convert: bool) -> str:
+        def text(v: Any) -> str:
+            return css_entries(t.path, t.type, _fraction(v) if convert else v)[0][1]
+        return "; ".join([text(t.value), *(f"{k} {text(v)}" for k, v in t.modes.items())])
+    return (f"{css_property(t.path)} is written from 0 to 1 ({values(True)}); its source "
+            f"holds it from 0 to 100 ({values(False)}).")
+
+
 def _conflict(prefix: str, path: str) -> ValueError:
     return ValueError(f"{prefix} is a token and also a group holding {path}; DTCG cannot "
                       "hold both, so rename one")
@@ -232,11 +243,7 @@ def to_css(ts: TokenSet, *, scheme: str = "system",
         "scheme" in parse(k, ts.axes) for t in ts.tokens() for k in t.modes)
     base = [f"  color-scheme: {ts.axes['scheme'][0]};"] if schemed else []
     phone = tuple(phone_roles(ts))
-    header = [*header, *(
-        f"{css_property(t.path)} is written from 0 to 1 "
-        f"({css_entries(t.path, t.type, _fraction(t.value))[0][1]}); its source holds it "
-        f"from 0 to 100 ({css_entries(t.path, t.type, t.value)[0][1]})."
-        for t in ts.tokens() if _percent(t))]
+    header = [*header, *(_percent_note(t) for t in ts.tokens() if _percent(t))]
     out = [*_comment(header), ":root {", *base,
            *(line for t in ts.tokens() for line in _lines(t, t.value, phone=phone)), "}"]
     keys: List[str] = []

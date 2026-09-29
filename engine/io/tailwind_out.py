@@ -28,7 +28,8 @@ has a phone style beside it (--text-hero-phone, its size and letter
 spacing times the phone factor), so a page writes text-hero-phone
 tablet:text-hero.
 
-Any other system is written in its own names (roles=False, the default):
+Any other system is written in its own names (roles=False; the caller
+always says which):
 a system imported from a Tailwind stylesheet comes back with its own
 selectors, resets, scheme and `@custom-variant dark` line, so imported and
 written again the text is the same. Whether a system is the engine's is
@@ -180,9 +181,11 @@ def _parts(ts: TokenSet, forms: Optional[Mapping[str, Tuple[str, str]]], scheme:
 
 def to_tailwind(ts: TokenSet, forms: Optional[Mapping[str, Tuple[str, str]]] = None,
                 resets: Optional[Sequence[str]] = None, *, scheme: str = "system",
-                roles: bool = False, variant: str = "") -> str:
+                roles: bool, variant: str = "") -> str:
     """A Tailwind 4 theme stylesheet for `ts` (see the module docstring).
-    `roles` is True for a system in the engine's roles, which takes RESETS
+    `roles` has no default, so no caller exports a built system in its
+    primitives by leaving it out: True for a system in the engine's roles
+    (a built system, or one in_roles() says is), which takes RESETS
     unless `resets` is given; any other system is written in its own names
     with the resets given. `forms`, `resets`, `scheme` and `variant` (the
     `@custom-variant dark` declaration, written back before @theme) come
@@ -232,16 +235,37 @@ def _shown(t: Token) -> str:
     return f"{text(t.value)} ({modes})" if modes else text(t.value)
 
 
+def _unread(imported: Imported) -> Dict[str, str]:
+    """Every custom property the source declares that the import did not
+    make a token (an entry under Not read, a component's property, a
+    viewport switch), each with what the report says of it."""
+    items = [*imported.report.not_read, *imported.report.notes]
+    found: Dict[str, str] = {}
+    for item in items:
+        if item.name.startswith("--") and not item.name.endswith("*") \
+                and not imported.tokens.has(item.name[2:]):
+            found.setdefault(item.name, item.message)
+    return found
+
+
 def _additions(imported: Imported, ts: TokenSet) -> TokenSet:
-    """The tokens of `ts` the source does not hold, matched by the custom
+    """The tokens of `ts` the source does not declare, matched by the custom
     property each becomes. Raises InputError naming the property and the
-    fix when `ts` changes one the source holds: an extension only adds."""
+    fix when `ts` changes one the source holds, or sets one the source
+    declares and the import did not read: an extension loaded after the
+    source would replace its value, and an extension only adds."""
     source = imported.report.source.path
     held = {css_property(t.path): t for t in imported.tokens.tokens()}
+    unread = _unread(imported)
     out = TokenSet(ts.axes)
     for t in ts.tokens():
         name = css_property(t.path)
         old = held.get(name)
+        if name in unread:
+            raise InputError(f"{name} is declared in {source}, where the import did not read it "
+                             f"({unread[name]}); an extension file loaded after {source} would "
+                             f"replace its value, so rename the addition, or map it to {name} "
+                             f"and write {name} in {source} in a form the import reads")
         if old is None:
             out.add(t)
         elif (old.type, old.value, old.modes) != (t.type, t.value, t.modes):
@@ -253,12 +277,17 @@ def _additions(imported: Imported, ts: TokenSet) -> TokenSet:
 
 def tailwind_extension(imported: Imported, ts: TokenSet) -> str:
     """The extension stylesheet beside a Tailwind source the engine did not
-    write: the tokens of `ts` the source does not hold, in the source's own
+    write: the tokens of `ts` the source does not declare, in the source's own
     names, in an @theme block of its own, each mode in the source's own
     selectors, opened by a comment that says to load it after the source
     and carries the engine's digest. "" when there is nothing to add.
-    Raises InputError when `ts` changes a token the source holds."""
-    added = _additions(imported, ts)
+    Raises InputError when `ts` changes or sets a property the source
+    declares."""
+    return _extension(imported, _additions(imported, ts))
+
+
+def _extension(imported: Imported, added: TokenSet) -> str:
+    """The extension text for the additions _additions() found."""
     if not added.tokens():
         return ""
     name = Path(imported.report.source.path).name
@@ -283,7 +312,7 @@ def write_tailwind(ts: TokenSet, imported: Imported, *, force: bool = False,
     outcome with `file` (the file written to) and `load` (how to load an
     extension file, else ""). Raises InputError when `imported` is not a
     Tailwind stylesheet, or when `ts` changes a token a foreign source
-    holds."""
+    declares."""
     source = imported.report.source
     path = Path(source.path).expanduser()
     if source.format != "tailwind":
@@ -295,17 +324,18 @@ def write_tailwind(ts: TokenSet, imported: Imported, *, force: bool = False,
     if imported.owned:
         name = path.name
         text = stamp_digest(to_tailwind(ts, imported.forms, imported.resets,
-                                        scheme=imported.scheme, variant=imported.variant),
-                            css=True)
+                                        scheme=imported.scheme, roles=False,
+                                        variant=imported.variant), css=True)
     else:
         name = extension_name(path)
-        text = tailwind_extension(imported, ts)
+        added = _additions(imported, ts)
+        text = _extension(imported, added)
         if not text:
             return {"status": "unchanged", "written": [], "unchanged": [], "conflicts": [],
                     "message": f"{source.path} already holds every token of the system to "
                                "write, so no extension file was written.",
                     "backup": "", "replaced": {}, "file": "", "load": ""}
-        count = len(_additions(imported, ts).tokens())
+        count = len(added.tokens())
         load = (f"Load {path.parent / name} after {source.path}: it adds {count} "
                 f"token{'' if count == 1 else 's'} to that theme and changes nothing in it. "
                 f"Where the source is imported, import {name} on the line after it, for "

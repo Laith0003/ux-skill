@@ -13,6 +13,7 @@ wrote is rewritten in place; one it did not write is never rewritten: the
 additions go in an extension stylesheet beside it, stamped as the
 engine's, with its own @theme block."""
 import json
+from pathlib import Path
 
 import pytest
 
@@ -39,8 +40,19 @@ def _ours():
     return build_system(NEUTRAL, "#3366FF").tokens
 
 
+# A folder no record can sit in, so a source read from text is never
+# taken as the engine's because of a record where the tests run.
+NOWHERE = Path(__file__).resolve().parent / "no-such-folder"
+
+
+@pytest.fixture(autouse=True)
+def _nowhere():
+    assert not NOWHERE.exists()
+
+
 def _import(text, name="theme.css"):
-    return import_tailwind_css(text, Source(name, "tailwind", "0" * 64, len(text)))
+    return import_tailwind_css(text, Source(str(NOWHERE / name), "tailwind", "0" * 64,
+                                            len(text)))
 
 
 def test_roles_take_tailwind_names_in_its_namespaces():
@@ -113,7 +125,7 @@ def test_our_export_round_trips_through_the_importer_byte_for_byte(scheme):
     assert imported.report.not_read == []
     assert imported.resets == RESETS and imported.scheme == scheme
     assert to_tailwind(imported.tokens, imported.forms, imported.resets,
-                       scheme=imported.scheme) == text
+                       scheme=imported.scheme, roles=False) == text
     assert export_tailwind(imported) == text
 
 
@@ -136,7 +148,8 @@ def test_an_imported_tailwind_system_is_written_back_in_its_own_names():
 """
     first = _import(source)
     assert first.resets == ("--color-*",)
-    text = to_tailwind(first.tokens, first.forms, first.resets, scheme=first.scheme)
+    text = to_tailwind(first.tokens, first.forms, first.resets, scheme=first.scheme,
+                       roles=False)
     assert text == ("@theme {\n  --color-*: initial;\n  --color-ink: #1B1D22;\n"
                     "  --color-paper: #FDFDFB;\n  --color-surface: var(--color-paper);\n"
                     "  --radius-card: 0.75rem;\n}\n\n:root {\n  color-scheme: light;\n}\n\n"
@@ -145,7 +158,7 @@ def test_an_imported_tailwind_system_is_written_back_in_its_own_names():
     assert [(t.path, t.value, t.modes) for t in second.tokens.tokens()] == [
         (t.path, t.value, t.modes) for t in first.tokens.tokens()]
     assert to_tailwind(second.tokens, second.forms, second.resets,
-                       scheme=second.scheme) == text
+                       scheme=second.scheme, roles=False) == text
 
 
 # ------------------------------------------------------------ the dark variant
@@ -204,7 +217,7 @@ FOREIGN_DTCG = {
 
 def _dtcg(doc, name="tokens.json"):
     text = json.dumps(doc) if not isinstance(doc, str) else doc
-    return import_dtcg(text, Source(name, "dtcg", "0" * 64, len(text)))
+    return import_dtcg(text, Source(str(NOWHERE / name), "dtcg", "0" * 64, len(text)))
 
 
 def test_one_engine_style_name_never_makes_a_foreign_system_the_engines():
@@ -290,7 +303,7 @@ def test_an_opacity_held_from_0_to_100_is_written_from_0_to_1_with_the_unit_note
     ts = TokenSet({})
     ts.add(Token("opacity.muted", "number", 60, extensions={"unit": "percent"}))
     ts.add(Token("opacity.plain", "number", 0.5))
-    text = to_tailwind(ts)
+    text = to_tailwind(ts, roles=False)
     assert text == ("/*\n * --opacity-muted is written from 0 to 1 (0.6); its source holds it "
                     "from 0 to 100 (60).\n */\n@theme {\n  --opacity-muted: 0.6;\n"
                     "  --opacity-plain: 0.5;\n}\n")
@@ -300,9 +313,24 @@ def test_an_opacity_held_from_0_to_100_is_written_from_0_to_1_with_the_unit_note
            "(60).\n" in css
 
 
+def test_an_opacity_note_names_each_mode_value_it_converts():
+    ts = TokenSet({"scheme": ("light", "dark")})
+    ts.add(Token("opacity.muted", "number", 60, modes={"scheme:dark": 40},
+                 extensions={"unit": "percent"}))
+    css = to_css(ts)
+    assert " * --opacity-muted is written from 0 to 1 (0.6; scheme:dark 0.4); its source holds " \
+           "it from 0 to 100 (60; scheme:dark 40).\n" in css
+    assert "  --opacity-muted: 0.4;\n" in css
+
+
+def test_roles_must_be_said_so_a_built_system_is_never_exported_by_accident():
+    with pytest.raises(TypeError):
+        to_tailwind(_ours())
+
+
 def test_an_opacity_in_percent_is_not_read_and_the_fix_says_0_to_1():
     imported = import_css(":root {\n  --opacity-muted: 60%;\n}\n",
-                          Source("theme.css", "css", "0" * 64, 10))
+                          Source(str(NOWHERE / "theme.css"), "css", "0" * 64, 10))
     [item] = imported.report.not_read
     assert item.name == "--opacity-muted"
     assert item.message == ("60% is an opacity in percent; write it as a number from 0 to 1 "
@@ -425,6 +453,39 @@ def test_an_extension_only_adds_a_changed_token_is_refused_by_name(tmp_path):
         f"only adds tokens, so change --color-ink in {f} itself, or add a token under a new "
         "name")
     assert not (tmp_path / "theme-ext.css").exists()
+
+
+UNREAD = FOREIGN.replace("  --radius-card: 0.75rem;\n",
+                         "  --radius-card: 0.75rem;\n  --spacing-gutter: 1.5em;\n") + \
+    ".btn {\n  --btn-pad: 12px;\n}\n"
+
+
+@pytest.mark.parametrize("name,path", [("--spacing-gutter", "spacing-gutter"),
+                                       ("--btn-pad", "btn-pad")])
+def test_an_addition_named_like_an_entry_the_import_did_not_read_is_refused(tmp_path, name,
+                                                                          path):
+    f, imported = _source(tmp_path, UNREAD)
+    assert name in [i.name for i in imported.report.not_read]
+    assert not imported.tokens.has(path)
+    ts = _extended(imported, Token(path, "dimension", {"value": 24, "unit": "px"}))
+    with pytest.raises(InputError) as exc:
+        write_tailwind(ts, imported)
+    assert str(exc.value).startswith(f"{name} is declared in {f}, where the import did not "
+                                     "read it (")
+    assert str(exc.value).endswith(
+        f"); an extension file loaded after {f} would replace its value, so rename the "
+        f"addition, or map it to {name} and write {name} in {f} in a form the import reads")
+    assert not (tmp_path / "theme-ext.css").exists()
+
+
+def test_an_addition_beside_entries_the_import_did_not_read_changes_none_of_them(tmp_path):
+    f, imported = _source(tmp_path, UNREAD)
+    outcome = write_tailwind(_extended(imported, Token("spacing-gutter-wide", "dimension",
+                                                       {"value": 24, "unit": "px"})), imported)
+    assert outcome["status"] == "written"
+    assert "changes nothing in it" in outcome["load"]
+    text = (tmp_path / "theme-ext.css").read_text(encoding="utf-8")
+    assert "--spacing-gutter:" not in text and "--btn-pad" not in text
 
 
 def test_nothing_to_add_writes_nothing(tmp_path):
