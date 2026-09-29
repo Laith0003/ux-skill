@@ -61,7 +61,7 @@ GLOBALS = """.dark {
 
 
 def _pair(tmp_path):
-    (tmp_path / "tokens.json").write_text(json.dumps(TOKENS), encoding="utf-8")
+    (tmp_path / "tokens.json").write_text(json.dumps(TOKENS, indent=2), encoding="utf-8")
     (tmp_path / "globals.css").write_text(GLOBALS, encoding="utf-8")
     return tmp_path / "tokens.json", tmp_path / "globals.css"
 
@@ -109,31 +109,65 @@ def test_a_stylesheet_read_with_a_tokens_file_adds_its_dark_values(tmp_path):
         "and 1 token of its own")
 
 
-def test_a_value_the_stylesheet_sets_otherwise_is_not_read_and_the_systems_stays(tmp_path):
+def test_a_later_stylesheet_wins_a_base_value_as_the_browser_does(tmp_path):
     tokens, sheet = _pair(tmp_path)
     sheet.write_text(":root { --color-ink: #000000; }\n", encoding="utf-8")
     imported = read_sources([tokens, sheet])
-    assert imported.tokens.get("color.ink").value == "#1A1A1F"
-    wheres = [i.where for i in imported.report.not_read]
-    assert "globals.css:1" in wheres
+    assert imported.tokens.get("color.ink").value == "#000000"
+    assert not imported.report.not_read
+    [note] = [i for i in imported.report.notes if i.where == "globals.css:1"]
+    assert note.name == "--color-ink"
+    assert note.message == (
+        "sets the base value #000000 on :root, which wins over #1A1A1F on :root at "
+        "tokens.json:3 as the browser decides: it loads after tokens.json with a selector as "
+        "specific; #000000 is read. Keep one value: remove the other at tokens.json:3, or this "
+        "one if #1A1A1F is the value you mean")
     assert all("uxskill-read-together" not in i.where + i.message
-               for i in imported.report.not_read)
+               for i in imported.report.notes)
 
 
-def test_a_base_value_set_otherwise_keeps_the_systems_and_every_dark_value(tmp_path):
+def test_a_less_specific_stylesheet_loses_and_names_both_places(tmp_path):
     tokens, sheet = _pair(tmp_path)
-    sheet.write_text(":root {\n  --app-gap: 12px;\n  --color-ink: #000000;\n}\n" + GLOBALS,
-                     encoding="utf-8")
+    sheet.write_text("html {\n  --color-ink: #000000;\n}\n" + GLOBALS, encoding="utf-8")
     imported = read_sources([tokens, sheet])
     assert imported.tokens.get("color.ink").value == "#1A1A1F"
     # Every dark value still pairs, including those pointing at color.ink.
     assert imported.tokens.get("color.surface.page").modes == {"scheme:dark": "{color.ink}"}
     assert imported.tokens.get("color.text.body").modes == {"scheme:dark": "{color.paper}"}
     [kept] = imported.report.not_read
-    assert (kept.where, kept.name) == ("globals.css:3", "--color-ink")
-    assert kept.message.startswith("sets the base value #000000, where tokens.json holds "
-                                   "#1A1A1F; tokens.json's value is kept")
-    assert "2 mode values added" in imported.report.notes[-1].message
+    assert (kept.where, kept.name) == ("globals.css:2", "--color-ink")
+    assert kept.message == (
+        "sets the base value #000000 on html, which loses to #1A1A1F on :root at tokens.json:3 "
+        "as the browser decides: :root is more specific, so #1A1A1F is kept and globals.css's "
+        "other values still pair with it. Remove it from globals.css, or change it at "
+        "tokens.json:3 if #000000 is the value you mean")
+
+
+def test_a_doubled_root_in_the_globals_wins_and_keeps_the_dark_values(tmp_path):
+    tokens, sheet = _pair(tmp_path)
+    sheet.write_text(GLOBALS + "html:root {\n  --color-ink: #000000;\n}\n"
+                     ':root:root[data-theme="dark"] {\n  --color-paper: #101010;\n}\n',
+                     encoding="utf-8")
+    imported = read_sources([tokens, sheet])
+    assert imported.tokens.get("color.ink").value == "#000000"
+    assert imported.tokens.get("color.paper").modes == {"scheme:dark": "#101010"}
+    assert imported.tokens.get("color.surface.page").modes == {"scheme:dark": "{color.ink}"}
+    [note] = [i for i in imported.report.notes if i.name == "--color-ink"]
+    assert "html:root is more specific than :root" in note.message
+    assert note.where == "globals.css:7"
+
+
+def test_of_two_stylesheets_the_later_wins_and_the_first_is_named(tmp_path):
+    tokens, sheet = _pair(tmp_path)
+    sheet.write_text(":root { --app-edge: #DDDDDD; }\n", encoding="utf-8")
+    second = tmp_path / "site.css"
+    second.write_text(":root {\n  --app-edge: #CCCCCC;\n}\n", encoding="utf-8")
+    imported = read_sources([tokens, sheet, second])
+    assert imported.tokens.get("app-edge").value == "#CCCCCC"
+    assert not imported.report.not_read
+    [note] = [i for i in imported.report.notes if i.name == "--app-edge"]
+    assert note.where == "site.css:2"
+    assert "wins over #DDDDDD on :root at globals.css:1" in note.message
 
 
 def test_places_in_messages_name_the_real_file_and_line(tmp_path):

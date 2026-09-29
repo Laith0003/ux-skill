@@ -1,7 +1,9 @@
 """Import CSS custom properties in their own names.
 
 What is read: custom properties set on the root (`:root`, `html`, `:host`,
-and Tailwind's `@theme` block), on a theme selector (`[data-theme="dark"]`,
+Tailwind's `@theme` block, and the root written twice, `:root:root` or
+`html:root`, which a site writes to outrank another file's root: still the
+root, never a component), on a theme selector (`[data-theme="dark"]`,
 `.dark`, `[dir="rtl"]`, or several of them joined on the root), and inside
 the preference media queries prefers-color-scheme, prefers-contrast and
 prefers-reduced-motion. Each property becomes a token whose path is its
@@ -33,7 +35,10 @@ of this engine's attributes at its engine base value
 (`[data-density="comfortable"]`) sets a root property to another value,
 that attribute is one axis whose base is the root (`base`) and whose modes
 are every value the file sets it to (density: base, comfortable,
-compact), noted, and written back with each value on :root. The media types
+compact), noted, and written back with each value on :root. A root that
+reads right to left (`:root { direction: rtl }`) holds the rtl values, so
+the direction axis it switches with [dir="ltr"] is rtl-based: rtl, then
+ltr, never a guess from the selectors. The media types
 screen and all are dropped from a query: `@media screen and
 (prefers-color-scheme: dark)` is the dark scheme, and `@media screen`
 alone is read as the base, since it holds wherever the page is on screen.
@@ -133,6 +138,64 @@ SYSTEM, LIGHT, DARK = "system", "light", "dark"
 
 # Root selectors: a property set here is the base value.
 ROOTS = (":root", "html", ":host", "@theme")
+# The root at the start of a selector, as written: :root, html, :host or
+# @theme, and the root written more than once (:root:root, html:root),
+# which a stylesheet uses to outrank another file's root. It is still the
+# root, with a higher specificity; never a component.
+_ROOT_AT = re.compile(r"(?:html)?(?::root)+(?![\w-])|html(?![\w-])|:host(?![\w-])|@theme\b")
+
+
+def root_prefix(member: str) -> str:
+    """The root one selector opens with (`:root:root` in
+    `:root:root[data-theme=dark]`), or ""."""
+    m = _ROOT_AT.match(member.strip())
+    return m.group(0) if m else ""
+
+
+def is_root(member: str) -> bool:
+    """True for one selector that is the root alone, however often it is
+    written (:root, html, :root:root, html:root, :host, @theme)."""
+    member = member.strip()
+    return bool(member) and root_prefix(member) == member
+
+
+_SPEC_ID = re.compile(r"#[\w-]+")
+_SPEC_ATTR = re.compile(r"\[[^\]]*\]")
+_SPEC_CLASS = re.compile(r"\.[\w-]+|(?<!:):[\w-]+(?:\([^()]*\))?")
+_SPEC_TYPE = re.compile(r"(?:^|(?<=[\s>+~]))[a-zA-Z][\w-]*|::[\w-]+")
+
+
+def specificity(member: str) -> Tuple[int, int, int]:
+    """CSS specificity of one selector: (ids, classes with attributes and
+    pseudo-classes, types with pseudo-elements). :where() counts nothing;
+    :is(), :not() and :has() count their most specific argument. @theme
+    is read as :root."""
+    text = member.strip()
+    if text.startswith("@theme"):
+        return (0, 1, 0)
+    total = [0, 0, 0]
+    while True:
+        m = re.search(r":(where|is|not|has)\(", text)
+        if not m:
+            break
+        depth, end = 0, len(text)
+        for i in range(m.end() - 1, len(text)):
+            depth += {"(": 1, ")": -1}.get(text[i], 0)
+            if depth == 0:
+                end = i
+                break
+        inner = text[m.end():end]
+        if m.group(1) != "where":
+            best = max((specificity(a) for a in split_top(inner, ",") if a.strip()),
+                       default=(0, 0, 0))
+            total = [a + b for a, b in zip(total, best)]
+        text = text[:m.start()] + " " + text[end + 1:]
+    total[1] += len(_SPEC_ATTR.findall(text))
+    text = _SPEC_ATTR.sub(" ", text)
+    total[0] += len(_SPEC_ID.findall(text))
+    total[1] += len(_SPEC_CLASS.findall(text))
+    total[2] += len([t for t in _SPEC_TYPE.findall(text) if t != "*"])
+    return (total[0], total[1], total[2])
 # Media features this engine writes, and the axis value each one sets.
 MEDIA_AXES: Dict[str, Tuple[str, str]] = {
     "(prefers-color-scheme: dark)": ("scheme", "dark"),
@@ -387,11 +450,10 @@ class _Modes:
         or `html.dark`), so it is written back as the file has it; None when
         it is not a root or theme selector."""
         rest, rooted, prefix = sel, False, ""
-        for root in ROOTS:
-            if rest.startswith(root):
-                rest, rooted = rest[len(root):], root != "@theme"
-                prefix = root if rooted else ""
-                break
+        root = root_prefix(sel)
+        if root:
+            rest, rooted = sel.strip()[len(root):], root != "@theme"
+            prefix = root if rooted else ""
         parts: List[Tuple[str, str, str]] = []
         while rest:
             if rest[0].isspace():
@@ -670,7 +732,7 @@ def _base(selector: str) -> bool:
     list names the root itself beside theme selectors of any other name,
     its aliases (`:root, .theme-x`)."""
     members = split_top(selector, ",")
-    rooted = any(one.strip() in ROOTS for one in members)
+    rooted = any(is_root(one) for one in members)
     for one in members:
         parts = _Modes.parse(one)
         if parts is None or any((a in AXES or not rooted) and (a not in AXES or v != AXES[a][0])
@@ -907,6 +969,16 @@ def import_css(text: str, source: Source) -> Imported:
         used = {v for r in rules for one in split_top(r.selector, ",")
                 for a, v, f in _Modes.parse(one) or [] if a == axis and f == ""}
         modes.rebased[axis] = (ROOT_BASE, *(v for v in AXES[axis] if v in used))
+    # A root that reads right to left (:root { direction: rtl }) holds the
+    # rtl values: rtl is the direction axis's base, never a guess from the
+    # selectors, and [dir="ltr"] is its mode.
+    rtl_root = "direction" in modes.rebased and any(
+        d.name.lower() == "direction" and d.value.strip().lower() == "rtl"
+        for r in parse_css(text, source.path, every=True)
+        if not r.media and _base(r.selector) for d in r.declarations)
+    if rtl_root:
+        modes.rebased["direction"] = ("rtl", *(v for v in modes.rebased["direction"][1:]
+                                              if v != "rtl"))
     root_values: Dict[str, str] = {}
     for r in rules:
         at_base = _at_base(r.selector)
@@ -946,10 +1018,12 @@ def import_css(text: str, source: Source) -> Imported:
         at_base = _at_base(rule.selector)
         if at_base and rebased_at.get(at_base[0]) is rule:
             axis = at_base[0]
+            held_as = (f"{modes.rebased[axis][0]}, what :root holds,"
+                       if modes.rebased[axis][0] != ROOT_BASE else ":root")
             notes.append((rule.line, Item(f"{name}:{rule.line}", rule.selector, (
                 f"sets values that differ from :root; the base is what :root holds, so "
-                f"[{CSS_AXES[axis][0]}] was read as one axis, {axis}, with :root as its base and "
-                f"{_and(list(modes.rebased[axis][1:]))} as its "
+                f"[{CSS_AXES[axis][0]}] was read as one axis, {axis}, with {held_as} as its base "
+                f"and {_and(list(modes.rebased[axis][1:]))} as its "
                 f"{'mode' if len(modes.rebased[axis]) == 2 else 'modes'}"))))
         custom = any(axis not in AXES for o in options if o for axis, _, _ in o)
         outside = any(o is None for o in options)

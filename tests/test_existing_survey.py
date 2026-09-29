@@ -300,14 +300,17 @@ def test_an_app_file_that_redeclares_a_token_after_importing_the_system_is_named
     [entry] = detect_existing_system(tmp_path)["declared"]["disagreements"]
     assert entry["token"] == "--brand"
     assert entry["values"] == [
-        {"path": "packages/tokens/tokens.css", "token": "--brand", "value": "#7C3AED"},
-        {"path": "resources/css/app.css", "token": "--brand", "value": "#0F766E"}]
+        {"path": "packages/tokens/tokens.css", "line": 1, "token": "--brand", "value": "#7C3AED",
+         "selector": ":root"},
+        {"path": "resources/css/app.css", "line": 2, "token": "--brand", "value": "#0F766E",
+         "selector": ":root"}]
     assert entry["wins"] == "resources/css/app.css"
     assert entry["why"] == (
-        "--brand is #7C3AED in packages/tokens/tokens.css and #0F766E in resources/css/app.css; "
-        "resources/css/app.css wins: it imports packages/tokens/tokens.css and sets it again "
-        "after, which silently undoes the value there; remove the second declaration, or change "
-        "it in packages/tokens/tokens.css")
+        "--brand is #7C3AED in packages/tokens/tokens.css:1 and #0F766E in "
+        "resources/css/app.css:2; resources/css/app.css:2 wins: it imports "
+        "packages/tokens/tokens.css and sets it again after, which silently undoes the value at "
+        "packages/tokens/tokens.css:1; remove the second declaration at resources/css/app.css:2, "
+        "or change it at packages/tokens/tokens.css:1")
 
 
 def test_two_unrelated_stylesheets_leave_the_winner_open(tmp_path: Path) -> None:
@@ -317,7 +320,7 @@ def test_two_unrelated_stylesheets_leave_the_winner_open(tmp_path: Path) -> None
     [entry] = detect_existing_system(tmp_path)["declared"]["disagreements"]
     assert entry["wins"] == ""
     assert entry["why"].endswith(
-        "styles/a-tokens.css and styles/b-tokens.css set it with equal weight and neither loads "
+        "styles/a-tokens.css:1 and styles/b-tokens.css:1 set it with equal weight and neither loads "
         "the other, so the stylesheet the page loads last wins; keep one value, or import one "
         "file from the other so the order is written down")
 
@@ -351,9 +354,9 @@ def test_a_curated_palette_that_contradicts_the_tokens_is_named(tmp_path: Path) 
     assert entry["token"] == "--color-primary"
     assert entry["wins"] == "styles/theme.css"
     assert entry["why"] == (
-        "--color-primary is #0F766E in styles/theme.css and #7C3AED in MASTER.md; "
-        "styles/theme.css wins: it is the only stylesheet that sets it; the page shows its "
-        "value; MASTER.md only describes the palette, so correct the document or the token")
+        "--color-primary is #0F766E in styles/theme.css:1 and #7C3AED in MASTER.md:5; "
+        "styles/theme.css:1 wins: it is the only stylesheet that sets it; the page shows its "
+        "value; MASTER.md:5 only describes the palette, so correct the document or the token")
 
 
 def test_two_spellings_of_one_value_are_no_disagreement(tmp_path: Path) -> None:
@@ -391,7 +394,7 @@ def test_a_theme_block_redeclared_by_the_app_is_named_with_its_theme(tmp_path: P
     assert (entry["token"], entry["theme"], entry["wins"]) == (
         "--muted", "[data-theme=dark]", "src/app.css")
     assert entry["why"].startswith("--muted under [data-theme=dark] is #9CA3AF in "
-                                   "packages/tokens/tokens.css and #A1A1AA in src/app.css; ")
+                                   "packages/tokens/tokens.css:7 and #A1A1AA in src/app.css:2; ")
 
 
 def test_a_package_name_import_resolves_through_the_workspace(tmp_path: Path) -> None:
@@ -424,7 +427,7 @@ def test_an_unlayered_system_beats_an_override_inside_a_layer(tmp_path: Path) ->
     [entry] = detect_existing_system(tmp_path)["declared"]["disagreements"]
     assert entry["wins"] == "packages/tokens/tokens.css"
     assert ("it is set outside any cascade layer, which beats the value inside a layer in "
-            "src/app.css whatever the order") in entry["why"]
+            "src/app.css:3 whatever the order") in entry["why"]
 
 
 def test_a_widget_stylesheet_alone_is_not_a_system(tmp_path: Path) -> None:

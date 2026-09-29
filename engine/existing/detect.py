@@ -803,17 +803,29 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     ``primary_why`` says which was chosen and why; ``primary_note`` says why
     none was, when no candidate can carry text.
 
+    ``dark`` lists where the project keeps its dark values, wherever they
+    live (the system's own stylesheet, or a site's globals beside it): each
+    stylesheet and selector that sets custom properties under a dark
+    selector ([data-theme=dark], .dark, the root written twice before one,
+    :root:root[data-theme=dark]) or prefers-color-scheme: dark, with its
+    line and how many properties it sets.
+
     ``disagreements`` lists each token two sources set to different values:
     any two stylesheets that set it on the root or under one theme (an app
     stylesheet that imports the system's file and sets a token again among
     its component rules undoes the system's value), a token file, and a
     hand-written MASTER.md or DESIGN.md palette. Each names the token (and
-    its ``theme``), every file with its value, the file that wins in the
-    cascade and why: outside a cascade layer beats inside one, :root beats
-    html, and then the file loaded last, by its imports (a package name is
-    resolved through node_modules or the workspace packages) or a page's
-    links. The winner is "" when these files do not decide it, and an
-    import that could not be resolved is said to be so.
+    its ``theme``), every file with its value and line (and the selector,
+    for a stylesheet), the file that wins in the cascade and why, naming the
+    winner and each loser by file and line: outside a cascade layer beats
+    inside one, the more specific selector beats the less (:root beats
+    html; the root written twice, :root:root or html:root, beats :root, and
+    is still the root), and then the file loaded last, by its imports (a
+    package name is resolved through node_modules or the workspace
+    packages) or a page's links. A token file or document is named only
+    when it says another value than the one the page shows. The winner is
+    "" when these files do not decide it, and an import that could not be
+    resolved is said to be so.
     """
     base = Path(root).expanduser()
     result: Dict[str, Any] = {"found": False,
@@ -1032,6 +1044,9 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
         p for p in html_files if survey.is_style(p) and p not in css_files
         and survey.in_product(p, base) and not _is_built(p, base)
         and survey.declares(_read_text(p))]
+    dark = survey.dark_scheme(base, styles)
+    if dark:
+        declared["dark"] = dark
     disagree = survey.disagreements(
         base, styles, doc_paths,
         [base / s["path"] for s in sources if s["kind"] in ("master-md", "design-md")],

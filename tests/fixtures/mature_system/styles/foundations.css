@@ -1,0 +1,32 @@
+/* Foundations: the system's values as custom properties. */
+:root {
+  --brand-canvas: #FBFAF7;
+  --brand-surface: #FFFFFF;
+  --brand-text-primary: #1B1F24;
+  --brand-text-secondary: #5A6270;
+  --brand-hairline: #E3E1DC;
+  --brand-primary: #0B5F4A;
+  --brand-on-primary: #FFFFFF;
+  --brand-focus: #1F6FEB;
+  --status-success: #1E7B45;
+  --status-warning: #8A5A00;
+  --status-danger: #B3261E;
+  --type-family-display: "Newsreader", Georgia, serif;
+  --type-family-body: "Inter", system-ui, sans-serif;
+  --type-family-data: "IBM Plex Mono", ui-monospace, monospace;
+  --radius-md: 8px;
+  --motion-duration-fast: 150ms;
+  --surface-raised: var(--brand-surface);
+}
+
+body {
+  background: var(--brand-canvas);
+  color: var(--brand-text-primary);
+  font-family: var(--type-family-body);
+}
+
+.card {
+  background: var(--surface-raised);
+  border: 1px solid var(--brand-hairline);
+  border-radius: var(--radius-md);
+}

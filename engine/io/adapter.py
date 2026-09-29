@@ -372,6 +372,11 @@ def _propose_axes(ts: TokenSet) -> Dict[str, AxisMap]:
         ours = _our_axis(name, base, other)
         if ours is None or ours in axes:
             continue
+        if set(values) == set(AXES[ours]):
+            # The same values, whichever the system holds on its root (an
+            # rtl-based direction axis): each maps to itself.
+            axes[ours] = AxisMap(name, {v: v for v in AXES[ours]}, "name")
+            continue
         axes[ours] = AxisMap(name, {AXES[ours][0]: base, AXES[ours][1]: other}, "name")
     return axes
 

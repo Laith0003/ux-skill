@@ -16,9 +16,14 @@ the dark values. The stylesheets are read together with the system, so a
 dark value is paired by name with the system's token (--color-text-body
 with color.text.body), a var() in one file resolves to a token of
 another, and a property the stylesheets alone declare becomes a token of
-its own. A value a stylesheet sets differently from the system is listed
-under Not read, and the system's is kept. Every file read is in the
-report's also_read, so the intake step checks and backs up each one.
+its own. A base value set more than once is read as the browser reads
+it: the system loads first and each stylesheet after it, in the order
+given; the more specific selector wins (html:root and :root:root outrank
+:root, which outranks html; a token file's value is read as :root), and
+of two as specific the later one does. The winner's value is the token's,
+with a note naming the winner and the loser by file and line; a loser is
+listed under Not read with both places and the fix. Every file read is in
+the report's also_read, so the intake step checks and backs up each one.
 """
 from __future__ import annotations
 
@@ -30,6 +35,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations.errors import InputError
 from engine.foundations.tokens import TokenSet, alias_target, css_property, is_alias
+from engine.io.values_in import split_top
 from engine.io.report import (FORMATS, Imported, ImportReport, Item, Mapped, Source,
                               ownership_line, read_source)
 
@@ -127,8 +133,10 @@ def read_system(path: Any, fmt: str = "auto", label: str = "--from",
     found = detect_format(path, label, format_label) if fmt == "auto" else fmt
     _check_format(Path(path).expanduser(), fmt, format_label)
     if found == "project":
-        return read_sources(_proposed(Path(path).expanduser(), label), "auto", label,
-                            second_modes, modes_label, format_label)
+        root = Path(path).expanduser()
+        imported = read_sources(_proposed(root, label), "auto", label, second_modes,
+                                modes_label, format_label)
+        return _root_direction(imported, root)
     if second_modes and found != "figma":
         raise InputError(f"{modes_label} is for a Figma variables export, and {label} "
                          f"{Path(path).name} is read as {found}; drop {modes_label}")
@@ -136,6 +144,29 @@ def read_system(path: Any, fmt: str = "auto", label: str = "--from",
     options = {"second_modes": dict(second_modes)} if second_modes else {}
     imported = read_any(path, found, label, **options)
     imported.report.ownership = ownership_line(imported)
+    return imported
+
+
+def _root_direction(imported: Imported, root: Path) -> Imported:
+    """A project whose pages read right to left (<html dir="rtl">) holds
+    its rtl values on the root: a direction axis read with the root as its
+    base and ltr as its mode is rtl-based, said so in a note. The base is
+    what the root holds, never a guess from the selectors."""
+    from engine.existing import detect_existing_system
+    from engine.foundations.tokens import ROOT_BASE
+    axis = imported.tokens.axes.get("direction")
+    if not axis or axis[0] != ROOT_BASE or "rtl" in axis:
+        return imported
+    if detect_existing_system(root).get("declared", {}).get("direction") != "rtl":
+        return imported
+    ts = TokenSet({**imported.tokens.axes, "direction": ("rtl", *axis[1:])})
+    for t in imported.tokens.tokens():
+        ts.add(t)
+    imported.tokens = ts
+    imported.report.axes = {a: tuple(v) for a, v in ts.axes.items()}
+    imported.report.notes.append(Item(root.name, "direction", (
+        "the pages set dir=\"rtl\" on <html>, so the root holds the rtl values: rtl is the "
+        "direction axis's base and ltr its mode")))
     return imported
 
 
@@ -285,8 +316,9 @@ def combine(first: Imported, sheets: Sequence[Tuple[Source, str]], label: str) -
     names = {css_property(t.path)[2:]: t.path for t in first.tokens.tokens()}
     system = Path(first.report.source.path).name
     kept: List[Item] = []
-    sheets = [(source, _without_overrides(first, source, sheet, names, system, kept))
-              for source, sheet in sheets]
+    won_notes: List[Item] = []
+    texts, won = _cascade(first, sheets, names, kept, won_notes)
+    sheets = [(source, text) for (source, _), text in zip(sheets, texts)]
     text = base + "\n" + "\n".join(t for _, t in sheets)
     places = _Places(base.count("\n") + 1, sheets, system)
     together = import_css(text, Source(_MARK, "css", "0" * 64, len(text)))
@@ -297,15 +329,16 @@ def combine(first: Imported, sheets: Sequence[Tuple[Source, str]], label: str) -
     ts = TokenSet(axes)
     added_modes = 0
     for t in first.tokens.tokens():
-        theirs = together.tokens.get(css_property(t.path)[2:]) \
-            if together.tokens.has(css_property(t.path)[2:]) else None
+        key = css_property(t.path)[2:]
+        theirs = together.tokens.get(key) if together.tokens.has(key) else None
         modes = dict(t.modes)
         if theirs is not None:
             for ctx, v in theirs.modes.items():
                 if ctx not in modes and _usable(ctx, first.tokens.axes, together.tokens.axes):
                     modes[ctx] = _rename(v, names)
                     added_modes += 1
-        ts.add(replace(t, modes=modes, extensions=dict(t.extensions)))
+        value = won[key] if key in won else t.value
+        ts.add(replace(t, value=value, modes=modes, extensions=dict(t.extensions)))
     own = 0
     for t in together.tokens.tokens():
         if t.path in names or t.path not in declared or ts.has(t.path):
@@ -316,7 +349,7 @@ def combine(first: Imported, sheets: Sequence[Tuple[Source, str]], label: str) -
     old = first.report
     report = ImportReport.of(old.source, ts, old.entries + own)
     report.renamed = list(old.renamed)
-    report.notes = list(old.notes)
+    report.notes = list(old.notes) + won_notes
     report.not_read = list(old.not_read) + kept
     report.mapped = list(old.mapped)
     report.headline = list(old.headline)
@@ -340,40 +373,141 @@ def combine(first: Imported, sheets: Sequence[Tuple[Source, str]], label: str) -
 
 
 def _shown(value: Any) -> str:
+    if isinstance(value, dict) and set(value) == {"value", "unit"}:
+        return f"{value['value']:g}{value['unit']}" if isinstance(value["value"], (int, float)) \
+            else f"{value['value']}{value['unit']}"
     return value if isinstance(value, str) else json.dumps(value, sort_keys=True)
 
 
-def _without_overrides(first: Imported, source: Source, text: str, names: Dict[str, str],
-                       system: str, kept: List[Item]) -> str:
-    """`text` with each base value it sets for a token the system holds
-    with another value blanked out (lines and places stay), each listed in
-    `kept` as not read at its own file and line: the system's value is
-    kept, and the stylesheet's dark values still pair with the token."""
-    from engine.io.css_in import _base, import_css, parse_css
-    sheet = Path(source.path).name
-    alone = import_css(text, source).tokens
-    lines = text.split("\n")
-    for rule in parse_css(text, source.path):
-        if rule.media or not (rule.selector == "@theme" or _base(rule.selector)):
+def _decl_value(text: str, names: Dict[str, str]) -> Optional[Tuple[str, Any]]:
+    """(kind, value) of a declaration as a token holds it, an alias to a
+    system token by its path; None when it has no single reading."""
+    from engine.io.values_in import NotRead, css_alias, read_value
+    try:
+        alias = css_alias(text)
+        if alias is not None:
+            return "alias", "{" + names.get(alias[0], alias[0]) + "}"
+        return read_value(text)
+    except NotRead:
+        return None
+
+
+def _system_place(first: Imported, key: str, path: str) -> Tuple[str, int, str,
+                                                                   Tuple[int, int, int]]:
+    """(file, line, selector, specificity) where the system sets a token's
+    base value: the last base rule that declares it in the system's
+    stylesheets, else its key in the token file, read as :root (the root
+    a built token file's values load on)."""
+    from engine.existing.survey import _key_line
+    from engine.io.css_in import _base, is_root, parse_css, specificity
+    files = [first.report.source.path, *(a.path for a in first.report.also_read)]
+    for f in reversed(files):
+        p = Path(f)
+        if p.suffix.lower() not in (".css", ".scss", ".pcss"):
             continue
-        for d in rule.declarations:
-            key = d.name[2:]
-            if key not in names or not alone.has(key):
+        try:
+            rules = parse_css(p.read_text(encoding="utf-8-sig"), p.name)
+        except (OSError, UnicodeDecodeError, ValueError, InputError):
+            continue
+        hit = None
+        for rule in rules:
+            if rule.media or not (rule.selector == "@theme" or _base(rule.selector)):
                 continue
-            ours = first.tokens.get(names[key]).value
-            if _rename(alone.get(key).value, names) == ours:
+            for d in rule.declarations:
+                if d.name == "--" + key:
+                    hit = (p.name, d.line, rule.selector.strip(),
+                           max(specificity(m) for m in split_top(rule.selector, ",")
+                               if is_root(m) or m.strip() == "@theme"))
+        if hit is not None:
+            return hit
+    p = Path(first.report.source.path)
+    try:
+        line = _key_line(p.read_text(encoding="utf-8-sig"), path)
+    except (OSError, UnicodeDecodeError):
+        line = 1
+    return p.name, line, ":root", (0, 1, 0)
+
+
+def _cascade(first: Imported, sheets: Sequence[Tuple[Source, str]], names: Dict[str, str],
+             kept: List[Item], notes: List[Item]) -> Tuple[List[str], Dict[str, Any]]:
+    """The base values the system and the stylesheets set more than once,
+    decided as the browser decides them (see the module docstring): each
+    stylesheet's text with every declaration that lost, and every one that
+    beat the system's value, blanked out (lines and places stay), and the
+    value that won over the system's for each token. A loser is listed in
+    `kept` as not read, a winner over another value in `notes`, each naming
+    both places."""
+    from engine.io.css_in import _base, is_root, parse_css, specificity
+    lines = [text.split("\n") for _, text in sheets]
+    # key -> (reading, specificity, value as written, file, line, selector,
+    #         the sheet and line holding it, or None for the system)
+    current: Dict[str, Tuple[Any, Tuple[int, int, int], str, str, int, str,
+                             Optional[Tuple[int, int, str]]]] = {}
+    won: Dict[str, Any] = {}
+
+    def blank(i: int, line: int, prop: str) -> None:
+        row = lines[i][line - 1]
+        m = re.search(re.escape(prop) + r"\s*:[^;}]*;?", row)
+        if m is not None:
+            lines[i][line - 1] = row[:m.start()] + " " * (m.end() - m.start()) + row[m.end():]
+
+    for i, (source, text) in enumerate(sheets):
+        sheet = Path(source.path).name
+        for rule in parse_css(text, source.path):
+            if rule.media or not (rule.selector == "@theme" or _base(rule.selector)):
                 continue
-            row = lines[d.line - 1]
-            m = re.search(re.escape(d.name) + r"\s*:[^;}]*;?", row)
-            if m is None:
-                continue
-            lines[d.line - 1] = row[:m.start()] + " " * (m.end() - m.start()) + row[m.end():]
-            kept.append(Item(f"{sheet}:{d.line}", d.name, (
-                f"sets the base value {d.value}, where {system} holds {_shown(ours)}; "
-                f"{system}'s value is kept and {sheet}'s other values still pair with it. "
-                f"Remove it from {sheet}, or change it in {system} if {d.value} is the value "
-                "you mean")))
-    return "\n".join(lines)
+            members = [m for m in split_top(rule.selector, ",") if is_root(m)
+                       or m.strip() == "@theme"] or split_top(rule.selector, ",")
+            spec = max(specificity(m) for m in members)
+            selector = rule.selector.strip()
+            for d in rule.declarations:
+                key = d.name[2:]
+                read = _decl_value(d.value, names)
+                if read is None:
+                    continue
+                if key not in current and key in names:
+                    ours = first.tokens.get(names[key])
+                    file, line, sel, sys_spec = _system_place(first, key, names[key])
+                    current[key] = ((ours.type, ours.value), sys_spec, _shown(ours.value), file,
+                                    line, sel, None)
+                prev = current.get(key)
+                mine = (read, spec, d.value.strip(), sheet, d.line, selector, (i, d.line, d.name))
+                if prev is None:
+                    current[key] = mine
+                    continue
+                if _same(read, prev[0]):
+                    continue
+                if spec >= prev[1]:
+                    why = (f"{selector} is more specific than {prev[5]}" if spec > prev[1] else
+                           f"it loads after {prev[3]} with a selector as specific")
+                    notes.append(Item(f"{sheet}:{d.line}", d.name, (
+                        f"sets the base value {d.value.strip()} on {selector}, which wins over "
+                        f"{prev[2]} on {prev[5]} at {prev[3]}:{prev[4]} as the browser decides: "
+                        f"{why}; {d.value.strip()} is read. Keep one value: remove the other at "
+                        f"{prev[3]}:{prev[4]}, or this one if {prev[2]} is the value you mean")))
+                    if prev[6] is not None:
+                        blank(*prev[6])
+                    if key in names:
+                        blank(i, d.line, d.name)
+                        won[key] = read[1]
+                    current[key] = mine
+                else:
+                    blank(i, d.line, d.name)
+                    kept.append(Item(f"{sheet}:{d.line}", d.name, (
+                        f"sets the base value {d.value.strip()} on {selector}, which loses to "
+                        f"{prev[2]} on {prev[5]} at {prev[3]}:{prev[4]} as the browser decides: "
+                        f"{prev[5]} is more specific, so {prev[2]} is kept and {sheet}'s other "
+                        f"values still pair with it. Remove it from {sheet}, or change it at "
+                        f"{prev[3]}:{prev[4]} if {d.value.strip()} is the value you mean")))
+    return ["\n".join(rows) for rows in lines], won
+
+
+def _same(a: Tuple[str, Any], b: Tuple[str, Any]) -> bool:
+    """Whether two readings are one value: equal, or two spellings of one
+    color."""
+    if a[1] == b[1]:
+        return True
+    return isinstance(a[1], str) and isinstance(b[1], str) and a[1].upper() == b[1].upper()
 
 
 def _usable(ctx: str, first: Mapping[str, Sequence[str]],

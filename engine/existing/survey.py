@@ -27,7 +27,6 @@ _MAIN_CSS = re.compile(r"^(?:app|main|globals?|styles?|index|site|base|theme|tok
                        r"variables|vars|root)\.(?:css|scss|pcss)$", re.I)
 _MIN_THEME_PROPS = 3
 _MIN_MAIN_THEME_PROPS = 6
-_ROOTS = (":root", "html", ":host", "@theme")
 STYLE_SUFFIXES = (".css", ".scss", ".pcss")
 TEMPLATE_SUFFIXES = (".html", ".htm", ".blade.php", ".jsx", ".tsx", ".vue", ".svelte",
                      ".astro", ".erb", ".twig")
@@ -108,13 +107,12 @@ def _theme_member(member: str) -> bool:
     """True for the root, or a compound of theme classes and attributes on
     the root or alone. A class or attribute of any other name on its own
     (.dp, [data-size]) is a component, whatever properties it holds."""
-    if member in _ROOTS:
+    if _is_root(member):
         return True
     rest, rooted = member, False
-    for root in (":root", "html", ":host"):
-        if rest.startswith(root):
-            rest, rooted = rest[len(root):], True
-            break
+    root = _root_prefix(member)
+    if root and root != "@theme":
+        rest, rooted = member.strip()[len(root):], True
     if not rest:
         return rooted
     pos = 0
@@ -135,7 +133,22 @@ def _themed(selector: str) -> bool:
 
 
 def _rooted(selector: str) -> bool:
-    return all(m in _ROOTS for m in _members(selector))
+    return all(_is_root(m) for m in _members(selector))
+
+
+def _is_root(member: str) -> bool:
+    from engine.io.css_in import is_root  # engine.io imports this package
+    return is_root(member)
+
+
+def _root_prefix(member: str) -> str:
+    from engine.io.css_in import root_prefix  # engine.io imports this package
+    return root_prefix(member)
+
+
+def _specificity(member: str) -> Tuple[int, int, int]:
+    from engine.io.css_in import specificity  # engine.io imports this package
+    return specificity(member)
 
 
 def css_token_file(name: str, text: str) -> bool:
@@ -398,15 +411,50 @@ def data_face(styles: Sequence[Path], files: Sequence[Path],
     return "", ""
 
 
+# ------------------------------------------------------------------ the dark scheme
+
+
+def dark_scheme(base: Path, styles: Sequence[Path]) -> List[Dict[str, Any]]:
+    """Where the project keeps its dark values, wherever it lives: each
+    stylesheet rule that sets custom properties under a dark selector
+    ([data-theme=dark], .dark, the root written twice before one) or under
+    prefers-color-scheme: dark, as {path, line, selector, properties}, one
+    entry per file and selector, in the order the files are given."""
+    from engine.io.css_in import _Modes  # engine.io imports this package
+    out: Dict[Tuple[Path, str], Dict[str, Any]] = {}
+    for path in styles:
+        for rule in _rules(read_text(path)):
+            props = [d for d in rule.declarations if d.name.startswith("--")]
+            if not props:
+                continue
+            by_media = any(re.search(r"prefers-color-scheme\s*:\s*dark", m) for m in rule.media)
+            named = any(("scheme", "dark") in [(a, v) for a, v, _ in _Modes.parse(m) or []]
+                        for m in _members(rule.selector))
+            if not (by_media or named):
+                continue
+            shown = rule.selector.strip()
+            if by_media:
+                shown = " ".join([*(f"@media {m}" for m in rule.media), shown])
+            key = (path, shown)
+            if key not in out:
+                out[key] = {"path": path.relative_to(base).as_posix(), "line": rule.line,
+                            "selector": shown, "properties": 0}
+            out[key]["properties"] += len(props)
+    return list(out.values())
+
+
 # ------------------------------------------------------------------ disagreements
 
 _IMPORT = re.compile(r"@import\s+(?:url\(\s*)?[\"']([^\"']+)[\"']\s*\)?([^;]*);")
 _LINK = re.compile(r"<link\b[^>]*?\bhref\s*=\s*[\"']([^\"']+\.css)(?:\?[^\"']*)?[\"']", re.I)
 _LAYER_BLOCK = re.compile(r"@layer\b[^{};]*\{")
 # (layered, specificity): a declaration outside any cascade layer beats
-# one inside a layer, whatever their order and specificity; then :root,
-# :host and @theme outrank html.
-Rank = Tuple[int, int]
+# one inside a layer, whatever their order and specificity; then the more
+# specific selector wins (:root outranks html, :root:root and html:root
+# outrank :root), as the browser decides.
+Rank = Tuple[int, Tuple[int, int, int]]
+# (value, rank, line, selector) of one custom property in a stylesheet.
+Set_ = Tuple[str, Rank, int, str]
 
 
 def token_key(name: str) -> str:
@@ -443,28 +491,27 @@ def _context(selector: str) -> str:
         return ""
     parts = []
     for m in _members(selector):
-        for root in (":root", "html", ":host"):
-            if m.startswith(root) and len(m) > len(root):
-                m = m[len(root):]
-                break
+        root = _root_prefix(m)
+        if root and root != "@theme" and len(m.strip()) > len(root):
+            m = m.strip()[len(root):]
         parts.append(re.sub(r"[\"'\s]", "", m))
     return ", ".join(sorted(parts))
 
 
-def css_values(text: str, layered: bool = False) -> Dict[Tuple[str, str], Tuple[str, Rank]]:
-    """(theme, name) -> (value, rank) of each custom property a stylesheet
-    sets on the root or a theme selector outside any media query, the
-    cascade's last word within the file. `layered` when the file itself is
-    imported into a layer."""
+def css_values(text: str, layered: bool = False) -> Dict[Tuple[str, str], Set_]:
+    """(theme, name) -> (value, rank, line, selector) of each custom
+    property a stylesheet sets on the root or a theme selector outside any
+    media query, the cascade's last word within the file. `layered` when
+    the file itself is imported into a layer."""
     if not declares(text):
         return {}
     layers = _layered_lines(text)
-    out: Dict[Tuple[str, str], Tuple[str, Rank]] = {}
+    out: Dict[Tuple[str, str], Set_] = {}
     for rule in _rules(text):
         if rule.media or not rule.declarations or not _themed(rule.selector):
             continue
         inside = layered or any(a <= rule.line <= b for a, b in layers)
-        spec = max(0 if m == "html" else 1 for m in _members(rule.selector))
+        spec = max(_specificity(m) for m in _members(rule.selector))
         rank = (0 if inside else 1, spec)
         ctx = _context(rule.selector)
         for d in rule.declarations:
@@ -472,7 +519,7 @@ def css_values(text: str, layered: bool = False) -> Dict[Tuple[str, str], Tuple[
                 continue
             key = (ctx, d.name)
             if key not in out or rank >= out[key][1]:
-                out[key] = (d.value.strip(), rank)
+                out[key] = (d.value.strip(), rank, d.line, rule.selector.strip())
     return out
 
 
@@ -521,19 +568,40 @@ def _resolve(path: Path, ref: str, base: Path, packages: Dict[str, Path]) -> Opt
     return None
 
 
+def _key_line(text: str, name: str) -> int:
+    """The line a token file or document writes a token on: each segment of
+    its path found as a key after the one before it (1 when not found)."""
+    at = 0
+    for seg in [s for s in re.split(r"[.]", name) if s]:
+        m = re.search(r"[\"'`]" + re.escape(seg) + r"[\"'`]", text[at:])
+        if not m:
+            m = re.search(re.escape(seg), text[at:])
+            if not m:
+                return text.count("\n", 0, at) + 1 if at else 1
+        at += m.start()
+    return text.count("\n", 0, at) + 1
+
+
+# One file's word on a token: (path, name as written, value as written,
+# reading, kind, rank, line, selector).
+_Row = Tuple[Path, str, str, str, str, Rank, int, str]
+
+
 def disagreements(base: Path, css_paths: Sequence[Path], token_docs: Sequence[Tuple[Path, Any]],
                   md_paths: Sequence[Path], files: Sequence[Path],
                   reading: Callable[[str, Dict[str, str]], str],
                   flatten: Callable[[Any], Dict[str, Dict[str, Any]]]) -> List[Dict[str, Any]]:
     """Each token two sources set to different values: stylesheets (every
     one that sets custom properties on the root or a theme, an app's main
-    stylesheet among its component rules included), token files and a
+    stylesheet among its component rules included, the root written twice
+    as :root:root or html:root read as the root), token files and a
     hand-written MASTER.md or DESIGN.md palette. Each entry names the token
-    (and the theme, for a value set under one), every file with its value,
-    the file that wins in the cascade ("" when these files do not decide
-    it) and why. `files` is the walk, for pages, package names and
-    node_modules; `reading` turns a value into what it reads as, given the
-    properties around it; `flatten` reads a token document."""
+    (and the theme, for a value set under one), every file with its value
+    and line, the file that wins in the cascade ("" when these files do not
+    decide it) and why, with both files and lines. `files` is the walk, for
+    pages, package names and node_modules; `reading` turns a value into
+    what it reads as, given the properties around it; `flatten` reads a
+    token document."""
     css_paths = [p.resolve() for p in css_paths]
     rel = {p: p.relative_to(base).as_posix() for p in [*css_paths, *(p for p, _ in token_docs),
                                                         *md_paths]}
@@ -543,24 +611,26 @@ def disagreements(base: Path, css_paths: Sequence[Path], token_docs: Sequence[Tu
     css = {p: css_values(texts[p], p in order.layered) for p in css_paths}
     union: Dict[str, str] = {}
     for values in css.values():
-        for (ctx, name), (value, _) in values.items():
+        for (ctx, name), row in values.items():
             if not ctx:
-                union.setdefault(name, value)
-    # key -> [(path, name as written, value as written, reading, kind, rank)]
-    found: Dict[Tuple[str, str], List[Tuple[Path, str, str, str, str, Rank]]] = {}
+                union.setdefault(name, row[0])
+    # key -> every file's word on it
+    found: Dict[Tuple[str, str], List[_Row]] = {}
     for path, values in css.items():
-        own = {n: v for (c, n), (v, _) in values.items() if not c}
+        own = {n: row[0] for (c, n), row in values.items() if not c}
         props = {**union, **own}
-        for (ctx, name), (value, rank) in values.items():
+        for (ctx, name), (value, rank, line, selector) in values.items():
             found.setdefault((ctx, token_key(name)), []).append(
-                (path, name, value, reading(value, props), "css", rank))
+                (path, name, value, reading(value, props), "css", rank, line, selector))
     for path, doc in token_docs:
+        text = read_text(path, 2_000_000)
         for name, tok in flatten(doc).items():
             value = tok.get("value")
             if isinstance(value, (str, int, float)) and not isinstance(value, bool):
-                text = str(value)
+                shown = str(value)
                 found.setdefault(("", token_key(name)), []).append(
-                    (path, name, text, reading(text, union), "tokens", (0, 0)))
+                    (path, name, shown, reading(shown, union), "tokens", (0, (0, 0, 0)),
+                     _key_line(text, name), ""))
     loose: Dict[str, List[Tuple[str, str]]] = {}
     for key in found:
         if not key[0]:
@@ -568,8 +638,9 @@ def disagreements(base: Path, css_paths: Sequence[Path], token_docs: Sequence[Tu
     for path in md_paths:
         from engine.io.markdown_in import import_markdown  # engine.io imports this package
         from engine.io.report import Source
+        text = read_text(path)
         try:
-            imported = import_markdown([(path.name, read_text(path))],
+            imported = import_markdown([(path.name, text)],
                                        Source(str(path), "markdown", "0" * 64, 0))
         except (ValueError, TypeError):
             continue
@@ -578,11 +649,11 @@ def disagreements(base: Path, css_paths: Sequence[Path], token_docs: Sequence[Tu
                 continue
             for key in loose.get(_loose(token_key(tok.path)), []):
                 found[key].append((path, tok.path, tok.value, reading(tok.value, union), "md",
-                                   (0, 0)))
+                                   (0, (0, 0, 0)), _key_line(text, tok.path), ""))
 
     out: List[Dict[str, Any]] = []
     for (ctx, _), entries in found.items():
-        by_file: Dict[Path, Tuple[Path, str, str, str, str, Rank]] = {}
+        by_file: Dict[Path, _Row] = {}
         for e in entries:
             by_file[e[0]] = e  # a file's last word on the token
         if len(by_file) < 2 or len({e[3] for e in by_file.values()}) < 2:
@@ -591,13 +662,14 @@ def disagreements(base: Path, css_paths: Sequence[Path], token_docs: Sequence[Tu
         wins, why = _winner(rows, order, rel)
         name = next((e[1] for e in rows if e[4] == "css"), rows[0][1])
         shown = f"{name} under {ctx}" if ctx else name
-        listed = [f"{e[2]} in {rel[e[0]]}" for e in rows]
+        listed = [f"{e[2]} in {rel[e[0]]}:{e[6]}" for e in rows]
         said = " and ".join(listed) if len(listed) == 2 else (
             ", ".join(listed[:-1]) + " and " + listed[-1])
         entry: Dict[str, Any] = {"token": name}
         if ctx:
             entry["theme"] = ctx
-        entry.update({"values": [{"path": rel[e[0]], "token": e[1], "value": e[2]} for e in rows],
+        entry.update({"values": [{"path": rel[e[0]], "line": e[6], "token": e[1], "value": e[2],
+                                  **({"selector": e[7]} if e[7] else {})} for e in rows],
                       "wins": rel[wins] if wins else "",
                       "why": f"{shown} is {said}; {why}"})
         out.append(entry)
@@ -677,10 +749,15 @@ def _load_order(css_paths: Sequence[Path], texts: Dict[Path, str], files: Sequen
     return order
 
 
-def _winner(rows: List[Tuple[Path, str, str, str, str, Rank]], order: _Order,
+def _at(e: _Row, rel: Dict[Path, str]) -> str:
+    return f"{rel[e[0]]}:{e[6]}"
+
+
+def _winner(rows: List[_Row], order: _Order,
             rel: Dict[Path, str]) -> Tuple[Optional[Path], str]:
-    """The file whose value the page shows, and why; (None, why) when these
-    files do not decide it."""
+    """The file whose value the page shows, and why, naming the winner and
+    each loser by file and line; (None, why) when these files do not
+    decide it."""
     styles = [e for e in rows if e[4] == "css"]
     if not styles:
         tokens = [e for e in rows if e[4] == "tokens"]
@@ -698,19 +775,21 @@ def _winner(rows: List[Tuple[Path, str, str, str, str, Rank]], order: _Order,
     if low:
         if any(e[5][0] < top[0] for e in low):
             why_rank = ("it is set outside any cascade layer, which beats the value inside a "
-                        f"layer in {', '.join(rel[e[0]] for e in low if e[5][0] < top[0])} "
+                        f"layer in {', '.join(_at(e, rel) for e in low if e[5][0] < top[0])} "
                         "whatever the order")
         else:
-            why_rank = (f"it sets it on :root, which outranks html in "
-                        f"{', '.join(rel[e[0]] for e in low)} whatever the order")
+            sel = ranked[0][7]
+            why_rank = (f"it sets it on {sel}, which outranks "
+                        + ", ".join(f"{e[7]} in {_at(e, rel)}" for e in low)
+                        + " whatever the order")
     if len(ranked) == 1:
-        win = ranked[0][0]
+        win = ranked[0]
         why = why_rank or "it is the only stylesheet that sets it; the page shows its value"
     else:
         last = [e for e in ranked
                 if all(o[0] in order.after[e[0]] for o in ranked if o is not e)]
         if not last:
-            names = " and ".join(rel[e[0]] for e in ranked)
+            names = " and ".join(_at(e, rel) for e in ranked)
             lost = [(rel[e[0]], ref) for e in ranked for ref in order.unresolved.get(e[0], [])]
             if lost:
                 where, ref = lost[0]
@@ -722,27 +801,31 @@ def _winner(rows: List[Tuple[Path, str, str, str, str, Rank]], order: _Order,
             if away:
                 where, ref, target = away[0]
                 return None, (f"{names} set it with equal weight, and {where} imports {ref}, "
-                              f"which resolves to {target}, not to either of these files, so which one the page loads last is not "
-                              "known; keep one value, or import the file the system keeps")
+                              f"which resolves to {target}, not to either of these files, so "
+                              "which one the page loads last is not known; keep one value, or "
+                              "import the file the system keeps")
             return None, (f"{names} set it with equal weight and neither loads the other, so the "
                           "stylesheet the page loads last wins; keep one value, or import one "
                           "file from the other so the order is written down")
-        win = last[0][0]
-        undone = [rel[e[0]] for e in ranked if e[0] != win]
-        how = ("imports" if all(o[0] in order.imports[win] for o in ranked if o[0] != win)
+        win = last[0]
+        undone = [e for e in ranked if e[0] != win[0]]
+        at = ", ".join(_at(e, rel) for e in undone)
+        how = ("imports" if all(o[0] in order.imports[win[0]] for o in ranked if o[0] != win[0])
                else "loads after")
-        why = (f"it {how} {', '.join(undone)} and sets it again after, which silently undoes "
-               f"the value there; remove the second declaration, or change it in "
-               f"{', '.join(undone)}")
+        why = (f"it {how} {', '.join(rel[e[0]] for e in undone)} and sets it again after, which "
+               f"silently undoes the value at {at}; remove the second declaration at "
+               f"{_at(win, rel)}, or change it at {at}")
         if why_rank:
             why = f"{why}; {why_rank}"
     tail = ""
-    docs = [rel[e[0]] for e in others if e[4] == "md"]
-    tokens = [rel[e[0]] for e in others if e[4] == "tokens"]
+    # Only a file that says another value than the page shows is named.
+    differ = [e for e in others if e[3] != win[3]]
+    docs = [_at(e, rel) for e in differ if e[4] == "md"]
+    tokens = [_at(e, rel) for e in differ if e[4] == "tokens"]
     if tokens:
         tail += (f"; {', '.join(tokens)} holds another value, which reaches the page only "
                  "through a build that writes it into a stylesheet, so make them agree")
     if docs:
         tail += (f"; {', '.join(docs)} only describes the palette, so correct the document or "
                  "the token")
-    return win, f"{rel[win]} wins: {why}{tail}"
+    return win[0], f"{_at(win, rel)} wins: {why}{tail}"
