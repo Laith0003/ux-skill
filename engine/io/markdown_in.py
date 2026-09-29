@@ -1294,7 +1294,9 @@ def read_markdown(path: Any, label: str = "--from") -> Imported:
         except UnicodeDecodeError:
             raise InputError(f"{label} {f} is not UTF-8 text; save it as UTF-8 and pass it "
                              "again") from None
-        digest.update(f.name.encode("utf-8") + b"\0" + data)
+        # A folder's digest takes each file's name and bytes in name order;
+        # one file's, its bytes alone, as the intake step takes it again.
+        digest.update(f.name.encode("utf-8") + b"\0" + data if p.is_dir() else data)
         size += len(data)
         files.append((f.name, text))
     return import_markdown(files, Source(str(p), "markdown", digest.hexdigest(), size))

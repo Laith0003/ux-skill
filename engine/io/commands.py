@@ -45,7 +45,7 @@ CLI: Dict[str, str] = {
     "replace_client": "--replace-client-files", "mapping": "--mapping", "add": "--add",
     "add_role": "--add-role", "to": "--to", "brand": "--brand", "axes": "--axes",
     "brief": "--brief", "tokens": "--tokens", "latin_only": "--latin-only",
-    "scheme": "--scheme", "figma_mode": "--figma-mode"}
+    "scheme": "--scheme", "figma_mode": "--figma-mode", "import": "system import"}
 MAPPING = "mapping.json"
 
 
@@ -109,7 +109,7 @@ def _mapping(imported: Imported, mapping: Any, labels: Mapping[str, str],
         said = [f"Read through {used}, the {MAPPING} already there; its entries win over "
                 f"names. Pass {labels['mapping']} to read through another."]
     if not used:
-        return proposed, [], (f"{MAPPING} (run system import with {labels['out']} to write "
+        return proposed, [], (f"{MAPPING} (run {labels['import']} with {labels['out']} to write "
                               "one, and pass it as " + labels["mapping"] + ")"), ""
     name = str(used)
     label = labels["mapping"] if mapping else f"{labels['out']} {MAPPING}"
@@ -270,7 +270,19 @@ def run_extend(source: Any, *, out: Any, fmt: str = "auto", mapping: Any = None,
     done = extend(imported, maps, foundations=list(add), roles=roles,
                   contracts=list(contracts), axes=axis_values, axes_source=axes_source,
                   brand=brand_hex, arabic=arabic, audience=audience,
-                  unread=unread_lines(brief, labels["brief"]), mapping_name=name, words=words)
+                  unread=unread_lines(brief, labels["brief"]), mapping_name=name, words=words,
+                  add_label=labels["add"], role_label=labels["add_role"])
+    if add and not (done.added or done.problems or add_role or contracts):
+        # Asked again for what is already there: nothing new to write.
+        result = _read_result("unchanged", imported)
+        result.update({"added": 0, "problems": [], "unread": list(done.unread), "load": "",
+                       "mapping_file": used, "mapping_kept": False,
+                       "mapping_notes": list(notes), "report": done.files["extend-report.md"],
+                       "written": [], "unchanged": [], "conflicts": [],
+                       "message": (f"Nothing was written: {', '.join(add)} adds no token that "
+                                   f"{Path(imported.report.source.path).name}, with what "
+                                   "ux-skill added beside it, does not already hold.")})
+        return result
     kept = None
     if not done.problems and MAPPING in done.files:
         kept = _theirs(folder, done.mapping, done.files[MAPPING], force, labels)
@@ -359,7 +371,7 @@ def run_export(source: Any, *, to: str, fmt: str = "auto", out: Any = None,
     if n and to in ("figma", "dtcg"):
         result["note"] = (f"{n} {'entry' if n == 1 else 'entries'} of the source "
                           f"{'was' if n == 1 else 'were'} not read and {'is' if n == 1 else 'are'}"
-                          f" not in these files; run system import on it to see each with how "
+                          f" not in these files; run {labels['import']} on it to see each with how "
                           "to write it so it can be read.")
     if include_files:
         result["texts"] = dict(files)
@@ -390,7 +402,7 @@ def run_contracts_check(folder: Any, source: Any, *, fmt: str = "auto", mapping:
         mapping, name = propose(imported.tokens), MAPPING
         notes.append(f"No {labels['mapping']} was given and the system does not use the "
                      "engine's role names, so its roles were read through a mapping proposed "
-                     "from names; run system import with an out folder to write it as "
+                     f"from names; run {labels['import']} with an out folder to write it as "
                      f"{MAPPING}, confirm it, and pass it as {labels['mapping']}.")
     done = check_contracts(folder, imported, mapping, mapping_name=name)
     return {"status": "passed" if done.passed else "failed",

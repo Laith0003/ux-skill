@@ -1,13 +1,13 @@
 ---
 name: ux-mcp
-description: Run the ux-skill engine as a Model Context Protocol server over stdio. Exposes 18 tools (recommender, linter, MASTER.md persistence, and the 11 data manifests) so ANY MCP-capable client — Claude Desktop, Cursor, Windsurf, generic agents — can query the engine without installing the full plugin.
+description: Run the ux-skill engine as a Model Context Protocol server over stdio. Exposes 25 tools (recommender, linter, MASTER.md persistence, the 11 data manifests, the foundations engine, and the tools that read, measure, extend and export a design system a project already has) so any MCP-capable client (Claude Desktop, Cursor, Windsurf, generic agents) can query the engine without installing the full plugin.
 allowed-tools: Bash
 disable-model-invocation: false
 ---
 
 # /ux-mcp — the design intelligence MCP
 
-**One server. Fourteen tools. Every MCP-aware client gets the engine.**
+**One server. Twenty-five tools. Every MCP-aware client gets the engine.**
 
 This is the asymmetric move. None of the leading Claude UX skills (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) ship an MCP server. Doing so turns ux-skill into the canonical *design-intelligence MCP* — agents in any host can call into the same recommender, linter, and manifests that the plugin uses, without needing to install the plugin itself.
 
@@ -45,7 +45,7 @@ python3 -m engine.mcp.server # equivalent module form
 
 The server speaks stdio JSON-RPC. Logs go to **stderr only**; stdout is reserved for the protocol stream.
 
-## Exposed tools (14)
+## Exposed tools (25)
 
 | Tool | What it does |
 |---|---|
@@ -63,6 +63,17 @@ The server speaks stdio JSON-RPC. Logs go to **stderr only**; stdout is reserved
 | `ux_persist_save` | Persist a recommendation as `.ux/design-system/MASTER.md` in a given project root. Idempotent — same input writes byte-identical bytes. |
 | `ux_persist_load` | Load `.ux/design-system/MASTER.md` back into a structured dict. |
 | `ux_stats` | Return the engine version and per-manifest entry counts. Useful as a health probe. |
+| `ux_image_extract` | Read a design image (PNG, JPG, WebP) and return a brief plus hints: dominant colors, canvas polarity, matched palette and style. Optionally runs the recommender on it. |
+| `ux_synthesize` | Synthesize a design language from a brief: axes, palette, type pair, spacing, radius, motion. Offline and deterministic. |
+| `ux_decisions_query` | Filter the local decisions ledger by industry, ui_type, command, minimum score or accepted only. |
+| `ux_decisions_stats` | Aggregate stats over the local decisions ledger: totals, top brands, lint score median, acceptance rate. |
+| `ux_system_build` | Build a WCAG-gated design system from a brand color, with a brief or seven axes optional; with `out`, write tokens.json, tokens.css, the font files and the report. |
+| `ux_system_detect` | Find a design system a project already has and what it declares. Read it before any other tool; it is fixed input. |
+| `ux_system_import` | Read an existing system (DTCG, CSS custom properties, Tailwind, markdown, Figma variables, or several files as one) in its own names. Returns counts, a proposed mapping and the import report. |
+| `ux_system_enhance` | Measure an existing system and, with `scan`, the code that uses it. A report; nothing is rewritten. |
+| `ux_system_extend` | Add foundations, roles or contracts without changing a token the system has: an extension file beside a system ux-skill did not write. |
+| `ux_system_export` | Write a system as tokens.css, a Tailwind 4 theme, Figma variables or tokens.json, into `out` only. |
+| `ux_contracts_check` | Check a folder of component contracts against a system, through its mapping. Returns counts and the problems folded by what they say. |
 
 ## Client configuration
 
@@ -203,5 +214,5 @@ The competition is locked into Claude Code's plugin runtime. The MCP server make
 ## Errors
 
 - **`mcp package not installed`** → run `pip install 'uxskill[mcp]'` and try again.
-- **`Unknown tool: foo`** → the tool name in the JSON-RPC call doesn't match one of the 14 in `TOOLS`. Check the table above.
+- **`Unknown tool: foo`** → the tool name in the JSON-RPC call doesn't match one of the 25 in `TOOLS`. Check the table above.
 - **`engine.mcp.server` import error** → likely pydantic missing from your environment; `pip install 'uxskill'` reinstalls the base deps.

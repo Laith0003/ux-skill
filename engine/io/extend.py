@@ -689,14 +689,16 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
            brand: Optional[str] = None, arabic: bool = True,
            audience: Optional[Audience] = None, unread: Sequence[str] = (),
            mapping_name: str = "mapping.json",
-           words: Optional[Dict[str, int]] = None) -> Extended:
+           words: Optional[Dict[str, int]] = None, add_label: str = "--add",
+           role_label: str = "--add-role") -> Extended:
     """Extend an imported system (see the module docstring). `audience`
     holds the brief's structured fields and `unread` the brief's words the
     engine did not read (emit.brief_audience and emit.unread_lines);
     `mapping_name` is the mapping file the messages name; `words` the
     letters of the page's longest headline word per script
-    (emit.brief_words), so an added type foundation fits it. Raises
-    InputError for an addition that cannot be made as asked.
+    (emit.brief_words), so an added type foundation fits it; `add_label`
+    and `role_label` name the two inputs in messages. Raises InputError for
+    an addition that cannot be made as asked.
 
     Color is generated around the colors the system already plays
     (_owner_colors): its page, text and brand fill when the mapping sends
@@ -711,7 +713,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
     sheet = source.format in _STYLESHEETS
     for f in foundations:
         if f not in _NAMES:
-            raise InputError(f"--add names {f}, which is not a foundation; use "
+            raise InputError(f"{add_label} names {f}, which is not a foundation; use "
                              f"{', '.join(_NAMES[:-1])} or {_NAMES[-1]}")
 
     in_place = _in_place(imported)
@@ -746,7 +748,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
             problems.append(f"{prop} is declared in {name} as a value the import could not "
                             f"read ({why}), and in {earlier.name}, written by an earlier "
                             f"extension, which loads after {name} and replaces it; {fix}")
-    _check_roles(roles, mapping, base, mapping_name)
+    _check_roles(roles, mapping, base, mapping_name, role_label)
 
     held = _Held(sheet)
     for t in imported.tokens.tokens():
@@ -1070,7 +1072,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
             inherited.append(_theirs_fix(m, f.fg, str(checking.roles[f.fg].token),
                                          on_page[(f.fg, f.mode)]))
         else:
-            caused.append(_owner_fix(m, roles_added, mapping_name))
+            caused.append(_owner_fix(m, roles_added, mapping_name, role_label))
     problems += caused
     had = [m for m in after.findings if m in before.findings]
     existing = [m for m in had if not _in_new_mode(m, brought)]
@@ -1160,7 +1162,8 @@ def _in_new_mode(finding: str, brought: Sequence[str]) -> bool:
                for axis, value in (pair.split(":") for pair in key.split(",")))
 
 
-def _owner_fix(finding: str, roles: Dict[str, str], mapping_name: str) -> str:
+def _owner_fix(finding: str, roles: Dict[str, str], mapping_name: str,
+               role_label: str = "--add-role") -> str:
     """A finding on a role the extension adds, with a fix the owner can
     take: map the role to one of their tokens, which a foundation then
     uses instead of adding its own, or leave the foundation out; for a
@@ -1181,7 +1184,7 @@ def _owner_fix(finding: str, roles: Dict[str, str], mapping_name: str) -> str:
     head = head.rstrip(" .;")
     origin = roles[role]
     if origin == "role":
-        fix = f"Point --add-role {role} at another of your tokens, or leave it out"
+        fix = f"Point {role_label} {role} at another of your tokens, or leave it out"
     else:
         fix = (f"Map {role} in {mapping_name} to one of your tokens, which the {origin} "
                f"foundation then uses instead of adding its own, or leave {origin} out")
@@ -1222,25 +1225,25 @@ def _theirs_fix(finding: str, role: str, token: str, ratio: float) -> str:
 
 
 def _check_roles(roles: Dict[str, str], mapping: Mapping, base: TokenSet,
-                 mapping_name: str) -> None:
+                 mapping_name: str, label: str = "--add-role") -> None:
     """Raise InputError naming the flag and the fix for a role that cannot
     be added as asked."""
     for role, target in roles.items():
         if role not in ROLE_TYPES:
-            raise InputError(f"--add-role names {role}, which is not a role the engine checks; "
+            raise InputError(f"{label} names {role}, which is not a role the engine checks; "
                              "use one of its roles, for example color.text.default")
         if role in mapping.roles:
             if mapping.roles[role].token is None:
-                raise InputError(f"--add-role names {role}, which {mapping_name} keeps out of "
+                raise InputError(f"{label} names {role}, which {mapping_name} keeps out of "
                                  f"the check with {_NOT_MAPPED}; remove that entry from "
                                  f"{mapping_name} to add it")
-            raise InputError(f"--add-role names {role}, which the mapping already sends to "
+            raise InputError(f"{label} names {role}, which the mapping already sends to "
                              f"{mapping.roles[role].token}; edit {mapping_name} to repoint it")
         if not base.has(target):
-            raise InputError(f"--add-role points {role} at {target}, which the system does not "
+            raise InputError(f"{label} points {role} at {target}, which the system does not "
                              "have; name one of its tokens")
         if base.get(target).type != ROLE_TYPES[role]:
-            raise InputError(f"--add-role points {role} at {target}, a {base.get(target).type}, "
+            raise InputError(f"{label} points {role} at {target}, a {base.get(target).type}, "
                              f"but the role needs a {ROLE_TYPES[role]}; name a "
                              f"{ROLE_TYPES[role]} token")
 
@@ -1304,7 +1307,9 @@ def _sheet(imported: Imported, added: TokenSet, earlier: Optional[_Earlier]) -> 
     if earlier is None or not earlier.body.strip():
         return text
     head = "/*\n" + "".join(f" * {line}\n" for line in _head(imported)) + " */\n"
-    return stamp_digest(head + earlier.body.rstrip("\n") + "\n\n" + _body(text), css=True)
+    # Nothing new: the earlier extension as it is, with no empty rule block.
+    new = "\n\n" + _body(text) if added.tokens() else "\n"
+    return stamp_digest(head + earlier.body.rstrip("\n") + new, css=True)
 
 
 def _detached(ts: TokenSet, added: Sequence[Token]) -> List[Token]:

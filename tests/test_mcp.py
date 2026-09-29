@@ -165,3 +165,16 @@ def test_server_builds_with_the_installed_mcp():
         pytest.skip("mcp is not installed")
     from engine.mcp.server import _build_server
     assert _build_server() is not None
+
+
+def test_the_ux_mcp_doc_states_the_real_count_and_lists_every_tool():
+    import re
+    from engine.mcp import TOOLS
+    doc = (Path(__file__).resolve().parents[1] / "commands" / "ux-mcp.md").read_text(
+        encoding="utf-8")
+    n = len(TOOLS)
+    assert f"Exposes {n} tools" in doc and f"## Exposed tools ({n})" in doc
+    assert f"one of the {n} in `TOOLS`" in doc
+    assert not re.search(r"\b(14|18|Fourteen|Eighteen) tools\b", doc)
+    table = doc[doc.index("## Exposed tools"):doc.index("## Client configuration")]
+    assert set(re.findall(r"^\| `(ux_[a-z_]+)` \|", table, re.M)) == set(TOOLS)

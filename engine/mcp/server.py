@@ -370,12 +370,17 @@ _MCP_LABELS = {"from": "source", "format": "format", "out": "out", "force": "for
                "replace_client": "the command line's --replace-client-files",
                "mapping": "mapping", "add": "add", "add_role": "add_role", "to": "to",
                "brand": "brand", "axes": "axes", "brief": "brief", "tokens": "tokens",
-               "latin_only": "latin_only", "scheme": "scheme", "figma_mode": "figma_modes"}
+               "latin_only": "latin_only", "scheme": "scheme", "figma_mode": "figma_modes",
+               "import": "ux_system_import"}
+# The most folded problem lines a contract check returns over MCP.
+_PROBLEM_CAP = 40
 
 
-def _abs_path(value: Any, label: str, example: str, required: bool = False) -> Optional[str]:
-    """An absolute path as text, or None when optional and left out.
-    Raises InputError naming `label` and the fix."""
+def _abs_path(value: Any, label: str, example: str, required: bool = False,
+              kind: str = "") -> Optional[str]:
+    """An absolute path as text, or None when optional and left out; with
+    `kind` ("folder" or "file") it must exist as one. Raises InputError
+    naming `label` and the fix."""
     from engine.foundations.emit import InputError
     if value is None or (isinstance(value, str) and not value.strip()):
         if required:
@@ -390,16 +395,19 @@ def _abs_path(value: Any, label: str, example: str, required: bool = False) -> O
         raise InputError(f"{label} is {value!r}, a relative path; the MCP server runs in its own "
                          f"folder, so pass an absolute path, for example "
                          f"/Users/you/project/{example}")
+    if kind and not (p.is_dir() if kind == "folder" else p.is_file()):
+        raise InputError(f"{label} {p} is not a {kind} that exists; pass {_PATH} an existing "
+                         f"{kind}")
     return str(p)
 
 
-def _paths(value: Any, label: str, example: str) -> List[str]:
+def _paths(value: Any, label: str, example: str, kind: str = "") -> List[str]:
     from engine.foundations.emit import InputError
     items = [] if value is None else ([value] if isinstance(value, str) else value)
     if not isinstance(items, list):
         raise InputError(f"{label} is {value!r}; pass a list of absolute paths, for example "
                          f"[\"/Users/you/project/{example}\"]")
-    return [str(_abs_path(v, label, example, required=True)) for v in items]
+    return [str(_abs_path(v, label, example, required=True, kind=kind)) for v in items]
 
 
 def _words(value: Any, label: str) -> List[str]:
@@ -425,6 +433,44 @@ def _io_call(fn: Callable[[], Dict[str, Any]]) -> Dict[str, Any]:
         return {"status": "invalid", "error": str(exc)}
 
 
+def _format(value: Any) -> str:
+    from engine.foundations.emit import InputError
+    if value is None:
+        return "auto"
+    if not isinstance(value, str):
+        raise InputError(f"format is {value!r}; pass auto, dtcg, css, tailwind, tailwind-json, "
+                         "markdown or figma")
+    return value
+
+
+def _folded(result: Dict[str, Any]) -> Dict[str, Any]:
+    """A contract check small enough for one tool result: counts, problems
+    by rule, and the problems folded by what they say once the contract and
+    part are set aside, each with how many and which contracts, at most
+    _PROBLEM_CAP of them. `lines` repeats `problems` and is dropped."""
+    import re
+    problems = result.pop("problems")
+    result.pop("lines", None)
+    groups: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    by_rule: Dict[str, int] = {}
+    for p in problems:
+        said = re.sub(r"^[\w.-]+: [\w.-]+(?: \([^)]*\))? ", "", p["message"])
+        entry = groups.setdefault((p["rule"], said), {"rule": p["rule"], "message": said,
+                                                      "count": 0, "contracts": []})
+        entry["count"] += 1
+        if p["contract"] not in entry["contracts"]:
+            entry["contracts"].append(p["contract"])
+        by_rule[p["rule"]] = by_rule.get(p["rule"], 0) + 1
+    folded = sorted(groups.values(), key=lambda g: -g["count"])
+    result.update({"problems_total": len(problems), "by_rule": by_rule,
+                   "problems": folded[:_PROBLEM_CAP],
+                   "problems_omitted": sum(g["count"] for g in folded[_PROBLEM_CAP:])})
+    if result["problems_omitted"]:
+        result["notes"].append(f"{result['problems_omitted']} more problems are not shown; "
+                               "uxskill contracts check prints every one.")
+    return result
+
+
 def _common(payload: Any) -> Dict[str, Any]:
     """format, out, force and figma_modes, checked, as the command layer takes them."""
     from engine.foundations.emit import InputError, parse_switch
@@ -433,11 +479,7 @@ def _common(payload: Any) -> Dict[str, Any]:
             isinstance(k, str) and isinstance(v, str) for k, v in modes.items())):
         raise InputError(f"figma_modes is {modes!r}; pass an object such as "
                          "{\"Type\": \"SM\"}, collection to mode, or leave it out")
-    fmt = payload.format if payload.format is not None else "auto"
-    if not isinstance(fmt, str):
-        raise InputError(f"format is {fmt!r}; pass auto, dtcg, css, tailwind, tailwind-json, "
-                         "markdown or figma")
-    return {"fmt": fmt, "out": _abs_path(payload.out, "out", "design-system"),
+    return {"fmt": _format(payload.format), "out": _abs_path(payload.out, "out", "design-system"),
             "force": parse_switch(payload.force, "force", "replace files in out that differ",
                                   "write nothing when a file differs"),
             "second_modes": modes, "labels": _MCP_LABELS}
@@ -490,7 +532,7 @@ def handle_ux_system_extend(args: Dict[str, Any]) -> Dict[str, Any]:
         return run_extend(
             source, mapping=_abs_path(payload.mapping, "mapping", "mapping.json"),
             add=_words(payload.add, "add"), add_role=_words(payload.add_role, "add_role"),
-            contracts=_paths(payload.contracts, "contracts", "chip.yaml"),
+            contracts=_paths(payload.contracts, "contracts", "chip.yaml", "file"),
             brand=payload.brand, axes=payload.axes, brief=payload.brief,
             latin_only=parse_latin_only(payload.latin_only, "latin_only"), **common)
     return _io_call(run)
@@ -515,20 +557,16 @@ def handle_ux_system_export(args: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def handle_ux_contracts_check(args: Dict[str, Any]) -> Dict[str, Any]:
-    """Check a folder of component contracts against a system."""
-    from engine.foundations.emit import InputError
+    """Check a folder of component contracts against a system: counts, and
+    the problems folded and capped (_folded)."""
     from engine.io.commands import run_contracts_check
     payload = UxContractsCheckInput.model_validate(args or {})
 
     def run() -> Dict[str, Any]:
-        fmt = payload.format if payload.format is not None else "auto"
-        if not isinstance(fmt, str):
-            raise InputError(f"format is {fmt!r}; pass auto, dtcg, css, tailwind, "
-                             "tailwind-json, markdown or figma")
-        return run_contracts_check(
-            _abs_path(payload.folder, "folder", "contracts", required=True),
-            _source(payload.tokens, "tokens.json", "tokens"), fmt=fmt,
-            mapping=_abs_path(payload.mapping, "mapping", "mapping.json"), labels=_MCP_LABELS)
+        return _folded(run_contracts_check(
+            _abs_path(payload.folder, "folder", "contracts", required=True, kind="folder"),
+            _source(payload.tokens, "tokens.json", "tokens"), fmt=_format(payload.format),
+            mapping=_abs_path(payload.mapping, "mapping", "mapping.json"), labels=_MCP_LABELS))
     return _io_call(run)
 
 

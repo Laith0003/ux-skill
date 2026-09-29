@@ -5,6 +5,7 @@ its exit code, the font families it names are the ones the engine picks,
 and the existing-system modes say what works now, with no version label. The README and CHANGELOG
 beta sections tell a reader how to install the beta, and no doc promises a
 brief word the synthesizer does not read."""
+import json
 import re
 from pathlib import Path
 
@@ -194,8 +195,45 @@ def test_the_modes_say_what_works_now():
                  "rewritten in place", ".uxskill/files.json", ".uxskill/backup/",
                  "Tailwind 4", "Figma", "high-contrast", "several files",
                  '{"token": null, "by": "owner"}', '"fields"', "prefix",
-                 "Do not pass --force", "Decisions made without you", "one source"):
+                 "Do not pass --force", "Decisions made without you"):
         assert part in text, part
+
+
+EXT_SOURCES = {
+    "css": ("theme.css", ":root { --ink: #1b1d22; --paper: #fdfdfb; }\n"),
+    "tailwind": ("app.css", "@theme {\n  --color-ink: #1b1d22;\n  --color-paper: #fdfdfb;\n}\n"),
+    "dtcg": ("brand.json", '{"ink": {"$type": "color", "$value": "#1b1d22"}, '
+                           '"paper": {"$type": "color", "$value": "#fdfdfb"}}'),
+    "tailwind-json": ("tailwind-theme.json", '{"colors": {"ink": "#1b1d22", "paper": "#fdfdfb"}}'),
+    "markdown": ("DESIGN.md", "# Tokens\n\n| Token | Value |\n|---|---|\n| ink | #1b1d22 |\n"
+                              "| paper | #fdfdfb |\n"),
+    "figma": ("variables.json", json.dumps({"meta": {
+        "variableCollections": {"c:1": {"id": "c:1", "name": "Color", "defaultModeId": "m:1",
+                                        "modes": [{"modeId": "m:1", "name": "Light"}],
+                                        "variableIds": ["v:1"]}},
+        "variables": {"v:1": {"id": "v:1", "name": "ink", "variableCollectionId": "c:1",
+                              "resolvedType": "COLOR",
+                              "valuesByMode": {"m:1": {"r": 0.1, "g": 0.1, "b": 0.1, "a": 1}},
+                              "scopes": ["ALL_SCOPES"], "description": "",
+                              "hiddenFromPublishing": False, "remote": False}}}})),
+}
+
+
+def test_the_extension_file_the_doc_names_is_the_one_extend_writes(tmp_path):
+    from engine.io import FORMATS
+    from engine.io.commands import run_extend
+    rows = dict(re.findall(r"^  \| `([a-z-]+)` \| (.+?) \|$", EXTEND, re.M))
+    assert set(rows) == set(FORMATS) == set(EXT_SOURCES)
+    for fmt, (name, text) in EXT_SOURCES.items():
+        folder = tmp_path / fmt
+        folder.mkdir()
+        (folder / name).write_text(text, encoding="utf-8")
+        result = run_extend(str(folder / name), out=str(folder / "out"), add=["radius"])
+        assert result["status"] == "written" and result["format"] == fmt, (fmt, result)
+        named = {n.replace("<name>", Path(name).stem)
+                 for n in re.findall(r"`([^`]+-ext\.[a-z]+)`", rows[fmt])}
+        beside = {p.name for p in folder.iterdir()} - {name, "out", ".uxskill"}
+        assert named and beside == named, (fmt, beside, named)
 
 
 def test_the_modes_carry_no_version_label_and_no_measured_example():

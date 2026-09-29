@@ -245,10 +245,20 @@ Over MCP, call `ux_system_import` and `ux_system_enhance` with absolute paths: `
 
 Import and confirm the mapping first (enhance steps 1 to 3), and list the folders. Who owns the source decides where the additions go, and it is read from the ownership record, never from token names:
 
-- A system ux-skill did not write never rewrites: the additions go in an extension file beside it, in its own format and naming, holding only what was added. A stylesheet gets `theme-ext.css`, loaded after `theme.css`; a Tailwind 4 theme gets an extension stylesheet with an `@theme` block of its own; a tokens file gets `tokens-ext.json`, whose tokens alias the source's; a Figma export gets an extension file and the script that applies it. The result's `load` line says how to load it.
+- ux-skill never rewrites a system it did not write: the additions go in an extension file beside it, in the system's own naming, holding only what was added. The result's `load` line says how to load it. The file depends on what the system was read from (`<name>` is the source's file name without its extension, so `theme.css` gets `theme-ext.css`):
+
+  | source format | written beside the source |
+  |---|---|
+  | `css` | `<name>-ext.css`, loaded after the source |
+  | `tailwind` | `<name>-ext.css`, with an `@theme` block of its own |
+  | `dtcg` | `<name>-ext.json`, a tokens file read after the source |
+  | `tailwind-json` | `tokens-ext.json`, each token holding its own value |
+  | `markdown` | `tokens-ext.json`, each token holding its own value |
+  | `figma` | `<name>-ext.json` and `<name>-ext.js`, the script that adds the variables in the Figma file |
+
 - A system ux-skill wrote (its folder's `.uxskill/files.json` record lists the file at its digest, or the file carries the engine's digest stamp) is rewritten in place after a backup, and tokens.css and the font files beside it are rebuilt when they are the engine's and unchanged. system-report.md and art/ are not rebuilt; run create again for those.
 
-Before any write the command checks that every source is still the file that was imported, copies each one into `.uxskill/backup/` in the folder it writes, backs up every file it replaces by its content, and records what it wrote in `.uxskill/files.json`. It refuses to replace a file that differs. Do not pass --force until the user says to replace the named files; `--force` replaces only files ux-skill wrote, and `--replace-client-files` exists only for a user who asks to replace one of their own.
+Before any write the command checks that every source is still the file that was imported, copies each one into `.uxskill/backup/` in the folder it writes, backs up every file it replaces by its content, and records what it wrote in `.uxskill/files.json`. It refuses to replace a file that differs. Do not pass --force until the user says to replace the named files; `--force` replaces only files ux-skill wrote, and `--replace-client-files` exists only for a user who asks to replace one of their own, and only on the command line; MCP does not take it.
 
 ### 2. Run it
 
@@ -262,7 +272,7 @@ uxskill --no-pretty system extend --from design/theme.css --mapping design-syste
 - `--add-role color.focus.ring=brand-700` points one of the engine's roles at one of the system's own tokens.
 - `--contract chip.yaml` checks a contract through the mapping and copies it into `contracts/` in the out folder.
 
-The result keeps the source's format, so there is one source of truth, not two copies. A system read from markdown or a Tailwind 3 theme comes back as tokens.json, and the report says so under "Decisions made without you".
+The source itself stays as it is; the extension file holds only what was added, and the owner merges the two by hand when they want one file. A system read from markdown or a resolved Tailwind config gets a tokens file beside it, since neither format holds generated tokens, and the report says so under "Decisions made without you".
 
 ### 3. Read the result
 

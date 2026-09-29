@@ -187,3 +187,75 @@ def test_a_bad_format_is_named_by_its_mcp_field(tmp_path):
     assert wrong["error"] == ("format dtcg reads JSON and theme.css is a stylesheet; pass "
                               "format css or tailwind, or leave format out")
     assert "--" not in unknown["error"] + wrong["error"]
+
+
+def test_extend_names_add_and_add_role_by_their_fields(tmp_path):
+    source, out = _theme(tmp_path), str(tmp_path / "out")
+    cases = (({"add": ["shadow"]}, "add names shadow"),
+             ({"add_role": ["color.nope=ink"]}, "add_role names color.nope"),
+             ({"add_role": ["color.focus.ring=hb-nope"]},
+              "add_role points color.focus.ring at hb-nope"))
+    for extra, start in cases:
+        result = handle_ux_system_extend({"source": source, "out": out, **extra})
+        assert result["status"] == "invalid", result
+        assert result["error"].startswith(start), result["error"]
+        assert "--" not in result["error"], result["error"]
+
+
+def test_the_contract_check_result_stays_small_on_a_foreign_system(tmp_path):
+    import json
+    result = handle_ux_contracts_check({"folder": str(SEED_DIR), "tokens": _theme(tmp_path)})
+    assert result["status"] == "failed" and "lines" not in result
+    assert result["problems_total"] > 100
+    assert sum(result["by_rule"].values()) == result["problems_total"]
+    assert sum(p["count"] for p in result["problems"]) + result["problems_omitted"] \
+        == result["problems_total"]
+    assert len(result["problems"]) <= 40
+    assert len(json.dumps(result)) < 20000
+    assert all("--" not in n for n in result["notes"])
+    assert "ux_system_import" in " ".join(result["notes"])
+
+
+def test_missing_folders_and_contracts_are_invalid(tmp_path):
+    folder = handle_ux_contracts_check({"folder": str(tmp_path / "nope"),
+                                        "tokens": _tokens(tmp_path)})
+    assert folder["status"] == "invalid" and folder["error"].startswith("folder ")
+    contract = handle_ux_system_extend({"source": _theme(tmp_path), "out": str(tmp_path / "o"),
+                                        "contracts": [str(tmp_path / "chip.yaml")]})
+    assert contract["status"] == "invalid" and contract["error"].startswith("contracts ")
+
+
+def test_a_second_identical_extend_is_unchanged(tmp_path):
+    args = {"source": _theme(tmp_path), "add": ["radius"], "out": str(tmp_path / "out")}
+    assert handle_ux_system_extend(args)["status"] == "written"
+    ext = (tmp_path / "theme-ext.css").read_text(encoding="utf-8")
+    again = handle_ux_system_extend(args)
+    assert again["status"] == "unchanged", again.get("message")
+    assert (tmp_path / "theme-ext.css").read_text(encoding="utf-8") == ext
+    assert not re.search(r"\{\s*\}", ext)
+
+
+def test_a_single_markdown_file_can_be_written(tmp_path):
+    md = tmp_path / "DESIGN.md"
+    md.write_text("# Tokens\n\n| Token | Value |\n|---|---|\n| ink | #1b1d22 |\n"
+                  "| paper | #fdfdfb |\n", encoding="utf-8")
+    out = tmp_path / "intake"
+    result = handle_ux_system_import({"source": str(md), "out": str(out)})
+    assert result["status"] == "written", result.get("message")
+    extended = handle_ux_system_extend({"source": str(md), "add": ["radius"],
+                                        "out": str(out)})
+    assert extended["status"] == "written", extended.get("message")
+    assert (tmp_path / "tokens-ext.json").is_file()
+
+
+def test_a_second_identical_extend_is_unchanged_on_the_command_line(tmp_path):
+    import json
+    from click.testing import CliRunner
+    from engine.cli.main import cli
+    args = ["--no-pretty", "system", "extend", "--from", _theme(tmp_path), "--add", "radius",
+            "--out", str(tmp_path / "out")]
+    first = CliRunner().invoke(cli, args)
+    assert first.exit_code == 0 and json.loads(first.output)["status"] == "written"
+    again = CliRunner().invoke(cli, args)
+    assert again.exit_code == 0, again.output
+    assert json.loads(again.output)["status"] == "unchanged"
