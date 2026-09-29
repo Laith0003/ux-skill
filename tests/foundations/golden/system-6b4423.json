@@ -272,11 +272,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.952941,
-            0.917647,
-            0.886275
+            0.921569,
+            0.921569,
+            0.921569
           ],
-          "hex": "#F3EAE2"
+          "hex": "#EBEBEB"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -289,11 +289,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.133333,
-            0.090196,
-            0.05098
+            0.098039,
+            0.098039,
+            0.098039
           ],
-          "hex": "#22170D"
+          "hex": "#191919"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -306,11 +306,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.862745,
-            0.815686,
-            0.776471
+            0.823529,
+            0.823529,
+            0.823529
           ],
-          "hex": "#DCD0C6"
+          "hex": "#D2D2D2"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -323,11 +323,11 @@
         "$value": {
           "colorSpace": "srgb",
           "components": [
-            0.168627,
-            0.117647,
-            0.078431
+            0.129412,
+            0.129412,
+            0.129412
           ],
-          "hex": "#2B1E14"
+          "hex": "#212121"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -3113,6 +3113,134 @@
           }
         }
       }
+    },
+    "ink": {
+      "light": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.12549,
+            0.117647,
+            0.113725
+          ],
+          "alpha": 0.058824,
+          "hex": "#201E1D"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "light-high": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.054902,
+            0.05098,
+            0.047059
+          ],
+          "alpha": 0.086275,
+          "hex": "#0E0D0C"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "dark": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0.968627,
+            0.964706,
+            0.964706
+          ],
+          "alpha": 0.058824,
+          "hex": "#F7F6F6"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "dark-high": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "alpha": 0.086275,
+          "hex": "#FFFFFF"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "hairline": {
+      "$type": "color",
+      "$value": "{color.ink.light}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic",
+          "modes": {
+            "contrast:high": "{color.ink.light-high}",
+            "scheme:dark": "{color.ink.dark}",
+            "scheme:dark,contrast:high": "{color.ink.dark-high}"
+          }
+        }
+      }
+    },
+    "share": {
+      "chromatic": {
+        "$type": "number",
+        "$value": 0.04,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "bands": {
+        "$type": "number",
+        "$value": 0.0,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "budget": {
+      "chromatic": {
+        "$type": "number",
+        "$value": "{color.share.chromatic}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "bands": {
+        "$type": "number",
+        "$value": "{color.share.bands}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      }
     }
   },
   "space": {
@@ -3300,6 +3428,30 @@
       "$type": "dimension",
       "$value": {
         "value": 192,
+        "unit": "px"
+      },
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "primitive"
+        }
+      }
+    },
+    "56": {
+      "$type": "dimension",
+      "$value": {
+        "value": 224,
+        "unit": "px"
+      },
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "primitive"
+        }
+      }
+    },
+    "60": {
+      "$type": "dimension",
+      "$value": {
+        "value": 240,
         "unit": "px"
       },
       "$extensions": {
@@ -3905,6 +4057,34 @@
                 "value": 0,
                 "unit": "px"
               }
+            },
+            {
+              "color": {
+                "colorSpace": "srgb",
+                "components": [
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "alpha": 0.058824,
+                "hex": "#000000"
+              },
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
+                "unit": "px"
+              }
             }
           ],
           "$extensions": {
@@ -4208,6 +4388,34 @@
               },
               "spread": {
                 "value": 0,
+                "unit": "px"
+              }
+            },
+            {
+              "color": {
+                "colorSpace": "srgb",
+                "components": [
+                  1.0,
+                  1.0,
+                  1.0
+                ],
+                "alpha": 0.058824,
+                "hex": "#FFFFFF"
+              },
+              "offsetX": {
+                "value": 0,
+                "unit": "px"
+              },
+              "offsetY": {
+                "value": 0,
+                "unit": "px"
+              },
+              "blur": {
+                "value": 0,
+                "unit": "px"
+              },
+              "spread": {
+                "value": 1,
                 "unit": "px"
               }
             }
@@ -4716,6 +4924,18 @@
           }
         }
       },
+      "350": {
+        "$type": "duration",
+        "$value": {
+          "value": 350,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
       "400": {
         "$type": "duration",
         "$value": {
@@ -4728,10 +4948,46 @@
           }
         }
       },
+      "450": {
+        "$type": "duration",
+        "$value": {
+          "value": 450,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
       "500": {
         "$type": "duration",
         "$value": {
           "value": 500,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "600": {
+        "$type": "duration",
+        "$value": {
+          "value": 600,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "700": {
+        "$type": "duration",
+        "$value": {
+          "value": 700,
           "unit": "ms"
         },
         "$extensions": {
@@ -4783,9 +5039,9 @@
       "out": {
         "$type": "cubicBezier",
         "$value": [
-          0.254,
-          0.167,
-          0.268,
+          0.206,
+          0.835,
+          0.22,
           1.0
         ],
         "$extensions": {
@@ -4825,9 +5081,9 @@
       "expressive": {
         "$type": "cubicBezier",
         "$value": [
-          0.3,
-          0.751,
-          0.405,
+          0.166,
+          1.037,
+          0.309,
           1.0
         ],
         "$extensions": {
@@ -4921,13 +5177,85 @@
         }
       }
     },
+    "scale": {
+      "984": {
+        "$type": "number",
+        "$value": 0.984,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "1000": {
+        "$type": "number",
+        "$value": 1.0,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "glide": {
+      "0": {
+        "$type": "number",
+        "$value": 0.0,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
     "press": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.100}",
+        "$value": "{motion.duration.150}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic"
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.duration.100}"
+            }
+          }
+        }
+      },
+      "curve": {
+        "$type": "cubicBezier",
+        "$value": "{motion.curve.out}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.curve.gentle}"
+            }
+          }
+        }
+      },
+      "scale": {
+        "$type": "number",
+        "$value": "{motion.scale.984}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.scale.1000}"
+            }
+          }
+        }
+      }
+    },
+    "state": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{motion.duration.150}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.duration.100}"
+            }
           }
         }
       },
@@ -4947,7 +5275,7 @@
     "reveal": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.150}",
+        "$value": "{motion.duration.450}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -4985,10 +5313,13 @@
     "dismiss": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.100}",
+        "$value": "{motion.duration.350}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic"
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.duration.100}"
+            }
           }
         }
       },
@@ -5020,7 +5351,7 @@
     "swap": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.150}",
+        "$value": "{motion.duration.450}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5032,7 +5363,7 @@
       },
       "curve": {
         "$type": "cubicBezier",
-        "$value": "{motion.curve.in-out}",
+        "$value": "{motion.curve.out}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5046,7 +5377,7 @@
     "expand": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.200}",
+        "$value": "{motion.duration.500}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5058,7 +5389,7 @@
       },
       "curve": {
         "$type": "cubicBezier",
-        "$value": "{motion.curve.in-out}",
+        "$value": "{motion.curve.out}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5072,7 +5403,71 @@
     "page": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.300}",
+        "$value": "{motion.duration.600}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.duration.100}"
+            }
+          }
+        }
+      },
+      "curve": {
+        "$type": "cubicBezier",
+        "$value": "{motion.curve.out}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.curve.gentle}"
+            }
+          }
+        }
+      },
+      "distance": {
+        "$type": "dimension",
+        "$value": "{motion.distance.2}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.distance.0}"
+            }
+          }
+        }
+      }
+    },
+    "indicator": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{motion.duration.200}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.duration.0}"
+            }
+          }
+        }
+      },
+      "curve": {
+        "$type": "cubicBezier",
+        "$value": "{motion.curve.out}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "motion:reduced": "{motion.curve.gentle}"
+            }
+          }
+        }
+      }
+    },
+    "arrive": {
+      "duration": {
+        "$type": "duration",
+        "$value": "{motion.duration.500}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5130,7 +5525,7 @@
     "expressive": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.400}",
+        "$value": "{motion.duration.350}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5174,6 +5569,15 @@
           "modes": {
             "direction:rtl": "{motion.sign.backward}"
           }
+        }
+      }
+    },
+    "scroll": {
+      "$type": "number",
+      "$value": "{motion.glide.0}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic"
         }
       }
     }
@@ -5247,6 +5651,18 @@
       }
     },
     "width": {
+      "2": {
+        "$type": "dimension",
+        "$value": {
+          "value": 2,
+          "unit": "px"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
       "32": {
         "$type": "dimension",
         "$value": {
@@ -5318,9 +5734,33 @@
             "layer": "primitive"
           }
         }
+      },
+      "1920": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1920,
+          "unit": "px"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
       }
     },
     "rem": {
+      "25": {
+        "$type": "dimension",
+        "$value": {
+          "value": 25,
+          "unit": "rem"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
       "32": {
         "$type": "dimension",
         "$value": {
@@ -5332,17 +5772,14 @@
             "layer": "primitive"
           }
         }
-      },
-      "38": {
-        "$type": "dimension",
-        "$value": {
-          "value": 38,
-          "unit": "rem"
-        },
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
+      }
+    },
+    "ch-em": {
+      "$type": "number",
+      "$value": 0.4541,
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "primitive"
         }
       }
     },
@@ -5511,6 +5948,15 @@
             }
           }
         }
+      },
+      "full": {
+        "$type": "dimension",
+        "$value": "{space.12}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
       }
     },
     "region-gap": {
@@ -5566,48 +6012,48 @@
     "landing-gap": {
       "phone": {
         "$type": "dimension",
-        "$value": "{space.16}",
+        "$value": "{space.48}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "density:compact": "{space.12}"
+              "density:compact": "{space.40}"
             }
           }
         }
       },
       "tablet": {
         "$type": "dimension",
-        "$value": "{space.20}",
+        "$value": "{space.48}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "density:compact": "{space.16}"
+              "density:compact": "{space.40}"
             }
           }
         }
       },
       "laptop": {
         "$type": "dimension",
-        "$value": "{space.24}",
+        "$value": "{space.48}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "density:compact": "{space.20}"
+              "density:compact": "{space.40}"
             }
           }
         }
       },
       "desktop": {
         "$type": "dimension",
-        "$value": "{space.32}",
+        "$value": "{space.56}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "density:compact": "{space.24}"
+              "density:compact": "{space.48}"
             }
           }
         }
@@ -5665,6 +6111,67 @@
         }
       }
     },
+    "landing": {
+      "margin-inline": {
+        "phone": {
+          "$type": "dimension",
+          "$value": "{space.4}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "density:compact": "{space.3}"
+              }
+            }
+          }
+        },
+        "tablet": {
+          "$type": "dimension",
+          "$value": "{space.6}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "density:compact": "{space.5}"
+              }
+            }
+          }
+        },
+        "laptop": {
+          "$type": "dimension",
+          "$value": "{space.8}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "density:compact": "{space.6}"
+              }
+            }
+          }
+        },
+        "desktop": {
+          "$type": "dimension",
+          "$value": "{space.10}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "density:compact": "{space.8}"
+              }
+            }
+          }
+        }
+      },
+      "max-width": {
+        "$type": "dimension",
+        "$value": "{layout.width.1440}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      }
+    },
     "header": {
       "padding-block": {
         "$type": "dimension",
@@ -5702,12 +6209,59 @@
             "layer": "semantic"
           }
         }
+      },
+      "full": {
+        "$type": "dimension",
+        "$value": "{layout.width.1920}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      }
+    },
+    "seam": {
+      "overlap": {
+        "$type": "dimension",
+        "$value": "{space.0}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "fade": {
+        "$type": "dimension",
+        "$value": "{space.0}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "line": {
+        "$type": "dimension",
+        "$value": "{layout.width.2}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
       }
     },
     "measure": {
       "text": {
         "$type": "dimension",
-        "$value": "{layout.rem.38}",
+        "$value": "{layout.rem.32}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "landing": {
+        "$type": "dimension",
+        "$value": "{layout.rem.25}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic"
@@ -5822,9 +6376,81 @@
       }
     },
     "weight": {
+      "300": {
+        "$type": "fontWeight",
+        "$value": 300,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "360": {
+        "$type": "fontWeight",
+        "$value": 360,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "370": {
+        "$type": "fontWeight",
+        "$value": 370,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "380": {
+        "$type": "fontWeight",
+        "$value": 380,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "390": {
+        "$type": "fontWeight",
+        "$value": 390,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
       "400": {
         "$type": "fontWeight",
         "$value": 400,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "420": {
+        "$type": "fontWeight",
+        "$value": 420,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "450": {
+        "$type": "fontWeight",
+        "$value": 450,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "460": {
+        "$type": "fontWeight",
+        "$value": 460,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -5972,7 +6598,7 @@
         "10": {
           "$type": "dimension",
           "$value": {
-            "value": 3.8125,
+            "value": 4.3125,
             "unit": "rem"
           },
           "$extensions": {
@@ -6094,7 +6720,7 @@
         "10": {
           "$type": "dimension",
           "$value": {
-            "value": 4.3125,
+            "value": 4.875,
             "unit": "rem"
           },
           "$extensions": {
@@ -6107,9 +6733,27 @@
     },
     "leading": {
       "latin": {
-        "0": {
+        "step-10": {
           "$type": "number",
-          "$value": 1.14,
+          "$value": 1.07,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "step-9": {
+          "$type": "number",
+          "$value": 1.12,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "step-8": {
+          "$type": "number",
+          "$value": 1.12,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -6145,9 +6789,27 @@
         }
       },
       "arabic": {
-        "0": {
+        "step-10": {
           "$type": "number",
-          "$value": 1.34,
+          "$value": 1.27,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "step-9": {
+          "$type": "number",
+          "$value": 1.32,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "step-8": {
+          "$type": "number",
+          "$value": 1.32,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -6188,6 +6850,18 @@
         "$type": "dimension",
         "$value": {
           "value": 0,
+          "unit": "px"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "caps": {
+        "$type": "dimension",
+        "$value": {
+          "value": 1.59,
           "unit": "px"
         },
         "$extensions": {
@@ -6247,7 +6921,7 @@
       "step-10": {
         "$type": "dimension",
         "$value": {
-          "value": -0.34,
+          "value": -0.39,
           "unit": "px"
         },
         "$extensions": {
@@ -6277,7 +6951,7 @@
           "fontSize": "{type.size.latin.10}",
           "fontWeight": "{type.weight.400}",
           "letterSpacing": "{type.tracking.step-10}",
-          "lineHeight": "{type.leading.latin.0}"
+          "lineHeight": "{type.leading.latin.step-10}"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -6288,7 +6962,111 @@
                 "fontSize": "{type.size.arabic.10}",
                 "fontWeight": "{type.weight.400}",
                 "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.0}"
+                "lineHeight": "{type.leading.arabic.step-10}"
+              },
+              "scheme:dark": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.10}",
+                "fontWeight": "{type.weight.380}",
+                "letterSpacing": "{type.tracking.step-10}",
+                "lineHeight": "{type.leading.latin.step-10}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.10}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.step-10}",
+                "lineHeight": "{type.leading.latin.step-10}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.10}",
+                "fontWeight": "{type.weight.390}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-10}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.10}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-10}"
+              }
+            }
+          }
+        }
+      },
+      "display-caps": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.face.display}",
+          "fontSize": "{type.size.latin.10}",
+          "fontWeight": "{type.weight.400}",
+          "letterSpacing": "{type.tracking.caps}",
+          "lineHeight": "{type.leading.latin.step-10}"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.10}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-10}"
+              },
+              "scheme:dark": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.10}",
+                "fontWeight": "{type.weight.380}",
+                "letterSpacing": "{type.tracking.caps}",
+                "lineHeight": "{type.leading.latin.step-10}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.10}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.caps}",
+                "lineHeight": "{type.leading.latin.step-10}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.10}",
+                "fontWeight": "{type.weight.390}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-10}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.10}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-10}"
+              }
+            }
+          }
+        }
+      },
+      "display-emphasis": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{type.face.display}",
+          "fontSize": "{type.size.latin.10}",
+          "fontWeight": "{type.weight.300}",
+          "letterSpacing": "{type.tracking.step-10}",
+          "lineHeight": "{type.leading.latin.step-10}"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.10}",
+                "fontWeight": "{type.weight.300}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-10}"
               }
             }
           }
@@ -6301,7 +7079,7 @@
           "fontSize": "{type.size.latin.9}",
           "fontWeight": "{type.weight.400}",
           "letterSpacing": "{type.tracking.step-9}",
-          "lineHeight": "{type.leading.latin.0}"
+          "lineHeight": "{type.leading.latin.step-9}"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -6312,7 +7090,35 @@
                 "fontSize": "{type.size.arabic.9}",
                 "fontWeight": "{type.weight.400}",
                 "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.0}"
+                "lineHeight": "{type.leading.arabic.step-9}"
+              },
+              "scheme:dark": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.9}",
+                "fontWeight": "{type.weight.370}",
+                "letterSpacing": "{type.tracking.step-9}",
+                "lineHeight": "{type.leading.latin.step-9}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.9}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.step-9}",
+                "lineHeight": "{type.leading.latin.step-9}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.9}",
+                "fontWeight": "{type.weight.370}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-9}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.9}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-9}"
               }
             }
           }
@@ -6325,7 +7131,7 @@
           "fontSize": "{type.size.latin.8}",
           "fontWeight": "{type.weight.400}",
           "letterSpacing": "{type.tracking.step-8}",
-          "lineHeight": "{type.leading.latin.0}"
+          "lineHeight": "{type.leading.latin.step-8}"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -6336,7 +7142,35 @@
                 "fontSize": "{type.size.arabic.8}",
                 "fontWeight": "{type.weight.400}",
                 "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.0}"
+                "lineHeight": "{type.leading.arabic.step-8}"
+              },
+              "scheme:dark": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.8}",
+                "fontWeight": "{type.weight.370}",
+                "letterSpacing": "{type.tracking.step-8}",
+                "lineHeight": "{type.leading.latin.step-8}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.8}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.step-8}",
+                "lineHeight": "{type.leading.latin.step-8}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.8}",
+                "fontWeight": "{type.weight.370}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-8}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.8}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-8}"
               }
             }
           }
@@ -6347,7 +7181,7 @@
         "$value": {
           "fontFamily": "{type.face.display}",
           "fontSize": "{type.size.latin.7}",
-          "fontWeight": "{type.weight.400}",
+          "fontWeight": "{type.weight.450}",
           "letterSpacing": "{type.tracking.step-7}",
           "lineHeight": "{type.leading.latin.1}"
         },
@@ -6358,7 +7192,35 @@
               "direction:rtl": {
                 "fontFamily": "{type.face.arabic-display}",
                 "fontSize": "{type.size.arabic.7}",
-                "fontWeight": "{type.weight.400}",
+                "fontWeight": "{type.weight.450}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.1}"
+              },
+              "scheme:dark": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.7}",
+                "fontWeight": "{type.weight.420}",
+                "letterSpacing": "{type.tracking.step-7}",
+                "lineHeight": "{type.leading.latin.1}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.7}",
+                "fontWeight": "{type.weight.450}",
+                "letterSpacing": "{type.tracking.step-7}",
+                "lineHeight": "{type.leading.latin.1}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.7}",
+                "fontWeight": "{type.weight.420}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.1}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.7}",
+                "fontWeight": "{type.weight.450}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.1}"
               }
@@ -6373,7 +7235,7 @@
           "fontSize": "{type.size.latin.8}",
           "fontWeight": "{type.weight.400}",
           "letterSpacing": "{type.tracking.step-8}",
-          "lineHeight": "{type.leading.latin.0}"
+          "lineHeight": "{type.leading.latin.step-8}"
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
@@ -6384,7 +7246,35 @@
                 "fontSize": "{type.size.arabic.8}",
                 "fontWeight": "{type.weight.400}",
                 "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.0}"
+                "lineHeight": "{type.leading.arabic.step-8}"
+              },
+              "scheme:dark": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.8}",
+                "fontWeight": "{type.weight.370}",
+                "letterSpacing": "{type.tracking.step-8}",
+                "lineHeight": "{type.leading.latin.step-8}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.display}",
+                "fontSize": "{type.size.latin.8}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.step-8}",
+                "lineHeight": "{type.leading.latin.step-8}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.8}",
+                "fontWeight": "{type.weight.370}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-8}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic-display}",
+                "fontSize": "{type.size.arabic.8}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.step-8}"
               }
             }
           }
@@ -6417,7 +7307,35 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.1}"
               },
+              "scheme:dark": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.5}",
+                "fontWeight": "{type.weight.460}",
+                "letterSpacing": "{type.tracking.step-5}",
+                "lineHeight": "{type.leading.latin.1}"
+              },
               "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.5}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.1}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.5}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.step-5}",
+                "lineHeight": "{type.leading.latin.1}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.5}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.1}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.5}",
                 "fontWeight": "{type.weight.600}",
@@ -6455,7 +7373,35 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               },
+              "scheme:dark": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.4}",
+                "fontWeight": "{type.weight.460}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
               "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.4}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.4}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.4}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.4}",
                 "fontWeight": "{type.weight.600}",
@@ -6493,7 +7439,35 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.3}"
               },
+              "scheme:dark": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.3}",
+                "fontWeight": "{type.weight.360}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
               "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.3}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.3}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.3}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.3}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.3}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.3}",
                 "fontWeight": "{type.weight.500}",
@@ -6531,7 +7505,35 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.3}"
               },
+              "scheme:dark": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.360}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
               "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.3}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.3}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.2}",
                 "fontWeight": "{type.weight.500}",
@@ -6569,7 +7571,35 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               },
+              "scheme:dark": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.460}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
               "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.2}",
                 "fontWeight": "{type.weight.600}",
@@ -6607,7 +7637,35 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               },
+              "scheme:dark": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.3}",
+                "fontWeight": "{type.weight.460}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
               "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.3}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.3}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.3}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.3}",
                 "fontWeight": "{type.weight.600}",
@@ -6645,7 +7703,35 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               },
+              "scheme:dark": {
+                "fontFamily": "{type.face.mono}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.460}",
+                "letterSpacing": "{type.tracking.label}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
               "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.mono}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.600}",
+                "letterSpacing": "{type.tracking.label}",
+                "lineHeight": "{type.leading.latin.2}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.2}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.2}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.2}",
                 "fontWeight": "{type.weight.600}",
@@ -6683,7 +7769,35 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.3}"
               },
+              "scheme:dark": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.1}",
+                "fontWeight": "{type.weight.360}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
               "contrast:high,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.1}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.3}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.text}",
+                "fontSize": "{type.size.latin.1}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
+              "scheme:dark,direction:rtl": {
+                "fontFamily": "{type.face.arabic}",
+                "fontSize": "{type.size.arabic.1}",
+                "fontWeight": "{type.weight.400}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.arabic.3}"
+              },
+              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.1}",
                 "fontWeight": "{type.weight.500}",
@@ -6713,6 +7827,20 @@
                 "fontWeight": "{type.weight.500}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.latin.3}"
+              },
+              "scheme:dark": {
+                "fontFamily": "{type.face.mono}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.360}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
+              },
+              "scheme:dark,contrast:high": {
+                "fontFamily": "{type.face.mono}",
+                "fontSize": "{type.size.latin.2}",
+                "fontWeight": "{type.weight.500}",
+                "letterSpacing": "{type.tracking.0}",
+                "lineHeight": "{type.leading.latin.3}"
               }
             }
           }
@@ -6726,7 +7854,11 @@
         "io.github.laith0003.ux-skill": {
           "layer": "semantic",
           "modes": {
-            "contrast:high": "{type.weight.700}"
+            "scheme:dark": "{type.weight.460}",
+            "contrast:high": "{type.weight.700}",
+            "scheme:dark,contrast:high": "{type.weight.700}",
+            "scheme:dark,direction:rtl": "{type.weight.500}",
+            "scheme:dark,contrast:high,direction:rtl": "{type.weight.700}"
           }
         }
       }
@@ -6866,7 +7998,7 @@
       },
       "10": {
         "$type": "number",
-        "$value": 0.4262,
+        "$value": 0.7971,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -6914,6 +8046,24 @@
       "figure": {
         "$type": "number",
         "$value": "{type.phone-scale.8}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "display-caps": {
+        "$type": "number",
+        "$value": "{type.phone-scale.10}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "display-emphasis": {
+        "$type": "number",
+        "$value": "{type.phone-scale.10}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic"
@@ -7037,6 +8187,124 @@
             }
           }
         }
+      },
+      "arabic": {
+        "10": {
+          "tablet": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          },
+          "laptop": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          },
+          "desktop": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          }
+        },
+        "9": {
+          "tablet": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          },
+          "laptop": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          },
+          "desktop": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          }
+        },
+        "8": {
+          "tablet": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          },
+          "laptop": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          },
+          "desktop": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          }
+        },
+        "7": {
+          "tablet": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          },
+          "laptop": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          },
+          "desktop": {
+            "$type": "number",
+            "$value": 1.0,
+            "$extensions": {
+              "io.github.laith0003.ux-skill": {
+                "layer": "primitive"
+              }
+            }
+          }
+        }
       }
     },
     "fit": {
@@ -7153,6 +8421,214 @@
             "io.github.laith0003.ux-skill": {
               "layer": "semantic"
             }
+          }
+        }
+      }
+    },
+    "vw": {
+      "phone": {
+        "$type": "number",
+        "$value": 13.91,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "tablet": {
+        "$type": "number",
+        "$value": 14.29,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "laptop": {
+        "$type": "number",
+        "$value": 4.79,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "desktop": {
+        "$type": "number",
+        "$value": 4.79,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "arabic": {
+        "phone": {
+          "$type": "number",
+          "$value": 11.78,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "tablet": {
+          "$type": "number",
+          "$value": 12.1,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": 5.41,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": 5.41,
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "primitive"
+            }
+          }
+        }
+      }
+    },
+    "fluid": {
+      "display": {
+        "phone": {
+          "$type": "number",
+          "$value": "{type.vw.phone}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "direction:rtl": "{type.vw.arabic.phone}"
+              }
+            }
+          }
+        },
+        "tablet": {
+          "$type": "number",
+          "$value": "{type.vw.tablet}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "direction:rtl": "{type.vw.arabic.tablet}"
+              }
+            }
+          }
+        },
+        "laptop": {
+          "$type": "number",
+          "$value": "{type.vw.laptop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "direction:rtl": "{type.vw.arabic.laptop}"
+              }
+            }
+          }
+        },
+        "desktop": {
+          "$type": "number",
+          "$value": "{type.vw.desktop}",
+          "$extensions": {
+            "io.github.laith0003.ux-skill": {
+              "layer": "semantic",
+              "modes": {
+                "direction:rtl": "{type.vw.arabic.desktop}"
+              }
+            }
+          }
+        }
+      }
+    },
+    "fit-word": {
+      "latin": {
+        "$type": "number",
+        "$value": 13,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "arabic": {
+        "$type": "number",
+        "$value": 10,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "fit-columns": {
+      "$type": "number",
+      "$value": 7,
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "primitive"
+        }
+      }
+    },
+    "tone": {
+      "10": {
+        "$type": "number",
+        "$value": 0.1,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "switch": {
+      "off": {
+        "$type": "number",
+        "$value": 0,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "on": {
+        "$type": "number",
+        "$value": 1,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "emphasis": {
+      "tone": {
+        "$type": "number",
+        "$value": "{type.tone.10}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "italic": {
+        "$type": "number",
+        "$value": "{type.switch.off}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
           }
         }
       }
@@ -7370,6 +8846,228 @@
     "tint": {
       "$type": "color",
       "$value": "{imagery.wash}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic"
+        }
+      }
+    },
+    "grade": {
+      "lightness": {
+        "$type": "number",
+        "$value": 52.5,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "temperature": {
+        "$type": "number",
+        "$value": -0.8,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "chroma": {
+        "$type": "number",
+        "$value": 11.3,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "contrast": {
+        "$type": "number",
+        "$value": 13.4,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "black-point": {
+        "$type": "number",
+        "$value": 9.6,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "grain": {
+        "$type": "number",
+        "$value": 0.06,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "energy": {
+        "$type": "number",
+        "$value": 0.1,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "spread-lightness": {
+        "$type": "number",
+        "$value": 6.4,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "spread-temperature": {
+        "$type": "number",
+        "$value": 3.2,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "spread-chroma": {
+        "$type": "number",
+        "$value": 4.4,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "photo": {
+      "lightness": {
+        "$type": "number",
+        "$value": "{imagery.grade.lightness}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "temperature": {
+        "$type": "number",
+        "$value": "{imagery.grade.temperature}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "chroma": {
+        "$type": "number",
+        "$value": "{imagery.grade.chroma}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "contrast": {
+        "$type": "number",
+        "$value": "{imagery.grade.contrast}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "black-point": {
+        "$type": "number",
+        "$value": "{imagery.grade.black-point}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "grain": {
+        "$type": "number",
+        "$value": "{imagery.grade.grain}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "energy": {
+        "$type": "number",
+        "$value": "{imagery.grade.energy}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "spread-lightness": {
+        "$type": "number",
+        "$value": "{imagery.grade.spread-lightness}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "spread-temperature": {
+        "$type": "number",
+        "$value": "{imagery.grade.spread-temperature}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      },
+      "spread-chroma": {
+        "$type": "number",
+        "$value": "{imagery.grade.spread-chroma}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic"
+          }
+        }
+      }
+    },
+    "share": {
+      "reach": {
+        "$type": "number",
+        "$value": 0.48,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "fade": {
+        "$type": "number",
+        "$value": 0.15,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "scrim-reach": {
+      "$type": "number",
+      "$value": "{imagery.share.reach}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic"
+        }
+      }
+    },
+    "scrim-fade": {
+      "$type": "number",
+      "$value": "{imagery.share.fade}",
       "$extensions": {
         "io.github.laith0003.ux-skill": {
           "layer": "semantic"

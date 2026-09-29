@@ -12,6 +12,7 @@
   "--color-decorative-support: var(--color-support-600);",
   "--color-focus-ring-inverse: var(--color-brand-700);",
   "--color-focus-ring: var(--color-brand-200);",
+  "--color-hairline: var(--color-ink-dark);",
   "--color-illustration-line: var(--color-brand-400);",
   "--color-line-accent: var(--color-brand-300);",
   "--color-line-danger: var(--color-danger-400);",
@@ -73,6 +74,7 @@
    "--color-action-primary-edge: var(--color-brand-800);",
    "--color-focus-ring-inverse: var(--color-brand-200);",
    "--color-focus-ring: var(--color-brand-800);",
+   "--color-hairline: var(--color-ink-light-high);",
    "--color-illustration-line: var(--color-brand-800);",
    "--color-line-accent: var(--color-brand-800);",
    "--color-line-danger: var(--color-danger-700);",
@@ -120,6 +122,7 @@
    "--color-action-primary-edge: var(--color-brand-exact);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
+   "--color-hairline: var(--color-ink-dark-high);",
    "--color-illustration-line: var(--color-brand-200);",
    "--color-line-accent: var(--color-brand-200);",
    "--color-line-danger: var(--color-danger-300);",
@@ -168,6 +171,7 @@
    "--color-action-primary-edge: var(--color-brand-exact);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
+   "--color-hairline: var(--color-ink-dark-high);",
    "--color-illustration-line: var(--color-brand-200);",
    "--color-line-accent: var(--color-brand-200);",
    "--color-line-danger: var(--color-danger-300);",
@@ -216,6 +220,7 @@
    "--color-action-primary-edge: var(--color-brand-exact);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
+   "--color-hairline: var(--color-ink-dark-high);",
    "--color-illustration-line: var(--color-brand-200);",
    "--color-line-accent: var(--color-brand-200);",
    "--color-line-danger: var(--color-danger-300);",
@@ -264,6 +269,7 @@
    "--color-action-primary-edge: var(--color-brand-800);",
    "--color-focus-ring-inverse: var(--color-brand-200);",
    "--color-focus-ring: var(--color-brand-800);",
+   "--color-hairline: var(--color-ink-light-high);",
    "--color-illustration-line: var(--color-brand-800);",
    "--color-line-accent: var(--color-brand-800);",
    "--color-line-danger: var(--color-danger-700);",
@@ -311,6 +317,7 @@
    "--color-action-primary-edge: var(--color-brand-exact);",
    "--color-focus-ring-inverse: var(--color-brand-800);",
    "--color-focus-ring: var(--color-brand-100);",
+   "--color-hairline: var(--color-ink-dark-high);",
    "--color-illustration-line: var(--color-brand-200);",
    "--color-line-accent: var(--color-brand-200);",
    "--color-line-danger: var(--color-danger-300);",
@@ -371,8 +378,8 @@
   "--color-brand-exact: #FFD400;",
   "--color-brand-tint-light: #F4ECD1;",
   "--color-brand-tint-dark: #1E1906;",
-  "--color-brand-band-light: #EAE3C7;",
-  "--color-brand-band-dark: #332A09;",
+  "--color-brand-band-light: #ECE2C2;",
+  "--color-brand-band-dark: #312B14;",
   "--color-brand-fill: #8D7400;",
   "--color-brand-fill-hover: #7C6600;",
   "--color-brand-fill-pressed: #6C5800;",
@@ -548,7 +555,16 @@
   "--color-status-info-text: var(--color-info-700);",
   "--color-status-info-soft: var(--color-info-soft-100);",
   "--color-status-info-strong: var(--color-info-600);",
-  "--color-status-info-on-strong: var(--color-base-white);"
+  "--color-status-info-on-strong: var(--color-base-white);",
+  "--color-ink-light: #201F1C16;",
+  "--color-ink-light-high: #0E0D0B21;",
+  "--color-ink-dark: #F7F7F516;",
+  "--color-ink-dark-high: #FFFFFF21;",
+  "--color-hairline: var(--color-ink-light);",
+  "--color-share-chromatic: 0.11;",
+  "--color-share-bands: 0.19;",
+  "--color-budget-chromatic: var(--color-share-chromatic);",
+  "--color-budget-bands: var(--color-share-bands);"
  ],
  "dtcg": {
   "color.action.danger": "{color.danger.600}",
@@ -682,20 +698,20 @@
   "color.brand.band-dark": {
    "colorSpace": "srgb",
    "components": [
-    0.2,
-    0.164706,
-    0.035294
+    0.192157,
+    0.168627,
+    0.078431
    ],
-   "hex": "#332A09"
+   "hex": "#312B14"
   },
   "color.brand.band-light": {
    "colorSpace": "srgb",
    "components": [
-    0.917647,
-    0.890196,
-    0.780392
+    0.92549,
+    0.886275,
+    0.760784
    ],
-   "hex": "#EAE3C7"
+   "hex": "#ECE2C2"
   },
   "color.brand.exact": {
    "colorSpace": "srgb",
@@ -778,6 +794,8 @@
    ],
    "hex": "#F4ECD1"
   },
+  "color.budget.bands": "{color.share.bands}",
+  "color.budget.chromatic": "{color.share.chromatic}",
   "color.danger.100": {
    "colorSpace": "srgb",
    "components": [
@@ -918,6 +936,7 @@
   "color.decorative.support": "{color.support.300}",
   "color.focus.ring": "{color.brand.700}",
   "color.focus.ring-inverse": "{color.brand.300}",
+  "color.hairline": "{color.ink.light}",
   "color.illustration.line": "{color.brand.700}",
   "color.info.100": {
    "colorSpace": "srgb",
@@ -1053,6 +1072,46 @@
     0.082353
    ],
    "hex": "#040F15"
+  },
+  "color.ink.dark": {
+   "alpha": 0.086275,
+   "colorSpace": "srgb",
+   "components": [
+    0.968627,
+    0.968627,
+    0.960784
+   ],
+   "hex": "#F7F7F5"
+  },
+  "color.ink.dark-high": {
+   "alpha": 0.129412,
+   "colorSpace": "srgb",
+   "components": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "hex": "#FFFFFF"
+  },
+  "color.ink.light": {
+   "alpha": 0.086275,
+   "colorSpace": "srgb",
+   "components": [
+    0.12549,
+    0.121569,
+    0.109804
+   ],
+   "hex": "#201F1C"
+  },
+  "color.ink.light-high": {
+   "alpha": 0.129412,
+   "colorSpace": "srgb",
+   "components": [
+    0.054902,
+    0.05098,
+    0.043137
+   ],
+   "hex": "#0E0D0B"
   },
   "color.line.accent": "{color.brand.700}",
   "color.line.danger": "{color.danger.600}",
@@ -1238,6 +1297,8 @@
    ],
    "hex": "#000000"
   },
+  "color.share.bands": 0.19,
+  "color.share.chromatic": 0.11,
   "color.status.danger.on-strong": "{color.base.white}",
   "color.status.danger.soft": "{color.danger.soft-100}",
   "color.status.danger.strong": "{color.danger.600}",
@@ -1890,16 +1951,16 @@
    "light-high": "#120D00"
   },
   "color.brand.band-dark": {
-   "dark": "#332A09",
-   "dark-high": "#332A09",
-   "light": "#332A09",
-   "light-high": "#332A09"
+   "dark": "#312B14",
+   "dark-high": "#312B14",
+   "light": "#312B14",
+   "light-high": "#312B14"
   },
   "color.brand.band-light": {
-   "dark": "#EAE3C7",
-   "dark-high": "#EAE3C7",
-   "light": "#EAE3C7",
-   "light-high": "#EAE3C7"
+   "dark": "#ECE2C2",
+   "dark-high": "#ECE2C2",
+   "light": "#ECE2C2",
+   "light-high": "#ECE2C2"
   },
   "color.brand.exact": {
    "dark": "#FFD400",
@@ -1954,6 +2015,18 @@
    "dark-high": "#F4ECD1",
    "light": "#F4ECD1",
    "light-high": "#F4ECD1"
+  },
+  "color.budget.bands": {
+   "dark": 0.19,
+   "dark-high": 0.19,
+   "light": 0.19,
+   "light-high": 0.19
+  },
+  "color.budget.chromatic": {
+   "dark": 0.11,
+   "dark-high": 0.11,
+   "light": 0.11,
+   "light-high": 0.11
   },
   "color.danger.100": {
    "dark": "#FCD2C6",
@@ -2075,6 +2148,12 @@
    "light": "#EFD36C",
    "light-high": "#F5DF92"
   },
+  "color.hairline": {
+   "dark": "#F7F7F516",
+   "dark-high": "#FFFFFF21",
+   "light": "#201F1C16",
+   "light-high": "#0E0D0B21"
+  },
   "color.illustration.line": {
    "dark": "#EAC63B",
    "dark-high": "#F5DF92",
@@ -2170,6 +2249,30 @@
    "dark-high": "#040F15",
    "light": "#040F15",
    "light-high": "#040F15"
+  },
+  "color.ink.dark": {
+   "dark": "#F7F7F516",
+   "dark-high": "#F7F7F516",
+   "light": "#F7F7F516",
+   "light-high": "#F7F7F516"
+  },
+  "color.ink.dark-high": {
+   "dark": "#FFFFFF21",
+   "dark-high": "#FFFFFF21",
+   "light": "#FFFFFF21",
+   "light-high": "#FFFFFF21"
+  },
+  "color.ink.light": {
+   "dark": "#201F1C16",
+   "dark-high": "#201F1C16",
+   "light": "#201F1C16",
+   "light-high": "#201F1C16"
+  },
+  "color.ink.light-high": {
+   "dark": "#0E0D0B21",
+   "dark-high": "#0E0D0B21",
+   "light": "#0E0D0B21",
+   "light-high": "#0E0D0B21"
   },
   "color.line.accent": {
    "dark": "#EFD36C",
@@ -2332,6 +2435,18 @@
    "dark-high": "#000000CC",
    "light": "#000000CC",
    "light-high": "#000000CC"
+  },
+  "color.share.bands": {
+   "dark": 0.19,
+   "dark-high": 0.19,
+   "light": 0.19,
+   "light-high": 0.19
+  },
+  "color.share.chromatic": {
+   "dark": 0.11,
+   "dark-high": 0.11,
+   "light": 0.11,
+   "light-high": 0.11
   },
   "color.status.danger.on-strong": {
    "dark": "#000000",
@@ -2586,10 +2701,10 @@
    "light-high": "#001112"
   },
   "color.surface.band": {
-   "dark": "#332A09",
-   "dark-high": "#332A09",
-   "light": "#EAE3C7",
-   "light-high": "#EAE3C7"
+   "dark": "#312B14",
+   "dark-high": "#312B14",
+   "light": "#ECE2C2",
+   "light-high": "#ECE2C2"
   },
   "color.surface.brand": {
    "dark": "#FFD400",
