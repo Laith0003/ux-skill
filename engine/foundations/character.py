@@ -224,19 +224,52 @@ def status_soft(axes: AxisValues) -> float:
     return round(0.3 + 0.7 * energy(axes), 4)
 
 
+# The energy up to which a page changes no color from section to section,
+# and the most chroma a section band reaches at energy 1 in light and dark.
+BAND_FROM = 0.2
+BAND_CHROMA = (0.12, 0.1)
+
+
+def band_level(axes: AxisValues) -> float:
+    """How far section bands carry color, 0 to 1: nothing up to an energy
+    of BAND_FROM, rising to 1 at energy 1. Measured award pages change
+    their background about every second screen, more and harder the
+    louder they are; a calm page separates its sections by space alone."""
+    return clamp((energy(axes) - BAND_FROM) / (1.0 - BAND_FROM))
+
+
 def dark_band_chroma(axes: AxisValues) -> float:
-    """The most chroma a section band takes in dark mode, 0.02 for a muted
-    system to 0.08 for a bold one: a dark band is a quiet tint of the
-    brand, never a saturated slab."""
-    return round(0.02 + 0.06 * axes.contrast, 4)
+    """The most chroma a section band takes in dark mode, 0 for a calm
+    system to 0.1 for a loud one (band_level): a dark band stays quieter
+    than a light one. The tints share this cap."""
+    return round(BAND_CHROMA[1] * band_level(axes), 4)
 
 
 def light_band_chroma(axes: AxisValues) -> float:
-    """The most chroma a section band takes in light mode, 0.015 for a
-    muted system to 0.06 for a bold one: a light band spans a whole
-    section, so a muted system gets a pale tint of the brand, never a loud
-    slab of it."""
-    return round(0.015 + 0.045 * axes.contrast, 4)
+    """The most chroma a section band takes in light mode, 0 for a calm
+    system to 0.12 for a loud one (band_level), so a loud page can carry
+    its section rhythm in color. The tints share this cap."""
+    return round(BAND_CHROMA[0] * band_level(axes), 4)
+
+
+def band_share(axes: AxisValues) -> float:
+    """The share of a landing page's sections set on a band of color, 0 for
+    a calm system to 0.5 for a loud one (band_level)."""
+    return round(0.5 * band_level(axes), 2)
+
+
+def chromatic_budget(axes: AxisValues) -> float:
+    """The share of the interface (the page less its images) set in a
+    chromatic color, from 0.02 for a calm system to 0.2 for a loud one, by
+    energy. Measured award pages keep saturated color near 0 when calm and
+    about a fifth of the page when loud."""
+    return round(0.02 + 0.18 * energy(axes), 2)
+
+
+def ink_alpha(axes: AxisValues) -> float:
+    """The alpha of the ink a decorative line or a card's ring is drawn in,
+    0.05 for a muted system to 0.12 for a bold one, by contrast."""
+    return round(0.05 + 0.07 * axes.contrast, 3)
 
 
 def expressiveness(axes: AxisValues) -> float:

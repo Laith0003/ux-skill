@@ -24,6 +24,8 @@ Imagery sets how photos and illustrations sit in the system: the aspect ratios m
 - `imagery.duotone.shadow`: the dark end of a duotone treatment, deep in the brand's hue.
 - `imagery.duotone.highlight`: the light end of a duotone treatment, pulled warm or cool with the warmth axis.
 - `imagery.tint`: a translucent brand wash laid over a photo, stronger in a warm system.
+- `imagery.scrim-reach`: how far up from the bottom edge a full-bleed hero's scrim holds its full strength, as a share of the hero's height: at least the region a two-line landing headline and what sits under it fill (decisions/bottom-anchored-hero.md).
+- `imagery.scrim-fade`: the share of the hero's height above that over which the scrim fades to clear.
 
 ## Choosing
 
@@ -61,6 +63,7 @@ Audits how media is cropped, treated and captioned: ratios, the scrim under any 
 - `scrim-text`: the text on the scrim reaches 4.5:1 over both a white and a black image, 7:1 under high contrast (WCAG 1.4.3 and 1.4.6); a white image is the worst under light text and a black one under dark text, and the finding names the image that failed.
 - `media-ratios`: every ratio lies between 1:5 and 5:1.
 - `duotone-range`: the duotone shadow and highlight are at least 7:1 apart, our floor, so a treated photo keeps its detail.
+- `scrim-covers-text`: the scrim's reach covers a two-line landing headline and what sits under it on a 1440 by 900 and a 390 by 844 hero.
 
 ## Beyond the gate
 

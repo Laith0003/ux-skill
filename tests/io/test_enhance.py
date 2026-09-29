@@ -425,7 +425,7 @@ def test_the_not_mapped_list_is_folded_and_complete_in_the_json():
     text = report.markdown()
     how = text.split("## How it was checked")[1].split("## Structure")[0]
     assert max(len(line) for line in how.splitlines()) <= 160
-    assert "  - color: 68 of 71, such as color.surface.card, color.surface.sunken and 66 more" \
+    assert "  - color: 71 of 74, such as color.surface.card, color.surface.sunken and 69 more" \
         in how
     assert len(report.to_dict()["mapping"]["not_mapped"]) == len(ROLE_TYPES) - 3
 
@@ -593,8 +593,8 @@ def test_a_big_repo_keeps_the_report_small_and_the_json_complete(tmp_path):
     assert "- The code references 300 names the system does not have, 3000 times:" in text
     assert " roles are mapped by name only" in text
     decisions = text.split("## Decisions made without you")[1]
-    assert ("- 71 color roles are mapped by name only, each to the token of the same name: "
-            "color.surface.page, color.surface.card, color.surface.sunken and 68 more; confirm "
+    assert ("- 74 color roles are mapped by name only, each to the token of the same name: "
+            "color.surface.page, color.surface.card, color.surface.sunken and 71 more; confirm "
             "them in mapping.json.") in decisions
     assert decisions.count(" by name only") < 20
 

@@ -104,7 +104,9 @@ def test_only_contrast_and_formality_move_elevation():
 
 def test_build_system_prints_shadows_and_their_dark_switch():
     css = to_css(build_system(axes(), "#3366FF").tokens)
-    assert "  --elevation-shadow-light-1: 0px 1px 3px 0px #0000001A, 0px 0px 1px 0px #0000000D;" in css
+    # level 1 carries the 1px ink ring after its key and ambient layers
+    assert ("  --elevation-shadow-light-1: 0px 1px 3px 0px #0000001A, 0px 0px 1px 0px #0000000D, "
+            "0px 0px 0px 1px #00000016;") in css
     dark = css.split(':root[data-theme="dark"] {')[1].split("}")[0]
     assert "  --elevation-dialog: var(--elevation-shadow-dark-4);" in dark
 

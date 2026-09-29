@@ -17,7 +17,7 @@ Elevation sets how far things float: four shadow levels, each stronger in dark, 
 
 ## Roles
 
-- `elevation.card`: the resting shadow of a card or panel on the page.
+- `elevation.card`: the resting shadow of a card or panel on the page, with a 1px ring in the ink at the alpha of color.hairline, black in light and white in dark, so the card's edge reads without an opaque border (decisions/lines-in-ink.md).
 - `elevation.lifted`: a card that stands above its siblings, or an element held during a drag.
 - `elevation.popover`: menus, dropdowns, popovers and tooltips anchored to a control.
 - `elevation.dialog`: dialogs and other layers that block the page.

@@ -119,7 +119,38 @@ def tint_alpha(axes: AxisValues) -> int:
     return int((0.10 + 0.20 * axes.warmth) * 255 + 0.5)
 
 
-def generate_imagery(axes: AxisValues, brand_hex: str) -> Generated:
+# The first screen a hero fills, desktop and phone, and what sits under
+# the two-line headline in the scrim's region: a lede, the action, the gaps
+# between them and the hero's bottom padding, in px.
+HERO_VIEWS = ((1440, 900), (390, 844))
+TEXT_ALLOWANCE_PX = 250
+# The scrim reaches at least this share of the hero from its bottom edge,
+# and fades to clear over SCRIM_FADE of the height above that.
+SCRIM_REACH_MIN, SCRIM_FADE = 0.4, 0.15
+
+
+def text_region(display_px: float, leading: float, view_height: float) -> float:
+    """The share of a hero's height, from its bottom edge, that a two-line
+    headline at `display_px` and `leading` fills with what sits under it."""
+    return (2 * display_px * leading + TEXT_ALLOWANCE_PX) / view_height
+
+
+def scrim_reach(axes: AxisValues, body_px: int = 16) -> float:
+    """How far up from the bottom edge a full-bleed hero's scrim holds its
+    full strength, as a share of the hero's height: the region the
+    headline sits in on the desktop and the phone view (the landing
+    display at the tallest display leading, typography.DISPLAY_LEAD[0]),
+    at least SCRIM_REACH_MIN, rounded up to hundredths."""
+    import math
+    from engine.foundations import typography
+    px = typography.latin_px(axes, body_px)[typography.DISPLAY_STEP - 1]
+    lh = typography.DISPLAY_LEAD[0]
+    need = max(text_region(px, lh, HERO_VIEWS[0][1]),
+               text_region(min(px, character.PHONE_DISPLAY_PX[1]), lh, HERO_VIEWS[1][1]))
+    return min(1.0, max(SCRIM_REACH_MIN, math.ceil(need * 100) / 100))
+
+
+def generate_imagery(axes: AxisValues, brand_hex: str, body_px: int = 16) -> Generated:
     ts = TokenSet()
     ratios = sorted({hero_ratio(axes), card_ratio(axes), PORTRAIT},
                     key=lambda r: r[0] / r[1])
@@ -147,6 +178,12 @@ def generate_imagery(axes: AxisValues, brand_hex: str) -> Generated:
     ts.add(Token("imagery.duotone.highlight", "color", "{imagery.duo.highlight}",
                  layer="semantic"))
     ts.add(Token("imagery.tint", "color", "{imagery.wash}", layer="semantic"))
+    shares = (("reach", scrim_reach(axes, body_px)), ("fade", SCRIM_FADE))
+    for name, v in shares:
+        ts.add(Token(f"imagery.share.{name}", "number", v))
+    for name, _ in shares:
+        ts.add(Token(f"imagery.scrim-{name}", "number", "{imagery.share.%s}" % name,
+                     layer="semantic"))
     hw, hh = hero_ratio(axes)
     cw, ch = card_ratio(axes)
     return Generated(tokens=ts, notes=[
@@ -155,6 +192,7 @@ def generate_imagery(axes: AxisValues, brand_hex: str) -> Generated:
 
 
 ROLE_TYPES: Dict[str, str] = {
+    "imagery.scrim-reach": "number", "imagery.scrim-fade": "number",
     "imagery.ratio.hero": "number", "imagery.ratio.card": "number",
     "imagery.ratio.portrait": "number", "imagery.scrim": "color", "imagery.on-scrim": "color",
     "imagery.duotone.shadow": "color", "imagery.duotone.highlight": "color",
@@ -210,17 +248,42 @@ def _duotone(ts: TokenSet, mode: str) -> List[str]:
             f"{DUOTONE_FLOOR:g}:1 so a duotone photo keeps its detail, so move them apart"]
 
 
+def _scrim_covers(ts: TokenSet, mode: str) -> List[str]:
+    """A full-bleed hero's scrim holds its full strength over the region a
+    two-line landing headline and what sits under it fill, on the desktop
+    and the phone view."""
+    from engine.foundations.values import dimension_px
+    if not (_typed(ts, "imagery.scrim-reach") and ts.has("type.text.display")
+            and ts.get("type.text.display").type == "typography"):
+        return []
+    reach = float(ts.resolve("imagery.scrim-reach"))
+    display = ts.resolve("type.text.display")
+    px, lh = dimension_px(display["fontSize"]), float(display["lineHeight"])
+    phone = float(ts.resolve("type.phone.display")) if ts.has("type.phone.display") else 1.0
+    out = []
+    for (w, h), size in zip(HERO_VIEWS, (px, px * phone)):
+        need = text_region(size, lh, h)
+        if need > reach + 0.005:
+            out.append(f"imagery.scrim-reach is {reach:g}, but a two-line headline at "
+                       f"{size:.0f}px with what sits under it fills {need:.2f} of a {w} by {h} "
+                       "hero from its bottom edge; point imagery.scrim-reach at a share of "
+                       f"{need:.2f} or more")
+    return out
+
+
 CHECKS: Tuple[Check, ...] = (
     Check("scrim-text", "1.4.3", _scrim_text, axes=("contrast",)),
     Check("media-ratios", "system", _ratios,
           exempt_axes=(("contrast", "ratios never carry modes"),)),
     Check("duotone-range", "system", _duotone,
           exempt_axes=(("contrast", "the duotone pair never carries modes"),)),
+    Check("scrim-covers-text", "system", _scrim_covers,
+          exempt_axes=(("contrast", "the scrim's reach never carries modes"),)),
 )
 
 
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
-    return generate_imagery(axes, inputs.brand_hex)
+    return generate_imagery(axes, inputs.brand_hex, inputs.audience.body_px)
 
 
 FOUNDATION = Foundation(name="imagery", generate=_generate, checks=CHECKS,

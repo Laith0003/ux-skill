@@ -7,7 +7,9 @@ linear score over the axes plus the fields that bear on it (an older
 audience favors stacked, long reading favors the editorial column,
 glancing favors bento). The highest score wins, ties broken by name, and
 the report says why: the winner, the runner-up and the terms that decided
-it. No industry or keyword picks a composition.
+it. No industry or keyword picks a composition. A full-bleed hero anchors
+its headline at the bottom start or centres it (hero_anchor), and the scrim
+covers the region the headline sits in (imagery.scrim_reach).
 """
 from __future__ import annotations
 
@@ -36,6 +38,23 @@ DESCRIPTIONS: Mapping[str, str] = MappingProxyType({
     "full-bleed-media": "edge-to-edge images or generated art with the headline on a scrim, "
                         "then bands of media and short copy",
 })
+# Where the headline sits over full-bleed media: at the bottom start, over
+# a scrim that rises from the bottom edge, or centred, poster style.
+ANCHORS: Mapping[str, str] = MappingProxyType({
+    "bottom-start": "the headline anchored at the bottom start of the media, on a scrim that "
+                    "rises from the bottom edge",
+    "center": "the headline centred on the media, poster style, on a full scrim",
+})
+
+
+def hero_anchor(axes: AxisValues) -> str:
+    """Where a full-bleed hero sets its headline: centred, poster style,
+    for a brand that leans to a capitals display (character.capitals at
+    0.5 and up, loud and informal), else at the bottom start. Measured
+    award pages anchor 16 of 35 headlines in the lower half, start-aligned
+    over media, and centre mostly poster-style heroes."""
+    from engine.foundations import character
+    return "center" if character.capitals(axes) >= 0.5 else "bottom-start"
 
 
 def _terms_split(a: AxisValues, aud: Audience) -> Terms:
@@ -77,15 +96,19 @@ class Composition:
     name: str
     scores: Tuple[Tuple[str, float], ...]  # every composition, highest first
     reasons: Tuple[str, ...]               # the winner's two largest terms
+    anchor: str = "bottom-start"           # a full-bleed hero's headline (ANCHORS)
 
     def line(self) -> str:
         (win, top), (second, next_score) = self.scores[0], self.scores[1]
-        return (f"{win}: {DESCRIPTIONS[win]}. It scored {top:.2f}, ahead of {second} at "
+        text = (f"{win}: {DESCRIPTIONS[win]}. It scored {top:.2f}, ahead of {second} at "
                 f"{next_score:.2f}, mostly for {' and '.join(self.reasons)}.")
+        if win == "full-bleed-media":
+            text += f" The hero sets {ANCHORS[self.anchor]}."
+        return text
 
     def to_dict(self) -> Dict[str, object]:
         return {"name": self.name, "scores": {k: round(v, 4) for k, v in self.scores},
-                "reasons": list(self.reasons)}
+                "reasons": list(self.reasons), "anchor": self.anchor}
 
 
 def choose(axes: AxisValues, audience: Audience = Audience()) -> Composition:
@@ -94,4 +117,4 @@ def choose(axes: AxisValues, audience: Audience = Audience()) -> Composition:
                     key=lambda item: (-item[1], item[0]))
     win = totals[0][0]
     top = sorted((t for t in table[win] if t[1] > 0), key=lambda t: (-t[1], t[0]))[:2]
-    return Composition(win, tuple(totals), tuple(name for name, _ in top))
+    return Composition(win, tuple(totals), tuple(name for name, _ in top), hero_anchor(axes))

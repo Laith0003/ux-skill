@@ -57,16 +57,25 @@ def _dim(px: int) -> Dict[str, Any]:
     return {"value": px, "unit": "px"}
 
 
-def shadow(depth: float, level: int, scheme: str) -> List[Dict[str, Any]]:
+def shadow(depth: float, level: int, scheme: str,
+           ring: float = 0.0) -> List[Dict[str, Any]]:
+    """The key and ambient layers of a level's shadow; with `ring` (an
+    alpha) level 1 adds a 1px ring in the ink, black in light and white in
+    dark, so a card's edge reads without an opaque border."""
     y, blur, spread = KEY[level - 1]
     ay, ablur = AMBIENT[level - 1]
     a = key_alpha(depth, level, scheme)
-    return [
+    layers = [
         {"color": _black(a), "offsetX": _dim(0), "offsetY": _dim(y),
          "blur": _dim(max(y + 1, int(blur * softness(depth) + 0.5))), "spread": _dim(spread)},
         {"color": _black(round(a / 2, 3)), "offsetX": _dim(0), "offsetY": _dim(ay),
          "blur": _dim(ablur), "spread": _dim(0)},
     ]
+    if ring and level == 1:
+        ink = "#000000" if scheme == "light" else "#FFFFFF"
+        layers.append({"color": f"{ink}{round(ring * 255):02X}", "offsetX": _dim(0),
+                       "offsetY": _dim(0), "blur": _dim(0), "spread": _dim(1)})
+    return layers
 
 
 def inset(depth: float, scheme: str) -> List[Dict[str, Any]]:
@@ -82,7 +91,7 @@ def generate_elevation(axes: AxisValues) -> Generated:
     for scheme in ("light", "dark"):
         for level in range(1, 5):
             ts.add(Token(f"elevation.shadow.{scheme}.{level}", "shadow",
-                         shadow(d, level, scheme)))
+                         shadow(d, level, scheme, ring=character.ink_alpha(axes))))
         ts.add(Token(f"elevation.shadow.{scheme}.inset", "shadow", inset(d, scheme)))
     for z in sorted(set(ORDER.values())):
         ts.add(Token(f"elevation.z.{z}", "number", z))

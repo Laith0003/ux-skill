@@ -76,6 +76,10 @@ class Face:
     ink: Optional[Tuple[int, int]] = None
     # The family ships a true italic on Google Fonts under the same name.
     italic: bool = False
+    # How common the face already is in generated pages, added to its
+    # distance so no display face takes more than UBIQUITY_CAP of the axis
+    # space (display faces only; see UBIQUITY_SAMPLE).
+    ubiquity: float = 0.0
 
     @property
     def slug(self) -> str:
@@ -121,25 +125,26 @@ FACES: Tuple[Face, ...] = (
     # display faces
     Face("Fraunces", "display", "serif", (100, 900), True,
          _m(2000, 1956, 510, 0, 964, 1400, 1042.1, None, None),
-         (0.35, 0.9, 0.75, 0.9, 0.7), "El Messiri", ink=(738, 245), italic=True),
+         (0.35, 0.9, 0.75, 0.9, 0.7), "El Messiri", ink=(738, 245), italic=True, ubiquity=0.034),
     Face("Playfair Display", "display", "serif", (400, 900), True,
          _m(1000, 1082, 251, 0, 514, 708, 456.4, None, None),
-         (0.9, 0.55, 0.35, 0.85, 0.85), "Amiri", ink=(784, 188), italic=True),
+         (0.9, 0.55, 0.35, 0.85, 0.85), "Amiri", ink=(784, 188), italic=True, ubiquity=0.034),
     Face("Space Grotesk", "display", "sans-serif", (300, 700), True,
          _m(1000, 984, 292, 0, 486, 700, 497.7, None, None),
-         (0.55, 0.2, 0.3, 0.05, 0.65), "Readex Pro", ink=(700, 200)),
+         (0.55, 0.2, 0.3, 0.05, 0.65), "Readex Pro", ink=(700, 200), ubiquity=0.034),
     Face("Bricolage Grotesque", "display", "sans-serif", (200, 800), True,
          _m(1000, 930, 270, 0, 528, 660, 453.6, None, None),
-         (0.15, 0.7, 0.55, 0.5, 0.85), "Baloo Bhaijaan 2", ink=(704, 184)),
+         (0.15, 0.7, 0.55, 0.5, 0.85), "Baloo Bhaijaan 2", ink=(704, 184), ubiquity=0.034),
     Face("Sora", "display", "sans-serif", (100, 800), True,
          _m(1000, 970, 290, 0, 534, 730, 512.1, None, None),
-         (0.65, 0.35, 0.55, 0.15, 0.5), "Alexandria", ink=(734, 208)),
+         (0.65, 0.35, 0.55, 0.15, 0.5), "Alexandria", ink=(734, 208), ubiquity=0.079),
     Face("Outfit", "display", "sans-serif", (100, 900), True,
          _m(1000, 1000, 260, 0, 460, 676, 444.0, None, None),
-         (0.4, 0.6, 0.8, 0.3, 0.45), "Alexandria", ink=(724, 209)),
+         (0.4, 0.6, 0.8, 0.3, 0.45), "Alexandria", ink=(724, 209), ubiquity=0.104),
     Face("Newsreader", "display", "serif", (200, 800), True,
          _m(2000, 1470, 530, 0, 852, 1340, 816.1, None, None),
-         (0.8, 0.6, 0.4, 1.0, 0.5), "Noto Naskh Arabic", ink=(715, 260), italic=True),
+         (0.8, 0.6, 0.4, 1.0, 0.5), "Noto Naskh Arabic", ink=(715, 260), italic=True,
+         ubiquity=0.034),
     Face("Baloo 2", "display", "sans-serif", (400, 800), True,
          _m(1000, 1078, 524, 0, 460, 602, 435.4, None, None),
          (0.05, 0.95, 1.0, 0.6, 0.6), "Baloo Bhaijaan 2", ink=(670, 202)),
@@ -209,9 +214,20 @@ def place_of(axes: AxisValues) -> Tuple[float, float, float, float, float]:
             axes.contrast)
 
 
+# The sample the ubiquity costs were set on: warmth, contrast, geometry,
+# formality and type personality each at 0, 1/8, ... 1 (the axes a face's
+# place reads), with density and motion at 0.5; no display face takes more
+# than UBIQUITY_CAP of it and each takes at least UBIQUITY_FLOOR.
+UBIQUITY_SAMPLE = tuple(i / 8 for i in range(9))
+UBIQUITY_CAP, UBIQUITY_FLOOR = 0.16, 0.06
+
+
 def distance(face: Face, axes: AxisValues) -> float:
+    """The weighted squared distance between the face's place and the axes,
+    plus its ubiquity cost."""
     w = WEIGHTS[face.role]
-    return sum(k * (a - b) ** 2 for k, a, b in zip(w, place_of(axes), face.place))
+    return sum(k * (a - b) ** 2 for k, a, b in zip(w, place_of(axes), face.place)) \
+        + face.ubiquity
 
 
 def bookish(face: Face) -> float:

@@ -412,7 +412,7 @@ def test_an_empty_mapping_checks_nothing():
         ("scheme", "contrast", "density", "direction", "motion")]
     assert notes[5:] == [
         "the mapping leaves out color.surface.page, color.surface.card, color.surface.sunken and "
-        "68 more, which the imported system has under each role's own name, so they were not "
+        "71 more, which the imported system has under each role's own name, so they were not "
         "checked; map each one to check it"]
 
 

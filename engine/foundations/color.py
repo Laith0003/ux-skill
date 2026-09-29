@@ -1066,7 +1066,9 @@ def seed_hint(ts: TokenSet, finding: GateFinding) -> str:
 
 # Every semantic role is a color. The build's role-types check reports any
 # other type once, and the checks below skip it.
-ROLE_TYPES: Mapping[str, str] = MappingProxyType({role: "color" for role in SEMANTIC})
+ROLE_TYPES: Mapping[str, str] = MappingProxyType({
+    **{role: "color" for role in SEMANTIC}, "color.hairline": "color",
+    "color.budget.chromatic": "number", "color.budget.bands": "number"})
 
 
 def _typed(ts: TokenSet, path: str) -> bool:
@@ -1627,7 +1629,40 @@ def generate_color(axes: AxisValues, brand_hex: str, brand_role: Optional[str] =
     for role in SEMANTIC:
         base, modes = compress({mode: "{" + pick[mode][role] + "}" for mode in COLOR_CONTEXTS})
         ts.add(Token(role, "color", base, modes=modes, layer="semantic"))
+    _add_ink_and_budget(ts, axes, prims, pick)
     return Generated(tokens=ts, notes=notes)
+
+
+# Under high contrast the ink line is this many times stronger.
+INK_LINE_HIGH = 1.5
+
+
+def _add_ink_and_budget(ts: TokenSet, axes: AxisValues, prims: Dict[str, str],
+                        pick: Dict[str, Dict[str, str]]) -> None:
+    """color.hairline: the text color of each context at character.ink_alpha
+    (INK_LINE_HIGH times it under high contrast), a decorative line with no
+    contrast minimum, outside the line family the pairings cover; and the
+    color budget of a page: character.chromatic_budget and
+    character.band_share."""
+    alpha = character.ink_alpha(axes)
+    keys = {}
+    for mode in COLOR_CONTEXTS:
+        pairs = parse(mode)
+        a = min(1.0, alpha * (INK_LINE_HIGH if pairs.get("contrast") == "high" else 1.0))
+        name = f"color.ink.{pairs['scheme']}" + ("-high" if pairs.get("contrast") == "high"
+                                                 else "")
+        ts.add(Token(name, "color", f"{prims[pick[mode]['color.text.default']]}"
+                                     f"{round(a * 255):02X}"))
+        keys[mode] = "{" + name + "}"
+    base, modes = compress(keys)
+    ts.add(Token("color.hairline", "color", base, modes=modes, layer="semantic"))
+    budget = (("chromatic", character.chromatic_budget(axes)),
+              ("bands", character.band_share(axes)))
+    for name, value in budget:
+        ts.add(Token(f"color.share.{name}", "number", value))
+    for name, _ in budget:
+        ts.add(Token(f"color.budget.{name}", "number", "{color.share.%s}" % name,
+                     layer="semantic"))
 
 
 _CONTEXT_WORDS = (("scheme:light,contrast:standard", "Light mode"),

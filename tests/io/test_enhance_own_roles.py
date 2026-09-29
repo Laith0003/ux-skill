@@ -52,6 +52,7 @@ a {{ color: {v('color.text.link')}; }}
 .input {{ border: 1px solid {v('color.line.input')}; }}
 .input[aria-invalid=true] {{ border-color: {v('color.line.danger')}; }}
 .quote {{ border-inline-start: 4px solid {v('color.line.accent')}; }}
+hr {{ border-top: 1px solid {v('color.hairline')}; }}
 .input:focus-visible {{ outline-color: {v('color.focus.ring')}; }}
 .band :focus-visible {{ outline-color: {v('color.focus.ring-inverse')}; }}
 .overlay {{ background: {v('color.scrim')}; }}
