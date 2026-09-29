@@ -17,18 +17,21 @@ Public surface
 --------------
 ``detect_existing_system(root) -> dict``
 ``flatten_dtcg(doc) -> dict``
-``ownership(path) -> str``, ``is_ux_skill_file(path) -> bool``
-``stamp_digest(text, comment=False) -> str``
+``ownership(path) -> str``, ``is_ux_skill_file(path) -> bool``,
+``is_ux_skill_text(text) -> bool``
+``stamp_digest(text, comment=False, css=False) -> str``
 ``client_files_in(out_dir, names) -> list``
 """
 from engine.existing.detect import (
     DESIGN_MD_MARKER, DIGEST_KEY, OWNER_KEY, OWNER_VALUE, client_files_in,
     css_custom_properties, detect_existing_system, flatten_dtcg, is_ux_skill_file,
-    mark_suggestions, normalize_hex, ownership, resolve_css_var, stamp_digest, text_digest,
+    is_ux_skill_text, mark_suggestions, normalize_hex, ownership, resolve_css_var, stamp_digest,
+    text_digest,
 )
 
 __all__ = [
     "DESIGN_MD_MARKER", "DIGEST_KEY", "OWNER_KEY", "OWNER_VALUE", "client_files_in",
     "css_custom_properties", "detect_existing_system", "flatten_dtcg", "is_ux_skill_file",
-    "mark_suggestions", "normalize_hex", "ownership", "resolve_css_var", "stamp_digest", "text_digest",
+    "is_ux_skill_text", "mark_suggestions", "normalize_hex", "ownership", "resolve_css_var",
+    "stamp_digest", "text_digest",
 ]

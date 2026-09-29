@@ -2,12 +2,14 @@
 
 A file this engine wrote (its root $extensions carry our axes) comes back
 exactly: layers, modes and values as written, so export(import(file)) is
-the same bytes. A foreign file is read by the DTCG 2025.10 rules: a group's
-$type applies to the tokens below it, a token without a $type that
-references another takes that token's type, `{a.b}` and `$ref` references
-become aliases, and `$root` (a group's own token) is read as a segment
-named root, which the report says. A token that references another is
-semantic; any other is a primitive.
+the same bytes, and Imported.owned says so unless the record of the files
+the engine wrote lists it at another digest (it was edited since). A
+foreign file is read by the DTCG 2025.10 rules: a group's $type applies to
+the tokens below it, a token without a $type that references another
+takes that token's type, `{a.b}` and `$ref` references become aliases,
+and `$root` (a group's own token) is read as a segment named root, which
+the report says. A token that references another is semantic; any other
+is a primitive.
 
 Values in the 2025.10 object forms are read as they are. Older string
 forms ("16px", "#FFFFFF"), hsl, oklch and oklab colors, and a color with a
@@ -62,7 +64,8 @@ from engine.foundations.validate import LAYERS
 from engine.foundations.values import TYPES, TYPOGRAPHY_FIELDS
 from engine.io.graph import cycles
 from engine.io.mode_words import axis_of, is_base, mode_of, words
-from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
+from engine.io.report import (Imported, ImportReport, Item, Mapped, Source, read_source,
+                              recorded)
 from engine.io.values_in import GamutMapped, NotRead, read_value
 
 # The weight names DTCG defines, and the number each one means.
@@ -835,6 +838,11 @@ def import_dtcg(text: str, source: Source,
     name = Path(source.path).name
     doc = _parse(text, name)
     axes = _axes(doc, name)
+    # The engine's own file is known by the record of the files it wrote,
+    # or, for a file the record does not list, by its extension key on the
+    # root; never by the names of its tokens.
+    listed = recorded(source)
+    owned = listed if listed is not None else axes is not None
     log = _Log()
     also: List[Source] = []
     if dark is not None and axes is not None:
@@ -1162,7 +1170,7 @@ def import_dtcg(text: str, source: Source,
     report.not_read = _Log.done(log.not_read, dropped)
     report.mapped = _Log.done(log.mapped, dropped)
     report.also_read = also
-    return Imported(ts, report)
+    return Imported(ts, report, owned=owned)
 
 
 # Words a file or folder name may hold beside the scheme word.

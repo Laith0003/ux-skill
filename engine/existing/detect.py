@@ -236,15 +236,28 @@ def text_digest(text: str) -> str:
     return hashlib.sha256(_DIGEST_LINE_RE.sub("", text).encode("utf-8")).hexdigest()
 
 
-def stamp_digest(text: str, comment: bool = False) -> str:
+def stamp_digest(text: str, comment: bool = False, css: bool = False) -> str:
     """``text`` with a digest line added after its opening ``---``: a
     frontmatter key, or a YAML comment when ``comment`` is True (for a
-    DESIGN.md, whose frontmatter keys are a fixed standard)."""
+    DESIGN.md, whose frontmatter keys are a fixed standard). With ``css``
+    the line goes inside a block comment that opens the stylesheet: the
+    first one when the text opens with ``/*`` on a line of its own, else a
+    comment of its own."""
+    if css:
+        bare = text if text.startswith("/*\n") else "/*\n*/\n" + text
+        return "/*\n" + "ux-skill-digest: %s\n" % text_digest(bare) + bare[3:]
     digest = text_digest(text)
     line = ("# ux-skill-digest: %s\n" if comment else DIGEST_KEY + ": %s\n") % digest
     if text.startswith("---\n"):
         return "---\n" + line + text[4:]
     return line + text
+
+
+def is_ux_skill_text(text: str) -> bool:
+    """True when ``text`` carries ux-skill's digest and still matches it:
+    what ``is_ux_skill_file`` says of a file, for text already read."""
+    m = _DIGEST_LINE_RE.search(text)
+    return bool(m) and m.group(1) == text_digest(text)
 
 
 def ownership(path: Any) -> str:

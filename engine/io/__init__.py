@@ -4,11 +4,12 @@ rule files, a Figma variables export), each with a report of what it read,
 the value reader they share, the naming adapter that checks an imported
 system in the engine's roles while it keeps its own names, the scanner
 that measures what a codebase actually uses, and the enhance report that
-sets the two side by side. read_any reads a file in any of FORMATS, and
-write_with_intake is the step every write into a folder someone already
-has goes through: it checks and backs up every source first. Importing
-the package never loads the writer; write_with_intake loads it when it
-runs.
+sets the two side by side, and the Tailwind 4 exporter, which writes
+beside a source it did not build and never over it. read_any reads a file
+in any of FORMATS, and write_with_intake is the step every write into a
+folder someone already has goes through: it checks and backs up every
+source first. Importing the package never loads the writer;
+write_with_intake loads it when it runs.
 """
 from pathlib import Path
 from typing import Any
@@ -30,6 +31,9 @@ from engine.io.report import (FORMATS, Imported, ImportReport, Item, Mapped, Sou
 from engine.io.scan import SKIP_DIRS, NotMeasured, Scan, UnknownClass, Usage, scan
 from engine.io.tailwind_in import (
     EXPORT_COMMAND, import_tailwind_css, import_tailwind_json, read_tailwind)
+from engine.io.tailwind_out import (
+    RESETS, export_tailwind, extension_name, in_roles, tailwind_extension, tailwind_name,
+    to_tailwind, write_tailwind)
 from engine.io.values_in import (CSS_KEYWORDS, GamutMapped, NotRead, css_alias, read_value,
                                  split_top)
 
@@ -46,6 +50,8 @@ __all__ = [
     "read_any", "read_markdown", "read_source", "read_tailwind", "read_value", "scan",
     "source_digest", "split_top", "write_css", "write_with_intake",
     "their_names", "view",
+    "RESETS", "export_tailwind", "extension_name", "in_roles", "tailwind_extension",
+    "tailwind_name", "to_tailwind", "write_tailwind",
 ]
 
 

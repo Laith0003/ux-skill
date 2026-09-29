@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 from engine.foundations.layout import responsive_css
 from engine.foundations.typography import phone_roles, responsive_lines, scale_property
 from engine.foundations.modes import AXES, CSS_AXES, join, parse
-from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.tokens import Token, TokenSet, css_property
 from engine.foundations.values import css_entries, decode, encode
 
 EXT = "io.github.laith0003.ux-skill"
@@ -24,6 +24,18 @@ KEPT = ("original", "read_as")
 # The extension keys earlier builds wrote; a document that still carries
 # them is refused, since reading it would drop its layers and modes.
 LEGACY_EXT = ("ux.layer", "ux.modes")
+# Token.extensions["unit"] on a number an importer read from 0 to 100 (an
+# opacity in a Figma file): CSS writes it from 0 to 1 and says so.
+PERCENT = "percent"
+
+
+def _percent(t: Token) -> bool:
+    return t.type == "number" and t.extensions.get("unit") == PERCENT
+
+
+def _fraction(value: Any) -> Any:
+    """A number held from 0 to 100 as CSS writes it, from 0 to 1."""
+    return round(value / 100, 6) if isinstance(value, (int, float)) else value
 
 
 def _conflict(prefix: str, path: str) -> ValueError:
@@ -109,8 +121,9 @@ def _lines(t: Token, value: Any, indent: str = "  ", phone: Tuple[str, ...] = ()
     tokens.css sets to the phone factor below the tablet breakpoint and to
     1 from it up. A value an importer kept in its own spelling (a color
     outside sRGB, Token.extensions) is written as the file wrote it while
-    it still holds the value it was read as."""
-    entries = css_entries(t.path, t.type, value)
+    it still holds the value it was read as. A number held from 0 to 100
+    (PERCENT) is written from 0 to 1."""
+    entries = css_entries(t.path, t.type, _fraction(value) if _percent(t) else value)
     original = (t.extensions.get("original") or {}).get(context)
     if original is not None and (t.extensions.get("read_as") or {}).get(context) == value:
         entries = [(prop, original) for prop, _ in entries]
@@ -209,14 +222,21 @@ def to_css(ts: TokenSet, *, scheme: str = "system",
     imported set with a scheme axis gets color-scheme too; on :root it
     outranks an app's own `html { color-scheme: light dark }`. `header`
     lines open the file as a comment (an import's write-back lists there
-    what it did not read). Last come the layout's responsive aliases (layout.responsive_css), one
-    property per tiered role that follows the viewport."""
+    what it did not read), and so does a line for each number held from 0
+    to 100 (PERCENT), which is written from 0 to 1. Last come the layout's
+    responsive aliases (layout.responsive_css), one property per tiered
+    role that follows the viewport."""
     if scheme not in SCHEME_DEFAULTS:
         raise ValueError(f"scheme is {scheme!r}; use one of {list(SCHEME_DEFAULTS)}")
     schemed = "scheme" in ts.axes and any(
         "scheme" in parse(k, ts.axes) for t in ts.tokens() for k in t.modes)
     base = [f"  color-scheme: {ts.axes['scheme'][0]};"] if schemed else []
     phone = tuple(phone_roles(ts))
+    header = [*header, *(
+        f"{css_property(t.path)} is written from 0 to 1 "
+        f"({css_entries(t.path, t.type, _fraction(t.value))[0][1]}); its source holds it "
+        f"from 0 to 100 ({css_entries(t.path, t.type, t.value)[0][1]})."
+        for t in ts.tokens() if _percent(t))]
     out = [*_comment(header), ":root {", *base,
            *(line for t in ts.tokens() for line in _lines(t, t.value, phone=phone)), "}"]
     keys: List[str] = []

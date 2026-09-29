@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
+from engine.existing.record import read_record
 from engine.foundations.errors import InputError, _brief_text
 from engine.foundations.tokens import TokenSet
 
@@ -108,6 +109,16 @@ def read_source(path: Any, fmt: str, label: str) -> Tuple[Source, str]:
     return Source(str(p), fmt, hashlib.sha256(data).hexdigest(), len(data)), text
 
 
+def recorded(source: Source) -> Optional[bool]:
+    """What the record of the files the engine wrote, in the source's
+    folder, says of the source: True when it lists the file at the digest
+    it was read at, False when at another (the file changed since the
+    engine wrote it), None when it does not list the file."""
+    p = Path(source.path).expanduser()
+    listed = read_record(p.parent).get(p.name)
+    return None if listed is None else listed == source.sha256[:12]
+
+
 @dataclass
 class ImportReport:
     source: Source
@@ -189,10 +200,21 @@ class Imported:
     """An imported system: its tokens in the source's own names, the
     report, and for a CSS source how each mode axis was switched there
     (axis -> (the selector for the non-base value as the file writes it,
-    or "" when only the media query sets it; the media query, or "")) and
-    which scheme it opens (system, light or dark), so the system can be
-    written back in the forms it came in (css_in.write_css)."""
+    or "" when only the media query sets it; the media query, or "")),
+    which scheme it opens (system, light or dark), the Tailwind namespace
+    resets it writes (`--color-*: initial`) and its `@custom-variant dark`
+    declaration as written, so the system can be written back in the forms
+    it came in (css_in.write_css, tailwind_out.to_tailwind). `owned` is
+    what the source's ownership record says, never its token names: True
+    for a file the engine wrote and nobody changed since, which the record
+    in its folder lists at the digest it was read at (recorded), or a
+    stylesheet whose engine digest stamp still matches, or a tokens file
+    the record does not list that carries the engine's extension key on
+    its root (one written before the record existed)."""
     tokens: TokenSet
     report: ImportReport
     forms: Mapping[str, Tuple[str, str]] = field(default_factory=dict)
     scheme: str = "system"
+    resets: Tuple[str, ...] = ()
+    variant: str = ""
+    owned: bool = False

@@ -43,9 +43,15 @@ file writes it (`.dark` alone, `:root.dark`, `html.dark`), with the media
 query when the file uses that too, or the media query alone (an empty
 selector) when the file sets the axis only there; Imported.scheme records
 which scheme it opens. export.to_css given both writes each such axis in
-exactly those forms and adds no selector of its own for it. A color
-mapped into sRGB keeps its spelling in Token.extensions and is written
-back in it while the token holds the value it was read as. write_css
+exactly those forms and adds no selector of its own for it.
+Imported.resets keeps each Tailwind namespace reset (`--color-*:
+initial`) and Imported.variant the `@custom-variant dark` declaration as
+written, so the Tailwind exporter gives both back. Imported.owned is True
+only for a file the engine wrote and nobody changed since: the record in
+its folder lists it at the digest it was read at, or it carries the
+engine's digest stamp and still matches it. A
+color mapped into sRGB keeps its spelling in Token.extensions and is
+written back in it while the token holds the value it was read as. write_css
 does all this and opens the file with a comment that lists every entry
 not read, with its fix, and every such color. Not given back: comments,
 component rules, the order and grouping of rules, and the file's own
@@ -96,11 +102,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 
+from engine.existing import is_ux_skill_text
 from engine.foundations.errors import InputError
 from engine.foundations.export import to_css
 from engine.foundations.modes import AXES, CSS_AXES, join
 from engine.foundations.tokens import Token, TokenSet
-from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
+from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source, recorded
 from engine.io.values_in import GamutMapped, NotRead, css_alias, read_value, split_top
 
 # The scheme a stylesheet opens (export.SCHEME_DEFAULTS): it follows the
@@ -522,6 +529,22 @@ def dark_variant(text: str) -> Optional[Tuple[str, int, str, Tuple[str, ...]]]:
     return selectors[0], line, written, tuple(selectors)
 
 
+def variant_text(text: str) -> str:
+    """The `@custom-variant dark` declaration as the file writes it, from
+    the at-rule to its closing ; or }, comments inside kept, or "" when the
+    file declares none, so a write-back gives it back verbatim."""
+    blank = _blank_comments(text)
+    m = _CUSTOM_DARK.search(blank)
+    if not m:
+        return ""
+    if m.group(1) == "(":
+        end = blank.find(";", m.start(1))
+        end = len(blank) if end == -1 else end + 1
+    else:
+        end = _matching(blank, m.start(1), "the file") + 1
+    return text[m.start():end].strip()
+
+
 _GROUP = re.compile(r":(where|is|not)\(")
 
 
@@ -807,6 +830,8 @@ def import_css(text: str, source: Source) -> Imported:
     found: Dict[str, Dict[Tuple[Tuple[str, str], ...], Tuple[str, int]]] = {}
     not_read: List[Tuple[int, Item]] = []
     notes: List[Tuple[int, Item]] = []
+    # Tailwind namespace resets (--color-*: initial), in the order written.
+    resets: List[str] = []
     # Dark rules in a form this engine does not write: (line, label, properties).
     paired: List[Tuple[int, str, List[str]]] = []
     # property -> context -> every (value, line) set there, in the order read.
@@ -849,6 +874,8 @@ def import_css(text: str, source: Source) -> Imported:
             if d.name in switches:
                 continue
             if d.name.endswith("*"):
+                if d.value.strip() == "initial" and d.name not in resets:
+                    resets.append(d.name)
                 notes.append((d.line, Item(f"{name}:{d.line}", d.name, "clears Tailwind's default "
                               f"values in the {d.name} namespace; the system holds only what "
                               "this file sets")))
@@ -954,7 +981,8 @@ def import_css(text: str, source: Source) -> Imported:
                     if gamut and kind == "color":
                         own_original[join(dict(key), axes)] = value_text.strip()
         except NotRead as exc:
-            not_read.append((line, Item(f"{name}:{line}", prop, str(exc))))
+            not_read.append((line, Item(f"{name}:{line}", prop,
+                                        _opacity_fix(prop, value_text) or str(exc))))
             continue
         values[path] = read
         notes += own_notes
@@ -1033,7 +1061,22 @@ def import_css(text: str, source: Source) -> Imported:
     report.notes = [i for _, i in sorted(notes, key=lambda x: x[0])]
     report.not_read = [i for _, i in sorted(not_read, key=lambda x: x[0])]
     report.mapped = [i for _, i in sorted(mapped, key=lambda x: x[0])]
-    return Imported(ts, report, dict(modes.forms), modes.scheme())
+    return Imported(ts, report, dict(modes.forms), scheme=modes.scheme(),
+                    resets=tuple(resets), variant=variant_text(text),
+                    owned=recorded(source) is True or is_ux_skill_text(text))
+
+
+_PERCENT = re.compile(r"(-?(?:\d+\.?\d*|\.\d+))%")
+
+
+def _opacity_fix(prop: str, value: str) -> str:
+    """The fix for an opacity written in percent (--opacity-muted: 60%),
+    which a token holds from 0 to 1, or "" for any other entry."""
+    m = _PERCENT.fullmatch(value.strip())
+    if not m or not {"opacity", "alpha"} & set(prop.lstrip("-").lower().split("-")):
+        return ""
+    return (f"{value.strip()} is an opacity in percent; write it as a number from 0 to 1 "
+            f"({round(float(m.group(1)) / 100, 6):g}) so it can be read")
 
 
 def write_css(imported: Imported) -> str:

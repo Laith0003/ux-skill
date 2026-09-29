@@ -71,7 +71,9 @@ class Token:
     # What an importer keeps beside the value so a write-back gives the
     # file's own form back: "original" (context -> the value as written)
     # and "read_as" (context -> the value it was read as), for a color
-    # mapped into sRGB. Empty for every token the engine builds.
+    # mapped into sRGB; "unit": "percent" for a number the source holds
+    # from 0 to 100, which CSS writes from 0 to 1 (export.PERCENT). Empty
+    # for every token the engine builds.
     extensions: Dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
