@@ -22,7 +22,7 @@ from dataclasses import dataclass
 from typing import Any, List, Optional, Tuple
 
 from engine.foundations.color_math import gamut_map_oklch, oklab_to_oklch, rgb_to_hex
-from engine.foundations.values import GENERIC_FAMILIES, STROKE_STYLES
+from engine.foundations.values import GENERIC_FAMILIES, PLATFORM_FAMILIES, STROKE_STYLES
 
 
 class NotRead(ValueError):
@@ -258,16 +258,23 @@ def _color_function(text: str, name: str, body: str,
     return rgb_to_hex(rgb) + _alpha_hex(alpha)
 
 
+_PLATFORM = {name.lower(): name for name in PLATFORM_FAMILIES}
+
+
 def _font_names(text: str) -> Optional[List[str]]:
     """A font list when the text can only be one: quoted names, or a comma
-    list, or a single generic family."""
+    list, or a single generic family or platform keyword (-apple-system,
+    BlinkMacSystemFont, kept in that spelling)."""
     parts = split_top(text)
     quoted = any(p[:1] in "\"'" for p in parts)
-    if len(parts) == 1 and not quoted and parts[0] not in GENERIC_FAMILIES:
+    if len(parts) == 1 and not quoted and parts[0] not in GENERIC_FAMILIES \
+            and parts[0].lower() not in _PLATFORM:
         return None
     names = []
     for p in parts:
-        if p[:1] in "\"'" and p[-1:] == p[:1]:
+        if p.lower() in _PLATFORM:
+            names.append(_PLATFORM[p.lower()])
+        elif p[:1] in "\"'" and p[-1:] == p[:1]:
             names.append(p[1:-1])
         elif re.fullmatch(r"[A-Za-z][A-Za-z0-9 _-]*", p):
             names.append(p)

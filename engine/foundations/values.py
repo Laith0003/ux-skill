@@ -26,6 +26,9 @@ _HEX = re.compile(r"#(?:[0-9A-Fa-f]{3}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})")
 _FONT_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9 _-]*")
 GENERIC_FAMILIES = ("serif", "sans-serif", "monospace", "cursive", "fantasy", "system-ui",
                     "ui-serif", "ui-sans-serif", "ui-monospace", "ui-rounded", "math", "emoji")
+# Platform keywords a font list names unquoted: each stands for the
+# platform's own interface face, and quoting one breaks it.
+PLATFORM_FAMILIES = ("-apple-system", "BlinkMacSystemFont")
 STROKE_STYLES = ("solid", "dashed", "dotted", "double", "groove", "ridge", "outset", "inset")
 SHADOW_KEYS = ("color", "offsetX", "offsetY", "blur", "spread")
 # DTCG typography field -> (the token type that field holds, its CSS property)
@@ -133,12 +136,15 @@ def _bezier_ok(v: Any) -> bool:
 
 def _family_ok(v: Any) -> bool:
     names = v if isinstance(v, list) else [v]
-    return bool(names) and all(isinstance(n, str) and _FONT_NAME.fullmatch(n) for n in names)
+    return bool(names) and all(isinstance(n, str) and (n in PLATFORM_FAMILIES
+                                                       or _FONT_NAME.fullmatch(n))
+                               for n in names)
 
 
 def _family_css(v: Any) -> str:
     names = v if isinstance(v, list) else [v]
-    return ", ".join(n if n in GENERIC_FAMILIES else f'"{n}"' for n in names)
+    return ", ".join(n if n in GENERIC_FAMILIES or n in PLATFORM_FAMILIES else f'"{n}"'
+                     for n in names)
 
 
 def _weight_ok(v: Any) -> bool:

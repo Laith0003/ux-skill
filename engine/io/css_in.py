@@ -25,7 +25,14 @@ either way or bare. An attribute with another name set to dark
 (`[data-sidebar=dark]`) themes a region, so it is the scheme only when
 written on :root or html; elsewhere it is not read, and the report says
 so. A selector list is the root when each member is the root or a theme
-selector at its base value (`:root, [data-x=light]`). The media types
+selector at its base value (`:root, [data-x=light]`), and when it names the
+root itself beside any theme selectors (`:root, .theme-x,
+[data-theme=light]`): those are aliases of the root, noted, and written
+back on :root. The base is always what the root holds: a rule on one of
+this engine's attributes at its base value (`[data-density="comfortable"]`)
+that sets a root property to another value is a mode of its own, named
+after the attribute (data-density:comfortable), noted, and written back
+under its own selector. The media types
 screen and all are dropped from a query: `@media screen and
 (prefers-color-scheme: dark)` is the dark scheme, and `@media screen`
 alone is read as the base, since it holds wherever the page is on screen.
@@ -88,6 +95,10 @@ Nested rules (CSS Nesting) are rules of their own, read to any depth:
 `&` stands for the parent, any other selector is a descendant of it, and
 a nested @media adds to the parent's media. A nested rule never folds
 into its parent, so a component nested in :root is a component.
+
+A font list that opens with var() before named families (`var(--font-a),
+"Rubik", sans-serif`) is read as the named families, with a note that
+names the var().
 
 What is not read, each with the fix: properties set on components or under
 other media queries, a property set only under a mode, values with no
@@ -640,12 +651,55 @@ def _ours(sel: str, parts: List[Tuple[str, str, str]]) -> bool:
 
 def _base(selector: str) -> bool:
     """True when every selector in the list is the root, or a theme selector
-    at its base value (`:root, :host`, `:root, [data-x=light]`)."""
-    for one in split_top(selector, ","):
+    at its base value (`:root, :host`, `:root, [data-x=light]`), or when the
+    list names the root itself beside theme selectors of any other name,
+    its aliases (`:root, .theme-x`)."""
+    members = split_top(selector, ",")
+    rooted = any(one.strip() in ROOTS for one in members)
+    for one in members:
         parts = _Modes.parse(one)
-        if parts is None or any(a not in AXES or v != AXES[a][0] for a, v, _ in parts):
+        if parts is None or any((a in AXES or not rooted) and (a not in AXES or v != AXES[a][0])
+                                for a, v, _ in parts):
             return False
     return True
+
+
+def _aliases_of_root(selector: str) -> List[str]:
+    """The members of a root selector list that name a theme selector of
+    the file's own beside the root (.theme-x in `:root, .theme-x`)."""
+    if not _base(selector):
+        return []
+    return [one.strip() for one in split_top(selector, ",")
+            if any(a not in AXES for a, _, _ in _Modes.parse(one) or [])]
+
+
+def _at_base(selector: str) -> Optional[Tuple[str, str]]:
+    """(axis, value) for a rule on one of this engine's attributes alone at
+    its base value (`[data-density="comfortable"]`), else None."""
+    members = split_top(selector, ",")
+    parts = _Modes.parse(members[0]) if len(members) == 1 else None
+    if not parts or len(parts) != 1 or parts[0][2] != "" or parts[0][0] not in AXES:
+        return None
+    axis, value, _ = parts[0]
+    return (axis, value) if value == AXES[axis][0] and axis in CSS_AXES else None
+
+
+def _var_led_font(text: str) -> Optional[Tuple[str, str]]:
+    """(the named families, the var() members before them) for a font list
+    that opens with var() (`var(--font-a), "Rubik", sans-serif`), else None."""
+    parts = split_top(text, ",")
+    lead = 0
+    while lead < len(parts) and parts[lead].strip().startswith("var("):
+        lead += 1
+    if not lead or lead == len(parts):
+        return None
+    rest = ", ".join(p.strip() for p in parts[lead:])
+    try:
+        if read_value(rest)[0] != "fontFamily":
+            return None
+    except NotRead:
+        return None
+    return rest, ", ".join(p.strip() for p in parts[:lead])
 
 
 def _reading(text: str) -> Any:
@@ -814,9 +868,23 @@ def import_css(text: str, source: Source) -> Imported:
     rules = [_on_dark_variant(r, dark_at, every) for r in parse_css(text, source.path)]
     modes = _Modes()
     switches = _viewport(rules)
+    # The base is what the root holds: a rule on one of this engine's
+    # attributes at its base value that sets a root property to another
+    # value is a mode of its own, selector -> (its axis, value).
+    held: Dict[str, str] = {}
+    for r in rules:
+        if not r.media and _base(r.selector) and _at_base(r.selector) is None:
+            for d in r.declarations:
+                held.setdefault(d.name, d.value)
+    split: Dict[str, Tuple[str, str]] = {}
+    for r in rules:
+        at_base = None if r.media else _at_base(r.selector)
+        if at_base and any(d.name in held and _reading(d.value) != _reading(held[d.name])
+                           for d in r.declarations):
+            split[r.selector] = (CSS_AXES[at_base[0]][0], at_base[1])
     root_values: Dict[str, str] = {}
     for r in rules:
-        if not r.media and _base(r.selector):
+        if not r.media and _base(r.selector) and r.selector not in split:
             for d in r.declarations:
                 root_values.setdefault(d.name, d.value)
     # Switches between plain numbers: a scale factor, name -> [(width, number)].
@@ -843,10 +911,23 @@ def import_css(text: str, source: Source) -> Imported:
             continue
         media = modes.media(rule.media)
         options = [_Modes.parse(s, variant_on) for s in split_top(rule.selector, ",")]
+        aliases = _aliases_of_root(rule.selector) if not rule.media else []
+        if aliases:
+            options = [o for o in options if o is not None and all(a in AXES for a, _, _ in o)]
+            notes.append((rule.line, Item(f"{name}:{rule.line}", rule.selector, (
+                f"names the root with {', '.join(aliases)}, so {', '.join(aliases)} "
+                "holds the root's values; read as the base, and written back on :root"))))
+        if rule.selector in split and not rule.media:
+            attr, value = split[rule.selector]
+            options = [[(attr, value, rule.selector.strip())]]
+            notes.append((rule.line, Item(f"{name}:{rule.line}", rule.selector, (
+                f"sets values that differ from :root at {value}, this engine's base value for "
+                f"{attr}; the base is what :root holds, so {value} was read as a mode of its "
+                f"own, {attr}:{value}"))))
         custom = any(axis not in AXES for o in options if o for axis, _, _ in o)
         outside = any(o is None for o in options)
-        component = outside or (
-            custom and not all(d.name in root_names for d in rule.declarations))
+        component = outside or (rule.selector not in split and custom
+                                and not all(d.name in root_names for d in rule.declarations))
         keys = set()
         modes.refused = None
         if media is not None and not component:
@@ -966,6 +1047,13 @@ def import_css(text: str, source: Source) -> Imported:
                         own_notes.append((at, Item(f"{name}:{at}", prop, _scaled_note(
                             value_text.strip(), size, factor, factors[factor]))))
                     value_text = f"var(--{size})"
+                led = _var_led_font(value_text)
+                if led:
+                    own_notes.append((at, Item(f"{name}:{at}", prop, (
+                        f"opens with {led[1]}, whose face this file sets elsewhere, so it was "
+                        f"read as the named families after it ({led[0]}); write that face "
+                        "into the list by name if it should lead"))))
+                    value_text = led[0]
                 alias = css_alias(value_text)
                 if alias is not None:
                     read.append((join(dict(key), axes), "alias", alias[0], at))
