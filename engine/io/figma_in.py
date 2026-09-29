@@ -33,17 +33,17 @@ Light and Dark, Default and Dark, or Dark mode read into the scheme axis,
 the light or default one the base and the dark one scheme:dark, as the
 other importers read a dark scheme; a pair where one mode names an axis on
 its own (Light and High contrast, Brand and Dark) reads into that axis;
-any other pair gives an axis named after both modes (Main and Partner
-give main-partner), the default mode the base. Each such collection is noted. A collection whose modes are
-viewport tiers (Mobile, Tablet and Desktop, or SM to XL, or a collection
-named Breakpoints) is never a mode axis: its default tier is read, and one
-note names the other tiers' values, which the engine sets itself. A
-collection with more modes is read one mode per axis, as the other
-importers read one column or theme per axis: Light, Dark and High contrast
-give the base, scheme:dark and contrast:high, and a mode left over (Dim, or
-a combined High contrast dark) is listed under Not read with its fix. When
-no mode names an axis, the default mode is read and second_modes names the
-other mode to read for it.
+any other pair gives an axis named after both modes (Main and Partner give
+main-partner), the default mode the base. Each such collection is noted. A
+collection whose modes are viewport tiers (Mobile, Tablet and Desktop, or
+SM to XL, or a collection named Breakpoints) is never a mode axis: its
+default tier is read, and one note names the other tiers' values, which
+the engine sets itself. A collection with more modes is read one mode per
+axis, as the other importers read one column or theme per axis: Light,
+Dark and High contrast give the base, scheme:dark and contrast:high, and a
+mode left over (Dim, or a combined High contrast dark) is listed under Not
+read with its fix. When no mode names an axis, the default mode is read
+and second_modes names the other mode to read for it.
 """
 from __future__ import annotations
 
