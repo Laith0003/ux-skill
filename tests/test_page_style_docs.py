@@ -78,7 +78,8 @@ def test_the_playbook_speaks_the_systems_own_names():
     sec = _section(LANDING, "## Inside an existing design system", "## ")
     assert "vocabulary" in sec and "never names to write" in sec
     assert "var(--space-section)" in sec and "engine.io.propose" in sec
-    assert "stock or lifestyle photography" in sec and "logo" in sec
+    assert "Photographs are required" in sec and "photo_exclusions" in sec and "logo" in sec
+    assert "product-screen section" not in sec and "no picture" not in sec
     _no_dashes(sec, "landing existing-system section")
 
 

@@ -160,7 +160,7 @@ class BrandProfile:
 
 # The strategy sections of the standard brand.md the engine fills from a brand book.
 STRATEGY_FIELDS = ("positioning", "personality", "promise", "guardrails")
-# Words in photography.avoid that ban stock or lifestyle photography.
+# Words that name stock or lifestyle photography.
 _STOCK_BAN_RE = re.compile(r"\b(?:stock|lifestyle)\b", re.IGNORECASE)
 # Words that grant permission, and the words that negate it.
 _STOCK_ALLOW_RE = re.compile(r"\b(?:allowed|allow|allows|permitted|fine|welcome|ok|okay|may use|"
@@ -169,36 +169,69 @@ _NEGATION_RE = re.compile(r"\b(?:not|never|no|none|nor|without|don't|dont|do not
                           r"isn't|aren't|cannot|can't|mustn't|avoid|ban|bans|banned)\b|n't\b",
                           re.IGNORECASE)
 _CLAUSE_RE = re.compile(r"[;,.:]|\bbut\b|\bexcept\b|\bunless\b", re.IGNORECASE)
+# An entry that forbids photography itself: a negation and a word for
+# photographs, and nothing that narrows them to a kind.
+_PHOTO_WORD_RE = re.compile(r"\b(?:photography|photographs?|photos?|pictures?|imagery|images?)\b",
+                            re.IGNORECASE)
+_FILLER_RE = re.compile(r"\b(?:at|all|of|any|kind|kinds|ever|use|used|using|is|are|be|we|our|on|"
+                        r"this|the|a|in|pages?|site|allowed|permitted|whatsoever|anywhere|"
+                        r"real|either)\b", re.IGNORECASE)
 # The avoid line the engine itself wrote into brand.md before 4.0, when a
 # brand stated no photography rules. It is the engine's default, not the
-# brand's ban, so it neither bans nor allows stock.
+# brand's rule, so it excludes nothing.
 LEGACY_DEFAULT_AVOID = ("random/generic stock", "ai-slop clutter")
+# What the engine writes when the brand forbids photography outright.
+NO_PHOTOGRAPHY = "no photography at all"
 
 
-def _allows_stock(entry: str) -> bool:
-    """True when one clause of the entry names stock and grants it with no
-    negation anywhere in that clause ("curated stock allowed"). "Never
-    allow stock photos", "stock photos are not allowed" and "no stock" do
-    not."""
-    return any(_STOCK_BAN_RE.search(c) and _STOCK_ALLOW_RE.search(c) and not _NEGATION_RE.search(c)
-               for c in _CLAUSE_RE.split(entry))
+def _allowance(clause: str) -> bool:
+    """True when a clause names stock and grants it with no negation in it
+    ("curated stock allowed"). "Never allow stock photos", "stock photos are
+    not allowed" and "no stock" are not allowances."""
+    return bool(_STOCK_BAN_RE.search(clause) and _STOCK_ALLOW_RE.search(clause)
+                and not _NEGATION_RE.search(clause))
 
 
-def stock_allowed(profile: "BrandProfile") -> bool:
-    """False when the brand's photography rules ban stock or lifestyle
-    photography: the page then uses the brand's own product screens and
-    photographs, or no picture at all, never a stock fallback. An avoid
-    entry that mentions stock or lifestyle anywhere bans it ("No stock
-    photos or generic smiling people", "stock and generic imagery", "Never
-    allow stock photos"); only an entry with an unnegated allowance keeps
-    it ("generic stock; curated stock allowed"). The engine's own pre-4.0
-    default line is ignored."""
+def _forbids_photography(entry: str) -> bool:
+    if not (_NEGATION_RE.search(entry) and _PHOTO_WORD_RE.search(entry)):
+        return False
+    rest = _FILLER_RE.sub(" ", _PHOTO_WORD_RE.sub(" ", _NEGATION_RE.sub(" ", entry)))
+    return not re.sub(r"[\W_]+", "", rest)
+
+
+def _avoid_entries(profile: "BrandProfile") -> List[str]:
     avoid = [str(a).strip() for a in
-             ((getattr(profile, "photography", None) or {}).get("avoid") or [])]
+             ((getattr(profile, "photography", None) or {}).get("avoid") or []) if str(a).strip()]
     lowered = [" ".join(a.lower().split()) for a in avoid]
     if all(d in lowered for d in LEGACY_DEFAULT_AVOID):
         avoid = [a for a, low in zip(avoid, lowered) if low not in LEGACY_DEFAULT_AVOID]
-    return not any(_STOCK_BAN_RE.search(a) and not _allows_stock(a) for a in avoid)
+    return avoid
+
+
+def photography_forbidden(profile: "BrandProfile") -> bool:
+    """True only when the brand's rules say no photography at all ("no
+    photography", "never use photos"): the page then carries none, and the
+    gate reports the rule. A ban on a kind of photo never says this."""
+    return any(_forbids_photography(a) for a in _avoid_entries(profile))
+
+
+def photo_exclusions(profile: "BrandProfile") -> List[str]:
+    """The kinds of photo that do not qualify for this brand, in the brand's
+    own words: every avoid entry, a negated one included ("Never allow stock
+    photos" excludes stock), less any clause that allows a kind outright
+    ("curated stock allowed"). A page still carries photographs, from the
+    kinds that qualify; the engine's own pre-4.0 default line excludes
+    nothing, and a rule that forbids photography outright is
+    photography_forbidden, not an exclusion."""
+    out: List[str] = []
+    for entry in _avoid_entries(profile):
+        if _forbids_photography(entry):
+            continue
+        kept = [c.strip() for c in _CLAUSE_RE.split(entry) if c.strip() and not _allowance(c)]
+        kind = entry if len(kept) == len(_CLAUSE_RE.split(entry)) else "; ".join(kept)
+        if kept and kind not in out:
+            out.append(kind)
+    return out
 
 
 def build_profile(signals: Dict[str, Any]) -> BrandProfile:
@@ -338,6 +371,10 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
         "subjects": list(photo_signals.get("subjects") or signals.get("photography_subjects") or []),
         "avoid": list(photo_signals.get("avoid") or signals.get("photography_avoid") or []),
     }
+    # A brand book that says no photography at all: written as an avoid
+    # entry, so brand.md carries it and reads it back.
+    if photo_signals.get("forbidden") is True and NO_PHOTOGRAPHY not in p.photography["avoid"]:
+        p.photography["avoid"].append(NO_PHOTOGRAPHY)
 
     # strategy: positioning, personality, promise and guardrails as a brand
     # book states them; none is guessed from the voice line.
@@ -910,8 +947,8 @@ def image_search_terms(profile: "BrandProfile",
     an ``.axes`` attribute (e.g. a synthesized system). Unknown shapes are ignored.
     """
     terms: List[str] = []
-    if not stock_allowed(profile):
-        # The brand bans stock: its own product screens and photographs, or none.
+    if photography_forbidden(profile):
+        # The brand says no photography at all: nothing to source.
         return terms
 
     def _add(t: str) -> None:

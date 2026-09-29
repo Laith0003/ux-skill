@@ -10,7 +10,7 @@ import re
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional, Tuple  # Tuple used by _TAG_EXPECTATIONS
 
-from engine.brand import score_brand_fidelity, score_imagery
+from engine.brand import photography_forbidden, score_brand_fidelity, score_imagery
 from engine.brand.extract import BrandProfile
 
 
@@ -370,7 +370,8 @@ def evaluate(html: str = "", css: str = "",
     if prof is not None and (prof.primary or prof.name or prof.logo):
         fid = score_brand_fidelity(html, prof, css_text=css, base_dir=base_dir, root=root)
         img = score_imagery(html, logo_url=(prof.logo or {}).get("url") or "",
-                            brand_name=prof.name or "")
+                            brand_name=prof.name or "",
+                            photography_forbidden=photography_forbidden(prof))
         brand_fidelity = fid["score"]
         imagery = img["score"]
         if not fid["passed"]:

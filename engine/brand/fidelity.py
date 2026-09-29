@@ -564,16 +564,14 @@ def score_brand_fidelity(html_text: str, profile: BrandProfile, css_text: str = 
     return {"score": score, "passed": passed, "findings": findings}
 
 
-# --- Imagery presence (richness) -- a SIBLING to brand fidelity --------------
-# A full page must carry REAL imagery: a raster <img>/<picture>/<video>, a real
-# background photo, or a SUBSTANTIAL inline SVG illustration. Icon-sized SVGs
-# (Lucide/Heroicons-style, sub-100px / tiny viewBox) do NOT count -- a wall of
-# cards with only tiny icons is still a text-wall. This is deliberately NOT folded
-# into score_brand_fidelity's weighted score: a page can honor the brand's
-# color/logo/type perfectly and still ship as a text-wall. Imagery presence is
-# *richness*, not brand-honoring -- keep the two scores honest by keeping them
-# separate. (The data/anti-patterns.json `imagery-mandatory-missing` rule is the
-# live linter backstop; this is the structural check P7 wiring will call.)
+# --- Photographs: a sibling to brand fidelity ---------------------------------
+# A full page must carry a photograph: a raster <img>, a <picture>, a <video>
+# or a raster background that is not the logo. An illustration, icons or the
+# logo alone do not count; only a brand whose rules forbid photography outright
+# passes without one. This is kept out of score_brand_fidelity's weighted
+# score: a page can honor the brand's color, logo and type and still ship with
+# no photograph, so the two are reported apart. (The data/anti-patterns.json
+# `imagery-mandatory-missing` rule is the linter's own check.)
 
 _FULLPAGE_RE = re.compile(r"<(?:body|html)\b", re.IGNORECASE)
 _REAL_BG_RE = re.compile(
@@ -624,6 +622,16 @@ def _svg_is_illustration(open_tag: str) -> bool:
     return False
 
 
+_VECTOR_SRC_RE = re.compile(r"(?:\.svgz?(?:[?#].*)?$|^data:image/svg)", re.IGNORECASE)
+
+
+def _raster(attrs: Dict[str, Optional[str]]) -> bool:
+    """An <img> that can hold a photograph: any source but a vector file."""
+    src = (attrs.get("src") or attrs.get("data-src") or attrs.get("srcset") or "").strip()
+    src = src.split(",")[0].split()[0] if src else ""
+    return not _VECTOR_SRC_RE.search(src)
+
+
 def _same_file(src: str, logo_url: str) -> bool:
     if not src or not logo_url:
         return False
@@ -646,7 +654,7 @@ class _Visuals(HTMLParser):
         self.home_link_open = False
         self.home_link_used = False
         self.home_link_seen = False
-        self.media: List[bool] = []               # is_logo per img/video
+        self.media: List[Tuple[bool, bool]] = []  # (is_logo, is_photo) per img/video
         self.svgs: List[Tuple[str, bool]] = []    # (open tag, is_logo)
         self._svg: Optional[List[Any]] = None     # [open tag, is_logo, depth]
 
@@ -682,7 +690,7 @@ class _Visuals(HTMLParser):
                 logo = True
                 self.home_link_used = True
         if tag in _MEDIA and self._svg is None:
-            self.media.append(logo)
+            self.media.append((logo, tag == "video" or _raster(dict(attrs))))
         if tag == "svg" and self._svg is None:
             self._svg = [self.get_starttag_text() or "<svg>", logo, len(self.stack)]
         if tag in _VOID:
@@ -725,18 +733,21 @@ class _Visuals(HTMLParser):
             self._svg = None
 
 
-def score_imagery(html_text: str, logo_url: str = "", brand_name: str = "") -> Dict[str, Any]:
-    """Does a FULL page carry real imagery, or is it a text-wall? Deterministic.
+def score_imagery(html_text: str, logo_url: str = "", brand_name: str = "",
+                  photography_forbidden: bool = False) -> Dict[str, Any]:
+    """Does a FULL page carry a photograph? Deterministic.
 
     Returns ``{ok, kind, score, detail}`` with ``kind`` in {fragment, image,
-    bg-photo, illustration-svg, logo-only, icons-only, none}. Component
-    fragments (no <body>/<html>) are exempt (ok=True): not every partial
-    needs art. Icons are NOT imagery: a page whose only visuals are sub-100px
-    SVGs fails. Nor is the logo: the brand's logo file (``logo_url``), an
-    element marked as a logo, wordmark, logo row or navbar brand, one whose
-    label is the brand's name (``brand_name``), or the first image in a
-    page's first link to its home page is identity, and a page with nothing
-    else fails.
+    bg-photo, no-photography, illustration-only, logo-only, icons-only,
+    none}. A page passes with a raster image, a picture, a video or a raster
+    background that is not the logo. Component fragments (no <body>/<html>)
+    are exempt. An illustration, icons or the logo alone fail: the brand's
+    logo file (``logo_url``), an element marked as a logo, wordmark, logo
+    row or navbar brand, one whose label is the brand's name
+    (``brand_name``), or the first image in the page's first link to its
+    home page is identity. Only a brand whose rules forbid photography
+    outright (``photography_forbidden``) passes with no photograph, and the
+    detail reports the rule.
     """
     html = html_text or ""
     if not _FULLPAGE_RE.search(html):
@@ -745,29 +756,33 @@ def score_imagery(html_text: str, logo_url: str = "", brand_name: str = "") -> D
     parser = _Visuals(logo_url, brand_name)
     parser.feed(html)
     parser.close()
-    logos = parser.media.count(True) + sum(1 for _, is_logo in parser.svgs if is_logo)
-    if parser.media.count(False):
+    logos = sum(1 for is_logo, _ in parser.media if is_logo) \
+        + sum(1 for _, is_logo in parser.svgs if is_logo)
+    fix = ("Add photographs: the client's own first, else sourced ones (stock included) that fit "
+           "the photo direction and none of the kinds the brand's rules exclude.")
+    if photography_forbidden:
+        return {"ok": True, "kind": "no-photography", "score": 100,
+                "detail": ("The brand's rules forbid photography, so the page needs none; the "
+                           "rule is honored. Check that no picture on the page is a photograph.")}
+    if any(not is_logo and photo for is_logo, photo in parser.media):
         return {"ok": True, "kind": "image", "score": 100,
-                "detail": "Page carries a real image / picture / video."}
+                "detail": "Page carries a photograph (a raster image, picture or video)."}
     if any(not _LOGO_WORD_RE.search(m.group(1).rsplit("/", 1)[-1])
            and not _same_file(m.group(1), logo_url) for m in _REAL_BG_RE.finditer(html)):
         return {"ok": True, "kind": "bg-photo", "score": 100,
-                "detail": "Page carries a real background photo."}
+                "detail": "Page carries a background photograph."}
     own = [tag for tag, is_logo in parser.svgs if not is_logo]
-    if any(_svg_is_illustration(tag) for tag in own):
-        return {"ok": True, "kind": "illustration-svg", "score": 100,
-                "detail": "Page carries a substantial inline SVG illustration."}
+    vectors = any(not is_logo and not photo for is_logo, photo in parser.media)
+    if vectors or any(_svg_is_illustration(tag) for tag in own):
+        return {"ok": False, "kind": "illustration-only", "score": 0,
+                "detail": "The page carries illustrations but no photograph. " + fix}
     if logos:
         return {"ok": False, "kind": "logo-only", "score": 0,
                 "detail": ("The only images are the logo or logo rows (%d); a logo is identity, "
-                           "not imagery. Add the brand's own product screens or photographs; "
-                           "stock only when the brand book allows it." % logos)}
+                           "not imagery. " % logos) + fix}
     if own:
         return {"ok": False, "kind": "icons-only", "score": 0,
-                "detail": ("Only icon-sized inline SVGs (< %dpx) and no real image -- a "
-                           "wall of cards with tiny icons still reads as a text-wall. Add "
-                           "real imagery: the client's own product screens and photographs first, "
-                           "stock only where the brand book allows it." % _ICON_PX)}
+                "detail": ("Only icon-sized inline SVGs (< %dpx) and no photograph: a wall of "
+                           "cards with tiny icons still reads as a text-wall. " % _ICON_PX) + fix}
     return {"ok": False, "kind": "none", "score": 0,
-            "detail": ("Page ships zero imagery -- no image, picture/video, real background "
-                       "photo, or illustration. The biggest richness failure.")}
+            "detail": "Page ships no photograph and no image at all. " + fix}

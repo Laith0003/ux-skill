@@ -54,9 +54,10 @@ brand-fidelity hard floor are unchanged.
    curated Unsplash/Pexels chosen to match the 7-axis temperature and brand; pick the
    best per slot. Ban only *random/generic* stock and AI-slop clutter — not all
    photography. Abstract SVG is not a substitute for a real product/site image, and
-   the logo never counts as imagery. When the brand book bans stock or lifestyle
-   photography, nothing from stock fills a gap: the brand's own product screens and
-   photographs, or no picture.
+   the logo never counts as imagery. A brand book's ban on a kind of photo narrows
+   which photos qualify (`photo_exclusions`); photographs are still required, sourced
+   when the client has none. Only a rule of no photography at all
+   (`photography_forbidden`) removes them, and the page reports it.
 9. **Richness via a page-level section sequence.** Pick a whole-page pattern from
    the brief's structured fields (`product_type`, `primary_action`, `primary_side`,
    `platforms`, `page`, `stage`; /ux-design engine step 2.5), never its industry or

@@ -25,7 +25,7 @@ This playbook names sizes, colors and gaps by the engine's roles: `layout.landin
 - The page's CSS reads the system's own variables by the names the system gave them. Where the system calls its section gap `--space-section`, the page writes `var(--space-section)`, not `var(--layout-landing-gap)`, and no class or custom property is named after a role. Find each variable in the system's files, or in the mapping `engine.io.propose` writes, and list in the build notes which variable stands for which role.
 - A role the system has no variable for goes in the extension file of /ux-design step 1a, named in the system's style.
 - The page style recorded in /ux-design step 1a.1 outranks the sizes and gaps in this playbook. A brand whose pages open dark, overlap their sections or set headlines above its own type scale keeps doing that on the new page.
-- Pictures come from the brand: its product screens and its photographs. Where its brand book bans stock or lifestyle photography, no stock fills a gap; a section with nothing real to show becomes a text section or a product-screen section. A logo, a wordmark or a row of customer logos is never the page's imagery.
+- Photographs are required on every page: the brand's own first, then sourced ones (stock included) chosen by the photo direction. A kind of photo the brand book rules out (`engine.brand.photo_exclusions`) never appears, and every other kind still qualifies; only a system that forbids photography outright gets a page without photographs, reported in the build notes. A logo, a wordmark or a row of customer logos is never the page's photograph.
 
 ---
 

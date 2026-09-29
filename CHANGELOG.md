@@ -42,15 +42,19 @@ project adheres to [Semantic Versioning](https://semver.org/).
   uses those components. The five live-product archetypes move to
   `styles/arsenal.md`, since dashboards, components and AI landing heroes
   all use them.
-- Stock photography follows the brand's own avoid list in `brand.md`. An
-  entry that mentions stock or lifestyle photography anywhere bans stock,
-  however it is worded ("no stock", "stock photos are not allowed",
-  "never allow stock photos"); only an entry that allows it outright, with
-  no negation ("curated stock allowed"), keeps it. With stock banned, the
-  engine suggests no stock search terms and pages use the brand's own
-  product screens and photographs. The line earlier versions wrote when a
-  brand stated no rules, "random/generic stock, AI-slop clutter", is the
-  engine's old default, not a ban: it is ignored, and a new `brand.md`
+- Every page carries photographs, sourced (stock included) when the
+  client has none, and the brand gate fails a page whose only images are
+  illustrations, icons or the logo. The avoid list in `brand.md` names the
+  kinds of photo that do not qualify (`engine.brand.photo_exclusions`),
+  however an entry is worded ("no stock", "stock photos are not allowed",
+  "never allow stock photos"); only a clause that allows a kind outright,
+  with no negation ("curated stock allowed"), is not an exclusion. A ban
+  narrows the choice and never removes photography. Only a rule of no
+  photography at all (`engine.brand.photography_forbidden`, or
+  `photography.forbidden` in the brand signals) lets a page ship without
+  photographs, and the gate reports it. The line earlier versions wrote
+  when a brand stated no rules, "random/generic stock, AI-slop clutter",
+  is the engine's old default and excludes nothing; a new `brand.md`
   writes "random placeholder images, AI-slop clutter" instead.
 - A test fails when a rule sentence, exact or near (0.9 similarity), sits
   in a playbook and in a file it moved out of, in `commands/ux-design.md`,
