@@ -1320,7 +1320,9 @@ def write_outcome(system: SystemOutput, out_dir: Path, *, force: bool = False,
     fields both callers report: status (a key of STATUS_EXIT), written,
     unchanged, conflicts and message. A failed system writes nothing. The
     labels name the force and out inputs the way the caller's person types
-    them, in the refusal message."""
+    them, in the refusal message. A write also updates the engine's record
+    of the files it wrote (engine.existing.record.RECORD); a build that
+    changes nothing leaves the folder, record included, as it is."""
     stale, reason = system.stale_rule_pack, system.stale_reason
 
     def outcome(status: str, written: Sequence[str] = (), unchanged: Sequence[str] = (),
@@ -1335,18 +1337,29 @@ def write_outcome(system: SystemOutput, out_dir: Path, *, force: bool = False,
 
     if not system.passed:
         return outcome("failed", message=failure_message(system))
+    from engine.existing.record import RECORD, record_text
     try:
-        plan = write_files(out_dir, system.files, force=force)
+        plan = plan_writes(out_dir, system.files)
+        if plan.conflicts and not force:
+            # Refused: the plan's would-be writes did not happen.
+            return outcome("refused", unchanged=plan.unchanged, conflicts=plan.conflicts,
+                           message=conflict_message(out_dir, plan, force_label, out_label))
+        if not plan.write and not plan.conflicts:
+            return outcome("unchanged", unchanged=plan.unchanged,
+                           message=f"{out_dir} already holds this system; nothing changed.")
+        # The record of what the engine wrote goes with the system, so a
+        # later write can tell each file is still the engine's. It may
+        # replace an earlier record, which it extends; any other file only
+        # when it was planned and forced.
+        record = record_text(out_dir, system.files)
+        done = write_files(out_dir, {**system.files, RECORD: record}, force=True,
+                           replace={*plan.conflicts, RECORD})
     except InputError as exc:
         # The inputs were fine; the folder could not be written. Nothing in
         # it changed, so this is a run that wrote nothing.
         return outcome("error", message=str(exc))
-    if plan.conflicts:
-        # Refused: the plan's would-be writes did not happen.
-        return outcome("refused", unchanged=plan.unchanged, conflicts=plan.conflicts,
-                       message=conflict_message(out_dir, plan, force_label, out_label))
-    if plan.write:
-        return outcome("written", written=plan.write, unchanged=plan.unchanged,
-                       message=f"Wrote {', '.join(plan.write)} to {out_dir}.")
-    return outcome("unchanged", unchanged=plan.unchanged,
-                   message=f"{out_dir} already holds this system; nothing changed.")
+    if done.conflicts:
+        return outcome("refused", unchanged=done.unchanged, conflicts=done.conflicts,
+                       message=conflict_message(out_dir, done, force_label, out_label))
+    return outcome("written", written=done.write, unchanged=done.unchanged,
+                   message=f"Wrote {', '.join(done.write)} to {out_dir}.")

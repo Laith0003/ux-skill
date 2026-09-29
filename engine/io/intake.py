@@ -13,11 +13,14 @@ and before anything else it:
 3. when forced to replace a file that differs, copies that file, byte for
    byte, into <out>/.uxskill/backup/<its own digest>/replaced/, so a
    backup is never overwritten by a later one. Force replaces only a file
-   that carries the engine's digest and still matches it; any other file
-   is replaced only when the caller also passes replace_client;
+   the engine wrote that still matches (engine.existing.record: listed in
+   the folder's record at its digest, or carrying the engine's stamp);
+   any other file is replaced only when the caller also passes
+   replace_client;
 4. records the sources, the files written and the backups in
    <out>/.uxskill/intake/<intake id>.json, adding to the record a
-   write from the same sources made before.
+   write from the same sources made before, and each file written, with
+   its digest, in the folder's record of what the engine wrote.
 
 Every file name must be a plain path below the out folder and outside
 .uxskill/ (emit.check_name).
@@ -37,7 +40,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Tuple, Union
 
-from engine.existing import is_ux_skill_file
+from engine.existing.record import RECORD, engine_wrote, record_text
 from engine.foundations.errors import InputError
 from engine.io.report import ImportReport, Source
 
@@ -203,9 +206,9 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
         return _outcome("refused", conflict_message(out, plan, force_label, out_label),
                         unchanged=plan.unchanged, conflicts=plan.conflicts)
     if plan.conflicts and not replace_client:
-        # Force replaces only a file that carries the engine's own digest
-        # and still matches it; any other file is somebody's own.
-        theirs = [n for n in plan.conflicts if not is_ux_skill_file(out / n)]
+        # Force replaces only a file the engine wrote that still matches:
+        # listed in the folder's record at its digest, or stamped.
+        theirs = [n for n in plan.conflicts if not engine_wrote(out, n)]
         if theirs:
             one = len(theirs) == 1
             return _outcome("refused", (
@@ -249,11 +252,12 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
               "writes": list(dict.fromkeys([*earlier["writes"], *files])),
               "replaced": {**earlier["replaced"], **replaced}}
     extra[record_name] = json.dumps(record, indent=2) + "\n"
+    extra[RECORD] = record_text(out, files)
     try:
-        # Only the files allowed above and the record, which extends an
-        # earlier one, may be replaced; a file that changed since is not.
+        # Only the files allowed above and the two records, which extend
+        # earlier ones, may be replaced; a file that changed since is not.
         done = write_files(out, {**extra, **files}, force=True,
-                           replace={*plan.conflicts, record_name})
+                           replace={*plan.conflicts, record_name, RECORD})
     except InputError as exc:
         return _outcome("error", str(exc))
     if done.conflicts:

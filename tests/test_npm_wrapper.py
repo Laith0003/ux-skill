@@ -219,5 +219,5 @@ def test_a_project_with_its_own_engine_package_does_not_shadow_ours(tmp_path):
     # A relative --out still lands in the project folder.
     assert {p.name for p in (project / "ds").iterdir()} == {
         "tokens.json", "tokens.css", "fonts.css", "fonts-self-host.css", "system-report.md",
-        "art"}
+        "art", ".uxskill"}
     assert json.loads(out.stdout)["status"] == "written"

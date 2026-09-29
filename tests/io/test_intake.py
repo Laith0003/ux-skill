@@ -15,6 +15,8 @@ from pathlib import Path
 import pytest
 
 from engine.existing import stamp_digest
+from engine.existing.record import RECORD, read_record
+from engine.foundations.emit import NEUTRAL, NEUTRAL_SOURCE, make_system, write_outcome
 from engine.io.dtcg_in import read_dtcg
 from engine.io.intake import INTAKE_DIR, source_digest, write_with_intake
 from engine.io.markdown_in import read_markdown
@@ -52,7 +54,7 @@ def test_a_first_write_records_the_source_and_backs_it_up(tmp_path):
     sid = source.sha256[:12]
     assert outcome["status"] == "written"
     assert outcome["written"] == [f"{INTAKE_DIR}/backup/{sid}/source/theme.css",
-                                  f"{INTAKE_DIR}/intake/{sid}.json", "theme.css"]
+                                  f"{INTAKE_DIR}/intake/{sid}.json", RECORD, "theme.css"]
     assert outcome["backup"] == f"{INTAKE_DIR}/backup/{sid}"
     assert outcome["replaced"] == {}
     assert outcome["message"] == (
@@ -94,8 +96,8 @@ def test_a_later_write_from_the_same_source_adds_to_its_record(tmp_path):
     outcome = write_with_intake(out, {"theme-ext.css": "ext\n"}, source)
     sid = source.sha256[:12]
     assert outcome["status"] == "written"
-    # New files first, then the record, which the earlier one is replaced by.
-    assert outcome["written"] == ["theme-ext.css", f"{INTAKE_DIR}/intake/{sid}.json"]
+    # New files first, then the records, each replacing the earlier one.
+    assert outcome["written"] == ["theme-ext.css", f"{INTAKE_DIR}/intake/{sid}.json", RECORD]
     assert _record(out, sid)["writes"] == ["theme.css", "theme-ext.css"]
 
 
@@ -404,6 +406,62 @@ def test_a_file_the_engine_wrote_is_replaced_with_force_until_a_person_edits_it(
     (out / "notes.md").write_text(stamp_digest("# notes\n") + "edited\n", encoding="utf-8")
     outcome = write_with_intake(out, {"notes.md": "# newer\n"}, source, force=True)
     assert outcome["status"] == "refused" and outcome["conflicts"] == ["notes.md"]
+
+
+# The engine's own system: system build records each file it wrote with its
+# digest, so a rewrite through the intake step replaces them with force
+# alone, and a file the owner edited since needs the second flag.
+def _built(out, brand="#3366ff", rule_pack=True):
+    system = make_system(brand, NEUTRAL, NEUTRAL_SOURCE, rule_pack=rule_pack)
+    assert write_outcome(system, out)["status"] == "written"
+    return system
+
+
+def test_the_engines_own_system_is_rewritten_with_force_alone(tmp_path):
+    source = _source(tmp_path)
+    out = tmp_path / "ds"
+    _built(out)
+    again = make_system("#6b4423", NEUTRAL, NEUTRAL_SOURCE, rule_pack=True)
+    before = {n: (out / n).read_bytes() for n in again.files if (out / n).is_file()}
+    outcome = write_with_intake(out, again.files, source, force=True)
+    assert outcome["status"] == "written"
+    changed = [n for n in again.files if before.get(n) != again.files[n].encode("utf-8")]
+    assert {"tokens.json", "tokens.css", "system-report.md", "rule-pack/built-from.json",
+            "art/pattern.svg"} <= set(changed)
+    assert sorted(outcome["replaced"]) == sorted(changed)
+    for name, where in outcome["replaced"].items():
+        assert (out / where).read_bytes() == before[name]
+    for name, text in again.files.items():
+        assert (out / name).read_text(encoding="utf-8") == text
+    # What the step wrote is the engine's in turn: the next rewrite needs
+    # no second flag either.
+    third = make_system("#ffd400", NEUTRAL, NEUTRAL_SOURCE, rule_pack=True)
+    assert write_with_intake(out, third.files, source, force=True)["status"] == "written"
+
+
+def test_a_file_of_the_engines_system_edited_by_hand_needs_the_second_flag(tmp_path):
+    source = _source(tmp_path)
+    out = tmp_path / "ds"
+    _built(out)
+    (out / "tokens.css").write_text((out / "tokens.css").read_text() + "/* mine */\n",
+                                    encoding="utf-8")
+    again = make_system("#6b4423", NEUTRAL, NEUTRAL_SOURCE, rule_pack=True)
+    before = _snapshot(out)
+    outcome = write_with_intake(out, again.files, source, force=True)
+    assert outcome["status"] == "refused" and outcome["conflicts"] == ["tokens.css"]
+    assert outcome["message"] == _refusal(out, "tokens.css")
+    assert _snapshot(out) == before
+    outcome = write_with_intake(out, again.files, source, force=True, replace_client=True)
+    assert outcome["status"] == "written"
+    assert (out / outcome["replaced"]["tokens.css"]).read_text().endswith("/* mine */\n")
+
+
+def test_every_write_records_what_it_wrote(tmp_path):
+    source = _source(tmp_path)
+    out = tmp_path / "out"
+    write_with_intake(out, {"b.css": "b\n", "a.css": "a\n"}, source)
+    assert read_record(out) == {"a.css": _digest(b"a\n"), "b.css": _digest(b"b\n")}
+    assert RECORD.startswith(f"{INTAKE_DIR}/")
 
 
 # Every name is a plain path below the out folder and outside .uxskill/.

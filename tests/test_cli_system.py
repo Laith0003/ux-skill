@@ -44,7 +44,7 @@ def test_build_writes_the_three_files(tmp_path):
     result, payload = _run("--brand", "#3366FF", "--out", str(out))
     assert result.exit_code == 0, result.output
     assert payload["status"] == "written" and payload["passed"] is True
-    assert payload["written"] == list(FILES) and payload["conflicts"] == []
+    assert payload["written"] == [*FILES, ".uxskill/files.json"] and payload["conflicts"] == []
     assert payload["gate"].startswith("WCAG gate passed: ")
     assert payload["axes_source"].startswith("neutral default")
     expected = make_system("#3366FF", NEUTRAL, payload["axes_source"])
@@ -296,7 +296,8 @@ def test_without_the_flag_no_rule_pack_is_written(tmp_path):
     out = tmp_path / "ds"
     result, _ = _run("--brand", "#3366FF", "--out", str(out))
     assert result.exit_code == 0
-    assert sorted(p.name for p in out.iterdir()) == sorted({n.split("/")[0] for n in FILES})
+    assert sorted(p.name for p in out.iterdir()) == sorted(
+        {n.split("/")[0] for n in FILES} | {".uxskill"})
 
 
 # A pack beside tokens it was not built from is reported as stale, named

@@ -162,9 +162,10 @@ def test_out_writes_the_same_bytes_as_the_cli(tmp_path):
     out = tmp_path / "mcp"
     result = handle_ux_system_build({"brand": "#3366FF", "brief": brief, "out": str(out)})
     assert result["status"] == "written" and result["passed"] is True
+    # The record of what the engine wrote goes last.
     assert result["written"] == ["tokens.json", "tokens.css", "fonts.css", "fonts-self-host.css",
                                  "system-report.md", "art/pattern.svg", "art/shapes.svg",
-                                 "art/gradient.svg"]
+                                 "art/gradient.svg", ".uxskill/files.json"]
     assert result["unchanged"] == [] and result["conflicts"] == []
     assert "css" not in result
     for name in result["written"]:
@@ -185,7 +186,9 @@ def test_out_refuses_a_differing_file_without_force(tmp_path):
     assert result["status"] == "refused" and result["passed"] is True
     # the two font files follow the axes, not the brand, so they are left as they are
     fonts = {"fonts.css", "fonts-self-host.css"}
-    assert result["written"] == [] and set(result["conflicts"]) == set(before) - fonts
+    # The record is not a file of the system, so it is never a conflict.
+    assert result["written"] == [] and set(result["conflicts"]) == set(before) - fonts - {
+        ".uxskill/files.json"}
     assert result["unchanged"] == ["fonts.css", "fonts-self-host.css"]
     assert "Pass force: true to replace them, or pass a different out folder." in result["message"]
     assert {str(p.relative_to(tmp_path)): p.read_bytes() for p in tmp_path.rglob("*")
