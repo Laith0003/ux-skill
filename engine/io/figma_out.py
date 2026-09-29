@@ -66,8 +66,9 @@ READ_SCRIPT = (_HERE / "read-variables.js").read_text(encoding="utf-8")
 # The collection an extension adds for tokens no collection of the file fits.
 ADDITIONS = "ux-skill additions"
 _HEAD = "// Apply a ux-skill design system to this Figma file through Figma's plugin API.\n"
-_EXT_HEAD = ("// Add ux-skill's additions to the Figma file {name} was exported from, through "
-             "Figma's plugin API.\n")
+# The line that opens an extension's script; {name} is the export it extends.
+EXTENSION_HEAD = ("// Add ux-skill's additions to the Figma file {name} was exported from, "
+                  "through Figma's plugin API.\n")
 
 _FIGMA_TYPES = {"color": "COLOR", "dimension": "FLOAT", "duration": "FLOAT", "number": "FLOAT",
                 "fontWeight": "FLOAT", "fontFamily": "STRING"}
@@ -320,7 +321,8 @@ def _unsized(collections: List[Dict[str, Any]], sizes: set) -> int:
                if v["name"] in sizes and kinds[f"{c['name']}:{v['name']}"] != "size")
 
 
-def _script(payload: Dict[str, Any], head: str) -> str:
+def apply_script(payload: Dict[str, Any], head: str) -> str:
+    """The apply script with `head` on top and `payload` inlined."""
     inline = "const PAYLOAD = " + json.dumps(payload, separators=(",", ":")) + ";\n"
     return head + inline + APPLY_SCRIPT
 
@@ -330,7 +332,7 @@ def figma_files(ts: TokenSet) -> Dict[str, str]:
     script with the payload inlined) and figma-read-variables.js."""
     payload = to_figma(ts)
     return {"figma-variables.json": json.dumps(payload, indent=2) + "\n",
-            "figma-variables.js": _script(payload, _HEAD),
+            "figma-variables.js": apply_script(payload, _HEAD),
             "figma-read-variables.js": READ_SCRIPT}
 
 
@@ -540,7 +542,7 @@ def _and(items: List[str]) -> str:
     return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
 
 
-def _extension_names(source: Path) -> Tuple[str, str]:
+def extension_names(source: Path) -> Tuple[str, str]:
     """The payload and the script written beside a source: variables.json
     gives variables-ext.json and variables-ext.js."""
     return f"{source.stem}-ext.json", f"{source.stem}-ext.js"
@@ -581,10 +583,10 @@ def write_figma(ts: TokenSet, imported: Imported, *, force: bool = False,
                     "message": f"{source.path} already holds every token of the system to "
                                "write, so no extension was written.",
                     "backup": "", "replaced": {}, "file": "", "load": ""}
-        data, script = _extension_names(path)
+        data, script = extension_names(path)
         files = {data: json.dumps(payload, indent=2) + "\n",
-                 script: stamp_digest(_script(payload, _EXT_HEAD.format(name=path.name)),
-                                      css=True)}
+                 script: stamp_digest(
+                     apply_script(payload, EXTENSION_HEAD.format(name=path.name)), css=True)}
         does = (f"it adds {count} variable{'' if count == 1 else 's'} and changes none that the "
                 "file has")
         # What it writes in a mode the import did not read is said here too.
@@ -603,5 +605,6 @@ def write_figma(ts: TokenSet, imported: Imported, *, force: bool = False,
     return outcome
 
 
-__all__ = ["ADDITIONS", "APPLY_SCRIPT", "READ_SCRIPT", "Ref", "as_export", "figma_extension",
-           "figma_files", "to_figma", "write_figma"]
+__all__ = ["ADDITIONS", "APPLY_SCRIPT", "EXTENSION_HEAD", "READ_SCRIPT", "Ref", "apply_script",
+           "as_export", "extension_names", "figma_extension", "figma_files", "to_figma",
+           "write_figma"]

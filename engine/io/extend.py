@@ -5,7 +5,9 @@ Three kinds of addition:
   in the engine's own role names; a foundation that aliases another's
   steps (layout aliases space) brings only the steps it points at, and a
   role the mapping already sends to one of the system's tokens is not
-  added again: what points at it points at the system's token;
+  added again: what points at it points at the system's token; a role
+  the owner keeps out with a "not mapped" entry gets no token, nor does
+  anything that points at it;
 - a role, pointed at one of the system's own tokens (color.focus.ring at
   brand-700), which the mapping then records;
 - a contract, bound through the mapping and copied into contracts/.
@@ -35,16 +37,30 @@ writes), and the report says how to load it:
   (figma_out.figma_extension).
 An extension file already beside the source is read first: what it added
 is kept, counted as part of the system, and the new additions follow it.
+Where the source now sets a name the earlier extension sets too, with
+another value, the extension would replace the owner's value, so that
+blocks with the fix. A Figma extension keeps the variables of an earlier
+one the file does not have yet; the ones it has now are left as the file
+has them.
 Only the engine's own system, known from the record of the files it wrote
 (Imported.owned, never token names), is rewritten in place, and only when
 the import read every entry of it; otherwise it is extended like any
-other. write_extended() writes either through the intake step.
+other, and a Figma export never is: Figma holds its variables.
+write_extended() writes either through the intake step, the files that
+belong beside the source there and the rest into another folder when one
+is named; both folders are checked before anything is written, and a
+second write that fails puts the first back.
 
 The result is checked through the same view and gate enhance uses; the
 Check section says how many roles are mapped per foundation, or that
-nothing was measured. What the extension adds that fails, and every
-addition problem, blocks it; findings that were there before are listed
-apart. A blocked result gives only its report.
+nothing was measured. The system as it was is checked in the same
+contexts, under every axis the additions bring, so what it had before is
+never taken for what they caused. What the extension adds that fails,
+and every addition problem, blocks it, each with a fix the owner can
+take (map the role to one of their tokens, or leave the foundation out);
+findings that were there before are listed apart, and so are findings
+on the system's own tokens in a mode only the additions bring, which it
+was never measured in. A blocked result gives only its report.
 
 A foundation is generated for the brief's audience as a system build is
 (body size, targets, the ring, the measure, the scripts), and the report
@@ -57,9 +73,11 @@ from __future__ import annotations
 
 import dataclasses
 import json
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
+from typing import Mapping as Mapping_
 
 from engine.contracts.bind import validate_contracts
 from engine.contracts.schema import ContractError, load_contract
@@ -79,8 +97,8 @@ from engine.io.adapter import ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mappin
 from engine.io.css_in import import_css
 from engine.io.enhance import enhance
 from engine.io.figma_out import (
-    _EXT_HEAD, _extension_names, _script, figma_extension, figma_files)
-from engine.io.intake import write_with_intake
+    EXTENSION_HEAD, apply_script, extension_names, figma_extension, figma_files)
+from engine.io.intake import INTAKE_DIR, write_with_intake
 from engine.io.report import Imported, read_source
 from engine.io.scan import canonical
 from engine.io.tailwind_in import import_tailwind_css
@@ -105,8 +123,10 @@ class Extended:
     what blocks it (empty when nothing does), the findings that were there
     before, the decisions it took, the files to write, the brief's words
     it did not read, the files that belong beside the source (the system
-    or its extension file, and the font files), and how to load an
-    extension file ("" when the system is rewritten in place)."""
+    or its extension file, and the font files), how to load an extension
+    file ("" when the system is rewritten in place), and the findings on
+    the system's own tokens in a mode only the additions bring (contrast
+    high, say), which it was never measured in before."""
     tokens: TokenSet
     mapping: Mapping
     added: List[str]
@@ -118,6 +138,7 @@ class Extended:
     unread: List[str] = field(default_factory=list)
     beside: List[str] = field(default_factory=list)
     load: str = ""
+    unmeasured: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -125,13 +146,15 @@ class _Earlier:
     """An extension file already beside the source: its name, the tokens
     it adds in the source's names, the text written for them (a
     stylesheet's body, without its opening comment), the properties or
-    paths it declares that could not be read back, and for a Figma
-    extension its payload."""
+    paths it declares that could not be read back, for a Figma
+    extension its payload, and each place where it now replaces a value
+    the source sets, with the fix."""
     name: str
     tokens: TokenSet
     body: str = ""
     unread: Dict[str, str] = field(default_factory=dict)
     payload: Optional[Dict[str, Any]] = None
+    clashes: List[str] = field(default_factory=list)
 
 
 def _refs(value: Any) -> List[str]:
@@ -246,16 +269,19 @@ def _ext_names(imported: Imported) -> List[str]:
     if source.format in _READ_ONLY:
         return [_TOKENS_EXT]
     if source.format == "figma":
-        data, script = _extension_names(path)
+        data, script = extension_names(path)
         return [data, script]
     return [extension_name(path)]
 
 
 def _in_place(imported: Imported) -> bool:
     """Whether the system is the engine's own and can be written back
-    whole: the import read every entry of it and it is one file."""
+    whole: the import read every entry of it and it is one file. A Figma
+    export is never rewritten: Figma holds the variables, so an addition
+    is always a script to run there."""
     report = imported.report
-    if not imported.owned or report.source.format in _READ_ONLY:
+    if not imported.owned or report.source.format in _READ_ONLY \
+            or report.source.format == "figma":
         return False
     if report.not_read or report.also_read:
         return False
@@ -312,7 +338,8 @@ def _earlier(imported: Imported, name: str) -> Optional[_Earlier]:
                 tokens.add(t)
         before = unread_properties(imported)
         unread = {p: m for p, m in unread_properties(both).items() if p not in before}
-        return _Earlier(name, tokens, _body(text), unread)
+        return _Earlier(name, tokens, _body(text), unread,
+                        clashes=_sheet_clashes(imported, both, text, name))
     if fmt == "figma":
         try:
             payload = json.loads(text)
@@ -329,6 +356,38 @@ def _earlier(imported: Imported, name: str) -> Optional[_Earlier]:
                          f"({exc}), so what it added cannot be kept; move it away to start the "
                          "extension again") from None
     return _Earlier(name, tokens)
+
+
+_DECLARED = re.compile(r"(--[A-Za-z0-9_-]+)\s*:")
+
+
+def _sheet_clashes(imported: Imported, both: Imported, text: str, ext: str) -> List[str]:
+    """Each custom property an earlier stylesheet extension declares that
+    the source now declares too with another value, or declares where the
+    import did not read it: the extension loads after the source, so it
+    would replace the owner's value."""
+    name = Path(imported.report.source.path).name
+    own = {css_property(t.path): t for t in imported.tokens.tokens()}
+    unread = unread_properties(imported)
+    out: List[str] = []
+    bare = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    for prop in dict.fromkeys(_DECLARED.findall(bare)):
+        if prop in unread:
+            out.append(f"{prop} is declared in {name}, where the import did not read it "
+                       f"({unread[prop]}), and in {ext}, written by an earlier extension, "
+                       f"which loads after {name} and replaces its value; remove {prop} from "
+                       f"{ext}, or from {name}")
+            continue
+        mine = own.get(prop)
+        if mine is None:
+            continue
+        seen = both.tokens.get(mine.path) if both.tokens.has(mine.path) else None
+        if seen is None or (seen.type, seen.value, seen.modes) != (
+                mine.type, mine.value, mine.modes):
+            out.append(f"{prop} is in {name} and in {ext}, written by an earlier extension, "
+                       f"with other values, so {ext} replaces the value {name} sets; remove "
+                       f"{prop} from {ext}, or from {name}")
+    return out
 
 
 def _union(*axes: Any) -> Dict[str, Tuple[str, str]]:
@@ -410,6 +469,8 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                             f"earlier extension, with other values, so {earlier.name} "
                             f"replaces the value {name} sets; remove {t.path} from "
                             f"{earlier.name}, or from {name}")
+    if earlier is not None:
+        problems += earlier.clashes
     _check_roles(roles, mapping, base, mapping_name)
 
     held = _Held(sheet)
@@ -444,6 +505,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
     decisions: List[str] = []
     new_axes: Dict[str, Tuple[str, str]] = dict(base.axes)
     candidates: List[Tuple[Token, str]] = []   # (token in the engine's paths, where from)
+    axis_trouble: List[str] = []
     generated = TokenSet()
     if foundations:
         try:
@@ -472,6 +534,31 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                              f"{'it' if one else 'them'}; its tokens that point at "
                              f"{'that role' if one else 'those roles'} point at yours.")
             wanted = [t for t in wanted if t.path not in played]
+        kept = [t.path for t in wanted if t.path in mapping.roles
+                and mapping.roles[t.path].token is None]
+        if kept:
+            # The owner's "not mapped" entry keeps the role out: no token is
+            # added for it, nor for anything the foundation points at it.
+            gone = set(kept)
+            grew = True
+            while grew:
+                more = {t.path for t in wanted if t.path not in gone
+                        and any(r in gone for v in [t.value, *t.modes.values()]
+                                for r in _refs(v))}
+                grew = bool(more)
+                gone |= more
+            after_them = [t.path for t in wanted if t.path in gone and t.path not in kept]
+            one = len(kept) == 1
+            line = (f"{_and(kept)} {'is' if one else 'are'} kept out in {mapping_name} with "
+                    f"{_NOT_MAPPED}, so the foundation added no token for "
+                    f"{'it' if one else 'them'}")
+            if after_them:
+                line += (f"; {_and([named(p) for p in after_them])} "
+                         f"{'points' if len(after_them) == 1 else 'point'} at "
+                         f"{'it' if one else 'them'} and "
+                         f"{'was' if len(after_them) == 1 else 'were'} left out too")
+            decisions.append(line + ".")
+            wanted = [t for t in wanted if t.path not in gone]
         mine = {t.path for t in wanted}
         by_path = {t.path: t for t in generated.tokens()}
         todo = [r for t in wanted for v in [t.value, *t.modes.values()] for r in _refs(v)]
@@ -493,14 +580,23 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                                          f"{', '.join(named(p) for p in steps)}.")
         candidates = [(t, t.path.split(".", 1)[0]) for t in wanted] + \
             [(by_path[p], "step") for p in by_path if p in pulled]
-        problems += _axis_problems([t for t, _ in candidates], mapping, new_axes, mapping_name)
+        axis_trouble = _axis_problems([t for t, _ in candidates], mapping, new_axes,
+                                      mapping_name)
+        problems += axis_trouble
     new_axes = {**dict(base.axes),
                 **{a: AXES[a] for a in AXES if a in new_axes and a not in base.axes}}
 
     adding: List[Tuple[Token, str]] = []
-    if not problems:
+    blocked: set = set()   # engine paths of additions that clash
+    if not axis_trouble:
         for t, origin in candidates:
             root = t.path.split(".", 1)[0]
+            # A step another foundation points at is left out with that one.
+            by = root if origin != "step" else _and(
+                [f.name for f in FOUNDATIONS if f.name in foundations and root in f.requires]
+                or [root])
+            what = (f"the {root} foundation" if origin != "step"
+                    else f"the {root} step {by} points at")
             probe = _translate(t, mapping, new_axes)
             probe = _copy(probe, path=named(t.path), rename=named)
             hit = [k for k in held.keys(probe) if k in declared]
@@ -509,21 +605,23 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                 problems.append(f"{hit[0]} is declared in {where}, where the import did not "
                                 f"read it ({why}); the extension file loads after {name} and "
                                 f"would replace its value, so write {hit[0]} in {where} in a "
-                                f"form the import reads, or leave {root} out")
+                                f"form the import reads, or leave {by} out")
+                blocked.add(t.path)
                 continue
             same = held.same(probe)
             if same is None:
                 adding.append((t, origin))
             elif not same:
+                blocked.add(t.path)
                 key = next(k for k in held.keys(probe) if k in held.by)
                 old, where = held.by[key]
                 shown = ([_shown_css(old), _shown_css(probe)] if sheet
                          else [_shown(base, old), _shown(generated, t)])
                 fix = f"rename {key} in {name}" if where == name else f"edit {where} itself,"
                 problems.append(f"{key} is already in {placed(where)} with another value "
-                                f"({shown[0]}, the {root} foundation would write {shown[1]}); "
-                                f"extend never changes a token the system has, so {fix} or "
-                                f"leave {root} out")
+                                f"({shown[0]}, {what} would write {shown[1]}); extend never "
+                                f"changes a token the system has, so {fix} or leave {by} "
+                                "out")
     for role, target in roles.items():
         token = Token(role, ROLE_TYPES[role], "{" + target + "}", layer="semantic")
         probe = _copy(token, path=named(role))
@@ -583,13 +681,33 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
         if axis not in base.axes and axis not in new_mapping.axes:
             new_mapping.axes[axis] = AxisMap(axis, {v: v for v in AXES[axis]}, "name")
 
-    before = enhance(dataclasses.replace(imported, tokens=base), mapping,
+    clashes = len(problems)
+    # The system as it was, checked in the same contexts as the result:
+    # under every axis the additions bring, so a finding it had before
+    # reads the same in both and is never taken for one the additions
+    # caused.
+    brought = [a for a in new_axes if a not in base.axes]
+    wide = TokenSet(new_axes)
+    for t in base.tokens():
+        wide.add(t)
+    before = enhance(dataclasses.replace(imported, tokens=wide),
+                     Mapping(dict(mapping.roles), {**mapping.axes,
+                                                    **{a: new_mapping.axes[a] for a in brought
+                                                       if a in new_mapping.axes}}),
                      mapping_name=mapping_name)
     after = enhance(dataclasses.replace(imported, tokens=merged), new_mapping,
                     mapping_name=mapping_name)
-    problems += [m for m in after.findings if m not in before.findings]
-    existing = [m for m in after.findings if m in before.findings]
-    problems += [p.message for p in validate(engine_set) if p.token in ours]
+    roles_added = {t.path: "role" if origin == "role" else t.path.split(".", 1)[0]
+                   for t, origin in adding if t.path in ROLE_TYPES}
+    problems += [_owner_fix(m, roles_added, mapping_name)
+                 for m in after.findings if m not in before.findings]
+    had = [m for m in after.findings if m in before.findings]
+    existing = [m for m in had if not _in_new_mode(m, brought)]
+    unmeasured = [m for m in had if _in_new_mode(m, brought)]
+    problems += [p.message for p in validate(engine_set) if p.token in ours
+                 and not any(r in blocked for v in [engine_set.get(p.token).value,
+                                                    *engine_set.get(p.token).modes.values()]
+                             for r in _refs(v))]
 
     contract_files: Dict[str, str] = {}
     if contracts:
@@ -621,7 +739,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
         decisions.append(f"{name} is the engine's own, but the import did not read all of it, "
                          f"so it is not rewritten; the additions are in {ext_names[0]}.")
     result = Extended(merged, new_mapping, added, after.check, problems, existing, decisions,
-                      unread=list(unread))
+                      unread=list(unread), unmeasured=unmeasured)
     system: Dict[str, str] = {}
     if not problems:
         try:
@@ -630,7 +748,8 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
         except (InputError, ValueError) as exc:
             problems.append(str(exc))
     report = _report(imported, result, list(foundations), roles, list(contract_files),
-                     origins, after, earlier, in_place, ext_names, mapping_name)
+                     origins, after, earlier, in_place, ext_names, mapping_name, clashes,
+                     brought)
     if problems:
         result.files = {"extend-report.md": report}
         result.load = ""
@@ -639,6 +758,50 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
     result.files = {**system, **fonts, "mapping.json": dump_mapping(new_mapping),
                     "extend-report.md": report, **contract_files}
     return result
+
+
+_CONTEXT = re.compile(r"\(([a-z]+:[a-z]+(?:,[a-z]+:[a-z]+)*)")
+# The fixes a finding ends with for a system the owner holds: they name
+# what to change in it, which for a token the extension adds is nothing
+# the owner can edit.
+_THEIR_FIXES = (" Change the value of one of them in your system", ", so ")
+
+
+def _in_new_mode(finding: str, brought: Sequence[str]) -> bool:
+    """Whether a finding holds in a mode of an axis the additions bring,
+    at its other value (contrast:high), and so was never measured on the
+    system before."""
+    return any(axis in brought and value != AXES[axis][0]
+               for key in _CONTEXT.findall(finding)
+               for axis, value in (pair.split(":") for pair in key.split(",")))
+
+
+def _owner_fix(finding: str, roles: Dict[str, str], mapping_name: str) -> str:
+    """A finding on a role the extension adds, with a fix the owner can
+    take: map the role to one of their tokens, which a foundation then
+    uses instead of adding its own, or leave the foundation out; for a
+    role added with --add-role, point it at another token. Any other
+    finding is as it is."""
+    hit = [(m.start(), r) for r in roles
+           for m in [re.search(r"(?<![\w.-])" + re.escape(r) + r"(?![\w-]|\.[\w-])", finding)]
+           if m]
+    if not hit:
+        return finding
+    role = min(hit)[1]
+    head = finding
+    for cut in _THEIR_FIXES:
+        at = head.find(cut)
+        if at != -1:
+            head = head[:at]
+            break
+    head = head.rstrip(" .;")
+    origin = roles[role]
+    if origin == "role":
+        fix = f"Point --add-role {role} at another of your tokens, or leave it out"
+    else:
+        fix = (f"Map {role} in {mapping_name} to one of your tokens, which the {origin} "
+               f"foundation then uses instead of adding its own, or leave {origin} out")
+    return f"{head}. {fix}."
 
 
 def _check_roles(roles: Dict[str, str], mapping: Mapping, base: TokenSet,
@@ -777,7 +940,8 @@ def _figma(imported: Imported, ts: TokenSet, earlier: Optional[_Earlier],
     count = sum(len(c["variables"]) for c in payload["collections"])
     source = Path(imported.report.source.path).name
     return ({names[0]: json.dumps(payload, indent=2) + "\n",
-             names[1]: stamp_digest(_script(payload, _EXT_HEAD.format(name=source)), css=True)},
+             names[1]: stamp_digest(apply_script(payload, EXTENSION_HEAD.format(name=source)),
+                                    css=True)},
             count)
 
 
@@ -849,7 +1013,7 @@ def _s(n: int) -> str:
 def _report(imported: Imported, result: Extended, foundations: List[str],
             roles: Dict[str, str], contracts: List[str], origins: Dict[str, str],
             after: Any, earlier: Optional[_Earlier], in_place: bool, ext_names: List[str],
-            mapping_name: str) -> str:
+            mapping_name: str, clashes: int, brought: List[str]) -> str:
     source = imported.report.source
     name = Path(source.path).name
     also = [Path(a.path).name for a in imported.report.also_read]
@@ -900,6 +1064,9 @@ def _report(imported: Imported, result: Extended, foundations: List[str],
                          f"token{_s(count)}; it is kept as it is, and the new additions follow "
                          "it.")
     lines += ["", "## Check", ""]
+    if clashes:
+        lines += ["The additions under What blocks it that clash with the system were left "
+                  "out of this check; it covers the system with the rest.", ""]
     check = after.check_lines(source.path)
     if not after.measured:
         check[-1] = ("The gate was not measured: no role is mapped, so nothing was checked and "
@@ -910,10 +1077,22 @@ def _report(imported: Imported, result: Extended, foundations: List[str],
         lines += ["", "## What blocks it", "",
                   "Nothing was written but this report; fix each line and run it again.", ""]
         lines += [f"- {p}" for p in result.problems]
+    if result.existing or result.unmeasured:
+        lines += ["", "## Already in the system", ""]
     if result.existing:
-        lines += ["", "## Already in the system", "",
-                  "These were there before the extension; it did not cause them.", ""]
+        lines += ["These were there before the extension; it did not cause them.", ""]
         lines += [f"- {m}" for m in result.existing]
+    if result.unmeasured:
+        seen = [a for a in brought if any(_in_new_mode(m, [a]) for m in result.unmeasured)]
+        one = len(seen) == 1
+        modes = _and([f"{a} {AXES[a][1]}" for a in seen])
+        lines += ([""] if result.existing else []) + [
+            f"Your system was never measured in {modes}, "
+            f"{'a mode' if one else 'modes'} the additions bring. These findings are on your "
+            f"own tokens in {'that mode' if one else 'those modes'}; the extension did not "
+            "cause them, and they do not block it. Decide whether your system should hold "
+            f"{'that mode' if one else 'them'}.", ""]
+        lines += [f"- {m}" for m in result.unmeasured]
     lines += ["", "## Decisions made without you", ""]
     lines += [f"- {d}" for d in result.decisions] or ["None."]
     if result.unread:
@@ -934,7 +1113,9 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
     extension file, and the font files, beside the source (the only place
     an extension file loads from); the mapping, the report and the
     contracts into `out`, or beside the source when `out` is None. A
-    blocked result writes only its report. Returns write_with_intake's
+    blocked result writes only its report. Two folders are written both or
+    neither: each is checked before anything is written, and if the second
+    write fails the first is put back as it was. Returns write_with_intake's
     outcome, with `load` added (and appended to the message after a
     write). When two folders are written, `beside` and `out` hold each
     folder's outcome and the lists name each file under its folder."""
@@ -945,33 +1126,94 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
     if result.problems:
         return {**write_with_intake(target, {"extend-report.md": result.files["extend-report.md"]},
                                     imported.report, **labels), "load": ""}
-    same = out is None or target.resolve() == here.resolve()
-    if same:
-        outcome = write_with_intake(here, result.files, imported.report, **labels)
-    else:
-        near = {n: result.files[n] for n in result.beside}
-        rest = {n: t for n, t in result.files.items() if n not in result.beside}
-        first = write_with_intake(here, near, imported.report, **labels)
-        if first["status"] not in ("written", "unchanged"):
-            return {**first, "load": result.load}
-        second = write_with_intake(target, rest, imported.report, **labels)
-        status = second["status"]
-        if status in ("written", "unchanged") and "written" in (first["status"], status):
-            status = "written"
-        outcome = {"status": status,
-                   "written": [str(here / n) for n in first["written"]]
-                   + [str(target / n) for n in second["written"]],
-                   "unchanged": [str(here / n) for n in first["unchanged"]]
-                   + [str(target / n) for n in second["unchanged"]],
-                   "conflicts": [str(target / n) for n in second["conflicts"]],
-                   "message": f"{first['message']} {second['message']}",
-                   "backup": second["backup"],
-                   "replaced": {**{str(here / n): str(here / b)
-                                   for n, b in first["replaced"].items()},
-                                **{str(target / n): str(target / b)
-                                   for n, b in second["replaced"].items()}},
-                   "beside": first, "out": second}
+    if out is None or target.resolve() == here.resolve():
+        return _loaded(_fonts_note(write_with_intake(here, result.files, imported.report,
+                                                     **labels), result, labels), result)
+    near = {n: result.files[n] for n in result.beside}
+    rest = {n: t for n, t in result.files.items() if n not in result.beside}
+    for folder, files in ((here, near), (target, rest)):
+        planned = write_with_intake(folder, files, imported.report, plan_only=True, **labels)
+        if planned["status"] not in ("planned", "unchanged"):
+            return {**_fonts_note(planned, result, labels), "load": result.load}
+    saved = _snapshot(here, near)
+    first = write_with_intake(here, near, imported.report, **labels)
+    if first["status"] not in ("written", "unchanged"):
+        return {**first, "load": result.load}
+    second = write_with_intake(target, rest, imported.report, **labels)
+    if second["status"] not in ("written", "unchanged"):
+        _put_back(here, first["written"], saved)
+        return {**second, "load": result.load,
+                "message": second["message"] + f" What was written in {here} was put back as it "
+                                                "was, so nothing changed."}
+    status = "written" if "written" in (first["status"], second["status"]) else "unchanged"
+    words = [o["message"] for o in (first, second) if o["status"] == "written"]
+    outcome = {"status": status,
+               "written": [str(here / n) for n in first["written"]]
+               + [str(target / n) for n in second["written"]],
+               "unchanged": [str(here / n) for n in first["unchanged"]]
+               + [str(target / n) for n in second["unchanged"]],
+               "conflicts": [],
+               "message": " ".join(words) or second["message"],
+               "backup": second["backup"],
+               "replaced": {**{str(here / n): str(here / b)
+                               for n, b in first["replaced"].items()},
+                            **{str(target / n): str(target / b)
+                               for n, b in second["replaced"].items()}},
+               "beside": first, "out": second}
+    return _loaded(outcome, result)
+
+
+def _loaded(outcome: Dict[str, Any], result: Extended) -> Dict[str, Any]:
+    """The outcome with how to load the extension, said after a write."""
     outcome["load"] = result.load
     if result.load and outcome["status"] in ("written", "unchanged"):
         outcome["message"] += " " + result.load
     return outcome
+
+
+_FONTS = ("fonts.css", "fonts-self-host.css")
+
+
+def _fonts_note(outcome: Dict[str, Any], result: Extended,
+                labels: Dict[str, Any]) -> Dict[str, Any]:
+    """A refusal over a font file the extension writes, with why it is
+    written and what to do."""
+    hit = [c for c in outcome.get("conflicts", []) if Path(c).name in _FONTS]
+    if outcome["status"] == "refused" and hit and any(n in result.files for n in _FONTS):
+        one = len(hit) == 1
+        outcome["message"] += (
+            f" {_and([Path(h).name for h in hit])} {'is one of' if one else 'are'} the font "
+            "files the added faces load through, written beside the system as a build writes "
+            f"them; move your own file{'' if one else 's'} of that name, or pass "
+            f"{labels['replace_label']} as well as {labels['force_label']} to replace "
+            f"{'it' if one else 'them'} after a backup.")
+    return outcome
+
+
+def _snapshot(folder: Path, files: Mapping_[str, str]) -> Dict[str, bytes]:
+    """The bytes of every file a write into `folder` may replace: the files
+    it writes that exist, and the records under the intake folder."""
+    saved: Dict[str, bytes] = {}
+    names = [*files, *(str(p.relative_to(folder)) for p in sorted(
+        (folder / INTAKE_DIR).rglob("*.json")) if p.is_file())] \
+        if (folder / INTAKE_DIR).is_dir() else list(files)
+    for name in names:
+        p = folder / name
+        if p.is_file():
+            saved[name] = p.read_bytes()
+    return saved
+
+
+def _put_back(folder: Path, written: Sequence[str], saved: Dict[str, bytes]) -> None:
+    """Undo a write: each file it wrote gets its old bytes back, or is
+    removed when it was new, and folders it made that are now empty go."""
+    for name in written:
+        p = folder / name
+        if name in saved:
+            p.write_bytes(saved[name])
+            continue
+        p.unlink(missing_ok=True)
+        parent = p.parent
+        while parent != folder and parent.is_dir() and not any(parent.iterdir()):
+            parent.rmdir()
+            parent = parent.parent

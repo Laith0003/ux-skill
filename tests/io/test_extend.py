@@ -8,6 +8,7 @@ recorded as the engine's, and a later extension keeps what an earlier one
 added. Only the engine's own system, known from the record of the files
 it wrote and never from token names, is rewritten in place, through the
 intake step."""
+import dataclasses
 import hashlib
 import json
 from pathlib import Path
@@ -28,7 +29,7 @@ from engine.io.figma_in import read_figma
 from engine.io.intake import write_with_intake
 from engine.io.markdown_in import import_markdown
 from engine.io.report import Source
-from engine.io.tailwind_in import import_tailwind_css, import_tailwind_json
+from engine.io.tailwind_in import import_tailwind_css, import_tailwind_json, read_tailwind
 from engine.io.tailwind_out import to_tailwind
 from engine.synthesizer.axes import AxisValues
 
@@ -284,8 +285,8 @@ def test_an_added_role_that_fails_the_gate_blocks_with_the_systems_names():
     result = extend(_foreign(), MAPPING, roles={"color.focus.ring": "brand-700"})
     assert result.problems == [
         "color.focus.ring on color.surface.page (your page) (scheme:dark) is 1.84:1; "
-        "WCAG 1.4.11 needs 3:1. Change the value of one of them in your system, or map the "
-        "role to a token with more contrast."]
+        "WCAG 1.4.11 needs 3:1. Point --add-role color.focus.ring at another of your tokens, "
+        "or leave it out."]
     assert list(result.files) == ["extend-report.md"]
     report = result.files["extend-report.md"]
     assert "## What blocks it" in report
@@ -322,6 +323,60 @@ def test_nothing_mapped_is_not_measured():
     result = extend(imported, Mapping(), contracts=())
     report = result.files["extend-report.md"]
     assert "not measured" in report.split("## Check\n\n", 1)[1].split("\n## ", 1)[0]
+
+
+
+# A light only system whose text passes AA (5.23:1) but not AAA, and one
+# whose text fails AA (2.76:1).
+def _light(ink):
+    return FOREIGN.replace("--ink: #1b1d22", f"--ink: {ink}").replace(
+        ".dark {\n  --text-body: var(--paper);\n  --page: var(--ink);\n}\n", "")
+
+
+LIGHT = Mapping(roles=dict(MAPPING.roles), axes={})
+
+
+@pytest.mark.parametrize("add", ["border", "type"])
+def test_a_mode_the_additions_bring_never_blames_the_systems_own_tokens(add):
+    result = extend(_foreign(_light("#6b6b6b")), LIGHT, foundations=(add,))
+    assert result.problems == [] and result.existing == []
+    assert result.unmeasured == [
+        "color.text.default (your text-body) on color.surface.page (your page) "
+        "(contrast:high) is 5.23:1; WCAG 1.4.6 needs 7:1. Change the value of one of them in "
+        "your system, or map the role to a token with more contrast."]
+    report = result.files["extend-report.md"]
+    assert "Your system was never measured in contrast high, a mode the additions bring." \
+        in report
+
+
+@pytest.mark.parametrize("add", ["radius", "border", "type"])
+def test_a_finding_the_system_had_stays_apart_whatever_axis_the_additions_bring(add):
+    result = extend(_foreign(_light("#9a9a9a")), LIGHT, foundations=(add,))
+    assert result.problems == []
+    assert len(result.existing) == 1 and "is 2.76:1; WCAG 1.4.3 needs 4.5:1" in \
+        result.existing[0]
+
+
+def test_a_role_the_owner_kept_out_gets_no_token_from_a_foundation():
+    mapping = Mapping(roles={**MAPPING.roles, "color.focus.ring": RoleMap(None, "owner")},
+                      axes=dict(MAPPING.axes))
+    result = extend(_foreign(), mapping, foundations=("color",))
+    assert "color-focus-ring" not in result.added
+    assert any(d.startswith('color.focus.ring is kept out in mapping.json with {"token": null, '
+                            '"by": "owner"}, so the foundation added no token for it')
+               for d in result.decisions)
+    assert not any("color.focus.ring " in p for p in result.problems)
+
+
+def test_an_added_role_that_fails_against_the_owners_page_names_a_fix_the_owner_can_take():
+    result = extend(_foreign(), MAPPING, foundations=("color",))
+    assert result.problems[0] == (
+        "color.surface.tint measures 1.044:1 against color.surface.page (your page) "
+        "(scheme:dark,contrast:standard); our floor is 1.1:1. Map color.surface.tint in "
+        "mapping.json to one of your tokens, which the color foundation then uses instead of "
+        "adding its own, or leave color out.")
+    assert not any("step further" in p for p in result.problems)
+
 
 
 # ---------------------------------------------------------------- contracts
@@ -420,8 +475,8 @@ def test_markdown_and_a_tailwind_3_theme_get_an_extension_tokens_file():
     assert result.problems == [] and "tokens-ext.json" in result.files
 
 
-def test_a_foreign_figma_export_gets_an_extension_script(tmp_path):
-    export = {"variableCollections": {"c1": {
+def _figma_export():
+    return {"variableCollections": {"c1": {
         "id": "c1", "name": "Colors", "defaultModeId": "m1",
         "modes": [{"modeId": "m1", "name": "Light"}, {"modeId": "m2", "name": "Dark"}],
         "variableIds": ["v1", "v2"]}},
@@ -434,12 +489,17 @@ def test_a_foreign_figma_export_gets_an_extension_script(tmp_path):
                    "resolvedType": "COLOR", "scopes": ["ALL_SCOPES"],
                    "valuesByMode": {"m1": {"r": 0.99, "g": 0.99, "b": 0.98, "a": 1},
                                     "m2": {"r": 0.1, "g": 0.1, "b": 0.12, "a": 1}}}}}
-    (tmp_path / "variables.json").write_text(json.dumps(export), encoding="utf-8")
+
+
+FIGMA_MAPPING = Mapping(roles={"color.text.default": RoleMap("ink"),
+                               "color.surface.page": RoleMap("paper")},
+                        axes={"scheme": AxisMap("scheme", {"light": "light", "dark": "dark"})})
+
+
+def test_a_foreign_figma_export_gets_an_extension_script(tmp_path):
+    (tmp_path / "variables.json").write_text(json.dumps(_figma_export()), encoding="utf-8")
     imported = read_figma(tmp_path / "variables.json")
-    mapping = Mapping(roles={"color.text.default": RoleMap("ink"),
-                             "color.surface.page": RoleMap("paper")},
-                      axes={"scheme": AxisMap("scheme", {"light": "light", "dark": "dark"})})
-    result = extend(imported, mapping, foundations=("radius",))
+    result = extend(imported, FIGMA_MAPPING, foundations=("radius",))
     assert result.problems == []
     assert result.beside == ["variables-ext.json", "variables-ext.js"]
     assert result.load.startswith("Run variables-ext.js in the Figma file")
@@ -467,6 +527,45 @@ def test_a_later_extension_keeps_what_an_earlier_one_added(tmp_path):
     assert done["status"] == "written", done["message"]
     assert (tmp_path / "theme.css").read_text(encoding="utf-8") == FOREIGN
     assert "theme-ext.css" in read_record(tmp_path)
+
+
+def test_a_later_stylesheet_extension_blocks_where_the_source_now_sets_its_name(tmp_path):
+    (tmp_path / "theme.css").write_text(FOREIGN, encoding="utf-8")
+    first = extend(read_css(tmp_path / "theme.css"), MAPPING, foundations=("radius",))
+    assert write_extended(first, read_css(tmp_path / "theme.css"))["status"] == "written"
+    (tmp_path / "theme.css").write_text(
+        FOREIGN.replace("  --page: var(--paper);\n}", "  --page: var(--paper);\n"
+                        "  --radius-card: 2px;\n}"), encoding="utf-8")
+    mapping = parse_mapping(first.files["mapping.json"], "mapping.json")
+    again = extend(read_css(tmp_path / "theme.css"), mapping, foundations=("motion",))
+    assert again.problems[0] == (
+        "--radius-card is in theme.css and in theme-ext.css, written by an earlier extension, "
+        "with other values, so theme-ext.css replaces the value theme.css sets; remove "
+        "--radius-card from theme-ext.css, or from theme.css")
+    assert list(again.files) == ["extend-report.md"]
+
+
+TAILWIND = ('@import "tailwindcss";\n\n@theme {\n  --color-ink: #1b1d22;\n'
+            '  --color-paper: #fdfdfb;\n}\n')
+TW_MAPPING = Mapping(roles={"color.text.default": RoleMap("color-ink"),
+                            "color.surface.page": RoleMap("color-paper")})
+
+
+def test_a_later_tailwind_extension_keeps_the_first_and_sees_a_changed_source(tmp_path):
+    (tmp_path / "app.css").write_text(TAILWIND, encoding="utf-8")
+    first = extend(read_tailwind(tmp_path / "app.css"), TW_MAPPING, foundations=("radius",))
+    assert write_extended(first, read_tailwind(tmp_path / "app.css"))["status"] == "written"
+    mapping = parse_mapping(first.files["mapping.json"], "mapping.json")
+    second = extend(read_tailwind(tmp_path / "app.css"), mapping, foundations=("motion",))
+    assert second.problems == []
+    ext = second.files["app-ext.css"]
+    assert ext.count("@theme {") == 2 and "--radius-card:" in ext
+    assert "--motion-reveal-duration:" in ext and "@import" not in ext
+    (tmp_path / "app.css").write_text(
+        TAILWIND.replace("}\n", "  --radius-card: 2px;\n}\n"), encoding="utf-8")
+    third = extend(read_tailwind(tmp_path / "app.css"), mapping, foundations=("motion",))
+    assert third.problems[0].startswith("--radius-card is in app.css and in app-ext.css, "
+                                        "written by an earlier extension, with other values")
 
 
 def test_a_later_extension_that_would_change_an_earlier_addition_blocks(tmp_path):
@@ -527,6 +626,65 @@ def test_the_report_and_mapping_can_go_to_another_folder(tmp_path):
     assert sorted(p.name for p in (tmp_path / "intake").iterdir()) == [
         ".uxskill", "extend-report.md", "mapping.json"]
     assert (tmp_path / "theme.css").read_text(encoding="utf-8") == FOREIGN
+
+
+def test_two_folders_are_written_both_or_neither(tmp_path):
+    (tmp_path / "theme.css").write_text(FOREIGN, encoding="utf-8")
+    intake = tmp_path / "intake"
+    intake.mkdir()
+    (intake / "mapping.json").write_text('{"version": 1, "roles": {}}\n', encoding="utf-8")
+    imported = read_css(tmp_path / "theme.css")
+    result = extend(imported, MAPPING, foundations=("radius",))
+    outcome = write_extended(result, imported, out=intake)
+    assert outcome["status"] == "refused"
+    assert "Wrote" not in outcome["message"]
+    assert not (tmp_path / "theme-ext.css").exists()
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["intake", "theme.css"]
+    assert sorted(p.name for p in intake.iterdir()) == ["mapping.json"]
+
+
+def test_a_second_folder_that_fails_puts_the_first_back(tmp_path, monkeypatch):
+    import sys
+    module = sys.modules["engine.io.extend"]
+    (tmp_path / "theme.css").write_text(FOREIGN, encoding="utf-8")
+    imported = read_css(tmp_path / "theme.css")
+    result = extend(imported, MAPPING, foundations=("radius",))
+    real = module.write_with_intake
+
+    def failing(folder, files, sources, **kw):
+        if "mapping.json" in files and not kw.get("plan_only"):
+            return {"status": "error", "written": [], "unchanged": [], "conflicts": [],
+                    "message": "Nothing was written: the disk is full.", "backup": "",
+                    "replaced": {}}
+        return real(folder, files, sources, **kw)
+
+    monkeypatch.setattr(module, "write_with_intake", failing)
+    outcome = write_extended(result, imported, out=tmp_path / "intake")
+    assert outcome["status"] == "error"
+    assert "put back as it was" in outcome["message"]
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["theme.css"]
+
+
+def test_a_font_file_the_owner_has_is_named_in_the_refusal(tmp_path):
+    (tmp_path / "theme.css").write_text(FOREIGN, encoding="utf-8")
+    (tmp_path / "fonts.css").write_text("/* mine */\n", encoding="utf-8")
+    imported = read_css(tmp_path / "theme.css")
+    result = extend(imported, MAPPING, foundations=("type",))
+    outcome = write_extended(result, imported, force=True)
+    assert outcome["status"] == "refused"
+    assert outcome["message"].endswith(
+        "fonts.css is one of the font files the added faces load through, written beside the "
+        "system as a build writes them; move your own file of that name, or pass "
+        "--replace-client-files as well as --force to replace it after a backup.")
+
+
+def test_a_figma_export_the_engine_wrote_still_gets_a_script_to_run(tmp_path):
+    export = _figma_export()
+    (tmp_path / "variables.json").write_text(json.dumps(export), encoding="utf-8")
+    imported = dataclasses.replace(read_figma(tmp_path / "variables.json"), owned=True)
+    result = extend(imported, FIGMA_MAPPING, foundations=("radius",))
+    assert result.beside == ["variables-ext.json", "variables-ext.js"]
+    assert result.load.startswith("Run variables-ext.js")
 
 
 def test_the_same_extension_gives_the_same_bytes():

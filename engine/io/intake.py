@@ -159,13 +159,17 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
                       force: bool = False, replace_client: bool = False,
                       force_label: str = "--force",
                       replace_label: str = "--replace-client-files",
-                      out_label: str = "--out") -> Dict[str, Any]:
+                      out_label: str = "--out", plan_only: bool = False) -> Dict[str, Any]:
     """Write `files` into out_dir after the intake step (see the module
     docstring). `sources` is a Source, an ImportReport (its source and every
     file in also_read) or a list of either. The labels name the caller's
     inputs in messages. Returns status (a key of emit.STATUS_EXIT),
     written, unchanged, conflicts, message, the backup folder of the
-    sources and replaced (each replaced file and where its backup is)."""
+    sources and replaced (each replaced file and where its backup is).
+    With plan_only nothing is written: the outcome is the refusal or error
+    the write would give, or status "planned" (or "unchanged") when it
+    would go ahead, so a caller writing into two folders can check both
+    first."""
     from engine.foundations.emit import check_name, conflict_message, plan_writes, write_files
 
     out = Path(out_dir).expanduser()
@@ -218,6 +222,9 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
                 f"as {force_label} to replace {'it' if one else 'them'} after a backup, or pass "
                 f"a different {out_label} folder."),
                 unchanged=plan.unchanged, conflicts=theirs)
+    if plan_only:
+        return _outcome("planned", f"{out} can take these files.", unchanged=plan.unchanged,
+                        conflicts=plan.conflicts)
     extra: Dict[str, Union[str, bytes]] = {}
     backed_up: Dict[str, str] = {}
     for source, f, rel in layout:
