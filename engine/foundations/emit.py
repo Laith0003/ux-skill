@@ -29,6 +29,7 @@ from engine.foundations.audience import (
     writes_arabic)
 from engine.foundations.build import FOUNDATIONS, ValidationError, build_system
 from engine.foundations.composition import choose as choose_composition
+from engine.foundations.imagery import photo_direction, photo_lines
 # InputError and _brief_text live in a leaf module so the importers can use
 # them without loading this one; they are re-exported here unchanged.
 from engine.foundations.errors import InputError, _brief_text  # noqa: F401
@@ -725,6 +726,9 @@ _FONTS_SELF_HOST = ("Self-hosted: link fonts-self-host.css and put the WOFF2 fil
 _COMPOSITION_LEAD = ("The layout a landing page starts from, scored from the axes and the brief's "
                      "fields; the landing playbooks build on it, and the JSON result names it as "
                      "composition.")
+_PHOTO_LEAD = ("The pages use photographs. When the client gives none, source them to this "
+               "direction; every photo on a page shares one grade, and lint --render checks the "
+               "grade lock. Derived from the axes, the brand color and the brief's fields.")
 _ART_LEAD = ("Generated from the axes and the colors above, so a page is never empty for want "
              "of photos. Three layers, a quiet neutral plane, the brand's focal shape and "
              "support accents, split the drawn area about 60, 30 and 10 percent; warmth moves "
@@ -758,7 +762,7 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   font_link: Sequence[str] = (), audience: Sequence[str] = (),
                   unread: Sequence[str] = (), art: bool = False,
                   composition: str = "", sentence: str = "",
-                  nudges: Sequence[str] = ()) -> str:
+                  nudges: Sequence[str] = (), photography: Sequence[str] = ()) -> str:
     """system-report.md: one sentence on what was built, what it was built
     from, the gate result, every note or finding in plain words, and how to
     use the files, the rule pack among them when it was written. No time
@@ -804,6 +808,8 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
                   "", *[f"    {tag}" for tag in font_link], "", _FONTS_SELF_HOST, ""]
     if composition:
         lines += ["## Page composition", "", _COMPOSITION_LEAD, "", f"- {composition}", ""]
+    if photography:
+        lines += ["## Photography", "", _PHOTO_LEAD, "", *[f"- {p}" for p in photography], ""]
     if art:
         lines += ["## Brand art", "", _ART_LEAD, "", *[f"- {a}" for a in art_lines()], ""]
     lines += ["## Files", "",
@@ -859,13 +865,17 @@ def character_sentence(axes: AxisValues, ts: Any, composition: str,
 def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 arabic: bool = True, rule_pack: bool = False,
                 audience: Optional[Audience] = None,
-                unread: Sequence[str] = (), nudges: Sequence[str] = ()) -> SystemOutput:
+                unread: Sequence[str] = (), nudges: Sequence[str] = (),
+                primary_action: Optional[str] = None, photo_bans: Sequence[str] = (),
+                no_photography: bool = False) -> SystemOutput:
     """Build, validate and gate. On success `files` holds every file in FILES
     and ART_FILES, and with rule_pack every rule pack file under
     RULE_PACK_DIR after them;
     on a validation, gate or rule pack failure `files` is empty and
     `findings` names every problem, so a caller can never write a failing
-    system."""
+    system. The report's photography direction reads the brief's
+    primary_action, a brand's bans on kinds of photo (`photo_bans`) and
+    whether a client system forbids photography (`no_photography`)."""
     audience = audience or Audience()
     composition = choose_composition(axes, audience)
     notes: Sequence[str] = ()
@@ -911,6 +921,9 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                            font_link=font_link,
                            audience=[e.line() for e in effects(audience, axes)], unread=unread,
                            art=bool(art), composition=composition.line() if tokens else "",
+                           photography=photo_lines(photo_direction(
+                               axes, brand, audience.product_type, audience.age, primary_action,
+                               photo_bans, no_photography)) if tokens else (),
                            sentence=character_sentence(axes, built.tokens, composition.name,
                                                        audience)
                            if tokens else "", nudges=nudges)

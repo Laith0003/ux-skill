@@ -18,7 +18,9 @@ The corner of media is radius.media (the radius foundation).
 """
 from __future__ import annotations
 
-from typing import Dict, List, Tuple
+from dataclasses import dataclass
+from types import MappingProxyType
+from typing import Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations import character
 from engine.foundations.color_math import (
@@ -150,6 +152,181 @@ def scrim_reach(axes: AxisValues, body_px: int = 16) -> float:
     return min(1.0, max(SCRIM_REACH_MIN, math.ceil(need * 100) / 100))
 
 
+# Photography. A page uses photographs; when the client gives none the
+# skill sources them to this direction. Every quantity is continuous in the
+# axes and the brand color; the words that describe it for a search are
+# read from the quantities, never from an industry. Measured in CIELAB over
+# a photo: L* (lightness), b* (temperature: warm above 0, cool below) and
+# C* (chroma); contrast is the standard deviation of L*, the black point
+# the L* of its darkest percent.
+PHOTO_KINDS = ("people in context", "places", "the product or goods", "details and textures",
+               "staged lifestyle")
+# The spread every photo on a page keeps from the page's own mean (the
+# grade lock), from a formal to a playful brand, and how far the page's
+# mean may sit from the direction's target.
+GRADE_SPREAD = {"lightness": (6.0, 10.0), "temperature": (3.0, 5.0), "chroma": (4.0, 8.0)}
+GRADE_TOLERANCE = {"lightness": 12.0, "temperature": 6.0, "chroma": 8.0}
+# What a photo shows, by the brief's product_type (the product the page
+# sells), its audience's age and its primary action: structured fields,
+# never a word of the brief.
+SUBJECTS = {
+    "app": "people using the product in their own setting, the screen implied or out of focus",
+    "software": "people at work with the product, the screen implied or out of focus",
+    "commerce": "the goods themselves in real light, then in use",
+    "marketplace": "the people on both sides of an exchange",
+    "local-service": "the place and the people who serve in it",
+    "editorial": "the subjects of the stories, where they are",
+    "marketing-site": "the team and its work, where it happens",
+}
+PEOPLE = {"children": "children with the adults around them", "teens": "teenagers",
+          "adults": "adults", "all-ages": "people across ages", "older-adults": "people over 60"}
+MOMENTS = {"sign-up": "someone starting out", "sign-in": "someone returning to their work",
+           "buy": "the goods in hand", "quote": "the job in progress", "book": "the moment before "
+           "the visit", "contact": "a conversation", "demo": "the product at work",
+           "download": "the product in use on the go", "subscribe": "a regular ritual",
+           "open-account": "a first step with money"}
+
+
+@dataclass(frozen=True)
+class PhotoDirection:
+    """How the page's photographs look, and the grade every one of them
+    shares. None of it applies when a client system forbids photography
+    (`allowed` False)."""
+    allowed: bool
+    lightness: float
+    temperature: float
+    chroma: float
+    contrast: float
+    black_point: float
+    grain: float
+    energy: float
+    spread: Mapping[str, float]
+    subject: str
+    framing: str
+    kinds: Tuple[str, ...]
+    words: Tuple[str, ...]
+
+    def ranges(self) -> Dict[str, Tuple[float, float]]:
+        """The page mean's acceptance range per measure: the target plus or
+        minus GRADE_TOLERANCE."""
+        target = {"lightness": self.lightness, "temperature": self.temperature,
+                  "chroma": self.chroma}
+        return {k: (round(target[k] - GRADE_TOLERANCE[k], 1),
+                    round(target[k] + GRADE_TOLERANCE[k], 1)) for k in target}
+
+    def query(self) -> str:
+        """Words for a photo search: the subject, then the look."""
+        return ", ".join((self.subject,) + self.words)
+
+
+def _words(d: Dict[str, float]) -> Tuple[str, ...]:
+    """The look in words, each read from a quantity by fixed cuts."""
+    t, L, sd, c, bp, g, e = (d["temperature"], d["lightness"], d["contrast"], d["chroma"],
+                             d["black_point"], d["grain"], d["energy"])
+    return (
+        "warm, golden light" if t >= 6 else "cool, blue light" if t <= -2 else "neutral daylight",
+        "bright, high-key exposure" if L >= 60 else "low-key, moody exposure" if L <= 46
+        else "balanced exposure",
+        "hard light and deep shadows" if sd >= 22 else "soft, even light" if sd <= 15
+        else "natural contrast",
+        "vivid color" if c >= 22 else "muted, desaturated color" if c <= 12 else "natural color",
+        "lifted, matte blacks" if bp >= 10 else "rich blacks",
+        "visible film grain" if g >= 0.35 else "fine grain" if g >= 0.15
+        else "clean, grain-free finish",
+        "dynamic, caught mid-motion" if e >= 0.66 else "still and composed" if e <= 0.33
+        else "a candid, natural moment")
+
+
+def photo_direction(axes: AxisValues, brand_hex: str, product_type: Optional[str] = None,
+                    age: str = "adults", primary_action: Optional[str] = None,
+                    bans: Sequence[str] = (), forbidden: bool = False) -> PhotoDirection:
+    """The photographs a page uses, from the axes and the brand color (the
+    grade) and from the brief's structured fields (the subject). A brand's
+    ban on a kind of photo (a name in PHOTO_KINDS) narrows the kinds;
+    photography goes only when a client system forbids it."""
+    _, bc, bh = hex_to_oklch(brand_hex)
+    weight = character.hue_weight(bc)
+    lean = (0.5 - character.coolness(bh)) * weight
+    energy = character.energy(axes)
+    d = {
+        "temperature": round(-6 + 16 * axes.warmth + 4 * lean, 1),
+        "lightness": round(38 + 30 * character.clamp(0.45 * (1 - axes.contrast)
+                                                     + 0.3 * (1 - axes.formality)
+                                                     + 0.25 * axes.warmth), 1),
+        "contrast": round(12 + 14 * axes.contrast, 1),
+        "chroma": round(6 + 20 * energy * (1 - 0.4 * axes.formality) + 4 * weight, 1),
+        "black_point": round(2 + 14 * (1 - axes.contrast) * (0.5 + 0.5 * axes.warmth), 1),
+        "grain": round(character.clamp(0.6 * axes.type_personality * (1 - 0.5 * axes.geometry)),
+                       2),
+        "energy": round(0.5 * energy + 0.5 * axes.motion, 2),
+    }
+    spread = {k: round(lo + (hi - lo) * (1 - axes.formality), 1)
+              for k, (lo, hi) in GRADE_SPREAD.items()}
+    who = PEOPLE.get(age, "adults")
+    subject = SUBJECTS.get(product_type or "", "real people and places the product serves")
+    subject += f"; people are {who}"
+    if primary_action in MOMENTS:
+        subject += f"; the moment: {MOMENTS[primary_action]}"
+    framing = ("tight crops close to the subject" if axes.density >= 0.6 else
+               "wide frames with room to breathe" if axes.density <= 0.4 else
+               "medium frames") + (", centred and symmetric" if axes.formality >= 0.6 else
+                                   ", off-centre and candid" if axes.formality <= 0.4 else "")
+    kinds = tuple(k for k in PHOTO_KINDS if k not in set(bans))
+    return PhotoDirection(not forbidden, d["lightness"], d["temperature"], d["chroma"],
+                          d["contrast"], d["black_point"], d["grain"], d["energy"],
+                          MappingProxyType(spread), subject, framing, kinds, _words(d))
+
+
+def grade_problems(photos: Sequence[Tuple[str, float, float, float]],
+                   direction: PhotoDirection) -> List[str]:
+    """The grade lock, for lint --render: each (name, mean L*, mean b*, mean
+    C*) of a page's photos sits within the direction's spread of the page's
+    own mean, and the page's mean within the direction's ranges. One
+    message per photo or measure out of line, naming it and the fix."""
+    if not photos:
+        return []
+    keys = ("lightness", "temperature", "chroma")
+    mean = {k: sum(p[i + 1] for p in photos) / len(photos) for i, k in enumerate(keys)}
+    out = []
+    for k, (lo, hi) in direction.ranges().items():
+        if not lo <= mean[k] <= hi:
+            out.append(f"the page's photos average {k} {mean[k]:.1f}, outside the direction's "
+                       f"{lo:g} to {hi:g}; regrade them or choose photos nearer {k} "
+                       f"{(lo + hi) / 2:g}")
+    for name, *values in photos:
+        for k, v in zip(keys, values):
+            if abs(v - mean[k]) > direction.spread[k] + 1e-9:
+                out.append(f"{name} has {k} {v:.1f}, {abs(v - mean[k]):.1f} from the page's mean "
+                           f"{mean[k]:.1f}; every photo stays within {direction.spread[k]:g}, so "
+                           "regrade it to match or replace it")
+    return out
+
+
+def photo_lines(direction: Optional[PhotoDirection]) -> List[str]:
+    """The report's lines on photography."""
+    if direction is None:
+        return []
+    if not direction.allowed:
+        return ["The client's system forbids photography, so the pages carry none; imagery "
+                "comes from generated art and the product itself."]
+    r = direction.ranges()
+    return [
+        f"Subject: {direction.subject}. Framing: {direction.framing}.",
+        f"Kinds: {', '.join(direction.kinds)}.",
+        f"Look: {'; '.join(direction.words)}.",
+        f"Grade: mean lightness {direction.lightness:g} (L*), temperature "
+        f"{direction.temperature:+g} (b*), chroma {direction.chroma:g} (C*), contrast "
+        f"{direction.contrast:g} (the spread of L*), black point {direction.black_point:g}, "
+        f"grain {direction.grain:g}, energy {direction.energy:g}.",
+        f"Grade lock: every photo within {direction.spread['lightness']:g} of the page's mean "
+        f"lightness, {direction.spread['temperature']:g} of its temperature and "
+        f"{direction.spread['chroma']:g} of its chroma; the page's mean within lightness "
+        f"{r['lightness'][0]:g} to {r['lightness'][1]:g}, temperature {r['temperature'][0]:g} "
+        f"to {r['temperature'][1]:g} and chroma {r['chroma'][0]:g} to {r['chroma'][1]:g}.",
+        f"Search words: {direction.query()}.",
+    ]
+
+
 def generate_imagery(axes: AxisValues, brand_hex: str, body_px: int = 16) -> Generated:
     ts = TokenSet()
     ratios = sorted({hero_ratio(axes), card_ratio(axes), PORTRAIT},
@@ -178,6 +355,17 @@ def generate_imagery(axes: AxisValues, brand_hex: str, body_px: int = 16) -> Gen
     ts.add(Token("imagery.duotone.highlight", "color", "{imagery.duo.highlight}",
                  layer="semantic"))
     ts.add(Token("imagery.tint", "color", "{imagery.wash}", layer="semantic"))
+    photo = photo_direction(axes, brand_hex)
+    grades = (("lightness", photo.lightness), ("temperature", photo.temperature),
+              ("chroma", photo.chroma), ("contrast", photo.contrast),
+              ("black-point", photo.black_point), ("grain", photo.grain),
+              ("energy", photo.energy),
+              *((f"spread-{k}", v) for k, v in photo.spread.items()))
+    for name, v in grades:
+        ts.add(Token(f"imagery.grade.{name}", "number", v))
+    for name, _ in grades:
+        ts.add(Token(f"imagery.photo.{name}", "number", "{imagery.grade.%s}" % name,
+                     layer="semantic"))
     shares = (("reach", scrim_reach(axes, body_px)), ("fade", SCRIM_FADE))
     for name, v in shares:
         ts.add(Token(f"imagery.share.{name}", "number", v))
@@ -191,7 +379,10 @@ def generate_imagery(axes: AxisValues, brand_hex: str, body_px: int = 16) -> Gen
         f"({alphas['high'] / 255:.2f} under high contrast)"])
 
 
+PHOTO_ROLES = ("lightness", "temperature", "chroma", "contrast", "black-point", "grain",
+               "energy", "spread-lightness", "spread-temperature", "spread-chroma")
 ROLE_TYPES: Dict[str, str] = {
+    **{f"imagery.photo.{name}": "number" for name in PHOTO_ROLES},
     "imagery.scrim-reach": "number", "imagery.scrim-fade": "number",
     "imagery.ratio.hero": "number", "imagery.ratio.card": "number",
     "imagery.ratio.portrait": "number", "imagery.scrim": "color", "imagery.on-scrim": "color",

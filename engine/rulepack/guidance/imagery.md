@@ -2,7 +2,7 @@
 
 ## Summary
 
-Imagery sets how photos and illustrations sit in the system: the aspect ratios media is cropped to, a scrim that keeps text over any image readable, a brand tint and a duotone pair that bring photos into the brand's light, and, with the radius foundation, the corner of media. Generated brand art (art/ beside tokens.json) fills a page that has no photos yet. Every value follows the axes and the brand color. Imagery does not choose photos; it says how to crop, treat and place them.
+Imagery sets how photos and illustrations sit in the system: the aspect ratios media is cropped to, a scrim that keeps text over any image readable, a brand tint and a duotone pair that bring photos into the brand's light, and, with the radius foundation, the corner of media. Generated brand art (art/ beside tokens.json) fills a page that has no photos yet. Every value follows the axes and the brand color. Imagery says how to crop, treat and place photos, and which photos to use: a page uses photographs, and when the client gives none they are sourced to the photo direction, one grade for every photo on the page (decisions/photo-direction.md).
 
 ## Principles
 
@@ -26,6 +26,14 @@ Imagery sets how photos and illustrations sit in the system: the aspect ratios m
 - `imagery.tint`: a translucent brand wash laid over a photo, stronger in a warm system.
 - `imagery.scrim-reach`: how far up from the bottom edge a full-bleed hero's scrim holds its full strength, as a share of the hero's height: at least the region a two-line landing headline and what sits under it fill (decisions/bottom-anchored-hero.md).
 - `imagery.scrim-fade`: the share of the hero's height above that over which the scrim fades to clear.
+- `imagery.photo.lightness`: the mean CIELAB lightness (L*) the page's photographs aim for: brighter for a muted, playful, warm brand, lower key for a bold, formal one (decisions/photo-direction.md).
+- `imagery.photo.temperature`: the mean CIELAB b* the photographs aim for: warm above 0, cool below, from warmth and the brand's own hue.
+- `imagery.photo.chroma`: the mean CIELAB chroma (C*) the photographs aim for, rising with energy and held back by formality.
+- `imagery.photo.contrast`: the spread of L* inside a photo, harder light for a bolder brand.
+- `imagery.photo.black-point`: the L* of a photo's darkest percent: lifted, matte blacks for a calm, warm brand.
+- `imagery.photo.grain`: how much film grain a photo carries, 0 to 0.6: more for a humanist, soft brand.
+- `imagery.photo.energy`: how much movement a photo holds, 0 (still and composed) to 1 (caught mid-motion).
+- `imagery.photo.spread-<measure>`: how far each photo on a page may sit from the page's own mean <measure>, the grade lock; tighter for a formal brand.
 
 ## Choosing
 

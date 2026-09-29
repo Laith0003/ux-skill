@@ -68,6 +68,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Arabic is set larger by a ratio the two faces' metrics give](arabic-proportional.md)
 - [Fields and tables have their own inner spacing](field-and-table-spacing.md)
 - [Imagery is a foundation of ratios, a measured scrim, a duotone and a tint](imagery-foundation.md)
+- [A page uses photographs to a direction the axes set, and every photo on a page shares one grade](photo-direction.md)
 - [The scrim is measured over the worst image for its text](scrim-worst-image.md)
 - [Text on generated art sits on a veil of the page color, measured over the art's own colors](media-veil.md)
 - [Every build draws decorative brand art from the axes](generated-art.md)
