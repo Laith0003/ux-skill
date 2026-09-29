@@ -87,6 +87,8 @@ It also reads seven structured fields about who the product is for and what it i
 
 Older and mixed-age readers get larger body text and targets, a wider focus ring and no compact density; languages or an Arabic primary script decide whether Arabic ships (either with `--latin-only` is refused); `dark` opens the page dark while `data-theme="light"` still switches it. The report's "Who it is for" section says what each field changed and why, and "What the engine did not read" names every word that changed nothing and how to say it. Never tell the user that unread words shaped the system.
 
+When the page's headline is known, pass it as `headline`: the headline as the user wrote it, or a list of the page's headlines. The landing display is sized so the longest word fits its column; without it the display fits a 13-letter word (10 letters in Arabic). A value that is not text, has no word, or holds a word of more than 40 letters is refused with the field and the fix.
+
 When a word the user said is unread and it matters, pass what it means as a `character` object: any of the seven axes (`warmth`, `contrast`, `density`, `geometry`, `formality`, `motion`, `type_personality`), each a nudge from -0.3 to 0.3, applied after the words and before `forbidden`. For example "sturdy" might be `"character": {"contrast": 0.1, "geometry": -0.1}`. Keep each nudge small and say it to the user; the report's "Character nudges" section states each nudge, the value the words gave, the value the build used and the foundations the axis moves. A value outside the range, or a key that is not an axis, is refused with the field and the fix.
 
 ### 3. Look before writing

@@ -111,7 +111,9 @@ FIELDS_HELP = (
     '"older-adults". A character object passes what a word the engine does not read means, '
     "as nudges from -0.3 to 0.3 on the axes warmth, contrast, density, geometry, formality, "
     'motion and type_personality, applied after the words: "sturdy" might be "character": '
-    '{"contrast": 0.1, "geometry": -0.1}.')
+    '{"contrast": 0.1, "geometry": -0.1}. A headline field gives the page\'s headline as '
+    "text, or a list of its headlines, so the landing display fits its longest word; without "
+    "it the display fits a 13-letter word.")
 # A language tag: a primary subtag of two or three letters, then subtags.
 TAG = re.compile(r"^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$")
 # Language names a brief may hold by mistake, and the tag to give instead.

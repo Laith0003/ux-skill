@@ -347,6 +347,54 @@ def brief_axes(brief: Mapping[str, Any], label: str = "brief", *,
     return axes, source
 
 
+# The brief field that gives the page's headline, so the landing display
+# fits its longest word (build_system's words) instead of a long word of
+# its own. Text, or a list of the page's headlines.
+HEADLINE_FIELD = "headline"
+_LONGEST_FIT = 40
+_ARABIC = re.compile("[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]")
+
+
+def brief_words(brief: Optional[Mapping[str, Any]],
+                label: str = "brief") -> Optional[Dict[str, int]]:
+    """The letters of the longest word of the brief's headline, per script
+    ({"latin": n, "arabic": m}, each script the headline writes), or None
+    when the brief gives no headline. Words are split at spaces, hyphens
+    and slashes, and only letters are counted (not marks, digits or
+    punctuation). Raises InputError naming the
+    field and the fix for a headline that is not text or has no word, or a
+    word longer than the fit takes."""
+    if brief is None:
+        return None
+    if isinstance(brief.get("answers"), dict):
+        brief = brief["answers"]
+    value = brief.get(HEADLINE_FIELD)
+    if value in (None, "", []):
+        return None
+    lines = [value] if isinstance(value, str) else value
+    if not isinstance(lines, list) or not all(isinstance(v, str) for v in lines):
+        raise InputError(f"{label} field {HEADLINE_FIELD} is {value!r}; give the page's headline "
+                         f'as text, for example "{HEADLINE_FIELD}": "Pay anyone in seconds", or '
+                         "a list of the page's headlines")
+    longest: Dict[str, int] = {}
+    for line in lines:
+        for word in re.split(r"[\s/\u2010-\u2015-]+", line):
+            n = sum(ch.isalpha() for ch in word)
+            if not n:
+                continue
+            script = "arabic" if _ARABIC.search(word) else "latin"
+            if n > _LONGEST_FIT:
+                raise InputError(f"{label} field {HEADLINE_FIELD} has the word {word[:20]}... of "
+                                 f"{n} letters; the display fits words of up to {_LONGEST_FIT}, "
+                                 "so break it or write the headline as the page shows it")
+            longest[script] = max(n, longest.get(script, 0))
+    if not longest:
+        raise InputError(f"{label} field {HEADLINE_FIELD} is {value!r}, which has no word; give "
+                         f'the page\'s headline as text, for example "{HEADLINE_FIELD}": '
+                         '"Pay anyone in seconds"')
+    return {k: longest[k] for k in ("latin", "arabic") if k in longest}
+
+
 def unread_lines(brief: Optional[Mapping[str, Any]], label: str = "brief") -> List[str]:
     """Every brief word the engine did not read, each with how to say it so
     it is read. Empty when every word was read."""
@@ -386,7 +434,7 @@ def unread_lines(brief: Optional[Mapping[str, Any]], label: str = "brief") -> Li
                            f"example {_NUDGE_EXAMPLE}.")
     for key, value in sorted(brief.items()):
         if key in BRIEF_FIELDS or key in AUDIENCE_FIELDS or key == CHARACTER_FIELD \
-                or value in (None, "", [], {}):
+                or key == HEADLINE_FIELD or value in (None, "", [], {}):
             continue
         out.append(f'{key} "{_as_words(value)}" is not read by the system build'
                    + (_UNREAD_HINTS[key] if key in _UNREAD_HINTS
@@ -867,7 +915,8 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
                 audience: Optional[Audience] = None,
                 unread: Sequence[str] = (), nudges: Sequence[str] = (),
                 primary_action: Optional[str] = None, photo_bans: Sequence[str] = (),
-                no_photography: bool = False) -> SystemOutput:
+                no_photography: bool = False,
+                words: Optional[Mapping[str, int]] = None) -> SystemOutput:
     """Build, validate and gate. On success `files` holds every file in FILES
     and ART_FILES, and with rule_pack every rule pack file under
     RULE_PACK_DIR after them;
@@ -875,7 +924,9 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     `findings` names every problem, so a caller can never write a failing
     system. The report's photography direction reads the brief's
     primary_action, a brand's bans on kinds of photo (`photo_bans`) and
-    whether a client system forbids photography (`no_photography`)."""
+    whether a client system forbids photography (`no_photography`).
+    `words` gives the letters of the page's longest headline word per
+    script (brief_words), so the landing display fits it."""
     audience = audience or Audience()
     composition = choose_composition(axes, audience)
     notes: Sequence[str] = ()
@@ -886,7 +937,7 @@ def make_system(brand: str, axes: AxisValues, axes_source: str, *,
     art: Dict[str, str] = {}
     pack: Dict[str, str] = {}
     try:
-        built = build_system(axes, brand, arabic=arabic, audience=audience)
+        built = build_system(axes, brand, arabic=arabic, audience=audience, words=words)
     except ValidationError as exc:
         findings = tuple(SystemFinding(p.token, "", p.message) for p in exc.problems)
         n = len(findings)

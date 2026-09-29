@@ -563,9 +563,9 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
     error naming the input and the fix.
     """
     from engine.foundations.emit import (
-        InputError, brief_audience, check_out_dir, choose_axes, make_system, note_rule_pack,
-        nudge_lines, parse_brand, parse_latin_only, parse_switch, resolve_arabic, unread_lines,
-        write_outcome)
+        InputError, brief_audience, brief_words, check_out_dir, choose_axes, make_system,
+        note_rule_pack, nudge_lines, parse_brand, parse_latin_only, parse_switch, resolve_arabic,
+        unread_lines, write_outcome)
     payload = UxSystemBuildInput.model_validate(args or {})
     try:
         brand = parse_brand(payload.brand, "brand")
@@ -575,6 +575,7 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
         axes, source = choose_axes(payload.brief, payload.axes)
         latin_only = parse_latin_only(payload.latin_only, "latin_only")
         audience = brief_audience(payload.brief, "brief")
+        words = brief_words(payload.brief, "brief")
         arabic = resolve_arabic(latin_only, audience, "latin_only")
         include_files = parse_switch(payload.include_files, "include_files",
                                      "return the tokens.css and tokens.json text",
@@ -594,7 +595,7 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
                 "report": "", "files": []}
     system = make_system(brand, axes, source, arabic=arabic, audience=audience,
                          unread=unread_lines(payload.brief, "brief"),
-                         nudges=nudge_lines(payload.brief, "brief"))
+                         nudges=nudge_lines(payload.brief, "brief"), words=words)
     if out is not None:
         system = note_rule_pack(system, out, force=force)
     result: Dict[str, Any] = {
@@ -622,6 +623,10 @@ def handle_ux_system_build(args: Dict[str, Any]) -> Dict[str, Any]:
         else:
             result.update(write_outcome(system, out, force=force, force_label="force: true",
                                         out_label="out"))
+            from engine.existing.record import RECORD, record_unchanged
+            if result["status"] == "unchanged" and record_unchanged(out, system.files):
+                result["message"] += (f" Recorded the files in {out / RECORD}, so force: true "
+                                      "can tell them from files you edit.")
     return result
 
 

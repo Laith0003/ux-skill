@@ -67,3 +67,28 @@ def engine_wrote(out_dir: Any, name: str) -> bool:
         return path.is_file() and file_digest(path.read_bytes()) == listed
     except OSError:
         return False
+
+
+def record_unchanged(out_dir: Any, files: Mapping[str, Union[str, bytes]]) -> bool:
+    """Write the record for a folder built before the record existed, when
+    a build finds every file in it unchanged: each of `files` must be on
+    disk with exactly those bytes, and the folder must hold no record yet.
+    Returns True when the record was written; False, writing nothing, when
+    a file differs or is missing, a record exists, or it cannot be
+    written."""
+    out = Path(out_dir)
+    if not files or (out / RECORD).exists():
+        return False
+    for name, data in files.items():
+        raw = data.encode("utf-8") if isinstance(data, str) else data
+        try:
+            if (out / name).read_bytes() != raw:
+                return False
+        except OSError:
+            return False
+    try:
+        (out / RECORD).parent.mkdir(exist_ok=True)
+        (out / RECORD).write_text(record_text(out, files), encoding="utf-8")
+    except OSError:
+        return False
+    return True

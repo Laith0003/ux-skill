@@ -912,7 +912,8 @@ else:
         be written), 2 for a bad input.
         """
         from engine.foundations.emit import (
-            STATUS_EXIT, InputError, brief_audience, check_out_dir, choose_axes, failure_text,
+            STATUS_EXIT, InputError, brief_audience, brief_words, check_out_dir, choose_axes,
+            failure_text,
             make_system, note_rule_pack, nudge_lines, parse_brand, read_brief, resolve_arabic,
             unread_lines, write_outcome)
         try:
@@ -921,13 +922,14 @@ else:
             axes, source = choose_axes(brief, axes_text, brief_label="--brief",
                                        axes_label="--axes")
             audience = brief_audience(brief, "--brief")
+            words = brief_words(brief, "--brief")
             arabic = resolve_arabic(latin_only, audience, "--latin-only")
             out = check_out_dir(out_dir, "--out")
         except InputError as exc:
             raise click.UsageError(str(exc)) from None
         system = make_system(brand_hex, axes, source, arabic=arabic, rule_pack=rule_pack,
                              audience=audience, unread=unread_lines(brief, "--brief"),
-                             nudges=nudge_lines(brief, "--brief"))
+                             nudges=nudge_lines(brief, "--brief"), words=words)
         system = note_rule_pack(system, out, force=force)
         from engine.existing import client_files_in
         theirs = client_files_in(out, system.files) if (force and not replace_client) else []
@@ -942,6 +944,13 @@ else:
             }
         else:
             outcome = write_outcome(system, out, force=force)
+            from engine.existing.record import RECORD, record_unchanged
+            # A folder built before the record existed gains it on a build
+            # that finds every file unchanged, so --force can later tell the
+            # engine's files from the owner's edits.
+            if outcome["status"] == "unchanged" and record_unchanged(out, system.files):
+                outcome["message"] += (f" Recorded the files in {out / RECORD}, so --force can "
+                                       "tell them from files you edit.")
         status = outcome["status"]
         _emit({**system.to_dict(), "out": str(out), **outcome}, ctx.obj["pretty"])
         if status == "failed":
