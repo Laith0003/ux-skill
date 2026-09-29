@@ -89,7 +89,9 @@ def test_our_own_css_maps_every_role_by_name_and_every_axis_to_itself():
 
 def test_a_foreign_system_maps_what_its_names_say_and_leaves_the_rest_to_the_owner():
     mapping = propose(_css(FOREIGN))
-    assert mapping.roles == {}
+    # text-body is a name the text vocabulary knows; page is not.
+    assert mapping.roles == {"color.text.default": RoleMap("text-body", "name",
+                                                           vocabulary="text names")}
     assert mapping.axes == {"scheme": AxisMap("scheme", {"light": "light", "dark": "dark"},
                                               "name")}
     # A class the importer keeps as its own axis maps when its name says which.
@@ -143,11 +145,14 @@ def test_an_imported_dtcg_set_with_a_dark_file_is_checked_in_our_roles():
     mapping = propose(ts)
     assert mapping.axes == {"scheme": AxisMap("scheme", {"light": "light", "dark": "dark"},
                                               "name")}
+    # The names say both roles; the owner confirms them.
+    assert {r: (m.token, m.by) for r, m in mapping.roles.items()} == {
+        "color.surface.page": ("surface.page", "name"), "color.text.default": ("text.body", "name")}
     mapping.roles.update({"color.text.default": RoleMap("text.body"),
                           "color.surface.page": RoleMap("surface.page")})
     checked, notes = view(ts, mapping)
     assert notes == []
-    assert [t.path for t in checked.tokens()] == ["color.text.default", "color.surface.page"]
+    assert [t.path for t in checked.tokens()] == ["color.surface.page", "color.text.default"]
     assert checked.get("color.text.default").modes == {"scheme:dark": "#FDFDFB"}
     assert check_system(checked, structure=False).passed
     # A dark text that sinks into its page is found, and named in their words.
@@ -652,4 +657,4 @@ def test_a_figma_export_is_proposed_and_viewed_in_our_roles():
     ts = read_figma(FIXTURES / "figma" / "variables.json").tokens
     _, checked = _owner_view(ts, "text.body", "surface.page", {"scheme": SCHEME_BY_NAME})
     assert checked.get("color.text.default").modes == {"scheme:dark": "#FAFAF7"}
-    assert [t.path for t in checked.tokens()] == ["color.text.default", "color.surface.page"]
+    assert [t.path for t in checked.tokens()] == ["color.surface.page", "color.text.default"]

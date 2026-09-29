@@ -48,8 +48,8 @@ from engine.foundations.modes import AXES
 from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_alias
 from engine.foundations.validate import validate
 from engine.io.adapter import (
-    AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, Mapping, deleted_axes, reduced_pairs, reduced_twins,
-    their_names, view)
+    AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, VOCABULARY_EXAMPLES, Mapping, deleted_axes,
+    reduced_pairs, reduced_twins, their_names, view)
 from engine.io.report import Imported
 from engine.io.scan import Scan, Usage, _norm, canonical
 
@@ -472,6 +472,8 @@ class Enhanced:
                         "mapped": len(self.mapped()), "of": len(ROLE_TYPES),
                         "by_name": [r for r, x in m.roles.items()
                                     if x.token is not None and x.by == "name"],
+                        "vocabularies": {r: x.vocabulary for r, x in m.roles.items()
+                                         if x.vocabulary},
                         "left_out": self.left_out(),
                         "axes_left_out": self.axes_left_out(),
                         "not_mapped": self.not_mapped(),
@@ -972,22 +974,38 @@ def _by_name(mapping: Mapping, name: str) -> List[str]:
     """The roles mapped by name only, one line per foundation: a lone role
     by itself, more with a count and a few (the JSON report lists each)."""
     per: Dict[str, List[Tuple[str, str]]] = {}
+    vocabularies: Dict[str, List[str]] = {}
     for role, m in mapping.roles.items():
         if m.by == "name" and m.token is not None:
-            per.setdefault(role.split(".", 1)[0], []).append((role, m.token))
+            foundation = role.split(".", 1)[0]
+            per.setdefault(foundation, []).append((role, m.token))
+            if m.vocabulary and m.vocabulary not in vocabularies.setdefault(foundation, []):
+                vocabularies[foundation].append(m.vocabulary)
     lines = []
     for foundation, pairs in per.items():
+        through = _through(vocabularies.get(foundation, []))
         if len(pairs) == 1:
             role, token = pairs[0]
-            lines.append(f"{role} is mapped to {token} by name only; confirm it in {name}.")
+            lines.append(f"{role} is mapped to {token} by name only{through}; confirm it in "
+                         f"{name}.")
             continue
         same = sum(1 for r, t in pairs if _norm(r) == _norm(t))
         shown = _few([r if _norm(r) == _norm(t) else f"{r} to {t}" for r, t in pairs], 3)
         each = (", each to the token of the same name" if same == len(pairs) else
                 f", {same} of them to the token of the same name" if same else "")
-        lines.append(f"{len(pairs)} {foundation} roles are mapped by name only{each}: {shown}; "
-                     f"confirm them in {name}. The JSON report lists each.")
+        lines.append(f"{len(pairs)} {foundation} roles are mapped by name only{each}{through}: "
+                     f"{shown}; confirm them in {name}. The JSON report lists each.")
     return lines
+
+
+def _through(vocabularies: Sequence[str]) -> str:
+    """Which naming vocabularies the proposals matched, as a clause."""
+    if not vocabularies:
+        return ""
+    if len(vocabularies) == 1:
+        v = vocabularies[0]
+        return f", through the {v} vocabulary ({VOCABULARY_EXAMPLES.get(v, v)})"
+    return f", through the {_and(list(vocabularies))} vocabularies"
 
 
 _ROLE_TYPE_FIX = re.compile(r"; point it at a (\w+) token(, for example .*)?$")

@@ -26,10 +26,16 @@ tokens, a twin beside each token whose name adds a reduced word
 mapping reads no motion axis, view() reads each twin as its token's
 reduced-motion value, with a note naming the pairs.
 
-propose() maps a role only when a token's name is the role's own path
+propose() maps a role when a token's name is the role's own path
 written with other separators (color.text.default, color-text-default,
-color/text/default), and a typography role to the five field properties
-the engine's CSS writes for it. It maps an axis only when its name or its
+color/text/default), a typography role to the five field properties the
+engine's CSS writes for it, and a color role when a token's name is one
+the common naming vocabularies give it (VOCABULARIES: background and
+foreground, on- pairs, brand names, bg, fg and border families, text
+names, or the role's path without color), each entry saying which
+vocabulary matched. Names only: a name maps only a token of the role's
+type, and a name that means different things in different systems
+(accent, secondary) is not in the table. It maps an axis only when its name or its
 values say which one it is (light and dark, ltr and rtl, a .compact
 class). Nothing else is guessed: the rest waits for the owner.
 
@@ -96,6 +102,9 @@ class RoleMap:
     token: Optional[str]
     by: str = "owner"
     fields: Optional[Dict[str, FieldMap]] = field(default=None, hash=False)
+    # The naming vocabulary a proposal by name matched (see VOCABULARIES);
+    # "" for a token named as the role itself, or an entry the owner wrote.
+    vocabulary: str = ""
 
     @classmethod
     def per_field(cls, fields: Dict[str, FieldMap]) -> "RoleMap":
@@ -140,11 +149,107 @@ def _has_fields(ts: TokenSet, prefix: str) -> bool:
     return all(ts.has(p) for p in _field_names(prefix).values())
 
 
+# Common naming vocabularies: names a system writes for a role, in hyphens,
+# matched with any separators, after a leading color or colors segment
+# and before a trailing default one (color-background, colors.primary.
+# DEFAULT). A table of names, never a look. Earlier vocabularies win a
+# role; a name maps only a token of the role's type.
+VOCABULARIES: Tuple[Tuple[str, str, Tuple[Tuple[str, str], ...]], ...] = (
+    ("plain names", "background, foreground, primary, border, input, ring and the -foreground "
+     "pairs", (
+        ("background", "color.surface.page"), ("foreground", "color.text.default"),
+        ("card", "color.surface.card"), ("surface", "color.surface.card"),
+        ("popover", "color.surface.raised"), ("muted", "color.surface.sunken"),
+        ("muted-foreground", "color.text.muted"),
+        ("primary", "color.action.primary"), ("primary-foreground", "color.text.on-action"),
+        ("destructive", "color.action.danger"),
+        ("destructive-foreground", "color.text.on-danger"), ("border", "color.line.subtle"),
+        ("input", "color.line.input"), ("ring", "color.focus.ring"),
+        ("focus", "color.focus.ring"), ("link", "color.text.link"))),
+    ("text names", "text-primary, text-secondary, text-link", (
+        ("text", "color.text.default"), ("text-primary", "color.text.default"),
+        ("text-base", "color.text.default"), ("text-body", "color.text.default"),
+        ("text-secondary", "color.text.muted"), ("text-subtle", "color.text.muted"),
+        ("text-tertiary", "color.text.muted"), ("text-on-inverse", "color.text.inverse"),
+        ("text-brand", "color.text.accent"), ("text-on-primary", "color.text.on-action"),
+        ("text-on-brand", "color.text.on-action"), ("text-on-accent", "color.text.on-action"),
+        ("text-danger", "color.status.danger.text"), ("text-error", "color.status.danger.text"),
+        ("text-warning", "color.status.warning.text"),
+        ("text-success", "color.status.success.text"), ("text-info", "color.status.info.text"))),
+    ("bg, fg and border families", "bg-default, fg-muted, border-default", (
+        ("bg", "color.surface.page"), ("bg-default", "color.surface.page"),
+        ("bg-canvas", "color.surface.page"),
+        ("bg-page", "color.surface.page"), ("bg-base", "color.surface.page"),
+        ("bg-surface", "color.surface.card"), ("bg-card", "color.surface.card"),
+        ("bg-panel", "color.surface.card"), ("bg-subtle", "color.surface.sunken"),
+        ("bg-muted", "color.surface.sunken"), ("bg-inset", "color.surface.sunken"),
+        ("bg-sunken", "color.surface.sunken"), ("bg-raised", "color.surface.raised"),
+        ("bg-overlay", "color.surface.raised"), ("bg-elevated", "color.surface.raised"),
+        ("bg-inverse", "color.surface.inverse"), ("bg-emphasis", "color.surface.inverse"),
+        ("bg-selected", "color.surface.selected"), ("bg-brand", "color.surface.brand"),
+        ("fg", "color.text.default"), ("fg-default", "color.text.default"),
+        ("fg-base", "color.text.default"),
+        ("fg-muted", "color.text.muted"), ("fg-subtle", "color.text.muted"),
+        ("fg-secondary", "color.text.muted"), ("fg-inverse", "color.text.inverse"),
+        ("fg-on-emphasis", "color.text.inverse"), ("fg-on-inverse", "color.text.inverse"),
+        ("fg-disabled", "color.text.disabled"), ("fg-link", "color.text.link"),
+        ("fg-accent", "color.text.accent"), ("fg-on-brand", "color.text.on-action"),
+        ("fg-on-primary", "color.text.on-action"), ("fg-on-accent", "color.text.on-action"),
+        ("fg-danger", "color.status.danger.text"), ("fg-error", "color.status.danger.text"),
+        ("border-default", "color.line.subtle"), ("border-base", "color.line.subtle"),
+        ("border-subtle", "color.line.subtle"),
+        ("border-muted", "color.line.subtle"), ("border-input", "color.line.input"),
+        ("border-field", "color.line.input"), ("border-control", "color.line.input"),
+        ("border-focus", "color.focus.ring"), ("border-focused", "color.focus.ring"),
+        ("border-danger", "color.line.danger"), ("border-error", "color.line.danger"),
+        ("border-selected", "color.line.selected"), ("border-active", "color.line.selected"),
+        ("border-accent", "color.line.accent"), ("border-brand", "color.line.accent"))),
+    ("on- pairs", "on-surface, on-primary, on-error", (
+        ("on-background", "color.text.default"), ("on-surface", "color.text.default"),
+        ("on-surface-variant", "color.text.muted"), ("surface-variant", "color.surface.sunken"),
+        ("inverse-surface", "color.surface.inverse"),
+        ("inverse-on-surface", "color.text.inverse"), ("on-primary", "color.text.on-action"),
+        ("error", "color.action.danger"), ("danger", "color.action.danger"),
+        ("on-error", "color.text.on-danger"), ("on-danger", "color.text.on-danger"),
+        ("outline", "color.line.input"), ("outline-variant", "color.line.subtle"))),
+    ("brand names", "brand, brand-hover, on-brand", (
+        ("brand", "color.action.primary"), ("brand-primary", "color.action.primary"),
+        ("brand-base", "color.action.primary"), ("brand-hover", "color.action.primary-hover"),
+        ("brand-pressed", "color.action.primary-pressed"),
+        ("brand-active", "color.action.primary-pressed"), ("on-brand", "color.text.on-action"),
+        ("brand-foreground", "color.text.on-action"), ("brand-fg", "color.text.on-action"),
+        ("brand-contrast", "color.text.on-action"))),
+)
+# The vocabulary a token named as a color role without its color segment
+# (text-default, surface-raised, focus-ring) matches.
+ROLE_NAMES = ("role names", "a color role's own path without color, such as text-default")
+VOCABULARY_EXAMPLES: Dict[str, str] = {ROLE_NAMES[0]: ROLE_NAMES[1],
+                                       **{v: ex for v, ex, _ in VOCABULARIES}}
+
+
+def _keys(path: str) -> Tuple[str, Optional[str]]:
+    """The names a token answers to in the vocabularies: its own, without a
+    leading color or colors segment, and that without a trailing default
+    one (None when it has none), which a name matches only after every
+    whole name has."""
+    parts = _norm(path).split(".")
+    if len(parts) > 1 and parts[0] in ("color", "colors"):
+        parts = parts[1:]
+    short = ".".join(parts[:-1]) if len(parts) > 1 and parts[-1] == "default" else None
+    return ".".join(parts), short
+
+
 def propose(ts: TokenSet) -> Mapping:
     """A first mapping from names alone (see the module docstring)."""
     by_norm: Dict[str, str] = {}
+    by_key: Dict[str, str] = {}
+    by_short: Dict[str, str] = {}
     for t in ts.tokens():
         by_norm.setdefault(_norm(t.path), t.path)
+        whole, short = _keys(t.path)
+        by_key.setdefault(whole, t.path)
+        if short is not None:
+            by_short.setdefault(short, t.path)
     roles: Dict[str, RoleMap] = {}
     for role, kind in ROLE_TYPES.items():
         match = by_norm.get(_norm(role))
@@ -154,7 +259,19 @@ def propose(ts: TokenSet) -> Mapping:
             prefix = role.replace(".", "-")
             if _has_fields(ts, prefix):
                 roles[role] = RoleMap(prefix, "name")
-    return Mapping(roles, _propose_axes(ts))
+    taken = {m.token for m in roles.values()}
+    tables = [(ROLE_NAMES[0], tuple((r[len("color."):], r) for r in ROLE_TYPES
+                                    if r.startswith("color.")))]
+    tables += [(name, entries) for name, _, entries in VOCABULARIES]
+    for index, (vocabulary, entries) in ((i, t) for i in (by_key, by_short) for t in tables):
+        for name, role in entries:
+            token = index.get(_norm(name))
+            if role in roles or token is None or token in taken \
+                    or ts.get(token).type != ROLE_TYPES[role]:
+                continue
+            roles[role] = RoleMap(token, "name", vocabulary=vocabulary)
+            taken.add(token)
+    return Mapping({r: roles[r] for r in ROLE_TYPES if r in roles}, _propose_axes(ts))
 
 
 def _propose_axes(ts: TokenSet) -> Dict[str, AxisMap]:
@@ -258,7 +375,8 @@ def dump_mapping(mapping: Mapping) -> str:
 
 def _dump_role(m: RoleMap) -> Dict[str, Any]:
     if m.fields is None:
-        return {"token": m.token, "by": m.by}
+        return ({"token": m.token, "by": m.by, "vocabulary": m.vocabulary} if m.vocabulary
+                else {"token": m.token, "by": m.by})
     return {"fields": {k: {"token": f.token, "by": f.by} for k, f in m.fields.items()}}
 
 
@@ -341,7 +459,15 @@ def parse_mapping(text: str, name: str) -> Mapping:
         if not (by in BY and (isinstance(token, str) and token
                               or token is None and by == "owner")):
             raise InputError(f"{name} role {role} is {json.dumps(entry)}; write {_ROLE_FIX}")
-        roles[role] = RoleMap(entry["token"], entry.get("by", "owner"))
+        vocabulary = entry.get("vocabulary", "")
+        if not isinstance(vocabulary, str):
+            raise InputError(f"{name} role {role} has vocabulary {json.dumps(vocabulary)}; "
+                             "remove it, or write the name of the vocabulary as text")
+        extra = [k for k in entry if k not in ("token", "by", "vocabulary")]
+        if extra:
+            raise InputError(f"{name} role {role} has the key {extra[0]}, which a role entry "
+                             "does not use; keep only token, by and vocabulary")
+        roles[role] = RoleMap(entry["token"], entry.get("by", "owner"), vocabulary=vocabulary)
     axes: Dict[str, AxisMap] = {}
     for axis, entry in (doc.get("axes") or {}).items():
         if axis not in AXES:
