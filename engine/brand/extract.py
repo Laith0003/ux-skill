@@ -162,16 +162,20 @@ class BrandProfile:
 STRATEGY_FIELDS = ("positioning", "personality", "promise", "guardrails")
 # Words in photography.avoid that ban stock or lifestyle photography.
 _STOCK_BAN_RE = re.compile(r"\b(?:stock|lifestyle)\b", re.IGNORECASE)
-_GENERIC_RE = re.compile(r"\b(?:random|generic)\b", re.IGNORECASE)
+# Words that say an entry allows stock outright ("curated stock allowed").
+_STOCK_ALLOW_RE = re.compile(r"\b(?:allowed|allow|allows|permitted|fine|welcome|may use|can use)\b",
+                             re.IGNORECASE)
 
 
 def stock_allowed(profile: "BrandProfile") -> bool:
     """False when the brand's photography rules ban stock or lifestyle
     photography: the page then uses the brand's own product screens and
-    photographs, or no picture at all, never a stock fallback."""
+    photographs, or no picture at all, never a stock fallback. An avoid
+    entry that mentions stock or lifestyle anywhere bans it ("No stock
+    photos or generic smiling people", "stock and generic imagery"); only
+    an entry that says outright that stock is allowed keeps it."""
     avoid = (getattr(profile, "photography", None) or {}).get("avoid") or []
-    # "random/generic stock" bans the careless kind only; curated stock stays.
-    return not any(_STOCK_BAN_RE.search(str(a)) and not _GENERIC_RE.search(str(a))
+    return not any(_STOCK_BAN_RE.search(str(a)) and not _STOCK_ALLOW_RE.search(str(a))
                    for a in avoid)
 
 
@@ -517,7 +521,7 @@ def render_md(p: BrandProfile) -> str:
     lines += ["- **Mood:** %s" % (", ".join(mood) if mood else _NOT_EXTRACTED)]
     lines += ["- **Subjects:** %s" % (", ".join(subjects) if subjects else _NOT_EXTRACTED)]
     lines += ["- **Avoid:** %s" % (", ".join(p_avoid) if p_avoid
-                                   else "random/generic stock, AI-slop clutter")]
+                                   else "random placeholder images, AI-slop clutter")]
     lines += [""]
 
     # Style.

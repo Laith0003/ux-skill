@@ -588,9 +588,21 @@ _ICON_PX = 100  # below this an inline SVG reads as an icon, not as imagery
 _LOGO_WORD_RE = re.compile(
     r"(?<![a-z])(?:logo(?:s|types?|marks?)?|wordmarks?|brandmarks?|brand-marks?)(?![a-z])",
     re.IGNORECASE)
-_LOGO_ATTRS = ("class", "id", "alt", "aria-label", "title", "src", "srcset", "data-src", "href")
-# A link to the page's own home: the image it wraps first is the logo.
-_HOME_HREFS = ("/", "#top", "./", "index.html", "/index.html")
+# Names and files: a logo word anywhere in them marks the element.
+_LOGO_ATTRS = ("class", "id", "src", "srcset", "data-src", "href")
+# Words for people: a logo word marks the element only when the label is a
+# short name ending in it ("Northfield logo"), not a sentence that mentions a
+# logo ("our new logo on the storefront").
+_LABEL_ATTRS = ("alt", "aria-label", "title")
+_LABEL_LOGO_RE = re.compile(
+    r"^\s*(?:\S+\s+){0,3}(?:logo(?:type|mark)?|wordmark|brandmark)\s*$", re.IGNORECASE)
+# The wrapper a navbar puts its logo in.
+_BRAND_CLASS_RE = re.compile(r"(?<![\w-])(?:navbar-|site-|header-)?brand(?![\w-])", re.IGNORECASE)
+# A link to the page's own home: the image it wraps first is the logo. A
+# language home (/en/, /ar) and an absolute link to a site's root count.
+_HOME_HREF_RE = re.compile(
+    r"^(?:https?://[^/?#]+)?(?:/|/?index\.html?|#top|\./|/[a-z]{2}(?:-[a-z]{2,4})?/?)?$",
+    re.IGNORECASE)
 _VOID = frozenset(("area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta",
                    "param", "source", "track", "wbr"))
 _MEDIA = ("img", "video")
@@ -623,9 +635,10 @@ class _Visuals(HTMLParser):
     file, or when it is the first image inside the page's first link to its
     home page."""
 
-    def __init__(self, logo_url: str) -> None:
+    def __init__(self, logo_url: str, brand_name: str = "") -> None:
         super().__init__(convert_charrefs=True)
         self.logo_url = logo_url
+        self.brand_name = " ".join(brand_name.lower().split())
         self.stack: List[Tuple[str, bool]] = []   # (tag, inside a logo)
         self.home_link_open = False
         self.home_link_used = False
@@ -639,6 +652,11 @@ class _Visuals(HTMLParser):
         values = {k.lower(): (v or "") for k, v in attrs}
         own = any(_LOGO_WORD_RE.search(values[k]) for k in _LOGO_ATTRS
                   if k in values and not (k == "href" and tag != "a"))
+        own = own or bool(_BRAND_CLASS_RE.search(values.get("class", "")))
+        for k in _LABEL_ATTRS:
+            label = " ".join(values.get(k, "").lower().split())
+            if label and (_LABEL_LOGO_RE.match(label) or label == self.brand_name):
+                own = True
         if tag == "img" and _same_file(values.get("src", ""), self.logo_url):
             own = True
         return inside or own
@@ -647,9 +665,10 @@ class _Visuals(HTMLParser):
         tag = tag.lower()
         logo = self._is_logo(tag, attrs)
         if tag == "a":
-            href = (dict(attrs).get("href") or "").strip().lower()
-            self.home_link_open = href in _HOME_HREFS and not self.home_link_seen
-            self.home_link_seen = self.home_link_seen or href in _HOME_HREFS
+            href = (dict(attrs).get("href") or "").strip()
+            home = href != "" and bool(_HOME_HREF_RE.match(href))
+            self.home_link_open = home and not self.home_link_seen
+            self.home_link_seen = self.home_link_seen or home
             self.home_link_used = False
         if tag in _MEDIA or tag == "svg":
             if self.home_link_open and not self.home_link_used and self._svg is None:
@@ -699,7 +718,7 @@ class _Visuals(HTMLParser):
             self._svg = None
 
 
-def score_imagery(html_text: str, logo_url: str = "") -> Dict[str, Any]:
+def score_imagery(html_text: str, logo_url: str = "", brand_name: str = "") -> Dict[str, Any]:
     """Does a FULL page carry real imagery, or is it a text-wall? Deterministic.
 
     Returns ``{ok, kind, score, detail}`` with ``kind`` in {fragment, image,
@@ -707,7 +726,8 @@ def score_imagery(html_text: str, logo_url: str = "") -> Dict[str, Any]:
     fragments (no <body>/<html>) are exempt (ok=True): not every partial
     needs art. Icons are NOT imagery: a page whose only visuals are sub-100px
     SVGs fails. Nor is the logo: the brand's logo file (``logo_url``), an
-    element marked as a logo, wordmark or logo row, or the first image in a
+    element marked as a logo, wordmark, logo row or navbar brand, one whose
+    label is the brand's name (``brand_name``), or the first image in a
     page's first link to its home page is identity, and a page with nothing
     else fails.
     """
@@ -715,7 +735,7 @@ def score_imagery(html_text: str, logo_url: str = "") -> Dict[str, Any]:
     if not _FULLPAGE_RE.search(html):
         return {"ok": True, "kind": "fragment", "score": 100,
                 "detail": "Component fragment (no <body>); imagery check not applicable."}
-    parser = _Visuals(logo_url)
+    parser = _Visuals(logo_url, brand_name)
     parser.feed(html)
     parser.close()
     logos = parser.media.count(True) + sum(1 for _, is_logo in parser.svgs if is_logo)
@@ -739,7 +759,8 @@ def score_imagery(html_text: str, logo_url: str = "") -> Dict[str, Any]:
         return {"ok": False, "kind": "icons-only", "score": 0,
                 "detail": ("Only icon-sized inline SVGs (< %dpx) and no real image -- a "
                            "wall of cards with tiny icons still reads as a text-wall. Add "
-                           "real imagery (client assets first, then curated stock)." % _ICON_PX)}
+                           "real imagery: the client's own product screens and photographs first, "
+                           "stock only where the brand book allows it." % _ICON_PX)}
     return {"ok": False, "kind": "none", "score": 0,
             "detail": ("Page ships zero imagery -- no image, picture/video, real background "
                        "photo, or illustration. The biggest richness failure.")}

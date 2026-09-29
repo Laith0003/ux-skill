@@ -50,6 +50,33 @@ def test_a_page_whose_only_picture_is_a_logo_has_no_imagery(body):
     assert res["kind"] in ("logo-only", "none"), res
 
 
+@pytest.mark.parametrize("body", [
+    # A wordmark in a link to a language home, or to the site's own root.
+    '<header><a href="/en/"><svg viewBox="0 0 240 64"><path d="M0 0z"/></svg></a></header>',
+    ('<header><a href="https://northfield.example/"><svg viewBox="0 0 240 64"><path d="M0 0z"/>'
+     '</svg></a></header>'),
+    # A wordmark in the navbar's brand wrapper.
+    '<nav><span class="navbar-brand"><svg viewBox="0 0 240 64"><path d="M0 0z"/></svg></span></nav>',
+    # An image whose label is the brand's name.
+    '<header><img src="img/nf.png" width="240" height="64" alt="Northfield"></header>',
+])
+def test_a_wordmark_in_any_usual_place_is_not_imagery(body):
+    res = score_imagery(_page(body), logo_url=LOGO, brand_name="Northfield")
+    assert res["ok"] is False and res["kind"] == "logo-only", res
+
+
+def test_a_photo_that_mentions_a_logo_in_its_alt_is_still_a_photo():
+    body = ('<main><img src="img/storefront.jpg" width="800" height="500" '
+            'alt="Our new logo above the storefront at dusk"></main>')
+    assert score_imagery(_page(body), logo_url=LOGO)["kind"] == "image"
+
+
+def test_the_icons_only_detail_does_not_offer_stock_unconditionally():
+    body = '<main><svg viewBox="0 0 24 24" width="24" height="24"><path d="M0 0z"/></svg></main>'
+    detail = score_imagery(_page(body))["detail"]
+    assert "stock only where the brand book allows it" in detail
+
+
 def test_the_logo_only_detail_names_the_fix():
     res = score_imagery(_page(f'<header><img src="{LOGO}" alt="Northfield"></header>'), logo_url=LOGO)
     assert res["kind"] == "logo-only"
@@ -145,3 +172,25 @@ def test_the_default_avoid_line_still_allows_curated_stock():
     p = parse_brand_md(render_md(build_profile({"name": "Northfield"})))
     assert stock_allowed(p) is True
     assert image_search_terms(p)
+
+
+@pytest.mark.parametrize("avoid", [
+    ["No stock photos or generic smiling people"],
+    ["stock and generic imagery"],
+    ["Stock imagery; generic illustrations"],
+    ["random/generic stock"],
+    ["posed lifestyle shots"],
+])
+def test_an_entry_that_mentions_stock_anywhere_bans_it(avoid):
+    p = build_profile({"photography": {"avoid": avoid}})
+    assert stock_allowed(p) is False, avoid
+    assert image_search_terms(p) == []
+
+
+@pytest.mark.parametrize("avoid", [
+    ["watermarks", "AI renders"],
+    ["generic stock; curated stock allowed"],
+])
+def test_only_an_entry_that_says_so_allows_stock(avoid):
+    assert stock_allowed(build_profile({"photography": {"avoid": avoid}})) is True, avoid
+
