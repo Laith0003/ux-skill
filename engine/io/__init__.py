@@ -22,7 +22,7 @@ from engine.foundations.errors import InputError
 from engine.io.adapter import (
     ROLE_TYPES, AxisMap, Mapping, RoleMap, dump_mapping, load_mapping, merge, parse_mapping,
     propose, their_names, view)
-from engine.io.adapter import FieldMap
+from engine.io.adapter import FieldMap, reduced_pairs
 from engine.io.css_in import Rule, import_css, parse_css, read_css, write_css
 from engine.io.dtcg_in import import_dtcg, read_dtcg
 from engine.io.enhance import Drift, Enhanced, Lie, RawWithToken, drift, enhance
@@ -46,7 +46,7 @@ from engine.io.values_in import (CSS_KEYWORDS, GamutMapped, NotRead, css_alias, 
                                  split_top)
 
 __all__ = [
-    "FieldMap",
+    "FieldMap", "reduced_pairs",
     "CSS_KEYWORDS", "EXPORT_COMMAND", "FORMATS", "INTAKE_DIR", "REST_ENDPOINT", "ROLE_TYPES",
     "SIZE_SCOPES",
     "SKIP_DIRS", "AxisMap", "Drift", "Enhanced", "GamutMapped", "ImportReport", "Imported",

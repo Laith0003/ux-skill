@@ -20,6 +20,9 @@ custom property, SCSS or Less variable set in the app's own CSS is a
 definition, not a raw use, and so is an @font-face or @property block;
 Scan.declared lists the custom properties the code declares, so a report
 can tell a var() to one of them from a token the system lacks.
+Scan.reduced_motion lists each rule a stylesheet sets under
+prefers-reduced-motion: reduce, so a report can say the code turns motion
+down even where the system has no mode for it.
 
 What the scanner sees and cannot measure is listed in Scan.not_read, each
 entry with why and the fix, so a report can say what it did not count: a
@@ -193,6 +196,7 @@ DARK = "scheme:dark"
 _DARK_SELECTOR = re.compile(r"""\.dark(?![\w-])|\[class~=["']?dark["']?\]|"""
                             r"""\[""" + THEME_ATTR.pattern + r"""\s*=\s*["']?dark["']?\s*\]""")
 _DARK_MEDIA = re.compile(r"prefers-color-scheme\s*:\s*dark")
+_REDUCED_MEDIA = re.compile(r"prefers-reduced-motion\s*:\s*reduce")
 
 # Tailwind: utility prefix -> the theme namespaces its value may name, with
 # the family of a token found in each (v4 @theme names first, then v3 theme
@@ -418,6 +422,10 @@ class Scan:
     # The custom properties the code declares itself (--name), each once in
     # the order first seen: a var() to one is the code's own, not a token.
     declared: List[str] = field(default_factory=list)
+    # (file, line, selector) for each rule a stylesheet sets under
+    # prefers-reduced-motion: reduce, so a report can say the code has
+    # reduced motion even when the system has no mode for it.
+    reduced_motion: List[Tuple[str, int, str]] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         """Everything the scan found, as JSON takes it: each entry not
@@ -434,7 +442,9 @@ class Scan:
                 "not_read": [entry(n, ("file", "line", "kind", "text"))
                              for n in self.not_read],
                 "skipped": [{"file": f, "why": w} for f, w in self.skipped],
-                "declared": list(self.declared)}
+                "declared": list(self.declared),
+                "reduced_motion": [{"file": f, "line": n, "selector": sel}
+                                   for f, n, sel in self.reduced_motion]}
 
 
 def _norm(name: str) -> str:
@@ -973,6 +983,9 @@ class _Scanner:
         if _TAILWIND_CSS.search(_blank_comments(text)):
             self.tailwind = True
         for rule in parse_css(text, self.file, every=True):
+            if any(_REDUCED_MEDIA.search(m) for m in rule.media) and rule.declarations:
+                self.result.reduced_motion.append((self.file, rule.line + first_line,
+                                                   " ".join(rule.selector.split())))
             # A selector list in several states records each use once per
             # state; what was not measured is listed once.
             for i, state in enumerate(_selector_states(rule.selector, rule.media)):

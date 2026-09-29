@@ -20,6 +20,12 @@ reads each field from its own token; a role with a field left out is not
 checked, with a note that names the field, since the engine never picks
 one for it.
 
+A system with no motion mode may keep its reduced motion in separate
+tokens, a twin beside each token whose name adds a reduced word
+(duration-slow and duration-slow-reduced, or motion.reduced.*). When the
+mapping reads no motion axis, view() reads each twin as its token's
+reduced-motion value, with a note naming the pairs.
+
 propose() maps a role only when a token's name is the role's own path
 written with other separators (color.text.default, color-text-default,
 color/text/default), and a typography role to the five field properties
@@ -45,7 +51,9 @@ from typing import Any, Dict, List, Optional, Tuple
 from engine.foundations.build import FOUNDATIONS
 from engine.foundations.errors import InputError
 from engine.foundations.modes import AXES, ModeError, compress, contexts, join, parse
-from engine.foundations.tokens import ROOT_BASE, AliasError, Token, TokenSet
+from engine.foundations.modes import FOUNDATION_AXES
+from engine.foundations.tokens import (
+    ROOT_BASE, AliasError, Token, TokenSet, alias_target, is_alias)
 from engine.foundations.values import TYPOGRAPHY_FIELDS
 from engine.io.mode_words import axis_of, mode_of
 
@@ -483,6 +491,71 @@ def _root_axis_note(axis: str, values: Tuple[str, ...], name: str) -> str:
             f"to check it, write in {name} {entry}")
 
 
+# The word a token's name carries when it holds another token's value under
+# reduced motion (duration-slow-reduced, motion.reduced.duration.slow).
+REDUCED_WORDS = ("reduced", "reduce")
+REDUCED_NOTE = ("motion:reduced is read from the separate tokens the system declares for it: "
+                "{pairs}; map the motion axis in {name} to read it from a mode instead")
+
+
+def _name_words(path: str) -> Tuple[str, ...]:
+    spaced = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", path)
+    return tuple(w.lower() for w in re.split(r"[.\-/_ ]+", spaced) if w)
+
+
+def reduced_pairs(ts: TokenSet) -> Dict[str, str]:
+    """Each token that has a separate reduced-motion twin, and the twin: a
+    token of the same type whose name is the token's own with a reduced
+    word added anywhere (duration-slow-reduced, reduced-duration-slow,
+    motion.reduced.duration.slow, or reduced-motion before the rest).
+    Names only, in the set's order."""
+    by_words: Dict[Tuple[str, ...], str] = {}
+    for t in ts.tokens():
+        by_words.setdefault(_name_words(t.path), t.path)
+    out: Dict[str, str] = {}
+    for t in ts.tokens():
+        words = _name_words(t.path)
+        for i, word in enumerate(words):
+            if word not in REDUCED_WORDS:
+                continue
+            for drop in (1, 2):
+                if drop == 2 and words[i + 1:i + 2] != ("motion",):
+                    continue
+                base = by_words.get(words[:i] + words[i + drop:])
+                if base is not None and base != t.path and base not in out \
+                        and ts.get(base).type == t.type:
+                    out[base] = t.path
+                    break
+            else:
+                continue
+            break
+    return out
+
+
+def reduced_twins(ts: TokenSet, mapping: Mapping) -> Dict[str, Tuple[str, str]]:
+    """The mapped motion roles view() reads under reduced motion from a
+    separate twin token, each with (the token it reads, the twin): only
+    when the mapping reads no motion axis and the owner did not leave it
+    out, and the system has no mode a first mapping would read as one. A
+    role whose token aliases a token with a twin reads that twin."""
+    if "motion" in mapping.axes or "motion" in _propose_axes(ts):
+        return {}
+    pairs = reduced_pairs(ts)
+    out: Dict[str, Tuple[str, str]] = {}
+    for role, m in mapping.roles.items():
+        if m.token is None or m.fields is not None or not ts.has(m.token) \
+                or "motion" not in FOUNDATION_AXES.get(role.split(".", 1)[0], ()):
+            continue
+        path, seen = m.token, set()
+        while path not in pairs and path not in seen and ts.has(path) \
+                and is_alias(ts.get(path).value):
+            seen.add(path)
+            path = alias_target(ts.get(path).value)
+        if path in pairs:
+            out[role] = (path, pairs[path])
+    return out
+
+
 def _resolve(ts: TokenSet, role: str, token: str, context: str,
              fields: Optional[Dict[str, FieldMap]] = None) -> Any:
     if fields is not None:
@@ -525,12 +598,18 @@ def view(ts: TokenSet, mapping: Mapping,
     token or axis value the system lacks; `name` is the mapping file its
     messages name."""
     _check(ts, mapping, name)
-    axes = {a: AXES[a] for a in AXES if a in mapping.axes and mapping.axes[a].source is not None}
+    twins = reduced_twins(ts, mapping)
+    axes = {a: AXES[a] for a in AXES if a in mapping.axes and mapping.axes[a].source is not None
+            or a == "motion" and twins}
     out = TokenSet(axes)
     notes: List[str] = [AXIS_LEFT_OUT.format(axis=a, name=name)
                         for a, m in mapping.axes.items() if m.source is None]
     notes += _axes_left_out(ts, mapping, name)
     notes += _left_out(ts, mapping, name)
+    if twins:
+        pairs = {base: twin for base, twin in twins.values()}
+        notes.append(REDUCED_NOTE.format(
+            pairs=_and([f"{twin} for {base}" for base, twin in pairs.items()]), name=name))
     for role, m in mapping.roles.items():
         if m.token is None:
             notes.append(ROLE_LEFT_OUT.format(role=role, name=name))
@@ -544,11 +623,14 @@ def view(ts: TokenSet, mapping: Mapping,
         values: Dict[str, Any] = {}
         try:
             for ctx in contexts(list(axes), axes):
+                ours = parse(ctx, axes)
                 theirs = {mapping.axes[a].source: mapping.axes[a].values[v]
-                          for a, v in parse(ctx, axes).items()}
+                          for a, v in ours.items() if a in mapping.axes}
                 their_ctx = join({a: v for a, v in theirs.items()
                                   if v != ts.axes[a][0]}, ts.axes)
-                values[ctx] = _resolve(ts, role, m.token, their_ctx, m.fields)
+                token = (twins[role][1] if role in twins and ours.get("motion") == "reduced"
+                         else m.token)
+                values[ctx] = _resolve(ts, role, token, their_ctx, m.fields)
         except (AliasError, ModeError) as exc:
             notes.append(f"{role} reads {m.token}, which cannot be resolved ({exc}); it was left "
                          "out of the check")

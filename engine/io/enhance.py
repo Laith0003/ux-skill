@@ -27,7 +27,9 @@ measures what the code actually does against it:
 The report says how many of the engine's roles the mapping covers, which
 ones the owner left out and which ones are not mapped at all, so a mapping
 that maps nothing never passes as a clean gate. Then what the owner should
-confirm (reading faces, breakpoints, modes the mapping lacks) and every
+confirm (reading faces, breakpoints, modes the mapping lacks; reduced
+motion kept as separate twin tokens, or as a prefers-reduced-motion block
+in the code, is reported as present, not as a missing mode) and every
 decision the engine made without them (mappings by name, entries a merge
 proposed, values read with a note), so they can reverse it.
 
@@ -46,7 +48,8 @@ from engine.foundations.modes import AXES
 from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_alias
 from engine.foundations.validate import validate
 from engine.io.adapter import (
-    AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, Mapping, deleted_axes, their_names, view)
+    AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, Mapping, deleted_axes, reduced_pairs, reduced_twins,
+    their_names, view)
 from engine.io.report import Imported
 from engine.io.scan import Scan, Usage, _norm, canonical
 
@@ -844,8 +847,40 @@ def _reading_face(checked: TokenSet, role: str) -> Optional[str]:
     return face if isinstance(face, str) else (face[0] if face else None)
 
 
+def _reduced_motion(ts: TokenSet, mapping: Mapping, scanned: Optional[Scan],
+                    source: str, name: str) -> str:
+    """What the report says of reduced motion when the mapping reads no
+    motion axis: present through separate twin tokens, present in the
+    code's own reduced-motion block, or missing."""
+    twins = reduced_twins(ts, mapping)
+    if twins:
+        pairs = {base: twin for base, twin in twins.values()}
+        shown = _and_few([f"{t} for {b}" for b, t in pairs.items()], 3)
+        return (f"The system has reduced motion as separate tokens ({shown}), read as the "
+                "reduced-motion values of their base tokens, so the motion checks ran under "
+                "reduced motion; confirm each pair.")
+    pairs = reduced_pairs(ts)
+    if pairs:
+        shown = _and_few([f"{t} for {b}" for b, t in pairs.items()], 3)
+        return (f"The system has reduced motion as separate tokens ({shown}), but no mapped role "
+                f"reads them; map the motion roles to their base tokens in {name} to check them "
+                "under reduced motion.")
+    blocks = list(getattr(scanned, "reduced_motion", ()) or ())
+    if blocks:
+        every = [b for b in blocks if "*" in b[2]]
+        file, line, _ = (every or blocks)[0]
+        what = "for everything " if every else ""
+        return (f"The code turns motion down {what}in a prefers-reduced-motion block at "
+                f"{file}:{line}, so reduced motion is present, though not as a mode of the "
+                "system: the motion checks under reduced motion ran on no token. To check them, "
+                f"give {source} a reduced-motion mode or reduced tokens, and map them in {name}.")
+    return ("The system has no reduced-motion mode in the mapping, so the motion checks under "
+            "reduced motion did not run; if it has one, map it as the motion axis in "
+            f"{name}.")
+
+
 def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str],
-             deleted: Sequence[str] = ()) -> List[str]:
+             deleted: Sequence[str] = (), motion: str = "") -> List[str]:
     out = []
     for role in READING_ROLES:
         first = _reading_face(checked, role) if checked.has(role) else None
@@ -871,10 +906,8 @@ def _confirm(mapping: Mapping, checked: TokenSet, foundations: Sequence[str],
                    "layout.breakpoint.tablet to your first breakpoint to check it.")
     # An axis the owner left out on purpose is not asked for again, nor one
     # deleted from the mapping, which the decisions already name.
-    if "motion" not in mapping.axes and "motion" not in deleted:
-        out.append("The system has no reduced-motion mode in the mapping, so the motion checks "
-                   "under reduced motion did not run; if it has one, map it as the motion axis "
-                   "in mapping.json.")
+    if "motion" not in mapping.axes and "motion" not in deleted and motion:
+        out.append(motion)
     if "scheme" not in mapping.axes and "scheme" not in deleted:
         out.append("The system has no dark mode in the mapping, so dark was not checked; if it "
                    "has one, map it as the scheme axis in mapping.json.")
@@ -971,9 +1004,16 @@ def _mapped_fix(failure: Any, name: str) -> Any:
     return type(failure)(failure.check, failure.criterion, failure.mode, message)
 
 
-def _finding(text: str, mapping: Mapping) -> str:
+def _finding(text: str, mapping: Mapping,
+             twins: Optional[Dict[str, Tuple[str, str]]] = None) -> str:
     """A gate message in the system's names; a set with no mode axis
-    prints an empty context, which is dropped."""
+    prints an empty context, which is dropped. For a role read under
+    reduced motion from a twin token, the fix names the twin, since the
+    system has no override to change."""
+    for role, (_, twin) in (twins or {}).items():
+        if text.startswith(role + " "):
+            text = (text.replace("with a motion:reduced override", f"in your {twin}")
+                    .replace("its motion:reduced override", f"your {twin}"))
     return their_names(text.replace(" ()", ""), mapping)
 
 
@@ -995,8 +1035,9 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
         n.startswith(f"{r} reads {mapping.roles[r].token}, which cannot be resolved (")
         for r in unresolved)]
     report = result.report
+    twins = reduced_twins(ts, mapping)
     findings = [_finding(_MOVE.sub(_THEIR_FIX, f.message()), mapping) for f in report.findings]
-    findings += [_finding(f"{c.message} (in {c.mode})" if c.mode else c.message, mapping)
+    findings += [_finding(f"{c.message} (in {c.mode})" if c.mode else c.message, mapping, twins)
                  for c in (_mapped_fix(c, mapping_name) for c in report.failures)]
     decisions = _by_name(mapping, mapping_name)
     for axis, m in mapping.axes.items():
@@ -1019,6 +1060,8 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     decisions += [n for n in notes if n not in owner]
     return Enhanced(imported, mapping, result, structure,
                     drift(ts, scanned) if scanned is not None else None,
-                    _confirm(mapping, checked, result.foundations, list(deleted_axes(ts, mapping))),
+                    _confirm(mapping, checked, result.foundations, list(deleted_axes(ts, mapping)),
+                             _reduced_motion(ts, mapping, scanned, imported.report.source.path,
+                                             mapping_name)),
                     decisions, findings,
                     list(merge_notes), list(unresolved))
