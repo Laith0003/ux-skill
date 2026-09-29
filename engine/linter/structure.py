@@ -2001,6 +2001,152 @@ def skip_link(ctx: FileContext, view: View, match: re.Match, start: int) -> bool
     return anchor is None or anchor.start() > match.start()
 
 
+# ---------------------------------------------------------------------------
+# Gradients: a scrim is one hue at several alphas
+# ---------------------------------------------------------------------------
+
+_HEX_COLOR = re.compile(r"#([0-9a-f]{3,8})\b", re.I)
+_COLOR_FN = re.compile(r"\b(rgba?|hsla?)\(([^()]*)\)", re.I)
+_NAMED_RGB = {"black": (0, 0, 0), "white": (255, 255, 255)}
+
+
+def _hex_rgb(digits: str) -> Optional[Tuple[int, int, int]]:
+    if len(digits) in (3, 4):
+        digits = "".join(c * 2 for c in digits[:3])
+    elif len(digits) in (6, 8):
+        digits = digits[:6]
+    else:
+        return None
+    return tuple(int(digits[i:i + 2], 16) for i in (0, 2, 4))  # type: ignore[return-value]
+
+
+def _channel(value: str, scale: float) -> Optional[float]:
+    try:
+        return float(value[:-1]) * scale / 100 if value.endswith("%") else float(value)
+    except ValueError:
+        return None
+
+
+def _fn_rgb(name: str, args: str) -> Optional[Tuple[int, int, int]]:
+    parts = [a for a in re.split(r"[\s,/]+", args.strip()) if a]
+    if len(parts) < 3:
+        return None
+    if name.lower().startswith("rgb"):
+        vals = [_channel(v, 255) for v in parts[:3]]
+        if any(v is None for v in vals):
+            return None
+        return tuple(int(round(v)) for v in vals)  # type: ignore[arg-type,return-value]
+    h = _channel(parts[0].replace("deg", ""), 360)
+    s, lum = _channel(parts[1], 1), _channel(parts[2], 1)
+    if h is None or s is None or lum is None:
+        return None
+    s, lum = (s / 100 if s > 1 else s), (lum / 100 if lum > 1 else lum)
+    c = (1 - abs(2 * lum - 1)) * s
+    x = c * (1 - abs((h / 60) % 2 - 1))
+    m = lum - c / 2
+    r, g, b = [(c, x, 0), (x, c, 0), (0, c, x), (0, x, c), (x, 0, c), (c, 0, x)][int(h % 360 // 60)]
+    return tuple(int(round((v + m) * 255)) for v in (r, g, b))  # type: ignore[return-value]
+
+
+def _stop_rgb(stop: str) -> Tuple[str, Optional[Tuple[int, int, int]]]:
+    """``("clear", None)`` for transparent, ``("color", rgb)`` for a color
+    this reads, ``("skip", None)`` for a direction or a position, and
+    ``("unknown", None)`` for a color it cannot read (var(), a name)."""
+    s = stop.strip().lower()
+    if not s or re.match(r"^(?:to\s|[-\d.]+(?:deg|turn|rad|grad)\b|from\s|in\s)", s):
+        return "skip", None
+    if s.startswith("transparent"):
+        return "clear", None
+    m = _COLOR_FN.search(s)
+    if m:
+        rgb = _fn_rgb(m.group(1), m.group(2))
+        return ("color", rgb) if rgb else ("unknown", None)
+    m = _HEX_COLOR.search(s)
+    if m:
+        rgb = _hex_rgb(m.group(1))
+        return ("color", rgb) if rgb else ("unknown", None)
+    word = s.split()[0]
+    if word in _NAMED_RGB:
+        return "color", _NAMED_RGB[word]
+    if re.match(r"^[-\d.]+(?:%|px|em|rem)?$", word):
+        return "skip", None
+    return "unknown", None
+
+
+def is_scrim(gradient: str) -> bool:
+    """True when every color stop of a gradient is one color (transparent
+    counts as a fade of it) at different alphas: a scrim over an image,
+    not a chrome gradient. A stop this cannot read keeps it a gradient."""
+    inner = gradient[gradient.index("(") + 1:gradient.rindex(")")] if "(" in gradient else ""
+    colors = set()
+    for stop in _split_top(inner):
+        kind, rgb = _stop_rgb(stop)
+        if kind == "unknown":
+            return False
+        if kind == "color":
+            colors.add(rgb)
+    return len(colors) <= 1
+
+
+def multi_hue_gradient(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """A gradient of three or more stops is chrome only when its stops are
+    more than one color; one hue at several alphas is a scrim."""
+    return not is_scrim(match.group(0))
+
+
+# ---------------------------------------------------------------------------
+# Spinners the button contract asks for
+# ---------------------------------------------------------------------------
+
+_BUTTON_SELECTOR = re.compile(
+    r"(?:^|[\s>+~(,])button\b|[.#][\w-]*(?:btn|button)[\w-]*|\[role\s*=\s*['\"]?button", re.I)
+_CONTRACT_PLACES = ("design-system/rule-pack/contracts/button.yaml",
+                    "rule-pack/contracts/button.yaml", "contracts/button.yaml")
+_ROOT_MARKERS = (".git", "package.json", "pyproject.toml", "composer.json")
+
+
+@lru_cache(maxsize=64)
+def _contract_spinner(folder: str) -> bool:
+    """Whether the button contract that governs ``folder`` lists a spinner
+    part: the project's own contract (its rule pack), else the seed
+    contract that ships with the engine."""
+    from engine.contracts.schema import ContractError, load_contract
+    here = Path(folder)
+    for base in [here, *here.parents]:
+        for rel in _CONTRACT_PLACES:
+            f = base / rel
+            if f.is_file():
+                try:
+                    return any(part.name == "spinner" for part in load_contract(f).parts)
+                except (ContractError, OSError):
+                    return False
+        if any((base / m).exists() for m in _ROOT_MARKERS):
+            break
+    from engine.contracts.library import SEED_DIR
+    try:
+        return any(part.name == "spinner" for part in load_contract(SEED_DIR / "button.yaml").parts)
+    except (ContractError, OSError):
+        return False
+
+
+def spinner_outside_contract(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """The default border spinner is a finding, except on a button whose
+    contract lists a spinner part for its loading state: the contract's
+    requirement wins."""
+    at = match.start()
+    if view.text[at:at + 1] == ".":
+        brace = view.text.find("{", at)
+        at = brace + 1 if brace != -1 else at
+    block = block_at(ctx, view, at)
+    if block is None or not any(_BUTTON_SELECTOR.search(s) for s in block.selectors):
+        return True
+    try:
+        folder = str(Path(ctx.path).resolve().parent)
+    except OSError:
+        folder = "."
+    return not _contract_spinner(folder)
+
+
 POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
     "input-has-no-name": input_has_no_name,
     "svg-not-hidden": svg_not_hidden,
@@ -2011,4 +2157,6 @@ POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
     "skip-link": skip_link,
     "accent-ruler": accent_ruler,
     "hamburger-on-desktop": hamburger_on_desktop,
+    "multi-hue-gradient": multi_hue_gradient,
+    "spinner-outside-contract": spinner_outside_contract,
 }

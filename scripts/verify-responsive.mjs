@@ -14,13 +14,16 @@
  *             -> you have NOT verified. Eyeball on a real device. Do NOT claim passed.
  *
  * Usage: node scripts/verify-responsive.mjs <file-or-url> [widths=360,390] [outdir=.]
+ * Screenshots are named by page and width (verify-<page>-<width>.png), so
+ * checking several pages into one folder never overwrites one with another.
  * Chrome path override: CHROME_BIN=/path/to/chrome
  * Needs only Node 21+ (built-in fetch + WebSocket) and a Chrome/Chromium binary.
  */
 import { spawn } from 'node:child_process';
 import { mkdtempSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, relative, isAbsolute } from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const STICKY_CEILING = 96;        // px; a taller pinned header is a fail
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -31,14 +34,44 @@ function degrade(msg) {
   process.exit(2);
 }
 
+/**
+ * The page part of a screenshot name: a file's path under the working folder
+ * (or its full path outside it), or a URL's host and path, without the
+ * extension, as lowercase words joined by dashes. en/index.html and
+ * ar/index.html give en-index and ar-index.
+ */
+export function pageSlug(target, cwd = process.cwd()) {
+  let host = '';
+  let name = String(target || 'page');
+  const web = /^(https?):\/\/([^/?#]+)([^?#]*)/i.exec(name);
+  if (web) { host = web[2]; name = web[3]; }
+  else {
+    name = name.replace(/^file:\/\//i, '');
+    const rel = isAbsolute(name) ? relative(cwd, name) : name;
+    name = rel.startsWith('..') ? name : rel;
+  }
+  name = name.replace(/\/+$/, '').replace(/\.[a-z0-9]+$/i, '');
+  const slug = (host + '/' + name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return slug || 'page';
+}
+
+/** The screenshot file name for one page at one width. */
+export function shotName(target, width, cwd = process.cwd()) {
+  return 'verify-' + pageSlug(target, cwd) + '-' + width + '.png';
+}
+
+const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
 const target = process.argv[2];
-if (!target) degrade('no target given (usage: verify-responsive.mjs <file-or-url> [widths] [outdir])');
+if (isMain && !target) degrade('no target given (usage: verify-responsive.mjs <file-or-url> [widths] [outdir])');
 const widths = (process.argv[3] || '360,390').split(',').map((n) => parseInt(n, 10)).filter(Boolean);
 const outDir = process.argv[4] || '.';
-const url = /^(https?|file):/.test(target)
+const url = !target ? '' : /^(https?|file):/.test(target)
   ? target
   : 'file://' + (target.startsWith('/') ? target : join(process.cwd(), target));
 
+if (isMain) main();
+
+function main() {
 const CHROME = process.env.CHROME_BIN ||
   ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
    '/Applications/Chromium.app/Contents/MacOS/Chromium',
@@ -57,7 +90,7 @@ const MEASURE = `(()=>{
   const st=all.concat([d]).filter(e=>{const c=getComputedStyle(e);if(c.position!=='sticky'&&c.position!=='fixed')return false;
       const t=parseFloat(c.top);return isFinite(t)&&Math.abs(t)<=1&&e.getClientRects().length;});
   const outer=st.filter(e=>!st.some(o=>o!==e&&o.contains(e)));
-  return {innerWidth:vw,scrollWidth:d.scrollWidth,clientWidth:d.clientWidth,
+  return {innerWidth:vw,scrollWidth:d.scrollWidth,clientWidth:d.clientWidth,over,
     stickyH:outer.reduce((s,e)=>s+e.offsetHeight,0),
     vp:(document.querySelector('meta[name=viewport]')||{}).content||'(none)'};
 })()`;
@@ -125,7 +158,7 @@ function makeCdp(wsUrl) {
     const { result } = await cdp.send('Runtime.evaluate', { expression: MEASURE, returnByValue: true }, sessionId);
     const v = result && result.value;
     if (!v) degrade('could not measure the page at ' + w + 'px');
-    const shot = join(outDir, 'verify-' + w + '.png');
+    const shot = join(outDir, shotName(target, w));
     const { data } = await cdp.send('Page.captureScreenshot', { format: 'png' }, sessionId);
     writeFileSync(shot, Buffer.from(data, 'base64')); shots.push(shot);
     if (v.innerWidth > w) {
@@ -150,3 +183,4 @@ function makeCdp(wsUrl) {
   console.log('  screenshots: ' + shots.join(', '));
   process.exit(failed ? 1 : 0);
 })().catch((e) => degrade('verifier crashed: ' + (e && e.message)));
+}

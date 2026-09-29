@@ -85,6 +85,8 @@ node scripts/verify-responsive.mjs <file-or-url> 360,390 <out-dir>
 It sets a TRUE device viewport (via the DevTools Emulation domain, self-calibrated so a lying
 viewport is caught), measures `document.documentElement.scrollWidth` vs the device width,
 sums the sticky-chrome height, and **writes a screenshot per width so the output can be SEEN**.
+Each shot is named by page and width (`verify-en-index-360.png`, `verify-ar-index-360.png`), so
+several pages checked into one folder never overwrite each other.
 
 Honesty contract (the whole point):
 - **exit 0** = VERIFIED clean.

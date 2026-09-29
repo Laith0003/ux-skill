@@ -1202,7 +1202,8 @@
           "blade",
           "astro"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "multi-hue-gradient"
       },
       "why": "Three-plus color stops in a linear-gradient is the v0 / Cursor / generic-AI default; reads as chrome-y template output rather than a deliberate brand decision.",
       "fix": "Use a two-stop gradient (or a single solid) with hue spread under 60 degrees. If depth is needed, layer a low-opacity overlay instead of stacking stops."
@@ -1950,7 +1951,8 @@
           "css",
           "scss"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "spinner-outside-contract"
       },
       "why": "The 4-border-color, border-top-different, animation: spin recipe is the textbook 1998 spinner that every AI generator emits for any loading state - signals the loading affordance was set by default, not designed. Modern systems use skeleton screens, progress bars, or branded indicators.",
       "fix": "Replace with a skeleton screen for content loading, a progress indicator for known-duration tasks, or a branded SVG mark animated via transform: rotate. The bordered spinner is the loading equivalent of Lorem ipsum."

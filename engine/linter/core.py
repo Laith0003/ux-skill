@@ -12,6 +12,11 @@ Public surface
 ``lint(paths, severity_threshold) -> LintReport``
 ``lint_text(name, text) -> List[Finding]`` lints one file's contents.
 ``LintReport`` is JSON-serialisable via ``to_dict()``.
+
+When the project holds a client's own design system (``ux system detect``
+finds one), the files of that system are linted and reported apart, under
+``system``: they are the client's fixed input, not generated output, so
+they never lower the page's score or its exit code.
 """
 from __future__ import annotations
 
@@ -75,6 +80,16 @@ class Finding:
         return asdict(self)
 
 
+def _counts(findings: Iterable["Finding"]) -> Dict[str, int]:
+    out: Dict[str, int] = {"critical": 0, "high": 0, "medium": 0, "low": 0}
+    n = 0
+    for f in findings:
+        out[f.severity] = out.get(f.severity, 0) + 1
+        n += 1
+    out["total"] = n
+    return out
+
+
 @dataclass
 class LintReport:
     findings: List[Finding] = field(default_factory=list)
@@ -82,9 +97,13 @@ class LintReport:
     rules_loaded: int = 0
     exit_code: int = 0
     score: int = 100   # v2.1 — 0-100 quality score, severity-weighted
+    # The client's own system files, linted apart: they never touch the
+    # score or the exit code above.
+    system_files: List[str] = field(default_factory=list)
+    system_findings: List[Finding] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
-        return {
+        out: Dict[str, Any] = {
             "files_scanned": self.files_scanned,
             "rules_loaded": self.rules_loaded,
             "exit_code": self.exit_code,
@@ -92,13 +111,20 @@ class LintReport:
             "findings": [f.to_dict() for f in self.findings],
             "summary": self.counts(),
         }
+        if self.system_files:
+            out["system"] = {
+                "note": ("The client's own design system files, found by ux system detect. "
+                         "They are its fixed input, not generated output, so their findings "
+                         "are listed here and do not lower the page's score or exit code."),
+                "files": list(self.system_files),
+                "score": compute_score(self.system_findings, len(self.system_files)),
+                "findings": [f.to_dict() for f in self.system_findings],
+                "summary": _counts(self.system_findings),
+            }
+        return out
 
     def counts(self) -> Dict[str, int]:
-        out: Dict[str, int] = {"critical": 0, "high": 0, "medium": 0, "low": 0}
-        for f in self.findings:
-            out[f.severity] = out.get(f.severity, 0) + 1
-        out["total"] = len(self.findings)
-        return out
+        return _counts(self.findings)
 
 
 IGNORED_DIRS = {
@@ -400,6 +426,33 @@ def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None
     return findings
 
 
+def system_files(files: Iterable[Path], targets: Iterable[Path] = ()) -> set:
+    """The resolved paths among ``files`` that belong to a client's own
+    design system: a source ``ux system detect`` reports for the file's
+    project (the nearest folder with a project marker, else the linted
+    folder that holds the file, else the file's own folder), or a file
+    inside a system folder it reports. A file ux-skill wrote and nobody has
+    changed since is generated output, never the client's system."""
+    from engine.existing import detect_existing_system, is_ux_skill_file
+
+    folders = [Path(t).resolve() for t in targets if Path(t).is_dir()]
+    found: Dict[Path, List[tuple]] = {}
+    out = set()
+    for f in files:
+        f = Path(f).resolve()
+        root = (_project_root(f.parent)
+                or next((d for d in folders if d in f.parents), None) or f.parent)
+        if root not in found:
+            result = detect_existing_system(root)
+            found[root] = ([((root / s["path"]).resolve(), s["kind"] == "system-folder")
+                            for s in result.get("sources", [])] if result.get("found") else [])
+        for src, folder in found[root]:
+            if (f == src or (folder and src in f.parents)) and not is_ux_skill_file(f):
+                out.add(f)
+                break
+    return out
+
+
 def lint(
     paths: Iterable[str] | Iterable[Path],
     severity_threshold: str = "high",
@@ -408,7 +461,9 @@ def lint(
 
     ``severity_threshold`` sets the lowest severity that counts toward the
     non-zero exit code (CI gate). Findings below this severity are still
-    reported, just not fatal.
+    reported, just not fatal. Files of the client's own design system
+    (``system_files``) are linted and reported apart: their findings never
+    count toward the score or the exit code.
     """
     rules = _compile_rules()
     threshold = SEVERITY_RANK.get(severity_threshold, 2)
@@ -428,15 +483,23 @@ def lint(
                 return None
         return texts[key]
 
+    theirs = system_files(files, targets)
+    own_system: List[str] = []
+    system_findings: List[Finding] = []
     for path in files:
         text = read(path)
         if text is None:
             continue
-        files_scanned += 1
         pages = None
         if path.name.lower().endswith(STYLE_SUFFIXES):
             pages = [(str(p), t) for p in stylesheet_pages(path, files, read=read) if (t := read(p)) is not None]
-        findings.extend(lint_text(str(path), text, rules, pages=pages))
+        found = lint_text(str(path), text, rules, pages=pages)
+        if path.resolve() in theirs:
+            own_system.append(str(path))
+            system_findings.extend(found)
+            continue
+        files_scanned += 1
+        findings.extend(found)
 
     fatal = any(SEVERITY_RANK.get(f.severity, 0) >= threshold for f in findings)
     score = compute_score(findings, files_scanned)
@@ -446,4 +509,6 @@ def lint(
         rules_loaded=len(rules),
         exit_code=1 if fatal else 0,
         score=score,
+        system_files=own_system,
+        system_findings=system_findings,
     )
