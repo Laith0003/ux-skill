@@ -135,8 +135,39 @@ def test_a_frontmatter_of_token_groups_is_read():
     assert ts.get("typography.body.fontFamily").value == ["Inter Text"]
     assert ts.get("rounded.md").value == {"value": 8, "unit": "px"}
     assert _rows(imported.report.not_read) == [(
+        "DESIGN.md:4", "description",
+        'holds #0F766E in the document\'s own key description, which is not read as a token; '
+        'write it under colors, such as colors: <name>: "#0F766E"'), (
         "DESIGN.md:16", "components",
         "holds component properties, which are not system tokens, so the group was not read; "
         "keep them in each component's contract, and move a value the system shares into "
         "colors, rounded or spacing")]
     assert imported.report.headline == []
+
+
+def test_a_heading_that_holds_a_value_is_listed():
+    report = _import("# Lantern\n\n### Primary #3B5BDB\n\nThe action color.\n").report
+    assert _rows(report.not_read) == [(
+        "DESIGN.md:3", "", "holds #3B5BDB in a heading, which is not read as a token; write it "
+                           "on a line of its own as a list item such as - `color.<name>`: #3B5BDB")]
+    assert report.headline != []
+
+
+def test_a_list_under_a_frontmatter_group_is_listed():
+    text = '---\ncolors:\n  ramp:\n    - "#000000"\n    - "#111111"\n---\n'
+    imported = _import(text)
+    assert imported.report.tokens == 0
+    assert _rows(imported.report.not_read) == [(
+        "DESIGN.md:4", "colors.ramp", 'is a list, and an item of a list has no name, so it was '
+                                      'not read; give each value a key of its own, such as '
+                                      'ramp: 100: "#000000"')]
+
+
+def test_values_only_in_top_level_keys_are_listed_under_the_headline():
+    report = _import('---\nname: lantern\ndescription: "Accent #3B5BDB"\n---\n\n# Lantern\n').report
+    assert report.headline != [] and [i.name for i in report.not_read] == ["description"]
+
+
+def test_the_example_group_fits_what_the_value_is():
+    report = _import("## Motion\n\nCards round their corners by 12px.\n").report
+    assert "- `size.<name>`: 12px" in report.not_read[0].message

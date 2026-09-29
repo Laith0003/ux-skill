@@ -322,21 +322,39 @@ def _held(text: str) -> List[str]:
     return list(dict.fromkeys(m.group(0) for m in _HELD.finditer(text)))
 
 
-def _group_for(value: str, heading: str) -> str:
-    """The group an example token name opens with: the heading's word, or
-    what the value is."""
-    slug = _slug(heading)
-    if slug:
-        return slug.split("-")[0]
+# The heading words an example name may open with, by what the value is.
+_GROUP_WORDS = {
+    "color": frozenset(("color", "colors", "colour", "colours", "palette", "brand", "surface",
+                        "surfaces", "ink", "text")),
+    "size": frozenset(("space", "spacing", "size", "sizes", "radius", "radii", "rounded",
+                       "shape", "shapes", "layout", "elevation", "shadow", "shadows", "border",
+                       "borders", "type", "typography", "grid")),
+    "duration": frozenset(("motion", "duration", "durations", "animation", "transition",
+                           "transitions", "timing")),
+}
+
+
+def _kind_of(value: str) -> str:
+    """color, size or duration: what a value found in text is."""
     if value.startswith("#") or "(" in value:
         return "color"
     return "duration" if value.endswith("s") and not value.endswith("px") else "size"
 
 
+def _group_for(value: str, heading: str) -> str:
+    """The group an example token name opens with: the heading's word when
+    it fits what the value is (radius under ## Radius), else what the value
+    is (a radius under ## Motion is size)."""
+    kind = _kind_of(value)
+    word = _slug(heading).split("-")[0]
+    return word if word in _GROUP_WORDS[kind] else kind
+
+
 def _frontmatter(lines: List[str]) -> Tuple[int, List[Tuple[int, List[str], str]]]:
     """(the index of the first line after a frontmatter block, or 0 when the
     file has none; each key that holds a value, as (line, its keys from the
-    top, the value with YAML quotes removed))."""
+    top, the value with YAML quotes removed)). An item of a YAML list is
+    given as the keys above it plus "-"."""
     if not lines or lines[0].strip() != "---":
         return 0, []
     end = next((k for k in range(1, len(lines)) if lines[k].strip() in ("---", "...")), None)
@@ -345,6 +363,17 @@ def _frontmatter(lines: List[str]) -> Tuple[int, List[Tuple[int, List[str], str]
     stack: List[Tuple[int, str]] = []
     leaves: List[Tuple[int, List[str], str]] = []
     for k in range(1, end):
+        item = re.match(r"^(\s*)-\s+(.*?)\s*$", lines[k])
+        if item and not _FRONT_KEY.match(lines[k][len(item.group(1)) + 2:]):
+            indent = len(item.group(1).expandtabs(2))
+            while stack and stack[-1][0] > indent:
+                stack.pop()
+            if stack:
+                value = item.group(2)
+                if len(value) > 1 and value[0] == value[-1] and value[0] in "\"'":
+                    value = value[1:-1]
+                leaves.append((k + 1, [s for _, s in stack] + ["-"], value))
+            continue
         m = _FRONT_KEY.match(lines[k])
         if not m or lines[k].lstrip().startswith("#"):
             continue
@@ -922,8 +951,26 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
     def read_frontmatter(file_name: str, leaves: List[Tuple[int, List[str], str]]) -> None:
         """Each value under a token group, as a token named by its keys."""
         skipped: Dict[str, int] = {}
+        listed: Dict[str, int] = {}
         for at, keys, value in leaves:
+            held = _held(value)
             if len(keys) < 2:  # the document's own keys: name, version
+                if held:
+                    group = {"color": "colors", "size": "spacing",
+                             "duration": "motion"}[_kind_of(held[0])]
+                    not_read.append(Item(f"{file_name}:{at}", keys[0], (
+                        f"holds {_and(held)} in the document's own key {keys[0]}, which is not "
+                        f"read as a token; write it under {group}, such as {group}: <name>: "
+                        f"\"{held[0]}\"")))
+                continue
+            if keys[-1] == "-":
+                path = ".".join(keys[:-1])
+                if held and path not in listed:
+                    listed[path] = at
+                    not_read.append(Item(f"{file_name}:{at}", path, (
+                        f"is a list, and an item of a list has no name, so it was not read; "
+                        f"give each value a key of its own, such as {keys[-2]}: 100: "
+                        f"\"{held[0]}\"")))
                 continue
             if keys[0].lower() not in FRONTMATTER_GROUPS:
                 if _held(value) or _BRACE.fullmatch(value.strip()):
@@ -1004,6 +1051,12 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 continue
             heading = _HEADING.fullmatch(line)
             if heading:
+                held = _held(heading.group(1))
+                if held:
+                    not_read.append(Item(where, "", (
+                        f"holds {_and(held)} in a heading, which is not read as a token; write "
+                        f"it on a line of its own as a list item such as - "
+                        f"`{_group_for(held[0], heading.group(1))}.<name>`: {held[0]}")))
                 section["unit"] = _heading_unit(heading.group(1))
                 # A title (#) names the document, not a group of tokens.
                 section["heading"] = heading.group(1) if not line.lstrip().startswith("# ") \
@@ -1211,8 +1264,7 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
     report.headline = [
         f"No token was read from {file_name}, though it holds values; every line that holds one "
         "is listed below, under Not read or as a rule, with how to write it so it can be read."
-        for file_name, text in files if file_name not in gave and _held("\n".join(
-            ln for ln in text.splitlines() if not _HEADING.fullmatch(ln)))]
+        for file_name, text in files if file_name not in gave and _held(text)]
     report.notes = sorted(kept_notes, key=key)
     report.not_read = sorted(not_read, key=key)
     report.mapped = sorted(mapped, key=key)
