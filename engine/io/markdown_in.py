@@ -17,7 +17,17 @@ Read as tokens:
 - a palette keyed by step (a Step column of 50, 100 ... 900 and a column per
   family, or the steps across the top): each cell is a primitive named
   family.step;
-- a list item whose name is in backticks: "- `space.2`: 8px" or "= 8px".
+- a list item whose name is in backticks: "- `space.2`: 8px" or "= 8px";
+- a type table: a name column and a Font, Size, Weight, Line height and
+  Letter spacing column (Family, Leading and Tracking too) reads each row
+  as one typography token.
+
+A column that names a property of each row's token (Line height, Weight,
+Letter spacing, Curve, Easing) is never a mode. Beside the token's value
+in a table without all five typography fields, it is listed under Not
+read with the column to add or the token to write. The engine holds no
+transition token, so a Curve beside a Duration is listed with the fix to
+write each curve as its own token.
 
 A unit in a column header (Value (px), Size [rem]) or in the heading above
 (## Spacing (px), ## Motion, in ms) is the unit of a bare number there. A
@@ -46,7 +56,7 @@ from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from engine.foundations.errors import InputError, _brief_text
 from engine.foundations.modes import AXES
-from engine.foundations.values import GENERIC_FAMILIES, STROKE_STYLES
+from engine.foundations.values import GENERIC_FAMILIES, STROKE_STYLES, TYPES, TYPOGRAPHY_FIELDS
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.mode_words import axis_of, is_base, mode_of, words as name_words
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source
@@ -69,6 +79,22 @@ GUIDANCE_AVOID = ("don't", "dont", "do not", "avoid", "bad", "incorrect", "wrong
 # The first column of a palette keyed by step.
 STEP_HEADERS = ("step", "steps", "shade", "shades", "scale", "tone", "tones", "level", "")
 
+# Column headers that name a property of each row's token, never a mode:
+# the typography fields (a row with all five reads as one typography
+# token) and the motion properties beside a duration.
+TYPE_FIELD_HEADERS = {
+    "fontFamily": ("font", "family", "font family", "typeface", "font-family"),
+    "fontSize": ("size", "font size", "font-size"),
+    "fontWeight": ("weight", "font weight", "font-weight"),
+    "lineHeight": ("line height", "line-height", "leading", "lineheight"),
+    "letterSpacing": ("letter spacing", "letter-spacing", "tracking", "letterspacing"),
+}
+MOTION_HEADERS = ("curve", "easing", "ease", "timing", "timing function", "delay")
+# Each typography field as a column is headed and as a person names it.
+_FIELD_COLUMN = {"fontFamily": "Font", "fontSize": "Size", "fontWeight": "Weight",
+                 "lineHeight": "Line height", "letterSpacing": "Letter spacing"}
+_FIELD_WORDS = {"fontFamily": "font", "fontSize": "font size", "fontWeight": "font weight",
+                "lineHeight": "line height", "letterSpacing": "letter spacing"}
 _NAME = re.compile(r"(?:--)?[A-Za-z0-9_-]+(?:[./][A-Za-z0-9_-]+)*")
 _LIST = re.compile(r"\s*(?:[-*+]|\d+[.)])\s+`([^`]+)`\s*[:=]\s*(.+?)\s*$")
 _DELIMITER = re.compile(r"\s*\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?\s*$")
@@ -281,6 +307,12 @@ class _Entry:
     bare: Dict[str, str] = field(default_factory=dict)
     # the contexts read from an alias column
     aliased: Tuple[str, ...] = ()
+    # A typography row: field -> (cell, its column, the unit its header or
+    # heading names)
+    fields: Dict[str, Tuple[str, str, str]] = field(default_factory=dict)
+    # References a typography row's fields hold: target -> (column, the
+    # types that fit there)
+    field_aliases: Dict[str, Tuple[str, Tuple[str, ...]]] = field(default_factory=dict)
 
 
 @dataclass
@@ -298,6 +330,8 @@ class _Table:
     whole: bool = False
     palette: str = ""
     guidance: str = ""
+    # A typography table: each field's column, when the table has all five.
+    fields: Dict[str, int] = field(default_factory=dict)
 
 
 def _guidance(raw: List[str], low: List[str]) -> str:
@@ -335,6 +369,43 @@ def _palette(raw: List[str], low: List[str], rows: List[List[str]]) -> Optional[
     return _Table(name=0, palette="down")
 
 
+def _type_field(header: str) -> str:
+    """The typography field a column header names (Line height is
+    lineHeight), or ""."""
+    return next((f for f, heads in TYPE_FIELD_HEADERS.items() if header in heads), "")
+
+
+def _property(header: str) -> bool:
+    """True when a column header names a property of each row's token: a
+    typography field or a motion property such as Curve."""
+    return bool(_type_field(header)) or header in MOTION_HEADERS
+
+
+def _row_name(cell: str) -> str:
+    return _path(_unquote(re.sub(r"^(\*{1,2}|_{1,2})(.+)\1$", r"\2", cell.strip())))
+
+
+def _property_fix(raw: List[str], low: List[str], rows: List[List[str]], name: int, c: int,
+                  typed: Dict[str, int]) -> str:
+    """Why a property column beside the token's value was not read, and
+    the fix: the missing typography columns, or its own token, with an
+    example from the first row that fills it."""
+    what = low[c]
+    slug = _slug(what) or "value"
+    example = next(((_row_name(r[name]), _unquote(r[c])) for r in rows
+                    if len(r) > max(name, c) and r[name].strip() and r[c].strip()), None)
+    own = (f"write each {what} as its own token, such as `{example[0]}.{slug}` | {example[1]}"
+           if example else f"write each {what} as its own token, named for its row plus .{slug}")
+    if _type_field(what):
+        missing = [_FIELD_COLUMN[f] for f in TYPOGRAPHY_FIELDS if f not in typed]
+        add = (f"add a {missing[0]} column" if len(missing) == 1 else
+               f"add {_and(missing)} columns")
+        return (f"is the {what} of each token, so its column was not read; {add} to read each "
+                f"row as one typography token, or {own}")
+    return (f"is the {what} of each token, and the engine holds no transition token, so its "
+            f"column was not read; {own}")
+
+
 def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
     """How a table with these headers and rows is read; None when it holds
     no tokens (no name column, or only prose beside it)."""
@@ -365,6 +436,32 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
                 and any(_refish(t) for _, t in cells):
             name, alias = named, name
     table = _Table(name, alias=alias, units={c: u for c, (_, u) in enumerate(split) if u})
+    # Property columns are fields of each row's token, never modes: all five
+    # typography fields make a typography table; any other property column
+    # beside the token's value is left out with its fix.
+    typed: Dict[str, int] = {}
+    for c in value + other:
+        found_field = _type_field(low[c])
+        if found_field and found_field not in typed:
+            typed[found_field] = c
+    if len(typed) == len(TYPOGRAPHY_FIELDS):
+        table.fields = {f: typed[f] for f in TYPOGRAPHY_FIELDS}
+        heads = _and([raw[c] for c in table.fields.values()])
+        for c in [c for c in value + other + ([alias] if alias >= 0 else [])
+                  if c not in table.fields.values()]:
+            table.dropped.append((raw[c], (
+                f"is not a typography field, so its column was not read; this table reads "
+                f"each row as one typography token from its {heads} columns, so put "
+                f"{raw[c]} in a table of its own")))
+        table.alias = -1
+        return table
+    props = [c for c in other if _property(low[c])]
+    if props:
+        other = [c for c in other if c not in props]
+        if not value and not other:
+            other, props = props[:1], props[1:]
+        for c in props:
+            table.dropped.append((raw[c], _property_fix(raw, low, rows, name, c, typed)))
 
     def place(columns: List[int], base: str) -> None:
         held: Dict[str, str] = {}
@@ -445,6 +542,72 @@ def _decode(text: str, entry: _Entry) -> Tuple[str, Any]:
     return read
 
 
+# How to write each typography field, for a cell that holds another value.
+_FIELD_FIX = {
+    "fontFamily": "write a font name, or a list of them ending in a generic family such as "
+                  "sans-serif",
+    "fontSize": "write a length in px or rem, such as 16px",
+    "fontWeight": "write it as a number from 1 to 1000, such as 700",
+    "lineHeight": "write it as a number, such as 1.5",
+    "letterSpacing": "write a length in px or rem, such as 0.2px",
+}
+# The token types a reference in each typography field may point at.
+_FIELD_FITS = {"fontFamily": ("fontFamily",), "fontSize": ("dimension",),
+               "fontWeight": ("fontWeight", "number"), "lineHeight": ("number",),
+               "letterSpacing": ("dimension",)}
+
+
+def _field(f: str, text: str, column: str, unit: str, entry: _Entry) -> Any:
+    """One typography field of a row, read from its cell. Raises NotRead
+    with what is wrong and the fix."""
+    what = _FIELD_WORDS[f]
+    if f in ("fontSize", "letterSpacing") and _BARE_NUMBER.fullmatch(text):
+        if unit in ("px", "rem"):
+            text += unit
+        elif float(text) == 0:
+            text += "px"
+        else:
+            raise NotRead(f"{text} has no unit, and a {what} is a size; write the unit in the "
+                          f"cell, such as {text}px, or in the column header, such as "
+                          f"{column} (px)")
+    if f == "fontFamily" and _FONT_PART.fullmatch(text):
+        text = f'"{text}"'
+    try:
+        kind, value = _decode(text, entry)
+    except NotRead:
+        if f == "fontWeight":
+            raise NotRead(f"{text} is not a font weight; {_FIELD_FIX[f]}") from None
+        raise
+    if kind == "alias":
+        entry.field_aliases[value] = (column, _FIELD_FITS[f])
+        return "{" + value + "}"
+    if f == "lineHeight" and kind == "dimension":
+        raise NotRead(f"{text} is a length, and the engine keeps a line height as a multiple "
+                      f"of the font size; {_FIELD_FIX[f]}")
+    want = TYPOGRAPHY_FIELDS[f][0]
+    if f == "fontWeight" and kind == "number" and TYPES[want].check(value):
+        return value
+    if kind != want:
+        raise NotRead(f"{text} is not a {what}; {_FIELD_FIX[f]}")
+    return value
+
+
+def _typography(entry: _Entry) -> Dict[str, Any]:
+    """A typography row's value, field by field. Raises NotRead naming the
+    column and the fix."""
+    out: Dict[str, Any] = {}
+    for f in TYPOGRAPHY_FIELDS:
+        text, column, unit = entry.fields[f]
+        text = _unquote(text)
+        if not text:
+            raise NotRead(f"has no value in the {column} column; write one there")
+        try:
+            out[f] = _field(f, text, column, unit, entry)
+        except NotRead as exc:
+            raise NotRead(f"in the {column} column, {exc}") from None
+    return out
+
+
 def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Imported:
     """The tokens a list of (file name, text) rule files hold, in order."""
     found: Dict[str, _Entry] = {}
@@ -465,10 +628,11 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
     section = {"unit": ""}
 
     def add(name: str, where: str, values: Dict[str, str], labels: Dict[str, str],
-            units: Optional[Dict[str, str]] = None, aliased: Tuple[str, ...] = ()) -> None:
+            units: Optional[Dict[str, str]] = None, aliased: Tuple[str, ...] = (),
+            fields: Optional[Dict[str, Tuple[str, str, str]]] = None) -> None:
         nonlocal entries
         written = _unquote(re.sub(r"^(\*{1,2}|_{1,2})(.+)\1$", r"\2", name.strip()))
-        if written and _NAME.fullmatch(written):
+        if written and _NAME.fullmatch(written) and not fields:
             # A comma list of names is a font only with evidence; without it,
             # and for any value written in words, the line is a rule.
             ruled = fonty = False
@@ -502,7 +666,7 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         # size or a duration with no unit anywhere is not read.
         bare: Dict[str, str] = {}
         for ctx, v in list(values.items()):
-            if not _BARE_NUMBER.fullmatch(v):
+            if fields or not _BARE_NUMBER.fullmatch(v):
                 continue
             unit = (units or {}).get(ctx) or section["unit"]
             need = _needs_unit(path)
@@ -539,7 +703,9 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                                  "one there" if column else "has no value; write one or remove "
                                  "the entry"))
             return
-        found[path] = _Entry(where, written, values, labels, bare=bare, aliased=aliased)
+        found[path] = _Entry(where, written, values, labels, bare=bare, aliased=aliased,
+                             fields={f: (text, column, unit or section["unit"])
+                                     for f, (text, column, unit) in (fields or {}).items()})
 
     def read_table(table: _Table, raw: List[str], rows: List[Tuple[int, List[str]]],
                    file_name: str, where: str) -> None:
@@ -564,6 +730,22 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                     if family and c < len(cells) and cells[c].strip():
                         add(f"{family}.{step}", f"{file_name}:{r}", {"": cells[c]},
                             {"": raw[c], "name": raw[0]}, {"": table.units.get(c, "")})
+            return
+        if table.fields:
+            need = max(table.name, *table.fields.values())
+            for r, cells in rows:
+                at = f"{file_name}:{r}"
+                if len(cells) <= need:
+                    entries += 1
+                    name = _unquote(cells[table.name]) if table.name < len(cells) else ""
+                    count = f"{len(cells)} cell{'s' if len(cells) != 1 else ''}"
+                    not_read.append(Item(at, name, f"has {count} where the header has "
+                                         f"{len(raw)}; give the row one cell per column"))
+                    continue
+                fields = {f: (cells[c], raw[c], table.units.get(c, ""))
+                          for f, c in table.fields.items()}
+                add(cells[table.name], at, {"": " | ".join(t for t, _, _ in fields.values())},
+                    {"": "", "name": raw[table.name]}, fields=fields)
             return
         if table.palette == "across":
             for r, cells in rows:
@@ -730,6 +912,9 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 try:
                     if ctx in entry.bare:
                         raise NotRead(entry.bare[ctx])
+                    if entry.fields and not ctx:
+                        entry.decoded[ctx] = ("typography", _typography(entry))
+                        continue
                     entry.decoded[ctx] = _decode(text, entry)
                 except NotRead as exc:
                     column = entry.labels.get(ctx, "")
@@ -750,7 +935,8 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         failed[path] = why
 
     def targets(path: str) -> List[str]:
-        return [v for k, v in found[path].decoded.values() if k == "alias"]
+        return [v for k, v in found[path].decoded.values() if k == "alias"] \
+            + list(found[path].field_aliases)
 
     def kind_of(path: str, seen: Tuple[str, ...] = ()) -> str:
         """Literals decide a type; an alias takes its target's."""
@@ -798,6 +984,12 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 first = next(ctx for ctx, k in literals if k == kind)
                 mixed[path] = (f"holds a {kind} in the {entry.labels[first]} column and a "
                                f"{odd[1]} in the {entry.labels[odd[0]]} column; give it one type")
+        for path, entry in found.items():
+            for target, (column, fits) in entry.field_aliases.items():
+                got = kind_of(target) if target in found else ""
+                if got and got not in fits and path not in mixed:
+                    mixed[path] = (f"in the {column} column, references {target}, a {got}, where "
+                                   f"a {fits[0]} belongs; point it at a {fits[0]}")
         for path, why in mixed.items():
             drop(path, why)
         if not typeless and not mixed:
@@ -820,7 +1012,8 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         written = {ctx: ("{" + v + "}" if k == "alias" else v)
                    for ctx, (k, v) in entry.decoded.items()}
         modes = {ctx: v for ctx, v in written.items() if ctx}
-        aliased = any(k == "alias" for k, _ in entry.decoded.values())
+        aliased = any(k == "alias" for k, _ in entry.decoded.values()) \
+            or bool(entry.field_aliases)
         ts.add(Token(path, kind, written[""], modes=modes,
                      layer="semantic" if aliased or modes else "primitive"))
         kept_notes += entry.notes

@@ -814,3 +814,114 @@ def test_entries_count_the_names_of_a_table_that_was_not_read():
     report = _import(text).report
     assert report.entries == 2 and report.tokens == 0
     assert [i.where for i in report.not_read] == ["rules.md:1"]
+
+
+# Columns that name a typography or motion property are fields of the row's
+# token, never modes.
+TYPE_TABLE = """| Token | Font | Size (px) | Weight | Line height | Letter spacing |
+|---|---|---|---|---|---|
+| `type.body` | Inter | 16 | 400 | 1.5 | 0 |
+| `type.title` | "Display Sans", sans-serif | 24 | 600 | 1.25 | -0.2px |
+"""
+
+
+def test_a_type_table_with_every_field_reads_each_row_as_one_typography_token():
+    imported = _import(TYPE_TABLE)
+    ts = imported.tokens
+    assert [(t.path, t.type) for t in ts.tokens()] == [("type.body", "typography"),
+                                                       ("type.title", "typography")]
+    assert ts.get("type.body").value == {
+        "fontFamily": ["Inter"], "fontSize": {"value": 16, "unit": "px"}, "fontWeight": 400,
+        "lineHeight": 1.5, "letterSpacing": {"value": 0, "unit": "px"}}
+    assert ts.get("type.title").value["fontFamily"] == ["Display Sans", "sans-serif"]
+    assert ts.get("type.title").value["letterSpacing"] == {"value": -0.2, "unit": "px"}
+    assert imported.report.not_read == [] and imported.report.entries == 2
+
+
+def test_leading_and_tracking_are_line_height_and_letter_spacing():
+    text = ("| Name | Family | Size | Weight | Leading | Tracking |\n|---|---|---|---|---|---|\n"
+            "| `type.caption` | Inter | 12px | 500 | 1.4 | 0.01rem |\n")
+    ts = _import(text).tokens
+    assert ts.get("type.caption").value["lineHeight"] == 1.4
+    assert ts.get("type.caption").value["letterSpacing"] == {"value": 0.01, "unit": "rem"}
+
+
+def test_a_type_field_that_cannot_be_read_names_its_column_and_the_fix():
+    text = ("| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | 16 | bold | 24px | 0 |\n")
+    imported = _import(text)
+    assert list(imported.tokens.tokens()) == []
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:3", "type.body", "in the Size column, 16 has no unit, and a font size is a "
+                                    "size; write the unit in the cell, such as 16px, or in the "
+                                    "column header, such as Size (px)")]
+    fixed = text.replace("| 16 |", "| 16px |")
+    assert _rows(_import(fixed).report.not_read) == [
+        ("rules.md:3", "type.body", "in the Weight column, bold is not a font weight; write it "
+                                    "as a number from 1 to 1000, such as 700")]
+    fixed = fixed.replace("bold", "700")
+    assert _rows(_import(fixed).report.not_read) == [
+        ("rules.md:3", "type.body", "in the Line height column, 24px is a length, and the "
+                                    "engine keeps a line height as a multiple of the font size; "
+                                    "write it as a number, such as 1.5")]
+
+
+def test_type_properties_beside_a_size_with_no_font_column_say_how_to_read_them():
+    text = ("| Token | Size | Line height | Weight | Letter spacing |\n|---|---|---|---|---|\n"
+            "| `type.body` | 16px | 1.5 | 400 | 0 |\n")
+    imported = _import(text)
+    assert imported.tokens.get("type.body").value == {"value": 16, "unit": "px"}
+    rows = _rows(imported.report.not_read)
+    assert rows == [
+        ("rules.md:1", "Line height", "is the line height of each token, so its column was not "
+                                      "read; add a Font column to read each row as one "
+                                      "typography token, or write each line height as its own "
+                                      "token, such as `type.body.line-height` | 1.5"),
+        ("rules.md:1", "Weight", "is the weight of each token, so its column was not read; add "
+                                 "a Font column to read each row as one typography token, or "
+                                 "write each weight as its own token, such as "
+                                 "`type.body.weight` | 400"),
+        ("rules.md:1", "Letter spacing", "is the letter spacing of each token, so its column "
+                                         "was not read; add a Font column to read each row as "
+                                         "one typography token, or write each letter spacing as "
+                                         "its own token, such as `type.body.letter-spacing` | 0")]
+    assert not any("mode" in m for _, _, m in rows)
+
+
+def test_a_curve_beside_a_duration_is_its_own_token_not_a_mode():
+    for header in ("Curve", "Easing"):
+        text = (f"| Token | Duration | {header} |\n|---|---|---|\n"
+                "| `motion.fast` | 120ms | cubic-bezier(0.2, 0, 0, 1) |\n")
+        imported = _import(text)
+        assert imported.tokens.get("motion.fast").value == {"value": 120, "unit": "ms"}
+        slug = header.lower()
+        assert _rows(imported.report.not_read) == [
+            ("rules.md:1", header, f"is the {slug} of each token, and the engine holds no "
+                                   "transition token, so its column was not read; write each "
+                                   f"{slug} as its own token, such as `motion.fast.{slug}` | "
+                                   "cubic-bezier(0.2, 0, 0, 1)")]
+
+
+def test_a_font_and_a_weight_never_make_a_mode_axis():
+    text = "| Token | Font | Weight |\n|---|---|---|\n| `type.body` | Inter, sans-serif | 400 |\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {}
+    assert imported.tokens.get("type.body").value == ["Inter", "sans-serif"]
+    assert [(n, m.split(",")[0]) for _, n, m in _rows(imported.report.not_read)] == [
+        ("Weight", "is the weight of each token")]
+
+
+def test_a_type_field_may_reference_a_token_of_its_own_type():
+    text = ("- `size.md`: 16px\n- `weight.regular`: 400\n- `color.ink`: #111111\n\n"
+            "| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | {size.md} | {weight.regular} | 1.5 | 0 |\n"
+            "| `type.bad` | Inter | {color.ink} | 400 | 1.5 | 0 |\n")
+    imported = _import(text)
+    body = imported.tokens.get("type.body")
+    assert (body.value["fontSize"], body.value["fontWeight"], body.layer) == (
+        "{size.md}", "{weight.regular}", "semantic")
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:8", "type.bad", "in the Size column, references color.ink, a color, where a "
+                                   "dimension belongs; point it at a dimension")]
