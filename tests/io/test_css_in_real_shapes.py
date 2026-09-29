@@ -70,30 +70,51 @@ DENSITY = """:root {
 """
 
 
-def test_the_base_is_what_the_root_holds_and_each_density_is_a_mode():
+def test_the_base_is_what_the_root_holds_and_one_attribute_is_one_axis():
     imported = _import(DENSITY)
     report = imported.report
     assert report.not_read == []
-    assert dict(imported.tokens.axes) == {"density": ("comfortable", "compact"),
-                                          "data-density": ("base", "comfortable")}
+    assert dict(imported.tokens.axes) == {"density": ("base", "comfortable", "compact")}
     row = imported.tokens.get("row")
     assert row.value == {"value": 44, "unit": "px"}
-    assert row.modes == {"data-density:comfortable": {"value": 52, "unit": "px"},
+    assert row.modes == {"density:comfortable": {"value": 52, "unit": "px"},
                          "density:compact": {"value": 36, "unit": "px"}}
     assert _rows(report.notes) == [(
         "theme.css:6", '[data-density="comfortable"]',
-        "sets values that differ from :root at comfortable, this engine's base value for "
-        "data-density; the base is what :root holds, so comfortable was read as a mode of its "
-        "own, data-density:comfortable")]
+        "sets values that differ from :root; the base is what :root holds, so [data-density] "
+        "was read as one axis, density, with :root as its base and comfortable and compact as "
+        "its modes")]
+
+
+def test_the_report_never_names_a_density_value_as_the_base():
+    text = _import(DENSITY).report.markdown()
+    assert "Modes: density (what :root holds is the base; modes comfortable, compact)." in text
+    assert "comfortable is the base" not in text
 
 
 def test_the_density_modes_are_written_back_under_their_own_selectors():
     text = write_css(_import(DENSITY))
-    assert '[data-density="comfortable"] {\n  --space-2: 10px;' in text
+    assert ':root[data-density="comfortable"] {\n  --space-2: 10px;' in text
     assert ':root[data-density="compact"] {\n  --space-2: 6px;' in text
     again = _import(text)
     assert again.report.not_read == []
+    assert dict(again.tokens.axes) == {"density": ("base", "comfortable", "compact")}
     assert again.tokens.get("row").modes == _import(DENSITY).tokens.get("row").modes
+
+
+def test_the_density_axis_survives_a_dtcg_round_trip():
+    from engine.foundations.export import from_dtcg, to_dtcg
+    ts = _import(DENSITY).tokens
+    back = from_dtcg(to_dtcg(ts))
+    assert dict(back.axes) == dict(ts.axes)
+    assert back.resolve("row", "density:compact") == {"value": 36, "unit": "px"}
+
+
+def test_a_var_the_file_does_not_define_is_named_so():
+    imported = _import(':root {\n  --font-display: var(--font-missing), "Rubik", sans-serif;\n}\n')
+    [note] = imported.report.notes
+    assert note.message.startswith("opens with var(--font-missing), which this file does not "
+                                   "define, so it was read as the named families after it")
 
 
 def test_a_base_value_rule_that_repeats_the_root_stays_the_base():

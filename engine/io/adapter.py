@@ -119,7 +119,10 @@ def propose(ts: TokenSet) -> Mapping:
 def _propose_axes(ts: TokenSet) -> Dict[str, AxisMap]:
     """The axes a first mapping reads, by the names of the set's own."""
     axes: Dict[str, AxisMap] = {}
-    for name, (base, other) in ts.axes.items():
+    for name, values in ts.axes.items():
+        if len(values) != 2:  # a root-based axis of several modes: the owner maps it
+            continue
+        base, other = values
         ours = _our_axis(name, base, other)
         if ours is None or ours in axes:
             continue

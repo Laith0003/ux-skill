@@ -178,7 +178,9 @@ class ImportReport:
                  "## What was read", "", "| Type | Tokens |", "|---|---|"]
         lines += [f"| {t} | {n} |" for t, n in self.by_type.items()]
         if self.axes:
-            modes = "; ".join(f"{a} ({v[0]} is the base, {v[1]})" for a, v in self.axes.items())
+            modes = "; ".join(f"{a} ({v[0]} is the base, {v[1]})" if len(v) == 2 else
+                              f"{a} (what :root holds is the base; modes {', '.join(v[1:])})"
+                              for a, v in self.axes.items())
             lines += ["", f"Modes: {modes}."]
         else:
             lines += ["", "Modes: none; every token has one value."]

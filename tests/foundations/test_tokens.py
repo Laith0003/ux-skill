@@ -140,3 +140,10 @@ def test_alias_error_carries_its_cause():
     with pytest.raises(AliasError) as exc:
         TokenSet().resolve("nope", "light")
     assert exc.value.cause == "missing"
+
+
+def test_an_axis_based_on_the_root_may_hold_several_modes():
+    ts = TokenSet({"density": ("base", "comfortable", "compact")})
+    assert dict(ts.axes) == {"density": ("base", "comfortable", "compact")}
+    with pytest.raises(ValueError, match=r"a mode axis has exactly two values"):
+        TokenSet({"density": ("comfortable", "compact", "base")})

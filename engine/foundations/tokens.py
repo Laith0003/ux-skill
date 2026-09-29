@@ -83,6 +83,11 @@ class Token:
             self.modes = {m: norm(v) for m, v in self.modes.items()}
 
 
+# The base value of an imported axis when the root holds it, not one of
+# the axis's named values.
+ROOT_BASE = "base"
+
+
 class TokenSet:
     """Tokens in insertion order, plus the mode axes their overrides use
     (see modes.py). A context is a key such as "scheme:dark,contrast:high";
@@ -90,7 +95,11 @@ class TokenSet:
 
     def __init__(self, axes: Mapping[str, Tuple[str, ...]] = AXES):
         for name, values in axes.items():
-            if len(values) != 2:
+            # An imported axis whose base is the root (ROOT_BASE) may hold
+            # several modes, one per value its attribute takes
+            # (data-density: base, comfortable, compact); every other axis
+            # has exactly two values.
+            if len(values) != 2 and not (len(values) > 2 and values[0] == ROOT_BASE):
                 raise ValueError(
                     f"axis {name!r} has values {list(values)}; a mode axis has exactly two "
                     "values, the base first; split a third value into its own axis")
