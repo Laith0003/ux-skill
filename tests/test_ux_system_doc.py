@@ -2,7 +2,7 @@
 they tell the model to run: every flag the create mode uses exists, the
 MCP tool it names exists, every status the CLI prints is in its table with
 its exit code, the font families it names are the ones the engine picks,
-and the 4.1 modes are marked as not yet here. The README and CHANGELOG
+and the existing-system modes say what works now, with no version label. The README and CHANGELOG
 beta sections tell a reader how to install the beta, and no doc promises a
 brief word the synthesizer does not read."""
 import re
@@ -111,12 +111,28 @@ def test_it_says_nothing_loads_the_fonts_and_names_every_family():
     assert "system faces" in CREATE
 
 
-def test_modes_table_marks_enhance_and_extend_for_4_1():
+def test_the_existing_system_modes_say_what_works_now():
     modes = _section(DOC, "## Modes")
     for mode in ("enhance --from", "extend --from"):
         row = next(line for line in modes.splitlines() if mode in line)
-        assert "Coming in 4.1" in row
+        assert "4.1" not in row and "work now" in row and "being added" in row
+    assert "4.1" not in modes and "does not read an existing one" not in DOC
     assert "3.x" in modes and "`/ux-system create`" in modes
+    existing = _section(DOC, "## An existing system")
+    for part in ("system detect", "read_any", "propose", "merge", "scan", "enhance", "extension file"):
+        assert part in existing, part
+    for fmt in ("`dtcg`", "`css`", "`tailwind`", "`tailwind-json`", "`markdown`", "`figma`"):
+        assert fmt in existing, fmt
+    assert "\u2014" not in existing and "\u2013" not in existing
+
+
+def test_the_readers_the_doc_names_are_the_engines():
+    from engine import io
+    existing = _section(DOC, "## An existing system")
+    for name in ("read_any", "propose", "merge", "dump_mapping", "scan", "enhance"):
+        assert f"engine.io.{name}(" in existing and hasattr(io, name), name
+    for fmt in io.FORMATS:
+        assert f"`{fmt}`" in existing, fmt
 
 
 def test_new_prose_has_no_em_dashes_or_double_hyphen_punctuation():

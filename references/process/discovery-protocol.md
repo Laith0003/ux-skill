@@ -11,6 +11,7 @@ A generation command that skips discovery is a bug.
 - The user explicitly passes `--skip-discovery` (they're an expert who knows what they want and accepts default-driven output).
 - The user passes a fully-populated brief in a single message that already answers every required field. In that case, **verify the brief covers all required fields, then proceed.** If anything is missing, ask for the missing fields only.
 - The user is iterating on an existing artifact (e.g., `/ux-fix --auto` on a prior audit). The earlier discovery is reused from `.ux/last-frame.json` or the relevant report.
+- The project already answers a field: a brand book, a voice or facts sheet, the brand's own pages and templates, or an existing design system. Take each answer from that material instead of asking it, ask only what the material leaves open, and record where each answer came from (a `sources` map from field to file). The wow moment counts: when the brand's pages already show a signature move, that is the answer.
 
 In every other case, discovery is mandatory.
 
@@ -74,7 +75,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 ### 10. The wow moment (optional — the model derives one if you don't give it)
 **Ask**: "Anything specific this design must do that a visitor remembers 24h later — a feature, motion, interaction, or visual moment? If not, I'll derive one."
 
-**Why**: A merely-clean page is the floor — competent and forgettable. The fix is NOT to demand a wow moment from the user (older guidance said "wow can only come from the user" — that is overturned). The model **derives a wow layer** — 2-3 coordinated signature moments — from `brand temperature + industry + goal`, per `references/foundations/wow.md`. A user-supplied moment refines or overrides that layer; absent one, the model composes its own and never falls back to forgettable.
+**Why**: A merely-clean page is the floor: competent and forgettable. The wow moment is not demanded from the user. The model **derives a wow layer** (2-3 coordinated signature moments) from the brand's own page style, the brief's structured fields and the goal, per `references/foundations/wow.md`, never from the industry. A user-supplied moment refines or overrides that layer; absent one, the model composes its own and never falls back to forgettable.
 
 ---
 
@@ -118,7 +119,8 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
        "avoid_list": [...],
        "wow_moment": "<verbatim>",
        "extras": {...}
-     }
+     },
+     "sources": {"voice": "<file the answer came from, or user>", "...": "..."}
    }
    ```
 2. **Capture the brand, do not just read it.** If a brand identity *file* was provided, read it. If a URL to the user's OWN site/brand was provided, run the capture gate in `references/process/brand-extraction.md` (rendered-DOM colors + logo pixels + loaded fonts -> `ux brand --signals-file` -> `--brand-file`) and pass the URL via `--brand-url`. For *reference-inspiration* URLs (field 2), study the rendered page for aesthetic intent. A raw `WebFetch` of a JS-rendered site is an empty shell, never treat it as the brand source of truth.
@@ -135,7 +137,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 ## Hard rules for the discovery phase
 
 - **Never assume.** If a field is ambiguous, ask. The cost of one clarification message is far lower than the cost of regenerating a misaligned design.
-- **Never ship a forgettable surface, but you do not need the user to supply the wow.** If they give a concrete moment, use it. If they say "anything's fine," DERIVE the wow layer (2-3 coordinated signature moments from brand temperature + industry + goal, per `references/foundations/wow.md`); never fall back to a default.
+- **Never ship a forgettable surface, but you do not need the user to supply the wow.** If they give a concrete moment, use it. If they say "anything's fine," DERIVE the wow layer (2-3 coordinated signature moments from the brand's page style, the brief's fields and the goal, per `references/foundations/wow.md`); never fall back to a default.
 - **Never substitute defaults for missing answers.** If the user skips a field, ask again or surface that you'll proceed with a default and what that default is, so they can intervene.
 - **Always echo back the brief** before generating. Two sentences max: "Here's what I'm building. Stop me if any of this is wrong."
 - **If the user gave their own site/brand URL, capturing it is mandatory, not optional.** The extracted brand overrides the engine's palette/type pick. Skipping capture is the single biggest avoidable failure (shipping the house accent + a placeholder logo). The recommender's `--brand-url` gate surfaces the miss after the fact; the fix is to capture first.

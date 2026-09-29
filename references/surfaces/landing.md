@@ -18,6 +18,17 @@ Discovery asks landing briefs for their sections in order (`references/process/d
 
 ---
 
+## Inside an existing design system
+
+This playbook names sizes, colors and gaps by the engine's roles: `layout.landing-gap.<tier>`, `type.text.display`, `color.surface.brand`, `imagery.scrim` and the rest. Those names are a vocabulary for reasoning about a page, never names to write. When the project has a system of its own (/ux-design step 1a):
+
+- The page's CSS reads the system's own variables by the names the system gave them. Where the system calls its section gap `--space-section`, the page writes `var(--space-section)`, not `var(--layout-landing-gap)`, and no class or custom property is named after a role. Find each variable in the system's files, or in the mapping `engine.io.propose` writes, and list in the build notes which variable stands for which role.
+- A role the system has no variable for goes in the extension file of /ux-design step 1a, named in the system's style.
+- The page style recorded in /ux-design step 1a.1 outranks the sizes and gaps in this playbook. A brand whose pages open dark, overlap their sections or set headlines above its own type scale keeps doing that on the new page.
+- Pictures come from the brand: its product screens and its photographs. Where its brand book bans stock or lifestyle photography, no stock fills a gap; a section with nothing real to show becomes a text section or a product-screen section. A logo, a wordmark or a row of customer logos is never the page's imagery.
+
+---
+
 ## Layout archetypes
 
 Pick one archetype per page and commit to it. Each one is a complete skeleton. Mixing two skeletons on one page produces the composition fingerprint: a page that could belong to any product.
@@ -66,15 +77,17 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 
 ### Pattern pairings by brief
 
-| Brief | Archetype | Patterns |
+The pairing follows what the page has to show, never the client's industry, and the brand's own page style outranks it.
+
+| What the page shows | Archetype | Patterns |
 |---|---|---|
-| Modern SaaS landing | Split-hero product page | Asymmetric split hero + bento grid + spotlight border cards + perpetual micro-interactions |
-| AI product landing | Thesis statement | Thesis-statement hero + before/after panels + command input demo + magnetic button + mesh gradient bg |
-| Developer-tooling landing | Product demo led | Code-as-design hero + terminal mockup + monochrome logo wall + keyboard chips + status indicator |
-| Fintech / wealth | Single-field conversion | Editorial split + email-capture hero + monochrome logo wall + research/timeline band |
-| Creator-tool landing | Product demo led | Interactive demo hero + bento grid + per-section accent colors + tilted product frames + tinted shadows |
-| Premium consumer brand | Cinematic brand | Cinematic center hero + double-bezel containers + mesh gradient + scroll-pinned product walks |
-| Mobile app landing | Split-hero product page | Morphing status pill nav + dock-style magnification CTA + parallax tilt feature card |
+| Software people sign in to, with real screens | Split-hero product page | Asymmetric split hero + bento grid + spotlight border cards + perpetual micro-interactions |
+| A product that answers what the user types | Thesis statement | Thesis-statement hero + before/after panels + command input demo + magnetic button + mesh gradient bg |
+| A product that runs in a terminal or ships code | Product demo led | Code-as-design hero + terminal mockup + monochrome logo wall + keyboard chips + status indicator |
+| One field that converts (an email, a phone number, an account request) | Single-field conversion | Editorial split + email-capture hero + monochrome logo wall + research/timeline band |
+| A tool people make things with | Product demo led | Interactive demo hero + bento grid + per-section accent colors + tilted product frames + tinted shadows |
+| One physical product with real photography | Cinematic brand | Cinematic center hero + double-bezel containers + mesh gradient + scroll-pinned product walks |
+| A store app | Split-hero product page | Morphing status pill nav + dock-style magnification CTA + parallax tilt feature card |
 
 ---
 
@@ -84,7 +97,7 @@ Every system the engine builds names one of five compositions: the layout a land
 
 The composition is the layout; the archetype above is the argument the page makes. They pair naturally: split with the Split-hero product page or Service lead generation, stacked with Thesis statement or Single-field conversion, bento with Product demo led, editorial-column with Editorial long form, full-bleed-media with Cinematic brand. Another pairing is allowed when the build notes give the reason.
 
-What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.desktop` columns inside `layout.container.max`) and at 375 (the phone tier: `layout.columns.phone` columns inside `layout.margin-inline.phone`). Sections sit `var(--layout-landing-gap)` apart, the `layout.landing-gap.<tier>` role that tokens.css switches per tier. The headline takes `type.text.display` and steps down on phones by `type.phone.display`. These two token sizes are the answer wherever this playbook gives a section spacing or a headline size: they are built and checked, a size of your own is not. Numbers take `type.text.figure`. The primary action is a filled button at `layout.target.large`. A proof section with no real proof behind it is dropped with its reason (/ux-design engine step 2.5); the layouts below close up around the gap rather than hold an empty band.
+What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.desktop` columns inside `layout.container.max`) and at 375 (the phone tier: `layout.columns.phone` columns inside `layout.margin-inline.phone`). Sections sit `var(--layout-landing-gap)` apart, the `layout.landing-gap.<tier>` role that tokens.css switches per tier. The headline takes `type.text.display` and steps down on phones by `type.phone.display`. These two token sizes are the answer wherever this playbook gives a section spacing or a headline size: they are built and checked, a size of your own is not. Inside a client's own system, its own variables and its recorded page style take their place (Inside an existing design system). Numbers take `type.text.figure`. The primary action is a filled button at `layout.target.large`. A proof section with no real proof behind it is dropped with its reason (/ux-design engine step 2.5); the layouts below close up around the gap rather than hold an empty band.
 
 ### split
 
@@ -205,7 +218,7 @@ The section order comes from the archetype above and from the engine's page sequ
 
 **Cropped dashboard preview.** For B2B marketing that shows dashboards or admin interfaces. Cropped, never full-page. The reader sees one card, one chart, a sliver of nav: enough to read "this is software," not enough to parse the dashboard. Real data shapes (sparklines, log lines, plausible numbers) instead of stock chart shapes. Cost: zero, design discipline.
 
-**Code as hero content.** For developer-tooling and infrastructure marketing. Treat a code block like hero photography. Short (6-14 lines), syntax-highlighted with a custom theme that matches the page accent, inside window chrome (traffic-light dots, a title bar with the filename). Built in HTML and CSS, not a screenshot, so it scales crisply. Cost: medium, a custom syntax theme plus window chrome styling.
+**Code as hero content.** For a product that ships code or runs in a terminal. Treat a code block like hero photography. Short (6-14 lines), syntax-highlighted with a custom theme that matches the page accent, inside window chrome (traffic-light dots, a title bar with the filename). Built in HTML and CSS, not a screenshot, so it scales crisply. Cost: medium, a custom syntax theme plus window chrome styling.
 
 **Terminal mockup.** For infrastructure, CLI and dev-tool marketing. Near-black window with traffic-light chrome and a `$` or `>` prompt. The command is short, declarative, and runnable exactly as written. Multi-line terminals fade older lines with reduced opacity. Output is monospace and color-coded (green success, gray chatter, bright neutral for user input). Cost: low, CSS plus content.
 

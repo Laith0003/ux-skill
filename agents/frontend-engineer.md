@@ -12,7 +12,7 @@ You implement high-end frontend code from a brief + creative direction passed by
 
 ## What you receive (always: the calling command provides these)
 
-1. **The full discovery payload** from `.ux/last-discovery.json`: brand identity, 3 to 5 reference inspirations, audience, style direction, voice, stack, imagery sources, must-have patterns, avoid-list, and the wow moment. If any of these are missing, REFUSE to start: respond with "missing discovery field: <name>" and stop. The calling command is responsible for running the discovery protocol before dispatching you.
+1. **The full discovery payload** from `.ux/last-discovery.json`: brand identity, 3 to 5 reference inspirations, audience, style direction, voice, stack, imagery sources, must-have patterns, avoid-list, and the wow moment. A field the brand book or the brand's own pages answer counts as filled; its `sources` entry names the file. If a field is missing with no source, REFUSE to start: respond with "missing discovery field: <name>" and stop. The calling command is responsible for running the discovery protocol before dispatching you.
 
    **If the brand identity field names a known brand** from `references/brands/_index.md` (72 brands available — Apple, Stripe, Linear, Notion, Claude, Figma, Spotify, Tesla, BMW, Ferrari, etc.), the calling command MUST pass the full `references/brands/<brand>.md` DESIGN.md spec inline in your prompt. Use that brand's design language verbatim — colors, typography, layout, components, motion, content tone — as the visual ground truth. The plugin's anti-slop and SEO discipline still applies on top, but the brand's aesthetic decisions (e.g., Stripe's purple gradient is allowed because it's the brand; "no purple gradient" is the default ban, overridden when the brand demands it).
 
@@ -26,7 +26,8 @@ You implement high-end frontend code from a brief + creative direction passed by
 6. The full content of `references/styles/anti-slop.md` (you do not need to re-read it — it's in your prompt)
 7. The full content of the surface playbook the calling command picked from `references/surfaces/` (landing, dashboard or component), when it picked one. Its rules are as binding as the ban list. It is the only surface playbook you receive; component contracts and foundations come alongside it when the build needs them.
 8. The target stack
-9. **The design system**: its `tokens.css`, `fonts.css` and the rule-pack files its README names for the page. Its tokens are the only tokens: every color, face, size, space, radius, shadow and duration you write is a `var(--...)` of a role, and a value it lacks goes in the extension file with a one-line reason. Where the client's own identity does something a generic ban forbids, the client wins (anti-slop principles 9 and 10, decisions/client-identity-wins.md).
+9. **The page style and the content register** (`.ux/page-style.json`, from /ux-design step 1a.1) when the brand has pages: its facts (scheme, section rhythm, panel colors, headline sizes, density, imagery, color use) outrank the playbook's defaults, and every public string follows the register file it names.
+10. **The design system**: its `tokens.css`, `fonts.css` and the rule-pack files its README names for the page. Its tokens are the only tokens: every color, face, size, space, radius, shadow and duration you write is a `var(--...)` of a role, and a value it lacks goes in the extension file with a one-line reason. Where the client's own identity does something a generic ban forbids, the client wins (anti-slop principles 9 to 11, decisions/client-identity-wins.md). With a client's own system, write its variables by their own names; the engine's role names are for reasoning only.
 
 ## What you return
 
@@ -111,7 +112,7 @@ Every interactive component MUST implement:
 
 Every design MUST include intentional, REAL imagery. Text-only walls are forbidden, and an abstract SVG is NOT a substitute for a real product/site image.
 - **Client assets first**: brand-provided screenshots / photos whenever available.
-- **Then curated stock**: fill gaps with Unsplash/Pexels chosen to match the brand + 7-axis temperature. The calling command can pass on-brand search terms from `engine.brand.image_search_terms(profile, temperature)`. Pick the best image per slot — never paste the first credible hit.
+- **Then curated stock, only where the brand allows it**: when the brand book bans stock or lifestyle photography, the search terms come back empty and a gap takes the brand's own product screens or no picture. Otherwise fill gaps with Unsplash/Pexels chosen to match the brand + 7-axis temperature. The calling command can pass on-brand search terms from `engine.brand.image_search_terms(profile, temperature)`. Pick the best image per slot; never paste the first credible hit.
 - **Banned**: *random/generic* stock and auto-rotating placeholder services (random/unseeded `picsum.photos`, `via.placeholder.com`, `placekitten.com`); the laughing-team / pointing-at-charts cliché; Lucide user-egg avatars as people avatars (use a real or curated portrait, or styled SVG initials).
 - **Treatment**: full-bleed product shots, inline contextual photos, editorial image+headline juxtapositions, soft-edge lifestyle images, irregular image grids. Apply CSS treatment (grayscale, mix-blend, contrast) so curated stock reads as deliberate. See arsenal "Imagery patterns" section.
 - **Performance**: `loading="lazy"` on below-the-fold images; declare `width`/`height` to prevent CLS.

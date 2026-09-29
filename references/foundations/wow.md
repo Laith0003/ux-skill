@@ -7,12 +7,14 @@ without the user having to hand it one.
 
 ## Doctrine: the model derives wow (it is not outsourced to the user)
 
-Older guidance said "the wow moment can only come from the user." That is overturned. In
-the common flow -- someone hands us a URL and wants their page leveled up -- there is no
-rich brief and no hand-specified moment, yet the output must still be memorable. So the
-engine **derives a wow layer** from `brand temperature + industry + page goal`. A
-user-supplied wow moment still wins when present; absent one, the model does not fall back
-to "clean and forgettable" -- it composes its own.
+In the common flow, someone hands us a URL or a project and wants the page leveled up: there
+is no rich brief and no hand-specified moment, yet the output must still be memorable. So
+the model **derives a wow layer** from three things: the brand's own page style (what its
+pages already do: scheme, rhythm, imagery, how color is used), the brief's structured fields
+(`product_type`, `page`, `platforms`, `stage`) and the page goal. A user-supplied wow moment
+wins when present. When the brand's pages or brand book already show a signature move, the
+wow layer extends that move instead of inventing another. Absent all of these, the model
+still composes its own and never settles for clean and forgettable.
 
 ## What a wow layer is: 2-3 coordinated moments, one dominant
 
@@ -34,28 +36,42 @@ Pick the hero moment + the motion signature always; add the section moment only 
 is long enough to earn it. **Two to three total. One dominant, the rest supporting.** Never
 three co-equal spectacles competing for the eye.
 
-## Derive the set from brand temperature (the anti-uniformity rule)
+## Derive the set from this brand, never from its industry (the anti-uniformity rule)
 
 **Wow is the one thing that must NOT be a recipe.** A fixed map (`lead-gen -> always these
-three moves`) produces formulaic wow -- a new generic centroid, the exact reflex the arsenal
-exists to defeat. Treat the arsenal as a *palette*: derive a coherent set from this brand's
-temperature, then **vary it to this brand**. Two skip-hire pages and two law-firm pages
-should not get the same three moves.
+three moves`, or an industry to an effect) produces formulaic wow: a new generic centroid,
+the exact reflex the arsenal exists to defeat. Two products in one industry can share
+nothing but the word, so no table here names an industry. Treat the arsenal as a *palette*:
+derive a coherent set from what this brand is and does, then **vary it to this brand**.
 
-Map the synthesized 7-axis temperature to a moment family:
+**1. What carries the value decides the hero moment.** The brand's own product screens make
+the hero the product doing its job (a real screen in motion, a live input that answers).
+Real photography makes it depth and a measured scrim. A claim with nothing to show makes it
+type: a kinetic or masked headline reveal. A terminal or code moment belongs only to a
+product that itself runs in a terminal or ships code.
+
+**2. The brand's page style sets how loud the layer is.** A quiet brand (color held back,
+one idea per screen, little motion on its own pages) gets one slow reveal and no section
+moment. A loud one (color flooded across bands, dense sections) may carry a kinetic
+headline or a marquee. The layer never runs louder than the brand's own pages.
+
+**3. The 7-axis temperature picks the language within that volume:**
 - **warm / human / friendly** -> real photography with depth, gentle counters, soft
-  staggered reveals. (Skip-hire, hospitality, local services.)
+  staggered reveals.
 - **bold / energetic / high-contrast** -> kinetic type reveal, marquee, magnetic CTA,
-  single-word gradient. (Consumer, sport, creator tools.)
-- **technical / precise / cool** -> terminal mockup, code-as-content, scramble text, data
-  viz, status indicators. (Dev tools, infra, fintech.)
+  single-word gradient.
+- **technical / precise / cool** -> data shown as it is (real figures, live status
+  indicators), scramble text, the product's own interface cropped close.
 - **editorial / calm / spacious** -> column rhythm, text-mask reveal, slow ambient motion,
-  curtain reveal. (Publications, brand-led, research.)
-- **luxury / formal** -> cinematic restraint: one slow camera-like reveal, generous
+  curtain reveal.
+- **formal / restrained** -> cinematic restraint: one slow camera-like reveal, generous
   negative space, a single tilted product frame. Motion is rare and expensive-looking.
 
-Goal also shapes it: a lead-gen page's hero moment should pull toward the form, not away
-from it; a product page's hero moment is the product; a portfolio's is the work.
+**4. The brief's fields and the goal point it.** A page whose conversion is a form pulls the
+hero moment toward the form, never away from it. A feature page (`page: feature`) shows that
+feature at work. A web app that signs in by phone makes the phone field itself the first
+thing that moves. A product page's hero moment is the product; a portfolio's is the work. A
+pre-launch page shows nothing that fakes usage.
 
 ## The discipline (this is the build, not an afterthought)
 
@@ -90,14 +106,18 @@ exists to prevent, and fights the responsive gates. So:
 
 ## Worked examples (illustrations of RANGE, not recipes to stamp)
 
-- **Lead-gen local service (warm):** hero = real on-site photo with a green->ink scrim and
-  the headline + quote form composed over it; motion signature = proof-stat counters ticking
-  up on entry; (long page) section moment = choreographed hover on the service cards.
-- **AI product (technical/bold):** hero = a live command-input demo with a typewriter cycle;
-  motion signature = staggered reveals; section moment = a before/after panel.
-- **Dev tool (technical/cool):** hero = terminal mockup running a real command; motion
-  signature = scramble-on-load for the headline; section moment = code-as-design block.
-- **Luxury consumer (formal):** hero = one slow cinematic reveal of the product on near-black;
-  motion signature = a single tilted product frame with a soft float; no section moment.
+- **A form converts, real photos, warm brand:** hero = a real on-site photo with a scrim in
+  the brand's ink and the headline + quote form composed over it; motion signature =
+  proof-stat counters ticking up on entry; (long page) section moment = choreographed hover
+  on the service cards.
+- **A product with a command input, bold brand:** hero = the live input answering a real
+  query with a typewriter cycle; motion signature = staggered reveals; section moment = a
+  before/after panel.
+- **A product that runs in a terminal, cool brand:** hero = the real command and its real
+  output; motion signature = scramble-on-load for the headline; section moment = a
+  code-as-design block.
+- **A quiet brand with one product object, formal:** hero = one slow cinematic reveal of the
+  product on the brand's dark canvas; motion signature = a single tilted product frame with
+  a soft float; no section moment.
 
 Same three tiers, four different languages. That difference IS the wow -- not the tier list.

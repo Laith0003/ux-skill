@@ -2,7 +2,7 @@
 
 Default model output has measurable, predictable failure modes. This file catalogues them. Every entry here exists because the unconstrained generator reaches for it reflexively, and the result reads as machine-made.
 
-Treat each ban as a hard rule unless a brief explicitly overrides it, or the client's own system or identity does otherwise (principles 9 and 10). The goal is not stylistic preference: it is the elimination of fingerprints that mark output as generated.
+Treat each ban as a hard rule unless a brief explicitly overrides it, or the client's own system or identity does otherwise (principles 9 to 11). The goal is not stylistic preference: it is the elimination of fingerprints that mark output as generated.
 
 ---
 
@@ -18,7 +18,7 @@ Treat each ban as a hard rule unless a brief explicitly overrides it, or the cli
 
 5. **Content is a design surface.** "John Doe" + "Acme Corp" + `99.99%` is content slop and ruins the design regardless of layout quality. Treat placeholder content with the same care as the layout that holds it.
 
-6. **Imagery is mandatory and real.** A text-only wall reads as a memo, not a product. Every layout accommodates imagery — never avoids it. Use the client's own assets first; fill the gaps with curated Unsplash/Pexels chosen to match the brand and the 7-axis temperature, then treat them so they read as deliberate. An abstract SVG is NOT a substitute for a real product or site image. Only *random/generic* stock (and the auto-rotating placeholder services) is banned — real photography, chosen on purpose, is the goal.
+6. **Imagery is mandatory and real.** A text-only wall reads as a memo, not a product. Every layout accommodates imagery and never avoids it. Use the client's own assets first; fill the gaps with curated Unsplash/Pexels chosen to match the brand and the 7-axis temperature, then treat them so they read as deliberate. An abstract SVG is NOT a substitute for a real product or site image, and neither is the logo. Only *random/generic* stock (and the auto-rotating placeholder services) is banned: real photography, chosen on purpose, is the goal. Stock fills a gap only where the brand allows it: a brand book that bans stock or lifestyle photography leaves the brand's own product screens and photographs, or no picture.
 
 7. **Convention over cleverness on navigation.** Logo top-left. Nav top or left. Search is a magnifying glass. Innovate when you know you have a better idea; otherwise honor convention so the user can scan.
 
@@ -27,6 +27,8 @@ Treat each ban as a hard rule unless a brief explicitly overrides it, or the cli
 9. **A client's existing design system wins.** When the project already has its own system (tokens, foundation CSS, a hand-written MASTER.md or DESIGN.md), every generic rule in this file yields to it: its colors, saturation, gradients, type, label tracking and case stand as they are. These bans guard against model defaults, never against a client's deliberate identity; a mark beside a label still needs the recorded waiver (decisions/eyebrow-is-text.md). Find it with `ux system detect` before applying any rule below.
 
 10. **A client's own identity wins, even with no full system.** When there are no token files but the client has a logo, a site, an app or a brand book, the same holds for what that material shows: its saturated brand, its brand gradient, its pure white or pure black canvas, its blue or violet hue stay as the client uses them (decisions/client-identity-wins.md, which extends decisions/existing-system-wins.md to identities with no full system). The evidence is client material that predates the build, named with its exact value (the hex, the gradient stops), and the page uses that exact value; the engine's generated art, anything made in this session and a word in the brief are not evidence. The contrast gate still holds: keep the color and solve the text on it.
+
+11. **The system font stack and pure white bans apply to generated systems only.** They stop a generator from shipping its defaults. A client's own system that sets a system font stack (`-apple-system`, `system-ui`, `Segoe UI`) or a pure white canvas keeps it exactly, like every other value it owns.
 
 ---
 
@@ -56,7 +58,7 @@ Mobile is not the small version of the desktop — it is where most of the traff
 |---|---|
 | Default `box-shadow` glows, neon outer glows | Inner border (`border-white/10`) + tinted inner shadow (`shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]`) |
 | Pure black (`#000000`) | Zinc-950, charcoal, off-black: `#0a0a0a`, `#111111` are correct. A client whose identity is set in pure black keeps it (decisions/client-identity-wins.md) |
-| Pure white (`#FFFFFF`) on premium marketing | Warm off-white in the `#FAFAF8` to `#F7F6F3` range; pure white reads as default. A client whose identity is set on pure white keeps it (decisions/client-identity-wins.md) |
+| Pure white (`#FFFFFF`) on premium marketing, in a generated system | Warm off-white in the `#FAFAF8` to `#F7F6F3` range; pure white reads as default. A client whose identity is set on pure white keeps it (decisions/client-identity-wins.md, principle 11) |
 | Oversaturated accents (>80% saturation) | Desaturate. High contrast comes from value, not saturation. A client's own saturated brand stays exact (decisions/client-identity-wins.md) |
 | Text-fill gradients on large headers | Solid color + weight hierarchy. One word in gradient per page is the absolute maximum |
 | The "AI" purple-to-blue gradient on white | A single restrained accent (Emerald, Electric Blue, Deep Rose, Amber) against neutrals. A gradient from the client's own identity is not this default and stays (decisions/client-identity-wins.md) |
@@ -95,8 +97,8 @@ Hero rules, including the hero height, live in `references/surfaces/landing.md`.
 | Mismatched font families per section | One display + one body across the entire project. If a serif appears, it appears surgically — once or twice per page maximum |
 | Body text > 75 characters per line | `max-w-[65ch]` on paragraphs. Roughly 55-72 characters per line is the editorial sweet spot |
 | Body type below 16px on marketing surfaces | 16-18px minimum. Compressed body type reads as a startup template |
-| Arial, Roboto, generic system stacks as primary display | Distinctive display face (Geist, Satoshi, Cabinet Grotesk, Outfit) — or a deliberately chosen variable sans. Note: Inter is a legitimate, modern choice; pair it carefully and don't reach for it reflexively as the only option |
-| Default font-fallback chains (the standard humanist sans most platforms ship) | Choose the type intentionally even when the brief doesn't specify |
+| Arial, Roboto, generic system stacks as primary display, in a generated system | Distinctive display face (Geist, Satoshi, Cabinet Grotesk, Outfit), or a deliberately chosen variable sans. Note: Inter is a legitimate, modern choice; pair it carefully and don't reach for it reflexively as the only option |
+| Default font-fallback chains (the standard humanist sans most platforms ship), in a generated system | Choose the type intentionally even when the brief doesn't specify. A client's own system stack stays (principle 11) |
 | Same display family across every output | Vary across generations. Never converge on one stack repeatedly |
 | Title Case Across Every Word In Headlines | Sentence case. Title case reads as advertising copy from a previous decade |
 | ALL CAPS headlines at >14px | All-caps reserved for eyebrow labels at 10-13px with tracked spacing (0.05em-0.1em) |
@@ -104,7 +106,7 @@ Hero rules, including the hero height, live in `references/surfaces/landing.md`.
 | Italic used as decoration | Italic means "this is a title" or "I am emphasizing this word" — not "this is a fancy moment" |
 | Tracking left at 0 on display sizes (>48px) | Tighten display tracking by -1% to -3% (-0.01em to -0.03em). The fix that separates polished from amateur |
 | Tabular figures mixed with proportional figures on the same page | Pick one. Stat blocks, prices, version strings get tabular; prose gets proportional |
-| Straight quotes (' "), double-hyphen (--) | Curly quotes ('') and em dashes (—) where appropriate. Get these right |
+| Straight quotes (' ") in copy, and a double hyphen or a long dash as punctuation | Curly quotes and apostrophes in copy. No em dashes and no double hyphen: a period, a comma or a colon does the job |
 | Decorative or handwritten display faces on premium surfaces | Personality comes from scale, weight contrast, and whitespace — not face selection |
 | 5+ weights from the same family | Three-weight system at most: bold/semibold for display, regular for body, lighter for support |
 | Variable font weight animated for decoration only | When variable axes animate, the motion expresses state change — not "look at this font" |

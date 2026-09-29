@@ -12,7 +12,7 @@ You are running the `/ux-system` command from the `ux` plugin. The job is to pro
 
 Triggers: "we don't have a design system", "build us a system", "propose tokens", "what should our theme be", "set up our DS", "we need a token JSON", "design our brand foundations".
 
-If the project already has a design system, do not run this. Recommend `/ux-component` against the existing system instead.
+If the project already has a design system, do not build a new one: read it as it is (see "An existing system" below), and build components against it with `/ux-component`.
 
 ## Modes
 
@@ -20,10 +20,30 @@ If the project already has a design system, do not run this. Recommend `/ux-comp
 |---|---|---|
 | `/ux-system create` | Builds a WCAG-gated token system with the 4.0 foundations engine. See "create mode" below. | 4.0 beta |
 | `/ux-system` (no mode) | The 3.x starter flow: discovery, recommendation, then the design-system-architect agent writes tokens, foundation docs and component contracts. See "3.x starter flow" below. | 3.x, kept until 4.0 final |
-| `/ux-system enhance --from <src>` | Measure an existing system and improve it in place, keeping its token names. | Coming in 4.1 (needs importers) |
-| `/ux-system extend --from <src> --add <...>` | Add foundations or roles to an existing system without touching the rest. | Coming in 4.1 (needs importers) |
+| `/ux-system enhance --from <src>` | Measure an existing system against its own code and report what to improve, keeping its token names. | The engine steps work now from Python (see "An existing system"); the command form is being added |
+| `/ux-system extend --from <src> --add <...>` | Add foundations or roles to an existing system in a separate extension file beside it, without touching the rest. | The readers and the mapping work now; the command form is being added |
 
-If the user asks for `enhance` or `extend`, say plainly that it arrives in 4.1, because it needs the importers that read an existing system. The beta builds new systems; it does not read an existing one. Offer `create` for a new system, or the 3.x flow, and stop there.
+If the user asks for `enhance` or `extend`, run the steps under "An existing system" below and give the user the enhance report. Never rewrite the client's files.
+
+## An existing system
+
+A system the project already has is fixed input: the engine reads it in its own names and never rewrites it. These parts work now:
+
+1. **Find it.** `uxskill --no-pretty system detect --root .` lists the system's files by kind (token source, token files, built output, foundation CSS, `MASTER.md`, `DESIGN.md`, a system folder) and what they declare: the primary and its token, the text color, the faces, every named color and the languages of the project's HTML.
+2. **Read it.** Five readers take a system in its own format: `dtcg` (DTCG JSON tokens), `css` (CSS custom properties), `tailwind` (a Tailwind 4 `@theme` stylesheet) or `tailwind-json` (a resolved Tailwind config export), `markdown` (markdown rule files) and `figma` (a Figma variables export). `engine.io.read_any(path, fmt)` returns the tokens in the system's own names and an import report: what it read, and every entry it did not read with how to write it so it is read. It never guesses a value.
+3. **Map it.** `engine.io.propose(tokens)` proposes which of the system's names fills each of the engine's roles, by name only. `engine.io.merge(proposed, existing)` keeps every entry the owner wrote in the mapping file and fills only the roles still open; `engine.io.dump_mapping(mapping)` writes the file for the owner to confirm.
+4. **Measure it.** `engine.io.scan([code folders], tokens)` reads what the product's code actually uses. `engine.io.enhance(imported, mapping, scanned)` is the enhance report: tokens the code never reads, raw values a token already holds, values written several ways, names every use contradicts, references to tokens the system lacks, how many roles the mapping covers, what the owner should confirm, and every decision made without them. It measures and proposes; it never changes a value or writes a file. `.markdown()` gives the report as text, `.to_dict()` as JSON.
+
+```bash
+python3 -c "
+from engine.io import read_any, propose, scan, enhance
+imported = read_any('design-system/tokens.json', 'dtcg')
+report = enhance(imported, propose(imported.tokens), scan(['src'], imported.tokens))
+print(report.markdown())
+"
+```
+
+What the command forms add: `system enhance --from`, `system extend --from` and `system export` run these steps from the command line, check and back up every source before any write, and write whatever they add to a client's system as a separate extension file in the source's own format, loaded after it, with the report naming the file and how to load it.
 
 ## create mode (4.0 beta)
 

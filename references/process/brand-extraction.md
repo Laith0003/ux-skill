@@ -20,6 +20,10 @@ brand-fidelity hard floor are unchanged.
 
 1. **Always auto-extract the brand** when a reference exists, with no confirm step
    unless told otherwise. The result is a travelling `brand.md` (+ `brand.json`).
+   The language comes from the project's own templates and pages, never a default;
+   positioning, personality, promise, guardrails and the picture rules come from the
+   brand book when there is one, in its words. A photography mood is never built
+   from voice words.
 2. **The brand.md travels** to every step (discover -> synthesize -> generate) as a
    hard anchor, and is **scored by the linter/rating**. Output that drifts off-brand
    fails — see rule 7.
@@ -35,7 +39,8 @@ brand-fidelity hard floor are unchanged.
    system-ui, Open Sans, Lato, Segoe UI, Source Sans) is the *absence* of a type
    choice — do not preserve it. Read the logo's wordmark style (a vision pass) and
    pick a deliberate pairing that matches it. Only preserve a site font when it is
-   genuinely distinctive.
+   genuinely distinctive. A face the client's own design system declares (found by
+   `ux system detect`) is its choice and stays, a system stack included.
 5. **Preserve human copy by default.** Do not rewrite existing headlines/body that
    are already human and good. Restructure walls of text into scannable blocks, keep
    the words. Rewrite only when asked.
@@ -48,7 +53,10 @@ brand-fidelity hard floor are unchanged.
 8. **Imagery is mandatory and real.** Source the client's own assets first; fill with
    curated Unsplash/Pexels chosen to match the 7-axis temperature and brand; pick the
    best per slot. Ban only *random/generic* stock and AI-slop clutter — not all
-   photography. Abstract SVG is not a substitute for a real product/site image.
+   photography. Abstract SVG is not a substitute for a real product/site image, and
+   the logo never counts as imagery. When the brand book bans stock or lifestyle
+   photography, nothing from stock fills a gap: the brand's own product screens and
+   photographs, or no picture.
 9. **Richness via a page-level section sequence.** Pick a whole-page pattern by goal
    and expand the FULL sequence with completeness and a per-item icon. For lead-gen:
    Hero (+form) -> Proof/stats bar -> value cards -> category pills -> item cards ->

@@ -704,7 +704,7 @@ def score_imagery(html_text: str, logo_url: str = "") -> Dict[str, Any]:
 
     Returns ``{ok, kind, score, detail}`` with ``kind`` in {fragment, image,
     bg-photo, illustration-svg, logo-only, icons-only, none}. Component
-    fragments (no <body>/<html>) are exempt (ok=True) -- not every partial
+    fragments (no <body>/<html>) are exempt (ok=True): not every partial
     needs art. Icons are NOT imagery: a page whose only visuals are sub-100px
     SVGs fails. Nor is the logo: the brand's logo file (``logo_url``), an
     element marked as a logo, wordmark or logo row, or the first image in a
