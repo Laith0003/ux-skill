@@ -395,9 +395,11 @@ def test_the_figure_holds_a_number_band():
         assert px(ts, "type.text.figure") >= 36, (brief, px(ts, "type.text.figure"))
 
 
-@pytest.mark.parametrize("density, want", [(0.0, 192), (0.5, 160), (1.0, 128)])
-def test_the_landing_gap_matches_the_playbook_at_desktop(density, want):
-    ts = build_system(axes(density=density), "#2F6FDB").tokens
+@pytest.mark.parametrize("contrast, formality, want", [(0.0, 1.0, 240), (0.5, 0.5, 128),
+                                                     (1.0, 0.0, 96)])
+def test_the_landing_gap_follows_how_calm_and_formal_the_brand_is(contrast, formality, want):
+    ts = build_system(axes(contrast=contrast, formality=formality, motion=contrast),
+                      "#2F6FDB").tokens
     assert dim(ts, "layout.landing-gap.desktop") == want
     for tier in ("phone", "tablet", "laptop", "desktop"):
         assert dim(ts, f"layout.landing-gap.{tier}") >= dim(ts, f"layout.region-gap.{tier}")

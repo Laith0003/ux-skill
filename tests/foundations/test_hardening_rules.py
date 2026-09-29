@@ -111,9 +111,24 @@ def test_the_reading_measure_has_a_floor_and_the_form_measure_a_cap():
                Token("layout.rem.48", "dimension", _rem(48)),
                Token("layout.measure.text", "dimension", "{layout.rem.20}", layer="semantic"),
                Token("layout.measure.form", "dimension", "{layout.rem.48}", layer="semantic"))
+    # The set names no text face, so a character is the one the build
+    # counted (layout.ch-em): 20rem holds the 40 characters of our floor.
+    assert _failures(ts, layout.CHECKS, "text-measure-floor") == []
+    ts = _with(ts, Token("layout.rem.18", "dimension", _rem(18)),
+               Token("layout.measure.landing", "dimension", "{layout.rem.18}", layer="semantic"))
     assert _failures(ts, layout.CHECKS, "text-measure-floor") == [
-        "layout.measure.text is 20rem; below our floor of 30rem a reading column breaks lines "
-        "every few words, so keep it at 30rem or more"]
+        "layout.measure.landing is 18rem, 38 characters of the text face the build counted; "
+        "below our floor of 40 characters a column breaks lines every few words, so keep it at "
+        "20rem or more"]
+    # With no face and no counted character, a character is half an em.
+    plain = TokenSet(ts.axes)
+    for t in ts.tokens():
+        if t.path != "layout.ch-em":
+            plain.add(t)
+    assert _failures(plain, layout.CHECKS, "text-measure-floor") == [
+        "layout.measure.landing is 18rem, 36 characters of half an em at 16px; below our "
+        "floor of 40 characters a column breaks lines every few words, so keep it at 20rem or "
+        "more"]
     assert _failures(ts, layout.CHECKS, "form-measure") == [
         "layout.measure.form is 48rem; a form wider than the reading measure is read like a "
         "long line, so keep it at 40rem or less, our ceiling for a reading width"]
@@ -127,8 +142,8 @@ def test_the_container_is_at_least_the_reflow_width_and_the_measure():
     assert _failures(ts, layout.CHECKS, "container-bounds") == [
         "layout.container.max is 300px, narrower than the 320px reflow width; point it at a "
         "width of 320px or more",
-        "layout.container.max is 300px, narrower than layout.measure.text (608px), so a "
-        "reading column would not fit; point it at a width of 608px or more"]
+        "layout.container.max is 300px, narrower than layout.measure.text (512px), so a "
+        "reading column would not fit; point it at a width of 512px or more"]
 
 
 # Type: every role has a floor, tracking and leading behave on every role,

@@ -42,7 +42,9 @@ def test_long_reading_opens_the_lines_and_narrows_the_measure():
     a = read_audience({"reading_context": "long-read"})
     ts = build_system(MID, "#3366FF", audience=a).tokens
     assert ts.resolve("type.text.body")["lineHeight"] == 1.65
-    assert ts.resolve("layout.measure.text")["value"] == 34
+    # 4 characters fewer of Noto Sans at 16px: 63 characters, 30rem, against 32rem
+    assert ts.resolve("layout.measure.text")["value"] == 30
+    assert build_system(MID, "#3366FF").tokens.resolve("layout.measure.text")["value"] == 32
 
 
 def test_languages_decide_arabic_and_the_primary_script():

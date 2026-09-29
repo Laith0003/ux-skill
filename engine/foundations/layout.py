@@ -14,9 +14,9 @@ property and gets the right tier at every width.
 """
 from __future__ import annotations
 
-from typing import Any, Callable, Dict, List, Sequence, Tuple
+from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
-from engine.foundations import space
+from engine.foundations import character, space
 from engine.foundations.foundation import (
     BrandInputs, Foundation, Generated, direct_alias, is_step, typed)
 from engine.foundations.gate import Check
@@ -37,24 +37,39 @@ MARGIN = {"phone": (5, 4), "tablet": (8, 6), "laptop": (12, 8), "desktop": (16, 
 # every density.
 REGION_GAP = {"phone": (12, 8), "tablet": (16, 12), "laptop": (24, 16), "desktop": (32, 16)}
 HERO_PADDING = {"phone": (16, 10), "tablet": (20, 12), "laptop": (24, 16), "desktop": (32, 20)}
-# The gap between the sections of a landing page, per tier: airier than an
-# app's region gap, 128 to 192px at desktop by density, so a long page
-# changes pace between sections. Never below the region gap at its tier.
-LANDING_GAP = {"phone": (20, 16), "tablet": (24, 20), "laptop": (32, 24), "desktop": (48, 32)}
+# The gap between the sections of a landing page comes from how calm the
+# brief is (character.landing_gap_px, 64 to 240px at desktop, falling with
+# energy and rising with formality); the phone takes a share of it
+# (character.phone_gap_share) and the tablet and laptop sit a third and two
+# thirds of the way up. Never below the region gap at its tier.
+LANDING_STEPS = {"phone": 0.0, "tablet": 1 / 3, "laptop": 2 / 3, "desktop": 1.0}
 # Header and footer block padding, the same at every width.
 HEADER_PADDING, FOOTER_PADDING = (4, 3), (16, 10)
 # Tiered roles with a responsive alias in CSS (responsive_css).
 RESPONSIVE = ("columns", "gutter", "margin-inline", "region-gap", "landing-gap",
-              "hero.padding-block")
+              "hero.padding-block", "landing.margin-inline")
 # Tiered roles that alias the spacing scale (layout-on-space).
-ON_SPACE = ("gutter", "margin-inline", "region-gap", "landing-gap", "hero.padding-block")
+ON_SPACE = ("gutter", "margin-inline", "region-gap", "landing-gap", "hero.padding-block",
+            "landing.margin-inline")
+# Untiered roles that alias the spacing scale: the full-width margin and
+# how sections meet.
+ON_SPACE_ONE = ("layout.margin-inline.full", "layout.seam.overlap", "layout.seam.fade")
 COMPACT_FLOOR = 2  # space units, 8px
 CONTAINERS = (1120, 1280, 1440)
-MEASURE_REM = {"text": 38, "form": 32}
+# A full-width landing page stops growing here and centres beyond it.
+FULL_CONTAINER = 1920
+# The measures: text and landing from characters of the text face
+# (character.reading_measure_ch, landing_measure_ch), form fixed.
+MEASURE_REM = {"form": 32}
+MEASURES = ("text", "landing", "form")
 # Our approximation of the 80 characters WCAG 1.4.8 sets as the widest line.
 MAX_TEXT_MEASURE_REM = 40
-# Our floor for a reading column: narrower, lines break every few words.
-MIN_TEXT_MEASURE_REM = 30
+# Our floor for a reading or landing column, in characters of the text face
+# (half an em each when the face is not one we know): narrower, lines
+# break every few words.
+MIN_MEASURE_CH = 40
+# The width of a character when the set's text face is not in the catalog.
+DEFAULT_CH_EM = 0.5
 # WCAG 1.4.10: content reflows at a 320 CSS px wide viewport.
 REFLOW_PX = 320
 # Our floor per phone column at the reflow width: room for a 44px target.
@@ -77,22 +92,76 @@ def container_px(density: float) -> int:
     return space.snap(CONTAINERS[0] + (CONTAINERS[-1] - CONTAINERS[0]) * density, CONTAINERS)
 
 
+def full_margin_units(axes: AxisValues) -> int:
+    """The full-width landing margin in space units (character.full_margin_px),
+    never under the tablet's margin, so margins never shrink as the tier
+    widens."""
+    return max(space.snap(character.full_margin_px(axes) / space.BASE_UNIT),
+               _units(MARGIN["tablet"], axes.density)[0])
+
+
+def uses_full_width(axes: AxisValues) -> bool:
+    """Whether the landing page takes the full-width frame (character.full_width)."""
+    return character.full_width(axes) >= 0.5
+
+
+def landing_margin_units(axes: AxisValues, tier: str) -> int:
+    """The landing page's inline margin at a tier, in space units: the page
+    margin, or from the laptop up the full-width margin when the page takes
+    the full-width frame."""
+    if uses_full_width(axes) and tier in ("laptop", "desktop"):
+        return full_margin_units(axes)
+    return _units(MARGIN[tier], axes.density)[0]
+
+
 def landing_frame(axes: AxisValues) -> Tuple[Dict[str, float], float]:
     """({tier: inline margin px}, container px) a landing page sets its
-    content in: the page margins per tier and the container."""
-    margins = {tier: _units(MARGIN[tier], axes.density)[0] * space.BASE_UNIT for tier in TIERS}
-    return margins, float(container_px(axes.density))
+    content in: its margins per tier and its container, the full-width one
+    when the page takes it."""
+    margins = {tier: landing_margin_units(axes, tier) * space.BASE_UNIT for tier in TIERS}
+    box = FULL_CONTAINER if uses_full_width(axes) else container_px(axes.density)
+    return margins, float(box)
+
+
+def landing_gap_units(axes: AxisValues) -> Dict[str, int]:
+    """{tier: space units} for the gap between landing sections: the
+    desktop gap (character.landing_gap_px), the phone's share of it, the
+    tiers between at their steps; never below the region gap at its tier
+    and never shrinking as the viewport grows."""
+    desktop = character.landing_gap_px(axes)
+    phone = desktop * character.phone_gap_share(axes)
+    out: Dict[str, int] = {}
+    below = 0
+    for tier in TIERS:
+        px = phone + (desktop - phone) * LANDING_STEPS[tier]
+        units = space.snap(px / space.BASE_UNIT)
+        units = max(units, _units(REGION_GAP[tier], axes.density)[0], below)
+        out[tier] = below = units
+    return out
+
+
+def measure_rem(chars: float, face: Any, body_px: int = 16) -> int:
+    """A measure of `chars` characters of the text face at body size, in
+    whole rem at a 16px root."""
+    em = (face.metrics.latin_avg or 0) / face.metrics.upm if face else DEFAULT_CH_EM
+    return max(1, int(chars * em * body_px / 16 + 0.5))
 
 
 def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
-                    measure_rem: int = MEASURE_REM["text"],
-                    refuse_compact: bool = False) -> Generated:
-    """The page grid and regions. `target_px` and `measure_rem` come from
-    the audience (larger targets for older readers, a narrower measure for
-    long reading); with `refuse_compact` the compact mode keeps every
+                    long_read: bool = False, refuse_compact: bool = False,
+                    body_px: int = 16, book_depth: Optional[float] = None) -> Generated:
+    """The page grid and regions. `target_px`, `long_read` and `body_px`
+    come from the audience (larger targets for older readers, a few fewer
+    characters for long reading, a larger body); the measures are
+    characters of the text face at body size (fonts.choose with
+    `book_depth`); with `refuse_compact` the compact mode keeps every
     comfortable value."""
+    from engine.foundations import fonts
     d = axes.density
-    measures = dict(MEASURE_REM, text=measure_rem)
+    face = fonts.choose(axes, book_depth).text
+    measures = {"text": measure_rem(character.reading_measure_ch(axes, long_read), face, body_px),
+                "landing": measure_rem(character.landing_measure_ch(axes), face, body_px),
+                **MEASURE_REM}
     targets = {"comfortable": target_px,
                "compact": target_px if refuse_compact else TARGET_PX["compact"]}
     ts = TokenSet()
@@ -100,11 +169,15 @@ def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
         ts.add(Token(f"layout.viewport.{px}", "dimension", {"value": px, "unit": "px"}))
     for n in sorted(set(COLUMNS.values())):
         ts.add(Token(f"layout.column-count.{n}", "number", n))
+    line = int(character.seam_line(axes) * 2 + 0.5)
     for px in sorted(set(CONTAINERS) | set(TARGET_PX.values()) | set(targets.values())
-                     | {targets["comfortable"] + LARGE_EXTRA_PX}):
+                     | {targets["comfortable"] + LARGE_EXTRA_PX, FULL_CONTAINER, line}):
         ts.add(Token(f"layout.width.{px}", "dimension", {"value": px, "unit": "px"}))
-    for rem in sorted(set(MEASURE_REM.values()) | set(measures.values())):
+    for rem in sorted(set(measures.values())):
         ts.add(Token(f"layout.rem.{rem}", "dimension", {"value": rem, "unit": "rem"}))
+    # The character the measures count, so a set without type still reads it.
+    ts.add(Token("layout.ch-em", "number",
+                 round((face.metrics.latin_avg or 0) / face.metrics.upm * body_px / 16, 4)))
 
     for tier, px in VIEWPORTS.items():
         ts.add(Token(f"layout.breakpoint.{tier}", "dimension", "{layout.viewport.%d}" % px,
@@ -112,15 +185,30 @@ def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
     for tier in TIERS:
         ts.add(Token(f"layout.columns.{tier}", "number",
                      "{layout.column-count.%d}" % COLUMNS[tier], layer="semantic"))
+    landing = landing_gap_units(axes)
+    full = full_margin_units(axes)
     for group, table in (("gutter", GUTTER), ("margin-inline", MARGIN),
-                         ("region-gap", REGION_GAP), ("landing-gap", LANDING_GAP),
-                         ("hero.padding-block", HERO_PADDING)):
+                         ("region-gap", REGION_GAP), ("landing-gap", None),
+                         ("hero.padding-block", HERO_PADDING), ("landing.margin-inline", MARGIN)):
         for tier in TIERS:
-            comfortable, compact = _units(table[tier], d)
+            if group == "landing-gap":
+                comfortable = landing[tier]
+                compact = max(space.compact_step(comfortable, COMPACT_FLOOR),
+                              _units(REGION_GAP[tier], d)[1])
+            elif group == "landing.margin-inline" and uses_full_width(axes) \
+                    and tier in ("laptop", "desktop"):
+                comfortable = compact = full
+            else:
+                comfortable, compact = _units(table[tier], d)
             compact = comfortable if refuse_compact else compact
             modes = {"density:compact": "{space.%d}" % compact} if compact != comfortable else {}
             ts.add(Token(f"layout.{group}.{tier}", "dimension", "{space.%d}" % comfortable,
                          modes=modes, layer="semantic"))
+        if group == "margin-inline":
+            ts.add(Token("layout.margin-inline.full", "dimension", "{space.%d}" % full,
+                         layer="semantic"))
+    ts.add(Token("layout.landing.max-width", "dimension", "{layout.width.%d}" % (
+        FULL_CONTAINER if uses_full_width(axes) else container_px(d)), layer="semantic"))
     for name, pair in (("header", HEADER_PADDING), ("footer", FOOTER_PADDING)):
         comfortable, compact = _units(pair, d)
         compact = comfortable if refuse_compact else compact
@@ -129,8 +217,15 @@ def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
                      modes=modes, layer="semantic"))
     ts.add(Token("layout.container.max", "dimension", "{layout.width.%d}" % container_px(d),
                  layer="semantic"))
-    for name, rem in measures.items():
-        ts.add(Token(f"layout.measure.{name}", "dimension", "{layout.rem.%d}" % rem,
+    ts.add(Token("layout.container.full", "dimension", "{layout.width.%d}" % FULL_CONTAINER,
+                 layer="semantic"))
+    for name, px in (("overlap", character.seam_overlap_px(axes)),
+                     ("fade", character.seam_fade_px(axes))):
+        ts.add(Token(f"layout.seam.{name}", "dimension",
+                     "{space.%d}" % space.snap(px / space.BASE_UNIT), layer="semantic"))
+    ts.add(Token("layout.seam.line", "dimension", "{layout.width.%d}" % line, layer="semantic"))
+    for name in MEASURES:
+        ts.add(Token(f"layout.measure.{name}", "dimension", "{layout.rem.%d}" % measures[name],
                      layer="semantic"))
     ts.add(Token("layout.target.min", "dimension", "{layout.width.%d}" % targets["comfortable"],
                  modes={} if targets["compact"] == targets["comfortable"] else
@@ -139,7 +234,13 @@ def generate_layout(axes: AxisValues, target_px: int = TARGET_PX["comfortable"],
     ts.add(Token("layout.target.large", "dimension",
                  "{layout.width.%d}" % (targets["comfortable"] + LARGE_EXTRA_PX),
                  layer="semantic"))
-    return Generated(tokens=ts, notes=[f"layout: container {container_px(d)}px"])
+    frame = ("full width, " + str(full * space.BASE_UNIT) + "px margins"
+             if uses_full_width(axes) else f"{container_px(d)}px container")
+    return Generated(tokens=ts, notes=[
+        f"layout: container {container_px(d)}px, landing page {frame}, landing gap "
+        f"{landing['desktop'] * space.BASE_UNIT}px at desktop and "
+        f"{landing['phone'] * space.BASE_UNIT}px on a phone, measures "
+        f"{measures['landing']}rem for landing copy and {measures['text']}rem for reading"])
 
 
 def responsive_css(ts: TokenSet, extra: Dict[str, List[str]] = None) -> List[str]:
@@ -180,10 +281,14 @@ ROLE_TYPES: Dict[str, str] = {
     **{f"layout.margin-inline.{t}": "dimension" for t in TIERS},
     **{f"layout.region-gap.{t}": "dimension" for t in TIERS},
     **{f"layout.landing-gap.{t}": "dimension" for t in TIERS},
+    **{f"layout.landing.margin-inline.{t}": "dimension" for t in TIERS},
+    "layout.margin-inline.full": "dimension", "layout.container.full": "dimension",
+    "layout.landing.max-width": "dimension", "layout.seam.overlap": "dimension",
+    "layout.seam.fade": "dimension", "layout.seam.line": "dimension",
     **{f"layout.hero.padding-block.{t}": "dimension" for t in TIERS},
     "layout.header.padding-block": "dimension", "layout.footer.padding-block": "dimension",
     "layout.container.max": "dimension",
-    **{f"layout.measure.{name}": "dimension" for name in MEASURE_REM},
+    **{f"layout.measure.{name}": "dimension" for name in MEASURES},
     "layout.target.min": "dimension",
     "layout.target.large": "dimension",
 }
@@ -310,7 +415,7 @@ def _regions(ts: TokenSet, mode: str) -> List[str]:
 def _grid_order(ts: TokenSet, mode: str) -> List[str]:
     """Gutters and inline margins never shrink as the tier widens."""
     out = []
-    for group in ("gutter", "margin-inline"):
+    for group in ("gutter", "margin-inline", "landing.margin-inline"):
         present = [f"layout.{group}.{t}" for t in TIERS if _typed(ts, f"layout.{group}.{t}")]
         for a, b in zip(present, present[1:]):
             va, vb, w = _px(ts, a, mode), _px(ts, b, mode), _where(mode)
@@ -323,7 +428,7 @@ def _grid_order(ts: TokenSet, mode: str) -> List[str]:
 
 def _gutter_floor(ts: TokenSet, mode: str) -> List[str]:
     out = []
-    for group in ("gutter", "margin-inline"):
+    for group in ("gutter", "margin-inline", "landing.margin-inline"):
         for tier in TIERS:
             p = f"layout.{group}.{tier}"
             if not _typed(ts, p) or _repeat(ts, (p,), mode, _px):
@@ -368,16 +473,43 @@ def _phone_columns(ts: TokenSet, mode: str) -> List[str]:
             "hold a comfortable target, so narrow the phone margins or gutters"]
 
 
+def _ch_px(ts: TokenSet) -> Tuple[float, str]:
+    """(the width of one character of body text in px, how it was read):
+    the text face's average advance at the body size when the set names a
+    face in the catalog, else layout.ch-em (the character the build
+    counted, in rem) when the set has it, else DEFAULT_CH_EM at 16px."""
+    from engine.foundations import fonts
+    body = 16.0
+    if not ts.has("type.face.text") and ts.has("layout.ch-em") \
+            and ts.get("layout.ch-em").type == "number":
+        return float(ts.resolve("layout.ch-em")) * 16, "the text face the build counted"
+    if ts.has("type.text.body") and ts.get("type.text.body").type == "typography":
+        body = dimension_px(ts.resolve("type.text.body")["fontSize"])
+    face = None
+    if ts.has("type.face.text") and ts.get("type.face.text").type == "fontFamily":
+        family = ts.resolve("type.face.text")
+        face = fonts.BY_FAMILY.get(family[0] if isinstance(family, list) else family)
+    if face is None or not face.metrics.latin_avg:
+        return DEFAULT_CH_EM * body, f"half an em at {body:g}px"
+    return face.metrics.latin_avg / face.metrics.upm * body, f"{face.family} at {body:g}px"
+
+
 def _measure_floor(ts: TokenSet, mode: str) -> List[str]:
-    p = "layout.measure.text"
-    if not _typed(ts, p) or _repeat(ts, (p,), mode, _px):
-        return []
-    rem = _px(ts, p, mode) / 16
-    if rem >= MIN_TEXT_MEASURE_REM:
-        return []
-    return [f"{p} is {rem:g}rem{_where(mode)}; below our floor of {MIN_TEXT_MEASURE_REM}rem a "
-            "reading column breaks lines every few words, so keep it at "
-            f"{MIN_TEXT_MEASURE_REM}rem or more"]
+    """The reading and landing measures hold at least MIN_MEASURE_CH
+    characters of the text face."""
+    out = []
+    for p in ("layout.measure.text", "layout.measure.landing"):
+        if not _typed(ts, p) or _repeat(ts, (p,), mode, _px):
+            continue
+        ch, how = _ch_px(ts)
+        chars = _px(ts, p, mode) / ch
+        if chars + 1e-9 >= MIN_MEASURE_CH:
+            continue
+        need = int(MIN_MEASURE_CH * ch / 16 + 0.999)
+        out.append(f"{p} is {_px(ts, p, mode) / 16:g}rem{_where(mode)}, {chars:.0f} characters "
+                   f"of {how}; below our floor of {MIN_MEASURE_CH} characters a column breaks "
+                   f"lines every few words, so keep it at {need}rem or more")
+    return out
 
 
 def _form_measure(ts: TokenSet, mode: str) -> List[str]:
@@ -401,10 +533,15 @@ def _container(ts: TokenSet, mode: str) -> List[str]:
         out.append(f"{p} is {v:g}px{_where(mode)}, narrower than the {REFLOW_PX}px reflow "
                    f"width; point it at a width of {REFLOW_PX}px or more")
     text = "layout.measure.text"
-    if _typed(ts, text) and v < _px(ts, text, mode):
-        need = _px(ts, text, mode)
-        out.append(f"{p} is {v:g}px{_where(mode)}, narrower than {text} ({need:g}px), so a "
-                   f"reading column would not fit; point it at a width of {need:g}px or more")
+    for box in (p, "layout.landing.max-width"):
+        if box != p and (not _typed(ts, box) or _repeat(ts, (box,), mode, _px)):
+            continue
+        v = _px(ts, box, mode)
+        if _typed(ts, text) and v < _px(ts, text, mode):
+            need = _px(ts, text, mode)
+            out.append(f"{box} is {v:g}px{_where(mode)}, narrower than {text} ({need:g}px), so "
+                       f"a reading column would not fit; point it at a width of {need:g}px or "
+                       "more")
     return out
 
 
@@ -415,6 +552,7 @@ def _on_space(ts: TokenSet, mode: str) -> List[str]:
     together."""
     roles = [f"layout.{group}.{tier}" for group in ON_SPACE for tier in TIERS]
     roles += [f"layout.{name}.padding-block" for name in ("header", "footer")]
+    roles += list(ON_SPACE_ONE)
     out = []
     for role in roles:
         if not _typed(ts, role):
@@ -448,8 +586,10 @@ CHECKS: Tuple[Check, ...] = (
 
 def _generate(axes: AxisValues, inputs: BrandInputs) -> Generated:
     a = inputs.audience
-    return generate_layout(axes, target_px=a.target_px, measure_rem=a.measure_rem,
-                           refuse_compact=a.refuse_compact)
+    return generate_layout(axes, target_px=a.target_px,
+                           long_read=a.reading_context == "long-read",
+                           refuse_compact=a.refuse_compact, body_px=a.body_px,
+                           book_depth=a.book_depth)
 
 
 FOUNDATION = Foundation(name="layout", generate=_generate, checks=CHECKS, requires=("space",),

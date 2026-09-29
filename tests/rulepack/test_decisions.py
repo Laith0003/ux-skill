@@ -52,6 +52,8 @@ EXPECTED = {
     "phone-accepts-local-input", "one-label-per-action",
     "display-follows-expressiveness", "display-lines-sit-tight", "weights-stay-light",
     "two-voice-headline", "capitals-track-open", "lines-break-balanced",
+    "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",
+    "sections-meet-by-a-seam",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -93,7 +95,9 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "nested-radius": "strict-radius-nesting",
               "landing-display-step": "display-follows-expressiveness",
               "the-full-type-ladder": "display-lines-sit-tight",
-              "type-along-the-scale": "weights-stay-light"}
+              "type-along-the-scale": "weights-stay-light",
+              "landing-gap": "landing-rhythm-follows-the-brand",
+              "layout-bounds": "measures-count-characters"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

@@ -83,6 +83,15 @@ QUANTITIES = {
         ("expressive overshoot", lambda ts: ts.resolve("motion.expressive.curve")[1], 1, 0.3),
         ("reveal duration ms", lambda ts: ts.resolve("motion.reveal.duration")["value"],
          1, 100)),
+    ("contrast", "layout"): (
+        ("desktop landing gap px", lambda ts: _px(ts.resolve("layout.landing-gap.desktop")),
+         -1, 32),),
+    ("motion", "layout"): (
+        ("desktop landing gap px", lambda ts: _px(ts.resolve("layout.landing-gap.desktop")),
+         -1, 32),),
+    ("formality", "layout"): (
+        ("desktop landing gap px", lambda ts: _px(ts.resolve("layout.landing-gap.desktop")),
+         1, 32),),
     ("motion", "type"): (
         ("landing display px", lambda ts: _px(ts.resolve("type.text.display")["fontSize"]),
          1, 30),),

@@ -33,11 +33,11 @@ from engine.synthesizer.axes import AxisValues
 # tests/foundations/test_character.py (QUANTITIES).
 INFLUENCE: Mapping[str, Tuple[str, ...]] = MappingProxyType({
     "warmth": ("color", "imagery"),
-    "contrast": ("color", "type", "elevation", "border"),
+    "contrast": ("color", "type", "elevation", "border", "layout"),
     "density": ("space", "layout", "type"),
     "geometry": ("radius", "imagery"),
-    "formality": ("radius", "type", "elevation", "motion", "imagery"),
-    "motion": ("motion", "color", "type"),
+    "formality": ("radius", "type", "elevation", "motion", "imagery", "layout"),
+    "motion": ("motion", "color", "type", "layout"),
     "type_personality": ("type",),
 })
 
@@ -290,6 +290,98 @@ def phone_display_px(axes: AxisValues) -> float:
     """The landing display's size on a phone at these axes, from its
     desktop size (phone_display_for)."""
     return phone_display_for(landing_display_px(axes))
+
+
+def calm_space(axes: AxisValues) -> float:
+    """How much a landing page separates its sections by space, 0 to 1:
+    six tenths quiet (one minus energy) and four tenths formality. Measured
+    award pages pack loud sections tight and give calm, formal ones 200px
+    or more of empty space."""
+    return clamp(0.6 * (1.0 - energy(axes)) + 0.4 * axes.formality)
+
+
+# The gap between landing sections at desktop, from the loudest to the
+# calmest brief, on a log scale; the phone takes PHONE_GAP_SHARE of it.
+LANDING_GAP_PX = (64.0, 240.0)
+PHONE_GAP_SHARE = (0.6, 0.9)
+
+
+def landing_gap_px(axes: AxisValues) -> float:
+    """The gap between landing sections at desktop, 64 to 240px: falls with
+    energy and rises with formality (calm_space), on a log scale."""
+    low, high = LANDING_GAP_PX
+    return low * (high / low) ** calm_space(axes)
+
+
+def phone_gap_share(axes: AxisValues) -> float:
+    """The phone's landing gap over the desktop one, 0.6 for a loud brief to
+    0.9 for a calm one: measured phone gaps barely shrink."""
+    lo, hi = PHONE_GAP_SHARE
+    return lo + (hi - lo) * calm_space(axes)
+
+
+# Characters per line: landing copy from a loud to a calm, formal brief;
+# running text from playful to formal, a few fewer for long reading.
+LANDING_MEASURE_CH = (42.0, 56.0)
+READING_MEASURE_CH = (64.0, 70.0)
+LONG_READ_FEWER_CH = 4.0
+
+
+def landing_measure_ch(axes: AxisValues) -> float:
+    """The line length of landing copy in characters, 42 to 56: shorter as
+    energy rises, longer as formality rises (half each)."""
+    lo, hi = LANDING_MEASURE_CH
+    return lo + (hi - lo) * clamp(0.5 * (1.0 - energy(axes)) + 0.5 * axes.formality)
+
+
+def reading_measure_ch(axes: AxisValues, long_read: bool = False) -> float:
+    """The line length of running text in characters: 64 to 70 by
+    formality, LONG_READ_FEWER_CH fewer for long reading (60 to 66)."""
+    lo, hi = READING_MEASURE_CH
+    return lo + (hi - lo) * axes.formality - (LONG_READ_FEWER_CH if long_read else 0.0)
+
+
+# The full-width landing page: its inline margin from a calm to a loud brief.
+FULL_MARGIN_PX = (48.0, 24.0)
+
+
+def full_width(axes: AxisValues) -> float:
+    """How far the landing page leans to a full-width frame, 0 to 1: nothing
+    up to an expressiveness of 0.45, all of it from 0.75. The page takes the
+    full-width frame at 0.5 and above."""
+    return clamp((expressiveness(axes) - 0.45) / 0.3)
+
+
+def full_margin_px(axes: AxisValues) -> float:
+    """The inline margin of a full-width landing page, 48px for a calm
+    brand to 24px for a loud one, by energy."""
+    calm, loud = FULL_MARGIN_PX
+    return calm + (loud - calm) * energy(axes)
+
+
+# How far hero media reaches into the next section, and how long a tonal
+# seam between two sections runs, at full depth.
+SEAM_OVERLAP_PX = 128.0
+SEAM_FADE_PX = 192.0
+
+
+def seam_overlap_px(axes: AxisValues) -> float:
+    """How far hero media overlaps the next section: SEAM_OVERLAP_PX times
+    depth, so a flat brand meets its sections edge to edge."""
+    return SEAM_OVERLAP_PX * depth(axes)
+
+
+def seam_fade_px(axes: AxisValues) -> float:
+    """How long a tonal seam between two sections runs: SEAM_FADE_PX times
+    depth, shortened by contrast, so a bold brand cuts hard."""
+    return SEAM_FADE_PX * depth(axes) * (1.0 - axes.contrast)
+
+
+def seam_line(axes: AxisValues) -> float:
+    """How strongly a hairline marks where sections meet, 0 to 1: only a
+    formal (0.6 and up) and calm (energy under 0.35) brand draws one,
+    stronger with formality; the calm end of the seam."""
+    return clamp((axes.formality - 0.6) / 0.3) * clamp((0.35 - energy(axes)) / 0.25)
 
 
 def axes_support_hue(axes: AxisValues) -> float:

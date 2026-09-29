@@ -1,10 +1,10 @@
 ---
 id: layout-bounds
 title: Gutters, margins, measures and the container stay inside our bounds at every tier
-status: active
+status: superseded
 areas: [layout]
 supersedes: null
-superseded_by: null
+superseded_by: measures-count-characters
 ---
 
 # Gutters, margins, measures and the container stay inside our bounds at every tier

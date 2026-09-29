@@ -19,7 +19,7 @@ from engine.foundations.values import dimension_px
 from engine.synthesizer.axes import AxisValues
 
 BASE_UNIT = 4  # px; every step lands on a 4px grid
-UNITS = (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48)
+UNITS = (0, 1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 56, 60)
 
 # role -> (units when the density axis is 0, units when it is 1, compact floor)
 ROLES: Dict[str, Tuple[int, int, int]] = {

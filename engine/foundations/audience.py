@@ -206,9 +206,6 @@ class Audience:
     def leading_extra(self) -> float:
         return 0.1 if self.reading_context == "long-read" else 0.0
 
-    @property
-    def measure_rem(self) -> int:
-        return 34 if self.reading_context == "long-read" else 38
 
     @property
     def book_depth(self) -> Optional[float]:
@@ -335,8 +332,8 @@ def effects(a: Audience, axes: Optional[Any] = None) -> List[Effect]:
         out.append(Effect(f"Targets are at least {a.target_px}px",
                           "the brief says the product is used on the go, one handed"))
     if a.reading_context == "long-read":
-        out.append(Effect(f"Body line height is 0.1 taller and the reading measure is "
-                          f"{a.measure_rem}rem", "the brief says people read at length"))
+        out.append(Effect("Body line height is 0.1 taller and the reading measure 4 characters "
+                          "shorter", "the brief says people read at length"))
     if a.reading_context == "glance":
         out.append(Effect(_glance_words(a, axes), "the brief says people glance at it"))
     if "languages" in a.given:

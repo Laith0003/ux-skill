@@ -1,10 +1,10 @@
 ---
 id: landing-gap
 title: A landing page spaces its sections with its own gap, 128 to 192px at desktop by density
-status: active
+status: superseded
 areas: [layout, space]
 supersedes: null
-superseded_by: null
+superseded_by: landing-rhythm-follows-the-brand
 ---
 
 # A landing page spaces its sections with its own gap, 128 to 192px at desktop by density

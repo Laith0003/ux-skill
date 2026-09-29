@@ -54,7 +54,8 @@ def test_container_widens_with_density_and_reading_width_does_not():
     assert [container_px(d) for d in (0.0, 0.5, 1.0)] == [1120, 1280, 1440]
     for d in (0.0, 1.0):
         ts = layout_with_space(d)
-        assert px(ts, "layout.measure.text") == 38 * 16
+        # 67 characters of the text face at 16px at formality 0.5
+        assert px(ts, "layout.measure.text") == 32 * 16
         assert ts.resolve("layout.measure.form") == {"value": 32, "unit": "rem"}
 
 
@@ -206,11 +207,26 @@ def test_layout_needs_space_in_the_same_build():
     assert build_system(axes(), "#3366FF", foundations=("space", "layout")).report.passed
 
 
-def test_only_density_moves_layout():
-    base = [(t.path, t.value, t.modes) for t in generate_layout(axes()).tokens.tokens()]
+def test_the_page_grid_moves_with_density_and_the_landing_rhythm_with_the_brand():
+    """Density alone moves the page grid; energy and formality move the
+    landing gap, the measures, the landing frame and the seam
+    (decisions/landing-rhythm-follows-the-brand.md)."""
+    grid = ("layout.gutter.", "layout.margin-inline.phone", "layout.margin-inline.tablet",
+            "layout.margin-inline.laptop", "layout.margin-inline.desktop", "layout.region-gap.",
+            "layout.container.max", "layout.columns.", "layout.breakpoint.", "layout.target.",
+            "layout.hero.", "layout.header.", "layout.footer.")
+
+    def dump(a):
+        return [(t.path, t.value, t.modes) for t in generate_layout(a).tokens.tokens()
+                if t.path.startswith(grid)]
     other = axes(warmth=0.0, contrast=1.0, geometry=0.0, formality=1.0, motion=1.0,
                  type_personality=0.0)
-    assert [(t.path, t.value, t.modes) for t in generate_layout(other).tokens.tokens()] == base
+    assert dump(other) == dump(axes())
+    loud, calm = (build_system(a, "#3366FF", foundations=("space", "layout")).tokens
+                  for a in (axes(contrast=1.0, motion=1.0, formality=0.0),
+                            axes(contrast=0.0, motion=0.0, formality=1.0)))
+    for role in ("layout.landing-gap.desktop", "layout.measure.landing"):
+        assert px(loud, role) < px(calm, role), role
 
 
 def test_css_uses_logical_margin_names_and_density_blocks():
@@ -305,7 +321,7 @@ def _media_block(css, px):
 def test_tokens_css_switches_every_tiered_role_by_viewport():
     css = to_css(build_system(AxisValues(*[0.5] * 7), "#3366FF").tokens)
     assert layout.RESPONSIVE == ("columns", "gutter", "margin-inline", "region-gap",
-                                 "landing-gap", "hero.padding-block")
+                                 "landing-gap", "hero.padding-block", "landing.margin-inline")
     groups = [g.replace(".", "-") for g in layout.RESPONSIVE]
     base = re.search(r"\n:root \{\n((?:  --layout-[a-z-]+: var\(--layout-[a-z-]+-phone\);\n)+"
                      r"(?:  --type-text-[a-z0-9-]+: var\(--type-[a-z0-9-]+\);\n)*"
