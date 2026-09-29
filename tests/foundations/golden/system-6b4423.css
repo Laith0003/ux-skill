@@ -300,7 +300,9 @@
   --motion-duration-100: 100ms;
   --motion-duration-150: 150ms;
   --motion-duration-200: 200ms;
+  --motion-duration-240: 240ms;
   --motion-duration-250: 250ms;
+  --motion-duration-280: 280ms;
   --motion-duration-300: 300ms;
   --motion-duration-350: 350ms;
   --motion-duration-400: 400ms;
@@ -394,7 +396,7 @@
   --layout-region-gap-desktop: var(--space-16);
   --layout-landing-gap-phone: var(--space-48);
   --layout-landing-gap-tablet: var(--space-48);
-  --layout-landing-gap-laptop: var(--space-48);
+  --layout-landing-gap-laptop: var(--space-56);
   --layout-landing-gap-desktop: var(--space-56);
   --layout-hero-padding-block-phone: var(--space-10);
   --layout-hero-padding-block-tablet: var(--space-12);
@@ -1215,7 +1217,7 @@
   --layout-region-gap-desktop: var(--space-12);
   --layout-landing-gap-phone: var(--space-40);
   --layout-landing-gap-tablet: var(--space-40);
-  --layout-landing-gap-laptop: var(--space-40);
+  --layout-landing-gap-laptop: var(--space-48);
   --layout-landing-gap-desktop: var(--space-48);
   --layout-hero-padding-block-phone: var(--space-8);
   --layout-hero-padding-block-tablet: var(--space-10);

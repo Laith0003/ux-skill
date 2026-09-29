@@ -300,7 +300,9 @@
   --motion-duration-100: 100ms;
   --motion-duration-150: 150ms;
   --motion-duration-200: 200ms;
+  --motion-duration-240: 240ms;
   --motion-duration-250: 250ms;
+  --motion-duration-280: 280ms;
   --motion-duration-300: 300ms;
   --motion-duration-350: 350ms;
   --motion-duration-400: 400ms;
@@ -343,7 +345,7 @@
   --motion-page-duration: var(--motion-duration-450);
   --motion-page-curve: var(--motion-curve-out);
   --motion-page-distance: var(--motion-distance-2);
-  --motion-indicator-duration: var(--motion-duration-250);
+  --motion-indicator-duration: var(--motion-duration-240);
   --motion-indicator-curve: var(--motion-curve-out);
   --motion-arrive-duration: var(--motion-duration-600);
   --motion-arrive-curve: var(--motion-curve-out);

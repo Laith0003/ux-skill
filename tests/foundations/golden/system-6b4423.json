@@ -4900,10 +4900,34 @@
           }
         }
       },
+      "240": {
+        "$type": "duration",
+        "$value": {
+          "value": 240,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
       "250": {
         "$type": "duration",
         "$value": {
           "value": 250,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "280": {
+        "$type": "duration",
+        "$value": {
+          "value": 280,
           "unit": "ms"
         },
         "$extensions": {
@@ -6036,12 +6060,12 @@
       },
       "laptop": {
         "$type": "dimension",
-        "$value": "{space.48}",
+        "$value": "{space.56}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "density:compact": "{space.40}"
+              "density:compact": "{space.48}"
             }
           }
         }

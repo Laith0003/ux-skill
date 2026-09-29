@@ -4900,10 +4900,34 @@
           }
         }
       },
+      "240": {
+        "$type": "duration",
+        "$value": {
+          "value": 240,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
       "250": {
         "$type": "duration",
         "$value": {
           "value": 250,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "280": {
+        "$type": "duration",
+        "$value": {
+          "value": 280,
           "unit": "ms"
         },
         "$extensions": {
@@ -5441,7 +5465,7 @@
     "indicator": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.250}",
+        "$value": "{motion.duration.240}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",

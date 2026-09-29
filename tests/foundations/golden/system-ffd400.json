@@ -4894,10 +4894,34 @@
           }
         }
       },
+      "240": {
+        "$type": "duration",
+        "$value": {
+          "value": 240,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
       "250": {
         "$type": "duration",
         "$value": {
           "value": 250,
+          "unit": "ms"
+        },
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      },
+      "280": {
+        "$type": "duration",
+        "$value": {
+          "value": 280,
           "unit": "ms"
         },
         "$extensions": {
@@ -5249,7 +5273,7 @@
     "state": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.250}",
+        "$value": "{motion.duration.240}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5275,7 +5299,7 @@
     "reveal": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.250}",
+        "$value": "{motion.duration.240}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5351,7 +5375,7 @@
     "swap": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.250}",
+        "$value": "{motion.duration.240}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5377,7 +5401,7 @@
     "expand": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.300}",
+        "$value": "{motion.duration.280}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -5441,7 +5465,7 @@
     "indicator": {
       "duration": {
         "$type": "duration",
-        "$value": "{motion.duration.250}",
+        "$value": "{motion.duration.280}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
@@ -6027,29 +6051,17 @@
     "landing-gap": {
       "phone": {
         "$type": "dimension",
-        "$value": "{space.12}",
+        "$value": "{space.20}",
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "semantic",
             "modes": {
-              "density:compact": "{space.10}"
+              "density:compact": "{space.16}"
             }
           }
         }
       },
       "tablet": {
-        "$type": "dimension",
-        "$value": "{space.16}",
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "semantic",
-            "modes": {
-              "density:compact": "{space.12}"
-            }
-          }
-        }
-      },
-      "laptop": {
         "$type": "dimension",
         "$value": "{space.24}",
         "$extensions": {
@@ -6057,6 +6069,18 @@
             "layer": "semantic",
             "modes": {
               "density:compact": "{space.20}"
+            }
+          }
+        }
+      },
+      "laptop": {
+        "$type": "dimension",
+        "$value": "{space.32}",
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "semantic",
+            "modes": {
+              "density:compact": "{space.24}"
             }
           }
         }
