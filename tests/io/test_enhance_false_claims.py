@@ -61,8 +61,9 @@ def test_a_flat_or_theme_switching_layer_is_told_once_and_never_per_token():
     assert not [p for p in structure if "alias a primitive instead" in p
                 or "alias its primitive directly" in p]
     assert structure == [
-        "The system is layered its own way: 4 tokens hold a value of their own or point at "
-        "another token that is not a primitive (such as surface, card-bg, text, border). The "
+        "The system is layered its own way: 4 tokens hold a value of their own, point at another "
+        "token that is not a primitive, or are primitives that change by mode (such as surface, "
+        "card-bg, text, border). The "
         "engine's own systems alias primitives, but a flat system, or a layer whose values "
         "switch by mode, works as it is, so nothing here needs to change"]
 
@@ -121,22 +122,44 @@ def test_a_definition_line_is_never_a_use(tmp_path):
     assert d.unused == []
 
 
-def test_error_pages_and_email_templates_are_noted_once_not_told_to_use_tokens(tmp_path):
-    root = _files(tmp_path, {
-        "app.css": ".a { color: #111111; }\n",
-        "errors/500.html": '<p style="color: #111111; padding: 16px">Down</p>\n',
-        "emails/welcome.html": '<td style="background: #ffffff">Hi</td>\n'})
-    imported = _css(":root { --ink: #111111; --paper: #ffffff; --space-4: 16px; }\n")
-    result = enhance(imported, Mapping(), scan([root], imported.tokens))
-    d = result.drift
-    assert [(r.value, [u.where() for u in r.uses]) for r in d.raw_with_token] == [
-        ("#111111", ["app.css:1"])]
-    assert d.standalone == ["emails/welcome.html", "errors/500.html"]
+PAD = '<div style="padding: 16px">x</div>\n'
+JSX = 'export default () => <div style={{ padding: "16px" }}>x</div>;\n'
+FULL = 'export default () => <Html><Body style={{ padding: "16px" }}>x</Body></Html>;\n'
+EXEMPT = {
+    "resources/views/errors/500.blade.php": PAD,
+    "public/404.html": PAD,
+    "app/global-error.tsx": JSX,
+    "emails/VerifyEmail.tsx": FULL,
+    "mail/welcome.html": PAD,
+    "src/notifications/reset.email.tsx": JSX,
+}
+MEASURED = {
+    "app/error.tsx": JSX,
+    "src/components/error/Banner.vue": "<template>" + PAD + "</template>\n",
+    "src/pages/VerifyEmail.tsx": JSX,
+    "emails/components/Footer.tsx": JSX,
+    "src/error/Notice.html": PAD,
+}
+
+
+def test_error_pages_and_email_templates_are_known_by_what_the_file_is(tmp_path):
+    root = _files(tmp_path, {**EXEMPT, **MEASURED})
+    imported = _css(":root { --space-4: 16px; }\n")
+    scanned = scan([root], imported.tokens)
+    assert sorted(f for f, _ in scanned.standalone) == sorted(EXEMPT)
+    result = enhance(imported, Mapping(), scanned)
+    held = [u.file for r in result.drift.raw_with_token for u in r.uses]
+    # App screens and components stay measured; the standalone files do not.
+    assert sorted(held) == sorted(MEASURED)
     text = result.markdown()
-    assert text.count("emails/welcome.html") == 1
-    assert ("- 2 files are error pages or email templates (emails/welcome.html and "
-            "errors/500.html). They are shown where the app's stylesheet and custom properties "
-            "may not load, so their raw values are not listed here.") in text
+    for name in EXEMPT:
+        assert text.count(name) == 1, name
+    assert ("- app/global-error.tsx is the framework's error route, which replaces the root "
+            "layout and loads none of the app's stylesheets, so its raw values are not listed "
+            "here.") in text
+    assert ("- emails/VerifyEmail.tsx and mail/welcome.html are email templates in a mail "
+            "folder, which an email client styles without the app's custom properties, so their "
+            "raw values are not listed here.") in text
 
 
 def test_no_dark_mode_says_which_source_was_read_and_where_dark_lives(tmp_path):
@@ -187,3 +210,12 @@ def test_names_a_density_or_theme_block_defines_are_not_missing(tmp_path):
             "on :root too, so the base mode has one, or import it together with the file that "
             "sets its base value.") in text
     assert "--glow (app.css:1) is in tokens.css, so it is not missing" in text
+
+
+def test_the_layering_note_agrees_with_one_token_and_names_primitives_with_modes():
+    lone = _css(":root { --ink: #111111; --text: var(--ink); --text-2: var(--text); }\n")
+    assert enhance(lone, Mapping()).structure == [
+        "The system is layered its own way: 1 token holds a value of its own, points at another "
+        "token that is not a primitive, or is a primitive that changes by mode (such as text-2). "
+        "The engine's own systems alias primitives, but a flat system, or a layer whose values "
+        "switch by mode, works as it is, so nothing here needs to change"]

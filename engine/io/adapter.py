@@ -33,9 +33,14 @@ engine's CSS writes for it, and a color role when a token's name is one
 the common naming vocabularies give it (VOCABULARIES: background and
 foreground, on- pairs, brand names, bg, fg and border families, text
 names, or the role's path without color), each entry saying which
-vocabulary matched. Names only: a name maps only a token of the role's
-type, and a name that means different things in different systems
-(accent, secondary) is not in the table. It maps an axis only when its name or its
+vocabulary matched. Names are read as words (fgColor-default is fg color
+default), with or without their color words and a prefix most of the
+system's color names share (md-sys-color, acme), which the entry records
+and the report names. Names the vocabularies know but give no role
+(accent, secondary) are listed by unclaimed() for the owner. Names only:
+a name maps only a token of the role's type, and a name that means
+different things in different systems (accent, secondary) is not in the
+table. It maps an axis only when its name or its
 values say which one it is (light and dark, ltr and rtl, a .compact
 class). Nothing else is guessed: the rest waits for the owner.
 
@@ -105,6 +110,9 @@ class RoleMap:
     # The naming vocabulary a proposal by name matched (see VOCABULARIES);
     # "" for a token named as the role itself, or an entry the owner wrote.
     vocabulary: str = ""
+    # The prefix the system's color names share that the match read
+    # through (md-sys-color), as the system writes it; "" for none.
+    prefix: str = ""
 
     @classmethod
     def per_field(cls, fields: Dict[str, FieldMap]) -> "RoleMap":
@@ -227,29 +235,103 @@ VOCABULARY_EXAMPLES: Dict[str, str] = {ROLE_NAMES[0]: ROLE_NAMES[1],
                                        **{v: ex for v, ex, _ in VOCABULARIES}}
 
 
-def _keys(path: str) -> Tuple[str, Optional[str]]:
-    """The names a token answers to in the vocabularies: its own, without a
-    leading color or colors segment, and that without a trailing default
-    one (None when it has none), which a name matches only after every
-    whole name has."""
-    parts = _norm(path).split(".")
-    if len(parts) > 1 and parts[0] in ("color", "colors"):
-        parts = parts[1:]
-    short = ".".join(parts[:-1]) if len(parts) > 1 and parts[-1] == "default" else None
-    return ".".join(parts), short
+# Names the vocabularies know that play no one role of the engine's: never
+# proposed, and named in the report so the owner can map them.
+UNCLAIMED = ("accent", "accent-foreground", "secondary", "secondary-foreground",
+             "card-foreground", "popover-foreground", "sidebar", "sidebar-foreground",
+             "sidebar-primary", "sidebar-accent", "sidebar-border", "sidebar-ring", "chart")
+
+
+def _vocab_key(name: str) -> str:
+    return ".".join(_name_words(name))
+
+
+def _shared_prefix(ts: TokenSet) -> Tuple[str, ...]:
+    """The leading words most of the set's color names share (md sys color,
+    acme), found as the longest run at least three in five of them start
+    with and at least two do; () when there is none."""
+    names = [_name_words(t.path) for t in ts.tokens() if t.type == "color"]
+    prefix: Tuple[str, ...] = ()
+    for k in range(1, 6):
+        counts: Dict[Tuple[str, ...], int] = {}
+        for words in names:
+            if len(words) > k:
+                counts[words[:k]] = counts.get(words[:k], 0) + 1
+        if not counts:
+            break
+        head, n = max(counts.items(), key=lambda kv: kv[1])
+        if n < 2 or n * 5 < len(names) * 3 or head[:len(prefix)] != prefix:
+            break
+        prefix = head
+    return prefix
+
+
+def _prefix_text(path: str, words: Tuple[str, ...]) -> str:
+    """The prefix as the token writes it (md-sys-color, md.sys.color)."""
+    for i in range(1, len(path) + 1):
+        if _name_words(path[:i]) == words and (i == len(path) or not path[i].islower()
+                                                and not path[i].isdigit()):
+            return path[:i].rstrip(".-/_ ")
+    return " ".join(words)
+
+
+def _keys(path: str, prefix: Tuple[str, ...] = ()) -> List[Tuple[int, str, bool]]:
+    """(tier, name, read through the prefix) for each name a token answers
+    to in the vocabularies: tier 0 its own words, without a leading color
+    or colors word (camelCase split: fgColor-default is fg color default);
+    tier 1 those without their color words (fg default) and without the
+    prefix the set's color names share; tier 2 each of those without a
+    trailing default word. A lower tier wins a role first."""
+    words = _name_words(path)
+    if len(words) > 1 and words[0] in ("color", "colors"):
+        words = words[1:]
+    whole: List[Tuple[Tuple[str, ...], bool]] = [(words, False)]
+    derived: List[Tuple[Tuple[str, ...], bool]] = [(tuple(w for w in words if w != "color"),
+                                                     False)]
+    full = _name_words(path)
+    if prefix and full[:len(prefix)] == prefix and len(full) > len(prefix):
+        rest = full[len(prefix):]
+        if len(rest) > 1 and rest[0] in ("color", "colors"):
+            rest = rest[1:]
+        derived += [(rest, True), (tuple(w for w in rest if w != "color"), True)]
+    out: List[Tuple[int, str, bool]] = []
+    for tier, keys in ((0, whole), (1, derived)):
+        out += [(tier, ".".join(k), through) for k, through in keys if k]
+    out += [(2, ".".join(k[:-1]), through) for k, through in whole + derived
+            if len(k) > 1 and k[-1] == "default"]
+    return out
+
+
+def unclaimed(ts: TokenSet, mapping: Mapping) -> List[str]:
+    """The color tokens the mapping does not name whose names the
+    vocabularies know but give no role (accent, secondary, card-foreground,
+    sidebar-*, chart-*), in the set's order."""
+    prefix = _shared_prefix(ts)
+    used = {m.token for m in mapping.roles.values()}
+    known = {_vocab_key(n) for n in UNCLAIMED}
+    out = []
+    for t in ts.tokens():
+        if t.type != "color" or t.path in used:
+            continue
+        keys = {k for _, k, _ in _keys(t.path, prefix)}
+        if keys & known or any(k.split(".")[0] in ("sidebar", "chart") for k in keys):
+            out.append(t.path)
+    return out
 
 
 def propose(ts: TokenSet) -> Mapping:
     """A first mapping from names alone (see the module docstring)."""
     by_norm: Dict[str, str] = {}
-    by_key: Dict[str, str] = {}
-    by_short: Dict[str, str] = {}
+    prefix = _shared_prefix(ts)
+    tiers: List[Dict[str, Tuple[str, bool]]] = [{}, {}, {}]
     for t in ts.tokens():
         by_norm.setdefault(_norm(t.path), t.path)
-        whole, short = _keys(t.path)
-        by_key.setdefault(whole, t.path)
-        if short is not None:
-            by_short.setdefault(short, t.path)
+        for tier, key, through in _keys(t.path, prefix):
+            tiers[tier].setdefault(key, (t.path, through))
+    shown = ""
+    if prefix:
+        sample = next(t.path for t in ts.tokens() if _name_words(t.path)[:len(prefix)] == prefix)
+        shown = _prefix_text(sample, prefix)
     roles: Dict[str, RoleMap] = {}
     for role, kind in ROLE_TYPES.items():
         match = by_norm.get(_norm(role))
@@ -262,14 +344,20 @@ def propose(ts: TokenSet) -> Mapping:
     taken = {m.token for m in roles.values()}
     tables = [(ROLE_NAMES[0], tuple((r[len("color."):], r) for r in ROLE_TYPES
                                     if r.startswith("color.")))]
-    tables += [(name, entries) for name, _, entries in VOCABULARIES]
-    for index, (vocabulary, entries) in ((i, t) for i in (by_key, by_short) for t in tables):
+    # With no background, surface is the page, not a card on it.
+    background = any("background" in index for index in tiers)
+    tables += [(name, tuple((n, "color.surface.page" if n == "surface" and not background
+                             else r) for n, r in entries))
+               for name, _, entries in VOCABULARIES]
+    for index, (vocabulary, entries) in ((i, t) for i in tiers for t in tables):
         for name, role in entries:
-            token = index.get(_norm(name))
-            if role in roles or token is None or token in taken \
-                    or ts.get(token).type != ROLE_TYPES[role]:
+            found = index.get(_vocab_key(name))
+            if role in roles or found is None or found[0] in taken \
+                    or ts.get(found[0]).type != ROLE_TYPES[role]:
                 continue
-            roles[role] = RoleMap(token, "name", vocabulary=vocabulary)
+            token, through = found
+            roles[role] = RoleMap(token, "name", vocabulary=vocabulary,
+                                  prefix=shown if through else "")
             taken.add(token)
     return Mapping({r: roles[r] for r in ROLE_TYPES if r in roles}, _propose_axes(ts))
 
@@ -327,8 +415,11 @@ def merge(proposed: Mapping, existing: Mapping,
     engine's order."""
     roles = {r: _owners(m, proposed.roles.get(r)) for r, m in existing.roles.items()
              if m.by == "owner"}
+    # A token the owner sent to one role is not proposed for another.
+    owners = {m.token for m in roles.values() if m.token is not None}
     for r, m in proposed.roles.items():
-        roles.setdefault(r, m)
+        if m.token not in owners:
+            roles.setdefault(r, m)
     axes = {a: m for a, m in existing.axes.items() if m.by == "owner"}
     for a, m in proposed.axes.items():
         axes.setdefault(a, m)
@@ -375,8 +466,12 @@ def dump_mapping(mapping: Mapping) -> str:
 
 def _dump_role(m: RoleMap) -> Dict[str, Any]:
     if m.fields is None:
-        return ({"token": m.token, "by": m.by, "vocabulary": m.vocabulary} if m.vocabulary
-                else {"token": m.token, "by": m.by})
+        out: Dict[str, Any] = {"token": m.token, "by": m.by}
+        if m.vocabulary:
+            out["vocabulary"] = m.vocabulary
+        if m.prefix:
+            out["prefix"] = m.prefix
+        return out
     return {"fields": {k: {"token": f.token, "by": f.by} for k, f in m.fields.items()}}
 
 
@@ -459,15 +554,13 @@ def parse_mapping(text: str, name: str) -> Mapping:
         if not (by in BY and (isinstance(token, str) and token
                               or token is None and by == "owner")):
             raise InputError(f"{name} role {role} is {json.dumps(entry)}; write {_ROLE_FIX}")
-        vocabulary = entry.get("vocabulary", "")
-        if not isinstance(vocabulary, str):
-            raise InputError(f"{name} role {role} has vocabulary {json.dumps(vocabulary)}; "
-                             "remove it, or write the name of the vocabulary as text")
-        extra = [k for k in entry if k not in ("token", "by", "vocabulary")]
-        if extra:
-            raise InputError(f"{name} role {role} has the key {extra[0]}, which a role entry "
-                             "does not use; keep only token, by and vocabulary")
-        roles[role] = RoleMap(entry["token"], entry.get("by", "owner"), vocabulary=vocabulary)
+        for key in ("vocabulary", "prefix"):
+            if not isinstance(entry.get(key, ""), str):
+                raise InputError(f"{name} role {role} has {key} {json.dumps(entry[key])}; "
+                                 f"remove it, or write the {key} as text")
+        roles[role] = RoleMap(entry["token"], entry.get("by", "owner"),
+                              vocabulary=entry.get("vocabulary", ""),
+                              prefix=entry.get("prefix", ""))
     axes: Dict[str, AxisMap] = {}
     for axis, entry in (doc.get("axes") or {}).items():
         if axis not in AXES:
@@ -631,7 +724,8 @@ def _name_words(path: str) -> Tuple[str, ...]:
 
 def reduced_pairs(ts: TokenSet) -> Dict[str, str]:
     """Each token that has a separate reduced-motion twin, and the twin: a
-    token of the same type whose name is the token's own with a reduced
+    motion value (a duration, a curve, or a length named for travel) of
+    the same type whose name is the token's own with a reduced
     word added anywhere (duration-slow-reduced, reduced-duration-slow,
     motion.reduced.pace.calm, or reduced-motion before the rest).
     Names only, in the set's order."""
@@ -649,13 +743,20 @@ def reduced_pairs(ts: TokenSet) -> Dict[str, str]:
                     continue
                 base = by_words.get(words[:i] + words[i + drop:])
                 if base is not None and base != t.path and base not in out \
-                        and ts.get(base).type == t.type:
+                        and ts.get(base).type == t.type and _moves(t.type, words):
                     out[base] = t.path
                     break
             else:
                 continue
             break
     return out
+
+
+def _moves(kind: str, words: Tuple[str, ...]) -> bool:
+    """Whether a token of this type and name can be a motion value: a
+    duration, a curve, or a length named for travel (distance, offset)."""
+    return kind in ("duration", "cubicBezier") or kind == "dimension" and bool(
+        set(words) & {"distance", "travel", "offset", "motion"})
 
 
 def reduced_twins(ts: TokenSet, mapping: Mapping) -> Dict[str, Tuple[str, str]]:
@@ -696,7 +797,12 @@ def _fields_unfit(ts: TokenSet, role: str, fields: Dict[str, FieldMap],
     """Why a role mapped field by field cannot be checked ("" when it can):
     a field left out, which is never guessed, or a field token of another
     type."""
-    missing = [k for k in TYPOGRAPHY_FIELDS if fields.get(k) is None or fields[k].token is None]
+    nulled = [k for k in TYPOGRAPHY_FIELDS if k in fields and fields[k].token is None]
+    if nulled:
+        what = "field" if len(nulled) == 1 else "fields"
+        return (f"{role} is not checked: the owner left out its {what} {_and(nulled)} in "
+                f"{name}, and the engine never picks a field for it")
+    missing = [k for k in TYPOGRAPHY_FIELDS if fields.get(k) is None]
     if missing:
         mapped = [k for k in TYPOGRAPHY_FIELDS if k not in missing]
         return (f"{role} maps {_and(mapped)} field by field in {name} but not {_and(missing)}, "

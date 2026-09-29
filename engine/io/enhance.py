@@ -40,8 +40,8 @@ Structure lists what is wrong with the system itself. How the engine
 layers its own systems (a semantic token aliases a primitive, a primitive
 holds no mode) is told at most once, as a note, since a flat system or a
 layer whose values switch by mode works as it is; the engine's rule on
-which axes each of its foundations varies on is not applied to names that
-are not its roles.
+which axes each of its foundations varies on is not applied to a system
+it did not make.
 
 The report says how many of the engine's roles the mapping covers, which
 ones the owner left out and which ones are not mapped at all, so a mapping
@@ -68,10 +68,11 @@ from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_ali
 from engine.foundations.validate import validate
 from engine.io.adapter import (
     AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, VOCABULARY_EXAMPLES, Mapping, deleted_axes,
-    reduced_pairs, reduced_twins, their_names, view)
+    reduced_pairs, reduced_twins, their_names, unclaimed, view)
 from engine.io.report import Imported
 from engine.io.scan import (
-    FAMILY_WORDS, LINE_WORDS, RADIUS_WORDS, SPACE_WORDS, Scan, Usage, _norm, canonical)
+    ERROR_PAGE, ERROR_ROUTE, FAMILY_WORDS, LINE_WORDS, MAIL_FOLDER, MAIL_SUFFIX, RADIUS_WORDS,
+    SPACE_WORDS, Scan, Usage, _norm, canonical)
 
 # Family of a use -> the token types that can hold its value. A
 # line-height is a number, or a length when written with a unit.
@@ -106,14 +107,12 @@ _MOVE = re.compile(r" Move \S+ to a step with more contrast against \S+\.(?: .*)
 _THEIR_FIX = (" Change the value of one of them in your system, or map the role to a token "
               "with more contrast.")
 READING_ROLES = ("type.text.body", "type.text.body-small", "type.text.fine")
-# Pages shown where the app's stylesheet and custom properties may not load:
-# error pages (a folder named errors, or 404.html) and email templates (a
-# folder named emails or mail, or a file named for email). Their raw
-# values are not listed; the report names the files once.
-_STANDALONE_DIRS = ("errors", "error", "emails", "email", "mail", "mails", "newsletters",
-                    "newsletter")
-_STANDALONE_STEMS = re.compile(r"(40[0-9]|50[0-9x]|error|maintenance|offline)$|.*e-?mail",
-                               re.I)
+# What each reason for a standalone file reads as after the file names.
+_STANDALONE_KIND = {
+    ERROR_PAGE: ("an error page", "error pages"),
+    ERROR_ROUTE: ("", ""),
+    MAIL_FOLDER: ("an email template", "email templates"),
+    MAIL_SUFFIX: ("an email template", "email templates")}
 # How many names a folded line shows before "and N more".
 FEW = 6
 # The longest line the gate prints; a longer one wraps, a finding under its
@@ -285,8 +284,8 @@ class Drift:
     # code declares itself: the code's own, not tokens the system lacks.
     own: Dict[str, List[str]] = field(default_factory=dict)
     # Error pages and email templates the scan read, whose raw values are
-    # not listed (see _standalone).
-    standalone: List[str] = field(default_factory=list)
+    # not listed: file -> why (scan.standalone).
+    standalone: Dict[str, str] = field(default_factory=dict)
     # References to names the system's source holds in an entry the import
     # did not read (a property set only under a density or theme block):
     # --name -> (where each reference is, the entry's place and message).
@@ -346,14 +345,6 @@ def _holders(held: Dict[Tuple[str, str], List[str]], u: Usage) -> List[str]:
     return [p for _, p in sorted(out, key=lambda x: x[0])]
 
 
-def _standalone(file: str) -> bool:
-    """Whether a file is an error page or an email template."""
-    parts = re.split(r"[\\/]", file)
-    stem = parts[-1].split(".", 1)[0]
-    return any(p.lower() in _STANDALONE_DIRS for p in parts[:-1]) \
-        or bool(_STANDALONE_STEMS.fullmatch(stem))
-
-
 def _not_read(entry: Any) -> Tuple[str, int, str, str, str]:
     file, line, kind, text = tuple(entry)[:4]
     return file, line, kind, text, getattr(entry, "why", "") or ""
@@ -384,7 +375,7 @@ def drift(ts: TokenSet, scanned: Scan) -> Drift:
 
     held = _held(ts)
     groups: Dict[Tuple[str, str], List[Usage]] = {}
-    d.standalone = sorted({u.file for u in usages if _standalone(u.file)})
+    d.standalone = dict(getattr(scanned, "standalone", ()) or ())
     for u in usages:
         if u.kind != "raw" or u.file in d.standalone:
             continue
@@ -599,7 +590,7 @@ class Enhanced:
                 "unread_refs": [{"name": n, "uses": list(w), "where": at, "why": why}
                                 for n, (w, at, why) in d.unread_refs.items()],
                 "own": [{"name": n, "uses": list(w)} for n, w in d.own.items()],
-                "standalone": list(d.standalone),
+                "standalone": [{"file": f, "why": w} for f, w in d.standalone.items()],
                 "skipped": [{"file": f, "why": w} for f, w in d.skipped],
                 "unknown_classes": [{"where": f"{u[0]}:{u[1]}", "class": u[2],
                                      "looked_in": list(getattr(u, "looked_in", ())),
@@ -649,9 +640,11 @@ class Enhanced:
                      "check them.")]
         if why:
             n = len(self.mapped())
-            roles = "the 1 mapped role" if n == 1 else f"none of the {n} mapped roles"
-            could = "could not be checked" if n == 1 else "could be checked"
-            if why != "no mapped role could be checked":
+            if why == "no mapped role could be checked":
+                roles = "the 1 mapped role" if n == 1 else f"none of the {n} mapped roles"
+                could = "could not be checked" if n == 1 else "could be checked"
+            else:
+                roles = "the 1 mapped role" if n == 1 else f"the {n} mapped roles"
                 could = "gave the gate no check to apply"
             return [(f"Not measured: {roles} {could} (see Structure and the decisions), so the "
                      "gate had nothing to measure and nothing here passed.")]
@@ -741,14 +734,7 @@ class Enhanced:
         if gaps:
             lines[0] += (f" {_and(gaps).capitalize()}; each is listed at the end of this "
                          "section, and what is below covers only what was read.")
-        if d.standalone:
-            k = len(d.standalone)
-            what = _count(k, "file is an error page or an email template",
-                          "files are error pages or email templates")
-            lines.append(f"- {what} ({_and_few(d.standalone, FEW)}). "
-                         f"{'It is' if k == 1 else 'They are'} "
-                         "shown where the app's stylesheet and custom properties may not load, so "
-                         f"{'its' if k == 1 else 'their'} raw values are not listed here.")
+        lines += _standalone_lines(d.standalone)
         lines.append("")
         total = sum(t for t, _ in d.totals.values())
         if d.unused:
@@ -929,6 +915,22 @@ class Enhanced:
                 "JSON report lists every use.")
 
 
+def _standalone_lines(standalone: Dict[str, str]) -> List[str]:
+    """Each error page or email template, named once with why, one line per
+    reason."""
+    why: Dict[str, List[str]] = {}
+    for file, reason in standalone.items():
+        why.setdefault(reason, []).append(file)
+    lines = []
+    for reason, files in why.items():
+        one, many = _STANDALONE_KIND.get(reason, ("", ""))
+        k = len(files)
+        kind = (one if k == 1 else many) + " " if one else ""
+        lines.append(f"- {_and_few(files, FEW)} {'is' if k == 1 else 'are'} {kind}{reason}, so "
+                     f"{'its' if k == 1 else 'their'} raw values are not listed here.")
+    return lines
+
+
 def _missing(missing: Sequence[Missing]) -> List[str]:
     """References to tokens the system lacks: one line per name, or, past
     FEW names, one line for all with a count and a few."""
@@ -1081,10 +1083,12 @@ def _their_structure(problems: Sequence[Any]) -> List[str]:
             continue
         out.append(p.message)
     if layered:
-        out.append(f"The system is layered its own way: {len(layered)} "
-                   f"{'token holds' if len(layered) == 1 else 'tokens hold'} a value of "
-                   f"{'its' if len(layered) == 1 else 'their'} own or point at another token "
-                   f"that is not a primitive (such as {_few(layered, 3)}). The engine's own "
+        what = ("token holds a value of its own, points at another token that is not a "
+                "primitive, or is a primitive that changes by mode" if len(layered) == 1 else
+                "tokens hold a value of their own, point at another token that is not a "
+                "primitive, or are primitives that change by mode")
+        out.append(f"The system is layered its own way: {len(layered)} {what} "
+                   f"(such as {_few(layered, 3)}). The engine's own "
                    "systems alias primitives, but a flat system, or a layer whose values switch "
                    "by mode, works as it is, so nothing here needs to change")
     return out
@@ -1166,15 +1170,21 @@ def _by_name(mapping: Mapping, name: str) -> List[str]:
     by itself, more with a count and a few (the JSON report lists each)."""
     per: Dict[str, List[Tuple[str, str]]] = {}
     vocabularies: Dict[str, List[str]] = {}
+    prefixes: Dict[str, List[str]] = {}
     for role, m in mapping.roles.items():
         if m.by == "name" and m.token is not None:
             foundation = role.split(".", 1)[0]
             per.setdefault(foundation, []).append((role, m.token))
             if m.vocabulary and m.vocabulary not in vocabularies.setdefault(foundation, []):
                 vocabularies[foundation].append(m.vocabulary)
+            if m.prefix and m.prefix not in prefixes.setdefault(foundation, []):
+                prefixes[foundation].append(m.prefix)
     lines = []
     for foundation, pairs in per.items():
         through = _through(vocabularies.get(foundation, []))
+        if prefixes.get(foundation):
+            through += (f", after the prefix {_and(prefixes[foundation])} that the system's "
+                        "color names share")
         if len(pairs) == 1:
             role, token = pairs[0]
             lines.append(f"{role} is mapped to {token} by name only{through}; confirm it in "
@@ -1236,8 +1246,10 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     ts = imported.tokens
     checked, notes = view(ts, mapping, mapping_name)
     result = check_system(checked, structure=checked is ts)
-    structure = (_their_structure(validate(ts)) if checked is not ts
-                 else [p.message for p in result.problems])
+    # The engine's own structure rules apply only to a set checked whole as
+    # the engine's own: every role it has mapped as itself.
+    structure = ([p.message for p in result.problems] if checked is ts and mapping.roles
+                 else _their_structure(validate(ts)))
     unresolved = _unresolved(ts, checked, mapping, imported.report.source.path, mapping_name)
     structure += list(unresolved.values())
     notes = [n for n in notes if not any(
@@ -1249,6 +1261,11 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
     findings += [_finding(f"{c.message} (in {c.mode})" if c.mode else c.message, mapping, twins)
                  for c in (_mapped_fix(c, mapping_name) for c in report.failures)]
     decisions = _by_name(mapping, mapping_name)
+    left = unclaimed(ts, mapping)
+    if left:
+        decisions.append("The system has names the vocabularies know but give no role, so they "
+                         f"were not proposed: {_and_few(left, FEW)}; if one plays one of the "
+                         f"engine's roles, map it in {mapping_name}.")
     for axis, m in mapping.axes.items():
         if m.by == "name" and m.source is not None:
             values = ""

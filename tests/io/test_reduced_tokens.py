@@ -115,3 +115,19 @@ def test_a_global_reduced_motion_block_in_the_code_counts_as_present(tmp_path):
             "base.css:3, so reduced motion is present, though not as a mode of the system: the "
             "motion checks under reduced motion ran on no token. To check them, give motion.css "
             "a reduced-motion mode or reduced tokens, and map them in mapping.json.") in confirm
+
+
+def test_twins_are_motion_values_only():
+    ts = _imported(":root { --opacity-overlay: 0.6; --opacity-overlay-reduced: 1; "
+                   "--shadow-lift: 4px; --shadow-lift-reduced: 0px; "
+                   "--distance-reveal: 16px; --distance-reveal-reduced: 0px; }\n").tokens
+    assert reduced_pairs(ts) == {"distance-reveal": "distance-reveal-reduced"}
+
+
+def test_a_boolean_reduced_motion_query_counts_as_present(tmp_path):
+    (tmp_path / "base.css").write_text(
+        "@media (prefers-reduced-motion) {\n  * { transition: none; }\n}\n"
+        "@media (prefers-reduced-motion: no-preference) {\n  .a { transition: all 1s; }\n}\n",
+        encoding="utf-8")
+    scanned = scan([tmp_path], _imported(":root { --ink: #111111; }\n").tokens)
+    assert scanned.reduced_motion == [("base.css", 2, "*")]

@@ -73,3 +73,21 @@ def test_mapped_roles_that_could_not_be_checked_are_not_measured_either(tmp_path
     assert ("Not measured: the 1 mapped role could not be checked (see Structure and the "
             "decisions), so the gate had nothing to measure and nothing here passed.") in \
         result.markdown()
+
+
+def test_mapped_roles_that_gave_no_check_read_as_such():
+    from engine.foundations.build import SystemCheck
+    from engine.foundations.gate import GateReport
+    from engine.io.enhance import Enhanced
+    from engine.io.css_in import import_css
+    from engine.io.report import Source
+    text = ":root { --ink: #111111; }\n"
+    imported = import_css(text, Source("t.css", "css", "0" * 64, len(text)))
+    mapping = Mapping(roles={"color.text.default": RoleMap("ink", "owner"),
+                             "color.surface.page": RoleMap("ink", "owner")})
+    check = SystemCheck((), GateReport([], 0, [], 0, []), ("color",))
+    result = Enhanced(imported, mapping, check, [], None, [], [], [])
+    assert result.why_not_measured() == "no check applied to the mapped roles"
+    assert result.markdown().count(
+        "Not measured: the 2 mapped roles gave the gate no check to apply (see Structure and the "
+        "decisions), so the gate had nothing to measure and nothing here passed.") == 1

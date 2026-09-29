@@ -120,8 +120,9 @@ def test_a_tailwind_theme_prefix_is_read_through():
 
 
 def test_on_pairs_map_the_color_on_each_surface():
+    # With no background, surface is the page.
     assert _roles(propose(_imported(ON_PAIRS).tokens)) == {
-        "color.surface.card": ("surface", "plain names"),
+        "color.surface.page": ("surface", "plain names"),
         "color.text.default": ("on-surface", "on- pairs"),
         "color.text.muted": ("on-surface-variant", "on- pairs"),
         "color.text.on-action": ("on-primary", "on- pairs"),
@@ -196,3 +197,107 @@ def test_a_proposal_from_a_vocabulary_is_measured_and_named_in_the_decisions():
             "color.surface.page to background, color.surface.card to card, color.surface.sunken "
             "to muted and 10 more; confirm them in mapping.json. The JSON report lists each."
             ) in result.decisions
+
+
+# ---------------------------------------------------------------- prefixes
+
+def _prefixed(mapping):
+    return {r: (m.token, m.vocabulary, m.prefix) for r, m in mapping.roles.items()}
+
+
+MD = ("primary", "on-primary", "surface", "on-surface", "on-surface-variant", "outline",
+      "outline-variant", "error", "on-error")
+MD_EXPECT = {
+    "color.surface.page": ("surface", "plain names"),
+    "color.text.default": ("on-surface", "on- pairs"),
+    "color.text.muted": ("on-surface-variant", "on- pairs"),
+    "color.text.on-action": ("on-primary", "on- pairs"),
+    "color.text.on-danger": ("on-error", "on- pairs"),
+    "color.action.primary": ("primary", "plain names"),
+    "color.action.danger": ("error", "on- pairs"),
+    "color.line.subtle": ("outline-variant", "on- pairs"),
+    "color.line.input": ("outline", "on- pairs")}
+
+
+def test_a_prefix_most_color_names_share_is_read_through_and_reported():
+    text = ":root {\n" + "".join(f"  --md-sys-color-{n}: #{i:02x}3355;\n"
+                                 for i, n in enumerate(MD)) + "  --md-sys-shape-corner: 4px;\n}\n"
+    mapping = propose(_imported(text).tokens)
+    assert _prefixed(mapping) == {r: (f"md-sys-color-{t}", v, "md-sys-color")
+                                  for r, (t, v) in MD_EXPECT.items()}
+
+
+def test_a_dtcg_prefix_is_read_through_too():
+    from engine.io.dtcg_in import import_dtcg
+    doc = {"md": {"sys": {"color": {n: {"$type": "color", "$value": f"#{i:02x}3355"}
+                                    for i, n in enumerate(MD)}}}}
+    text = json.dumps(doc)
+    ts = import_dtcg(text, Source("tokens.json", "dtcg", "0" * 64, len(text))).tokens
+    assert _prefixed(propose(ts)) == {r: (f"md.sys.color.{t}", v, "md.sys.color")
+                                      for r, (t, v) in MD_EXPECT.items()}
+
+
+def test_a_brand_prefix_and_a_ds_color_prefix_are_read_through():
+    acme = _imported(":root {\n  --acme-bg-default: #ffffff;\n  --acme-fg-default: #111111;\n"
+                     "  --acme-fg-muted: #555555;\n  --acme-border-default: #dddddd;\n"
+                     "  --acme-brand: #2244cc;\n  --acme-radius-sm: 4px;\n}\n")
+    assert _prefixed(propose(acme.tokens)) == {
+        "color.surface.page": ("acme-bg-default", "bg, fg and border families", "acme"),
+        "color.text.default": ("acme-fg-default", "bg, fg and border families", "acme"),
+        "color.text.muted": ("acme-fg-muted", "bg, fg and border families", "acme"),
+        "color.action.primary": ("acme-brand", "brand names", "acme"),
+        "color.line.subtle": ("acme-border-default", "bg, fg and border families", "acme")}
+    ds = _imported(":root {\n  --ds-color-background: #ffffff;\n  --ds-color-foreground: #111111;"
+                   "\n  --ds-color-primary: #2244cc;\n  --ds-color-border: #dddddd;\n"
+                   "  --ds-color-ring: #2244cc;\n}\n")
+    assert _prefixed(propose(ds.tokens)) == {
+        "color.surface.page": ("ds-color-background", "plain names", "ds-color"),
+        "color.text.default": ("ds-color-foreground", "plain names", "ds-color"),
+        "color.action.primary": ("ds-color-primary", "plain names", "ds-color"),
+        "color.line.subtle": ("ds-color-border", "plain names", "ds-color"),
+        "color.focus.ring": ("ds-color-ring", "plain names", "ds-color")}
+
+
+def test_camel_case_words_are_read_as_words():
+    ts = _imported(":root {\n  --fgColor-default: #111111;\n  --fgColor-muted: #555555;\n"
+                   "  --bgColor-default: #ffffff;\n  --borderColor-default: #dddddd;\n}\n").tokens
+    assert _prefixed(propose(ts)) == {
+        "color.surface.page": ("bgColor-default", "bg, fg and border families", ""),
+        "color.text.default": ("fgColor-default", "bg, fg and border families", ""),
+        "color.text.muted": ("fgColor-muted", "bg, fg and border families", ""),
+        "color.line.subtle": ("borderColor-default", "bg, fg and border families", "")}
+
+
+def test_the_prefix_is_kept_in_the_mapping_and_named_in_the_decisions():
+    text = ":root {\n" + "".join(f"  --ds-color-{n}: #{i:02x}3355;\n"
+                                 for i, n in enumerate(("background", "foreground"))) + "}\n"
+    imported = _imported(text)
+    mapping = propose(imported.tokens)
+    doc = json.loads(dump_mapping(mapping))
+    assert doc["roles"]["color.text.default"] == {
+        "token": "ds-color-foreground", "by": "name", "vocabulary": "plain names",
+        "prefix": "ds-color"}
+    assert parse_mapping(dump_mapping(mapping), "mapping.json") == mapping
+    decisions = enhance(imported, mapping).decisions
+    assert ("2 color roles are mapped by name only, through the plain names vocabulary "
+            "(background, foreground, primary, border, input, ring and the -foreground pairs), "
+            "after the prefix ds-color that the system's color names share: color.surface.page "
+            "to ds-color-background, color.text.default to ds-color-foreground; confirm them in "
+            "mapping.json. The JSON report lists each.") in decisions
+
+
+def test_names_the_vocabularies_know_but_give_no_role_are_named_for_the_owner():
+    imported = _imported(PLAIN)
+    decisions = enhance(imported, propose(imported.tokens)).decisions
+    assert ("The system has names the vocabularies know but give no role, so they were not "
+            "proposed: card-foreground, accent and secondary; if one plays one of the engine's "
+            "roles, map it in mapping.json.") in decisions
+
+
+def test_merge_never_proposes_a_token_the_owner_sent_to_another_role():
+    from engine.io.adapter import Mapping, merge
+    ts = _imported(PLAIN).tokens
+    owner = Mapping(roles={"color.text.default": RoleMap("primary", "owner")})
+    merged, _ = merge(propose(ts), owner)
+    assert merged.roles["color.text.default"] == RoleMap("primary", "owner")
+    assert "color.action.primary" not in merged.roles

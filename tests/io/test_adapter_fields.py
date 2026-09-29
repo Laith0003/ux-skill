@@ -171,3 +171,19 @@ def test_the_enhance_report_names_each_field_and_notes_a_field_left_out():
             "in mapping.json but not letterSpacing, so it was not checked; add \"letterSpacing\": "
             "{\"token\": \"<your token>\", \"by\": \"owner\"} to its fields") in result.decisions
     assert result.measured and result.check.report.passed
+
+
+def test_a_field_the_owner_left_out_is_said_so():
+    fields = dict(FIELDS, letterSpacing=FieldMap(None, "owner"))
+    checked, notes = view(_ts(), Mapping(roles={"type.text.body": RoleMap.per_field(fields)}),
+                          "mapping.json")
+    assert not checked.has("type.text.body")
+    assert notes == [
+        "type.text.body is not checked: the owner left out its field letterSpacing in "
+        "mapping.json, and the engine never picks a field for it"]
+
+
+def test_a_role_entry_may_carry_a_note_of_the_owners():
+    doc = json.dumps({"version": 1, "roles": {"color.text.default": {
+        "token": "ink", "by": "owner", "note": "checked by hand"}}})
+    assert parse_mapping(doc, "mapping.json").roles["color.text.default"] == RoleMap("ink")

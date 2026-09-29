@@ -197,7 +197,8 @@ DARK = "scheme:dark"
 _DARK_SELECTOR = re.compile(r"""\.dark(?![\w-])|\[class~=["']?dark["']?\]|"""
                             r"""\[""" + THEME_ATTR.pattern + r"""\s*=\s*["']?dark["']?\s*\]""")
 _DARK_MEDIA = re.compile(r"prefers-color-scheme\s*:\s*dark")
-_REDUCED_MEDIA = re.compile(r"prefers-reduced-motion\s*:\s*reduce")
+# The query as reduce, or in its boolean form, which means reduce.
+_REDUCED_MEDIA = re.compile(r"prefers-reduced-motion\s*(:\s*reduce\b|\))")
 
 # Words that name a family in a token's name. A raw value is offered only a
 # token named for its own family (a z-index of 400 is not a weight token
@@ -446,6 +447,9 @@ class Scan:
     # the dark scheme, so a report can tell a system whose dark mode lives
     # in a second file.
     dark: List[Tuple[str, str, int]] = field(default_factory=list)
+    # (file, why) for each error page or email template read (see
+    # standalone): shown where the app's stylesheet may not load.
+    standalone: List[Tuple[str, str]] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         """Everything the scan found, as JSON takes it: each entry not
@@ -465,7 +469,8 @@ class Scan:
                 "declared": list(self.declared),
                 "reduced_motion": [{"file": f, "line": n, "selector": sel}
                                    for f, n, sel in self.reduced_motion],
-                "dark": [{"name": p, "file": f, "line": n} for p, f, n in self.dark]}
+                "dark": [{"name": p, "file": f, "line": n} for p, f, n in self.dark],
+                "standalone": [{"file": f, "why": w} for f, w in self.standalone]}
 
 
 def _norm(name: str) -> str:
@@ -1417,6 +1422,9 @@ def scan(roots: Sequence[Any], ts: TokenSet, exclude: Iterable[Any] = ()) -> Sca
             continue
         if name.startswith("postcss.config.") and "tailwind" in text:
             scanner.tailwind = True
+        why = standalone(rel, text)
+        if why:
+            result.standalone.append((rel, why))
         scanner.begin(rel)
         try:
             if name.endswith(CSS_EXT):
@@ -1429,6 +1437,53 @@ def scan(roots: Sequence[Any], ts: TokenSet, exclude: Iterable[Any] = ()) -> Sca
         scanner.end()
         result.files += 1
     return scanner.finish()
+
+
+# What a file is when it is shown where the app's stylesheet may not load.
+_TEMPLATE_EXT = (".html", ".htm", ".php", ".twig", ".hbs", ".handlebars", ".njk", ".liquid",
+                 ".erb", ".ejs", ".mustache", ".mjml")
+_ROUTE_DIRS = ("pages", "routes", "app", "views", "errors", "public", "static")
+_MAIL_DIRS = ("emails", "email", "mail", "mails", "newsletters")
+_ERROR_STEM = re.compile(r"(40[0-9]|50[0-9]|50x)$", re.I)
+_FULL_DOCUMENT = re.compile(r"<(html|Html)\b|<!doctype\s+html", re.I)
+ERROR_PAGE = ("an error page served on its own, where the app's stylesheet and custom properties "
+              "may not load")
+ERROR_ROUTE = ("the framework's error route, which replaces the root layout and loads none of "
+               "the app's stylesheets")
+MAIL_FOLDER = ("in a mail folder, which an email client styles without the app's custom "
+               "properties")
+MAIL_SUFFIX = ("by its mail template suffix, which an email client styles without the app's "
+               "custom properties")
+
+
+def standalone(rel: str, text: str) -> str:
+    """Why a file is an error page or an email template, shown where the
+    app's stylesheet and custom properties may not load, or "" for any other
+    file. Known by what the file is: a template or route file named for an
+    error status (404.html, errors/500.blade.php, pages/404.tsx), a
+    template in an errors folder, the framework's error route that replaces
+    the root layout (global-error.tsx), a template in a mail folder or a
+    component there that renders a full document, or a mail template suffix
+    (reset.email.tsx, welcome.mail.html). A file under components/ is never
+    one: an error banner or a verify-email screen is part of the app."""
+    parts = [p for p in re.split(r"[\\/]", rel) if p]
+    folders = [p.lower() for p in parts[:-1]]
+    name = parts[-1].lower()
+    stem, _, rest = name.partition(".")
+    if "components" in folders:
+        return ""
+    template = name.endswith(_TEMPLATE_EXT)
+    if _ERROR_STEM.fullmatch(stem) and (template or set(folders) & set(_ROUTE_DIRS)):
+        return ERROR_PAGE
+    if template and "errors" in folders:
+        return ERROR_PAGE
+    if stem == "global-error" and name.endswith(SCRIPT_EXT):
+        return ERROR_ROUTE
+    if rest.split(".", 1)[0] in ("email", "mail") and "." in rest:
+        return MAIL_SUFFIX
+    if set(folders) & set(_MAIL_DIRS) and (template or _FULL_DOCUMENT.search(text)):
+        return MAIL_FOLDER
+    return ""
 
 
 def _unread(path: Path, name: str) -> str:

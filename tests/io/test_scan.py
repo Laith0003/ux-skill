@@ -794,7 +794,7 @@ def test_scan_to_dict_carries_every_reason_and_the_public_names_are_exported(tmp
     result = scan([tmp_path], _tokens())
     data = result.to_dict()
     assert list(data) == ["files", "usages", "unknown_classes", "not_read", "skipped",
-                          "declared", "reduced_motion", "dark"]
+                          "declared", "reduced_motion", "dark", "standalone"]
     assert data["files"] == 1
     assert data["usages"] == [{"file": "a.html", "line": 1, "prop": "color", "family": "color",
                                "kind": "token", "value": "color-ink",
