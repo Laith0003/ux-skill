@@ -136,6 +136,9 @@ class ImportReport:
     # Values read for a mode beside the base (a dark value), counted apart
     # from the entries, so an entry means a name in every format.
     mode_values: int = 0
+    # What the owner must see first, such as a file that holds values and
+    # gave no token; written right under the count.
+    headline: List[str] = field(default_factory=list)
 
     @classmethod
     def of(cls, source: Source, ts: TokenSet, entries: int,
@@ -160,13 +163,15 @@ class ImportReport:
                 "renamed": [i.to_dict() for i in self.renamed],
                 "notes": [i.to_dict() for i in self.notes],
                 "mapped": [i.to_dict() for i in self.mapped],
-                "not_read": [i.to_dict() for i in self.not_read]}
+                "not_read": [i.to_dict() for i in self.not_read],
+                **({"headline": list(self.headline)} if self.headline else {})}
 
     def markdown(self) -> str:
         s = self.source
         lines = ["# Import report", "",
                  f"Read {s.path} ({s.format}, {s.size} bytes, sha256 {s.sha256[:12]}): "
                  f"{self.entries} entries, {self.tokens} tokens.", "",
+                 *(line for h in self.headline for line in (h, "")),
                  f"{self.mode_values} mode value{'' if self.mode_values == 1 else 's'}.", "",
                  *[f"Also read {a.path} ({a.format}, {a.size} bytes, sha256 {a.sha256[:12]})."
                    for a in self.also_read], *([""] if self.also_read else []),

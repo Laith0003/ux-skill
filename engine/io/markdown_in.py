@@ -36,6 +36,20 @@ or a shadow offset, with no unit anywhere is not read.
 Do and Avoid tables (Do and Don't, Use and Avoid, Good and Bad) are
 guidance: they make no axis and join the file's rule note.
 
+A DESIGN.md frontmatter (between --- lines at the top) is read too: each
+value under a token group (colors, typography, rounded, spacing,
+elevation, motion and their plural or singular forms) is a token named by
+its keys, colors.primary or typography.body.fontSize; top-level keys such
+as name and version are the document's own. A group this does not read
+(components, or any other) that holds values is listed under Not read.
+
+Nothing that holds a value is dropped silently: a line of running text, a
+list item whose name is not in backticks, a table no column of which
+names the tokens, and a code block, each holding a color, a length, a
+duration or a shadow, is listed under Not read with how to write it so it
+can be read. A file that holds values and gives no token says so at the
+top of the report.
+
 A name may be written plain, in bold or in backticks, with dots, dashes or
 slashes (a slash reads as a dot, and the report lists it as renamed); a
 value may be a literal, `{other.token}` or var(--other). Prose, tables
@@ -139,6 +153,20 @@ _SIZE_WORDS = frozenset(("space", "spacing", "gap", "padding", "margin", "inset"
 _TIME_WORDS = frozenset(("duration", "delay"))
 _UNITLESS_WORDS = frozenset(("line", "leading", "weight", "opacity", "z", "index", "zindex",
                              "ratio", "scale", "factor", "alpha", "order", "count", "flex"))
+# A value in running text, a cell or a code block: a hex color (three or
+# four digits only with a letter, so an issue number is not one), a color
+# function, a length in px, rem or em, and a duration.
+_HELD = re.compile(
+    r"(?<![\w&])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|(?=[0-9]*[a-fA-F])[0-9a-fA-F]{3,4})(?![\w-])"
+    r"|\b(?:rgba?|hsla?|oklch|oklab|lab|lch|hwb|color)\([^()]*\)"
+    r"|(?<![\w.#-])-?\d+(?:\.\d+)?(?:px|rem|em|ms)\b|(?<![\w.#-])(?:\d(?:\.\d+)?|\.\d+)s\b")
+# A list item whose name is not in backticks: "- Cards: 12px", "- **Primary**: #0F766E".
+_LOOSE_ITEM = re.compile(r"\s*(?:[-*+]|\d+[.)])\s+([^`:=]{1,60}?)\s*[:=]\s*(.+?)\s*$")
+# The frontmatter groups that hold tokens, as a DESIGN.md names them.
+FRONTMATTER_GROUPS = ("colors", "color", "typography", "type", "rounded", "radius", "radii",
+                      "spacing", "space", "elevation", "shadow", "shadows", "motion",
+                      "duration", "durations", "easing", "fonts", "font", "sizes", "size")
+_FRONT_KEY = re.compile(r"^(\s*)([A-Za-z0-9_.-]+|\"[^\"]+\"|'[^']+')\s*:\s*(.*?)\s*$")
 
 
 def _and(words: Sequence[str]) -> str:
@@ -287,6 +315,49 @@ def _token_named(cell: str) -> bool:
     text = re.sub(r"^(\*{1,2}|_{1,2})(.+)\1$", r"\2", cell.strip())
     inner = _unquote(text)
     return bool(_NAME.fullmatch(inner)) and (text != inner or any(c in inner for c in ".-/"))
+
+
+def _held(text: str) -> List[str]:
+    """The values a line of text holds, as written, in order."""
+    return list(dict.fromkeys(m.group(0) for m in _HELD.finditer(text)))
+
+
+def _group_for(value: str, heading: str) -> str:
+    """The group an example token name opens with: the heading's word, or
+    what the value is."""
+    slug = _slug(heading)
+    if slug:
+        return slug.split("-")[0]
+    if value.startswith("#") or "(" in value:
+        return "color"
+    return "duration" if value.endswith("s") and not value.endswith("px") else "size"
+
+
+def _frontmatter(lines: List[str]) -> Tuple[int, List[Tuple[int, List[str], str]]]:
+    """(the index of the first line after a frontmatter block, or 0 when the
+    file has none; each key that holds a value, as (line, its keys from the
+    top, the value with YAML quotes removed))."""
+    if not lines or lines[0].strip() != "---":
+        return 0, []
+    end = next((k for k in range(1, len(lines)) if lines[k].strip() in ("---", "...")), None)
+    if end is None:
+        return 0, []
+    stack: List[Tuple[int, str]] = []
+    leaves: List[Tuple[int, List[str], str]] = []
+    for k in range(1, end):
+        m = _FRONT_KEY.match(lines[k])
+        if not m or lines[k].lstrip().startswith("#"):
+            continue
+        indent, key, value = len(m.group(1).expandtabs(2)), m.group(2).strip("\"'"), m.group(3)
+        while stack and stack[-1][0] >= indent:
+            stack.pop()
+        if value in ("", "|", ">"):
+            stack.append((indent, key))
+            continue
+        if len(value) > 1 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        leaves.append((k + 1, [s for _, s in stack] + [key], value))
+    return end + 1, leaves
 
 
 def _slug(text: str) -> str:
@@ -626,8 +697,9 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
     font_rules: set = set()
     # (path, where, name, what the second says, where the first was, what it set)
     again: List[Tuple[str, str, str, str, str, str]] = []
-    # The unit the heading above names for the bare numbers below it.
-    section = {"unit": ""}
+    # The unit the heading above names for the bare numbers below it, and
+    # the heading's text, for the example name in a fix.
+    section = {"unit": "", "heading": ""}
 
     def add(name: str, where: str, values: Dict[str, str], labels: Dict[str, str],
             units: Optional[Dict[str, str]] = None, aliased: Tuple[str, ...] = (),
@@ -808,14 +880,85 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 units[ctx] = table.units.get(c, "")
             add(cells[table.name], at, values, labels, units, aliased)
 
+    def unread_line(file_name: str, at: int, line: str) -> None:
+        """A line that holds values and is no token: listed with the fix."""
+        held = _held(line)
+        if not held:
+            return
+        group = _group_for(held[0], section["heading"])
+        loose = _LOOSE_ITEM.match(line)
+        where = f"{file_name}:{at}"
+        if loose:
+            label = re.sub(r"[*_]", "", loose.group(1)).strip()
+            example = f"{group}.{_slug(label) or 'name'}"
+            value = _unquote(loose.group(2)).strip()
+            not_read.append(Item(where, label, (
+                f"holds {_and(held)} under a name not in backticks, so it was not read; write "
+                f"it as - `{example}`: {value}")))
+            return
+        not_read.append(Item(where, "", (
+            f"holds {_and(held)} in running text, which is not read as a token; write it as a "
+            f"list item such as - `{group}.<name>`: {held[0]}, or as a row of a table with Token "
+            "and Value columns")))
+
+    def unread_block(file_name: str, at: int, kind: str, held: List[str]) -> None:
+        """A code block that holds values: listed with the fix."""
+        if not held:
+            return
+        lang = kind.lower()
+        fix = ("if they come from a token file, import that file with --from and its .json "
+               "path; otherwise list them in a table with Token and Value columns"
+               if lang == "json"
+               else "write them as custom properties on :root in a .css file and import it with "
+                    "--from, or list them in a table with Token and Value columns"
+               if lang in ("scss", "sass", "less", "styl", "stylus") else
+               "list them in a table with Token and Value columns, or as list items such as - "
+               f"`{_group_for(held[0], section['heading'])}.<name>`: {held[0]}")
+        what = f"a {kind} code block" if kind else "a code block"
+        not_read.append(Item(f"{file_name}:{at}", "", (
+            f"{what} holds {_and(held[:6])}{' and more' if len(held) > 6 else ''}, which "
+            f"{'is' if len(held) == 1 else 'are'} not read as tokens; {fix}")))
+
+    def read_frontmatter(file_name: str, leaves: List[Tuple[int, List[str], str]]) -> None:
+        """Each value under a token group, as a token named by its keys."""
+        skipped: Dict[str, int] = {}
+        for at, keys, value in leaves:
+            if len(keys) < 2:  # the document's own keys: name, version
+                continue
+            if keys[0].lower() not in FRONTMATTER_GROUPS:
+                if _held(value) or _BRACE.fullmatch(value.strip()):
+                    skipped.setdefault(keys[0], at)
+                continue
+            if keys[-1].lower() in ("fontfamily", "font-family", "family") \
+                    and "," not in value and value[:1] not in "\"'":
+                value = f'"{value}"'
+            add("`" + ".".join(keys) + "`", f"{file_name}:{at}", {"": value},
+                {"": "", "name": "frontmatter"})
+        for group, at in skipped.items():
+            why = ("holds component properties, which are not system tokens, so the group was "
+                   "not read; keep them in each component's contract, and move a value the "
+                   "system shares into colors, rounded or spacing"
+                   if group.lower() == "components" else
+                   "is a frontmatter group this does not read as tokens, so its values were not "
+                   "read; move each one into colors, typography, rounded, spacing, elevation or "
+                   "motion")
+            not_read.append(Item(f"{file_name}:{at}", group, why))
+
     for file_name, text in files:
         lines = text.splitlines()
         i, fence, in_list, in_code, closed = 0, "", False, False, -1
-        section["unit"] = ""
+        section["unit"] = section["heading"] = ""
+        i, leaves = _frontmatter(lines)
+        read_frontmatter(file_name, leaves)
+        # The open code block: (its first line, its language, the values it holds).
+        block: List[Any] = []
         while i < len(lines):
             line = lines[i]
             where = f"{file_name}:{i + 1}"
             opened = _FENCE.match(line)
+            if block and not fence and not in_code:
+                unread_block(file_name, *block)
+                block = []
             if not fence and line.strip():
                 # An indented code block: four spaces in, after a blank line,
                 # a heading, a thematic break or a closing fence (each ends
@@ -825,10 +968,16 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                                                     or not lines[i - 1].strip()
                                                     or _BLOCK_END.match(lines[i - 1])
                                                     or closed == i - 1):
+                    if not in_code:
+                        block = [i + 1, "", []]
+                    block[2] += [v for v in _held(line) if v not in block[2]]
                     in_code = True
                     i += 1
                     continue
                 in_code = False
+                if block:
+                    unread_block(file_name, *block)
+                    block = []
                 if _BULLET.match(line):
                     in_list = True
                 elif indent == 0:
@@ -837,6 +986,11 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 if opened and opened.group(1)[0] == fence[0] and len(opened.group(1)) >= \
                         len(fence) and not opened.group(2):
                     fence, closed = "", i
+                    if block:
+                        unread_block(file_name, *block)
+                        block = []
+                elif block:
+                    block[2] += [v for v in _held(line) if v not in block[2]]
                 i += 1
                 continue
             if opened:
@@ -844,11 +998,16 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 if opened.group(2).lower() == "css":
                     notes.append(Item(where, "", "a css code block was not read; import the "
                                       "stylesheet itself with --from and a .css file"))
+                else:
+                    block = [i + 1, opened.group(2), []]
                 i += 1
                 continue
             heading = _HEADING.fullmatch(line)
             if heading:
                 section["unit"] = _heading_unit(heading.group(1))
+                # A title (#) names the document, not a group of tokens.
+                section["heading"] = heading.group(1) if not line.lstrip().startswith("# ") \
+                    else ""
                 i += 1
                 continue
             listed = _LIST.match(line)
@@ -866,6 +1025,7 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 rows = [(r + 1, _split(lines[r])) for r in range(i + 2, end)]
                 rows = [(r, cells) for r, cells in rows if any(cells)]
                 table = _table(raw, [cells for _, cells in rows])
+                guided = table is not None
                 if table is not None and table.guidance:
                     guidance.setdefault(file_name, []).append((i + 1, table.guidance))
                     table = None
@@ -881,9 +1041,21 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                     table = None
                 if table is not None:
                     read_table(table, raw, rows, file_name, where)
+                elif not guided:
+                    held = [v for _, cells in rows for c in cells for v in _held(c)]
+                    if held:
+                        not_read.append(Item(where, "", (
+                            f"a table with the columns {_and([h for h in raw if h] or ['none'])} "
+                            f"holds {_and(list(dict.fromkeys(held))[:4])}"
+                            f"{' and more' if len(set(held)) > 4 else ''}, but no column names "
+                            "the tokens, so it was not read; head the column that names each "
+                            "one Token, Name or Role, and the column of values Value")))
                 i, in_list = end, False
                 continue
+            unread_line(file_name, i + 1, line)
             i += 1
+        if block:
+            unread_block(file_name, *block)
 
     for file_name in dict.fromkeys([*rules, *guidance]):
         found_rules = rules.get(file_name, [])
@@ -1035,6 +1207,12 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         return order.get(file_name, 0), int(line)
 
     report = ImportReport.of(source, ts, entries=entries)
+    gave = {found[path].where.rpartition(":")[0] for path in found}
+    report.headline = [
+        f"No token was read from {file_name}, though it holds values; every line that holds one "
+        "is listed below, under Not read or as a rule, with how to write it so it can be read."
+        for file_name, text in files if file_name not in gave and _held("\n".join(
+            ln for ln in text.splitlines() if not _HEADING.fullmatch(ln)))]
     report.notes = sorted(kept_notes, key=key)
     report.not_read = sorted(not_read, key=key)
     report.mapped = sorted(mapped, key=key)

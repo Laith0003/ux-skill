@@ -107,6 +107,9 @@ def test_the_report_names_each_file_and_line(tmp_path):
                                         "example `color.accent`"),
         ("space.md:6", "space.huge", "3em is relative to the parent's font size, so it has no "
                                      "fixed value; write it in px or rem"),
+        ("space.md:7", "", "holds 4px in running text, which is not read as a token; write it "
+                           "as a list item such as - `size.<name>`: 4px, or as a row of a "
+                           "table with Token and Value columns"),
         ("space.md:16", "space.1", "is set again with another value (6px); space.md:3 set it "
                                    "first to 4px, which was kept, so keep one")]
 
@@ -266,7 +269,17 @@ def test_prose_tables_and_code_blocks_are_not_tokens():
             "- plain item: 4px\n- `z` is used for gaps\n")
     imported = _import(text)
     assert imported.report.entries == 0 and imported.report.notes == []
-    assert imported.report.not_read == []
+    # Not tokens, and never dropped silently: each place that holds a value
+    # is listed with its fix.
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:5", "", "a code block holds 4px, which is not read as tokens; list them in a "
+                           "table with Token and Value columns, or as list items such as - "
+                           "`size.<name>`: 4px"),
+        ("rules.md:9", "", "a json code block holds 4px, which is not read as tokens; if they "
+                           "come from a token file, import that file with --from and its .json "
+                           "path; otherwise list them in a table with Token and Value columns"),
+        ("rules.md:12", "plain item", "holds 4px under a name not in backticks, so it was not "
+                                      "read; write it as - `size.plain-item`: 4px")]
 
 
 def test_a_name_set_twice_with_the_same_value_is_not_reported():
