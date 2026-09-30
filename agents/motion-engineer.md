@@ -59,7 +59,7 @@ If you import `framer-motion`, `gsap`, `@gsap/react`, or `motion`, check `packag
 - **Bidirectional** (continuous, looping): ease-in-out only when both ends need to feel symmetrical
 - **Spring physics** preferred over cubic-bezier for premium feel:
   ```
-  { type: "spring", stiffness: 100, damping: 20 }       // standard
+  { type: "spring", duration: 0.35, bounce: 0.2 }       // standard
   { type: "spring", stiffness: 300, damping: 30 }       // snappy
   { type: "spring", stiffness: 60,  damping: 14 }       // soft, bouncy
   ```

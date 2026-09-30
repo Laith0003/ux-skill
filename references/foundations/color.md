@@ -132,17 +132,17 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 ### Pattern: High-end ethereal glass substrate
 **Use when**: Dark scheme, high contrast, cool hue and a deep elevation ramp (`depth` high).
 **Anti-pattern**: Flat solid color hero blocks with no texture or depth.
-**How**: Substrate is the deepest OLED black (`#050505`). Radial mesh gradients in the background — subtle glowing orbs in deep purple, emerald, indigo, or magenta, well outside saturation thresholds that would feel garish. Card surfaces near-vantablack with heavy backdrop blur and hairline white borders at low opacity (`rgba(255,255,255,0.08)` to `rgba(255,255,255,0.12)`). Inner highlights on glass elements: a single 1px inset top highlight at low opacity to suggest a glass plate catching light. Apply backdrop-blur only to fixed or sticky elements; never to scrolling content.
+**How**: A near-black page, cool rather than neutral, with two or three large blurred fields of the brand's hue and one support hue kept well below the chroma the budget allows, so they read as light rather than color. Cards sit one elevation step above the page with a frosted backdrop and an edge drawn in white at 8 to 12 percent; a single 1px highlight on the top edge suggests a pane of glass. Blur only what is fixed or sticky, never what scrolls.
 
 ### Pattern: High-end editorial luxury substrate
 **Use when**: Warm, formal and humanist: warmth high, formality high, type personality humanist.
 **Anti-pattern**: Generic SaaS off-white with cool gray neutrals — reads as templated.
-**How**: Substrate warm cream (`#FDFBF7`) or deep espresso for dark variants. Accent tones muted sage, ochre, soft terracotta, dusty rose, or a single saturated jewel tone used surgically. High-contrast variable serif fonts at massive scale. Subtle film-grain overlay at very low opacity (`0.03`) on a fixed `pointer-events-none` layer for a physical paper feel.
+**How**: A warm cream page (or a deep brown for the dark scheme), accents taken from muted earth tones near the brand's hue, and at most one saturated tone used in one place. A serif display at a large size carries the voice; a faint grain on a fixed, non-interactive layer adds a paper feel.
 
 ### Pattern: High-end soft structuralism substrate
 **Use when**: Muted contrast, round geometry and a light scheme: soft and quiet on the axes.
 **Anti-pattern**: Hard drop shadows under floating components.
-**How**: Substrate silver-gray, warm white, or completely white. Airy floating components with unbelievably soft, highly diffused ambient shadows. The shadow is large in spread but extremely low in opacity. Massive bold display sans-serifs. Occasional precision color accents — a single saturated color reserved for a CTA or single brand mark. The single saturated color provides the only chromatic punch on the page.
+**How**: A pale grey or warm white page. Components float on shadows that spread wide and stay faint, so depth reads without an edge. A heavy sans sets the display. One saturated color, the brand's, appears only on the primary action or the mark; everything else stays neutral.
 
 ### Pattern: Mesh-orb hero background
 **Use when**: Lively motion and high energy, where the color budget allows an ambient field behind the hero.

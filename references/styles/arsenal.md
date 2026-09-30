@@ -44,10 +44,10 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **What it is**: Buttons that physically pull toward the cursor as it approaches.
 **Cost**: medium — must use `useMotionValue` / `useTransform`. Never `useState` for continuous tracking.
 
-### Button-in-button (the trailing icon bezel)
+### Nested icon chip (the trailing icon in its own shape)
 **Use when**: high-end CTAs with directional icons.
-**What it is**: Primary CTA with a trailing arrow that lives inside its own circular wrapper, flush with the parent button's right inner padding. The wrapper has its own background and ring distinct from the parent. On hover, the nested icon translates diagonally (1px up, 1px right) and scales slightly (1.05).
-**Why it works**: Naked arrows next to text are a generator default; the bezel reads as machined hardware.
+**What it is**: The primary action's trailing arrow sits in a small round chip of its own at the inner end of the button, with its own fill and ring. On hover the chip nudges 1px toward the arrow's direction and grows a little.
+**Why it works**: A loose arrow beside the label is the default reach; a chip gives the arrow a shape that reads as made on purpose.
 **Cost**: low — nested elements + hover transform.
 
 ### Mega menu reveal
@@ -82,7 +82,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 
 ### Bento grid
 **Use when**: feature sections, software landings, dashboards, product overviews.
-**What it is**: Asymmetric tile grouping. Different tile sizes; uses `grid-flow-dense` for tight packing. Each tile has its own micro-interaction. Tile size carries hierarchy instead of headline weight; larger tiles carry marquee features, smaller tiles carry supporting capabilities.
+**What it is**: Asymmetric tile grouping. Different tile sizes; uses `grid-auto-flow: dense` for tight packing. Each tile has its own micro-interaction. Tile size carries hierarchy instead of headline weight; larger tiles carry marquee features, smaller tiles carry supporting capabilities.
 **Why it works**: Implies depth + density without overwhelming. Lets each tile carry its own story.
 **Cost**: design effort medium, code low (CSS Grid).
 **Combine with**: perpetual micro-interactions per tile; the five live-product archetypes below (Live-product archetypes), mixed across a dashboard bento as `references/surfaces/dashboard.md` describes.
@@ -149,7 +149,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 
 ### Glassmorphism panel (true liquid glass)
 **Use when**: high-end maximalist styles, modal overlays, navigation pills.
-**What it is**: True frosted glass with inner refraction borders. Beyond `backdrop-blur`, add a 1px inner border (`border-white/10`) and a subtle inner shadow (`shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]`). These two layers simulate physical edge refraction; without them, "glass" reads as "blurred div."
+**What it is**: True frosted glass with inner refraction borders. Beyond `backdrop-blur`, add a 1px inner border (`border-white/10`) and a subtle inner shadow (`box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08)`). These two layers simulate physical edge refraction; without them, "glass" reads as "blurred div."
 **Cost**: low — pure CSS. Don't overuse; it's a moment, not a system. Reserve for fixed/sticky surfaces only — backdrop-blur on scrolling content kills mobile frame rates.
 
 ### Holographic foil card
@@ -395,7 +395,7 @@ Each perpetual loop MUST be memoized (`React.memo`) and isolated in its own micr
 ### Spring physics specs
 Standard spring for premium feel:
 ```
-{ type: "spring", stiffness: 100, damping: 20 }
+{ type: "spring", duration: 0.35, bounce: 0.2 }
 ```
 No linear easing on interactive elements. For UI feedback, use `cubic-bezier(0.16, 1, 0.3, 1)`. For cinematic entries, `cubic-bezier(0.32, 0.72, 0, 1)`.
 

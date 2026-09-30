@@ -186,7 +186,7 @@ motion-ease-enter   → cubic-bezier(0.16, 1, 0.3, 1)   (ease-out)
 motion-ease-exit    → cubic-bezier(0.4, 0, 1, 1)      (ease-in)
 motion-ease-inout   → cubic-bezier(0.65, 0, 0.35, 1)  (symmetric)
 
-motion-spring-default → { stiffness: 100, damping: 20 }
+motion-spring-default → { duration: 0.35, bounce: 0.2 }
 motion-spring-snappy  → { stiffness: 300, damping: 30 }
 motion-spring-soft    → { stiffness: 60,  damping: 14 }
 ```

@@ -137,7 +137,7 @@
 
 ### Pattern: Numerals as editorial folios
 **Use when**: Section numbering, step indicators, or chapter markers.
-**Anti-pattern**: "SECTION 01," "QUESTION 05" — banned amateur-tier signposting.
+**Anti-pattern**: "SECTION 01," "CHAPTER 03": banned amateur-tier signposting.
 **How**: Numbers and section markers in monospace, used like editorial folios. Small, tracked, set in a muted neutral. They function as orientation markers, not as decoration. The number itself is the marker; no surrounding meta-label.
 
 ## Tokens / values
@@ -363,7 +363,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - [ ] `font-display: swap` configured to avoid invisible text during load (severity: High)
 - [ ] Variable font weight respected — reduce by ~50 units in dark mode (severity: Cosmetic)
 - [ ] No more than two display fonts paired together (severity: High)
-- [ ] Numbered "SECTION 01" / "QUESTION 05" meta-labels removed (severity: High)
+- [ ] Numbered "SECTION 01" / "CHAPTER 03" meta-labels removed (severity: High)
 - [ ] No 6-line wrapped headings under any breakpoint (severity: Critical)
 - [ ] Italic reserved for genuine emphasis or titles, not decoration (severity: Cosmetic)
 - [ ] Type scale documented in tokens; no ad-hoc per-component sizes (severity: High)

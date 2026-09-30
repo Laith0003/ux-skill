@@ -264,7 +264,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 | Centered hero with text over dark image as the default | Asymmetric hero: text left or right, image with a subtle stylistic fade. A centred hero fits a brand that leans to capitals (a poster-like display), or the Thesis statement and Cinematic brand archetypes chosen deliberately; centring is never the calm default. |
 | Symmetric 50/50 split-screen heroes | 7/5 or 5/7 split. The asymmetry creates hierarchy without typography variance |
 | Cookie-cutter left-text-right-image hero as the default reach | Editorial split (massive whitespace between halves), curtain reveal, asymmetric float, or full-bleed background |
-| `h-screen` on the hero | `min-h-[100dvh]`. The iOS Safari address-bar collapse breaks `h-screen` |
+| `h-screen` on the hero | `min-h-dvh`. The iOS Safari address-bar collapse breaks `h-screen` |
 | Floating stamp or badge icons on hero text | If the hero needs a label, use a small eyebrow tag above the H1 |
 | Pill tags scattered under the hero as decoration | Pills work as status indicators or single-eyebrow taxonomy, not as decorative confetti |
 | Raw data or stats dumped in the hero subhead ("100k users", "99.99% uptime") | Stats earn their place lower on the page with context. The hero subhead clarifies, it does not quantify. This covers proof figures, not a concrete term of the offer: a time frame, a price or a quantity ("Delivered in 48 hours") is what makes the offer believable and belongs there |
@@ -439,7 +439,7 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 ## Checklist
 
 ### Critical
-- [ ] No `h-screen` on the hero; `min-h-[100dvh]` instead
+- [ ] No `h-screen` on the hero; `min-h-dvh` instead
 - [ ] Nav stays one row at 360px and the sticky top chrome is 96px or less
 - [ ] At 390 and 360, with every fixed element present at load, the primary action shows on the first screen and nothing covers it
 - [ ] Under `dir="rtl"`, letter-spacing is 0 and layout uses logical properties

@@ -275,7 +275,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Typography: `Geist`, `Satoshi`, or `Cabinet Grotesk`; subtle `tracking-tight` on headers
 - Labels: titles and descriptions OUTSIDE and BELOW cards for gallery presentation
 - Padding inside cards: 32 to 40px (`p-8` to `p-10`)
-- Animation engine: spring physics (`stiffness: 100, damping: 20`), heavy use of `layout` and `layoutId`, every card with an "active state" that loops infinitely
+- Animation engine: spring physics (`duration: 0.35, bounce: 0.2`, the role's duration and the brand's overshoot), heavy use of `layout` and `layoutId`, every card with an "active state" that loops infinitely
 
 ### Chart type selection
 - **Trend over time**: line chart, area chart, sparkline

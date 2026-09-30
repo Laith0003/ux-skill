@@ -130,9 +130,9 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
    ```
 2. **Capture the brand, do not just read it.** If a brand identity *file* was provided, read it. If a URL to the user's OWN site/brand was provided, run the capture gate in `references/process/brand-extraction.md` (rendered-DOM colors + logo pixels + loaded fonts -> `ux brand --signals-file` -> `--brand-file`) and pass the URL via `--brand-url`. For *reference-inspiration* URLs (field 2), study the rendered page for aesthetic intent. A raw `WebFetch` of a JS-rendered site is an empty shell, never treat it as the brand source of truth.
 3. **Set the three dials** based on the style direction + audience + density signals from the references:
-   - `DESIGN_VARIANCE` (1 perfect symmetry → 10 artsy chaos)
-   - `MOTION_INTENSITY` (1 static → 10 cinematic)
-   - `VISUAL_DENSITY` (1 art-gallery → 10 cockpit)
+   - `DESIGN_VARIANCE` (1, every block on a strict grid, to 10, a freely composed page)
+   - `MOTION_INTENSITY` (1, still, to 10, scenes led by the scroll)
+   - `VISUAL_DENSITY` (1, a few items with wide space, to 10, many read at a glance)
 4. **Pick 2–4 arsenal patterns** that fit the brief + the wow moment.
 5. **Dispatch the sub-agent** with the full discovery payload + the dials + the picked patterns + `references/styles/anti-slop.md` + the relevant arsenal entries + the surface playbook the command selected (`references/surfaces/`), embedded inline.
 6. **Echo the discovery summary** in the output so the user can verify their intent landed.

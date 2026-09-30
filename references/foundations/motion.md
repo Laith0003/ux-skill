@@ -40,7 +40,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 
 8. **Stagger lists, not chrome** — List or grid items enter with a 30 to 50ms cascade between siblings. The wave is direction-aware (left-to-right LTR, mirrored RTL). All-at-once entries flatten composition; too-slow staggers (100ms+) feel theatrical.
 
-9. **Spring physics for tactile UI gestures** — Drag handles, toggles, modal open/close use spring physics rather than cubic-bezier curves. Standard spring: `{ type: "spring", stiffness: 100, damping: 20 }`. The motion reads as having weight.
+9. **Springs for things a person drags or toggles.** Drag handles, toggles and sheets settle on a spring rather than a curve, so they carry weight. The spring takes the role's duration and a bounce that follows the brand's overshoot (character.overshoot), for example `{ type: "spring", duration: 0.35, bounce: 0.2 }`; a still, formal brand sets the bounce near 0.
 
 10. **Perpetual motion is isolated and memoized** — Any infinite loop or perpetual animation lives in its own microscopic memoized client component. A floating ambient pulse must not re-render the page it sits on.
 
@@ -96,7 +96,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 ### Pattern: Modal open with spring physics
 **Use when**: Modal dialogs, sheets, side drawers.
 **Anti-pattern**: Modal snaps in instantly, or fades over 800ms with no spatial cue.
-**How**: Modal scales from `scale-0.95` to `scale-1` with `opacity 0 → 1`. Spring physics: `{ type: "spring", stiffness: 100, damping: 20 }`. Sheet slides from below with similar spring. Scrim fades behind. Modal animates from its trigger source where possible (use `layoutId`).
+**How**: Modal scales from `scale-0.95` to `scale-1` with `opacity 0 → 1`. Spring physics: `{ type: "spring", duration: 0.35, bounce: 0.2 }`. Sheet slides from below with similar spring. Scrim fades behind. Modal animates from its trigger source where possible (use `layoutId`).
 
 ### Pattern: Page transition (forward / back)
 **Use when**: Native-feeling navigation between screens.
@@ -210,7 +210,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - Premium entry: `cubic-bezier(0.32, 0.72, 0, 1)`
 - State change: `cubic-bezier(0.4, 0, 0.2, 1)`
 - Snap (brutalist): `steps(N)` for N discrete frames
-- Spring physics: `{ type: "spring", stiffness: 100, damping: 20 }`
+- Spring physics: `{ type: "spring", duration: 0.35, bounce: 0.2 }`
 - Avoid: `linear`, `ease-in-out` default, browser-default `ease`
 
 ### Transform values
@@ -290,7 +290,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - Animation durations under 100ms or over 1500ms (other than ambient loops)
 
 ### Motion library defaults (when present)
-- Spring physics: `stiffness: 100, damping: 20`
+- Spring physics: `duration: 0.35, bounce: 0.2`, the role's duration and the brand's overshoot
 - Stagger children: `staggerChildren: 0.05` (50ms)
 - Layout transitions: use `layout` and `layoutId` props for smooth re-ordering
 - Variants: parent variants and children must reside in identical client component tree

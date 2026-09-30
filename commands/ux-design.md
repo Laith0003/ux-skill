@@ -387,11 +387,11 @@ These are non-negotiable. The output's distinction from generic AI output IS the
 
 ### 3. Set the dials
 
-Pick values for three dials based on the brief (these are inherited from `design-taste-frontend`). With an existing system or brand pages, step 1a.1 has set them from the brand; the defaults below apply only where the brand has no page:
+Pick three dials. They summarize for the build what the system's axes already say (contrast and motion, density), each on a scale of 1 to 10; with an existing system or brand pages, step 1a.1 has set them from the brand, and the defaults below apply only where the brand has no page:
 
-- **DESIGN_VARIANCE** (1 perfect symmetry → 10 artsy chaos) — default 7 for landing pages, 4 for dashboards, 5 for components
-- **MOTION_INTENSITY** (1 static → 10 cinematic) — default 6 for landing pages, 3 for dashboards, 4 for components
-- **VISUAL_DENSITY** (1 art gallery → 10 cockpit) — default 4 for landing pages, 8 for dashboards, 5 for components
+- **DESIGN_VARIANCE**: how far the layout leaves a strict, aligned grid, from every block on the grid (1) to a freely composed page (10). Default 7 for landing pages, 4 for dashboards, 5 for components.
+- **MOTION_INTENSITY**: how much the page moves on its own, from still (1) to scenes led by the scroll (10). Default 6 for landing pages, 3 for dashboards, 4 for components.
+- **VISUAL_DENSITY**: how much one screen holds, from a few items with wide space (1) to many read at a glance (10). Default 4 for landing pages, 8 for dashboards, 5 for components.
 
 Override with whatever the user explicitly asked for. Surface your dial values in the output, each with where it came from (a page-style fact, the brand book, the user, or the default), so the user sees what you picked.
 

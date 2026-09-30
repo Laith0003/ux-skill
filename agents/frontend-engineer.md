@@ -127,7 +127,7 @@ One rule, stated in `commands/ux-design.md` (Hard rules, Icons): one set per pag
 
 - Duration 150–300ms for micro-interactions, ≤400ms for complex transitions, never >500ms
 - Animate `transform` and `opacity` only
-- Spring physics for premium feel: `{ type: "spring", stiffness: 100, damping: 20 }`
+- Spring physics for premium feel: `{ type: "spring", duration: 0.35, bounce: 0.2 }`
 - Exit ~60–70% of entry duration
 - Stagger lists 30–50ms per item
 - Respect `prefers-reduced-motion`
@@ -141,8 +141,8 @@ One rule, stated in `commands/ux-design.md` (Hard rules, Icons): one set per pag
 - Sticky-header budget on mobile: only the primary nav + its CTA persist on scroll — keep pinned chrome to ~one row (`<= 72px`, ceiling `~96px`). A utility/announcement bar (ratings, claims) is NOT sticky and lives OUTSIDE the sticky container (a sibling above the sticky `<header>`, since a sticky element is bounded by its containing block — leaving the bar inside both bloats the header and unsticks the nav). On mobile that bar collapses to ONE compact line (middot-separated) or shows fewer claims — never a tall stack of centered lines.
 - Nothing escapes its container: no absolutely-positioned element bleeds outside its parent on small screens; size full-bleed surfaces to `100%`/the container, NEVER `width: 100vw` (it overflows by the scrollbar width)
 - The container is `layout.container.max`, running text `layout.measure.text`; sections sit `layout.landing-gap.<tier>` apart on a landing page
-- Never `h-screen` for hero; use `min-h-[100dvh]`
-- Grid for structure, never `w-[calc(33%-1rem)]` flex-math
+- Never `h-screen` for hero; use `min-h-dvh`
+- Grid for structure, never `flex-basis: calc(33.3% - 24px)` flex-math
 - AIDA reading order on landing pages: Attention (hero) → Interest (value props) → Desire (proof) → Action (CTA)
 - H1 line limit: the one in `references/surfaces/landing.md` (Hero composition)
 

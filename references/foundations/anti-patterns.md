@@ -535,7 +535,7 @@ min-height:\s*100vh\b
 
 Allow `100vh` only when paired with a fallback to `100dvh`.
 
-**Better alternative**: Use `100dvh` (dynamic viewport height) which excludes the collapsing UI. Or `min-h-[100dvh]` in Tailwind. Provide a fallback to `100vh` for older browsers.
+**Better alternative**: Use `100dvh` (dynamic viewport height) which excludes the collapsing UI. Or `min-h-dvh` in Tailwind. Provide a fallback to `100vh` for older browsers.
 
 **Severity**: High
 **Mode**: both
@@ -549,7 +549,7 @@ Allow `100vh` only when paired with a fallback to `100dvh`.
 **Example good**:
 
 ```html
-<section class="hero min-h-[100vh] min-h-[100dvh]">
+<section class="hero min-h-[100vh] min-h-dvh">
 ```
 
 ---
@@ -620,7 +620,7 @@ Flag unless paired with a `100dvh` fallback or applied inside a media query that
 }
 ```
 
-Or Tailwind: `min-h-[100vh] min-h-[100dvh]`.
+Or Tailwind: `min-h-[100vh] min-h-dvh`.
 
 **Severity**: Medium
 **Mode**: both

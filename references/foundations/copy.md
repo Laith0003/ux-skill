@@ -167,7 +167,7 @@ Single-word feature names get capitalization rules and become brand assets. Nami
 
 ### Pattern: Eyebrow labels
 **Use when**: Section openers needing taxonomic context without numbered chapters.
-**Anti-pattern**: "SECTION 01," "QUESTION 05," "OUR PROCESS 02" — banned forever.
+**Anti-pattern**: "SECTION 01," "CHAPTER 03," "OUR PROCESS 02": banned forever.
 **How**: Short, uppercase or sentence-case label at 10 to 13px, tracking +0.06em to +0.10em, in muted neutral or paired accent. Names the conceptual category:
 - "PLATFORM"
 - "VOICE AGENT"
@@ -439,7 +439,7 @@ Resist the temptation to make each layer do the others' jobs.
 - [ ] No em dashes, en dashes or double hyphens as punctuation (severity: Cosmetic)
 - [ ] Voice consistent across marketing, in-product, error, docs (severity: High)
 - [ ] Feature names are nouns / noun-phrases, not adjective-stacks (severity: Medium)
-- [ ] No "SECTION 01," "QUESTION 05" meta-labels (severity: High)
+- [ ] No "SECTION 01," "CHAPTER 03" meta-labels (severity: High)
 - [ ] Eyebrow labels in 10 to 13px tracked uppercase or sentence case (severity: Cosmetic)
 - [ ] No emojis in any production copy (severity: Critical)
 - [ ] No autoplay sound or video with sound (severity: Critical)

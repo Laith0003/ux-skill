@@ -470,30 +470,30 @@ Numerals and metadata:
 
 ### Color
 
-Color is purposeful and theatrical, but never crass. Pick a vibe archetype and commit.
+Color is purposeful and theatrical, but never crass. The look follows the brand's axes.
 
-Vibe archetypes — pick ONE per project:
+Three looks the axes can reach, described by where they sit, never by the kind of business:
 
-**Ethereal glass** (suited for technical, AI, SaaS surfaces):
+**Dark glass** (dark scheme, high contrast, cool hue, deep elevation):
 
-- Substrate: the deepest OLED black, around `#050505`.
-- Radial mesh gradients in the background — subtle glowing orbs in deep purple, emerald, indigo, or magenta, well outside saturation thresholds that would feel garish.
-- Card surfaces: near-vantablack with heavy backdrop blur and hairline white borders at low opacity (e.g., `rgba(255,255,255,0.08)` to `rgba(255,255,255,0.12)`).
-- Inner highlights on glass elements: a single 1px inset top highlight at low opacity to suggest a glass plate catching light.
+- A near-black page, cool rather than neutral.
+- Two or three large blurred fields of the brand's hue and one support hue behind the content, kept below the chroma the color budget allows.
+- Cards one elevation step above the page, a frosted backdrop and an edge in white at 8 to 12 percent.
+- One 1px highlight along the top edge of a raised card, like light on a pane.
 
-**Editorial luxury** (suited for lifestyle, real estate, agency, hospitality):
+**Warm editorial** (warm, formal, humanist type):
 
-- Substrate: warm cream, around `#FDFBF7`, or deep espresso for dark variants.
-- Accent tones: muted sage, ochre, soft terracotta, dusty rose, or a single saturated jewel tone used surgically.
-- High-contrast variable serif fonts at massive scale.
-- Subtle film-grain overlay at very low opacity (`0.03`) for a physical paper feel.
+- A warm cream page, or a deep brown for the dark scheme.
+- Accents from muted earth tones near the brand's hue; at most one saturated tone, in one place.
+- A serif display at a large size.
+- A faint grain on a fixed layer for a paper feel.
 
-**Soft structuralism** (suited for consumer, health, portfolio, premium hardware):
+**Soft and quiet** (muted contrast, round geometry, light scheme):
 
-- Substrate: silver-gray, warm white, or completely white.
-- Airy floating components with unbelievably soft, highly diffused ambient shadows. The shadow is large in spread but extremely low in opacity.
-- Massive bold display sans-serifs.
-- Occasional precision color accents — a single saturated color reserved for a CTA or single brand mark.
+- A pale grey or warm white page.
+- Components that float on wide, faint shadows, with no hard edge.
+- A heavy sans for the display.
+- One saturated color, the brand's, only on the primary action or the mark.
 
 Universal rules:
 
@@ -530,7 +530,7 @@ Layout archetypes — pick ONE per project:
 Universal mobile rules:
 
 - Any asymmetric layout that uses fractional widths above the `md:` breakpoint must aggressively fall back to `w-full` with `px-4` and `py-8` padding below `768px`.
-- Never use `h-screen` for full-height sections — always `min-h-[100dvh]` to prevent mobile viewport jumping when the address bar collapses.
+- Never use `h-screen` for full-height sections: always `min-h-dvh` to prevent mobile viewport jumping when the address bar collapses.
 
 Eyebrow rhythm:
 
@@ -577,7 +577,7 @@ Performance constraints:
 Buttons:
 
 - Primary CTAs are fully rounded pills with generous padding (`px-6 py-3`).
-- The button-in-button pattern is mandatory for any CTA with a trailing icon. The arrow (or other glyph) never sits naked next to the text — it lives inside its own circular wrapper, flush with the main button's right inner padding. The wrapper has its own subtle background and ring, distinct from the parent button.
+- The nested icon chip is mandatory for any CTA with a trailing icon. The arrow (or other glyph) never sits naked next to the text: it lives inside its own circular wrapper, flush with the main button's right inner padding. The wrapper has its own subtle background and ring, distinct from the parent button.
 - Secondary buttons echo the same pill shape with reduced fill (`bg-black/5`, `bg-white/10`) and a hairline ring.
 
 Cards and feature containers — the double-bezel pattern:
@@ -618,7 +618,7 @@ Eyebrow tags:
 - Liquid glass cards with backdrop blur, hairline borders, and inset highlights, suggesting machined hardware on glass.
 - Holographic or iridescent micro-accents — small reflective elements on otherwise restrained surfaces.
 - Cinematic scroll entries: text and imagery rising from below with motion blur dissolving as they settle.
-- The button-in-button pattern with magnetic hover physics.
+- The nested icon chip with magnetic hover physics.
 - The double-bezel concentric radius pattern, applied consistently to every premium container.
 - Floating glass pill navigation that detaches from the viewport edge.
 - Eyebrow tags preceding every major headline.
@@ -1586,7 +1586,7 @@ Atmospheric. The substrate is deep dark; gradients sit behind everything, narrow
 Substrate:
 
 - Deep OLED black: `#050505` to `#0A0A0A`. Avoid pure black.
-- Surface fills: near-vantablack with hairline white borders at low opacity.
+- Surface fills: one step above a near-black page, edged in white at low opacity.
 
 Mesh gradient backgrounds:
 
@@ -1600,7 +1600,7 @@ Mesh gradient backgrounds:
 
 Surfaces (glass cards):
 
-- Background: near-vantablack with heavy backdrop blur.
+- Background: a near-black fill with a strong frosted backdrop.
 - Border: hairline white at `rgba(255,255,255,0.08)` to `rgba(255,255,255,0.12)`.
 - Inner highlight: a single `1px` inset top highlight at low opacity, suggesting glass catching light.
 
@@ -1669,7 +1669,7 @@ Page transitions:
 Buttons:
 
 - Primary: pill-shaped, fully rounded, accent fill, white text.
-- The button-in-button pattern for any CTA with a trailing icon — the arrow lives inside its own circular wrapper.
+- The nested icon chip for any CTA with a trailing icon: the arrow lives inside its own circular wrapper.
 - Secondary: pill shape with `bg-white/5` fill and a hairline ring.
 
 Cards:
@@ -1709,7 +1709,7 @@ Eyebrow tags:
 - Floating glass pill navigation detached from the viewport edge.
 - Holographic or iridescent micro-accents used surgically.
 - Cinematic scroll entries with motion blur dissolving into focus.
-- Magnetic button hover physics with the button-in-button pattern.
+- Magnetic button hover physics with the nested icon chip.
 - Subtle film-grain overlay at very low opacity (`0.03`) on fixed layers.
 - Hero imagery rendered as a physical artifact — framed, tilted, lit.
 

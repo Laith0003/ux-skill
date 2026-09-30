@@ -56,7 +56,7 @@ Mobile is not the small version of the desktop — it is where most of the traff
 
 | Don't | Do instead |
 |---|---|
-| Default `box-shadow` glows, neon outer glows | Inner border (`border-white/10`) + tinted inner shadow (`shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]`) |
+| Default `box-shadow` glows, neon outer glows | Inner border (`border-white/10`) + tinted inner shadow (`box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08)`) |
 | Pure black (`#000000`) | Zinc-950, charcoal, off-black: `#0a0a0a`, `#111111` are correct. A client whose identity is set in pure black keeps it (decisions/client-identity-wins.md) |
 | Pure white (`#FFFFFF`) on premium marketing, in a generated system | Warm off-white in the `#FAFAF8` to `#F7F6F3` range; pure white reads as default. A client whose identity is set on pure white keeps it (decisions/client-identity-wins.md, principle 11) |
 | Oversaturated accents (>80% saturation) | Desaturate. High contrast comes from value, not saturation. A client's own saturated brand stays exact (decisions/client-identity-wins.md) |
@@ -78,7 +78,7 @@ Mobile is not the small version of the desktop — it is where most of the traff
 | Decorative blobs, waves, geometric patterns not in the spec | If decoration doesn't carry a job, delete it |
 | 3D chrome, ray-traced spheres, metaverse-cluster renders | Restrained matte 3D when needed; or skip entirely |
 | Iridescent rainbow overlays as primary visual | Used surgically on a single foil card or premium accent — not as a section theme |
-| Flex math like `w-[calc(33%-1rem)]` | CSS Grid (`grid grid-cols-1 md:grid-cols-3 gap-6`) |
+| Flex math like `flex-basis: calc(33.3% - 24px)` | CSS Grid (`grid grid-cols-1 md:grid-cols-3 gap-6`) |
 | `border-radius: 9999px` on non-tag elements (pill cards, pill primary buttons) | Pill shape is reserved for tags, status badges, sometimes primary CTAs in maximalist styles |
 | Inconsistent corner radii across components | Pick 2-3 radii and commit. Mixing 4, 8, 12, 16, 24px across a single page reads as undisciplined |
 | Color bands switched on and off down the page with no content reason (the same idea on alternating slabs) | Bands carry the section rhythm by the brand's energy: `color.budget.bands` of the sections sit on a band, none on a calm page and up to half on a loud one. Otherwise space and a change of ground separate sections; an eyebrow never separates sections |
@@ -127,7 +127,7 @@ Hero rules, including the hero height, live in `references/surfaces/landing.md`.
 | Random spacing increments (5px, 11px, 23px) | 4/8 rhythm — every gap, padding, margin in multiples of 4 |
 | A reading column wider than the measure | Text keeps `layout.measure.*`. The frame follows the brand: an expressive brand page runs a full-width grid (`layout.landing.full`, a 1920px container with a 24 to 48px margin) and a calm one keeps `layout.container.max` |
 | Bootstrap-style symmetric grids with 24px gutters | The grid exists to allow alignment, not to enforce density. Most marketing sections only need 1, 2, or 8 columns |
-| Meta-labels like "SECTION 01", "QUESTION 05", "OUR PROCESS 02", "ABOUT US" as decoration | Strip them entirely. If the section needs a label, use a small eyebrow naming the category — not numbered chapter signposting |
+| Meta-labels like "SECTION 01", "CHAPTER 03", "OUR PROCESS 02", "ABOUT US" as decoration | Strip them entirely. If the section needs a label, use a small eyebrow naming the category: not numbered chapter signposting |
 | "Section X of Y" indicators | Space and a change of ground separate sections; an eyebrow never separates sections. Numbered chapter framing only when the product genuinely is a journey |
 | Floating elements with awkward gaps | Padding and margins are mathematically intentional |
 | Cards bare on background without any structure | Bordered (1px hairline), bezel-wrapped (in maximalist styles), or grouped by spacing — but never floating without context |
@@ -138,7 +138,7 @@ Landing-page layout rules (hero, section rhythm, feature sections, pricing, navi
 
 ---
 
-## Forbidden — content & data (the "Jane Doe" effect)
+## Forbidden: content and data (the placeholder-name effect)
 
 The single fastest way to mark output as AI-generated. The design can be perfect; if the placeholder content is generic, the whole surface reads as slop.
 
@@ -223,7 +223,7 @@ Landing-page interaction rules (hero carousels, headline typewriters, testimonia
 | Placeholder-only form labels | Visible label above input, helper below input, error below input |
 | Form fields with no helper text markup at all | Helper text slot exists in the markup even when empty, so error states don't cause layout shift |
 | Default `shadcn/ui` styling | Customize radii, colors, shadows to match the project aesthetic. Default `shadcn` is a recognized AI tell |
-| Naked trailing arrows on CTA text | In high-end styles, wrap the arrow in its own circular bezel inside the button (button-in-button pattern). In minimalist styles, the arrow sits naked inline — but tracked properly |
+| Naked trailing arrows on CTA text | In high-end styles, wrap the arrow in its own circular bezel inside the button (a nested icon chip). In minimalist styles, the arrow sits naked inline: but tracked properly |
 | Default heavy drop shadows on cards | Hairline 1px borders, near-invisible shadows (4-8% alpha), or rely on background contrast |
 | Generic line-icon clichés (lightbulb, rocket, lock) | Purposeful, often custom icons. The lightbulb cliché is absent from every premium cohort |
 | OS chrome stripped from product screenshots | Real OS chrome (traffic lights, menubar, status bar) grounds the screenshot as real software. Stripping it makes it read as prototype |
@@ -272,7 +272,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] No literal placeholder token shipped (`{TODO_FILL...}`, `{{ var }}`, "lorem ipsum")
 - [ ] No pure `#000` text or background
 - [ ] No row of three equal cards that each hold just an icon, a title and a line
-- [ ] No "SECTION 01" / "QUESTION 05" / decorative meta-labels
+- [ ] No "SECTION 01" / "CHAPTER 03" / decorative meta-labels
 - [ ] No exclamation marks in marketing copy
 - Landing-page critical checks live in the checklist of `references/surfaces/landing.md`.
 
@@ -307,7 +307,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] Corner radii consistent (2-3 values max across the page)
 - [ ] Mock data inside a product UI is irregular; every figure the page claims is the client's own, with what it counts and as of when, or a labeled draft placeholder; never an invented number
 - [ ] Color saturation tuned separately for light and dark modes
-- [ ] No naked trailing arrows on CTAs in high-end styles (button-in-button pattern instead)
+- [ ] No naked trailing arrows on CTAs in high-end styles (a nested icon chip instead)
 - Landing-page medium checks (press logos, unsupported trust claims) live in the checklist of `references/surfaces/landing.md`.
 
 ### Low (taste calls — flag but don't block)

@@ -80,8 +80,8 @@
 - Tertiary: text-only with inline underline on hover
 - Touch target: ≥44x44pt
 
-**Premium button-in-button pattern**:
-For high-end aesthetic CTAs with a trailing icon, the icon lives inside its own circular wrapper, flush with the main button's right inner padding. Wrapper has its own subtle background and ring. On hover, the wrapper translates 1px up and 1px right, scales up to `scale-105`.
+**Nested icon chip**:
+For an action with a trailing icon in an expressive brand, the icon sits in a small round chip of its own at the inner end of the button, with its own fill and ring. On hover the chip nudges 1px in the arrow's direction and grows a little.
 
 ### Input (canonical)
 **Use when**: Every form field — text, email, phone, number, date, password.

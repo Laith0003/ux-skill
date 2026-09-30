@@ -74,10 +74,10 @@
 **Anti-pattern**: Button jumps wildly toward cursor or lags behind it.
 **How**: Use `useMotionValue` and `useTransform` (never `useState`) to track cursor position. Button translates 4 to 8px maximum toward cursor. Spring physics damp the motion. On press, scale down to `0.98`. NEVER use React `useState` for magnetic hover — performance collapses on mobile.
 
-### Pattern: Button-in-button (high-end)
+### Pattern: Nested icon chip
 **Use when**: CTA with a trailing icon (arrow, chevron) in premium aesthetic.
 **Anti-pattern**: Arrow sitting naked next to text inside the button.
-**How**: The arrow lives inside its own circular wrapper, flush with the main button's right inner padding. The wrapper has its own subtle background and ring. On hover, the wrapper translates diagonally (1px up and 1px right) and scales up slightly (`scale-105`), creating internal kinetic tension.
+**How**: The trailing icon sits in a small round chip of its own at the inner end of the button, with its own fill and ring. On hover the chip nudges 1px in the arrow's direction and grows a little, on `motion.state`.
 
 ### Pattern: Gesture with visible affordance
 **Use when**: Swipe-to-delete, swipe-to-archive, swipe-to-reply.
@@ -235,7 +235,7 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 
 ### Cursor parallax (premium)
 - Use `useMotionValue` to track cursor position
-- Apply spring damping (`stiffness: 100, damping: 20`)
+- Apply spring damping (`duration: 0.35, bounce: 0.2`, the role's duration and the brand's overshoot)
 - Maximum 4 to 8px translation or 4 to 8 degrees rotation
 - Slow ease (200 to 400ms)
 - Disabled on touch devices

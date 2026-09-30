@@ -37,10 +37,10 @@
 | Constrain prose columns to 640 to 720px | Run paragraphs at 100+ characters per line |
 | Reserve z-indexes for nav, modal, overlay, tooltip | Spam `z-50` arbitrarily on every component |
 | Respect safe areas for status bar, notch, home indicator | Place tappable controls under notch or gesture area |
-| Use `min-h-[100dvh]` for full-height sections | Use `h-screen` (breaks on iOS Safari address bar collapse) |
+| Use `min-h-dvh` for full-height sections | Use `h-screen` (breaks on iOS Safari address bar collapse) |
 | Document the spacing scale as design tokens | Re-invent gap values per component |
-| Use CSS Grid for responsive structures | Use flexbox percentage math like `w-[calc(33%-1rem)]` |
-| Use `grid-flow-dense` on bento layouts | Leave empty cells in bento grids |
+| Use CSS Grid for responsive structures | Use flexbox percentage math like `flex-basis: calc(33.3% - 24px)` |
+| Use `grid-auto-flow: dense` on bento layouts | Leave empty cells in bento grids |
 | Use generous whitespace as the structural device | Reach for borders, rules, and dividers as separators |
 
 ## Examples
@@ -53,7 +53,7 @@
 ### Pattern: AIDA section vertical rhythm
 **Use when**: Landing pages structured around Attention → Interest → Desire → Action.
 **Anti-pattern**: Identical padding on every section regardless of role.
-**How**: Hero gets the deepest top padding (often `min-h-[100dvh]` with content centered or split). Interest sections (bento, features) get `var(--layout-landing-gap)`. Desire sections (motion, media) may take up to one and a half times it to let scroll moments breathe. Action sections (final CTA) get `var(--layout-landing-gap)` plus a tinted background band that visually separates from the footer.
+**How**: Hero gets the deepest top padding (often `min-h-dvh` with content centered or split). Interest sections (bento, features) get `var(--layout-landing-gap)`. Desire sections (motion, media) may take up to one and a half times it to let scroll moments breathe. Action sections (final CTA) get `var(--layout-landing-gap)` plus a tinted background band that visually separates from the footer.
 
 ### Pattern: Adaptive gutter scaling
 **Use when**: Pages that span 375px mobile to 1440px+ desktop.
@@ -72,7 +72,7 @@
 ### Pattern: Bento grid with no empty cells
 **Use when**: Asymmetric tile grids for "what's in the box" sections, dashboards, feature showcases.
 **Anti-pattern**: A bento grid with 3 cards in row 1 and 2 cards in row 2 leaving a visible empty cell at the bottom-right.
-**How**: Use `grid-flow-dense` to fill gaps. Aim for 3 to 5 cards (not 8) with varied sizes — one tall, one wide, one or two square. `gap-4` to `gap-6` between cards. Mobile collapses to a single column with `gap-4`.
+**How**: Use `grid-auto-flow: dense` to fill gaps. Aim for 3 to 5 cards (not 8) with varied sizes: one tall, one wide, one or two square. `gap-4` to `gap-6` between cards. Mobile collapses to a single column with `gap-4`.
 
 ### Pattern: Z-index scale
 **Use when**: Layering sticky nav, modals, drawers, tooltips, toasts.
@@ -146,7 +146,7 @@
 **Use when**: Landing pages structured around Attention → Interest → Desire → Action.
 **Anti-pattern**: Same `py-32` on every section.
 **How**:
-- Hero (Attention): `min-h-[100dvh]` with centered or split content; section padding minimal because the hero is its own block
+- Hero (Attention): `min-h-dvh` with centered or split content; section padding minimal because the hero is its own block
 - Interest (bento, features): `var(--layout-landing-gap)` standard
 - Desire (motion / proof / scrolly): up to one and a half times `var(--layout-landing-gap)` to let scroll moments breathe
 - Action (final CTA): `var(--layout-landing-gap)` plus tinted background band
@@ -232,11 +232,11 @@
 - Below 768px: remove rotations and negative-margin overlaps from z-axis cascades
 
 ### Banned spacing patterns
-- `h-screen` for full-height sections (use `min-h-[100dvh]`)
-- Flex percentage math like `w-[calc(33%-1rem)]` (use CSS Grid)
+- `h-screen` for full-height sections (use `min-h-dvh`)
+- Flex percentage math like `flex-basis: calc(33.3% - 24px)` (use CSS Grid)
 - Same narrow gutter from phone to desktop (adapt by breakpoint)
 - Section spacing under `var(--layout-landing-gap)` on marketing surfaces
-- Empty cells in bento grids (use `grid-flow-dense`)
+- Empty cells in bento grids (use `grid-auto-flow: dense`)
 - Symmetrical padding on every section as a fallback
 - Arbitrary `z-50` or `z-[9999]` without documented purpose
 - Horizontal scroll on mobile body content (wrap page in `overflow-x-hidden w-full max-w-full`)
@@ -255,7 +255,7 @@
 - [ ] Base spacing unit (4 or 8) chosen and documented (severity: High)
 - [ ] All gaps, paddings, margins land on multiples of the base unit (severity: High)
 - [ ] Marketing sections use `var(--layout-landing-gap)`, or at least 64px phone and 128px desktop without a design system (severity: High)
-- [ ] Hero uses `min-h-[100dvh]`, not `h-screen` (severity: Critical)
+- [ ] Hero uses `min-h-dvh`, not `h-screen` (severity: Critical)
 - [ ] Page wrapped in `overflow-x-hidden w-full max-w-full` when motion is used (severity: High)
 - [ ] Outer container caps at `max-w-7xl` (1280px) or `max-w-[1400px]` (severity: Medium)
 - [ ] Prose columns clamp to `max-w-prose` (~65ch / 640 to 720px) (severity: Medium)
@@ -264,9 +264,9 @@
 - [ ] Safe areas respected for status bar, notch, home indicator (severity: Critical for mobile)
 - [ ] Scroll containers have content insets so lists are not hidden behind fixed bars (severity: High)
 - [ ] Mobile aggressive collapse: any asymmetric layout above `md:` falls back to single-column below 768px (severity: Critical)
-- [ ] No `h-screen` anywhere — `min-h-[100dvh]` used consistently (severity: Critical)
+- [ ] No `h-screen` anywhere: `min-h-dvh` used consistently (severity: Critical)
 - [ ] CSS Grid used for responsive structures; no flex percentage math (severity: High)
-- [ ] Bento grids use `grid-flow-dense`; no empty cells (severity: High)
+- [ ] Bento grids use `grid-auto-flow: dense`; no empty cells (severity: High)
 - [ ] Bento card count follows `references/surfaces/landing.md` (When to include a section) (severity: Medium)
 - [ ] Z-index scale documented; no `z-50` or `z-[9999]` spam (severity: Medium)
 - [ ] No horizontal scroll on mobile body content (severity: Critical)
