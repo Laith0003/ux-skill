@@ -150,8 +150,11 @@ def _scopes(t: Token) -> List[str]:
         return []
     if root == "type" and second == "tracking":
         return ["LETTER_SPACING"]
-    if root == "type" and second == "size":
+    if root == "type" and (second == "size" or last == "font-size"):
         return ["FONT_SIZE"]
+    # A text role's fields, as a Figma file holds them: one variable each.
+    if root == "type" and last == "letter-spacing":
+        return ["LETTER_SPACING"]
     return ["ALL_SCOPES"]
 
 

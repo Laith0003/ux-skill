@@ -698,6 +698,17 @@ def _run(tmp_path, meta, *scripts):
     return json.loads(run.stdout)
 
 
+def test_an_export_read_back_and_exported_again_is_the_same_payload():
+    # A text role's fields come back as one variable each; exporting them
+    # again keeps the field scope each had, so nothing else changes.
+    ts = _system()
+    payload = to_figma(ts)
+    back = import_figma(json.dumps(as_export(payload)), _source("x")).tokens
+    again = to_figma(back)
+    assert again["collections"] == payload["collections"]
+    assert again["mode"] == payload["mode"]
+
+
 _EMPTY = {"variableCollections": {}, "variables": {}}
 
 
