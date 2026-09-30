@@ -20,7 +20,7 @@
 
 8. **Magnetic micro-physics use motion values, never state** — `useMotionValue` and `useTransform` for continuous hover and cursor-tracked motion. `useState` triggers re-renders that collapse performance on mobile.
 
-9. **Tactile feedback is the difference between toy and tool** — Press states with translation, scale, or elevation shift. Hover states on cards shift border or background, never elevation. Color shift on links. The user feels the interface respond.
+9. **Tactile feedback is the difference between toy and tool**: Press states with translation, scale, or elevation shift. Hover states on cards shift border or background, never elevation. Color shift on links. The user feels the interface respond.
 
 10. **System gestures are sacred** — Pinch-zoom is preserved (never `user-scalable=no`). Predictive back works. Tab Bar swipe doesn't block content scroll. Don't fight the OS.
 

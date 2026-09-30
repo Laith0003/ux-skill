@@ -1566,11 +1566,11 @@ STRINGS["footer_link_slash_commands"] = k("Slash commands &middot; 23",
        "es":"Slash commands &middot; 23","fr":"Slash commands &middot; 23","de":"Slash-Commands &middot; 23",
        "pt-BR":"Slash commands &middot; 23","ru":"Slash-команды &middot; 23","tr":"Slash komutları &middot; 23","it":"Slash command &middot; 23"})
 
-STRINGS["footer_link_mcp_server"] = k("MCP server &middot; 18 tools",
-    **{"zh-CN":"MCP 服务器 &middot; 18 个工具","zh-TW":"MCP 伺服器 &middot; 18 個工具","ja":"MCP サーバー &middot; 18 ツール","ko":"MCP 서버 &middot; 18개 도구","hi":"MCP server &middot; 18 tools",
-       "id":"Server MCP &middot; 18 tool","vi":"MCP server &middot; 18 tool","th":"เซิร์ฟเวอร์ MCP &middot; 18 เครื่องมือ","ar":"خادم MCP &middot; 18 أداة",
-       "es":"Servidor MCP &middot; 18 herramientas","fr":"Serveur MCP &middot; 18 outils","de":"MCP-Server &middot; 18 Tools",
-       "pt-BR":"Servidor MCP &middot; 18 ferramentas","ru":"MCP-сервер &middot; 18 инструментов","tr":"MCP sunucusu &middot; 18 araç","it":"Server MCP &middot; 18 strumenti"})
+STRINGS["footer_link_mcp_server"] = k("MCP server &middot; 25 tools",
+    **{"zh-CN":"MCP 服务器 &middot; 25 个工具","zh-TW":"MCP 伺服器 &middot; 25 個工具","ja":"MCP サーバー &middot; 25 ツール","ko":"MCP 서버 &middot; 25개 도구","hi":"MCP server &middot; 25 tools",
+       "id":"Server MCP &middot; 25 tool","vi":"MCP server &middot; 25 tool","th":"เซิร์ฟเวอร์ MCP &middot; 25 เครื่องมือ","ar":"خادم MCP &middot; 25 أداة",
+       "es":"Servidor MCP &middot; 25 herramientas","fr":"Serveur MCP &middot; 25 outils","de":"MCP-Server &middot; 25 Tools",
+       "pt-BR":"Servidor MCP &middot; 25 ferramentas","ru":"MCP-сервер &middot; 25 инструментов","tr":"MCP sunucusu &middot; 25 araç","it":"Server MCP &middot; 25 strumenti"})
 
 STRINGS["footer_link_launch_post"] = k("v3.0 The Brain &middot; launch",
     **{"zh-CN":"v3.0 The Brain &middot; 发布","zh-TW":"v3.0 The Brain &middot; 發布","ja":"v3.0 The Brain &middot; ローンチ","ko":"v3.0 The Brain &middot; 런치","hi":"v3.0 The Brain &middot; launch",

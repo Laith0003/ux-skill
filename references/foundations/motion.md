@@ -71,7 +71,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 ### Pattern: Hover on interactive cards
 **Use when**: Clickable cards, primary CTAs, image tiles.
 **Anti-pattern**: Cards that snap on hover with no transition, cards that scale dramatically (1.2x or higher) and shift surrounding content, or cards that rise on hover.
-**How**: Hover, focus and press never change a card's elevation; only a drag lifts. Shift the border or background over 150 to 250ms. The change is unmistakable but never showy. Never scale CTAs on hover — looks toy-like; use a color shift only.
+**How**: Hover, focus and press never change a card's elevation; only a drag lifts. Shift the border or background over 150 to 250ms. The change is unmistakable but never showy. Never scale CTAs on hover: it looks toy-like; use a color shift only.
 
 ### Pattern: Tactile press feedback
 **Use when**: Buttons, cards, any tappable surface.

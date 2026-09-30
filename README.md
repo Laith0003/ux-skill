@@ -1185,24 +1185,21 @@ For full detail per dimension, see [compare.html](https://uxskill.laithjunaidy.c
 
 ## Roadmap
 
-### v2.1: Linter completeness (Q3 2026)
+Next, in no fixed release:
 
-- **+17 deferred anti-pattern rules** to reach 52 total. Targets: dark-on-dark hover states, color-only state encoding, redundant z-index escalation, hardcoded breakpoints in JS, opacity instead of disabled state, etc.
-- **`uxskill lint --fix` for safe rewrites** of mechanically-fixable findings (button-no-type, img-no-alt empty-string, console-log-leak removal).
-- **VS Code extension** that surfaces lint findings inline (no need to run CI).
+- **Figma styles**: effect styles for shadows, grid styles, and text styles bound to the field variables, written on a live file.
+- **Component mapping**: a Figma component and its variants to a code component and its props, carried through the handoff.
+- **A live-site importer**: read the system a published site actually renders, beside the file importers.
+- **Docs pages for a built system**: the human view of its tokens, roles and contracts.
 
-### v2.2: Component manifest expansion (Q4 2026)
+Also open:
 
-- **+50 components** to reach 198 total. Net-new: combobox with async filter, command-palette with recent-items heuristic, conditional-form-step, payment-element variants, RTL-aware date picker, MENA-specific phone input, calendar grid with hijri overlay.
-- **Per-component code emit** in 6 stacks (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, vanilla HTML/CSS).
-- **Component playground** at uxskill.laithjunaidy.com/playground, try the recommendation engine + see live component preview.
-
-### v3: The marketplace + the lock-in (2027)
-
-- **Brand spec marketplace**: publish and discover community brand specs. Pay-to-publish to fund moderation.
-- **Custom anti-pattern rules**: projects can define their own regex rules in `data/anti-patterns.local.json` (already shipped in v2; v3 adds discovery + sharing).
-- **`uxskill plan`**: full multi-page site planning from a brief, not just one surface.
-- **Figma plugin parity**: same recommendation engine, surfaced in Figma.
+- **`uxskill lint --fix` for safe rewrites** of mechanically fixable findings (button-no-type, img-no-alt empty string, console-log-leak removal).
+- **VS Code extension** that surfaces lint findings inline.
+- **Per-component code emit** in six stacks (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, vanilla HTML/CSS).
+- **Brand spec marketplace**: publish and discover community brand specs.
+- **Custom anti-pattern rules**: discovery and sharing for the rules projects define in `data/anti-patterns.local.json`.
+- **`uxskill plan`**: multi-page site planning from a brief, not just one surface.
 
 ---
 

@@ -617,7 +617,7 @@ Motion is restrained in premium cohorts. The premium ones tend to be slower and 
 
 **Color transitions**: long, eased curves. Background-color and gradient transitions run 600-1200ms with custom cubic-bezier curves. Slowness reads as confidence.
 
-**Hover states**: choreographed micro-events. A card hover does several things in concert while the card stays at rest: the border brightens, an inner icon rotates 10°, an arrow slides 4px right. The hover is a small show.
+**Hover states**: choreographed micro-events. A card hover does several things in concert while the card stays at rest: the border brightens, an inner icon rotates 10 degrees, an arrow slides 4px right. The hover is a small show.
 
 **Scroll-pinned product walks**: pin the visual, scrub through 4-6 states as the user scrolls. Storytelling without autoplay.
 

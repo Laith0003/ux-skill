@@ -214,5 +214,5 @@ The competition is locked into Claude Code's plugin runtime. The MCP server make
 ## Errors
 
 - **`mcp package not installed`** → run `pip install 'uxskill[mcp]'` and try again.
-- **`Unknown tool: foo`** → the tool name in the JSON-RPC call doesn't match one of the 25 in `TOOLS`. Check the table above.
+- **`Unknown tool: foo`**: the tool name in the JSON-RPC call doesn't match one of the 25 in `TOOLS`. Check the table above.
 - **`engine.mcp.server` import error** → likely pydantic missing from your environment; `pip install 'uxskill'` reinstalls the base deps.

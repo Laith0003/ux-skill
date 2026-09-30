@@ -4,7 +4,7 @@ Anti-slop bans I consciously avoided:
 1. Inter font — used the Apple system stack (`-apple-system, BlinkMacSystemFont, "SF Pro Display", "Geist", system-ui, sans-serif`) with an SF Arabic fallback under `dir="rtl"`.
 2. Purple/blue AI gradient — the only chromatic accent is the brand-mark dot (`--brand-dot: #0EA5E9`) used as tiny punctuation only; the entire surface is monochrome zinc-950 on white. Semantic colors stay tied to meaning (emerald for "matched / added" success only).
 3. Generic placeholder names + brands — used "Lina Touma", "Bashar Kuzbari", "Mira Halawani", "Adnan Tabbaa" and real Jordanian brands (Bashiti Hardware, Café Younes, Wild Jordan Center, Mlabbas, Casper & Gambini's).
-4. Round/cliché numbers — 23,847 active members, 47.2% return rate, 1.7× spend uplift, 2,418,560 points awarded, 8,734 redemptions, 1,260 / 2,000 to Gold; phone `+962 79 000 0000`.
+4. Round/cliché numbers: 23,847 active members, 47.2% return rate, 1.7× spend uplift, 2,418,560 points awarded, 8,734 redemptions, 1,260 / 2,000 to Gold; phone `+962 79 000 0000`.
 5. Centered hero — asymmetric 7/5 split, asset side translates `y-8` and the floating stamp card sits at `-bottom-6 -start-4` with a `-3deg` rotation.
 6. Three equal cards — value-prop section is zig-zag: 8/4, then 5/7, then full-width.
 7. `h-screen` — never used; layout flows by content with `min-h` available if needed.

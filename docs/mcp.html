@@ -12,7 +12,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ux-skill MCP server, the design intelligence MCP for Claude Desktop, Cursor, Windsurf, any agent</title>
-  <meta name="description" content="ux-skill MCP server: 18 tools over stdio. Recommender, 152-rule linter, 11 data manifests. Works in any MCP host. No other Claude UX skill ships one.">
+  <meta name="description" content="ux-skill MCP server: 25 tools over stdio. Recommender, 152-rule linter, 11 data manifests. Works in any MCP host. No other Claude UX skill ships one.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/mcp.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -21,7 +21,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/mcp.html">
   <meta property="og:title" content="ux-skill MCP server, design intelligence for any MCP host">
-  <meta property="og:description" content="18 tools over stdio. Claude Desktop, Cursor, Windsurf, generic agents. None of the top 8 Claude UX skills ship an MCP server. ux-skill does.">
+  <meta property="og:description" content="25 tools over stdio. Claude Desktop, Cursor, Windsurf, generic agents. None of the top 8 Claude UX skills ship an MCP server. ux-skill does.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/mcp.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -30,7 +30,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="ux-skill MCP server, design intelligence MCP">
-  <meta name="twitter:description" content="18 tools. stdio transport. pip install 'uxskill[mcp]'. The asymmetric move.">
+  <meta name="twitter:description" content="25 tools. stdio transport. pip install 'uxskill[mcp]'. The asymmetric move.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -618,7 +618,7 @@
     "name": "ux-mcp",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Cross-platform (MCP stdio server)",
-    "description": "Model Context Protocol server exposing the ux-skill engine as 18 tools, works in Claude Desktop, Cursor, Windsurf, and any MCP-capable host. ux_recommend, ux_lint, 11 manifest readers, persistence, stats.",
+    "description": "Model Context Protocol server exposing the ux-skill engine as 25 tools, works in Claude Desktop, Cursor, Windsurf, and any MCP-capable host. ux_recommend, ux_lint, 11 manifest readers, persistence, stats.",
     "softwareVersion": "3.2.1",
     "downloadUrl": "https://pypi.org/project/uxskill/",
     "url": "https://uxskill.laithjunaidy.com/mcp.html",
@@ -626,7 +626,7 @@
     "author": {"@type": "Person", "name": "Laith Aljunaidy", "url": "https://github.com/Laith0003"},
     "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
     "featureList": [
-      "18 MCP tools over stdio",
+      "25 MCP tools over stdio",
       "ux_recommend, 5-parallel-search reasoning",
       "ux_lint, deterministic regex linter",
       "11 manifest readers (styles, palettes, type-pairs, components, industries, motion, anti-patterns, brands, landing-patterns, etc.)",
@@ -1021,15 +1021,15 @@
 <main id="main">
   <div class="page">
     <section class="hero">
-      <span class="eyebrow">MCP server &middot; stdio &middot; 18 tools &middot; 2026</span>
+      <span class="eyebrow">MCP server &middot; stdio &middot; 25 tools &middot; 2026</span>
       <h1>Design intelligence over <span class="accent">Model Context Protocol</span>.</h1>
       <p class="lede">
-        ux-skill ships a Model Context Protocol server. <strong>Any MCP-capable host</strong>, Claude Desktop, Cursor, Windsurf, generic agents, can call the recommender, the linter, and all eleven data manifests over stdio. No plugin install, no IDE lock-in, just a long-running daemon and 18 tools.
+        ux-skill ships a Model Context Protocol server. <strong>Any MCP-capable host</strong>, Claude Desktop, Cursor, Windsurf, generic agents, can call the recommender, the linter, and all eleven data manifests over stdio. No plugin install, no IDE lock-in, just a long-running daemon and 25 tools.
       </p>
 
       <figure class="docfig">
         <img src="/screenshots/cursor-running-ux.webp" width="1600" height="1000" alt="Cursor calling the uxskill MCP tools over stdio: the recommender and linter invoked from inside the editor without a plugin install." loading="lazy">
-        <figcaption>One MCP daemon, 18 tools, any compatible host, here, answering from inside Cursor.</figcaption>
+        <figcaption>One MCP daemon, 25 tools, any compatible host, here, answering from inside Cursor.</figcaption>
       </figure>
 
       <div class="pitch">
@@ -1067,10 +1067,10 @@
       <p>One server. Every host. That's the move.</p>
     </section>
 
-    <!-- The 18 tools -->
+    <!-- The 25 tools -->
     <section>
       <span class="sub-eye">The catalogue</span>
-      <h2>Fourteen tools, <span class="accent">one engine.</span></h2>
+      <h2>Twenty-five tools, <span class="accent">one engine.</span></h2>
       <p class="intro">Each tool is a pure <code>dict -&gt; dict</code> Python handler. Same code path the slash commands use; same data manifests; same deterministic recommender. The MCP layer is a thin stdio wrapper.</p>
 
       <table class="tools">
@@ -1096,6 +1096,13 @@
           <tr><td class="tname"><code>ux_synthesize</code></td><td>Synthesize a fresh design language from a brief, axes, palette, type pair, spacing, radius, motion. Mode auto-dispatched (pure synthesis / brand anchor / strict brand). Offline and deterministic.</td></tr>
           <tr><td class="tname"><code>ux_decisions_query</code></td><td>Filter the local decisions ledger by industry, ui_type, command, min score, or accepted-only. The recommender re-ranks on this once a brief&rsquo;s bucket has enough prior decisions.</td></tr>
           <tr><td class="tname"><code>ux_decisions_stats</code></td><td>Aggregate stats over the local decisions ledger, totals by command, industry, ui_type, mode, top brands, median lint score, acceptance rate. No telemetry; your install&rsquo;s local view.</td></tr>
+          <tr><td class="tname"><code>ux_system_build</code></td><td>Build a WCAG-gated design system from a brand color, with a brief or seven axes optional; with <code>out</code>, write tokens.json, tokens.css, the font files and the report.</td></tr>
+          <tr><td class="tname"><code>ux_system_detect</code></td><td>Find a design system a project already has and what it declares. Read it before any other tool; it is fixed input.</td></tr>
+          <tr><td class="tname"><code>ux_system_import</code></td><td>Read an existing system (DTCG, CSS custom properties, Tailwind, markdown, Figma variables, or several files as one) in its own names. Returns counts, a proposed mapping and the import report.</td></tr>
+          <tr><td class="tname"><code>ux_system_enhance</code></td><td>Measure an existing system and, with <code>scan</code>, the code that uses it. A report; nothing is rewritten.</td></tr>
+          <tr><td class="tname"><code>ux_system_extend</code></td><td>Add foundations, roles or contracts without changing a token the system has: an extension file beside a system ux-skill did not write.</td></tr>
+          <tr><td class="tname"><code>ux_system_export</code></td><td>Write a system as tokens.css, a Tailwind 4 theme, Figma variables or tokens.json, into <code>out</code> only.</td></tr>
+          <tr><td class="tname"><code>ux_contracts_check</code></td><td>Check a folder of component contracts against a system, through its mapping. Returns counts and the problems folded by what they say.</td></tr>
         </tbody>
       </table>
     </section>
@@ -1239,7 +1246,7 @@
     <section>
       <span class="sub-eye">How it's built</span>
       <h2>Transport separated from <span class="accent">handlers.</span></h2>
-      <p>The 18 tools are pure <code>dict -&gt; dict</code> Python functions in <code>engine.mcp.server</code>. The MCP stdio transport is an optional dependency that lazy-imports inside <code>run_server()</code>. Three consequences fall out:</p>
+      <p>The 25 tools are pure <code>dict -&gt; dict</code> Python functions in <code>engine.mcp.server</code>. The MCP stdio transport is an optional dependency that lazy-imports inside <code>run_server()</code>. Three consequences fall out:</p>
       <ul>
         <li>The <code>engine.mcp</code> module imports cleanly whether or not the <code>mcp</code> Python package is installed.</li>
         <li>Tests exercise the handlers directly, no async event loop, no subprocess plumbing in the test suite.</li>

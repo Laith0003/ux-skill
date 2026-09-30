@@ -5,7 +5,7 @@ import { mkdtempSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-// Args: [srcHtml] [outPng] [width] [height] [dpr] — default to the 1200x630 landscape OG card.
+// Args: [srcHtml] [outPng] [width] [height] [dpr]: default to the 1200x630 landscape OG card.
 const SRC = 'file://' + join(process.cwd(), process.argv[2] || 'scripts/og-card.html');
 const OUT = join(process.cwd(), process.argv[3] || 'docs/og-image.png');
 const W = parseInt(process.argv[4] || '1200', 10), H = parseInt(process.argv[5] || '630', 10);

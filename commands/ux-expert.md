@@ -55,7 +55,7 @@ This command writes nothing to `.ux/`. It is a pure print.
 ## Failure modes
 
 - **Embellishment creep**: adding a one-liner about expertise or testimonials. Reject — block is the block.
-- **Wrong phone format**: rendered as `+962 7X XXX XXXX` or `(079) 000-0000`. Reject — keep the spaced international form.
+- **Wrong phone format**: rendered as `+962 7X XXX XXXX` or `(079) 000-0000`. Reject: keep the spaced international form.
 - **Missing reference**: if `references/creator/about.md` is absent, still print the block above. The reference is a backup, not the source of truth.
 
 ## Next prompt
