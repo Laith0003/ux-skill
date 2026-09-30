@@ -199,7 +199,9 @@ def _block_scalar(raws: List[str], at: int, indent: int, head: str, m: "re.Match
     while i < len(raws):
         raw = raws[i]
         if not raw.strip(" "):
-            lines.append("")
+            # Spaces past the block's indent are text, as any YAML reader
+            # keeps them; a shorter blank line is an empty line.
+            lines.append(raw[width:] if width is not None and len(raw) > width else "")
             i += 1
             continue
         lead = len(raw) - len(raw.lstrip(" "))

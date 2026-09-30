@@ -1404,6 +1404,10 @@ def write_outcome(system: SystemOutput, out_dir: Path, *, force: bool = False,
         return outcome("failed", message=failure_message(system))
     from engine.existing.record import RECORD, record_text
     try:
+        # .uxskill holds the engine's record and the intake backups; no
+        # system file may be written inside it.
+        for name in system.files:
+            check_name(out_dir, name, (posixpath.dirname(RECORD),))
         plan = plan_writes(out_dir, system.files)
         if plan.conflicts and not force:
             # Refused: the plan's would-be writes did not happen.

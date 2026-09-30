@@ -73,3 +73,13 @@ def test_a_record_that_cannot_be_read_grants_nothing(tmp_path):
 def test_the_digest_is_twelve_hex_digits_of_the_bytes():
     assert file_digest("a\n") == file_digest(b"a\n") == _digest(b"a\n")
     assert len(file_digest(b"")) == 12
+
+
+def test_a_system_file_inside_the_record_folder_is_refused_in_any_case(tmp_path):
+    import dataclasses
+    system = make_system("#3366ff", NEUTRAL, NEUTRAL_SOURCE)
+    for name in (".uxskill/x.css", ".UXSKILL/x.css"):
+        bad = dataclasses.replace(system, files={**system.files, name: "a"})
+        outcome = write_outcome(bad, tmp_path, force=True)
+        assert outcome["status"] == "error" and ".uxskill/" in outcome["message"]
+        assert list(tmp_path.iterdir()) == []

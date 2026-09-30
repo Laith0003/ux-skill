@@ -189,3 +189,14 @@ def test_an_unquoted_date_is_the_one_documented_difference():
     yaml = pytest.importorskip("yaml")
     assert loads("a: 2026-09-25") == {"a": "2026-09-25"}
     assert yaml.safe_load("a: 2026-09-25") == {"a": datetime.date(2026, 9, 25)}
+
+
+def test_spaces_past_a_block_indent_are_text_as_pyyaml_reads_them():
+    yaml = pytest.importorskip("yaml")
+    documents = [
+        "a: |\n  x\n    \n  y\n", "a: |\n  x\n   \n  y\n", "a: |\n  x\n  y\n    \n",
+        "a: |+\n  x\n    \nb: 1\n", "a: >\n  x\n    \n  y\n", "a: |-\n  x\n     \n  y\n   \n",
+        "- |\n  x\n    \n  y\n", "a: |\n  x\n\n  y\n",
+    ]
+    counts, wrong = _compare(yaml, documents)
+    assert wrong == [] and counts["same"] == len(documents)

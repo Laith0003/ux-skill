@@ -148,9 +148,26 @@ def test_the_contract_check(tmp_path):
 
 
 def test_every_status_the_tools_return_is_one_the_cli_knows(tmp_path):
-    statuses = {handle_ux_system_import({"source": _theme(tmp_path)})["status"],
-                handle_ux_system_export({"source": _tokens(tmp_path), "to": "css"})["status"]}
-    assert statuses <= set(EXIT)
+    theme, tokens, out = _theme(tmp_path), _tokens(tmp_path), str(tmp_path / "o")
+    runs = [
+        handle_ux_system_import({"source": theme}),
+        handle_ux_system_import({}),
+        handle_ux_system_enhance({"source": theme}),
+        handle_ux_system_enhance({"source": theme, "sourse": 1}),
+        handle_ux_system_extend({"source": theme, "add": ["motion"], "out": out}),
+        handle_ux_system_extend({"source": theme, "add": ["motion"], "out": out}),
+        handle_ux_system_extend({"source": theme, "add": ["nothing"], "out": out}),
+        handle_ux_system_export({"source": tokens, "to": "css"}),
+        handle_ux_system_export({"source": tokens, "to": "css", "out": str(tmp_path / "e")}),
+        handle_ux_system_export({"source": tokens}),
+    ]
+    # "invalid" is the tools' bad-input status, which the command line
+    # reports as a usage error before any command runs; it always names
+    # the input in "error".
+    statuses = {r["status"] for r in runs}
+    assert statuses - {"invalid"} <= set(EXIT), statuses - set(EXIT)
+    assert {"invalid", "written", "unchanged", "read"} <= statuses, statuses
+    assert all(r["error"] for r in runs if r["status"] == "invalid")
 
 
 def test_bad_inputs_are_invalid_and_name_the_field(tmp_path):

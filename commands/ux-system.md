@@ -260,6 +260,8 @@ Import and confirm the mapping first (enhance steps 1 to 3), and list the folder
 
 Before any write the command checks that every source is still the file that was imported, copies each one into `.uxskill/backup/` in the folder it writes, backs up every file it replaces by its content, and records what it wrote in `.uxskill/files.json`. It refuses to replace a file that differs. Do not pass --force until the user says to replace the named files; `--force` replaces only files ux-skill wrote, and `--replace-client-files` exists only for a user who asks to replace one of their own, and only on the command line; MCP does not take it.
 
+A folder built before the record existed gains `.uxskill/files.json` on the first build that changes a file in it; until then only the files that carry the digest stamp count as ux-skill's. `.uxskill` must be a folder: a file or a link by that name makes build stop and name it, with nothing written.
+
 ### 2. Run it
 
 ```bash
