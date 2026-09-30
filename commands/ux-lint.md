@@ -297,6 +297,20 @@ Other detection fields: `also` adds more passes with their own pattern and targe
 
 `.htm` files read as HTML, and `.svelte` files match every rule scoped to HTML or Vue.
 
+### The render check
+
+`uxskill lint --render` loads each HTML file in headless Chromium at 390, 430, 768 and 1280px and adds what only the rendered page shows. Two rules measure layout at every width; the rest measure once, at 1280px, or on pages that are not frozen:
+
+| Rule | What it measures |
+|---|---|
+| `centered-text-off-center` | Centered text in a box that sits against one edge of its container. |
+| `horizontal-overflow` | The page scrolls sideways; names up to three elements that reach past the viewport. |
+| `color-over-budget` | Only on a page that carries `--color-budget-chromatic`. The share of text characters in a chromatic color (OKLCH chroma 0.08 and up), and the share of the interface area (the page less images, video, canvas, SVG and background pictures) filled in one, painted on a 16px grid in document order. Text over `color.budget.chromatic`, or fill over it plus `color.budget.bands`, fires, with two points of slack. Colors of custom properties named for a status are left out. |
+| `photo-grade-off` | Only on a page that carries the `--imagery-photo-*` tokens. Every raster image and background at least 120px on each side that is not a logo is measured for its mean L*, b* and C*; each must sit within the grade lock's spread of the page's mean, and the page's mean within the direction's ranges (`imagery.grade_problems`). |
+| `accent-text-low-contrast` | Text in a color (OKLCH chroma 0.04 and up) against the ground under it, the backgrounds composited on white: under 4.5:1 fires, once per color and ground. Text over a picture, a gradient or an overlay beside media is left to the scrim check. |
+| `infinite-animation-under-reduced-motion` | With reduced motion set, any animation that runs forever and is not a progress indicator. |
+| `moving-content-without-pause` | With no motion preference, any animation that runs on its own for more than five seconds beside other content, when the page has no control that pauses it: a button or toggle named pause, stop or play, or one whose `aria-controls` names the moving region. |
+
 When the project holds a client's own design system, the files that make it up are linted and listed apart under `system` in the JSON, with their own score. They are the client's fixed input, so their findings never lower the page's score or trip the exit code. A file counts only when all of these hold: `ux system detect` reports it as a token source, a token file, built output, a foundation stylesheet or a hand-written `MASTER.md` or `DESIGN.md`, or it sits in a system folder detect reports; the engine did not write it (no digest stamp, not listed in a `.uxskill/files.json` record); it is not an extension file (a name ending in `-ext` or `-extension`); and, for a stylesheet, it holds only token blocks. A page's own globals with a theme block and page rules, the extension file beside a system, and anything the engine wrote are always scored with the page. So is a client's foundation stylesheet that holds one base rule (a `body` or `html` rule) beside its tokens: its findings count toward the page, and moving that rule into a stylesheet of its own keeps the token file apart.
 
 A stylesheet made mostly of custom-property definitions (at least three, and at least nine in ten of its declarations) is a token layer: the engine's `tokens.css`, or a client's own token files. Its definitions are judged only by rules marked `token_definitions` (a default shadcn palette, a zero-offset glow, a default font); a duration or an easing defined as a token is the design system's choice, not a finding. Its other lines, and a page's own stylesheet, keep every rule. Content decides, never the file name.

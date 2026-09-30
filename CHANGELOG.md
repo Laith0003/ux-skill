@@ -62,6 +62,21 @@ project adheres to [Semantic Versioning](https://semver.org/).
   in a playbook and in a file it moved out of, in `commands/ux-design.md`,
   or in two playbooks, and when a file pointer does not resolve.
 
+- The lint reads the page's own system. A weight, size, tracking or
+  duration the page's tokens define passes; with no system the fixed
+  thresholds hold. Duration rules judge when a move answers, from its
+  declared curve: a response half done within 70ms and nine tenths within
+  220ms, an entrance half within 140ms. `imagery-mandatory-missing` needs
+  a photograph; an SVG illustration alone fails unless the brand forbids
+  photography. Three equal cards fail only when each holds just an icon, a
+  title and a line.
+- New lint rules: `eyebrows-over-budget`, `layout-family-repeated`,
+  `split-sections-in-a-row`, `marquee-more-than-one`,
+  `text-ink-at-low-alpha` and `infinite-animation-without-reduced-motion`.
+- `lint --render` adds the color budget, the photo grade lock, accent text
+  on every ground it lands on, loops under reduced motion and a pause
+  control for anything that moves on its own for more than five seconds.
+
 ### Deprecated
 These seven commands are now aliases. Each one says where it moved and
 runs the new command with the same arguments. They are removed in 4.1.

@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Iterable, List, Sequence
 
 from engine.linter.core import Finding, LintReport, SEVERITY_RANK, compute_score
+from engine.render import taste
 
 # Phone, large phone, tablet, desktop. Some drift only exists between
 # breakpoints (a max-width that is wider than a phone column but narrower
@@ -117,6 +118,7 @@ _RULES = {
              "unchecked. Run it again; if it repeats, look for a script or resource that "
              "never finishes loading, or a page error, in the message."),
         what="not measured: {error} ({vw}px viewport)"),
+    **taste.RULES,
 }
 
 
@@ -161,19 +163,33 @@ def _html_files(paths: Iterable[str]) -> List[Path]:
     return out
 
 
-async def _measure(browser, sem, f: Path, w: int, h: int):
+async def _measure(browser, sem, f: Path, w: int, h: int, desktop: bool = False):
     async with sem:
         page = await browser.new_page(viewport={"width": w, "height": h})
         try:
             await page.goto(f.resolve().as_uri(), wait_until="load")
             await page.add_style_tag(content=_FREEZE_CSS)
-            return await page.evaluate(_MEASURE_JS, TOLERANCE_PX)
+            result = await page.evaluate(_MEASURE_JS, TOLERANCE_PX)
+            if desktop:  # the page's color, accents and photos, measured once
+                result["findings"].extend(await taste.page_checks(page))
+            return result
         except Exception as exc:  # one page that hangs or errors must not stop the run
             error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
             return {"vw": w, "findings": [
                 {"rule": "render-failed", "sel": "page", "cls": "", "text": "", "error": error}]}
         finally:
             await page.close()
+
+
+async def _motion(browser, sem, f: Path, w: int, h: int):
+    """Motion that runs on its own, on pages that are not frozen."""
+    async with sem:
+        try:
+            return {"vw": w, "findings": await taste.motion_checks(browser, f, w, h)}
+        except Exception as exc:  # one page that hangs or errors must not stop the run
+            error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
+            return {"vw": w, "findings": [
+                {"rule": "render-failed", "sel": "page", "cls": "", "text": "", "error": error}]}
 
 
 async def _run(files: List[Path], viewports: Sequence[tuple]):
@@ -186,11 +202,16 @@ async def _run(files: List[Path], viewports: Sequence[tuple]):
     async with async_playwright() as pw:
         browser = await _launch(pw)
         try:
-            jobs = [_measure(browser, sem, f, w, h) for f in files for w, h in viewports]
+            wide = max(viewports, key=lambda v: v[0])
+            jobs = []
+            for f in files:
+                jobs.extend(_measure(browser, sem, f, w, h, desktop=(w, h) == wide)
+                            for w, h in viewports)
+                jobs.append(_motion(browser, sem, f, *wide))
             results = await asyncio.gather(*jobs)
         finally:
             await browser.close()
-    n = len(viewports)
+    n = len(viewports) + 1
     return [results[i * n:(i + 1) * n] for i in range(len(files))]
 
 

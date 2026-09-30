@@ -185,3 +185,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Three equal cards fire only when every card holds just an icon, a title and a line](three-cards-read-by-content.md)
 - [Text in the ink color keeps an alpha of 0.7 or more unless the system has its value](ink-text-keeps-its-alpha.md)
 - [Every infinite animation stops under reduced motion](loops-stop-under-reduced-motion.md)
+- [The rendered page keeps chromatic color within the system's budget](color-budget-on-the-page.md)
+- [Every photograph on a rendered page sits within one grade](grade-lock-on-the-page.md)
+- [Accent text is measured against every ground it lands on](accent-text-on-every-ground.md)
+- [Anything that moves on its own stops under reduced motion and can be paused](moving-content-pauses.md)
