@@ -117,3 +117,29 @@ def test_render_reports_line_and_direction(tmp_path):
     hit = [x for x in report.findings if x.rule_id == "centered-text-off-center"]
     assert hit and hit[0].line == 3
     assert "rtl" in hit[0].excerpt and "px" in hit[0].excerpt
+
+
+def test_a_page_that_fails_to_load_is_a_finding_not_a_crash(tmp_path):
+    """One page whose load times out used to abort the whole --render run."""
+    import asyncio
+    from engine.render import core
+
+    class Page:
+        async def goto(self, *a, **k):
+            raise TimeoutError("Timeout 30000ms exceeded waiting for load")
+
+        async def close(self):
+            pass
+
+    class Browser:
+        async def new_page(self, **k):
+            return Page()
+
+    async def go():
+        return await core._measure(Browser(), asyncio.Semaphore(1), tmp_path / "x.html", 390, 844)
+
+    result = asyncio.run(go())
+    hit = result["findings"][0]
+    assert hit["rule"] == "render-failed" and "Timeout" in hit["error"]
+    rule = core._RULES["render-failed"]
+    assert "30000ms" in rule["what"].format(vw=result["vw"], **hit)

@@ -55,6 +55,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0f1115;
@@ -205,7 +207,7 @@
       color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) {
       font-family: var(--display);
       color: var(--ink);
       margin: 0;
@@ -249,7 +251,7 @@
       margin: 56px 0 16px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
       font-size: 19px;
@@ -289,7 +291,7 @@
       font-size: 12px; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--muted);
     }
-    .plugin-card h3 {
+    .plugin-card h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
       font-size: 22px;
@@ -327,7 +329,8 @@
       text-transform: uppercase; color: var(--scene-accent);
       margin-bottom: 10px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
       font-size: 18px;
@@ -482,6 +485,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   <a class="skip-link sr-only" href="#main">Go to article</a>
@@ -586,6 +590,10 @@
         Claude Code's marketplace shipped in 2025 and the design-and-frontend corner of it is now the deepest. Ten plugins are worth a slot in your install list if you build UI for a living. Below: live star counts, the exact <code>/plugin install</code> command, what each one actually does, and where each fits.
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed where noted</p>
+      <figure class="docfig">
+        <img src="/screenshots/claude-code-running-ux.webp" width="1600" height="1000" alt="A Claude Code session running /ux-recommend and then /ux-design hero: the brief resolves to a style, palette, type pair and motion preset, and the generated hero lints at 0 critical and 0 high." loading="lazy" decoding="async">
+        <figcaption>ux-skill in a Claude Code session: recommend, generate, lint, from one install.</figcaption>
+      </figure>
 
       <h2>Why ten and not fifty</h2>
       <p>
@@ -774,7 +782,7 @@
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>Star counts compress what each plugin actually does.</h4>
+        <h3 class="h4">Star counts compress what each plugin actually does.</h3>
         <p>ui-ux-pro-max owns 84,000 stars because it shipped first and the recommender pattern is genuinely sound. ux-skill at 14 stars isn't comparable on awareness; it's comparable on the four nets new (linter, brand specs, motion presets, components) we shipped on top of the same architecture.</p>
         <p>The ranking above is by install volume, not by quality. Pick by what you're missing, not by the star count.</p>
       </div>

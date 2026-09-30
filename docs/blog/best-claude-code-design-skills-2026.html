@@ -37,6 +37,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface: #0f1115;
@@ -178,7 +180,7 @@
       color: var(--scene-accent);
       margin-bottom: 22px;
     }
-    h1, h2, h3, h4 {
+    h1, h2, h3:where(:not(.h4)), h4 , h3:where(.h4) {
       font-family: var(--display);
       color: var(--ink);
       margin: 0;
@@ -222,7 +224,7 @@
       margin: 56px 0 16px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 32, 'wght' 600;
       font-size: 19px;
@@ -259,7 +261,7 @@
       background: var(--surface-2);
       border-color: var(--scene-accent);
     }
-    .rank-card h3 {
+    .rank-card h3:where(:not(.h4)) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 620;
       font-size: 26px;
@@ -313,7 +315,8 @@
       margin: 18px 0;
       line-height: 1.45;
     }
-    .rank-card h4 {
+    .rank-card h4,
+    .rank-card h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600;
       font-size: 14px;
@@ -391,7 +394,8 @@
       color: var(--scene-accent);
       margin-bottom: 10px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--display);
       font-variation-settings: 'wdth' 92, 'opsz' 24, 'wght' 600;
       font-size: 18px;
@@ -577,6 +581,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   <a class="skip-link sr-only" href="#main">Go to article</a>
@@ -680,6 +685,10 @@
         The Claude Code skill ecosystem has eight design-focused plugins worth installing in 2026. Star counts below are live from GitHub on <strong>2026-05-28</strong>. Each card lists what the skill is great at, what it lacks, who should pick it, and how to install it. No marketing spin.
       </p>
       <p class="byline">By the ux-skill team &middot; 10 min read &middot; MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/claude-code-running-ux.webp" width="1600" height="1000" alt="A Claude Code session running /ux-recommend and then /ux-design hero: the brief resolves to a style, palette, type pair and motion preset, and the generated hero lints at 0 critical and 0 high." loading="lazy" decoding="async">
+        <figcaption>What an install looks like in use: recommend, then generate, then lint, in one session.</figcaption>
+      </figure>
 
       <h2>How we ranked</h2>
       <p>
@@ -920,7 +929,7 @@
 
       <div class="honesty">
         <div class="label">The honest position</div>
-        <h4>About the ux-skill ranking at #6</h4>
+        <h3 class="h4">About the ux-skill ranking at #6</h3>
         <p>If we were ranking by stars, ux-skill would be #8 of 8: 14 stars is the smallest installed base in the list. We ranked by scope (1,243 entries, 25 commands, 5 sub-agents, 35 linter rules, 160 brand specs, 17 IDEs) and put it where the architecture says it lands. Read that as a self-aware bias.</p>
         <p>The cards above are accurate on what each tool actually ships. Star counts will move (they're live as of 2026-05-28). Pick by the problem, not the badge.</p>
       </div>

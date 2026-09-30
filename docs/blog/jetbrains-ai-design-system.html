@@ -57,6 +57,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -179,13 +181,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -250,7 +253,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -349,7 +353,8 @@
       font-size: 12.5px;
       color: var(--scene-accent);
     }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     /* Never allow horizontal scroll on mobile. The body sets overflow-x: clip
@@ -419,6 +424,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -510,6 +516,10 @@
         <strong>JetBrains AI Assistant ships in IntelliJ, WebStorm, PyCharm, GoLand, RubyMine, and the rest of the suite.</strong> It is excellent at refactoring and code completion. On design tasks, it reverts to the same model defaults every other AI surface produces: Inter as display, the canonical purple-to-blue gradient, three identical cards. ux-skill wires into JetBrains AI through the custom instructions surface and a CLI-driven linter that runs in the integrated terminal.
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/cursor-running-ux.webp" width="1600" height="1000" alt="A code editor with a generated Hero component open and a chat panel running /ux-design, which reads the saved recommendation and reports 0 high and 0 critical lint findings." loading="lazy" decoding="async">
+        <figcaption>The editor-agnostic part: generation reads the saved recommendation, then lints its own output.</figcaption>
+      </figure>
 
       <h2>Why JetBrains projects hit the design problem</h2>
       <p>
@@ -784,7 +794,7 @@ repos:
 
       <div class="honesty">
         <div class="label">Honesty card</div>
-        <h4>A JetBrains plugin is on the roadmap.</h4>
+        <h3 class="h4">A JetBrains plugin is on the roadmap.</h3>
         <p>The current integration is CLI plus MCP. A native JetBrains Marketplace plugin would let us surface the recommender inside the AI Assistant chat without leaving the IDE. That is on the roadmap for v2.3 but not shipped yet.</p>
         <p>The CLI plus MCP approach covers the full functionality today, you just live in the integrated terminal more than you might in a plugin-first world. That terminal is fast and right there.</p>
       </div>
@@ -816,9 +826,9 @@ repos:
         <div class="row"><span class="prompt">$</span> pipx install <span class="arg">uxskill</span></div>
         <div class="row"><span class="prompt">$</span> uxskill <span class="arg">init --target jetbrains</span></div>
         <div class="row"><span class="prompt">$</span> uxskill <span class="arg">lint src/ --threshold high</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or via npx if Python is not installed</div>
+        <div class="row row--note">or via npx if Python is not installed</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init --target jetbrains</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">or as a Claude Code plugin alongside JetBrains</div>
+        <div class="row row--note">or as a Claude Code plugin alongside JetBrains</div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
       </div>
     </section>

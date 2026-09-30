@@ -420,7 +420,7 @@ The cream canvas + serif display + generous internal padding create an editorial
 | Soft hairline | 1px `{colors.hairline}` border | Inputs, sub-nav, occasionally on cards |
 | Cream card | `{colors.surface-card}` background — no shadow | Feature cards, content cards |
 | Dark surface card | `{colors.surface-dark}` background — no shadow | Code editor mockups, model showcase cards |
-| Subtle drop shadow | Faint shadow at low alpha | Hover-elevated states (the system uses `0 1px 3px rgba(20,20,19,0.08)` rarely) |
+| Subtle drop shadow | Faint shadow at low alpha | Raised states (the system uses `0 1px 3px rgba(20,20,19,0.08)` rarely) |
 
 The elevation philosophy is **color-block first, shadow rare**. Most depth comes from the cream-vs-dark surface contrast. Shadows are minimal. The dark surface mockups have their own internal product chrome (code editor scrollbars, line numbers, syntax highlighting) which adds detail without needing external shadows.
 

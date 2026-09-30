@@ -7,8 +7,10 @@ Steps per photo:
   - Generate a tiny 24px-wide blur placeholder (for LQIP / blur-up loading)
 
 Outputs:
-  docs/editorial/editorial-<n>.jpg          full (~100 KB each)
-  docs/editorial/editorial-<n>-tiny.jpg     LQIP (~1 KB each)
+  scripts/assets/editorial/editorial-<n>.jpg        full (~100 KB each)
+  scripts/assets/editorial/editorial-<n>-tiny.jpg   LQIP (~1 KB each)
+
+No page in docs/ uses these any more; scripts/og-editorial.html uses three.
 
 All source images are from https://picsum.photos — CC0 licensed.
 Attribution: Lorem Picsum (https://picsum.photos), photos by Unsplash contributors.
@@ -19,7 +21,7 @@ import io
 
 
 ROOT = Path(__file__).resolve().parent.parent
-DOCS = ROOT / "docs" / "editorial"
+DOCS = ROOT / "scripts" / "assets" / "editorial"
 
 
 def darken_gradient(img: Image.Image) -> Image.Image:

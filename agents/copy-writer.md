@@ -114,7 +114,7 @@ Helper text exists to:
 
 - Explain a constraint not obvious from the label ("8+ characters, including a number")
 - Reduce uncertainty ("We'll send a code to this number")
-- Provide an example ("e.g., +962 79 786 8335")
+- Provide an example ("e.g., +962 79 000 0000")
 
 NEVER restate the label. NEVER use helper text for marketing. NEVER write more than 2 lines.
 

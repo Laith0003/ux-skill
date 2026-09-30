@@ -118,6 +118,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
 
@@ -208,6 +209,10 @@
 <h1>Why every AI UI reaches for <em>the bento grid</em>.</h1>
 <p class="lede">In about two years the bento grid went from an Apple keynote device to the reflex an AI builder reaches for the moment you say "feature section." You know the look: a mosaic of rounded tiles in mismatched sizes, one big, two medium, three small, arranged like a lunchbox. It can be the right call. Most of the time it is not. It is six equal ideas crammed into unequal boxes, variety with no reason behind it.</p>
 </header>
+<figure class="docfig">
+  <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
+  <figcaption>Layout defaults are caught the same way as color ones: by rule, in CI, before merge.</figcaption>
+</figure>
 
 <h2>Where the reflex comes from</h2>
 <p>Apple popularized the modern bento layout, and the design web copied it hard. Tailwind's marketing examples lean on it; component galleries are full of it; landing-page templates ship it as the default "features" block. So the screenshots a model learns from are saturated with bento. When you ask for a feature section, the most-represented answer in the training data is a mosaic of tiles, and that is what comes back.</p>

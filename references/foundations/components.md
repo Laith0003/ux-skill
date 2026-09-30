@@ -55,7 +55,7 @@
 **Variants**: primary, secondary, tertiary, danger, ghost, outline, icon-only.
 **Required states**:
 - **Default**: visible at rest, clearly affords interaction
-- **Hover**: background brightness shift (2 to 4% L), or shadow lift, or color change; 150 to 250ms
+- **Hover**: background brightness shift (2 to 4% L), or color change; 150 to 250ms. Hover never changes elevation.
 - **Active / pressed**: `-translate-y-[1px]` or `scale-[0.98]`; 80 to 150ms
 - **Focus**: visible 2 to 4px focus ring; never `outline: none` without replacement
 - **Disabled**: 0.38 to 0.5 opacity + `cursor: not-allowed` + `disabled` attribute
@@ -175,7 +175,7 @@ For high-end aesthetic CTAs with a trailing icon, the icon lives inside its own 
 
 **Required states**:
 - **Default**: visible at rest with subtle elevation or border
-- **Hover** (if clickable): `translateY(-2px)` to `translateY(-4px)` + shadow elevation shift; 200 to 300ms
+- **Hover** (if clickable): border or background shift; 150 to 250ms. Hover, focus and press never change a card's elevation; only a drag lifts.
 - **Pressed** (if clickable): `scale-[0.98]` press feedback
 - **Focused** (if clickable): visible focus ring
 - **Loading**: skeleton matching card layout
@@ -488,7 +488,7 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 - Border: 1px hairline (`#EAEAEA` light; white at 8 to 12% alpha dark)
 - Radius: 8 to 12px (default); 16 to 24px (premium); 32 to 40px (major bento)
 - Shadow: tinted to background hue, 8 to 14% alpha; or pure hairline border
-- Hover (clickable): `translateY(-2px)` to `translateY(-4px)` + shadow lift; 200 to 300ms
+- Hover (clickable): border or background shift; 150 to 250ms. No lift.
 - Press (clickable): `scale-[0.98]`
 
 ### Table specs

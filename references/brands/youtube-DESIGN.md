@@ -80,7 +80,7 @@ Section spacing is tight — 16–24px between major bands, far tighter than mar
 - **Thumbnail card** — 16:9 image, slight 8px radius (subtle), title clamped to 2 lines, channel name muted, metadata row beneath
 - **Subscribe button** — Solid red `#ff0000`, white text, 2–4px radius, 36px height — the only chromatic CTA in the chrome
 - **Subscribe button (subscribed state)** — Inverts to neutral gray fill, "Subscribed" label with a bell icon
-- **Like / Dislike pill** — Joint pill with a vertical divider, thumb icons + count, gray fill on dark mode, hover lifts to surface-1
+- **Like / Dislike pill** — Joint pill with a vertical divider, thumb icons + count, gray fill on dark mode, hover shifts to surface-1
 - **Category filter chip** — Pill-shaped, 32px height, neutral gray fill, "active" state inverts to dark fill + light text
 - **Comment thread** — Avatar 40px circle, author name + time, body text, like/reply row beneath
 - **Sidebar nav item** — 40px row height, 24px icon + 14px label, hover background `#f2f2f2` (light) or `#1f1f1f` (dark)

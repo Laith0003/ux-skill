@@ -88,7 +88,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Functional developer-grade motion — code-snippet tabs have a 150ms underline slide. Hover lifts on cards are subtle (1.01 scale). API request/response chrome animates with a slight type-in effect on landing. The brand reads as devtools-functional.
+Functional developer-grade motion — code-snippet tabs have a 150ms underline slide. Cards lift slightly on hover (1.01 scale). API request/response chrome animates with a slight type-in effect on landing. The brand reads as devtools-functional.
 
 ## 8. Anti-patterns to Avoid
 

@@ -118,6 +118,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
 
@@ -208,6 +209,10 @@
 <h1>The accessibility holes in <em>AI-generated UI</em>.</h1>
 <p class="lede">Generated interfaces almost always pass the eye test. They also fail, quietly, for anyone using a keyboard, a screen reader, or a screen in sunlight. The same defects recur in every model: gray body text below the contrast floor, a focus ring switched off and never replaced, an icon button with no name, a clickable div pretending to be a control. None of it shows up in a screenshot, which is exactly why it ships.</p>
 </header>
+<figure class="docfig">
+  <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
+  <figcaption>Many of the holes in this post are mechanical, so a linter can find them before a user does.</figcaption>
+</figure>
 
 <h2>Why the look passes and the operability does not</h2>
 <p>An AI model is trained to produce something that resembles good UI. Its reward is visual plausibility: does this look like the screenshots in the training set. Accessibility is, almost by definition, the part of an interface that is invisible in a screenshot. Contrast ratios, focus order, accessible names, the difference between a <code>&lt;button&gt;</code> and a styled <code>&lt;div&gt;</code>. None of it changes a single pixel of the rendered frame. So the optimization target never sees it, and the model has no pressure to get it right.</p>

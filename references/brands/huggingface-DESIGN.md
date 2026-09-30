@@ -72,7 +72,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 5. Componentry Feel
 
-- **Model card listing** — Row with model author + model name + task tag chips + downloads count + likes count. Clickable to detail. Hover lifts background to `#f7f7f7`
+- **Model card listing** — Row with model author + model name + task tag chips + downloads count + likes count. Clickable to detail. Hover shifts background to `#f7f7f7`
 - **Primary CTA (yellow pill)** — HF Yellow fill, dark text, full-pill radius, 40px height, weight-600 label
 - **Secondary CTA** — Transparent fill, 1px gray border, ink text
 - **Code snippet (tabbed)** — Code block with framework tabs at the top (PyTorch, TensorFlow, JAX), code in IBM Plex Mono, copy button in the top-right
@@ -87,7 +87,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Functional minimal motion — 150ms hover on links and buttons, slight card lift on hover (1.01 scale). Model card "like" button has a satisfying scale-tick on click. The brand reads as developer-platform functional, never marketing-flashy.
+Functional minimal motion — 150ms hover on links and buttons, and cards lift slightly on hover (1.01 scale). Model card "like" button has a satisfying scale-tick on click. The brand reads as developer-platform functional, never marketing-flashy.
 
 ## 8. Anti-patterns to Avoid
 

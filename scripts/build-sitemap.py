@@ -8,10 +8,8 @@ newer translated posts were never added. This regenerates the whole file from th
 filesystem so it can never silently drift again.
 
 Excluded (non-canonical, must NOT be indexed):
-  - index-classic.html : a duplicate of the homepage (same title); indexing it
-    would compete with "/".
-  - launch/**          : marketing collateral and OG-share pages (facebook-*.html),
-    not organic landing pages.
+  - launch/**          : marketing collateral, not organic landing pages. The
+    social image sources (facebook-*.html) now live in scripts/.
   - any page carrying <meta name="robots" content="noindex">.
 
 lastmod is the file's last git commit date (best-effort; falls back to today).
@@ -30,8 +28,6 @@ TODAY = datetime.date.today().isoformat()
 
 
 def excluded(rel):
-    if rel == "index-classic.html":
-        return True
     if rel.startswith("launch/"):
         return True
     return False

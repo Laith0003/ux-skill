@@ -383,7 +383,7 @@ Cal.com uses generous but not excessive whitespace — section padding sits at 9
 | Flat | No shadow, no border | Body sections, top nav, hero bands |
 | Soft hairline | 1px `{colors.hairline}` border | Inputs, table dividers, occasionally on cards |
 | Card surface | `{colors.surface-card}` background — no shadow | Feature cards, testimonials |
-| Subtle drop shadow | Faint shadow at low alpha | Pricing tier cards, hover-elevated states (the system uses `0 1px 2px rgba(0,0,0,0.05)` and `0 4px 12px rgba(0,0,0,0.08)`) |
+| Subtle drop shadow | Faint shadow at low alpha | Pricing tier cards (the system uses `0 1px 2px rgba(0,0,0,0.05)` and `0 4px 12px rgba(0,0,0,0.08)`) |
 | Featured tier | `{colors.surface-dark}` background, no shadow needed | The featured pricing tier inverts to dark surface — color contrast does the elevation work |
 
 The elevation philosophy is **soft and modern** — small drop shadows on elevated cards, color-block contrast for emphasis. No heavy shadows, no neumorphism, no glassmorphism.

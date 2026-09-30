@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -186,7 +188,7 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 18px;
       letter-spacing: -0.005em; color: var(--ink);
@@ -252,7 +254,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -345,7 +348,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body {
@@ -414,6 +418,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -505,6 +510,10 @@
         <strong>設計システムは、もはやデザイナーが Figma で組み立てる成果物ではなく、AI のセッションが参照するデータレイヤだ。</strong>ux-skill は、Python 製の CLI として、Claude Code、Cursor、Windsurf、その他 14 個の IDE にデザインインテリジェンスを供給する。1,243 件のカタログ、145 個の決定論的な正規表現ルール、131 件のブランド仕様、22 個のコマンド, , 一つのインストールで全部届く。
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-recommend.webp" width="1600" height="1000" alt="ランディングページのブリーフに ux recommend を実行したターミナル。業種、スタイル、パレット、書体、モーションの 5 つのレーンがそれぞれ信頼度つきで決まり、1 つのレコメンデーションファイルにまとまる。" loading="lazy" decoding="async">
+        <figcaption>ブリーフからシステムへ。ブラウザもアカウントも使わず、ターミナルで完結する。</figcaption>
+      </figure>
 
       <h2>なぜ「設計システム CLI」なのか</h2>
       <p>
@@ -601,7 +610,7 @@ $ uxskill lint apps/web/src --threshold high
 
       <div class="honesty">
         <div class="label">正直なスコープ</div>
-        <h4>CLI は床と天井を作る。センスは作らない。</h4>
+        <h3 class="h4">CLI は床と天井を作る。センスは作らない。</h3>
         <p>このツールが解決するのは「指紋」と呼ばれる構造的な既定値だ。Inter を見出しに使う、紫から青へのグラデーション、3 つの同一カード, , これらはどの AI も同じように到達する場所で、正規表現で検出できる。リンターはここを止める。</p>
         <p>「このセクションのリズムが悪い」「このコピーが冷たい」, , これは正規表現の管轄ではない。これは人間か、モデルの判断が要る。ux-skill はクリティーク用のコマンド（<code>ux critique</code>）も持っているが、それは CI ではなくエディタの中で、必要なときに呼ばれる。</p>
       </div>
@@ -623,9 +632,9 @@ $ uxskill lint apps/web/src --threshold high
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

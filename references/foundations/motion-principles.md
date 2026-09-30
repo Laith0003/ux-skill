@@ -175,7 +175,7 @@ Linear curves are reserved for motion that should not accelerate or decelerate �
 - Marquee scroll: linear, duration calculated from content length and target velocity.
 
 **Don't:**
-- Use linear on any UI transition with a start and end state (modal open, hover lift, focus ring).
+- Use linear on any UI transition with a start and end state (modal open, hover tint, focus ring).
 - Animate position changes with linear — reads as a robot move.
 
 ---
@@ -205,7 +205,7 @@ Anything the user triggers and expects to see resolve immediately — button pre
 
 **Do:**
 - Button press feedback: 120ms.
-- Hover lift: 200ms.
+- Hover tint: 200ms.
 - Dropdown menu entry: 180ms.
 
 **Don't:**
@@ -543,7 +543,7 @@ CSS animations and transitions run on the compositor thread. JS-driven animation
 - CSS `@starting-style` for one-shot entries.
 
 **Don't:**
-- Build a hover lift in JS when a one-liner CSS transition does the job.
+- Build a hover effect in JS when a one-liner CSS transition does the job.
 - Trigger CSS class toggles from JS just to "feel modern" — `:hover`, `:focus`, `:active` exist.
 
 ### Web Animations API for programmatic-CSS use cases

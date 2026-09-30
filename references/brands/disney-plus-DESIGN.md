@@ -30,7 +30,7 @@ Disney+ is the family streaming service whose visual language is the deep-galaxy
 8-base (8/16/24/32/48/64). Section padding 48–64px between poster rows — tighter than luxury sites, looser than Booking. Each franchise row is a horizontal-scroll strip with 6–8 poster tiles visible at desktop. The five-franchise brand-tier row sits above the genre rows on every browse page.
 
 ## Motion signature
-Magical-realm immersion. Cold-start animation: stars twinkle across deep blue, then the Disney+ wordmark resolves with the iconic Walt Disney signature flourish. Poster tiles on row-hover lift 1.08x with a 250ms cubic-bezier. Franchise-tile transitions to franchise-page use a magical-portal effect — a brief zoom-in to the franchise color world (red for Marvel, blue for Disney, yellow for Pixar).
+Magical-realm immersion. Cold-start animation: stars twinkle across deep blue, then the Disney+ wordmark resolves with the iconic Walt Disney signature flourish. Poster tiles scale up 1.08x on row hover, over a 250ms cubic-bezier. Franchise-tile transitions to franchise-page use a magical-portal effect — a brief zoom-in to the franchise color world (red for Marvel, blue for Disney, yellow for Pixar).
 
 ## Components observed
 - `galaxy-blue-canvas` — the brand's deep-blue starfield surface

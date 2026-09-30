@@ -571,7 +571,7 @@ The system runs predominantly flat with strategic atmospheric depth.
 | Level | Treatment | Use |
 |---|---|---|
 | 0 (flat) | No shadow; `{colors.hairline}` border | Default cards, table rows, form inputs |
-| 1 (subtle) | `rgba(0, 0, 0, 0.04) 0px 1px 2px 0px` | Hover-elevated tiles, subtle highlights |
+| 1 (subtle) | `rgba(0, 0, 0, 0.04) 0px 1px 2px 0px` | Raised tiles, subtle highlights |
 | 2 (card) | `rgba(0, 0, 0, 0.08) 0px 4px 12px 0px` | Standard feature cards |
 | 3 (mockup) | `rgba(0, 0, 0, 0.12) 0px 24px 48px -8px` | Hero product mockup framing — the deep diffuse drop on the homepage hero docs preview |
 | 4 (brand-tinted) | `rgba(0, 212, 164, 0.08) 0px 8px 24px` | Featured pricing tier glow |

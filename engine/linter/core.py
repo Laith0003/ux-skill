@@ -24,7 +24,7 @@ import re
 from bisect import bisect_right
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, List, Optional
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 from engine.data_loader import load
 from engine.linter.structure import POST_CHECKS, FileContext, in_spans, token_definitions
@@ -101,6 +101,7 @@ class LintReport:
     # score or the exit code above.
     system_files: List[str] = field(default_factory=list)
     system_findings: List[Finding] = field(default_factory=list)
+    waived_lines: int = 0  # lines where a ux-lint-disable or ux-lint-off waiver applies
 
     def to_dict(self) -> Dict[str, Any]:
         out: Dict[str, Any] = {
@@ -108,6 +109,7 @@ class LintReport:
             "rules_loaded": self.rules_loaded,
             "exit_code": self.exit_code,
             "score": self.score,
+            "waived_lines": self.waived_lines,
             "findings": [f.to_dict() for f in self.findings],
             "summary": self.counts(),
         }
@@ -131,11 +133,6 @@ IGNORED_DIRS = {
     "node_modules", ".git", "dist", "build", ".next", ".nuxt", ".svelte-kit",
     ".astro", "vendor", ".ux", ".venv", "venv", "__pycache__", "coverage",
 }
-_DISABLE = re.compile(
-    r"ux-lint-disable(-next-line)?"
-    r"(?:[:\s]+([a-z0-9][\w-]*(?:\s*,\s*[a-z0-9][\w-]*)*))?",
-    re.IGNORECASE,
-)
 _RULE_CACHE: Dict[int, List[Dict[str, Any]]] = {}
 
 
@@ -206,6 +203,67 @@ def _compile_rules() -> List[Dict[str, Any]]:
     return rules
 
 
+# Waivers, written as comments in the file being linted:
+#   ux-lint-disable [rule-a, rule-b]      this line only; no ids waives every rule
+#   ux-lint-disable-next-line [rule-a]    the line below
+#   ux-lint-off rule-a, rule-b            from this line ...
+#   ux-lint-on                            ... to this line, for the named rules only
+# A region must name at least one rule and must be closed. A region that breaks
+# either rule waives nothing and is reported as a finding on its opening line.
+_IDS = r"(?:[:\s]+([a-z0-9][\w-]*(?:\s*,\s*[a-z0-9][\w-]*)*))?"
+_DISABLE = re.compile(r"ux-lint-disable(-next-line)?" + _IDS, re.IGNORECASE)
+_REGION = re.compile(r"ux-lint-(off|on)\b" + _IDS, re.IGNORECASE)
+_REGION_RULE = {"id": "lint-waiver-region", "name": "Broken ux-lint-off region",
+                "severity": "high", "category": "Lint"}
+
+
+def _ids(raw: Optional[str]) -> Optional[set]:
+    return {x.strip().lower() for x in raw.split(",")} if raw else None
+
+
+def _waivers(text: str) -> Tuple[Dict[int, Optional[set]], List[Tuple[int, str]]]:
+    """Map line number to the rule ids waived there (``None`` means every rule),
+    plus (line, message) for each broken region."""
+    waived: Dict[int, Optional[set]] = {}
+    broken: List[Tuple[int, str]] = []
+    if "ux-lint-" not in text:
+        return waived, broken
+
+    def waive(line_no: int, ids: Optional[set]) -> None:
+        if ids is None or waived.get(line_no, set()) is None:
+            waived[line_no] = None
+        else:
+            waived.setdefault(line_no, set()).update(ids)  # type: ignore[union-attr]
+
+    opened: Optional[Tuple[int, Optional[set]]] = None
+    for line_no, line in enumerate(text.splitlines(), start=1):
+        for m in _DISABLE.finditer(line):
+            waive(line_no + 1 if m.group(1) else line_no, _ids(m.group(2)))
+        for m in _REGION.finditer(line):
+            if m.group(1).lower() == "off":
+                if opened is not None:
+                    broken.append((opened[0], f"ux-lint-off at line {opened[0]} is still open when "
+                                   f"another starts at line {line_no}. Add <!-- ux-lint-on --> "
+                                   f"before line {line_no}."))
+                opened = (line_no, _ids(m.group(2)))
+            elif opened is None:
+                broken.append((line_no, f"ux-lint-on at line {line_no} closes no region. Remove it, "
+                               "or add <!-- ux-lint-off rule-id --> above the quoted text."))
+            else:
+                first, ids = opened
+                opened = None
+                if not ids:
+                    broken.append((first, f"ux-lint-off at line {first} names no rule. Name the rules "
+                                   "it waives: <!-- ux-lint-off rule-a, rule-b -->."))
+                    continue
+                for n in range(first, line_no + 1):
+                    waive(n, ids)
+    if opened is not None:
+        broken.append((opened[0], f"ux-lint-off at line {opened[0]} is never closed. Add "
+                       "<!-- ux-lint-on --> after the last line it should cover."))
+    return waived, broken
+
+
 def _walk_paths(paths: Iterable[Path]) -> Iterable[Path]:
     seen = set()
     for p in paths:
@@ -242,22 +300,6 @@ def _scope_matches(path: Path, scope: set) -> bool:
     if name.endswith(".blade.php") and "blade" in scope:
         return True
     return False
-
-
-def _suppressions(text: str) -> Dict[int, Optional[set]]:
-    """Map line number to the rule ids waived there (``None`` means all)."""
-    out: Dict[int, Optional[set]] = {}
-    if "ux-lint-disable" not in text:
-        return out
-    for line_no, line in enumerate(text.splitlines(), start=1):
-        for m in _DISABLE.finditer(line):
-            target = line_no + 1 if m.group(1) else line_no
-            ids = {x.strip().lower() for x in m.group(2).split(",")} if m.group(2) else None
-            if ids is None or out.get(target, set()) is None:
-                out[target] = None
-            else:
-                out.setdefault(target, set()).update(ids)  # type: ignore[union-attr]
-    return out
 
 
 def _pass_targets(rule: Dict[str, Any]) -> Iterable[tuple]:
@@ -375,11 +417,17 @@ def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None
     views = FileViews(path.name, text)
     line_starts = [0] + [m.end() for m in re.finditer("\n", text)]
     lines = text.splitlines()
-    waived = _suppressions(text)
+    waived, broken = _waivers(text)
     ctx = FileContext(path, text, views)
     ctx.pages = _page_contexts(pages)
     defs = token_definitions(ctx)
-    findings: List[Finding] = []
+    findings: List[Finding] = [Finding(
+        rule_id=_REGION_RULE["id"], rule_name=_REGION_RULE["name"],
+        severity=_REGION_RULE["severity"], category=_REGION_RULE["category"],
+        file=str(name), line=line_no, column=1,
+        excerpt=lines[line_no - 1][:200] if line_no <= len(lines) else "",
+        fix=message,
+    ) for line_no, message in broken]
     for rule in rules:
         if not _scope_matches(path, rule["scope"]):
             continue
@@ -533,6 +581,7 @@ def lint(
     threshold = SEVERITY_RANK.get(severity_threshold, 2)
     findings: List[Finding] = []
     files_scanned = 0
+    waived_lines = 0
 
     targets = [Path(p) for p in (paths or [Path(".")])]
     files = list(_walk_paths(targets))
@@ -563,6 +612,7 @@ def lint(
             system_findings.extend(found)
             continue
         files_scanned += 1
+        waived_lines += len(_waivers(text)[0])
         findings.extend(found)
 
     fatal = any(SEVERITY_RANK.get(f.severity, 0) >= threshold for f in findings)
@@ -571,6 +621,7 @@ def lint(
         findings=findings,
         files_scanned=files_scanned,
         rules_loaded=len(rules),
+        waived_lines=waived_lines,
         exit_code=1 if fatal else 0,
         score=score,
         system_files=own_system,

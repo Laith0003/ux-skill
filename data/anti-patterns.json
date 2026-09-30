@@ -1263,8 +1263,8 @@
         ],
         "target": "css"
       },
-      "why": "scale(1.1) or higher on hover reads as amateur - it shouts when a 1-2 percent nudge or a shadow lift would be more confident.",
-      "fix": "Use scale(1.01) to scale(1.03), or replace the scale with a translateY(-2px) plus shadow shift. Restraint reads premium."
+      "why": "scale(1.1) or higher on hover reads as amateur - it shouts when a border or background shift would be more confident.",
+      "fix": "Drop the scale from the card :hover rule and shift its border or background instead. Hover never changes a card's elevation; only a drag lifts. Restraint reads premium."
     },
     {
       "id": "dynamic-island-glow-everywhere",
@@ -1295,8 +1295,9 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "\\{(?![^{}]*(?<![\\w-])background(?:-color)?\\s*:)[^{}]*backdrop-filter\\s*:\\s*blur",
+        "pattern": "(?<![\\w-])backdrop-filter\\s*:\\s*blur",
         "flags": "im",
+        "post": "blur-without-background",
         "scope": [
           "css",
           "scss",
@@ -2110,7 +2111,7 @@
       "category": "Performance",
       "detection": {
         "type": "regex",
-        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*true)[^)])*\\)",
+        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*(?:true|false))[^)])*\\)",
         "flags": "i",
         "scope": [
           "ts",
@@ -2722,7 +2723,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bnext[\\s-]generation\\b",
+        "pattern": "(?<![\\w#-])next[\\s-]generation(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2745,7 +2746,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bcutting[\\s-]edge\\b",
+        "pattern": "(?<![\\w#-])cutting[\\s-]edge(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2768,7 +2769,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bbest[\\s-]in[\\s-]class\\b",
+        "pattern": "(?<![\\w#-])best[\\s-]in[\\s-]class(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2791,7 +2792,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bworld[\\s-]class\\b",
+        "pattern": "(?<![\\w#-])world[\\s-]class(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2814,7 +2815,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bindustry[\\s-]leading\\b",
+        "pattern": "(?<![\\w#-])industry[\\s-]leading(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2837,7 +2838,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bgame[\\s-]chang(?:er|ing|e)\\b",
+        "pattern": "(?<![\\w#-])game[\\s-]chang(?:er|ing|e)(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2860,7 +2861,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bAI[\\s-]?(?:powered|driven|enabled|enhanced|first)\\b",
+        "pattern": "(?<![\\w#-])AI[\\s-]?(?:powered|driven|enabled|enhanced|first)(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2883,7 +2884,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\b(?:leverage(?:\\s+the\\s+power\\s+of)?\\s+AI|harness(?:\\s+the\\s+power\\s+of)?|tap\\s+into\\s+the\\s+power\\s+of)\\b",
+        "pattern": "(?<![\\w#-])(?:leverage(?:\\s+the\\s+power\\s+of)?\\s+AI|harness(?:\\s+the\\s+power\\s+of)?|tap\\s+into\\s+the\\s+power\\s+of)(?![\\w-])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -3014,7 +3015,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<image\\b|<(?!svg\\b)[a-z][\\w-]*\\b[^>]*\\brole\\s*=\\s*[\\\"']img[\\\"']|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\\\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\\\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
+        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<iframe\\b|<image\\b|<(?!svg\\b)[a-z][\\w-]*\\b[^>]*\\brole\\s*=\\s*[\\\"']img[\\\"']|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\\\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\\\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
         "flags": "i",
         "scope": [
           "html",

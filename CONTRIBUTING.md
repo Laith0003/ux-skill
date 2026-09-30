@@ -82,4 +82,3 @@ Be sharp, be direct, be useful. Don't be a jerk.
 For UX consulting, design reviews, or product positioning sessions outside of plugin contributions:
 
 - LinkedIn: https://www.linkedin.com/in/laithaljunaidy/
-- Phone: +962 79 786 8335

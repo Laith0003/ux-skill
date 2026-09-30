@@ -67,6 +67,8 @@
 </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0f1115;
@@ -189,13 +191,14 @@
       color: var(--scene-accent);
       font-style: italic; font-weight: 400;
     }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 19px;
       letter-spacing: -0.005em; color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px;
       color: var(--ink);
@@ -260,7 +263,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 600; font-size: 17px; color: var(--ink);
       margin-bottom: 10px;
@@ -353,7 +357,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body {
@@ -422,6 +427,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -513,6 +519,10 @@
         <strong>The vibe coder's tool belt is a hand-rolled set of CLI primitives.</strong> Cursor, Claude Code, Cline, Aider, Codex, the model writes; the developer reviews. The missing piece is a deterministic gate that catches the AI design fingerprint before it merges. Not an LLM judge. Not a SaaS dashboard. A command-line linter that runs in milliseconds, plugs into pre-commit, and exits non-zero on a finding. Here is the engineering write-up.
       </p>
       <p class="byline">By the ux-skill team &middot; 8 min read &middot; MIT-licensed open source</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
+        <figcaption>The gate in action: two high findings, one fix line each, exit code 1.</figcaption>
+      </figure>
 
       <h2>Why a CLI is the right shape for vibe coding</h2>
       <p>
@@ -725,7 +735,7 @@ npx uxskill@latest lint --threshold high --staged || exit 1</pre>
 
       <div class="honesty">
         <div class="label">Honest scope</div>
-        <h4>The CLI is the floor, not the ceiling.</h4>
+        <h3 class="h4">The CLI is the floor, not the ceiling.</h3>
         <p>The linter catches structural fingerprints, literal tokens, class names, hex values, DOM shapes. It does not catch "the section rhythm is wrong" or "the copy reads cold." Those need a review pass, by a human or a stronger model. The CLI is the deterministic floor; <code>/ux-critique</code> ships in the same package for the taste pass.</p>
         <p>The reason the CLI never calls an LLM is the same reason a unit test never calls an LLM. Reproducibility is the entire value proposition. If the lint result depends on a model's mood, the lint is no longer a lint, it is a recommendation, and recommendations belong in a different layer.</p>
       </div>
@@ -793,9 +803,9 @@ src/**/*.stories.tsx                   fade-in-up-everywhere</pre>
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">, or, </div>
+        <div class="row row--note">, or, </div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

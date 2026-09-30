@@ -85,7 +85,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Hand-illustrated quirky motion — Freddie the chimp blinks and gestures on idle. Hand-drawn illustrations have subtle wiggle animations on hero pages. Hover lift on cards is restrained (1.01 scale + 200ms). The motion budget is quirky-warm, never corporate-smooth.
+Hand-illustrated quirky motion — Freddie the chimp blinks and gestures on idle. Hand-drawn illustrations have subtle wiggle animations on hero pages. Cards lift only slightly on hover (1.01 scale, 200ms). The motion budget is quirky-warm, never corporate-smooth.
 
 ## 8. Anti-patterns to Avoid
 

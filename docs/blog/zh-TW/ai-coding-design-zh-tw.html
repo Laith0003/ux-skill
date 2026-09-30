@@ -64,6 +64,8 @@
   </script>
 
   <style>
+  :where(h3.h4){font-size:1em;margin-block:1.33em}
+
     :root {
       --canvas: #07080a;
       --surface-1: #0d0f12;
@@ -174,13 +176,14 @@
       color: var(--ink); margin: 64px 0 18px;
     }
     h2 .accent { color: var(--scene-accent); }
-    h3 {
+    h3:where(:not(.h4)) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 18px;
       color: var(--ink);
       margin: 36px 0 14px;
     }
-    h4 {
+    h4,
+    h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 16px;
       color: var(--ink);
@@ -245,7 +248,8 @@
       font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--scene-accent); margin-bottom: 8px;
     }
-    .honesty h4 {
+    .honesty h4,
+    .honesty h3:where(.h4) {
       font-family: var(--body-face);
       font-weight: 700; font-size: 16px; color: var(--ink);
       margin-bottom: 10px;
@@ -339,7 +343,8 @@
     }
     .compare-table tr:last-child td { border-bottom: 0; }
     .compare-table strong { color: var(--ink); }
-  </style>
+    .install-block .row.row--note { margin-top: 14px; opacity: 0.5; }
+</style>
   <!-- noscroll-fix -->
   <style>
     html, body { overflow-x: clip; max-width: 100%; }
@@ -401,6 +406,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
   
@@ -492,6 +498,10 @@
         <strong>Cursor、Claude Code、Cline、Windsurf,每個 AI 編程工具都掉進同一組預設。</strong>90px Inter、紫到藍漸層、三張一模一樣的卡片。換 model 也一樣,輸出幾乎沒變。ux-skill 是一個 MIT 授權的 Python 開源引擎,用 145 條確定性正則規則在 CI 中擋下預設值。不呼叫 LLM,不耗 token,沒有遙測。
       </p>
       <p class="byline">ux-skill 團隊 · 10 分鐘閱讀 · MIT 授權</p>
+      <figure class="docfig">
+        <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="終端機執行 ux lint：找出兩個 high 等級問題，一個紫到藍漸層與一段殘留的佔位文字，每個都標出檔案、行號與修正方式，最後以結束碼 1 結束。" loading="lazy" decoding="async">
+        <figcaption>一次真實執行：每條結果都附上規則名、檔案位置與修正方式。不呼叫 LLM。</figcaption>
+      </figure>
 
       <h2>為什麼每個 AI 都寫出一樣的網站</h2>
       <p>
@@ -641,7 +651,7 @@
 
       <div class="honesty">
         <div class="label">誠實的範圍</div>
-        <h4>正則抓的是結構性指紋,不是品味。</h4>
+        <h3 class="h4">正則抓的是結構性指紋,不是品味。</h3>
         <p>linter 永遠不會講「這個區塊節奏不對」或「這段文案讀起來太冷」。那需要人類或一個 model。但正則確實會抓到所有有 literal token、pattern 或形狀的指紋,AI 預設大多都是這類,因為 model 一再回到同一個 artifact。</p>
         <p>我們刻意不在 CI 跑 LLM-judge。如果你的標準是「看起來像 designer 做的」,那是 code review,不是 lint。ux-skill 有出貨 <code>/ux-critique</code> 做品味檢查,但那是在 IDE 中跑,不是 CI。</p>
       </div>
@@ -668,9 +678,9 @@
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> /plugin marketplace add <span class="arg">Laith0003/ux-skill</span></div>
         <div class="row"><span class="prompt">$</span> /plugin install <span class="arg">ux@ux-skill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 或 ·</div>
+        <div class="row row--note">· 或 ·</div>
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>
-        <div class="row" style="margin-top:14px; opacity:0.5;">· 或 ·</div>
+        <div class="row row--note">· 或 ·</div>
         <div class="row"><span class="prompt">$</span> npx <span class="arg">uxskill@alpha init</span></div>
       </div>
     </section>

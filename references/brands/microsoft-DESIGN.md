@@ -71,7 +71,7 @@ Section padding is 80–96px vertical between major bands — modern-SaaS rhythm
 
 ## 5. Componentry Feel
 
-- **Product card (Fluent)** — White surface, 1px hairline border, 4–8px radius, internal padding 24px. Title, sub-line, product render, "Learn more" link. No shadow at rest; hover lifts surface to `#f5f5f5`
+- **Product card (Fluent)** — White surface, 1px hairline border, 4–8px radius, internal padding 24px. Title, sub-line, product render, "Learn more" link. No shadow at rest; hover shifts surface to `#f5f5f5`
 - **Primary CTA** — Solid Microsoft Blue fill, white text, 4px radius (or 16px for the pill variant), 40px height, weight-600 label
 - **Secondary button** — Transparent fill, 1px Microsoft Blue border, blue text, same dimensions
 - **Acrylic flyout** — Floating panel with `backdrop-filter: blur(40px) saturate(180%)` over `rgba(255,255,255,0.7)`. Signature Fluent material

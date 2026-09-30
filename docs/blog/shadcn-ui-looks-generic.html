@@ -118,6 +118,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
 
@@ -208,6 +209,10 @@
 <h1>Everything built with shadcn/ui <em>looks the same</em>,<br>and how to break out.</h1>
 <p class="lede">shadcn/ui is the best thing to happen to React UI in years. You own the component code, it sits on Radix for behaviour, and nothing is locked behind a theme prop. That is exactly why every shadcn app looks like every other shadcn app: the components ship unstyled, an AI fills the styling, and it reaches for the same defaults every single time. The library is not the problem. The missing brief is.</p>
 </header>
+<figure class="docfig">
+  <img src="/screenshots/brand-mosaic.webp" width="1600" height="1000" alt="A grid of twelve brand tiles, each set in its own typeface and accent color, showing how far real brand systems diverge from one another." loading="lazy" decoding="async">
+  <figcaption>Breaking out looks like this: every brand sets its own type and accent instead of sharing one theme.</figcaption>
+</figure>
 
 <h2>Unstyled is the feature, not the bug</h2>
 <p>shadcn/ui does something deliberate that most libraries don't: it gives you primitives, not a finished skin. A Button is structure and behaviour with a set of CSS variables left open for you to fill. That is the whole pitch: copy the code in, make it yours.</p>

@@ -23,7 +23,7 @@ Netflix is the streaming entertainment brand whose visual language is the world'
 8-base (8/16/24/32/48). Section padding 48–64px between poster rows. Each horizontal-scroll row is a category title above a strip of 6–8 poster tiles at desktop. Hero auto-play video consumes 60–70vh.
 
 ## Motion signature
-Hero auto-plays muted clip — typically 30 seconds of a featured show with slow camera moves and atmospheric music. Poster-art tiles on row-hover lift 1.08x scale with a 200ms ease-out and reveal hover-preview (auto-play 6-second clip). The signature 'TUDUM' sonic mnemonic — the brand's audio motif — plays on app cold-start.
+Hero auto-plays muted clip — typically 30 seconds of a featured show with slow camera moves and atmospheric music. Poster-art tiles scale up 1.08x on row hover with a 200ms ease-out and reveal a hover preview (auto-play 6-second clip). The signature 'TUDUM' sonic mnemonic — the brand's audio motif — plays on app cold-start.
 
 ## Components observed
 - `hero-auto-play-video` — full-bleed muted video hero

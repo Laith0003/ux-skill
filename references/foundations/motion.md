@@ -68,10 +68,10 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 
 ## Examples
 
-### Pattern: Hover lift on interactive cards
+### Pattern: Hover on interactive cards
 **Use when**: Clickable cards, primary CTAs, image tiles.
-**Anti-pattern**: Cards that snap on hover with no transition, or cards that scale dramatically (1.2x or higher) and shift surrounding content.
-**How**: `translateY(-2px)` to `translateY(-4px)` combined with a shadow elevation shift. Duration 200 to 300ms with `cubic-bezier(0.16, 1, 0.3, 1)`. The change is unmistakable but never showy. Never scale CTAs on hover — looks toy-like; use color or shadow shift only.
+**Anti-pattern**: Cards that snap on hover with no transition, cards that scale dramatically (1.2x or higher) and shift surrounding content, or cards that rise on hover.
+**How**: Hover, focus and press never change a card's elevation; only a drag lifts. Shift the border or background over 150 to 250ms. The change is unmistakable but never showy. Never scale CTAs on hover — looks toy-like; use a color shift only.
 
 ### Pattern: Tactile press feedback
 **Use when**: Buttons, cards, any tappable surface.
@@ -215,8 +215,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 
 ### Transform values
 - Tap feedback: `-translate-y-[1px]` or `scale-[0.98]`
-- Hover lift: `-translate-y-[2px]` to `-translate-y-[4px]`
-- Card hover scale: `scale-[1.02]` to `scale-[1.05]` inside `overflow-hidden`
+- Card hover: border or background shift, no scale
 - Scroll fade-up: `translateY(12px)` to `translateY(24px)`
 - Cinematic entry: `translateY(64px)` + `blur(12px)` + `opacity-0`
 - Magnetic button: 4 to 8px translate maximum toward cursor

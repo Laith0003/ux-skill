@@ -523,7 +523,7 @@ The system runs predominantly flat with strategic atmospheric depth from photogr
 | Level | Treatment | Use |
 |---|---|---|
 | 0 (flat) | No shadow; `{colors.hairline-soft}` border | Default cards, table rows, form inputs |
-| 1 (subtle) | `rgba(0, 0, 0, 0.04) 0px 1px 2px 0px` | Hover-elevated tiles |
+| 1 (subtle) | `rgba(0, 0, 0, 0.04) 0px 1px 2px 0px` | Raised tiles |
 | 2 (card) | `rgba(0, 0, 0, 0.04) 0px 4px 12px 0px` | Standard feature cards |
 | 3 (mockup) | `rgba(0, 0, 0, 0.08) 0px 12px 24px -4px` | IDE mockup, code editor frames |
 | 4 (modal) | `rgba(0, 0, 0, 0.12) 0px 16px 48px -8px` | Modals, dropdowns |

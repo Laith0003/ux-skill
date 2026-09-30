@@ -2297,7 +2297,28 @@ def one_action_several_labels(ctx: FileContext, view: View, match: re.Match, sta
     return start in _relabelled(ctx)
 
 
+# ---------------------------------------------------------------------------
+# glass-without-fallback
+# ---------------------------------------------------------------------------
+
+_BACKGROUND_DECL = re.compile(r"(?<![\w-])background(?:-color)?\s*:", re.I)
+
+
+def blur_without_background(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """A backdrop blur is a finding only inside a rule block that sets no
+    background or background-color, before or after the blur. The finding
+    sits on the blur's own line."""
+    text, pos = view.text, match.start()
+    opened = max(text.rfind("{", 0, pos), text.rfind("}", 0, pos))
+    if opened == -1 or text[opened] != "{":
+        return False
+    ends = [i for i in (text.find("{", pos), text.find("}", pos)) if i != -1]
+    body = text[opened + 1:min(ends) if ends else len(text)]
+    return _BACKGROUND_DECL.search(body) is None
+
+
 POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
+    "blur-without-background": blur_without_background,
     "input-has-no-name": input_has_no_name,
     "svg-not-hidden": svg_not_hidden,
     "outline-without-ring": outline_without_ring,

@@ -121,6 +121,7 @@
     outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
   @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
   @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none;}}</style>
+<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
 
@@ -211,6 +212,10 @@
 <h1>A design engine that <em>learns offline</em>,<br>and never calls an LLM.</h1>
 <p class="lede">Every other "generative design" tool reaches for an API. ux-skill v3.0 doesn't. Same brief always produces the same output. Reproducible across machines. Yet the system genuinely learns from its own decisions log over time. Here's how the math holds.</p>
 </header>
+<figure class="docfig">
+  <img src="/screenshots/terminal-ux-recommend.webp" width="1600" height="1000" alt="A terminal running ux recommend on a landing-page brief: five lanes (industry, style, palette, type, motion) each resolve with a confidence score and merge into one recommendation file." loading="lazy" decoding="async">
+  <figcaption>31 ms and no API call: the same brief returns the same recommendation on every machine.</figcaption>
+</figure>
 
 <h2>Why no LLM in the loop</h2>
 <p>An LLM in the generation path means:</p>
