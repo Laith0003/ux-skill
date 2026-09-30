@@ -949,6 +949,33 @@ def infinite_animation_unguarded(ctx: FileContext, view: View, match: re.Match, 
     return not all(_guarded(s, guards) for s in block.selectors)
 
 
+# ---------------------------------------------------------------------------
+# animating-layout-properties: an indicator may change its inline size
+# ---------------------------------------------------------------------------
+
+_LAYOUT_PROP = re.compile(r"(?<![\w-])((?:min|max)-(?:width|height|inline-size|block-size)|width|height"
+                          r"|top|left|right|bottom|inline-size|block-size|inset(?:-[a-z]+)*"
+                          r"|margin(?:-[a-z]+)*|padding(?:-[a-z]+)*)(?![\w-])", re.I)
+_INDICATOR = re.compile(r"indicator|underline|ink-?bar|highlight|thumb|selection", re.I)
+_SIZE_ONLY = {"width", "inline-size"}
+
+
+def layout_transition_reflows(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """A transition on a layout property is a finding unless its only
+    layout property is the inline size of a moving indicator (a selector
+    naming an indicator, or an element taken out of flow with position
+    absolute or fixed), which reflows nothing beside it."""
+    props = {m.group(1).lower() for m in _LAYOUT_PROP.finditer(match.group(0).split(":", 1)[-1])}
+    if not props or not props <= _SIZE_ONLY:
+        return True
+    block = block_at(ctx, view, match.start())
+    if block is None:
+        return True
+    position = _decl_map(block.body).get("position", "").strip().lower()
+    return not (any(_INDICATOR.search(s) for s in block.selectors)
+                or position in ("absolute", "fixed"))
+
+
 TASTE_CHECKS = {
     "weight-outside-system": weight_outside_system,
     "tracking-outside-system": tracking_outside_system,
@@ -966,4 +993,5 @@ TASTE_CHECKS = {
     "grid-holds-plain-cards": grid_holds_plain_cards,
     "text-ink-at-low-alpha": text_ink_at_low_alpha,
     "infinite-animation-unguarded": infinite_animation_unguarded,
+    "layout-transition-reflows": layout_transition_reflows,
 }

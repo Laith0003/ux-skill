@@ -51,7 +51,7 @@ EXPECTED = {
     "the-full-type-ladder", "imported-sets-pass", "phone-order-in-both-scripts",
     "phone-accepts-local-input", "one-label-per-action",
     "lint-reads-the-system", "motion-lint-times-the-curve", "photograph-required-in-lint", "eyebrows-follow-formality", "layouts-repeat-at-most-twice", "splits-run-at-most-two", "one-marquee-per-page", "three-cards-read-by-content", "ink-text-keeps-its-alpha", "loops-stop-under-reduced-motion",
-    "color-budget-on-the-page", "grade-lock-on-the-page", "accent-text-on-every-ground", "moving-content-pauses",
+    "color-budget-on-the-page", "grade-lock-on-the-page", "accent-text-on-every-ground", "moving-content-pauses", "layout-transitions-that-reflow",
     "display-follows-expressiveness", "display-lines-sit-tight", "weights-stay-light",
     "two-voice-headline", "capitals-track-open", "lines-break-balanced",
     "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",

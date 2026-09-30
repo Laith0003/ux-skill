@@ -1139,10 +1139,11 @@
           "vue",
           "html"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "layout-transition-reflows"
       },
-      "why": "Animating width, height, top, left, margin, padding triggers layout and paint on every frame - the dropped-frame jank pattern that makes the UI feel cheap.",
-      "fix": "Animate transform (translate, scale) and opacity only. Use scale instead of width, translate instead of top/left. The compositor thanks you."
+      "why": "Animating width, height, top, left, margin or padding lays the page out again on every frame, and everything beside the element moves with it: the dropped-frame jank that makes a UI feel cheap. Two cases reflow nothing beside them and pass: the inline size of a moving indicator (a selector naming an indicator, or an element taken out of flow), and grid-template-rows on a single disclosure, which this rule does not read.",
+      "fix": "Animate transform and opacity: scale instead of width, translate instead of top or left. Open a disclosure with grid-template-rows from 0fr to 1fr, and slide an indicator on transform with its inline size on the system's indicator role (--motion-indicator-duration)."
     },
     {
       "id": "img-no-dimensions",

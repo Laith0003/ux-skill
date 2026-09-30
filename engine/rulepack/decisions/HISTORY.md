@@ -189,3 +189,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Every photograph on a rendered page sits within one grade](grade-lock-on-the-page.md)
 - [Accent text is measured against every ground it lands on](accent-text-on-every-ground.md)
 - [Anything that moves on its own stops under reduced motion and can be paused](moving-content-pauses.md)
+- [A layout transition is flagged when it moves what sits beside it](layout-transitions-that-reflow.md)
