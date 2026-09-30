@@ -143,7 +143,7 @@ Scan the surface for these specific tells. Each found tell is a Critical or High
 
 #### Layout slop
 - **3-equal-card row**: three identical cards in a grid. Lazy. Replace with 2-col zig-zag, asymmetric, horizontal scroll, or bento.
-- **Centered hero**: title centered, subhead centered, CTA centered. When `DESIGN_VARIANCE > 4` this is a fail, unless the page uses the Thesis statement or Cinematic brand archetype by deliberate choice (the centered-hero rule in `references/surfaces/landing.md`).
+- **Centered hero**: title centered, subhead centered, CTA centered, chosen to make the page look calm. Centring is a composition, not a calm default: it passes for a poster-like display in capitals or the Thesis statement and Cinematic brand archetypes (`references/surfaces/landing.md`), and fails for a calm brief over three equal cards.
 - **Equal-spaced everything**: 24px between every section. Real surfaces have rhythm — sections of different weight breathe differently.
 - **Full-width containers**: every section spans the viewport, edge-to-edge. Real layouts have intentional asymmetry — some sections inset, some bleed.
 - **No imagery**: walls of text and CTAs, no photography, no illustration, no diagrams. Text-only is a slop tell.
@@ -292,7 +292,7 @@ If Critical count > 5 OR a purple-blue gradient is found as the primary visual, 
 
 - Never auto-fix a layout change (3-card row → zig-zag) without confirmation. Layout decisions need a human signoff.
 - Never approve a surface with a purple-blue gradient as the primary visual. That is the strongest AI-slop tell.
-- Never approve a centered hero when `DESIGN_VARIANCE > 4`, unless the page uses the Thesis statement or Cinematic brand archetype by deliberate choice (`references/surfaces/landing.md`). Otherwise force asymmetry.
+- Never approve a centred hero picked to look calm; approve it only for a capitals display or a Thesis statement or Cinematic brand page (`references/surfaces/landing.md`, Hero bans).
 - Never replace one Inter with another generic sans. If Inter is wrong, the answer is a typeface with character, not "Inter but different."
 - Never accept random/generic stock or a random/unseeded placeholder service (the linter flags these). Curated Unsplash/Pexels chosen to match the brand + temperature is acceptable; the first unchosen hit, or a rotating placeholder, is the tell. An abstract SVG is not a substitute for a real product/site image.
 - Never approve a surface with no interaction states. Hover, focus, disabled, loading, empty, error — at minimum.

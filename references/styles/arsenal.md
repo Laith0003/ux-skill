@@ -7,7 +7,7 @@ The calling command picks patterns based on:
 - The MOTION_INTENSITY dial
 - The DESIGN_VARIANCE dial
 - The product type (landing, dashboard, component), whose surface-specific patterns live in `references/surfaces/`
-- The committed style system (industrial, minimalist, high-end)
+- The brand's axes and the system built from them (contrast, density, motion, formality)
 
 Patterns below are organized by purpose. Skim by section to find what fits the moment. Cost notes indicate implementation effort; performance notes indicate where these patterns break if applied carelessly.
 
@@ -30,7 +30,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **Cost**: zero — pure layout.
 
 ### Dock-style magnification nav
-**Use when**: creative tools, design-forward portfolios.
+**Use when**: A page with a few destinations shown as icons, and lively motion.
 **What it is**: Navbar at the edge with icons that scale fluidly on hover; neighbors grow proportionally less.
 **Cost**: low — CSS scale + cubic-bezier easing.
 
@@ -61,7 +61,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **Cost**: medium — spring physics + path math.
 
 ### Contextual radial menu
-**Use when**: editing surfaces, creative tools.
+**Use when**: An editing surface where actions belong to the point clicked.
 **What it is**: Circular menu expanding exactly at the click coordinates.
 **Cost**: medium — pointer coords + radial layout.
 
@@ -185,7 +185,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **Cost**: zero — CSS.
 
 ### Tinted-shadow card (creative-cohort signature)
-**Use when**: creative tools, brand-led marketing.
+**Use when**: The brand's hue is strong and the depth is high enough for shadows to carry it.
 **What it is**: Drop shadow colored in the section accent rather than gray. A teal section gets teal-mist shadows. Default values: `0 8px 32px` with 8-14% alpha in the brand hue, often paired with a tighter `0 1px 2px` black at 6% for grounding.
 **Why it works**: Reads as "lit from inside the brand."
 **Cost**: zero — CSS tint.
@@ -214,8 +214,14 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **What it is**: Central background image zooming in / out seamlessly as the user scrolls.
 **Cost**: medium — scroll-trigger + transform.
 
+### Inertial scroll and page transitions (opt-in)
+**Use when**: The brand's motion is 0.6 or more and the brief asks for a cinematic scroll. The system's `motion.scroll` is 0 below that and 0 under reduced motion, so the treatment is off by default.
+**What it is**: Scrolling that eases to rest instead of stopping at once, and pages that transition on `motion.page`. The reader keeps the direction and speed of the scroll; nothing pins or hijacks it.
+**Guard**: Under `prefers-reduced-motion: reduce` native scrolling returns and page transitions drop to a cut. Keyboard, find in page and anchor links keep working.
+**Cost**: medium, a scroll library or the View Transitions API, plus the reduced-motion guard.
+
 ### Liquid swipe transition
-**Use when**: between-page transitions in editorial sites, between hero variants in tabbed flows.
+**Use when**: Page transitions are switched on (an opt-in on `motion.page`), between pages of a long read or hero variants in tabbed flows. Under reduced motion the transition drops to a cut.
 **What it is**: Page transitions that wipe the screen like viscous liquid.
 **Cost**: high — SVG path morphing.
 
@@ -296,7 +302,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **Cost**: zero — CSS color tokens.
 
 ### Variable-axis hover animation
-**Use when**: premium creative-tool surfaces, brand-led marketing.
+**Use when**: The face has a weight axis and the brand's motion is lively.
 **What it is**: Font weight tightens from 400 to 600 as the cursor approaches a label; a number "settles" from 800 to 600 once a counter finishes animating. Cheap to ship if the font supports it; very expensive-looking on first encounter.
 **Cost**: low — `font-variation-settings` animation on a variable font.
 
@@ -312,7 +318,7 @@ Hero and landing-page patterns (hero variants, section flow, AIDA framing) live 
 **Cost**: zero: markup discipline.
 
 ### Headline + deflating qualifier
-**Use when**: ambitious-but-honest brand voice (creative tools, AI products).
+**Use when**: The brand voice makes a large claim and can name its limit.
 **What it is**: Big claim + small honest constraint. "Make anything possible — in one tool." "Build better sites, faster." The qualifier is what makes the claim believable.
 **Cost**: zero — copy structure.
 
@@ -450,7 +456,7 @@ Imagery is part of the design, not a nice-to-have. Every layout must accommodate
 ### Full-bleed product image
 **Use when**: showcasing the actual product / app screen. Anchor every major section with one.
 **What it is**: A single edge-to-edge image (or container-width) running full bleed between text blocks. No frame, no shadow, no caption chrome — let the image speak.
-**Source**: real product screenshots when available; otherwise curated, on-brand stock (Unsplash/Pexels) chosen to match the 7-axis temperature, treated so it reads as deliberate. A custom inline-SVG illustration can support a section but is NOT a substitute for the real image. Random/unseeded placeholder services never ship.
+**Source**: photographs are required: the client's own first, else sourced ones (stock included) that follow the system's photo direction (the `imagery.photo.*` grade, the report's subject and kinds). A brand's ban on a kind of photo narrows the kinds and never removes photography. Real product screenshots add to photographs; a drawn illustration never stands in for one. Random placeholder services never ship.
 
 ### Inline contextual image
 **Use when**: illustrating a feature, a moment, a person.
@@ -474,7 +480,7 @@ Imagery is part of the design, not a nice-to-have. Every layout must accommodate
 **Cost**: low — overlay markup on the screenshot.
 
 ### Tilted product frame
-**Use when**: high-end maximalist / creative-tool styles, hero product mockups.
+**Use when**: A product screen shown as an object, in an expressive brand.
 **What it is**: Product shots tilted 6-12° on the Y-axis, given a subtle perspective shadow, floated against the section background. Creates the "design object" framing — screenshot becomes an artifact, not documentation.
 **Cost**: low — CSS transform + shadow.
 
@@ -489,14 +495,14 @@ Imagery is part of the design, not a nice-to-have. Every layout must accommodate
 **Cost**: zero — overlay markup on the screenshot. Names must be plausible (not "User1").
 
 ### Before / after panel
-**Use when**: AI products, transformation features, magic-trick demos.
+**Use when**: The product turns an input into an output worth comparing side by side.
 **What it is**: Two-panel comparison: messy input left, clean output right, often with an arrow or wand glyph between. Demonstrates value without verbal explanation.
 **Cost**: zero — layout.
 
 Logo wall rules live in `references/surfaces/landing.md` (Proof).
 
 ### Generative-art output as portfolio
-**Use when**: AI products where the output IS the product.
+**Use when**: What the product makes is the proof.
 **What it is**: Sample images, audio waveforms with transcript captions, sample text in an editor, placed in the layout AS IF they were portfolio pieces. The output is the proof; description is supplementary.
 **Cost**: low — curated assets + grid layout.
 

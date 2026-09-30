@@ -135,28 +135,22 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 ### Pattern: Loading button state
 **Use when**: Async actions on a button (submit, save, send).
 **Anti-pattern**: Button stays clickable during submit; user clicks twice and submits twice.
-**How**: Disable the button during async operation. Show a spinner or progress indicator inside the button. Optionally swap label to "Submitting..." or "Saving...". Restore on completion. If the operation takes >3 seconds, show progress (percentage, step indicator) rather than indefinite spinner.
+**How**: Disable the button during the operation. The button keeps its label, the verb, and shows a spinner beside it in the same cell, crossfading on `motion.swap`, at the button's own width so nothing shifts. If the operation takes more than 3 seconds, show progress (percentage, step indicator) rather than an indefinite spinner.
 
 ### Pattern: Tap feedback latency budget
 **Use when**: Any tappable surface.
 **Anti-pattern**: Heavy JavaScript handlers blocking the main thread, delaying tap response past 100ms.
 **How**: Keep tap response under 100ms. Use CSS-only state changes where possible (`:active`, `:focus`). Defer heavy work to `requestIdleCallback` or workers. The visual response must lead the action; the action follows the response.
 
-### Pattern: Press feedback selection by aesthetic
-**Use when**: Defining the active state for an entire design system.
-**Anti-pattern**: Inconsistent press feedback — translate on some, scale on others, color on others.
-**How**: Pick one and apply consistently:
-- Brutalist: full color inversion (zero milliseconds, instant snap)
-- Minimalist: micro-scale `0.98` and slight darken (80 to 150ms)
-- High-end: micro-scale `0.98` combined with magnetic physics shift (80 to 150ms)
+### Pattern: Press feedback from the system
+**Use when**: Defining the pressed state for an entire design system.
+**Anti-pattern**: Inconsistent press feedback: translate on some, scale on others, color on others.
+**How**: Bind every pressable part to the press roles: `motion.press.scale` (about 0.985 for a still, formal brand to 0.96 for a kinetic one, exactly 1 under reduced motion) over `motion.press.duration` on its curve, plus the fill's pressed state. The brand's motion and formality set the values; the component never picks its own.
 
-### Pattern: Hover state selection by aesthetic
-**Use when**: Defining the hover state for an entire design system.
+### Pattern: Hover and state change from the system
+**Use when**: Defining the hover and selected states for an entire design system.
 **Anti-pattern**: Different hover behavior on every component.
-**How**:
-- Brutalist: instant inversion or instant border-color shift to accent
-- Minimalist: subtle shadow lift, micro-scale, or quiet color shift over 150 to 250ms
-- High-end: magnetic button physics with nested icon translation, scale, and color shift over 300 to 500ms with custom cubic-bezier
+**How**: Every part with a hover, selected or pressed state transitions on `motion.state` (150ms for a still, formal brand to 240ms for a kinetic one, 100ms or less under reduced motion), half done within 70ms. A moving selection uses one shared indicator on `motion.indicator`.
 
 ### Pattern: Cursor on web
 **Use when**: Every web interactive element.
@@ -233,7 +227,7 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 - Avoid haptic on every interaction — reserve for moments
 
 ### Loading patterns
-- Button loading: spinner inside button, disable click
+- Button loading: spinner beside the label inside the button, the button keeps its label and width, click disabled
 - Inline loading: skeleton matching layout shape
 - Page loading: thin progress bar at top of viewport
 - Long operation (>3s): show progress percentage or step indicator

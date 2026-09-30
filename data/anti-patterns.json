@@ -1052,7 +1052,7 @@
         "target": "text"
       },
       "why": "99.99%, 10x faster, 100% guaranteed - the suspiciously round numbers AI invents to sound credible. Real measurements are messy and specific.",
-      "fix": "Use the real number you measured: 99.93% uptime over Q1, 4.2x faster median build, refunded 218 of 244 reported issues. Specificity is the signal."
+      "fix": "Never invent a number. Use the client's own figure as the client states it, with what it counts and as of when (\"99.93% uptime over Q1\", \"1,240 repairs since March 2025\"). A figure with no source ships only as a labeled draft placeholder the client fills, never as a claim."
     },
     {
       "id": "display-bold-700",

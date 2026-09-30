@@ -20,7 +20,7 @@
 
 8. **`grid-flow-dense` on bento layouts.** Asymmetric bento grids fill empty cells. No missing corners, no dead space. The card count lives in `references/surfaces/landing.md` (When to include a section).
 
-9. **Section spacing creates chapters** — Each section feels like a distinct cinematic chapter. Marketing sections at `py-32 md:py-48` minimum; premium at `py-40 md:py-56`. Cramming kills editorial energy.
+9. **Section spacing follows the brand.** Sections sit `layout.landing-gap.<tier>` apart: 64 to 240px at desktop, wider for a calm or formal brand and tighter for a loud one, and 0.6 to 0.9 of that on a phone. Bands carry the rhythm at high energy and none at calm (`color.budget.bands`).
 
 10. **Conventions over cleverness for navigation** — Logo top-left. Nav top or left. Search = magnifying glass. Innovate when you have a better idea; otherwise honor convention so users can scan.
 
@@ -83,7 +83,7 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 **How**: A short headline + bullet list pins on the left while a stack of product screenshots scrolls past on the right, swapping in at scroll triggers. Frame 1: empty state. Frame 2: user types. Frame 3: result appears. Frame 4: AI responds. Couples narrative with motion without requiring autoplay.
 
 ### Pattern: Brutalist edge-bleed macro-typography
-**Use when**: Industrial, technical, anti-mainstream aesthetic.
+**Use when**: High contrast, geometric type and low warmth, with capitals: the loud, technical end of the axes.
 **Anti-pattern**: Containing brutalist headlines inside a polite SaaS max-width.
 **How**: Macro-typography is allowed and encouraged to bleed past viewport edges, cropping a numeral or letter. Reinforces the "this is a printed plate" feeling. Use fluid clamps like `clamp(4rem, 10vw, 15rem)` so headlines visibly press against viewport edges. Push macro-headlines to one rail; cluster telemetry tight against the opposite edge.
 
@@ -122,7 +122,7 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 **How**: A short headline + bullet list pins on the left while a stack of product screenshots scrolls past on the right, swapping in at scroll triggers. Frame 1: empty state. Frame 2: user types. Frame 3: result appears. Frame 4: AI responds. Mobile collapse: vertical stack with one image per frame, no pinning.
 
 ### Pattern: Templates and gallery section
-**Use when**: Creative tools, design platforms, or any product with user-generated artifacts.
+**Use when**: The page shows things people made with the product.
 **Anti-pattern**: Burying templates and example projects in a separate page.
 **How**: A "see what people made" or template-grid section roughly 70% down the page. Horizontal-scroll carousel of starting points lets users see "what I could make" before committing. Hover-reveals creator names. Refreshed regularly as a living asset.
 
@@ -149,8 +149,8 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 ## Tokens / values
 
 ### Container widths
-- Outer container: `max-w-7xl mx-auto` (1280px) or `max-w-[1400px] mx-auto`
-- Cap above which the page just centers: 1400px
+- Outer container: `layout.container.max`; an expressive brand page (expressiveness 0.5 and up) takes the full-width frame, `layout.landing.full`, a 1920px container with a 24 to 48px margin by energy
+- Reading columns keep their measure inside either frame (`layout.measure.*`)
 - Prose / text columns: `max-w-prose` or `max-w-[65ch]` (~640 to 720px)
 - Hero H1 container: `max-w-5xl` to `max-w-7xl` (1024 to 1280px) or wider
 - Visual containers: `max-w-5xl` to `max-w-7xl` (1024 to 1280px)
@@ -163,12 +163,10 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 - 1024px: laptop (`lg:`)
 - 1280px: desktop (`xl:`)
 - 1440px: wide desktop (`2xl:`)
-- Cap layouts at 1400px
+- Wide screens: the frame grows to `layout.container.max` or the full-width frame; text keeps its measure
 
 ### Section padding (marketing)
-- Default: `py-32 md:py-48` (128px / 192px)
-- Premium: `py-40 md:py-56` (160px / 224px)
-- Editorial: `py-32 md:py-48`
+- Every section: `var(--layout-landing-gap)`, 64 to 240px at desktop by the brand (calm and formal wider, loud tighter), 0.6 to 0.9 of it on a phone
 - Final CTA: `py-32 md:py-48` with tinted background band
 - Mobile minimum: `py-16` (64px)
 
@@ -217,7 +215,7 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 - `h-screen` (use `min-h-[100dvh]`)
 - Flex percentage math (use Grid)
 - 3-column equal card feature rows
-- Center-everything fallback at VARIANCE > 4
+- Center-everything as the fallback for a calm page (centring is a composition, chosen for a poster-like or capitals display)
 - Bento grids with empty cells (use `grid-flow-dense`)
 - Cramped sections (`py-12` on marketing)
 - Horizontal scroll on mobile body content

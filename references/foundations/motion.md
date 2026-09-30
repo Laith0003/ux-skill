@@ -26,13 +26,13 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 
 1. **Motion communicates, never decorates** — Every animation expresses a cause-effect relationship: a state change, a hierarchy shift, a confirmation, a spatial transition. Decoration-only motion is noise that drains attention and battery.
 
-2. **Duration is calibrated to function** — 150 to 300ms for micro-interactions (button press, hover, focus). 250 to 400ms for entry transitions (modal open, page transition). 400 to 700ms for complex transitions (large content swap, multi-element orchestration). Never exceed 500ms for UI feedback, never exceed 900ms for major entries.
+2. **Motion is judged by when it answers.** The system's roles set the durations from the brand: reveal and swap 200 to 450ms, expand 250 to 500, page 300 to 600, arrive 350 to 800, state 150 to 240, slower for a formal brand and quicker for a loud one. Length alone decides nothing; the curve does. A direct response (press, hover, state, swap, indicator) is half done within 70ms and nine tenths within 220ms, an entrance half within 140ms (motion.settle_ms). Reduced motion keeps 100ms or less.
 
 3. **Easing has direction and meaning** — `ease-out` (`cubic-bezier(0.16, 1, 0.3, 1)`) for entering. `ease-in` for exiting. `linear` never on UI transitions (linear motion reads mechanical and dated). Spring physics or custom cubic-beziers for natural feel.
 
 4. **Exit is faster than enter** — Exit animations run at 60 to 70% of enter duration. The asymmetry feels more responsive. A modal that opens in 300ms closes in 200ms.
 
-5. **Animate only `transform` and `opacity`** — These are the only two properties that hit the compositor without triggering layout. Animating `width`, `height`, `top`, or `left` causes layout shift, CLS, and frame drops.
+5. **Animate `transform` and `opacity`.** These hit the compositor without laying the page out again. Animating `width`, `height`, `top` or `left` on an element in flow moves everything beside it. Two moves reflow nothing and are allowed: `grid-template-rows` from 0fr to 1fr on a single disclosure, and the inline size of a moving indicator (`motion.indicator`).
 
 6. **Respect reduced-motion at every level** — `prefers-reduced-motion: reduce` is a contract. Replace `translateY` reveals with opacity-only fades. Pause background ambient motion. Drop blur from scroll entries. Never opt the user back in by default.
 
@@ -195,13 +195,13 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - Hover: 150 to 250ms
 - Micro-interaction: 150 to 300ms
 - Modal / sheet entry: 250 to 400ms
-- Page transition: 250 to 350ms
-- Scroll-triggered reveal: 300 to 500ms (quiet) or 400 to 600ms (premium)
-- Premium cinematic entry: 700 to 900ms
+- Page transition: the system's `motion.page`, 300 to 600ms; an opt-in treatment that drops to a cut under reduced motion
+- Scroll-triggered reveal: the system's `motion.reveal`, 200 to 450ms by the brand
+- Entrance: the system's `motion.arrive`, 350 to 800ms, half done within 140ms
 - Number counter: 800 to 1500ms
 - Stat ticker on enter: 800 to 1500ms with ease-out
-- Logo marquee full loop: 20 to 60 seconds
-- Ambient background motion: 4 to 8 second loops
+- Logo marquee full loop: 20 to 60 seconds, with a pause control and stopped under reduced motion
+- Ambient background motion: 4 to 8 second loops, stopped under reduced motion; anything moving more than 5 seconds beside other content gets a pause control (2.2.2)
 - Brand mark on first load: 600 to 1200ms (skip on return visits)
 - Exit duration: 60 to 70% of enter duration
 
@@ -271,7 +271,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 
 ### Banned motion patterns
 - Side scroll progress paths (fixed-position SVG drawing lines down the viewport edge)
-- Animating `width`, `height`, `top`, `left`
+- Animating `width`, `height`, `top`, `left` on an element in flow (a disclosure's `grid-template-rows` and an indicator's inline size are allowed)
 - `linear` easing on UI transitions
 - Snapping state changes (instant 0ms with no transition) outside brutalist contexts
 - Scroll-jacking that forces horizontal narrative

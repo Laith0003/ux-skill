@@ -44,8 +44,8 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 ### 2. Thesis statement
 
 **Structure.** A centered, single-line display headline. Two to four sentences of body-size prose under it. One CTA with at most one secondary link. Then long-form argument sections, a before and after panel, a short proof band, and a closing CTA that restates the thesis.
-**Pick it when.** The brand voice is the product: editorial positioning, AI and research products, a company with a point of view to argue.
-**It fails when.** The archetype is picked by default rather than deliberately, which breaks the centered-hero rule: Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately. It also fails when the H1 wraps past three lines, or the hero grows a toolbar of buttons. A thesis page with no argument under the hero is a slogan, not a page.
+**Pick it when.** The brand voice is the product: a company with a point of view to argue in full sentences.
+**It fails when.** The archetype is picked by default rather than deliberately, which breaks the centered-hero rule: A centred hero fits a brand that leans to capitals (a poster-like display), or the Thesis statement and Cinematic brand archetypes chosen deliberately; centring is never the calm default. It also fails when the H1 wraps past three lines, or the hero grows a toolbar of buttons. A thesis page with no argument under the hero is a slogan, not a page.
 
 ### 3. Product demo led
 
@@ -69,7 +69,7 @@ Pick one archetype per page and commit to it. Each one is a complete skeleton. M
 
 **Structure.** A full-bleed image or muted video with a dark radial wash. Centered statement, exactly two high-contrast CTAs. Image-led sections below: lifestyle photography at 4:5 or near-square, one product detail section, a short story, a closing CTA.
 **Pick it when.** Imagery carries the value: the brand has real photography of its product or place, and a brand book that allows it.
-**It fails when.** The archetype is picked by default rather than deliberately, which breaks the centered-hero rule: Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately. It also fails when the text sits on the image without a legible scrim, or the imagery is generic stock that could advertise anything.
+**It fails when.** The archetype is picked by default rather than deliberately, which breaks the centered-hero rule: A centred hero fits a brand that leans to capitals (a poster-like display), or the Thesis statement and Cinematic brand archetypes chosen deliberately; centring is never the calm default. It also fails when the text sits on the image without a legible scrim, or the imagery is generic stock that could advertise anything.
 
 ### 7. Service lead generation
 
@@ -104,7 +104,7 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 ### split
 
 **Structure.** The message on one side and one image or proof object on the other, then sections that alternate sides.
-**The engine picks it** when the brief is formal, the contrast is balanced rather than extreme, and the temperature is cool: formality, balanced contrast and coolness are its three terms. It suits business software, finance, security, and a marketplace with a real product view.
+**The engine picks it** when the brief is formal, the contrast is balanced rather than extreme, and the temperature is cool: formality, balanced contrast and coolness are its three terms. It fits a page whose value is one real product view beside one argument.
 **At 1440.** Hero: the copy spans 7 of the 12 columns and the media 5, or 5 and 7 when the media carries the value; headline, one lede, the primary action and at most one secondary link. Proof: one full-width band directly under the hero, either a logo row or three to five figures with their labels. Sections below alternate the media side, each 7 and 5. Call to action: a full-width closing band on `color.surface.brand` with one filled action.
 **At 375.** Hero: one column, copy, then the action at full width, then the media at full width at `imagery.ratio.card` or the media's own ratio, cropped clear of any mark. Proof: the band becomes two figures per row, or a logo row that wraps to two rows. Every alternating section stacks the same way, media first. Call to action: the closing band keeps one full-width action.
 **Arabic.** Under `dir="rtl"` the copy column takes the start side, the right, and the media the left, through logical grid placement, not reordered markup. The alternation mirrors with it. Figures keep Western digits and the media itself never flips.
@@ -113,8 +113,8 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 ### stacked
 
 **Structure.** One centered column of large, calm sections, one idea each, read top to bottom.
-**The engine picks it** when the audience is older or of mixed age (the age field weighs most), the density is airy and the contrast is muted: the audience's age, airiness and muted contrast are its terms. It suits patient-facing healthcare, public services and local businesses whose visitors read on a phone.
-**At 1440.** Hero: headline, lede and one action centered within `layout.measure.text`, with the image below the action across the container, never beside it. Pair it with the Thesis statement archetype so the centered hero is deliberate; otherwise align the hero to the start of the same column. Proof: one row of figures or one named quote, inside the measure. Each later section is one idea in the measure, its media across the container, and every second region sits on `color.surface.band` so the column has a rhythm. Call to action: a centered closing band that repeats the hero's action.
+**The engine picks it** when the audience is older or of mixed age (the age field weighs most), the density is airy and the contrast is muted: the audience's age, airiness and muted contrast are its terms. It fits a page read top to bottom on a phone, one idea at a time.
+**At 1440.** Hero: headline, lede and one action centered within `layout.measure.text`, with the image below the action across the container, never beside it. Pair it with the Thesis statement archetype so the centered hero is deliberate; otherwise align the hero to the start of the same column. Proof: one row of figures or one named quote, inside the measure. Each later section is one idea in the measure, its media across the container, and regions sit on `color.surface.band` in the share `color.budget.bands` allows, so a calm column keeps its rhythm in space alone and a loud one in bands. Call to action: a centered closing band that repeats the hero's action.
 **At 375.** Almost nothing moves, since the column already fits. Hero: the headline steps down and the action goes full width. Proof: figures stack one per row, or the quote runs the full width. Call to action: the closing band keeps its one action at full width. The landing gap takes its phone value.
 **Arabic.** Centered lines stay centered. Lists, forms and captions inside the column align to the start, the right.
 **It fails when.** Every region is the same centered block at the same weight and the page reads as a slide deck, or it is kept for a product people have to compare side by side.
@@ -122,7 +122,7 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 ### bento
 
 **Structure.** A grid of tiles of different sizes, each a feature or a number, scanned at a glance.
-**The engine picks it** for a dense, high-contrast brief with geometric type, and more strongly when the brief's reading context is glance: density, contrast, geometric type and glance reading are its terms. It suits developer tools, status and monitoring products, and apps whose value is several capabilities at once.
+**The engine picks it** for a dense, high-contrast brief with geometric type, and more strongly when the brief's reading context is glance: density, contrast, geometric type and glance reading are its terms. It fits a page whose value is several capabilities at once, each shown by a real view or a figure.
 **At 1440.** Hero: a start-aligned or split hero above the grid; the grid is never the hero. Grid: five to eight tiles on the 12 columns, spanning 3, 4, 6 or 8 columns and one or two rows, with one lead tile (6 or 8 columns, two rows) holding the real product view. Tiles sit `layout.gutter.desktop` apart, not the region gap. Proof: figures live inside tiles with their labels, and one tile may hold a named quote. Call to action: a closing band after the grid, never a tile.
 **At 375.** Hero: copy, action at full width, then the product view. Grid: one column in reading order, lead tile first, each tile at full width with its height set by its content. Proof: two figure tiles may share a row when each is a number and a short label; a quote tile runs full width. Call to action: the closing band after the last tile, one full-width action.
 **Arabic.** Grid placement mirrors, so the lead tile starts at the right edge. Tile content aligns to the start; digits keep their order.
@@ -131,7 +131,7 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 ### editorial-column
 
 **Structure.** A narrow reading column with a large display title, pull quotes and images set into the text.
-**The engine picks it** for humanist type, a formal tone and an airy density, and more strongly when the reading context is long reading: humanist type, formality, airiness and long reading are its terms. It suits research, editorial products, consultancies that sell judgment and long product explainers.
+**The engine picks it** for humanist type, a formal tone and an airy density, and more strongly when the reading context is long reading: humanist type, formality, airiness and long reading are its terms. It fits a page with a long argument to read.
 **At 1440.** Hero: the display title start-aligned across up to 8 columns, a standfirst in the body style within `layout.measure.text`, a line of metadata in `type.text.label`, then one image at `imagery.ratio.hero` across the container. Body: the text column at `layout.measure.text`, offset from the start by one or two columns; images break out to the container; pull quotes sit in the wide margin beside the paragraph they come from. Proof: the pull quotes, each attributed with name, role and company. Call to action: an inline action where the argument ends, then a closing band.
 **When the client has no pull quotes:** use one of the client's own sentences as a callout, set large with no quotation marks and no attribution, since it is the page's own claim; or a real figure with its source in a caption; or a captioned image of the real product or place. Never an invented quote, and never quotation marks around words nobody said.
 **At 375.** Hero: the title steps down and the standfirst follows it, the image runs the full width. Body: the column takes the full width inside the margins. Proof: margin quotes and callouts become blocks between paragraphs. Call to action: the inline action at full width, then the closing band.
@@ -141,8 +141,8 @@ What all five share. Widths are read at 1440 (the desktop tier: `layout.columns.
 ### full-bleed-media
 
 **Structure.** Edge-to-edge images or generated art with the headline on a scrim, then bands of media and short copy.
-**The engine picks it** for a warm, playful brief with lively motion: warmth, playfulness and motion are its terms. It suits hospitality, food, consumer products, events and lifestyle brands with real photography.
-**At 1440.** Hero: the image runs to both viewport edges at `imagery.ratio.hero`, with the headline and action inside the container on `imagery.scrim` in `imagery.on-scrim`, the scrim measured on the worst part of the image (decisions/scrim-worst-image.md). Proof: a band of short attributed lines or a rating between the media bands, on the page surface, never on a photo. Below, full-bleed image bands alternate with contained text bands. Call to action: a closing band over an image on the scrim, or on `color.surface.brand`.
+**The engine picks it** for a warm, playful brief with lively motion: warmth, playfulness and motion are its terms. It fits a page carried by real photography of a place, a thing or the people in it.
+**At 1440.** Hero: the image runs to both viewport edges at `imagery.ratio.hero`, with the headline anchored at the bottom start (centred for a brand that leans to capitals, the composition's anchor) and the action under it inside the container, on `imagery.scrim` in `imagery.on-scrim` reaching `imagery.scrim-reach` of the hero's height from its bottom edge, the scrim measured on the worst part of the image (decisions/scrim-worst-image.md). Proof: a band of short attributed lines or a rating between the media bands, on the page surface, never on a photo. Below, full-bleed image bands alternate with contained text bands. Call to action: a closing band over an image on the scrim, or on `color.surface.brand`.
 **At 375.** Hero: an art-directed portrait crop at `imagery.ratio.portrait` (a separate source through `<picture>`), subject clear of the text; the headline sits on the scrim in the lower third and the action runs full width. Each band stacks image then text. Proof: the attributed lines stack one per row on the page surface. Call to action: the closing band keeps its scrim and one full-width action.
 **Arabic.** The text block moves to the start side, the right, and the crop keeps the subject away from it, so the right-to-left crop may differ from the left-to-right one. Photos never flip.
 **It fails when.** The images are stock, text sits on a photo without the scrim, or the client has no real imagery; then start from the runner-up the report names instead.
@@ -196,6 +196,8 @@ Length is not the variable; what the page answers before it asks is. A light ask
 ### Hero composition
 
 - One headline, one supporting line, one primary CTA (filled) and at most one secondary (ghost button or text link), one product image or short motion. The CTA section below holds the button rules.
+- **The action on a brand or editorial page may live in the header.** A Cinematic brand or Editorial long form page can keep its first screen to the headline and the image, with the filled action in the header; a product, lead-generation or single-field page keeps the filled action in the hero body.
+- **The headline is the display role.** `type.text.display` runs 60 to 240px at 1440 by the brand's expressiveness and 36 to 90px on a phone; set it on the role, balanced (`text-wrap: balance`), never at a size of your own.
 - Above the fold, nothing else fights for attention. No carousel, no slideshow, no rotating taglines.
 - **H1 line limit.** The H1 runs 3 lines at most at every breakpoint from 375px to 1440px; a 4-line H1 fails. Meet the limit by widening the headline's container up to `layout.container.max`, and by tightening the words, never by shrinking `type.text.display` or adding a size of your own.
 - **One argument to one reader.** The first screen is a single case made to a single person. Before building it, write one line for what the page claims and one for who it claims it to; the headline, the lede, the image and the button each serve that pair, or they are rewritten. Drift shows up most between the headline and the lede, when the first speaks to the person doing the work and the second to the person who pays. The button follows how this reader buys: a self-serve verb such as "Start free" does not sit under copy aimed at a buying committee, which expects "Talk to sales" or "Book a demo". Change only the part that drifted. The first screen passes the stranger test (shown only that screen, someone new names the product and its reader) and the swap test (a rival's name in the headline makes it false).
@@ -205,15 +207,15 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **Asymmetric split hero.** Text aligned left or right, media asset on the opposite side, no centering. The background fades subtly into the page background (lighter on light mode, darker on dark mode). The split is intentionally uneven, 7/5 or 5/7 columns, not 6/6. It defeats the "centered hero over dark image" default: the asymmetry creates hierarchy without typography variance. Cost: zero, pure layout.
 
-**Editorial split hero.** For premium SaaS and content-led products. Text left, image right, with massive negative space between. The split is 60/40 or 65/35 with breathing room, not 50/50. Cost: zero, layout discipline.
+**Editorial split hero.** For content-led pages. Text left, image right, with massive negative space between. The split is 60/40 or 65/35 with breathing room, not 50/50. Cost: zero, layout discipline.
 
-**Artistic asymmetry hero.** For brand-forward marketing and creative-tool landings. Text offset to the left, an artistic floating image overlapping the text from the bottom right, generous negative space. Cost: low, layout plus image z-stacking.
+**Artistic asymmetry hero.** For a brand-led page with an image that can overlap the text. Text offset to the left, an artistic floating image overlapping the text from the bottom right, generous negative space. Cost: low, layout plus image z-stacking.
 
-**Asymmetric hero with stylistic fade.** For brand-driven launch pages and premium consumer products. A high-quality relevant background image with a subtle stylistic fade (darkening or lightening into the page background depending on mode). Text aligned cleanly left or right. Cost: low, image processing plus a CSS gradient mask.
+**Asymmetric hero with stylistic fade.** For a brand-led page with one strong photograph. A high-quality relevant background image with a subtle stylistic fade (darkening or lightening into the page background depending on mode). Text aligned cleanly left or right. Cost: low, image processing plus a CSS gradient mask.
 
 **Cinematic center hero.** For marketing surfaces where a single statement carries the entire value proposition. Text perfectly centered, ultra-wide H1 container (`max-w-5xl` or wider), exactly two high-contrast CTAs below. Behind everything, a full-bleed background image with a dark radial wash. Buttons stay legible: a dark background gets white text, a light background gets dark text. When centered is the intentional choice (not the default), it functions as a declaration of confidence; the centered-hero rule in Hero bans decides when it is allowed. Cost: low, careful contrast tuning and image processing.
 
-**Thesis-statement hero.** For editorial, AI and research-positioning products. Large centered display headline (single line if possible), 2-4 sentences of body-size prose under it, single CTA with at most one secondary link. No multi-button toolbar. The cliff between display scale and body scale is the design. Confidence reads as willingness to use full sentences in the subhead. Cost: zero, typographic discipline.
+**Thesis-statement hero.** For a page whose case is one statement argued in full sentences. Large centered display headline (single line if possible), 2-4 sentences of body-size prose under it, single CTA with at most one secondary link. No multi-button toolbar. The cliff between display scale and body scale is the design. Confidence reads as willingness to use full sentences in the subhead. Cost: zero, typographic discipline.
 
 **Email-capture hero.** A single email input plus a single button as the hero's primary CTA. See archetype 5. Cost: low, form plus state.
 
@@ -223,7 +225,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **Large product mock.** The canonical hero image is the actual UI: a dashboard, a workflow, a chat interface. Cropped close, with extreme detail visible and real-looking data inside it. Soft drop shadow and subtle rounded corners (12-24px). Box-shadow at low opacity and high blur (for example `0 24px 64px rgba(0,0,0,0.08)`). The screenshot floats above the page without harsh edges.
 
-**Cropped dashboard preview.** For B2B marketing that shows dashboards or admin interfaces. Cropped, never full-page. The reader sees one card, one chart, a sliver of nav: enough to read "this is software," not enough to parse the dashboard. Real data shapes (sparklines, log lines, plausible numbers) instead of stock chart shapes. Cost: zero, design discipline.
+**Cropped dashboard preview.** For a page whose product is a dashboard or an admin interface. Cropped, never full-page. The reader sees one card, one chart, a sliver of nav: enough to read "this is software," not enough to parse the dashboard. Real data shapes (sparklines, log lines, plausible numbers) instead of stock chart shapes. Cost: zero, design discipline.
 
 **Code as hero content.** For a product that ships code or runs in a terminal. Treat a code block like hero photography. Short (6-14 lines), syntax-highlighted with a custom theme that matches the page accent, inside window chrome (traffic-light dots, a title bar with the filename). Built in HTML and CSS, not a screenshot, so it scales crisply. Cost: medium, a custom syntax theme plus window chrome styling.
 
@@ -231,7 +233,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **Interactive product demo.** A real, manipulable instance of the product running inline. The user can drag, type and click, and the product responds with actual logic, not a video loop. The strongest "designed by designers" signal available. Affordances: subtle pulsing dots, ghost hand-cursor hints, a "try it" label on the first interactable element.
 
-**Animated metric callouts.** Numbers tick up from 0 on entry over 800-1500ms. Restricted to 2-3 stats; more dilutes the effect. The counter triggers once per page entry, then stays static. Numbers use tabular figures, so the layout does not shift during the count, and an eyebrow above each stat names what it counts.
+**Animated metric callouts.** Numbers tick up from 0 on entry over 800-1500ms. Restricted to 2-3 stats; more dilutes the effect. The counter triggers once per page entry, then stays static. Numbers use tabular figures, so the layout does not shift during the count, and a label under each figure names what it counts.
 
 **Kinetic headline reveal.** Hero text appears almost instantly; the heavier interactive demo or 3D render fades in 200-400ms behind it. Never make users wait for first meaningful paint.
 
@@ -243,11 +245,11 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **3D marquee object.** A single render of the product as a physical thing: soft-clay device, glass orb, metallic monolith. Rotates on scroll. Matte (not glossy) PBR materials with a strong rim light and a soft floor shadow.
 
-**Two-column hero with metaphor image.** The text does the heavy lifting; the image carries a metaphor. Works for support and customer-experience categories. The image is atmospheric, not literal product UI: water, light, fabric or sky as a metaphor for the feeling the product evokes.
+**Two-column hero with metaphor image.** The text does the heavy lifting; the image carries a metaphor. Works when the product is a feeling more than a screen. The image is atmospheric, not literal product UI: water, light, fabric or sky as a metaphor for the feeling the product evokes.
 
 **Synthetic screenshot composition.** When the product is too abstract to screenshot (a workflow, an agent conversation, a queue of work), the hero becomes a stylized composition of UI fragments: a card, a notification, a chat bubble, a status pill, floating against a soft background.
 
-**Narrative chat thread.** A multi-turn conversation between an agent and a person, shown inline. The reader absorbs the capability through the conversation instead of prose explaining it. Replaces older "feature screenshot" treatments for AI-adjacent capabilities.
+**Narrative chat thread.** A multi-turn conversation between an agent and a person, shown inline. The reader absorbs the capability through the conversation instead of prose explaining it. Fits a product that works through conversation.
 
 **Cropped interface fragment.** A standard split where the visual is a real interface fragment, not a stock illustration, and it overflows the viewport on purpose (a cropped right edge) to imply scale. The deliberate crop is the signal. Cost: zero, layout.
 
@@ -259,7 +261,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 | Don't | Do instead |
 |---|---|
-| Centered hero with text over dark image as the default | Asymmetric hero: text left or right, image with a subtle stylistic fade. Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately. |
+| Centered hero with text over dark image as the default | Asymmetric hero: text left or right, image with a subtle stylistic fade. A centred hero fits a brand that leans to capitals (a poster-like display), or the Thesis statement and Cinematic brand archetypes chosen deliberately; centring is never the calm default. |
 | Symmetric 50/50 split-screen heroes | 7/5 or 5/7 split. The asymmetry creates hierarchy without typography variance |
 | Cookie-cutter left-text-right-image hero as the default reach | Editorial split (massive whitespace between halves), curtain reveal, asymmetric float, or full-bleed background |
 | `h-screen` on the hero | `min-h-[100dvh]`. The iOS Safari address-bar collapse breaks `h-screen` |
@@ -334,7 +336,7 @@ For trust strips and customer-proof sections. 6-10 customer logos in a single ro
 | Customer quotes without a name, role, or company | Name plus role plus company at minimum. Quotes with no attribution read as fabricated |
 | Generic testimonial sections of 15+ unattributed quotes | 2-3 strong, named, quantified quotes beat 15 vibes-only |
 | Auto-playing testimonial videos on page load | Opt-in. Auto-play is intrusive |
-| Stat callouts that are visibly invented ("99.99% uptime!"), or real figures reshaped to look precise | The client's figure as the client gives it, with what it counts and as of when ("1,240 repairs since March 2025"). A round real figure stays round |
+| Stat callouts that are visibly invented ("99.99% uptime!"), or real figures reshaped to look precise | The client's figure as the client gives it, with what it counts and as of when ("1,240 repairs since March 2025"). A round real figure stays round. Never invent a number: a figure with no source ships only as a labeled draft placeholder the client fills |
 | A count with no definition or date ("10,000+ happy customers") | Render it as a plain fact line with its basis, what it counts and as of when, or drop it |
 | A logo row standing in for an outcome ("Trusted by" above logos, and no result anywhere) | A logo row proves a relationship, not a result. An outcome claim needs its own figure or a named quote |
 | "Trusted by 10,000+ developers" with no logos | Show logos or show nothing |
@@ -445,7 +447,7 @@ A landing page that ships in Arabic is designed in Arabic, not mirrored after th
 ### High
 - [ ] One archetype chosen and committed; the page does not mix skeletons
 - [ ] Headline, subhead, visual and CTA address the same reader and the same buying motion
-- [ ] Centered hero only when DESIGN_VARIANCE is 4 or below, or when the archetype is Thesis statement or Cinematic brand and was chosen deliberately.
+- [ ] A centred hero fits a brand that leans to capitals (a poster-like display), or the Thesis statement and Cinematic brand archetypes chosen deliberately; centring is never the calm default.
 - [ ] No hero button that scrolls to a form already visible in the hero
 - [ ] No customer logos in original full color
 - [ ] Specific CTAs, not "Get Started" / "Learn More" reflexively

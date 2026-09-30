@@ -12,7 +12,7 @@ Treat each ban as a hard rule unless a brief explicitly overrides it, or the cli
 
 2. **Restraint beats decoration.** Single accent color, neutral base, intentional whitespace. Don't add a gradient because the model defaults to one. Don't add a glow because the surface needs "polish." A surface needs a job, not ornament.
 
-3. **Type carries weight, not just size.** Hierarchy comes from weight + color + spacing — not from `text-9xl`. Oversize H1s that scream just because they're H1s are amateur. Premium type whispers at scale.
+3. **Type size follows the brand.** Hierarchy comes from size, weight and color together, and the headline's size is the system's display role: 60 to 240px at 1440 by the brand's expressiveness (character.landing_display_px), near 60 to 90px for a calm brand and 180 to 240px for a loud one. A size of your own, larger or smaller, is the tell.
 
 4. **Motion has meaning or it doesn't ship.** Decorative animation is slop. Every motion expresses cause and effect, confirms a state change, or invites engagement. Bouncing for the sake of bouncing dates the work in six months.
 
@@ -81,7 +81,7 @@ Mobile is not the small version of the desktop — it is where most of the traff
 | Flex math like `w-[calc(33%-1rem)]` | CSS Grid (`grid grid-cols-1 md:grid-cols-3 gap-6`) |
 | `border-radius: 9999px` on non-tag elements (pill cards, pill primary buttons) | Pill shape is reserved for tags, status badges, sometimes primary CTAs in maximalist styles |
 | Inconsistent corner radii across components | Pick 2-3 radii and commit. Mixing 4, 8, 12, 16, 24px across a single page reads as undisciplined |
-| Hard-edged dark slabs alternating with white slabs as section dividers | Use eyebrow tags and whitespace rhythm to separate sections; reserve full-color bands for one or two moments per page |
+| Color bands switched on and off down the page with no content reason (the same idea on alternating slabs) | Bands carry the section rhythm by the brand's energy: `color.budget.bands` of the sections sit on a band, none on a calm page and up to half on a loud one. Otherwise space and a change of ground separate sections; an eyebrow never separates sections |
 
 Hero rules, including the hero height, live in `references/surfaces/landing.md`.
 
@@ -92,22 +92,22 @@ Hero rules, including the hero height, live in `references/surfaces/landing.md`.
 | Don't | Do instead |
 |---|---|
 | Serif faces on dashboards, admin, data UIs, software UIs | Sans only. Geist + Geist Mono, Satoshi + JetBrains Mono, IBM Plex Sans + IBM Plex Mono, or similar disciplined pairings |
-| H1 that screams (`text-9xl`) just because it's an H1 | Hierarchy from weight + color + spacing; cap display at `text-4xl md:text-6xl tracking-tighter leading-none` unless the brief is maximalist |
+| A headline size of your own (`text-9xl`, `text-[112px]`), larger or smaller than the system's | The display role: `type.text.display`, a fluid clamp from character.landing_display_px, 60 to 240px at 1440 and 36 to 90px on a phone. Widen the container before the size shrinks |
 | H1 wrapping past the line limit in `references/surfaces/landing.md` (Hero composition) | Widen the container (`max-w-5xl`, `max-w-6xl`, `w-full`) and use `clamp()` to scale the font down |
 | Mismatched font families per section | One display + one body across the entire project. If a serif appears, it appears surgically — once or twice per page maximum |
-| Body text > 75 characters per line | `max-w-[65ch]` on paragraphs. Roughly 55-72 characters per line is the editorial sweet spot |
+| Paragraphs wider than the system's measure | `layout.measure.landing`, 42 to 56 characters of the text face on a landing page, and `layout.measure.text`, 60 to 70 for reading |
 | Body type below 16px on marketing surfaces | 16-18px minimum. Compressed body type reads as a startup template |
 | Arial, Roboto, generic system stacks as primary display, in a generated system | Distinctive display face (Geist, Satoshi, Cabinet Grotesk, Outfit), or a deliberately chosen variable sans. Note: Inter is a legitimate, modern choice; pair it carefully and don't reach for it reflexively as the only option |
 | Default font-fallback chains (the standard humanist sans most platforms ship), in a generated system | Choose the type intentionally even when the brief doesn't specify. A client's own system stack stays (principle 11) |
 | Same display family across every output | Vary across generations. Never converge on one stack repeatedly |
 | Title Case Across Every Word In Headlines | Sentence case. Title case reads as advertising copy from a previous decade |
-| ALL CAPS headlines at >14px | All-caps reserved for eyebrow labels at 10-13px with tracked spacing (0.05em-0.1em) |
-| All-caps for body copy, subheads, or anything readable | Breaks legibility. Reserved for eyebrow labels only |
+| A headline in capitals when the system does not lean to capitals | Sentence case. A loud brand's system leans to capitals (character.capitals at 0.5 and up) and sets them on `type.text.display-caps`, tracked at 0 or open; a calm brand keeps its headlines in sentence case |
+| Capitals on body copy, subheads, or anything read at length | Breaks legibility. Capitals belong to short labels and to a loud brand's display |
 | Italic used as decoration | Italic means "this is a title" or "I am emphasizing this word" — not "this is a fancy moment" |
-| Tracking left at 0 on display sizes (>48px) | Tighten display tracking by -1% to -3% (-0.01em to -0.03em). The fix that separates polished from amateur |
+| Display tracking of your own | The system's tracking per step, tighter as contrast rises; capitals track at 0 or open (`type.tracking.caps`) |
 | Tabular figures mixed with proportional figures on the same page | Pick one. Stat blocks, prices, version strings get tabular; prose gets proportional |
 | Straight quotes (' ") in copy, and a double hyphen or a long dash as punctuation | Curly quotes and apostrophes in copy. No em dashes and no double hyphen: a period, a comma or a colon does the job |
-| Decorative or handwritten display faces on premium surfaces | Personality comes from scale, weight contrast, and whitespace — not face selection |
+| A display face picked for novelty with nothing in the brand behind it | The display face is the system's (fonts.distance over the axes). A loud, informal brand can carry a display face; a calm one keeps to its text family |
 | 5+ weights from the same family | Three-weight system at most: bold/semibold for display, regular for body, lighter for support |
 | Variable font weight animated for decoration only | When variable axes animate, the motion expresses state change — not "look at this font" |
 | Eyebrows that aren't tracked (`+0.05em` to `+0.10em`) | All eyebrows are tracked. The wide tracking is the whole point. An existing design system wins: when the client's system sets label letter-spacing to 0 or sentence case, keep it (decisions/existing-system-wins.md) |
@@ -121,14 +121,14 @@ Hero rules, including the hero height, live in `references/surfaces/landing.md`.
 |---|---|
 | 3-equal-cards horizontal feature row | 2-column zig-zag, asymmetric grid, horizontal scroll, or bento. The 3-equal pattern is the strongest AI tell |
 | Center alignment as a fallback when no layout decision is made | Center alignment is a deliberate choice for hero callouts, isolated lockups, or final CTAs — not a default |
-| Center alignment when DESIGN_VARIANCE > 4 | Split screen (60/40 or 65/35, not 50/50), left-aligned over right-aligned, asymmetric whitespace |
+| Centring a page to make it calm | Centring is a composition, not the calm option: measured award pages centre more when the brand is loud and poster-like. A centred hero fits a capitals display or the Thesis statement and Cinematic brand archetypes; a calm brief with a centred hero over three equal cards reads as generated |
 | Horizontal scroll on mobile from off-screen animations | Wrap the page in `overflow-x-hidden w-full max-w-full` |
 | Symmetric three-column grids without massive whitespace gaps | Asymmetric bento, or split with one column dominant |
 | Random spacing increments (5px, 11px, 23px) | 4/8 rhythm — every gap, padding, margin in multiples of 4 |
-| Content max-width >1400px | Cap at 1200-1400px. Beyond that, line-length becomes punishing and the eye loses anchor |
+| A reading column wider than the measure | Text keeps `layout.measure.*`. The frame follows the brand: an expressive brand page runs a full-width grid (`layout.landing.full`, a 1920px container with a 24 to 48px margin) and a calm one keeps `layout.container.max` |
 | Bootstrap-style symmetric grids with 24px gutters | The grid exists to allow alignment, not to enforce density. Most marketing sections only need 1, 2, or 8 columns |
 | Meta-labels like "SECTION 01", "QUESTION 05", "OUR PROCESS 02", "ABOUT US" as decoration | Strip them entirely. If the section needs a label, use a small eyebrow naming the category — not numbered chapter signposting |
-| "Section X of Y" indicators | Eyebrow tags replace decorative section dividers. Numbered chapter framing only when the product genuinely is a journey |
+| "Section X of Y" indicators | Space and a change of ground separate sections; an eyebrow never separates sections. Numbered chapter framing only when the product genuinely is a journey |
 | Floating elements with awkward gaps | Padding and margins are mathematically intentional |
 | Cards bare on background without any structure | Bordered (1px hairline), bezel-wrapped (in maximalist styles), or grouped by spacing — but never floating without context |
 | Cards mixing structure within the same row | Inside a row, all cards share one anatomy — same icon position, same heading scale, same internal padding |
@@ -148,7 +148,7 @@ The single fastest way to mark output as AI-generated. The design can be perfect
 | "example@example.com", "user@email.com" | Realistic, contextual emails |
 | "Acme", "Nexus", "SmartFlow", "Zenith", "Stellar", "Vertex", "Apex" | Contextual brand names. A fintech is "Ledgerine" or "Tash"; a CRM is "Patio" or "Greta" |
 | Round numbers inside a product mock (a dashboard, a table, a chart): "99.99%", "50%", "1234567", "$10,000" | Plausible, irregular stand-in data that fits the screen: "47.2%", "63%", "$8,247.30". This is for data inside a UI mock only |
-| A figure the page claims, reshaped to look precise or given with nothing about what it counts | The client's own figure, as the client states it, with what it counts and as of when. A round real figure stays round; one the client cannot define or date follows the Proof bans in `references/surfaces/landing.md` |
+| A figure the page claims, reshaped to look precise or given with nothing about what it counts | The client's own figure, as the client states it, with what it counts and as of when. With no source, the slot holds a labeled draft placeholder for the client, not a made-up figure. A round real figure stays round; one the client cannot define or date follows the Proof bans in `references/surfaces/landing.md` |
 | Default Lucide / Heroicons egg avatars | Real/licensed photos, or distinct SVG initials with intentional styling. When you need a stand-in face, source a curated, on-brand portrait (Unsplash/Pexels) rather than an auto-rotating placeholder; the linter flags *random/unseeded* services HIGH. |
 | Lorem ipsum, "Your text here", "Placeholder content" | Generate realistic content based on the brief. If a mockup exists, extract text from it |
 | Filler verbs: "Elevate", "Seamless", "Unleash", "Next-Gen", "Empower", "Revolutionize", "Transform", "Leverage", "Robust" | Concrete verbs naming what the product actually does: "Send", "Settle", "Track", "Decide", "Ship", "Deploy", "Query" |
@@ -182,18 +182,18 @@ Landing-page proof and CTA rules (testimonials, logo walls, press logos, stat ca
 | Vague empty states ("No items yet", "No data") | Empty states explain what should be there and how to make it appear: "Connect your first source to start" |
 | Vague errors ("Form contains errors", "Something went wrong") | Name the field and the action. "Phone number missing — add a number to continue" |
 | Linear easing on UI motion | `ease-out` on enter, `ease-in` on exit, custom cubic-bezier, or spring physics. `linear` and `ease-in-out` read as unconsidered |
-| Instant state changes (0ms) | 150-300ms for micro-interactions. Below 100ms is invisible |
-| Slow motion (>500ms on micro, >1000ms on hover) | Cap micro at 300ms, complex at 400-800ms, never >1500ms |
+| Instant state changes (0ms) | The system's `motion.state` role, 150 to 240ms by the brand's motion; under reduced motion it stays at 100ms or less |
+| Motion that answers late: a hover or press not half done by 70ms, an entrance not half done by 140ms | The system's roles (`motion.state`, `motion.press`, `motion.reveal`, `motion.arrive`), whose curves answer in time at any length (motion.settle_ms). A long move on a strong out curve is fine; a short one on ease-in-out is not |
 | Continuous animations driven by `useState` | `useMotionValue` + `useTransform` only. `useState` causes re-render storms |
 | Perpetual motion components that re-render the parent | Wrap perpetual loops in `React.memo` and isolate to leaf Client Components |
 | Hover-only critical interactions | Tap/click for primary; hover is enhancement only. Mobile has no hover |
 | Animating `width`, `height`, `top`, `left` | `transform` + `opacity` only — hardware acceleration |
 | Ignoring `prefers-reduced-motion` | Wrap motion in a reduced-motion check. Replace transforms with simple opacity fades, shorten durations, drop blur components |
-| Scroll-jacking, scroll-snap that forces a sequence | The page scrolls naturally; reveals happen as the user reaches them |
+| Scroll-jacking, scroll-snap that forces a sequence | The page scrolls in the reader's direction. Inertial scroll is an opt-in treatment on `motion.scroll` (0 below a motion of 0.6, 0 under reduced motion), never a hijack |
 | Horizontal scroll hijack as a default | Reserved for galleries or storytelling sequences with a real reason; never the default flow |
 | Pinned-3d-element scroll-controlled video scrubbing as decoration | When scrub motion appears, it carries a real demo or sequence |
 | Auto-playing background video with sound | Muted, looped, with a pause control. Sound is opt-in |
-| Auto-rotating carousels under 4 seconds per slide | Either continuous marquees (no pagination dots, sub-conscious speed 20-40s loop) or scroll-snap horizontal lists with visible affordance |
+| Auto-rotating carousels under 4 seconds per slide | Either one continuous marquee (no pagination dots, a slow loop, a pause control, stopped under reduced motion) or scroll-snap horizontal lists with visible affordance |
 | Number counters that animate on every scroll past | Once per page entry. Settling jitter on the final number is a tell |
 | Bouncy spring animations on type | Spring physics on draggable UI elements (toggles, modals, drag handles), not on headline reveals |
 | Page-load animations that loop endlessly on the wordmark | Once-on-load is the rule. Looping brand-mark animation in nav reads as distracting |
@@ -216,7 +216,7 @@ Landing-page interaction rules (hero carousels, headline typewriters, testimonia
 | Mixed icon styles (filled + outline at the same hierarchy level) | One icon family, one stroke weight, one fill state at any given level |
 | Mixing icon families (Lucide + Heroicons + Phosphor in the same project) | One family, committed |
 | Stroke-width inconsistency (mixing 1.5 + 2.0 in the same surface) | Pick one stroke and stick with it |
-| No imagery anywhere (text walls of cards) | Imagery is mandatory and real. Real product UI when available; otherwise curated, on-brand stock (Unsplash/Pexels) chosen by temperature. A descriptive inline-SVG illustration can support a section but is NOT a substitute for the real product/site image. Random/unseeded placeholder services never ship |
+| No imagery anywhere (text walls of cards) | Photographs are required: the client's own first, else sourced ones (stock included) that follow the system's photo direction (the `imagery.photo.*` grade, the report's subject and kinds). A brand's ban on a kind of photo narrows the kinds; only a brand that forbids photography outright ships without one. Drawn art and product fragments add to photographs, never replace them. Random placeholder services never ship |
 | Stock-photo placeholder divs as "image here" markers | Real imagery or hand-styled SVG/CSS placeholders. Stock-placeholder divs ship as the final shippable mistake |
 | Random radius values across components (4, 8, 12, 16, 24px on the same page) | Token: `rounded-sm` / `md` / `lg` / `2xl` / `[2.5rem]` — pick a scale, commit |
 | Toasts that steal focus | `aria-live="polite"` toasts. Never grab focus |
@@ -235,20 +235,20 @@ Hero component rules live in `references/surfaces/landing.md`. Dashboard card-de
 
 ## Tokens / numeric guardrails
 
-- **Color saturation**: < 80% for any accent in restrained styles; saturated jewel tones acceptable in maximalist styles but reserved for small surface areas, never full-bleed. A client's own brand keeps its saturation (decisions/client-identity-wins.md)
-- **Contrast**: ≥ 4.5:1 for body text, ≥ 3:1 for large/UI text. AAA where possible on primary copy
+- **Color**: within the system's budget, `color.budget.chromatic` (2 to 20 percent of the interface by energy) plus `color.budget.bands` for bands; lint --render measures it. A client's own brand keeps its saturation (decisions/client-identity-wins.md)
+- **Contrast**: 4.5:1 for all text at any size (1.4.3; the system holds every text role to it), 3:1 for UI components and graphics (1.4.11)
 - **Spacing**: multiples of 4 (4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160)
 - **Touch targets**: ≥ 44×44 pt (iOS), ≥ 48×48 dp (Android) regardless of visual render
-- **Animation duration**: 150-300ms micro, ≤ 400ms complex hover, 400-800ms major reveals, 600-1200ms cinematic transitions, never > 1500ms
-- **Body line length**: 35-60 chars mobile, 55-72 desktop (`max-w-[65ch]`)
+- **Motion**: the system's roles. A direct response is half done within 70ms and nine tenths within 220ms, an entrance half within 140ms (motion.settle_ms); reduced motion keeps 100ms or less
+- **Measure**: 42 to 56 characters on a landing page (`layout.measure.landing`), 60 to 70 for reading (`layout.measure.text`)
 - **Max H1 lines**: the limit in `references/surfaces/landing.md` (Hero composition)
-- **Container max-width**: 1200-1400px or `max-w-7xl`
+- **Frame**: `layout.container.max`, or a full-width grid for an expressive brand page (`layout.landing.full`)
 - **Card internal padding**: 24-40px
-- **Font scale**: 12 / 14 / 16 / 18 / 24 / 32 / 48 / 64 / 96 / 144 — pick a 4-step subset and commit
+- **Font scale**: 6 to 10 sizes from the system's ladder, with one detached display
 - **Body font size minimum**: 16px on marketing, 15-16px on dashboards
-- **Display line-height**: 1.0-1.15
+- **Display line height**: the system's `type.leading` steps, 1.12 at 40px down to 1.0 (muted) or 0.92 (bold) at 160px and up; Arabic at least 0.15 above
 - **Body line-height**: 1.5-1.7
-- **Display tracking**: -0.01em to -0.03em at >48px
+- **Display tracking**: the system's step tracking, tighter as contrast rises; capitals at 0 or open
 - **Eyebrow tracking**: +0.05em to +0.10em uppercase, unless an existing design system sets its own
 - **Image aspect ratios**: 16:9, 4:3, 1:1, 4:5 — vary intentionally, never random
 
@@ -271,7 +271,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] Nav stays ONE row at 360px and NO short label wraps — brand wordmark, button/CTA labels, nav links each on one line (`scrollHeight <= 1.4 * lineHeight`); verified directly, since `scrollWidth` alone misses a wrapped nav
 - [ ] No literal placeholder token shipped (`{TODO_FILL...}`, `{{ var }}`, "lorem ipsum")
 - [ ] No pure `#000` text or background
-- [ ] No 3-equal-cards feature row
+- [ ] No row of three equal cards that each hold just an icon, a title and a line
 - [ ] No "SECTION 01" / "QUESTION 05" / decorative meta-labels
 - [ ] No exclamation marks in marketing copy
 - Landing-page critical checks live in the checklist of `references/surfaces/landing.md`.
@@ -285,27 +285,27 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 - [ ] All animations on `transform` + `opacity` only
 - [ ] `prefers-reduced-motion` respected
 - [ ] No GSAP + motion library in the same component tree
-- [ ] No scroll-jacking
-- [ ] Imagery is present, real, and intentional (no text-only walls; no abstract SVG as a stand-in for a real product/site image)
+- [ ] No scroll-jacking; inertial scroll only on `motion.scroll`, off under reduced motion
+- [ ] Photographs are present and follow the photo direction (no text-only walls; no illustration standing in for a photograph)
 - [ ] Icons are one consistent family at consistent stroke width
 - [ ] No hover-only critical interactions
-- [ ] No oversaturated accents (> 80% in restrained styles), except the client's own brand
+- [ ] Chromatic color within the system's budget (lint --render `color-over-budget`), except the client's own brand
 - [ ] No multiple gradient sections
 - [ ] No filler verbs ("Elevate", "Unleash", "Next-Gen")
 - Landing-page high checks (centered hero, logo color, CTA wording, footer) live in the checklist of `references/surfaces/landing.md`.
 
 ### Medium (polish — fix before final)
 - [ ] H1 in sentence case (not Title Case)
-- [ ] Display tracking tightened (-0.01 to -0.03em)
-- [ ] Body line-length capped at ≤ 65ch
+- [ ] Display tracking from the system (tight for a bold display, 0 or open for capitals)
+- [ ] Paragraphs within the system's measure (42 to 56 characters on a landing page)
 - [ ] Body type at 16-18px minimum on marketing
-- [ ] Single accent color, < 80% saturation in restrained styles
+- [ ] One accent, within the system's color budget
 - [ ] Spacing on 4/8 rhythm
-- [ ] Imagery is real and chosen: client assets first, then curated Unsplash/Pexels by temperature — no random/generic stock, no abstract SVG standing in for a real product image
+- [ ] Photographs are real and chosen: client assets first, then sourced ones by the photo direction, all within one grade (lint --render `photo-grade-off`)
 - [ ] One icon family at consistent stroke width
 - [ ] Eyebrow labels tracked (+0.05em to +0.10em), or as the existing design system sets them
 - [ ] Corner radii consistent (2-3 values max across the page)
-- [ ] Mock data inside a product UI is irregular; every figure the page claims is the client's own, with what it counts and as of when
+- [ ] Mock data inside a product UI is irregular; every figure the page claims is the client's own, with what it counts and as of when, or a labeled draft placeholder; never an invented number
 - [ ] Color saturation tuned separately for light and dark modes
 - [ ] No naked trailing arrows on CTAs in high-end styles (button-in-button pattern instead)
 - Landing-page medium checks (press logos, unsupported trust claims) live in the checklist of `references/surfaces/landing.md`.
@@ -323,7 +323,7 @@ Run before shipping any UI output. Severity tags indicate the failure mode if vi
 These are the combinations that, when they co-occur, mark the output as machine-made within seconds of viewing. Each one alone is a signal; together they are a confession.
 
 ### The composition fingerprint
-- Centered hero + left-text-right-image as default reach + 3-equal cards below + decorative meta-label numbering = generated.
+- A centred hero chosen to look calm + left-text-right-image as default reach + 3-equal cards below + decorative meta-label numbering = generated.
 - The page tells you nothing about the product because it could be any product. Every section is a slot the model filled with the safest possible option.
 - Fix: pick one organizing principle (editorial column rhythm, bento, asymmetric split) and commit. Vary section orientation. Earn each layout decision.
 

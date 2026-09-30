@@ -60,14 +60,14 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 
 ### Tiered surface elevation (dark mode)
 
-**Use when**: dark-mode dashboards, premium dev tools.
+**Use when**: A dark-scheme dashboard, where elevation reads as lightness.
 **What it is**: A 4-5 step lightness ladder for page, card, raised, popover and overlay. Each step is small in absolute lightness (about 3-5% L lift) but the cumulative effect creates real depth. No drop shadows; elevation lives in lightness.
 **Cost**: zero, token discipline.
 
 ## Examples
 
 ### Pattern: Cockpit density (VISUAL_DENSITY 8 to 10)
-**Use when**: Trading dashboards, analytics, monitoring, ops, internal tools where information density is the value.
+**Use when**: Information density is the value: many live figures read at a glance (density high, glance reading).
 **Anti-pattern**: Generous card padding (24 to 40px), white surfaces between every metric, soft drop shadows.
 **How**:
 - Tiny paddings (4 to 12px)
@@ -197,7 +197,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - User scroll position preserved across updates
 
 ### Pattern: Brutalist data viz
-**Use when**: Industrial, terminal-adjacent, or anti-mainstream products.
+**Use when**: High contrast, low warmth and geometric type: the loud, technical end of the axes.
 **Anti-pattern**: Smooth animated splines, soft drop shadows, brand-color charts.
 **How**:
 - Single-color line charts in foreground ink against substrate
@@ -208,7 +208,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Numeric counters tick through digits with `steps(N)` easing (slot-machine effect)
 
 ### Pattern: Monochrome-leaning palette
-**Use when**: Any premium SaaS dashboard.
+**Use when**: A dashboard whose color budget is small (energy low to mid).
 **Anti-pattern**: 5+ accent colors decorating chrome and data simultaneously.
 **How**:
 - Background: off-white or near-black (depending on mode)

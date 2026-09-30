@@ -41,7 +41,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 
 7. **One accent, not three** — One primary brand accent appears on CTAs, focus rings, and the rare semantic highlight. Three or four accents fight for attention and dilute meaning.
 
-8. **Saturation below 80% for accents** — Highly saturated accents on dark surfaces vibrate. Desaturate slightly so they settle and blend.
+8. **The color budget follows energy.** The share of the interface in a chromatic color is the system's `color.budget.chromatic`, 2 percent for a calm brand to 20 percent for a loud one, and bands add `color.budget.bands`. lint --render measures both on the page.
 
 9. **Semantic state colors are reserved** — Green = success, red = destructive, amber = warning. Never repurpose semantic colors as brand colors. If the brand color happens to be green, success notifications get a different green (shifted in chroma) so meaning stays unambiguous.
 
@@ -70,7 +70,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 ## Examples
 
 ### Pattern: Single accent on near-monochrome chassis
-**Use when**: Any product surface where restraint matters — premium SaaS, fintech, AI tooling, editorial, B2B.
+**Use when**: The brand's energy is low to mid, so the color budget (`color.budget.chromatic`) is small.
 **Anti-pattern**: Five accent colors splattered across body, links, CTAs, and decorative illustration simultaneously.
 **How**: Build the chassis from off-white background, charcoal text, mid-gray dividers. Pick one saturated accent (a calibrated blue, green, teal, violet, or warm ochre). Deploy the accent only on primary CTAs, in-line links, focused form states, and one or two illustrated highlights per section. The accent loses its signaling power if everything is "the accent."
 
@@ -95,9 +95,9 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 **How**: A teal section gets a teal-mist shadow. A faintly cool background wants a faintly cool shadow. Default formula: `0 8px 32px` at 8 to 14% alpha in the brand hue, often paired with a tighter `0 1px 2px` black at 6% for grounding. The combined effect reads as "lit from inside the brand."
 
 ### Pattern: Section-anchored background shifts
-**Use when**: Long pages need visual chunking without decorative dividers.
+**Use when**: Long pages need visual chunking without decorative dividers; how much comes from bands follows the brand's energy.
 **Anti-pattern**: Three or four bright color blocks alternating down the page.
-**How**: Use three to four micro-shades of off-white (`#FFFFFF` → `#FAFAFA` → `#F4F6FA`) to differentiate sections. The page feels structured without feeling segmented. Reserve a true-dark band for one moment per page — often the final CTA or one feature deep-dive.
+**How**: The band share follows the brand's energy (`color.budget.bands`): a calm page (energy 0.2 or less) changes no ground at all and separates sections with space; a loud one sets up to half its sections on bands that carry the brand's hue. Between those, the system's band and tint roles hold the shades. Bands carry rhythm, never the same idea on alternating slabs.
 
 ### Pattern: Semantic color discipline
 **Use when**: Status pills, error states, success confirmations, dashboard data.
@@ -120,32 +120,32 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 **How**: Assign each feature a distinct color and preserve that color throughout — subnav highlight, icon tint, product UI screenshot accent. Section A is teal-on-ink; section B is coral-on-ink; section C returns to neutral. The colors form a memorable system: teal = collaboration, coral = AI, violet = automation. The product UI carries the color forward so marketing surface and product surface match.
 
 ### Pattern: Brutalist light-print substrate
-**Use when**: Industrial, technical, or anti-mainstream products.
+**Use when**: High contrast, low warmth and geometric type, light scheme: the loud, technical end of the axes.
 **Anti-pattern**: Glassmorphism, soft drop shadows, or full-spectrum gradients on a brutalist substrate.
 **How**: Background warm matte off-white (`#F4F4F0` to `#EAE8E3`) — unbleached documentation paper, not bright SaaS white. Foreground near-black carbon ink (`#050505` to `#111111`). Accent a single aviation or hazard red (`#E61919` or `#FF2A2A`), used as strike-throughs, structural dividers, or vital data highlights. The hazard red carries all chromatic load. No gradients, no soft shadows, no translucency beyond simulated noise overlays.
 
 ### Pattern: Brutalist dark tactical substrate
-**Use when**: Industrial, terminal-adjacent, or tactical products.
+**Use when**: High contrast, low warmth and geometric type, dark scheme.
 **Anti-pattern**: Pure `#000000` background that reads as raw HTML, not designed.
 **How**: Background deactivated CRT black (`#0A0A0A` to `#121212`). Foreground white phosphor (`#EAEAEA`). Same hazard red accent. An optional terminal green (`#4AF626`) may appear on a single specific element (one status indicator or one live readout) — never as a general body color.
 
 ### Pattern: High-end ethereal glass substrate
-**Use when**: Technical, AI, SaaS surfaces where premium ambient depth is required.
+**Use when**: Dark scheme, high contrast, cool hue and a deep elevation ramp (`depth` high).
 **Anti-pattern**: Flat solid color hero blocks with no texture or depth.
 **How**: Substrate is the deepest OLED black (`#050505`). Radial mesh gradients in the background — subtle glowing orbs in deep purple, emerald, indigo, or magenta, well outside saturation thresholds that would feel garish. Card surfaces near-vantablack with heavy backdrop blur and hairline white borders at low opacity (`rgba(255,255,255,0.08)` to `rgba(255,255,255,0.12)`). Inner highlights on glass elements: a single 1px inset top highlight at low opacity to suggest a glass plate catching light. Apply backdrop-blur only to fixed or sticky elements; never to scrolling content.
 
 ### Pattern: High-end editorial luxury substrate
-**Use when**: Lifestyle, real estate, agency, hospitality surfaces.
+**Use when**: Warm, formal and humanist: warmth high, formality high, type personality humanist.
 **Anti-pattern**: Generic SaaS off-white with cool gray neutrals — reads as templated.
 **How**: Substrate warm cream (`#FDFBF7`) or deep espresso for dark variants. Accent tones muted sage, ochre, soft terracotta, dusty rose, or a single saturated jewel tone used surgically. High-contrast variable serif fonts at massive scale. Subtle film-grain overlay at very low opacity (`0.03`) on a fixed `pointer-events-none` layer for a physical paper feel.
 
 ### Pattern: High-end soft structuralism substrate
-**Use when**: Consumer, health, portfolio, premium hardware companion apps.
+**Use when**: Muted contrast, round geometry and a light scheme: soft and quiet on the axes.
 **Anti-pattern**: Hard drop shadows under floating components.
 **How**: Substrate silver-gray, warm white, or completely white. Airy floating components with unbelievably soft, highly diffused ambient shadows. The shadow is large in spread but extremely low in opacity. Massive bold display sans-serifs. Occasional precision color accents — a single saturated color reserved for a CTA or single brand mark. The single saturated color provides the only chromatic punch on the page.
 
 ### Pattern: Mesh-orb hero background
-**Use when**: Premium creative-tool category, AI products, modern SaaS heroes.
+**Use when**: Lively motion and high energy, where the color budget allows an ambient field behind the hero.
 **Anti-pattern**: Single static gradient covering the entire hero.
 **How**: 3 to 5 large, blurred radial gradients in brand colors form ambient backgrounds. Gaussian blur ~120px. Noise opacity 60 to 80% on the gradient layer. Each orb animated subtly: 4 to 8 second ease loops, 3 to 6px translation. Orbs positioned outside the safe text area so contrast on copy stays consistent. The hero feels alive without distracting.
 
@@ -199,10 +199,10 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 - Disabled: L = 32 to 40%
 
 ### Brand accent rules
-- Saturation: < 80% (desaturate so accents blend with neutrals)
+- Budget: the system's `color.budget.chromatic` of the interface, plus `color.budget.bands` for bands
 - Maximum 1 accent in chrome; one supporting semantic color permitted in data viz
 - Accent appears only on: primary CTAs, in-line links, focused form fields, status pips, key icon highlights
-- Accent does NOT appear in: section backgrounds, card chrome, body text, decorative illustration fills
+- Accent does NOT appear in: card chrome, body text, decorative illustration fills; section backgrounds only as the system's bands, within `color.budget.bands`
 
 ### Semantic state colors (reserved)
 - Success: green family (e.g., `#16A34A` to `#22C55E` for light; lifted equivalents for dark)
@@ -231,91 +231,10 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 - Avoid pure-saturated accents in dark mode (reduce chroma 10 to 15%)
 - Avoid "AI purple gradient" (purple-to-blue on white) — banned
 
-### Palette systems by industry / product type
-
-**SaaS / dev tools:**
-- Cool blues (`#2563EB`, `#4F46E5`, `#0EA5E9`), deep purples (`#7C3AED`, `#6366F1`)
-- Neutrals: slate or zinc scale
-- One accent (teal, amber) for CTA differentiation
-- Mood: trust, capability, focused
-
-**E-commerce / retail:**
-- Brand-led (varies); common defaults: black, deep red, navy
-- Accents: sale red (`#DC2626`), trust green (`#16A34A`)
-- Warm gray neutrals for product backgrounds
-- Mood: desire, urgency, clarity
-
-**Healthcare / medical:**
-- Calming blues (`#0284C7`), soft greens (`#10B981`), warm whites
-- Never alarming reds for primary CTAs
-- Soft warm grays
-- Mood: trust, care, calm
-
-**Beauty / wellness / spa:**
-- Soft pinks (`#FCE7F3`, `#F9A8D4`), nude tones (`#FBCFE8`, `#E5C7B7`), sage (`#A7C4A0`)
-- Accents: gold (`#D4A574`), terracotta (`#C97B5C`)
-- Cream and off-white neutrals
-- Mood: serenity, indulgence, premium
-
-**Fintech / banking / crypto:**
-- Deep blues (`#1E40AF`, `#0F172A`), black, electric green for growth
-- Accents: sharp green (gains), red (losses), gold (premium tier)
-- Cool gray and charcoal neutrals
-- Mood: trust, precision, authority
-
-**Service / booking / marketplace:**
-- Friendly brand colors: coral (`#FF6B6B`), warm blue (`#3B82F6`), teal (`#14B8A6`)
-- Accents: booking-success green, premium gold
-- Warm gray neutrals
-- Mood: approachable, reliable, energetic
-
-**Gaming / entertainment:**
-- Saturated, high-contrast: neon pink (`#EC4899`), electric purple (`#8B5CF6`), acid green (`#84CC16`), cyan (`#06B6D4`)
-- Accents: glow effects, gradient blends
-- Deep black and near-black surfaces
-- Mood: energy, immersion, hype
-
-**Food & beverage:**
-- Warm earth tones: terracotta (`#C2410C`), olive (`#65A30D`), mustard (`#CA8A04`), deep burgundy
-- Accents: cream, butter yellow
-- Warm beige and parchment neutrals
-- Mood: appetite, craft, warmth
-
-**Education / learning:**
-- Optimistic blues (`#3B82F6`), encouraging greens (`#22C55E`), playful yellows (`#FACC15`)
-- Accents: achievement gold, growth purple
-- Soft warm white neutrals
-- Mood: optimism, growth, achievement
-
-**Travel / hospitality:**
-- Sky blues, sunset oranges, lush greens, sand neutrals
-- Brand-specific accents (airline branding leans bold red or navy)
-- Warm sandy beige neutrals
-- Mood: escape, wonder, comfort
-
-**Productivity / notes / calendar:**
-- Restrained: single accent (`#3B82F6` or `#18181B`) over near-monochrome neutrals
-- Subtle category colors (limited palette)
-- Warm or cool gray scale neutrals
-- Mood: focus, clarity, calm
-
-**Real estate / luxury:**
-- Deep charcoal, navy, cream, gold accents
-- Accents: brass, deep emerald
-- Warm ivory, soft taupe
-- Mood: premium, established, trusted
-
-**Kids / family:**
-- Saturated primary colors: bright blue (`#3B82F6`), pure red, sunshine yellow
-- Accents: playful pastels
-- Pure white, soft cream neutrals
-- Mood: joy, safety, play
-
-**Crypto / web3:**
-- Black, electric purple (`#A855F7`), neon green (`#22D3EE`), white
-- Accents: holographic gradients (sparingly)
-- Deep black, charcoal neutrals
-- Mood: future, decentralized, premium-tech
+### Palettes come from the brand
+- The engine builds every palette from the brand color and the seven axes: the neutrals lean along the brand, the support hue follows warmth and contrast, the band chroma follows energy. No palette is picked by the kind of business.
+- A client's own colors are fixed input and stay as the client uses them (decisions/client-identity-wins.md).
+- What a palette should feel like is set by the axes: warmth moves the neutrals and the support hue, contrast moves the gap between surface and ink, energy moves how much of the page carries color.
 
 ### Pastel pair system (for muted UI badges)
 - Pale red surface `#FDEBEC` with text `#9F2F2D` (destructive, warning)
@@ -328,7 +247,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 - Pure `#000000` and `#FFFFFF` in product chrome
 - "AI purple gradient" (purple-to-blue on white) as a default
 - Rainbow accent palettes with five or more hues
-- Saturated brand color used as a full-bleed hero wall
+- Saturated brand color flooding a calm page (a loud brand's bands follow `color.budget.bands`)
 - Multiple gradient sections on a single page
 - Customer logos in their native brand colors on a logo strip
 - Semantic state colors (red, green, amber) used as primary brand colors

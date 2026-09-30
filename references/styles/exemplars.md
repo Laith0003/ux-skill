@@ -19,7 +19,7 @@ This file is organized by surface and intent:
 
 ## Premium SaaS catalog overview
 
-The premium SaaS aesthetic in current marketing surfaces is built on a foundation of subtraction. Each premium product removes the things a less mature brand would add. No second typeface, no second accent color, no competing primary CTA in the hero, no decorative AI iconography, no stock photo, no parallax, no scroll-jacking, no exclamation, no superlative. The negative space (visual, typographic, and rhetorical) is the personality.
+The premium SaaS aesthetic in current marketing surfaces is built on a foundation of subtraction. Each premium product removes the things a less mature brand would add. No second typeface, no second accent color, no competing primary CTA in the hero, no decorative AI iconography, no photo off the page's grade, no parallax, no scroll-jacking, no exclamation, no superlative. The negative space (visual, typographic, and rhetorical) is the personality.
 
 What converges across the premium tier:
 
@@ -810,7 +810,7 @@ The most counter-intuitive lesson: the more confident the company, the quieter t
 
 ### Subtraction over addition
 
-Premium pages are built on what they refuse to include. No second typeface. No second accent. No competing primary CTA in the hero. No decorative AI iconography. No stock photo. No parallax. No scroll-jacking. No exclamation. No superlative.
+Premium pages are built on what they refuse to include. No second typeface. No second accent. No competing primary CTA in the hero. No decorative AI iconography. No photo off the page's grade. No parallax. No scroll-jacking. No exclamation. No superlative.
 
 Every removed element creates room for the remaining ones to land. The discipline to leave things out is the hardest pattern to copy.
 
@@ -825,7 +825,7 @@ Where a real number exists, it appears. Where it doesn't, the cohort restructure
 
 ### Imagery is real product, not stock
 
-Premium surfaces refuse stock photography. The product is the product. Where humans appear, it's named customers in real environments, shot with editorial restraint.
+Photographs are required and share one grade, the system's photo direction; stock is allowed when it fits that grade and the brand's kinds. The product appears as itself beside them. Where humans appear, they are real people in real places, shot with editorial restraint.
 
 ### Motion is purposeful and short
 

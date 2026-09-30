@@ -4,21 +4,21 @@
 
 ## Principles
 
-1. **Scale jumps are aggressive, mid-steps are removed** — Display sizes leap one to two orders of magnitude over body. There is no comfortable middle tier between body and hero. The cliff is the design; comfortable mid-sizes flatten hierarchy.
+1. **The display is detached from the rest.** The display role sits well above the section headings: 60 to 240px at 1440 by the brand's expressiveness (character.landing_display_px), 36 to 90px on a phone, fluid in between. The ladder below it holds 6 to 10 sizes, one level at least 1.08 times the next.
 
-2. **Weight carries hierarchy more than size** — Use one bold or semibold for display, one regular for body, one medium for labels. Three or four weight steps cover an entire system. Five or more weights signal an undisciplined ramp.
+2. **Weight follows size and formality.** The display sets at 400 to 650 in fifties, lighter for a formal brand and for a large display (character.display_weight); body at 400. Three or four weight steps cover an entire system. Five or more weights signal an undisciplined ramp.
 
-3. **Line-height inverts with size** — Body sits at 1.5 to 1.7 for breathing room. Display tightens to 1.0 to 1.15 so headlines read as a single sculpted block. Missing this inversion is the most consistent amateur tell.
+3. **Line height falls as size rises.** Body sits at 1.5 to 1.7. The display runs 1.12 at 40px down to 1.0 for a muted brand or 0.92 for a bold one at 160px and up (the system's `type.leading` steps, floor 0.88); Arabic display stays at least 0.15 above.
 
-4. **Tracking tightens as type grows, loosens as it shrinks** — Display at -0.01em to -0.03em (sometimes -0.04em to -0.06em on brutalist headlines). Eyebrows and small caps at +0.05em to +0.12em. Body stays at default tracking; over-tracked body reads dated.
+4. **Tracking tightens as type grows, loosens as it shrinks.** The display tightens with contrast; capitals track at 0 or open, since they already sit close. Labels open up with formality. Body stays at default tracking.
 
-5. **Sentence case is the default** — Reserve title case for proper nouns and trademarked product names. ALL CAPS is reserved for eyebrows at 10 to 13px with positive tracking. Title-case headlines on every word read as enterprise from a previous decade.
+5. **Sentence case is the default.** Reserve title case for proper nouns and trademarked product names. Capitals belong to short labels, and to the display of a loud brand whose system leans to capitals (character.capitals, `type.text.display-caps`). Title-case headlines on every word read as enterprise from a previous decade.
 
-6. **Line length is policed** — Body paragraphs clamp to 55 to 75 characters. Mobile floors at 35 to 60 per line. Long-line marketing copy is treated as a mistake; either break into columns or constrain measure.
+6. **Line length is policed.** The measure counts characters of the text face: 42 to 56 on a landing page (`layout.measure.landing`), 60 to 70 for reading, 60 to 66 for a long read. Headlines wrap balanced (`text-wrap: balance`), paragraphs pretty (`text-wrap: pretty`).
 
 7. **Numbers get the tabular treatment in data UI** — Tabular figures align decimals and prevent layout shift on count-up. Reserve proportional figures for prose. Mixed proportional and tabular on the same page reads as undisciplined.
 
-8. **No serifs on dashboards or software UIs** — Serifs belong to editorial, marketing, and luxury contexts. A dashboard with serif headlines reads as a category error. Reserve serifs for surgical editorial moments inside otherwise-sans pages.
+8. **No serifs on dashboards or software UIs.** A dashboard is read at a glance, in dense rows; a serif headline there fights the data. Serifs belong to long reading and to display moments inside otherwise-sans pages.
 
 9. **Pair two typefaces at most** — A display face plus a body face, or a sans plus a mono. Three faces only when a clear hierarchy demands it (sans, serif, mono for editorial-tech hybrids). Two display fonts together is banned.
 
@@ -30,14 +30,14 @@
 |---|---|
 | Use a single workhorse sans-serif at varying weights for most surfaces | Mix five fonts across one page |
 | Set body at 16 to 18px with line-height 1.5 to 1.7 | Set body below 12px or above 22px on web |
-| Tighten tracking to -0.02em on display sizes 48px and above | Use the same tracking on display and body |
+| Take display tracking from the system, tighter as contrast rises | Use the same tracking on display and body |
 | Use sentence case for headlines | Use Title Case On Every Word |
-| Compress display line-height to 1.0 to 1.15 | Run display headlines at body line-height (looks like a stack) |
+| Set display line height from the system's steps, 1.12 down to 0.92 as the size rises | Run display headlines at body line-height (looks like a stack) |
 | Use tabular figures in tables, dashboards, prices, timers | Use proportional figures for vertically aligned numeric columns |
 | Pair sans with a mono for technical contexts | Pair two display faces together |
 | Use weight changes (400 to 600) to signal hierarchy | Use color alone to signal hierarchy |
-| Use ALL CAPS only for eyebrows at 10 to 13px with +0.06em tracking | Use ALL CAPS for body or subheads at any size |
-| Standardize on one type ramp with four to six steps | Invent new sizes per component |
+| Use capitals for short labels, and for a loud brand's display on its capitals role | Use capitals for body or subheads at any size |
+| Standardize on one type ramp of 6 to 10 sizes with one detached display | Invent new sizes per component |
 | Enable curly quotes in production copy; break sentences with a period, a comma or a colon | Ship straight quotes, em dashes or a double hyphen as punctuation |
 | Reserve italic for genuine emphasis or titles | Use italic as decoration |
 | Match optical size to rendered pixel size when the face supports it | Use a single optical variant across display and body |
@@ -48,7 +48,7 @@
 ### Pattern: Display headline at hero scale
 **Use when**: Hero or section opener carrying the page's primary claim.
 **Anti-pattern**: 6-line wrapped headline crammed inside a narrow container, or a hero headline at 24px hoping weight will carry it.
-**How**: Set the H1 in an ultra-wide container (`max-w-5xl` or wider). Size with clamp: `clamp(3rem, 5vw, 5.5rem)` so the line lands on conceptual beats, not on whitespace. Compress line-height to 1.0 to 1.15. Tighten tracking to -0.02em. The line limit lives in `references/surfaces/landing.md` (Hero composition); if the H1 overflows it, widen the container before shrinking the font.
+**How**: Bind the H1 to `type.text.display`, a fluid clamp the system derives from the brand: 60 to 240px at 1440 by expressiveness, 36 to 90px on a phone. Line height from the system's display step, `text-wrap: balance` so the lines land on beats. The line limit lives in `references/surfaces/landing.md` (Hero composition); if the H1 overflows it, widen the container before the size shrinks.
 
 ### Pattern: Editorial body with measured column
 **Use when**: Long-form marketing prose, documentation body, or any reading-intensive surface.
@@ -56,7 +56,7 @@
 **How**: Size body at 16 to 18px, regular weight, line-height 1.55 to 1.7. Clamp paragraph width to `max-w-[65ch]` or roughly 32 to 40em. On wide viewports, the canvas stays wide; the column stays narrow. This is the magazine effect.
 
 ### Pattern: Eyebrow + headline
-**Use when**: Sectioning a long page without numbered chapters or decorative dividers.
+**Use when**: A section needs a label its heading cannot carry: a step number, a category. Eyebrows never separate sections; space and a change of ground do, and the share of sections with one follows formality (character.eyebrow_share).
 **Anti-pattern**: Naming sections as "SECTION 01" / "ABOUT US" / "OUR PROCESS 02" — these are amateur-tier signposting and banned.
 **How**: A short label sits above the headline at 10 to 13px, weight 500 to 600, tracking +0.06em to +0.10em, in muted neutral or a paired accent. Sentence case or uppercase both work; pick one and apply consistently. The eyebrow is text only: no line, dash or dot before or after it.
 
@@ -76,9 +76,9 @@
 **How**: Pick three weights — typically 400 (body), 500 (UI labels, secondary headlines), 600 or 700 (display headlines). Italic and light weights stay out of the system unless the brief specifically demands them. The intentional gap between 400 and 600 makes hierarchy unmissable.
 
 ### Pattern: Compressed type scale
-**Use when**: Marketing landing pages, premium SaaS surfaces, editorial sites.
+**Use when**: Any page with a type system; the display's distance above the ladder grows with expressiveness.
 **Anti-pattern**: A 12-step type scale with sizes at 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 28, 32px.
-**How**: Define four to six scales: hero display, section heading, subhead, body, small, eyebrow. Each scale gets one size, one weight, one line-height. No fifth scale snuck in for a sidebar. The system is the constraint, and the constraint is the look.
+**How**: Define 6 to 10 sizes from one ladder: a detached display, section heading, subhead, body, small, label. Each size gets one weight and one line height. No size snuck in for a sidebar. The system is the constraint, and the constraint is the look.
 
 ### Pattern: Dark-mode weight compensation
 **Use when**: Building a dark variant of the same typography system.
@@ -86,12 +86,12 @@
 **How**: Reduce font weight by roughly 50 units when going from light to dark for the same size (e.g., 600 in light becomes 550 in dark). This compensates for the apparent thickening of light type on dark background. Line-height stays the same across modes. Letter-spacing can loosen by 1 to 2% on body in dark mode.
 
 ### Pattern: Numerical specificity as typographic ornament
-**Use when**: Premium B2B and editorial surfaces where the persuasion is numerical.
+**Use when**: The page's persuasion is a measured figure the client gives, and the brand is formal.
 **Anti-pattern**: "Big Stat" pattern with glowing 96pt numerals where the number is the only design move.
 **How**: Concrete numbers (latency in ms, accuracy percentages, yield rates, fee figures) appear set at the same scale as the surrounding text but carry visual weight purely from their precision. The precision itself is the rhetoric. "75ms" inline at body scale persuades more than "Blazingly fast" at 96pt.
 
 ### Pattern: Long-form prose under a hero
-**Use when**: AI, fintech, or research-led products where the company has something to say.
+**Use when**: The page argues a case at length and the reading context is long reading.
 **Anti-pattern**: A trimmed-down tagline as the only body copy under an oversized hero.
 **How**: Several premium surfaces allow paragraph-length body copy under the hero subhead — three or four sentences of substantive prose rather than a single tagline. Body sits at 15 to 17px, line-height 1.55 to 1.7. The willingness to use full sentences signals that the company has something to say.
 
@@ -101,7 +101,7 @@
 **How**: Pull quote sits at 28 to 40px, weight 500, line-height 1.3. Attribution beneath drops to body size with reduced contrast. The quote does not start with a quotation mark — instead, an oversized opening quote mark sits as a graphic element to the left or above. Set the quote at slightly larger size than body, regular weight, with the speaker's name and role beneath. No oversized quotation marks around the quote, no decorative card chrome, no logo overlay on the photograph.
 
 ### Pattern: Variable font weight animation
-**Use when**: Premium SaaS surfaces where craftsmanship is part of the value proposition.
+**Use when**: The face has a weight axis and the brand's motion is lively enough for one moving detail.
 **Anti-pattern**: Variable axis animations on every label and headline — looks gimmicky.
 **How**: A label tightens from 400 to 600 as the cursor approaches, or a number "settles" from 800 to 600 once a counter finishes animating. Cheap to ship if the font supports it; very expensive-looking on first encounter. Use sparingly — once or twice per page maximum. Disable under `prefers-reduced-motion: reduce`.
 
@@ -121,7 +121,7 @@
 **How**: One linear or conic gradient fills one carefully chosen word in the hero or a section headline. The rest stays plain. One word in gradient text in 2026 looks like craft; whole sentences look like decoration. The word chosen is the verb or the noun the page is selling.
 
 ### Pattern: Brutalist macro / micro contrast
-**Use when**: Industrial, technical, anti-mainstream products.
+**Use when**: High contrast, geometric type and low warmth: the loud, technical end of the axes.
 **Anti-pattern**: Sans-serif at uniform scale across an entire brutalist surface.
 **How**: Two compulsory voices — a structural heavy sans for headlines (`clamp(4rem, 10vw, 15rem)`, line-height 0.85 to 0.95, tracking -0.03em to -0.06em, uppercase) and a technical monospace for metadata (10 to 14px, `+0.05em` to `+0.10em` tracking, uppercase). The eye is never given a comfortable midrange — dense clusters of monospaced metadata sit immediately next to vast expanses of negative space framing macro-typography.
 
@@ -143,7 +143,7 @@
 ## Tokens / values
 
 ### Scale (web, desktop default)
-- Hero display: 48 to 96px (push to 64 to 96px or higher with clamp); brutalist headlines bleed to 120 to 240px with `clamp(4rem, 10vw, 15rem)`
+- Display: 60 to 240px at 1440 by expressiveness (`type.text.display`, a fluid clamp); capitals on `type.text.display-caps`
 - Section heading (H2): 32 to 48px
 - Subhead (H3): 20 to 24px
 - Large body / lead: 18 to 22px
@@ -154,17 +154,17 @@
 
 ### Mobile floors
 - Body: 16px minimum (prevents iOS auto-zoom on input focus)
-- Hero display: 36 to 48px minimum; never below 36px
+- Display: 36 to 90px on a phone, from the desktop size (0.8 of it up to 72px, easing to 0.5 at 120px and up)
 
 ### Weight
-- Display: 600 to 800 (premium SaaS sits at 500 to 700; weight 900 reads as shouty)
+- Display: 400 to 650 in fifties, lighter for a formal brand and a large display
 - Subhead / UI label: 500 to 600
 - Body: 400 to 450
 - Caption / metadata / disabled: 400, sometimes paired with reduced opacity
 - Reduce by ~50 units in dark mode for matching perceived weight
 
 ### Line-height
-- Display (48px+): 1.0 to 1.15
+- Display: 1.12 at 40px down to 1.0 (muted) or 0.92 (bold) at 160px and up; floor 0.88
 - Section heading: 1.15 to 1.3
 - Subhead: 1.3 to 1.4
 - Body: 1.5 to 1.7
@@ -172,8 +172,8 @@
 - Brutalist display: 0.85 to 0.95 (intentionally cramped)
 
 ### Tracking (letter-spacing)
-- Display at 80px+: -0.02em to -0.03em
-- Display at 48 to 80px: -0.01em to -0.02em
+- Display: the system's step tracking, tighter as contrast rises
+- Display in capitals: 0 or open (`type.tracking.caps`)
 - Section heading: -0.01em to 0
 - Body: 0 (default)
 - Small / caption: 0 to +0.01em
@@ -183,8 +183,8 @@
 
 ### Line length (measure)
 - Mobile: 35 to 60 characters
-- Desktop body: 55 to 75 characters
-- Magazine-effect body: 60 to 65 characters (32 to 40em max-width)
+- Landing paragraphs: 42 to 56 characters (`layout.measure.landing`); reading body: 60 to 70
+- Long read: 60 to 66 characters
 - Display H1: ultra-wide container (`max-w-5xl` to `max-w-7xl` or wider) — width prevents wraps, not narrowness
 
 ### Font loading
@@ -201,127 +201,129 @@
 - 5 lines: catastrophic
 - 6 lines: disqualifying
 
-### Font pairings — by mood
+### Font pairings by character
 
-**Elegant / luxury:**
-- Playfair Display + Source Sans 3 — serif heading + clean sans body; editorial, fashion, premium brands
-- Cormorant + Inter — display serif + neutral sans; hospitality, beauty
-- Libre Caslon Display + Libre Franklin — classic editorial pairing; media, longform
-- Italiana + Inter — thin elegant serif + utilitarian sans; fashion, lookbook
-- Bodoni Moda + Inter — sharp contrast serif + clean sans; luxury fashion
-- Cardo + Roboto — refined book serif + standard sans; academic luxury
-- EB Garamond + Inter — humanist serif + sans; editorial, longform
+The engine picks faces from the axes (fonts.distance); these describe what each pairing does, never which business it belongs to.
+
+**Elegant, high-contrast serifs:**
+- Playfair Display + Source Sans 3: serif heading + clean sans body
+- Cormorant + Inter: display serif + neutral sans
+- Libre Caslon Display + Libre Franklin: classic editorial pairing
+- Italiana + Inter: thin elegant serif + utilitarian sans
+- Bodoni Moda + Inter: sharp contrast serif + clean sans
+- Cardo + Roboto: refined book serif + standard sans
+- EB Garamond + Inter: humanist serif + sans
 
 **Playful / friendly:**
-- Fraunces + Inter — quirky display serif + clean sans; creative SaaS, lifestyle
-- DM Serif Display + DM Sans — family pairing, modern playful; startups, consumer
-- Caveat + Inter — handwritten + sans; education, kids
-- Lobster + Open Sans — script + clean sans; food and beverage, casual brands
-- Pacifico + Open Sans — brush script + sans; lifestyle, leisure
-- Quicksand + Quicksand — rounded sans across hierarchy; kids, wellness
-- Comic Neue + Open Sans — friendly + neutral; education, kids (sparingly)
+- Fraunces + Inter: quirky display serif + clean sans
+- DM Serif Display + DM Sans: family pairing, modern playful
+- Caveat + Inter: handwritten + sans
+- Lobster + Open Sans: script + clean sans
+- Pacifico + Open Sans: brush script + sans
+- Quicksand + Quicksand: rounded sans across hierarchy
+- Comic Neue + Open Sans: friendly + neutral
 
 **Professional / trust:**
-- Inter + Inter — single-family pairing, modern standard; tech, SaaS
-- IBM Plex Sans + IBM Plex Mono — sans + mono for tech credibility; dev tools, fintech
-- Roboto + Roboto Mono — Material-aligned; Android-first products
-- Source Sans 3 + Source Code Pro — open-source family; government, healthcare
-- Work Sans + Work Sans — single neutral family; B2B, agency
-- Manrope + Manrope — modern geometric sans; tech
-- Public Sans + Public Sans — government-aligned; civic tech
+- Inter + Inter: single-family pairing, modern standard
+- IBM Plex Sans + IBM Plex Mono: sans + mono for tech credibility
+- Roboto + Roboto Mono: Material-aligned
+- Source Sans 3 + Source Code Pro: open-source family
+- Work Sans + Work Sans: single neutral family
+- Manrope + Manrope: modern geometric sans
+- Public Sans + Public Sans: plain, open and highly legible
 
 **Modern / tech:**
-- Geist + Geist Mono — modern minimal; dev tools, AI products
-- Satoshi + JetBrains Mono — geometric + dev mono; modern startups
-- Plus Jakarta Sans + Inter — modern + standard; fintech, SaaS
-- Onest + Inter — new geometric + standard; modern web
-- General Sans + JetBrains Mono — versatile + mono; tech
-- Hanken Grotesk + Inter — grotesque + neutral; editorial tech
-- Outfit + Inter — rounded geometric + sans; modern consumer
+- Geist + Geist Mono: modern minimal
+- Satoshi + JetBrains Mono: geometric + dev mono
+- Plus Jakarta Sans + Inter: modern + standard
+- Onest + Inter: new geometric + standard
+- General Sans + JetBrains Mono: versatile + mono
+- Hanken Grotesk + Inter: grotesque + neutral
+- Outfit + Inter: rounded geometric + sans
 
 **Brutalist / editorial:**
-- Space Grotesk + IBM Plex Mono — geometric quirky + mono; indie tech, brutalism
-- Archivo Black + Inter — heavy display + clean body; music, editorial
-- Anton + Open Sans — condensed display + sans; sports, news
-- Bebas Neue + Roboto — all-caps condensed + sans; cinema, sports
-- Druk + Inter — bold display + standard; brutalism, editorial
-- Monument Grotesk + Inter — neo-grotesque + standard; indie, design
-- NB International + IBM Plex Mono — tech-brutal pairing; crypto, web3
+- Space Grotesk + IBM Plex Mono: geometric quirky + mono
+- Archivo Black + Inter: heavy display + clean body
+- Anton + Open Sans: condensed display + sans
+- Bebas Neue + Roboto: all-caps condensed + sans
+- Druk + Inter: bold display + standard
+- Monument Grotesk + Inter: neo-grotesque + standard
+- NB International + IBM Plex Mono: tech-brutal pairing
 
 **Display / statement:**
-- Big Caslon + Inter — massive display serif + sans; luxury announcement
-- Recoleta + Inter — friendly contemporary serif + sans; health, wellness
-- Migra + Inter — quirky display + sans; creative brands
-- PP Editorial New + Inter — modern serif + sans; editorial
-- PP Neue Montreal + Inter — sharp grotesque + sans; modern luxury
-- Tobias + Inter — refined display serif + sans; editorial luxury
+- Big Caslon + Inter: massive display serif + sans
+- Recoleta + Inter: friendly contemporary serif + sans
+- Migra + Inter: quirky display + sans
+- PP Editorial New + Inter: modern serif + sans
+- PP Neue Montreal + Inter: sharp grotesque + sans
+- Tobias + Inter: refined display serif + sans
 
 **Mono / technical:**
-- JetBrains Mono — dev-focused mono; code blocks
-- Fira Code — mono with ligatures; dev tools
-- IBM Plex Mono — corporate mono; fintech, enterprise
-- Geist Mono — modern mono; AI products, modern dev tools
-- Berkeley Mono — premium mono; creative tech
-- Commit Mono — compact mono; terminal apps
+- JetBrains Mono: dev-focused mono
+- Fira Code: mono with ligatures
+- IBM Plex Mono: corporate mono
+- Geist Mono: modern mono
+- Berkeley Mono: premium mono
+- Commit Mono: compact mono
 
 Pick one mono and apply across code blocks, shortcut chips, metadata, and inline values.
 
 ### Banned typographic patterns
 - Arial, Roboto, generic system stacks as primary display faces
 - Serifs on dashboards or software UIs
-- Inter used as the only reflex (acceptable as a body face but vary across projects; do not default to it)
+- Inter used as the only reflex (acceptable as a body face but vary across projects
 - Mixing two display faces together
 - Title case on every word of every headline
 - ALL CAPS body or subheads
 - Oversized H1s that scream from scale alone (use weight and color for hierarchy)
 - 6-line wrapped headings
-- Decorative ligatures on body copy (standard ligatures are fine; discretionary ligatures are editorial-only)
+- Decorative ligatures on body copy (standard ligatures are fine
 - Straight quotes and double-hyphens in production copy
 - Italic used as decoration
 - Comic-Sans-adjacent humor in primary surfaces
 - Variable font weight animations on headlines as a primary hook (use sparingly, on hover or once on load)
 - Text-fill gradients on whole sentences (one-word gradient acceptable)
-- Decorative serifs deployed for "premium feel" — the premium feel comes from sans-serif at scale with editorial restraint, not from swapping in a serif
-- All-caps headlines as a "powerful" device — reserve all-caps for 10 to 13px eyebrows
-- Display headlines in 900-weight — reads as old-internet shouty; cluster at 500 to 700
+- Decorative serifs deployed for "premium feel": the premium feel comes from sans-serif at scale with editorial restraint, not from swapping in a serif
+- All-caps headlines as a "powerful" device: reserve all-caps for 10 to 13px eyebrows
+- Display headlines in 900-weight: reads as old-internet shouty
 - Number-counter animations that overshoot and settle (must end exactly on target)
 - Animated marketing copy that types itself letter-by-letter for the H1 (acceptable once for a code sample, never for the H1)
-- Headline punctuation as faux-rhetorical setup ("Why so slow?") — only use questions when genuinely asking
+- Headline punctuation as faux-rhetorical setup ("Why so slow?"): only use questions when genuinely asking
 - Headlines under 9 words that still feel padded with adjectives ("Powerful, modern, intelligent platform")
 - Five fonts on one page with three weights in arbitrary roles
 
 ### Anti-AI-slop typography
 The default LLM output reaches for typography that signals AI generation. Override these biases:
-- Reach beyond Inter, Roboto, system-ui — pick a distinctive display face deliberately
-- Vary across generations — never converge on Space Grotesk repeatedly; no two outputs reach for the same stack reflexively
+- Reach beyond Inter, Roboto, system-ui: pick a distinctive display face deliberately
+- Vary across generations: never converge on Space Grotesk repeatedly
 - Avoid 900-weight display headlines (the AI-shouty default)
-- Avoid evenly-distributed weight ladders (400 / 500 / 600 / 700 / 800 in arbitrary roles) — compress to 3 to 4 weights
-- Reject the oversized-H1-as-its-own-justification pattern; control hierarchy with weight and color
+- Avoid evenly-distributed weight ladders (400 / 500 / 600 / 700 / 800 in arbitrary roles): compress to 3 to 4 weights
+- Reject the oversized-H1-as-its-own-justification pattern
 - Reject the centered-headline-at-massive-scale default unless you genuinely chose it
 - Recognize that a 4-line H1 means the container is too narrow, not that the font is too big
 - Never reflexively reach for Inter when a more distinctive face would serve the brand
 
 ### Hierarchy rules
-- Compress to four to six type scales; no fifth scale snuck in
+- Compress to four to six type scales
 - Use weight changes more aggressively than size changes for adjacent levels
 - Reserve italic for genuine emphasis or for titles
 - Give an eyebrow more weight with its own size, weight or color, never with a line, dash or dot beside it
-- Anchor numerals to the brand: stat moments at 96 to 144px in display weight; unit labels at 40 to 60% of the numeral size
+- Anchor numerals to the brand: stat moments at 96 to 144px in display weight
 
 ### Editorial column rhythm
 - Body paragraphs clamp to 55 to 75 characters per line via `max-width`
 - Roughly 32 to 40em for body text columns
-- Outer canvas full-width; text column narrow
-- "Magazine effect" — wide canvas, narrow column
+- Outer canvas full-width
+- "Magazine effect": wide canvas, narrow column
 - Multiple columns rather than 100-character single-column wrap
-- Long-line marketing copy is treated as a mistake; break into columns
+- Long-line marketing copy is treated as a mistake
 
 ### Optical sizing
 - Use display optical variant for hero moments
 - Use text optical variant for body when variable fonts support `opsz`
 - On non-variable faces, replace the display face entirely at the breakpoint where text-optical stops looking right
 - Set `opsz` to match rendered pixel size: 20 / 24 / 40 / 48 axis values for typical icon sizes
-- Display moments at hero scale use larger `opsz` values; body uses smaller
+- Display moments at hero scale use larger `opsz` values
 
 ### Tracking sub-tokens by scale
 - 80px+ display: -0.02em to -0.03em
@@ -337,7 +339,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 ### Optical-detail tokens
 - `font-smoothing: antialiased` on light-on-dark surfaces
 - `text-rendering: optimizeLegibility` on prose-heavy surfaces
-- Enable standard ligatures (fi, fl) on body; reserve discretionary ligatures (ct, st, sp) for editorial moments
+- Enable standard ligatures (fi, fl) on body
 - Enable tabular figures via `font-variant-numeric: tabular-nums` for data tables, prices, timers, dashboards
 - Use the display optical variant for hero moments and the text optical variant for body when variable fonts support `opsz`
 

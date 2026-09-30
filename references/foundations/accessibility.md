@@ -56,10 +56,7 @@
 ### Pattern: Visible focus ring
 **Use when**: Every interactive element — button, link, input, card, tab.
 **Anti-pattern**: `outline: none` with no replacement, or 1px gray ring invisible on the surface.
-**How**: 2 to 4px solid outline in the brand accent color, offset 2 to 4px. Style varies by aesthetic:
-- Brutalist: hard 2px solid accent outline with zero offset
-- Minimalist: 2px solid focus ring in paired accent pastel, 2px offset
-- High-end: combined ring and soft outer glow keyed to active vibe accent
+**How**: The system's focus ring role (`color.focus.ring`), a solid outline 2 to 4px wide with an offset that clears the control, at 3:1 against every surface it sits on (1.4.11). Its width and offset come from the system, the same for every component:
 
 The focus state is not just `:focus-visible` — actually visible. `:focus-visible` should style the focus, but never rely on it without ensuring the style is genuinely perceivable.
 

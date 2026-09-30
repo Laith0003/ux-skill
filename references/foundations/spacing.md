@@ -6,7 +6,7 @@
 
 1. **Pick a base unit and commit** — 4px or 8px. Build every gap, padding, and margin on multiples of that unit. The system is the look. Random spacing increments with no rhythm read as undisciplined.
 
-2. **Section breathing room signals confidence** — Marketing sections at 96 to 160px vertical padding (often 120 to 200px on developer-tooling). Cramped sections (`py-12` on marketing) read as discount; breathing sections read as premium. Mobile halves the rhythm but keeps the principle.
+2. **Section spacing follows the brand.** Landing sections sit `layout.landing-gap.<tier>` apart: 64 to 240px at desktop, wider for a calm or formal brand and tighter for a loud one, and 0.6 to 0.9 of that on a phone. Cramped sections (`py-12` on marketing) read as discount; the system's gap reads as composed.
 
 3. **Density mode is a deliberate choice** — Art-gallery (low density), daily-app (comfortable), cockpit (packed). Pick one per surface based on product type. Mobile caps density at "daily-app" regardless of desktop choice.
 
@@ -29,7 +29,7 @@
 | Do | Don't |
 |---|---|
 | Use a 4px or 8px base spacing unit | Use random px values like 7px, 13px, 19px |
-| Apply 96 to 160px vertical padding to marketing sections | Cram marketing sections at 24 to 48px vertical padding |
+| Space marketing sections with `var(--layout-landing-gap)` (64 to 240px at desktop by the brand) | Cram marketing sections at 24 to 48px vertical padding |
 | Halve section padding on mobile, keep the rhythm | Eliminate section padding on mobile |
 | Use 24 to 40px internal padding inside premium cards | Use 8px tight padding inside premium cards |
 | Increase horizontal gutters at wider breakpoints | Keep the same narrow gutter from phone to desktop |
@@ -48,7 +48,7 @@
 ### Pattern: Marketing section padding
 **Use when**: Any marketing landing section that needs to feel like a distinct cinematic chapter.
 **Anti-pattern**: `py-12` (48px) — sections feel cramped, slabs of content with no breathing room.
-**How**: With a 4.0 design system, space sections with `var(--layout-landing-gap)`: it follows the viewport's tier (64 to 80px on a phone, 80 to 96px on a tablet, 96 to 128px on a laptop, 128 to 192px at desktop, by the system's density). Without one, use at least `py-16 md:py-48` (64px phone, 192px desktop). Sections breathe; the page reads as composed.
+**How**: With a 4.0 design system, space sections with `var(--layout-landing-gap)`: it follows the viewport's tier and the brand, 64 to 240px at desktop (calm and formal wider, loud tighter) and 0.6 to 0.9 of that on a phone. Without one, use at least `py-16 md:py-48` (64px phone, 192px desktop). Sections breathe; the page reads as composed.
 
 ### Pattern: AIDA section vertical rhythm
 **Use when**: Landing pages structured around Attention → Interest → Desire → Action.
@@ -87,7 +87,7 @@
 - 1000: critical overlays (loading, fatal errors)
 
 ### Pattern: Asymmetric whitespace push
-**Use when**: Layouts at DESIGN_VARIANCE 8 or above — asymmetric editorial, premium hero, brutalist.
+**Use when**: The brand is expressive (0.7 and up): wide asymmetric sections in a full-width frame.
 **Anti-pattern**: Symmetrical padding on every section produces the corporate-template look.
 **How**: Push content off-center with `padding-left: 20vw` or generous one-sided whitespace. Use fractional grid columns (`grid-template-columns: 2fr 1fr 1fr`) instead of equal `grid-cols-3`. Apply `margin-top: -2rem` for overlapping cards or images. Mobile aggressively falls back to single-column `w-full px-4`.
 
@@ -113,10 +113,10 @@
 - 12 to 16px: between paragraph and next paragraph
 - 24 to 32px: between component groups (headline block to CTA)
 - 48 to 64px: between distinct content blocks within a section
-- 96 to 160px: between major sections
+- `var(--layout-landing-gap)`: between major sections, 64 to 240px at desktop by the brand
 
 ### Pattern: Brutalist grid lines via gap
-**Use when**: Industrial, technical, or engineered-document aesthetic.
+**Use when**: High contrast, geometric type and a formal grid: the technical end of the axes.
 **Anti-pattern**: Heavy `border` declarations on every cell.
 **How**: Use `display: grid; gap: 1px;` with contrasting parent/child background colors to generate razor-thin dividing lines. The grid is allowed to be visible — faint baseline grids, registration marks, and ruler tick marks reinforce the engineered feel.
 
@@ -153,7 +153,7 @@
 - Footer: handled separately; minimum `py-16 md:py-24`
 
 ### Pattern: Magazine effect (wide canvas, narrow column)
-**Use when**: Editorial, premium SaaS, long-form content surfaces.
+**Use when**: The page is read at length (the long reading context).
 **Anti-pattern**: Body text running 100+ characters per line across a wide viewport.
 **How**: Outer canvas full-width (`max-w-7xl` or `max-w-[1400px]`). Body text columns inside clamp to 55 to 75 characters via `max-w-prose` or `max-w-[65ch]`. Inside premium card containers, internal padding stays at 24 to 40px. The eye reads short lines on a wide canvas; the magazine effect is the cumulative result.
 
@@ -173,8 +173,7 @@
 - In px: 0 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128 / 192 / 256 / 384 / 512 / 640
 
 ### Section padding by surface type
-- Marketing landing: `var(--layout-landing-gap)` (64 to 80px phone, 128 to 192px desktop, by density)
-- Marketing premium / developer-tooling: `py-40 md:py-56` (160 to 224px desktop)
+- Marketing landing: `var(--layout-landing-gap)` (64 to 240px at desktop by the brand, 0.6 to 0.9 of it on a phone)
 - Marketing brutalist / editorial: `var(--layout-landing-gap)`, often paired with full-width macro-typography
 - Product / dashboard: `py-12 md:py-16` (48 to 64px)
 - Modal / sheet: `p-6` (24px) to `p-8` (32px)
