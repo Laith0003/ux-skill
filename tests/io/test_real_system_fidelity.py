@@ -77,7 +77,7 @@ def test_a_sites_globals_with_a_doubled_root_bring_the_dark_stage(tmp_path):
     assert imported.tokens.get("brand.primary").value == "#0A6B53"
     note = next(i for i in imported.report.notes if i.name == "--brand-primary")
     assert note.where == "globals.css:13"
-    assert "on :root at tokens.json:9" in note.message
+    assert "at tokens.json:9 (:root)" in note.message
     assert not [i for i in imported.report.not_read if "doubled" in i.message]
 
 
@@ -230,8 +230,50 @@ def test_the_result_says_where_each_file_went_and_why(tmp_path):
     where = result["where"]
     assert where["beside"]["files"] == ["tokens-ext.json"]
     assert where["out"]["files"] == ["mapping.json", "extend-report.md"]
-    assert where["out"]["why"] == "--out holds the report and the mapping only"
+    assert where["out"]["why"] == (
+        "--out holds the report and the mapping, with its own .uxskill folder: the record of "
+        "the files ux-skill wrote there and a backup of the sources read")
+    # The out folder holds exactly what the result says.
+    assert sorted(p.name for p in out.iterdir()) == sorted(
+        [*where["out"]["files"], where["out"]["intake"]])
     assert (f"tokens-ext.json went beside tokens.json in {tmp_path}, since an extension loads "
             "next to the file it extends") in result["message"]
     report = (out / "extend-report.md").read_text()
     assert "tokens-ext.json goes beside tokens.json, where an extension loads from" in report
+    assert "go into the out folder, with its own .uxskill folder" in report
+
+
+def test_a_utility_looks_in_its_own_namespace_before_colors(tmp_path):
+    from engine.existing import survey
+    from engine.foundations.tokens import Token, TokenSet
+    from engine.io.scan import scan
+    from engine.io.tailwind_config import read_theme
+    (tmp_path / "tailwind.config.js").write_text(
+        "module.exports = { theme: { extend: {\n"
+        "  colors: { primary: 'var(--brand-primary)' },\n"
+        "  textColor: { primary: 'var(--brand-text-primary)' },\n} } }\n", encoding="utf-8")
+    page = tmp_path / "index.html"
+    page.write_text('<button class="bg-primary">Go</button><a class="text-primary" href="/">'
+                    "Home</a>", encoding="utf-8")
+    ts = TokenSet({})
+    ts.add(Token("brand.primary", "color", "#0B5F4A"))
+    ts.add(Token("brand.text-primary", "color", "#1B1F24"))
+    uses = {u.prop: u.value for u in scan([tmp_path], ts).usages}
+    assert uses == {"bg-primary": "brand.primary", "text-primary": "brand.text-primary"}
+    theme = read_theme([tmp_path])
+    assert survey.button_paints(["--brand-primary", "--brand-text-primary"], [page], theme) \
+        == {"--brand-primary": 1, "--brand-text-primary": 1}
+
+
+def test_utilities_are_never_spellings_of_a_literal(tmp_path):
+    from engine.foundations.tokens import TokenSet
+    from engine.io.enhance import drift
+    from engine.io.scan import scan
+    (tmp_path / "tailwind.config.js").write_text("module.exports = {}\n", encoding="utf-8")
+    (tmp_path / "a.html").write_text('<p class="bg-white text-white border-2">x</p>',
+                                     encoding="utf-8")
+    (tmp_path / "a.css").write_text(".x { color: #fff; border-width: 2px; }\n"
+                                    ".y { color: #FFFFFF; }\n", encoding="utf-8")
+    d = drift(TokenSet({}), scan([tmp_path], TokenSet({})))
+    # Only the two literal texts of white are spellings; no utility is one.
+    assert [(s.value, s.texts) for s in d.spellings] == [("#FFFFFF", ["#fff", "#FFFFFF"])]

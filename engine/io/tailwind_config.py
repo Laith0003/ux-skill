@@ -331,11 +331,12 @@ def _module(text: str) -> Tuple[Any, Dict[str, Any]]:
     if isinstance(exported, _Computed):
         m = re.match(r"[A-Za-z_$][\w$.]*\s*\(\s*", exported.text)
         if m and exported.text.endswith(")"):   # defineConfig({...}) or a wrapper
-            inner = _Parser(exported.text[m.end():-1])
-            if inner.at("{"):
-                inner.next()
-                o = inner.obj(exported.pos)
-                return o, names
+            # Read from the brace in the whole text, so lines stay the file's.
+            brace = exported.pos + m.end()
+            at = next((k for k, t in enumerate(p.toks) if t.pos == brace), None)
+            if at is not None and p.toks[at].text == "{":
+                p.i = at + 1
+                return p.obj(brace), names
     return exported, names
 
 

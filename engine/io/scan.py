@@ -1169,7 +1169,10 @@ class _Scanner:
                 if found is not None:
                     self.add(at, utility, family, "token", found[0], text, state)
                     return
-        entry = next((e for e in (self.theme.get(space, name) for space, _ in spaces) if e),
+        # A utility's own namespace first (textColor for text-, fontSize
+        # after it), then colors, as Tailwind merges them.
+        ordered = [sp for sp in spaces if sp not in _C] + [sp for sp in spaces if sp in _C]
+        entry = next((e for e in (self.theme.get(space, name) for space, _ in ordered) if e),
                      None) if name else None
         if entry is not None:
             # A name the project's Tailwind config maps: var(--x) reaches

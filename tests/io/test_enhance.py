@@ -421,6 +421,9 @@ def test_a_clean_gate_names_no_findings_and_a_lone_role_says_no_pair_was_measure
     assert ("Not measured: no contrast pair was measured, since each needs both of its roles "
             "mapped, so no contrast was checked and nothing here passed. The rule checks on "
             "color ran alone:") in text
+    # No verdict word beside "nothing here passed": the counts only.
+    gate_text = text.split("## Gate")[1].split("## What the code")[0]
+    assert "WCAG gate passed" not in gate_text and "rule checks, 0 failing." in gate_text
     gate = report.to_dict()["gate"]
     # The JSON says what the markdown says: 0 pairs is never a measured gate.
     assert (gate["measured"], gate["passed"], gate["pairs_checked"]) == (False, None, 0)
@@ -635,5 +638,5 @@ def test_a_mistyped_role_is_fixed_in_the_mapping_not_with_a_hex():
     gate = " ".join(report.markdown().split("## Gate")[1].split("## What the code")[0].split())
     assert ("Not measured: no contrast pair was measured, since color.text.default is not of "
             "the type its role expects (see below), so no contrast was checked and nothing here "
-            "passed. The rule checks on color ran alone: WCAG gate failed on the rule checks:") \
+            "passed. The rule checks on color ran alone:") \
         in gate

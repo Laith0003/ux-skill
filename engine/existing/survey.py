@@ -231,9 +231,6 @@ def _class_calls(text: str) -> List[Tuple[int, str]]:
     return out
 
 
-_COLOR_SPACES = ("colors", "backgroundColor", "textColor", "color")
-
-
 def _prop_name(name: str) -> str:
     return re.sub(r"[^A-Za-z0-9-]+", "-", name.lstrip("-")).strip("-")
 
@@ -248,26 +245,37 @@ def button_paints(names: Sequence[str], files: Sequence[Path],
     button or link component. A utility counts when it names the token or
     a name the project's Tailwind theme (`theme`, a tailwind_config
     ThemeMap) maps to it with var(), such as bg-primary for
-    colors.primary: 'var(--brand-primary)'. Hover and focus paints are not
-    counted."""
+    colors.primary: 'var(--brand-primary)', looked up as Tailwind does: a
+    bg- utility in backgroundColor before colors, a text- one in textColor
+    before colors. Hover and focus paints are not counted."""
     counts = {n: 0 for n in names}
-    stems: Dict[str, List[str]] = {}
-    for n in names:
-        stems[n] = [_stem(n)]
-        if theme is not None:
-            stems[n] += [name for ns, name in theme.names_for(_prop_name(n))
-                         if ns in _COLOR_SPACES and name not in stems[n]]
-    vars_ = {n: re.compile(r"var\(\s*--" + re.escape(_prop_name(n)) + r"\s*[,)]", re.I)
+    props = {n: _prop_name(n) for n in names}
+    stems = {n: _stem(n) for n in names}
+    vars_ = {n: re.compile(r"var\(\s*--" + re.escape(props[n]) + r"\s*[,)]", re.I)
              for n in names}
+
+    def painted(util: str, link: bool) -> List[str]:
+        """The tokens a resting utility paints with, as Tailwind resolves
+        it: a bg- utility through backgroundColor, then colors; a text- one
+        (on a link) through textColor, then colors; a name the theme does
+        not map by the token's own name."""
+        for prefix, own in (("bg-", "backgroundColor"), ("text-", "textColor")):
+            if not util.startswith(prefix) or (prefix == "text-" and not link):
+                continue
+            name = util[len(prefix):]
+            entry = None
+            if theme is not None:
+                entry = theme.get(own, name) or theme.get("colors", name) \
+                    or theme.get("color", name)
+            if entry is not None:
+                return [n for n in names if entry.var and entry.var == props[n]]
+            return [n for n in names if name == stems[n] or util == stems[n]]
+        return []
 
     def utilities(classes: str, link: bool) -> None:
         for util in _resting(classes):
-            for n, forms in stems.items():
-                for stem in forms:
-                    own = stem if stem.startswith(("bg-", "text-")) else ""
-                    if util in (f"bg-{stem}", own) or (link and util == f"text-{stem}"):
-                        counts[n] += 1
-                        break
+            for n in painted(util, link):
+                counts[n] += 1
 
     for path in files:
         low = path.name.lower()

@@ -865,9 +865,10 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
         if anchor:
             generated, pointed = _on_theirs(generated, anchor, mapping)
         decisions.append(f"{', '.join(foundations)} was generated from {axes_source}"
-                         + (f" and the brand color {seed}{seed_from}"
+                         + ("" if arabic else ", Latin only")
+                         + (f"; its brand color is {seed}{seed_from}"
                             if "color" in foundations or "imagery" in foundations else "")
-                         + ("" if arabic else ", Latin only") + ".")
+                         + ".")
         if anchor:
             yours = [f"{mapping.roles[r].token} ({r})" for r in dict.fromkeys(
                 r for ctx in anchor.values() for r in ctx)]
@@ -1627,8 +1628,9 @@ def _report(imported: Imported, result: Extended, foundations: List[str],
             lines += ["", (f"{_and(ext_names)} {'goes' if len(ext_names) == 1 else 'go'} "
                            f"beside {name}, where an extension loads from, with the backups "
                            "of every source under .uxskill there; this report and "
-                           "mapping.json go into the out folder, which holds the report and "
-                           "the mapping only.")]
+                           "mapping.json go into the out folder, with its own .uxskill "
+                           "folder: the record of the files ux-skill wrote there and a backup "
+                           "of the sources read.")]
     lines += ["", "## What was kept", "",
               f"All {len(imported.tokens.tokens())} tokens {name} had are unchanged, in their "
               "order and with their names."]
@@ -1766,8 +1768,10 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
                         "why": f"an extension loads next to the file it extends, so it sits "
                                f"beside {name}, with the backups of the sources under "
                                f"{here / INTAKE_DIR}"},
-             "out": {"folder": str(target), "files": list(rest),
-                     "why": f"{out_label} holds the report and the mapping only"}}
+             "out": {"folder": str(target), "files": list(rest), "intake": INTAKE_DIR,
+                     "why": f"{out_label} holds the report and the mapping, with its own "
+                            f"{INTAKE_DIR} folder: the record of the files ux-skill wrote there "
+                            "and a backup of the sources read"}}
     words.append(f"{_and(list(near))} went beside {name} in {here}, since "
                  f"{where['beside']['why'].split(', so', 1)[0]}; the sources' backups are "
                  f"under {here / INTAKE_DIR} there. {_and(list(rest))} went into {target}, "

@@ -118,10 +118,10 @@ def test_a_later_stylesheet_wins_a_base_value_as_the_browser_does(tmp_path):
     [note] = [i for i in imported.report.notes if i.where == "globals.css:1"]
     assert note.name == "--color-ink"
     assert note.message == (
-        "sets the base value #000000 on :root, which wins over #1A1A1F on :root at "
-        "tokens.json:3 as the browser decides: it loads after tokens.json with a selector as "
-        "specific; #000000 is read. Keep one value: remove the other at tokens.json:3, or this "
-        "one if #1A1A1F is the value you mean")
+        "sets the base value #000000 on :root, which wins over #1A1A1F at tokens.json:3 "
+        "(:root) as the browser decides: it loads after tokens.json with a selector as "
+        "specific; #000000 is read. Keep one value: remove the other at tokens.json:3 (:root), "
+        "or this one if #1A1A1F is the value you mean")
     assert all("uxskill-read-together" not in i.where + i.message
                for i in imported.report.notes)
 
@@ -137,10 +137,10 @@ def test_a_less_specific_stylesheet_loses_and_names_both_places(tmp_path):
     [kept] = imported.report.not_read
     assert (kept.where, kept.name) == ("globals.css:2", "--color-ink")
     assert kept.message == (
-        "sets the base value #000000 on html, which loses to #1A1A1F on :root at tokens.json:3 "
-        "as the browser decides: :root is more specific, so #1A1A1F is kept and globals.css's "
+        "sets the base value #000000 on html, which loses to #1A1A1F at tokens.json:3 (:root) "
+        "as the browser decides: that is more specific, so #1A1A1F is kept and globals.css's "
         "other values still pair with it. Remove it from globals.css, or change it at "
-        "tokens.json:3 if #000000 is the value you mean")
+        "tokens.json:3 (:root) if #000000 is the value you mean")
 
 
 def test_a_doubled_root_in_the_globals_wins_and_keeps_the_dark_values(tmp_path):
@@ -167,7 +167,7 @@ def test_of_two_stylesheets_the_later_wins_and_the_first_is_named(tmp_path):
     assert not imported.report.not_read
     [note] = [i for i in imported.report.notes if i.name == "--app-edge"]
     assert note.where == "site.css:2"
-    assert "wins over #DDDDDD on :root at globals.css:1" in note.message
+    assert "wins over #DDDDDD at globals.css:1 (:root)" in note.message
 
 
 def test_places_in_messages_name_the_real_file_and_line(tmp_path):
@@ -509,3 +509,20 @@ def test_the_contract_check_passes_the_seeds_on_any_format(tmp_path):
 def test_every_status_has_an_exit_code():
     assert EXIT == {"read": 0, "reported": 0, "built": 0, "passed": 0, "written": 0,
                     "unchanged": 0, "blocked": 1, "failed": 1, "refused": 1, "error": 1}
+
+
+def test_every_place_holding_the_losing_value_is_named(tmp_path):
+    # A token file, a stylesheet that mirrors it, and an html:root override
+    # in a third file: the browser overrides the mirror, so both are named.
+    tokens, sheet = _pair(tmp_path)
+    sheet.write_text(":root {\n  --color-ink: #1a1a1f;\n}\n", encoding="utf-8")
+    site = tmp_path / "site.css"
+    site.write_text("html:root {\n  --color-ink: #000000;\n}\n", encoding="utf-8")
+    imported = read_sources([tokens, sheet, site])
+    assert imported.tokens.get("color.ink").value == "#000000"
+    [note] = [i for i in imported.report.notes if i.name == "--color-ink"]
+    assert note.where == "site.css:2"
+    assert ("wins over #1A1A1F at globals.css:2 (:root) and tokens.json:3 (:root) as the "
+            "browser decides: html:root is more specific than :root") in note.message
+    assert "remove the other at globals.css:2 (:root) and tokens.json:3 (:root)" in note.message
+    assert not imported.report.not_read

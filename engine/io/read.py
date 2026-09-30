@@ -436,13 +436,13 @@ def _cascade(first: Imported, sheets: Sequence[Tuple[Source, str]], names: Dict[
     beat the system's value, blanked out (lines and places stay), and the
     value that won over the system's for each token. A loser is listed in
     `kept` as not read, a winner over another value in `notes`, each naming
-    both places."""
+    every place that holds the other value, stylesheets first."""
     from engine.io.css_in import _base, is_root, parse_css, specificity
     lines = [text.split("\n") for _, text in sheets]
-    # key -> (reading, specificity, value as written, file, line, selector,
-    #         the sheet and line holding it, or None for the system)
-    current: Dict[str, Tuple[Any, Tuple[int, int, int], str, str, int, str,
-                             Optional[Tuple[int, int, str]]]] = {}
+    # key -> the value that stands: its reading, specificity, text, and
+    # every place that holds it, [(file, line, selector, the sheet's
+    # (index, line, property) or None for the system)].
+    current: Dict[str, Dict[str, Any]] = {}
     won: Dict[str, Any] = {}
 
     def blank(i: int, line: int, prop: str) -> None:
@@ -450,6 +450,12 @@ def _cascade(first: Imported, sheets: Sequence[Tuple[Source, str]], names: Dict[
         m = re.search(re.escape(prop) + r"\s*:[^;}]*;?", row)
         if m is not None:
             lines[i][line - 1] = row[:m.start()] + " " * (m.end() - m.start()) + row[m.end():]
+
+    def at(places: List[Tuple[str, int, str, Any]]) -> str:
+        """Every place, stylesheets first, as file:line (selector)."""
+        ordered = [p for p in places if p[3] is not None] + [p for p in places if p[3] is None]
+        shown = [f"{f}:{n} ({sel})" for f, n, sel, _ in ordered]
+        return shown[0] if len(shown) == 1 else ", ".join(shown[:-1]) + " and " + shown[-1]
 
     for i, (source, text) in enumerate(sheets):
         sheet = Path(source.path).name
@@ -468,37 +474,48 @@ def _cascade(first: Imported, sheets: Sequence[Tuple[Source, str]], names: Dict[
                 if key not in current and key in names:
                     ours = first.tokens.get(names[key])
                     file, line, sel, sys_spec = _system_place(first, key, names[key])
-                    current[key] = ((ours.type, ours.value), sys_spec, _shown(ours.value), file,
-                                    line, sel, None)
+                    current[key] = {"read": (ours.type, ours.value), "spec": sys_spec,
+                                    "text": _shown(ours.value),
+                                    "places": [(file, line, sel, None)]}
+                place = (sheet, d.line, selector, (i, d.line, d.name))
                 prev = current.get(key)
-                mine = (read, spec, d.value.strip(), sheet, d.line, selector, (i, d.line, d.name))
                 if prev is None:
-                    current[key] = mine
+                    current[key] = {"read": read, "spec": spec, "text": d.value.strip(),
+                                    "places": [place]}
                     continue
-                if _same(read, prev[0]):
+                if _same(read, prev["read"]):
+                    # Another place holding the value that stands.
+                    prev["places"].append(place)
+                    prev["spec"] = max(prev["spec"], spec)
                     continue
-                if spec >= prev[1]:
-                    why = (f"{selector} is more specific than {prev[5]}" if spec > prev[1] else
-                           f"it loads after {prev[3]} with a selector as specific")
+                losers = at(prev["places"])
+                if spec >= prev["spec"]:
+                    top = max(prev["places"], key=lambda p: p[2] != ":root")[2]
+                    why = (f"{selector} is more specific than {top}" if spec > prev["spec"]
+                           else f"it loads after "
+                           f"{' and '.join(dict.fromkeys(p[0] for p in prev['places']))} "
+                           "with a selector as specific")
                     notes.append(Item(f"{sheet}:{d.line}", d.name, (
                         f"sets the base value {d.value.strip()} on {selector}, which wins over "
-                        f"{prev[2]} on {prev[5]} at {prev[3]}:{prev[4]} as the browser decides: "
-                        f"{why}; {d.value.strip()} is read. Keep one value: remove the other at "
-                        f"{prev[3]}:{prev[4]}, or this one if {prev[2]} is the value you mean")))
-                    if prev[6] is not None:
-                        blank(*prev[6])
+                        f"{prev['text']} at {losers} as the browser decides: {why}; "
+                        f"{d.value.strip()} is read. Keep one value: remove the other at "
+                        f"{losers}, or this one if {prev['text']} is the value you mean")))
+                    for p in prev["places"]:
+                        if p[3] is not None:
+                            blank(*p[3])
                     if key in names:
                         blank(i, d.line, d.name)
                         won[key] = read[1]
-                    current[key] = mine
+                    current[key] = {"read": read, "spec": spec, "text": d.value.strip(),
+                                    "places": [place]}
                 else:
                     blank(i, d.line, d.name)
                     kept.append(Item(f"{sheet}:{d.line}", d.name, (
                         f"sets the base value {d.value.strip()} on {selector}, which loses to "
-                        f"{prev[2]} on {prev[5]} at {prev[3]}:{prev[4]} as the browser decides: "
-                        f"{prev[5]} is more specific, so {prev[2]} is kept and {sheet}'s other "
-                        f"values still pair with it. Remove it from {sheet}, or change it at "
-                        f"{prev[3]}:{prev[4]} if {d.value.strip()} is the value you mean")))
+                        f"{prev['text']} at {losers} as the browser decides: that is more "
+                        f"specific, so {prev['text']} is kept and {sheet}'s other values still "
+                        f"pair with it. Remove it from {sheet}, or change it at {losers} if "
+                        f"{d.value.strip()} is the value you mean")))
     return ["\n".join(rows) for rows in lines], won
 
 

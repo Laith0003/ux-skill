@@ -438,7 +438,7 @@ def test_added_color_on_a_light_only_system_passes_against_its_own_page():
     # The owner's own fill and text are never added again.
     assert not any(p in result.added for p in ("color-action-primary", "color-surface-page",
                                                "color-text-default", "color-text-on-action"))
-    assert ("color was generated from every axis at 0.5 and the brand color #3B6FD4, read from "
+    assert ("color was generated from every axis at 0.5; its brand color is #3B6FD4, read from "
             "your action (color.action.primary).") in result.decisions
 
 
@@ -690,7 +690,7 @@ def test_a_light_only_system_writes_no_dark_shadow_steps():
 
 def test_the_default_brand_color_is_named_as_the_engines_default():
     result = extend(_foreign(DARK_ONLY), DARK_ONLY_MAPPING, foundations=("color",))
-    assert ("color was generated from every axis at 0.5 and the brand color #3366FF, the "
+    assert ("color was generated from every axis at 0.5; its brand color is #3366FF, the "
             "engine's default, since mapping.json maps no color.action.primary and no color's "
             "name says primary or brand; map it there, or pass the brand color.") \
         in result.decisions

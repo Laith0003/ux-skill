@@ -149,3 +149,13 @@ def test_a_source_stylesheets_own_rules_count_as_uses(tmp_path):
     # Its definitions are not uses: status.danger is defined there and
     # used nowhere.
     assert "status.danger" in drift["unused"]
+
+
+def test_lines_inside_a_config_wrapper_are_the_files_own(tmp_path):
+    _write(tmp_path, "tailwind.config.ts",
+           "import { defineConfig } from 'x'\n\nexport default defineConfig({\n"
+           "  theme: {\n    extend: {\n      colors: {\n        ink: 'var(--ink)',\n"
+           "      },\n      spacing: { rail: makeScale() },\n    },\n  },\n})\n")
+    theme = read_theme([tmp_path])
+    assert theme.get("colors", "ink").line == 7
+    assert [(line, text) for _, line, text, _ in theme.not_read] == [(9, "makeScale()")]

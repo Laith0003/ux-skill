@@ -20,7 +20,8 @@ measures what the code actually does against it:
   Error pages and email templates are shown where the app's stylesheet
   may not load: their raw values are not listed, and the files are named
   once;
-- values written many ways (#fff, #FFF and white), and how many raw
+- values written many ways (#fff, #FFF and white), literal texts only,
+  since a utility class cannot be respelled, and how many raw
   values each family carries (a corner written 3px, 4px and 6px);
 - names that lie: every use contradicts the name (a background token only
   ever used as text, a hover token never used on hover), and names with
@@ -410,12 +411,16 @@ def drift(ts: TokenSet, scanned: Scan) -> Drift:
         for tokens, part in parts.items():
             if tokens:
                 d.raw_with_token.append(RawWithToken(uses[0].value, list(tokens), part))
+        # Spellings are literal texts only (#fff, #FFFFFF, white): a utility
+        # (bg-white, text-white, border) names the value by its class and
+        # cannot be written another way, so it is never one of them.
+        literal = [u for u in uses if u.text != u.prop]
         texts: List[str] = []
-        for u in uses:
+        for u in literal:
             if u.text not in texts:
                 texts.append(u.text)
         if len(texts) > 1:
-            d.spellings.append(Spelling(uses[0].value, texts, uses))
+            d.spellings.append(Spelling(uses[0].value, texts, literal))
     declared = set(getattr(scanned, "declared", ()))
     for u in usages:
         if u.kind == "missing" and u.value in declared:
@@ -677,9 +682,10 @@ class Enhanced:
                      f"nothing here passed; map roles to your tokens in {self.mapping_name} to "
                      "check them.")]
         if why.startswith("no contrast pair was measured"):
-            head = self.check.report.summary().splitlines()[0]
+            report = self.check.report
             line = (f"Not measured: {why}, so no contrast was checked and nothing here passed. "
-                    f"The rule checks on {_and(self.check.foundations)} ran alone: {head}")
+                    f"The rule checks on {_and(self.check.foundations)} ran alone: "
+                    f"{report.rules_checked} rule checks, {len(report.failures)} failing.")
             out = textwrap.wrap(line, WIDTH, break_long_words=False, break_on_hyphens=False)
             if self.findings and findings:
                 out.append("")
