@@ -51,9 +51,15 @@ PROOF_KINDS: Tuple[str, ...] = ("case-studies", "certifications", "logos", "pres
 CONTACT_KINDS: Tuple[str, ...] = ("address", "chat", "email", "form", "phone", "whatsapp")
 STAGES: Tuple[str, ...] = ("live", "pre-launch")
 PRE_LAUNCH = "pre-launch"
-# What the page is for: the product's home, one feature of it, or one campaign
-# whose only job is one ask.
-PAGES: Tuple[str, ...] = ("home", "feature", "campaign")
+# What the page is for: the product's home, one feature of it, one campaign
+# whose only job is one ask, or an inner page of the site.
+PAGES: Tuple[str, ...] = ("home", "feature", "campaign", "pricing", "about", "contact",
+                          "customers", "customer-story", "legal")
+# Inner pages and the sequence each picks. They open on a secondary hero and
+# share the site's header, closing band and footer (one page family).
+INNER_PAGES: Dict[str, str] = {"pricing": "pricing-page", "about": "about-page",
+                               "contact": "contact-page", "customers": "customers-page",
+                               "customer-story": "customer-story", "legal": "legal-page"}
 # What the visitor gives at the ask. The last four are heavy: card details, a
 # call, a purchase or a signed contract need their objections answered above
 # the first place the ask is repeated.
@@ -252,7 +258,8 @@ class _Brief:
                                  else ""))
         self.page = _choice(fields, "page", PAGES, "use feature for a page about one feature of "
                             "the product, campaign for a page whose only job is one ask, home "
-                            "for its main page")
+                            "for its main page, or the inner page it is (pricing, about, "
+                            "contact, customers, customer-story, legal)")
         self.commitment = _choice(fields, "commitment", COMMITMENTS, "name what the visitor "
                                   "gives at the ask, or leave it out")
         self.arrival = _choice(fields, "arrival", ARRIVALS, "name what most visitors know on "
@@ -574,6 +581,10 @@ def select_for_brief(brief: Mapping[str, Any]) -> Dict[str, Any]:
             raise ValueError(f"page_sequence: {explicit!r} is not a sequence; use one of "
                              f"{', '.join(sorted(by_id))}")
         sid, why = explicit, f"page_sequence {explicit}"
+    elif b.page in INNER_PAGES:
+        sid = INNER_PAGES[b.page]
+        why = (f"page {b.page}: an inner page of the site, opened by a secondary hero that names "
+               f"the page, and sharing the site's header, closing band and footer")
     elif b.stage == PRE_LAUNCH:
         live_id, _ = _live(b)
         live = by_id[live_id]

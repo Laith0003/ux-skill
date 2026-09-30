@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "4.0.0",
-    "entries": 13,
+    "entries": 19,
     "last_updated": "2026-09-29",
     "source": "ux-skill 4.0 page-level section sequences",
     "schema_version": "3.0",
@@ -940,6 +940,313 @@
       },
       "footer": "Sitemap footer: For suppliers, For buyers, Company, Legal.",
       "notes": "The page speaks to the supply side, so the buyer-only sections (categories to shop, how ordering works, delivery to the buyer) are left out. Icons follow the one icon rule in commands/ux-design.md: one set per page, an icon only where it says something distinct about its item."
+    },
+    {
+      "id": "pricing-page",
+      "goal": "pricing",
+      "picked_by": "page: pricing (an inner page of the site)",
+      "section_sequence": [
+        {
+          "section": "Secondary hero (the plans named)",
+          "job": "ask",
+          "purpose": "Name the page (Pricing) and say in one line who each plan is for, with one action: the plan most people pick. No second home-page claim."
+        },
+        {
+          "section": "Plan comparison",
+          "job": "explanation",
+          "purpose": "The plans side by side with the rows that differ; the recommended plan marked with words, not color alone. On a phone, three or more plans become a plan switcher that keeps the row labels and preselects the recommended plan; two plans keep both columns."
+        },
+        {
+          "section": "What every plan includes",
+          "job": "explanation",
+          "purpose": "The parts every plan shares, once, so the comparison shows only what differs."
+        },
+        {
+          "section": "Named quote about the value",
+          "job": "proof",
+          "proof": "testimonials",
+          "purpose": "One named quote about what the plan was worth: name, role, and business or city."
+        },
+        {
+          "section": "FAQ (billing, limits, cancelling)",
+          "job": "objection",
+          "purpose": "How billing works, what happens at a limit, how to cancel. Answers only what the client can answer truthfully. Its questions come from the brief's objections, each in the customer's own words turned into a question; with no objections in the brief, it answers only the operational questions the client's own material answers."
+        },
+        {
+          "section": "Closing band (the site's own)",
+          "job": "ask",
+          "purpose": "The site's one closing band, the same on every page of the family: the primary action in the same words as the home page."
+        },
+        {
+          "section": "Rich footer (the site's own)",
+          "job": "navigation",
+          "purpose": "The site's one sitemap footer, the same instance on every page."
+        }
+      ],
+      "cta_placement": "The recommended plan's action in the secondary hero, on each plan in the comparison, and in the closing band.",
+      "conversion_mechanisms": [
+        "recommended plan action",
+        "plan comparison",
+        "named testimonial",
+        "FAQ objection handling",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {
+        "named testimonial": "testimonials"
+      },
+      "footer": "The site's sitemap footer, shared by every page built in the run.",
+      "notes": "A pricing page answers what it costs and what differs; every price is the client's own. One page family: pages built in one run share one header, one closing band and one footer instance, so the site reads as one; this page changes only what sits between them."
+    },
+    {
+      "id": "about-page",
+      "goal": "about",
+      "picked_by": "page: about (an inner page of the site)",
+      "section_sequence": [
+        {
+          "section": "Secondary hero (the company named)",
+          "job": "ask",
+          "purpose": "Name the page (About) and say in one line what the company does and for whom, with one action: the site's primary action or a link to open roles."
+        },
+        {
+          "section": "What we do and why",
+          "job": "explanation",
+          "purpose": "What the company does, for whom, and the reason it exists, in the client's own words."
+        },
+        {
+          "section": "The people",
+          "job": "explanation",
+          "purpose": "The team or the founders in real photographs with their names and roles; never generated faces."
+        },
+        {
+          "section": "Proof of the work",
+          "job": "proof",
+          "proof": "logos",
+          "purpose": "Who the company works with: a logo row of real customers, or the numbers the client can date."
+        },
+        {
+          "section": "Closing band (the site's own)",
+          "job": "ask",
+          "purpose": "The site's one closing band, the same on every page of the family: the primary action in the same words as the home page."
+        },
+        {
+          "section": "Rich footer (the site's own)",
+          "job": "navigation",
+          "purpose": "The site's one sitemap footer, the same instance on every page."
+        }
+      ],
+      "cta_placement": "The site's primary action in the secondary hero and the closing band.",
+      "conversion_mechanisms": [
+        "primary action",
+        "real team photographs",
+        "customer logos",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {
+        "customer logos": "logos"
+      },
+      "footer": "The site's sitemap footer, shared by every page built in the run.",
+      "notes": "An about page shows who is behind the product; the team appears as itself. One page family: pages built in one run share one header, one closing band and one footer instance, so the site reads as one; this page changes only what sits between them."
+    },
+    {
+      "id": "contact-page",
+      "goal": "contact",
+      "picked_by": "page: contact (an inner page of the site)",
+      "section_sequence": [
+        {
+          "section": "Secondary hero (the routes named)",
+          "job": "ask",
+          "purpose": "Name the page (Contact) and say in one line what a visitor can ask and how soon they hear back, with one action: the route the client answers fastest."
+        },
+        {
+          "section": "Routes",
+          "job": "explanation",
+          "purpose": "Every route the client offers (phone, email, chat, form, address) with its hours and how soon each is answered; no route the client does not answer."
+        },
+        {
+          "section": "Where to find us",
+          "job": "explanation",
+          "purpose": "The address with a photograph of the place and how to get there, when the client has a place people visit."
+        },
+        {
+          "section": "Before you write",
+          "job": "objection",
+          "purpose": "The questions most people write about, answered here, from the client's own material."
+        },
+        {
+          "section": "Closing band (the site's own)",
+          "job": "ask",
+          "purpose": "The site's one closing band, the same on every page of the family: the primary action in the same words as the home page."
+        },
+        {
+          "section": "Rich footer (the site's own)",
+          "job": "navigation",
+          "purpose": "The site's one sitemap footer, the same instance on every page."
+        }
+      ],
+      "cta_placement": "The fastest route in the secondary hero and in the closing band.",
+      "conversion_mechanisms": [
+        "fastest route in hero",
+        "every route with its hours",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {},
+      "footer": "The site's sitemap footer, shared by every page built in the run.",
+      "notes": "A contact page lists the routes the client really answers, with hours. One page family: pages built in one run share one header, one closing band and one footer instance, so the site reads as one; this page changes only what sits between them."
+    },
+    {
+      "id": "customers-page",
+      "goal": "customers",
+      "picked_by": "page: customers (an inner page of the site)",
+      "section_sequence": [
+        {
+          "section": "Secondary hero (the customers named)",
+          "job": "ask",
+          "purpose": "Name the page (Customers) and say in one line who uses the product, with one action: the site's primary action."
+        },
+        {
+          "section": "Logo row",
+          "job": "proof",
+          "proof": "logos",
+          "purpose": "The customers' own logos in one monochrome row at even optical weight."
+        },
+        {
+          "section": "Customer stories",
+          "job": "proof",
+          "proof": "case-studies",
+          "purpose": "One card per story, each with the customer's name, their result in their own figure and a photograph of them or their work; each links to its story page."
+        },
+        {
+          "section": "Named quotes",
+          "job": "proof",
+          "proof": "testimonials",
+          "purpose": "Two or three named quotes: name, role, and business or city."
+        },
+        {
+          "section": "Closing band (the site's own)",
+          "job": "ask",
+          "purpose": "The site's one closing band, the same on every page of the family: the primary action in the same words as the home page."
+        },
+        {
+          "section": "Rich footer (the site's own)",
+          "job": "navigation",
+          "purpose": "The site's one sitemap footer, the same instance on every page."
+        }
+      ],
+      "cta_placement": "The site's primary action in the secondary hero and the closing band.",
+      "conversion_mechanisms": [
+        "customer logos",
+        "customer stories",
+        "named testimonial",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {
+        "customer logos": "logos",
+        "customer stories": "case-studies",
+        "named testimonial": "testimonials"
+      },
+      "footer": "The site's sitemap footer, shared by every page built in the run.",
+      "notes": "A customers page gathers real proof; with none, it is not built. One page family: pages built in one run share one header, one closing band and one footer instance, so the site reads as one; this page changes only what sits between them."
+    },
+    {
+      "id": "customer-story",
+      "goal": "customer story",
+      "picked_by": "page: customer-story (an inner page of the site)",
+      "section_sequence": [
+        {
+          "section": "Secondary hero (the customer named)",
+          "job": "ask",
+          "purpose": "Name the customer and their result in one line, with one action: the site's primary action. A photograph of the customer or their work."
+        },
+        {
+          "section": "The situation before",
+          "job": "explanation",
+          "purpose": "What the customer was doing before and what it cost them, in their words."
+        },
+        {
+          "section": "What they did",
+          "job": "explanation",
+          "purpose": "How they used the product, with real screens or photographs of the work."
+        },
+        {
+          "section": "The result in their figures",
+          "job": "proof",
+          "proof": "case-studies",
+          "purpose": "The result as the customer measured it, with what it counts and as of when."
+        },
+        {
+          "section": "Named quote",
+          "job": "proof",
+          "proof": "testimonials",
+          "purpose": "The customer's own words: name, role, and business or city."
+        },
+        {
+          "section": "Closing band (the site's own)",
+          "job": "ask",
+          "purpose": "The site's one closing band, the same on every page of the family: the primary action in the same words as the home page."
+        },
+        {
+          "section": "Rich footer (the site's own)",
+          "job": "navigation",
+          "purpose": "The site's one sitemap footer, the same instance on every page."
+        }
+      ],
+      "cta_placement": "The site's primary action in the secondary hero and the closing band.",
+      "conversion_mechanisms": [
+        "customer result",
+        "named testimonial",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {
+        "customer result": "case-studies",
+        "named testimonial": "testimonials"
+      },
+      "footer": "The site's sitemap footer, shared by every page built in the run.",
+      "notes": "A customer story is one customer's case told with their own figures and words. One page family: pages built in one run share one header, one closing band and one footer instance, so the site reads as one; this page changes only what sits between them."
+    },
+    {
+      "id": "legal-page",
+      "goal": "legal",
+      "picked_by": "page: legal (an inner page of the site)",
+      "section_sequence": [
+        {
+          "section": "Secondary hero (the document named)",
+          "job": "ask",
+          "purpose": "Name the document and the date it takes effect in one line, with one action: how to reach the client with a question about it."
+        },
+        {
+          "section": "Contents",
+          "job": "explanation",
+          "purpose": "Links to each part of the document, for a long document."
+        },
+        {
+          "section": "The document",
+          "job": "explanation",
+          "purpose": "The client's own text at the reading measure, headings for each part, nothing added."
+        },
+        {
+          "section": "Questions about this document",
+          "job": "objection",
+          "purpose": "Who to write to and how soon they answer."
+        },
+        {
+          "section": "Closing band (the site's own)",
+          "job": "ask",
+          "purpose": "The site's one closing band, the same on every page of the family: the primary action in the same words as the home page."
+        },
+        {
+          "section": "Rich footer (the site's own)",
+          "job": "navigation",
+          "purpose": "The site's one sitemap footer, the same instance on every page."
+        }
+      ],
+      "cta_placement": "The contact route in the secondary hero and the closing band.",
+      "conversion_mechanisms": [
+        "contact route",
+        "repeated CTA band"
+      ],
+      "mechanism_needs": {},
+      "footer": "The site's sitemap footer, shared by every page built in the run.",
+      "notes": "A legal page carries the client's own text unchanged, at the reading measure. One page family: pages built in one run share one header, one closing band and one footer instance, so the site reads as one; this page changes only what sits between them."
     }
   ]
 }

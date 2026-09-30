@@ -596,7 +596,7 @@ Fill the fields from what the user said, and leave out any the user did not say:
 | `proof` | any of `stats`, `testimonials`, `logos`, `reviews`, `case-studies`, `certifications`, `press`; `[]` for none | the client gives real numbers, named quotes, client logos and so on. `[]` when it has none |
 | `contact` | any of `phone`, `whatsapp`, `email`, `form`, `chat`, `address` | the routes the client really offers |
 | `stage` | `live`, `pre-launch` | `pre-launch` when there are no customers yet; `live` when it has users |
-| `page` | `home`, `feature`, `campaign` | `feature` when the page is about one feature of the product, not its main page; `campaign` when the page exists for one ask (a paid campaign, a launch, a waitlist) |
+| `page` | `home`, `feature`, `campaign`, `pricing`, `about`, `contact`, `customers`, `customer-story`, `legal` | `feature` when the page is about one feature of the product, not its main page; `campaign` when the page exists for one ask (a paid campaign, a launch, a waitlist); an inner page's own name for that page of the site, which opens on a secondary hero and shares the site's header, closing band and footer |
 | `platforms` | any of `web`, `ios`, `android`, `desktop` | where the product really runs; store badges appear only with `ios` or `android` |
 | `sign_in` | any of `phone`, `email`, `password`, `sso`, `social` | how the product's users really sign in |
 | `commitment` | `email`, `phone`, `account`, `trial`, `card`, `call`, `purchase`, `contract` | what the visitor gives at the ask; leave it out when the user did not say |

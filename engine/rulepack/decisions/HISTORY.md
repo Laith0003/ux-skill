@@ -190,3 +190,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Accent text is measured against every ground it lands on](accent-text-on-every-ground.md)
 - [Anything that moves on its own stops under reduced motion and can be paused](moving-content-pauses.md)
 - [A layout transition is flagged when it moves what sits beside it](layout-transitions-that-reflow.md)
+- [Inner pages have their own sequences and share one header, closing band and footer](inner-pages-one-family.md)

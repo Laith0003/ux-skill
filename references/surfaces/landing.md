@@ -404,6 +404,12 @@ The place a visitor hesitates is the field that asks for something. Put the reas
 
 ---
 
+## Pages of one site
+
+An inner page (`page: pricing`, `about`, `contact`, `customers`, `customer-story` or `legal` in the brief) gets its own sequence from the engine. It opens on a secondary hero whose job is to orient inside the site: the page's own name as the heading, one line on what the page holds, one action, and a fragment of the product or a photograph the page is about. It never restates the home page's claim.
+
+Pages built in one run are one page family: they share one header, one closing band and one footer instance, written once and reused, so a visitor moving between them sees the same frame and only the middle changes. The closing band keeps the home page's action in the same words.
+
 ## Arabic and RTL
 
 A landing page that ships in Arabic is designed in Arabic, not mirrored after the fact.
