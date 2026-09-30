@@ -107,17 +107,32 @@ EXPECT = {
     "imp/layer-b.css": {IMP: []},
     # A token layer (mostly custom-property definitions) is judged on its
     # definitions only by rules written for token definitions; its usage
-    # lines, and a page's own stylesheet, keep every rule.
+    # lines, and a page's own stylesheet, keep every rule. A duration the
+    # page's own tokens define passes the 300ms rule: the system chose it.
     "tokdef/client-tokens.css": {
-        "timing-300ms-default": [23],
+        "timing-300ms-default": [],
         "cubic-bezier-material-only": [23],
         "glow-shadow-zero-offset": [5],
         "default-font-only": [6],
     },
     "tokdef/page.css": {
-        "timing-300ms-default": [1, 2],
+        "timing-300ms-default": [],
         "cubic-bezier-material-only": [1, 3],
     },
+    # Eyebrows follow the brand's formality (read back from the system's
+    # grade spread), splits and marquees are counted, layouts repeat at most
+    # twice, motion answers by its curve, ink text keeps its alpha at 0.7 or
+    # more, and a loop stops under reduced motion.
+    "taste/t1-eyebrows.html": {"eyebrows-over-budget": [5, 6]},
+    "taste/t2-eyebrows-formal.html": {"eyebrows-over-budget": [6]},
+    "taste/t3-splits-marquees.html": {"split-sections-in-a-row": [9],
+                                      "layout-family-repeated": [7, 8, 9],
+                                      "marquee-more-than-one": [10, 11]},
+    "taste/t4-motion.css": {"transition-duration-500ms-or-longer": [3, 5, 10],
+                            "animation-duration-too-long": [8],
+                            "timing-300ms-default": []},
+    "taste/t5-ink.css": {"text-ink-at-low-alpha": [1, 4, 6]},
+    "taste/t6-loops.css": {"infinite-animation-without-reduced-motion": [2]},
     # other review probes
     "misc/d1.tsx": {"div-onclick-no-role": [3, 4]},
     "misc/e1.html": {"emoji-in-ui": [1, 2, 5]},

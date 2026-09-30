@@ -1,0 +1,3 @@
+.marquee__track { animation: slide 20s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .marquee__track { animation: none; } }
+@keyframes slide { to { transform: translateX(-50%); } }

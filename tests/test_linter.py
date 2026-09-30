@@ -240,8 +240,9 @@ def test_page_with_img_not_flagged_imagery_mandatory(tmp_path):
     assert "imagery-mandatory-missing" not in ids
 
 
-def test_page_with_inline_svg_not_flagged_imagery_mandatory(tmp_path):
-    """A SUBSTANTIAL inline SVG illustration (large viewBox) counts as imagery."""
+def test_page_with_inline_svg_only_flagged_imagery_mandatory(tmp_path):
+    """An inline SVG illustration, however large, is not a photograph: a
+    landing page with nothing else is flagged."""
     f = tmp_path / "withsvg.html"
     f.write_text(
         '<!doctype html><html><body><main><section><h1>Skips</h1>'
@@ -249,7 +250,7 @@ def test_page_with_inline_svg_not_flagged_imagery_mandatory(tmp_path):
         '</section></main></body></html>',
         encoding="utf-8")
     ids = [x["rule_id"] for x in lint([str(f)]).to_dict()["findings"]]
-    assert "imagery-mandatory-missing" not in ids
+    assert "imagery-mandatory-missing" in ids
 
 
 def test_icon_only_page_flags_imagery_mandatory(tmp_path):

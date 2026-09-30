@@ -50,6 +50,7 @@ EXPECTED = {
     "layout-bounds", "reflow-at-320", "spacing-within-group", "strict-radius-nesting",
     "the-full-type-ladder", "imported-sets-pass", "phone-order-in-both-scripts",
     "phone-accepts-local-input", "one-label-per-action",
+    "lint-reads-the-system", "motion-lint-times-the-curve", "photograph-required-in-lint", "eyebrows-follow-formality", "layouts-repeat-at-most-twice", "splits-run-at-most-two", "one-marquee-per-page", "three-cards-read-by-content", "ink-text-keeps-its-alpha", "loops-stop-under-reduced-motion",
     "display-follows-expressiveness", "display-lines-sit-tight", "weights-stay-light",
     "two-voice-headline", "capitals-track-open", "lines-break-balanced",
     "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",
@@ -131,7 +132,7 @@ def test_records_cite_wcag_only_by_criteria_that_exist_here():
     cited = set()
     for r in load_records():
         cited |= set(re.findall(r"\b([1-4]\.\d\.\d{1,2})\b", r.text))
-    assert cited <= {"1.4.1", "1.4.3", "1.4.6", "1.4.8", "1.4.10", "1.4.11", "2.3.3", "2.4.7",
+    assert cited <= {"1.4.1", "1.4.3", "1.4.6", "1.4.8", "1.4.10", "1.4.11", "2.2.2", "2.3.3", "2.4.7",
                      "2.5.5", "2.5.8"}, cited
 
 

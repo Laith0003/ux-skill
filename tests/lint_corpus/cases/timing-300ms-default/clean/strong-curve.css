@@ -1,0 +1,2 @@
+.btn { transition: transform 300ms cubic-bezier(.2, 1, .25, 1); }
+.btn:active { transform: scale(.97); }

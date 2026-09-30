@@ -1,0 +1,2 @@
+.marquee__track { animation: slide 20s linear infinite; }
+@keyframes slide { to { transform: translateX(-50%); } }

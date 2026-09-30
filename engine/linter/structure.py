@@ -2333,3 +2333,9 @@ POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
     "phone-rejects-local": phone_rejects_local,
     "one-action-several-labels": one_action_several_labels,
 }
+
+# The checks that read the page's own system, time motion by its curve and
+# count a landing page's structure live in engine/linter/taste.py.
+from engine.linter.taste import TASTE_CHECKS  # noqa: E402
+
+POST_CHECKS.update(TASTE_CHECKS)

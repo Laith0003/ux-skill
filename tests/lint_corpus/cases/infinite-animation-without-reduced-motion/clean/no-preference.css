@@ -1,0 +1,3 @@
+@media (prefers-reduced-motion: no-preference) {
+  .beam { animation: glow 4s ease-in-out infinite; }
+}

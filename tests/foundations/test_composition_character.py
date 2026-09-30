@@ -134,3 +134,10 @@ def test_a_scrim_that_stops_short_of_the_headline_is_named():
     msgs = [f.message for f in gate(short, [], imagery.CHECKS, raise_on_fail=False).failures
             if f.check == "scrim-covers-text"]
     assert msgs and msgs[0].startswith("imagery.scrim-reach is 0.3, but a two-line headline at ")
+
+
+def test_the_eyebrow_share_rises_with_formality_from_a_sixth_to_a_half():
+    shares = [character.eyebrow_share(f / 10) for f in range(11)]
+    assert shares[0] == round(1 / 6, 4) and shares[-1] == 0.5
+    assert all(a < b for a, b in zip(shares, shares[1:]))
+    assert character.eyebrow_share(-1) == shares[0] and character.eyebrow_share(2) == shares[-1]

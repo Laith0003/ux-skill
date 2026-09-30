@@ -266,6 +266,14 @@ def chromatic_budget(axes: AxisValues) -> float:
     return round(0.02 + 0.18 * energy(axes), 2)
 
 
+def eyebrow_share(formality: float) -> float:
+    """The share of a landing page's sections that may carry an eyebrow
+    label, from a sixth for a playful brand to a half for a formal one: a
+    formal page labels its parts, a playful one lets its headlines stand.
+    lint counts eyebrows against it."""
+    return round(1 / 6 + (1 / 2 - 1 / 6) * clamp(formality), 4)
+
+
 def ink_alpha(axes: AxisValues) -> float:
     """The alpha of the ink a decorative line or a card's ring is drawn in,
     0.05 for a muted system to 0.12 for a bold one, by contrast."""

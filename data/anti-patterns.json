@@ -1,8 +1,8 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 159,
-    "last_updated": "2026-09-29",
+    "entries": 165,
+    "last_updated": "2026-09-30",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
   },
@@ -73,10 +73,11 @@
           "blade",
           "astro"
         ],
-        "target": "markup"
+        "target": "markup",
+        "post": "cards-hold-only-icon-title-line"
       },
-      "why": "Three equal cards with three icons and three short paragraphs is the safest default the generator reaches for and the strongest layout fingerprint in AI-generated marketing surfaces.",
-      "fix": "Use asymmetric layouts: bento grids, 2-and-1 splits, 4 with one spanning width. Vary card size by content priority."
+      "why": "Three equal cards that each hold just an icon, a title and a line are the strongest layout fingerprint of generated marketing pages: nothing in them differs but the words. Equal columns whose cards each carry their own image or richer content pass.",
+      "fix": "Give each card what only it can show (its own photograph, a product fragment, a real figure), or change the layout: a split, a list with one lead item, a bento whose cell sizes follow the content."
     },
     {
       "id": "fake-name-john-doe",
@@ -233,7 +234,7 @@
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "(?:transition(?:-duration)?|animation-duration):\\s*300ms\\b|(?<![\\w$@-])duration-300\\b|\\bduration:\\s*0\\.3s\\b",
+        "pattern": "(?:transition(?:-duration)?|animation-duration):\\s*300ms\\b|(?<![\\w-])(?:transition|animation)\\s*:[^;{}]*\\s(?:300ms|0?\\.3s)\\b|(?<![\\w$@-])duration-300\\b|\\bduration:\\s*0\\.3s\\b",
         "flags": "i",
         "scope": [
           "css",
@@ -246,10 +247,11 @@
         "target": [
           "css",
           "classes"
-        ]
+        ],
+        "post": "default-300-answers-late"
       },
-      "why": "300ms is the editor default - using it everywhere signals zero motion intent and reads as laziness to anyone who tunes animation curves.",
-      "fix": "Micro-interactions 150-220ms, complex transitions 250-400ms, exit 60-70% of entry. Pick durations that match the feel, not the default."
+      "why": "300ms on the default curve is the editor default: nothing about the motion was decided. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. A curve that is not declared or cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
+      "fix": "Bind the system's motion roles (--motion-state-*, --motion-swap-*). With no system, declare a curve that answers in time (half done within 70ms for a hover or press) and a duration chosen for the move."
     },
     {
       "id": "cubic-bezier-material-only",
@@ -359,10 +361,11 @@
         "target": [
           "css",
           "classes"
-        ]
+        ],
+        "post": "size-outside-system"
       },
-      "why": "Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.",
-      "fix": "Extend the Tailwind theme scale or use clamp() for fluid hero typography. text-6xl/text-7xl/text-8xl exist for a reason."
+      "why": "A display size picked by eye bypasses the type scale, so the hierarchy no longer holds at other widths. When the page carries its own design system (custom properties it defines or links), the value passes if the system has it: the system decided it.",
+      "fix": "Take the display size from the type tokens (--type-text-display-font-size, a fluid clamp the engine derives from the brand). With no system, add the size to the theme's scale and write it as a clamp() between the phone and desktop sizes."
     },
     {
       "id": "blur-bg-only-decoration",
@@ -1068,10 +1071,11 @@
           "vue",
           "html"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "weight-outside-system"
       },
-      "why": "Display fonts at 700 weight read dense and visually muddy. Most display faces are drawn to sing at 500-600; 700+ is for body emphasis, not headlines.",
-      "fix": "Use font-weight 500 or 600 on display headings. Reserve 700+ for body emphasis (bold inline text, table totals, primary CTA labels)."
+      "why": "A heavy weight on a display that nothing chose reads dense and muddy: measured award pages set their headlines near 400, and only a loud, informal brand earns 700 on a large display. When the page carries its own design system (custom properties it defines or links), the value passes if the system has it: the system decided it.",
+      "fix": "Take the display weight from the type tokens (--type-text-display-font-weight, or the system's weight role). With no system, set display headings at 400 to 600 and keep 700 and up for short emphasis."
     },
     {
       "id": "all-caps-large",
@@ -1090,10 +1094,11 @@
           "vue",
           "html"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "capitals-outside-system"
       },
-      "why": "ALL CAPS reading speed is 13-20% slower than mixed case because word shape is lost. At 14px or larger it actively impedes reading.",
-      "fix": "Reserve uppercase for eyebrows, labels, and badges under 14px. Use sentence case for anything readers need to read, not just scan."
+      "why": "Capitals at reading size slow reading, because word shapes are lost. A loud brand can set its display in capitals: when the page's system has a capitals display role, a capitals style at one of the system's two largest sizes, tracked at 0 or open, passes. Body, subhead and tight-tracked capitals are still reported.",
+      "fix": "Set body and subhead text in sentence case; keep capitals for short labels. For a capitals display, bind the system's display-caps role (--type-text-display-caps-*), which tracks at 0 or open."
     },
     {
       "id": "cursor-pointer-non-interactive",
@@ -1715,10 +1720,11 @@
         "target": [
           "css",
           "classes"
-        ]
+        ],
+        "post": "tracking-outside-system"
       },
-      "why": "tracking-tighter (-0.05em) on font-weight 800+ display is the unmistakable 'AI hero' typographic recipe - copied from every Linear-clone landing page. The combination crushes the counters and reads as default, not deliberate.",
-      "fix": "Use letter-spacing -0.01em to -0.02em on display headings, with font-weight 500-600. Reserve heavy-and-tight pairings for short brand wordmarks, not full headlines."
+      "why": "Tight tracking on a heavy display that nothing chose crushes the counters and reads as a default recipe. When the page carries its own design system (custom properties it defines or links), the value passes if the system has it: the system decided it. Both the tracking and the weight must be the system's.",
+      "fix": "Take the display's letter spacing and weight from the type tokens (--type-text-display-letter-spacing, --type-text-display-font-weight). With no system, keep display tracking between -0.01em and -0.02em at a weight of 400 to 600."
     },
     {
       "id": "hover-only-card-actions",
@@ -1763,7 +1769,7 @@
     },
     {
       "id": "animation-duration-too-long",
-      "name": "Micro-interaction with animation-duration over 800ms",
+      "name": "Long animation that starts slowly",
       "severity": "medium",
       "category": "Motion",
       "detection": {
@@ -1778,10 +1784,11 @@
           "vue",
           "html"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "animation-answers-late"
       },
-      "why": "A hover, focus, or state-change animation longer than 800ms feels sluggish - users perceive UI under 200ms as instant, under 500ms as snappy, over 800ms as broken or laggy. Long durations on micro-interactions signal no taste decision was made.",
-      "fix": "Cap micro-interactions at 150-400ms. Reserve longer durations (800ms+) for narrative scenes, page transitions, or deliberate orchestration - never for a button hover or icon flip."
+      "why": "An animation of 800ms or more on a slow-starting curve keeps the page waiting. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. A curve that is not declared or cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
+      "fix": "Bind the system's entrance role (--motion-arrive-duration with --motion-arrive-curve). With no system, put the long move on a strong out curve so it is half done within 140ms, or shorten it."
     },
     {
       "id": "text-3xl-4xl-5xl-stack",
@@ -1822,9 +1829,10 @@
           "vue",
           "html"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "grid-holds-plain-cards"
       },
-      "why": "repeat(3, 1fr) with no minmax(), no auto-fit, and no asymmetric weighting is the laziest grid declaration - signals the layout was set by a generator that defaulted to 'three equal columns' without thinking about content priority or responsive behavior.",
+      "why": "repeat(3, 1fr) around cells that each hold just an icon, a title and a line is the three-equal-cards default. When the file, or a page that loads the stylesheet, shows that each cell carries its own media or richer content, the grid passes; a stylesheet with no markup to read is still reported.",
       "fix": "Use minmax for responsive floors: repeat(auto-fit, minmax(280px, 1fr)). For deliberate three-column layouts, weight by content: grid-template-columns: 2fr 1fr 1fr, or use named-area grids."
     },
     {
@@ -2190,12 +2198,12 @@
     },
     {
       "id": "transition-duration-500ms-or-longer",
-      "name": "Interactive transition-duration 500ms or longer",
+      "name": "Interactive transition that answers late",
       "severity": "medium",
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "transition-duration\\s*:\\s*(?:[5-9]\\d{2}|[1-9]\\d{3,})ms\\b|transition-duration\\s*:\\s*(?:0?\\.[5-9]|[1-9](?:\\.\\d+)?)s\\b|(?<![\\w-])transition\\s*:[^;{}]*\\s(?:[5-9]\\d{2}|[1-9]\\d{3,})ms\\b|(?<![\\w-])transition\\s*:[^;{}]*\\s(?:0?\\.[5-9]|[1-9](?:\\.\\d+)?)s\\b",
+        "pattern": "transition-duration\\s*:\\s*(?:[4-9]\\d{2}|[1-9]\\d{3,})ms\\b|transition-duration\\s*:\\s*(?:0?\\.[4-9]|[1-9](?:\\.\\d+)?)s\\b|(?<![\\w-])transition\\s*:[^;{}]*\\s(?:[4-9]\\d{2}|[1-9]\\d{3,})ms\\b|(?<![\\w-])transition\\s*:[^;{}]*\\s(?:0?\\.[4-9]|[1-9](?:\\.\\d+)?)s\\b",
         "flags": "i",
         "scope": [
           "css",
@@ -2205,10 +2213,11 @@
           "vue",
           "html"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "transition-answers-late"
       },
-      "why": "A `transition-duration` of 500ms or more on hover, focus, or active states feels laggy - the human perception threshold for 'instant' is 100ms and for 'snappy' is 200ms. Users move the mouse 8-12 times per second; a 500ms transition means the hover state hasn't finished settling before the cursor moves on. Stretched transitions are the AI default for 'smooth.'",
-      "fix": "Cap interactive transitions at 150-300ms. Use 200ms for color/background/border hovers, 250-300ms for transform/scale, and 100-150ms for fast snap states (focus rings, active depressions). Reserve 500ms+ for scene transitions, drawer slides, and page-level state changes - never single-element hovers."
+      "why": "A transition of 400ms or more that starts slowly leaves the hover or press unanswered while the pointer has moved on. Length alone is not the problem: a long move on a strong out curve is half done in 70ms. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. A curve that is not declared or cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
+      "fix": "Bind the system's motion roles (--motion-state-duration with --motion-state-curve for hover and state, --motion-reveal-* for entrances). With no system, use a strong out curve such as cubic-bezier(0.2, 0.8, 0.2, 1), or shorten the move until it is half done within 70ms."
     },
     {
       "id": "cursor-not-allowed-no-visual",
@@ -3010,12 +3019,12 @@
     },
     {
       "id": "imagery-mandatory-missing",
-      "name": "Page with no real imagery (icon-only text-wall)",
+      "name": "Landing page with no photograph",
       "severity": "high",
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<iframe\\b|<image\\b|<(?!svg\\b)[a-z][\\w-]*\\b[^>]*\\brole\\s*=\\s*[\\\"']img[\\\"']|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\\\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\\\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
+        "pattern": "\\A(?=[\\s\\S]*<body\\b)[\\s\\S]{0,80}",
         "flags": "i",
         "scope": [
           "html",
@@ -3023,10 +3032,10 @@
           "astro"
         ],
         "target": "code",
-        "post": "page-needs-imagery"
+        "post": "page-needs-photograph"
       },
-      "why": "Imagery is mandatory and real. A full rendered page (has a <body>) whose only visuals are icon-sized SVGs (sub-100px, a tiny viewBox) - or that ships no imagery at all - is a text-wall of cards that reads as a memo, not a product. Icons are not imagery; a meaningful illustration (>=100px or a large viewBox), a real <img>/<picture>/<video>, or a real background photo is. The single biggest richness failure. (Scoped to full documents; component fragments without a <body> are exempt.) Pages that are not landing pages are skipped: an app root with no text or role=application; a docs page or app shell with a sidebar or table of contents beside the content; or a page where one article, form, table, code listing, list or grid holds most of the main text. A hero (an h1 followed by a call to action) always marks a landing page, and a form that wraps several sections is the page itself.",
-      "fix": "Add real imagery: the client's own product UI/screenshots first, then curated Unsplash/Pexels chosen to match the brand and temperature. An abstract SVG illustration can support a section but is not a substitute for a real product/site image. Anchor major sections with imagery; never ship a text-only wall."
+      "why": "A landing page carries photographs: a raster image, a picture, a video or a raster background that is not the logo. An illustration, icons or the logo alone do not count; drawn art and product fragments add to photographs and never replace them. Only a brand whose rules forbid photography (a brand.md beside the page or above it that says so) passes with none. Component fragments without a <body> are exempt. Pages that are not landing pages are skipped: an app root with no text or role=application; a docs page or app shell with a sidebar or table of contents beside the content; or a page where one article, form, table, code listing, list or grid holds most of the main text. A hero (an h1 followed by a call to action) always marks a landing page, and a form that wraps several sections is the page itself.",
+      "fix": "Add photographs: the client's own first, else sourced ones that follow the system's photo direction (the imagery.photo.* tokens and the report's Photography section) and none of the kinds the brand's rules exclude. A ban on a kind of photo narrows the kinds; it never removes photography."
     },
     {
       "id": "generic-alt-image-photo-icon",
@@ -3647,6 +3656,147 @@
       },
       "why": "A page that names one action three ways (a header button, a hero button and a closing band that each say something different) makes the reader stop and compare them, and the one thing the page asks for stops reading as one thing.",
       "fix": "Give every call to action that does the same thing (the same destination, the same form) the same words, the verb of the hero's button. A different next step gets a different label and, when it is secondary, a text link."
+    },
+    {
+      "id": "eyebrows-over-budget",
+      "name": "More eyebrows than the brand calls for",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<[a-z][\\w-]*\\b[^>]*\\bclass(?:Name)?\\s*=",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "eyebrows-over-budget"
+      },
+      "why": "A small label above every section heading turns each section into the same announcement, and the page reads as a template. How many sections carry one follows the brand's formality: a sixth of them for a playful brand, up to half for a formal one (a third when the page's system does not say). Eyebrows past that allowance are reported; a page with fewer than three sections is not counted.",
+      "fix": "Keep eyebrows where a section needs a label the heading cannot carry (a step number, a category) and let the other headings stand alone. Separate sections with space or a change of ground, never with a label."
+    },
+    {
+      "id": "layout-family-repeated",
+      "name": "One layout used for three sections",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<section\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "layout-family-repeated"
+      },
+      "why": "Three sections built from the same tree of elements (a heading over three cards, again and again) read as one section repeated, and the page loses its rhythm. Repeated items inside a section count once; the words are ignored.",
+      "fix": "Give each section the layout its content needs: a split for one idea and its picture, a list for steps, a quote on its own, a grid only where items compare. Use one layout at most twice on a page."
+    },
+    {
+      "id": "split-sections-in-a-row",
+      "name": "More than two media-and-text splits in a row",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<section\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "split-sections-in-a-row"
+      },
+      "why": "A picture beside text, then text beside a picture, then again: the zigzag is the default a generator reaches for, and by the third the reader stops reading. The third split in a row and every one after it are reported.",
+      "fix": "Break the run after two: a full-width image, a grid of several items, a single quote or a band of figures between splits."
+    },
+    {
+      "id": "marquee-more-than-one",
+      "name": "More than one marquee",
+      "severity": "medium",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "<marquee\\b|<[a-z][\\w-]*\\b[^>]*(?:\\bclass(?:Name)?\\s*=\\s*[\"'{][^\"'}]*(?:marquee|ticker)|\\bdata-marquee\\b)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "marquee-more-than-one"
+      },
+      "why": "One scrolling strip can carry logos or a line of news; a second one competes with it and with the text around it, and every strip that moves on its own for more than five seconds needs a way to pause it.",
+      "fix": "Keep one marquee and turn the others into static rows. Give the one that stays a pause control and stop it under prefers-reduced-motion."
+    },
+    {
+      "id": "text-ink-at-low-alpha",
+      "name": "Text in ink at low alpha",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?<![\\w-])color\\s*:\\s*(?:rgba?\\([^)]*\\)|#[0-9a-f]{8}\\b|#[0-9a-f]{4}\\b|color-mix\\([^;{}]*transparent[^;{}]*\\))|(?<![\\w-])text-(?:black|white|foreground|ink|(?:gray|slate|zinc|neutral|stone)-\\d{2,3})/(?:\\d{1,2}|\\[0?\\.\\d+\\])(?![\\w-])",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": [
+          "css",
+          "classes"
+        ],
+        "post": "text-ink-at-low-alpha"
+      },
+      "why": "Muted text written as the ink color at an alpha under 0.7 (rgba, an eight-digit hex, color-mix with transparent, text-black/50) lands wherever the ground is: on white it may pass, on an off-white card or a band it drops under 4.5:1 (1.4.3). It passes when its value over the page ground is a color in the page's own token set.",
+      "fix": "Use the system's muted text role (an opaque color checked at 4.5:1 on every surface it sits on), or an opaque grey that meets 4.5:1 on the grounds the text lands on."
+    },
+    {
+      "id": "infinite-animation-without-reduced-motion",
+      "name": "Infinite animation that keeps running under reduced motion",
+      "severity": "high",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?<![\\w-])animation(?:-iteration-count)?\\s*:[^;{}]*\\binfinite\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": "css",
+        "post": "infinite-animation-unguarded"
+      },
+      "why": "A loop that never ends (a marquee, a glow, a floating shape) keeps moving for a person who asked their system for less motion. It passes when it runs only under prefers-reduced-motion: no-preference, when a reduced-motion query stops it on its selector or on every element, or when it is a progress indicator.",
+      "fix": "Wrap the animation in @media (prefers-reduced-motion: no-preference), or stop it in @media (prefers-reduced-motion: reduce) with animation: none. Anything that moves on its own for more than five seconds beside other content also needs a pause control (2.2.2)."
     }
   ]
 }
