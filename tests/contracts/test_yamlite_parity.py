@@ -200,3 +200,48 @@ def test_spaces_past_a_block_indent_are_text_as_pyyaml_reads_them():
     ]
     counts, wrong = _compare(yaml, documents)
     assert wrong == [] and counts["same"] == len(documents)
+
+
+def _block_documents(seed, count):
+    """Block text over its edges: lines of spaces longer and shorter than
+    the indentation, before, among and after the text, every header, and a
+    document that ends with or without a final line break."""
+    rng = random.Random(seed)
+    heads = ["", "-", "+", "1", "2", "2-", "+3"]
+    places = {"a: ": 2, "- ": 2, "- a: ": 4, "k:\n  a: ": 4}
+    out = []
+    for _ in range(count):
+        place = rng.choice(sorted(places))
+        indent = places[place]
+        lines = []
+        for _ in range(rng.randint(1, 5)):
+            if rng.random() < 0.4:
+                lines.append(" " * (indent + rng.choice([0, 0, 1, 2])) + rng.choice(["x", "y z"]))
+            else:
+                lines.append(" " * rng.randint(0, indent + 4))
+        tail = rng.choice(["\n", "", "\nb: 1\n" if place == "a: " else "\n"])
+        out.append(place + rng.choice("|>") + rng.choice(heads) + "\n" + "\n".join(lines)
+                   + tail)
+    return out
+
+
+def test_block_text_reads_as_pyyaml_reads_it_or_is_refused():
+    yaml = pytest.importorskip("yaml")
+    named = [
+        # A line of spaces longer than the indentation keeps its spaces past it.
+        "a: |\n  x\n    \n", "a: |+\n  x\n   \n", "a: >+\n  x\n   \n",
+        # The last line has no line break after it, so the text has none.
+        "a: |\n  x\n    ", "- |\n  x", "- |1\n  ",
+        # Keep chomping keeps the breaks there are, and no more.
+        "a: |+\n", "a: |+\n\n", "- |+\n \n",
+    ]
+    counts, wrong = _compare(yaml, named + _block_documents(SEED, 3000))
+    assert wrong == [], wrong[:5]
+    assert counts["same"] >= 1500, counts
+
+
+def test_a_blank_line_deeper_than_the_first_line_of_block_text_is_refused():
+    # Every YAML reader refuses it: the first line of text sets the indent.
+    with pytest.raises(YamlError, match=r"line 2: this line of spaces before the block text "
+                                        r"holds more spaces than its first line"):
+        loads("a: |\n    \n  x\n", "c.yaml")
