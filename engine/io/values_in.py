@@ -340,6 +340,9 @@ UNITLESS_WORDS = frozenset(("line", "leading", "weight", "opacity", "z", "index"
                             "multiplier", "stroke", "lightness", "chroma", "hue", "saturation",
                             "temperature"))
 TIME_WORDS = frozenset(("duration", "delay"))
+# Words that say a number is a letter spacing: bare, it is as often em as
+# px, so it takes no default unit and is not read.
+TRACKING_WORDS = frozenset(("letter", "tracking"))
 _CAMEL = re.compile(r"(?<=[a-z0-9])(?=[A-Z])")
 
 
@@ -354,9 +357,18 @@ def size_word(name: str) -> str:
     borderRadius.md), or "" when the name names no size, or a plain number
     or a time (line-height, z-index, duration)."""
     found = name_words(name)
-    if set(found) & (UNITLESS_WORDS | TIME_WORDS):
+    if set(found) & (UNITLESS_WORDS | TIME_WORDS | TRACKING_WORDS):
         return ""
     return next((w for w in found if w in SIZE_WORDS), "")
+
+
+def bare_tracking(name: str, text: str) -> str:
+    """Why a bare number named for a letter spacing is not read, with the
+    fix, or "" when the name says no letter spacing or the number is 0."""
+    if not set(name_words(name)) & TRACKING_WORDS or float(text) == 0:
+        return ""
+    return (f"{text} has no unit, and its name says it is a letter spacing, which is often "
+            f"written in em, so it was not read; write {text}em, or the unit it has")
 
 
 def bare_size_note(text: str, word: str) -> str:

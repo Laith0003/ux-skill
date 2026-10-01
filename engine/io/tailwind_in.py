@@ -29,7 +29,8 @@ from engine.foundations.errors import InputError
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.css_in import import_css
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source
-from engine.io.values_in import GamutMapped, NotRead, bare_size_note, read_value, size_word
+from engine.io.values_in import (GamutMapped, NotRead, bare_size_note, bare_tracking,
+                                 read_value, size_word)
 
 # The command that exports a Tailwind 3 config's resolved theme as JSON.
 EXPORT_COMMAND = ("node -e \"const r=require('tailwindcss/resolveConfig');"
@@ -118,6 +119,10 @@ def import_tailwind_json(text: str, source: Source) -> Imported:
                     gamut: List[GamutMapped] = []
                     kind, literal = read_value(text_value, gamut)
                     mapped.extend(Mapped.of(where, source_name, g) for g in gamut)
+                    tracking = bare_tracking(source_name, text_value.strip()) \
+                        if kind == "number" else ""
+                    if tracking:
+                        raise NotRead(tracking)
                     word = size_word(source_name) if kind == "number" else ""
                     if word:
                         # A bare number on a size key is read as px.

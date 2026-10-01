@@ -38,11 +38,12 @@ A unit in a column header (Value (px), Size [rem]) or in the heading above
 (## Spacing (px), ## Motion, in ms) is the unit of a bare number there,
 and of a shadow's bare offsets. A bare number whose name says it is a size
 (space, radius, container, elevation, offset) with no unit anywhere is
-read as px, with a note; a bare duration with no unit anywhere is not
-read.
+read as px, with a note; a bare duration, or a bare letter spacing (a
+name with letter or tracking in it), with no unit anywhere is not read.
 Do and Avoid tables (Do and Don't, Use and Avoid, Good and Bad), and an
 Avoid column beside prose (Definition and Avoid), are guidance: they make
-no axis and join the file's rule note.
+no axis and join the file's rule note. A Do or Avoid column beside a
+value column joins the rule note too, and the values beside it are read.
 
 A DESIGN.md frontmatter (between --- lines at the top) is read too: each
 value under a token group (colors, typography, rounded, spacing,
@@ -84,9 +85,9 @@ from engine.foundations.tokens import Token, TokenSet
 from engine.io.mode_words import axis_of, is_base, mode_of, words as name_words
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source
 from engine.io.values_in import (COLOR_KEYWORDS, CSS_KEYWORDS, EASING_KEYWORDS, GamutMapped,
-                                 NotRead, TIME_WORDS, UNITLESS_WORDS, bare_size_note, css_alias,
-                                 leading_ratio, length_text, read_value, size_word,
-                                 shadow_with_unit, split_top)
+                                 NotRead, TIME_WORDS, UNITLESS_WORDS, bare_size_note,
+                                 bare_tracking, css_alias, leading_ratio, length_text,
+                                 read_value, shadow_with_unit, size_word, split_top)
 
 NAME_HEADERS = ("token", "name", "variable", "role", "token name", "css variable")
 VALUE_HEADERS = ("value", "hex", "color", "size", "px", "rem", "ms", "duration")
@@ -439,12 +440,16 @@ class _Table:
     fields: Dict[str, int] = field(default_factory=dict)
     # An alias column for a mode (Dark alias): (column, axis).
     mode_aliases: List[Tuple[int, str]] = field(default_factory=list)
+    # Do and Avoid columns beside the values: guidance, kept as a rule.
+    guide: List[str] = field(default_factory=list)
 
 
 # The words of an alias column's header ("Alias of", "Maps to"); any other
 # word names the mode the column holds the reference in ("Dark alias").
 _ALIAS_WORDS = frozenset(("alias", "aliases", "aliased", "reference", "references", "ref",
-                          "refs", "maps", "points", "refers"))
+                          "refs"))
+# Words that name an alias only as a phrase: Size (points) is no alias.
+_ALIAS_PHRASES = (("maps", "to"), ("points", "to"), ("refers", "to"))
 _ALIAS_FILLER = frozenset(("to", "of", "for", "token", "mode"))
 
 
@@ -453,9 +458,12 @@ def _alias_mode(header: str) -> Optional[str]:
     holds the base's reference (Alias, Alias of, Maps to, Light alias),
     or the words that name its mode (Dark alias gives dark)."""
     found = re.findall(r"[a-z0-9]+", header.lower())
-    if not set(found) & _ALIAS_WORDS:
+    phrased = {p[0] for p in _ALIAS_PHRASES if any(
+        tuple(found[k:k + 2]) == p for k in range(len(found) - 1))}
+    if not set(found) & _ALIAS_WORDS and not phrased:
         return None
-    rest = " ".join(w for w in found if w not in _ALIAS_WORDS and w not in _ALIAS_FILLER)
+    rest = " ".join(w for w in found
+                    if w not in _ALIAS_WORDS and w not in _ALIAS_FILLER and w not in phrased)
     return "" if not rest or is_base(rest) else rest
 
 
@@ -570,6 +578,8 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
                 and any(_refish(t) for _, t in cells):
             name, alias = named, name
     table = _Table(name, alias=alias, units={c: u for c, (_, u) in enumerate(split) if u})
+    table.guide = [raw[c] for c, h in enumerate(low)
+                   if c not in (name, alias, *by_mode) and h in GUIDANCE_DO + GUIDANCE_AVOID]
     # Property columns are fields of each row's token, never modes: all five
     # typography fields make a typography table; any other property column
     # beside the token's value is left out with its fix.
@@ -793,6 +803,8 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
     rules: Dict[str, List[Tuple[int, str]]] = {}
     # file -> [(line, label)] of Do and Avoid tables
     guidance: Dict[str, List[Tuple[int, str]]] = {}
+    # file -> [(line, labels)] of Do and Avoid columns beside a table's values
+    guide_columns: Dict[str, List[Tuple[int, List[str]]]] = {}
     # files where a rule has the shape of a font list, so the note says how
     # a font list reads
     font_rules: set = set()
@@ -851,8 +863,11 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
             if fields or not _BARE_NUMBER.fullmatch(v):
                 continue
             need = _needs_unit(path)
+            tracking = bare_tracking(path, v)
             if unit:
                 values[ctx] = v + unit
+            elif tracking:
+                bare[ctx] = tracking
             elif need and float(v) == 0:
                 values[ctx] = v + ("ms" if need == "duration" else "px")
             elif need and need != "duration":
@@ -1204,6 +1219,8 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                         "tokens; head the value column Value, Hex or Size to read it")))
                     table = None
                 if table is not None:
+                    if table.guide:
+                        guide_columns.setdefault(file_name, []).append((i + 1, table.guide))
                     read_table(table, raw, rows, file_name, where)
                 elif not guided:
                     held = [v for _, cells in rows for c in cells for v in _held(c)]
@@ -1221,9 +1238,10 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         if block:
             unread_block(file_name, *block)
 
-    for file_name in dict.fromkeys([*rules, *guidance]):
+    for file_name in dict.fromkeys([*rules, *guidance, *guide_columns]):
         found_rules = rules.get(file_name, [])
         tables = guidance.get(file_name, [])
+        columns = guide_columns.get(file_name, [])
         parts = []
         if found_rules:
             listed = ", ".join(f"`{name}` (line {line})" for line, name in found_rules)
@@ -1235,12 +1253,15 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 "its value after the colon or in the cell, and put the rule on its own line"
                 + ("; a font list reads when its font names are quoted or it ends in a generic "
                    "family such as sans-serif" if file_name in font_rules else ""))
-        if tables:
-            one = len(tables) == 1
-            parts.append(_and([f"the {label} table (line {line})" for line, label in tables])
+        if tables or columns:
+            held = sorted([(line, f"the {label} table (line {line})") for line, label in tables]
+                          + [(line, f"the {_and(labels)} column{'s' if len(labels) > 1 else ''} "
+                                    f"of the table on line {line}") for line, labels in columns])
+            one = len(held) == 1 and not (columns and len(columns[0][1]) > 1)
+            parts.append(_and([text for _, text in held])
                          + (" holds guidance, not values, and was kept as a rule" if one else
                             " hold guidance, not values, and were kept as rules"))
-        first = min(line for line, _ in found_rules + tables)
+        first = min(line for line, _ in found_rules + tables + columns)
         notes.append(Item(f"{file_name}:{first}", "", "; ".join(parts)))
 
     # Decode each value; a reference is kept as an alias to its target.

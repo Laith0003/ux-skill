@@ -130,8 +130,8 @@ from engine.foundations.export import to_css
 from engine.foundations.modes import AXES, CSS_AXES, join
 from engine.foundations.tokens import ROOT_BASE, Token, TokenSet
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source, recorded
-from engine.io.values_in import (GamutMapped, NotRead, bare_size_note, css_alias, read_value,
-                                 size_word, split_top)
+from engine.io.values_in import (GamutMapped, NotRead, bare_size_note, bare_tracking,
+                                 css_alias, read_value, size_word, split_top)
 
 # The scheme a stylesheet opens (export.SCHEME_DEFAULTS): it follows the
 # system when prefers-color-scheme sets the dark values, opens dark when
@@ -1185,6 +1185,10 @@ def import_css(text: str, source: Source) -> Imported:
                 else:
                     gamut: List[GamutMapped] = []
                     kind, value = read_value(value_text, gamut)
+                    tracking = bare_tracking(path, value_text.strip()) if kind == "number" \
+                        else ""
+                    if tracking:
+                        raise NotRead(tracking)
                     word = size_word(path) if kind == "number" else ""
                     if word:
                         # A bare number named for a size is read as px.

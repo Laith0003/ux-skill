@@ -143,6 +143,17 @@ def test_a_bare_number_on_a_size_key_is_read_as_px_with_a_note():
          "write 1200px to say so, or the unit it has if it is not px")]
 
 
+def test_a_bare_letter_spacing_key_is_not_read_and_names_the_unit_to_write():
+    text = json.dumps({"theme": {"letterSpacing": {"tight": "-0.025"}}})
+    imported = import_tailwind_json(text, Source("theme.json", "tailwind-json", "0" * 64,
+                                                 len(text)))
+    assert list(imported.tokens.tokens()) == []
+    assert [(i.where, i.name, i.message) for i in imported.report.not_read] == [
+        ("theme.json letterSpacing.tight", "letterSpacing.tight",
+         "-0.025 has no unit, and its name says it is a letter spacing, which is often written "
+         "in em, so it was not read; write -0.025em, or the unit it has")]
+
+
 @pytest.mark.parametrize("name", ["tailwind.config.js", "tailwind.config.ts",
                                   "tailwind.config.cjs", "tailwind.config.mjs"])
 def test_javascript_is_never_run(tmp_path, name):

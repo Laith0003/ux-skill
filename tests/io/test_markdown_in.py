@@ -703,6 +703,17 @@ def test_a_unit_in_the_heading_is_the_unit_of_a_bare_number():
     assert ts.get("motion.fast").value == {"value": 120, "unit": "ms"}
 
 
+def test_a_bare_letter_spacing_is_not_read_and_names_the_unit_to_write():
+    text = "- `letter-spacing.tight`: -0.02\n- `tracking.wide`: 0.04\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:1", "letter-spacing.tight",
+         "-0.02 has no unit, and its name says it is a letter spacing, which is often written "
+         "in em, so it was not read; write -0.02em, or the unit it has"),
+        ("rules.md:2", "tracking.wide",
+         "0.04 has no unit, and its name says it is a letter spacing, which is often written "
+         "in em, so it was not read; write 0.04em, or the unit it has")]
+
+
 def test_a_size_with_no_unit_anywhere_is_read_as_px_and_a_duration_is_not_read():
     text = ("| Token | Value |\n|---|---|\n| `space.4` | 16 |\n| `radius.card` | 12 |\n"
             "| `line-height.body` | 1.5 |\n| `weight.bold` | 700 |\n| `space.0` | 0 |\n"
@@ -831,7 +842,8 @@ def test_an_alias_column_reads_a_reference_or_a_backticked_name(head):
     assert ts.get("text.body").layer == "semantic" and imported.report.not_read == []
 
 
-@pytest.mark.parametrize("head", ["Alias of", "Aliased to", "Alias for", "Reference to"])
+@pytest.mark.parametrize("head", ["Alias of", "Aliased to", "Alias for", "Reference to",
+                                  "Points to", "Refers to", "Maps to"])
 def test_an_alias_header_with_a_preposition_is_the_alias_column(head):
     text = (f"| Token | Value | {head} |\n|---|---|---|\n| `gray.900` | #111111 | |\n"
             "| `text.body` | | `gray.900` |\n")
@@ -897,6 +909,33 @@ def test_a_guidance_column_beside_a_value_column_is_not_a_mode():
     text = "| Token | Value | Avoid |\n|---|---|---|\n| `gray.900` | #111111 | On photos. |\n"
     imported = _import(text)
     assert dict(imported.tokens.axes) == {} and imported.report.not_read == []
+
+
+def test_a_guidance_column_beside_a_value_column_joins_the_rule_note():
+    text = ("| Token | Value | Avoid |\n|---|---|---|\n| `color.brand` | #112233 | text on dark |\n"
+            "\n| Token | Value | Do | Don't |\n|---|---|---|---|\n"
+            "| `color.ink` | #111111 | body text | captions |\n")
+    imported = _import(text)
+    assert imported.tokens.get("color.brand").value == "#112233"
+    assert imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "the Avoid column of the table on line 1 and the Do and Don't columns "
+                           "of the table on line 5 hold guidance, not values, and were kept as "
+                           "rules")]
+    assert "the Avoid column of the table on line 1" in imported.report.markdown()
+
+
+@pytest.mark.parametrize("text", [
+    "| Token | Size (points) |\n|---|---|\n| `space.2` | 8px |\n",
+    "| Token | Font | Size (points) | Weight | Line height | Letter spacing |\n"
+    "|---|---|---|---|---|---|\n| `type.body` | Inter | 16px | 400 | 1.5 | 0 |\n",
+], ids=["value", "type"])
+def test_a_header_that_holds_a_word_like_points_is_not_an_alias_column(text):
+    imported = _import(text)
+    said = " ".join(i.message for i in imported.report.notes + imported.report.not_read)
+    assert "alias" not in said and "no column names the tokens" not in said
+    if "space.2" in text:
+        assert imported.tokens.get("space.2").value == {"value": 8, "unit": "px"}
 
 
 def test_a_column_that_cannot_name_a_mode_names_itself_and_the_fix():
