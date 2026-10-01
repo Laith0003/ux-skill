@@ -62,7 +62,52 @@ def test_pages_that_read_right_to_left_make_rtl_the_base(tmp_path):
                                      encoding="utf-8")
     imported = read_system(root)
     assert imported.tokens.axes["direction"] == ("rtl", "ltr")
-    assert any("the root holds the rtl values" in i.message for i in imported.report.notes)
+    # One note says how the direction axis was read, and it says rtl.
+    said = [i for i in imported.report.notes if "direction" in i.message]
+    assert len(said) == 1, [i.message for i in said]
+    assert said[0].where == "tokens.css:2" and said[0].name == '[dir="ltr"]'
+    assert "the root holds the rtl values" in said[0].message
+    assert "with rtl, what :root holds, as its base and ltr as its mode" in said[0].message
+    assert ":root as its base" not in said[0].message
+
+
+def _rtl_pages(tmp_path):
+    sheet = tmp_path / "tokens.css"
+    sheet.write_text(":root { --gap-start: 16px; --ink: #111111; --paper: #FFFFFF; }\n"
+                     '[dir="ltr"] { --gap-start: 24px; }\n', encoding="utf-8")
+    pages = tmp_path / "app"
+    pages.mkdir()
+    (pages / "index.html").write_text('<html lang="ar" dir="rtl"><body class="p-4"></body>'
+                                      "</html>", encoding="utf-8")
+    return sheet, pages
+
+
+def test_scanned_pages_that_read_right_to_left_make_rtl_the_base(tmp_path, monkeypatch):
+    import importlib
+    measure = importlib.import_module("engine.io.enhance")
+    from engine.io.commands import run_enhance
+    from engine.io.read import pages_direction
+    sheet, pages = _rtl_pages(tmp_path)
+    imported = pages_direction(read_sources([sheet]), [pages], "--scan")
+    assert imported.tokens.axes["direction"] == ("rtl", "ltr")
+    said = [i for i in imported.report.notes if "direction" in i.message]
+    assert len(said) == 1
+    assert said[0].message.startswith("sets values that differ from :root; the pages in "
+                                      "--scan app set dir=\"rtl\" on <html>")
+    # enhance --from with --scan reads the system through the same rule.
+    seen = []
+    real = measure.enhance
+    monkeypatch.setattr(measure, "enhance",
+                        lambda imp, *a, **k: seen.append(imp.tokens.axes) or real(imp, *a, **k))
+    run_enhance(sheet, scan=[pages])
+    assert seen[0]["direction"] == ("rtl", "ltr")
+    seen.clear()
+    run_enhance(sheet)
+    assert seen[0]["direction"] == ("base", "ltr")
+    # Pages that read left to right leave the root as the base.
+    (pages / "index.html").write_text('<html lang="en"><body></body></html>', encoding="utf-8")
+    assert pages_direction(read_sources([sheet]), [pages], "--scan").tokens.axes[
+        "direction"] == ("base", "ltr")
 
 
 # ---------------------------------------------------------------- the dark stage

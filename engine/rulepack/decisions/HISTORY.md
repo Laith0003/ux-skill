@@ -27,6 +27,10 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Distinctness is measured on a grey and on four saturated reference brands, each with its corner floor](distinctness-on-saturated-brands.md)
 - [Checks compare dimensions in px and durations in ms, and read scale steps by their number](checks-read-one-unit.md)
 - [A set the engine did not generate passes the same gate, a role it lacks is skipped, and only strict fails it](imported-sets-pass.md)
+- [An in-place extend of the engine's own system rebuilds its report and art from what the report records](own-system-rebuilt-in-place.md)
+- [A later extend writes the engine's own extension file again without force, and each out folder keeps its own intake record](extension-carried-forward.md)
+- [A size named for a text role is proposed as that role's font size alone](type-size-names.md)
+- [Tailwind's own spacing steps are raw values while the project's theme keeps the scale](tailwind-spacing-steps.md)
 - [A Figma collection of three or more modes that name no engine axis is read whole on one axis named for it](figma-modes-on-one-axis.md)
 - [A bare number whose name says it is a size is read as px, with a note](bare-sizes-read-as-px.md)
 

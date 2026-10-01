@@ -33,7 +33,11 @@ reduced-motion value, with a note naming the pairs.
 propose() maps a role when a token's name is the role's own path
 written with other separators (color.text.default, color-text-default,
 color/text/default), a typography role to the five field properties the
-engine's CSS writes for it, and a color role when a token's name is one
+engine's CSS writes for it, a text role's fontSize alone to a dimension
+whose name says type, font or text and that role's size (TYPE_SIZES:
+type.size-body is type.text.body's fontSize, and the owner maps its other
+fields; a bare size-body is listed by unclaimed_sizes()), and a color
+role when a token's name is one
 the common naming vocabularies give it (VOCABULARIES: background and
 foreground, on- pairs, brand names, bg, fg and border families, text
 names, or the role's path without color), each entry saying which
@@ -56,6 +60,7 @@ roles.
 """
 from __future__ import annotations
 
+import dataclasses
 import difflib
 import json
 import re
@@ -286,11 +291,49 @@ VOCABULARIES: Tuple[Tuple[str, str, Tuple[Tuple[str, str], ...]], ...] = (
         ("screen-md", "layout.breakpoint.tablet"), ("screen-lg", "layout.breakpoint.laptop"),
         ("screen-xl", "layout.breakpoint.desktop"))),
 )
+# Type size names: a dimension whose name says type, font or text, then
+# size, then a text role's own name (type.size-body, font-size-display,
+# text-size-label, fontSize.h1) is that typography role's fontSize, the one
+# field its name says; the owner maps the other fields. A bare size name
+# (size-body, sizes.label) does not say it is type, and a scale step or a
+# word with no role of its own (size-md, size-lead, size-base) names no
+# text role: both are left to the owner, the bare one with a note
+# (unclaimed_sizes).
+TYPE_SIZES: Tuple[str, str, Tuple[Tuple[str, str], ...]] = (
+    "type size names", "type.size-body, font-size-display, text-size-h1", (
+        ("display", "type.text.display"), ("hero", "type.text.hero"),
+        ("h1", "type.text.heading-1"), ("heading-1", "type.text.heading-1"),
+        ("h2", "type.text.heading-2"), ("heading-2", "type.text.heading-2"),
+        ("h3", "type.text.heading-3"), ("heading-3", "type.text.heading-3"),
+        ("section-title", "type.text.section-title"), ("figure", "type.text.figure"),
+        ("body", "type.text.body"), ("body-small", "type.text.body-small"),
+        ("ui", "type.text.ui"), ("ui-large", "type.text.ui-large"),
+        ("label", "type.text.label"), ("fine", "type.text.fine"),
+        ("code", "type.text.code")))
+_TYPE_WORDS = ("type", "typography", "font", "text")
+_SIZE_WORDS = ("size", "sizes")
+
+
+def _sized_role(path: str) -> Tuple[str, bool]:
+    """The text role a size name says and whether the name says type (a
+    type, font or text word right before size); ("", False) for a name
+    that says no text role."""
+    words = _name_words(path)
+    roles = dict(TYPE_SIZES[2])
+    for i, w in enumerate(words):
+        if w in _SIZE_WORDS:
+            role = roles.get("-".join(words[i + 1:]), "")
+            if role:
+                return role, i > 0 and words[i - 1] in _TYPE_WORDS
+    return "", False
+
+
 # The vocabulary a token named as a color role without its color segment
 # (text-default, surface-raised, focus-ring) matches.
 ROLE_NAMES = ("role names", "a color role's own path without color, such as text-default")
 VOCABULARY_EXAMPLES: Dict[str, str] = {ROLE_NAMES[0]: ROLE_NAMES[1],
-                                       **{v: ex for v, ex, _ in VOCABULARIES}}
+                                       **{v: ex for v, ex, _ in VOCABULARIES},
+                                       TYPE_SIZES[0]: TYPE_SIZES[1]}
 
 
 # Names the vocabularies know that play no one role of the engine's: never
@@ -369,6 +412,21 @@ def _keys(path: str, prefix: Tuple[str, ...] = ()) -> List[Tuple[int, str, bool]
     return out
 
 
+def unclaimed_sizes(ts: TokenSet, mapping: Mapping) -> List[Tuple[str, str]]:
+    """The dimension tokens the mapping does not use whose bare size name
+    (size-display, sizes.label) names a text role without saying type, as
+    (token, the role it names), in the set's order: never proposed, since
+    the name does not say it is type, and named for the owner."""
+    used = {m.token for m in mapping.roles.values()} | {
+        f.token for m in mapping.roles.values() for f in (m.fields or {}).values()}
+    out = []
+    for t in ts.tokens():
+        role, typed = _sized_role(t.path)
+        if role and not typed and t.type == "dimension" and t.path not in used:
+            out.append((t.path, role))
+    return out
+
+
 def unclaimed(ts: TokenSet, mapping: Mapping) -> List[str]:
     """The color tokens the mapping does not name whose names the
     vocabularies know but give no role (accent, secondary, card-foreground,
@@ -427,6 +485,13 @@ def propose(ts: TokenSet) -> Mapping:
             roles[role] = RoleMap(token, "name", vocabulary=vocabulary,
                                   prefix=shown if through else "")
             taken.add(token)
+    for t in ts.tokens():
+        role, typed = _sized_role(t.path)
+        if not typed or role in roles or t.path in taken or t.type != "dimension":
+            continue
+        sized = RoleMap.per_field({"fontSize": FieldMap(t.path, "name")})
+        roles[role] = dataclasses.replace(sized, vocabulary=TYPE_SIZES[0])
+        taken.add(t.path)
     return Mapping({r: roles[r] for r in ROLE_TYPES if r in roles}, _propose_axes(ts))
 
 
