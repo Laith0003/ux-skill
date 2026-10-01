@@ -27,8 +27,8 @@
     },
     "radius_control": "10px",
     "state_duration": "240ms",
-    "tokens": 614,
-    "tokens_sha256": "efc62881accaf3b4"
+    "tokens": 728,
+    "tokens_sha256": "fa9a9443c28ca0cc"
   },
   "id": "snowflake",
   "name": "Snowflake",

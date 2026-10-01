@@ -27,8 +27,8 @@
     },
     "radius_control": "5px",
     "state_duration": "200ms",
-    "tokens": 615,
-    "tokens_sha256": "9d03c96f34b8750d"
+    "tokens": 729,
+    "tokens_sha256": "7178563c018fe747"
   },
   "id": "posthog",
   "name": "PostHog",

@@ -27,8 +27,8 @@
     },
     "radius_control": "11px",
     "state_duration": "200ms",
-    "tokens": 616,
-    "tokens_sha256": "132fe86858307e1d"
+    "tokens": 730,
+    "tokens_sha256": "b664b02e3f145aab"
   },
   "id": "salesforce",
   "name": "Salesforce",

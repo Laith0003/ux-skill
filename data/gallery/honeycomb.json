@@ -27,8 +27,8 @@
     },
     "radius_control": "8px",
     "state_duration": "200ms",
-    "tokens": 615,
-    "tokens_sha256": "43cf0446d8619202"
+    "tokens": 729,
+    "tokens_sha256": "f0e913f918cdb5f2"
   },
   "id": "honeycomb",
   "name": "Honeycomb",

@@ -27,8 +27,8 @@
     },
     "radius_control": "5px",
     "state_duration": "200ms",
-    "tokens": 614,
-    "tokens_sha256": "8a8fbdeebf2522d8"
+    "tokens": 728,
+    "tokens_sha256": "0d6f84c0878eda72"
   },
   "id": "ramp",
   "name": "Ramp",

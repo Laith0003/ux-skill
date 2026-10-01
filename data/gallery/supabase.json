@@ -27,8 +27,8 @@
     },
     "radius_control": "6px",
     "state_duration": "200ms",
-    "tokens": 614,
-    "tokens_sha256": "c2dd7c0f929922ba"
+    "tokens": 728,
+    "tokens_sha256": "b7cf458677c1cd20"
   },
   "id": "supabase",
   "name": "Supabase",

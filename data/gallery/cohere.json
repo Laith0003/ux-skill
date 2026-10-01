@@ -27,8 +27,8 @@
     },
     "radius_control": "7px",
     "state_duration": "200ms",
-    "tokens": 613,
-    "tokens_sha256": "62645ed07134f4cb"
+    "tokens": 727,
+    "tokens_sha256": "90fb2898f94bdc81"
   },
   "id": "cohere",
   "name": "Cohere",

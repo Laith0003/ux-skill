@@ -27,8 +27,8 @@
     },
     "radius_control": "3px",
     "state_duration": "200ms",
-    "tokens": 614,
-    "tokens_sha256": "b84e5ee381a62476"
+    "tokens": 728,
+    "tokens_sha256": "7ee5b69cf37e2a70"
   },
   "id": "airtable",
   "name": "Airtable",

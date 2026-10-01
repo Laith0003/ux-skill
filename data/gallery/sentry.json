@@ -27,8 +27,8 @@
     },
     "radius_control": "5px",
     "state_duration": "200ms",
-    "tokens": 614,
-    "tokens_sha256": "49d9f40792114432"
+    "tokens": 728,
+    "tokens_sha256": "8101b1e5e017e7c7"
   },
   "id": "sentry",
   "name": "Sentry",

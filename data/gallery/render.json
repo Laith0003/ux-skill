@@ -27,8 +27,8 @@
     },
     "radius_control": "7px",
     "state_duration": "150ms",
-    "tokens": 616,
-    "tokens_sha256": "68b7cb35c63ea36e"
+    "tokens": 730,
+    "tokens_sha256": "2c8634a8c0c4add5"
   },
   "id": "render",
   "name": "Render",

@@ -27,8 +27,8 @@
     },
     "radius_control": "2px",
     "state_duration": "200ms",
-    "tokens": 612,
-    "tokens_sha256": "9843ab9e5db38a13"
+    "tokens": 726,
+    "tokens_sha256": "57f5b2d8c77051c0"
   },
   "id": "warp",
   "name": "Warp",

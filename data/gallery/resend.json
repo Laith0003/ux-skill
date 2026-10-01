@@ -27,8 +27,8 @@
     },
     "radius_control": "3px",
     "state_duration": "200ms",
-    "tokens": 613,
-    "tokens_sha256": "a86811232cb6ced4"
+    "tokens": 727,
+    "tokens_sha256": "208402f1413ce1e7"
   },
   "id": "resend",
   "name": "Resend",

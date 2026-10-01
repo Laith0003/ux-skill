@@ -27,8 +27,8 @@
     },
     "radius_control": "2px",
     "state_duration": "200ms",
-    "tokens": 614,
-    "tokens_sha256": "b3283a033cc09fe1"
+    "tokens": 728,
+    "tokens_sha256": "b1ed24647ae9ae16"
   },
   "id": "ollama",
   "name": "Ollama",

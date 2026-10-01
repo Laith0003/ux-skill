@@ -27,8 +27,8 @@
     },
     "radius_control": "7px",
     "state_duration": "150ms",
-    "tokens": 614,
-    "tokens_sha256": "cbf906639e900481"
+    "tokens": 728,
+    "tokens_sha256": "e679294ef27eb4e1"
   },
   "id": "fivetran",
   "name": "Fivetran",

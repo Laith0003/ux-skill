@@ -27,8 +27,8 @@
     },
     "radius_control": "6px",
     "state_duration": "240ms",
-    "tokens": 616,
-    "tokens_sha256": "b48f8f1756699404"
+    "tokens": 730,
+    "tokens_sha256": "33792fcf001daf49"
   },
   "id": "cloudflare",
   "name": "Cloudflare",

@@ -27,8 +27,8 @@
     },
     "radius_control": "2px",
     "state_duration": "200ms",
-    "tokens": 612,
-    "tokens_sha256": "4468d342f01fdfb8"
+    "tokens": 726,
+    "tokens_sha256": "34695e661f3611ae"
   },
   "id": "anthropic",
   "name": "Anthropic",

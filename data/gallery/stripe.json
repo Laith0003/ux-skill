@@ -27,8 +27,8 @@
     },
     "radius_control": "8px",
     "state_duration": "200ms",
-    "tokens": 614,
-    "tokens_sha256": "ab5fca392a46ee0b"
+    "tokens": 728,
+    "tokens_sha256": "e752f5aeefb814b8"
   },
   "id": "stripe",
   "name": "Stripe",

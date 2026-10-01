@@ -27,8 +27,8 @@
     },
     "radius_control": "11px",
     "state_duration": "200ms",
-    "tokens": 615,
-    "tokens_sha256": "017d854ddb7a726b"
+    "tokens": 729,
+    "tokens_sha256": "51e93bd4ed45a273"
   },
   "id": "monzo",
   "name": "Monzo",

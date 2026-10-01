@@ -27,8 +27,8 @@
     },
     "radius_control": "3px",
     "state_duration": "200ms",
-    "tokens": 613,
-    "tokens_sha256": "e816492f4fe4e69b"
+    "tokens": 727,
+    "tokens_sha256": "0838ee74d9d424a7"
   },
   "id": "raycast",
   "name": "Raycast",

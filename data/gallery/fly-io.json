@@ -27,8 +27,8 @@
     },
     "radius_control": "6px",
     "state_duration": "200ms",
-    "tokens": 615,
-    "tokens_sha256": "dadec4102d7d1737"
+    "tokens": 729,
+    "tokens_sha256": "d6314a15e84ebf53"
   },
   "id": "fly-io",
   "name": "Fly.io",

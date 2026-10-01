@@ -27,8 +27,8 @@
     },
     "radius_control": "2px",
     "state_duration": "200ms",
-    "tokens": 615,
-    "tokens_sha256": "fbf13e540e495add"
+    "tokens": 729,
+    "tokens_sha256": "b7e79ccbfd3e2f79"
   },
   "id": "nvidia",
   "name": "NVIDIA",

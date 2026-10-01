@@ -27,8 +27,8 @@
     },
     "radius_control": "9px",
     "state_duration": "200ms",
-    "tokens": 615,
-    "tokens_sha256": "078619981e512def"
+    "tokens": 729,
+    "tokens_sha256": "194e604c4cbac1b7"
   },
   "id": "coinbase",
   "name": "Coinbase",

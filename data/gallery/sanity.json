@@ -27,8 +27,8 @@
     },
     "radius_control": "2px",
     "state_duration": "200ms",
-    "tokens": 614,
-    "tokens_sha256": "0666ea6d3e916caa"
+    "tokens": 728,
+    "tokens_sha256": "ea769c0c953ab20e"
   },
   "id": "sanity",
   "name": "Sanity",

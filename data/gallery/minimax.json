@@ -27,8 +27,8 @@
     },
     "radius_control": "6px",
     "state_duration": "200ms",
-    "tokens": 614,
-    "tokens_sha256": "86b35f27060aae9f"
+    "tokens": 728,
+    "tokens_sha256": "5ccc5e9b02d0c729"
   },
   "id": "minimax",
   "name": "MiniMax",

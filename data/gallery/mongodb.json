@@ -27,8 +27,8 @@
     },
     "radius_control": "9px",
     "state_duration": "200ms",
-    "tokens": 615,
-    "tokens_sha256": "9e5a3f4f26e02887"
+    "tokens": 729,
+    "tokens_sha256": "91f97599d175fe7c"
   },
   "id": "mongodb",
   "name": "MongoDB",
