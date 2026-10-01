@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Render scripts/og-card.html -> docs/og-image.png at 1200x630 (DPR 2 for crispness).
+// Render scripts/og-card.html -> docs/og-image.png. scripts/render_og_cards.py is the
+// usual way: it also refreshes the card's figures from the engine first.
 import { spawn } from 'node:child_process';
 import { mkdtempSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -9,8 +10,8 @@ import { join } from 'node:path';
 const SRC = 'file://' + join(process.cwd(), process.argv[2] || 'scripts/og-card.html');
 const OUT = join(process.cwd(), process.argv[3] || 'docs/og-image.png');
 const W = parseInt(process.argv[4] || '1200', 10), H = parseInt(process.argv[5] || '630', 10);
-// Optional 6th arg: device pixel ratio (default 2). Pass 1 for an image at exactly W x H.
-const DPR = parseFloat(process.argv[6] || '2');
+// Optional 6th arg: device pixel ratio (default 1, an image at exactly W x H, as the pages declare).
+const DPR = parseFloat(process.argv[6] || '1');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const CHROME = ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Chromium.app/Contents/MacOS/Chromium'].find((p) => existsSync(p));
@@ -45,7 +46,7 @@ function makeCdp(wsUrl) {
   await cdp.send('Emulation.setDeviceMetricsOverride', { width: W, height: H, deviceScaleFactor: DPR, mobile: false }, sid);
   await cdp.send('Page.navigate', { url: SRC }, sid);
   await cdp.wait('Page.loadEventFired'); await sleep(2600); // fonts + glow settle
-  // deviceScaleFactor:2 already gives 2x (2400x1260); clip scale:1 avoids compounding past Twitter's 4096 cap.
+  // clip scale:1 keeps the image at W x H times DPR, without compounding the device scale.
   const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width: W, height: H, scale: 1 } }, sid);
   writeFileSync(OUT, Buffer.from(data, 'base64'));
   console.log('wrote', OUT, '(' + Math.round(Buffer.from(data, 'base64').length / 1024) + ' KB)');

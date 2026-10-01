@@ -1,0 +1,10 @@
+Photographs used on the site, with their source and license.
+
+lake-canoe.jpg
+  Used on:  docs/index.html (the 4.0 foundations section) and the localized homepages
+  Shows:    a woman paddling a canoe on a still turquoise lake at dusk, evergreen forest behind
+  Author:   Roberto Nickson
+  Source:   https://unsplash.com/photos/7BjmDICVloE (served by Lorem Picsum as image 1011)
+  License:  Unsplash License, https://unsplash.com/license
+            (free to use, including commercially; attribution not required but given here)
+  Edits:    cropped to 16:10, resized to 1600x1000 and recompressed as JPEG
