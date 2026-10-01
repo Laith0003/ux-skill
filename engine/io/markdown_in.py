@@ -35,8 +35,9 @@ A unit in a column header (Value (px), Size [rem]) or in the heading above
 (## Spacing (px), ## Motion, in ms) is the unit of a bare number there,
 and of a shadow's bare offsets. A bare number for a size or a duration,
 or a shadow offset, with no unit anywhere is not read.
-Do and Avoid tables (Do and Don't, Use and Avoid, Good and Bad) are
-guidance: they make no axis and join the file's rule note.
+Do and Avoid tables (Do and Don't, Use and Avoid, Good and Bad), and an
+Avoid column beside prose (Definition and Avoid), are guidance: they make
+no axis and join the file's rule note.
 
 A DESIGN.md frontmatter (between --- lines at the top) is read too: each
 value under a token group (colors, typography, rounded, spacing,
@@ -83,8 +84,9 @@ from engine.io.values_in import (COLOR_KEYWORDS, CSS_KEYWORDS, EASING_KEYWORDS, 
 
 NAME_HEADERS = ("token", "name", "variable", "role", "token name", "css variable")
 VALUE_HEADERS = ("value", "hex", "color", "size", "px", "rem", "ms", "duration")
-PROSE_HEADERS = ("notes", "note", "description", "usage", "use", "purpose", "meaning",
-                 "example", "when", "why", "do", "don't", "dont")
+PROSE_HEADERS = ("notes", "note", "description", "definition", "definitions", "rationale",
+                 "usage", "use", "purpose", "meaning", "example", "when", "why", "do",
+                 "don't", "dont")
 # A column that names each token's alias, read as its value where it holds
 # a reference. Token is one too, beside another name column.
 ALIAS_HEADERS = ("alias", "aliases", "reference", "references", "maps to", "points to",
@@ -440,12 +442,16 @@ class _Table:
 
 def _guidance(raw: List[str], low: List[str]) -> str:
     """The label of a Do and Avoid table ("Do and Avoid"), or "" when the
-    table is not guidance."""
+    table is not guidance. An Avoid column beside prose (Definition and
+    Avoid, Usage and Avoid) is guidance too: what each token is for and
+    what to keep it from, never two modes."""
     body = [c for c, h in enumerate(low) if h not in NAME_HEADERS and h]
     kinds = GUIDANCE_DO + GUIDANCE_AVOID
-    if any(low[c] in GUIDANCE_DO for c in body) and any(low[c] in GUIDANCE_AVOID for c in body) \
+    do = any(low[c] in GUIDANCE_DO for c in body)
+    prose = [c for c in body if low[c] not in kinds and _prose_header(low[c])]
+    if any(low[c] in GUIDANCE_AVOID for c in body) and (do or prose) \
             and all(low[c] in kinds or _prose_header(low[c]) for c in body):
-        return _and([raw[c] for c in body if low[c] in kinds])
+        return _and([raw[c] for c in body if low[c] in kinds or (not do and c in prose)])
     return ""
 
 
@@ -529,7 +535,7 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
     value = [c for c, h in enumerate(low) if c not in (name, alias) and h in VALUE_HEADERS]
     other = [c for c, h in enumerate(low)
              if c not in (name, alias) and h and h not in VALUE_HEADERS and h not in NAME_HEADERS
-             and not _prose_header(h)]
+             and not _prose_header(h) and h not in GUIDANCE_DO + GUIDANCE_AVOID]
     if alias < 0 and not value and not other and low[name] == "token":
         # A Token column of references beside a column of names: the names
         # are the tokens, and the Token column holds what each aliases.

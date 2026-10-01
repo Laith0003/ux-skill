@@ -776,6 +776,28 @@ def test_a_do_and_avoid_table_is_guidance_not_a_mode(head):
                             "kept as a rule")
 
 
+@pytest.mark.parametrize("head, label", [
+    ("| Token | Definition | Avoid |", "Definition and Avoid"),
+    ("| Name | Meaning | Avoid |", "Meaning and Avoid"),
+    ("| Role | Definition | Usage | Avoid |", "Definition, Usage and Avoid"),
+], ids=["definition", "meaning", "usage"])
+def test_a_definition_and_avoid_table_is_guidance_not_a_mode(head, label):
+    width = head.count("|") - 1
+    rows = ["| `color.ink` | Body text on light grounds. | Text over photographs. |",
+            "| `color.edge` | Hairlines between rows. | Borders on buttons. |"]
+    if width == 4:
+        rows = [r.replace(" | Text", " | Long reads. | Text").replace(" | Borders",
+                                                                       " | Tables. | Borders")
+                for r in rows]
+    text = "\n".join([head, "|" + "---|" * width, *rows]) + "\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {} and imported.report.tokens == 0
+    assert imported.report.not_read == []
+    [note] = imported.report.notes
+    assert note.message == (f"the {label} table (line 1) holds guidance, not values, and was "
+                            "kept as a rule")
+
+
 def test_guidance_joins_the_rules_of_its_file():
     text = "- `accent`: for links\n\n| Do | Avoid |\n|---|---|\n| a | b |\n"
     [note] = _import(text).report.notes
