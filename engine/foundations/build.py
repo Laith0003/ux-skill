@@ -87,8 +87,7 @@ def _check_inputs(axes: Any, brand_hex: Any, arabic: Any) -> None:
 
 def _check_words(words: Any) -> None:
     """words is None or {"latin": n, "arabic": m} with letter counts from 1
-    to 40: a Latin count in average letters, so it may be fractional, an
-    Arabic one whole."""
+    to 40, fractional when they carry the fit's slack (emit.brief_words)."""
     if words is None:
         return
     if not isinstance(words, Mapping):
@@ -96,12 +95,9 @@ def _check_words(words: Any) -> None:
     for key, n in words.items():
         if key not in ("latin", "arabic"):
             raise ValueError(f"words names {key!r}; use \"latin\" or \"arabic\"")
-        whole = key == "arabic"
-        if isinstance(n, bool) or not isinstance(n, int if whole else (int, float)) \
-                or not 1 <= n <= 40:
-            kind = "a whole number" if whole else "a number of average letters"
+        if isinstance(n, bool) or not isinstance(n, (int, float)) or not 1 <= n <= 40:
             raise ValueError(f"words[{key!r}] is {n!r}; give the letters of the longest "
-                             f"headline word, {kind} from 1 to 40")
+                             "headline word, a number from 1 to 40")
 
 
 def _select(foundations: Optional[Sequence[str]]) -> Tuple[Foundation, ...]:

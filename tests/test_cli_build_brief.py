@@ -34,10 +34,10 @@ def test_the_headline_gives_its_longest_word_per_script():
     assert brief_words({"headline": "Pay anyone in seconds"}) == {"latin": 8.1}
     assert brief_words({"headline": ["Well-made", "مرحبا "
                                                   "بالعالم"]}) \
-        == {"latin": 5.5, "arabic": 7}
-    assert brief_words({"answers": {"headline": "Go far"}}) == {"latin": 2.8}
+        == {"latin": 5.5, "arabic": 7.5}
+    assert brief_words({"answers": {"headline": "Go far"}}) == {"latin": 3.0}
     # A browser does not reliably break after a slash: and/or is one word.
-    assert brief_words({"headline": "Buy and/or sell"}) == {"latin": 5.8}
+    assert brief_words({"headline": "Buy and/or sell"}) == {"latin": 5.9}
     assert unread_lines({"tone": ["calm"], "headline": "Go far"}) == []
 
 
@@ -50,7 +50,7 @@ def test_the_headline_gives_its_longest_word_per_script():
                "display fits words of up to 40, so break it or write the headline as the page "
                "shows it"),
     ("a" * 38, "brief field headline has the word aaaaaaaaaaaaaaaaaaaa... of 38 letters, as wide "
-               "as 44 average letters; the display fits words of up to 40, so break it or write "
+               "as 44.4 average letters; the display fits words of up to 40, so break it or write "
                "the headline as the page shows it"),
 ])
 def test_a_headline_that_cannot_be_read_names_the_field_and_the_fix(value, message):
@@ -74,7 +74,7 @@ def test_the_briefs_headline_sizes_the_display_on_system_build(tmp_path):
     brief.write_text(json.dumps({"tone": ["calm"]}), encoding="utf-8")
     result, _ = _run("system", "build", "--brand", "#3366FF", "--brief", str(brief), "--out",
                      str(tmp_path / "c"))
-    assert result.exit_code == 0 and _fit(tmp_path / "c") == 13
+    assert result.exit_code == 0 and _fit(tmp_path / "c") == 14.1
     brief.write_text(json.dumps({"tone": ["calm"], "headline": ["Go", 4]}), encoding="utf-8")
     bad, _ = _run("system", "build", "--brand", "#3366FF", "--brief", str(brief), "--out",
                   str(tmp_path / "b"))

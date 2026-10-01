@@ -41,7 +41,7 @@ from engine.foundations.art import art_files
 from engine.foundations.art import report_lines as art_lines
 from engine.foundations.fonts import fonts_css, link_tags, loading_lines, self_host_css
 from engine.foundations.gate import GateFailure, GateReport
-from engine.foundations.typography import fit_letters
+from engine.foundations.typography import arabic_fit_letters, fit_letters
 from engine.synthesizer.axes import (
     AXIS_NAMES, FORBIDDEN_CLAMPS, INDUSTRY_SEEDS, NUDGE_LIMIT, TONE_NUDGES, AxisValues,
     _apply_tone_nudges, _normalize_tag, _seed_from_industry, check_character, compute_axes,
@@ -364,7 +364,8 @@ def brief_words(brief: Optional[Mapping[str, Any]],
     hyphens (a browser does not reliably break after a slash, so and/or is
     one word), and only letters are counted (not marks, digits or
     punctuation); a Latin word counts in average letters, a wide letter for
-    more than a narrow one (typography.fit_letters). Raises InputError naming the
+    more than a narrow one (typography.fit_letters), and each count takes
+    the fit's slack, so it may be fractional. Raises InputError naming the
     field and the fix for a headline that is not text or has no word, or a
     word longer than the fit takes."""
     if brief is None:
@@ -386,7 +387,7 @@ def brief_words(brief: Optional[Mapping[str, Any]],
             if not n:
                 continue
             script = "arabic" if _ARABIC.search(word) else "latin"
-            fit = fit_letters(word) if script == "latin" else n
+            fit = fit_letters(word) if script == "latin" else arabic_fit_letters(n)
             if max(n, fit) > _LONGEST_FIT:
                 wide = f", as wide as {fit:g} average letters" if fit > n else ""
                 raise InputError(f"{label} field {HEADLINE_FIELD} has the word {word[:20]}... of "

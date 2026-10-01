@@ -116,8 +116,11 @@ project adheres to [Semantic Versioning](https://semver.org/).
   could run sideways at tablet width. Each Latin face now carries its
   letter advance without the space, and a headline the brief gives counts
   its longest word by its letters: an m or a W for more, an i or an l for
-  less. Where the default word binds, the display comes down by up to
-  about 9 percent.
+  less. Faces are measured at a display size and the heaviest display
+  weight, a brand that sets its display in capitals has its word measured
+  in capitals, and an Arabic word takes the same care. Where the default
+  word binds, the display comes down; give the brief's headline and a
+  short one stands at full size.
 
 ### Deprecated
 These seven commands are now aliases. Each one says where it moved and

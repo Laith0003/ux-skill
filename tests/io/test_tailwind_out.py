@@ -101,11 +101,11 @@ def test_a_style_that_steps_down_on_a_phone_has_a_phone_style_beside_it():
     text = to_tailwind(ts, roles=True)
     factor = ts.resolve("type.phone.hero")
     size = ts.resolve("type.text.hero")["fontSize"]
-    assert size == {"value": 3.375, "unit": "rem"} and factor == 0.568
-    assert "  --text-hero-phone: 1.9169rem;\n" in text
-    assert "  --text-hero-phone--letter-spacing: -0.62px;\n" in text
+    assert size == {"value": 3.375, "unit": "rem"} and factor == 0.5349
+    assert "  --text-hero-phone: 1.805rem;\n" in text
+    assert "  --text-hero-phone--letter-spacing: -0.59px;\n" in text
     rtl = text[text.index('\n:root[dir="rtl"] {'):]
-    assert "  --text-hero-phone: 2.2012rem;\n" in rtl
+    assert "  --text-hero-phone: 2.0725rem;\n" in rtl
     assert "--text-body-phone" not in text
 
 

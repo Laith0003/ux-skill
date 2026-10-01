@@ -100,8 +100,8 @@ def test_our_own_tokens_css_comes_back_byte_for_byte(scheme, monkeypatch):
     # A fluid size reads as the size it is clamped to, with one note.
     assert report.notes[0].message == (
         "is calc(var(--type-size-latin-10) * var(--type-text-display-scale)), and "
-        "--type-text-display-scale scales it with the viewport (0.5, then 0.9234 from 640px, "
-        "then 0.9234 from 1024px, then 0.9858 from 1280px), so it was read as "
+        "--type-text-display-scale scales it with the viewport (0.5, then 0.8135 from 640px, "
+        "then 0.8135 from 1024px, then 0.8685 from 1280px), so it was read as "
         "var(--type-size-latin-10), its unscaled value; the viewport is not a mode, so the "
         "scale is not a token; within that it follows --type-text-display-fluid in vw, never "
         "under the hero plus 1px")

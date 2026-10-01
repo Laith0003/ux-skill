@@ -340,8 +340,10 @@ def capitals_outside_system(ctx: FileContext, view: View, match: re.Match, start
     """Capitals at 20px and up (the size read through the page's system)
     pass when the page's system has a capitals display role, leans to
     capitals (type.capitals at CAPITALS_FROM or more, when the system emits
-    it), the size is one of the system's two largest and the letters are
-    not tracked tight."""
+    it), the size lies between the system's two largest (the display runs
+    fluid from just over the hero to its size, and its fit factor may hold
+    it under that size at every width) and the letters are not tracked
+    tight."""
     block = block_at(ctx, view, match.start())
     decls = _decl_map(block.body) if block else {}
     px = _font_size_px(ctx, decls["font-size"]) if "font-size" in decls else None
@@ -353,7 +355,7 @@ def capitals_outside_system(ctx: FileContext, view: View, match: re.Match, start
     if sys_.capitals is not None and sys_.capitals < character.CAPITALS_FROM:
         return True
     top = sorted(set(round(s, 2) for s in sys_.sizes))[-2:]
-    if not any(abs(px - t) <= 0.5 for t in top):
+    if not top[0] - 0.5 <= px <= top[-1] + 0.5:
         return True
     spacing = decls.get("letter-spacing", "")
     tracked = _Expr(ctx).read(spacing) if spacing else None

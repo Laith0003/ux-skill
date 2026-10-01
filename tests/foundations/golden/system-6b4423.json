@@ -10320,7 +10320,7 @@
     "vw": {
       "phone": {
         "$type": "number",
-        "$value": 12.9,
+        "$value": 11.81,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -10329,7 +10329,7 @@
       },
       "tablet": {
         "$type": "number",
-        "$value": 13.26,
+        "$value": 12.14,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -10357,7 +10357,7 @@
       "arabic": {
         "phone": {
           "$type": "number",
-          "$value": 11.78,
+          "$value": 11.11,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -10366,7 +10366,7 @@
         },
         "tablet": {
           "$type": "number",
-          "$value": 12.1,
+          "$value": 11.42,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -10448,7 +10448,7 @@
     "fit-word": {
       "latin": {
         "$type": "number",
-        "$value": 13,
+        "$value": 14.1,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -10457,7 +10457,7 @@
       },
       "arabic": {
         "$type": "number",
-        "$value": 10,
+        "$value": 10.6,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"

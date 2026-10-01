@@ -76,7 +76,8 @@ def test_the_headline_columns_come_from_the_composition():
 
 
 def test_a_loud_brief_keeps_its_full_display_at_the_desktop_tier():
-    ts = build_system(LOUD, "#3366FF").tokens
+    # A loud page sets a short word large; its capitals are measured too.
+    ts = build_system(LOUD, "#3366FF", words={"latin": 6}).tokens
     assert ts.resolve("type.fit-columns") == 12
     assert ts.resolve("type.fit.display.desktop", LTR) == 1.0
     assert display_px(ts) >= 200
@@ -92,12 +93,12 @@ def test_a_wide_arabic_face_never_shrinks_the_latin_headline():
 def test_a_shorter_known_word_lets_the_phone_display_grow():
     default = build_system(LOUD, "#3366FF").tokens
     known = build_system(LOUD, "#3366FF", words={"latin": 7, "arabic": 5}).tokens
-    assert known.resolve("type.fit-word.latin") == 7
+    assert 7 < known.resolve("type.fit-word.latin") < default.resolve("type.fit-word.latin")
     assert known.resolve("type.fluid.display.phone", LTR) > \
         default.resolve("type.fluid.display.phone", LTR)
 
 
-@pytest.mark.parametrize("words", [{"latin": 0}, {"greek": 5}, {"arabic": 4.5}, {"latin": 41},
+@pytest.mark.parametrize("words", [{"latin": 0}, {"greek": 5}, {"arabic": 41}, {"latin": 40.1},
                                    {"latin": True}, "seven"])
 def test_a_bad_word_count_is_refused_naming_the_input(words):
     with pytest.raises((TypeError, ValueError), match="words"):
@@ -115,8 +116,9 @@ def test_the_display_fits_its_word_at_every_tier_edge_in_both_scripts():
         broken.add(Token(t.path, t.type, 30.0) if t.path == "type.vw.phone" else t)
     msgs = [f.message for f in gate(broken, [], CHECKS, raise_on_fail=False).failures
             if f.check == "display-fits"]
-    assert msgs and msgs[0].startswith("type.text.display at 320px wide (phone) sets a 13 letter "
-                                       "latin word")
+    letters = ts.resolve("type.fit-word.latin")
+    assert msgs and msgs[0].startswith("type.text.display at 320px wide (phone) sets a latin word "
+                                       f"of {letters:g} average letters (type.fit-word.latin)")
     assert "type.fluid.display.phone" in msgs[0]
 
 
@@ -129,20 +131,24 @@ def test_tokens_css_sets_the_display_fluid_between_the_hero_and_its_factor():
 
 
 def test_the_fluid_display_reaches_its_size_at_the_reference_width():
-    # Its size there is the display token (less when the desktop fit holds
-    # a long word inside the column), unless the word stops it sooner: then
-    # the word fills the column at the desktop's narrowest width.
-    from engine.foundations.typography import FIT_WORD, frame_of, word_em
+    """At 1440 wide the display is its size, unless the page's word stops
+    it: then the word fills the column, at the desktop's narrowest width
+    (the fluid size) or at its widest (the fit factor). It never falls far."""
+    from engine.foundations.typography import frame_of, word_em
     for a in (CALM, MID, LOUD):
         ts = build_system(a, "#3366FF").tokens
-        fitted = display_px(ts) * ts.resolve("type.fit.display.desktop", LTR)
+        size = display_px(ts)
+        fit = ts.resolve("type.fit.display.desktop", LTR)
         vw = ts.resolve("type.fluid.display.desktop", LTR)
-        at_1440 = min(vw * 14.4, fitted)
-        if at_1440 < fitted - 1.5:
-            word = word_em(fonts.choose(a).display, "latin", FIT_WORD["latin"]) * vw * 12.8
-            assert word == pytest.approx(frame_of(a).column("desktop", 1280), rel=0.01)
-        else:
-            assert at_1440 == pytest.approx(fitted, abs=1.5)
+        at_1440 = min(vw * 14.4, size * fit)
+        assert at_1440 >= 0.6 * size
+        if at_1440 >= size - 1.5:
+            continue
+        frame = frame_of(a, ts.resolve("type.fit-columns"))
+        word = word_em(fonts.choose(a).display, "latin", ts.resolve("type.fit-word.latin"))
+        by_vw = word * vw * 12.8 / frame.column("desktop", 1280)
+        by_fit = word * size * fit / frame.column("desktop", 10_000)
+        assert by_vw == pytest.approx(1, rel=0.01) or by_fit == pytest.approx(1, rel=0.01)
 
 
 # 3. Display leading: tight at large sizes, never colliding.

@@ -9837,7 +9837,7 @@
     "phone-scale": {
       "7": {
         "$type": "number",
-        "$value": 0.6735,
+        "$value": 0.5918,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -9846,7 +9846,7 @@
       },
       "8": {
         "$type": "number",
-        "$value": 0.5525,
+        "$value": 0.4545,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -9855,7 +9855,7 @@
       },
       "9": {
         "$type": "number",
-        "$value": 0.4307,
+        "$value": 0.3563,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -9941,7 +9941,7 @@
       "10": {
         "tablet": {
           "$type": "number",
-          "$value": 0.7416,
+          "$value": 0.4801,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -9950,7 +9950,7 @@
         },
         "laptop": {
           "$type": "number",
-          "$value": 0.9396,
+          "$value": 0.6083,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -9959,7 +9959,7 @@
         },
         "desktop": {
           "$type": "number",
-          "$value": 1.0,
+          "$value": 0.9613,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -9970,7 +9970,7 @@
       "9": {
         "tablet": {
           "$type": "number",
-          "$value": 0.9079,
+          "$value": 0.587,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -9979,7 +9979,7 @@
         },
         "laptop": {
           "$type": "number",
-          "$value": 1.0,
+          "$value": 0.9798,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -9999,7 +9999,7 @@
       "8": {
         "tablet": {
           "$type": "number",
-          "$value": 1.0,
+          "$value": 0.7164,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -10028,7 +10028,7 @@
       "7": {
         "tablet": {
           "$type": "number",
-          "$value": 1.0,
+          "$value": 0.8934,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -10058,7 +10058,7 @@
         "10": {
           "tablet": {
             "$type": "number",
-            "$value": 0.6815,
+            "$value": 0.6429,
             "$extensions": {
               "io.github.laith0003.ux-skill": {
                 "layer": "primitive"
@@ -10067,7 +10067,7 @@
           },
           "laptop": {
             "$type": "number",
-            "$value": 0.8634,
+            "$value": 0.8145,
             "$extensions": {
               "io.github.laith0003.ux-skill": {
                 "layer": "primitive"
@@ -10087,7 +10087,7 @@
         "9": {
           "tablet": {
             "$type": "number",
-            "$value": 0.8391,
+            "$value": 0.7915,
             "$extensions": {
               "io.github.laith0003.ux-skill": {
                 "layer": "primitive"
@@ -10116,7 +10116,7 @@
         "8": {
           "tablet": {
             "$type": "number",
-            "$value": 1.0,
+            "$value": 0.9665,
             "$extensions": {
               "io.github.laith0003.ux-skill": {
                 "layer": "primitive"
@@ -10204,7 +10204,10 @@
           "$value": "{type.tier-scale.10.desktop}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
-              "layer": "semantic"
+              "layer": "semantic",
+              "modes": {
+                "direction:rtl": "{type.tier-scale.arabic.10.desktop}"
+              }
             }
           }
         }
@@ -10227,7 +10230,10 @@
           "$value": "{type.tier-scale.9.laptop}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
-              "layer": "semantic"
+              "layer": "semantic",
+              "modes": {
+                "direction:rtl": "{type.tier-scale.arabic.9.laptop}"
+              }
             }
           }
         },
@@ -10247,7 +10253,10 @@
           "$value": "{type.tier-scale.8.tablet}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
-              "layer": "semantic"
+              "layer": "semantic",
+              "modes": {
+                "direction:rtl": "{type.tier-scale.arabic.8.tablet}"
+              }
             }
           }
         },
@@ -10276,7 +10285,10 @@
           "$value": "{type.tier-scale.7.tablet}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
-              "layer": "semantic"
+              "layer": "semantic",
+              "modes": {
+                "direction:rtl": "{type.tier-scale.arabic.7.tablet}"
+              }
             }
           }
         },
@@ -10303,7 +10315,7 @@
     "vw": {
       "phone": {
         "$type": "number",
-        "$value": 12.99,
+        "$value": 8.41,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -10312,7 +10324,7 @@
       },
       "tablet": {
         "$type": "number",
-        "$value": 13.36,
+        "$value": 8.65,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -10321,7 +10333,7 @@
       },
       "laptop": {
         "$type": "number",
-        "$value": 13.33,
+        "$value": 9.01,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -10330,7 +10342,7 @@
       },
       "desktop": {
         "$type": "number",
-        "$value": 13.33,
+        "$value": 9.13,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -10340,7 +10352,7 @@
       "arabic": {
         "phone": {
           "$type": "number",
-          "$value": 12.56,
+          "$value": 11.85,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -10349,7 +10361,7 @@
         },
         "tablet": {
           "$type": "number",
-          "$value": 12.91,
+          "$value": 12.18,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -10358,7 +10370,7 @@
         },
         "laptop": {
           "$type": "number",
-          "$value": 13.45,
+          "$value": 12.69,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -10367,7 +10379,7 @@
         },
         "desktop": {
           "$type": "number",
-          "$value": 13.63,
+          "$value": 12.86,
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "primitive"
@@ -10431,7 +10443,7 @@
     "fit-word": {
       "latin": {
         "$type": "number",
-        "$value": 13,
+        "$value": 19.0,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -10440,7 +10452,7 @@
       },
       "arabic": {
         "$type": "number",
-        "$value": 10,
+        "$value": 10.6,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
