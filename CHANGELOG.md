@@ -27,6 +27,20 @@ project adheres to [Semantic Versioning](https://semver.org/).
 - The photo direction asks for the client's own photos first, describes
   each missing shot by what it shows, and names the stock cliches to avoid
   (handshakes, laptops showing charts, glowing locks, posed teams).
+- Lint reads what a page uses. On a page with its own markup, a rule on a
+  utility class no element carries (the rest of a compiled stylesheet) is
+  not reported, nor a library rule whose selector matches nothing there;
+  a dashboard with a sidebar is an app shell even when its header has a
+  button. Over a hundred pages from AI builders this removed a quarter of
+  the findings, none on an element the page has.
+- The quality score tells heavy pages apart: past 50 points of penalty it
+  decays toward 0 instead of stopping there. Scores of 50 and up are
+  unchanged.
+- `lint --render` reports text that runs past its own box
+  (`text-overflows-its-box`), such as a display word wider than its column.
+- The render color budget reads the status and category colors of a linked
+  `tokens.css` on a page opened from disk, where the sheet's rules cannot
+  be read, so they count as meaning there too.
 - 25 slash commands become 18. Each merged command keeps every step and
   flag of the ones it absorbed:
   - `/ux-discover` takes `--frame` (the four-field framing block) and

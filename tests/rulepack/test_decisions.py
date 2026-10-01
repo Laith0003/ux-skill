@@ -55,6 +55,7 @@ EXPECTED = {
     "display-leading-floor-in-lint", "capitals-follow-the-signal",
     "states-answer-on-motion", "one-indicator-per-control", "hidden-controls-leave-the-tab-order",
     "states-name-themselves", "render-drives-the-page", "sections-are-contracts",
+    "lint-reads-what-the-page-uses", "score-tells-heavy-pages-apart", "text-stays-in-its-box",
     "categories-for-nominal-data",
     "photos-show-this-business",
     "display-follows-expressiveness", "display-lines-sit-tight", "weights-stay-light",

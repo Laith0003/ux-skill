@@ -20,6 +20,7 @@ they never lower the page's score or its exit code.
 """
 from __future__ import annotations
 
+import math
 import re
 from bisect import bisect_right
 from dataclasses import dataclass, field, asdict
@@ -27,7 +28,8 @@ from pathlib import Path
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 from engine.data_loader import load
-from engine.linter.structure import POST_CHECKS, FileContext, in_spans, token_definitions
+from engine.linter.structure import (
+    POST_CHECKS, FileContext, in_spans, token_definitions, unused_utility)
 from engine.linter.views import CHANNELS, FileViews, is_mention
 
 
@@ -44,24 +46,32 @@ DEFAULT_GLOBS = (
 )
 
 
+# Past this many points the penalty decays instead of subtracting, so pages
+# with many findings still differ: the score is 100 minus the penalty down
+# to SCORE_KNEE, then SCORE_KNEE * exp(-(penalty - SCORE_KNEE) / SCORE_TAIL).
+SCORE_KNEE = 50
+SCORE_TAIL = 100.0
+
+
 def compute_score(findings: List["Finding"], files_scanned: int = 1) -> int:
     """Compute a 0-100 quality score from a list of findings.
 
-    Formula: start at 100, subtract severity-weighted penalties, normalized
-    per file scanned so a big repo isn't auto-penalized vs a single file.
+    Each finding costs its severity weight (SEVERITY_WEIGHT). The penalty
+    is normalized per file scanned, so a big repo is not auto-penalized vs
+    a single file.
 
-        score = max(0, 100 - sum(SEVERITY_WEIGHT[f.severity]) / max(files, 1))
-
-    A clean file = 100. A file with 5 mediums = 80. A file with 5 highs = 50.
-    Compounding violations drop the score quickly; the v2.1 gate trips at 65.
+    Up to SCORE_KNEE the score is 100 minus the penalty: a clean file is
+    100, five mediums 80, five highs 50, and the v2.1 gate trips at 65.
+    Past the knee the score decays toward 0 and never reaches it, so a page
+    with thirty problems still scores under one with twelve.
     """
     if not findings:
         return 100
-    total_penalty = 0
-    for f in findings:
-        total_penalty += SEVERITY_WEIGHT.get(f.severity, 4)
+    total_penalty = sum(SEVERITY_WEIGHT.get(f.severity, 4) for f in findings)
     per_file = total_penalty / max(files_scanned, 1)
-    return max(0, min(100, int(round(100 - per_file))))
+    if per_file <= SCORE_KNEE:
+        return max(0, min(100, int(round(100 - per_file))))
+    return max(1, int(round(SCORE_KNEE * math.exp(-(per_file - SCORE_KNEE) / SCORE_TAIL))))
 
 
 @dataclass
@@ -454,6 +464,8 @@ def lint_text(name: str, text: str, rules: Optional[List[Dict[str, Any]]] = None
                     continue
                 w = waived.get(line_no, set())
                 if w is None or (rule["id"] or "").lower() in w:
+                    continue
+                if target == "css" and unused_utility(ctx, view, match.start()):
                     continue
                 if rule["post"] is not None and not rule["post"](ctx, view, match, start):
                     continue
