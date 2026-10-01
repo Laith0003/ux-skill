@@ -873,11 +873,52 @@ def test_a_type_field_that_cannot_be_read_names_its_column_and_the_fix():
     assert _rows(_import(fixed).report.not_read) == [
         ("rules.md:3", "type.body", "in the Weight column, bold is not a font weight; write it "
                                     "as a number from 1 to 1000, such as 700")]
-    fixed = fixed.replace("bold", "700")
-    assert _rows(_import(fixed).report.not_read) == [
-        ("rules.md:3", "type.body", "in the Line height column, 24px is a length, and the "
-                                    "engine keeps a line height as a multiple of the font size; "
-                                    "write it as a number, such as 1.5")]
+    fixed = fixed.replace("bold", "700").replace("| 0 |", "| 0.2em |")
+    assert _rows(_import(fixed).report.not_read)[0][2].startswith(
+        "in the Letter spacing column, 0.2em")
+
+
+def test_a_line_height_in_px_is_read_against_the_size_of_its_style():
+    text = ("| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | 16px | 400 | 24px | 0 |\n"
+            "| `type.small` | Inter | 0.875rem | 400 | 1.25rem | 0 |\n"
+            "| `type.note` | Inter | 14px | 400 | 20px | 0 |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert ts.get("type.body").value["lineHeight"] == 1.5
+    assert ts.get("type.small").value["lineHeight"] == 1.4286
+    assert ts.get("type.note").value["lineHeight"] == 1.4286
+    assert imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:3", "type.body", "in the Line height column, 24px is a length; it was read "
+                                    "against the font size 16px as 1.5, the multiple of the "
+                                    "font size the engine keeps; write 1.5 to say so"),
+        ("rules.md:4", "type.small", "in the Line height column, 1.25rem is a length; it was "
+                                     "read against the font size 0.875rem as 1.4286, the "
+                                     "multiple of the font size the engine keeps; write 1.4286 "
+                                     "to say so"),
+        ("rules.md:5", "type.note", "in the Line height column, 20px is a length; it was read "
+                                    "against the font size 14px as 1.4286, the multiple of the "
+                                    "font size the engine keeps; write 1.4286 to say so")]
+
+
+def test_a_line_height_in_another_unit_than_its_size_or_beside_a_reference_is_not_read():
+    text = ("| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | 1rem | 400 | 24px | 0 |\n"
+            "| `size.md` | | | | | |\n"
+            "| `type.lead` | Inter | {size.md} | 400 | 28px | 0 |\n")
+    rows = [r for r in _rows(_import(text).report.not_read) if r[1] != "size.md"]
+    assert rows == [
+        ("rules.md:3", "type.body", "in the Line height column, 24px is a length in px and the "
+                                    "font size 1rem is in rem, so it cannot be read as a "
+                                    "multiple of the font size; write it as a number, such as "
+                                    "1.5, or write both in one unit"),
+        ("rules.md:5", "type.lead", "in the Line height column, 28px is a length and the font "
+                                    "size is the reference {size.md}, so it cannot be read as a "
+                                    "multiple of the font size here; write it as a number, such "
+                                    "as 1.5")]
 
 
 def test_type_properties_beside_a_size_with_no_font_column_say_how_to_read_them():

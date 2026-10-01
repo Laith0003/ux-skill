@@ -20,7 +20,9 @@ Read as tokens:
 - a list item whose name is in backticks: "- `space.2`: 8px" or "= 8px";
 - a type table: a name column and a Font, Size, Weight, Line height and
   Letter spacing column (Family, Leading and Tracking too) reads each row
-  as one typography token.
+  as one typography token. A line height written as a length (24px) is
+  read against the row's font size in the same unit (16px gives 1.5), with
+  a note; beside a size in another unit or a reference it is not read.
 
 A column that names a property of each row's token (Line height, Weight,
 Letter spacing, Curve, Easing) is never a mode. Beside the token's value
@@ -76,8 +78,8 @@ from engine.foundations.tokens import Token, TokenSet
 from engine.io.mode_words import axis_of, is_base, mode_of, words as name_words
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source
 from engine.io.values_in import (COLOR_KEYWORDS, CSS_KEYWORDS, EASING_KEYWORDS, GamutMapped,
-                                 NotRead, css_alias, read_value, shadow_with_unit,
-                                 split_top)
+                                 NotRead, css_alias, leading_ratio, length_text, read_value,
+                                 shadow_with_unit, split_top)
 
 NAME_HEADERS = ("token", "name", "variable", "role", "token name", "css variable")
 VALUE_HEADERS = ("value", "hex", "color", "size", "px", "rem", "ms", "duration")
@@ -684,8 +686,8 @@ def _field(f: str, text: str, column: str, unit: str, entry: _Entry) -> Any:
         entry.field_aliases[value] = (column, _FIELD_FITS[f])
         return "{" + value + "}"
     if f == "lineHeight" and kind == "dimension":
-        raise NotRead(f"{text} is a length, and the engine keeps a line height as a multiple "
-                      f"of the font size; {_FIELD_FIX[f]}")
+        # A length, read against the row's font size once that is read.
+        return value
     want = TYPOGRAPHY_FIELDS[f][0]
     if f == "fontWeight" and kind == "number" and TYPES[want].check(value):
         return value
@@ -707,6 +709,28 @@ def _typography(entry: _Entry) -> Dict[str, Any]:
             out[f] = _field(f, text, column, unit, entry)
         except NotRead as exc:
             raise NotRead(f"in the {column} column, {exc}") from None
+    if isinstance(out["lineHeight"], dict):
+        # A line height written as a length is read against the row's font
+        # size, the multiple the engine keeps.
+        column = entry.fields["lineHeight"][1]
+        shown, size = length_text(out["lineHeight"]), out["fontSize"]
+        ratio, why = leading_ratio(out["lineHeight"], size)
+        fix = "write it as a number, such as 1.5"
+        if why == "unit":
+            raise NotRead(f"in the {column} column, {shown} is a length in "
+                          f"{out['lineHeight']['unit']} and the font size {length_text(size)} "
+                          f"is in {size['unit']}, so it cannot be read as a multiple of the "
+                          f"font size; {fix}, or write both in one unit")
+        if why:
+            what = f"the reference {size}" if why == "reference" else length_text(size)
+            raise NotRead(f"in the {column} column, {shown} is a length and the font size is "
+                          f"{what}, so it cannot be read as a multiple of the font size here; "
+                          f"{fix}")
+        entry.notes.append(Item(entry.where, entry.written, (
+            f"in the {column} column, {shown} is a length; it was read against the font size "
+            f"{length_text(size)} as {ratio}, the multiple of the font size the engine keeps; "
+            f"write {ratio} to say so")))
+        out["lineHeight"] = ratio
     return out
 
 

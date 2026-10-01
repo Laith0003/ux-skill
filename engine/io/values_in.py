@@ -327,6 +327,33 @@ def _shadow_layer(text: str, mapped: Optional[List[GamutMapped]]) -> dict:
     return layer
 
 
+def length_text(value: Any) -> str:
+    """A length literal as a person writes it: 16px, 0.875rem."""
+    if isinstance(value, dict) and set(value) == {"value", "unit"}:
+        return f"{value['value']:g}{value['unit']}"
+    return str(value)
+
+
+def leading_ratio(line_height: Any, size: Any) -> Tuple[Optional[Any], str]:
+    """(the line height as a multiple of the font size, to four decimals,
+    "") when both are lengths in one unit, so a line height written as
+    24px beside a 16px size reads as 1.5. (None, why) otherwise: "reference"
+    when the size is not a length (an alias), "unit" when the two units
+    differ, since converting them would need a root size the token does not
+    hold, and "zero" for a size of 0."""
+    lengths = [v for v in (line_height, size)
+               if isinstance(v, dict) and set(v) == {"value", "unit"}
+               and isinstance(v["value"], (int, float)) and not isinstance(v["value"], bool)]
+    if len(lengths) < 2:
+        return None, "reference"
+    if size["value"] <= 0:
+        return None, "zero"
+    if line_height["unit"] != size["unit"]:
+        return None, "unit"
+    ratio = round(line_height["value"] / size["value"], 4)
+    return (int(ratio) if float(ratio).is_integer() else ratio), ""
+
+
 def shadow_with_unit(text: str, unit: str = "px") -> Optional[str]:
     """`text` with `unit` added to each bare offset when it is a shadow
     whose offsets have no unit (0 2 8 #0000001A is 0 2px 8px #0000001A),
