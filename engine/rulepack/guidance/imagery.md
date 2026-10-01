@@ -2,7 +2,7 @@
 
 ## Summary
 
-Imagery sets how photos and illustrations sit in the system: the aspect ratios media is cropped to, a scrim that keeps text over any image readable, a brand tint and a duotone pair that bring photos into the brand's light, and, with the radius foundation, the corner of media. Generated brand art (art/ beside tokens.json) fills a page that has no photos yet. Every value follows the axes and the brand color. Imagery says how to crop, treat and place photos, and which photos to use: a page uses photographs, and when the client gives none they are sourced to the photo direction, one grade for every photo on the page (decisions/photo-direction.md).
+Imagery sets how photos and illustrations sit in the system: the aspect ratios media is cropped to, a scrim that keeps text over any image readable, a brand tint and a duotone pair that bring photos into the brand's light, and, with the radius foundation, the corner of media. Generated brand art (art/ beside tokens.json) fills a page that has no photos yet. Every value follows the axes and the brand color. Imagery says how to crop, treat and place photos, and which photos to use: a page uses photographs, and when the client gives none they are sourced to the photo direction, one grade for every photo on the page (decisions/photo-direction.md). The photos show what only this business has: its own place, people, goods and work first; stand-ins are sourced to the direction only until those arrive, and never the subjects a stock search returns first (handshakes, laptops showing charts, glowing locks, posed teams), which the report names under Avoid (decisions/photos-show-this-business.md).
 
 ## Principles
 
