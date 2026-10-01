@@ -118,6 +118,8 @@ def _edge_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
     for fill in (b for b in contract.tokens if b.property == "fill"):
         if not (ts.has(fill.role) and ts.get(fill.role).type == "color"):
             continue
+        if contract.category == "section" and fill.part == "container":
+            continue  # a band of the page, set apart by space or its ground, never an edge
         width = any(_covers(e, fill) and e.property == "border-width" and e.role in EDGE_ROLES
                     for e in contract.tokens)
         color = any(_covers(e, fill) and e.property == "border-color" for e in contract.tokens)

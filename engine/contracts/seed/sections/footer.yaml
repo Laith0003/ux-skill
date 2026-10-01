@@ -1,0 +1,39 @@
+# Footer: the site's sitemap. Every value is a semantic role.
+name: footer
+status: experimental
+category: section
+description: The site's footer, the sitemap, contact routes and legal links, in the site-footer contract, the same instance on every page.
+job: Prove the site is complete and every page and route is one step away.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: columns, rtlBehavior: logical}
+slots:
+  - {name: columns, takes: [site-footer], required: true}
+variants:
+  - {name: density, values: [standard, compact], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.region-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+contrast: []
+surfaces: [color.surface.page, color.surface.tint]
+proof: none
+phone: [pair-small-items]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - Each column heading names what its links hold
+usage:
+  do:
+    - Use the site-footer contract
+    - On a phone, pair short columns two to a row
+  dont:
+    - Do not put the only route to a page in the footer
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

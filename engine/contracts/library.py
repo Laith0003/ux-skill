@@ -2,12 +2,14 @@
 contracts that ship with the engine (in seed/, all experimental)."""
 from __future__ import annotations
 
+from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Tuple, Union
 
 from engine.contracts.schema import Contract, ContractError, ContractProblem, load_contract
 
 SEED_DIR = Path(__file__).resolve().parent / "seed"
+SECTION_DIR = SEED_DIR / "sections"
 
 
 def load_folder(folder: Union[str, Path]) -> Tuple[Contract, ...]:
@@ -40,3 +42,14 @@ def seed_contracts() -> Tuple[Contract, ...]:
 def seed_sources() -> Dict[str, str]:
     """Each seed file's name and text, sorted by name, for copying as is."""
     return {f.name: f.read_text(encoding="utf-8") for f in sorted(SEED_DIR.glob("*.yaml"))}
+
+
+def component_names() -> Tuple[str, ...]:
+    """The seed component contracts' names, read from their file names."""
+    return tuple(sorted(f.stem for f in SEED_DIR.glob("*.yaml")))
+
+
+@lru_cache(maxsize=1)
+def seed_sections() -> Tuple[Contract, ...]:
+    """The seed section contracts, sorted by name."""
+    return load_folder(SECTION_DIR)

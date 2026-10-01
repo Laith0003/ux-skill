@@ -397,6 +397,18 @@ def _with_phone_sign_in(seq: Dict[str, Any], sign_in: Optional[List[str]]) -> bo
     return phone
 
 
+def _contract_drop(section: Mapping[str, Any]) -> str:
+    """The section contract's own reason for dropping, after a space, or
+    nothing for a prose-only section."""
+    from engine.contracts.library import seed_sections
+    name = section.get("contract")
+    if not name:
+        return ""
+    by_name = {c.name: c for c in seed_sections()}
+    spec = by_name[name].section if name in by_name else None
+    return f" The {name} contract says: {spec.drop}." if spec and spec.drop != "none" else ""
+
+
 def _drop_unproven(seq: Dict[str, Any], proof: Optional[List[str]],
                    contact: Optional[List[str]]) -> List[Dict[str, str]]:
     """Remove the sections and mechanisms the client cannot fill; say why."""
@@ -409,7 +421,7 @@ def _drop_unproven(seq: Dict[str, Any], proof: Optional[List[str]],
                 dropped.append({"section": s["section"], "reason": (
                     f"{s['section']} needs the client's real {PROOF_LABELS.get(kind, kind)} "
                     f"(proof: {kind}) and the brief's proof list has none; dropped, never "
-                    f"invented.")})
+                    f"invented." + _contract_drop(s))})
             else:
                 kept.append(s)
         seq["section_sequence"] = kept

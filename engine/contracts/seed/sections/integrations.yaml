@@ -1,0 +1,56 @@
+# Integrations: the tools the product connects to. Every value is a semantic role.
+name: integrations
+status: experimental
+category: section
+description: The tools and places the product connects to, by name and mark, with what each connection does.
+job: Prove the product fits the tools the reader already uses.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: logo, rtlBehavior: logical}
+  - {name: media, rtlBehavior: logical}
+slots:
+  - {name: logo, takes: [photograph], required: true}
+  - {name: media, takes: [photograph, interface-fragment], required: false}
+variants:
+  - {name: density, values: [standard, compact], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: max-width, role: layout.container.max}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.section-title}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: heading, property: stack-gap, role: space.text.gap}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: max-width, role: layout.measure.landing}
+  - {part: logo, property: icon, role: color.logo}
+  - {part: logo, property: gap, role: space.group.gap}
+  - {part: media, property: radius, role: radius.media}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.logo, bg: color.surface.page, minimum: 3, criterion: "system", high: 3}
+surfaces: [color.surface.page, color.surface.tint]
+proof: none
+phone: [pair-small-items, recrop-fragments]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - Name each tool and say in a few words what connecting it does
+usage:
+  do:
+    - Show only connections that work today
+    - On a phone, pair the marks two to a row
+  dont:
+    - Do not show a wall of marks with no words
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -198,3 +198,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [A hidden control leaves the tab order, an exit runs to its end, and a theme switch does not animate the page](hidden-controls-leave-the-tab-order.md)
 - [A state names itself in words a screen reader and a voice user can use](states-name-themselves.md)
 - [The render check drives the page with its motion running](render-drives-the-page.md)
+- [A page's sections are contracts that compose component contracts](sections-are-contracts.md)
