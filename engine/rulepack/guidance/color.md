@@ -8,7 +8,7 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 
 - **Hierarchy by contrast.** The strongest contrast goes to primary content and the one main action; supporting content steps down. When everything is loud, nothing leads.
 - **One meaning per role.** A role means the same thing on every screen and in every component. A role is never borrowed for its value.
-- **Separate families.** Brand color marks identity, and by its role the main action, the words or the edges; neutral carries structure and reading; status colors report outcomes. A family never stands in for another.
+- **Separate families.** Brand color marks identity, and by its role the main action, the words or the edges; neutral carries structure and reading; status colors report outcomes; category colors tell apart states and series that are neither good nor bad (decisions/categories-for-nominal-data.md). A family never stands in for another.
 - **Saturation is an accent.** Fully saturated color goes on controls, focus, status and at most one brand band per view. Elsewhere the brand reaches surfaces as a tint or a band, never behind running text at full strength (decisions/surfaces-stand-apart.md).
 - **Depth by lightness.** A surface that sits higher is never darker than the one below it. In dark the page, card and raised surfaces are each their own lighter step, and the step, not the shadow, is the main depth cue; the page is the floor, and the sunken surface sits in the card, between the page and the card (decisions/dark-surfaces-rise.md). Where two levels share a color, as card and raised do in light, the shadow or an edge tells them apart. Modes lists the order in each context as built.
 - **Never color alone.** Anything color says, an icon, a word, a shape or a heavier edge says too (WCAG 1.4.1).
@@ -83,6 +83,30 @@ Color sets every surface, text, line, fill and ring in the product, in light and
 - `color.status.info.soft`: the quiet info tint of an info status banner or badge. Every soft fill keeps the share of its step's chroma the character gives, less for a calm, muted brief and all of it for a loud, lively one (decisions/soft-fills-follow-character.md).
 - `color.status.info.strong`: the solid info color for the icon of an info status banner and an info badge.
 - `color.status.info.on-strong`: text and icons on the strong info fill.
+- `color.category.1.soft`: the fill of a pill, tag or tile in category 1, such as an order state that is neither good nor bad.
+- `color.category.1.strong`: category 1's mark in a chart (a bar, a line, a segment) and its legend swatch.
+- `color.category.1.text`: category 1's words on its soft fill, the page or a card, such as a pill label or a legend entry.
+- `color.category.1.on-strong`: text and icons on category 1's strong tone.
+- `color.category.2.soft`: the fill of a pill, tag or tile in category 2, such as an order state that is neither good nor bad.
+- `color.category.2.strong`: category 2's mark in a chart (a bar, a line, a segment) and its legend swatch.
+- `color.category.2.text`: category 2's words on its soft fill, the page or a card, such as a pill label or a legend entry.
+- `color.category.2.on-strong`: text and icons on category 2's strong tone.
+- `color.category.3.soft`: the fill of a pill, tag or tile in category 3, such as an order state that is neither good nor bad.
+- `color.category.3.strong`: category 3's mark in a chart (a bar, a line, a segment) and its legend swatch.
+- `color.category.3.text`: category 3's words on its soft fill, the page or a card, such as a pill label or a legend entry.
+- `color.category.3.on-strong`: text and icons on category 3's strong tone.
+- `color.category.4.soft`: the fill of a pill, tag or tile in category 4, such as an order state that is neither good nor bad.
+- `color.category.4.strong`: category 4's mark in a chart (a bar, a line, a segment) and its legend swatch.
+- `color.category.4.text`: category 4's words on its soft fill, the page or a card, such as a pill label or a legend entry.
+- `color.category.4.on-strong`: text and icons on category 4's strong tone.
+- `color.category.5.soft`: the fill of a pill, tag or tile in category 5, such as an order state that is neither good nor bad.
+- `color.category.5.strong`: category 5's mark in a chart (a bar, a line, a segment) and its legend swatch.
+- `color.category.5.text`: category 5's words on its soft fill, the page or a card, such as a pill label or a legend entry.
+- `color.category.5.on-strong`: text and icons on category 5's strong tone.
+- `color.category.6.soft`: the fill of a pill, tag or tile in category 6, such as an order state that is neither good nor bad.
+- `color.category.6.strong`: category 6's mark in a chart (a bar, a line, a segment) and its legend swatch.
+- `color.category.6.text`: category 6's words on its soft fill, the page or a card, such as a pill label or a legend entry.
+- `color.category.6.on-strong`: text and icons on category 6's strong tone.
 
 ## Choosing
 
@@ -147,6 +171,7 @@ Some roles carry no contrast minimum. Disabled text and fills are checked for di
 - `error-edge-hue`: under high contrast the error edge stays within one ramp step of its standard step, so it stays red; an edge that is a literal color or a step of another ramp is a finding too.
 - `states-distinct`: each fill's hover and pressed steps differ from the fill and from each other.
 - `disabled-distinct`: disabled text differs from default and muted text, and the disabled fill differs from the primary fill.
+- `categories-distinct`: every two categories' strong tones stand at least 0.06 apart in OKLab in every context, so two chart series or two order states never read as one color, our floor.
 - `disabled-visible`: the disabled fill differs from the card and raised surfaces, so a disabled button never vanishes.
 - `line-subtle-visible`: the subtle separator differs from the card and raised surfaces it divides.
 - `scheme-polarity`: in light the page is lighter than the text, in dark it is darker.

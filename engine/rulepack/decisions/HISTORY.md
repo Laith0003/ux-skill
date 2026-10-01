@@ -208,3 +208,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Lint reports what the page uses, not what its bundle carries](lint-reads-what-the-page-uses.md)
 - [The quality score tells heavy pages apart](score-tells-heavy-pages-apart.md)
 - [The render check reports text that runs past its own box](text-stays-in-its-box.md)
+- [Nominal data takes six category hues that start on the brand](categories-for-nominal-data.md)

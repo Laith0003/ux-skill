@@ -9,6 +9,15 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Six category colors for nominal data: `color.category.1` to
+  `color.category.6`, each with a soft fill (a pill or a tile), a strong
+  tone (a chart mark), text, and text on the strong tone, in light, dark
+  and high contrast. The first sits on the brand's hue and the rest step
+  round the wheel; neighbors also differ in lightness. Every system gains
+  24 roles and the gate measures them on every surface. Import a shadcn
+  theme and `chart-1` to `chart-5` map to the category marks.
+
 ### Changed
 - Lint reads what a page uses. On a page with its own markup, a rule on a
   utility class no element carries (the rest of a compiled stylesheet) is
