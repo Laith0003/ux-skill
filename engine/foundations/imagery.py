@@ -170,8 +170,10 @@ GRADE_TOLERANCE = {"lightness": 12.0, "temperature": 6.0, "chroma": 8.0}
 # sells), its audience's age and its primary action: structured fields,
 # never a word of the brief.
 SUBJECTS = {
-    "app": "people using the product in their own setting, the screen implied or out of focus",
-    "software": "people at work with the product, the screen implied or out of focus",
+    "app": "the people who use the product, in their own place and mid-task, the screen out "
+           "of frame or out of focus",
+    "software": "the people who use the product at their real desks and sites, mid-task, the "
+                "screen out of frame or out of focus",
     "commerce": "the goods themselves in real light, then in use",
     "marketplace": "the people on both sides of an exchange",
     "local-service": "the place and the people who serve in it",
@@ -185,6 +187,18 @@ MOMENTS = {"sign-up": "someone starting out", "sign-in": "someone returning to t
            "the visit", "contact": "a conversation", "demo": "the product at work",
            "download": "the product in use on the go", "subscribe": "a regular ritual",
            "open-account": "a first step with money"}
+
+
+# Subjects a stock search returns first, which read as filler on any page:
+# the direction names them so a page's photos show what only this business
+# has instead.
+STOCK_CLICHES = ("handshakes and high-fives", "a laptop or phone showing charts",
+                 "people pointing at a screen", "a team posed around a table",
+                 "locks, shields and glowing circuits", "server rooms in neon light",
+                 "coins, piggy banks and growing plants", "medical props on white",
+                 "faces smiling at the camera")
+# Words a photo search takes to leave the cliches out.
+SEARCH_EXCLUDES = ("-stock", "-handshake", "-illustration", "-3d")
 
 
 @dataclass(frozen=True)
@@ -215,8 +229,9 @@ class PhotoDirection:
                     round(target[k] + GRADE_TOLERANCE[k], 1)) for k in target}
 
     def query(self) -> str:
-        """Words for a photo search: the subject, then the look."""
-        return ", ".join((self.subject,) + self.words)
+        """Words for a photo search: the subject, then the look, then the
+        words that leave the stock cliches out."""
+        return ", ".join((self.subject,) + self.words) + " " + " ".join(SEARCH_EXCLUDES)
 
 
 def _words(d: Dict[str, float]) -> Tuple[str, ...]:
@@ -322,6 +337,12 @@ def photo_lines(direction: Optional[PhotoDirection]) -> List[str]:
     return [
         f"Subject: {direction.subject}. Framing: {direction.framing}.",
         f"Kinds: {', '.join(direction.kinds)}.",
+        "Source: the client's own photos first: this place, these people, these goods and this "
+        "work as they are. Where there are none, ask for each shot by what it shows (this "
+        "counter, this front desk, this crew on this site), and source stand-ins to this "
+        "direction only until those arrive, listed for replacement.",
+        f"Avoid: {', '.join(STOCK_CLICHES)}; and any subject a stock search returns first for "
+        "the industry.",
         f"Look: {'; '.join(direction.words)}.",
         f"Grade: mean lightness {direction.lightness:g} (L*), temperature "
         f"{direction.temperature:+g} (b*), chroma {direction.chroma:g} (C*), contrast "

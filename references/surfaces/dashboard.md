@@ -2,7 +2,7 @@
 
 The surface playbook for data UI. `/ux-design` loads this file, and no other surface playbook, in dashboard mode (`--dashboard`, or a brief for a dashboard, admin panel, metrics page or console).
 
-> Data UI lives by different rules than marketing surfaces. Density is the product. Cards lose their job. Typography becomes data. Color carries semantic state. Restraint is the visual signature; density is the value proposition.
+> Data UI lives by different rules than marketing surfaces. A dashboard is read many times a day, so every figure carries its context, color tells states and series apart, and density follows how the page is read: a shop owner glancing at the counter is not a dispatcher watching six feeds. Restraint is the signature; bareness is not restraint.
 
 ## When it applies
 
@@ -10,34 +10,41 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 
 ## Principles
 
-1. **Density is the product, not a problem.** A dashboard's job is to surface signal per unit of screen. Generous spacing that fits 3 metrics on a 1440px monitor wastes the user's screen and their scan time. Pick a density mode and commit.
+1. **Density follows how the page is read.** The system's density axis and the brief's reading context set it: a daily-app dashboard (density 4 to 7) groups its figures in panels with room to scan; a cockpit (8 to 10) packs signal per unit of screen. Generous spacing that fits 3 metrics on a 1440px monitor wastes the screen; so does cockpit density on a page read at arm's length. Pick a density mode and commit.
 
-2. **Cards lose their job in dense data UI.** At VISUAL_DENSITY > 7, generic card containers are banned. Use logic-grouping via `border-t`, `divide-y`, or pure negative space. Data metrics breathe without being boxed unless elevation communicates hierarchy.
+2. **Panels group at daily density; hairlines group in a cockpit.** At daily density a panel on the card surface groups one question (sales, stock, reviews) with its own header. At VISUAL_DENSITY > 7 generic card containers are banned: use `border-t`, `divide-y`, or pure negative space.
 
-3. **Tabular numerals are mandatory.** `font-mono` + `font-variant-numeric: tabular-nums` on every numeric column, every stat callout, every ticker. Mixed proportional and tabular figures on the same page is undisciplined.
+3. **Tabular numerals are mandatory.** `font-variant-numeric: tabular-nums` on every numeric column, every stat callout, every ticker, in the system's own face; a monospace face only in a cockpit or for codes and IDs. Mixed proportional and tabular figures on the same page is undisciplined.
 
 4. **No serifs on dashboards.** Serifs belong to editorial and marketing. Dashboard typography uses neo-grotesque sans pairings (`Geist + Geist Mono`, `Satoshi + JetBrains Mono`, `Inter + IBM Plex Mono`).
 
-5. **Semantic color is reserved for meaning.** Green = up / live / success, red = down / regression / error, amber = warning, neutral or branded blue = informational. Never decorative. Never repurposed as brand color.
+5. **Color is reserved for meaning.** Status colors (`color.status.*`) report outcomes: success, warning, danger, info. Category colors (`color.category.1` to `.6`) tell apart states and series that are neither good nor bad: shipped, preparing, scheduled, a second chart series. Never decorative, and never color alone: a state always shows its word.
 
-6. **Mono-color logo and chrome, accent only on action.** Dashboard chrome stays neutral. A single accent appears only on primary CTAs, focus rings, and the one or two highlights that earn it.
+6. **Neutral chrome, accent on action.** Dashboard chrome stays neutral. The brand accent appears on the primary action, the focus ring and the current navigation item; icons sit in the muted text color.
 
 7. **Live indicators breathe sparingly.** Maximum 2 perpetual ambient pulses per viewport. Only on truly live elements. Anything more becomes screensaver noise that drains attention and battery.
 
 8. **Charts are UI, not decoration.** Charts follow the same rules as the rest of the system: accessibility, contrast, clarity, color-not-only. Tooltips work on hover AND tap AND keyboard focus. Empty / loading / error states are designed.
 
-9. **Restraint is the dashboard's signature.** The premium signal of a dashboard is composure under information density. The cluttered SaaS reflex (gradients, decorative icons, multiple accent colors) is what amateur dashboards do. The disciplined version uses typography, alignment, and negative space.
+9. **Restraint is the dashboard's signature.** The premium signal of a dashboard is composure under information density. The cluttered SaaS reflex (gradients, glows, decorative icons, multiple accent colors in the chrome) is what amateur dashboards do. The disciplined version uses scale, alignment, negative space and color that means something. A page of bare figures with no comparison, no icons and one gray is not restraint, it is unfinished.
 
 10. **Mobile collapse is a separate design.** Below 768px, cockpit-density rows collapse to scrollable card stacks, not 1px-divided rows. Mobile dashboards prioritize fewer metrics per viewport with deeper drill-down.
+
+11. **Every figure carries its context.** A figure says what it compares against ("+18.6% vs yesterday"), when it applies ("Scheduled 24 Jul") or what it counts ("3.1 M (1,200 orders)"). A number with nothing beside it cannot be acted on.
+
+12. **Real content.** A product, a listing or a property shows its own photo; a review shows the person's name; an order shows its real identifier. Placeholders and stock imagery read as unfinished.
 
 ## Do / Don't
 
 | Do | Don't |
 |---|---|
-| Use `font-mono` + tabular numerals on numeric columns | Mix proportional and tabular figures |
-| Replace cards with `border-t` or `divide-y` in dense data | Wrap every metric in a `<Card>` |
+| Use tabular numerals on every figure | Mix proportional and tabular figures |
+| Give every key figure its comparison, date or count | Show a bare number |
+| Put an icon, the title and one control in a panel header | Leave a panel header with a title alone |
+| Show a product's own photo as its thumbnail | Put stock photos on a dashboard |
+| Group with panels at daily density, hairlines in a cockpit | Wrap every row of dense data in a `<Card>` |
 | Use neo-grotesque sans (Geist, Satoshi, Inter) | Use serifs in dashboard typography |
-| Use semantic color (green/red/amber) only for state | Use semantic colors as brand decoration |
+| Use status colors for outcomes and category colors for states and series | Use either as brand decoration |
 | Right-align action columns | Place action buttons in the leftmost column |
 | Use sparklines inline for at-a-glance trends | Embed a full chart for every metric |
 | Use compact stat tiles with monospaced numerals | Use 3D charts or rainbow gradients |
@@ -65,6 +72,23 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 **Cost**: zero, token discipline.
 
 ## Examples
+
+### Pattern: Daily-app dashboard (density 4 to 7)
+**Use when**: The default for a product's own dashboard: a store, a clinic, a team or a back office checks it many times a day (density mid, reading context glance or task).
+**Anti-pattern**: Bare figures with no comparison, panels with a title and nothing else in their header, one gray everywhere, no icons, stock photos, or the cockpit treatment (no boxes, mono numerals) on a page that is read at arm's length.
+**How**:
+- Canvas and panels: the page on `color.surface.page` (or `color.surface.tint` for a soft wash), every panel on `color.surface.card` at `radius.card` with `color.line.subtle` or `elevation.card`. Panels group; whitespace between them is `space.group-gap`.
+- Page header: the page name in the heading role, one plain sentence under it that says what the page is for, and the page's own actions (Export, Add) on the right, the primary action last.
+- Figures with context: every key figure is large (figure role, tabular numerals, the face's own figures, not a mono face) and carries its context on one small line: the change against a named period with an arrow and the sign ("+18.6% vs yesterday"), a date ("Scheduled 24 Jul"), or a count in parentheses ("3.1 M (1,200 orders)"). A figure with nothing to compare against says what it counts and as of when.
+- KPI row: four or five figures, as cards or as one panel divided by hairlines. Equal cards are right here when each carries a different figure and its own context; what is banned is identical tiles that say nothing beyond a number.
+- Panel anatomy: an icon, the panel title, and on the right one control that changes the panel (a period menu, a filter) or a "View all" link. Nothing else in the header.
+- Icons: one line icon set at one stroke width, on every navigation item and every panel title, in `color.text.muted`; never emoji, never filled and outlined icons mixed.
+- Status: an order, ticket or account state is a pill in its own category (`color.category.N.soft` with `color.category.N.text`), the same category for the same state everywhere on the product. Success, warning and danger keep `color.status.*` for outcomes (paid, low stock, failed); the categories carry the states that are neither good nor bad (shipped, preparing, scheduled).
+- Grouped counts: a breakdown by state can be one tile per state on its category soft fill, with the count large in the category's text color.
+- Tables: a tinted header row (`color.surface.header`), the identifier first in the label weight, figures right aligned in tabular numerals, status pills, the row action last and named for its row.
+- Catalog photos: a product, a listing or a property shows its own photo as a thumbnail; these are content, not decoration. Stock photography stays banned.
+- People: reviews and messages show the person's name; the signed-in user sits at the foot of the navigation with a name, a role and the notifications control.
+- Charts: series take the categories in order (`color.category.1.strong` first, which sits on the brand hue), bars start at zero, and every chart has its empty, loading and error states.
 
 ### Pattern: Cockpit density (VISUAL_DENSITY 8 to 10)
 **Use when**: Information density is the value: many live figures read at a glance (density high, glance reading).
@@ -111,9 +135,9 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 **Anti-pattern**: Stat tile padding at 40px on each side, taking 4 rows of vertical space for one number.
 **How**:
 - Eyebrow label: 10 to 12px, tracked uppercase or sentence case
-- Stat number: 32 to 64px, weight 600 to 700, tabular figures, `font-mono`
+- Stat number: 32 to 64px, weight 600 to 700, tabular figures (`font-mono` only in a cockpit)
 - Unit label: 50 to 60% of stat size, regular weight, baseline-aligned
-- Delta indicator: small triangle or arrow + percentage in semantic green / red
+- Delta indicator: an arrow, the signed percentage and the period it compares against ("vs yesterday"), in status green or red
 - Optional sparkline below: 60 to 120px wide
 - Internal padding: 16 to 24px (or less in cockpit mode)
 
@@ -215,7 +239,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Text: charcoal or off-white
 - Borders / dividers: hairlines (`#EAEAEA` light; white at 8 to 12% alpha dark)
 - One brand accent: CTAs and focus rings only
-- Semantic colors (green/red/amber): inside product data and pills only
+- Status and category colors: inside product data, pills and charts only
 - Chart colors: diverging or sequential, never decorative
 
 ### Pattern pairing
@@ -249,7 +273,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 ### Typography (dashboard-specific)
 - Display headlines: neo-grotesque sans only (Geist, Satoshi, Inter, Manrope)
 - Body: 14 to 16px on dashboard surfaces (smaller than marketing)
-- Stat numerals: 32 to 64px (compact tile), 48 to 144px (hero metric)
+- Stat numerals: 32 to 64px (compact tile), 48 to 144px (hero metric), tabular figures in the system's face
 - Stat numeral unit label: 40 to 60% of stat size
 - Eyebrow labels: 10 to 12px, weight 500, tracking +0.06em
 - Inline code / values: 13 to 14px in `font-mono`
@@ -275,7 +299,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Typography: `Geist`, `Satoshi`, or `Cabinet Grotesk`; subtle `tracking-tight` on headers
 - Labels: titles and descriptions OUTSIDE and BELOW cards for gallery presentation
 - Padding inside cards: 32 to 40px (`p-8` to `p-10`)
-- Animation engine: spring physics (`duration: 0.35, bounce: 0.2`, the role's duration and the brand's overshoot), heavy use of `layout` and `layoutId`, every card with an "active state" that loops infinitely
+- Animation engine: spring physics (`duration: 0.35, bounce: 0.2`, the role's duration and the brand's overshoot) on layout changes; a card moves when its data changes, never on a loop
 
 ### Chart type selection
 - **Trend over time**: line chart, area chart, sparkline
@@ -291,7 +315,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 ### Chart color palettes (accessible)
 - **Diverging**: blue, gray, red (for negative-positive scales); avoid red-green
 - **Sequential**: single-hue gradient (light to dark) for ordered data
-- **Qualitative**: maximum 7 to 8 distinct hues for categories
+- **Qualitative**: the system's categories in order, `color.category.1` (on the brand hue) first; six at most, then group the rest as Other
 - **Colorblind-safe**: perceptually uniform (Viridis, Cividis, Magma)
 
 ### Chart specs
@@ -302,13 +326,12 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Direct labeling for small datasets (label values directly on chart)
 - Tooltip, legend, `aria-label`, data table alternative and state coverage follow the chart patterns above.
 
-### Semantic state colors (dashboard data)
-- Success / up / live / healthy: green family
-- Error / down / regression / destructive: red family
-- Warning / pending: amber family
-- Informational / neutral: branded blue
+### Status and category colors (dashboard data)
+- Outcomes take the status colors: success, up, healthy (`color.status.success.*`); error, down, failed (`color.status.danger.*`); warning, low stock, pending payment (`color.status.warning.*`); information (`color.status.info.*`)
+- States that are neither good nor bad take a category: shipped, preparing, scheduled, draft (`color.category.N.soft` behind `color.category.N.text`); the same state keeps the same category on every page
+- Chart series and breakdown segments take the categories in order (`color.category.N.strong`)
 - Disabled / muted: gray
-- These NEVER appear as chrome decoration
+- None of them appear as chrome decoration, and none of them stand without the state's word
 
 ### Table specs (dashboard)
 - Row height: 32 to 48px (default); 28 to 36px (cockpit); 48 to 56px (comfortable)
@@ -325,7 +348,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Below 768px: motion intensity reduces by 2 levels
 
 ### Banned dashboard patterns
-- Three equal cards for a KPI row (use an asymmetric bento or hairline-separated metric blocks)
+- Identical KPI tiles that show a bare number with no comparison, date or count (equal cards are fine when each carries its own figure and context)
 - A widget without empty, loading and error states
 - Serif typography on dashboards
 - Mixed proportional and tabular figures on the same page
@@ -342,7 +365,9 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Modal-only filtering (use inline filter bar)
 - Pulsing live indicators on every row
 - Floating UI windows with drop shadows and tilted-perspective screenshots
-- Stock photography in dashboard surfaces
+- Stock photography in dashboard surfaces (a product's own photo as its thumbnail is content, not stock)
+- Emoji as icons, or filled and outlined icons mixed
+- Status pills that differ by color alone
 
 ### Restraint signals (premium dashboards)
 - Off-white or near-black background; never pure
@@ -358,11 +383,14 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 
 - [ ] Density mode (art-gallery / daily-app / cockpit) chosen and consistent (severity: High)
 - [ ] Cockpit-density mode caps at "daily-app" below 768px (severity: High)
-- [ ] Tabular numerals (`font-mono` + `tabular-nums`) on numeric columns and stat callouts (severity: Critical)
+- [ ] Tabular numerals (`tabular-nums`) on numeric columns and stat callouts (severity: Critical)
+- [ ] Every key figure carries its comparison, date or count (severity: High)
+- [ ] Every panel header has its icon, its title and at most one control (severity: Medium)
+- [ ] One line icon set on navigation and panel titles (severity: Medium)
 - [ ] No mixed proportional and tabular figures on the same page (severity: High)
 - [ ] No serifs in dashboard typography (severity: High)
 - [ ] Cards replaced with `border-t` / `divide-y` in cockpit-density UIs (severity: Medium)
-- [ ] Semantic state colors (green/red/amber) used only for state, not chrome (severity: Critical)
+- [ ] Status colors for outcomes and category colors for states and series, never chrome, never without the word (severity: Critical)
 - [ ] One accent color in chrome, applied only on CTAs and focus rings (severity: High)
 - [ ] Chrome stays monochrome; chromatic load carried by data (severity: Medium)
 - [ ] Numbers right-aligned in tables (severity: Medium)
@@ -387,7 +415,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - [ ] Real-time updates preserve user scroll position (severity: High)
 - [ ] Sparklines used for at-a-glance trends (no full chart for every metric) (severity: Cosmetic)
 - [ ] Mobile dashboards prioritize fewer metrics per viewport with drill-down (severity: Medium)
-- [ ] Number animations use `font-mono` with tabular figures to prevent layout shift (severity: High)
+- [ ] Number animations use tabular figures to prevent layout shift (severity: High)
 - [ ] No decorative gradients on dashboard surfaces (severity: Medium)
 - [ ] No glowing AI / neural icons (use restrained generic symbols) (severity: Medium)
 - [ ] Charts honor `prefers-reduced-motion: reduce` on entrance animations (severity: Critical)

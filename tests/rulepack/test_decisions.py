@@ -56,6 +56,7 @@ EXPECTED = {
     "states-answer-on-motion", "one-indicator-per-control", "hidden-controls-leave-the-tab-order",
     "states-name-themselves", "render-drives-the-page", "sections-are-contracts",
     "categories-for-nominal-data",
+    "photos-show-this-business",
     "display-follows-expressiveness", "display-lines-sit-tight", "weights-stay-light",
     "two-voice-headline", "capitals-track-open", "lines-break-balanced",
     "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",

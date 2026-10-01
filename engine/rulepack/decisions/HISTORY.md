@@ -206,3 +206,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The render check drives the page with its motion running](render-drives-the-page.md)
 - [A page's sections are contracts that compose component contracts](sections-are-contracts.md)
 - [Nominal data takes six category hues that start on the brand](categories-for-nominal-data.md)
+- [Photos show what only this business has](photos-show-this-business.md)

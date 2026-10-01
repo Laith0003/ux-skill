@@ -19,6 +19,14 @@ project adheres to [Semantic Versioning](https://semver.org/).
   theme and `chart-1` to `chart-5` map to the category marks.
 
 ### Changed
+- The dashboard playbook teaches the product dashboard people check many
+  times a day: every figure carries its comparison, date or count; states
+  take the category colors and outcomes the status colors, never color
+  alone; panels share one anatomy (icon, title, one control); one icon set;
+  a product's own photo is content. The cockpit rules stay for dense briefs.
+- The photo direction asks for the client's own photos first, describes
+  each missing shot by what it shows, and names the stock cliches to avoid
+  (handshakes, laptops showing charts, glowing locks, posed teams).
 - 25 slash commands become 18. Each merged command keeps every step and
   flag of the ones it absorbed:
   - `/ux-discover` takes `--frame` (the four-field framing block) and
