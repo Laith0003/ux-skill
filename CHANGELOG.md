@@ -194,8 +194,9 @@ dark and high contrast, and writes only what passes. 3.x users: start with
   set only while a control is not disabled passes, a focus rule that fills
   the control in place of its outline counts as an indicator, and a
   pseudo-element at opacity 0 is never a hidden control. Over fourteen
-  public admin dashboards this removed 175 findings, none of them a real
-  problem.
+  public admin dashboards this removed 166 findings, none of them a real
+  problem. A shadow kept in a custom property is now counted where it is
+  used.
 - The quality score counts a repeated rule lightly past 50 points of
   penalty: the n-th finding of a rule weighs 1/n there, so 149 links to
   "#" read as one pattern, not 149 problems. Every score of 50 and up, and

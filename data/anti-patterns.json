@@ -1247,7 +1247,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "(?<![\\w-])box-shadow\\s*:(?:[^(),;{}]|\\([^()]*\\))*(?:,(?:[^(),;{}]|\\([^()]*\\))*){4,}",
+        "pattern": "(?<![\\w-])box-shadow\\s*:(?:[^(),;{}]|\\([^()]*\\))*(?:,(?:[^(),;{}]|\\([^()]*\\))*){4,}|(?<![\\w-])box-shadow\\s*:[^;{}]*\\bvar\\(",
         "flags": "im",
         "scope": [
           "css",
@@ -2693,7 +2693,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "(?<!:not\\():disabled[^{]*\\{[^}]*cursor\\s*:\\s*pointer\\s*[;}]",
+        "pattern": ":disabled[^{]*\\{[^}]*cursor\\s*:\\s*pointer\\s*[;}]",
         "flags": "im",
         "scope": [
           "css",
@@ -2705,7 +2705,8 @@
           "blade",
           "astro"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "pointer-on-disabled"
       },
       "why": "A :disabled element with cursor: pointer signals to the user that the element is clickable - the visual affordance says 'I respond' while the actual element says 'I don't.' Confused state, immediate friction. Common when a global utility class wins over the :disabled override.",
       "fix": "Override to cursor: not-allowed (or cursor: default) inside the :disabled selector. Pair with opacity: 0.5 and pointer-events: none on the visual layer if the disabled state must be unreachable to mouse users."

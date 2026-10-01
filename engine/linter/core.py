@@ -50,7 +50,7 @@ DEFAULT_GLOBS = (
 # with many findings still differ: the score is 100 minus the penalty down
 # to SCORE_KNEE, then SCORE_KNEE * exp(-(penalty - SCORE_KNEE) / SCORE_TAIL).
 # Past the knee the excess shrinks by how much of the page repeats one
-# rule: the n-th finding of a rule counts 1/n of its weight in the
+# rule: the n-th finding of a rule in a file counts 1/n of its weight in the
 # repeated penalty, and the excess is scaled by that penalty over the full
 # one, so a page of distinct problems scores as before.
 SCORE_KNEE = 50
@@ -70,7 +70,7 @@ def compute_score(findings: List["Finding"], files_scanned: int = 1) -> int:
     with thirty problems still scores under one with twelve. There the
     excess over the knee shrinks by how much the page repeats one rule
     (149 placeholder links are one pattern, not 149 problems): the n-th
-    finding of a rule counts 1/n of its weight, heaviest first, and the
+    finding of a rule in a file counts 1/n of its weight, heaviest first, and the
     excess is scaled by that repeated penalty over the full one. A page of
     distinct problems scores as before, and so does any page up to the
     knee.
@@ -82,11 +82,12 @@ def compute_score(findings: List["Finding"], files_scanned: int = 1) -> int:
     per_file = total_penalty / max(files_scanned, 1)
     if per_file <= SCORE_KNEE:
         return max(0, min(100, int(round(100 - per_file))))
-    seen: Dict[str, int] = {}
+    seen: Dict[Tuple[str, str], int] = {}
     repeated = 0.0
     for f, w in sorted(zip(findings, weights), key=lambda fw: -fw[1]):
-        seen[f.rule_id] = seen.get(f.rule_id, 0) + 1
-        repeated += w / seen[f.rule_id]
+        key = (f.file, f.rule_id)  # repeats count within a file, never across files
+        seen[key] = seen.get(key, 0) + 1
+        repeated += w / seen[key]
     excess = (per_file - SCORE_KNEE) * repeated / total_penalty
     return max(1, int(round(SCORE_KNEE * math.exp(-excess / SCORE_TAIL))))
 

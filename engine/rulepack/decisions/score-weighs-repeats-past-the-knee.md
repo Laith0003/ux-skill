@@ -15,7 +15,7 @@ The score cost every finding its full severity weight and decayed past 50 points
 
 ## Decision
 
-Every finding costs its severity weight. Up to 50 points of penalty the score is 100 minus the penalty, so a clean file is 100, five mediums 80, five highs 50, and a page under 65 fails the gate. Past 50 points the score is 50 times e to the minus (excess over 100), where the excess is the penalty over 50 scaled by the repeated penalty over the full one. The repeated penalty counts the n-th finding of a rule at 1/n of its weight, heaviest first. A page whose findings are all different rules has a repeated penalty equal to its full one and scores as before.
+Every finding costs its severity weight. Up to 50 points of penalty the score is 100 minus the penalty, so a clean file is 100, five mediums 80, five highs 50, and a page under 65 fails the gate. Past 50 points the score is 50 times e to the minus (excess over 100), where the excess is the penalty over 50 scaled by the repeated penalty over the full one. The repeated penalty counts the n-th finding of a rule in a file at 1/n of its weight, heaviest first; repeats are counted within a file, so the same page scanned twenty times scores as one page. A page whose findings are all different rules has a repeated penalty equal to its full one and scores as before.
 
 ## Why
 

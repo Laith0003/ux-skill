@@ -166,7 +166,13 @@ def _revealed_by_focus_or_hover(blocks: List[Block], hidden: Block) -> bool:
     return False
 
 
-_PSEUDO_ELEMENT = re.compile(r"::[\w-]+|:(?:before|after|first-line|first-letter)\b", re.I)
+# Pseudo-elements that draw a part of an element and never take focus;
+# ::part() and ::slotted() select real elements, and a scroll button or a
+# picker can hold focus, so they are not among them.
+_PSEUDO_ELEMENT = re.compile(r"::(?:before|after|placeholder|marker|selection|first-line|"
+                             r"first-letter|backdrop|cue|grammar-error|spelling-error|"
+                             r"target-text|highlight\([^)]*\))(?![\w-])"
+                             r"|:(?:before|after|first-line|first-letter)(?![\w-])", re.I)
 
 
 def focusable_hidden_by_opacity(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:

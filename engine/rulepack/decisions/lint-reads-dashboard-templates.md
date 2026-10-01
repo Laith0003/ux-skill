@@ -2,7 +2,7 @@
 id: lint-reads-dashboard-templates
 title: Lint reads dashboards as admin templates build them
 status: active
-areas: [output, motion]
+areas: [output, elevation]
 supersedes: null
 superseded_by: null
 ---
@@ -15,7 +15,7 @@ Run over fourteen public admin dashboards (Tailwind 4, Bootstrap and Material bu
 
 ## Decision
 
-The unused utility check reads a match on a rule's selector as belonging to that rule, inside an @layer or @media too (structure.rule_at). box-shadow-multilayer-default counts only the layers a box-shadow draws itself: a layer that is only a custom property draws nothing there, and its value is judged where it is defined (shadow-drawn-layers, five layers or more). cursor-pointer-on-disabled reports :disabled only outside :not(). In a focus rule, a fill, a text color or an underline in place of the outline counts as a visible indicator, as an outline, a box-shadow or a border already did. An opacity of 0 on a pseudo-element is never a hidden control, since a pseudo-element takes no focus.
+The unused utility check reads a match on a rule's selector as belonging to that rule, inside an @layer or @media too, and a brace inside a quoted attribute value does not end the selector (structure.rule_at). box-shadow-multilayer-default counts the layers a box-shadow paints (shadow-drawn-layers, five or more): a layer that is a lone var() is read through the page's custom properties, its most layered value counted, so var(--elev) holding five layers is five; a layer with no offset, blur or spread, or in a fully transparent color, paints nothing, which leaves Tailwind's composed shadows at the layers they draw. The rule also matches a box-shadow made of var() so that case is read at all. cursor-pointer-on-disabled reports a rule only when a :disabled sits outside every :not(...) argument (pointer-on-disabled), so button:not(*:disabled) and button:not(.x, :disabled) pass. In a focus rule, a fill, a text color or an underline in place of the outline counts as a visible indicator, as an outline, a box-shadow or a border already did, in the rule that removes the outline or in another focus rule covering it (fill_kind); a transparent color, a keyword that keeps the current color, and a var() the page does not define do not count. An opacity of 0 on a pseudo-element that draws a part of an element (::before, ::after, ::placeholder, ::marker and the like) is never a hidden control; ::part() and ::slotted() select real elements and are read as before.
 
 ## Why
 
@@ -23,8 +23,8 @@ A finding should point at something a person would change. Each of these fired o
 
 ## What it touches
 
-engine/linter/structure.py (rule_at, unused_utility, outline_without_ring, shadow_drawn_layers); engine/linter/components.py (focusable_hidden_by_opacity); data/anti-patterns.json (box-shadow-multilayer-default post, cursor-pointer-on-disabled pattern); tests/test_lint_dashboards.py; the corpus cases and probe misc/dash1.html.
+engine/linter/structure.py (rule_at, unused_utility, resolved, fill_kind, outline_without_ring, _rings, drawn_layers, shadow_drawn_layers, pointer_on_disabled); engine/linter/components.py (focusable_hidden_by_opacity); data/anti-patterns.json (box-shadow-multilayer-default pattern and post, cursor-pointer-on-disabled post); tests/test_lint_dashboards.py; the corpus cases and probe misc/dash1.html.
 
 ## Consequences
 
-175 fewer findings over the fourteen dashboards, 87 of them on the shadcn dashboard example. A focus rule that only removes the outline, a control at opacity 0, five drawn shadow layers and a pointer on a disabled control are reported as before. A fill counts as a focus indicator whatever its contrast; WCAG 2.4.7 asks for a visible indicator, and this check does not measure how visible.
+166 fewer findings over the fourteen dashboards, 87 of them on the shadcn dashboard example. A focus rule that only removes the outline, a control at opacity 0, five drawn shadow layers and a pointer on a disabled control are reported as before. A fill counts as a focus indicator whatever its contrast; WCAG 2.4.7 asks for a visible indicator, and this check does not measure how visible.

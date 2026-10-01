@@ -99,3 +99,90 @@ def test_a_control_at_opacity_zero_is_still_reported():
     css = ".check { opacity: 0; }"
     ids = _ids(PAGE.format(css=css, body='<input type="checkbox" class="check" aria-label="a">'))
     assert "focusable-at-opacity-zero" in ids
+
+
+# ------------------------------------------------ review: what still counts as no indicator
+
+import pytest  # noqa: E402
+
+
+@pytest.mark.parametrize("css", [
+    ".m:focus-visible { outline: none; background: transparent; }",
+    ".m:focus-visible{outline:none;background:transparent}",
+    ".m:focus-visible { outline: none; text-decoration: none; }",
+    ".m:focus-visible { outline: none; color: inherit; }",
+    ".m:focus-visible { outline: none; background-color: #0000; }",
+    ".m:focus-visible { outline: none; background-color: rgba(0, 0, 0, 0); }",
+    ".m:focus-visible { outline: none; background-color: var(--x, transparent); }",
+    ".m:focus-visible { outline: none; background-color: var(--undefined); }",
+])
+def test_a_clear_or_unreadable_fill_is_no_focus_indicator(css):
+    ids = _ids(PAGE.format(css=css, body='<button type="button" class="m">Go</button>'))
+    assert "outline-none-no-focus-visible" in ids, css
+
+
+def test_a_fill_through_a_defined_custom_property_is_an_indicator():
+    css = (":root { --accent: #dbe4ff; }\n"
+           ".m:focus-visible { outline: none; background-color: var(--accent); }")
+    ids = _ids(PAGE.format(css=css, body='<button type="button" class="m">Go</button>'))
+    assert "outline-none-no-focus-visible" not in ids
+
+
+def test_a_fill_in_a_separate_focus_rule_covers_the_removal():
+    css = (".m:focus-visible { outline: none; }\n"
+           ".m:focus-visible { background-color: #dbe4ff; }")
+    ids = _ids(PAGE.format(css=css, body='<button type="button" class="m">Go</button>'))
+    assert "outline-none-no-focus-visible" not in ids
+
+
+@pytest.mark.parametrize("css", ["my-el::part(button) { opacity: 0; }",
+                                 "::slotted(a) { opacity: 0; }"])
+def test_part_and_slotted_select_real_elements(css):
+    assert "focusable-at-opacity-zero" in _ids(css, "widget.css"), css
+
+
+def test_a_shadow_held_in_a_custom_property_counts_its_layers():
+    five = "0 1px 1px #0001, 0 2px 2px #0001, 0 4px 4px #0001, 0 8px 8px #0001, 0 16px 16px #0001"
+    css = f":root {{ --elev: {five}; }}\n.c {{ box-shadow: var(--elev); }}"
+    ids = _ids(PAGE.format(css=css, body='<div class="c"><p>a</p></div>'))
+    assert "box-shadow-multilayer-default" in ids
+    one = [f"--e{i}: 0 {i}px {i}px #0001;" for i in range(1, 6)]
+    css = (":root { " + " ".join(one) + " }\n"
+           ".c { box-shadow: var(--e1), var(--e2), var(--e3), var(--e4), var(--e5); }")
+    ids = _ids(PAGE.format(css=css, body='<div class="c"><p>a</p></div>'))
+    assert "box-shadow-multilayer-default" in ids
+
+
+def test_tailwinds_empty_shadow_layers_draw_nothing():
+    css = (":root { --tw-inset-shadow: 0 0 #0000; --tw-inset-ring-shadow: 0 0 #0000;"
+           " --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; }\n" + PLUMBING)
+    ids = _ids(PAGE.format(css=css, body='<div class="shadow-sm"><p>a</p></div>'))
+    assert "box-shadow-multilayer-default" not in ids
+
+
+@pytest.mark.parametrize("sel", ["button:not(*:disabled)", "button:not(.x, :disabled)",
+                                 "button:not( :disabled)"])
+def test_every_negated_disabled_passes(sel):
+    ids = _ids(PAGE.format(css=f"{sel} {{ cursor: pointer; }}",
+                           body='<button type="button">Save</button>'))
+    assert "cursor-pointer-on-disabled" not in ids, sel
+
+
+def test_a_disabled_beside_a_negated_one_is_still_reported():
+    css = "button:not(:disabled), a:disabled { cursor: pointer; }"
+    ids = _ids(PAGE.format(css=css, body='<button type="button">Save</button>'))
+    assert "cursor-pointer-on-disabled" in ids
+
+
+def test_a_brace_in_a_quoted_selector_still_finds_its_rule():
+    css = '@layer utilities { .rounded-2xl[data-a="{"] { border-radius: 1rem; } }'
+    from pathlib import Path
+
+    from engine.linter.core import FileContext
+    from engine.linter.structure import rule_at
+    from engine.linter.views import FileViews
+    text = PAGE.format(css=css, body="<p>a</p>")
+    ctx = FileContext(Path("page.html"), text, FileViews("page.html", text))
+    view = ctx.views.get("css")
+    block = rule_at(ctx, view, view.text.index(".rounded-2xl"))
+    assert block is not None and block.selectors == ['.rounded-2xl[data-a="{"]']

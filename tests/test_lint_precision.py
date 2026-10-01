@@ -260,3 +260,12 @@ def test_an_inline_block_label_that_spills_is_reported(tmp_path):
             'display:inline-block;width:80px;white-space:nowrap">A label much wider than eighty '
             'pixels</label><p>Next</p></main></body></html>')
     assert "text-overflows-its-box" in _render_ids(tmp_path, html)
+
+
+def test_the_same_page_in_many_files_scores_as_one_page():
+    def page(name):
+        return [Finding(rule_id=f"r{i}", rule_name="r", severity="high", category="Layout",
+                        file=name, line=1, column=1, excerpt="", fix="") for i in range(6)]
+    one = compute_score(page("a.html"))
+    many = [f for n in range(20) for f in page(f"p{n}.html")]
+    assert compute_score(many, files_scanned=20) == one
