@@ -15,7 +15,7 @@ system extend writes the engine's own tokens.json again in place when the import
 
 ## Decision
 
-extend._built_beside builds system-report.md and each art file again from the extended tokens while the file is still as the engine wrote it (engine.existing.record.engine_wrote). emit.report_inputs reads the brand color, the axes (to the three places the report prints) and the axes line back from the report. emit.rebuild_report keeps what the system was built from, the notes, the composition and the photography direction as the build wrote them, says the scripts, the gate line, the brand color, the fonts, the brand art and the files again from the extended tokens, and adds an Extended in place section, before Files, with one line per extend naming what it added and pointing to the extend-report.md in its out folder. The art is art_files on the extended tokens with that brand color and those axes. A report the owner edited is theirs: it and the art stay as they are, and a decision line in the extend report says to build into a new folder for a fresh report and art. A report that does not say its brand color and axes is left the same way, with its own line.
+extend._built_beside builds system-report.md and each art file again from the extended tokens while the file is still as the engine wrote it (engine.existing.record.engine_wrote). emit.report_inputs reads the brand color, the axes (to the three places the report prints) and the axes line back from the report. emit.rebuild_report keeps what the system was built from, the notes, the composition and the photography direction as the build wrote them, says the opening, the scripts, the gate line, the brand color, the fonts, the brand art and the files again from the extended tokens, and adds an Extended in place section, before Files, with one line per extend naming what it added and pointing to the extend-report.md in its out folder. The opening names the foundations and modes the tokens hold and says the system was built by ux-skill and extended in place since. The Brand color section is written whenever the tokens have the brand's role, in the place a build puts it, before the notes. The art is art_files on the extended tokens with that brand color and those axes. A report the owner edited is theirs: it and the art stay as they are, and a decision line in the extend report says to build into a new folder for a fresh report and art. A report that does not say its brand color and axes is left the same way, with its own line.
 
 ## Why
 
@@ -23,7 +23,7 @@ A file beside the system that does not match it misleads whoever reads it next. 
 
 ## What it touches
 
-extend._built_beside, extend._report_and_art, emit.report_inputs, emit.rebuild_report, emit._scripts_line, emit._fonts_section; commands/ux-system.md.
+extend._built_beside, extend._report_and_art, emit.report_inputs, emit.rebuild_report, emit._scripts_line, emit._fonts_section, emit._extended_opening; commands/ux-system.md.
 
 ## Consequences
 

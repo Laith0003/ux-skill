@@ -932,20 +932,31 @@ def rebuild_report(text: str, ts: Any, added: Sequence[str], art: bool) -> str:
     `ts` the extended tokens, `added` the paths extend added and `art`
     whether the art files sit beside it. What the system was built from,
     the notes and the guidance stay as the build wrote them; what follows
-    from the tokens is said again from them (the scripts, the gate line,
-    the brand color, the fonts, the brand art and the files), and an
-    Extended in place section lists what was added, before Files. No time
-    stamps, so the same inputs give the same bytes."""
+    from the tokens is said again from them (the opening, which says the
+    system was extended in place, the scripts, the gate line, the brand
+    color, the fonts, the brand art and the files), and an Extended in
+    place section lists what was added, before Files. The Brand color
+    section is written whenever the tokens have the brand's role, where a
+    build puts it, before the notes. No time stamps, so the same inputs
+    give the same bytes."""
     from engine.foundations.build import check_system
     parts = _sections(text)
     arabic = ts.has("type.face.arabic")
-    gate = check_system(ts).report.summary().splitlines()[0]
+    checked = check_system(ts)
+    gate = checked.report.summary().splitlines()[0]
     fonts, font_link = loading_lines(ts), link_tags(ts)
     fidelity = brand_fidelity(ts) if ts.has("color.action.primary") else []
+    brand_section = ["## Brand color", "", _FIDELITY_LEAD, "", *[f"- {f}" for f in fidelity], ""]
+    inputs = report_inputs(text)
     out: List[List[str]] = []
     for part in parts:
         head = part[0] if part and part[0].startswith("## ") else ""
-        if head == "## Built from":
+        if fidelity and head in _AFTER_BRAND and not any(
+                p and p[0] == "## Brand color" for p in out):
+            out.append(brand_section)
+        if not head and inputs is not None and len(part) > 2:
+            part = [*part[:2], _extended_opening(inputs[0], ts, checked.passed), *part[3:]]
+        elif head == "## Built from":
             part = [_scripts_line(arabic) if line.startswith("- Scripts: ") else line
                     for line in part]
         elif head == "## WCAG gate" and len(part) > 2:
@@ -953,8 +964,7 @@ def rebuild_report(text: str, ts: Any, added: Sequence[str], art: bool) -> str:
         elif head == "## Brand color":
             if not fidelity:
                 continue
-            lead = [line for line in part if line and not line.startswith("- ")]
-            part = [lead[0], "", *lead[1:2], "", *[f"- {f}" for f in fidelity], ""]
+            part = brand_section
         elif head == "## Fonts":
             if not fonts:
                 continue
@@ -981,6 +991,27 @@ def rebuild_report(text: str, ts: Any, added: Sequence[str], art: bool) -> str:
     while lines and not lines[-1]:
         lines.pop()
     return "\n".join(lines) + "\n"
+
+
+# The sections a build writes after Brand color, in its order.
+_AFTER_BRAND = ("## Notes", "## Fonts", "## Page composition", "## Photography", "## Brand art",
+                EXTENDED_HEADING, "## Files")
+
+
+def _extended_opening(brand: str, ts: Any, passed: bool) -> str:
+    """The opening sentence of a report rebuilt after an in-place extend:
+    the foundations and modes the tokens hold now, that the system was
+    extended in place, and the gate's result."""
+    from engine.foundations.build import foundations_in
+    parts = _and([_FOUNDATION_WORDS.get(f, f) for f in foundations_in(ts)])
+    modes = [pair for axis, (pair, _) in _MODE_WORDS.items() if axis in ts.axes]
+    held = f", in {_and(modes)}" if modes else ""
+    result = ("Every color pairing passed the WCAG contrast gate, so the files below are ready "
+              "to use." if passed else
+              "The WCAG gate line below says how many checks do not pass; the extend "
+              "report names each with its fix.")
+    return (f"A design system for {brand}, built by ux-skill and extended in place since: "
+            f"{parts}{held}. {result}")
 
 
 def _added_line(added: Sequence[str]) -> str:

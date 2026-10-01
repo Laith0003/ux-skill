@@ -483,7 +483,13 @@ def test_an_in_place_extend_rebuilds_the_report_and_the_art(tmp_path):
     report = (ds / "system-report.md").read_text()
     # What it was built from stays; what extend added is said, with where
     # to read why.
-    assert report.split("## WCAG gate")[0] == old.split("## WCAG gate")[0]
+    built_from = report.split("## Built from")[1].split("## WCAG gate")[0]
+    assert built_from == old.split("## Built from")[1].split("## WCAG gate")[0]
+    # The opening says what the system holds now and that it was extended.
+    opening = report.split("\n\n")[1]
+    assert opening.startswith("A design system for #3366FF, built by ux-skill and extended in "
+                              "place since: color and radius,")
+    assert "complete" not in opening
     assert "## Extended in place" in report
     added = report.split("## Extended in place")[1].split("## Files")[0]
     assert f"- Added {done['added']} tokens: radius." in added
@@ -492,6 +498,24 @@ def test_an_in_place_extend_rebuilds_the_report_and_the_art(tmp_path):
     # Each rebuilt file is the engine's, so a later force can replace it.
     assert all(engine_wrote(ds, n) for n in ("system-report.md", *FILES))
     assert "system-report.md" in done["message"] or "system-report.md" in done["written"]
+
+
+def test_the_rebuilt_report_says_the_brand_color_from_the_tokens(tmp_path):
+    from engine.existing.record import record_text
+    from engine.foundations.emit import _FIDELITY_LEAD
+    ds = tmp_path / "ds"
+    old = _own_system_with_report(ds)
+    # A report written before the system had its brand color section.
+    start = old.index("## Brand color")
+    cut = old[:start] + old[old.index("## Notes"):]
+    (ds / "system-report.md").write_text(cut, encoding="utf-8")
+    (ds / RECORD).write_text(record_text(ds, {"system-report.md": cut}), encoding="utf-8")
+    done = run_extend(ds / "tokens.json", add=["radius"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    report = (ds / "system-report.md").read_text()
+    section = report.split("## Brand color")[1].split("## Notes")[0]
+    assert _FIDELITY_LEAD in section and "- Light mode: the button is" in section
+    assert report.index("## Brand color") < report.index("## Notes")
 
 
 def test_added_imagery_says_no_art_was_written_unless_art_is_drawn(tmp_path):
