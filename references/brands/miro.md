@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Miro-design-analysis
-description: Miro presents itself as the AI-powered visual workspace through a confident, almost playful brand voice — anchored by its signature canary yellow ({colors.brand-yellow}) wordmark over white canvas, broken open by colorful pastel feature tints (rose, teal, coral, orange, mint) that echo the actual sticky-note color palette used on the live whiteboard. Black-pill primary buttons dominate marketing, real Miro-board mockups serve as feature illustrations, and a 4-tier pricing grid leads into a dense comparison table. Roobert PRO carries display headlines; the system supports homepage, pricing, AI Workflows product page, agile vertical, and customer stories surfaces.
+description: Miro presents itself as the AI-powered visual workspace through a confident, almost playful brand voice, anchored by its signature canary yellow ({colors.brand-yellow}) wordmark over white canvas, broken open by colorful pastel feature tints (rose, teal, coral, orange, mint) that echo the actual sticky-note color palette used on the live whiteboard. Black-pill primary buttons dominate marketing, real Miro-board mockups serve as feature illustrations, and a 4-tier pricing grid leads into a dense comparison table. Roobert PRO carries display headlines; the system supports homepage, pricing, AI Workflows product page, agile vertical, and customer stories surfaces.
 
 colors:
   primary: "#1c1c1e"
@@ -438,9 +438,9 @@ components:
 
 ## Overview
 
-Miro positions itself as the AI-powered visual workspace through a confident, slightly playful brand voice. The homepage opens with a stark white canvas anchored by a small canary-yellow Miro wordmark in the top-left, a black-pill primary CTA "Get started free" and a secondary "Book a demo" outline pill — then dramatic real-Miro-board mockup imagery (sticky notes, kanban, mind maps) carries the visual weight. Across deeper surfaces, the system breaks open: pastel feature cards (rose, teal, coral, yellow) echo the actual sticky-note color palette of the live whiteboard product, and customer story cards reuse those tints to differentiate brand vignettes.
+Miro positions itself as the AI-powered visual workspace through a confident, slightly playful brand voice. The homepage opens with a stark white canvas anchored by a small canary-yellow Miro wordmark in the top-left, a black-pill primary CTA "Get started free" and a secondary "Book a demo" outline pill, then dramatic real-Miro-board mockup imagery (sticky notes, kanban, mind maps) carries the visual weight. Across deeper surfaces, the system breaks open: pastel feature cards (rose, teal, coral, yellow) echo the actual sticky-note color palette of the live whiteboard product, and customer story cards reuse those tints to differentiate brand vignettes.
 
-Roobert PRO — Miro's custom display face — anchors every typographic surface, from the 80px hero display down to 11px micro labels. The face's slightly rounded, geometric character pairs naturally with the playful product photography and the friendly product positioning. Black-pill primary buttons (`{rounded.full}`) dominate marketing CTAs; the brand color, signature canary yellow ({colors.brand-yellow}), is reserved for the wordmark, top promo banners, and "yellow tag" feature pills — never as a primary CTA. The 4-tier pricing comparison (Free / Starter / Business / Enterprise) leads into the densest surface in the system: a feature comparison table that runs ~80 rows deep across multiple section dividers.
+Roobert PRO (Miro's custom display face) anchors every typographic surface, from the 80px hero display down to 11px micro labels. The face's slightly rounded, geometric character pairs naturally with the playful product photography and the friendly product positioning. Black-pill primary buttons (`{rounded.full}`) dominate marketing CTAs; the brand color, signature canary yellow ({colors.brand-yellow}), is reserved for the wordmark, top promo banners, and "yellow tag" feature pills, never as a primary CTA. The 4-tier pricing comparison (Free / Starter / Business / Enterprise) leads into the densest surface in the system: a feature comparison table that runs ~80 rows deep across multiple section dividers.
 
 **Key Characteristics:**
 - Stark white canvas + Miro wordmark in canary yellow ({colors.brand-yellow}) as the recognizable opening signature
@@ -456,7 +456,7 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 > Source pages: miro.com/ (homepage), /pricing/ (4-tier comparison), /products/ai-workflows/ (AI product), /agile/ (vertical landing), /customers/ (story directory). Token coverage was identical across all five pages.
 
 ### Brand & Accent
-- **Miro Yellow** ({colors.brand-yellow}): The brand's recognizable canary yellow — wordmark color, top promo banner, "yellow tag" pills
+- **Miro Yellow** ({colors.brand-yellow}): The brand's recognizable canary yellow (wordmark color, top promo banner, "yellow tag" pills)
 - **Yellow Deep** ({colors.brand-yellow-deep}): Darker variant for hover states and emphasis
 - **Yellow Light** ({colors.yellow-light}): Pale yellow background tint for tag chips
 - **Yellow Dark** ({colors.yellow-dark}): Yellow-tag text color (dark olive) for chip foreground
@@ -528,9 +528,9 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 
 ### Principles
 - **Tight hero leading** (1.05) creates magazine-grade display headlines on the 80px hero
-- **Negative letter-spacing progression** — display sizes use -2px to -1.5px; smaller headings relax to 0
+- **Negative letter-spacing progression**: display sizes use -2px to -1.5px; smaller headings relax to 0
 - **Stat-display token** (64px / 500) for marketing stat callouts
-- **Single weight scale** — 400 (body), 500 (medium emphasis + headings), 600 (badges and uppercase). Roobert PRO does not use 700 in this system.
+- **Single weight scale**: 400 (body), 500 (medium emphasis + headings), 600 (badges and uppercase). Roobert PRO does not use 700 in this system.
 
 ## Layout
 
@@ -547,7 +547,7 @@ Roobert PRO — Miro's custom display face — anchors every typographic surface
 - AI Workflows page uses 2-column hero, then 3-up feature grid
 
 ### Whitespace Philosophy
-Marketing surfaces give content generous breathing room — `{spacing.hero}` (120px) hero padding gives the small wordmark room to breathe. Pricing surfaces tighten dramatically.
+Marketing surfaces give content generous breathing room: `{spacing.hero}` (120px) hero padding gives the small wordmark room to breathe. Pricing surfaces tighten dramatically.
 
 ## Elevation & Depth
 
@@ -562,7 +562,7 @@ The system runs predominantly flat with strategic depth on hero mockups.
 | 4 (modal) | `rgba(5, 0, 56, 0.12) 0px 16px 48px -8px` | Modals, dropdowns |
 
 ### Decorative Depth
-- The atmospheric depth on Miro's hero comes from the live-product-board mockup illustrations — sticky notes layered at z-offsets, color-block tints behind whiteboard frames
+- The atmospheric depth on Miro's hero comes from the live-product-board mockup illustrations: sticky notes layered at z-offsets, color-block tints behind whiteboard frames
 - Pastel feature cards carry their own visual weight via saturated background color
 - Customer-story cards layer dark photographic content with overlay scrims
 
@@ -594,166 +594,166 @@ The system runs predominantly flat with strategic depth on hero mockups.
 
 ### Buttons
 
-**`button-primary`** — Black pill primary CTA, the dominant action ("Get started free").
+**`button-primary`**: Black pill primary CTA, the dominant action ("Get started free").
 - Background `{colors.primary}`, text `{colors.on-primary}`, typography `{typography.button-md}`, padding `12px 24px`, rounded `{rounded.full}`.
 - Pressed state `button-primary-pressed` lifts to `{colors.charcoal}`.
 - Disabled state `button-primary-disabled` uses `{colors.hairline}` background and `{colors.muted}` text.
 
-**`button-yellow`** — Brand-yellow pill for moments of brand emphasis.
+**`button-yellow`**: Brand-yellow pill for moments of brand emphasis.
 - Background `{colors.brand-yellow}`, text `{colors.primary}`, typography `{typography.button-md}`, padding `12px 24px`, rounded `{rounded.full}`.
 
-**`button-blue`** — Brand-blue pill for inline action callouts.
+**`button-blue`**: Brand-blue pill for inline action callouts.
 - Background `{colors.brand-blue}`, text `{colors.on-primary}`, typography `{typography.button-md}`, padding `12px 24px`, rounded `{rounded.full}`.
 
-**`button-secondary`** — Outlined pill for secondary actions ("Book a demo").
+**`button-secondary`**: Outlined pill for secondary actions ("Book a demo").
 - Background transparent, text `{colors.ink}`, border `1px solid {colors.hairline-strong}`, typography `{typography.button-md}`, padding `12px 24px`, rounded `{rounded.full}`.
 
-**`button-on-dark`** — White pill for dark CTA banners.
+**`button-on-dark`**: White pill for dark CTA banners.
 - Background `{colors.on-dark}`, text `{colors.primary}`, typography `{typography.button-md}`, padding `12px 24px`, rounded `{rounded.full}`.
 
-**`button-ghost`** — Quieter rectangular ghost button.
+**`button-ghost`**: Quieter rectangular ghost button.
 - Background transparent, text `{colors.ink}`, typography `{typography.button-md}`, padding `8px 12px`, rounded `{rounded.md}`.
 
-**`button-link`** — Inline text link.
+**`button-link`**: Inline text link.
 - Background transparent, text `{colors.brand-blue}`, typography `{typography.body-sm-medium}`, padding `0`.
 
-**`button-icon-circular`** — 36×36px circular utility button.
+**`button-icon-circular`**: 36×36px circular utility button.
 - Background `{colors.canvas}`, text `{colors.ink}`, border `1px solid {colors.hairline}`, rounded `{rounded.full}`.
 
 ### Cards & Containers
 
-**`card-base`** — Standard content card.
+**`card-base`**: Standard content card.
 - Background `{colors.canvas}`, rounded `{rounded.xl}`, padding `{spacing.xl}`, border `1px solid {colors.hairline-soft}`.
 
-**`card-feature`** — White feature card with larger 28px corners.
+**`card-feature`**: White feature card with larger 28px corners.
 - Background `{colors.canvas}`, rounded `{rounded.xxxl}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline-soft}`.
 
-**`card-feature-yellow`** — Pastel-yellow feature card.
+**`card-feature-yellow`**: Pastel-yellow feature card.
 - Background `{colors.brand-yellow}`, text `{colors.primary}`, rounded `{rounded.xxxl}`, padding `{spacing.xxl}`.
 
-**`card-feature-coral`** — Pastel-coral feature card variant.
+**`card-feature-coral`**: Pastel-coral feature card variant.
 - Background `{colors.coral-light}`, text `{colors.primary}`, rounded `{rounded.xxxl}`, padding `{spacing.xxl}`.
 
-**`card-feature-teal`** — Pastel-teal feature card variant.
+**`card-feature-teal`**: Pastel-teal feature card variant.
 - Background `{colors.teal-light}`, text `{colors.primary}`, rounded `{rounded.xxxl}`, padding `{spacing.xxl}`.
 
-**`card-feature-rose`** — Pastel-rose feature card variant.
+**`card-feature-rose`**: Pastel-rose feature card variant.
 - Background `{colors.rose-light}`, text `{colors.primary}`, rounded `{rounded.xxxl}`, padding `{spacing.xxl}`.
 
-**`card-customer-story`** — Customer story card.
+**`card-customer-story`**: Customer story card.
 - Background `{colors.canvas}`, rounded `{rounded.xxxl}`, padding `0` (image fills the card), border `1px solid {colors.hairline-soft}`.
 
-**`card-stat`** — Stat-row cell for "100M+ users".
+**`card-stat`**: Stat-row cell for "100M+ users".
 - Background transparent, text `{colors.ink}`, typography `{typography.stat-display}`, padding `{spacing.lg}`.
 
-**`pricing-card`** — Standard pricing tier card.
+**`pricing-card`**: Standard pricing tier card.
 - Background `{colors.canvas}`, rounded `{rounded.xl}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline}`.
 
-**`pricing-card-featured`** — Featured pricing tier (Business — lavender background + blue border).
+**`pricing-card-featured`**: Featured pricing tier (Business: lavender background + blue border).
 - Background `{colors.surface-pricing-featured}`, rounded `{rounded.xl}`, padding `{spacing.xxl}`, border `2px solid {colors.brand-blue}`.
 
-**`pricing-card-enterprise`** — Dark-canvas enterprise tier card.
+**`pricing-card-enterprise`**: Dark-canvas enterprise tier card.
 - Background `{colors.primary}`, text `{colors.on-primary}`, rounded `{rounded.xl}`, padding `{spacing.xxl}`.
 
 ### Inputs & Forms
 
-**`text-input`** — Standard text field.
+**`text-input`**: Standard text field.
 - Background `{colors.canvas}`, text `{colors.ink}`, border `1px solid {colors.hairline-strong}`, rounded `{rounded.md}`, padding `{spacing.sm} {spacing.md}`, height 44px.
 
-**`text-input-focused`** — Activated state.
+**`text-input-focused`**: Activated state.
 - Border switches to `2px solid {colors.brand-blue}`.
 
-**`search-pill`** — Search bar.
+**`search-pill`**: Search bar.
 - Background `{colors.surface}`, text `{colors.steel}`, typography `{typography.body-sm}`, rounded `{rounded.md}`, height 40px, border `1px solid {colors.hairline}`.
 
-**`filter-dropdown`** — Pill-shaped filter dropdown ("Company use" / "Industry" / "Use case").
+**`filter-dropdown`**: Pill-shaped filter dropdown ("Company use" / "Industry" / "Use case").
 - Background `{colors.canvas}`, text `{colors.ink}`, typography `{typography.body-sm-medium}`, rounded `{rounded.full}`, padding `{spacing.xs} {spacing.md}`, border `1px solid {colors.hairline-strong}`.
 
 ### Tabs
 
-**`pill-tab`** + **`pill-tab-active`** — Pill-style tab nav.
+**`pill-tab`** + **`pill-tab-active`**: Pill-style tab nav.
 - Inactive: background `{colors.canvas}`, text `{colors.steel}`, border `1px solid {colors.hairline}`, padding `{spacing.xs} {spacing.md}`, rounded `{rounded.full}`.
 - Active: background `{colors.primary}`, text `{colors.on-primary}`.
 
-**`toggle-monthly-yearly`** — Two-state pill toggle (Monthly / Annual on pricing).
+**`toggle-monthly-yearly`**: Two-state pill toggle (Monthly / Annual on pricing).
 - Background `{colors.surface}`, rounded `{rounded.full}`, padding `4px`.
 
 ### Badges & Status
 
-**`badge-promo`** — Yellow promo banner badge.
+**`badge-promo`**: Yellow promo banner badge.
 - Background `{colors.brand-yellow}`, text `{colors.primary}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`badge-tag-yellow`** — Soft-yellow feature tag chip ("Yellow" tag on AI Workflows page).
+**`badge-tag-yellow`**: Soft-yellow feature tag chip ("Yellow" tag on AI Workflows page).
 - Background `{colors.surface-yellow}`, text `{colors.yellow-dark}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`badge-tag-purple`** — Lavender feature tag chip ("AI agent" tag).
+**`badge-tag-purple`**: Lavender feature tag chip ("AI agent" tag).
 - Background `{colors.surface-pricing-featured}`, text `{colors.brand-blue}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`badge-tag-coral`** — Coral feature tag chip variant.
+**`badge-tag-coral`**: Coral feature tag chip variant.
 - Background `{colors.coral-light}`, text `{colors.coral-dark}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`badge-success`** — Green success indicator.
+**`badge-success`**: Green success indicator.
 - Background `{colors.success-accent}`, text `{colors.on-primary}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`badge-discount`** — Yellow rectangular discount pill ("Save 15%").
+**`badge-discount`**: Yellow rectangular discount pill ("Save 15%").
 - Background `{colors.brand-yellow}`, text `{colors.primary}`, typography `{typography.caption-bold}`, rounded `{rounded.sm}`, padding `2px 6px`.
 
-**`promo-banner`** — Sticky black promo strip ABOVE the top nav.
+**`promo-banner`**: Sticky black promo strip ABOVE the top nav.
 - Background `{colors.primary}`, text `{colors.on-primary}`, typography `{typography.body-sm-medium}`, padding `{spacing.sm} {spacing.md}`. Carries inline yellow "GET YOUR SPOT" pill.
 
 ### Tables
 
-**`comparison-table`** — Pricing feature comparison table.
+**`comparison-table`**: Pricing feature comparison table.
 - Background `{colors.canvas}`, text `{colors.ink}`, typography `{typography.body-sm}`, rounded `{rounded.md}`, border `1px solid {colors.hairline}`.
 
-**`comparison-row`** — Individual feature row.
+**`comparison-row`**: Individual feature row.
 - Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.md} {spacing.lg}`, bottom border `1px solid {colors.hairline-soft}`.
 
 ### Documentation Components
 
-**`whiteboard-mockup`** — Real Miro-board UI rendered as feature illustration.
+**`whiteboard-mockup`**: Real Miro-board UI rendered as feature illustration.
 - Background `{colors.canvas}`, rounded `{rounded.xl}`, border `1px solid {colors.hairline-soft}`, shadow `rgba(5, 0, 56, 0.08) 0px 12px 32px -4px`.
 
-**`template-card`** — Template thumbnail card.
+**`template-card`**: Template thumbnail card.
 - Background `{colors.canvas}`, rounded `{rounded.xl}`, padding `{spacing.md}`, border `1px solid {colors.hairline}`.
 
-**`industry-tile`** — Industry-vertical tile.
+**`industry-tile`**: Industry-vertical tile.
 - Background `{colors.canvas}`, rounded `{rounded.xl}`, padding `{spacing.xl}`, border `1px solid {colors.hairline-soft}`.
 
-**`faq-accordion-item`** — FAQ panel item.
+**`faq-accordion-item`**: FAQ panel item.
 - Background `{colors.canvas}`, rounded `{rounded.md}`, padding `{spacing.xl}`, bottom border `1px solid {colors.hairline}`.
 
-**`logo-wall-item`** — Customer logo wordmark cell.
+**`logo-wall-item`**: Customer logo wordmark cell.
 - Background transparent, text `{colors.steel}`, typography `{typography.body-md-medium}`, padding `{spacing.lg}`.
 
-**`capterra-badge`** — Review/rating badge in the footer.
+**`capterra-badge`**: Review/rating badge in the footer.
 - Background `{colors.canvas}`, text `{colors.ink}`, typography `{typography.caption}`, rounded `{rounded.md}`, padding `{spacing.sm} {spacing.md}`, border `1px solid {colors.hairline}`.
 
-**`app-store-badge`** — App store / Google Play download pill.
+**`app-store-badge`**: App store / Google Play download pill.
 - Background `{colors.canvas}`, text `{colors.primary}`, typography `{typography.caption-bold}`, rounded `{rounded.md}`, padding `{spacing.sm} {spacing.md}`.
 
 ### Navigation
 
-**Top Navigation (Marketing)** — Sticky white bar with yellow Miro wordmark + horizontal links + right-side CTAs.
+**Top Navigation (Marketing)**: Sticky white bar with yellow Miro wordmark + horizontal links + right-side CTAs.
 - Background `{colors.canvas}`, height ~64px.
 - Left: Yellow square Miro wordmark + horizontal link list (Product, Solutions, Resources).
 - Right: "Login / Pricing / Contact sales" links + black-pill "Get started free".
 
 ### Signature Components
 
-**`hero-band-marketing`** — Marketing hero band.
+**`hero-band-marketing`**: Marketing hero band.
 - Background `{colors.canvas}`, padding `{spacing.hero}`.
 - Layout: centered headline in `{typography.hero-display}`, centered subtitle, centered button row, then whiteboard mockup illustration below.
 
-**`cta-banner-dark`** — Dark CTA banner at the bottom of feature pages.
+**`cta-banner-dark`**: Dark CTA banner at the bottom of feature pages.
 - Background `{colors.primary}`, text `{colors.on-primary}`, rounded `{rounded.feature}`, padding `{spacing.section}`. Centered headline + subtitle + `button-on-dark` "Get started free".
 
-**`footer-region`** — Massive multi-column dark footer.
+**`footer-region`**: Massive multi-column dark footer.
 - Background `{colors.footer-bg}`, padding `{spacing.section} {spacing.xxl}`.
 - 6-column link grid (Product / Solutions / Tools / Resources / Company / Plans & Pricing).
 - Section headings in `{typography.body-md-medium}` `{colors.on-dark}`.
 
-**`footer-link`** — Individual link in the footer.
+**`footer-link`**: Individual link in the footer.
 - Background transparent, text `{colors.on-dark-muted}`, typography `{typography.body-sm}`, padding `{spacing.xxs} 0`.
 
 ## Do's and Don'ts
@@ -773,7 +773,7 @@ The system runs predominantly flat with strategic depth on hero mockups.
 - Don't soften corners on buttons; the pill is a brand signature
 - Don't reduce hero leading below 1.05
 - Don't apply heavy shadows on flat documentation cards; reserve elevation for whiteboard mockups
-- Don't use stock photography — show the live product board UI
+- Don't use stock photography: show the live product board UI
 
 ## Responsive Behavior
 
@@ -781,16 +781,16 @@ The system runs predominantly flat with strategic depth on hero mockups.
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile (small) | < 480px | Single column. Hero scales to 36px. Pill nav collapses to hamburger. Pricing tiers stack 1-up. |
-| Mobile (large) | 480 – 767px | Feature tiles 2-up. Hero scales to 48px. |
-| Tablet | 768 – 1023px | 2-column feature grids. Pill-tab nav returns. |
-| Desktop | 1024 – 1279px | 4-tier pricing card row. Customer story grid 2-up. Hero at 64px. |
+| Mobile (large) | 480 to 767px | Feature tiles 2-up. Hero scales to 48px. |
+| Tablet | 768 to 1023px | 2-column feature grids. Pill-tab nav returns. |
+| Desktop | 1024 to 1279px | 4-tier pricing card row. Customer story grid 2-up. Hero at 64px. |
 | Wide Desktop | ≥ 1280px | Full hero presentation, 80px hero display. |
 
 ### Touch Targets
-- Pill buttons render at 40–44px effective height — at WCAG AAA floor
+- Pill buttons render at 40 to 44px effective height: at WCAG AAA floor
 - Circular icon buttons: 36×36px desktop → 44×44px mobile
 - Form inputs render at 44px height
-- Filter dropdowns render at ~36px tall — bumps to 44px on mobile
+- Filter dropdowns render at ~36px tall: bumps to 44px on mobile
 
 ### Collapsing Strategy
 - **Promo banner** stays full-width; truncates at < 480px
@@ -820,6 +820,6 @@ The system runs predominantly flat with strategic depth on hero mockups.
 ## Known Gaps
 
 - Specific dark-mode token values not surfaced
-- Animation/transition timings not extracted; recommend 150–200ms ease
+- Animation/transition timings not extracted; recommend 150 to 200ms ease
 - Form validation success state not explicitly captured beyond defaults
 - Sticky note color tints inside the actual whiteboard product are richer than what marketing surfaces capture

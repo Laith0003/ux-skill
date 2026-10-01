@@ -1,9 +1,9 @@
 # IBM
 
-> An enterprise-marketing canvas faithful to Carbon Design System: white surfaces, charcoal type, IBM Blue (#0f62fe) as the single confident accent, and a deliberately flat-square aesthetic where corners stay at 0–4px.
+> An enterprise-marketing canvas faithful to Carbon Design System: white surfaces, charcoal type, IBM Blue (#0f62fe) as the single confident accent, and a deliberately flat-square aesthetic where corners stay at 0 to 4px.
 
 **Category:** Developer Tools
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/ibm.json`](../../data/brands/ibm.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-An enterprise-marketing canvas faithful to Carbon Design System: white surfaces, charcoal type, IBM Blue (#0f62fe) as the single confident accent, and a deliberately flat-square aesthetic where corners stay at 0–4px.
+An enterprise-marketing canvas faithful to Carbon Design System: white surfaces, charcoal type, IBM Blue (#0f62fe) as the single confident accent, and a deliberately flat-square aesthetic where corners stay at 0 to 4px.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

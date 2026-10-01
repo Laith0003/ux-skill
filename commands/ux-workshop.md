@@ -32,17 +32,17 @@ Read before starting:
 ### 2. Compute the time-box
 
 Default split (adapt to total budget):
-- Phase 1 — Exploration Exercise: 25%
-- Phase 2 — Heat Map: 15%
-- Phase 3 — Stakeholder Mapping: 15%
-- Phase 4 — Remember the Future: 20%
-- Phase 5 — Game Plan: 25%
+- Phase 1: Exploration Exercise (25%)
+- Phase 2: Heat Map (15%)
+- Phase 3: Stakeholder Mapping (15%)
+- Phase 4: Remember the Future (20%)
+- Phase 5: Game Plan (25%)
 
 State the schedule upfront so participants know the pace.
 
 ### 3. Run the phases sequentially
 
-#### Phase 1 — Exploration Exercise
+#### Phase 1: Exploration Exercise
 
 Goal: collect insights, identify barriers, find opportunities.
 
@@ -54,7 +54,7 @@ Facilitate:
 
 Artifact: clustered theme map with tags.
 
-#### Phase 2 — Heat Map
+#### Phase 2: Heat Map
 
 Goal: prioritize opportunities by impact × feasibility × strategic fit.
 
@@ -68,7 +68,7 @@ Artifact: heat-mapped grid with the 3-5 hot opportunities ranked.
 
 If `research-synthesizer` is needed between phases (raw notes piling up, themes need digestion), dispatch it before continuing.
 
-#### Phase 3 — Stakeholder Mapping
+#### Phase 3: Stakeholder Mapping
 
 Goal: who's affected by this; map influence × interest.
 
@@ -80,7 +80,7 @@ Facilitate:
 
 Artifact: stakeholder grid with named parties + champion/blocker calls.
 
-#### Phase 4 — Remember the Future
+#### Phase 4: Remember the Future
 
 Goal: imagine successful future state in detail.
 
@@ -92,7 +92,7 @@ Facilitate:
 
 Artifact: future-state narrative + 5 concrete success markers.
 
-#### Phase 5 — Game Plan
+#### Phase 5: Game Plan
 
 Goal: concrete action plan with owners + dates + first MVP.
 

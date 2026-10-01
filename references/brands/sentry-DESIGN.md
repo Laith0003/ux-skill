@@ -1,9 +1,9 @@
 # Sentry
 
-> An inspired interpretation of Sentri's design language — a developer-tools brand built on a deep purple-violet midnight canvas, electric lime accents, and a slightly subversive illustrated personality.
+> An inspired interpretation of Sentri's design language: a developer-tools brand built on a deep purple-violet midnight canvas, electric lime accents, and a slightly subversive illustrated personality.
 
 **Category:** Developer Tools
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/sentry.json`](../../data/brands/sentry.json)
 
 ## Palette
@@ -17,7 +17,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-An inspired interpretation of Sentri's design language — a developer-tools brand built on a deep purple-violet midnight canvas, electric lime accents, and a slightly subversive illustrated personality.
+An inspired interpretation of Sentri's design language: a developer-tools brand built on a deep purple-violet midnight canvas, electric lime accents, and a slightly subversive illustrated personality.
 
 ## Voice cues
 
@@ -42,4 +42,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

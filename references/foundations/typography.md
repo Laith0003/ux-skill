@@ -16,13 +16,13 @@
 
 6. **Line length is policed.** The measure counts characters of the text face: 42 to 56 on a landing page (`layout.measure.landing`), 60 to 70 for reading, 60 to 66 for a long read. Headlines wrap balanced (`text-wrap: balance`), paragraphs pretty (`text-wrap: pretty`).
 
-7. **Numbers get the tabular treatment in data UI** — Tabular figures align decimals and prevent layout shift on count-up. Reserve proportional figures for prose. Mixed proportional and tabular on the same page reads as undisciplined.
+7. **Numbers get the tabular treatment in data UI**: Tabular figures align decimals and prevent layout shift on count-up. Reserve proportional figures for prose. Mixed proportional and tabular on the same page reads as undisciplined.
 
 8. **No serifs on dashboards or software UIs.** A dashboard is read at a glance, in dense rows; a serif headline there fights the data. Serifs belong to long reading and to display moments inside otherwise-sans pages.
 
-9. **Pair two typefaces at most** — A display face plus a body face, or a sans plus a mono. Three faces only when a clear hierarchy demands it (sans, serif, mono for editorial-tech hybrids). Two display fonts together is banned.
+9. **Pair two typefaces at most**: A display face plus a body face, or a sans plus a mono. Three faces only when a clear hierarchy demands it (sans, serif, mono for editorial-tech hybrids). Two display fonts together is banned.
 
-10. **Optical contrast matters more than face novelty** — A well-cut neo-grotesque used across an entire system beats a flashy display face deployed once. Restraint in face selection magnifies the moves you do make.
+10. **Optical contrast matters more than face novelty**: A well-cut neo-grotesque used across an entire system beats a flashy display face deployed once. Restraint in face selection magnifies the moves you do make.
 
 ## Do / Don't
 
@@ -57,11 +57,11 @@
 
 ### Pattern: Eyebrow + headline
 **Use when**: A section needs a label its heading cannot carry: a step number, a category. Eyebrows never separate sections; space and a change of ground do, and the share of sections with one follows formality (character.eyebrow_share).
-**Anti-pattern**: Naming sections as "SECTION 01" / "ABOUT US" / "OUR PROCESS 02" — these are amateur-tier signposting and banned.
+**Anti-pattern**: Naming sections as "SECTION 01" / "ABOUT US" / "OUR PROCESS 02" (these are amateur-tier signposting and banned).
 **How**: A short label sits above the headline at 10 to 13px, weight 500 to 600, tracking +0.06em to +0.10em, in muted neutral or a paired accent. Sentence case or uppercase both work; pick one and apply consistently. The eyebrow is text only: no line, dash or dot before or after it.
 
 ### Pattern: Stat callout
-**Use when**: A specific number is the persuasion — latency, accuracy, customer count, savings.
+**Use when**: A specific number is the persuasion (latency, accuracy, customer count, savings).
 **Anti-pattern**: Stacking five identical stat tiles in a row, or surrounding the number with vague modifiers like "blazing fast."
 **How**: Set the numeral at 48 to 144px, weight 700 to 800, in tabular figures. Drop the unit label ("ms", "%", "x", "K", "M") to 40 to 60% of the numeral size. Place a short qualifier label below at 14 to 16px regular. Two or three stats per row maximum; more dilutes.
 
@@ -73,7 +73,7 @@
 ### Pattern: Three-weight hierarchy
 **Use when**: Establishing typographic system for the entire product.
 **Anti-pattern**: Five or six weights from the same family used in arbitrary roles.
-**How**: Pick three weights — typically 400 (body), 500 (UI labels, secondary headlines), 600 or 700 (display headlines). Italic and light weights stay out of the system unless the brief specifically demands them. The intentional gap between 400 and 600 makes hierarchy unmissable.
+**How**: Pick three weights, typically 400 (body), 500 (UI labels, secondary headlines), 600 or 700 (display headlines). Italic and light weights stay out of the system unless the brief specifically demands them. The intentional gap between 400 and 600 makes hierarchy unmissable.
 
 ### Pattern: Compressed type scale
 **Use when**: Any page with a type system; the display's distance above the ladder grows with expressiveness.
@@ -93,17 +93,17 @@
 ### Pattern: Long-form prose under a hero
 **Use when**: The page argues a case at length and the reading context is long reading.
 **Anti-pattern**: A trimmed-down tagline as the only body copy under an oversized hero.
-**How**: Several premium surfaces allow paragraph-length body copy under the hero subhead — three or four sentences of substantive prose rather than a single tagline. Body sits at 15 to 17px, line-height 1.55 to 1.7. The willingness to use full sentences signals that the company has something to say.
+**How**: Several premium surfaces allow paragraph-length body copy under the hero subhead (three or four sentences of substantive prose rather than a single tagline). Body sits at 15 to 17px, line-height 1.55 to 1.7. The willingness to use full sentences signals that the company has something to say.
 
 ### Pattern: Pull-quote treatment for testimonials
 **Use when**: Customer testimonials in marketing surfaces.
 **Anti-pattern**: Pull quote at body size with quote marks, no visual differentiation from surrounding paragraphs.
-**How**: Pull quote sits at 28 to 40px, weight 500, line-height 1.3. Attribution beneath drops to body size with reduced contrast. The quote does not start with a quotation mark — instead, an oversized opening quote mark sits as a graphic element to the left or above. Set the quote at slightly larger size than body, regular weight, with the speaker's name and role beneath. No oversized quotation marks around the quote, no decorative card chrome, no logo overlay on the photograph.
+**How**: Pull quote sits at 28 to 40px, weight 500, line-height 1.3. Attribution beneath drops to body size with reduced contrast. The quote does not start with a quotation mark; instead, an oversized opening quote mark sits as a graphic element to the left or above. Set the quote at slightly larger size than body, regular weight, with the speaker's name and role beneath. No oversized quotation marks around the quote, no decorative card chrome, no logo overlay on the photograph.
 
 ### Pattern: Variable font weight animation
 **Use when**: The face has a weight axis and the brand's motion is lively enough for one moving detail.
-**Anti-pattern**: Variable axis animations on every label and headline — looks gimmicky.
-**How**: A label tightens from 400 to 600 as the cursor approaches, or a number "settles" from 800 to 600 once a counter finishes animating. Cheap to ship if the font supports it; very expensive-looking on first encounter. Use sparingly — once or twice per page maximum. Disable under `prefers-reduced-motion: reduce`.
+**Anti-pattern**: Variable axis animations on every label and headline (looks gimmicky).
+**How**: A label tightens from 400 to 600 as the cursor approaches, or a number "settles" from 800 to 600 once a counter finishes animating. Cheap to ship if the font supports it; very expensive-looking on first encounter. Use sparingly: once or twice per page maximum. Disable under `prefers-reduced-motion: reduce`.
 
 ### Pattern: Mono for literal values (semantic role)
 **Use when**: Version strings, region codes, percentage stats, build identifiers, inline data values.
@@ -117,13 +117,13 @@
 
 ### Pattern: Single gradient word in a headline
 **Use when**: High-end aesthetic that wants one moment of typographic personality.
-**Anti-pattern**: Whole sentences in gradient text — reads as 2017 startup decoration.
+**Anti-pattern**: Whole sentences in gradient text (reads as 2017 startup decoration).
 **How**: One linear or conic gradient fills one carefully chosen word in the hero or a section headline. The rest stays plain. One word in gradient text in 2026 looks like craft; whole sentences look like decoration. The word chosen is the verb or the noun the page is selling.
 
 ### Pattern: Brutalist macro / micro contrast
 **Use when**: High contrast, geometric type and low warmth: the loud, technical end of the axes.
 **Anti-pattern**: Sans-serif at uniform scale across an entire brutalist surface.
-**How**: Two compulsory voices — a structural heavy sans for headlines (`clamp(4rem, 10vw, 15rem)`, line-height 0.85 to 0.95, tracking -0.03em to -0.06em, uppercase) and a technical monospace for metadata (10 to 14px, `+0.05em` to `+0.10em` tracking, uppercase). The eye is never given a comfortable midrange — dense clusters of monospaced metadata sit immediately next to vast expanses of negative space framing macro-typography.
+**How**: Two compulsory voices: a structural heavy sans for headlines (`clamp(4rem, 10vw, 15rem)`, line-height 0.85 to 0.95, tracking -0.03em to -0.06em, uppercase) and a technical monospace for metadata (10 to 14px, `+0.05em` to `+0.10em` tracking, uppercase). The eye is never given a comfortable midrange: dense clusters of monospaced metadata sit immediately next to vast expanses of negative space framing macro-typography.
 
 ### Pattern: Single serif against an otherwise-sans page
 **Use when**: Premium minimalist surfaces where a single editorial flourish carries personality.
@@ -133,7 +133,7 @@
 ### Pattern: Three-weight system across the brand
 **Use when**: Establishing the typographic system for an entire product.
 **Anti-pattern**: A 6+ weight ladder where the differences between adjacent weights are imperceptible.
-**How**: Collapse weight choices to three roles: bold or semibold for display (600 to 700), regular for body (400), light for support / metadata (300). The gap between 400 and 600 is intentional — it makes hierarchy unmissable. Italic and light weights stay out unless the brief explicitly demands them.
+**How**: Collapse weight choices to three roles: bold or semibold for display (600 to 700), regular for body (400), light for support / metadata (300). The gap between 400 and 600 is intentional: it makes hierarchy unmissable. Italic and light weights stay out unless the brief explicitly demands them.
 
 ### Pattern: Numerals as editorial folios
 **Use when**: Section numbering, step indicators, or chapter markers.
@@ -185,7 +185,7 @@
 - Mobile: 35 to 60 characters
 - Landing paragraphs: 42 to 56 characters (`layout.measure.landing`); reading body: 60 to 70
 - Long read: 60 to 66 characters
-- Display H1: ultra-wide container (`max-w-5xl` to `max-w-7xl` or wider) — width prevents wraps, not narrowness
+- Display H1: ultra-wide container (`max-w-5xl` to `max-w-7xl` or wider), width prevents wraps, not narrowness
 
 ### Font loading
 - `font-display: swap` for non-critical fonts
@@ -357,11 +357,11 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - [ ] Three to four weight steps cover the entire system (severity: Medium)
 - [ ] Tracking tightens on display sizes (-0.01em to -0.03em at 48px+) (severity: Medium)
 - [ ] Eyebrows use ALL CAPS or sentence case at 10 to 13px with positive tracking (severity: Cosmetic)
-- [ ] ALL CAPS reserved for eyebrows only — never used for body or subheads above 14px (severity: High)
+- [ ] ALL CAPS reserved for eyebrows only, never used for body or subheads above 14px (severity: High)
 - [ ] Tabular figures enabled on data tables, dashboards, prices, timers (severity: Medium)
 - [ ] Curly quotes used; no straight quotes, em dashes or double hyphens as punctuation (severity: Cosmetic)
 - [ ] `font-display: swap` configured to avoid invisible text during load (severity: High)
-- [ ] Variable font weight respected — reduce by ~50 units in dark mode (severity: Cosmetic)
+- [ ] Variable font weight respected: reduce by ~50 units in dark mode (severity: Cosmetic)
 - [ ] No more than two display fonts paired together (severity: High)
 - [ ] Numbered "SECTION 01" / "CHAPTER 03" meta-labels removed (severity: High)
 - [ ] No 6-line wrapped headings under any breakpoint (severity: Critical)

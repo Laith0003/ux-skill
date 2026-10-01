@@ -3,7 +3,7 @@
 > A confident financial-platform interface anchored on a deep near-black canvas, where Binance's iconic yellow (#FCD535) carries every primary CTA, brand accent, and value-claim moment.
 
 **Category:** Fintech / Crypto
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/binance.json`](../../data/brands/binance.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

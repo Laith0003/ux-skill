@@ -1,6 +1,6 @@
 # The wow layer
 
-A page that is on-brand, responsive, and richly built is the **floor** -- correct and
+A page that is on-brand, responsive, and richly built is the **floor**: correct and
 forgettable. The wow layer is the **ceiling**: the 2-3 coordinated moments that make a
 visitor remember the page. This file is how the model produces wow itself, every time,
 without the user having to hand it one.
@@ -20,7 +20,7 @@ still composes its own and never settles for clean and forgettable.
 
 A wow layer is not "more effects." It is a small, **coherent** set drawn from three tiers:
 
-1. **The hero moment** (the entrance -- always present). The first thing seen does
+1. **The hero moment** (the entrance: always present). The first thing seen does
    something a static image can't: a kinetic headline reveal, a real-photo hero with depth
    + scrim, an interactive demo, a slow ambient motion, a 3D/clay object, a mesh-gradient
    field. This is the dominant moment.
@@ -28,7 +28,7 @@ A wow layer is not "more effects." It is a small, **coherent** set drawn from th
    and gives the page a pulse: proof-stat counters that tick up on entry, choreographed
    card hover (border + icon + arrow moving as one), staggered section reveals. Recurring,
    restrained, the same language each time.
-3. **The section moment** (one mid-page surprise -- optional, for longer pages). ONE
+3. **The section moment** (one mid-page surprise: optional, for longer pages). ONE
    place the page does something theatrical: a scroll-pinned product walk, a before/after,
    a kinetic marquee, a distinctive card treatment. Exactly one.
 
@@ -78,13 +78,13 @@ pre-launch page shows nothing that fakes usage.
 The richer layer is the higher-risk path. These keep it from becoming slop:
 
 - **Coherence over count.** The 2-3 moments must read as ONE design language. Check the
-  arsenal's "hard combinations to avoid" -- never stack glassmorphism + heavy shadow, three
+  arsenal's "hard combinations to avoid", never stack glassmorphism + heavy shadow, three
   scroll-triggers, or three motion languages on one headline.
 - **Cap at the arsenal's limit.** More than ~4 distinct effects and the page reads as a
   showcase, not a product. When in doubt, cut to the dominant moment + one support.
 - **Mobile tones down two levels.** What is ambient on desktop is distracting on a phone.
   Reduce intensity, drop the section moment if it costs scroll/perf, keep the hero moment
-  simple. Mobile-first wow is harder than desktop wow -- and it must never reintroduce
+  simple. Mobile-first wow is harder than desktop wow, and it must never reintroduce
   horizontal scroll, a tall sticky header, or wrapping (the responsive gates still rule).
 - **`prefers-reduced-motion` always.** Every moment has an opacity-only / instant fallback.
   No exceptions.
@@ -96,7 +96,7 @@ The richer layer is the higher-risk path. These keep it from becoming slop:
 ## How wow is validated
 
 Wow **cannot be gated**. A check that fails a build unless it detects "2 motion moments"
-just rewards shipping motion to pass -- which manufactures the over-animated slop this file
+just rewards shipping motion to pass, which manufactures the over-animated slop this file
 exists to prevent, and fights the responsive gates. So:
 
 - The engine may surface candidate moments and an **advisory** floor ("did this ship any
@@ -120,4 +120,4 @@ exists to prevent, and fights the responsive gates. So:
   product on the brand's dark canvas; motion signature = a single tilted product frame with
   a soft float; no section moment.
 
-Same three tiers, four different languages. That difference IS the wow -- not the tier list.
+Same three tiers, four different languages. That difference IS the wow, not the tier list.

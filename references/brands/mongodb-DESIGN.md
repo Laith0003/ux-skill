@@ -1,9 +1,9 @@
 # MongoDB
 
-> MongoDB carries a strong dual-mode visual identity — dark deep-teal hero bands with bright MongoDB green CTAs paired with stark white documentation surfaces.
+> MongoDB carries a strong dual-mode visual identity: dark deep-teal hero bands with bright MongoDB green CTAs paired with stark white documentation surfaces.
 
 **Category:** Developer Tools
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/mongodb.json`](../../data/brands/mongodb.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-MongoDB carries a strong dual-mode visual identity — dark deep-teal hero bands with bright MongoDB green CTAs paired with stark white documentation surfaces.
+MongoDB carries a strong dual-mode visual identity: dark deep-teal hero bands with bright MongoDB green CTAs paired with stark white documentation surfaces.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

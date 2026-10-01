@@ -3,7 +3,7 @@
 > Spotify's web interface is a dark, immersive music player that wraps listeners in a near-black cocoon (#121212, #181818, #1f1f1f) where album art and content become the primary source of color.
 
 **Category:** Consumer / Lifestyle / Retail
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/spotify.json`](../../data/brands/spotify.json)
 
 ## Palette
@@ -42,4 +42,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

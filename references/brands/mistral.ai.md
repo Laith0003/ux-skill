@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Mistral AI-design-analysis
-description: Mistral AI brands itself with a singular signature — atmospheric sunset gradients (mustard, orange, deep red) layered over photography of mountains, plus a horizontal "sunset stripe" bar that closes every page. The system pairs warm cream-yellow surfaces ({colors.cream}) with a saturated orange primary CTA ({colors.primary}) and uses an elegant near-serif voice for hero displays. Coverage spans homepage (Frontier AI hero), Le Studio product page, Coding solutions, news article surfaces, contact form, and services tier page — all anchored by the signature gradient closing band.
+description: Mistral AI brands itself with a singular signature, atmospheric sunset gradients (mustard, orange, deep red) layered over photography of mountains, plus a horizontal "sunset stripe" bar that closes every page. The system pairs warm cream-yellow surfaces ({colors.cream}) with a saturated orange primary CTA ({colors.primary}) and uses an elegant near-serif voice for hero displays. Coverage spans homepage (Frontier AI hero), Le Studio product page, Coding solutions, news article surfaces, contact form, and services tier page, all anchored by the signature gradient closing band.
 
 colors:
   primary: "#fa520f"
@@ -401,16 +401,16 @@ components:
 
 ## Overview
 
-Mistral AI carries itself with a singular, almost cinematographic visual signature — the homepage opens with "Frontier AI. In your hands." rendered in elegant near-serif display type over a photographic mountain landscape bathed in mustard-orange sunset light. Below the hero, every page closes with the same recognizable element: a horizontal "sunset stripe" gradient band running red→orange→yellow→cream that wraps the foot of the page just above the footer. This stripe is THE brand recognizer — it appears on the homepage, products/studio, solutions/coding, news articles, contact form, and services tier page without exception.
+Mistral AI carries itself with a singular, almost cinematographic visual signature: the homepage opens with "Frontier AI. In your hands." rendered in elegant near-serif display type over a photographic mountain landscape bathed in mustard-orange sunset light. Below the hero, every page closes with the same recognizable element: a horizontal "sunset stripe" gradient band running red→orange→yellow→cream that wraps the foot of the page just above the footer. This stripe is THE brand recognizer. It appears on the homepage, products/studio, solutions/coding, news articles, contact form, and services tier page without exception.
 
-The system pairs PP Editorial Old (a near-serif elegant display face) for hero displays with Inter for everything else (body, headings, UI). Cream-yellow surfaces ({colors.cream}, {colors.surface-cream-soft}) anchor form panels and feature cards; saturated orange ({colors.primary}) carries primary CTAs; the deep mountain photography on the homepage and the dark code mockups inside Le Studio create photographic depth. Cards are rectangular with `{rounded.lg}` (12px) corners — distinctly less playful than Miro's or Mintlify's pill-buttons-everywhere approach. Buttons are also `{rounded.md}` (8px), not pills — Mistral's geometry is more sober and editorial than its peers.
+The system pairs PP Editorial Old (a near-serif elegant display face) for hero displays with Inter for everything else (body, headings, UI). Cream-yellow surfaces ({colors.cream}, {colors.surface-cream-soft}) anchor form panels and feature cards; saturated orange ({colors.primary}) carries primary CTAs; the deep mountain photography on the homepage and the dark code mockups inside Le Studio create photographic depth. Cards are rectangular with `{rounded.lg}` (12px) corners: distinctly less playful than Miro's or Mintlify's pill-buttons-everywhere approach. Buttons are also `{rounded.md}` (8px), not pills: Mistral's geometry is more sober and editorial than its peers.
 
 **Key Characteristics:**
 - Atmospheric mountain-sunset hero photography (orange-red-yellow gradient sky)
 - Horizontal "sunset stripe" band ({colors.primary} → {colors.sunshine-700} → {colors.yellow-saturated} → {colors.cream}) at every page bottom
 - Cream-yellow surfaces ({colors.cream}, {colors.cream-soft}) for form panels and feature cards
 - PP Editorial Old (or similar near-serif) for hero displays; Inter for everything else
-- `{rounded.md}` (8px) buttons and `{rounded.lg}` (12px) cards — less playful, more editorial geometry
+- `{rounded.md}` (8px) buttons and `{rounded.lg}` (12px) cards: less playful, more editorial geometry
 - Saturated orange primary CTA ({colors.primary}) carries every action call
 
 ## Colors
@@ -492,10 +492,10 @@ The system pairs PP Editorial Old (a near-serif elegant display face) for hero d
 | `{typography.code-md}` | 14px | 400 | 1.50 | 0 | JetBrains Mono | Code blocks |
 
 ### Principles
-- **Editorial / sans pairing** — PP Editorial Old (near-serif, classical) anchors hero displays; Inter (geometric sans) carries everything else. The contrast IS the brand voice.
+- **Editorial / sans pairing**: PP Editorial Old (near-serif, classical) anchors hero displays; Inter (geometric sans) carries everything else. The contrast IS the brand voice.
 - **Generous body leading** (1.55 on body-md) for editorial readability across long-form pages
 - **Tight hero leading** (1.05 on 84px display) creates magazine-grade typographic display
-- **Negative letter-spacing** progresses with size — display sizes use -1.5px to -0.5px; smaller heads relax to 0
+- **Negative letter-spacing** progresses with size: display sizes use -1.5px to -0.5px; smaller heads relax to 0
 - **Stat-display token** (56px Editorial) for marketing stat callouts ("75% / 80% / 100%")
 
 ## Layout
@@ -514,7 +514,7 @@ The system pairs PP Editorial Old (a near-serif elegant display face) for hero d
 - Services page uses 4-tier card layout with cream feature panel separator strip
 
 ### Whitespace Philosophy
-Marketing surfaces give content generous breathing room — `{spacing.hero}` (120px) hero padding lets the mountain-sunset photography fill the frame. Form pages tighten dramatically: contact form panel uses `{spacing.xxl}` (32px) internal padding, fields stack on `{spacing.md}` (16px) gap.
+Marketing surfaces give content generous breathing room: `{spacing.hero}` (120px) hero padding lets the mountain-sunset photography fill the frame. Form pages tighten dramatically: contact form panel uses `{spacing.xxl}` (32px) internal padding, fields stack on `{spacing.md}` (16px) gap.
 
 ## Elevation & Depth
 
@@ -529,7 +529,7 @@ The system runs predominantly flat with strategic atmospheric depth from photogr
 | 4 (modal) | `rgba(0, 0, 0, 0.12) 0px 16px 48px -8px` | Modals, dropdowns |
 
 ### Decorative Depth
-- The atmospheric depth on Mistral's hero comes from the photographic mountain-sunset imagery — natural light gradient does the work
+- The atmospheric depth on Mistral's hero comes from the photographic mountain-sunset imagery: natural light gradient does the work
 - The "sunset stripe" closing band carries depth via its multi-stop gradient (red → orange → yellow → cream)
 - IDE / code mockups use dark-canvas backgrounds with subtle drop shadow
 
@@ -545,14 +545,14 @@ The system runs predominantly flat with strategic atmospheric depth from photogr
 | `{rounded.lg}` | 12px | Cards, modals, panels (the dominant card radius) |
 | `{rounded.xl}` | 16px | Larger feature panels |
 | `{rounded.xxl}` | 20px | Featured emphasis cards |
-| `{rounded.full}` | 9999px | Status badges, pill tabs (used sparingly — most buttons are NOT pills) |
+| `{rounded.full}` | 9999px | Status badges, pill tabs (used sparingly: most buttons are NOT pills) |
 
-The radius scale is sober and editorial — Mistral does NOT use pill buttons. `{rounded.md}` (8px) for buttons, `{rounded.lg}` (12px) for cards, `{rounded.full}` reserved for badges and the rare pill tab.
+The radius scale is sober and editorial: Mistral does NOT use pill buttons. `{rounded.md}` (8px) for buttons, `{rounded.lg}` (12px) for cards, `{rounded.full}` reserved for badges and the rare pill tab.
 
 ### Photography Geometry
 - Hero photography is full-bleed atmospheric mountain-sunset imagery with no internal framing
 - IDE/code mockups render with `{rounded.lg}` (12px) corners on dark canvas
-- Customer logos wall presents wordmarks inline at consistent 60–80px height
+- Customer logos wall presents wordmarks inline at consistent 60 to 80px height
 - Product imagery (Le Studio mockup, agent UI mockups) sits in `{rounded.lg}` panels with subtle border
 
 ## Components
@@ -561,167 +561,167 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 
 ### Buttons
 
-**`button-primary`** — Saturated-orange primary CTA, the dominant action.
+**`button-primary`**: Saturated-orange primary CTA, the dominant action.
 - Background `{colors.primary}`, text `{colors.on-primary}`, typography `{typography.button-md}`, padding `10px 20px`, rounded `{rounded.md}`.
 - Pressed state `button-primary-pressed` deepens to `{colors.primary-deep}`.
 - Disabled state `button-primary-disabled` uses `{colors.hairline}` background and `{colors.muted}` text.
 
-**`button-cream`** — Warm cream-yellow secondary action, common on cream-surface sections.
+**`button-cream`**: Warm cream-yellow secondary action, common on cream-surface sections.
 - Background `{colors.cream}`, text `{colors.ink}`, border `1px solid {colors.beige-deep}`, typography `{typography.button-md}`, padding `10px 20px`, rounded `{rounded.md}`.
 
-**`button-dark`** — Dark/black primary CTA on cream surfaces.
+**`button-dark`**: Dark/black primary CTA on cream surfaces.
 - Background `{colors.ink}`, text `{colors.on-dark}`, typography `{typography.button-md}`, padding `10px 20px`, rounded `{rounded.md}`.
 
-**`button-secondary`** — Outlined secondary action.
+**`button-secondary`**: Outlined secondary action.
 - Background transparent, text `{colors.ink}`, border `1px solid {colors.hairline-strong}`, typography `{typography.button-md}`, padding `10px 20px`, rounded `{rounded.md}`.
 
-**`button-on-cream`** — White button on cream-tinted backgrounds.
+**`button-on-cream`**: White button on cream-tinted backgrounds.
 - Background `{colors.canvas}`, text `{colors.ink}`, border `1px solid {colors.beige-deep}`, typography `{typography.button-md}`, padding `10px 20px`, rounded `{rounded.md}`.
 
-**`button-link`** — Inline orange text link.
+**`button-link`**: Inline orange text link.
 - Background transparent, text `{colors.primary}`, typography `{typography.body-sm-medium}`, padding `0`. Underline on activation.
 
 ### Cards & Containers
 
-**`card-base`** — Standard content card.
+**`card-base`**: Standard content card.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline-soft}`.
 
-**`card-feature`** — White feature card with larger padding.
+**`card-feature`**: White feature card with larger padding.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid `{colors.hairline-soft}`.
 
-**`card-cream`** — Warm cream-yellow feature card (services tiers, perk callouts).
+**`card-cream`**: Warm cream-yellow feature card (services tiers, perk callouts).
 - Background `{colors.cream}`, text `{colors.ink}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.beige-deep}`.
 
-**`card-cream-soft`** — Lighter cream variant.
+**`card-cream-soft`**: Lighter cream variant.
 - Background `{colors.surface-cream-soft}`, text `{colors.ink}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`.
 
-**`card-feature-product`** — Product showcase card with subtle elevation.
+**`card-feature-product`**: Product showcase card with subtle elevation.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline-soft}`, shadow `rgba(0, 0, 0, 0.04) 0px 4px 12px`.
 
-**`card-photographic`** — Photographic product card with dark background.
+**`card-photographic`**: Photographic product card with dark background.
 - Background `{colors.surface-code}`, text `{colors.on-dark}`, rounded `{rounded.lg}`, padding `0` (image fills the card).
 
-**`pricing-card`** — Standard pricing tier card.
+**`pricing-card`**: Standard pricing tier card.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline-soft}`.
 
-**`pricing-card-featured`** — Featured pricing tier (cream background + orange border).
+**`pricing-card-featured`**: Featured pricing tier (cream background + orange border).
 - Background `{colors.cream}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `2px solid {colors.primary}`.
 
 ### Inputs & Forms
 
-**`text-input`** — Standard text field.
+**`text-input`**: Standard text field.
 - Background `{colors.canvas}`, text `{colors.ink}`, border `1px solid {colors.hairline-strong}`, rounded `{rounded.md}`, padding `{spacing.sm} {spacing.md}`, height 44px.
 
-**`text-input-focused`** — Activated state.
+**`text-input-focused`**: Activated state.
 - Border switches to `2px solid {colors.primary}`.
 
-**`text-area`** — Multi-line text area for contact form.
+**`text-area`**: Multi-line text area for contact form.
 - Background `{colors.canvas}`, text `{colors.ink}`, border `1px solid {colors.hairline-strong}`, rounded `{rounded.md}`, padding `{spacing.md}`.
 
-**`contact-form-panel`** — Cream-tinted form container on the contact page.
+**`contact-form-panel`**: Cream-tinted form container on the contact page.
 - Background `{colors.cream}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.beige-deep}`. Hosts text-inputs, text-area, submit `button-dark`.
 
 ### Tabs
 
-**`pill-tab`** + **`pill-tab-active`** — Pill-style tab nav (used sparingly on product pages).
+**`pill-tab`** + **`pill-tab-active`**: Pill-style tab nav (used sparingly on product pages).
 - Inactive: background `{colors.canvas}`, text `{colors.steel}`, border `1px solid {colors.hairline}`, padding `{spacing.xs} {spacing.md}`, rounded `{rounded.full}`.
 - Active: background `{colors.ink}`, text `{colors.on-dark}`.
 
-**`segmented-tab`** + **`segmented-tab-active`** — Underline-style tab navigation.
+**`segmented-tab`** + **`segmented-tab-active`**: Underline-style tab navigation.
 - Inactive: text `{colors.steel}`, transparent background, padding `{spacing.sm} {spacing.md}`, no bottom border.
 - Active: text `{colors.primary}`, 2px bottom border in `{colors.primary}`.
 
 ### Badges & Status
 
-**`badge-orange`** — Saturated orange badge.
+**`badge-orange`**: Saturated orange badge.
 - Background `{colors.primary}`, text `{colors.on-primary}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`badge-cream`** — Cream-tinted tag chip.
+**`badge-cream`**: Cream-tinted tag chip.
 - Background `{colors.cream-deeper}`, text `{colors.ink}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`badge-dark`** — Dark/black status badge.
+**`badge-dark`**: Dark/black status badge.
 - Background `{colors.ink}`, text `{colors.on-dark}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`promo-banner`** — Sticky black promo strip ABOVE the top nav.
+**`promo-banner`**: Sticky black promo strip ABOVE the top nav.
 - Background `{colors.ink}`, text `{colors.on-dark}`, typography `{typography.body-sm-medium}`, padding `{spacing.sm} {spacing.md}`. Carries one-line copy + inline CTA.
 
 ### Code
 
-**`code-block`** — Syntax-highlighted IDE-style code block (Le Studio page mockup, agent demos).
+**`code-block`**: Syntax-highlighted IDE-style code block (Le Studio page mockup, agent demos).
 - Background `{colors.surface-code}`, text `{colors.on-dark}`, typography `{typography.code-md}`, rounded `{rounded.md}`, padding `{spacing.md}`.
 
-**`code-block-header`** — Header bar above the code block.
+**`code-block-header`**: Header bar above the code block.
 - Background `{colors.surface-code}`, text `{colors.on-dark-muted}`, typography `{typography.caption}`, padding `{spacing.xs} {spacing.md}`, bottom border `1px solid rgba(255,255,255,0.08)`.
 
 ### Documentation Components
 
-**`feature-icon-tile`** — Cream-yellow feature icon callout.
+**`feature-icon-tile`**: Cream-yellow feature icon callout.
 - Background `{colors.cream}`, rounded `{rounded.md}`, padding `{spacing.md}`, border `1px solid {colors.beige-deep}`.
 
-**`industry-tile`** — Industry-vertical tile in solutions page grid.
+**`industry-tile`**: Industry-vertical tile in solutions page grid.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline-soft}`.
 
-**`stat-cell`** — Stat-row cell ("75% more / 80% better").
+**`stat-cell`**: Stat-row cell ("75% more / 80% better").
 - Background transparent, text `{colors.ink}`, typography `{typography.stat-display}`, padding `{spacing.lg}`.
 
-**`customer-testimonial-card`** — Customer quote card (used inside Le Studio and Solutions pages).
+**`customer-testimonial-card`**: Customer quote card (used inside Le Studio and Solutions pages).
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline-soft}`. Quote in `{typography.body-md}`, attribution in `{typography.body-sm}` `{colors.steel}`.
 
-**`logo-wall-item`** — Customer logo wordmark cell.
+**`logo-wall-item`**: Customer logo wordmark cell.
 - Background transparent, text `{colors.steel}`, typography `{typography.body-md-medium}`, padding `{spacing.lg}`.
 
-**`faq-accordion-item`** — FAQ panel.
+**`faq-accordion-item`**: FAQ panel.
 - Background `{colors.canvas}`, rounded `{rounded.md}`, padding `{spacing.xl}`, bottom border `1px solid {colors.hairline}`.
 
-**`app-store-badge`** — App Store / Google Play download badge.
+**`app-store-badge`**: App Store / Google Play download badge.
 - Background `{colors.ink}`, text `{colors.on-dark}`, typography `{typography.caption-bold}`, rounded `{rounded.md}`, padding `{spacing.sm} {spacing.md}`.
 
 ### Navigation
 
-**Top Navigation (Marketing)** — Sticky white bar.
+**Top Navigation (Marketing)**: Sticky white bar.
 - Background `{colors.canvas}`, height ~64px, bottom border `1px solid {colors.hairline-soft}`.
 - Left: Mistral M-mark logo + "MISTRAL AI_" wordmark + horizontal link list (Products, Solutions, Research, Blog, Customers, Company).
 - Right: "Contact Sales" link + black-pill "Try Studio" CTA.
 
 ### Signature Components
 
-**`hero-band-sunset`** — Atmospheric sunset hero band.
+**`hero-band-sunset`**: Atmospheric sunset hero band.
 - Background gradient `linear-gradient(135deg, {colors.sunshine-700} 0%, {colors.sunshine-900} 60%, {colors.primary} 100%)` overlaid on photographic mountain landscape.
 - Layout: hero headline left in `{typography.hero-display}` ({colors.ink}), subtitle in `{typography.subtitle}` ({colors.ink-tint}), button row (`button-dark` + `button-secondary`), atmospheric mountain photography right.
 
-**`sunset-stripe-band`** — Horizontal closing band at the foot of every page.
+**`sunset-stripe-band`**: Horizontal closing band at the foot of every page.
 - Multi-stop gradient: `{colors.primary}` → `{colors.sunshine-700}` → `{colors.sunshine-500}` → `{colors.yellow-saturated}` → `{colors.cream}`.
 - Padding `{spacing.lg} 0`. Spans full width, sits above the footer. THIS IS THE BRAND'S MOST RECOGNIZABLE SIGNATURE ELEMENT.
 
-**`cta-banner-cream`** — Page-bottom CTA band on cream surface.
+**`cta-banner-cream`**: Page-bottom CTA band on cream surface.
 - Background `{colors.cream}`, text `{colors.ink}`, rounded `{rounded.lg}`, padding `{spacing.section}`. "The next chapter of AI is yours." headline in `{typography.heading-1}` (PP Editorial Old), button row below.
 
-**`footer-region`** — Cream-tinted multi-column footer.
+**`footer-region`**: Cream-tinted multi-column footer.
 - Background `{colors.footer-cream}`, padding `{spacing.section} {spacing.xxl}`.
 - 5-column link grid (Why Mistral / Explore / Build / Legal + brand mark column).
 - Bottom: language picker + social icons.
 
-**`footer-link`** — Individual footer link.
+**`footer-link`**: Individual footer link.
 - Background transparent, text `{colors.primary}`, typography `{typography.body-sm}`, padding `{spacing.xxs} 0`.
 
 ## Do's and Don'ts
 
 ### Do
 - Reserve `{colors.primary}` (saturated orange) for primary CTAs and active states only
-- Use the **sunset stripe band** at the foot of every page — it's the brand's most recognizable signature
-- Pair PP Editorial Old (display) with Inter (UI) — never substitute either with a generic alternative
+- Use the **sunset stripe band** at the foot of every page. It's the brand's most recognizable signature
+- Pair PP Editorial Old (display) with Inter (UI), never substitute either with a generic alternative
 - Apply `{rounded.md}` (8px) to buttons and `{rounded.lg}` (12px) to cards consistently
 - Use cream-yellow surfaces ({colors.cream}) for form panels, feature cards, and footer
-- Anchor heroes with photographic mountain-sunset imagery (or its visual equivalent — atmospheric gradient sky)
+- Anchor heroes with photographic mountain-sunset imagery (or its visual equivalent: atmospheric gradient sky)
 - Use stat-display token (PP Editorial 56px) for stat callouts to maintain editorial character
 
 ### Don't
-- Don't use pill-shaped buttons (`{rounded.full}`) — Mistral's geometry is sober and editorial, not playful
+- Don't use pill-shaped buttons (`{rounded.full}`): Mistral's geometry is sober and editorial, not playful
 - Don't introduce additional accent colors beyond the orange/yellow/cream sunset palette
-- Don't reduce hero leading below 1.05 — the editorial display needs that magazine-grade tightness
-- Don't replace PP Editorial Old hero displays with Inter — the editorial / sans contrast IS the brand
+- Don't reduce hero leading below 1.05: the editorial display needs that magazine-grade tightness
+- Don't replace PP Editorial Old hero displays with Inter: the editorial / sans contrast IS the brand
 - Don't apply heavy shadows on flat documentation cards; reserve elevation for IDE mockups
-- Don't drop the sunset stripe band from any page bottom — it's the brand's continuity element
+- Don't drop the sunset stripe band from any page bottom: it's the brand's continuity element
 
 ## Responsive Behavior
 
@@ -729,15 +729,15 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile (small) | < 480px | Single column. Hero scales to 40px (PP Editorial). Pill nav collapses to hamburger. Pricing tiers stack 1-up. |
-| Mobile (large) | 480 – 767px | Feature tiles 2-up. Hero scales to 52px. |
-| Tablet | 768 – 1023px | 2-column feature grids. Pill-tab nav returns. Hero 64px. |
-| Desktop | 1024 – 1279px | Multi-column layouts. Hero 76px. Stat row at full width. |
+| Mobile (large) | 480 to 767px | Feature tiles 2-up. Hero scales to 52px. |
+| Tablet | 768 to 1023px | 2-column feature grids. Pill-tab nav returns. Hero 64px. |
+| Desktop | 1024 to 1279px | Multi-column layouts. Hero 76px. Stat row at full width. |
 | Wide Desktop | ≥ 1280px | Full 84px hero presentation. |
 
 ### Touch Targets
-- Buttons render at 40–44px effective height — at WCAG AAA floor with `10px 20px` padding
+- Buttons render at 40 to 44px effective height: at WCAG AAA floor with `10px 20px` padding
 - Form inputs render at 44px height
-- Pill tabs render at ~32px tall — bumps to 44px on mobile
+- Pill tabs render at ~32px tall: bumps to 44px on mobile
 
 ### Collapsing Strategy
 - **Promo banner** stays full-width; truncates at < 480px
@@ -752,7 +752,7 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 ### Image Behavior
 - Mountain-sunset photography uses 16:9 ratio with full-bleed scaling
 - IDE mockup images maintain aspect ratio across breakpoints
-- Customer logo wall presents wordmarks at consistent 60–80px height
+- Customer logo wall presents wordmarks at consistent 60 to 80px height
 
 ## Iteration Guide
 
@@ -768,6 +768,6 @@ The radius scale is sober and editorial — Mistral does NOT use pill buttons. `
 ## Known Gaps
 
 - Specific dark-mode token values not surfaced; the brand has not shipped a published dark-mode palette
-- Animation/transition timings not extracted; recommend 150–200ms ease for hover/focus state transitions
+- Animation/transition timings not extracted; recommend 150 to 200ms ease for hover/focus state transitions
 - Form validation success state not explicitly captured beyond defaults
-- Sunset stripe band gradient stops are approximations — the actual values may vary slightly across pages but the visual rhythm is consistent
+- Sunset stripe band gradient stops are approximations: the actual values may vary slightly across pages but the visual rhythm is consistent

@@ -1,30 +1,30 @@
 # Components
 
-> A component is a contract: a name, a set of states, a set of slots, a documented behavior. Every component ships with every state required by users — not just the happy path.
+> A component is a contract: a name, a set of states, a set of slots, a documented behavior. Every component ships with every state required by users, not just the happy path.
 
 ## Principles
 
-1. **Every interactive component has a complete state cycle** — Default, hover, pressed/active, focus, disabled, loading, error, success, empty. Shipping only the happy path is a quality failure.
+1. **Every interactive component has a complete state cycle**: Default, hover, pressed/active, focus, disabled, loading, error, success, empty. Shipping only the happy path is a quality failure.
 
-2. **Semantic native controls beat custom containers** — `<button>`, `<a href>`, `<input>`, `<label>`, `<table>`, `<dialog>`. Generic `<div>` used as a button breaks screen readers, keyboard navigation, and focus management.
+2. **Semantic native controls beat custom containers**: `<button>`, `<a href>`, `<input>`, `<label>`, `<table>`, `<dialog>`. Generic `<div>` used as a button breaks screen readers, keyboard navigation, and focus management.
 
-3. **Compound components beat flat prop APIs** — `<Card><Card.Header><Card.Title>...</Card.Title></Card.Header></Card>` beats `<Card title="..." />`. Compound patterns compose cleanly; flat APIs leak abstractions.
+3. **Compound components beat flat prop APIs**: `<Card><Card.Header><Card.Title>...</Card.Title></Card.Header></Card>` beats `<Card title="..." />`. Compound patterns compose cleanly; flat APIs leak abstractions.
 
-4. **Semantic variants beat raw colors** — Buttons take `primary`, `secondary`, `tertiary`, `danger`, `ghost`, `outline`. Not `bg-blue-500`, `bg-red-500`. The variant adapts to themes; the raw color defeats the system.
+4. **Semantic variants beat raw colors**: Buttons take `primary`, `secondary`, `tertiary`, `danger`, `ghost`, `outline`. Not `bg-blue-500`, `bg-red-500`. The variant adapts to themes; the raw color defeats the system.
 
-5. **One primary action per context** — Each screen, section, or modal has exactly one primary CTA. Two primaries dilute the path. The rest are secondary, tertiary, or ghost.
+5. **One primary action per context**: Each screen, section, or modal has exactly one primary CTA. Two primaries dilute the path. The rest are secondary, tertiary, or ghost.
 
-6. **Cards earn their elevation** — Use cards only when elevation communicates hierarchy. Otherwise, alignment and spacing carry the structure. In dense data UI, replace cards with `border-t`, `divide-y`, or pure negative space.
+6. **Cards earn their elevation**: Use cards only when elevation communicates hierarchy. Otherwise, alignment and spacing carry the structure. In dense data UI, replace cards with `border-t`, `divide-y`, or pure negative space.
 
-7. **Forms validate on `blur`, not on every keystroke** — Show the error after the user finishes the input. Auto-focus the first invalid field on submit failure. Provide both inline errors and an aggregated summary.
+7. **Forms validate on `blur`, not on every keystroke**: Show the error after the user finishes the input. Auto-focus the first invalid field on submit failure. Provide both inline errors and an aggregated summary.
 
-8. **Modals and sheets offer a clear escape** — Escape key, visible close button, click-on-scrim. Confirm before dismissing with unsaved changes. Focus returns to the trigger after close.
+8. **Modals and sheets offer a clear escape**: Escape key, visible close button, click-on-scrim. Confirm before dismissing with unsaved changes. Focus returns to the trigger after close.
 
-9. **Tables use tabular numerals and consistent alignment** — Numbers right-aligned with `font-mono` and `font-variant-numeric: tabular-nums`. Action columns right-aligned. Sticky headers on long tables. Empty rows show an empty state across the full width.
+9. **Tables use tabular numerals and consistent alignment**: Numbers right-aligned with `font-mono` and `font-variant-numeric: tabular-nums`. Action columns right-aligned. Sticky headers on long tables. Empty rows show an empty state across the full width.
 
-10. **Toasts speak to screen readers** — `aria-live="polite"` for non-urgent updates. Auto-dismiss in 3 to 5 seconds. Never steal focus.
+10. **Toasts speak to screen readers**: `aria-live="polite"` for non-urgent updates. Auto-dismiss in 3 to 5 seconds. Never steal focus.
 
-11. **Disabled states are programmatically disabled** — Reduced opacity, cursor change, AND the semantic `disabled` attribute. Looks disabled AND refuses input.
+11. **Disabled states are programmatically disabled**: Reduced opacity, cursor change, AND the semantic `disabled` attribute. Looks disabled AND refuses input.
 
 ## Do / Don't
 
@@ -51,7 +51,7 @@
 ## Examples
 
 ### Button (canonical)
-**Use when**: Every clickable action — submit, save, cancel, navigate.
+**Use when**: Every clickable action (submit, save, cancel, navigate).
 **Variants**: primary, secondary, tertiary, danger, ghost, outline, icon-only.
 **Required states**:
 - **Default**: visible at rest, clearly affords interaction
@@ -84,7 +84,7 @@
 For an action with a trailing icon in an expressive brand, the icon sits in a small round chip of its own at the inner end of the button, with its own fill and ring. On hover the chip nudges 1px in the arrow's direction and grows a little.
 
 ### Input (canonical)
-**Use when**: Every form field — text, email, phone, number, date, password.
+**Use when**: Every form field (text, email, phone, number, date, password).
 **Required states**:
 - **Default**: visible label above, visible border, visible value (when present)
 - **Focus**: focus ring + slight border emphasis
@@ -103,7 +103,7 @@ For an action with a trailing icon in an expressive brand, the icon sits in a sm
 - No `<label for>` link
 
 **Specs**:
-- Label sits ABOVE the input — always
+- Label sits ABOVE the input: always
 - Helper text: optional, below the input, even if empty (markup) to prevent layout shift on error
 - Error text: below the input, paired with semantic red and an icon
 - Padding: 12 to 16px vertical, 12 to 16px horizontal
@@ -115,7 +115,7 @@ For an action with a trailing icon in an expressive brand, the icon sits in a sm
 - Semantic input types (`email`, `tel`, `number`, `url`, `date`) so mobile keyboards adapt
 
 ### Modal / Dialog (canonical)
-**Use when**: Discrete actions requiring focused attention — confirmation, edit, view detail.
+**Use when**: Discrete actions requiring focused attention (confirmation, edit, view detail).
 **Required states**:
 - **Closed**: not rendered (or `display: none`)
 - **Opening**: scale + fade entry from trigger source; 250 to 400ms with spring physics
@@ -128,7 +128,7 @@ For an action with a trailing icon in an expressive brand, the icon sits in a sm
 - Escape key dismisses
 - Click on scrim dismisses (unless work in progress)
 - Swipe-down dismisses on mobile sheets
-- Focus traps inside modal — Tab cycles through interactive elements
+- Focus traps inside modal: Tab cycles through interactive elements
 - Focus returns to trigger element on close
 - If unsaved changes exist, confirm before dismissing
 - Scrim opacity: 40 to 60% black (light mode); page background at 60 to 80% alpha (dark mode)
@@ -169,9 +169,9 @@ For an action with a trailing icon in an expressive brand, the icon sits in a sm
 ### Card (canonical)
 **Use when**: Elevation communicates hierarchy or grouping. NOT for every block.
 **When to ban cards**:
-- Dense data UI — use `border-t`, `divide-y`, or negative space instead
-- Cockpit-density dashboards — replace cards with hairlines
-- Brutalist surfaces — borders only, no shadows
+- Dense data UI: use `border-t`, `divide-y`, or negative space instead
+- Cockpit-density dashboards: replace cards with hairlines
+- Brutalist surfaces: borders only, no shadows
 
 **Required states**:
 - **Default**: visible at rest with subtle elevation or border
@@ -189,7 +189,7 @@ For an action with a trailing icon in an expressive brand, the icon sits in a sm
 - Premium diffuse shadow: `shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]`
 
 **Premium double-bezel pattern**:
-For high-end product surfaces, cards use the double-bezel pattern — outer shell with subtle background and hairline outer border, inner core with distinct background color, inner highlight, and a mathematically calculated smaller radius (e.g., `rounded-[calc(2rem-0.375rem)]`) so inner and outer are visibly concentric.
+For high-end product surfaces, cards use the double-bezel pattern, outer shell with subtle background and hairline outer border, inner core with distinct background color, inner highlight, and a mathematically calculated smaller radius (e.g., `rounded-[calc(2rem-0.375rem)]`) so inner and outer are visibly concentric.
 
 ### Table (canonical)
 **Use when**: Tabular data with rows and columns.
@@ -254,7 +254,7 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 - Active state with color + indicator bar or weight change
 - Safe area inset at bottom (above home indicator)
 - Persists across all top-level screens
-- Top-level only — never nest sub-navigation inside
+- Top-level only, never nest sub-navigation inside
 
 ### Form Field (canonical contract)
 **Use when**: Composing an input with its label, helper, and error.
@@ -281,7 +281,7 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 - Validation messages that disappear when user starts typing
 
 ### Toast / Notification (canonical)
-**Use when**: System feedback that does not require user action — success confirmation, info, non-blocking errors.
+**Use when**: System feedback that does not require user action (success confirmation, info, non-blocking errors).
 **Required affordances**:
 - `aria-live="polite"` for non-urgent (most cases)
 - `aria-live="assertive"` or `role="alert"` for urgent errors only
@@ -295,7 +295,7 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 - Toast covers primary CTA
 - Toast persists indefinitely (use a banner or alert instead)
 - Toast steals keyboard focus
-- Toast with destructive action — destructive needs confirmation, not a transient
+- Toast with destructive action: destructive needs confirmation, not a transient
 
 **Specs**:
 - Width: 320 to 480px
@@ -316,7 +316,7 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 - Error state: error message with retry action
 - Responsive reflow on mobile (horizontal bar instead of vertical, fewer ticks)
 - Screen reader summary: `aria-label` describing the chart's key insight
-- Data table alternative for accessibility — every chart has a parallel table
+- Data table alternative for accessibility: every chart has a parallel table
 
 **Chart type selection**:
 - Trend over time → line chart
@@ -326,7 +326,7 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 - Correlation → scatter plot
 
 **Color rules**:
-- Colorblind-safe palettes (Viridis, Cividis, Magma — perceptually uniform)
+- Colorblind-safe palettes (Viridis, Cividis, Magma: perceptually uniform)
 - Diverging: blue → gray → red (never red → green)
 - Sequential: single-hue gradient
 - Qualitative: max 7 to 8 distinct hues
@@ -345,14 +345,14 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 ### Accordion / FAQ (canonical)
 **Use when**: Hiding secondary information until user requests it.
 **Required affordances**:
-- Visible expand affordance — sharp `+` and `-` icons preferred over chevrons in minimalist aesthetic
+- Visible expand affordance: sharp `+` and `-` icons preferred over chevrons in minimalist aesthetic
 - Click anywhere on the row toggles
 - `aria-expanded` attribute tracks state
 - Smooth height transition (250 to 400ms)
 - Keyboard accessible (Enter and Space toggle)
 
 **Specs (minimalist)**:
-- Strip container boxes — separate items with `border-bottom: 1px solid #EAEAEA`
+- Strip container boxes: separate items with `border-bottom: 1px solid #EAEAEA`
 - Toggle icon: clean `+` and `-`
 - Item title: 16 to 18px, weight 500
 - Item body: 14 to 16px, weight 400, line-height 1.55 to 1.7
@@ -397,7 +397,7 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 **Required affordances**:
 - Match the eventual layout shape (not generic rectangles)
 - Shimmer animation across the block at 1.5 to 2s loops
-- Honor `prefers-reduced-motion: reduce` — replace shimmer with opacity pulsing
+- Honor `prefers-reduced-motion: reduce`: replace shimmer with opacity pulsing
 - Block click and interaction until loaded
 
 **Anti-patterns**:
@@ -423,15 +423,15 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 **Specs**:
 - Background: pastel pair (light + paired text color) for semantic states
 - Padding: 4 to 8px vertical, 8 to 12px horizontal
-- Radius: 9999px (pill) — the pill shape is reserved for this component
+- Radius: 9999px (pill); the pill shape is reserved for this component
 - Typography: 12 to 13px, weight 500 to 600, optional uppercase with +0.06em tracking
 - Maximum width before truncation: 200px
 
 **Pastel pair system**:
-- Pale red `#FDEBEC` with text `#9F2F2D` — destructive / warning
-- Pale blue `#E1F3FE` with text `#1F6C9F` — informational
-- Pale green `#EDF3EC` with text `#346538` — success
-- Pale yellow `#FBF3DB` with text `#956400` — pending / caution
+- Pale red `#FDEBEC` with text `#9F2F2D`: destructive / warning
+- Pale blue `#E1F3FE` with text `#1F6C9F`: informational
+- Pale green `#EDF3EC` with text `#346538`: success
+- Pale yellow `#FBF3DB` with text `#956400`: pending / caution
 
 ## Tokens / values
 
@@ -481,7 +481,7 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 - Exit: 60 to 70% of entry duration
 - Focus trap required
 - Escape key handler required
-- Maximum 2 modals deep — never more
+- Maximum 2 modals deep, never more
 
 ### Card specs
 - Padding: 24 to 40px (premium); 8 to 16px (cockpit)
@@ -574,7 +574,7 @@ For high-end product surfaces, cards use the double-bezel pattern — outer shel
 - 3D charts
 - Charts without empty / loading / error states
 - Skeleton that doesn't match eventual layout
-- Card overuse — wrapping every block in a `<Card>`
+- Card overuse: wrapping every block in a `<Card>`
 - Cards in cockpit-density UIs (use `divide-y` instead)
 - Generic centered spinner blocking content
 - Hover-only interactions on primary actions
@@ -597,7 +597,7 @@ Every component documents:
 - [ ] Every interactive component ships with all required states (severity: High)
 - [ ] Semantic native controls used (`<button>`, `<a>`, `<input>`, `<table>`) (severity: Critical)
 - [ ] Compound component pattern used for multi-part components (severity: Medium)
-- [ ] One primary CTA per context — no competing primaries (severity: High)
+- [ ] One primary CTA per context: no competing primaries (severity: High)
 - [ ] All buttons have visible focus ring (severity: Critical)
 - [ ] All buttons have hover and active states (severity: High)
 - [ ] All buttons meet 44pt touch target minimum (severity: Critical)
@@ -610,7 +610,7 @@ Every component documents:
 - [ ] Modal has Escape key, visible close button, scrim click (severity: Critical)
 - [ ] Modal traps focus while open (severity: Critical)
 - [ ] Focus returns to trigger element on modal close (severity: High)
-- [ ] Maximum 2 modals deep — never more (severity: High)
+- [ ] Maximum 2 modals deep, never more (severity: High)
 - [ ] Cards used only when elevation communicates hierarchy (severity: Medium)
 - [ ] Dense data UI uses `divide-y` or `border-t`, not `<Card>` wrapping (severity: Medium)
 - [ ] Table numbers right-aligned in tabular figures (severity: Medium)
@@ -630,7 +630,7 @@ Every component documents:
 - [ ] Skeleton matches eventual layout shape (severity: High)
 - [ ] Skeleton honors `prefers-reduced-motion` (severity: High)
 - [ ] Disabled states use opacity + cursor + `disabled` attribute (severity: High)
-- [ ] Component library defaults customized — radii, colors, shadows tuned to brand (severity: Medium)
+- [ ] Component library defaults customized: radii, colors, shadows tuned to brand (severity: Medium)
 - [ ] No generic egg avatar silhouettes (severity: High)
 - [ ] Avatar initials fallback when no photo (severity: Medium)
 - [ ] Pill / chip pastel pairs hold 4.5:1 contrast (severity: Critical)

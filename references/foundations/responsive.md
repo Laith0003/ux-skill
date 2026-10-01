@@ -1,7 +1,7 @@
 # Responsive & mobile-first
 
 The single most common shipped defect is a layout that looks right at 1440px and falls
-apart at 360px. Mobile is not a smaller desktop -- it is the primary canvas. Design the
+apart at 360px. Mobile is not a smaller desktop. It is the primary canvas. Design the
 360px view first; desktop is the enhancement. A layout that has not been seen at 360px
 is not finished.
 
@@ -13,7 +13,7 @@ is not finished.
    non-negotiable, not a nice-to-have. It is the first thing to verify and the most common
    thing to get wrong.
 3. **Every element has a defined behavior at every width.** Nothing is left to the
-   browser's default reflow. You decide what each block does as it narrows -- you do not
+   browser's default reflow. You decide what each block does as it narrows. You do not
    discover it.
 4. **Content reflows; it does not shrink.** Text wraps and stacks; columns become rows. Text
    never scales down to illegibility, and nothing is clipped or cut off to "make it fit."
@@ -24,18 +24,18 @@ is not finished.
    showing fewer), a 2-column section becoming 1 column with the image on top. Accidental break
    is the failure: a brand
    wordmark splitting mid-name, nav items wrapping into ragged multiple rows, a label
-   clipping, content overflowing its card. Same mechanism ("it wrapped") -- opposite
+   clipping, content overflowing its card. Same mechanism ("it wrapped"): opposite
    outcomes. **The test:** does the narrow state look composed and intended, or does it look
    like it fell apart? Engineer the intended narrow state; never let the browser improvise it.
-7. **Sticky chrome budget.** Fixed/sticky top chrome on mobile must stay minimal -- ideally a
+7. **Sticky chrome budget.** Fixed/sticky top chrome on mobile must stay minimal, ideally a
    single `~64px` bar, hard ceiling `~96px`. A tall sticky header is a failure: it crushes the
    viewport and reads as broken. Only what MUST persist sticks (the primary nav + its CTA);
-   decorative/utility bars (ratings, announcements) are NOT sticky -- they scroll away. Note
+   decorative/utility bars (ratings, announcements) are NOT sticky. They scroll away. Note
    that "reflow by design" is not a license to grow: stacking a claims row into four centered
-   lines is composed but it bloats the header -- keep secondary bars to one compact line and
-   out of the sticky container.
+   lines is composed but it bloats the header (keep secondary bars to one compact line and
+   out of the sticky container).
 
-## The horizontal-scroll killers (memorize these -- they cause ~all of it)
+## The horizontal-scroll killers (memorize these: they cause ~all of it)
 
 | Cause | Fix |
 |---|---|
@@ -62,7 +62,7 @@ is not finished.
 
 - Use `clamp(min, preferred, max)` for display type so it scales across the range without a
   dozen breakpoints: `font-size: clamp(1.9rem, 6vw, 3.5rem)`. A 56px headline must clamp down
-  to ~30-34px on a phone -- never ship desktop display sizes to 360px.
+  to ~30-34px on a phone, never ship desktop display sizes to 360px.
 - Section padding should also breathe down: generous on desktop, tighter on mobile (clamp or
   a smaller mobile value), so a hero isn't 160px of dead space on a phone.
 
@@ -72,13 +72,13 @@ is not finished.
 - `100vh` is wrong on mobile (it ignores the browser chrome, causing jump/cutoff) -> use
   `100svh` or `100dvh` for full-height sections.
 
-## Verify -- this is mandatory, and it must be REAL
+## Verify: this is mandatory, and it must be REAL
 
 A gate that cannot render has NOT verified. The recurring failure was a check that reported
-"green" on a page that horizontally scrolled on a real phone -- a false green is worse than
+"green" on a page that horizontally scrolled on a real phone: a false green is worse than
 no gate. So verification renders the page for real and is honest when it can't.
 
-**Run the real verifier** (headless Chrome, true mobile viewports, measured -- not guessed):
+**Run the real verifier** (headless Chrome, true mobile viewports, measured, not guessed):
 ```bash
 node scripts/verify-responsive.mjs <file-or-url> 360,390 <out-dir>
 ```
@@ -90,16 +90,16 @@ several pages checked into one folder never overwrite each other.
 
 Honesty contract (the whole point):
 - **exit 0** = VERIFIED clean.
-- **exit 1** = VERIFIED and FAILED -- a real defect: the page renders wider than the device
+- **exit 1** = VERIFIED and FAILED, a real defect: the page renders wider than the device
   (horizontal scroll; usual cause a fixed min-width wider than the device, sometimes a bad
   `<meta name="viewport">`), or the sticky chrome exceeds `~96px`. Fix the named cause.
-- **exit 2** = DEGRADED / UNVERIFIED -- no Chrome, or the viewport could not be trusted. You
+- **exit 2** = DEGRADED / UNVERIFIED: no Chrome, or the viewport could not be trusted. You
   have NOT verified. Eyeball on a real device; **never claim passed.**
 
 What the verifier cannot judge: WRAP of a short label/wordmark (a wrapped nav reads
 `scrollWidth == innerWidth`) and the *feel* of the page. So also: open the screenshots it
-wrote and LOOK, and deploy + eyeball on a real phone. An un-seen mobile layout is unverified
--- treat "I think it's fine" as "it is broken until seen." A green from a verifier that
+wrote and LOOK, and deploy + eyeball on a real phone. An un-seen mobile layout is unverified:
+treat "I think it's fine" as "it is broken until seen." A green from a verifier that
 DEGRADED is not a green.
 
 ## Do / Don't
@@ -112,7 +112,7 @@ DEGRADED is not a green.
 - **Do** constrain every image with `max-width: 100%`; **don't** ever use `width: 100vw`.
 - **Do** make the reflowed state look intentional; **don't** accept a layout that merely
   "doesn't crash" on mobile.
-- **Do** keep mobile sticky chrome to one ~64px bar (ceiling ~96px) -- only the nav + CTA
+- **Do** keep mobile sticky chrome to one ~64px bar (ceiling ~96px), only the nav + CTA
   persist; **don't** pin a tall header or leave a decorative/utility bar in the sticky container.
 
 ## Patterns

@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Composio-design-analysis
-description: A developer-tools brand for AI-agent tool integration whose marketing surfaces lean into a dark, technical aesthetic with a single deep-electric-blue voltage (`#0007cd`). The page floor is near-black (`#0f0f0f`); cards float above on subtle gray-tinted surfaces. abcDiatype carries display and body in a single sans family with weights 400-600. The brand's strongest visual signature is a four-pane terminal-style mockup (a 2×2 grid of dark code/output panels) with a central blue spotlight glow — used as the homepage hero anchor.
+description: A developer-tools brand for AI-agent tool integration whose marketing surfaces lean into a dark, technical aesthetic with a single deep-electric-blue voltage (`#0007cd`). The page floor is near-black (`#0f0f0f`); cards float above on subtle gray-tinted surfaces. abcDiatype carries display and body in a single sans family with weights 400-600. The brand's strongest visual signature is a four-pane terminal-style mockup (a 2×2 grid of dark code/output panels) with a central blue spotlight glow, used as the homepage hero anchor.
 
 colors:
   primary: "#0007cd"
@@ -259,53 +259,53 @@ components:
 
 ## Overview
 
-Composio's marketing site reads like a serious developer-infrastructure brand — closer to Vercel or Stripe Docs in atmosphere than to a typical AI-tools startup. The base canvas is a near-black `{colors.canvas}` (#0f0f0f) holding white type and a single voltage of **deep electric blue** (`{colors.primary}` — #0007cd) carrying every primary CTA, brand wordmark, and atmospheric spotlight glow that backs the homepage hero.
+Composio's marketing site reads like a serious developer-infrastructure brand: closer to Vercel or Stripe Docs in atmosphere than to a typical AI-tools startup. The base canvas is a near-black `{colors.canvas}` (#0f0f0f) holding white type and a single voltage of **deep electric blue** (`{colors.primary}`, #0007cd) carrying every primary CTA, brand wordmark, and atmospheric spotlight glow that backs the homepage hero.
 
-Type runs **abcDiatype** as the single sans family across display, body, navigation, and captions. Display sits at weight 500 — confident but not bombastic. Code blocks and terminal mockups switch to JetBrains Mono.
+Type runs **abcDiatype** as the single sans family across display, body, navigation, and captions. Display sits at weight 500: confident but not bombastic. Code blocks and terminal mockups switch to JetBrains Mono.
 
-The page rhythm is monolithic: dark canvas top to bottom with subtle elevation steps via card surfaces. The brand's strongest visual signature is a **four-pane terminal-style mockup** — a 2×2 grid of dark code/output panels with a central blue spotlight glow behind them.
+The page rhythm is monolithic: dark canvas top to bottom with subtle elevation steps via card surfaces. The brand's strongest visual signature is a **four-pane terminal-style mockup**: a 2×2 grid of dark code/output panels with a central blue spotlight glow behind them.
 
 **Key Characteristics:**
 - Single accent: `{colors.primary}` (#0007cd) for primary CTAs, wordmark, spotlight glows.
 - Single sans family: abcDiatype carries everything except code (JetBrains Mono).
 - Dark monolithic canvas: `{colors.canvas}` runs top to bottom; depth from `{colors.surface-card}` and `{colors.surface-card-elevated}` brightness steps.
 - Terminal-mockup hero: 2×2 grid of code/output panes is the brand signature.
-- Compact pill geometry: CTAs sit at `{rounded.md}` (8px), not full pills — developer-tool dialect.
+- Compact pill geometry: CTAs sit at `{rounded.md}` (8px), not full pills (developer-tool dialect).
 - Spotlight-glow atmospheric backdrop: a radial blue glow centered behind hero content.
 - 96px section rhythm.
 
 ## Colors
 
 ### Brand & Accent
-- **Composio Blue** (`{colors.primary}` — #0007cd): Primary CTAs, wordmark, spotlight glow center.
-- **Composio Blue Active** (`{colors.primary-active}` — #0005a3): Press state.
-- **Spotlight Glow Tone** (`{colors.primary-glow}` — #1a26ff): Brighter blue used inside radial atmospheric glows.
-- **Accent Cyan** (`{colors.accent-cyan}` — #00d4ff): Sparingly on data-flow visualizations.
-- **Accent Violet** (`{colors.accent-violet}` — #7b3aed): Inside specific product illustrations only.
+- **Composio Blue** (`{colors.primary}`, #0007cd): Primary CTAs, wordmark, spotlight glow center.
+- **Composio Blue Active** (`{colors.primary-active}`, #0005a3): Press state.
+- **Spotlight Glow Tone** (`{colors.primary-glow}`, #1a26ff): Brighter blue used inside radial atmospheric glows.
+- **Accent Cyan** (`{colors.accent-cyan}`, #00d4ff): Sparingly on data-flow visualizations.
+- **Accent Violet** (`{colors.accent-violet}`, #7b3aed): Inside specific product illustrations only.
 
 ### Surface
-- **Canvas** (`{colors.canvas}` — #0f0f0f): Page floor — near-black.
-- **Canvas Deep** (`{colors.canvas-deep}` — #000000): Pure black for terminal mockup grids and code blocks.
-- **Surface Card** (`{colors.surface-card}` — #181818): Default content card.
-- **Surface Card Elevated** (`{colors.surface-card-elevated}` — #222222): Terminal panes, secondary buttons.
-- **Surface Strong** (`{colors.surface-strong}` — #2a2a2a): Dropdown menus.
+- **Canvas** (`{colors.canvas}`, #0f0f0f): Page floor (near-black).
+- **Canvas Deep** (`{colors.canvas-deep}`, #000000): Pure black for terminal mockup grids and code blocks.
+- **Surface Card** (`{colors.surface-card}`, #181818): Default content card.
+- **Surface Card Elevated** (`{colors.surface-card-elevated}`, #222222): Terminal panes, secondary buttons.
+- **Surface Strong** (`{colors.surface-strong}`, #2a2a2a): Dropdown menus.
 
 ### Hairlines
-- **Hairline** (`{colors.hairline}` — #222222): Default 1px divider.
-- **Hairline Soft** (`{colors.hairline-soft}` — #1a1a1a): Lighter divider.
-- **Hairline Strong** (`{colors.hairline-strong}` — #333333): Stronger panel outline.
+- **Hairline** (`{colors.hairline}`, #222222): Default 1px divider.
+- **Hairline Soft** (`{colors.hairline-soft}`, #1a1a1a): Lighter divider.
+- **Hairline Strong** (`{colors.hairline-strong}`, #333333): Stronger panel outline.
 
 ### Text
-- **Ink** (`{colors.ink}` — #ffffff): Display headlines.
-- **Body** (`{colors.body}` — #a8a8a8): Default running-text — soft gray.
-- **Body Strong** (`{colors.body-strong}` — #ffffff): Same as ink.
-- **Muted** (`{colors.muted}` — #888888): Sub-titles, breadcrumbs.
-- **Muted Soft** (`{colors.muted-soft}` — #666666): Disabled text.
-- **On Primary** (`{colors.on-primary}` — #ffffff): White text on blue CTAs.
+- **Ink** (`{colors.ink}`, #ffffff): Display headlines.
+- **Body** (`{colors.body}`, #a8a8a8): Default running-text (soft gray).
+- **Body Strong** (`{colors.body-strong}`, #ffffff): Same as ink.
+- **Muted** (`{colors.muted}`, #888888): Sub-titles, breadcrumbs.
+- **Muted Soft** (`{colors.muted-soft}`, #666666): Disabled text.
+- **On Primary** (`{colors.on-primary}`, #ffffff): White text on blue CTAs.
 
 ### Semantic
-- **Success** (`{colors.semantic-success}` — #33d17a): "Online", "active" indicators.
-- **Error** (`{colors.semantic-error}` — #ff4d4d): Validation errors.
+- **Success** (`{colors.semantic-success}`, #33d17a): "Online", "active" indicators.
+- **Error** (`{colors.semantic-error}`, #ff4d4d): Validation errors.
 
 ## Typography
 
@@ -327,7 +327,7 @@ The system runs **abcDiatype** (Lineto) across every text role. Code blocks swit
 | `{typography.body-sm}` | 14px | 400 | 1.5 | 0 | Footer body |
 | `{typography.caption}` | 13px | 400 | 1.4 | 0 | Photo captions |
 | `{typography.caption-uppercase}` | 11px | 600 | 1.4 | 0.88px | Section labels, badge pills |
-| `{typography.code}` | 13px | 400 | 1.5 | 0 | Code blocks — JetBrains Mono |
+| `{typography.code}` | 13px | 400 | 1.5 | 0 | Code blocks: JetBrains Mono |
 | `{typography.button}` | 14px | 500 | 1.0 | 0 | CTA pill labels |
 | `{typography.nav-link}` | 14px | 500 | 1.4 | 0 | Top-nav menu |
 
@@ -354,7 +354,7 @@ abcDiatype is a Lineto licensed typeface. Open-source substitute: **Inter** at w
 - Footer: 5-column at desktop.
 
 ### Whitespace Philosophy
-The dark canvas creates its own depth — whitespace can stay tight without feeling crowded. 96px between bands; 24px between cards inside a band.
+The dark canvas creates its own depth: whitespace can stay tight without feeling crowded. 96px between bands; 24px between cards inside a band.
 
 ## Elevation & Depth
 
@@ -369,8 +369,8 @@ The system uses **brightness-step elevation**: surfaces step up in brightness in
 | Atmospheric glow | Radial gradient using `{colors.primary-glow}` | Hero spotlight backdrop |
 
 ### Decorative Depth
-- **Spotlight glow backdrops** — radial blue gradient centered behind hero content.
-- **Terminal-pane brightness ladder** — 2×2 mockup uses canvas-deep outer + surface-card-elevated panes.
+- **Spotlight glow backdrops**: radial blue gradient centered behind hero content.
+- **Terminal-pane brightness ladder**: 2×2 mockup uses canvas-deep outer + surface-card-elevated panes.
 
 ## Shapes
 
@@ -387,73 +387,73 @@ The system uses **brightness-step elevation**: surfaces step up in brightness in
 | `{rounded.pill}` | 9999px | Section-label badges |
 | `{rounded.full}` | 9999px | Avatar plates (rare) |
 
-Compact developer-ergonomic radii — 8px CTAs, 12-16px cards. Signals "developer tool" rather than "consumer brand."
+Compact developer-ergonomic radii: 8px CTAs, 12-16px cards. Signals "developer tool" rather than "consumer brand."
 
 ## Components
 
 ### Top Navigation
 
-**`top-nav-dark`** — Default top nav. Background `{colors.canvas}`, text `{colors.body-strong}`, height 64px. Layout: Composio wordmark left, primary horizontal menu (Product / Toolkits / Docs / Pricing / Customers / Blog), GitHub stars + Sign In + "Get started" right.
+**`top-nav-dark`**: Default top nav. Background `{colors.canvas}`, text `{colors.body-strong}`, height 64px. Layout: Composio wordmark left, primary horizontal menu (Product / Toolkits / Docs / Pricing / Customers / Blog), GitHub stars + Sign In + "Get started" right.
 
 ### Buttons
 
-**`button-primary`** — The signature Composio Blue CTA. Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button}` (14px / 500), padding 10px × 18px, height 40px, rounded `{rounded.md}` (8px).
+**`button-primary`**: The signature Composio Blue CTA. Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button}` (14px / 500), padding 10px × 18px, height 40px, rounded `{rounded.md}` (8px).
 
-**`button-primary-active`** — Press state. Background `{colors.primary-active}`.
+**`button-primary-active`**: Press state. Background `{colors.primary-active}`.
 
-**`button-secondary-dark`** — Surface-elevated secondary. Background `{colors.surface-card-elevated}`, text `{colors.body-strong}`.
+**`button-secondary-dark`**: Surface-elevated secondary. Background `{colors.surface-card-elevated}`, text `{colors.body-strong}`.
 
-**`button-outline`** — Transparent with 1px hairline-strong border.
+**`button-outline`**: Transparent with 1px hairline-strong border.
 
-**`button-tertiary-text`** — Inline text link.
+**`button-tertiary-text`**: Inline text link.
 
 ### Hero & Atmospheric
 
-**`hero-band`** — Homepage hero. Background `{colors.canvas}`, full-width display headline in `{typography.display-mega}` (72px / 500), subhead, two CTAs, and a spotlight-glow backdrop emanating from behind the centered terminal-mockup grid.
+**`hero-band`**: Homepage hero. Background `{colors.canvas}`, full-width display headline in `{typography.display-mega}` (72px / 500), subhead, two CTAs, and a spotlight-glow backdrop emanating from behind the centered terminal-mockup grid.
 
-**`terminal-mockup-grid`** — The brand's strongest visual signature. 2×2 grid of dark code/output panels inside a `{rounded.xl}` (16px) container. Background `{colors.canvas-deep}`, padding 32px, gap 16px.
+**`terminal-mockup-grid`**: The brand's strongest visual signature. 2×2 grid of dark code/output panels inside a `{rounded.xl}` (16px) container. Background `{colors.canvas-deep}`, padding 32px, gap 16px.
 
-**`terminal-pane`** — Individual code/output panel inside the mockup grid. Background `{colors.surface-card}`, text `{colors.body}` in `{typography.code}`, rounded `{rounded.lg}` (12px), padding 20px.
+**`terminal-pane`**: Individual code/output panel inside the mockup grid. Background `{colors.surface-card}`, text `{colors.body}` in `{typography.code}`, rounded `{rounded.lg}` (12px), padding 20px.
 
-**`spotlight-glow-card`** — Large feature card with centered display headline and a radial blue glow behind it. Background `{colors.surface-card}`, text `{colors.body-strong}` in `{typography.display-md}`, rounded `{rounded.xl}`, padding 48px.
+**`spotlight-glow-card`**: Large feature card with centered display headline and a radial blue glow behind it. Background `{colors.surface-card}`, text `{colors.body-strong}` in `{typography.display-md}`, rounded `{rounded.xl}`, padding 48px.
 
 ### Cards
 
-**`feature-card`** — 3-up benefit grid. Background `{colors.surface-card}`, text `{colors.body}`, type `{typography.title-md}`, rounded `{rounded.xl}`, padding 28px.
+**`feature-card`**: 3-up benefit grid. Background `{colors.surface-card}`, text `{colors.body}`, type `{typography.title-md}`, rounded `{rounded.xl}`, padding 28px.
 
-**`toolkit-card`** — 4-up toolkit grid (Slack, GitHub, Stripe, Notion, Linear, etc.). Background `{colors.surface-card}`, text `{colors.body-strong}`, type `{typography.title-sm}`, rounded `{rounded.lg}`, padding 20px. 40px square `{component.toolkit-icon}` top, toolkit name, one-line description.
+**`toolkit-card`**: 4-up toolkit grid (Slack, GitHub, Stripe, Notion, Linear, etc.). Background `{colors.surface-card}`, text `{colors.body-strong}`, type `{typography.title-sm}`, rounded `{rounded.lg}`, padding 20px. 40px square `{component.toolkit-icon}` top, toolkit name, one-line description.
 
-**`toolkit-icon`** — Square icon plate. Background `{colors.surface-card-elevated}`, rounded `{rounded.md}`, 40px size.
+**`toolkit-icon`**: Square icon plate. Background `{colors.surface-card-elevated}`, rounded `{rounded.md}`, 40px size.
 
-**`testimonial-card`** — Quote card. Background `{colors.surface-card}`, text `{colors.body}`, rounded `{rounded.lg}`, padding 24px.
+**`testimonial-card`**: Quote card. Background `{colors.surface-card}`, text `{colors.body}`, rounded `{rounded.lg}`, padding 24px.
 
 ### Code
 
-**`code-block`** — Inline code/terminal block. Background `{colors.canvas-deep}`, text `{colors.body}` in `{typography.code}`, rounded `{rounded.lg}`, padding 20px.
+**`code-block`**: Inline code/terminal block. Background `{colors.canvas-deep}`, text `{colors.body}` in `{typography.code}`, rounded `{rounded.lg}`, padding 20px.
 
 ### Forms
 
-**`text-input`** — Background `{colors.surface-card}`, text `{colors.body-strong}`, rounded `{rounded.md}` (8px), padding 12px × 16px, height 44px.
+**`text-input`**: Background `{colors.surface-card}`, text `{colors.body-strong}`, rounded `{rounded.md}` (8px), padding 12px × 16px, height 44px.
 
-**`search-input`** — Compact search field. Same surface and radius, smaller padding, 40px height.
+**`search-input`**: Compact search field. Same surface and radius, smaller padding, 40px height.
 
 ### Tags & Badges
 
-**`badge-pill`** — Small uppercase pill. Background `{colors.surface-card-elevated}`, text `{colors.body-strong}`, type `{typography.caption-uppercase}`, rounded `{rounded.pill}`, padding 4px × 10px.
+**`badge-pill`**: Small uppercase pill. Background `{colors.surface-card-elevated}`, text `{colors.body-strong}`, type `{typography.caption-uppercase}`, rounded `{rounded.pill}`, padding 4px × 10px.
 
 ### CTA / Footer
 
-**`cta-band-spotlight`** — Pre-footer band. Background `{colors.canvas}` with centered radial spotlight glow. Display headline + single primary CTA pill. 96px padding.
+**`cta-band-spotlight`**: Pre-footer band. Background `{colors.canvas}` with centered radial spotlight glow. Display headline + single primary CTA pill. 96px padding.
 
-**`footer-dark`** — Closing footer. Background `{colors.canvas}`, text `{colors.body}`. 5-column link list. 64×48px padding.
+**`footer-dark`**: Closing footer. Background `{colors.canvas}`, text `{colors.body}`. 5-column link list. 64×48px padding.
 
-**`footer-link`** — Background transparent, text `{colors.body}`, type `{typography.body-sm}`.
+**`footer-link`**: Background transparent, text `{colors.body}`, type `{typography.body-sm}`.
 
 ## Do's and Don'ts
 
 ### Do
 - Reserve `{colors.primary}` for primary CTAs, wordmark, and spotlight glows.
-- Use `{rounded.md}` (8px) for every CTA — not full pills.
+- Use `{rounded.md}` (8px) for every CTA, not full pills.
 - Use brightness-step ladder for elevation; avoid drop shadows.
 - Pair every hero with a centered radial blue spotlight glow.
 - Render code, CLI commands in JetBrains Mono via `{typography.code}`.
@@ -474,12 +474,12 @@ Compact developer-ergonomic radii — 8px CTAs, 12-16px cards. Signals "develope
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile | < 640px | Hero h1 72→36px; terminal mockup grid collapses to single pane; toolkit grid 1-up; nav hamburger. |
-| Tablet | 640–1024px | Hero h1 56px; terminal mockup grid stays 2×2; toolkit grid 2-up. |
-| Desktop | 1024–1280px | Full hero h1 72px; full 2×2 terminal mockup; toolkit grid 4-up. |
+| Tablet | 640 to 1024px | Hero h1 56px; terminal mockup grid stays 2×2; toolkit grid 2-up. |
+| Desktop | 1024 to 1280px | Full hero h1 72px; full 2×2 terminal mockup; toolkit grid 4-up. |
 | Wide | > 1280px | Content caps at 1200px. |
 
 ### Touch Targets
-- Primary CTA at 40px height — at WCAG AA, padded for AAA.
+- Primary CTA at 40px height: at WCAG AA, padded for AAA.
 - Search input at 40px.
 
 ### Collapsing Strategy
@@ -493,7 +493,7 @@ Compact developer-ergonomic radii — 8px CTAs, 12-16px cards. Signals "develope
 1. Focus on a single component at a time.
 2. CTAs default to `{rounded.md}` (8px). Cards use `{rounded.lg}` or `{rounded.xl}`.
 3. Variants live as separate entries inside `components:`.
-4. Use `{token.refs}` everywhere — never inline hex.
+4. Use `{token.refs}` everywhere, never inline hex.
 5. Hover state never documented.
 6. abcDiatype 500 for display, 400/600 for body. JetBrains Mono on every code surface.
 7. Composio Blue stays scarce.

@@ -3,7 +3,7 @@
 > A high-performance database interface anchored on near-pure black canvas with electric yellow as the brand voltage.
 
 **Category:** Developer Tools
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/clickhouse.json`](../../data/brands/clickhouse.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

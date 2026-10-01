@@ -22,7 +22,7 @@ A surface is named when:
 A surface is not named when:
 - The scope is "the design system" with no specific surfaces to apply it to.
 - The scope is "the product" without a list of surfaces.
-- The scope is "what looks bad" — a feeling, not a boundary.
+- The scope is "what looks bad": a feeling, not a boundary.
 
 ### 2. What is the metric of success?
 
@@ -37,7 +37,7 @@ The metric does two things: it tells you when the redesign is done, and it gives
 
 ### 3. What is explicitly out of scope?
 
-Information architecture, content strategy, naming conventions, copy rewrites, framework migrations — name each one as out unless it is explicitly in. The default for any adjacent concern is "out, document for follow-up."
+Information architecture, content strategy, naming conventions, copy rewrites, framework migrations: name each one as out unless it is explicitly in. The default for any adjacent concern is "out, document for follow-up."
 
 This list is what protects the redesign from scope creep. When something surfaces during the work that you want to fix, the question is: is it in the in-scope list? If not, it goes on the follow-up list and the work proceeds.
 
@@ -73,13 +73,13 @@ These can evolve but not vanish. The modernization changes the surface around th
 
 Components that were good when they shipped and are now dated. The flat 2018 cards. The pure-black backgrounds. The default Material Design buttons. The illustrations that look like the era they came from.
 
-These are the redesign's real targets. Stale does not mean broken — it means the component shipped against a different aesthetic baseline and the baseline has moved.
+These are the redesign's real targets. Stale does not mean broken. It means the component shipped against a different aesthetic baseline and the baseline has moved.
 
 ### Deprecated
 
 Components nobody loves, nobody asked for, and that exist only because of historical accident. The page nobody visits. The setting nobody touches. The "share" button that has had a 0.2% click rate for three years.
 
-Mark for removal; do not redesign what should be deleted. The redesign is also a deletion pass — every component you remove is one less component to maintain and one fewer surface to ship-quality.
+Mark for removal; do not redesign what should be deleted. The redesign is also a deletion pass: every component you remove is one less component to maintain and one fewer surface to ship-quality.
 
 ### The audit checklist
 
@@ -111,7 +111,7 @@ Run these against the existing UI. Each item is a flag, not a verdict:
 - **Exclamation marks in success messages.** "Oops!" errors. Be confident, direct.
 - **Lorem Ipsum, identical avatars, identical blog dates.** Fill with real-shaped placeholder content.
 - **Title Case On Every Header.** Switch to sentence case.
-- **Div soup.** Use semantic HTML — `<nav>`, `<main>`, `<article>`, `<aside>`, `<section>`.
+- **Div soup.** Use semantic HTML: `<nav>`, `<main>`, `<article>`, `<aside>`, `<section>`.
 - **Missing alt text, missing meta tags, arbitrary z-index values.** Clean up.
 - **No skip-to-content link.** Add one.
 - **No 404.** Design a helpful, branded page.
@@ -126,7 +126,7 @@ A redesign distinguishes two layers.
 
 ### Taste invariants (things that must stay)
 
-The things that, if removed, would change what the product *is* — not how it looks. These survive the redesign without negotiation.
+The things that, if removed, would change what the product *is*, not how it looks. These survive the redesign without negotiation.
 
 - **The product's voice.** The way it greets, confirms, apologizes. If the existing voice is "direct, warm, specific," the redesign keeps "direct, warm, specific." If the voice is broken (shouty, condescending, overly cheerful), that is a separate decision and lives on the in-scope or follow-up list.
 - **The decision architecture.** What the user can and cannot do. The redesign restyles the surface; it does not silently remove a capability.
@@ -140,7 +140,7 @@ The taste invariants are the equity. They are what makes a returning user feel "
 
 Everything else. The chrome, the surface, the choreography:
 
-- The exact typeface (within the family — and the family itself if it carries no equity).
+- The exact typeface (within the family, and the family itself if it carries no equity).
 - The radius scale.
 - The shadow style.
 - The spacing rhythm.
@@ -158,7 +158,7 @@ If you cannot decide whether something is invariant or expression, ask: **would 
 If yes, it is equity. Preserve it.
 If no, it is expression. Modernize it.
 
-If you genuinely cannot tell, ask the team. The team's institutional memory is the source of truth on what carries equity. Do not guess — guessing wrong on equity creates the worst outcome: a returning user opens the product and feels lost.
+If you genuinely cannot tell, ask the team. The team's institutional memory is the source of truth on what carries equity. Do not guess, guessing wrong on equity creates the worst outcome: a returning user opens the product and feels lost.
 
 ---
 
@@ -170,9 +170,9 @@ Brand equity lives in two places: marks (logo, brand color, type personality) an
 
 - **Keep the logo.** Replace its container, not its form. If the logo lived in a colored circle in the old chrome, the redesign can change the circle but not the logo inside it.
 
-- **Keep the brand color.** Reduce saturation. Tighten its usage rules. Give it more breathing room. The old design might have used the brand color on twelve elements; the new design uses it on three — that is modernization, not removal.
+- **Keep the brand color.** Reduce saturation. Tighten its usage rules. Give it more breathing room. The old design might have used the brand color on twelve elements; the new design uses it on three. That is modernization, not removal.
 
-- **Keep the type family if it carries equity.** Refresh the scale, weights, and tracking. Do not replace the family unless it is genuinely a problem — licensing, accessibility, or it never had equity to begin with.
+- **Keep the type family if it carries equity.** Refresh the scale, weights, and tracking. Do not replace the family unless it is genuinely a problem: licensing, accessibility, or it never had equity to begin with.
 
 - **Keep the voice.** Modernize tone where the current voice is shouty, exclamation-heavy, or condescending. The personality stays. The "we'll be right with you, hold tight" stays; the "OMG SO EXCITED YOU'RE HERE!!!" goes.
 
@@ -180,7 +180,7 @@ Brand equity lives in two places: marks (logo, brand color, type personality) an
 
 ### When equity is actually legacy
 
-Sometimes the team treats something as equity when it is actually legacy. The brand color is "ours" because nobody has questioned it in five years — but nobody actually liked it, the audience does not remember it, and replacing it would not feel like a loss.
+Sometimes the team treats something as equity when it is actually legacy. The brand color is "ours" because nobody has questioned it in five years, but nobody actually liked it, the audience does not remember it, and replacing it would not feel like a loss.
 
 The test:
 - Ask three returning users what color the brand is. If they cannot answer, the color is not equity.
@@ -202,7 +202,7 @@ Cut over the entire surface in one release. Reserved for:
 - Surfaces where the existing UI is so broken that gradual rollout is worse.
 - Greenfield within a redesign (a brand new page being added as part of the redesign).
 
-Requires a tight blast radius and a rollback path. The rollback is what makes big-bang safe — if the launch shows a problem in the first hour, the team can revert and diagnose.
+Requires a tight blast radius and a rollback path. The rollback is what makes big-bang safe: if the launch shows a problem in the first hour, the team can revert and diagnose.
 
 ### 2. Parallel pages
 
@@ -224,7 +224,7 @@ Use when:
 
 ### 4. Dark launch
 
-Ship the new design rendered but not visible — behind a query param the team uses, or a header check, or an internal-only flag. Validate in production with real data before exposing to users.
+Ship the new design rendered but not visible: behind a query param the team uses, or a header check, or an internal-only flag. Validate in production with real data before exposing to users.
 
 Use when:
 - The redesign has heavy computation or new data dependencies that need real-world validation.
@@ -254,13 +254,13 @@ When refactor applies:
 - The components map to what the new design needs.
 - The data flow is correct.
 - The accessibility foundation is present (semantic HTML, ARIA where needed, keyboard handling).
-- The issue is surface — colors, spacing, typography, interaction states.
+- The issue is surface: colors, spacing, typography, interaction states.
 
 Refactor is fast and reversible. Most redesigns end here.
 
 ### Rewrite
 
-The existing code is fighting the new design — wrong primitives, wrong stack, wrong layering. Rewrite the component or the page in place; keep the route and the URL stable.
+The existing code is fighting the new design: wrong primitives, wrong stack, wrong layering. Rewrite the component or the page in place; keep the route and the URL stable.
 
 When rewrite applies:
 - The existing component was built for a different aesthetic and is structurally incompatible.
@@ -292,22 +292,22 @@ A redesign is a change. Users do not always welcome change, even when the change
 
 Tell users what is happening before they discover it. The announcement says:
 - What is changing.
-- Why (in terms the user cares about — speed, clarity, new capabilities).
+- Why (in terms the user cares about: speed, clarity, new capabilities).
 - When (date or rollout window).
-- What stays the same (the equity — the things they will still recognize).
+- What stays the same (the equity: the things they will still recognize).
 - How to provide feedback if something goes wrong.
 
-A surprise redesign — users open the product one morning and find it different — generates more support tickets than a redesign announced a week in advance. The cost of the announcement is low; the benefit is high.
+A surprise redesign (users open the product one morning and find it different) generates more support tickets than a redesign announced a week in advance. The cost of the announcement is low; the benefit is high.
 
 ### Opt-in
 
-When the migration strategy supports it (parallel pages, feature flag), let users opt in. The opt-in is the friendliest rollout because it converts complaints into curiosity — users who do not want change can stay; users who want to try the new version can.
+When the migration strategy supports it (parallel pages, feature flag), let users opt in. The opt-in is the friendliest rollout because it converts complaints into curiosity: users who do not want change can stay; users who want to try the new version can.
 
 Opt-in surfaces the strongest signal: the percentage of users who opt back to the old version is the clearest measure of whether the redesign is actually better. If 30% opt back, something is wrong. If 2% opt back, the redesign is succeeding.
 
 ### Full rollout
 
-Once metrics support it, commit to the new version and remove the old. The full rollout removes the toggle, removes the alternate URL, removes the feature flag — the new design becomes the only design.
+Once metrics support it, commit to the new version and remove the old. The full rollout removes the toggle, removes the alternate URL, removes the feature flag: the new design becomes the only design.
 
 Time the full rollout against:
 - Stability of the new design (no open critical issues).
@@ -338,7 +338,7 @@ Recovery: when scope creep is detected mid-redesign, do not "finish what's start
 
 ### Regressions
 
-The new design is prettier but slower. Or prettier but less accessible. Or prettier but harder to use. The metric the team chose (in the scope phase) is the canary — when the metric moves the wrong way, the redesign has regressed.
+The new design is prettier but slower. Or prettier but less accessible. Or prettier but harder to use. The metric the team chose (in the scope phase) is the canary: when the metric moves the wrong way, the redesign has regressed.
 
 Prevention: track the metric continuously during the rollout. Define a regression threshold before the launch ("if conversion drops more than 5%, we pause the rollout").
 
@@ -346,15 +346,15 @@ Recovery: roll back the surface where the regression appeared. Diagnose. Fix. Re
 
 ### Regression of taste
 
-The redesign is technically modernized — better colors, better type, better spacing — but the soul of the product is gone. The signature warmth, the specific voice, the moments that users loved — they are not in the new design.
+The redesign is technically modernized (better colors, better type, better spacing) but the soul of the product is gone. The signature warmth, the specific voice, the moments that users loved. They are not in the new design.
 
-Prevention: the taste invariants list, written before the work starts, names what must survive. The work is reviewable against the list — does the new design preserve each invariant?
+Prevention: the taste invariants list, written before the work starts, names what must survive. The work is reviewable against the list: does the new design preserve each invariant?
 
 Recovery: the invariants that were lost are diagnosed and restored. The redesign does not roll back; the redesign incorporates the missing equity. The new save animation now matches the warmth of the old one; the new empty state has the personality of the old one.
 
 ### Drift during rollout
 
-The team starts redesigning surface 1 with a clear vision. By surface 6, the vision has drifted — surface 6 disagrees with surface 5 which disagrees with surface 4 which disagrees with surface 1. The redesign ships, but the result is incoherent across surfaces.
+The team starts redesigning surface 1 with a clear vision. By surface 6, the vision has drifted: surface 6 disagrees with surface 5 which disagrees with surface 4 which disagrees with surface 1. The redesign ships, but the result is incoherent across surfaces.
 
 Prevention: the design system document, written during or before the work, is the source of truth. Every surface is built against the system, not against the surface before it.
 
@@ -370,7 +370,7 @@ Recovery: when the team is reverting based on noise, return to the metric. Ask: 
 
 ### Premature cleanup
 
-The team deletes the old code before the new is proven. Six weeks in, a regression appears that requires reverting to the old version — and the old code is gone.
+The team deletes the old code before the new is proven. Six weeks in, a regression appears that requires reverting to the old version, and the old code is gone.
 
 Prevention: keep the old code in the tree until the new is proven. "Cleanup" is a phase after the redesign lands, not during.
 
@@ -382,7 +382,7 @@ Recovery: if the old code is already gone, the team commits to fixing the new ve
 
 1. **Work with the existing tech stack.** Do not migrate frameworks under cover of a redesign. If the framework needs to change, that is its own project.
 
-2. **Check the project's dependency file before importing anything new.** A new font, a new motion library, a new component primitive — each one needs justification, and the justification belongs in the design system document, not hidden in the build.
+2. **Check the project's dependency file before importing anything new.** A new font, a new motion library, a new component primitive: each one needs justification, and the justification belongs in the design system document, not hidden in the build.
 
 3. **Do not break existing functionality.** Test after every visible change. The redesign restyles; it does not silently remove capabilities.
 

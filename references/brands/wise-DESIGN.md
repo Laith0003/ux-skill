@@ -1,9 +1,9 @@
 # Wise
 
-> An inspired interpretation of Wise's design language — a global money-transfer brand whose surface combines an unusually heavy near-black display sans (weight 900 at 64–126 px) with a vivid lime-green brand accent, sage-tinted surface neutrals, and rounded white cards on a pale green-tinted canvas; the whole system reads more like a Scandinavian fintech magazine than a bank.
+> An inspired interpretation of Wise's design language: a global money-transfer brand whose surface combines an unusually heavy near-black display sans (weight 900 at 64 to 126 px) with a vivid lime-green brand accent, sage-tinted surface neutrals, and rounded white cards on a pale green-tinted canvas; the whole system reads more like a Scandinavian fintech magazine than a bank.
 
 **Category:** Fintech / Crypto
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/wise.json`](../../data/brands/wise.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-An inspired interpretation of Wise's design language — a global money-transfer brand whose surface combines an unusually heavy near-black display sans (weight 900 at 64–126 px) with a vivid lime-green brand accent, sage-tinted surface neutrals, and rounded white cards on a pale green-tinted canvas; the whole system reads more like a Scandinavian fintech magazine than a bank.
+An inspired interpretation of Wise's design language: a global money-transfer brand whose surface combines an unusually heavy near-black display sans (weight 900 at 64 to 126 px) with a vivid lime-green brand accent, sage-tinted surface neutrals, and rounded white cards on a pale green-tinted canvas; the whole system reads more like a Scandinavian fintech magazine than a bank.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._
