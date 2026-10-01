@@ -11,6 +11,7 @@ from engine.io.adapter import AxisMap, Mapping, RoleMap, reduced_pairs, view
 from engine.io.css_in import import_css
 from engine.io.dtcg_in import import_dtcg
 from engine.io.enhance import enhance
+from engine.io.figma_in import import_figma
 from engine.io.report import Source
 from engine.io.scan import scan
 
@@ -122,6 +123,44 @@ def test_twins_are_motion_values_only():
                    "--shadow-lift: 4px; --shadow-lift-reduced: 0px; "
                    "--distance-reveal: 16px; --distance-reveal-reduced: 0px; }\n").tokens
     assert reduced_pairs(ts) == {"distance-reveal": "distance-reveal-reduced"}
+
+
+def _figma_motion(names):
+    """A Figma export of one Motion collection: each FLOAT has no scope,
+    as Figma has none for a duration, so it is read as a plain number."""
+    variables = {f"v:{n}": {"id": f"v:{n}", "name": name, "variableCollectionId": "c:1",
+                            "resolvedType": "FLOAT", "valuesByMode": {"m:1": value},
+                            "scopes": [], "remote": False}
+                 for n, (name, value) in enumerate(names)}
+    doc = {"variableCollections": {"c:1": {
+        "id": "c:1", "name": "Motion", "defaultModeId": "m:1",
+        "modes": [{"modeId": "m:1", "name": "Value"}], "variableIds": list(variables)}},
+        "variables": variables}
+    text = json.dumps(doc)
+    return import_figma(text, Source("variables.json", "figma", "0" * 64, len(text)))
+
+
+def test_figma_twins_pair_as_plain_numbers_named_for_time_and_with_extra_words():
+    ts = _figma_motion([
+        ("duration/slow", 300), ("duration/slow (reduced)", 80),
+        ("motion/standard/fast", 150), ("motion/reduced/fast", 0),
+        ("delay/enter", 60), ("delay/enter/reduce", 0),
+        ("duration/calm", 400), ("a11y/prefers-reduced-motion/duration/calm", 0),
+        ("opacity/scrim", 0.6), ("opacity/scrim-reduced", 1)]).tokens
+    assert ts.get("duration.slow").type == "number"
+    assert reduced_pairs(ts) == {
+        "duration.slow": "duration.slow-reduced",
+        "motion.standard.fast": "motion.reduced.fast",
+        "delay.enter": "delay.enter.reduce",
+        "duration.calm": "a11y.prefers-reduced-motion.duration.calm"}
+
+
+def test_a_standard_word_in_the_base_pairs_in_css_too():
+    ts = _imported(":root { --pace-default-reveal: 300ms; --pace-reduced-reveal: 0ms; "
+                   "--ease-standard: cubic-bezier(0.2, 0, 0, 1); "
+                   "--ease-reduced-motion: linear; }\n").tokens
+    assert reduced_pairs(ts) == {"pace-default-reveal": "pace-reduced-reveal",
+                                 "ease-standard": "ease-reduced-motion"}
 
 
 def test_a_boolean_reduced_motion_query_counts_as_present(tmp_path):
