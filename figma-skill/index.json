@@ -1,0 +1,11 @@
+{
+  "$schema": "https://schemas.agentskills.io/discovery/0.2.0/schema.json",
+  "skills": [
+    {
+      "name": "ux-skill-foundations",
+      "type": "skill-md",
+      "description": "Build a brand's design system with ux-skill and bring it into Figma as variables and components that match the code. Use when the user wants Figma variables, modes or components from a brand color, a brief or an existing token file, or wants a Figma library checked against the tokens a site ships. Load figma-use alongside it for every use_figma call.",
+      "url": "ux-skill-foundations/SKILL.md"
+    }
+  ]
+}
