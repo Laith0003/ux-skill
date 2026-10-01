@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.25,
+    "formality": 0.362,
+    "geometry": 0.51,
+    "motion": 0.442,
+    "type_personality": 0.5,
+    "warmth": 0.491
+  },
+  "axes_source": "Read from data/brands/neon.json: warmth from the hue and chroma of the primary #00E599 and the canvas #0C0D0D; contrast from the ink #F5F7F4 on that canvas, its depth and the chroma of #00E599; density from its 8px spacing base; geometry from its radii 4, 8, 12, 16px; formality from the chroma of its primary and ink; motion from its stated durations 300ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#00E599",
+  "brand_rule": "The primary #00E599 reaches 11.74:1 on the canvas #0C0D0D, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#00E599",
+      "light": "#00E599"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0C0E0C",
+      "light": "#F6F7F6"
+    },
+    "radius_control": "8px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "a161bdaf41a281a2"
+  },
+  "id": "neon",
+  "name": "Neon",
+  "spec": "data/brands/neon.json"
+}

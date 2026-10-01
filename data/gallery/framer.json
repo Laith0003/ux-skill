@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.789,
+    "density": 1.0,
+    "formality": 1.0,
+    "geometry": 0.636,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.5
+  },
+  "axes_source": "Read from data/brands/framer.json: warmth from the hue and chroma of the primary #FFFFFF and the canvas #090909; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #FFFFFF; density from its 1px spacing base; geometry from its radii 4, 6, 10, 15, 20, 30px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FFFFFF",
+  "brand_rule": "The primary #FFFFFF reaches 19.91:1 on the canvas #090909, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DADADA",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D0D",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "6px",
+    "state_duration": "200ms",
+    "tokens": 613,
+    "tokens_sha256": "bb4289310b2cf7d0"
+  },
+  "id": "framer",
+  "name": "Framer",
+  "spec": "data/brands/framer.json"
+}

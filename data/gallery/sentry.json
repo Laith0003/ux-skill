@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.504,
+    "density": 0.5,
+    "formality": 0.86,
+    "geometry": 0.499,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.431
+  },
+  "axes_source": "Read from data/brands/sentry.json: warmth from the hue and chroma of the primary #150F23 and the canvas #FFFFFF; contrast from the ink #1F1633 on that canvas, its depth and the chroma of #150F23; density from its 4px spacing base; geometry from its radii 4, 6, 8, 10, 12, 18px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#150F23",
+  "brand_rule": "The primary #150F23 reaches 18.68:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DBDADD",
+      "light": "#1F1E21"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D0F",
+      "light": "#F7F6F8"
+    },
+    "radius_control": "5px",
+    "state_duration": "200ms",
+    "tokens": 614,
+    "tokens_sha256": "49d9f40792114432"
+  },
+  "id": "sentry",
+  "name": "Sentry",
+  "spec": "data/brands/sentry.json"
+}

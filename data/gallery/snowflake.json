@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.65,
+    "density": 0.25,
+    "formality": 0.176,
+    "geometry": 0.605,
+    "motion": 0.791,
+    "type_personality": 0.5,
+    "warmth": 0.15
+  },
+  "axes_source": "Read from data/brands/snowflake.json: warmth from the hue and chroma of the primary #29B5E8 and the canvas #FFFFFF; contrast from the ink #11567F on that canvas, its depth and the chroma of #29B5E8; density from its 8px spacing base; geometry from its radii 4, 8, 16, 24px; formality from the chroma of its primary and ink; motion from its stated durations 300ms, 12000ms, 60000ms, 600ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#11567F",
+  "brand_rule": "The primary #29B5E8 reaches only 2.37:1 on the canvas #FFFFFF, under the 3:1 a control needs, so the accent color_accent_glacier_deep #11567F at 7.89:1 carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#11567F",
+      "light": "#11567F"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0A0E10",
+      "light": "#F5F7F8"
+    },
+    "radius_control": "10px",
+    "state_duration": "240ms",
+    "tokens": 614,
+    "tokens_sha256": "efc62881accaf3b4"
+  },
+  "id": "snowflake",
+  "name": "Snowflake",
+  "spec": "data/brands/snowflake.json"
+}

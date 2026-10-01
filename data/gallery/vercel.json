@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.482,
+    "density": 0.5,
+    "formality": 1.0,
+    "geometry": 0.549,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.5
+  },
+  "axes_source": "Read from data/brands/vercel.json: warmth from the hue and chroma of the primary #171717 and the canvas #FFFFFF; contrast from the ink #171717 on that canvas, its depth and the chroma of #171717; density from its 4px spacing base; geometry from its radii 0, 4, 6, 8, 12, 16, 64px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#171717",
+  "brand_rule": "The primary #171717 reaches 17.93:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DADADA",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D0D",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "5px",
+    "state_duration": "200ms",
+    "tokens": 614,
+    "tokens_sha256": "11eed16bcbe1e174"
+  },
+  "id": "vercel",
+  "name": "Vercel",
+  "spec": "data/brands/vercel.json"
+}

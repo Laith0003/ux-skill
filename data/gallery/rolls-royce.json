@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.571,
+    "density": 0.25,
+    "formality": 1.0,
+    "geometry": 0.069,
+    "motion": 1.0,
+    "type_personality": 0.5,
+    "warmth": 0.571
+  },
+  "axes_source": "Read from data/brands/rolls-royce.json: warmth from the hue and chroma of the primary #1A1A1A and the canvas #F5F1E9; contrast from the ink #1A1A1A on that canvas, its depth and the chroma of #7A6035; density from its 8px spacing base; geometry from its radii 0, 2px; formality from the chroma of its primary and ink; motion from its stated durations 3000ms, 1200ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#1A1A1A",
+  "brand_rule": "The primary #1A1A1A reaches 15.45:1 on the canvas #F5F1E9, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DBDADA",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0E0D0D",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "2px",
+    "state_duration": "200ms",
+    "tokens": 613,
+    "tokens_sha256": "cb8a009bd7054398"
+  },
+  "id": "rolls-royce",
+  "name": "Rolls-Royce Motor Cars",
+  "spec": "data/brands/rolls-royce.json"
+}

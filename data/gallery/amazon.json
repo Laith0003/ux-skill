@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.838,
+    "density": 0.5,
+    "formality": 0.294,
+    "geometry": 0.235,
+    "motion": 0.0,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/amazon.json: warmth from the hue and chroma of the primary #FF9900 and the canvas #FFFFFF; contrast from the ink #0F1111 on that canvas, its depth and the chroma of #FF9900; density from its 4px spacing base; geometry from its radii 0, 3, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 50ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FF9900",
+  "brand_rule": "The primary #FF9900 reaches only 2.14:1 on the canvas #FFFFFF and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#FF9900",
+      "light": "#FF9900"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#0F0D0A",
+      "light": "#F8F6F5"
+    },
+    "radius_control": "4px",
+    "state_duration": "150ms",
+    "tokens": 615,
+    "tokens_sha256": "7263100ef9552c57"
+  },
+  "id": "amazon",
+  "name": "Amazon",
+  "spec": "data/brands/amazon.json"
+}

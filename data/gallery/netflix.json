@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.25,
+    "formality": 0.396,
+    "geometry": 0.248,
+    "motion": 0.76,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/netflix.json: warmth from the hue and chroma of the primary #E50914 and the canvas #141414; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #E50914; density from its 8px spacing base; geometry from its radii 2, 4, 6px; formality from the chroma of its primary and ink; motion from its stated durations 30000ms, 200ms, 6000ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#E50914",
+  "brand_rule": "The primary #E50914 reaches 3.84:1 on the canvas #141414, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#E50914",
+      "light": "#E50914"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "4px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "cd225920b36fc704"
+  },
+  "id": "netflix",
+  "name": "Netflix",
+  "spec": "data/brands/netflix.json"
+}

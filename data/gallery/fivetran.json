@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.803,
+    "density": 0.25,
+    "formality": 0.333,
+    "geometry": 0.435,
+    "motion": 0.14,
+    "type_personality": 0.5,
+    "warmth": 0.15
+  },
+  "axes_source": "Read from data/brands/fivetran.json: warmth from the hue and chroma of the primary #0073E6 and the canvas #FFFFFF; contrast from the ink #0D1219 on that canvas, its depth and the chroma of #0073E6; density from its 8px spacing base; geometry from its radii 4, 8, 12px; formality from the chroma of its primary and ink; motion from its stated durations 200ms, 100ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#0073E6",
+  "brand_rule": "The primary #0073E6 reaches 4.57:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#0073E6",
+      "light": "#0073E6"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0B0D10",
+      "light": "#F5F7F9"
+    },
+    "radius_control": "7px",
+    "state_duration": "150ms",
+    "tokens": 614,
+    "tokens_sha256": "cbf906639e900481"
+  },
+  "id": "fivetran",
+  "name": "Fivetran",
+  "spec": "data/brands/fivetran.json"
+}

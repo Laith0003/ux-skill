@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.741,
+    "density": 0.5,
+    "formality": 0.454,
+    "geometry": 0.605,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.817
+  },
+  "axes_source": "Read from data/brands/airbnb.json: warmth from the hue and chroma of the primary #FF385C and the canvas #FFFFFF; contrast from the ink #222222 on that canvas, its depth and the chroma of #FF385C; density from its 4px spacing base; geometry from its radii 0, 4, 8, 14, 20, 32px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FF385C",
+  "brand_rule": "The primary #FF385C reaches 3.52:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#E8174B",
+      "light": "#E8174B"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F8F6F6"
+    },
+    "radius_control": "9px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "47b5a3f99b4e8ed2"
+  },
+  "id": "airbnb",
+  "name": "Airbnb",
+  "spec": "data/brands/airbnb.json"
+}

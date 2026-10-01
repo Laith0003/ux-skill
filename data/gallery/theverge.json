@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.5,
+    "formality": 0.3,
+    "geometry": 0.5,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.15
+  },
+  "axes_source": "Read from data/brands/theverge.json: warmth from the hue and chroma of the primary #5200FF and the canvas #131313; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #5200FF; density at 0.5 since it states no spacing base; geometry at 0.5 since it states no radius; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#5200FF",
+  "brand_rule": "The primary #5200FF reaches only 2.48:1 on the canvas #131313 and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#5200FF",
+      "light": "#5200FF"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0D0D10",
+      "light": "#F6F7F9"
+    },
+    "radius_control": "8px",
+    "state_duration": "200ms",
+    "tokens": 614,
+    "tokens_sha256": "e3c06286f67e4139"
+  },
+  "id": "theverge",
+  "name": "The Verge",
+  "spec": "data/brands/theverge.json"
+}

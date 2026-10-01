@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.8,
+    "density": 0.5,
+    "formality": 0.301,
+    "geometry": 0.248,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.885
+  },
+  "axes_source": "Read from data/brands/posthog.json: warmth from the hue and chroma of the primary #F7A501 and the canvas #EEEFE9; contrast from the ink #23251D on that canvas, its depth and the chroma of #F7A501; density from its 4px spacing base; geometry from its radii 0, 2, 4, 6, 8px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#F7A501",
+  "brand_rule": "The primary #F7A501 reaches only 1.76:1 on the canvas #EEEFE9 and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#F7A501",
+      "light": "#F7A501"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#0F0D09",
+      "light": "#F8F6F4"
+    },
+    "radius_control": "5px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "9d03c96f34b8750d"
+  },
+  "id": "posthog",
+  "name": "PostHog",
+  "spec": "data/brands/posthog.json"
+}

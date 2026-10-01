@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.949,
+    "density": 0.5,
+    "formality": 0.628,
+    "geometry": 0.51,
+    "motion": 0.612,
+    "type_personality": 0.5,
+    "warmth": 0.085
+  },
+  "axes_source": "Read from data/brands/railway.json: warmth from the hue and chroma of the primary #9C7DFF and the canvas #13111C; contrast from the ink #FDFAFF on that canvas, its depth and the chroma of #9C7DFF; density from its 4px spacing base; geometry from its radii 4, 8, 12, 16px; formality from the chroma of its primary and ink; motion from its stated durations 1500ms, 200ms, 400ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#9C7DFF",
+  "brand_rule": "The primary #9C7DFF reaches 6.04:1 on the canvas #13111C, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#815FDF",
+      "light": "#9C7DFF"
+    },
+    "face": {
+      "display": "Space Grotesk",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D10",
+      "light": "#F7F6F9"
+    },
+    "radius_control": "6px",
+    "state_duration": "200ms",
+    "tokens": 617,
+    "tokens_sha256": "feb2cb5f8ba19693"
+  },
+  "id": "railway",
+  "name": "Railway",
+  "spec": "data/brands/railway.json"
+}

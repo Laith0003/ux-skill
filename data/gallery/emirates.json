@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.738,
+    "density": 0.25,
+    "formality": 0.478,
+    "geometry": 0.487,
+    "motion": 1.0,
+    "type_personality": 0.5,
+    "warmth": 0.909
+  },
+  "axes_source": "Read from data/brands/emirates.json: warmth from the hue and chroma of the primary #D71920 and the canvas #FDF9F3; contrast from the ink #1A1A1A on that canvas, its depth and the chroma of #D71920; density from its 8px spacing base; geometry from its radii 4, 8, 16px; formality from the chroma of its primary and ink; motion from its stated durations 1500ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#D71920",
+  "brand_rule": "The primary #D71920 reaches 4.94:1 on the canvas #FDF9F3, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#D71920",
+      "light": "#D71920"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "7px",
+    "state_duration": "240ms",
+    "tokens": 616,
+    "tokens_sha256": "c498c2f4257fdadd"
+  },
+  "id": "emirates",
+  "name": "Emirates",
+  "spec": "data/brands/emirates.json"
+}

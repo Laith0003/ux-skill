@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.951,
+    "density": 0.5,
+    "formality": 0.679,
+    "geometry": 0.565,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.144
+  },
+  "axes_source": "Read from data/brands/linear.app.json: warmth from the hue and chroma of the primary #5E6AD2 and the canvas #010102; contrast from the ink #F7F8F8 on that canvas, its depth and the chroma of #5E6AD2; density from its 4px spacing base; geometry from its radii 4, 6, 8, 12, 16, 24px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#5E6AD2",
+  "brand_rule": "The primary #5E6AD2 reaches 4.44:1 on the canvas #010102, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#5E6AD2",
+      "light": "#5E6AD2"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0C0D10",
+      "light": "#F6F7F9"
+    },
+    "radius_control": "7px",
+    "state_duration": "200ms",
+    "tokens": 613,
+    "tokens_sha256": "60b18e3d7ff76eb0"
+  },
+  "id": "linear.app",
+  "name": "Linear",
+  "spec": "data/brands/linear.app.json"
+}
