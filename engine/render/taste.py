@@ -103,10 +103,17 @@ _PAGE_JS = r"""(limits) => {
     const key = hex(c) + hex(ground);
     if (r < 4.5 && !seenPairs.has(key)) {
       seenPairs.add(key);
+      // 1.4.3 asks 3:1 of large text (24px, or 18.66px bold); the system
+      // holds every text role to 4.5:1 as its own floor.
+      const ps = getComputedStyle(p), px = parseFloat(ps.fontSize), w = parseInt(ps.fontWeight, 10);
+      const large = px >= 24 || (px >= 18.66 && w >= 700);
+      const under = (large && r >= 3)
+        ? 'under 4.5:1, the system\'s own floor for all text (1.4.3 asks 3:1 of large text)'
+        : (large ? 'under 3:1 (1.4.3, large text)' : 'under 4.5:1 (1.4.3)');
       out.findings.push({rule: 'accent-text-low-contrast', sel: sel(p), cls: p.className || '',
         text: t.slice(0, 60),
         detail: 'accent text ' + hex(c) + ' on ' + hex(ground) + ' measures '
-          + (Math.floor(r * 100) / 100).toFixed(2) + ':1, under 4.5:1 (1.4.3)'});
+          + (Math.floor(r * 100) / 100).toFixed(2) + ':1, ' + under});
     }
   }
 
@@ -173,7 +180,9 @@ _PAGE_JS = r"""(limits) => {
       if (e.tagName === 'IMG') src = e.currentSrc || e.src;
       else { const m = /url\(["']?([^"')]+)["']?\)/.exec(getComputedStyle(e).backgroundImage); if (m) src = m[1]; }
       if (!src || /\.svgz?(\?|#|$)/i.test(src) || src.startsWith('data:image/svg')) continue;
-      out.photos.push({src: new URL(src, document.baseURI).href, sel: sel(e), cls: e.className || ''});
+      let href = null;
+      try { href = new URL(src, document.baseURI).href; } catch (err) { href = null; }
+      if (href) out.photos.push({src: href, sel: sel(e), cls: e.className || ''});
     }
   }
   return out;
@@ -214,8 +223,11 @@ _MOTION_JS = r"""(reduced) => {
   const out = [];
   const progress = e => !!e.closest('[role=progressbar],[aria-busy=true]')
     || /spin|loader|loading|progress/i.test([e.id, e.className].join(' '));
-  // Pause, stop and play in the shipped languages.
-  const PAUSE = /pause|stop|play|\u0625\u064a\u0642\u0627\u0641|\u0623\u0648\u0642\u0641|\u062a\u0648\u0642\u0641|pausa|pausar|arr\u00eater|anhalten|\u505c\u6b62|\u6682\u505c|\u4e00\u6642\u505c\u6b62/i;
+  // Pause and stop in the shipped languages: whole words in Latin scripts,
+  // the word anywhere in the others. Play counts only as a toggle.
+  const PAUSE = /(?:^|[^\p{L}])(?:pause|stop|pausa|pausar|arr\u00eater|anhalten)(?![\p{L}])|\u0625\u064a\u0642\u0627\u0641|\u0623\u0648\u0642\u0641|\u062a\u0648\u0642\u0641|\u505c\u6b62|\u6682\u505c|\u4e00\u6642\u505c\u6b62/iu;
+  const PLAY = /(?:^|[^\p{L}])play(?![\p{L}])/iu;
+  const AREA = 'section,article,aside,header,footer,figure,[role=region],[role=banner],[role=contentinfo]';
   const controls = [...document.querySelectorAll('button,[role=button],input[type=checkbox],[aria-pressed]')]
     .filter(shown);
   const named = e => [e.getAttribute('aria-label'), e.innerText, e.getAttribute('title'), e.value].join(' ');
@@ -240,7 +252,11 @@ _MOTION_JS = r"""(reduced) => {
     if (other <= 0) continue;
     const owns = c => { const id = c.getAttribute('aria-controls');
       if (!id) return false; const tgt = document.getElementById(id); return !!tgt && tgt.contains(e); };
-    if (controls.some(c => owns(c) || PAUSE.test(named(c)))) continue;
+    // A control counts when it names the moving element (aria-controls on
+    // it or an ancestor), or is a pause control in the same area of the page.
+    const area = e.closest(AREA) || document.body;
+    const pauses = c => PAUSE.test(named(c)) || (PLAY.test(named(c)) && c.hasAttribute('aria-pressed'));
+    if (controls.some(c => owns(c) || (area.contains(c) && pauses(c)))) continue;
     seen.add(e);
     out.push({rule: 'moving-content-without-pause', sel: sel(e), cls: e.className || '',
       text: (e.innerText || '').slice(0, 60),

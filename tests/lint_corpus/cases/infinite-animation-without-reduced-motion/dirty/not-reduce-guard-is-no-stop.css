@@ -1,0 +1,2 @@
+.halo { animation: pulse 2s infinite; }
+@media not (prefers-reduced-motion: reduce) { .halo { animation: none; } }

@@ -413,6 +413,19 @@ def _drop_unproven(seq: Dict[str, Any], proof: Optional[List[str]],
             else:
                 kept.append(s)
         seq["section_sequence"] = kept
+    if contact is not None:
+        kept = []
+        for s in seq["section_sequence"]:
+            need = s.get("contact")
+            if need and need not in contact:
+                listed = ", ".join(contact) or "none"
+                dropped.append({"section": s["section"], "reason": (
+                    f"{s['section']} needs a {need} route (contact: {need}) and the brief's "
+                    f"contact list has {listed}; dropped, never invented. Add {need} to contact "
+                    f"if the client has one.")})
+            else:
+                kept.append(s)
+        seq["section_sequence"] = kept
     needs: Mapping[str, str] = seq.get("mechanism_needs") or {}
     mechanisms = []
     for m in seq.get("conversion_mechanisms") or []:
@@ -429,6 +442,28 @@ def _drop_unproven(seq: Dict[str, Any], proof: Optional[List[str]],
         else:
             mechanisms.append(m)
     seq["conversion_mechanisms"] = mechanisms
+    return dropped
+
+
+def _drop_pre_launch_proof(seq: Dict[str, Any], proof: Optional[List[str]]) -> List[Dict[str, str]]:
+    """An inner page before launch: remove every proof section and mechanism,
+    with the pre-launch reason, and point a brief that lists proof at stage."""
+    reason = ("the product has not launched, so the client has no {} yet; the page states "
+              "what exists instead of inventing it.")
+    dropped = [{"section": s["section"], "reason": f"{s['section']}: " + reason.format(
+        PROOF_LABELS.get(s["proof"], s["proof"]))}
+        for s in seq["section_sequence"] if s.get("proof")]
+    seq["section_sequence"] = [s for s in seq["section_sequence"] if not s.get("proof")]
+    needs: Mapping[str, str] = seq.get("mechanism_needs") or {}
+    for m in [m for m in seq.get("conversion_mechanisms") or [] if needs.get(m) in PROOF_KINDS]:
+        dropped.append({"mechanism": m, "reason": f"{m}: " + reason.format(
+            PROOF_LABELS.get(needs[m], needs[m]))})
+    seq["conversion_mechanisms"] = [m for m in seq.get("conversion_mechanisms") or []
+                                    if needs.get(m) not in PROOF_KINDS]
+    if proof:
+        dropped.append({"section": "Proof", "reason": (
+            f"The brief lists proof ({', '.join(proof)}) with stage pre-launch. If that proof is "
+            f"real, set stage to live to show it; before launch the page shows none.")})
     return dropped
 
 
@@ -615,6 +650,9 @@ def select_for_brief(brief: Mapping[str, Any]) -> Dict[str, Any]:
     _without_phone(seq, b.contact)
     if _with_phone_sign_in(seq, b.sign_in):
         why += "; sign_in phone: every sign-in is a phone number field"
+    if b.page in INNER_PAGES and b.stage == PRE_LAUNCH and not explicit:
+        why += "; stage pre-launch: the page shows no proof, since the product has not launched"
+        dropped += _drop_pre_launch_proof(seq, b.proof)
     if seq["id"] != PRE_LAUNCH:
         dropped += _drop_unproven(seq, b.proof, b.contact)
     if b.page == "campaign":

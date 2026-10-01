@@ -116,7 +116,9 @@ EXPECT = {
         "default-font-only": [6],
     },
     "tokdef/page.css": {
-        "timing-300ms-default": [],
+        # Line 1 defines the token; line 2 runs the system's 300ms on the
+        # default curve, the same as writing ease.
+        "timing-300ms-default": [2],
         "cubic-bezier-material-only": [1, 3],
     },
     # Eyebrows follow the brand's formality (read back from the system's
@@ -133,6 +135,22 @@ EXPECT = {
                             "timing-300ms-default": []},
     "taste/t5-ink.css": {"text-ink-at-low-alpha": [1, 4, 6]},
     "taste/t6-loops.css": {"infinite-animation-without-reduced-motion": [2]},
+    # Type values read against the page's own system, and with no system.
+    "taste/t7-type-system.html": {"display-bold-700": [], "hero-text-arbitrary-90px": [7],
+                                  "letterspacing-tracking-tight-display": [9],
+                                  "all-caps-large": [11, 12]},
+    "taste/t9-type-no-system.css": {"display-bold-700": [1, 5],
+                                    "hero-text-arbitrary-90px": [1, 2, 3, 4, 5],
+                                    "letterspacing-tracking-tight-display": [5],
+                                    "all-caps-large": [4]},
+    # Three equal columns fire only when every card is an icon, a title and a line.
+    "taste/t8-three-cards.html": {"three-equal-card-grid": [13], "grid-cols-3-1fr-default": [2]},
+    # A loop inside a reduce query is a finding; only a near-zero duration
+    # stops one; a not-reduce query is the no-preference case.
+    "taste/t10-loop-guards.css": {"infinite-animation-without-reduced-motion": [2, 3, 4, 5]},
+    # An unwritten curve is the default one, judged the same as ease.
+    "taste/t11-default-curve.css": {"transition-duration-500ms-or-longer": [2, 3],
+                                    "timing-300ms-default": [5, 6]},
     # other review probes
     "misc/d1.tsx": {"div-onclick-no-role": [3, 4]},
     "misc/e1.html": {"emoji-in-ui": [1, 2, 5]},
