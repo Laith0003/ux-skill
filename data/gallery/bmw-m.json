@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.8,
+    "density": 0.5,
+    "formality": 1.0,
+    "geometry": 0.193,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.5
+  },
+  "axes_source": "Read from data/brands/bmw-m.json: warmth from the hue and chroma of the primary #FFFFFF and the canvas #000000; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #FFFFFF; density from its 4px spacing base; geometry from its radii 0, 2, 4, 6px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FFFFFF",
+  "brand_rule": "The primary #FFFFFF reaches 21.00:1 on the canvas #000000, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DADADA",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D0D",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "2px",
+    "state_duration": "200ms",
+    "tokens": 726,
+    "tokens_sha256": "d886d0ab9f03c499"
+  },
+  "id": "bmw-m",
+  "name": "BMW M",
+  "spec": "data/brands/bmw-m.json"
+}

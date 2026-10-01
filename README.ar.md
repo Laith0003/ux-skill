@@ -4,24 +4,77 @@
 
 # ux-skill: محرّك ذكاء التصميم لـ Claude Code وCursor وكل أداة برمجة بالذكاء الاصطناعي
 
-> **v3.1.0 الإصدار المستقر، THE BRAIN.** أقوى إضافة لتجربة المستخدم في عالم البرمجة بالذكاء الاصطناعي. نواة استدلال مكتوبة بلغة Python مع 12 ملفّ بيانات JSON قابلًا للاستعلام (84 أسلوبًا تصميميًا، 176 لوحة ألوان، 70 اقترانًا طباعيًا، 148 مكوّنًا، 184 قطاعًا، 35 نوع رسم بياني، 57 مهيّأة حركة، 112 قانون تجربة مستخدم، 152 قاعدة لكشف الأنماط الضارّة، 25 منظومة تقنية، 160 مواصفة علامة تجارية)، إضافة إلى 25 أمرًا قطعيًا (slash command)، و5 وكلاء فرعيين، ومُدقّق حتمي يقضي على ركاكة الذكاء الاصطناعي. وهي متعدّدة بيئات التطوير: تثبيت موحّد لـ Claude Code وCursor وWindsurf وGitHub Copilot وGemini CLI وCodex وKiro وCline وContinue وAider وZed وJetBrains AI وPieces وTabby وTabnine وCodeWhisperer وRoo Cline.
+**محرّك لذكاء التصميم يجعل الواجهات التي يولّدها الذكاء الاصطناعي مميّزة بدل أن تكون نمطية.** أضِفه إلى أيّ أداة من 17 أداة للبرمجة بالذكاء الاصطناعي، فلا يعود ناتجك يبدو من صنع الذكاء الاصطناعي. مجاني، برخصة MIT، يعمل دون اتصال، بلا LLM.
+
+```bash
+pip install uxskill
+```
+
+**[ضع نجمة لـ ux-skill على GitHub](https://github.com/Laith0003/ux-skill)** إن وجدته مفيدًا، فهي أبسط طريقة لدعم المشروع. جديد هنا؟ ابدأ بـ[جولة الـ 60 ثانية](#التثبيت-السريع) أو شاهده حيًّا على [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com).
+
+![قبل: واجهة رئيسية نمطية بصورة من مكتبة صور، وتدرّج بنفسجي باهت، وبلا هوية للعلامة. بعد: صورة حقيقية لموقع بناء تحت طبقة داكنة، وعنوان تحريري بلمسة كهرمانية، ونموذج لطلب عرض سعر داخل الواجهة الرئيسية. الطلب نفسه، ونتيجة مختلفة حين يضع ux-skill القيود.](https://raw.githubusercontent.com/Laith0003/ux-skill/main/docs/blog/skiphire-redesign.png)
+
+*قبل: ركاكة SEO نمطية بصورة من مكتبة صور. بعد: واجهة رئيسية بصورة حقيقية لموقع بناء تحت طبقة داكنة، وعنوان تحريري بلمسة كهرمانية، ونموذج عرض سعر داخلها. أداة البرمجة نفسها، والطلب نفسه، ونتيجة مختلفة حين يضع ux-skill القيود.*
+
+> **الإصدار v4.0، FOUNDATIONS: أمر واحد يبني نظام تصميم كاملًا مفحوصًا وفق WCAG، والعربية والكتابة من اليمين إلى اليسار مدمجتان.** أقوى إضافة لتجربة المستخدم في عالم البرمجة بالذكاء الاصطناعي. نواة استدلال مكتوبة بلغة Python مع مُركِّب حتمي بسبعة محاور، و12 ملفّ بيانات JSON قابلًا للاستعلام (84 أسلوبًا تصميميًا، 176 لوحة ألوان، 70 اقترانًا طباعيًا، 148 مكوّنًا، 184 قطاعًا، 35 نوع رسم بياني، 57 مهيّأة حركة، 112 قانون تجربة مستخدم، 171 قاعدة لكشف الأنماط الضارّة، 25 منظومة تقنية، 160 مواصفة علامة تجارية)، و18 أمرًا من أوامر الشرطة المائلة، و5 وكلاء فرعيين، و25 أداة MCP، ومُدقّق حتمي يقضي على ركاكة الذكاء الاصطناعي. وهي متعدّدة بيئات التطوير: تُثبَّت في Claude Code وCursor وWindsurf وGitHub Copilot وGemini CLI وCodex وKiro وCline وContinue وAider وZed وJetBrains AI وPieces وTabby وTabnine وCodeWhisperer وRoo Cline.
 
 > **اسم العلامة هو `ux-skill`.** اسم الحزمة في PyPI و npm يبقى `uxskill`. ومستودع GitHub موجود على [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
-**الموقع:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **قارن مع كل إضافات UX لـ Claude:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+**المؤلّف:** [Laith Aljunaidy](https://laithjunaidy.com)، مصمّم ومدير تقني في عمّان · **الموقع:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **قارن مع كل إضافات UX لـ Claude:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-3.1.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#مثبّت-17-بيئة-تطوير)
+[![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### الجديد في 4.0: الأسس
+
+لون علامتك التجارية يدخل، ونظام تصميم كامل يخرج، وتباينه مفحوص قبل أن يصلك.
+
+```bash
+pip install --upgrade uxskill
+uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
+```
+
+يتطلّب Python 3.10 أو أحدث. لخادم MCP استخدم `pip install --upgrade 'uxskill[mcp]'`. ومع pipx استخدم `pipx install uxskill` (وفوق إصدار 3.x مثبّت استخدم `pipx upgrade uxskill`). ومع npm استخدم `npx uxskill@latest`. قادم من 3.x؟ [دليل الانتقال](docs/migrating-to-4.md) يربط كل رمز من رموز 3.x بدوره في 4.0.
+
+**تبني منتجًا أو صفحة هبوط؟** تحصل على `tokens.css` لتربطه من صفحتك، و`fonts.css` مع خطوط احتياطية مطابقة في القياسات للخطوط المختارة، و`fonts-self-host.css` الذي يحمّل الخطوط من ملفّاتك أنت، و`tokens.json` للأدوات، ورسومات زخرفية للعلامة في `art/`، و`system-report.md` الذي يشرح بلغة واضحة ما الذي بُني ولماذا، وبأيّ تكوين للصفحة تبدأ. صمّم الأنماط بالأدوار (`var(--color-action-primary)`، `var(--color-text-default)`، `var(--color-surface-page)`)، وبدّل بين الوضع الداكن والتباين العالي والمسافات المضغوطة والكتابة من اليمين إلى اليسار وتقليل الحركة بسمة واحدة على `<html>`. حمّل الخطوط برابط Google Fonts الذي يعطيه التقرير، أو بـ`fonts-self-host.css` ومجلد `fonts/`، واربط `fonts.css` مع أيّ منهما قبل `tokens.css`؛ ولا تعدّل أيًّا من الملفّين. ومع `--brief` يتبع المظهر القطاع والنبرة حين يذكرهما الموجز، وتحدّد الحقول المنظّمة (العمر، اللغات، المخطّط الافتراضي، سياق القراءة) حجم النص ومساحات اللمس وأنظمة الكتابة والمخطّط الذي يُفتح أوّلًا؛ والاكتشاف لا يسأل عن القطاع، لذا يسأل عنه `/ux-system create`. وفي Claude Code يتحقّق `/ux-system create` من الإصدار المثبّت ويشغّل البناء ويشرح التقرير.
+
+**تصمّم نظام تصميم؟** تسعة أسس (اللون، الخط، المسافات، التخطيط، الاستدارة، الحدود، الارتفاع، الحركة، الصور)، يتغيّر كلّ منها تغيّرًا متّصلًا مع المحاور السبعة، مع قيم أوّلية وأدوار دلالية، بصيغة رموز التصميم من W3C (DTCG 2025.10) وبقيم كل وضع. المدخلات نفسها تعطي البايتات نفسها. وعبر MCP يعيد `ux_system_build` التقرير ونتيجة الفحص وحجم كل ملف، ويكتب الملفّات نفسها التي يكتبها الأمر حين يُعطى `out`.
+
+- **بوّابة WCAG.** يُقاس كل زوج ألوان للنص وعناصر التحكم والتركيز في الوضعين الفاتح والداكن، وبالتباين العادي والعالي: WCAG 1.4.3 (النص 4.5:1) و1.4.11 (غير النصي 3:1) في التباين العادي، وWCAG 1.4.6 (النص 7:1) في التباين العالي، إضافة إلى حدّ أدنى خاصّ بنا قدره 4.5:1 في التباين العالي لمعظم الأجزاء غير النصية، لأنّ WCAG لا تحدّد مستوى معزّزًا للعناصر غير النصية. النظام الذي يخفق لا يُكتب، وتوضّح الرسالة ما يجب تغييره.
+- **آمن افتراضيًا.** لا يكتب أبدًا فوق ملف مختلف. `--force` يستبدل الملفّات فقط حين تطلب ذلك.
+- **العربية.** تحت `dir="rtl"` يتحوّل النص إلى خط عربي بمقاساته وارتفاع سطره الخاصّين؛ وتستخدم المسافات الخصائص المنطقية، وتنعكس الحركة. `--latin-only` يستبعد ذلك.
+
+**نظام تملكه بالفعل.** يقرأ `/ux-system enhance --from` نظامك بأسمائه الأصلية (رموز DTCG، أو خصائص CSS المخصّصة، أو سمة Tailwind، أو ملفّات قواعد markdown، أو تصدير متغيّرات Figma)، ويفحصه عبر البوّابة نفسها، ويقيس ما يفعله كودك به فعلًا؛ دون إعادة كتابة أيّ شيء. ويضيف `/ux-system extend --from` أسسًا أو أدوارًا أو عقودًا دون تغيير أيّ رمز قائم، في ملف امتداد بجانبه، ويكتبه `uxskill system export` بصيغة tokens.css أو سمة Tailwind 4 أو متغيّرات Figma. ويضيف الإصدار 4.2 طبقة الثقة (فحص lint عند كل كتابة، ومراجِع للمسة الأخيرة) والإطلاق. راجع [سجلّ التغييرات](CHANGELOG.md).
+
+**المكوّنات والأقسام.** تحدّد 23 عقدًا للمكوّنات الرموز التي يرتبط بها كل جزء من عنصر التحكم في كل حالة، وكيف تتحرّك كل حالة: تغيّر الحالة ينتقل وفق `motion.state`، والضغط يتحجّم وفق `motion.press.scale` (ويثبت عند تقليل الحركة)، وتنزلق التبويبات والقوائم وعناصر التحكم المقسّمة بمؤشّر واحد. وتسمّي 14 عقدًا للأقسام (الواجهة الرئيسية، الأسعار، الأسئلة الشائعة، التذييل وغيرها) وظيفة كل قسم، والمكوّنات التي تقبلها خاناته، والدليل الذي يحتاجه، وكيف يتراصّ على الهاتف. والصفحات المبنية منها تستخدم الصور الفوتوغرافية؛ أمّا مقتطفات الواجهة فصور إضافية، لا بديل عنها أبدًا.
+
+**مُدقّق يقرأ الصفحة.** 171 قاعدة، كثير منها مع فحص على CSS والترميز بعد تحليلهما، تقرأ نظام الصفحة نفسها: تُوقَّت الحركة وفق منحناها، ويُلزَم ارتفاع سطر عناوين العرض بالحدّ الأدنى للمحرّك، ويجب أن يخرج عنصر التحكم المخفي من ترتيب التنقّل بالمفتاح Tab. ويفتح `uxskill lint --render` كل صفحة في Chromium دون واجهة بعرض سطح المكتب والهاتف ويشغّلها فعلًا: حلقات تركيز لا تظهر أو مقصوصة، وتمرير وضغط يستجيبان متأخّرين، وتركيز يضيع بعد Escape، وضغط ما زال يتحرّك عند تقليل الحركة.
+
+**أوامر أقل.** صارت أوامر الشرطة المائلة الـ 25 الآن 18 أمرًا. يقبل `/ux-discover` الخيارين `--frame` و`--recommend`، ويقبل `/ux-design` الخيارات `--component` و`--dashboard` و`--from-image`، ويكرّر `/ux-polish` الفحص والإصلاح وإعادة الفحص حتى تبلغ النتيجة 90 أو تمرّ ثلاث جولات، ويقبل `/ux-init` الخيار `--stats`. وتبقى الأسماء القديمة السبعة صالحة كأسماء بديلة وتُزال في 4.1؛ راجع [الأسماء البديلة](#الأسماء-البديلة-تُزال-في-41).
+
+**أدلّة لكل نوع من الواجهات.** قواعد صفحات الهبوط ولوحات التحكم والمكوّنات موجودة في `references/surfaces/`، لكلّ منها دليل واحد. يحمّل `/ux-design` دليلًا واحدًا بالضبط بحسب وضعه، فلا يقرأ بناء لوحة التحكم قواعد الواجهة الرئيسية أبدًا.
+
+الاختبارات: **9764 ناجحًا**. دون اتصال. حتمي. لا يُستدعى أيّ LLM أبدًا.
+
+### الجديد في الإصدار v3.1: وفيّ للعلامة، متجاوب، حيّ
+
+- **الوفاء للعلامة إلزامي لا مرجوّ.** يُقرأ اللون الأساسي من بكسلات الشعار (لا من أكثر CSS طلاءً)؛ وتُرفض الخطوط الافتراضية إن لم توافق أسلوب حروف الشعار. وتنتقل العلامة المستخرجة `recommend` -> `synthesize`، و**حدّ أدنى صارم** في `evaluate` يُسقط أيّ ناتج يفقد لون العلامة أو شعارها أو لا يتضمّن صورًا حقيقية. تشغيل بيني في الاتجاهين مع اصطلاح `brand.md` المفتوح (عرض + استيراد).
+- **الهاتف أوّلًا، ببوّابة.** أسس حِرفية جديدة (`responsive.md`، `component-behaviors.md`) وبوّابة تراعي التفاف الأسطر، تُخفق عند التمرير الأفقي، أو التفاف عنوان قائمة التنقّل أو الشعار النصّي أو زرّ، أو ترويسة لاصقة مفرطة الارتفاع.
+- **طبقة الإبهار.** يستخلص المحرّك 2-3 لحظات مميّزة متناسقة في كل صفحة؛ وقد سقطت مقولة «الإبهار لا يأتي إلا من المستخدم».
+- **مُدقّق أدقّ** (152 قاعدة): كشف الصور الإلزامية والعناصر التي تقتصر على أيقونة، وقواعد للرموز المؤقّتة و`100vw`؛ ويُبقى على picsum ذي البذرة ويُحذف العشوائي.
+
+الملاحظات الكاملة في [CHANGELOG.md](CHANGELOG.md).
 
 ### الجديد في الإصدار v3
 
@@ -30,7 +83,7 @@
 - **ثلاثة أوضاع تشغيل تلقائي**: `strict_brand` (علامة واحدة بنسبة 100%)، `brand_anchor` (علامة واحدة بنسبة 70% + 30% مُكيَّفة بالمحاور من علامات شقيقة)، `pure_synthesis` (لا اسم علامة، استخلاص من 8 أمثلة موافقة في المحاور).
 - **سجلّ القرارات يُعيد ترتيب نظام التوصية.** ‏`.ux/decisions.jsonl` يُعيد ترتيب المُرشَّحين وفق النصرات السابقة في الحاوية `(industry, ui_type)` نفسها. آمن مع الانطلاق البارد. لا يحتسب إلا القرارات بـ`lint_score >= 80` و`user_accepted = true`.
 - **مصفوفة تفاعل المحاور**: حلٌّ صريح للنزاعات بين المحاور المتنافسة (dense + corporate → 4px، airy + corporate → 12px، soft + playful → 18px radius). لا قواعد ارتجالية صامتة بعد الآن.
-- **حلقة تلقائية `/ux-evolve`**: lint → polish → re-lint حتى تصل النتيجة إلى ≥ 90 أو إلى هضبة أو 5 جولات. حدّ الجودة عند 65.
+- **حلقة تلقائية `/ux-evolve`** (في 4.0 هي الحلقة الافتراضية لـ `/ux-polish`): lint → polish → re-lint حتى تصل النتيجة إلى ≥ 90 أو إلى هضبة أو 3 جولات في 4.0 (5 في v3). حدّ الجودة عند 65.
 - **3 أدوات MCP جديدة** (15 → 18): `ux_synthesize`، `ux_decisions_query`، `ux_decisions_stats`.
 - **لوحة إحصاءات محلية**: `uxskill stats --html` تكتب `.ux/stats.html` تُظهر ما تعلّمه تنصيبك أنت. لا قياسات عن بُعد، ولا جمع عالمي.
 - **اجتياز 223 اختبارًا.** بلا اتصال. حتمي. لا استدعاء لأي LLM.
@@ -47,7 +100,7 @@
 
 ux-skill هو **محرّك ذكاء تصميم** مخصّص لأدوات البرمجة المعتمدة على الذكاء الاصطناعي. يعمل كحزمة Python (`pip install uxskill`)، وكإضافة لـ Claude Code، وكمثبّت متعدّد يدعم 17 بيئة تطوير. يتلقّى المحرّك موجزًا للمشروع (القطاع، الجمهور، النغمة، المتطلّبات الإلزامية، الممنوعات، المنظومة التقنية، المنطقة)، ويُعيد نظام تصميم متكاملًا موصى به: أسلوب، لوحة ألوان، اقتران طباعي، مهيّآت حركة، مكوّنات، علامات تجارية يُحتذى بها، إلى جانب حواجز الأنماط الضارّة الواجب التزامها. والتوصية حتمية، المُدخل نفسه يُنتج المُخرج نفسه دائمًا.
 
-تجلس هذه الإضافة بينك وبين أداة الذكاء الاصطناعي. حين تطلب من Claude Code أو Cursor أو أيّ مساعد ذكي «أنشئ صفحة هبوط لتطبيق تقنيات مالية»، فإنّ المساعد عادةً ما يرتجل، وتأتي النتيجة مفضوحة كناتج ذكاء اصطناعي خلال خمس ثوانٍ (تدرّجات بنفسجية إلى زرقاء، ثلاث بطاقات متساوية، خطّ Inter بحجم عرضي، «John Doe» في الشهادات، انتقالات افتراضية بـ 300 مللي ثانية، قسم رئيسي موسّط، سهام نطّاطة في أزرار الدعوة لاتّخاذ إجراء). يُبدّل ux-skill الارتجال بـ**قيود مُهيكلة**: تشغّل `/ux-discover` لاستخراج الموجز، ثم `/ux-recommend` لاختيار النظام، ثم `/ux-design` لتوليد الكود، ثم `/ux-lint` للتحقّق من أنّه يجتاز قواعد كشف ركاكة الذكاء الاصطناعي الـ 152 الحتمية قبل الالتزام بأي تعديل.
+تجلس هذه الإضافة بينك وبين أداة الذكاء الاصطناعي. حين تطلب من Claude Code أو Cursor أو أيّ مساعد ذكي «أنشئ صفحة هبوط لتطبيق تقنيات مالية»، فإنّ المساعد عادةً ما يرتجل، وتأتي النتيجة مفضوحة كناتج ذكاء اصطناعي خلال خمس ثوانٍ (تدرّجات بنفسجية إلى زرقاء، ثلاث بطاقات متساوية، خط Inter بحجم العرض، «John Doe» في الشهادات، انتقالات افتراضية مدّتها 300ms، واجهة رئيسية في المنتصف، أسهم CTA تقفز). يستبدل ux-skill الارتجال بـ**قيود منظّمة**: تشغّل `/ux-discover` لالتقاط الموجز واختيار النظام، و`/ux-design` لتوليد الكود، و`/ux-lint` للتحقّق قبل الالتزام من أنّه يجتاز قواعد مكافحة ركاكة الذكاء الاصطناعي الحتمية الـ 171.
 
 هذا الملف هو المرجع المُعتمد. كلّ أمر، كلّ وكيل فرعي، كلّ ملفّ بيانات، كلّ مسار تثبيت، كلّ مواصفة علامة تجارية، كلّ تصنيف للأنماط الضارّة، كلّها موثّقة هنا. إن كنت تختار إضافة تصميم لـ Claude Code، أو تُقارن أدوات التصميم الذكي لـ Cursor أو Windsurf أو Codex، فاقرأ هذا الملف من أوّله إلى آخره مع صفحة [compare.html](https://uxskill.laithjunaidy.com/compare.html) جنبًا إلى جنب.
 
@@ -59,10 +112,10 @@ ux-skill هو **محرّك ذكاء تصميم** مخصّص لأدوات الب�
 2. [التثبيت السريع](#التثبيت-السريع)
 3. [الأرقام، مقارنة حيّة مع أفضل 8 مهارات UX لـ Claude](#الأرقام-مقارنة-حيّة-مع-أفضل-8-مهارات-ux-لـ-claude)
 4. [البنية، كيف تتشابك القطع](#البنية-كيف-تتشابك-القطع)
-5. [الأوامر القطعية الـ 25، مرجع تفصيلي](#الأوامر-القطعية-الـ-25-مرجع-تفصيلي)
+5. [أوامر الشرطة المائلة الـ 18، مرجع تفصيلي](#أوامر-الشرطة-المائلة-الـ-18-مرجع-تفصيلي)
 6. [الوكلاء الفرعيون الخمسة](#الوكلاء-الفرعيّون-الخمسة)
 7. [ملفّات البيانات الـ 11](#ملفّات-البيانات-الـ-11)
-8. [قواعد مكافحة ركاكة الذكاء الاصطناعي الـ 152، المُدقّق](#قواعد-مكافحة-ركاكة-الذكاء-الاصطناعي-الـ-152-المُدقّق)
+8. [قواعد مكافحة ركاكة الذكاء الاصطناعي الـ 171، المُدقّق](#قواعد-مكافحة-ركاكة-الذكاء-الاصطناعي-الـ-171-المُدقّق)
 9. [مواصفات DESIGN.md الـ 160 للعلامات، حسب الفئة](#مواصفات-designmd-الـ-160-للعلامات-حسب-الفئة)
 10. [خادم MCP، التحرّك غير المتماثل](#خادم-mcp-التحرّك-غير-المتماثل)
 11. [مثبّت 17 بيئة تطوير](#مثبّت-17-بيئة-تطوير)
@@ -82,7 +135,7 @@ ux-skill هو **محرّك ذكاء تصميم** مخصّص لأدوات الب�
 
 هناك ثلاثة أوضاع تلقائية: `strict_brand` (`reference_brands=[stripe] strict=True` → 100% من رموز Stripe، أسرع مسار)؛ و`brand_anchor` (`reference_brands=[stripe]` → 70% Stripe + 30% مُكيَّفة بالمحاور من 4 علامات شقيقة)؛ و`pure_synthesis` (لا اسم علامة → فضاء لا متناهٍ، استخلاص 8 أمثلة موافقة في المحاور إلى لغة تصميم جديدة). تُحَلّ النزاعات بين المحاور بواسطة **مصفوفة تفاعل محاور** موثَّقة، dense + corporate يُجَمَّع إلى 4px (تنتصر density، مدرسة Bloomberg)، airy + corporate إلى 12px (تنتصر formality، فخامة)، soft + playful إلى 18px radius، sharp + corporate إلى 2px. لا قواعد ارتجالية صامتة في التنفيذ.
 
-**سجلّ القرارات** (`.ux/decisions.jsonl`، مخطّط `_v: 1` مُقفَل) يُغلق حلقة التغذية الراجعة. ويُعيد نظام التوصية الآن ترتيب المرشّحين وفق النصرات السابقة في الحاوية `(industry, ui_type)` نفسها. آمن مع الانطلاق البارد، يتخطّى دون 3 سوابق. لا يحتسب إلا القرارات بـ`lint_score >= 80` و`user_accepted = true`. كما يُشغِّل `/ux-evolve` حلقة lint → polish → re-lint حتى ≥ 90 أو هضبة أو 5 جولات، بحدّ جودة عند 65 يُرفض ما تحته دون `--force`. النتيجة: كل تنصيب يزداد ذكاءً على مجموعته الخاصّة، وكل تشغيل قابل للاستنساخ بين الأجهزة، ويبقى المحرّك بلا اتصال تمامًا.
+**سجلّ القرارات** (`.ux/decisions.jsonl`، مخطّط `_v: 1` مُقفَل) يُغلق حلقة التغذية الراجعة. ويُعيد نظام التوصية الآن ترتيب المرشّحين وفق النجاحات السابقة في الحاوية `(industry, ui_type)` نفسها. آمن مع الانطلاق البارد: يتخطّى إعادة الترتيب إن قلّت القرارات السابقة عن 3. لا يحتسب إلا القرارات التي تحقّق `lint_score >= 80` و`user_accepted = true`. ويشغّل `/ux-polish` كذلك lint → polish → re-lint حتى تصل النتيجة إلى ≥ 90 أو إلى هضبة أو 3 جولات، مع حدّ جودة عند 65 يُرفض ما دونه من ناتج ما لم يُستخدم `--force`. والنتيجة: كل تثبيت يزداد ذكاءً من مدوّنته الخاصّة، وكل تشغيل قابل للتكرار بين الأجهزة، ويبقى المحرّك دون اتصال تمامًا.
 
 ---
 
@@ -99,7 +152,7 @@ ux-skill هو **محرّك ذكاء تصميم** مخصّص لأدوات الب�
 /plugin install ux@ux-skill
 ```
 
-يربط ذلك جميع الأوامر القطعية الـ 25 والوكلاء الفرعيين الخمسة بجلستك في Claude Code. بعد التثبيت، شغّل `/ux-init` لإعداد دليل الحالة `.ux/` الخاصّ بالمشروع والتأكّد من أنّ محرّك Python يمكن الوصول إليه.
+يربط ذلك جميع أوامر الشرطة المائلة الـ 18 (ومعها 7 أسماء قديمة تبقى أسماءً بديلة حتى 4.1) والوكلاء الفرعيين الخمسة بجلستك في Claude Code. بعد التثبيت، شغّل `/ux-init` لإعداد دليل الحالة `.ux/` الخاصّ بالمشروع والتأكّد من أنّ محرّك Python يمكن الوصول إليه.
 
 ### المسار 2: pip (شامل)
 
@@ -107,9 +160,9 @@ ux-skill هو **محرّك ذكاء تصميم** مخصّص لأدوات الب�
 
 ```bash
 pip install uxskill
-uxskill init                       # يكتشف بيئة التطوير ويُثبّت الناتج المناسب تلقائيًا
-uxskill stats                      # يطبع تعدادات الملفّات للتحقّق من التثبيت
-uxskill lint .                     # يشغّل المُدقّق على الدليل الحالي
+uxskill init                       # auto-detects your IDE, installs the right artifact
+uxskill stats                      # print manifest counts to verify install
+uxskill lint .                     # run the linter against the current directory
 ```
 
 الحزمة تُعرّض كلًّا من `ux` و`uxskill` كنقطتَي دخول لسطر الأوامر، وهما الملفّ التنفيذي نفسه.
@@ -119,7 +172,7 @@ uxskill lint .                     # يشغّل المُدقّق على الدل
 إذا لم ترغب في إدارة Python مباشرة، فإنّ غلاف npx يُقلع كلّ شيء عبر `pipx`:
 
 ```bash
-npx uxskill init                  # يُنزّل pipx و uxskill في أوّل تشغيل
+npx uxskill init                  # downloads pipx + uxskill on first run
 npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-app-router
 ```
 
@@ -128,7 +181,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "3.1.0-stable",
+#   "version": "4.0.0",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -139,13 +192,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 145,
+#     "anti-patterns": 171,
+#     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-إذا ظهر أيّ تعداد بقيمة 0، فهذا يعني أنّ ملفّ JSON المعنيّ مفقود، افتح بلاغًا على [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
+مجموع التعدادات الاثني عشر 1,262 مُدخلًا. إذا ظهر أيّ تعداد بقيمة 0، فهذا يعني أنّ ملفّ JSON المعنيّ مفقود؛ افتح بلاغًا على [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
 
 ---
 
@@ -153,7 +207,7 @@ ux stats
 
 تعدادات النجوم تمّ التحقّق منها آخر مرّة عبر `gh api` بتاريخ **2026-05-28**. ux-skill (Laith0003/ux-skill) هو الوافد الأحدث، نحن صغار في الانتشار، عميقون في البنية. والمقارنة أدناه صريحة: أين نخسر، وأين نربح.
 
-| الإضافة | النجوم | البنية | الأوامر القطعية | مُدقّق آمن للـ CI | مواصفات العلامات | المكوّنات | مهيّآت الحركة | بيئات التطوير المدعومة |
+| الإضافة | النجوم | البنية | أوامر الشرطة المائلة | مُدقّق آمن للـ CI | مواصفات العلامات | المكوّنات | مهيّآت الحركة | بيئات التطوير المدعومة |
 |---|---:|---|---:|---|---:|---:|---:|---:|
 | nextlevelbuilder/ui-ux-pro-max-skill | **83,958** | Python BM25 + CSV، مهارة واحدة | 1 | - |، | 0 | 0 | 18 |
 | nexu-io/open-design | **54,406** | Node.js + 19 مهارة + معاينة | 19 | - |، | 0 | 0 | 1 |
@@ -163,7 +217,7 @@ ux stats
 | dominikmartn/nothing-design-skill | **2,391** | مهارة بجمالية واحدة | 1 | - |، | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | مهارة تصميم مضادّة للركاكة | 1 | - |، | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | مكوّنات MD3 + تدقيق | 1 | - | (MD3 فقط) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **محرّك Python + 12 ملفّ بيانات + 25 أمرًا + 5 وكلاء + مُدقّق CI** | **22** | **152 قاعدة regex** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **محرّك Python + 12 ملفّ بيانات + 18 أمرًا + 5 وكلاء فرعيين + مُدقّق CI** | **18** | **171 قاعدة حتمية** | **160** | **148** | **57** | **17** |
 
 ### حيث نخسر
 
@@ -175,10 +229,10 @@ ux stats
 
 - **مكتبة المكوّنات:** 148 مكوّنًا موثّقًا مع التشريح، والحالات، والـ tokens المستخدَمة، ومواصفات الحركة. لا تُصدر أيّ من الإضافات الثماني الأخرى ملفّ مكوّنات مُهيكلًا.
 - **مهيّآت الحركة:** 57 مدخلًا جاهزًا لكلّ منظومة تقنية (Framer Motion، GSAP، CSS) مع بدائل لإيقاف الحركة. لا تُصدر إضافة منها ملفّ حركة.
-- **مُدقّق الأنماط الضارّة:** 152 قاعدة regex حتمية، تعمل ضمن CI، وتنتهي بشيفرة عدم نجاح عند Critical/High. لا تُصدر إضافة منها مُدقّقًا حتميًا.
+- **مُدقّق الأنماط الضارّة:** 171 قاعدة حتمية، تعمل ضمن CI، وتنتهي بشيفرة عدم نجاح عند Critical/High. لا تُصدر أيّ إضافة أخرى مُدقّقًا حتميًا.
 - **مواصفات العلامات:** 160 ملفّات DESIGN.md حقيقية (Apple، Stripe، Linear، Figma، Tesla، BMW، Notion، Spotify، Airbnb، Vercel، Supabase، Cursor، Raycast، Claude، و96 علامة أخرى). لا تُصدر إضافة منها مكتبة علامات.
 - **دعم 17 بيئة تطوير:** المحرّك نفسه، وغراء مختلف لكلّ بيئة.
-- **25 أمرًا قطعيًا:** اكتشاف، توليد، تدقيق، lint، صقل، حلقة إصلاح، دراسة حالة، ورشة، نسخ، حركة، إمكانية وصول، لوحات تحكّم، قائد عمليات، موصولة بالكامل.
+- **18 أمرًا من أوامر الشرطة المائلة:** اكتشاف، توليد (صفحات، مكوّنات، لوحات تحكّم، من صورة)، تدقيق، lint، حلقة صقل، حلقة إصلاح، دراسة حالة، ورشة، نسخ، حركة، إمكانية وصول، قائد عمليات، موصولة بالكامل.
 
 الجدول الكامل المتوازي على [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -187,80 +241,79 @@ ux stats
 ## البنية: كيف تتشابك القطع
 
 ```
-ux-skill (اسم الحزمة: uxskill)
+ux-skill (package name: uxskill)
 │
-├── data/                              العقل، ملفّات JSON قابلة للاستعلام
-│   ├── styles.json                    84 أسلوبًا تصميميًا + when/skip + tokens
-│   ├── palettes.json                  176 لوحة ألوان (فاتح/داكن، تباين مُحقَّق)
-│   ├── type-pairs.json                70 ثلاثيًّا display × body × mono
-│   ├── components.json                148 مكوّنًا (تشريح، حالات، حركة)
-│   ├── industries.json                184 قاعدة قطاع + إشارات الجمهور
-│   ├── chart-types.json               35 نوع رسم بياني (when/skip، التشفير)
-│   ├── tech-stacks.json               25 منظومة تقنية (Next, Astro, SvelteKit, Blade...)
-│   ├── ux-guidelines.json             112 قانونًا مُسمّى لتجربة المستخدم (Hick, Fitts, Miller...)
-│   ├── motion-presets.json            57 مهيّأة حركة (دخول، خروج، تمرير...)
-│   ├── anti-patterns.json             152 قاعدة regex (مصدر المُدقّق الآمن للـ CI)
-│   └── brands/*.json                  160 مواصفة DESIGN للعلامات + _index.json
+├── data/                              The brain, queryable JSON manifests
+│   ├── styles.json                    84 design styles + when/skip + tokens
+│   ├── palettes.json                  176 palettes (light/dark, contrast verified)
+│   ├── type-pairs.json                70 display × body × mono triplets
+│   ├── components.json                148 components (anatomy, states, motion)
+│   ├── industries.json                184 industry rules + audience signals
+│   ├── chart-types.json               35 chart types (when/skip, encoding)
+│   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
+│   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
+│   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
+│   ├── anti-patterns.json             171 rules (CI-safe linter source)
+│   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
-├── engine/                            Python، الاستدلال
-│   ├── synthesizer/                   v3، مُجَمِّع حتمي من 7 محاور
-│   ├── decisions/                     v3، سجلّ .ux/decisions.jsonl + إعادة ترتيب نظام التوصية
-│   ├── recommender/                   محرّك دمج بخمس عمليات بحث متوازية
-│   ├── linter/                        ماسح حتمي مضادّ للركاكة
-│   ├── discovery/                     بروتوكول استخراج إجباري من 10 حقول
-│   ├── generator/                     مُصدِر للـ tokens والملفّات
-│   ├── installer/                     مُثبّت متعدّد لـ 17 بيئة تطوير
-│   └── cli/                           نقطة الدخول `ux` / `uxskill`
+├── engine/                            Python, the reasoning
+│   ├── synthesizer/                   v3-7-axis deterministic compiler
+│   ├── decisions/                     v3, .ux/decisions.jsonl ledger + recommender re-rank
+│   ├── recommender/                   5-parallel-search merge engine (re-ranked by decisions)
+│   ├── linter/                        Deterministic anti-slop scanner
+│   ├── discovery/                     10-field forcing protocol
+│   ├── generator/                     Token + manifest emitter
+│   ├── installer/                     17-IDE multi-installer
+│   └── cli/                           `ux` / `uxskill` entry point
 │
-├── commands/                          25 أمرًا قطعيًا في Claude Code (.md)
-│   ├── ux-init.md                     الإقلاع
-│   ├── ux-stats.md                    لقطة المخزون
-│   ├── ux-discover.md                 استخراج من 10 حقول (بوّابة)
-│   ├── ux-recommend.md                الأمر الرائد، خمس عمليات بحث متوازية
-│   ├── ux-lint.md                     مُدقّق حتمي
-│   ├── ux-design.md                   توليد كود الواجهة الأمامية
-│   ├── ux-component.md                توليد مكوّن واحد
-│   ├── ux-system.md                   توليد نظام تصميم كامل
-│   ├── ux-dashboard.md                توليد سطح لوحة تحكّم
-│   ├── ux-motion.md                   معالجة حركة + تدقيق
-│   ├── ux-audit.md                    تدقيق تصميمي بست عدسات
-│   ├── ux-a11y.md                     تدقيق WCAG 2.1 AA
-│   ├── ux-critique.md                 نقد ذوقي (3 إيجابيات، 3 سلبيات، خطوة واحدة)
-│   ├── ux-copy.md                     مراجعة + إعادة كتابة النصوص الدقيقة
-│   ├── ux-fix.md                      تطبيق الملاحظات بصورة التزامات ذرّيّة
-│   ├── ux-polish.md                   صقل تجميلي + قتل ركاكة الذكاء الاصطناعي
-│   ├── ux-frame.md                    كتلة تأطير من 4 حقول
-│   ├── ux-research.md                 تخطيط بحث + توليف
-│   ├── ux-workshop.md                 ورشة تفكير تصميمي من 5 مراحل
-│   ├── ux-case-study.md               دراسة حالة قابلة للنشر بأسلوب Wfrah التحريري
-│   ├── ux-next.md                     قائد سير العمل (للقراءة فقط)
-│   └── ux-expert.md                   صلة استشارية
+├── commands/                          18 Claude Code slash commands (.md) + 7 aliases
+│   ├── ux-init.md                     bootstrap + inventory snapshot (--stats)
+│   ├── ux-discover.md                 10-field intake (gate), --frame, --recommend
+│   ├── ux-lint.md                     deterministic linter
+│   ├── ux-design.md                   generate a page, --component, --dashboard, --from-image
+│   ├── ux-system.md                   generate full design system
+│   ├── ux-motion.md                   motion treatment + audit
+│   ├── ux-audit.md                    6-lens design audit
+│   ├── ux-a11y.md                     WCAG 2.1 AA audit
+│   ├── ux-critique.md                 taste critique (3 wins, 3 misses, 1 move)
+│   ├── ux-copy.md                     microcopy review + rewrite
+│   ├── ux-fix.md                      apply findings as atomic commits
+│   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
+│   ├── ux-research.md                 research planning + synthesis
+│   ├── ux-workshop.md                 5-phase design thinking workshop
+│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-next.md                     workflow conductor (read-only)
+│   ├── ux-expert.md                   consulting hook
+│   ├── ux-mcp.md                      MCP server
+│   └── ux-frame.md, ux-recommend.md, ux-stats.md, ux-evolve.md,
+│       ux-component.md, ux-dashboard.md, ux-image-to-code.md
+│                                      aliases, removed in 4.1
 │
-├── agents/                            5 وكلاء فرعيين (.md)
+├── agents/                            5 sub-agents (.md)
 │   ├── frontend-engineer.md           React/Next/Vue/Blade/Astro
 │   ├── motion-engineer.md             Framer Motion / GSAP / CSS
-│   ├── copy-writer.md                 نصوص دقيقة بصوت العلامة
-│   ├── research-synthesizer.md        مقابلات + تحليلات + منافسون
-│   └── design-system-architect.md     tokens / مكوّنات / أُسس
+│   ├── copy-writer.md                 microcopy in brand voice
+│   ├── research-synthesizer.md        interviews + analytics + competitors
+│   └── design-system-architect.md     tokens / components / foundations
 │
-├── references/                        نصوص مرجعية للبيانات + صفحات تجريبية
-│   ├── foundations/                   anti-patterns.md، المبادئ، الذوق
-│   ├── laws/                          قوانين UX بصياغة موسّعة
-│   ├── process/                       discovery-protocol.md (حاملٌ للأحمال)
-│   ├── styles/                        نصوص حسب الأسلوب (anti-slop.md، إلخ)
-│   ├── components/                    مكوّنات بصياغة موسّعة
-│   ├── output/                        معايير الإخراج
-│   └── conditional/                   إرشاد خاصّ بكل منظومة
+├── references/                        Prose source for the data + demo pages
+│   ├── foundations/                   anti-patterns.md, principles, taste
+│   ├── laws/                          UX laws long-form
+│   ├── process/                       discovery-protocol.md (load-bearing)
+│   ├── styles/                        per-style prose (anti-slop.md, etc.)
+│   ├── components/                    component long-form
+│   ├── output/                        output rubrics
+│   └── conditional/                   stack-specific guidance
 │
 ├── bin/
-│   ├── uxskill.mjs                    غلاف npx -> محرّك Python
-│   ├── ux-lint.py                     مُدقّق v2 (المُفضَّل)
-│   └── ux-lint.sh                     احتياطي v1 (bash + perl-PCRE)
+│   ├── uxskill.mjs                    npx wrapper -> Python engine
+│   ├── ux-lint.py                     v2 linter (preferred)
+│   └── ux-lint.sh                     v1 fallback (bash + perl-PCRE)
 │
-└── .ux/                               (يُنشأ لكلّ مشروع)
-    ├── last-discovery.json            لقطة الموجز
-    ├── last-recommendation.json       النظام المختار
-    ├── last-frame.json                كتلة التأطير
+└── .ux/                               (created per project)
+    ├── last-discovery.json            brief snapshot
+    ├── last-recommendation.json       picked system
+    ├── last-frame.json                framing block
     ├── last-audit.json / last-a11y.json / last-copy.json / last-motion.json
     ├── last-design.json / last-component.json / last-dashboard.json
     └── last-critique.json / last-polish.json / last-research.json / last-workshop.json / last-case-study.json
@@ -268,69 +321,60 @@ ux-skill (اسم الحزمة: uxskill)
 
 ### كيف يعمل المحرّك فعليًّا
 
-1. **الإدخال.** تُقدّم موجزًا، إمّا تفاعليًّا عبر `/ux-discover` (10 حقول)، وإمّا عبر أعلام تُمرَّر إلى `ux recommend`.
-2. **خمس عمليات بحث متوازية.** يُشغّل المحرّك خمس استعلامات متزامنة عبر الملفّات:
-   - **القطاع → الأساليب الموصى بها** (industries.json)
-   - **الأسلوب → توافق لوحة الألوان + الخطّ + الحركة** (styles.json)
-   - **النغمة × الإلزامي → مُرشّح لوحات الألوان** (palettes.json)
-   - **المنظومة → توافق المكوّنات + مهيّآت الحركة** (tech-stacks.json، motion-presets.json)
-   - **الممنوع + المنطقة → الحواجز + قائمة مختصرة بالعلامات النموذجيّة** (anti-patterns.json، brands/)
-3. **الدمج.** يقوم مُدمج حتمي بترتيب المرشّحين، وحلّ التضاربات (مثلًا: إلزامية الوضع الداكن تفرض وضع لوحة الألوان)، ثم يُصدر نظامًا موصى به وحيدًا.
-4. **الإخراج.** ملفّ JSON يحتوي الأسلوب المُختار، ولوحة الألوان المُختارة، والاقتران الطباعي، وأفضل 5 مهيّآت حركة، وأفضل 12 مكوّنًا، وأفضل 5 علامات نموذجيّة، وكلّ حواجز الأنماط الضارّة الـ 152 وهي مُفعّلة. مع كتلة تبرير تشرح كلّ خيار.
-5. **التوليد.** تستهلك الأوامر اللاحقة (`/ux-design`، `/ux-component`، `/ux-system`، `/ux-dashboard`) التوصية لتوليد كود حقيقي عبر الوكلاء الفرعيين.
-6. **التحقّق.** يُعيد `/ux-lint` فحص الكود المُولَّد ضدّ قواعد regex الـ 145. يخرج بشيفرة عدم نجاح في حال وُجدت ملاحظات Critical/High داخل CI.
+1. **المُدخل.** تقدّم موجزًا، إمّا تفاعليًّا عبر `/ux-discover` (10 حقول) أو غير تفاعليّ عبر خيارات تمرّرها إلى `ux recommend`.
+2. **5 عمليات بحث متوازية.** يُجري المحرّك خمس عمليات بحث في آن واحد عبر ملفّات البيانات:
+   - **القطاع → recommended_styles** (industries.json)
+   - **الأسلوب → توافق لوحة الألوان + الخط + الحركة** (styles.json)
+   - **النبرة × المتطلّبات الأساسية → مرشّح لوحات الألوان** (palettes.json)
+   - **المنظومة التقنية → توافق المكوّنات + مهيّآت الحركة** (tech-stacks.json, motion-presets.json)
+   - **المحظورات + المنطقة → الحواجز + قائمة مختصرة بالعلامات النموذجية** (anti-patterns.json, brands/)
+3. **الدمج.** يرتّب دامج حتمي المرشّحين، ويحلّ التعارضات (مثلًا: الوضع الداكن الإلزامي يفرض وضع لوحة الألوان)، ويُخرج نظامًا موصى به واحدًا.
+4. **المُخرج.** مستند JSON يضمّ الأسلوب المختار ولوحة الألوان والاقتران الطباعي وأفضل 5 مهيّآت حركة وأفضل 12 مكوّنًا وأفضل 5 علامات نموذجية، وجميع حواجز الأنماط الضارّة الـ 171 مفعّلة. مع كتلة تعليل تشرح كل اختيار.
+5. **التوليد.** تستهلك الأوامر اللاحقة (`/ux-design` بأوضاعه: الصفحة والمكوّن ولوحة التحكم والصورة، و`/ux-system`) التوصيةَ لتوليد كود فعلي عبر الوكلاء الفرعيين.
+6. **التحقّق.** يُعيد `/ux-lint` فحص الكود المولَّد وفق القواعد الـ 171. وينتهي بشيفرة عدم نجاح عند Critical/High داخل CI.
 
-**Python يفكّر. HTML يُعرض. Markdown يربط.**
+**إضافات الإصدار v3.** يعيد نظام التوصية الآن ترتيب المرشّحين من `engine/decisions/` باستخدام `.ux/decisions.jsonl` (لا يحتسب إلا القرارات التي تحقّق `lint_score >= 80` و`user_accepted = true`؛ آمن مع الانطلاق البارد إن قلّت القرارات السابقة عن 3). ويمكن لمسار التوليد أن يمرّ عبر `engine/synthesizer/`، وهو مُصرِّف حتمي بسبعة محاور يُنتج رموزًا جديدة للوحة الألوان + الخط + المسافات + الاستدارة + الحركة لكل موجز بدل انتقاء قوالب من كتالوج. التفاصيل في [الدماغ، ما هو الإصدار v3.0](#الدماغ-ما-هو-الإصدار-v30).
+
+**Python يفكّر. HTML يعرض. Markdown يربط.**
 
 ---
 
-## الأوامر القطعية الـ 25: مرجع تفصيلي
+## أوامر الشرطة المائلة الـ 18: مرجع تفصيلي
 
-كلّ أمر يُسلَّم كملفّ `.md` داخل `commands/` مع `description` و`allowed-tools` و`triggers` و`when to use` و`when to skip` و`input` و`process` و`output state file`. الأوصاف أدناه مُلخَّصة؛ والمصدر الكامل هو المواصفة المعتمدة.
+يأتي كل أمر ملفًّا بصيغة `.md` تحت `commands/` يتضمّن `description` و`allowed-tools` و`triggers` و`when to use` و`when to skip` و`input` و`process` و`output state file`. الأوصاف أدناه مختصرة، والمصدر الكامل هو المواصفة المعتمدة.
 
-تُجمَّع الأوامر في خمس مجموعات: **الإقلاع والمخزون**، و**الاكتشاف والتوصية**، و**التوليد**، و**التدقيق والتحقّق**، و**الإصلاح والصقل**، و**القائد**.
+تنقسم الأوامر إلى سبع مجموعات: **الإقلاع والمخزون**، و**الاكتشاف والتوصية**، و**التوليد**، و**التدقيق والتحقّق**، و**الإصلاح والصقل**، و**الاكتشاف والسرد**، و**القائد**. وتبقى سبعة أسماء من 3.x صالحة [كأسماء بديلة](#الأسماء-البديلة-تُزال-في-41) حتى 4.1.
 
 ### الإقلاع والمخزون
 
 #### `/ux-init`: إقلاع المشروع
 
-- **ماذا:** يكتشف بيئة التطوير التي تستخدمها (`.claude/`، `.cursor/`، `.windsurf/`، إلخ)، ويُثبّت الناتج المناسب، ويتحقّق من إمكانية الوصول إلى محرّك Python، ويطبع لقطة إحصاءات.
-- **متى يُستخدم:** عند أوّل تثبيت في مشروع جديد. بعد استنساخ مشروع يستخدم ux-skill. بعد `pip install --upgrade uxskill`.
-- **متى يُتجاوز:** سبق أن شغّلته في هذا المشروع ولم يتغيّر شيء.
-- **الاستدعاء:** `/ux-init` (دون وسائط) أو `uxskill init` من سطر الأوامر.
-- **الإخراج:** ناتج خاصّ بكلّ بيئة (انظر [مثبّت 17 بيئة تطوير](#مثبّت-17-بيئة-تطوير)) + دليل `.ux/` + ملخّص يُطبع على الخرج القياسي.
-- **يربط بـ:** `/ux-discover` تاليًا.
+- **ماذا:** يكتشف بيئة التطوير التي تستخدمها (`.claude/`، `.cursor/`، `.windsurf/`، إلخ)، ويُثبّت الناتج المناسب، ويتحقّق من إمكانية الوصول إلى محرّك Python، ويطبع لقطة إحصاءات. ويطبع `--stats` اللقطة وحدها: الإصدار + عدد المُدخلات في ملفّات البيانات.
+- **متى يُستخدم:** عند أوّل تثبيت في مشروع جديد. بعد استنساخ مشروع يستخدم ux-skill. بعد `pip install --upgrade uxskill`. و`--stats` بعد التثبيت، أو بعد الترقية، أو حين تأتي التوصية باختيارات غريبة وتشكّ في أنّ ملفّات البيانات ناقصة.
+- **متى يُتجاوز:** سبق أن شغّلته في هذا المشروع ولم يتغيّر شيء. أمّا `--stats` فلا حاجة لتجاوزه أبدًا: إنّه قراءة تستغرق 50ms.
+- **الاستدعاء:** `/ux-init` (دون وسائط)، أو `/ux-init --stats`، أو `uxskill init` / `uxskill stats` من سطر الأوامر. يضيف `--decisions` ملخّص سجلّ القرارات، ويكتب `--html` الملف `.ux/stats.html`.
+- **الإخراج:** ناتج خاصّ بكلّ بيئة (انظر [مثبّت 17 بيئة تطوير](#مثبّت-17-بيئة-تطوير)) + دليل `.ux/` + ملخّص يُطبع على الخرج القياسي. ومع `--stats`: JSON على الخرج القياسي (انظر [التحقّق من التثبيت](#التحقّق-من-التثبيت) أعلاه).
+- **يربط بـ:** `/ux-discover` تاليًا. و`--stats` للتشخيص فقط.
 
-#### `/ux-stats`: طباعة مخزون البيانات
+#### `/ux-mcp`: تشغيل المحرّك خادمَ MCP
 
-- **ماذا:** يطبع الإصدار وتعدادات المُدخلات للملفّات الـ 11، حتى تتحقّق ممّا هو مُثبَّت.
-- **متى يُستخدم:** بعد التثبيت. بعد الترقية. حين تُعطي `/ux-recommend` خيارات مفاجِئة وتشكّ في أنّ الملفّات ناقصة.
-- **متى يُتجاوز:** أبدًا، إنّه أمر قراءة فقط بزمن 50 مللي ثانية.
-- **الاستدعاء:** `/ux-stats` أو `uxskill stats`.
-- **الإخراج:** JSON على الخرج القياسي (انظر [التحقّق من التثبيت](#التحقّق-من-التثبيت) أعلاه).
-- **يربط بـ:** للتشخيص فحسب؛ لا يُغذّي ما بعده.
+- **ماذا:** يشغّل المحرّك خادمًا لـ Model Context Protocol عبر stdio. وتصبح 25 أداة (نظام التوصية، والمُدقّق، والحفظ، والمُركِّب، وسجلّ القرارات، والاستخراج من الصور، وملفّات البيانات، وبناء نظام التصميم واستيراده وتحسينه وتوسيعه وتصديره وفحصه) قابلة للاستدعاء من أيّ مضيف يدعم MCP دون الإضافة.
+- **متى يُستخدم:** تعمل في مضيف آخر يدعم MCP وتريد المحرّك نفسه. تشغّل خطّ عمل متعدّد الوكلاء يحتاج مصدرًا واحدًا لقيود التصميم. تريد نظام التوصية أو المُدقّق عمليةً طويلة الأمد داخل CI.
+- **متى يُتجاوز:** أنت داخل Claude Code والإضافة مثبّتة؛ فأوامر الشرطة المائلة تصل إلى المحرّك أصلًا. تحتاج إجابة لمرّة واحدة؛ `uxskill recommend` أو `uxskill lint` أبسط.
+- **الاستدعاء:** `/ux-mcp`، أو `ux-mcp` من الطرفية بعد `pip install 'uxskill[mcp]'`.
+- **الإخراج:** خادم JSON-RPC عبر stdio. انظر [خادم MCP](#خادم-mcp-التحرّك-غير-المتماثل) و`commands/ux-mcp.md` لإعداد كل عميل.
+- **يربط بـ:** لا شيء؛ إنّه وسيلة نقل لا خطوة.
 
 ### الاكتشاف والتوصية
 
-#### `/ux-discover`: الدالّة الإلزامية (استخراج من 10 حقول)
+#### `/ux-discover`: الدالّة الإلزامية (استخراج من 10 حقول، تأطير، توصية)
 
-- **ماذا:** الاستخراج الإلزامي من 10 حقول الذي يجب أن يمرّ به كلّ مشروع قبل أيّ أمر توليد. نوع المشروع، الجمهور، الهدف الأساسي، النغمة، المتطلّبات الإلزامية، الممنوعات، العلامات المرجعيّة، المنظومة، المنطقة، مقياس النجاح. **لا ارتجال.** عبارات محظورة («حديث»، «نظيف») تُجبر المستخدم على التحديد.
-- **متى يُستخدم:** قبل أيّ `/ux-design` أو `/ux-component` أو `/ux-system` أو `/ux-dashboard`. كلّما تقادم موجز سابق.
-- **متى يُتجاوز:** تُصلح خطأً (`/ux-fix`). تُشغّل المُدقّق فقط (`/ux-lint`). الموجز لم يتغيّر منذ الجلسة السابقة.
-- **الاستدعاء:** `/ux-discover`. الإضافة تسأل وأنت تُجيب.
-- **الإخراج:** يكتب `.ux/last-discovery.json` (موجز الـ 10 حقول).
-- **يربط بـ:** `/ux-recommend` → يستخدم الاكتشاف لاختيار الأسلوب + لوحة الألوان + الخطّ + الحركة + المكوّنات. `/ux-design [موجز إضافي]` → يُولّد كود الواجهة الأمامية متّكئًا على التوصية. `/ux-component <اسم>` → يُولّد مكوّنًا واحدًا مُحاذيًا للقيود المُكتشَفة.
-
-#### `/ux-recommend`: المحرّك الرائد بخمس عمليات بحث متوازية
-
-- **ماذا:** يُشغّل عمليات البحث الخمس المتوازية لمحرّك Python عبر الملفّات الـ 12 ويُعيد نظام تصميم واحدًا مدموجًا. القطاع → الأسلوب → لوحة الألوان → الخطّ → الحركة + المكوّنات + العلامات النموذجيّة + الحواجز.
-- **متى يُستخدم:** بدء مشروع جديد من الصفر. تحويل وجهة منتج بات يبدو مُتعَبًا. ما قبل الإقلاع لأيّ `/ux-design` أو `/ux-component`.
-- **متى يُتجاوز:** سبق أن شغّلت `/ux-discover` وحفظت موجزًا، `/ux-recommend` يتمّ تلقائيًا في ذلك التدفّق. تُصلح خطأً واحدًا (استخدم `/ux-fix`). تحتاج فقط للمُدقّق (استخدم `/ux-lint`).
-- **الاستدعاء (في Claude Code):**
-  ```
-  /ux-recommend
-  ```
-  **الاستدعاء (في سطر الأوامر):**
+- **ماذا:** الاستخراج الإلزامي من 10 حقول الذي يمرّ به كل مشروع قبل أيّ أمر توليد. نوع المشروع، الجمهور، الهدف الأساسي، النبرة، المتطلّبات الأساسية، المحظورات، العلامات المرجعية، المنظومة التقنية، المنطقة، مقياس النجاح. **لا ارتجال.** العبارات المحظورة («حديث»، «نظيف») تُجبر المستخدم على التحديد. ثم يشغّل نظام التوصية: تُعيد عمليات البحث المتوازية الخمس لمحرّك Python عبر 12 ملفّ بيانات نظام تصميم واحدًا مدمجًا (القطاع → الأسلوب → لوحة الألوان → الخط → الحركة + المكوّنات + العلامات النموذجية + الحواجز).
+- **الأوضاع:** يلتقط `--frame` لمن هو المنتج والنتيجة والفرضية وإشارة النجاح في كتلة تأطير من أربعة حقول، أخفّ من الاستخراج الكامل. ويشغّل `--recommend` نظام التوصية وحده، من موجز محفوظ أو من خيارات لمرّة واحدة.
+- **متى يُستخدم:** قبل أيّ `/ux-design` أو `/ux-system`. كلّما تقادم موجز سابق. و`--frame` في بداية مشروع أو دورة عمل أو مهمّة منفردة، أو في منتصف الطريق حين ينحرف الحديث. و`--recommend` عند إعادة توجيه منتج يبدو منهكًا.
+- **متى يُتجاوز:** تُصلح علّة (`/ux-fix`). تشغّل تمريرة مُدقّق فقط (`/ux-lint`). الموجز لم يتغيّر منذ الجلسة السابقة.
+- **الاستدعاء (Claude Code):** `/ux-discover`، أو `/ux-discover --frame "loyalty wallet for a MENA retail pilot"`، أو `/ux-discover --recommend`.
+  **الاستدعاء (سطر الأوامر):**
   ```bash
   ux recommend \
     --project-type=landing \
@@ -341,46 +385,32 @@ ux-skill (اسم الحزمة: uxskill)
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **الإخراج:** يكتب `.ux/last-recommendation.json`، الأسلوب المختار، لوحة الألوان المختارة، الاقتران الطباعي، أفضل 5 مهيّآت حركة، أفضل 12 مكوّنًا، أفضل 5 علامات نموذجيّة، حواجز الأنماط الضارّة الـ 152 وهي مُفعَّلة، إلى جانب التبرير.
-- **يربط بـ:** `/ux-design [موجز]` → كود واجهة أمامية باستخدام الـ tokens الموصى بها. `/ux-system` → نظام تصميم كامل من التوصية. `/ux-component <اسم>` → مكوّن واحد بالأسلوب الموصى به. `/ux-lint` → يتحقّق من الكود المُولَّد.
+- **الإخراج:** `.ux/last-discovery.json` (موجز الحقول الـ 10)، و`.ux/last-recommendation.json` (الأسلوب المختار، لوحة الألوان، الاقتران الطباعي، أفضل 5 مهيّآت حركة، أفضل 12 مكوّنًا، أفضل 5 علامات نموذجية، جميع حواجز الأنماط الضارّة الـ 171 مفعّلة، مع التعليل)، ومع `--frame` الملف `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
+- **يربط بـ:** `/ux-design [extra brief]` → كود أمامي مبنيّ على التوصية. `/ux-design --component <name>` → مكوّن واحد متّسق مع القيود المكتشفة. `/ux-system` → نظام تصميم كامل من التوصية. `/ux-lint` → التحقّق من الكود المولَّد.
 
 ### التوليد
 
 #### `/ux-design`: توليد سطح جميل ومضادّ للركاكة من موجز
 
-- **ماذا:** يُولّد ناتجًا أماميًّا كاملًا بمستوى إنتاج (صفحة هبوط، موقع تسويقي، هيكل تطبيق) من موجز الاكتشاف + التوصية. يستدعي `frontend-engineer` بتوجيه إبداعي من مراجع مضادّة للركاكة ومن «الترسانة».
-- **متى يُستخدم:** «صمّم»، «ابنِ لي»، «أنشئ صفحة هبوط»، «اصنع لوحة تحكّم»، «اصنع مكوّنًا»، أيّ طلب تسليم بصري حرّ الصياغة.
-- **متى يُتجاوز:** تريد مراجعة لا بناء (استخدم `/ux-audit` أو `/ux-critique`). تريد مكوّنًا واحدًا فقط (استخدم `/ux-component`). عمل خلفي أو بنية تحتية.
-- **الاستدعاء:** `/ux-design ولّد صفحة هبوط للتقنيات المالية لبنك رقمي في الشرق الأوسط، نغمة دافئة تحريرية، وضع داكن AA، بلا تدرّجات بنفسجية`.
-- **الإخراج:** كود مُولَّد (HTML / Blade / JSX / Vue / Astro)، إضافة إلى `.ux/last-design.json`.
+- **ماذا:** يُولّد ناتجًا أماميًّا كاملًا بمستوى إنتاج (صفحة هبوط، موقع تسويقي، هيكل تطبيق) من موجز الاكتشاف + التوصية. يستدعي `frontend-engineer` بتوجيه إبداعي من مراجع مضادّة للركاكة ومن «الترسانة». ويختار الموجز، أو أحد الخيارات، وضعًا من أربعة:
+  - **الصفحة** (افتراضي): صفحة كاملة أو واجهة متعدّدة الأقسام. يكتب `.ux/last-design.json`.
+  - **`--component [name]`**: مكوّن واحد بمستوى إنتاج (زرّ، نافذة منبثقة، شريط تنقّل، شريط جانبي، بطاقة، جدول، نموذج، رسم بياني). بحالات التفاعل الأربع كلّها، قابل للوصول، وفيّ للعلامة. يبحث عن المكوّن في `.ux/last-recommendation.json` أوّلًا، ثم يستعلم ملفّ البيانات مباشرة. يكتب `.ux/last-component.json`.
+  - **`--dashboard`**: انضباط في كثافة البيانات، تخطيط bento، أرقام جدولية بعرض ثابت، أنماط sparkline، تجنّب الإفراط في البطاقات، ألوان حالة دلالية، حركة مقتصدة. ليس موقعًا تسويقيًّا أُلصقت عليه رسوم بيانية. يكتب `.ux/last-dashboard.json`.
+  - **`--from-image <path>`**: يقرأ صورة مرجعية للتصميم (PNG/JPG/WebP) برؤية حاسوبية خالصة عبر Pillow (اللوحة الغالبة، قطبية الخلفية، إشارة الخط)، ويطابقها مع ملفّات لوحات الألوان والأساليب، ثم يبني من التوصية الناتجة. ويتوقّف `--extract-only` بعد الاستخراج. يكتب `.ux/last-image-extract.json`.
+- **متى يُستخدم:** «صمّم»، «ابنِ لي»، «أنشئ صفحة هبوط»، «اصنع لوحة تحكّم»، «اصنع مكوّنًا»، «ابنِ زرًّا»، «صمّم لوحة الإدارة»، «لوحة المشغّل»، «لوحة مؤشّرات الأداء»، «ابنِه مثل لقطة الشاشة هذه»، أيّ طلب تسليم بصري حرّ الصياغة.
+- **متى يُتجاوز:** تريد مراجعة لا بناء (استخدم `/ux-audit` أو `/ux-critique`). عمل خلفي أو بنية تحتية.
+- **الاستدعاء:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`، `/ux-design --component pricing-card-trio --brief="fintech, dark, monospace numbers"`، `/ux-design --dashboard`، `/ux-design --from-image ref.png`.
+- **الإخراج:** الكود المولَّد (HTML / Blade / JSX / Vue / Astro)، إضافة إلى ملف الحالة الخاصّ بالوضع.
 - **يربط بـ:** `/ux-lint` → التحقّق من الحواجز. `/ux-polish` → صقل تجميلي. `/ux-a11y` → تدقيق إمكانية الوصول. `/ux-copy` → مراجعة النصوص الدقيقة. `/ux-fix` → تطبيق الملاحظات كالتزامات ذرّيّة.
-
-#### `/ux-component`: توليد مكوّن واحد
-
-- **ماذا:** يُنتج مكوّنًا واحدًا بمستوى إنتاج (زرّ، مودال، شريط تنقّل، شريط جانبي، بطاقة، جدول، نموذج، رسم بياني) انطلاقًا من مواصفة. الحالات التفاعليّة الأربع كلّها، متاحة الوصول، وفيّة للعلامة. يبحث أوّلًا عن المكوّن في `.ux/last-recommendation.json`، ثم يلجأ إلى الاستعلام المباشر من الملفّات.
-- **متى يُستخدم:** أيّ طلب لعنصر واحد، «ابنِ زرًّا»، «اصنع بطاقة تسعير»، «اصنع مودالًا»، «أضف شريط تنقّل»، «صمّم شريطًا جانبيًّا»، «أحتاج جدول بيانات»، «ابنِ نموذجًا»، «اصنع مكوّن رسم بياني».
-- **متى يُتجاوز:** صفحة كاملة أو سطح متعدّد الأقسام (استخدم `/ux-design`). عمل خلفي أو بنية تحتية.
-- **الاستدعاء:** `/ux-component pricing-card-trio --brief="تقنيات مالية، داكن، أرقام أحاديّة المسافة"`.
-- **الإخراج:** كود المكوّن المُولَّد، إضافة إلى `.ux/last-component.json`.
-- **يربط بـ:** `/ux-lint` → التحقّق. `/ux-polish` → الإحكام.
 
 #### `/ux-system`: توليد نظام تصميم انطلاقي كامل
 
 - **ماذا:** يقترح نظام تصميم انطلاقي كامل لمشروع لا يملك واحدًا، tokens (لون، خطّ، فراغ، حركة، نصف قطر، ظلّ)، وثائق أُسس، عقود مكوّنات، إقران الوضع الداكن، مُبدِّل للسمات. يستدعي `design-system-architect`.
 - **متى يُستخدم:** «لا نملك نظام تصميم»، «ابنِ لنا نظامًا»، «اقترح tokens»، «ماذا يجب أن تكون سِمتنا»، «أنشئ نظام التصميم».
-- **متى يُتجاوز:** المشروع يملك بالفعل نظام تصميم، استخدم `/ux-component` ضدّ النظام القائم بدلًا من ذلك. عمل خلفي أو بنية تحتية.
-- **الاستدعاء:** `/ux-system` (يُشغّل الاكتشاف أوّلًا إن لم يكن قد سُجّل).
+- **متى يُتجاوز:** المشروع يملك بالفعل نظام تصميم؛ استخدم `/ux-design --component` على النظام القائم بدلًا من ذلك. عمل خلفي أو بنية تحتية.
+- **الاستدعاء:** `/ux-system create` (محرّك الأسس)، `/ux-system enhance --from <file>` (قياس نظام تملكه بالفعل)، `/ux-system extend --from <file> --add <foundation>` (الإضافة إليه دون تغييره)، أو `/ux-system` (مسار 3.x؛ يُشغّل الاكتشاف أوّلًا إن لم يكن قد سُجّل).
 - **الإخراج:** `tokens.json`، `foundations.md`، عقود `components/*.md`، إمكانية إصدار اختياري لـ Tailwind / vanilla / SCSS. يكتب `.ux/last-system.json` لربط السياق.
-- **يربط بـ:** `/ux-component` → البناء على النظام الجديد. `/ux-design` → توليد سطح باستخدام الـ tokens الجديدة.
-
-#### `/ux-dashboard`: توليد متخصّص للوحات التحكّم
-
-- **ماذا:** لوحة تحكّم بانضباط كثافة البيانات، تخطيط bento، أرقام جدوليّة أحاديّة المسافة، أنماط خطوط مدمجة (sparkline)، مكافحة الإفراط في البطاقات، ألوان حالة دلاليّة، حركة مقتصدة. ليست صفحة تسويقيّة مع بعض الرسوم المُلصقة.
-- **متى يُستخدم:** «ابنِ لوحة تحكّم»، «صمّم لوحة الإدارة»، «اصنع صفحة مؤشّرات»، «وحدة تحكّم تشغيليّة»، «شاشة تحليلات»، «لوحة KPI»، «شاشة مراقبة».
-- **متى يُتجاوز:** صفحة هبوط تسويقيّة بإحصاءات (استخدم `/ux-design`). وحدة واحدة فقط (استخدم `/ux-component`). عمل خلفي أو بنية تحتية.
-- **الاستدعاء:** `/ux-dashboard`.
-- **الإخراج:** كود لوحة التحكّم المُولَّد + `.ux/last-dashboard.json`.
-- **يربط بـ:** `/ux-lint`، `/ux-audit`، `/ux-a11y`.
+- **يربط بـ:** `/ux-design --component` → البناء على النظام الجديد. `/ux-design` → توليد واجهة بالرموز الجديدة.
 
 #### `/ux-motion`: معالجة الحركة
 
@@ -395,10 +425,10 @@ ux-skill (اسم الحزمة: uxskill)
 
 #### `/ux-lint`: مُدقّق حتمي بقواعد regex (بلا LLM، آمن في CI)
 
-- **ماذا:** يشغّل 152 قاعدة regex على كودك. بلا أيّ استدعاء لنموذج لغوي. ينتهي بشيفرة عدم نجاح عند Critical / High داخل CI. المصدر: `data/anti-patterns.json`. القواعد تُغطّي الألوان (6)، الخطوط (3)، التخطيط (5)، الحركة (3)، المحتوى (5)، إمكانية الوصول (6)، الجودة (6)، المرئي (1).
-- **متى يُستخدم:** خطّاف ما قبل الالتزام. بوّابة CI. تمريرة أولى سريعة على كود قاعدة كبيرة قبل دفع كلفة `/ux-audit`. بعد `/ux-design` أو `/ux-component` للتحقّق من التوليد.
+- **ماذا:** يشغّل 171 قاعدة على كودك. بلا أيّ استدعاء لنموذج لغوي. ينتهي بشيفرة عدم نجاح عند Critical / High داخل CI. المصدر: `data/anti-patterns.json`. القواعد تُغطّي إمكانية الوصول (45)، المحتوى (35)، التخطيط (18)، الخطوط (16)، الحركة (14)، المرئي (14)، الجودة (12)، الألوان (10)، الأداء (5)، العمق (2).
+- **متى يُستخدم:** خطّاف ما قبل الالتزام. بوّابة CI. تمريرة أولى سريعة على قاعدة كود كبيرة قبل دفع كلفة `/ux-audit`. بعد `/ux-design` بأيّ وضع للتحقّق من التوليد.
 - **متى يُتجاوز:** تريد حلقة إصلاح (المُدقّق يُبلّغ ولا يُحرّر، اربطه بـ `/ux-polish --fix` أو `/ux-fix`). تريد حكمًا ذوقيًّا (استخدم `/ux-critique`).
-- **الاستدعاء (قطعي):** `/ux-lint src/`.
+- **الاستدعاء (أمر الشرطة المائلة):** `/ux-lint src/`.
 - **الاستدعاء (سطر الأوامر):** `uxskill lint .` أو `python3 bin/ux-lint.py .` أو `bash bin/ux-lint.sh --ci --fail-on high`.
 - **الاستدعاء (CI):**
   ```yaml
@@ -455,49 +485,40 @@ ux-skill (اسم الحزمة: uxskill)
 - **الإخراج:** التزامات ذرّيّة لكلّ ملاحظة. يُعيد تشغيل الأمر الأصلي ويُحدّث ملفّ `.ux/last-*.json`. ويطبع ملخّصًا.
 - **يربط بـ:** `/ux-next` → يختار القائد الخطوة التالية.
 
-#### `/ux-polish`: صقل تجميلي + قتل ركاكة الذكاء الاصطناعي
+#### `/ux-polish`: حلقة فحص وإصلاح وإعادة فحص + القضاء على ركاكة الذكاء الاصطناعي
 
-- **ماذا:** إيقاع الفراغات، شحذ التراتب، رصد ركاكة الذكاء الاصطناعي، اتّساق الـ tokens. النظير المعتمد على نموذج لغوي لـ `/ux-lint`، يستخدم حُكمك في القرارات الذوقيّة.
-- **متى يُستخدم:** البنية صحيحة لكن التنفيذ متراخٍ. «اصقل»، «أحكم هذا»، «أزل ركاكة الذكاء الاصطناعي»، «اجعله فاخرًا»، «اجعله أقلّ شبهًا بالذكاء الاصطناعي»، «الفراغات تبدو خاطئة»، «هذا يبدو عامًّا»، «يحتاج ذوقًا أكثر».
-- **متى يُتجاوز:** السطح يفتقر وظائف أساسيّة (أصلح ذلك أوّلًا). يحتاج إعادة تصميم لا صقلًا (استخدم `/ux-design`). مشكلات نسخ (استخدم `/ux-copy`). مشكلات حركة (استخدم `/ux-motion`). مشكلات إمكانية الوصول (استخدم `/ux-a11y`).
-- **الاستدعاء:** `/ux-polish src/components/Hero.tsx`.
-- **الإخراج:** كود مُحدَّث + `.ux/last-polish.json` يصف التغييرات.
+- **ماذا:** أوّلًا حلقة حتمية على ملف HTML محلّي: فحص lint، ثم ست تمريرات صقل متساوية الأثر، ثم إعادة الفحص، حتى تبلغ النتيجة 90 أو تثبت أو تمرّ ثلاث جولات (`--rounds` يغيّر السقف). افتراضيًا يبقى ناتج الحلقة في `<file>.evolved.html` ولا يُمسّ الأصل أبدًا. ولا يستبدل الأصلَ إلا `--loop-only` أو `--fix`، بعد التحقّق من نظافة شجرة العمل، ويمنع حدّ الجودة عند 65 أيّ نتيجة راسبة من استبداله ما لم يُستخدم `--force`؛ ومع `--brand-file` يصمد الحدّ الأدنى للوفاء بالعلامة عند كل مخرج. ثم تمريرة الذوق: إيقاع المسافات، شحذ التسلسل البصري، كشف ركاكة الذكاء الاصطناعي، اتّساق الرموز. هو النظير المعتمد على النماذج اللغوية لـ `/ux-lint`، ويعتمد على حكمك في مسائل الذوق. يشغّل `--loop-only` الحلقة وحدها، و`--no-loop` تمريرة الذوق وحدها، ويطبّق `--fix` ملاحظات الذوق.
+- **متى يُستخدم:** البنية صحيحة لكن التنفيذ مرتخٍ. «اصقله»، «شدّ هذا»، «أزِل ركاكة الذكاء الاصطناعي»، «اجعله فاخرًا»، «اجعله أقلّ شبهًا بالذكاء الاصطناعي»، «المسافات غير مريحة»، «يبدو عاديًّا»، «يحتاج ذوقًا أكثر»، «حسّنه حتى تتجاوز النتيجة 90»، «اجعله جاهزًا للإطلاق».
+- **متى يُتجاوز:** الواجهة تفتقد وظائف أساسية (أصلِحها أوّلًا). تحتاج إعادة تصميم لا صقلًا (استخدم `/ux-design`). مشكلات النصوص (استخدم `/ux-copy`). مشكلات الحركة (استخدم `/ux-motion`). مشكلات إمكانية الوصول (استخدم `/ux-a11y`).
+- **الاستدعاء:** `/ux-polish src/components/Hero.tsx`، `/ux-polish out/landing.html --css out/landing.css`، `/ux-polish out/landing.html --loop-only --rounds 5`.
+- **الإخراج:** `<file>.evolved.html` من الحلقة (يحلّ محلّ الأصل فقط مع `--loop-only` أو `--fix`)، وكود محدَّث مع `--fix`، و`.ux/last-evolve.json`، وسطر واحد في `.ux/decisions.jsonl`، و`.ux/last-polish.json` الذي يصف ملاحظات الذوق.
 - **يربط بـ:** `/ux-lint` → التحقّق من أنّ الصقل صمد. `/ux-a11y` → إعادة فحص إمكانية الوصول.
 
 ### الاكتشاف والسرد
-
-#### `/ux-frame`: كتلة تأطير من 4 حقول
-
-- **ماذا:** يلتقط لمن المنتج، النتيجة، الفرضيّة، إشارة النجاح، داخل كتلة تأطير مُهيكلة. لا عمل تصميمي يحصل، مجرّد استخراج بأربعة حقول يُحوّل طلبًا غامضًا إلى موجز قابل للعمل. أخفّ من `/ux-discover` (4 حقول مقابل 10).
-- **متى يُستخدم:** بداية أيّ مشروع أو سباق أو ارتباط فردي. في منتصف الطريق حين تنحرف المحادثة. «أطّر هذا»، «ما الموجز»، «أعدّ المشروع»، «تأطير».
-- **متى يُتجاوز:** مؤطَّر بالفعل (تحقّق من `.ux/last-frame.json`). بناء مكوّن فردي بلا تبعات تأطير. عمل خلفي أو بنية تحتية.
-- **الاستدعاء:** `/ux-frame "محفظة ولاء للتجربة الإقليميّة لـ Bashiti في الشرق الأوسط"`.
-- **الإخراج:** يكتب `.ux/last-frame.json`، `{audience, outcome, hypothesis, success_signal}`.
-- **يربط بـ:** `/ux-discover` → تمديد الإطار إلى موجز الـ 10 حقول. `/ux-design` → التوليد باستخدام الإطار مرتكَزًا.
 
 #### `/ux-research`: تخطيط بحث + توليف
 
 - **ماذا:** وضع التخطيط: يكتب نصوص مقابلات، استبيانات، فلاتر تجنيد. وضع التوليف (`--synthesize`): يهضم المقابلات والتحليلات ومواقع المنافسين ونتائج A/B وتذاكر الدعم في توصيات. يستدعي `research-synthesizer`.
 - **متى يُستخدم:** «خطّط لدراسة بحثيّة»، «أحتاج أسئلة مقابلات»، «صمّم استبيانًا»، «كيف أُجنّد مستخدمين»، «خطّة اختبار مستخدمين»، «دراسة يوميّات»، «اختبار تفضيل»، «fake door»، «smoke test»، «وَلِّف ملاحظات مقابلاتي».
 - **متى يُتجاوز:** الجواب معروف بثقة عالية. قرارات قابلة للتراجع بمخاطر منخفضة. عمل خلفي أو بنية تحتية.
-- **الاستدعاء:** `/ux-research --plan "تبنّي محفظة الولاء في الشرق الأوسط"` أو `/ux-research --synthesize interviews/*.md`.
+- **الاستدعاء:** `/ux-research --plan "loyalty wallet adoption in MENA"` أو `/ux-research --synthesize interviews/*.md`.
 - **الإخراج:** يكتب `.ux/last-research.json`، خطّة بحث، أو موضوعات مولَّفة + أدلّة + توصيات.
-- **يربط بـ:** `/ux-frame` → دمج النتائج في إطار. `/ux-design` → التوليد من النتائج. `/ux-workshop` → إدارة ورشة باستخدام البحث مُدخلًا.
+- **يربط بـ:** `/ux-discover --frame` → دمج النتائج في إطار. `/ux-design` → التوليد من النتائج. `/ux-workshop` → إدارة ورشة بالاعتماد على البحث مُدخلًا.
 
 #### `/ux-workshop`: ورشة تفكير تصميمي من 5 مراحل
 
 - **ماذا:** يُيسّر ورشة اكتشاف / تفكير تصميمي من البداية للنهاية. خمس مراحل متتابعة (استكشاف → خريطة حرارة → خريطة أصحاب مصلحة → رسم حلّ → خطّة لعب). محسوبة بالوقت. مخرجات ملموسة لكلّ مرحلة. تنتهي بقرار، لا بـ«ملاحظات مثيرة للاهتمام».
 - **متى يُستخدم:** سؤال حقيقي، مشاركون حقيقيّون، ميزانية وقت حقيقيّة. «أَدِر ورشة»، «يَسِّر اكتشافًا»، «هيا نُجرِ جلسة تفكير تصميمي»، «لديّ أصحاب مصلحة لساعة، ماذا نفعل»، «ابدأ المشروع».
-- **متى يُتجاوز:** الموجز واضح ومحدّد بالفعل. عصف فردي (استخدم `/ux-design` أو `/ux-frame`). الفريق في طور التنفيذ، لا في الاكتشاف.
-- **الاستدعاء:** `/ux-workshop "تحوّل محفظة الولاء" --participants="مديرَا منتج، مصمّم، قائد هندسة، ممثّل عملاء" --minutes=90`.
+- **متى يُتجاوز:** الموجز واضح ومحدَّد النطاق أصلًا. عصف ذهني فردي (استخدم `/ux-design` أو `/ux-discover --frame`). الفريق في منتصف التنفيذ لا في مرحلة الاكتشاف.
+- **الاستدعاء:** `/ux-workshop "loyalty wallet pivot" --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" --minutes=90`.
 - **الإخراج:** يكتب `.ux/last-workshop.json`، خطّة اللعب + مخرجات كلّ مرحلة.
 - **يربط بـ:** `/ux-design` → تنفيذ خطّة اللعب. `/ux-research` → سدّ الفجوات التي كشفتها الورشة. `/ux-case-study` → نشر الرحلة.
 
 #### `/ux-case-study`: دراسة حالة قابلة للنشر (شكل تحريري على طريقة Wfrah)
 
-- **ماذا:** يُولّد دراسة حالة لمشروع بشكل تحريري أحاديّ اللون نقي، طباعة Wfrah، فواصل بدقّة الشعرة، أكواد أقسام مرقّمة (A)–(G)، تخطيط آمن ثنائي اللغة. وثيقة، لا مطويّة تسويقيّة. تقرأ من `.ux/last-frame.json`، `.ux/last-workshop.json`، `.ux/last-research.json`، `.ux/last-design.json`، `.ux/last-a11y.json`، `.ux/last-polish.json`، `.ux/last-recommendation.json`، `.ux/last-discovery.json`.
+- **ماذا:** يُولّد دراسة حالة للمشروع بصيغة تحريرية أحادية اللون خالصة، بخطوط Wfrah، وفواصل رفيعة، ورموز أقسام مرقّمة من (A) إلى (G)، وتخطيط آمن للمحتوى ثنائي اللغة. مستند لا كتيّب تسويقي. يقرأ من `.ux/last-frame.json` و`.ux/last-workshop.json` و`.ux/last-research.json` و`.ux/last-design.json` و`.ux/last-a11y.json` و`.ux/last-polish.json` و`.ux/last-recommendation.json` و`.ux/last-discovery.json`.
 - **متى يُستخدم:** بعد الإطلاق. بعد محطّة مستقلّة. «اكتب دراسة حالة»، «اعمل دراسة حالة على هذا المشروع»، «أنجز وثيقة التغليف»، «انشر هذا العمل»، «قطعة بورتفوليو».
-- **متى يُتجاوز:** المشروع يفتقر إلى بيانات تملأ الأقسام (A)–(G). المستخدم يريد صفحة هبوط تسويقيّة لا دراسة حالة (استخدم `/ux-design`).
+- **متى يُتجاوز:** المشروع يفتقر إلى البيانات اللازمة لملء الأقسام من (A) إلى (G). المستخدم يريد صفحة هبوط تسويقية لا دراسة حالة (استخدم `/ux-design`).
 - **الاستدعاء:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
 - **الإخراج:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **يربط بـ:** أمر طرفي، عادةً نهاية المشروع.
@@ -521,35 +542,45 @@ ux-skill (اسم الحزمة: uxskill)
 - **الاستدعاء:** `/ux-expert`.
 - **الإخراج:** بطاقة تواصل وجيزة فيها LinkedIn / البريد / المستودع.
 
+### الأسماء البديلة، تُزال في 4.1
+
+دُمجت سبعة أوامر من 3.x في الأوامر الـ 18 أعلاه. وتبقى أسماؤها صالحة لإصدار واحد: يذكر كل اسم بديل المكان الذي انتقل إليه، ثم يشغّل الأمر الجديد بالوسائط نفسها.
+
+| الأمر القديم | الآن | ملاحظات |
+|---|---|---|
+| `/ux-frame` | `/ux-discover --frame` | كتلة التأطير نفسها، و`.ux/last-frame.json` نفسه |
+| `/ux-recommend` | `/ux-discover --recommend` | أداة MCP `ux_recommend` لم تتغيّر |
+| `/ux-stats` | `/ux-init --stats` | لقطة للقراءة فقط |
+| `/ux-evolve` | `/ux-polish --loop-only --rounds 5` | يحتفظ الاسم البديل بالسقف القديم البالغ خمس جولات؛ و`/ux-polish` وحده يتوقّف عند ثلاث |
+| `/ux-component` | `/ux-design --component` | `.ux/last-component.json` نفسه |
+| `/ux-dashboard` | `/ux-design --dashboard` | `.ux/last-dashboard.json` نفسه |
+| `/ux-image-to-code` | `/ux-design --extract-only --from-image` | احذف `--extract-only` للبناء من الصورة |
+
 ### مخطّط ربط الأوامر
 
 ```
                   ┌──────────────────────┐
-                  │  /ux-init            │
-                  │  /ux-stats           │
+                  │  /ux-init            │  --stats: inventory
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-frame           │  كتلة تأطير من 4 حقول
+                  │  /ux-discover        │  10-field intake (FORCING GATE)
+                  │                      │  --frame: 4-field framing block
+                  │                      │  then 5 parallel searches -> merged system
                   └────────────┬─────────┘
-                               │
-                  ┌────────────▼─────────┐
-                  │  /ux-discover        │  استخراج من 10 حقول (بوّابة إلزامية)
-                  └────────────┬─────────┘
-                               │ يكتب .ux/last-discovery.json
-                  ┌────────────▼─────────┐
-                  │  /ux-recommend       │  خمس عمليات بحث متوازية -> نظام مدموج
-                  └────────────┬─────────┘
-                               │ يكتب .ux/last-recommendation.json
+                               │ writes .ux/last-discovery.json
+                               │ writes .ux/last-recommendation.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
-   │ /ux-design     │ │ /ux-component   │ │ /ux-system  │
-   │ /ux-dashboard  │ │ /ux-motion      │ │             │
+   │ /ux-design     │ │ /ux-motion      │ │ /ux-system  │
+   │  --component   │ │                 │ │             │
+   │  --dashboard   │ │                 │ │             │
+   │  --from-image  │ │                 │ │             │
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ يكتب .ux/last-<surface>.json
+                               │ writes .ux/last-<surface>.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
@@ -558,19 +589,19 @@ ux-skill (اسم الحزمة: uxskill)
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ يكتب .ux/last-<lens>.json
+                               │ writes .ux/last-<lens>.json
                   ┌────────────▼─────────┐
-                  │  /ux-fix             │  تطبيق الملاحظات كالتزامات
+                  │  /ux-fix             │  apply findings as commits
                   │  /ux-polish          │
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-case-study      │  ناتج قابل للنشر
+                  │  /ux-case-study      │  publishable artifact
                   └──────────────────────┘
 
                   ┌──────────────────────┐
-                  │  /ux-next            │  قائد، للقراءة فقط
-                  │  /ux-expert          │  صلة استشاريّة
+                  │  /ux-next            │  conductor, read-only
+                  │  /ux-expert          │  consulting hook
                   └──────────────────────┘
 ```
 
@@ -578,12 +609,12 @@ ux-skill (اسم الحزمة: uxskill)
 
 ## الوكلاء الفرعيّون الخمسة
 
-الوكلاء الفرعيّون مولّدات متخصّصة بحسب الدور تستدعيها الأوامر. لا يعملون مستقلّين أبدًا، تستدعيهم `/ux-design` و`/ux-component` و`/ux-system` و`/ux-fix` و`/ux-research`، إلخ. كلّ وكيل له حدود ملكيّة محدّدة: لا يُقرّر الموجز؛ بل يُنفّذ ضدّه.
+الوكلاء الفرعيّون مولّدات متخصّصة بحسب الدور تستدعيها الأوامر. لا يعملون مستقلّين أبدًا، بل تستدعيهم `/ux-design` و`/ux-system` و`/ux-fix` و`/ux-research`، إلخ. لكلّ وكيل حدود مسؤولية محدّدة: لا يُقرّر الموجز، بل يُنفّذه.
 
 ### `frontend-engineer`
 
 - **يملك:** كود واجهة أماميّة بمستوى إنتاج (React، Next.js، Vue، Blade+Alpine، HTML نقي، Astro) بانضباط مضادّ لركاكة الذكاء الاصطناعي.
-- **يستدعيه:** `/ux-design`، `/ux-component`، `/ux-dashboard`، `/ux-fix`.
+- **يستدعيه:** `/ux-design` (أوضاع الصفحة والمكوّن ولوحة التحكم والصورة)، `/ux-fix`.
 - **مُدخلاته:** موجز + توجيه إبداعي + tokens (من `.ux/last-recommendation.json`).
 - **مُخرجاته:** كود عامل يتميّز عن الناتج العامّ للذكاء الاصطناعي. بلا تدرّجات بنفسجيّة، بلا سطح رئيسي موسّط، بلا ثلاث بطاقات متساوية، بلا Inter بحجم عرضي، بلا «John Doe»، بلا إيموجي، بلا افتراضات بـ 300 مللي ثانية.
 - **الأدوات:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -591,7 +622,7 @@ ux-skill (اسم الحزمة: uxskill)
 ### `motion-engineer`
 
 - **يملك:** الحركة داخل كود الواجهة الأماميّة الإنتاجي، Framer Motion، GSAP، رسوم CSS. المدد، المنحنيات، التتابع، بدائل إيقاف الحركة، انضباط الأداء.
-- **يستدعيه:** `/ux-design`، `/ux-motion --fix`، `/ux-component`.
+- **يستدعيه:** `/ux-design` (كل الأوضاع)، `/ux-motion --fix`.
 - **مُدخلاته:** موجز حركة + tokens + مهيّآت الحركة الـ 57 من `data/motion-presets.json`.
 - **مُخرجاته:** حركة تستحقّ مكانها. ملفوفة دومًا بفروع `prefers-reduced-motion`. مُختبَرة دومًا مقابل Core Web Vitals.
 - **الأدوات:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -599,7 +630,7 @@ ux-skill (اسم الحزمة: uxskill)
 ### `copy-writer`
 
 - **يملك:** النصوص التي تُشحَن، رسائل الأخطاء، الحالات الفارغة، أزرار CTA، حالات التحميل، رسائل النجاح، التنبيهات، النصوص المساعدة، تسميات النماذج، نصوص الأزرار.
-- **يستدعيه:** `/ux-copy --fix`، `/ux-design`، `/ux-frame`، `/ux-component`.
+- **يستدعيه:** `/ux-copy --fix`، `/ux-design` (كل الأوضاع)، `/ux-discover --frame`.
 - **مُدخلاته:** ملفّ تعريف الصوت (مُسمّى أو ملصق) + نصوص السطح.
 - **مُخرجاته:** نصوص دقيقة إنتاجيّة مُطبَّقة باتّساق على كلّ حالة في السطح، ليبدو المنتج منتجًا واحدًا لا عشرة. ممنوعات: «النموذج يحوي أخطاء»، «John Doe»، نصوص الذكاء الاصطناعي الاحتفاليّة المرحة، أزرار CTA عامّة، حالات فارغة ميّتة.
 - **الأدوات:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -607,7 +638,7 @@ ux-skill (اسم الحزمة: uxskill)
 ### `research-synthesizer`
 
 - **يملك:** هضم مُدخلات البحث (مقابلات، تحليلات، مواقع المنافسين، نتائج A/B، تذاكر الدعم) إلى توصيات تصميم قابلة للتنفيذ.
-- **يستدعيه:** `/ux-research`، `/ux-workshop`، `/ux-frame`.
+- **يستدعيه:** `/ux-research`، `/ux-workshop`، `/ux-discover --frame`.
 - **مُدخلاته:** بحث خام، نصوص مقابلات، تصديرات، روابط منافسين، تجميعات دعم.
 - **مُخرجاته:** موضوعات، أدلّة، توصيات. لا يُصمّم الجواب أبدًا، يُعطي المصمّم المادّة التي يُصمَّم منها.
 - **الأدوات:** `Read, Write, WebFetch, Bash, Glob, Grep`.
@@ -615,7 +646,7 @@ ux-skill (اسم الحزمة: uxskill)
 ### `design-system-architect`
 
 - **يملك:** أنظمة تصميم كاملة، tokens (لون، خطّ، فراغ، حركة، نصف قطر، ظلّ)، وثائق أُسس، عقود مكوّنات، إقران الوضع الداكن، طبقة السمات.
-- **يستدعيه:** `/ux-system`، و`/ux-component` عند عدم وجود نظام.
+- **يستدعيه:** `/ux-system`، و`/ux-design --component` حين لا يوجد نظام.
 - **مُدخلاته:** موجز علامة + `.ux/last-recommendation.json` (أسلوب + لوحة + اقتران طباعي + مهيّآت حركة).
 - **مُخرجاته:** نظام متماسك ذو وجهة نظر جاهز للإنتاج يستطيع الوكلاء اللاحقون البناء عليه دون إعادة اتّخاذ القرارات الأساسيّة. tokens بصيغة JSON، أُسس MD، عقود مكوّنات، إقران للوضع الداكن.
 - **الأدوات:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -626,7 +657,7 @@ ux-skill (اسم الحزمة: uxskill)
 
 1. الموجز / التوصية (محمَّل من `.ux/`).
 2. الشريحة المعنيّة من الملفّات (مثلًا: `frontend-engineer` يحصل على الأسلوب + لوحة الألوان + المكوّنات المُختارة؛ و`motion-engineer` يحصل على مهيّآت الحركة المُختارة).
-3. حواجز الأنماط الضارّة الـ 152 (مُفعّلة دومًا).
+3. حواجز الأنماط الضارّة الـ 171 (مُفعّلة دومًا).
 4. معيار نجاح (ما يجب أن يفعله الناتج).
 
 يُعيد الوكلاء الفرعيّون:
@@ -652,7 +683,7 @@ ux-skill (اسم الحزمة: uxskill)
 | `categories` | بساطة / سويسري، Brutalist، تحريري، Glassmorphism، Neumorphism، Bento، Skeuomorphic، صناعي، Maximalist، AI-Futurist، MENA-modern، Vaporwave، إلخ. |
 | `sample entry` | `swiss-international`، «الشبكة قانون. الخطّ يقوم بالحمل الثقيل. الزخرفة فشل.» |
 
-تستخدمه: `/ux-recommend`, `/ux-system`, `/ux-design`. المخطّط: [data/SCHEMAS.md](data/SCHEMAS.md).
+تستخدمه: `/ux-discover`، `/ux-system`، `/ux-design`. المخطّط: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `palettes.json`: 176 لوحة ألوان
 
@@ -663,7 +694,7 @@ ux-skill (اسم الحزمة: uxskill)
 | `tones` | دافئ، تحريري، magazine، عيادي، مرح، Brutalist، أحادي اللون، Jewel-tone، شرق أوسطي دافئ، dev-tools-dark، إلخ. |
 | `sample entry` | `claude-warm-editorial`، فاتح، دافئ/تحريري/magazine، canvas #faf9f5، primary #cc785c |
 
-تستخدمه: `/ux-recommend`, `/ux-system`. التباين مُحقَّق وفق AA / AAA. المخطّط: [data/SCHEMAS.md](data/SCHEMAS.md).
+تستخدمه: `/ux-discover`، `/ux-system`. التباين مُحقَّق وفق AA / AAA. المخطّط: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `type-pairs.json`: 70 اقترانًا طباعيًّا
 
@@ -673,7 +704,7 @@ ux-skill (اسم الحزمة: uxskill)
 | `keys per entry` | `id`, `name`, `display` (family + weights + source + license + URL), `body`, `mono`, `compatible_styles`, `taste_score` |
 | `sample entry` | `cormorant-inter-jetbrains`، Cormorant Garamond × Inter × JetBrains Mono |
 
-لكلّ عائلة ترخيص + رابط مصدر. تستخدمه `/ux-recommend`, `/ux-system`.
+لكل عائلات الخطوط رخصة + رابط مصدر. تستخدمه `/ux-discover` و`/ux-system`.
 
 ### `components.json`: 148 مكوّنًا
 
@@ -695,7 +726,7 @@ ux-skill (اسم الحزمة: uxskill)
 | `categories` | خدمات ماليّة، رعاية صحيّة، تعليم، تجارة إلكترونيّة، SaaS B2B، SaaS B2C، أدوات مطوّرين، إعلام، ألعاب، سفر، عقارات، خاصّة بالشرق الأوسط، إلخ. |
 | `sample entry` | `fintech-neobank`، ثقة عالية، إفصاحات تنظيميّة، واجهة رئيسيّة للأرصدة/المعاملات، أولويّة للهاتف للاستخدام اليومي |
 
-تستخدمه `/ux-recommend` كأوّل محور بحث متوازٍ.
+يستخدمه نظام التوصية (`/ux-discover`) كأوّل محور بحث متوازٍ.
 
 ### `chart-types.json`: 35 نوع رسم بياني
 
@@ -704,9 +735,9 @@ ux-skill (اسم الحزمة: uxskill)
 | `entries` | 35 |
 | `keys per entry` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
 | `categories` | مقارنة، سلاسل زمنيّة، توزيع، تكوين، علاقة، تدفّق، جغرافي |
-| `sample entry` | `bar-vertical`، قارن 4–15 فئة منفصلة. الموقع على المحور x يُمثّل الفئة؛ الارتفاع يُمثّل القيمة. |
+| `sample entry` | `bar-vertical`، قارن بين 4 و15 فئة منفصلة. الموقع على المحور x يُمثّل الفئة؛ الارتفاع يُمثّل القيمة. |
 
-تستخدمه `/ux-dashboard`, `/ux-component` (نسخ الرسوم البيانيّة).
+يستخدمه `/ux-design --dashboard` و`/ux-design --component` (نسخ الرسوم البيانيّة).
 
 ### `tech-stacks.json`: 25 منظومة تقنيّة
 
@@ -741,15 +772,15 @@ ux-skill (اسم الحزمة: uxskill)
 
 كلّ مهيّأة لها متغيّر لإيقاف الحركة. كود جاهز للمنظومات: Framer Motion، GSAP، CSS الخالص.
 
-### `anti-patterns.json`: 152 قاعدة regex
+### `anti-patterns.json`: 171 قاعدة
 
 | الحقل | الوصف |
 |---|---|
-| `entries` | 152 |
-| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
-| `categories` | إمكانية الوصول (23)، المحتوى (15)، التخطيط (13)، الخطوط (10)، الألوان (9)، الجودة (9)، المرئي (9)، الحركة (8)، الأداء (4) |
+| `entries` | 171 |
+| `keys per entry` | `id`، `name`، `severity` (critical/high/medium/low)، `category`، `detection` (النوع، النمط، الخيارات، النطاق، ولكثير من القواعد فحص `post` على الملف بعد تحليله)، `why`، `fix` |
+| `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-قائمة القواعد الكاملة في [قواعد مكافحة ركاكة الذكاء الاصطناعي الـ 145](#قواعد-مكافحة-ركاكة-الذكاء-الاصطناعي-الـ-152-المُدقّق).
+قائمة القواعد الكاملة في [قواعد مكافحة ركاكة الذكاء الاصطناعي الـ 171](#قواعد-مكافحة-ركاكة-الذكاء-الاصطناعي-الـ-171-المُدقّق).
 
 ### `brands/*.json`: 160 مواصفة علامة
 
@@ -763,88 +794,15 @@ ux-skill (اسم الحزمة: uxskill)
 
 ---
 
-## قواعد مكافحة ركاكة الذكاء الاصطناعي الـ 152: المُدقّق
+## قواعد مكافحة ركاكة الذكاء الاصطناعي الـ 171: المُدقّق
 
-يُقدّم ux-skill مُدقّقًا حتميًّا قائمًا على regex. **بلا LLM.** **بلا API.** **بلا شبكة.** يعمل ضمن CI في نحو 200 مللي ثانية على تطبيق Next.js نموذجي. يخرج بشيفرة عدم نجاح عند ملاحظات Critical / High حين يُضبط `--fail-on high`.
+يأتي ux-skill بمُدقّق حتمي: كل قاعدة نمط، وكثير منها يضيف فحصًا على CSS والترميز بعد تحليلهما، فلا يُحتسب التطابق إلا في السياق الذي تسمّيه القاعدة. **بلا LLM.** **بلا API.** **بلا شبكة.** يعمل داخل CI في نحو 200ms على تطبيق Next.js نموذجي. وينتهي بشيفرة عدم نجاح عند ملاحظات Critical / High حين يُضبط `--fail-on high`.
 
-تأتي القواعد من `data/anti-patterns.json` (يُفضَّل الإصدار v2) مع `references/foundations/anti-patterns.md` كاحتياطي (v1 bash). يُقدَّم ثنائيّان: `bin/ux-lint.py` (Python، سريع، قابل للتوسعة) و`bin/ux-lint.sh` (Bash + perl-PCRE، للبيئات التي لا تتوفّر فيها Python).
+مصدر القواعد هو `data/anti-patterns.json` (v2، المفضّل) مع `references/foundations/anti-patterns.md` بديلًا احتياطيًا (v1، bash). ويُشحن ملفّان تنفيذيان: `bin/ux-lint.py` (Python، سريع، قابل للتوسيع) و`bin/ux-lint.sh` (Bash + perl-PCRE، للبيئات التي تخلو من Python).
 
 ### القواعد حسب الفئة
 
-#### الخطوط (3 قواعد)
-
-| الخطورة | معرّف القاعدة | الاسم |
-|---|---|---|
-| high | `inter-as-display` | استعمال Inter كخطّ عرضي |
-| medium | `hero-text-arbitrary-90px` | حجم خطّ اعتباطي للقسم الرئيسي |
-| low | `font-system-only` | كومة خطوط النظام دون اختيار خطّ |
-
-#### الألوان (6 قواعد)
-
-| الخطورة | معرّف القاعدة | الاسم |
-|---|---|---|
-| high | `purple-to-blue-gradient` | تدرّج بنفسجي إلى أزرق افتراضي للذكاء الاصطناعي |
-| high | `dark-text-on-dark-card` | نصّ بتباين منخفض على بطاقة |
-| medium | `gradient-text-rainbow` | نصّ بتدرّج متعدّد المحطّات |
-| medium | `card-glow-purple-shadow` | ظلّ توهّج بنفسجي على البطاقات |
-| medium | `gradient-mesh-purple-pink` | قسم رئيسي بشبكة تدرّج بنفسجي-وردي |
-| low | `tailwind-color-named-vague` | ألوان Tailwind مُسمّاة دون token دلالي |
-
-#### التخطيط (5 قواعد)
-
-| الخطورة | معرّف القاعدة | الاسم |
-|---|---|---|
-| high | `three-equal-card-grid` | ثلاث بطاقات متساوية في صفّ |
-| medium | `centered-everything-hero` | قسم رئيسي يُوسّط كلّ شيء |
-| medium | `avatar-stack-overlapping` | كومة صور رمزيّة عامّة متراكبة |
-| low | `pill-rounded-full-everywhere` | `rounded-full` مُطبَّق على كلّ شيء |
-| low | `nav-equal-hamburger-desktop` | قائمة الهامبرغر على سطح المكتب |
-
-#### المحتوى (5 قواعد)
-
-| الخطورة | معرّف القاعدة | الاسم |
-|---|---|---|
-| high | `lorem-ipsum-leak` | Lorem ipsum داخل كود يُشحَن |
-| high | `emoji-in-ui` | إيموجي كعنصر واجهة |
-| high | `icon-emoji-stamp` | إيموجي كختم أيقونة |
-| high | `testimonial-fake-five-stars` | شهادة مكتوبة مباشرة بخمس نجوم |
-| medium | `fake-name-john-doe` | أسماء نائبة عامّة |
-
-#### الحركة (3 قواعد)
-
-| الخطورة | معرّف القاعدة | الاسم |
-|---|---|---|
-| medium | `cta-arrow-rightward-bouncing` | سهم نطّاط على زرّ الدعوة |
-| low | `timing-300ms-default` | توقيت انتقال افتراضي بـ 300 مللي ثانية |
-| low | `cubic-bezier-material-only` | تليين Material الافتراضي في كلّ مكان |
-
-#### إمكانية الوصول (6 قواعد)
-
-| الخطورة | معرّف القاعدة | الاسم |
-|---|---|---|
-| high | `inline-svg-no-aria` | SVG بدون aria-label أو aria-hidden |
-| high | `img-no-alt` | صورة تنقص خاصيّة alt |
-| high | `link-onclick-no-href` | رابط بـ onClick دون href |
-| medium | `button-no-type` | زرّ تنقصه خاصيّة type |
-| medium | `heading-skip-h1-h3` | تخطّي مستوى عنوان |
-| medium | `infinite-scroll-no-pagination` | تمرير لا نهائي دون بديل بلوحة المفاتيح |
-
-#### الجودة (6 قواعد)
-
-| الخطورة | معرّف القاعدة | الاسم |
-|---|---|---|
-| high | `console-log-leak` | `console.log` في كود المكوّن |
-| medium | `inline-style-attribute` | خاصيّة style مضمَّنة |
-| medium | `any-type-leak` | نوع TypeScript `any` |
-| medium | `arbitrary-z-index-9999` | قيمة z-index كسولة |
-| low | `shadcn-default-everywhere` | كتلة tokens افتراضيّة لـ shadcn دون تعديل |
-| low | `todo-fixme-comment` | TODO أو FIXME في كود يُشحَن |
-
-#### المرئي (قاعدة واحدة)
-
-| الخطورة | معرّف القاعدة | الاسم |
-|---|---|---|
-| low | `blur-bg-only-decoration` | Backdrop blur دون سطح زجاجي |
+يُولَّد الكتالوج الكامل للقواعد الـ 171، مرتّبةً حسب الفئة ثم حسب الخطورة، من `data/anti-patterns.json` في [README الإنجليزي](README.md#rules-by-category)، وتظهر فيه معرّفات القواعد وأسماؤها كما يطبعها المُدقّق. القواعد تُغطّي A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
 
 ### استخدام المُدقّق
 
@@ -852,9 +810,9 @@ ux-skill (اسم الحزمة: uxskill)
 
 ```bash
 uxskill lint .
-# أو
+# or
 python3 bin/ux-lint.py src/
-# أو
+# or
 bash bin/ux-lint.sh src/
 ```
 
@@ -881,7 +839,7 @@ src/components/Hero.tsx:24  [high]   purple-to-blue-gradient
   evidence: bg-gradient-to-br from-purple-500 to-blue-500
   fix: replace with the recommended palette's primary gradient or remove gradient
 
-src/components/Pricing.tsx:12  [high] three-equal-card-grid
+src/components/Pricing.tsx:11  [high] three-equal-card-grid
   evidence: grid grid-cols-3 gap-6 (3 equal Card children)
   fix: feature one card; flank with two reduced-emphasis cards
 
@@ -933,13 +891,13 @@ BMW، BMW M، Bugatti، Ferrari، Lamborghini، Renault، SpaceX، Tesla
 
 ## خادم MCP: التحرّك غير المتماثل
 
-يُقدّم ux-skill **خادم Model Context Protocol**. تشغّل `ux-mcp` فيتحوّل المحرّك إلى عمليّة stdio طويلة الأمد يقدر أيّ مضيف يدعم MCP، Claude Desktop وCursor وWindsurf والوكلاء العامّون، على الاتّصال بها. أربع عشرة أداة: `ux_recommend`، `ux_lint`، `ux_styles`، `ux_palettes`، `ux_type_pairs`، `ux_components`، `ux_industries`، `ux_motion_presets`، `ux_anti_patterns`، `ux_brands`، `ux_landing_patterns`، `ux_persist_save`، `ux_persist_load`، `ux_stats`. هي نفسها معالِجات Python التي تستخدمها الأوامر القطعيّة، ونفس ملفّات البيانات، ونفس المُوصي الحتمي.
+يُقدّم ux-skill **خادم Model Context Protocol**. تشغّل `ux-mcp` فيتحوّل المحرّك إلى عمليّة stdio طويلة الأمد يقدر أيّ مضيف يدعم MCP (Claude Desktop وCursor وWindsurf والوكلاء العامّون) على الاتّصال بها. 25 أداة: `ux_recommend`، `ux_system_detect`، `ux_lint`، `ux_styles`، `ux_palettes`، `ux_type_pairs`، `ux_components`، `ux_industries`، `ux_motion_presets`، `ux_anti_patterns`، `ux_brands`، `ux_landing_patterns`، `ux_persist_save`، `ux_persist_load`، `ux_stats`، `ux_image_extract`، `ux_synthesize`، `ux_decisions_query`، `ux_decisions_stats`، `ux_system_build`، `ux_system_import`، `ux_system_enhance`، `ux_system_extend`، `ux_system_export`، `ux_contracts_check`. معالجات Python نفسها التي تستخدمها أوامر الشرطة المائلة؛ وملفّات البيانات نفسها؛ ونظام التوصية الحتمي نفسه.
 
 **لماذا هذا تحرّكٌ غير متماثل:** ولا واحدة من أعلى ثماني مهارات UX لـ Claude (ui-ux-pro-max-skill، open-design، taste-skill، huashu-design، stitch، nothing-design، hallmark، material-3) تُصدر خادم MCP. كلّها محبوسة داخل runtime إضافات Claude Code. أمّا ux-skill فيمكن الوصول إليه من أيّ مضيف يتحدّث MCP، بما في ذلك وكلاء لم يسمعوا قطّ بإضافة Claude Code.
 
 ```bash
-pip install 'uxskill[mcp]'             # mcp إضافة اختياريّة
-ux-mcp                                  # يبدأ خادم stdio JSON-RPC
+pip install 'uxskill[mcp]'             # mcp is an opt-in extra
+ux-mcp                                  # stdio JSON-RPC server starts
 ```
 
 وجّه عميلك إلى الملفّ التنفيذي `ux-mcp`. توثيق الأدوات الكامل، وأمثلة JSON، وإعدادات كلّ عميل لـ Claude Desktop وCursor وWindsurf موجودة في [docs/mcp.html](docs/mcp.html) وفي `commands/ux-mcp.md`.
@@ -952,7 +910,7 @@ ux-mcp                                  # يبدأ خادم stdio JSON-RPC
 
 | بيئة التطوير / الأداة | إشارة الاكتشاف | الناتج المثبَّت |
 |---|---|---|
-| Claude Code | `.claude/` أو `CLAUDE.md` | ملفّ تعريف الإضافة في `.claude-plugin/plugin.json` + جميع الأوامر الـ 25 + جميع الوكلاء الفرعيين الخمسة |
+| Claude Code | `.claude/` أو `CLAUDE.md` | بيان الإضافة في `.claude-plugin/plugin.json` + الأوامر الـ 18 كلّها (والأسماء البديلة السبعة) + الوكلاء الفرعيون الخمسة كلّهم |
 | Cursor | `.cursor/` أو `.cursorrules` | رأس prompt في `.cursorrules` يُشير إلى المحرّك |
 | Windsurf | `.windsurf/` أو `.windsurfrules` | `.windsurfrules` بنفس رأس الـ prompt |
 | GitHub Copilot | `.github/copilot-instructions.md` أو `.vscode/` | `.github/copilot-instructions.md` |
@@ -984,8 +942,8 @@ ux-mcp                                  # يبدأ خادم stdio JSON-RPC
 
 ```bash
 pip install uxskill
-uxskill init                                # يكتشف Cursor ويكتب .cursorrules
-uxskill discover                            # استخراج من 10 حقول
+uxskill init                                # detects Cursor, writes .cursorrules
+uxskill discover                            # 10-field intake
 uxskill recommend \
   --project-type=dashboard \
   --industry=fintech-neobank \
@@ -1004,24 +962,24 @@ uxskill recommend \
 /plugin marketplace add Laith0003/ux-skill
 /plugin install ux@ux-skill
 /ux-discover
-> نوع المشروع؟ landing
-> القطاع؟ fintech-payments
-> النغمة؟ جدّيّة، تقنيّة، واثقة
-> الإلزاميّات؟ dark-mode، AA، أولويّة للهاتف
-> الممنوعات؟ purple-gradients، three-equal-cards
-> العلامات المرجعيّة؟ stripe
-> المنظومة؟ nextjs-15-app-router
-> المنطقة؟ عالمي
-> مقياس النجاح؟ تحويل التسجيل
+> Project type? landing
+> Industry? fintech-payments
+> Tone? serious, technical, confident
+> Must have? dark-mode, AA, mobile-first
+> Forbidden? purple-gradients, three-equal-cards
+> Reference brands? stripe
+> Stack? nextjs-15-app-router
+> Region? global
+> Success metric? signup conversion
 
-/ux-recommend
-> [يُعيد الأسلوب، لوحة الألوان، الاقتران الطباعي، مهيّآت الحركة، المكوّنات، العلامات النموذجيّة المُختارة]
+/ux-discover --recommend
+> [returns picked style, palette, type pair, motion presets, components, brand exemplars]
 
-/ux-design "ولّد صفحة الهبوط مستخدمًا مواصفة علامة Stripe كنموذج"
-> [frontend-engineer يُولّد الصفحة]
+/ux-design "generate the landing using the Stripe brand spec as exemplar"
+> [frontend-engineer generates the page]
 
 /ux-lint .
-> [تمرّ، مواصفة Stripe احتُرمت]
+> [passes, Stripe brand spec was respected]
 ```
 
 ### 3. تدقيق كود قائم بحثًا عن ركاكة الذكاء الاصطناعي داخل CI
@@ -1051,16 +1009,16 @@ PRs التي تُدخل تدرّجات بنفسجيّة إلى زرقاء، أو
 
 ```
 /ux-critique src/components/Hero.tsx
-> [3 إيجابيات، 3 سلبيات، خطوة استراتيجيّة واحدة، الرأي صريح]
+> [3 wins, 3 misses, 1 strategic move, the take is honest]
 
 /ux-lint src/
-> [15 بصمة ذكاء اصطناعي عالية الخطورة مرفوعة]
+> [15 high-severity AI fingerprints flagged]
 
 /ux-polish src/components/Hero.tsx
-> [جولة تجميليّة مدفوعة بنموذج لغوي + قتل ركاكة الذكاء الاصطناعي]
+> [LLM-driven cosmetic pass + AI-slop kill]
 
 /ux-fix
-> [يُطبّق الملاحظات كالتزامات ذرّيّة، ويُعيد تشغيل المُدقّق]
+> [applies findings as atomic commits, re-runs the linter]
 ```
 
 ثلاثة أوامر، سطح مصقول، التزامات ذرّيّة لكلّ إصلاح.
@@ -1068,10 +1026,10 @@ PRs التي تُدخل تدرّجات بنفسجيّة إلى زرقاء، أو
 ### 5. تصميم لوحة أوامر بأسلوب Linear
 
 ```
-/ux-component command-palette --brief="أسلوب Linear، داكن، اختصارات أحاديّة المسافة، العناصر الحديثة أوّلًا"
-> [يقرأ data/brands/linear.app.json للحصول على tokens + الحركات المميِّزة]
-> [يقرأ data/components.json لتشريح command-palette وحالاته]
-> [يستدعي frontend-engineer بمواصفة Linear صريحة]
+/ux-design --component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
+> [reads data/brands/linear.app.json for tokens + signature moves]
+> [reads data/components.json for the command-palette anatomy + states]
+> [dispatches frontend-engineer with explicit Linear spec]
 ```
 
 المكوّن المُولَّد يستخدم tokens ألوان Linear الحقيقيّة، وكومة الخطوط، وأعراف الحركة، وكثافات الشعريّات، لا «واجهة داكنة عامّة».
@@ -1081,8 +1039,8 @@ PRs التي تُدخل تدرّجات بنفسجيّة إلى زرقاء، أو
 لديك غرفة فيها 5 أشخاص لمدّة 90 دقيقة. تريدهم أن يخرجوا بخطّة لعب، لا بإحساس عامّ.
 
 ```
-/ux-workshop "تحوّل محفظة الولاء" \
-  --participants="مديرَا منتج، مصمّم، قائد هندسة، ممثّل عملاء" \
+/ux-workshop "loyalty wallet pivot" \
+  --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" \
   --minutes=90
 ```
 
@@ -1094,9 +1052,9 @@ PRs التي تُدخل تدرّجات بنفسجيّة إلى زرقاء، أو
 
 ```
 /ux-case-study --format=html --slug=bashiti-loyalty
-> [يقرأ .ux/last-frame.json، last-workshop.json، last-research.json، last-design.json، last-a11y.json، last-polish.json، last-recommendation.json، last-discovery.json]
-> [يُولّد دراسة حالة بأسلوب Wfrah التحريري بأقسام مرقّمة (A)-(G)، فواصل بدقّة الشعرة، تخطيط آمن ثنائي اللغة]
-> [يكتب case-studies/bashiti-loyalty.html]
+> [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
+> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/bashiti-loyalty.html]
 ```
 
 دراسة الحالة ناتج مُنجَز قابل للنشر، لا مسوّدة. أحاديّ اللون نقي، طباعة تحريريّة، جاهز للشحن إلى بورتفوليوك.
@@ -1107,7 +1065,7 @@ PRs التي تُدخل تدرّجات بنفسجيّة إلى زرقاء، أو
 
 ```bash
 uxskill discover
-# استخراج من 10 حقول، يُحفظ في .ux/last-discovery.json
+# 10-field intake, saves to .ux/last-discovery.json
 
 cat .ux/last-discovery.json
 # {
@@ -1121,7 +1079,7 @@ cat .ux/last-discovery.json
 
 ### 9. حفظ MASTER.md: قرارات التصميم في المستودع
 
-بعد `/ux-recommend`، احفظ الأسلوب + لوحة الألوان + الاقتران الطباعي + الحركة + المكوّنات + العلامات النموذجيّة + الحواجز المُختارة بوصفها ملفّ Markdown قابلًا للقراءة يستطيع فريقك مراجعته وعمل diff عليه ووضعه تحت إدارة الإصدارات.
+بعد `/ux-discover` (أو `/ux-discover --recommend`)، احفظ الأسلوب + لوحة الألوان + الاقتران الطباعي + الحركة + المكوّنات + العلامات النموذجيّة + الحواجز المُختارة بوصفها ملفّ Markdown سهل القراءة يستطيع فريقك مراجعته وعمل diff عليه ووضعه تحت إدارة الإصدارات.
 
 ```bash
 python3 -m engine.cli.main persist save --project-root .
@@ -1137,11 +1095,11 @@ python3 -m engine.cli.main persist save --project-root .
 
 | البُعد | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
-| الأوامر القطعيّة | **22** | 1 | 19 | 1 | 1 | متعدّد | 1 | 1 | 1 |
+| أوامر الشرطة المائلة | **18** | 1 | 19 | 1 | 1 | متعدّد | 1 | 1 | 1 |
 | المكوّنات | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | مهيّآت الحركة | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | مواصفات العلامات | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| قواعد الأنماط الضارّة | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| قواعد الأنماط الضارّة | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | مُدقّق حتمي آمن للـ CI | **نعم** | لا | لا | لا | لا | لا | لا | لا | لا |
 | بيئات التطوير المدعومة | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | بوّابة اكتشاف | **10 حقول** | ضمنيّة | ضمنيّة | ضمنيّة | ضمنيّة | ضمنيّة | ضمنيّة | ضمنيّة | ضمنيّة |
@@ -1161,24 +1119,21 @@ python3 -m engine.cli.main persist save --project-root .
 
 ## خارطة الطريق
 
-### v2.1: اكتمال المُدقّق (الربع الثالث 2026)
+التالي، دون إصدار محدّد:
 
-- **+17 قاعدة مؤجَّلة من الأنماط الضارّة** للوصول إلى 52 قاعدة. أهداف: حالات تمرير داكن على داكن، ترميز الحالة بالألوان وحدها، تصاعد z-index زائد، نقاط توقّف صلبة في JS، استخدام opacity بدلًا من حالة disabled، إلخ.
-- **`uxskill lint --fix` لإعادات كتابة آمنة** للملاحظات القابلة للإصلاح الميكانيكي (`button-no-type`، `img-no-alt` بسلسلة فارغة، إزالة `console-log-leak`).
-- **امتداد لـ VS Code** يُبرز ملاحظات المُدقّق داخل المحرّر (دون الحاجة إلى تشغيل CI).
+- **أنماط Figma**: أنماط تأثيرات للظلال، وأنماط شبكات، وأنماط نصوص مرتبطة بمتغيّرات الحقول، تُكتب في ملف حيّ.
+- **ربط المكوّنات**: مكوّن Figma ومتغيّراته مربوطان بمكوّن في الكود وخصائصه، ويبقى الربط قائمًا طوال التسليم.
+- **مستورد من موقع حيّ**: قراءة النظام الذي يعرضه موقع منشور فعلًا، إلى جانب مستوردات الملفّات.
+- **صفحات توثيق لنظام مبنيّ**: العرض البشري لرموزه وأدواره وعقوده.
 
-### v2.2: توسيع ملفّ المكوّنات (الربع الرابع 2026)
+ومفتوح أيضًا:
 
-- **+50 مكوّنًا** للوصول إلى 198 إجمالًا. جديد كلّيًّا: combobox بترشيح متزامن، command-palette باستدلال «العناصر الحديثة»، خطوة نموذج شرطيّة، تنويعات payment-element، منتقي تاريخ يراعي RTL، إدخال هاتف خاصّ بالشرق الأوسط، شبكة تقويم بتراكب هجري.
-- **إصدار كود لكلّ مكوّن** في 6 منظومات (Next.js + React، Vue 3 + Nuxt، SvelteKit، Astro، Blade + Alpine، HTML/CSS نقي).
-- **ميدان تجريبي للمكوّنات** على uxskill.laithjunaidy.com/playground، جرّب محرّك التوصية + شاهد معاينة حيّة للمكوّن.
-
-### v3: السوق + الاحتجاز (2027)
-
-- **سوق مواصفات العلامات**: نشر واكتشاف مواصفات علامات من المجتمع. النشر برسوم لتمويل الإشراف.
-- **قواعد مخصّصة للأنماط الضارّة**: يستطيع المشروع تعريف قواعد regex خاصّة في `data/anti-patterns.local.json` (أُصدِرت في v2؛ v3 يضيف الاكتشاف + المشاركة).
-- **`uxskill plan`**: تخطيط موقع كامل متعدّد الصفحات من موجز واحد، لا سطح واحد فقط.
-- **توأم لإضافة Figma**: نفس محرّك التوصية، مكشوفًا داخل Figma.
+- **`uxskill lint --fix` لإعادة كتابة آمنة** للملاحظات القابلة للإصلاح آليًّا (button-no-type، وimg-no-alt بنصّ فارغ، وإزالة console-log-leak).
+- **إضافة VS Code** تعرض ملاحظات الفحص داخل الكود.
+- **إخراج كود لكل مكوّن** في ست منظومات (Next.js + React، Vue 3 + Nuxt، SvelteKit، Astro، Blade + Alpine، HTML/CSS خالص).
+- **سوق لمواصفات العلامات**: نشر مواصفات العلامات من المجتمع واكتشافها.
+- **قواعد أنماط ضارّة مخصّصة**: اكتشاف ومشاركة القواعد التي تعرّفها المشاريع في `data/anti-patterns.local.json`.
+- **`uxskill plan`**: تخطيط مواقع متعدّدة الصفحات انطلاقًا من موجز، لا واجهة واحدة فقط.
 
 ---
 
@@ -1241,7 +1196,7 @@ MIT. استخدمه، فرّعه، ابنِ فوقه. إن وفّر عليك ش�
 
 ---
 
-**ux-skill** · **v3.1.0-stable** · بُنيت لتُخرج Claude Code وCursor وWindsurf وكلّ أداة برمجة ذكيّة أخرى واجهات أماميّة لا تُقرَأ كأنّها من صنع الذكاء الاصطناعي.
+**ux-skill** · **v4.0.0** · بُنيت لتُخرج Claude Code وCursor وWindsurf وكلّ أداة برمجة ذكيّة أخرى واجهات أماميّة لا تُقرَأ كأنّها من صنع الذكاء الاصطناعي.
 
 > ضع نجمة للمستودع على [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · ثبّت عبر `pip install uxskill` أو `npx uxskill init` · تصفّح المقارنة على [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)
 

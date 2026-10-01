@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.787,
+    "density": 0.5,
+    "formality": 0.33,
+    "geometry": 0.248,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/mailchimp.json: warmth from the hue and chroma of the primary #FFE01B and the canvas #FFFFFF; contrast from the ink #241C15 on that canvas, its depth and the chroma of #FFE01B; density from its 4px spacing base; geometry from its radii 0, 4, 8px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FFE01B",
+  "brand_rule": "The primary #FFE01B reaches only 1.32:1 on the canvas #FFFFFF and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#FFE01B",
+      "light": "#FFE01B"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#0E0D0A",
+      "light": "#F7F7F5"
+    },
+    "radius_control": "4px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "fddb5355d0fb8be4"
+  },
+  "id": "mailchimp",
+  "name": "Mailchimp",
+  "spec": "data/brands/mailchimp.json"
+}

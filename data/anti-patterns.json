@@ -3831,7 +3831,7 @@
       "id": "focusable-at-opacity-zero",
       "name": "Focusable control left at opacity 0",
       "severity": "medium",
-      "category": "Accessibility",
+      "category": "A11y",
       "detection": {
         "type": "regex",
         "pattern": "opacity\\s*:\\s*0(?![.\\d])",
@@ -3900,7 +3900,7 @@
       "id": "repeated-action-same-name",
       "name": "Actions in repeated items share one name",
       "severity": "medium",
-      "category": "Accessibility",
+      "category": "A11y",
       "detection": {
         "type": "regex",
         "pattern": "<(?:button|a)\\b[^>]*>",
@@ -3923,7 +3923,7 @@
       "id": "menu-row-disabled-without-reason",
       "name": "Disabled menu row with no reason",
       "severity": "medium",
-      "category": "Accessibility",
+      "category": "A11y",
       "detection": {
         "type": "regex",
         "pattern": "<[a-z][\\w-]*\\b[^>]*\\brole\\s*=\\s*[\"']menuitem(?:checkbox|radio)?[\"'][^>]*>",

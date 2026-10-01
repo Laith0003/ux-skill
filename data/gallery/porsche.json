@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.783,
+    "density": 0.25,
+    "formality": 0.398,
+    "geometry": 0.133,
+    "motion": 0.918,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/porsche.json: warmth from the hue and chroma of the primary #D5001C and the canvas #FFFFFF; contrast from the ink #0A0E10 on that canvas, its depth and the chroma of #D5001C; density from its 8px spacing base; geometry from its radii 0, 2, 4px; formality from the chroma of its primary and ink; motion from its stated durations 1200ms, 800ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#D5001C",
+  "brand_rule": "The primary #D5001C reaches 5.46:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#D5001C",
+      "light": "#D5001C"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "2px",
+    "state_duration": "240ms",
+    "tokens": 729,
+    "tokens_sha256": "a5dbda139f0bc977"
+  },
+  "id": "porsche",
+  "name": "Porsche",
+  "spec": "data/brands/porsche.json"
+}

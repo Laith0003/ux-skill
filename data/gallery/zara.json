@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.5,
+    "density": 0.25,
+    "formality": 1.0,
+    "geometry": 0.0,
+    "motion": 0.861,
+    "type_personality": 0.5,
+    "warmth": 0.5
+  },
+  "axes_source": "Read from data/brands/zara.json: warmth from the hue and chroma of the primary #000000 and the canvas #FFFFFF; contrast from the ink #000000 on that canvas, its depth and the chroma of #000000; density from its 8px spacing base; geometry from its radii 0px; formality from the chroma of its primary and ink; motion from its stated durations 1200ms, 600ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#000000",
+  "brand_rule": "The primary #000000 reaches 21.00:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DADADA",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D0D",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "2px",
+    "state_duration": "200ms",
+    "tokens": 727,
+    "tokens_sha256": "338ac60dab1cceae"
+  },
+  "id": "zara",
+  "name": "Zara",
+  "spec": "data/brands/zara.json"
+}

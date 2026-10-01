@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.488,
+    "density": 0.5,
+    "formality": 1.0,
+    "geometry": 0.482,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.5
+  },
+  "axes_source": "Read from data/brands/cal.json: warmth from the hue and chroma of the primary #111111 and the canvas #FFFFFF; contrast from the ink #111111 on that canvas, its depth and the chroma of #111111; density from its 4px spacing base; geometry from its radii 4, 6, 8, 12, 16px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#111111",
+  "brand_rule": "The primary #111111 reaches 18.88:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DADADA",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D0D",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "4px",
+    "state_duration": "200ms",
+    "tokens": 728,
+    "tokens_sha256": "2cc8b38220f03465"
+  },
+  "id": "cal",
+  "name": "Cal.com",
+  "spec": "data/brands/cal.json"
+}

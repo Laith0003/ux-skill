@@ -22,11 +22,11 @@
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/how-to-add-a-design-system-to-claude-code.html">
   <meta property="og:title" content="How to add a design system to Claude Code and Cursor">
   <meta property="og:description" content="Five steps to make Claude Code and Cursor generate UI that follows your tokens and brand, with a deterministic linter that fails the default AI look.">
-  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og-image.png?v=32">
-  <meta property="og:image:width" content="2400">
-  <meta property="og:image:height" content="1260">
+  <meta property="og:image" content="https://uxskill.laithjunaidy.com/og-image.png?v=40">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="uxskill: how to add a design system to Claude Code and Cursor">
-  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og-image.png?v=32">
+  <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og-image.png?v=40">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="How to add a design system to Claude Code and Cursor">
@@ -386,7 +386,7 @@
       {
         "@type": "HowToStep",
         "name": "Generate and lint UI against the system",
-        "text": "Build screens with the design and component commands, then run the audit command. A deterministic linter with 152 anti-pattern rules scores the output and fails when the default AI fingerprints appear.",
+        "text": "Build screens with the design and component commands, then run the audit command. A deterministic linter with 171 anti-pattern rules scores the output and fails when the default AI fingerprints appear.",
         "url": "https://uxskill.laithjunaidy.com/how-to-add-a-design-system-to-claude-code.html#step-5"
       }
     ]
@@ -604,7 +604,7 @@
       <h3>Generate UI, then lint it against the system</h3>
       <p>Build screens and components with the generation commands. Because the system file is in context, the output starts from your tokens rather than the model's defaults.</p>
       <div class="cmd"><span class="p">$</span> <span class="a">/ux-design</span> a pricing page   <span class="c"># /ux-component for a single element</span></div>
-      <p>Then verify. Run the audit command to score the output against a deterministic linter of 152 anti-pattern rules. It catches the fingerprints the model reaches for when left alone, the purple gradient, the three identical cards, emoji used as icons, and fails the result when too many appear. Wire the same check into CI and a regression cannot merge. Use <code>/ux-fix</code> to apply the corrections the linter recommends.</p>
+      <p>Then verify. Run the audit command to score the output against a deterministic linter of 171 anti-pattern rules. It catches the fingerprints the model reaches for when left alone, the purple gradient, the three identical cards, emoji used as icons, and fails the result when too many appear. Wire the same check into CI and a regression cannot merge. Use <code>/ux-fix</code> to apply the corrections the linter recommends.</p>
       <div class="cmd"><span class="p">$</span> <span class="a">/ux-audit</span> ./src/pricing   <span class="c"># non-zero exit on slop</span></div>
     </div>
 
@@ -632,7 +632,7 @@
     <section class="cta">
       <span class="eyebrow">Give your editor a design system</span>
       <h2>One command. <span class="accent">Seventeen editors.</span> Offline.</h2>
-      <p>uxskill is an open-source design engine for AI coding. It compiles a system anchored to your brand and lints generated UI against 152 anti-pattern rules. Deterministic, no telemetry, no account, MIT licensed.</p>
+      <p>uxskill is an open-source design engine for AI coding. It compiles a system anchored to your brand and lints generated UI against 171 anti-pattern rules. Deterministic, no telemetry, no account, MIT licensed.</p>
 
       <div class="install-block">
         <div class="row"><span class="prompt">$</span> pip install <span class="arg">uxskill</span></div>

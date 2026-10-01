@@ -16,15 +16,10 @@ const CHROME = ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
   '/Applications/Chromium.app/Contents/MacOS/Chromium'].find((p) => existsSync(p));
 if (!CHROME) { console.log('no chrome'); process.exit(2); }
 
-// slug -> [eyebrow, title (\n = line break), sub]  (numbers refreshed to v3.1 canon)
+// slug -> [eyebrow, title (\n = line break), sub]. The cards of the current pages (home,
+// about, blog-index, compare, faq, mcp, roadmap) and docs/og-image.png are rendered by
+// scripts/render_og_cards.py with the engine's figures; the cards here are for dated posts.
 const PAGES = {
-  "home": ["The design brain for AI coding", "Stop your AI code\nlooking generated.", "A deterministic engine that compiles a real design language per brief."],
-  "compare": ["Compare", "Every Claude design\nskill, side by side", "ux-skill 46/50 · next best 30/50"],
-  "about": ["About", "Why ux-skill exists", "From the prose-only v1 to the queryable Python engine"],
-  "faq": ["FAQ", "25 questions,\nanswered straight", "Install, license, plugin landscape, MCP"],
-  "roadmap": ["Roadmap", "What ships next", `v${LINE} shipped · the render check is live`],
-  "mcp": ["MCP server", "18 tools over stdio.\nAny MCP host.", "Claude Desktop · Cursor · Windsurf · generic agents"],
-  "blog-index": ["Blog", "Long-form writing on\nAI coding's design problem", "Honest comparisons. Real numbers. No marketing verbs."],
   "vs-ui-ux-pro-max": ["Comparison", "ui-ux-pro-max alternative:\nthe honest table", "1,243 entries vs ~600 · 152-rule linter vs none"],
   "anti-ai-slop-claude-skills": ["Ranking", "Anti-AI-slop tools for\nClaude Code in 2026", "taste-skill · hallmark · ux-skill v3.1"],
   "best-claude-code-design-skills-2026": ["Ranking", "Best Claude Code skills\nfor UX/UI design (2026)", "ui-ux-pro-max · open-design · taste-skill · ux-skill"],

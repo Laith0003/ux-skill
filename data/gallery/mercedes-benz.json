@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.756,
+    "density": 0.25,
+    "formality": 0.315,
+    "geometry": 0.248,
+    "motion": 1.0,
+    "type_personality": 0.5,
+    "warmth": 0.091
+  },
+  "axes_source": "Read from data/brands/mercedes-benz.json: warmth from the hue and chroma of the primary #00ADEF and the canvas #1A1D24; contrast from the ink #1A1D24 on that canvas, its depth and the chroma of #00ADEF; density from its 8px spacing base; geometry from its radii 0, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 1500ms, 6000ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#00ADEF",
+  "brand_rule": "The primary #00ADEF reaches 6.60:1 on the canvas #1A1D24, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#00ADEF",
+      "light": "#00ADEF"
+    },
+    "face": {
+      "display": "Space Grotesk",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0A0E10",
+      "light": "#F5F7F9"
+    },
+    "radius_control": "5px",
+    "state_duration": "240ms",
+    "tokens": 729,
+    "tokens_sha256": "a59b50ab64c6b23c"
+  },
+  "id": "mercedes-benz",
+  "name": "Mercedes-Benz",
+  "spec": "data/brands/mercedes-benz.json"
+}

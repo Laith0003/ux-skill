@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.5,
+    "formality": 0.333,
+    "geometry": 0.248,
+    "motion": 0.279,
+    "type_personality": 0.5,
+    "warmth": 0.091
+  },
+  "axes_source": "Read from data/brands/ubisoft.json: warmth from the hue and chroma of the primary #0070F3 and the canvas #0E1318; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #0070F3; density from its 4px spacing base; geometry from its radii 0, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 200ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#0070F3",
+  "brand_rule": "The primary #0070F3 reaches 4.10:1 on the canvas #0E1318, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#0070F3",
+      "light": "#0070F3"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0B0D11",
+      "light": "#F5F7F9"
+    },
+    "radius_control": "4px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "d9a9cb22b819e88c"
+  },
+  "id": "ubisoft",
+  "name": "Ubisoft",
+  "spec": "data/brands/ubisoft.json"
+}

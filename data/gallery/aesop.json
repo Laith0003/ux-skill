@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.482,
+    "density": 0.25,
+    "formality": 0.926,
+    "geometry": 0.069,
+    "motion": 0.279,
+    "type_personality": 0.5,
+    "warmth": 0.695
+  },
+  "axes_source": "Read from data/brands/aesop.json: warmth from the hue and chroma of the primary #241F17 and the canvas #DCCFB6; contrast from the ink #241F17 on that canvas, its depth and the chroma of #241F17; density from its 8px spacing base; geometry from its radii 0, 2px; formality from the chroma of its primary and ink; motion from its stated durations 200ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#241F17",
+  "brand_rule": "The primary #241F17 reaches 10.63:1 on the canvas #DCCFB6, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DCDAD9",
+      "light": "#201E1C"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0E0D0B",
+      "light": "#F7F7F5"
+    },
+    "radius_control": "2px",
+    "state_duration": "150ms",
+    "tokens": 727,
+    "tokens_sha256": "88b89dd34062484b"
+  },
+  "id": "aesop",
+  "name": "Aesop",
+  "spec": "data/brands/aesop.json"
+}

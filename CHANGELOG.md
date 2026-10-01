@@ -9,7 +9,68 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-10-01 - **FOUNDATIONS**
+
+ux-skill 4.0 builds a design system from one brand color and a brief, reads
+the system a team already has, checks every pairing for contrast in light,
+dark and high contrast, and writes only what passes. 3.x users: start with
+[docs/migrating-to-4.md](docs/migrating-to-4.md).
+
+### Upgrade
+- pip: `pip install --upgrade uxskill` (Python 3.10 or newer). For the MCP
+  server: `pip install --upgrade 'uxskill[mcp]'`. To stay on 3.x on
+  purpose: `pip install 'uxskill<4'`.
+- npm: `npx uxskill@latest`.
+- Then build a system:
+  `uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system`.
+
+### Migrating from 3.x
+- The 3.x `tokens.css` from `ux generate` and the system pack's
+  `DESIGN.md` and `tokens.css` are replaced by `tokens.css`, `tokens.json`
+  (DTCG), `fonts.css`, `art/` and `system-report.md`.
+- Build a new system and move the page onto its roles: every 3.x custom
+  property has a 4.0 role (`--color-canvas` is `--color-surface-page`,
+  `--color-primary` is `--color-action-primary`, `--space-md` is
+  `--space-4`, `--motion-base` is `--motion-state-duration`); the full table
+  is in the guide.
+- Or keep the 3.x system: `uxskill system import --from DESIGN.md` reads it
+  as it is, `system enhance` reports what it lacks and how to add it, and
+  `system extend` adds the missing foundations, roles or contracts in an
+  extension file beside it. Nothing is rewritten.
+
 ### Added
+- Nine foundations (color, type, space, layout, radius, border, elevation,
+  motion, imagery), each from primitives to semantic roles across five mode
+  axes, emitted as DTCG and CSS and checked by the WCAG gate. Every look is a
+  continuous function of the axes, the brand and the brief; no industry or
+  keyword picks one.
+- Importers for DTCG, CSS, Tailwind 4 and a resolved Tailwind 3 config,
+  Markdown rule files and Figma variables, with a naming adapter, `scan`,
+  `system enhance --from` and `system extend`. An importer never guesses: it
+  reads a value or lists the entry under Not read with how to write it.
+- Exporters to CSS, DTCG, Tailwind 4 and Figma variables, with the scripts
+  that apply and read them in a Figma file. Every write goes through an
+  intake step that backs up the client's files byte for byte.
+- 23 component contracts and 14 section contracts. A part that changes under
+  hover, selected or pressed binds a transition on `motion.state`; pressable
+  controls scale on `motion.press.scale` (1 under reduced motion); nav,
+  tabs, segmented controls and menus move one indicator on
+  `motion.indicator`. A section names its job, the components its slots
+  take, its variants, the proof it needs and its phone recomposition; every
+  page sequence names its section contracts.
+- 171 lint rules. The lint reads the page's own system, times motion from
+  its curve, holds a display line height to the engine's floor, reads the
+  system's lean to capitals, and checks how components show their states:
+  a hidden control leaves the tab order, an exit runs to its end, a theme
+  switch does not animate the page, and an action in a repeated item names
+  its item.
+- `lint --render` measures the color budget, the photo grade lock, accent
+  text on every ground, loops under reduced motion and pause controls, and
+  drives the page with its motion running: focus rings that do not show or
+  are clipped, hover and press that answer late, focus lost after Escape,
+  and a press that still moves under reduced motion.
+- Inner pages (pricing, about, contact, customers, customer story, legal)
+  with their own sequences, built in one run as one page family.
 - Six category colors for nominal data: `color.category.1` to
   `color.category.6`, each with a soft fill (a pill or a tile), a strong
   tone (a chart mark), text, and text on the strong tone, in light, dark
@@ -17,6 +78,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
   round the wheel; neighbors also differ in lightness. Every system gains
   24 roles and the gate measures them on every surface. Import a shadcn
   theme and `chart-1` to `chart-5` map to the category marks.
+- 25 MCP tools on one shared command layer.
+- `figma-skill/`: ux-skill as a skill for Figma's agent.
+- Release checks (`scripts/release_checks.py`): 600 sampled briefs build,
+  every gallery and fixture system round-trips through every format with no
+  mismatch, the build digest is stable across hash seeds, and the wheel
+  ships nothing private.
 
 ### Changed
 - The dashboard playbook teaches the product dashboard people check many

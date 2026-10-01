@@ -3,7 +3,7 @@ they tell the model to run: every flag the create mode uses exists, the
 MCP tool it names exists, every status the CLI prints is in its table with
 its exit code, the font families it names are the ones the engine picks,
 and the existing-system modes say what works now, with no version label. The README and CHANGELOG
-beta sections tell a reader how to install the beta, and no doc promises a
+4.0 sections tell a reader how to install the release, and no doc promises a
 brief word the synthesizer does not read."""
 import json
 import re
@@ -13,7 +13,6 @@ import pytest
 
 pytest.importorskip("click")
 
-from engine import __version__  # noqa: E402
 from engine.cli.main import cli  # noqa: E402
 from engine.discovery.core import FIELDS  # noqa: E402
 from engine.foundations.emit import STATUS_EXIT, _reading  # noqa: E402
@@ -35,7 +34,7 @@ def _section(text: str, heading: str) -> str:
     return text[start:] if end == -1 else text[start:end]
 
 
-CREATE = _section(DOC, "## create mode (4.0 beta)")
+CREATE = _section(DOC, "## create mode")
 
 
 def _step(heading: str) -> str:
@@ -45,8 +44,10 @@ def _step(heading: str) -> str:
     return CREATE[start:] if end == -1 else CREATE[start:end]
 
 
-README_BETA = README[README.index("### New in 4.0 beta"):README.index("### New in v3.1")]
-CHANGELOG_BETA = CHANGELOG[CHANGELOG.index("## [4.0.0-beta.1]"):CHANGELOG.index("## [3.2.0]")]
+README_40 = README[README.index("### New in 4.0: foundations"):README.index("### New in v3.1")]
+CHANGELOG_40 = CHANGELOG[CHANGELOG.index("## [4.0.0]"):CHANGELOG.index("## [3.2.0]")]
+# The 4.0.0 entry alone, without the beta notes below it.
+CHANGELOG_RELEASE = CHANGELOG_40[:CHANGELOG_40.index("## [4.0.0-beta.1]")]
 
 
 def _build_flags():
@@ -65,6 +66,8 @@ def test_every_flag_the_create_mode_names_exists():
     # --version belongs to uxskill itself, which the first step runs.
     assert "--version" in {opt for p in cli.params for opt in p.opts}
     used.discard("--version")
+    # --upgrade belongs to pip, in the install line the first step gives.
+    used.discard("--upgrade")
     assert used <= _build_flags(), sorted(used - _build_flags())
 
 
@@ -303,9 +306,7 @@ def test_architect_authors_contracts_at_experimental_and_reads_decisions_first()
     assert "`rule-pack/decisions/`" in section
 
 
-# ------------------------------------------------ installing the beta
-
-PINNED = f"uxskill=={__version__}"
+# ------------------------------------------------ installing the release
 
 
 def test_create_checks_the_version_before_it_builds():
@@ -313,7 +314,9 @@ def test_create_checks_the_version_before_it_builds():
     assert first.startswith("### 1. Check the engine version")
     assert "uxskill --version" in first and "python3 -m engine.cli.main --version" in first
     assert CREATE.index("uxskill --version") < CREATE.index("system build --brand")
-    assert f"pip install {PINNED}" in first and f"pipx install --force {PINNED}" in first
+    assert "pip install --upgrade uxskill" in first and "pipx upgrade uxskill" in first
+    assert "uxskill 4.0.0 or later" in first
+    assert "pre-release" not in first and "--pre" not in first
     assert "stop" in first and "do not change" in first
 
 
@@ -322,17 +325,24 @@ def test_exit_2_names_the_old_uxskill_case():
     assert "No such command 'system'" in line and "step 1" in line
 
 
-BETA_TEXT = {"README": README_BETA, "CHANGELOG": CHANGELOG_BETA, "create": CREATE}
+TEXT_40 = {"README": README_40, "CHANGELOG": CHANGELOG_40, "create": CREATE}
+RELEASE_TEXT = {"README": README_40, "CHANGELOG": CHANGELOG_RELEASE}
 
 
 @pytest.mark.parametrize("name", ["README", "CHANGELOG"])
-def test_the_beta_sections_say_how_to_install_the_beta(name):
-    text = BETA_TEXT[name]
-    for line in ("pip install --upgrade --pre uxskill", f"pip install {PINNED}",
-                 "pip install --upgrade --pre 'uxskill[mcp]'",
-                 "pipx install --pip-args=--pre uxskill", "npx uxskill@beta"):
+def test_the_release_sections_say_how_to_install_the_release(name):
+    text = RELEASE_TEXT[name]
+    for line in ("pip install --upgrade uxskill", "pip install --upgrade 'uxskill[mcp]'",
+                 "npx uxskill@latest"):
         assert line in text, (name, line)
-    assert text.index("pip install --upgrade --pre uxskill") < text.index("system build"), name
+    assert text.index("pip install --upgrade uxskill") < text.index("system build"), name
+
+
+@pytest.mark.parametrize("name", ["README", "CHANGELOG"])
+def test_the_release_sections_send_no_one_to_a_pre_release(name):
+    text = RELEASE_TEXT[name]
+    for word in ("--pre", "@beta", "4.0.0b1", "pre-release"):
+        assert word not in text, (name, word)
 
 
 # ------------------------------------------------ what the brief moves
@@ -366,18 +376,18 @@ def test_the_doc_names_every_discovery_word_the_engine_ignores():
 
 @pytest.mark.parametrize("name", ["README", "CHANGELOG", "create"])
 def test_the_look_follows_industry_and_tone_only_when_the_brief_names_them(name):
-    text = BETA_TEXT[name]
+    text = TEXT_40[name]
     assert "when the brief names them" in text, name
     assert "look follows your industry and tone." not in text, name
 
 
 def test_no_beta_doc_says_the_mcp_tool_writes_nothing():
-    assert "writes no files" not in CHANGELOG_BETA.lower()
-    assert "returns the same files as text and writes nothing" not in README_BETA
+    assert "writes no files" not in CHANGELOG_40.lower()
+    assert "returns the same files as text and writes nothing" not in README_40
 
 
 def test_the_test_count_sits_in_the_beta_section_and_matches_the_badge():
     badge = re.search(r"badge/tests-(\d+)_passing", README).group(1)
-    assert f"Tests **{badge} passing**" in README_BETA
+    assert f"Tests **{badge} passing**" in README_40
     v31 = README[README.index("### New in v3.1"):README.index("### What's new in v3")]
     assert "Tests **" not in v31

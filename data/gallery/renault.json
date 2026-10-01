@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.85,
+    "density": 0.5,
+    "formality": 0.3,
+    "geometry": 0.148,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/renault.json: warmth from the hue and chroma of the primary #FFED00 and the canvas #FFFFFF; contrast from the ink #000000 on that canvas, its depth and the chroma of #FFED00; density from its 4px spacing base; geometry from its radii 0, 2, 3, 4px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FFED00",
+  "brand_rule": "The primary #FFED00 reaches only 1.21:1 on the canvas #FFFFFF and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#FFED00",
+      "light": "#FFED00"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0E0D0A",
+      "light": "#F7F7F5"
+    },
+    "radius_control": "3px",
+    "state_duration": "200ms",
+    "tokens": 728,
+    "tokens_sha256": "b4cca3b9ca8ba712"
+  },
+  "id": "renault",
+  "name": "Renault",
+  "spec": "data/brands/renault.json"
+}

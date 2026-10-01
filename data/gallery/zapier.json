@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.831,
+    "density": 0.5,
+    "formality": 0.268,
+    "geometry": 0.349,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.874
+  },
+  "axes_source": "Read from data/brands/zapier.json: warmth from the hue and chroma of the primary #FF4F00 and the canvas #FFFEFB; contrast from the ink #201515 on that canvas, its depth and the chroma of #FF4F00; density from its 4px spacing base; geometry from its radii 0, 6, 12px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FF4F00",
+  "brand_rule": "The primary #FF4F00 reaches 3.27:1 on the canvas #FFFEFB, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#D74100",
+      "light": "#FF4F00"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0B",
+      "light": "#F9F6F5"
+    },
+    "radius_control": "6px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "aeb10b3def3b53c3"
+  },
+  "id": "zapier",
+  "name": "Zapier",
+  "spec": "data/brands/zapier.json"
+}

@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.754,
+    "density": 0.25,
+    "formality": 0.647,
+    "geometry": 0.415,
+    "motion": 0.544,
+    "type_personality": 0.5,
+    "warmth": 0.606
+  },
+  "axes_source": "Read from data/brands/github.json: warmth from the hue and chroma of the primary #2DA44E and the canvas #FFFFFF; contrast from the ink #1F2328 on that canvas, its depth and the chroma of #0969DA; density from its 8px spacing base; geometry from its radii 4, 6, 8, 12px; formality from the chroma of its primary and ink; motion from its stated durations 600ms, 120ms, 800ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#2DA44E",
+  "brand_rule": "The primary #2DA44E reaches 3.22:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#008937",
+      "light": "#008937"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0C0E0C",
+      "light": "#F6F7F6"
+    },
+    "radius_control": "5px",
+    "state_duration": "200ms",
+    "tokens": 728,
+    "tokens_sha256": "730ea5272d009e8b"
+  },
+  "id": "github",
+  "name": "GitHub",
+  "spec": "data/brands/github.json"
+}

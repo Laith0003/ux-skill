@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.5,
+    "formality": 0.393,
+    "geometry": 0.221,
+    "motion": 0.537,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/bloomberg.json: warmth from the hue and chroma of the primary #FB8B1E and the canvas #0A0A0A; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #FB8B1E; density from its 4px spacing base; geometry from its radii 0, 2, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 180ms, 800ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FB8B1E",
+  "brand_rule": "The primary #FB8B1E reaches 8.31:1 on the canvas #0A0A0A, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#FB8B1E",
+      "light": "#FB8B1E"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#100D0A",
+      "light": "#F8F6F5"
+    },
+    "radius_control": "4px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "43d0a15c13aab784"
+  },
+  "id": "bloomberg",
+  "name": "Bloomberg",
+  "spec": "data/brands/bloomberg.json"
+}

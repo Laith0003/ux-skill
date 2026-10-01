@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.65,
+    "density": 0.5,
+    "formality": 0.529,
+    "geometry": 0.5,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.15
+  },
+  "axes_source": "Read from data/brands/tesla.json: warmth from the hue and chroma of the primary #3E6AE1 and the canvas #FFFFFF; contrast from the ink #393C41 on that canvas, its depth and the chroma of #3E6AE1; density at 0.5 since it states no spacing base; geometry at 0.5 since it states no radius; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#3E6AE1",
+  "brand_rule": "The primary #3E6AE1 reaches 4.82:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#3E6AE1",
+      "light": "#3E6AE1"
+    },
+    "face": {
+      "display": "Sora",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0B0D10",
+      "light": "#F6F7F8"
+    },
+    "radius_control": "7px",
+    "state_duration": "200ms",
+    "tokens": 728,
+    "tokens_sha256": "b09c671414fbcf5a"
+  },
+  "id": "tesla",
+  "name": "Tesla",
+  "spec": "data/brands/tesla.json"
+}

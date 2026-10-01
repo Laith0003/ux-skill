@@ -2,24 +2,77 @@
 
 # ux-skill: Claude Code, Cursor और हर दूसरे AI कोडिंग टूल के लिए डिज़ाइन इंटेलिजेंस इंजन
 
-> **v3.1.0 स्टेबल, THE BRAIN.** AI कोडिंग के लिए सबसे मज़बूत UX प्लगइन। 12 क्वेरी-योग्य JSON मैनिफ़ेस्ट के साथ एक Python रीज़निंग कोर (84 शैलियाँ, 176 पैलेट, 70 टाइप पेयरिंग, 148 कंपोनेंट, 184 इंडस्ट्री, 35 चार्ट प्रकार, 57 मोशन प्रीसेट, 112 UX नियम, 152 एंटी-पैटर्न नियम, 25 टेक स्टैक, 160 ब्रांड स्पेक), 25 स्लैश कमांड, 5 सब-एजेंट, और एक डिटरमिनिस्टिक एंटी-AI-स्लॉप लिंटर। क्रॉस-IDE: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, और Roo Cline में उपलब्ध।
+**एक डिज़ाइन इंटेलिजेंस इंजन जो AI से बने UI को घिसा-पिटा नहीं, अलग पहचान वाला बनाता है।** इसे 17 AI कोडिंग टूल में से किसी में भी जोड़िए और आपका आउटपुट AI का बनाया हुआ दिखना बंद हो जाता है। मुफ़्त, MIT, ऑफ़लाइन, कोई LLM नहीं।
 
-> **ब्रांड नाम `ux-skill` है।** PyPI / npm पैकेज नाम `uxskill` ही रहेगा। GitHub रिपॉज़िटरी [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill) पर है।
+```bash
+pip install uxskill
+```
 
-**साइट:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **हर Claude UX प्लगइन के साथ तुलना:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+**[GitHub पर ux-skill को स्टार दें](https://github.com/Laith0003/ux-skill)** अगर यह काम का लगे: प्रोजेक्ट की मदद करने का यही सबसे आसान तरीका है। पहली बार आए हैं? [60 सेकंड के टूर](#त्वरित-इंस्टॉलेशन) से शुरू करें या इसे [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) पर लाइव देखें।
 
-[![Version](https://img.shields.io/badge/version-3.1.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+![पहले: स्टॉक फ़ोटो वाला आम-सा हीरो, हल्का बैंगनी ग्रेडिएंट, कोई ब्रांड पहचान नहीं। बाद में: गहरे स्क्रिम के नीचे असली कंस्ट्रक्शन साइट की फ़ोटो, एम्बर एक्सेंट वाली एडिटोरियल हेडलाइन, और हीरो के अंदर कोटेशन माँगने का फ़ॉर्म। वही प्रॉम्प्ट, पर जब पाबंदियाँ ux-skill देता है तो नतीजा अलग।](https://raw.githubusercontent.com/Laith0003/ux-skill/main/docs/blog/skiphire-redesign.png)
+
+*पहले: स्टॉक फ़ोटो वाला आम-सा SEO स्लॉप। बाद में: गहरे स्क्रिम के नीचे असली कंस्ट्रक्शन फ़ोटो वाला हीरो, एम्बर एक्सेंट वाली एडिटोरियल हेडलाइन, हीरो में कोटेशन फ़ॉर्म। वही AI कोडिंग टूल, वही प्रॉम्प्ट, पर जब पाबंदियाँ ux-skill देता है तो नतीजा अलग।*
+
+> **v4.0, FOUNDATIONS: एक कमांड पूरा, WCAG से जाँचा हुआ डिज़ाइन सिस्टम बनाती है, जिसमें अरबी और दाएँ से बाएँ लेखन पहले से शामिल है।** AI कोडिंग के लिए सबसे मज़बूत UX प्लगइन। डिटरमिनिस्टिक 7-अक्ष सिंथेसाइज़र वाला Python रीज़निंग कोर, 12 क्वेरी करने योग्य JSON मैनिफ़ेस्ट (84 स्टाइल, 176 पैलेट, 70 टाइप जोड़ियाँ, 148 कंपोनेंट, 184 इंडस्ट्री, 35 चार्ट प्रकार, 57 मोशन प्रीसेट, 112 UX नियम, 171 एंटी-पैटर्न नियम, 25 टेक स्टैक, 160 ब्रांड स्पेक), 18 स्लैश कमांड, 5 सब-एजेंट, 25 MCP टूल, और एक डिटरमिनिस्टिक एंटी-AI-स्लॉप लिंटर। क्रॉस-IDE: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer और Roo Cline में इंस्टॉल होता है।
+
+> **ब्रांड का नाम `ux-skill` है।** PyPI / npm पैकेज का नाम `uxskill` ही रहता है। GitHub रिपॉज़िटरी [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill) पर है।
+
+**लेखक:** [Laith Aljunaidy](https://laithjunaidy.com), अम्मान में डिज़ाइनर और CTO · **साइट:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **हर Claude UX प्लगइन से तुलना:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+
+[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#17-ide-इंस्टॉलर)
+[![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### 4.0 में नया: फ़ाउंडेशन
+
+एक ब्रांड रंग दीजिए, पूरा डिज़ाइन सिस्टम पाइए, और उसका कंट्रास्ट आपके हाथ में आने से पहले जाँचा जा चुका होता है।
+
+```bash
+pip install --upgrade uxskill
+uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
+```
+
+Python 3.10 या उससे नया। MCP सर्वर के लिए `pip install --upgrade 'uxskill[mcp]'`। pipx के साथ `pipx install uxskill` (पहले से इंस्टॉल 3.x के ऊपर `pipx upgrade uxskill`)। npm के साथ `npx uxskill@latest`। 3.x से आ रहे हैं? [माइग्रेशन गाइड](docs/migrating-to-4.md) हर 3.x टोकन को 4.0 में उसके रोल से जोड़ती है।
+
+**कोई प्रोडक्ट या लैंडिंग पेज बना रहे हैं?** आपको मिलता है पेज से लिंक करने के लिए `tokens.css`, चुने गए फ़ॉन्ट के लिए मेट्रिक से मेल खाते फ़ॉलबैक के साथ `fonts.css`, फ़ॉन्ट को आपकी अपनी फ़ाइलों से लोड करने वाला `fonts-self-host.css`, टूल के लिए `tokens.json`, `art/` में सजावटी ब्रांड आर्ट, और `system-report.md`, जो सीधे शब्दों में बताता है कि क्या बना, क्यों बना, और किस पेज कंपोज़िशन से शुरुआत करें। रोल के साथ स्टाइल करें (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`), और डार्क मोड, हाई कॉन्ट्रास्ट, कॉम्पैक्ट स्पेसिंग, दाएँ से बाएँ या कम मोशन को `<html>` पर एक एट्रिब्यूट से बदलें। फ़ॉन्ट रिपोर्ट में दिए Google Fonts लिंक से लोड करें, या `fonts-self-host.css` और एक `fonts/` फ़ोल्डर से, और दोनों में से किसी के साथ `fonts.css` को `tokens.css` से पहले लिंक करें; इन दोनों फ़ाइलों में बदलाव न करें। `--brief` के साथ, ब्रीफ़ में इंडस्ट्री और टोन दिए हों तो लुक उन्हीं के हिसाब से चलता है, और स्ट्रक्चर्ड फ़ील्ड (उम्र, भाषाएँ, डिफ़ॉल्ट स्कीम, पढ़ने का संदर्भ) टेक्स्ट का आकार, टारगेट, लिपियाँ और कौन-सी स्कीम खुलेगी यह तय करते हैं; डिस्कवरी इंडस्ट्री नहीं पूछती, इसलिए `/ux-system create` पूछता है। Claude Code में `/ux-system create` इंस्टॉल वर्ज़न जाँचता है, बिल्ड चलाता है और रिपोर्ट समझाता है।
+
+**डिज़ाइन सिस्टम डिज़ाइन कर रहे हैं?** नौ फ़ाउंडेशन (रंग, टाइपोग्राफ़ी, स्पेसिंग, लेआउट, रेडियस, बॉर्डर, एलिवेशन, मोशन, इमेजरी), हर एक सात अक्षों के साथ लगातार बदलता है, प्रिमिटिव और सिमैंटिक रोल के साथ, W3C डिज़ाइन टोकन फ़ॉर्मेट (DTCG 2025.10) में और हर मोड के मानों के साथ। वही इनपुट, वही बाइट। MCP पर `ux_system_build` रिपोर्ट, गेट का नतीजा और हर फ़ाइल का आकार लौटाता है, और `out` मिलने पर कमांड वाली ही फ़ाइलें लिखता है।
+
+- **WCAG गेट।** टेक्स्ट, कंट्रोल और फ़ोकस की हर रंग जोड़ी को लाइट और डार्क में, सामान्य और हाई कॉन्ट्रास्ट पर मापा जाता है: सामान्य कॉन्ट्रास्ट पर WCAG 1.4.3 (टेक्स्ट 4.5:1) और 1.4.11 (नॉन-टेक्स्ट 3:1), हाई कॉन्ट्रास्ट पर WCAG 1.4.6 (टेक्स्ट 7:1), और साथ में ज़्यादातर नॉन-टेक्स्ट हिस्सों के लिए हाई कॉन्ट्रास्ट में 4.5:1 की हमारी अपनी न्यूनतम सीमा, क्योंकि WCAG नॉन-टेक्स्ट के लिए कोई उन्नत स्तर तय नहीं करता। जो सिस्टम फ़ेल होता है वह लिखा नहीं जाता; संदेश बताता है कि क्या बदलना है।
+- **डिफ़ॉल्ट रूप से सुरक्षित।** यह कभी ऐसी फ़ाइल को ओवरराइट नहीं करता जो अलग हो। `--force` फ़ाइलें तभी बदलता है जब आप कहें।
+- **अरबी।** `dir="rtl"` के तहत टेक्स्ट एक अरबी फ़ॉन्ट पर चला जाता है जिसके अपने आकार और लाइन-हाइट हैं; स्पेसिंग लॉजिकल प्रॉपर्टी इस्तेमाल करती है और मोशन उलट जाता है। `--latin-only` इसे बाहर रखता है।
+
+**आपके पास पहले से मौजूद सिस्टम।** `/ux-system enhance --from` उसे उसके अपने नामों में पढ़ता है (DTCG टोकन, CSS कस्टम प्रॉपर्टी, Tailwind थीम, markdown नियम फ़ाइलें या Figma वेरिएबल एक्सपोर्ट), उसी गेट से जाँचता है और मापता है कि आपका कोड उसके साथ असल में क्या करता है; कुछ भी दोबारा नहीं लिखा जाता। `/ux-system extend --from` बिना कोई मौजूदा टोकन बदले फ़ाउंडेशन, रोल या कॉन्ट्रैक्ट जोड़ता है, उसके बगल में एक एक्सटेंशन फ़ाइल में, और `uxskill system export` उसे tokens.css, Tailwind 4 थीम या Figma वेरिएबल के रूप में लिखता है। 4.2 भरोसे की परत (हर राइट पर lint, एक फ़िनिश रिव्यूअर) और लॉन्च जोड़ेगा। [changelog](CHANGELOG.md) देखें।
+
+**कंपोनेंट और सेक्शन।** 23 कंपोनेंट कॉन्ट्रैक्ट बताते हैं कि किसी कंट्रोल का हर हिस्सा हर स्टेट में किन टोकन से बँधता है और हर स्टेट कैसे हिलता है: स्टेट बदलने पर ट्रांज़िशन `motion.state` पर होता है, दबाने पर स्केल `motion.press.scale` पर होता है (और कम मोशन में स्थिर रहता है), और टैब, मेन्यू और सेगमेंटेड कंट्रोल एक ही इंडिकेटर खिसकाते हैं। 14 सेक्शन कॉन्ट्रैक्ट (हीरो, प्राइसिंग, FAQ, फ़ुटर और बाकी) हर सेक्शन का काम, उसके स्लॉट में आने वाले कंपोनेंट, उसे चाहिए सबूत और फ़ोन पर वह कैसे एक के नीचे एक लगता है, यह तय करते हैं। इनसे बने पेज तस्वीरें इस्तेमाल करते हैं; इंटरफ़ेस के टुकड़े अतिरिक्त इमेजरी हैं, कभी विकल्प नहीं।
+
+**पेज पढ़ने वाला लिंटर।** 171 नियम, जिनमें से कई पार्स किए गए CSS और मार्कअप पर अलग जाँच भी करते हैं, पेज के अपने सिस्टम को पढ़ते हैं: मोशन का समय उसके कर्व से निकाला जाता है, डिस्प्ले हेडलाइन की लाइन-हाइट इंजन की न्यूनतम सीमा पर रखी जाती है, और छिपे कंट्रोल को टैब क्रम से बाहर होना चाहिए। `uxskill lint --render` हर पेज को headless Chromium में डेस्कटॉप और फ़ोन की चौड़ाई पर खोलकर चलाता है: ऐसी फ़ोकस रिंग जो दिखती नहीं या कटी हुई है, देर से जवाब देने वाला होवर और प्रेस, Escape के बाद खोया फ़ोकस, और कम मोशन में भी हिलता प्रेस।
+
+**कम कमांड।** 25 स्लैश कमांड अब 18 हैं। `/ux-discover` `--frame` और `--recommend` लेता है, `/ux-design` `--component`, `--dashboard` और `--from-image` लेता है, `/ux-polish` lint, fix, re-lint तब तक दोहराता है जब तक स्कोर 90 न हो जाए या तीन राउंड न हो जाएँ, और `/ux-init` `--stats` लेता है। सात पुराने नाम उपनाम के तौर पर चलते रहते हैं और 4.1 में हट जाएँगे; [उपनाम](#उपनाम-41-में-हटाए-जाएँगे) देखें।
+
+**सरफ़ेस प्लेबुक।** लैंडिंग, डैशबोर्ड और कंपोनेंट के नियम `references/surfaces/` में हैं, हर एक की अपनी प्लेबुक। `/ux-design` अपने मोड के हिसाब से ठीक एक प्लेबुक लोड करता है, इसलिए डैशबोर्ड बिल्ड कभी हीरो के नियम नहीं पढ़ता।
+
+टेस्ट **9764 पास**। ऑफ़लाइन। डिटरमिनिस्टिक। कभी कोई LLM नहीं बुलाया जाता।
+
+### v3.1 में नया: ब्रांड के प्रति सच्चा, रिस्पॉन्सिव, जीवंत
+
+- **ब्रांड के प्रति वफ़ादारी लागू की जाती है, उम्मीद पर नहीं छोड़ी जाती।** प्राइमरी रंग LOGO के पिक्सल से पढ़ा जाता है (सबसे ज़्यादा पेंट हुए CSS से नहीं); डिफ़ॉल्ट फ़ॉन्ट लोगो की अक्षर-शैली से मेल न खाएँ तो खारिज होते हैं। निकाला गया ब्रांड `recommend` -> `synthesize` तक जाता है, और `evaluate` में एक **सख्त न्यूनतम सीमा** हर उस आउटपुट को फ़ेल करती है जो ब्रांड रंग या लोगो खो दे या कोई असली इमेजरी न दे। खुले `brand.md` कन्वेंशन के साथ दोनों दिशाओं में इंटरऑप (रेंडर + इन्जेस्ट)।
+- **मोबाइल-फ़र्स्ट, गेट के साथ।** नए क्राफ़्ट फ़ाउंडेशन (`responsive.md`, `component-behaviors.md`) और लाइन-रैप को समझने वाला गेट, जो हॉरिज़ॉन्टल स्क्रॉल, रैप होते नैव, वर्डमार्क या बटन लेबल, या ज़रूरत से ऊँचे स्टिकी हेडर पर फ़ेल होता है।
+- **वाह वाली परत।** इंजन हर पेज के लिए 2-3 आपस में तालमेल वाले सिग्नेचर पल निकालता है; "वाह सिर्फ़ यूज़र से आ सकता है" वाली धारणा पलट दी गई है।
+- **ज़्यादा तेज़ लिंटर** (152 नियम): ज़रूरी इमेजरी और सिर्फ़-आइकन वाले एलिमेंट की पहचान, प्लेसहोल्डर टोकन और `100vw` के नियम; सीड वाला picsum रखा गया, रैंडम हटाया गया।
+
+पूरे नोट्स [CHANGELOG.md](CHANGELOG.md) में।
 
 ### v3 में नया क्या है
 
@@ -28,7 +81,7 @@
 - **तीन स्वचालित-डिस्पैच मोड**: `strict_brand` (एक ब्रांड का 100%), `brand_anchor` (एक ब्रांड का 70% + समान ब्रांडों से अक्ष-अनुकूलित 30%), `pure_synthesis` (कोई ब्रांड नामित नहीं, अक्ष-मिलान वाले 8 उदाहरणों से आसवन)।
 - **निर्णय बही recommender को पुनः-रैंक करती है।** `.ux/decisions.jsonl` समान `(industry, ui_type)` बकेट में पिछली जीत के अनुसार उम्मीदवारों को पुनः-रैंक करता है। कोल्ड-स्टार्ट सुरक्षित। केवल `lint_score >= 80` + `user_accepted = true` वाले निर्णय गिने जाते हैं।
 - **अक्ष-संपर्क मैट्रिक्स**: प्रतिस्पर्धी अक्षों के बीच स्पष्ट संघर्ष समाधान (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius)। अब कोई मूक तदर्थ नियम नहीं।
-- **`/ux-evolve` स्वचालित लूप**: स्कोर ≥ 90, पठार, या 5 राउंड तक lint → polish → re-lint। गुणवत्ता गेट 65 पर।
+- **`/ux-evolve` स्वचालित लूप** (4.0 में `/ux-polish` का डिफ़ॉल्ट लूप): स्कोर ≥ 90, पठार, या 4.0 में 3 राउंड (v3 में 5) तक lint → polish → re-lint। गुणवत्ता गेट 65 पर।
 - **3 नए MCP टूल** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`।
 - **स्थानीय stats डैशबोर्ड**: `uxskill stats --html` `.ux/stats.html` लिखता है जो दिखाता है कि **आपकी** स्थापना ने क्या सीखा। कोई टेलीमेट्री नहीं, कोई वैश्विक एकत्रीकरण नहीं।
 - **223 परीक्षण पास।** ऑफ़लाइन। निर्धारक। LLM कभी नहीं बुलाया।
@@ -45,7 +98,7 @@
 
 ux-skill AI कोडिंग टूल्स के लिए एक **डिज़ाइन इंटेलिजेंस इंजन** है। यह एक Python पैकेज (`pip install uxskill`), एक Claude Code प्लगइन, और 17-IDE मल्टी-इंस्टॉलर के रूप में चलता है। इंजन एक प्रोजेक्ट ब्रीफ़ (इंडस्ट्री, ऑडियंस, टोन, अनिवार्य तत्व, वर्जित तत्व, स्टैक, क्षेत्र) लेता है और एक पूर्ण अनुशंसित डिज़ाइन सिस्टम लौटाता है: शैली, पैलेट, टाइप पेयर, मोशन प्रीसेट, कंपोनेंट, अध्ययन योग्य ब्रांड उदाहरण, और जो एंटी-पैटर्न रेलिंग्स अनिवार्य हैं। यह अनुशंसा डिटरमिनिस्टिक है, एक ही इनपुट हमेशा एक ही आउटपुट देगा।
 
-प्लगइन आपके और AI कोडिंग टूल के बीच बैठता है। जब आप Claude Code, Cursor, या किसी और AI असिस्टेंट से "एक फ़िनटेक लैंडिंग पेज बनाओ" कहते हैं, तो असिस्टेंट आमतौर पर सुधार करता है, और परिणाम पाँच सेकंड में AI-जनरेटेड के रूप में पहचाना जा सकता है (पर्पल-टू-ब्लू ग्रेडिएंट, तीन समान कार्ड, डिस्प्ले साइज़ पर Inter, टेस्टीमोनियल में "John Doe", 300ms डिफ़ॉल्ट ट्रांज़िशन, सेंटर्ड हीरो, बाउंसिंग एरो CTA)। ux-skill सुधार की जगह **संरचित बाधाएँ** लाता है: आप ब्रीफ़ कैप्चर करने के लिए `/ux-discover` चलाते हैं, सिस्टम चुनने के लिए `/ux-recommend`, कोड जेनरेट करने के लिए `/ux-design`, और कमिट से पहले यह सत्यापित करने के लिए कि कोड 152 डिटरमिनिस्टिक एंटी-AI-स्लॉप नियमों को पास करता है `/ux-lint` चलाते हैं।
+प्लगइन आपके और AI कोडिंग टूल के बीच बैठता है। जब आप Claude Code, Cursor, या किसी और AI असिस्टेंट से "एक फ़िनटेक लैंडिंग पेज बनाओ" कहते हैं, तो असिस्टेंट आमतौर पर अपने मन से कुछ भी बना देता है, और नतीजा पाँच सेकंड में AI-जनरेटेड पहचान में आ जाता है (बैंगनी से नीला ग्रेडिएंट, तीन बराबर कार्ड, डिस्प्ले साइज़ पर Inter, टेस्टिमोनियल में "John Doe", 300ms डिफ़ॉल्ट ट्रांज़िशन, बीच में रखा हीरो, उछलते तीर वाले CTA)। ux-skill अंदाज़े की जगह **संरचित पाबंदियाँ** रखता है: आप ब्रीफ़ लेने और सिस्टम चुनने के लिए `/ux-discover`, कोड जेनरेट करने के लिए `/ux-design`, और कमिट से पहले यह जाँचने के लिए कि वह 171 डिटरमिनिस्टिक एंटी-AI-स्लॉप नियमों पर खरा उतरता है, `/ux-lint` चलाते हैं।
 
 यह README कैनोनिकल संदर्भ है। हर कमांड, हर सब-एजेंट, हर डेटा मैनिफ़ेस्ट, हर इंस्टॉल पाथ, हर ब्रांड स्पेक, हर एंटी-पैटर्न श्रेणी, सब यहीं डॉक्यूमेंट किया है। अगर आप एक Claude Code डिज़ाइन प्लगइन ढूँढ रहे हैं या Cursor, Windsurf, या Codex के लिए AI डिज़ाइन टूल्स की तुलना कर रहे हैं, तो इसे ऊपर से नीचे तक पढ़ें और साथ में [compare.html](https://uxskill.laithjunaidy.com/compare.html) भी।
 
@@ -57,10 +110,10 @@ ux-skill AI कोडिंग टूल्स के लिए एक **डि�
 2. [त्वरित इंस्टॉलेशन](#त्वरित-इंस्टॉलेशन)
 3. [संख्याएँ, शीर्ष 8 Claude UX स्किल्स के साथ लाइव तुलना](#संख्याएँ-शीर्ष-8-claude-ux-स्किल्स-के-साथ-लाइव-तुलना)
 4. [आर्किटेक्चर, टुकड़े कैसे जुड़ते हैं](#आर्किटेक्चर-टुकड़े-कैसे-जुड़ते-हैं)
-5. [25 स्लैश कमांड, विस्तृत संदर्भ](#25-स्लैश-कमांड-विस्तृत-संदर्भ)
+5. [18 स्लैश कमांड, विस्तृत संदर्भ](#18-स्लैश-कमांड-विस्तृत-संदर्भ)
 6. [5 सब-एजेंट](#5-सब-एजेंट)
-7. [12 डेटा मैनिफ़ेस्ट](#12-डेटा-मैनिफ़ेस्ट)
-8. [152 एंटी-AI-स्लॉप नियम, लिंटर](#152-एंटी-ai-स्लॉप-नियम-लिंटर)
+7. [11 डेटा मैनिफ़ेस्ट](#11-डेटा-मैनिफ़ेस्ट)
+8. [171 एंटी-AI-स्लॉप नियम, लिंटर](#171-एंटी-ai-स्लॉप-नियम-लिंटर)
 9. [160 ब्रांड DESIGN.md स्पेक, श्रेणी के अनुसार](#160-ब्रांड-designmd-स्पेक-श्रेणी-के-अनुसार)
 10. [MCP सर्वर, असममित चाल](#mcp-सर्वर-असममित-चाल)
 11. [17-IDE इंस्टॉलर](#17-ide-इंस्टॉलर)
@@ -80,7 +133,7 @@ v3.1.0 ux-skill के इतिहास का सबसे बड़ा व�
 
 तीन स्वचालित-डिस्पैच मोड हैं: `strict_brand` (`reference_brands=[stripe] strict=True` → 100% Stripe टोकन, सबसे तेज़ पथ); `brand_anchor` (`reference_brands=[stripe]` → 70% Stripe + 4 समान ब्रांडों से अक्ष-अनुकूलित 30%); और `pure_synthesis` (कोई ब्रांड नामित नहीं → अनंत स्थान, अक्ष-मिलान वाले 8 उदाहरणों से एक नई डिज़ाइन भाषा में आसवन)। प्रतिस्पर्धी अक्षों को एक प्रलेखित **अक्ष-संपर्क मैट्रिक्स** द्वारा हल किया जाता है, dense + corporate 4px पर कंपाइल होता है (density जीतता है, Bloomberg स्कूल), airy + corporate 12px पर (formality जीतता है, लक्ज़री), soft + playful 18px radius पर, sharp + corporate 2px पर। कार्यान्वयन में कोई मूक तदर्थ नियम नहीं।
 
-**निर्णय बही** (`.ux/decisions.jsonl`, schema `_v: 1` लॉक) फीडबैक लूप बंद करती है। Recommender अब समान `(industry, ui_type)` बकेट में पिछली जीत के अनुसार उम्मीदवारों को पुनः-रैंक करता है। कोल्ड-स्टार्ट सुरक्षित, 3 पूर्व-डेटा से कम होने पर छोड़ देता है। केवल `lint_score >= 80` AND `user_accepted = true` वाले निर्णय गिने जाते हैं। साथ ही `/ux-evolve` स्कोर ≥ 90, पठार, या 5 राउंड तक lint → polish → re-lint चलाता है, 65 पर गुणवत्ता गेट जिसके नीचे आउटपुट `--force` के बिना अस्वीकार होता है। परिणाम: प्रत्येक स्थापना अपने corpus पर अधिक स्मार्ट हो जाती है, हर रन मशीनों के बीच पुनरुत्पादित होता है, और इंजन पूरी तरह ऑफ़लाइन रहता है।
+**निर्णय बही** (`.ux/decisions.jsonl`, schema `_v: 1` लॉक) फीडबैक लूप बंद करती है। Recommender अब समान `(industry, ui_type)` बकेट में पिछली सफलताओं के अनुसार उम्मीदवारों को फिर से रैंक करता है। कोल्ड स्टार्ट में सुरक्षित: 3 से कम पिछले फ़ैसले हों तो री-रैंक छोड़ देता है। सिर्फ़ `lint_score >= 80` AND `user_accepted = true` वाले फ़ैसले गिने जाते हैं। साथ ही `/ux-polish` स्कोर ≥ 90, पठार, या 3 राउंड तक lint → polish → re-lint चलाता है, 65 के गुणवत्ता गेट के साथ, जिसके नीचे का आउटपुट `--force` के बिना ठुकरा दिया जाता है। नतीजा: हर इंस्टॉल अपने कॉर्पस पर समझदार होता जाता है, हर रन मशीनों के बीच दोहराया जा सकता है, और इंजन पूरी तरह ऑफ़लाइन रहता है।
 
 ---
 
@@ -97,7 +150,7 @@ v3.1.0 ux-skill के इतिहास का सबसे बड़ा व�
 /plugin install ux@ux-skill
 ```
 
-यह सभी 25 स्लैश कमांड और 5 सब-एजेंट को आपके Claude Code सेशन से जोड़ देता है। इंस्टॉल के बाद, प्रति-प्रोजेक्ट `.ux/` स्टेट डायरेक्टरी सेट करने और यह सत्यापित करने के लिए कि Python इंजन पहुँच योग्य है, `/ux-init` चलाएँ।
+यह सभी 18 स्लैश कमांड (साथ में 7 पुराने नाम जो 4.1 तक उपनाम के रूप में रहेंगे) और 5 सब-एजेंट को आपके Claude Code सेशन से जोड़ देता है। इंस्टॉल के बाद, प्रति-प्रोजेक्ट `.ux/` स्टेट डायरेक्टरी सेट करने और यह सत्यापित करने के लिए कि Python इंजन पहुँच योग्य है, `/ux-init` चलाएँ।
 
 ### पाथ 2: pip (यूनिवर्सल)
 
@@ -105,9 +158,9 @@ v3.1.0 ux-skill के इतिहास का सबसे बड़ा व�
 
 ```bash
 pip install uxskill
-uxskill init                       # आपके IDE का स्वत: पता लगाता है, सही आर्टिफ़ैक्ट इंस्टॉल करता है
-uxskill stats                      # इंस्टॉल सत्यापित करने के लिए मैनिफ़ेस्ट गिनती प्रिंट करें
-uxskill lint .                     # वर्तमान डायरेक्टरी पर लिंटर चलाएँ
+uxskill init                       # auto-detects your IDE, installs the right artifact
+uxskill stats                      # print manifest counts to verify install
+uxskill lint .                     # run the linter against the current directory
 ```
 
 पैकेज `ux` और `uxskill` दोनों को CLI एंट्री पॉइंट के रूप में उजागर करता है, वे एक ही बाइनरी हैं।
@@ -117,7 +170,7 @@ uxskill lint .                     # वर्तमान डायरेक्
 अगर आप सीधे Python संभालना नहीं चाहते, npx रैपर `pipx` के ज़रिए सब कुछ बूटस्ट्रैप करता है:
 
 ```bash
-npx uxskill init                  # पहली बार चलाने पर pipx + uxskill डाउनलोड करता है
+npx uxskill init                  # downloads pipx + uxskill on first run
 npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-app-router
 ```
 
@@ -126,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "3.1.0-stable",
+#   "version": "4.0.0",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -137,13 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 145,
+#     "anti-patterns": 171,
+#     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-अगर कोई गिनती 0 लौटाती है, JSON फ़ाइल गुम है, [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues) पर एक इश्यू खोलें।
+बारह गिनतियाँ मिलाकर 1,262 एंट्री होती हैं। अगर कोई गिनती 0 लौटाती है, तो JSON फ़ाइल गुम है; [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues) पर एक इश्यू खोलें।
 
 ---
 
@@ -161,7 +215,7 @@ ux stats
 | dominikmartn/nothing-design-skill | **2,391** | सिंगल-सौंदर्य स्किल | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | एंटी-स्लॉप डिज़ाइन स्किल | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 कंपोनेंट + ऑडिट | 1 | - | (केवल MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python इंजन + 12 मैनिफ़ेस्ट + 25 कमांड + 5 सब-एजेंट + CI लिंटर** | **22** | **152 regex नियम** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python इंजन + 12 मैनिफ़ेस्ट + 18 कमांड + 5 सब-एजेंट + CI लिंटर** | **18** | **171 डिटरमिनिस्टिक नियम** | **160** | **148** | **57** | **17** |
 
 ### हम कहाँ हारते हैं
 
@@ -173,10 +227,10 @@ ux stats
 
 - **कंपोनेंट लाइब्रेरी:** एनाटॉमी, स्टेट, उपयोग किए गए टोकन, और मोशन स्पेक के साथ 148 डॉक्यूमेंटेड कंपोनेंट। अन्य 8 में से कोई भी एक कंपोनेंट मैनिफ़ेस्ट नहीं भेजता।
 - **मोशन प्रीसेट:** रिड्यूस्ड-मोशन फ़ॉलबैक के साथ 57 स्टैक-तैयार एंट्री (Framer Motion, GSAP, CSS)। अन्य में से कोई भी मोशन मैनिफ़ेस्ट नहीं भेजता।
-- **एंटी-पैटर्न लिंटर:** 152 डिटरमिनिस्टिक regex नियम, CI में चलते हैं, Critical/High पर non-zero exit करते हैं। अन्य में से कोई भी डिटरमिनिस्टिक लिंटर नहीं भेजता।
-- **ब्रांड स्पेक:** 160 असली DESIGN.md स्पेक (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, और 146 और)। अन्य में से कोई भी ब्रांड लाइब्रेरी नहीं भेजता।
+- **एंटी-पैटर्न लिंटर:** 171 डिटरमिनिस्टिक नियम, CI में चलते हैं, Critical/High पर non-zero exit करते हैं। अन्य में से कोई भी डिटरमिनिस्टिक लिंटर नहीं भेजता।
+- **ब्रांड स्पेक:** 160 असली DESIGN.md स्पेक (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, और 96 और)। अन्य में से कोई भी ब्रांड लाइब्रेरी नहीं भेजता।
 - **17 IDE समर्थित:** एक ही इंजन, प्रति IDE अलग गोंद।
-- **25 स्लैश कमांड:** डिस्कवरी, जेनरेशन, ऑडिट, लिंट, पॉलिश, फ़िक्स लूप, केस-स्टडी, वर्कशॉप, कॉपी, मोशन, a11y, डैशबोर्ड, कंडक्टर, पूरी तरह एकीकृत।
+- **18 स्लैश कमांड:** डिस्कवरी, जेनरेशन (पेज, कंपोनेंट, डैशबोर्ड, इमेज से), ऑडिट, लिंट, पॉलिश लूप, फ़िक्स लूप, केस-स्टडी, वर्कशॉप, कॉपी, मोशन, a11y, कंडक्टर, पूरी तरह एकीकृत।
 
 पूरी टेबल-दर-टेबल साथ-साथ तुलना [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) पर।
 
@@ -185,149 +239,139 @@ ux stats
 ## आर्किटेक्चर: टुकड़े कैसे जुड़ते हैं
 
 ```
-ux-skill (पैकेज नाम: uxskill)
+ux-skill (package name: uxskill)
 │
-├── data/                              मस्तिष्क, क्वेरी-योग्य JSON मैनिफ़ेस्ट
-│   ├── styles.json                    84 डिज़ाइन शैलियाँ + when/skip + टोकन
-│   ├── palettes.json                  176 पैलेट (हल्का/गहरा, कंट्रास्ट सत्यापित)
-│   ├── type-pairs.json                70 display × body × mono ट्रिपलेट
-│   ├── components.json                148 कंपोनेंट (एनाटॉमी, स्टेट, मोशन)
-│   ├── industries.json                184 इंडस्ट्री नियम + ऑडियंस सिग्नल
-│   ├── chart-types.json               35 चार्ट प्रकार (when/skip, एनकोडिंग)
-│   ├── tech-stacks.json               25 स्टैक (Next, Astro, SvelteKit, Blade...)
-│   ├── ux-guidelines.json             112 नामित UX नियम (Hick, Fitts, Miller...)
-│   ├── motion-presets.json            57 मोशन प्रीसेट (entry, exit, hover...)
-│   ├── anti-patterns.json             152 regex नियम (CI-सेफ़ लिंटर स्रोत)
-│   └── brands/*.json                  160 ब्रांड DESIGN स्पेक + _index.json
+├── data/                              The brain, queryable JSON manifests
+│   ├── styles.json                    84 design styles + when/skip + tokens
+│   ├── palettes.json                  176 palettes (light/dark, contrast verified)
+│   ├── type-pairs.json                70 display × body × mono triplets
+│   ├── components.json                148 components (anatomy, states, motion)
+│   ├── industries.json                184 industry rules + audience signals
+│   ├── chart-types.json               35 chart types (when/skip, encoding)
+│   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
+│   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
+│   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
+│   ├── anti-patterns.json             171 rules (CI-safe linter source)
+│   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
-├── engine/                            Python, रीज़निंग
-│   ├── synthesizer/                   v3, निर्धारक 7-अक्ष संकलक
-│   ├── decisions/                     v3, .ux/decisions.jsonl बही + recommender पुनः-रैंक
-│   ├── recommender/                   5-समानांतर-खोज मर्ज इंजन
-│   ├── linter/                        डिटरमिनिस्टिक एंटी-स्लॉप स्कैनर
-│   ├── discovery/                     10-फ़ील्ड फ़ोर्सिंग प्रोटोकॉल
-│   ├── generator/                     टोकन + मैनिफ़ेस्ट एमिटर
-│   ├── installer/                     17-IDE मल्टी-इंस्टॉलर
-│   └── cli/                           `ux` / `uxskill` एंट्री पॉइंट
+├── engine/                            Python, the reasoning
+│   ├── synthesizer/                   v3-7-axis deterministic compiler
+│   ├── decisions/                     v3, .ux/decisions.jsonl ledger + recommender re-rank
+│   ├── recommender/                   5-parallel-search merge engine (re-ranked by decisions)
+│   ├── linter/                        Deterministic anti-slop scanner
+│   ├── discovery/                     10-field forcing protocol
+│   ├── generator/                     Token + manifest emitter
+│   ├── installer/                     17-IDE multi-installer
+│   └── cli/                           `ux` / `uxskill` entry point
 │
-├── commands/                          25 Claude Code स्लैश कमांड (.md)
-│   ├── ux-init.md                     बूटस्ट्रैप
-│   ├── ux-stats.md                    इन्वेंटरी स्नैपशॉट
-│   ├── ux-discover.md                 10-फ़ील्ड इनटेक (गेट)
-│   ├── ux-recommend.md                फ़्लैगशिप, 5-समानांतर खोज
-│   ├── ux-lint.md                     डिटरमिनिस्टिक लिंटर
-│   ├── ux-design.md                   फ़्रंटएंड कोड जेनरेट करें
-│   ├── ux-component.md                एक कंपोनेंट जेनरेट करें
-│   ├── ux-system.md                   पूरा डिज़ाइन सिस्टम जेनरेट करें
-│   ├── ux-dashboard.md                डैशबोर्ड सर्फ़ेस जेनरेट करें
-│   ├── ux-motion.md                   मोशन ट्रीटमेंट + ऑडिट
-│   ├── ux-audit.md                    6-लेंस डिज़ाइन ऑडिट
-│   ├── ux-a11y.md                     WCAG 2.1 AA ऑडिट
-│   ├── ux-critique.md                 रुचि आलोचना (3 जीत, 3 चूक, 1 चाल)
-│   ├── ux-copy.md                     माइक्रोकॉपी समीक्षा + पुनर्लेखन
-│   ├── ux-fix.md                      निष्कर्षों को परमाणु कमिट के रूप में लागू करें
-│   ├── ux-polish.md                   कॉस्मेटिक पास + AI-स्लॉप किल
-│   ├── ux-frame.md                    4-फ़ील्ड फ़्रेमिंग ब्लॉक
-│   ├── ux-research.md                 अनुसंधान योजना + संश्लेषण
-│   ├── ux-workshop.md                 5-चरण डिज़ाइन थिंकिंग वर्कशॉप
-│   ├── ux-case-study.md               प्रकाशन योग्य Wfrah-संपादकीय केस स्टडी
-│   ├── ux-next.md                     वर्कफ़्लो कंडक्टर (केवल-पठनीय)
-│   └── ux-expert.md                   परामर्श हुक
+├── commands/                          18 Claude Code slash commands (.md) + 7 aliases
+│   ├── ux-init.md                     bootstrap + inventory snapshot (--stats)
+│   ├── ux-discover.md                 10-field intake (gate), --frame, --recommend
+│   ├── ux-lint.md                     deterministic linter
+│   ├── ux-design.md                   generate a page, --component, --dashboard, --from-image
+│   ├── ux-system.md                   generate full design system
+│   ├── ux-motion.md                   motion treatment + audit
+│   ├── ux-audit.md                    6-lens design audit
+│   ├── ux-a11y.md                     WCAG 2.1 AA audit
+│   ├── ux-critique.md                 taste critique (3 wins, 3 misses, 1 move)
+│   ├── ux-copy.md                     microcopy review + rewrite
+│   ├── ux-fix.md                      apply findings as atomic commits
+│   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
+│   ├── ux-research.md                 research planning + synthesis
+│   ├── ux-workshop.md                 5-phase design thinking workshop
+│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-next.md                     workflow conductor (read-only)
+│   ├── ux-expert.md                   consulting hook
+│   ├── ux-mcp.md                      MCP server
+│   └── ux-frame.md, ux-recommend.md, ux-stats.md, ux-evolve.md,
+│       ux-component.md, ux-dashboard.md, ux-image-to-code.md
+│                                      aliases, removed in 4.1
 │
-├── agents/                            5 सब-एजेंट (.md)
+├── agents/                            5 sub-agents (.md)
 │   ├── frontend-engineer.md           React/Next/Vue/Blade/Astro
 │   ├── motion-engineer.md             Framer Motion / GSAP / CSS
-│   ├── copy-writer.md                 ब्रांड आवाज़ में माइक्रोकॉपी
-│   ├── research-synthesizer.md        साक्षात्कार + एनालिटिक्स + प्रतिस्पर्धी
-│   └── design-system-architect.md     टोकन / कंपोनेंट / फ़ाउंडेशन
+│   ├── copy-writer.md                 microcopy in brand voice
+│   ├── research-synthesizer.md        interviews + analytics + competitors
+│   └── design-system-architect.md     tokens / components / foundations
 │
-├── references/                        डेटा का गद्य स्रोत + डेमो पेज
-│   ├── foundations/                   anti-patterns.md, सिद्धांत, रुचि
-│   ├── laws/                          UX नियम लंबे रूप में
-│   ├── process/                       discovery-protocol.md (महत्वपूर्ण)
-│   ├── styles/                        प्रति-शैली गद्य (anti-slop.md, आदि)
-│   ├── components/                    कंपोनेंट लंबा रूप
-│   ├── output/                        आउटपुट रूब्रिक
-│   └── conditional/                   स्टैक-विशिष्ट मार्गदर्शन
+├── references/                        Prose source for the data + demo pages
+│   ├── foundations/                   anti-patterns.md, principles, taste
+│   ├── laws/                          UX laws long-form
+│   ├── process/                       discovery-protocol.md (load-bearing)
+│   ├── styles/                        per-style prose (anti-slop.md, etc.)
+│   ├── components/                    component long-form
+│   ├── output/                        output rubrics
+│   └── conditional/                   stack-specific guidance
 │
 ├── bin/
-│   ├── uxskill.mjs                    npx रैपर -> Python इंजन
-│   ├── ux-lint.py                     v2 लिंटर (पसंदीदा)
-│   └── ux-lint.sh                     v1 फ़ॉलबैक (bash + perl-PCRE)
+│   ├── uxskill.mjs                    npx wrapper -> Python engine
+│   ├── ux-lint.py                     v2 linter (preferred)
+│   └── ux-lint.sh                     v1 fallback (bash + perl-PCRE)
 │
-└── .ux/                               (प्रति प्रोजेक्ट निर्मित)
-    ├── last-discovery.json            ब्रीफ़ स्नैपशॉट
-    ├── last-recommendation.json       चयनित सिस्टम
-    ├── last-frame.json                फ़्रेमिंग ब्लॉक
+└── .ux/                               (created per project)
+    ├── last-discovery.json            brief snapshot
+    ├── last-recommendation.json       picked system
+    ├── last-frame.json                framing block
     ├── last-audit.json / last-a11y.json / last-copy.json / last-motion.json
     ├── last-design.json / last-component.json / last-dashboard.json
     └── last-critique.json / last-polish.json / last-research.json / last-workshop.json / last-case-study.json
 ```
 
-### इंजन वास्तव में कैसे काम करता है
+### इंजन असल में कैसे काम करता है
 
-1. **इनपुट।** आप एक ब्रीफ़ देते हैं, या तो इंटरैक्टिव रूप से `/ux-discover` के ज़रिए (10 फ़ील्ड) या `ux recommend` के flags के ज़रिए गैर-इंटरैक्टिव रूप से।
-2. **5 समानांतर खोज।** इंजन मैनिफ़ेस्ट में पाँच लुकअप समवर्ती रूप से चलाता है:
+1. **इनपुट।** आप एक ब्रीफ़ देते हैं, या तो `/ux-discover` (10 फ़ील्ड) से इंटरैक्टिव तरीके से, या `ux recommend` को फ़्लैग देकर बिना इंटरैक्शन के।
+2. **5 समानांतर खोजें।** इंजन मैनिफ़ेस्ट पर एक साथ पाँच लुकअप चलाता है:
    - **इंडस्ट्री → recommended_styles** (industries.json)
-   - **शैली → पैलेट + टाइप + मोशन संगतता** (styles.json)
-   - **टोन × अनिवार्य → पैलेट फ़िल्टर** (palettes.json)
+   - **स्टाइल → पैलेट + टाइप + मोशन संगतता** (styles.json)
+   - **टोन × ज़रूरी चीज़ें → पैलेट फ़िल्टर** (palettes.json)
    - **स्टैक → कंपोनेंट संगतता + मोशन प्रीसेट** (tech-stacks.json, motion-presets.json)
-   - **वर्जित + क्षेत्र → रेलिंग्स + ब्रांड उदाहरण शॉर्टलिस्ट** (anti-patterns.json, brands/)
-3. **मर्ज।** एक डिटरमिनिस्टिक मर्जर उम्मीदवारों को रैंक करता है, संघर्षों को हल करता है (उदाहरण के लिए, अनिवार्य डार्क-मोड पैलेट मोड को बाध्य करता है), और एक एकल अनुशंसित सिस्टम उत्सर्जित करता है।
-4. **आउटपुट।** चयनित शैली, पैलेट, टाइप पेयर, शीर्ष 5 मोशन प्रीसेट, शीर्ष 12 कंपोनेंट, शीर्ष 5 ब्रांड उदाहरण, और सभी 152 एंटी-पैटर्न रेलिंग्स सक्रिय के साथ एक JSON दस्तावेज़। साथ ही हर चयन को समझाने वाला एक तर्क ब्लॉक।
-5. **जेनरेशन।** डाउनस्ट्रीम कमांड (`/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard`) सब-एजेंट के ज़रिए वास्तविक कोड जेनरेट करने के लिए अनुशंसा का उपभोग करते हैं।
-6. **सत्यापन।** `/ux-lint` जेनरेट किए गए कोड को 152 regex नियमों के विरुद्ध पुनः स्कैन करता है। CI में Critical/High पर non-zero exit करता है।
+   - **वर्जित + क्षेत्र → रेलिंग्स + ब्रांड उदाहरणों की शॉर्टलिस्ट** (anti-patterns.json, brands/)
+3. **मर्ज।** एक डिटरमिनिस्टिक मर्जर उम्मीदवारों को रैंक करता है, टकराव सुलझाता है (जैसे ज़रूरी डार्क मोड पैलेट मोड तय कर देता है), और एक ही अनुशंसित सिस्टम देता है।
+4. **आउटपुट।** एक JSON दस्तावेज़, जिसमें चुनी गई स्टाइल, पैलेट, टाइप जोड़ी, शीर्ष 5 मोशन प्रीसेट, शीर्ष 12 कंपोनेंट, शीर्ष 5 ब्रांड उदाहरण, और सभी 171 एंटी-पैटर्न रेलिंग्स सक्रिय होती हैं। साथ में हर चुनाव का कारण बताने वाला ब्लॉक।
+5. **जेनरेशन।** आगे की कमांड (`/ux-design` अपने पेज, कंपोनेंट, डैशबोर्ड और इमेज मोड में, और `/ux-system`) अनुशंसा का इस्तेमाल करके सब-एजेंट के ज़रिए असली कोड बनाती हैं।
+6. **सत्यापन।** `/ux-lint` जेनरेट हुए कोड को 171 नियमों पर फिर से स्कैन करता है। CI में Critical/High पर non-zero exit करता है।
+
+**v3 में जोड़ा गया।** Recommender अब `.ux/decisions.jsonl` का इस्तेमाल करके `engine/decisions/` से उम्मीदवारों को फिर से रैंक करता है (सिर्फ़ `lint_score >= 80` AND `user_accepted = true` वाले फ़ैसले गिनता है; 3 से कम पिछले फ़ैसलों पर कोल्ड स्टार्ट में सुरक्षित)। जेनरेटर का रास्ता `engine/synthesizer/` तक भी जा सकता है, जो एक डिटरमिनिस्टिक 7-अक्ष कंपाइलर है और कैटलॉग से टेम्पलेट चुनने की जगह हर ब्रीफ़ के लिए नए पैलेट + टाइप + स्पेसिंग + रेडियस + मोशन टोकन बनाता है। ब्योरे के लिए [द ब्रेन, v3.0 क्या है](#द-ब्रेन-v30-क्या-है) देखें।
 
 **Python सोचता है। HTML दिखाता है। Markdown जोड़ता है।**
 
 ---
 
-## 25 स्लैश कमांड: विस्तृत संदर्भ
+## 18 स्लैश कमांड: विस्तृत संदर्भ
 
-हर कमांड `commands/` के तहत `.md` फ़ाइल के रूप में भेजा जाता है, जिसमें `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process`, और `output state file` होते हैं। नीचे के विवरण संक्षिप्त हैं; पूर्ण स्रोत कैनोनिकल स्पेक है।
+हर कमांड `commands/` के तहत एक `.md` फ़ाइल के रूप में आती है, जिसमें `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process` और `output state file` होते हैं। नीचे के विवरण संक्षिप्त हैं; पूरा स्रोत ही आधिकारिक स्पेक है।
 
-कमांड पाँच श्रेणियों में समूहित हैं: **बूटस्ट्रैप और इन्वेंटरी**, **डिस्कवरी और अनुशंसा**, **जेनरेशन**, **ऑडिट और सत्यापन**, **फ़िक्स और पॉलिश**, और **कंडक्टर**।
+कमांड सात समूहों में बँटी हैं: **बूटस्ट्रैप और इन्वेंटरी**, **डिस्कवरी और अनुशंसा**, **जेनरेशन**, **ऑडिट और सत्यापन**, **फ़िक्स और पॉलिश**, **डिस्कवरी और कथा**, और **कंडक्टर**। 3.x के सात नाम 4.1 तक [उपनाम](#उपनाम-41-में-हटाए-जाएँगे) के तौर पर चलते रहेंगे।
 
 ### बूटस्ट्रैप और इन्वेंटरी
 
 #### `/ux-init`: प्रोजेक्ट को बूटस्ट्रैप करें
 
-- **क्या:** पहचानता है कि आप कौन सा IDE उपयोग कर रहे हैं (`.claude/`, `.cursor/`, `.windsurf/`, आदि), सही आर्टिफ़ैक्ट इंस्टॉल करता है, सत्यापित करता है कि Python इंजन पहुँच योग्य है, स्टैट्स स्नैपशॉट प्रिंट करता है।
-- **कब उपयोग करें:** नए प्रोजेक्ट में पहली बार इंस्टॉल करते समय। ux-skill उपयोग करने वाले प्रोजेक्ट को क्लोन करने के बाद। `pip install --upgrade uxskill` के बाद।
-- **कब छोड़ें:** आप पहले से इस प्रोजेक्ट में चला चुके हैं और कुछ नहीं बदला।
-- **आह्वान:** `/ux-init` (कोई आर्ग नहीं) या CLI से `uxskill init`।
-- **आउटपुट:** प्रति-IDE आर्टिफ़ैक्ट ([17-IDE इंस्टॉलर](#17-ide-इंस्टॉलर) देखें) + `.ux/` डायरेक्टरी + stdout सारांश।
-- **जोड़ता है:** अगला `/ux-discover`।
+- **क्या:** पहचानता है कि आप कौन सा IDE उपयोग कर रहे हैं (`.claude/`, `.cursor/`, `.windsurf/`, आदि), सही आर्टिफ़ैक्ट इंस्टॉल करता है, सत्यापित करता है कि Python इंजन पहुँच योग्य है, स्टैट्स स्नैपशॉट प्रिंट करता है। `--stats` सिर्फ़ स्नैपशॉट प्रिंट करता है: वर्ज़न + डेटा मैनिफ़ेस्ट की एंट्री गिनती।
+- **कब उपयोग करें:** नए प्रोजेक्ट में पहली बार इंस्टॉल करते समय। ux-skill उपयोग करने वाले प्रोजेक्ट को क्लोन करने के बाद। `pip install --upgrade uxskill` के बाद। `--stats` इंस्टॉल के बाद, अपग्रेड के बाद, या जब कोई अनुशंसा चौंकाने वाले चुनाव दे और आपको मैनिफ़ेस्ट अधूरे होने का शक हो।
+- **कब छोड़ें:** आप पहले से इस प्रोजेक्ट में चला चुके हैं और कुछ नहीं बदला। `--stats` को कभी छोड़ने की ज़रूरत नहीं: यह 50ms की रीड है।
+- **आह्वान:** `/ux-init` (कोई आर्ग नहीं), `/ux-init --stats`, या CLI से `uxskill init` / `uxskill stats`। `--decisions` निर्णय बही का सारांश जोड़ता है; `--html` `.ux/stats.html` लिखता है।
+- **आउटपुट:** प्रति-IDE आर्टिफ़ैक्ट ([17-IDE इंस्टॉलर](#17-ide-इंस्टॉलर) देखें) + `.ux/` डायरेक्टरी + stdout सारांश। `--stats`: stdout पर JSON (ऊपर [इंस्टॉल सत्यापित करें](#इंस्टॉल-सत्यापित-करें) देखें)।
+- **जोड़ता है:** अगला `/ux-discover`। `--stats` सिर्फ़ जाँच के लिए है।
 
-#### `/ux-stats`: डेटा इन्वेंटरी प्रिंट करें
+#### `/ux-mcp`: इंजन को MCP सर्वर के रूप में चलाएँ
 
-- **क्या:** 12 डेटा मैनिफ़ेस्ट के लिए संस्करण + एंट्री गिनती प्रिंट करता है, ताकि आप सत्यापित कर सकें कि क्या इंस्टॉल किया गया है।
-- **कब उपयोग करें:** इंस्टॉल के बाद। अपग्रेड के बाद। जब `/ux-recommend` आश्चर्यजनक चयन लौटाता है और आप संदेह करते हैं कि मैनिफ़ेस्ट अधूरे हैं।
-- **कब छोड़ें:** कभी नहीं, यह 50ms का केवल-पठनीय कमांड है।
-- **आह्वान:** `/ux-stats` या `uxskill stats`।
-- **आउटपुट:** stdout पर JSON (ऊपर [इंस्टॉल सत्यापित करें](#इंस्टॉल-सत्यापित-करें) देखें)।
-- **जोड़ता है:** केवल डायग्नोस्टिक; डाउनस्ट्रीम कुछ फ़ीड नहीं करता।
+- **क्या:** इंजन को stdio पर Model Context Protocol सर्वर के रूप में शुरू करता है। 25 टूल (recommender, लिंटर, परसिस्टेंस, सिंथेसाइज़र, निर्णय बही, इमेज एक्सट्रैक्शन, डेटा मैनिफ़ेस्ट, और डिज़ाइन सिस्टम को बनाना, इम्पोर्ट करना, बेहतर करना, बढ़ाना, एक्सपोर्ट करना और जाँचना) प्लगइन के बिना किसी भी MCP-सक्षम होस्ट से बुलाए जा सकते हैं।
+- **कब उपयोग करें:** आप किसी दूसरे MCP-सक्षम होस्ट में काम करते हैं और वही इंजन चाहते हैं। आप ऐसी मल्टी-एजेंट पाइपलाइन चलाते हैं जिसे डिज़ाइन पाबंदियों का एक ही स्रोत चाहिए। आप recommender या लिंटर को CI में लंबे समय तक चलने वाली प्रक्रिया के रूप में चाहते हैं।
+- **कब छोड़ें:** आप प्लगइन इंस्टॉल किए हुए Claude Code के अंदर हैं; स्लैश कमांड पहले से इंजन तक पहुँचती हैं। आपको एक बार का जवाब चाहिए; `uxskill recommend` या `uxskill lint` ज़्यादा आसान है।
+- **आह्वान:** `/ux-mcp`, या `pip install 'uxskill[mcp]'` के बाद शेल से `ux-mcp`।
+- **आउटपुट:** एक stdio JSON-RPC सर्वर। हर क्लाइंट के कॉन्फ़िग के लिए [MCP सर्वर](#mcp-सर्वर-असममित-चाल) और `commands/ux-mcp.md` देखें।
+- **जोड़ता है:** कुछ नहीं; यह एक ट्रांसपोर्ट है, कोई कदम नहीं।
 
 ### डिस्कवरी और अनुशंसा
 
-#### `/ux-discover`: फ़ोर्सिंग फ़ंक्शन (10-फ़ील्ड इनटेक)
+#### `/ux-discover`: अनिवार्य द्वार (10-फ़ील्ड इनटेक, फ़्रेमिंग, अनुशंसा)
 
-- **क्या:** हर प्रोजेक्ट किसी भी जेनरेशन कमांड से पहले गुज़रता है अनिवार्य 10-फ़ील्ड इनटेक से। प्रोजेक्ट प्रकार, ऑडियंस, प्राथमिक लक्ष्य, टोन, अनिवार्य, वर्जित, संदर्भ ब्रांड, स्टैक, क्षेत्र, सफलता मीट्रिक। **कोई सुधार नहीं।** प्रतिबंधित वाक्यांश ("modern", "clean") उपयोगकर्ता को विशिष्ट होने के लिए मजबूर करते हैं।
-- **कब उपयोग करें:** किसी भी `/ux-design`, `/ux-component`, `/ux-system`, या `/ux-dashboard` से पहले। जब पिछला ब्रीफ़ बासी हो गया हो।
-- **कब छोड़ें:** आप बग ठीक कर रहे हैं (`/ux-fix`)। आप केवल लिंटर पास चला रहे हैं (`/ux-lint`)। ब्रीफ़ पिछले सत्र से अपरिवर्तित है।
-- **आह्वान:** `/ux-discover`। प्लगइन पूछता है; आप जवाब देते हैं।
-- **आउटपुट:** `.ux/last-discovery.json` लिखता है (10-फ़ील्ड ब्रीफ़)।
-- **जोड़ता है:** `/ux-recommend` → शैली + पैलेट + टाइप + मोशन + कंपोनेंट चुनने के लिए डिस्कवरी का उपयोग करता है। `/ux-design [अतिरिक्त ब्रीफ़]` → अनुशंसा में निहित फ़्रंटएंड कोड जेनरेट करता है। `/ux-component <नाम>` → खोजी गई बाधाओं के साथ संरेखित एक कंपोनेंट जेनरेट करता है।
-
-#### `/ux-recommend`: फ़्लैगशिप 5-समानांतर-खोज इंजन
-
-- **क्या:** Python इंजन की 5-समानांतर-खोज को 12 मैनिफ़ेस्ट पर चलाता है और एक मर्ज किया हुआ डिज़ाइन सिस्टम लौटाता है। इंडस्ट्री → शैली → पैलेट → टाइप → मोशन + कंपोनेंट + ब्रांड उदाहरण + रेलिंग्स।
-- **कब उपयोग करें:** शून्य से नया प्रोजेक्ट शुरू करना। थका हुआ दिखने वाला उत्पाद पिवट करना। किसी भी `/ux-design` या `/ux-component` से पहले प्री-फ़्लाइट।
-- **कब छोड़ें:** आपने पहले से `/ux-discover` चलाया और ब्रीफ़ सेव किया, `/ux-recommend` उस फ़्लो में स्वचालित है। आप एक बग ठीक कर रहे हैं (`/ux-fix` का उपयोग करें)। आपको केवल लिंट करना है (`/ux-lint` का उपयोग करें)।
-- **आह्वान (Claude Code):**
-  ```
-  /ux-recommend
-  ```
+- **क्या:** अनिवार्य 10-फ़ील्ड इनटेक, जिससे हर प्रोजेक्ट किसी भी जेनरेशन कमांड से पहले गुज़रता है। प्रोजेक्ट प्रकार, ऑडियंस, मुख्य लक्ष्य, टोन, ज़रूरी चीज़ें, वर्जित चीज़ें, रेफ़रेंस ब्रांड, स्टैक, क्षेत्र, सफलता का मापदंड। **कोई अंदाज़ा नहीं।** प्रतिबंधित शब्द ("modern", "clean") यूज़र को ठोस बात कहने पर मजबूर करते हैं। फिर recommender चलता है: Python इंजन की 12 मैनिफ़ेस्ट पर 5 समानांतर खोजें एक मिला-जुला डिज़ाइन सिस्टम लौटाती हैं (इंडस्ट्री → स्टाइल → पैलेट → टाइप → मोशन + कंपोनेंट + ब्रांड उदाहरण + रेलिंग्स)।
+- **मोड:** `--frame` किसके लिए, नतीजा, परिकल्पना और सफलता संकेत को चार फ़ील्ड वाले फ़्रेमिंग ब्लॉक में दर्ज करता है, जो पूरे इनटेक से हल्का है। `--recommend` सिर्फ़ recommender चलाता है, सहेजे गए ब्रीफ़ या एक बार के फ़्लैग से।
+- **कब उपयोग करें:** किसी भी `/ux-design` या `/ux-system` से पहले। जब भी पिछला ब्रीफ़ पुराना पड़ जाए। `--frame` किसी प्रोजेक्ट, स्प्रिंट या एक बार के काम की शुरुआत में, या बीच में जब बातचीत भटक गई हो। `--recommend` जब किसी थके-से दिखते प्रोडक्ट की दिशा बदलनी हो।
+- **कब छोड़ें:** आप कोई बग ठीक कर रहे हैं (`/ux-fix`)। आप सिर्फ़ एक लिंटर पास चला रहे हैं (`/ux-lint`)। पिछले सेशन से ब्रीफ़ नहीं बदला।
+- **आह्वान (Claude Code):** `/ux-discover`, `/ux-discover --frame "loyalty wallet for a MENA retail pilot"`, या `/ux-discover --recommend`।
   **आह्वान (CLI):**
   ```bash
   ux recommend \
@@ -339,46 +383,32 @@ ux-skill (पैकेज नाम: uxskill)
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **आउटपुट:** `.ux/last-recommendation.json` लिखता है, चयनित शैली, चयनित पैलेट, चयनित टाइप पेयर, शीर्ष 5 मोशन प्रीसेट, शीर्ष 12 कंपोनेंट, शीर्ष 5 ब्रांड उदाहरण, सभी 152 एंटी-पैटर्न रेलिंग्स सक्रिय, साथ ही तर्क।
-- **जोड़ता है:** `/ux-design [ब्रीफ़]` → अनुशंसित टोकन का उपयोग करके फ़्रंटएंड कोड। `/ux-system` → अनुशंसा से पूरा डिज़ाइन सिस्टम। `/ux-component <नाम>` → अनुशंसित शैली का उपयोग करने वाला एक कंपोनेंट। `/ux-lint` → जेनरेट किए गए कोड को सत्यापित करें।
+- **आउटपुट:** `.ux/last-discovery.json` (10-फ़ील्ड ब्रीफ़), `.ux/last-recommendation.json` (चुनी गई स्टाइल, पैलेट, टाइप जोड़ी, शीर्ष 5 मोशन प्रीसेट, शीर्ष 12 कंपोनेंट, शीर्ष 5 ब्रांड उदाहरण, सभी 171 एंटी-पैटर्न रेलिंग्स सक्रिय, साथ में कारण), और `--frame` के साथ `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`)।
+- **जोड़ता है:** `/ux-design [extra brief]` → अनुशंसा पर आधारित फ़्रंटएंड कोड। `/ux-design --component <name>` → पता चली पाबंदियों के मुताबिक एक कंपोनेंट। `/ux-system` → अनुशंसा से पूरा डिज़ाइन सिस्टम। `/ux-lint` → जेनरेट हुआ कोड सत्यापित करें।
 
 ### जेनरेशन
 
 #### `/ux-design`: ब्रीफ़ से एक सुंदर, एंटी-स्लॉप सर्फ़ेस जेनरेट करें
 
-- **क्या:** डिस्कवरी ब्रीफ़ + अनुशंसा से पूर्ण, उत्पादन-ग्रेड फ़्रंटएंड आर्टिफ़ैक्ट (लैंडिंग, मार्केटिंग साइट, ऐप शेल) जेनरेट करता है। एंटी-स्लॉप और आर्सेनल संदर्भों से रचनात्मक दिशा के साथ `frontend-engineer` को डिस्पैच करता है।
-- **कब उपयोग करें:** "Design a", "build me a", "generate a landing page", "create a dashboard", "make a component", कोई भी फ़्री-फ़ॉर्म दृश्य डिलीवरेबल अनुरोध।
-- **कब छोड़ें:** आप समीक्षा चाहते हैं, निर्माण नहीं (`/ux-audit` या `/ux-critique` का उपयोग करें)। आप केवल एक कंपोनेंट चाहते हैं (`/ux-component` का उपयोग करें)। बैकएंड या इंफ़्रास्ट्रक्चर कार्य।
-- **आह्वान:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`।
-- **आउटपुट:** जेनरेट किया गया कोड (HTML / Blade / JSX / Vue / Astro), साथ ही `.ux/last-design.json`।
+- **क्या:** डिस्कवरी ब्रीफ़ + अनुशंसा से पूर्ण, उत्पादन-ग्रेड फ़्रंटएंड आर्टिफ़ैक्ट (लैंडिंग, मार्केटिंग साइट, ऐप शेल) जेनरेट करता है। एंटी-स्लॉप और आर्सेनल संदर्भों की रचनात्मक दिशा के साथ `frontend-engineer` को डिस्पैच करता है। ब्रीफ़ या कोई फ़्लैग चार में से एक मोड चुनता है:
+  - **पेज** (डिफ़ॉल्ट): पूरा पेज या कई सेक्शन वाला सरफ़ेस। `.ux/last-design.json` लिखता है।
+  - **`--component [name]`**: एक अकेला, उत्पादन-ग्रेड कंपोनेंट (बटन, मोडल, नैवबार, साइडबार, कार्ड, टेबल, फ़ॉर्म, चार्ट)। चारों इंटरैक्शन स्टेट, सुलभ, ब्रांड के अनुरूप। कंपोनेंट को पहले `.ux/last-recommendation.json` में ढूँढता है, न मिले तो सीधे मैनिफ़ेस्ट से पूछता है। `.ux/last-component.json` लिखता है।
+  - **`--dashboard`**: डेटा घनत्व का अनुशासन, बेंटो लेआउट, टेबुलर मोनोस्पेस अंक, स्पार्कलाइन पैटर्न, कार्ड की भरमार से परहेज़, अर्थपूर्ण स्टेट रंग, संयमित मोशन। ऊपर से चार्ट चिपकाई हुई मार्केटिंग साइट नहीं। `.ux/last-dashboard.json` लिखता है।
+  - **`--from-image <path>`**: डिज़ाइन रेफ़रेंस इमेज (PNG/JPG/WebP) को शुद्ध Pillow कंप्यूटर विज़न से पढ़ता है (मुख्य पैलेट, कैनवस की ध्रुवता, टाइप संकेत), उसे पैलेट और स्टाइल मैनिफ़ेस्ट से मिलाता है, और मिली अनुशंसा से बनाता है। `--extract-only` एक्सट्रैक्शन के बाद रुक जाता है। `.ux/last-image-extract.json` लिखता है।
+- **कब उपयोग करें:** "Design a", "build me a", "generate a landing page", "create a dashboard", "make a component", "build a button", "design the admin panel", "operator console", "KPI board", "build it like this screenshot", कोई भी फ़्री-फ़ॉर्म दृश्य डिलीवरेबल अनुरोध।
+- **कब छोड़ें:** आप समीक्षा चाहते हैं, निर्माण नहीं (`/ux-audit` या `/ux-critique` का उपयोग करें)। बैकएंड या इंफ़्रास्ट्रक्चर कार्य।
+- **आह्वान:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`, `/ux-design --component pricing-card-trio --brief="fintech, dark, monospace numbers"`, `/ux-design --dashboard`, `/ux-design --from-image ref.png`।
+- **आउटपुट:** जेनरेट हुआ कोड (HTML / Blade / JSX / Vue / Astro), साथ में उस मोड की स्टेट फ़ाइल।
 - **जोड़ता है:** `/ux-lint` → रेलिंग्स के विरुद्ध सत्यापित करें। `/ux-polish` → कॉस्मेटिक पास। `/ux-a11y` → सुलभता ऑडिट। `/ux-copy` → माइक्रोकॉपी समीक्षा। `/ux-fix` → निष्कर्षों को परमाणु कमिट के रूप में लागू करें।
-
-#### `/ux-component`: एक कंपोनेंट जेनरेट करें
-
-- **क्या:** एक स्पेक से एक एकल, उत्पादन-ग्रेड कंपोनेंट (बटन, मोडल, navbar, sidebar, कार्ड, टेबल, फ़ॉर्म, चार्ट) उत्पन्न करता है। चारों इंटरैक्शन स्टेट, सुलभ, ऑन-ब्रांड। पहले `.ux/last-recommendation.json` में कंपोनेंट खोजता है, सीधे मैनिफ़ेस्ट क्वेरी पर फ़ॉलबैक करता है।
-- **कब उपयोग करें:** कोई भी सिंगल-एलिमेंट अनुरोध, "build a button", "create a pricing card", "make a modal", "add a navbar", "design a sidebar", "I need a data table", "build a form", "make a chart component"।
-- **कब छोड़ें:** पूरा पेज या मल्टी-सेक्शन सर्फ़ेस (`/ux-design` का उपयोग करें)। बैकएंड या इंफ़्रास्ट्रक्चर।
-- **आह्वान:** `/ux-component pricing-card-trio --brief="fintech, dark, monospace numbers"`।
-- **आउटपुट:** जेनरेट किया गया कंपोनेंट कोड, साथ ही `.ux/last-component.json`।
-- **जोड़ता है:** `/ux-lint` → सत्यापित करें। `/ux-polish` → कसें।
 
 #### `/ux-system`: एक पूर्ण स्टार्टर डिज़ाइन सिस्टम जेनरेट करें
 
 - **क्या:** एक ऐसे प्रोजेक्ट के लिए जिसके पास सिस्टम नहीं है, पूर्ण स्टार्टर डिज़ाइन सिस्टम प्रस्तावित करता है, टोकन (रंग, टाइप, स्पेस, मोशन, रेडियस, शैडो), फ़ाउंडेशन डॉक्स, कंपोनेंट कॉन्ट्रैक्ट, डार्क-मोड पेयरिंग, थीम स्विचर। `design-system-architect` को डिस्पैच करता है।
 - **कब उपयोग करें:** "We don't have a design system", "build us a system", "propose tokens", "what should our theme be", "set up our DS"।
-- **कब छोड़ें:** प्रोजेक्ट के पास पहले से एक डिज़ाइन सिस्टम है, मौजूदा सिस्टम के विरुद्ध `/ux-component` का उपयोग करें। बैकएंड या इंफ़्रास्ट्रक्चर।
-- **आह्वान:** `/ux-system` (अगर फ़ाइल में पहले से डिस्कवरी नहीं है तो पहले डिस्कवरी चलाता है)।
+- **कब छोड़ें:** प्रोजेक्ट के पास पहले से डिज़ाइन सिस्टम है; उसकी जगह मौजूदा सिस्टम पर `/ux-design --component` का उपयोग करें। बैकएंड या इंफ़्रास्ट्रक्चर।
+- **आह्वान:** `/ux-system create` (फ़ाउंडेशन इंजन), `/ux-system enhance --from <file>` (आपके पास पहले से मौजूद सिस्टम को मापें), `/ux-system extend --from <file> --add <foundation>` (बिना बदले उसमें जोड़ें), या `/ux-system` (3.x वाला तरीका; अगर फ़ाइल में पहले से डिस्कवरी नहीं है तो पहले डिस्कवरी चलाता है)।
 - **आउटपुट:** `tokens.json`, `foundations.md`, `components/*.md` कॉन्ट्रैक्ट, वैकल्पिक Tailwind / vanilla / SCSS एमिट। चेन संदर्भ के लिए `.ux/last-system.json` लिखता है।
-- **जोड़ता है:** `/ux-component` → नए सिस्टम के विरुद्ध निर्माण करें। `/ux-design` → नए टोकन का उपयोग करके एक सर्फ़ेस जेनरेट करें।
-
-#### `/ux-dashboard`: विशेष डैशबोर्ड जेनरेशन
-
-- **क्या:** डेटा घनत्व अनुशासन के साथ डैशबोर्ड, बेंटो लेआउट, टैबुलर मोनोस्पेस अंकों, स्पार्कलाइन पैटर्न, एंटी-कार्ड-ओवरयूज़, अर्थपूर्ण स्टेट रंग, संयमित मोशन। चार्ट चिपकाई गई मार्केटिंग साइट नहीं।
-- **कब उपयोग करें:** "Build a dashboard", "design the admin panel", "make a metrics page", "operator console", "analytics view", "KPI board", "monitoring screen"।
-- **कब छोड़ें:** आँकड़ों के साथ मार्केटिंग लैंडिंग पेज (`/ux-design` का उपयोग करें)। केवल एक विजेट (`/ux-component` का उपयोग करें)। बैकएंड या इंफ़्रास्ट्रक्चर।
-- **आह्वान:** `/ux-dashboard`।
-- **आउटपुट:** जेनरेट किया गया डैशबोर्ड कोड + `.ux/last-dashboard.json`।
-- **जोड़ता है:** `/ux-lint`, `/ux-audit`, `/ux-a11y`।
+- **जोड़ता है:** `/ux-design --component` → नए सिस्टम पर बनाएँ। `/ux-design` → नए टोकन से सरफ़ेस जेनरेट करें।
 
 #### `/ux-motion`: मोशन ट्रीटमेंट
 
@@ -393,8 +423,8 @@ ux-skill (पैकेज नाम: uxskill)
 
 #### `/ux-lint`: डिटरमिनिस्टिक regex-आधारित लिंटर (कोई LLM नहीं, CI-सेफ़)
 
-- **क्या:** आपके कोड के विरुद्ध 152 regex नियम चलाता है। कोई LLM कॉल नहीं। CI में Critical / High पर non-zero exit करता है। स्रोत: `data/anti-patterns.json`। नियम A11y (23), कंटेंट (15), लेआउट (13), टाइपोग्राफ़ी (10), रंग (9), गुणवत्ता (9), दृश्य (9), मोशन (8), प्रदर्शन (4) को कवर करते हैं।
-- **कब उपयोग करें:** प्री-कमिट हुक। CI गेट। `/ux-audit` की लागत चुकाने से पहले बड़े कोडबेस पर तेज़ पहला पास। जेनरेशन सत्यापित करने के लिए `/ux-design` या `/ux-component` के बाद।
+- **क्या:** आपके कोड के विरुद्ध 171 नियम चलाता है। कोई LLM कॉल नहीं। CI में Critical / High पर non-zero exit करता है। स्रोत: `data/anti-patterns.json`। नियम A11y (45), कंटेंट (35), लेआउट (18), टाइपोग्राफ़ी (16), मोशन (14), दृश्य (14), गुणवत्ता (12), रंग (10), परफ़ॉर्मेंस (5), गहराई (2) को कवर करते हैं।
+- **कब उपयोग करें:** प्री-कमिट हुक। CI गेट। `/ux-audit` की लागत चुकाने से पहले बड़े कोडबेस पर तेज़ पहला पास। जेनरेशन सत्यापित करने के लिए किसी भी मोड में `/ux-design` के बाद।
 - **कब छोड़ें:** आप एक फ़िक्स लूप चाहते हैं (लिंटर रिपोर्ट करता है, संपादित नहीं करता, `/ux-polish --fix` या `/ux-fix` में चेन करें)। आप रुचि निर्णय चाहते हैं (`/ux-critique` का उपयोग करें)।
 - **आह्वान (स्लैश):** `/ux-lint src/`।
 - **आह्वान (CLI):** `uxskill lint .` या `python3 bin/ux-lint.py .` या `bash bin/ux-lint.sh --ci --fail-on high`।
@@ -453,25 +483,16 @@ ux-skill (पैकेज नाम: uxskill)
 - **आउटपुट:** प्रति निष्कर्ष परमाणु कमिट। मूल कमांड को पुनः चलाता है और `.ux/last-*.json` फ़ाइल अपडेट करता है। एक सारांश प्रिंट करता है।
 - **जोड़ता है:** `/ux-next` → कंडक्टर अगली चाल चुनता है।
 
-#### `/ux-polish`: कॉस्मेटिक पास + AI-स्लॉप किल
+#### `/ux-polish`: lint, fix, re-lint लूप + AI-स्लॉप का सफ़ाया
 
-- **क्या:** स्पेसिंग लय, पदानुक्रम तीक्ष्णता, AI-स्लॉप पहचान, टोकन निरंतरता। `/ux-lint` का LLM-चालित समकक्ष, रुचि कॉल पर आपके निर्णय का उपयोग करता है।
-- **कब उपयोग करें:** संरचना सही है लेकिन कार्यान्वयन ढीला है। "Polish", "tighten this up", "remove the AI-slop", "make it premium", "make this less AI-looking", "the spacing feels off", "this looks generic", "needs more taste"।
-- **कब छोड़ें:** सर्फ़ेस में मुख्य कार्यक्षमता गायब है (पहले उसे ठीक करें)। एक रीडिज़ाइन चाहिए, पॉलिश नहीं (`/ux-design` का उपयोग करें)। कॉपी समस्याएँ (`/ux-copy` का उपयोग करें)। मोशन समस्याएँ (`/ux-motion` का उपयोग करें)। a11y समस्याएँ (`/ux-a11y` का उपयोग करें)।
-- **आह्वान:** `/ux-polish src/components/Hero.tsx`।
-- **आउटपुट:** अपडेट किया गया कोड + परिवर्तनों का वर्णन करने वाला `.ux/last-polish.json`।
-- **जोड़ता है:** `/ux-lint` → सत्यापित करें कि पॉलिश टिकी। `/ux-a11y` → सुलभता पुनः जाँचें।
+- **क्या:** पहले एक स्थानीय HTML फ़ाइल पर डिटरमिनिस्टिक लूप: lint, छह idempotent पॉलिश पास, re-lint, जब तक स्कोर 90 न हो, स्कोर ठहर न जाए, या तीन राउंड न हो जाएँ (`--rounds` सीमा बदलता है)। डिफ़ॉल्ट रूप से लूप का आउटपुट `<file>.evolved.html` में रहता है और मूल फ़ाइल को कभी छुआ नहीं जाता। सिर्फ़ `--loop-only` या `--fix` मूल फ़ाइल को बदलते हैं, साफ़ वर्किंग ट्री की जाँच के बाद, और 65 का गुणवत्ता गेट फ़ेल हुए नतीजे को `--force` के बिना उसकी जगह लेने से रोकता है; `--brand-file` के साथ ब्रांड-वफ़ादारी की न्यूनतम सीमा हर निकास पर लागू रहती है। फिर रुचि वाला पास: स्पेसिंग की लय, पदानुक्रम को धार देना, AI-स्लॉप की पहचान, टोकन की एकरूपता। यह `/ux-lint` का LLM-चालित साथी है, जो रुचि के फ़ैसलों में आपकी समझ का इस्तेमाल करता है। `--loop-only` सिर्फ़ लूप चलाता है; `--no-loop` सिर्फ़ रुचि वाला पास; `--fix` रुचि से जुड़े निष्कर्ष लागू करता है।
+- **कब उपयोग करें:** संरचना सही है पर अमल ढीला है। "Polish", "tighten this up", "remove the AI-slop", "make it premium", "make this less AI-looking", "the spacing feels off", "this looks generic", "needs more taste", "improve until score 90+", "make it ship-ready"।
+- **कब छोड़ें:** सरफ़ेस में मुख्य कार्यक्षमता नहीं है (पहले वह ठीक करें)। पॉलिश नहीं, रीडिज़ाइन चाहिए (`/ux-design` का उपयोग करें)। कॉपी की समस्याएँ (`/ux-copy` का उपयोग करें)। मोशन की समस्याएँ (`/ux-motion` का उपयोग करें)। a11y की समस्याएँ (`/ux-a11y` का उपयोग करें)।
+- **आह्वान:** `/ux-polish src/components/Hero.tsx`, `/ux-polish out/landing.html --css out/landing.css`, `/ux-polish out/landing.html --loop-only --rounds 5`।
+- **आउटपुट:** लूप से `<file>.evolved.html` (मूल फ़ाइल की जगह सिर्फ़ `--loop-only` या `--fix` में), `--fix` में अपडेट हुआ कोड, `.ux/last-evolve.json`, `.ux/decisions.jsonl` में एक पंक्ति, और रुचि से जुड़े निष्कर्ष बताने वाला `.ux/last-polish.json`।
+- **जोड़ता है:** `/ux-lint` → जाँचें कि पॉलिश टिकी रही। `/ux-a11y` → सुलभता फिर से जाँचें।
 
 ### डिस्कवरी और कथा
-
-#### `/ux-frame`: 4-फ़ील्ड फ़्रेमिंग ब्लॉक
-
-- **क्या:** यह-किसके-लिए-है, परिणाम, परिकल्पना, और सफलता संकेत को एक संरचित फ़्रेमिंग ब्लॉक में कैप्चर करता है। कोई डिज़ाइन कार्य नहीं होता, बस चार-फ़ील्ड इनटेक जो एक अस्पष्ट अनुरोध को एक कार्यशील ब्रीफ़ में बदल देता है। `/ux-discover` से हल्का (4 फ़ील्ड बनाम 10)।
-- **कब उपयोग करें:** किसी भी प्रोजेक्ट, स्प्रिंट, या एक बार के एंगेजमेंट की शुरुआत। बीच में जब बातचीत भटक गई हो। "Frame this", "what's the brief", "set up the project", "framing"।
-- **कब छोड़ें:** पहले से फ़्रेम किया हुआ (`.ux/last-frame.json` जाँचें)। कोई फ़्रेमिंग प्रभाव वाला एक बार का कंपोनेंट निर्माण। बैकएंड या इंफ़्रास्ट्रक्चर।
-- **आह्वान:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`।
-- **आउटपुट:** `.ux/last-frame.json` लिखता है, `{audience, outcome, hypothesis, success_signal}`।
-- **जोड़ता है:** `/ux-discover` → फ़्रेम को 10-फ़ील्ड ब्रीफ़ तक विस्तारित करें। `/ux-design` → फ़्रेम को एंकर के रूप में उपयोग करके जेनरेट करें।
 
 #### `/ux-research`: अनुसंधान योजना + संश्लेषण
 
@@ -480,22 +501,22 @@ ux-skill (पैकेज नाम: uxskill)
 - **कब छोड़ें:** उत्तर पहले से उच्च आत्मविश्वास के साथ ज्ञात है। कम-जोखिम वाले प्रतिवर्ती निर्णय। बैकएंड या इंफ़्रास्ट्रक्चर।
 - **आह्वान:** `/ux-research --plan "loyalty wallet adoption in MENA"` या `/ux-research --synthesize interviews/*.md`।
 - **आउटपुट:** `.ux/last-research.json` लिखता है, अनुसंधान योजना या संश्लेषित विषय + साक्ष्य + सिफ़ारिशें।
-- **जोड़ता है:** `/ux-frame` → निष्कर्षों को एक फ़्रेम में एकीकृत करें। `/ux-design` → निष्कर्षों से जेनरेट करें। `/ux-workshop` → अनुसंधान को इनपुट के रूप में उपयोग करके वर्कशॉप चलाएँ।
+- **जोड़ता है:** `/ux-discover --frame` → निष्कर्षों को फ़्रेम में जोड़ें। `/ux-design` → निष्कर्षों से जेनरेट करें। `/ux-workshop` → रिसर्च को इनपुट बनाकर वर्कशॉप चलाएँ।
 
 #### `/ux-workshop`: 5-चरण डिज़ाइन थिंकिंग वर्कशॉप
 
 - **क्या:** एक डिस्कवरी / डिज़ाइन-थिंकिंग वर्कशॉप को शुरू से अंत तक सुगम बनाता है। पाँच क्रमिक चरण (अन्वेषण → हीट मैप → हितधारक मैप → समाधान स्केच → गेम प्लान)। समय-सीमित। प्रति चरण ठोस आर्टिफ़ैक्ट। एक निर्णय के साथ समाप्त होता है, "दिलचस्प निष्कर्ष" के साथ नहीं।
 - **कब उपयोग करें:** असली प्रश्न, असली प्रतिभागी, असली समय बजट। "Run a workshop", "facilitate a discovery", "let's do a design thinking session", "I have stakeholders for an hour, what do we do", "kick off the project"।
-- **कब छोड़ें:** ब्रीफ़ पहले से स्पष्ट और दायरे में है। एकल विचार-मंथन (`/ux-design` या `/ux-frame` का उपयोग करें)। टीम मध्य-निष्पादन में है, डिस्कवरी में नहीं।
+- **कब छोड़ें:** ब्रीफ़ पहले से साफ़ और सीमित है। अकेले ब्रेनस्टॉर्म (`/ux-design` या `/ux-discover --frame` का उपयोग करें)। टीम डिस्कवरी में नहीं, अमल के बीच में है।
 - **आह्वान:** `/ux-workshop "loyalty wallet pivot" --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" --minutes=90`।
 - **आउटपुट:** `.ux/last-workshop.json` लिखता है, गेम प्लान + प्रति-चरण आर्टिफ़ैक्ट।
 - **जोड़ता है:** `/ux-design` → गेम प्लान निष्पादित करें। `/ux-research` → वर्कशॉप द्वारा उठाए गए अंतरालों को भरें। `/ux-case-study` → यात्रा प्रकाशित करें।
 
 #### `/ux-case-study`: प्रकाशन योग्य केस स्टडी (Wfrah-संपादकीय प्रारूप)
 
-- **क्या:** शुद्ध-मोनोक्रोम संपादकीय प्रारूप में एक प्रोजेक्ट केस स्टडी जेनरेट करता है, Wfrah टाइपोग्राफ़ी, हेयरलाइन सेपरेटर, क्रमांकित (A)–(G) सेक्शन कोड, द्विभाषी-सुरक्षित लेआउट। एक दस्तावेज़, मार्केटिंग ब्रोशर नहीं। `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json` से पढ़ता है।
+- **क्या:** शुद्ध मोनोक्रोम एडिटोरियल फ़ॉर्मेट में प्रोजेक्ट केस स्टडी बनाता है: Wfrah टाइपोग्राफ़ी, बारीक रेखा वाले विभाजक, (A) से (G) तक क्रमांकित सेक्शन कोड, द्विभाषी के लिए सुरक्षित लेआउट। एक दस्तावेज़, मार्केटिंग ब्रोशर नहीं। `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json` से पढ़ता है।
 - **कब उपयोग करें:** लॉन्च के बाद। एक अलग मील के पत्थर के बाद। "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece"।
-- **कब छोड़ें:** प्रोजेक्ट में (A)–(G) सेक्शन को भरने के लिए डेटा की कमी है। उपयोगकर्ता एक मार्केटिंग लैंडिंग चाहता है, केस स्टडी नहीं (`/ux-design` का उपयोग करें)।
+- **कब छोड़ें:** प्रोजेक्ट के पास (A) से (G) तक के सेक्शन भरने लायक डेटा नहीं है। यूज़र केस स्टडी नहीं, मार्केटिंग लैंडिंग चाहता है (`/ux-design` का उपयोग करें)।
 - **आह्वान:** `/ux-case-study --format=html --slug=bashiti-loyalty`।
 - **आउटपुट:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`।
 - **जोड़ता है:** टर्मिनल कमांड, आमतौर पर प्रोजेक्ट का अंत।
@@ -519,35 +540,45 @@ ux-skill (पैकेज नाम: uxskill)
 - **आह्वान:** `/ux-expert`।
 - **आउटपुट:** LinkedIn / ईमेल / रेपो के साथ एक संक्षिप्त संपर्क कार्ड।
 
+### उपनाम, 4.1 में हटाए जाएँगे
+
+3.x की सात कमांड ऊपर की 18 में मिला दी गई हैं। उनके नाम एक और रिलीज़ तक चलते हैं: हर उपनाम बताता है कि वह कहाँ चला गया, फिर उन्हीं आर्ग्युमेंट के साथ नई कमांड चलाता है।
+
+| पुरानी कमांड | अब | टिप्पणी |
+|---|---|---|
+| `/ux-frame` | `/ux-discover --frame` | वही फ़्रेमिंग ब्लॉक, वही `.ux/last-frame.json` |
+| `/ux-recommend` | `/ux-discover --recommend` | `ux_recommend` MCP टूल नहीं बदला |
+| `/ux-stats` | `/ux-init --stats` | सिर्फ़ पढ़ने वाला स्नैपशॉट |
+| `/ux-evolve` | `/ux-polish --loop-only --rounds 5` | उपनाम पुरानी पाँच राउंड की सीमा रखता है; अकेला `/ux-polish` तीन पर रुकता है |
+| `/ux-component` | `/ux-design --component` | वही `.ux/last-component.json` |
+| `/ux-dashboard` | `/ux-design --dashboard` | वही `.ux/last-dashboard.json` |
+| `/ux-image-to-code` | `/ux-design --extract-only --from-image` | इमेज से बनाने के लिए `--extract-only` हटा दें |
+
 ### कमांड चेनिंग ग्राफ़
 
 ```
                   ┌──────────────────────┐
-                  │  /ux-init            │
-                  │  /ux-stats           │
+                  │  /ux-init            │  --stats: inventory
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-frame           │  4-फ़ील्ड फ़्रेमिंग ब्लॉक
+                  │  /ux-discover        │  10-field intake (FORCING GATE)
+                  │                      │  --frame: 4-field framing block
+                  │                      │  then 5 parallel searches -> merged system
                   └────────────┬─────────┘
-                               │
-                  ┌────────────▼─────────┐
-                  │  /ux-discover        │  10-फ़ील्ड इनटेक (फ़ोर्सिंग गेट)
-                  └────────────┬─────────┘
-                               │ .ux/last-discovery.json लिखता है
-                  ┌────────────▼─────────┐
-                  │  /ux-recommend       │  5 समानांतर खोज -> मर्ज सिस्टम
-                  └────────────┬─────────┘
-                               │ .ux/last-recommendation.json लिखता है
+                               │ writes .ux/last-discovery.json
+                               │ writes .ux/last-recommendation.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
-   │ /ux-design     │ │ /ux-component   │ │ /ux-system  │
-   │ /ux-dashboard  │ │ /ux-motion      │ │             │
+   │ /ux-design     │ │ /ux-motion      │ │ /ux-system  │
+   │  --component   │ │                 │ │             │
+   │  --dashboard   │ │                 │ │             │
+   │  --from-image  │ │                 │ │             │
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ .ux/last-<surface>.json लिखता है
+                               │ writes .ux/last-<surface>.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
@@ -556,19 +587,19 @@ ux-skill (पैकेज नाम: uxskill)
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ .ux/last-<lens>.json लिखता है
+                               │ writes .ux/last-<lens>.json
                   ┌────────────▼─────────┐
-                  │  /ux-fix             │  निष्कर्ष कमिट के रूप में लागू करें
+                  │  /ux-fix             │  apply findings as commits
                   │  /ux-polish          │
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-case-study      │  प्रकाशन योग्य आर्टिफ़ैक्ट
+                  │  /ux-case-study      │  publishable artifact
                   └──────────────────────┘
 
                   ┌──────────────────────┐
-                  │  /ux-next            │  कंडक्टर, केवल-पठनीय
-                  │  /ux-expert          │  परामर्श हुक
+                  │  /ux-next            │  conductor, read-only
+                  │  /ux-expert          │  consulting hook
                   └──────────────────────┘
 ```
 
@@ -576,12 +607,12 @@ ux-skill (पैकेज नाम: uxskill)
 
 ## 5 सब-एजेंट
 
-सब-एजेंट कमांड द्वारा डिस्पैच किए गए भूमिका-विशिष्ट जेनरेटर हैं। वे कभी स्वतंत्र रूप से नहीं चलते, उन्हें `/ux-design`, `/ux-component`, `/ux-system`, `/ux-fix`, `/ux-research`, आदि द्वारा बुलाया जाता है। हर एजेंट के पास एक परिभाषित स्वामित्व सीमा है: वे ब्रीफ़ का निर्णय नहीं लेते; वे उसके विरुद्ध निष्पादन करते हैं।
+सब-एजेंट कमांड द्वारा डिस्पैच किए गए भूमिका-विशिष्ट जेनरेटर हैं। वे कभी स्वतंत्र रूप से नहीं चलते; उन्हें `/ux-design`, `/ux-system`, `/ux-fix`, `/ux-research`, आदि बुलाते हैं। हर एजेंट की ज़िम्मेदारी की एक तय सीमा है: वे ब्रीफ़ तय नहीं करते; वे उस पर अमल करते हैं।
 
 ### `frontend-engineer`
 
 - **स्वामी:** एंटी-AI-स्लॉप अनुशासन के साथ उत्पादन-ग्रेड फ़्रंटएंड कोड (React, Next.js, Vue, Blade+Alpine, vanilla HTML, Astro)।
-- **डिस्पैच करने वाला:** `/ux-design`, `/ux-component`, `/ux-dashboard`, `/ux-fix`।
+- **डिस्पैच करने वाला:** `/ux-design` (पेज, कंपोनेंट, डैशबोर्ड और इमेज मोड), `/ux-fix`।
 - **इनपुट:** ब्रीफ़ + रचनात्मक दिशा + टोकन (`.ux/last-recommendation.json` से)।
 - **आउटपुट:** कार्यशील कोड जो सामान्य AI आउटपुट से अलग पहचाना जा सकता है। कोई पर्पल ग्रेडिएंट नहीं, कोई सेंटर्ड हीरो नहीं, कोई तीन समान कार्ड नहीं, कोई डिस्प्ले साइज़ पर Inter नहीं, कोई "John Doe" नहीं, कोई इमोजी नहीं, कोई 300ms डिफ़ॉल्ट नहीं।
 - **टूल:** `Read, Write, Edit, Bash, Glob, Grep`।
@@ -589,7 +620,7 @@ ux-skill (पैकेज नाम: uxskill)
 ### `motion-engineer`
 
 - **स्वामी:** उत्पादन फ़्रंटएंड कोड में मोशन, Framer Motion, GSAP, CSS एनिमेशन। अवधि, ईज़िंग, कोरियोग्राफ़ी, रिड्यूस्ड-मोशन फ़ॉलबैक, प्रदर्शन अनुशासन।
-- **डिस्पैच करने वाला:** `/ux-design`, `/ux-motion --fix`, `/ux-component`।
+- **डिस्पैच करने वाला:** `/ux-design` (हर मोड), `/ux-motion --fix`।
 - **इनपुट:** मोशन ब्रीफ़ + टोकन + `data/motion-presets.json` से 57 मोशन प्रीसेट।
 - **आउटपुट:** मोशन जो अपनी जगह कमाता है। हमेशा `prefers-reduced-motion` फ़ॉलबैक में लिपटा। हमेशा Core Web Vitals के विरुद्ध परीक्षित।
 - **टूल:** `Read, Write, Edit, Bash, Glob, Grep`।
@@ -597,7 +628,7 @@ ux-skill (पैकेज नाम: uxskill)
 ### `copy-writer`
 
 - **स्वामी:** शिप होने वाली स्ट्रिंग्स, त्रुटि संदेश, खाली स्थिति, CTA, लोडिंग स्थिति, सफलता संदेश, टोस्ट, हेल्पर टेक्स्ट, फ़ॉर्म लेबल, बटन टेक्स्ट।
-- **डिस्पैच करने वाला:** `/ux-copy --fix`, `/ux-design`, `/ux-frame`, `/ux-component`।
+- **डिस्पैच करने वाला:** `/ux-copy --fix`, `/ux-design` (हर मोड), `/ux-discover --frame`।
 - **इनपुट:** आवाज़ प्रोफ़ाइल (नामित या पेस्ट की गई) + सर्फ़ेस की स्ट्रिंग्स।
 - **आउटपुट:** उत्पादन माइक्रोकॉपी एक सर्फ़ेस की हर स्थिति में लगातार लागू ताकि उत्पाद एक उत्पाद की तरह लगे, दस की तरह नहीं। प्रतिबंध: "form contains errors", "John Doe", AI-प्रसन्न उत्सवपूर्ण कॉपी, सामान्य CTA, मृत खाली स्थिति।
 - **टूल:** `Read, Write, Edit, Bash, Glob, Grep`।
@@ -605,7 +636,7 @@ ux-skill (पैकेज नाम: uxskill)
 ### `research-synthesizer`
 
 - **स्वामी:** अनुसंधान इनपुट (साक्षात्कार, एनालिटिक्स, प्रतिस्पर्धी साइट, A/B परिणाम, सपोर्ट टिकट) को क्रियाशील डिज़ाइन सिफ़ारिशों में पचाना।
-- **डिस्पैच करने वाला:** `/ux-research`, `/ux-workshop`, `/ux-frame`।
+- **डिस्पैच करने वाला:** `/ux-research`, `/ux-workshop`, `/ux-discover --frame`।
 - **इनपुट:** कच्चा अनुसंधान, ट्रांसक्रिप्ट, एक्सपोर्ट, प्रतिस्पर्धी URL, सपोर्ट क्लस्टर।
 - **आउटपुट:** विषय, साक्ष्य, सिफ़ारिशें। कभी उत्तर डिज़ाइन नहीं करता, डिज़ाइनर को डिज़ाइन करने का आधार देता है।
 - **टूल:** `Read, Write, WebFetch, Bash, Glob, Grep`।
@@ -613,7 +644,7 @@ ux-skill (पैकेज नाम: uxskill)
 ### `design-system-architect`
 
 - **स्वामी:** पूर्ण डिज़ाइन सिस्टम, टोकन (रंग, टाइप, स्पेस, मोशन, रेडियस, शैडो), फ़ाउंडेशन डॉक्स, कंपोनेंट कॉन्ट्रैक्ट, डार्क-मोड पेयरिंग, थीमिंग परत।
-- **डिस्पैच करने वाला:** `/ux-system`, `/ux-component` जब कोई सिस्टम न हो।
+- **डिस्पैच करने वाला:** `/ux-system`, और कोई सिस्टम न हो तो `/ux-design --component`।
 - **इनपुट:** ब्रांड ब्रीफ़ + `.ux/last-recommendation.json` (शैली + पैलेट + टाइप पेयर + मोशन प्रीसेट)।
 - **आउटपुट:** एक सुसंगत, मतपूर्ण, उत्पादन-तैयार सिस्टम जिसके विरुद्ध डाउनस्ट्रीम एजेंट मूल बातों को पुनः तय किए बिना निर्माण कर सकें। टोकन JSON, फ़ाउंडेशन MD, कंपोनेंट कॉन्ट्रैक्ट, डार्क-मोड मैपिंग।
 - **टूल:** `Read, Write, Edit, Bash, Glob, Grep`।
@@ -624,7 +655,7 @@ ux-skill (पैकेज नाम: uxskill)
 
 1. ब्रीफ़ / अनुशंसा (`.ux/` से लोड)।
 2. प्रासंगिक मैनिफ़ेस्ट स्लाइस (उदाहरण के लिए, `frontend-engineer` को चयनित शैली + पैलेट + कंपोनेंट मिलते हैं; `motion-engineer` को चयनित मोशन प्रीसेट मिलते हैं)।
-3. 152 एंटी-पैटर्न रेलिंग्स (हमेशा सक्रिय)।
+3. 171 एंटी-पैटर्न रेलिंग्स (हमेशा सक्रिय)।
 4. एक सफलता मानदंड (आर्टिफ़ैक्ट को क्या करना चाहिए)।
 
 सब-एजेंट लौटाते हैं:
@@ -637,7 +668,7 @@ ux-skill (पैकेज नाम: uxskill)
 
 ---
 
-## 12 डेटा मैनिफ़ेस्ट
+## 11 डेटा मैनिफ़ेस्ट
 
 डेटा परत मस्तिष्क है। हर कमांड इससे पढ़ता है; इंजन इसके पार मर्ज करता है; लिंटर इसके विरुद्ध स्कैन करता है। सभी फ़ाइलें `data/` के तहत रहती हैं और स्कीमा संस्करण के लिए अपनी एंट्री को `{_meta, entries}` में लपेटती हैं।
 
@@ -650,7 +681,7 @@ ux-skill (पैकेज नाम: uxskill)
 | `categories` | Minimalist / Swiss, Brutalist, Editorial, Glassmorphism, Neumorphism, Bento, Skeuomorphic, Industrial, Maximalist, AI-Futurist, MENA-modern, Vaporwave, आदि। |
 | `sample entry` | `swiss-international`, "ग्रिड कानून है। टाइप भारी काम करता है। सजावट विफलता है।" |
 
-उपयोग द्वारा: `/ux-recommend`, `/ux-system`, `/ux-design`। स्कीमा: [data/SCHEMAS.md](data/SCHEMAS.md)।
+उपयोग द्वारा: `/ux-discover`, `/ux-system`, `/ux-design`। स्कीमा: [data/SCHEMAS.md](data/SCHEMAS.md)।
 
 ### `palettes.json`: 176 रंग पैलेट
 
@@ -661,7 +692,7 @@ ux-skill (पैकेज नाम: uxskill)
 | `tones` | warm, editorial, magazine, clinical, playful, brutalist, monochrome, jewel-tone, MENA-warm, dev-tools-dark, आदि। |
 | `sample entry` | `claude-warm-editorial`, हल्का, warm/editorial/magazine, canvas #faf9f5, primary #cc785c |
 
-उपयोग द्वारा: `/ux-recommend`, `/ux-system`। AA / AAA पर कंट्रास्ट सत्यापित। स्कीमा: [data/SCHEMAS.md](data/SCHEMAS.md)।
+उपयोग द्वारा: `/ux-discover`, `/ux-system`। AA / AAA पर कंट्रास्ट सत्यापित। स्कीमा: [data/SCHEMAS.md](data/SCHEMAS.md)।
 
 ### `type-pairs.json`: 70 टाइप पेयरिंग
 
@@ -671,7 +702,7 @@ ux-skill (पैकेज नाम: uxskill)
 | `keys per entry` | `id`, `name`, `display` (परिवार + वज़न + स्रोत + लाइसेंस + URL), `body`, `mono`, `compatible_styles`, `taste_score` |
 | `sample entry` | `cormorant-inter-jetbrains`, Cormorant Garamond × Inter × JetBrains Mono |
 
-सभी परिवारों के पास लाइसेंस + स्रोत URL है। `/ux-recommend`, `/ux-system` द्वारा उपयोग।
+सभी फ़ैमिली के पास लाइसेंस + स्रोत URL है। उपयोग द्वारा: `/ux-discover`, `/ux-system`।
 
 ### `components.json`: 148 कंपोनेंट
 
@@ -693,7 +724,7 @@ ux-skill (पैकेज नाम: uxskill)
 | `categories` | Financial Services, Healthcare, Education, E-commerce, SaaS B2B, SaaS B2C, Developer Tools, Media, Gaming, Travel, Real Estate, MENA-specific, आदि। |
 | `sample entry` | `fintech-neobank`, उच्च विश्वास, नियामक प्रकटीकरण, बैलेंस/लेनदेन प्राथमिक UI, मोबाइल-पहले दैनिक-उपयोग |
 
-`/ux-recommend` द्वारा पहले समानांतर खोज अक्ष के रूप में उपयोग।
+Recommender (`/ux-discover`) द्वारा पहली समानांतर खोज अक्ष के रूप में उपयोग।
 
 ### `chart-types.json`: 35 चार्ट प्रकार
 
@@ -702,9 +733,9 @@ ux-skill (पैकेज नाम: uxskill)
 | `entries` | 35 |
 | `keys per entry` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
 | `categories` | Comparison, Time Series, Distribution, Composition, Relationship, Flow, Geographic |
-| `sample entry` | `bar-vertical`, 4–15 असतत श्रेणियों की तुलना करें। x-अक्ष के साथ स्थिति श्रेणी को मैप करती है; ऊँचाई मान को मैप करती है। |
+| `sample entry` | `bar-vertical`, 4 से 15 असतत श्रेणियों की तुलना करें। x-अक्ष पर स्थिति श्रेणी दिखाती है; ऊँचाई मान दिखाती है। |
 
-`/ux-dashboard`, `/ux-component` (चार्ट इंस्टेंस) द्वारा उपयोग।
+`/ux-design --dashboard` और `/ux-design --component` (चार्ट इंस्टेंस) द्वारा उपयोग।
 
 ### `tech-stacks.json`: 25 स्टैक
 
@@ -739,15 +770,15 @@ ux-skill (पैकेज नाम: uxskill)
 
 हर प्रीसेट में एक रिड्यूस्ड-मोशन वैरिएंट है। Framer Motion, GSAP, और शुद्ध CSS के लिए स्टैक-तैयार कोड।
 
-### `anti-patterns.json`: 152 regex नियम
+### `anti-patterns.json`: 171 नियम
 
 | फ़ील्ड | विवरण |
 |---|---|
-| `entries` | 152 |
-| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
-| `categories` | A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4) |
+| `entries` | 171 |
+| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (प्रकार, पैटर्न, फ़्लैग, दायरा, और कई नियमों में पार्स की गई फ़ाइल पर एक `post` जाँच), `why`, `fix` |
+| `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-पूरी नियम सूची [152 एंटी-AI-स्लॉप नियम](#152-एंटी-ai-स्लॉप-नियम-लिंटर) में है।
+पूरी नियम सूची [171 एंटी-AI-स्लॉप नियम](#171-एंटी-ai-स्लॉप-नियम-लिंटर) में है।
 
 ### `brands/*.json`: 160 ब्रांड स्पेक
 
@@ -761,88 +792,15 @@ ux-skill (पैकेज नाम: uxskill)
 
 ---
 
-## 152 एंटी-AI-स्लॉप नियम: लिंटर
+## 171 एंटी-AI-स्लॉप नियम: लिंटर
 
-ux-skill एक डिटरमिनिस्टिक regex-आधारित लिंटर भेजता है। **कोई LLM नहीं।** **कोई API नहीं।** **कोई नेटवर्क नहीं।** एक विशिष्ट Next.js ऐप पर CI में ~200ms में चलता है। `--fail-on high` सेट होने पर Critical / High निष्कर्षों पर non-zero exit करता है।
+ux-skill एक डिटरमिनिस्टिक लिंटर के साथ आता है: हर नियम एक पैटर्न है, और कई नियम पार्स किए गए CSS और मार्कअप पर अलग जाँच भी जोड़ते हैं, ताकि कोई मेल सिर्फ़ उसी संदर्भ में गिना जाए जिसका नियम नाम लेता है। **कोई LLM नहीं।** **कोई API नहीं।** **कोई नेटवर्क नहीं।** एक सामान्य Next.js ऐप पर CI में ~200ms में चलता है। `--fail-on high` सेट होने पर Critical / High निष्कर्षों पर non-zero exit करता है।
 
-नियम `data/anti-patterns.json` (v2 पसंदीदा) से स्रोत हैं, `references/foundations/anti-patterns.md` फ़ॉलबैक (v1 bash) के साथ। दो बाइनरी भेजे जाते हैं: `bin/ux-lint.py` (Python, तेज़, विस्तारयोग्य) और `bin/ux-lint.sh` (Bash + perl-PCRE, Python के बिना वातावरणों के लिए)।
+नियम `data/anti-patterns.json` (v2, पसंदीदा) से आते हैं, और `references/foundations/anti-patterns.md` (v1, bash) फ़ॉलबैक है। दो बाइनरी आती हैं: `bin/ux-lint.py` (Python, तेज़, बढ़ाने योग्य) और `bin/ux-lint.sh` (Bash + perl-PCRE, बिना Python वाले वातावरण के लिए)।
 
 ### श्रेणी के अनुसार नियम
 
-#### टाइपोग्राफ़ी (3 नियम)
-
-| गंभीरता | नियम ID | नाम |
-|---|---|---|
-| high | `inter-as-display` | Inter को डिस्प्ले फ़ॉन्ट के रूप में उपयोग |
-| medium | `hero-text-arbitrary-90px` | मनमाना हीरो फ़ॉन्ट साइज़ |
-| low | `font-system-only` | बिना चयनित टाइपफ़ेस के सिस्टम फ़ॉन्ट स्टैक |
-
-#### रंग (6 नियम)
-
-| गंभीरता | नियम ID | नाम |
-|---|---|---|
-| high | `purple-to-blue-gradient` | डिफ़ॉल्ट purple-to-blue AI ग्रेडिएंट |
-| high | `dark-text-on-dark-card` | कार्ड पर कम-कंट्रास्ट टेक्स्ट |
-| medium | `gradient-text-rainbow` | मल्टी-स्टॉप ग्रेडिएंट टेक्स्ट |
-| medium | `card-glow-purple-shadow` | कार्ड पर पर्पल ग्लो शैडो |
-| medium | `gradient-mesh-purple-pink` | पर्पल-पिंक मेश ग्रेडिएंट हीरो |
-| low | `tailwind-color-named-vague` | बिना सिमैंटिक टोकन के नामित Tailwind रंग |
-
-#### लेआउट (5 नियम)
-
-| गंभीरता | नियम ID | नाम |
-|---|---|---|
-| high | `three-equal-card-grid` | एक पंक्ति में तीन समान कार्ड |
-| medium | `centered-everything-hero` | सेंटर्ड हीरो संरचना |
-| medium | `avatar-stack-overlapping` | सामान्य ओवरलैपिंग अवतार स्टैक |
-| low | `pill-rounded-full-everywhere` | हर चीज़ पर लागू `rounded-full` |
-| low | `nav-equal-hamburger-desktop` | डेस्कटॉप पर हैमबर्गर मेनू |
-
-#### कंटेंट (5 नियम)
-
-| गंभीरता | नियम ID | नाम |
-|---|---|---|
-| high | `lorem-ipsum-leak` | शिपिंग कोड में Lorem ipsum |
-| high | `emoji-in-ui` | UI एलिमेंट के रूप में इमोजी उपयोग |
-| high | `icon-emoji-stamp` | आइकन स्टैम्प के रूप में इमोजी उपयोग |
-| high | `testimonial-fake-five-stars` | हार्डकोडेड पाँच-स्टार टेस्टीमोनियल |
-| medium | `fake-name-john-doe` | सामान्य प्लेसहोल्डर नाम |
-
-#### मोशन (3 नियम)
-
-| गंभीरता | नियम ID | नाम |
-|---|---|---|
-| medium | `cta-arrow-rightward-bouncing` | CTA पर बाउंसिंग एरो |
-| low | `timing-300ms-default` | डिफ़ॉल्ट 300ms ट्रांज़िशन टाइमिंग |
-| low | `cubic-bezier-material-only` | हर जगह Material डिफ़ॉल्ट ईज़िंग |
-
-#### A11y (6 नियम)
-
-| गंभीरता | नियम ID | नाम |
-|---|---|---|
-| high | `inline-svg-no-aria` | aria-label या aria-hidden के बिना SVG |
-| high | `img-no-alt` | alt एट्रिब्यूट गायब छवि |
-| high | `link-onclick-no-href` | onClick के साथ लेकिन href के बिना एंकर |
-| medium | `button-no-type` | type एट्रिब्यूट गायब बटन |
-| medium | `heading-skip-h1-h3` | छोड़ा गया हेडिंग स्तर |
-| medium | `infinite-scroll-no-pagination` | कीबोर्ड फ़ॉलबैक के बिना अनंत स्क्रॉल |
-
-#### गुणवत्ता (6 नियम)
-
-| गंभीरता | नियम ID | नाम |
-|---|---|---|
-| high | `console-log-leak` | कंपोनेंट कोड में `console.log` |
-| medium | `inline-style-attribute` | इनलाइन style एट्रिब्यूट |
-| medium | `any-type-leak` | TypeScript `any` टाइप |
-| medium | `arbitrary-z-index-9999` | आलसी z-index मान |
-| low | `shadcn-default-everywhere` | अपरिवर्तित डिफ़ॉल्ट shadcn टोकन ब्लॉक |
-| low | `todo-fixme-comment` | शिपिंग कोड में TODO या FIXME |
-
-#### विज़ुअल (1 नियम)
-
-| गंभीरता | नियम ID | नाम |
-|---|---|---|
-| low | `blur-bg-only-decoration` | बिना ग्लास सर्फ़ेस के बैकड्रॉप ब्लर |
+सभी 171 नियमों का पूरा कैटलॉग, श्रेणी और फिर गंभीरता के क्रम में, `data/anti-patterns.json` से [अंग्रेज़ी README](README.md#rules-by-category) में बनाया जाता है; वहाँ नियमों के ID और नाम वैसे ही हैं जैसे लिंटर उन्हें प्रिंट करता है। नियम A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) को कवर करते हैं।
 
 ### लिंटर उपयोग
 
@@ -850,9 +808,9 @@ ux-skill एक डिटरमिनिस्टिक regex-आधारित
 
 ```bash
 uxskill lint .
-# या
+# or
 python3 bin/ux-lint.py src/
-# या
+# or
 bash bin/ux-lint.sh src/
 ```
 
@@ -874,17 +832,17 @@ bash bin/ux-lint.sh --staged --fail-on high
 **आउटपुट (नमूना):**
 
 ```
-─── /ux-lint रिपोर्ट ───
+─── /ux-lint report ───
 src/components/Hero.tsx:24  [high]   purple-to-blue-gradient
-  साक्ष्य: bg-gradient-to-br from-purple-500 to-blue-500
-  फ़िक्स: अनुशंसित पैलेट के प्राथमिक ग्रेडिएंट से बदलें या ग्रेडिएंट हटाएँ
+  evidence: bg-gradient-to-br from-purple-500 to-blue-500
+  fix: replace with the recommended palette's primary gradient or remove gradient
 
-src/components/Pricing.tsx:12  [high] three-equal-card-grid
-  साक्ष्य: grid grid-cols-3 gap-6 (3 समान Card चिल्ड्रन)
-  फ़िक्स: एक कार्ड को फ़ीचर करें; दो कम-ज़ोर वाले कार्ड से घेरें
+src/components/Pricing.tsx:11  [high] three-equal-card-grid
+  evidence: grid grid-cols-3 gap-6 (3 equal Card children)
+  fix: feature one card; flank with two reduced-emphasis cards
 
-3 फ़ाइलें स्कैन की गईं · 2 high · 0 medium · 0 low · exit 1
-अनुशंसित अगला: /ux-polish --fix (LLM-चालित, लिंटेबल और सौंदर्य दोनों निष्कर्षों को संबोधित करता है)
+3 files scanned · 2 high · 0 medium · 0 low · exit 1
+Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aesthetic findings)
 ```
 
 ---
@@ -931,13 +889,13 @@ BMW, BMW M, Bugatti, Ferrari, Lamborghini, Renault, SpaceX, Tesla
 
 ## MCP सर्वर: असममित चाल
 
-ux-skill एक **Model Context Protocol सर्वर** भेजता है। `ux-mcp` चलाएँ और इंजन एक लंबे समय तक चलने वाली stdio प्रक्रिया बन जाता है जिसे कोई भी MCP-सक्षम होस्ट, Claude Desktop, Cursor, Windsurf, सामान्य एजेंट, कॉल कर सकते हैं। चौदह टूल: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`। वही Python हैंडलर जो स्लैश कमांड उपयोग करते हैं; वही डेटा मैनिफ़ेस्ट; वही डिटरमिनिस्टिक रिकमेंडर।
+ux-skill एक **Model Context Protocol सर्वर** भेजता है। `ux-mcp` चलाएँ और इंजन लंबे समय तक चलने वाली एक stdio प्रक्रिया बन जाता है, जिसे कोई भी MCP-सक्षम होस्ट (Claude Desktop, Cursor, Windsurf, सामान्य एजेंट) बुला सकता है। 25 टूल: `ux_recommend`, `ux_system_detect`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`, `ux_image_extract`, `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`, `ux_system_build`, `ux_system_import`, `ux_system_enhance`, `ux_system_extend`, `ux_system_export`, `ux_contracts_check`। वही Python हैंडलर जो स्लैश कमांड इस्तेमाल करती हैं; वही डेटा मैनिफ़ेस्ट; वही डिटरमिनिस्टिक recommender।
 
 **यह असममित चाल क्यों है:** शीर्ष आठ Claude UX स्किल्स (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) में से कोई भी MCP सर्वर नहीं भेजता। वे Claude Code के प्लगइन रनटाइम के अंदर बंद हैं। ux-skill MCP बोलने वाले किसी भी होस्ट से पहुँच योग्य है, उन एजेंटों सहित जिन्होंने कभी Claude Code प्लगइन के बारे में नहीं सुना।
 
 ```bash
-pip install 'uxskill[mcp]'             # mcp एक opt-in extra है
-ux-mcp                                  # stdio JSON-RPC सर्वर शुरू होता है
+pip install 'uxskill[mcp]'             # mcp is an opt-in extra
+ux-mcp                                  # stdio JSON-RPC server starts
 ```
 
 अपने क्लाइंट को `ux-mcp` बाइनरी की ओर इंगित करें। पूर्ण टूल डॉक्स, JSON उदाहरण, और Claude Desktop, Cursor, और Windsurf के लिए प्रति-क्लाइंट कॉन्फ़िग [docs/mcp.html](docs/mcp.html) पर और `commands/ux-mcp.md` में रहते हैं।
@@ -950,7 +908,7 @@ ux-mcp                                  # stdio JSON-RPC सर्वर शु�
 
 | IDE / टूल | पहचान संकेत | इंस्टॉल किया गया आर्टिफ़ैक्ट |
 |---|---|---|
-| Claude Code | `.claude/` या `CLAUDE.md` | `.claude-plugin/plugin.json` पर प्लगइन मैनिफ़ेस्ट + सभी 25 कमांड + सभी 5 सब-एजेंट |
+| Claude Code | `.claude/` या `CLAUDE.md` | `.claude-plugin/plugin.json` पर प्लगइन मैनिफ़ेस्ट + सभी 18 कमांड (और 7 उपनाम) + सभी 5 सब-एजेंट |
 | Cursor | `.cursor/` या `.cursorrules` | `.cursorrules` प्रॉम्प्ट हेडर इंजन की ओर इशारा करते हुए |
 | Windsurf | `.windsurf/` या `.windsurfrules` | `.windsurfrules` समान प्रॉम्प्ट हेडर के साथ |
 | GitHub Copilot | `.github/copilot-instructions.md` या `.vscode/` | `.github/copilot-instructions.md` |
@@ -982,8 +940,8 @@ ux-mcp                                  # stdio JSON-RPC सर्वर शु�
 
 ```bash
 pip install uxskill
-uxskill init                                # Cursor का पता लगाता है, .cursorrules लिखता है
-uxskill discover                            # 10-फ़ील्ड इनटेक
+uxskill init                                # detects Cursor, writes .cursorrules
+uxskill discover                            # 10-field intake
 uxskill recommend \
   --project-type=dashboard \
   --industry=fintech-neobank \
@@ -1012,14 +970,14 @@ uxskill recommend \
 > Region? global
 > Success metric? signup conversion
 
-/ux-recommend
-> [चयनित शैली, पैलेट, टाइप पेयर, मोशन प्रीसेट, कंपोनेंट, ब्रांड उदाहरण लौटाता है]
+/ux-discover --recommend
+> [returns picked style, palette, type pair, motion presets, components, brand exemplars]
 
 /ux-design "generate the landing using the Stripe brand spec as exemplar"
-> [frontend-engineer पेज जेनरेट करता है]
+> [frontend-engineer generates the page]
 
 /ux-lint .
-> [पास होता है, Stripe ब्रांड स्पेक का सम्मान किया गया]
+> [passes, Stripe brand spec was respected]
 ```
 
 ### 3. CI में AI स्लॉप के लिए मौजूदा कोड का ऑडिट
@@ -1049,16 +1007,16 @@ PR जो purple-to-blue ग्रेडिएंट, 96px पर Inter, "John D
 
 ```
 /ux-critique src/components/Hero.tsx
-> [3 जीत, 3 चूक, 1 रणनीतिक चाल, राय ईमानदार है]
+> [3 wins, 3 misses, 1 strategic move, the take is honest]
 
 /ux-lint src/
-> [15 high-severity AI फ़िंगरप्रिंट फ़्लैग किए गए]
+> [15 high-severity AI fingerprints flagged]
 
 /ux-polish src/components/Hero.tsx
-> [LLM-चालित कॉस्मेटिक पास + AI-स्लॉप किल]
+> [LLM-driven cosmetic pass + AI-slop kill]
 
 /ux-fix
-> [निष्कर्षों को परमाणु कमिट के रूप में लागू करता है, लिंटर को पुनः चलाता है]
+> [applies findings as atomic commits, re-runs the linter]
 ```
 
 तीन कमांड, एक पॉलिश की हुई सर्फ़ेस, प्रति फ़िक्स परमाणु कमिट।
@@ -1066,10 +1024,10 @@ PR जो purple-to-blue ग्रेडिएंट, 96px पर Inter, "John D
 ### 5. Linear-शैली कमांड पैलेट डिज़ाइन करना
 
 ```
-/ux-component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
-> [टोकन + हस्ताक्षर चालों के लिए data/brands/linear.app.json पढ़ता है]
-> [command-palette एनाटॉमी + स्टेट के लिए data/components.json पढ़ता है]
-> [स्पष्ट Linear स्पेक के साथ frontend-engineer को डिस्पैच करता है]
+/ux-design --component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
+> [reads data/brands/linear.app.json for tokens + signature moves]
+> [reads data/components.json for the command-palette anatomy + states]
+> [dispatches frontend-engineer with explicit Linear spec]
 ```
 
 जेनरेट किया गया कंपोनेंट Linear के वास्तविक रंग टोकन, टाइप स्टैक, मोशन सम्मेलन, हेयरलाइन घनत्व का उपयोग करता है, "सामान्य डार्क UI" नहीं।
@@ -1092,9 +1050,9 @@ PR जो purple-to-blue ग्रेडिएंट, 96px पर Inter, "John D
 
 ```
 /ux-case-study --format=html --slug=bashiti-loyalty
-> [.ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json पढ़ता है]
-> [क्रमांकित (A)-(G) सेक्शन, हेयरलाइन सेपरेटर, द्विभाषी-सुरक्षित लेआउट के साथ Wfrah-संपादकीय केस स्टडी जेनरेट करता है]
-> [case-studies/bashiti-loyalty.html लिखता है]
+> [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
+> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/bashiti-loyalty.html]
 ```
 
 केस स्टडी एक तैयार, प्रकाशन योग्य आर्टिफ़ैक्ट है, ड्राफ़्ट नहीं। शुद्ध मोनोक्रोम, संपादकीय टाइपोग्राफ़ी, आपके पोर्टफ़ोलियो पर शिप करने के लिए तैयार।
@@ -1105,7 +1063,7 @@ PR जो purple-to-blue ग्रेडिएंट, 96px पर Inter, "John D
 
 ```bash
 uxskill discover
-# 10-फ़ील्ड इनटेक, .ux/last-discovery.json में सेव करता है
+# 10-field intake, saves to .ux/last-discovery.json
 
 cat .ux/last-discovery.json
 # {
@@ -1119,7 +1077,7 @@ cat .ux/last-discovery.json
 
 ### 9. MASTER.md दृढ़ता: आपके डिज़ाइन निर्णय, रेपो में
 
-`/ux-recommend` के बाद, चयनित शैली + पैलेट + टाइप + मोशन + कंपोनेंट + ब्रांड उदाहरण + रेलिंग्स को एक मानव-पठनीय Markdown फ़ाइल के रूप में बनाए रखें जिसे आपकी टीम समीक्षा, diff, और संस्करण-नियंत्रण कर सकती है।
+`/ux-discover` (या `/ux-discover --recommend`) के बाद, चुनी गई स्टाइल + पैलेट + टाइप + मोशन + कंपोनेंट + ब्रांड उदाहरण + रेलिंग्स को एक पढ़ने में आसान Markdown फ़ाइल के रूप में सहेजें, जिसकी आपकी टीम समीक्षा कर सके, diff देख सके और वर्ज़न कंट्रोल में रख सके।
 
 ```bash
 python3 -m engine.cli.main persist save --project-root .
@@ -1135,11 +1093,11 @@ python3 -m engine.cli.main persist save --project-root .
 
 | आयाम | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
-| स्लैश कमांड | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
+| स्लैश कमांड | **18** | 1 | 19 | 1 | 1 | कई | 1 | 1 | 1 |
 | कंपोनेंट | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | मोशन प्रीसेट | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ब्रांड स्पेक | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| एंटी-पैटर्न नियम | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| एंटी-पैटर्न नियम | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI-सेफ़ डिटरमिनिस्टिक लिंटर | **हाँ** | नहीं | नहीं | नहीं | नहीं | नहीं | नहीं | नहीं | नहीं |
 | समर्थित IDE | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | डिस्कवरी गेट | **10 फ़ील्ड** | अंतर्निहित | अंतर्निहित | अंतर्निहित | अंतर्निहित | अंतर्निहित | अंतर्निहित | अंतर्निहित | अंतर्निहित |
@@ -1159,24 +1117,21 @@ python3 -m engine.cli.main persist save --project-root .
 
 ## रोडमैप
 
-### v2.1: लिंटर पूर्णता (Q3 2026)
+आगे, बिना किसी तय रिलीज़ के:
 
-- कुल 52 तक पहुँचने के लिए **+17 स्थगित एंटी-पैटर्न नियम**। लक्ष्य: dark-on-dark hover स्टेट, color-only स्टेट एनकोडिंग, अनावश्यक z-index वृद्धि, JS में हार्डकोडेड ब्रेकपॉइंट, disabled स्थिति के बजाय opacity, आदि।
-- यांत्रिक रूप से ठीक करने योग्य निष्कर्षों (button-no-type, img-no-alt खाली-स्ट्रिंग, console-log-leak हटाना) के सुरक्षित पुनर्लेखन के लिए **`uxskill lint --fix`**।
-- **VS Code एक्सटेंशन** जो लिंट निष्कर्षों को इनलाइन सामने लाता है (CI चलाने की ज़रूरत नहीं)।
+- **Figma स्टाइल**: छाया के लिए इफ़ेक्ट स्टाइल, ग्रिड स्टाइल, और फ़ील्ड वेरिएबल से बँधे टेक्स्ट स्टाइल, एक लाइव फ़ाइल पर लिखे गए।
+- **कंपोनेंट मैपिंग**: Figma कंपोनेंट और उसके वेरिएंट को कोड कंपोनेंट और उसके props से जोड़ना, हैंडऑफ़ के दौरान बरकरार।
+- **लाइव साइट इम्पोर्टर**: किसी प्रकाशित साइट का असल में रेंडर हुआ सिस्टम पढ़ना, फ़ाइल इम्पोर्टरों के साथ।
+- **बने हुए सिस्टम के लिए डॉक्स पेज**: उसके टोकन, रोल और कॉन्ट्रैक्ट का इंसानों के लिए दृश्य।
 
-### v2.2: कंपोनेंट मैनिफ़ेस्ट विस्तार (Q4 2026)
+और भी खुले काम:
 
-- कुल 198 तक पहुँचने के लिए **+50 कंपोनेंट**। बिल्कुल नए: async फ़िल्टर के साथ combobox, recent-items heuristic के साथ command-palette, conditional-form-step, payment-element वैरिएंट, RTL-aware date picker, MENA-विशिष्ट phone input, hijri overlay के साथ calendar grid।
-- 6 स्टैक्स में **प्रति-कंपोनेंट कोड एमिट** (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, vanilla HTML/CSS)।
-- uxskill.laithjunaidy.com/playground पर **कंपोनेंट प्लेग्राउंड**, अनुशंसा इंजन आज़माएँ + लाइव कंपोनेंट प्रीव्यू देखें।
-
-### v3: मार्केटप्लेस + लॉक-इन (2027)
-
-- **ब्रांड स्पेक मार्केटप्लेस**: समुदाय ब्रांड स्पेक प्रकाशित और खोजें। मॉडरेशन को निधि देने के लिए pay-to-publish।
-- **कस्टम एंटी-पैटर्न नियम**: प्रोजेक्ट `data/anti-patterns.local.json` में अपने स्वयं के regex नियम परिभाषित कर सकते हैं (v2 में पहले से शिप; v3 खोज + साझाकरण जोड़ता है)।
-- **`uxskill plan`**: एक ब्रीफ़ से पूर्ण मल्टी-पेज साइट योजना, केवल एक सर्फ़ेस नहीं।
-- **Figma प्लगइन समानता**: वही अनुशंसा इंजन, Figma में सामने आया।
+- **सुरक्षित रीराइट के लिए `uxskill lint --fix`**: यांत्रिक रूप से ठीक होने वाले निष्कर्षों के लिए (button-no-type, img-no-alt खाली स्ट्रिंग, console-log-leak हटाना)।
+- **VS Code एक्सटेंशन** जो लिंट निष्कर्ष इनलाइन दिखाए।
+- छह स्टैक में **प्रति-कंपोनेंट कोड आउटपुट** (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, वनीला HTML/CSS)।
+- **ब्रांड स्पेक मार्केटप्लेस**: कम्युनिटी के ब्रांड स्पेक प्रकाशित करना और खोजना।
+- **कस्टम एंटी-पैटर्न नियम**: प्रोजेक्ट `data/anti-patterns.local.json` में जो नियम तय करते हैं, उनकी खोज और साझा करना।
+- **`uxskill plan`**: सिर्फ़ एक सरफ़ेस नहीं, एक ब्रीफ़ से कई पेज वाली साइट की योजना।
 
 ---
 
@@ -1239,6 +1194,6 @@ MIT। इसे उपयोग करें, फ़ोर्क करें, 
 
 ---
 
-**ux-skill** · **v3.1.0-stable** · इसलिए बनाया गया ताकि Claude Code, Cursor, Windsurf, और हर दूसरा AI कोडिंग टूल फ़्रंटएंड आउटपुट करे जो AI-जनरेटेड के रूप में न पढ़ा जाए।
+**ux-skill** · **v4.0.0** · इसलिए बनाया गया ताकि Claude Code, Cursor, Windsurf, और हर दूसरा AI कोडिंग टूल फ़्रंटएंड आउटपुट करे जो AI-जनरेटेड के रूप में न पढ़ा जाए।
 
 > [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) पर रेपो को स्टार करें · `pip install uxskill` या `npx uxskill init` के ज़रिए इंस्टॉल करें · [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) पर तुलना देखें

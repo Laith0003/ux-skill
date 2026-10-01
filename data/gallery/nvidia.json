@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.754,
+    "density": 0.5,
+    "formality": 0.492,
+    "geometry": 0.069,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.756
+  },
+  "axes_source": "Read from data/brands/nvidia.json: warmth from the hue and chroma of the primary #76B900 and the canvas #FFFFFF; contrast from the ink #000000 on that canvas, its depth and the chroma of #76B900; density from its 4px spacing base; geometry from its radii 0, 1, 2px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#76B900",
+  "brand_rule": "The primary #76B900 reaches only 2.41:1 on the canvas #FFFFFF and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#76B900",
+      "light": "#76B900"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0C0E0B",
+      "light": "#F6F7F5"
+    },
+    "radius_control": "2px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "b7e79ccbfd3e2f79"
+  },
+  "id": "nvidia",
+  "name": "NVIDIA",
+  "spec": "data/brands/nvidia.json"
+}

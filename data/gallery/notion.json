@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.675,
+    "density": 0.5,
+    "formality": 0.608,
+    "geometry": 0.601,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.15
+  },
+  "axes_source": "Read from data/brands/notion.json: warmth from the hue and chroma of the primary #5645D4 and the canvas #FFFFFF; contrast from the ink #1A1A1A on that canvas, its depth and the chroma of #5645D4; density from its 4px spacing base; geometry from its radii 4, 6, 8, 12, 16, 20, 24px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#5645D4",
+  "brand_rule": "The primary #5645D4 reaches 6.57:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#5645D4",
+      "light": "#5645D4"
+    },
+    "face": {
+      "display": "Sora",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D10",
+      "light": "#F6F7F9"
+    },
+    "radius_control": "8px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "07ea07bdc36c5df6"
+  },
+  "id": "notion",
+  "name": "Notion",
+  "spec": "data/brands/notion.json"
+}

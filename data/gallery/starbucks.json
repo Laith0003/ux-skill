@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.713,
+    "density": 0.5,
+    "formality": 0.731,
+    "geometry": 0.5,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.478
+  },
+  "axes_source": "Read from data/brands/starbucks.json: warmth from the hue and chroma of the primary #006241 and the canvas #006241; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #006241; density at 0.5 since it states no spacing base; geometry at 0.5 since it states no radius; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#006241",
+  "brand_rule": "The primary #006241 reaches only 1.00:1 on the canvas #006241 and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#006241",
+      "light": "#006241"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0C0E0C",
+      "light": "#F6F7F6"
+    },
+    "radius_control": "6px",
+    "state_duration": "200ms",
+    "tokens": 728,
+    "tokens_sha256": "5077c4918ca67ce9"
+  },
+  "id": "starbucks",
+  "name": "Starbucks",
+  "spec": "data/brands/starbucks.json"
+}

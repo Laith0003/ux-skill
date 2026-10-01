@@ -175,6 +175,13 @@ def _roles_set(ts: TokenSet) -> TokenSet:
     return out
 
 
+def roles_set(ts: TokenSet) -> TokenSet:
+    """The tokens to_tailwind writes for a system in the engine's roles,
+    under their theme names, with resolved values per mode (a text style as
+    its fields, its phone style beside it)."""
+    return _roles_set(ts)
+
+
 def _parts(ts: TokenSet, forms: Optional[Mapping[str, Tuple[str, str]]], scheme: str,
            roles: bool) -> Tuple[List[str], List[str], str, List[str]]:
     """to_css's text cut into (the comment that opens it, the base

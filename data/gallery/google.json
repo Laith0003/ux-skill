@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.714,
+    "density": 0.25,
+    "formality": 0.5,
+    "geometry": 0.743,
+    "motion": 0.442,
+    "type_personality": 0.5,
+    "warmth": 0.15
+  },
+  "axes_source": "Read from data/brands/google.json: warmth from the hue and chroma of the primary #4285F4 and the canvas #FFFFFF; contrast from the ink #202124 on that canvas, its depth and the chroma of #4285F4; density from its 8px spacing base; geometry from its radii 8, 16, 24, 28px; formality from the chroma of its primary and ink; motion from its stated durations 300ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#4285F4",
+  "brand_rule": "The primary #4285F4 reaches 3.56:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#3173E0",
+      "light": "#3173E0"
+    },
+    "face": {
+      "display": "Sora",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0B0D10",
+      "light": "#F6F7F8"
+    },
+    "radius_control": "10px",
+    "state_duration": "200ms",
+    "tokens": 728,
+    "tokens_sha256": "471b95cdc32e1e27"
+  },
+  "id": "google",
+  "name": "Google",
+  "spec": "data/brands/google.json"
+}

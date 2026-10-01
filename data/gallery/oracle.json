@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.686,
+    "density": 0.5,
+    "formality": 0.588,
+    "geometry": 0.248,
+    "motion": 0.163,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/oracle.json: warmth from the hue and chroma of the primary #C74634 and the canvas #FFFFFF; contrast from the ink #161513 on that canvas, its depth and the chroma of #C74634; density from its 4px spacing base; geometry from its radii 0, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 150ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#C74634",
+  "brand_rule": "The primary #C74634 reaches 4.82:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#C74634",
+      "light": "#C74634"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "3px",
+    "state_duration": "150ms",
+    "tokens": 728,
+    "tokens_sha256": "780177d1d17352e0"
+  },
+  "id": "oracle",
+  "name": "Oracle",
+  "spec": "data/brands/oracle.json"
+}

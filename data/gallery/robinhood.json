@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.5,
+    "formality": 0.451,
+    "geometry": 0.51,
+    "motion": 0.426,
+    "type_personality": 0.5,
+    "warmth": 0.639
+  },
+  "axes_source": "Read from data/brands/robinhood.json: warmth from the hue and chroma of the primary #00C805 and the canvas #0A0C0D; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #00C805; density from its 4px spacing base; geometry from its radii 4, 8, 12, 16px; formality from the chroma of its primary and ink; motion from its stated durations 800ms, 200ms, 150ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#00C805",
+  "brand_rule": "The primary #00C805 reaches 8.65:1 on the canvas #0A0C0D, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#00C805",
+      "light": "#00C805"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0C0E0B",
+      "light": "#F6F7F6"
+    },
+    "radius_control": "7px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "b9bde2ab7105c839"
+  },
+  "id": "robinhood",
+  "name": "Robinhood",
+  "spec": "data/brands/robinhood.json"
+}

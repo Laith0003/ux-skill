@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.799,
+    "density": 0.5,
+    "formality": 0.304,
+    "geometry": 0.422,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.868
+  },
+  "axes_source": "Read from data/brands/cursor.json: warmth from the hue and chroma of the primary #F54E00 and the canvas #F7F7F4; contrast from the ink #26251E on that canvas, its depth and the chroma of #F54E00; density from its 4px spacing base; geometry from its radii 0, 4, 6, 8, 12, 16px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#F54E00",
+  "brand_rule": "The primary #F54E00 reaches 3.28:1 on the canvas #F7F7F4, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#D64300",
+      "light": "#D64300"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0B",
+      "light": "#F9F6F5"
+    },
+    "radius_control": "7px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "fe431b67338ae2c2"
+  },
+  "id": "cursor",
+  "name": "Cursor",
+  "spec": "data/brands/cursor.json"
+}

@@ -12,7 +12,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ux-skill MCP server, the design intelligence MCP for Claude Desktop, Cursor, Windsurf, any agent</title>
-  <meta name="description" content="ux-skill MCP server: 25 tools over stdio. Recommender, 152-rule linter, 11 data manifests. Works in any MCP host. No other Claude UX skill ships one.">
+  <meta name="description" content="ux-skill MCP server: 25 tools over stdio. Recommender, 171-rule linter, 12 data manifests. Works in any MCP host. No other Claude UX skill ships one.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/mcp.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -398,6 +398,11 @@
       white-space: nowrap;
       width: 220px;
     }
+    @media (max-width: 480px) {
+      .tools th, .tools td { padding: 12px 10px; }
+      .tools tbody td.tname { white-space: normal; width: auto; }
+      .tools tbody td.tname code { overflow-wrap: anywhere; }
+    }
     .tools tbody td.tname code {
       background: transparent;
       padding: 0;
@@ -619,7 +624,7 @@
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Cross-platform (MCP stdio server)",
     "description": "Model Context Protocol server exposing the ux-skill engine as 25 tools, works in Claude Desktop, Cursor, Windsurf, and any MCP-capable host. ux_recommend, ux_lint, 11 manifest readers, persistence, stats.",
-    "softwareVersion": "3.2.1",
+    "softwareVersion": "4.0.0",
     "downloadUrl": "https://pypi.org/project/uxskill/",
     "url": "https://uxskill.laithjunaidy.com/mcp.html",
     "license": "https://opensource.org/license/mit/",
@@ -1024,7 +1029,7 @@
       <span class="eyebrow">MCP server &middot; stdio &middot; 25 tools &middot; 2026</span>
       <h1>Design intelligence over <span class="accent">Model Context Protocol</span>.</h1>
       <p class="lede">
-        ux-skill ships a Model Context Protocol server. <strong>Any MCP-capable host</strong>, Claude Desktop, Cursor, Windsurf, generic agents, can call the recommender, the linter, and all eleven data manifests over stdio. No plugin install, no IDE lock-in, just a long-running daemon and 25 tools.
+        ux-skill ships a Model Context Protocol server. <strong>Any MCP-capable host</strong>, Claude Desktop, Cursor, Windsurf, generic agents, can call the recommender, the linter, and all twelve data manifests over stdio. No plugin install, no IDE lock-in, just a long-running daemon and 25 tools.
       </p>
 
       <figure class="docfig">
@@ -1079,14 +1084,14 @@
         </thead>
         <tbody>
           <tr><td class="tname"><code>ux_recommend</code></td><td>Run the 5-parallel-search recommender over a brief. Returns style, palette, type pair, motion presets, components, brand exemplars, anti-pattern guardrails, and a rationale line per lane.</td></tr>
-          <tr><td class="tname"><code>ux_lint</code></td><td>Run the 152-rule anti-AI-slop regex linter over file paths. Returns findings with rule id, severity, file, line, excerpt, and fix.</td></tr>
+          <tr><td class="tname"><code>ux_lint</code></td><td>Run the 171-rule anti-AI-slop linter over file paths. Returns findings with rule id, severity, file, line, excerpt, and fix.</td></tr>
           <tr><td class="tname"><code>ux_styles</code></td><td>Return all 84+ entries from <code>data/styles.json</code>, design philosophies with tokens.</td></tr>
           <tr><td class="tname"><code>ux_palettes</code></td><td>Return 176+ entries from <code>data/palettes.json</code>. Optional <code>mode</code> filter (<code>light</code> / <code>dark</code>).</td></tr>
           <tr><td class="tname"><code>ux_type_pairs</code></td><td>Return 70+ entries from <code>data/type-pairs.json</code>, display + body + mono pairings.</td></tr>
           <tr><td class="tname"><code>ux_components</code></td><td>Return 148+ entries from <code>data/components.json</code>. Optional <code>category</code> filter.</td></tr>
           <tr><td class="tname"><code>ux_industries</code></td><td>Return 184+ entries from <code>data/industries.json</code> with style/palette/type biases per domain.</td></tr>
           <tr><td class="tname"><code>ux_motion_presets</code></td><td>Return 57+ entries from <code>data/motion-presets.json</code> with easing, duration, stagger tokens.</td></tr>
-          <tr><td class="tname"><code>ux_anti_patterns</code></td><td>Return 35+ entries from <code>data/anti-patterns.json</code> (the regex rules that drive the linter). Optional <code>severity</code> filter.</td></tr>
+          <tr><td class="tname"><code>ux_anti_patterns</code></td><td>Return the 171 entries from <code>data/anti-patterns.json</code> (the regex rules that drive the linter). Optional <code>severity</code> filter.</td></tr>
           <tr><td class="tname"><code>ux_brands</code></td><td>Return 160 brand specs from <code>data/brands/*.json</code> (Apple, Stripe, Linear, Tesla, Notion, etc.). Optional <code>category</code> filter.</td></tr>
           <tr><td class="tname"><code>ux_landing_patterns</code></td><td>Return 24+ entries from <code>data/landing-patterns.json</code>, proven landing-page section patterns.</td></tr>
           <tr><td class="tname"><code>ux_persist_save</code></td><td>Write a recommendation as <code>.ux/design-system/MASTER.md</code> in the given project root. Idempotent, same input writes byte-identical bytes.</td></tr>
@@ -1134,7 +1139,7 @@
   <span class="k">"motion"</span>: [ ... <span class="c">/* top 5 presets compatible with style */</span> ],
   <span class="k">"components"</span>: [ ... <span class="c">/* top 12 compatible components */</span> ],
   <span class="k">"brand_exemplars"</span>: [ ... <span class="c">/* top 5 brands to study */</span> ],
-  <span class="k">"guardrails"</span>: [ ... <span class="c">/* all 152 anti-pattern rules, always-on */</span> ],
+  <span class="k">"guardrails"</span>: [ ... <span class="c">/* all 171 anti-pattern rules, always-on */</span> ],
   <span class="k">"rationale"</span>: [
     <span class="s">"Industry: Fintech Neobank"</span>,
     <span class="s">"Style: Monochrome Precise"</span>,
