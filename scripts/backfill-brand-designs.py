@@ -76,7 +76,7 @@ def list_or_empty(items, prefix="- "):
 
 
 def html_unescape_lite(s: str) -> str:
-    return s.replace("&mdash;", "—").replace("&middot;", "·")
+    return s.replace("&mdash;", ", ").replace("&middot;", "·")
 
 
 TEMPLATE = """# {name}
@@ -117,7 +117,7 @@ TEMPLATE = """# {name}
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely. It stays in sync as long as the heading layout is preserved._
 """
 
 
@@ -130,7 +130,7 @@ def render(bid: str, spec: dict) -> str:
         name=safe(spec.get("name") or bid),
         essence=essence,
         category=safe(spec.get("category"), "Uncategorized"),
-        industry=safe(spec.get("industry"), "—"),
+        industry=safe(spec.get("industry"), "n/a"),
         palette=colors_block(dl),
         typography=type_block(dl),
         philosophy=safe(spec.get("philosophy")) or "_(see essence above)_",

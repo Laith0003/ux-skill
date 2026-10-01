@@ -127,3 +127,9 @@ def test_the_check_skips_code_and_catches_prose(tmp_path):
     found = findings(sample, tmp_path)
     assert [f.split(":")[1] for f in found] == ["14", "15", "16"]
 
+
+
+def test_the_script_that_writes_brand_references_writes_no_dashes():
+    script = (Path(__file__).resolve().parents[1] / "scripts" /
+              "backfill-brand-designs.py").read_text(encoding="utf-8")
+    assert "—" not in script and "–" not in script
