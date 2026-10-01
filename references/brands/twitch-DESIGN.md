@@ -4,8 +4,8 @@
 Twitch is Amazon's live-streaming platform built for gamers, vtubers, IRL streamers, and the parasocial chat economy. Canvas is deep purple-tinted black (`#0e0e10`): distinguishably more purple than Netflix's true black or YouTube's pure black. The signature is Twitch purple (`#9146ff`): used at full saturation on the wordmark, on every primary CTA, on the 'Following', 'Subscribe', and 'Cheer' buttons. Type runs Inter (Twitch transitioned from Roobert to Inter as the system face) at modest scale. The interface is dominated by the chat sidebar and the channel grid: every stream is rendered with the streamer's webcam in the corner of game footage, and the chat scrolls live with subscriber-only badges, emote spam, and channel-points redemptions.
 
 ## Color
-- **Primary:** `#9146ff`, Twitch purple (every CTA + wordmark + speech-balloon glyph)
-- **Canvas:** `#0e0e10`, Purple-tinted black (distinguishably purpler than `#000`)
+- **Primary:** `#9146ff` (Twitch purple: every CTA + wordmark + speech-balloon glyph)
+- **Canvas:** `#0e0e10` (Purple-tinted black: distinguishably purpler than `#000`)
 - **Canvas card:** `#1f1f23` (Elevated card surface)
 - **Ink:** `#efeff1` (Off-white type)
 - **Muted:** `#adadb8` (Captions, viewer counts, metadata)
@@ -39,9 +39,9 @@ Real-time chat scroll: message bubbles slide up at variable cadence (sometimes 1
 ## Trademark signals
 - Deep purple-tinted black canvas (`#0e0e10`): purple tint distinguishes Twitch from Netflix true black and YouTube pure black
 - Twitch purple (`#9146ff`): vivid near-Brand-saturated purple on every CTA, every primary button, wordmark, speech-balloon glyph
-- Speech-balloon glyph (wordmark's chat-bubble accent emerging from the 'T') always alive to the chat-driven brand
+- Speech-balloon glyph (wordmark's chat-bubble accent emerging from the 'T'), always alive to the chat-driven brand
 - Live-stream tile with streamer webcam in corner: gameplay full-frame with face-cam overlaid in a circular thumbnail
-- Chat-sidebar UI dominance, every channel page is split: video left (60 to 70%), chat right (30 to 40%), chat is NOT optional; it IS the platform voltage
+- Chat-sidebar UI dominance. Every channel page is split: video left (60 to 70%), chat right (30 to 40%); chat is NOT optional; it IS the platform voltage
 
 ## What they DON'T do
 - No dropping the chat sidebar: video-only layouts read as YouTube/Netflix

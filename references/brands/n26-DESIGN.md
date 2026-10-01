@@ -4,14 +4,14 @@
 N26 is the European mobile-bank brand: Berlin-clean, slightly architectural, with a serif display tier that lifts it out of the all-sans neobank default. The canvas is a strict white-on-white with Tiempos Headline (or similar literary serif) carrying every hero, the floating physical credit card photograph on a soft pastel gradient as the recurring hero device, and a single N26 cyan-mint (#2DCFA5) for CTA voltage. The brand reads as European premium neobank.
 
 ## Color
-- **Primary:** `#2dcfa5`, N26 Cyan-Mint (the single CTA voltage)
+- **Primary:** `#2dcfa5` (N26 Cyan-Mint: the single CTA voltage)
 - **Primary deep:** `#20a584` (Mint Hover/Press)
 - **Canvas:** `#ffffff` (Pure White)
 - **Surface card:** `#ffffff` (White card with hairline border)
 - **Surface alt:** `#f5f5f5` (Off-white selected band background)
-- **Surface card-pastel-mint:** `#a8e6d6`, Pastel mint (behind floating card only)
-- **Surface card-pastel-coral:** `#ff8d6e`, Pastel coral (behind floating card only)
-- **Surface card-pastel-graphite:** `#3a3d44`, Graphite (behind premium-tier floating card)
+- **Surface card-pastel-mint:** `#a8e6d6` (Pastel mint: behind floating card only)
+- **Surface card-pastel-coral:** `#ff8d6e` (Pastel coral: behind floating card only)
+- **Surface card-pastel-graphite:** `#3a3d44` (Graphite: behind premium-tier floating card)
 - **Ink:** `#191919` (Near-black headlines and primary text)
 - **Body:** `#4a4a4a` (Default running text)
 - **Muted:** `#7a7a7a` (Captions, metadata)

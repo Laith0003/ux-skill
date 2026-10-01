@@ -4,7 +4,7 @@
 
 Lamborghini's website is a cathedral of darkness: a digital stage where jet-black surfaces stretch infinitely and every element emerges from the void like a machine under a spotlight. The page is almost entirely black. Not dark gray, not near-black: true, uncompromising black (`#000000`) that saturates the viewport and refuses to yield. Into this abyss, white type and Lamborghini Gold (`#FFC000`) are deployed with surgical precision, creating a visual language that feels like walking through a nighttime motorsport event where every surface absorbs light except the things that matter.
 
-The hero is a full-viewport video (dark, cinematic, immersive) showing event footage or vehicle reveals with the Lamborghini bull logo floating ethereally above. The navigation is minimal: a centered bull logo, a "MENU" hamburger on the left, and search/bookmark icons on the right, all rendered in white against the black canvas. There are no borders, no visible nav containers, no background color on the header, just white marks floating in darkness. The overall mood is nocturnal luxury: exclusive, theatrical, and deliberately intimidating. Each section transition is a scroll through darkness into the next revelation.
+The hero is a full-viewport video (dark, cinematic, immersive), showing event footage or vehicle reveals with the Lamborghini bull logo floating ethereally above. The navigation is minimal: a centered bull logo, a "MENU" hamburger on the left, and search/bookmark icons on the right, all rendered in white against the black canvas. There are no borders, no visible nav containers, no background color on the header, just white marks floating in darkness. The overall mood is nocturnal luxury: exclusive, theatrical, and deliberately intimidating. Each section transition is a scroll through darkness into the next revelation.
 
 Typography is the voice of this darkness. LamboType (a custom Neo-Grotesk typeface created by Character Type and design agency Strichpunkt) is used for everything from 120px uppercase display headlines to 10px micro labels. Its distinctive 12° angled terminals are inspired by the aerodynamic lines of Lamborghini's super sports cars, and its proportions range from Normal to Ultracompressed width. Headlines SHOUT in uppercase at enormous scales with tight line-heights (0.92 at 120px), creating dense blocks of text that feel stamped from steel. The typeface carries hexagonal geometric DNA (constructed from hexagons, three-armed stars, and circles) that echoes throughout the interface in the hexagonal pause button and UI icons. Built on Bootstrap grid with 68 Element Plus/UI components, the technical infrastructure is substantial beneath the theatrical surface.
 
@@ -55,7 +55,7 @@ Typography is the voice of this darkness. LamboType (a custom Neo-Grotesk typefa
 - **Teal Action** (`#1EAEDB`): Button hover background for transparent/ghost variants (rgb 30, 174, 219)
 
 ### Gradient System
-- No explicit gradients in the color palette, the dark-to-light progression is achieved through surface layering: `#000000` → `#181818` → `#202020` → `#494949` → `#7D7D7D`
+- No explicit gradients in the color palette; the dark-to-light progression is achieved through surface layering: `#000000` → `#181818` → `#202020` → `#494949` → `#7D7D7D`
 - Video heroes use natural atmospheric gradients from the content itself
 - Top-of-page gradient: subtle dark-to-darker fade at the edges of full-bleed imagery
 
@@ -99,13 +99,13 @@ Typography is the voice of this darkness. LamboType (a custom Neo-Grotesk typefa
 ### Buttons
 All buttons use **zero border-radius**: sharp, angular rectangles that echo the aggressive lines of Lamborghini vehicles.
 
-**Gold Accent CTA**, the primary action:
+**Gold Accent CTA**. The primary action:
 - Default: bg `#FFC000` (Lamborghini Gold), text `#000000`, padding 24px, fontSize 16px, fontWeight 400, borderRadius 0px, no border
 - Hover: bg `#917300` (Dark Gold), darkens significantly
 - Class: `btn-accent btn-large`
 - Used for: "Discover More", "Tickets", "Start Configuration"
 
-**Transparent Ghost**, the secondary action on dark backgrounds:
+**Transparent Ghost**. The secondary action on dark backgrounds:
 - Default: bg transparent, text `#FFFFFF`, border 1px solid `#FFFFFF`, padding 16px, opacity 0.5
 - Hover: bg `#1EAEDB` (Teal Action), text white, opacity 0.7
 - Focus: bg `#1EAEDB`, border 1px solid `#000000`, outline 2px solid `#000000`
@@ -193,7 +193,7 @@ Lamborghini uses darkness as whitespace. The generous black expanses between con
 | Level 4 (Mist) | `rgba(0,0,0,0.25)` | Subtle depth hints |
 
 ### Shadow Philosophy
-Lamborghini achieves depth through surface color layering rather than shadows. On a black canvas, traditional drop shadows are invisible, instead, the system creates elevation by shifting from absolute black to progressively lighter dark grays: `#000000` → `#181818` → `#202020` → `#494949`. This "darkness gradient" approach means that elevated elements are literally lighter than their surroundings, inverting the traditional shadow model.
+Lamborghini achieves depth through surface color layering rather than shadows. On a black canvas, traditional drop shadows are invisible; instead, the system creates elevation by shifting from absolute black to progressively lighter dark grays: `#000000` → `#181818` → `#202020` → `#494949`. This "darkness gradient" approach means that elevated elements are literally lighter than their surroundings, inverting the traditional shadow model.
 
 ### Decorative Depth
 - Full-bleed video provides atmospheric depth through cinematic lighting
@@ -283,6 +283,6 @@ Lamborghini achieves depth through surface color layering rather than shadows. O
 When refining existing screens generated with this design system:
 1. Focus on ONE component at a time: Lamborghini's system is extreme and every element must feel aggressive
 2. Reference specific color names and hex codes from this document: the palette has only about 5 active colors
-3. Use natural language descriptions, not CSS values, "sharp-cut golden rectangle" not "border-radius: 0px; background: #FFC000"
-4. Describe the desired "feel" alongside specific measurements, "floating in total darkness" communicates the black canvas better than "background: #000000"
+3. Use natural language descriptions, not CSS values: "sharp-cut golden rectangle" not "border-radius: 0px; background: #FFC000"
+4. Describe the desired "feel" alongside specific measurements: "floating in total darkness" communicates the black canvas better than "background: #000000"
 5. Remember that UPPERCASE IS THE DEFAULT: if text isn't uppercase at display sizes, it probably should be

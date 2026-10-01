@@ -1,11 +1,11 @@
 # Disney+: DESIGN.md
 
 ## Overview
-Disney+ is the family streaming service whose visual language is the deep-galaxy royal blue (`#01153e`) that distinguishes it from Netflix's cinema-black and HBO Max's neon-purple. Canvas is a deep navy with subtle starfield gradient. The signature is the Disney+ wordmark: Disney's iconic 'Walt Disney' Waltograph script joined to a sans-serif '+' lockup. Type runs a precise grotesk (Inter / Source Sans / proprietary Disney face) for the chrome, but every poster-art tile uses the original title-treatment fonts from Star Wars, Marvel, Pixar, etc.: the cross-franchise typography zoo IS the brand's promise. The hero is a brand-tier row organizing content by franchise (Disney / Pixar / Marvel / Star Wars / National Geographic) never by genre.
+Disney+ is the family streaming service whose visual language is the deep-galaxy royal blue (`#01153e`) that distinguishes it from Netflix's cinema-black and HBO Max's neon-purple. Canvas is a deep navy with subtle starfield gradient. The signature is the Disney+ wordmark: Disney's iconic 'Walt Disney' Waltograph script joined to a sans-serif '+' lockup. Type runs a precise grotesk (Inter / Source Sans / proprietary Disney face) for the chrome, but every poster-art tile uses the original title-treatment fonts from Star Wars, Marvel, Pixar, etc.: the cross-franchise typography zoo IS the brand's promise. The hero is a brand-tier row organizing content by franchise (Disney / Pixar / Marvel / Star Wars / National Geographic), never by genre.
 
 ## Color
-- **Primary:** `#01153e`, Disney+ galaxy-blue (the brand canvas itself)
-- **Canvas:** `#01153e`, Galaxy blue (deeper than navy, lighter than true black)
+- **Primary:** `#01153e` (Disney+ galaxy-blue: the brand canvas itself)
+- **Canvas:** `#01153e` (Galaxy blue: deeper than navy, lighter than true black)
 - **Canvas deep:** `#0a1d3f` (slight elevation step for cards)
 - **Ink:** `#ffffff` (White type on the dark canvas)
 - **Accent (CTA):** `#0072d2` (Brighter cyan-blue for primary 'Sign Up' / 'Watch Now' CTAs)
@@ -45,9 +45,9 @@ Magical-realm immersion. Cold-start animation: stars twinkle across deep blue, t
 ## Trademark signals
 - Deep galaxy-blue canvas (`#01153e`): the brand's most-recognized differentiator from Netflix-black or HBO-purple
 - Walt Disney + '+' wordmark lockup: Waltograph script joined to a precise sans '+', never broken apart
-- Five-franchise brand-tier row at top of every page, each tile uses the franchise's own brand colors (Marvel red, Pixar yellow), the only place multiple chromatic accents are permitted
+- Five-franchise brand-tier row at top of every page: each tile uses the franchise's own brand colors (Marvel red, Pixar yellow), the only place multiple chromatic accents are permitted
 - Original title-treatment typography on poster art: cross-franchise type zoo as feature
-- Family-safe content cropping (every poster art frames protagonists with clean, vibrant edges) no dark/edgy/violent compositions
+- Family-safe content cropping (every poster art frames protagonists with clean, vibrant edges); no dark/edgy/violent compositions
 
 ## What they DON'T do
 - No pure-black canvas: galaxy-blue IS the brand differentiator

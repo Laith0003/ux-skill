@@ -4,7 +4,7 @@
 The Atlantic is American long-form editorial: a paper-warm canvas (`#fcf9f4`) with a modern serif display (Atlantic Condensed / Domaine Display) and a deep editorial red (`#c8102e`) for the masthead and section accents. The site reads as a literary magazine: long single-column articles, full-bleed essay-cover photography, drop caps on feature openers, byline blocks treated as art.
 
 ## Color
-- **Primary:** `#c8102e`, Atlantic Red (masthead, section heads, link hover)
+- **Primary:** `#c8102e` (Atlantic Red: masthead, section heads, link hover)
 - **Canvas:** `#fcf9f4` (Paper Cream)
 - **Surface alt:** `#f3ede2` (Aged Paper)
 - **Surface card:** `#ffffff`

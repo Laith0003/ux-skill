@@ -8,7 +8,7 @@ This document covers what the system provides, how to install and configure it, 
 
 ## What the system provides
 
-The library exposes accessible React primitives for the common product UI surfaces. The primitives handle behavior (focus management, keyboard navigation, screen reader announcements, ARIA roles, state management) so the build can focus on visual customization and composition.
+The library exposes accessible React primitives for the common product UI surfaces. The primitives handle behavior (focus management, keyboard navigation, screen reader announcements, ARIA roles, state management), so the build can focus on visual customization and composition.
 
 Surface coverage at a glance:
 

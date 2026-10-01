@@ -4,7 +4,7 @@
 Booking.com is the Amsterdam-based travel-booking behemoth whose brand discipline is the opposite of luxury hospitality: dense, data-rich, urgency-driven, and unapologetically transactional. Canvas is pure white with crisp ink. The signature is the Booking.com blue (`#003580`) used at full saturation on the navigation, on the primary 'Search' CTA, and on the wordmark: a deep cobalt that reads as 'trustworthy financial institution' more than 'travel'. Type runs a precise grotesk (Booking Sans / system grotesk) at modest scale. The brand voltage is the urgency overlay: '5 people are looking at this property', 'Last booked 2 hours ago' (micro-copy interventions that turn search results into a high-pressure auction floor).
 
 ## Color
-- **Primary:** `#003580`, Booking.com cobalt blue (nav + CTAs + wordmark)
+- **Primary:** `#003580` (Booking.com cobalt blue: nav + CTAs + wordmark)
 - **Canvas:** `#ffffff` (Pure white)
 - **Ink:** `#1a1a1a` (Deep ink for headlines)
 - **Accent (loyalty):** `#febb02` (Yellow, reserved for Genius badges and review-value stickers)
@@ -38,7 +38,7 @@ Urgency-driven. 'Booked X hours ago' counters update in real-time via subtle 200
 - `button-primary-blue`: full-saturation cobalt CTA
 
 ## Trademark signals
-- Booking.com cobalt (`#003580`) (full saturation on nav and primary CTAs) reads as banking, not travel
+- Booking.com cobalt (`#003580`), full saturation on nav and primary CTAs, reads as banking, not travel
 - Yellow secondary accent (`#febb02`) reserved for Genius loyalty and review-value stickers, never as a CTA fill
 - Urgency overlay micro-copy ('Last booked 4 hours ago', '17 people are looking right now') on every property card
 - 10-out-of-10 review-score lozenge with the 'Excellent' label and review count on every property hero

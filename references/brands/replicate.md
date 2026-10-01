@@ -319,7 +319,7 @@ as friendly precision.
 - Hot orange (`{colors.primary}`, `#ea2804`) is reserved for the primary CTA, the hero band, and inline link colour. Never decorative.
 - Display headlines run massive (`{typography.display-xxl}` at 128px in hero bands and `{typography.display-xl}` at 72px on section openers) with tight `lineHeight: 1.0` and negative letter-spacing.
 - Three-family typography stack: `rb-freigeist-neue` for display, `basier-square` for UI/body, `jetbrains-mono` for code.
-- Every interactive element is fully rounded (`{rounded.full}` 9999px) (buttons, inputs, badges, avatars) while content cards step to `{rounded.md}` 10px.
+- Every interactive element (buttons, inputs, badges, avatars) is fully rounded (`{rounded.full}` 9999px), while content cards step to `{rounded.md}` 10px.
 - Dark code wells (`{colors.surface-dark}` background) sit inside the cream canvas as full-bleed reading surfaces, mimicking print pull-quotes.
 - Section rhythm: cream → orange hero → cream → dark code-story band → cream → black footer.
 
@@ -413,7 +413,7 @@ When the proprietary families are unavailable, clamp display `lineHeight` to 1.0
 - **Max content width** ≈ 1280px on body sections, 1440px on hero bands which run full-bleed.
 - **Model grid** on collections: 4 columns at desktop, 3 at tablet large, 2 at tablet, 1 at mobile.
 - **Pricing**: 3-tier grid centred at desktop, stacking vertically below 1024px; the centre tier flips to `{component.pricing-tier-featured}` (dark inversion) as the recommended option.
-- **Code-story sections**: a 2-up split (narrative copy left, code well right) collapsing to stacked at < 1024px.
+- **Code-story sections**: a 2-up split (narrative copy left, code well right), collapsing to stacked at < 1024px.
 
 ### Whitespace Philosophy
 - Whitespace on cream is generous and editorial: sections breathe at 96px and key bands open at 160px so the typography can scale up without feeling cramped.
@@ -433,7 +433,7 @@ When the proprietary families are unavailable, clamp display `lineHeight` to 1.0
 Drop shadows exist in the extracted tokens but are restrained: used sparingly to lift photography thumbnails one step off the cream canvas. The dominant elevation language is colour-blocking.
 
 ### Decorative Depth
-- **Hero atmospheric mesh**, the orange-to-pink gradient backing the home hero is a layered radial mesh: `{colors.primary}` core → `{colors.hero-glow}` mid-stop → `{colors.hero-pink}` outer wash. Reserved for the home hero band only.
+- **Hero atmospheric mesh**: the orange-to-pink gradient backing the home hero is a layered radial mesh: `{colors.primary}` core → `{colors.hero-glow}` mid-stop → `{colors.hero-pink}` outer wash. Reserved for the home hero band only.
 - **Code-story dark band**: the "How it works" section uses `{colors.surface-dark}` full-bleed with a single hairline `{colors.divider-dark}` separating narrative copy and code well.
 - **Contributor mosaic**: the home page features a horizontally-scrolling band of circular avatars (`{component.contributor-avatar}`) over a textured cream canvas; this is the only place avatars appear at the brand level.
 
@@ -601,7 +601,7 @@ Drop shadows exist in the extracted tokens but are restrained: used sparingly to
 
 ## Iteration Guide
 
-1. Focus on ONE component at a time. Most interactive elements share `{rounded.full}` and the `{colors.canvas}` / `{colors.surface-card}` pair, only the role-specific tokens (`{colors.primary}`, `{component.code-block}`) shift between variants.
+1. Focus on ONE component at a time. Most interactive elements share `{rounded.full}` and the `{colors.canvas}` / `{colors.surface-card}` pair; only the role-specific tokens (`{colors.primary}`, `{component.code-block}`) shift between variants.
 2. Reference component names and tokens directly (`{colors.primary}`, `{component.button-primary-pressed}`, `{rounded.lg}`): do not paraphrase.
 3. Run `npx @google/design.md lint DESIGN.md` after edits; orphaned-tokens warnings will catch unused entries.
 4. Add new variants as separate entries (`-pressed`, `-disabled`, `-featured`): do not bury them in prose.

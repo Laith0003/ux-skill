@@ -4,11 +4,11 @@
 OpenAI is the AI-platform-of-record brand: the calm, established institution in a category full of startups shouting at each other. The page rhythm is unmistakable: a pure-black hero band at top with a full-bleed photograph and a single 88 to 128px Söhne headline overlaid in white, switching abruptly to a white body below. The brand uses Söhne at every tier, has no chromatic accent, and refuses gradient, illustration, and emoji.
 
 ## Color
-- **Primary:** `#000000`, Pure Black (hero band, footer, dark CTAs)
-- **Canvas:** `#ffffff`, Pure White (body)
-- **Canvas Dark:** `#000000`, Pure Black (hero band + footer)
-- **Surface card:** `#f7f7f8`, Off-White (rare card backgrounds, pricing tiers)
-- **Surface card dark:** `#161616`, Near-Black (cards on dark hero band)
+- **Primary:** `#000000` (Pure Black: hero band, footer, dark CTAs)
+- **Canvas:** `#ffffff` (Pure White: body)
+- **Canvas Dark:** `#000000` (Pure Black: hero band + footer)
+- **Surface card:** `#f7f7f8` (Off-White: rare card backgrounds, pricing tiers)
+- **Surface card dark:** `#161616` (Near-Black: cards on dark hero band)
 - **Ink:** `#0d0d0d` (Near-pure-black for body text)
 - **On dark:** `#ffffff` (Pure white text on black surfaces)
 - **Body:** `#3c3c43` (Default running-text)

@@ -4,9 +4,9 @@
 Retool is the internal-tool builder brand, but it reads as a literary technology magazine, not a developer tool. The canvas is a warm cream (#fbf6ea), display headlines run GT Sectra serif at magazine-cover scale (72 to 96px weight 500), and the voltage is a single signal-orange (#ff5d00) reserved for CTAs and selected underlines. Every solutions page leads with a real Retool-built dashboard screenshot, paired with a logo wall of operator brands. The brand reads as "serious software for serious operators."
 
 ## Color
-- **Primary:** `#ff5d00`, Signal Orange (CTAs, link underlines, selected display word accents)
-- **Accent (amber):** `#ff9533`, Soft Amber (sub-accent on the largest moments, never on chrome)
-- **Canvas:** `#fbf6ea`, Retool Cream (the brand's editorial chrome)
+- **Primary:** `#ff5d00` (Signal Orange: CTAs, link underlines, selected display word accents)
+- **Accent (amber):** `#ff9533` (Soft Amber: sub-accent on the largest moments, never on chrome)
+- **Canvas:** `#fbf6ea` (Retool Cream: the brand's editorial chrome)
 - **Surface card:** `#ffffff` (White card on cream)
 - **Surface alt:** `#f3ecd9` (Selected band background)
 - **Surface dark:** `#171413` (Near-black for code blocks and pre-footer CTAs)

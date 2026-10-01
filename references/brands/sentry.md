@@ -446,7 +446,7 @@ The site doesn't use traditional photography: it uses **illustrated stickers and
 - Background `{colors.accent-violet-deep}`, text `{colors.on-primary}`, padding `{spacing.xxl}`, rounded `{rounded.xxl}`. The deep violet reads as a feature highlight without breaking out of the brand's purple family.
 
 **`code-block`**: code/install snippets.
-- Background `{colors.surface-night}`, text `{colors.on-primary}` rendered in `{typography.code}`. Padding `{spacing.lg}` 16px, rounded `{rounded.md}`. On dark canvas the code block is barely lifted from canvas, only the slightly deeper fill differentiates it.
+- Background `{colors.surface-night}`, text `{colors.on-primary}` rendered in `{typography.code}`. Padding `{spacing.lg}` 16px, rounded `{rounded.md}`. On dark canvas the code block is barely lifted from canvas; only the slightly deeper fill differentiates it.
 
 ### Inputs & Forms
 

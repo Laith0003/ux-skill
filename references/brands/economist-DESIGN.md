@@ -4,11 +4,11 @@
 The Economist is the British weekly newspaper-of-record brand: a 200-year-old global authority with strict editorial discipline. The brand is anchored by Economist Red (#E3120B) in a 1.5cm top-bar strip running the full page width, Milo Serif slab-serif for every headline, Officina Sans humanist body, no bylines (articles are unsigned), and drop caps opening feature articles. The visual system is conservative, dense, and unmistakably print-magazine ported to the web.
 
 ## Color
-- **Primary:** `#e3120b`, Economist Red (masthead bar, section eyebrows, dividers, drop caps)
+- **Primary:** `#e3120b` (Economist Red: masthead bar, section eyebrows, dividers, drop caps)
 - **Primary deep:** `#b80c08` (Red Hover/Press)
 - **Canvas:** `#ffffff` (Pure White)
 - **Surface card:** `#ffffff` (White card with hairline border)
-- **Surface alt:** `#f9f4eb`, Cream (sub-band backgrounds, podcast row, archive index)
+- **Surface alt:** `#f9f4eb` (Cream: sub-band backgrounds, podcast row, archive index)
 - **Ink:** `#121212` (Near-black headlines and body)
 - **Body:** `#3a3a3a` (Default running text)
 - **Muted:** `#6b6b6b` (Captions, metadata, dates)

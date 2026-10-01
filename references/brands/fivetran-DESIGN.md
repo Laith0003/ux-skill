@@ -1,11 +1,11 @@
 # Fivetran: DESIGN.md
 
 ## Overview
-Fivetran is the managed-data-pipeline brand, a clean white canvas, a single deep cobalt (#0073e6) for CTAs, and a connector-logo wall that runs across every product page (200+ source logos: Salesforce, Stripe, NetSuite, Workday, BigQuery, Snowflake). The brand reads as "mature data platform": enterprise-clean, logo-density forward, slightly serif-tinged with Tiempos Headline for moments of voice.
+Fivetran is the managed-data-pipeline brand: a clean white canvas, a single deep cobalt (#0073e6) for CTAs, and a connector-logo wall that runs across every product page (200+ source logos: Salesforce, Stripe, NetSuite, Workday, BigQuery, Snowflake). The brand reads as "mature data platform": enterprise-clean, logo-density forward, slightly serif-tinged with Tiempos Headline for moments of voice.
 
 ## Color
-- **Primary:** `#0073e6`, Cobalt Blue (CTAs, link underlines, focus rings)
-- **Accent (deep):** `#0058b3`, Cobalt Deep (hover / press)
+- **Primary:** `#0073e6` (Cobalt Blue: CTAs, link underlines, focus rings)
+- **Accent (deep):** `#0058b3` (Cobalt Deep: hover / press)
 - **Canvas:** `#ffffff` (Pure White)
 - **Surface card:** `#ffffff` (White card with hairline border)
 - **Surface alt:** `#f5f8fb` (Light blue-tinted off-white for selected bands)

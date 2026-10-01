@@ -423,7 +423,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 **Specs**:
 - Background: pastel pair (light + paired text color) for semantic states
 - Padding: 4 to 8px vertical, 8 to 12px horizontal
-- Radius: 9999px (pill), the pill shape is reserved for this component
+- Radius: 9999px (pill); the pill shape is reserved for this component
 - Typography: 12 to 13px, weight 500 to 600, optional uppercase with +0.06em tracking
 - Maximum width before truncation: 200px
 
@@ -597,7 +597,7 @@ Every component documents:
 - [ ] Every interactive component ships with all required states (severity: High)
 - [ ] Semantic native controls used (`<button>`, `<a>`, `<input>`, `<table>`) (severity: Critical)
 - [ ] Compound component pattern used for multi-part components (severity: Medium)
-- [ ] One primary CTA per context, no competing primaries (severity: High)
+- [ ] One primary CTA per context: no competing primaries (severity: High)
 - [ ] All buttons have visible focus ring (severity: Critical)
 - [ ] All buttons have hover and active states (severity: High)
 - [ ] All buttons meet 44pt touch target minimum (severity: Critical)
@@ -630,7 +630,7 @@ Every component documents:
 - [ ] Skeleton matches eventual layout shape (severity: High)
 - [ ] Skeleton honors `prefers-reduced-motion` (severity: High)
 - [ ] Disabled states use opacity + cursor + `disabled` attribute (severity: High)
-- [ ] Component library defaults customized, radii, colors, shadows tuned to brand (severity: Medium)
+- [ ] Component library defaults customized: radii, colors, shadows tuned to brand (severity: Medium)
 - [ ] No generic egg avatar silhouettes (severity: High)
 - [ ] Avatar initials fallback when no photo (severity: Medium)
 - [ ] Pill / chip pastel pairs hold 4.5:1 contrast (severity: Critical)

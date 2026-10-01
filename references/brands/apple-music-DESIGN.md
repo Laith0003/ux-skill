@@ -4,11 +4,11 @@
 Apple Music's marketing and browse surfaces sit at an interesting intersection: Apple's clean SF Pro chrome and a white canvas paired with full-bleed album-cover-driven hero bands. The brand is a chameleon dressed in SF Pro: every page derives its chromatic system from the featured album or artist artwork. The one fixed accent is Apple Music's signature red (#fa233b) for the brand mark and "Try free" CTAs.
 
 ## Color
-- **Primary:** `#fa233b`, Apple Music Red (the brand mark + "Try free" CTAs)
+- **Primary:** `#fa233b` (Apple Music Red: the brand mark + "Try free" CTAs)
 - **Primary deep:** `#cc1c30` (Red Hover/Press)
 - **Canvas:** `#ffffff` (Pure White)
 - **Surface card:** `#ffffff` (White card with subtle elevation)
-- **Surface alt:** `#f5f5f7`, Apple Off-White (between bands and selected card backgrounds)
+- **Surface alt:** `#f5f5f7` (Apple Off-White: between bands and selected card backgrounds)
 - **Surface dark:** `#1d1d1f` (Near-black for the desktop player chrome and selected dark bands)
 - **Ink:** `#1d1d1f` (Near-black for headlines and primary text)
 - **Body:** `#424245` (Default running text)

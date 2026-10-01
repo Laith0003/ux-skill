@@ -4,16 +4,16 @@
 Railway is the infrastructure-deployment brand for the "make-cloud-feel-magical" generation: built on a deep midnight-violet canvas (#13111c, deliberately not black), a single lavender-purple voltage (#9c7dff) for CTAs, and Berkeley Mono everywhere service names, env vars, and URLs appear. The hero IS a node graph of services (database, API, cron, worker) connected with hairlines and pulsing with deploy activity. The brand reads as "the magical version of cloud."
 
 ## Color
-- **Primary:** `#9c7dff`, Railway Lavender (the only voltage accent, glow on hover)
-- **Accent (soft):** `#c4b5fd`, Lavender Soft (secondary highlights, hover states)
-- **Canvas:** `#13111c`, Midnight Violet (the brand chrome)
+- **Primary:** `#9c7dff` (Railway Lavender: the only voltage accent, glow on hover)
+- **Accent (soft):** `#c4b5fd` (Lavender Soft: secondary highlights, hover states)
+- **Canvas:** `#13111c` (Midnight Violet: the brand chrome)
 - **Surface card:** `#1d1a2b` (Elevated violet for cards)
 - **Surface alt:** `#0d0b15` (Deeper violet for footer and modals)
 - **Surface code:** `#08070d` (Near-black violet for code blocks)
 - **Ink:** `#fdfaff` (Off-white text on violet)
 - **Body:** `#b4afc9` (Secondary text)
 - **Muted:** `#807994` (Captions, metadata, env var values)
-- **Hairlines:** `rgba(196,181,253,0.12)`, low-alpha lavender dividers (the brand decision)
+- **Hairlines:** `rgba(196,181,253,0.12)` (low-alpha lavender dividers: the brand decision)
 - **Success:** `#5dd49f` (Deploy success status)
 - **Warning:** `#ffb849` (Deploy warning status)
 - **Error:** `#ff5d6c` (Deploy failure status)

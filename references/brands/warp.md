@@ -286,7 +286,7 @@ Type is the second decisive voice. Hero display sits at 64 px Inter weight 400 w
 **Key Characteristics:**
 - A single primary "color", really an off-white `{colors.primary}` (`#f7f5f0`), that doubles as text on canvas and as the button-primary fill. There is no chromatic brand accent.
 - Warm dark canvas (`{colors.canvas}` `#2b2622`) is the only page surface. The brand's defining tone is the brown-warmth, not pure black.
-- Extremely tight button radii, 3 / 4 px (1 / 2× the brand's `{rounded.md}` 4 px base), the brand never uses generous pill shapes for CTAs. Only icon containers use `{rounded.full}`.
+- Extremely tight button radii: 3 / 4 px (1 / 2× the brand's `{rounded.md}` 4 px base); the brand never uses generous pill shapes for CTAs. Only icon containers use `{rounded.full}`.
 - Inter sans + DM Mono mono is the canonical pairing. Instrument Serif appears as a third editorial face for occasional italics.
 - Terminal-mockup imagery is the brand's only consistent decorative system: no gradients, no atmospheric overlays.
 - A subtle warm tint runs through every neutral; even body text and dividers carry a hint of warmth rather than neutral gray.

@@ -4,7 +4,7 @@
 Monzo is hot coral on white: the brand's signature card color (`#ff4f40`) is one of the most-recognized hues in consumer fintech. The marketing surface pairs the coral with a friendly geometric sans (FK Display / ABC Diatype) and a deliberately illustrated UI style (rounded characters, simplified objects). It feels closer to a children's book illustration system than a traditional bank.
 
 ## Color
-- **Primary:** `#ff4f40`, Hot Coral (the card)
+- **Primary:** `#ff4f40` (Hot Coral: the card)
 - **Primary deep:** `#e3382a`
 - **Canvas:** `#ffffff` (White)
 - **Surface alt:** `#fff5f1` (Coral Wash)

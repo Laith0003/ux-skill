@@ -4,14 +4,14 @@
 The canonical American newspaper online. The masthead serif (NYT Cheltenham) and the news-headline serif (NYT Imperial) carry every editorial moment; body runs in Imperial Text. The canvas is a paper-warm off-white (`#fffffe` with slight cream tint in real CSS: read as pure white at glance). The brand voltage is the masthead itself, set in display-size Cheltenham. Color is functional, never decorative: link blue, breaking-news red, byline gray.
 
 ## Color
-- **Primary:** `#000000`, Newsprint Black (used for type)
-- **Canvas:** `#ffffff`, Paper White (with subtle cream warmth)
-- **Surface alt:** `#f7f7f5`, Off-White (used for opinion section, special-feature backgrounds)
+- **Primary:** `#000000` (Newsprint Black: used for type)
+- **Canvas:** `#ffffff` (Paper White: with subtle cream warmth)
+- **Surface alt:** `#f7f7f5` (Off-White: used for opinion section, special-feature backgrounds)
 - **Ink:** `#000000`
 - **Body:** `#363636`
 - **Hairlines:** `#dfdfdf` (newsprint divider gray)
 - **Link blue:** `#326891` (Times Link)
-- **Breaking-news red:** `#d0021b`, Times Red (used only on breaking-news banners and Live indicators)
+- **Breaking-news red:** `#d0021b` (Times Red: used only on breaking-news banners and Live indicators)
 - **Section accent (Opinion):** `#326891` (the same blue)
 - **Section accent (Cooking):** `#236a51` (Recipe Green)
 

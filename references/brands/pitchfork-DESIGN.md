@@ -6,11 +6,11 @@ Pitchfork is raw, loud, bold black-on-white music criticism. The Pitchfork wordm
 ## Color
 - **Primary:** `#000000` (True Black)
 - **Canvas:** `#ffffff` (White)
-- **Surface alt:** `#f5f5f5`, Newsprint Gray (used on sidebar and footer)
+- **Surface alt:** `#f5f5f5` (Newsprint Gray: used on sidebar and footer)
 - **Ink:** `#000000`
 - **Body:** `#222222`
 - **Hairlines:** `#e1e1e1` (visible 1px rules)
-- **Best-New-Music red:** `#ff0000`, Pitchfork Red (BNM badge only)
+- **Best-New-Music red:** `#ff0000` (Pitchfork Red: BNM badge only)
 - **Score accent:** Score numerals use a slightly de-saturated dark (`#1c1c1c`) set in huge display
 - **Section accent:** Black-on-white only (no section-color system)
 

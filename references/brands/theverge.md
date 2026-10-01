@@ -152,7 +152,7 @@ The 0.80 line-height on Manuka display (107px, 90px, 60px) assumes the **proprie
 - Border radius: `20px` (standard) or `24px` (feature)
 - Border: `1px solid #ffffff` (on dark) or `0px 0px 1px solid #3cffd0` (on mint) or nothing (on saturated fill)
 - Padding: ~24 to 32px interior
-- Hover: no lift, no scale, the headline text color transitions from white to `#3860be` (deep link blue)
+- Hover: no lift, no scale; the headline text color transitions from white to `#3860be` (deep link blue)
 - Transition: 150ms ease on color only
 
 **Feature Card (Top Story)**

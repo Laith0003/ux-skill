@@ -316,8 +316,8 @@ letter-spacing. Body type is **Inter** at weight 400: open-source,
 no-nonsense, paired with positive tracking (`0.24px`) on UI labels for
 slightly more mechanical precision.
 
-The brand accent is `{colors.primary}` (`#494fdf`) (a saturated cobalt
-violet) but it appears scarcely on marketing surfaces. The actual primary
+The brand accent is `{colors.primary}` (`#494fdf`), a saturated cobalt
+violet, but it appears scarcely on marketing surfaces. The actual primary
 CTA on the hero is the **white pill on black** ("Choose your subscription"),
 and the cobalt violet is reserved for featured plan cards, secondary CTAs in
 white sections, and the brand glyph itself. A wide secondary palette of deep
@@ -631,6 +631,6 @@ The system has **no traditional drop-shadow language**. Surfaces register depth 
 ## Known Gaps
 
 - Pressed/active visual states are documented for `button-primary-pressed` only; other components rely on focus-ring (browser default) for interactive feedback.
-- Logged-in app surfaces (transactions, transfers, account settings) are out of scope, only the public marketing canvas is documented.
+- Logged-in app surfaces (transactions, transfers, account settings) are out of scope; only the public marketing canvas is documented.
 - The wide accent palette (`{colors.accent-teal}` through `{colors.accent-brown}`) is captured from the extracted token set, but exact usage inside product illustrations varies per market and product line; document per-illustration rather than as system buttons.
 - Mobile-app screenshot art direction (phone bezels, status bars) is product-photography territory and not standardised as design tokens.

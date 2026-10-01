@@ -9,8 +9,8 @@ Neon is a serverless Postgres platform whose marketing canvas is a near-black gr
 - **Surface card:** `#16191a` (Elevated Graphite)
 - **Ink (on dark):** `#f5f7f4` (Cream-tinted white)
 - **Hairlines/dividers:** `rgba(255,255,255,0.08)`
-- **Secondary surface (light bands):** `#fafaf7`, Warm white (used on docs/pricing only)
-- **Code-string accent:** `#a78bfa`, Soft violet (syntax highlighting)
+- **Secondary surface (light bands):** `#fafaf7` (Warm white: used on docs/pricing only)
+- **Code-string accent:** `#a78bfa` (Soft violet: syntax highlighting)
 - **Body muted:** `#8d918e`
 
 ## Typography

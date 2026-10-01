@@ -6,7 +6,7 @@ Sourcegraph's marketing surface pairs a deep slate near-black (`#0f111a`) with a
 ## Color
 - **Primary:** `#00cbec` (Electric Cyan-Blue)
 - **Secondary:** `#a112ff` (Violet)
-- **Tertiary signal:** `#ff5543`, Coral Alert (used for code-error highlights, status only)
+- **Tertiary signal:** `#ff5543` (Coral Alert: used for code-error highlights, status only)
 - **Canvas:** `#0f111a` (Slate Near-Black)
 - **Surface card:** `#1a1d29` (Elevated Slate)
 - **Ink (on dark):** `#f5f6fa` (Cool Cream)

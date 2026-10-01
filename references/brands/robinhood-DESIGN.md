@@ -4,11 +4,11 @@
 Robinhood is the retail-investing platform brand for the millennial investor: confident, dark-first, data-dense. The canvas is a warm near-black (#0a0c0d), the signature voltage is an electric Robinhood Green (#00C805) reserved exclusively for market-up indicators and primary CTAs, Capsule sans carries every text tier, and large tabular-figure mono numerals carry every portfolio value. The brand reads as a serious trading platform that happens to look modern.
 
 ## Color
-- **Primary:** `#00c805`, Robinhood Green (market-up, primary CTAs, brand mark)
+- **Primary:** `#00c805` (Robinhood Green: market-up, primary CTAs, brand mark)
 - **Primary deep:** `#00a004` (Green Hover/Press)
-- **Accent (market-down):** `#ff5052`, Red (negative percent change, sell-state)
-- **Canvas:** `#0a0c0d`, Warm Near-Black (the brand's trading-platform chrome)
-- **Canvas (light pages):** `#ffffff`, Pure White (the recent 2026 light marketing variant)
+- **Accent (market-down):** `#ff5052` (Red: negative percent change, sell-state)
+- **Canvas:** `#0a0c0d` (Warm Near-Black: the brand's trading-platform chrome)
+- **Canvas (light pages):** `#ffffff` (Pure White: the recent 2026 light marketing variant)
 - **Surface card:** `#15181a` (Elevated near-black)
 - **Surface alt:** `#1f2326` (Selected band background)
 - **Ink (on dark):** `#ffffff` (Pure white for portfolio values)

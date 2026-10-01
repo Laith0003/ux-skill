@@ -2,7 +2,7 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Adidas's web presence is sports-and-streetwear editorial, the three-stripes wordmark holds the page, the chrome is unapologetically black-on-white, athletic-action photography blends with high-fashion lookbook crops, and a single chromatic accent (the season's signature color: lime, electric blue, solar red) appears scarcely. The atmosphere is performance-meets-runway. Track athletes shot under stadium lighting and street-style models shot in deconstructed urban contexts share the same chrome. That consistency is the brand telling you "we're both performance and culture."
+Adidas's web presence is sports-and-streetwear editorial: the three-stripes wordmark holds the page, the chrome is unapologetically black-on-white, athletic-action photography blends with high-fashion lookbook crops, and a single chromatic accent (the season's signature color: lime, electric blue, solar red) appears scarcely. The atmosphere is performance-meets-runway. Track athletes shot under stadium lighting and street-style models shot in deconstructed urban contexts share the same chrome. That consistency is the brand telling you "we're both performance and culture."
 
 The three-stripes wordmark is the brand mark, used pure black on white. The brand's Performance and Originals sub-brands have distinct visual treatments (Performance leans more athletic-action and white-heavy; Originals leans more lookbook-editorial and color-rich) but both live in the same chrome system. The wordmark is invariant.
 

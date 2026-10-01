@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Binance-design-analysis
-description: A confident financial-platform interface anchored on a deep near-black canvas, where Binance's iconic yellow (#FCD535) carries every primary CTA, brand accent, and value-claim moment. Type runs Binance's custom BinanceNova / BinancePlex stack at modest weights, the system trusts size and yellow voltage over bold weight. Marketing and product surfaces default to the dark theme; transactional surfaces (buy crypto, deposit, exchange) flip to a light theme that shares the same yellow CTAs and gray-blue hairlines. Trading green (up) and red (down) accents thread through both modes for price-direction signals.
+description: A confident financial-platform interface anchored on a deep near-black canvas, where Binance's iconic yellow (#FCD535) carries every primary CTA, brand accent, and value-claim moment. Type runs Binance's custom BinanceNova / BinancePlex stack at modest weights; the system trusts size and yellow voltage over bold weight. Marketing and product surfaces default to the dark theme; transactional surfaces (buy crypto, deposit, exchange) flip to a light theme that shares the same yellow CTAs and gray-blue hairlines. Trading green (up) and red (down) accents thread through both modes for price-direction signals.
 
 colors:
   primary: "#fcd535"
@@ -337,7 +337,7 @@ Binance reads like a financial trading platform that wants to feel both authorit
 
 Type runs Binance's custom **BinanceNova** (display + body) and **BinancePlex** (numerical / financial display) stack. BinanceNova carries display headlines, section titles, and body copy. BinancePlex appears on price tickers, large stat numbers (transaction volumes, user counts, prize pools): anywhere a number wants to feel "tabular and reliable." Both run at modest weights: display sizes use weight 600-700 (bolder than typical marketing because trading platforms need numbers to read at a glance), body stays at 400.
 
-The product is **multi-theme**: marketing surfaces (homepage, smart-money, futures arena) default to dark, while transactional surfaces (buy crypto, deposit, withdraw) flip to a light theme. The same yellow CTAs and gray-blue hairlines (`{colors.hairline-on-light}`, #eaecef) thread through both, only canvas, surface, and text tones flip. Trading **green** (`{colors.trading-up}`, #0ecb81) and **red** (`{colors.trading-down}`, #f6465d) signal price direction in tables, charts, and price tickers across both modes.
+The product is **multi-theme**: marketing surfaces (homepage, smart-money, futures arena) default to dark, while transactional surfaces (buy crypto, deposit, withdraw) flip to a light theme. The same yellow CTAs and gray-blue hairlines (`{colors.hairline-on-light}`, #eaecef) thread through both; only canvas, surface, and text tones flip. Trading **green** (`{colors.trading-up}`, #0ecb81) and **red** (`{colors.trading-down}`, #f6465d) signal price direction in tables, charts, and price tickers across both modes.
 
 **Key Characteristics:**
 - Single accent color: `{colors.primary}` (#FCD535) does all brand voltage (primary CTAs, hero headlines, brand mark, badges). Used scarcely on dark for emphasis, ubiquitously on transactional dialogs.
@@ -627,7 +627,7 @@ Binance's radius hierarchy is tighter than typical marketing systems: most surfa
 ## Known Gaps
 
 - The dembrandt frequency analyzer captured `#eaecef` (light hairline, count 1022) as the highest-frequency token. The brand-defining `{colors.primary}` (#FCD535) appears far less frequently because it's used scarcely as accent: its system role had to be confirmed from screenshots.
-- BinanceNova and BinancePlex weight-axis values are not formalized as variable-font tokens, only the static weights observed in screenshots are documented.
+- BinanceNova and BinancePlex weight-axis values are not formalized as variable-font tokens; only the static weights observed in screenshots are documented.
 - Animation and transition timings (chart redraws, price-change flashes) are not in scope.
 - Form validation states beyond `{component.text-input-on-light}` defaults are not extracted: error / success input variants would need a sign-up or order-confirmation flow to confirm.
 - The trading dashboard surfaces (Spot / Futures / Margin) were not in the analyzed URL set; their order book, candlestick chart configuration, and position-management cards are not documented here.

@@ -1,10 +1,10 @@
 # Emirates: DESIGN.md
 
 ## Overview
-Emirates is the Dubai-headquartered flag carrier whose brand identity is the cinematic A380 first-class experience translated into web language. Canvas is warm cream (`#fdf9f3`) or deep desert-night-black. The signature palette is the Emirates red (`#d71920`) and gold trim. Type runs a custom Arabic-Latin co-typesetting system: the brand often shows Arabic naskh and Latin grotesk side-by-side at matched scale, a quiet declaration of the UAE origin. Photography is cinematic luxury aviation: A380 cabin interiors with onboard showers, first-class suites with sliding doors, business-class bars at 40,000 feet. The voice is 'fly better than business class' (gold trim, marble lavatories, chef-prepared meals) never apologetic about the luxury.
+Emirates is the Dubai-headquartered flag carrier whose brand identity is the cinematic A380 first-class experience translated into web language. Canvas is warm cream (`#fdf9f3`) or deep desert-night-black. The signature palette is the Emirates red (`#d71920`) and gold trim. Type runs a custom Arabic-Latin co-typesetting system: the brand often shows Arabic naskh and Latin grotesk side-by-side at matched scale, a quiet declaration of the UAE origin. Photography is cinematic luxury aviation: A380 cabin interiors with onboard showers, first-class suites with sliding doors, business-class bars at 40,000 feet. The voice is 'fly better than business class' (gold trim, marble lavatories, chef-prepared meals), never apologetic about the luxury.
 
 ## Color
-- **Primary:** `#d71920`, Emirates red (wordmark + primary CTA)
+- **Primary:** `#d71920` (Emirates red: wordmark + primary CTA)
 - **Canvas:** `#fdf9f3` (Warm cream)
 - **Canvas dark:** `#1a1a1a` (Desert-night-black for evening-mode pages)
 - **Ink:** `#1a1a1a`

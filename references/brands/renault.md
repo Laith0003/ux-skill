@@ -487,7 +487,7 @@ and used on floating elements like the configurator's sticky summary bar.
 
 **`text-input`**: default input
 - Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.body-md}`, 1px bottom border `{colors.hairline-strong}`, `rounded: {rounded.none}`, padding `{spacing.sm} {spacing.md}`, height 48px.
-- Inputs intentionally minimal (borderless on top and sides, single hairline at the bottom) keeping the catalogue feel.
+- Inputs intentionally minimal (borderless on top and sides, single hairline at the bottom), keeping the catalogue feel.
 
 ### Configurator
 
@@ -574,7 +574,7 @@ and used on floating elements like the configurator's sticky summary bar.
 
 ## Iteration Guide
 
-1. Focus on ONE component at a time. Most components share `{rounded.xs}`, `{colors.canvas}` / `{colors.surface-dark}`, and NouvelR, only the role-specific tokens (`{colors.primary}`, `{component.promo-tile-yellow}`) shift between variants.
+1. Focus on ONE component at a time. Most components share `{rounded.xs}`, `{colors.canvas}` / `{colors.surface-dark}`, and NouvelR; only the role-specific tokens (`{colors.primary}`, `{component.promo-tile-yellow}`) shift between variants.
 2. Reference component names and tokens directly (`{colors.primary}`, `{component.button-primary-pressed}`, `{rounded.pill}`): do not paraphrase.
 3. Run `npx @google/design.md lint DESIGN.md` after edits; the orphaned-tokens warning will catch unused entries before they ship.
 4. Add new variants as separate entries (`-pressed`, `-disabled`, `-outline`): do not bury them in prose.
@@ -585,5 +585,5 @@ and used on floating elements like the configurator's sticky summary bar.
 
 - Active/pressed visual states are not consistently observable in static surfaces; `button-primary-pressed` documents the extracted darkened-yellow value, but no other component has a pressed variant promoted to the YAML.
 - Drop-shadow values exist in the extracted tokens but are rarely surfaced visually; only the configurator's sticky summary bar uses them on the captured pages.
-- The MyRenault application surfaces (logged-in product) are out of scope for this extraction, only the public marketing canvas is documented.
+- The MyRenault application surfaces (logged-in product) are out of scope for this extraction; only the public marketing canvas is documented.
 - Form-field focus styling is not extracted; the system likely relies on a thicker bottom border at `{colors.ink}`, but this is not visually confirmed on the captured pages.

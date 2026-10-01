@@ -10,8 +10,8 @@ Patagonia's surface reads like a paper field journal that learned to do e-commer
 - **Ink:** `#1a1a1a` (Charcoal Ink)
 - **Body:** `#3d3d3a`
 - **Hairlines:** `rgba(26,26,26,0.15)` (thin ink-tone borders, often 1px)
-- **Accent (sustainability):** `#345d3f`, Spruce Green (used only on environmental content)
-- **Accent (worn):** `#8b6e44`, Sun-faded Khaki (used on heritage/recycled-materials labels)
+- **Accent (sustainability):** `#345d3f` (Spruce Green: used only on environmental content)
+- **Accent (worn):** `#8b6e44` (Sun-faded Khaki: used on heritage/recycled-materials labels)
 
 ## Typography
 - **Display:** Chronicle Display / Mercury Display, weight 500-600 (serif), tracking 0, sizes 48-72px hero

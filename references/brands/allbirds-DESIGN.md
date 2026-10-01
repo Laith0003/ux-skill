@@ -4,7 +4,7 @@
 Allbirds runs a warm-minimalism canvas: soft sage neutrals and warm ivory (`#f7f3ed`) with the brand voltage carried by product photography on textured paper-like backgrounds. Type is a humanist serif display (Tiempos / GT Sectra) paired with a clean sans body. The brand never raises its voice; every accent feels like a worn material rather than a digital color.
 
 ## Color
-- **Primary:** `#1a1a1a`, Soft Black (used for type and CTAs)
+- **Primary:** `#1a1a1a` (Soft Black: used for type and CTAs)
 - **Canvas:** `#f7f3ed` (Warm Ivory)
 - **Surface alt:** `#e8e6df` (Sage Bone)
 - **Accent (signature):** `#9ca890` (Allbirds Sage)

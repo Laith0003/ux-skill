@@ -4,12 +4,12 @@
 Anthropic is the corporate-research brand sister to the Claude product: same parent company, very different surface. Where Claude reads as a warm consumer chat product, Anthropic reads as a literary technology publisher: warm putty canvas, Tiempos serif at every display tier, narrow editorial body columns, and a thin red-clay accent kept almost entirely in reserve. The page IS the essay; there are almost no marketing devices.
 
 ## Color
-- **Primary:** `#191919`, Anthropic Ink (used for type and rare CTAs)
-- **Canvas:** `#f0eee6`, Putty (the most-recognized brand cue)
+- **Primary:** `#191919` (Anthropic Ink: used for type and rare CTAs)
+- **Canvas:** `#f0eee6` (Putty: the most-recognized brand cue)
 - **Surface card:** `#ffffff` (White cards on putty)
-- **Surface alt:** `#e8e4d6`, Putty Deep (selected band backgrounds)
-- **Accent (clay):** `#cc785c`, Red-Clay (inline article links + radial-spike glyph only)
-- **Accent (signal):** `#5db8a6`, Quiet teal (rare status dots)
+- **Surface alt:** `#e8e4d6` (Putty Deep: selected band backgrounds)
+- **Accent (clay):** `#cc785c` (Red-Clay: inline article links + radial-spike glyph only)
+- **Accent (signal):** `#5db8a6` (Quiet teal: rare status dots)
 - **Ink:** `#191919`
 - **Body:** `#4d4d4d`
 - **Muted:** `#737373` (captions, dates, secondary metadata)

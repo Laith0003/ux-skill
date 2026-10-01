@@ -4,7 +4,7 @@
 
 ## Principles
 
-1. **Touch targets are 44pt iOS, 48dp Android, 44px web (minimum**) Extend hit areas beyond visual bounds via `hitSlop` or padding when icons are smaller. Never require pixel-perfect taps on small icons or thin edges.
+1. **Touch targets are 44pt iOS, 48dp Android, 44px web (minimum)**: Extend hit areas beyond visual bounds via `hitSlop` or padding when icons are smaller. Never require pixel-perfect taps on small icons or thin edges.
 
 2. **Tap feedback lands within 80 to 150ms**: Ripple, opacity change, elevation change, or color flash. Pick one and apply consistently. Material state layers are a solid baseline.
 
@@ -273,10 +273,10 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 - [ ] Tap feedback lands within 80 to 150ms (severity: High)
 - [ ] Press states use `-translate-y-[1px]` or `scale-[0.98]` (severity: Medium)
 - [ ] Card hover changes border or background only, never elevation (severity: Medium)
-- [ ] No hover-only primary interactions, primary CTAs work without hover (severity: Critical)
+- [ ] No hover-only primary interactions: primary CTAs work without hover (severity: Critical)
 - [ ] `cursor: pointer` on all clickable elements (web) (severity: High)
 - [ ] `touch-action: manipulation` removes 300ms tap delay (web) (severity: Medium)
-- [ ] Pinch-zoom preserved, viewport meta does not set `user-scalable=no` (severity: Critical)
+- [ ] Pinch-zoom preserved: viewport meta does not set `user-scalable=no` (severity: Critical)
 - [ ] Drag threshold of 8 to 12px before drag starts (severity: High)
 - [ ] One primary gesture per region; gesture conflicts disambiguated (severity: High)
 - [ ] Critical actions have both gesture AND tappable control (severity: Critical)

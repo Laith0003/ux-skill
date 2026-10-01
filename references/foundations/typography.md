@@ -98,7 +98,7 @@
 ### Pattern: Pull-quote treatment for testimonials
 **Use when**: Customer testimonials in marketing surfaces.
 **Anti-pattern**: Pull quote at body size with quote marks, no visual differentiation from surrounding paragraphs.
-**How**: Pull quote sits at 28 to 40px, weight 500, line-height 1.3. Attribution beneath drops to body size with reduced contrast. The quote does not start with a quotation mark, instead, an oversized opening quote mark sits as a graphic element to the left or above. Set the quote at slightly larger size than body, regular weight, with the speaker's name and role beneath. No oversized quotation marks around the quote, no decorative card chrome, no logo overlay on the photograph.
+**How**: Pull quote sits at 28 to 40px, weight 500, line-height 1.3. Attribution beneath drops to body size with reduced contrast. The quote does not start with a quotation mark; instead, an oversized opening quote mark sits as a graphic element to the left or above. Set the quote at slightly larger size than body, regular weight, with the speaker's name and role beneath. No oversized quotation marks around the quote, no decorative card chrome, no logo overlay on the photograph.
 
 ### Pattern: Variable font weight animation
 **Use when**: The face has a weight axis and the brand's motion is lively enough for one moving detail.
@@ -123,7 +123,7 @@
 ### Pattern: Brutalist macro / micro contrast
 **Use when**: High contrast, geometric type and low warmth: the loud, technical end of the axes.
 **Anti-pattern**: Sans-serif at uniform scale across an entire brutalist surface.
-**How**: Two compulsory voices, a structural heavy sans for headlines (`clamp(4rem, 10vw, 15rem)`, line-height 0.85 to 0.95, tracking -0.03em to -0.06em, uppercase) and a technical monospace for metadata (10 to 14px, `+0.05em` to `+0.10em` tracking, uppercase). The eye is never given a comfortable midrange: dense clusters of monospaced metadata sit immediately next to vast expanses of negative space framing macro-typography.
+**How**: Two compulsory voices: a structural heavy sans for headlines (`clamp(4rem, 10vw, 15rem)`, line-height 0.85 to 0.95, tracking -0.03em to -0.06em, uppercase) and a technical monospace for metadata (10 to 14px, `+0.05em` to `+0.10em` tracking, uppercase). The eye is never given a comfortable midrange: dense clusters of monospaced metadata sit immediately next to vast expanses of negative space framing macro-typography.
 
 ### Pattern: Single serif against an otherwise-sans page
 **Use when**: Premium minimalist surfaces where a single editorial flourish carries personality.
@@ -361,7 +361,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - [ ] Tabular figures enabled on data tables, dashboards, prices, timers (severity: Medium)
 - [ ] Curly quotes used; no straight quotes, em dashes or double hyphens as punctuation (severity: Cosmetic)
 - [ ] `font-display: swap` configured to avoid invisible text during load (severity: High)
-- [ ] Variable font weight respected, reduce by ~50 units in dark mode (severity: Cosmetic)
+- [ ] Variable font weight respected: reduce by ~50 units in dark mode (severity: Cosmetic)
 - [ ] No more than two display fonts paired together (severity: High)
 - [ ] Numbered "SECTION 01" / "CHAPTER 03" meta-labels removed (severity: High)
 - [ ] No 6-line wrapped headings under any breakpoint (severity: Critical)

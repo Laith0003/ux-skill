@@ -4,10 +4,10 @@
 Herman Miller is the American modernist furniture house responsible for the Eames Lounge, the Aeron chair, and a century of design-museum-permanent-collection objects. Canvas is warm gallery-white (`#faf9f6`) or a deep editorial near-black for hero immersion. Type runs a thoughtful serif (Söhne / proprietary modernist serif) at editorial scale paired with a precise grotesk for body. Photography is fine-art product-as-sculpture: single chair in a vast gallery space, side-light, no styling props. The voice is museum-curator: object name, year, designer, materials (written as exhibition wall labels, not e-commerce descriptions).
 
 ## Color
-- **Primary / Ink:** `#000000`, Pure black (gallery-museum ink)
+- **Primary / Ink:** `#000000` (Pure black: gallery-museum ink)
 - **Canvas:** `#faf9f6` (Warm gallery-white)
 - **Ink:** `#1a1a1a` (Type running color)
-- **Accent:** `#a0532a`, Warm rust (for upholstery accent shots, hairline emphasis)
+- **Accent:** `#a0532a` (Warm rust: for upholstery accent shots, hairline emphasis)
 - **Body:** `#3a3a3a`
 - **Muted:** `#7a7a7a` (Captions, designer-credit metadata)
 - **Hairlines:** `rgba(0,0,0,0.10)`
@@ -36,8 +36,8 @@ Gallery-pacing. Hero images cross-fade slowly (~2s), never quick. Product detail
 - `footer-museum-style-monochrome`: gallery-style footer
 
 ## Trademark signals
-- Gallery-white canvas with single product staged in vast negative space (Aeron chair at 30% viewport, 70% empty floor) the absence IS the editorial
-- Exhibition-label captions ('Aeron Chair, 1994, by Bill Stumpf and Don Chadwick' in monospaced type beneath the photograph) museum, not catalog
+- Gallery-white canvas with single product staged in vast negative space (Aeron chair at 30% viewport, 70% empty floor); the absence IS the editorial
+- Exhibition-label captions ('Aeron Chair, 1994, by Bill Stumpf and Don Chadwick' in monospaced type beneath the photograph): museum, not catalog
 - Designer-credit type: every product page leads with the designer's name and the year of design, treating each chair as a historical artifact
 - Editorial long-form essays about chair manufacturing, materials science, and ergonomic research: written as cultural-magazine features
 - Single-image hero with low-saturation studio lighting, never multi-product collages, never lifestyle staging with people

@@ -268,7 +268,7 @@ The assistant walks the user through the five phases in sequence, asking the rig
 
 **Phase 5 with an assistant.** The assistant converts the day's outputs into a game plan template. It probes for unrealistic dates, for missing owners, for actions without clear outcomes. It defines the first MVP with the user, including the hypothesis-build-learning-criterion structure.
 
-When run with an assistant, the protocol takes one to three hours rather than a full day, because there is no group dynamic to manage. It produces less of the alignment side effect that a group workshop produces (the user comes out with a plan, not with stakeholder buy-in) so a follow-up step is needed: the user shares the artifacts with stakeholders and runs the alignment conversation separately.
+When run with an assistant, the protocol takes one to three hours rather than a full day, because there is no group dynamic to manage. It produces less of the alignment side effect that a group workshop produces (the user comes out with a plan, not with stakeholder buy-in), so a follow-up step is needed: the user shares the artifacts with stakeholders and runs the alignment conversation separately.
 
 The assistant's job is to enforce the protocol. Not to bias the answer. Not to skip a phase because the user is tired of phase three. Not to combine two phases because the user wants to move faster. The discipline of the protocol is what produces the quality of the output; an assistant that lets the user shortcut the protocol is delivering a worse outcome than an assistant that holds the line.
 

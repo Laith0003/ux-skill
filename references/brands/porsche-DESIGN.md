@@ -4,9 +4,9 @@
 Porsche is the Stuttgart sports-car house whose visual discipline is the opposite of every other German luxury automaker. Canvas is pure white or dark race-track-black. Type runs the proprietary Porsche Next typeface (a precise, modernist grotesk with subtle aperture variations) at every text tier. The signature is Porsche red (`#d5001c`): historically reserved for the 911 GT badging, used scarcely on configurator highlights, on the wordmark in select moments, and on the iconic horse-and-shield crest. Photography is cinematic motorsport: cars at speed on Alpine roads, paddock close-ups of the 911 chassis, design-team studio portraits. The voice is engineering-first: every page reads like a Le Mans technical manual translated into web layout.
 
 ## Color
-- **Primary:** `#d5001c`, Porsche red (GT badging + crest + rare configurator highlights)
-- **Canvas:** `#ffffff`, Pure white (default)
-- **Canvas dark:** `#000000`, Race-track-black (motorsport pages and configurators)
+- **Primary:** `#d5001c` (Porsche red: GT badging + crest + rare configurator highlights)
+- **Canvas:** `#ffffff` (Pure white: default)
+- **Canvas dark:** `#000000` (Race-track-black: motorsport pages and configurators)
 - **Ink:** `#0a0e10` (Deep ink for type)
 - **Accent (gold):** `#c8b063` (Stuttgart crest gold)
 - **Body:** `#3a3a3a`
@@ -37,11 +37,11 @@ Cinematic motorsport. Hero videos auto-play silent: 911s carving through Pyrenee
 - `footer-stuttgart-corporate`: multi-language corporate footer
 
 ## Trademark signals
-- Porsche Next at every tier (proprietary grotesk that reads as engineering-document, not fashion-magazine) refusing the serif-luxury convention
+- Porsche Next at every tier (proprietary grotesk that reads as engineering-document, not fashion-magazine), refusing the serif-luxury convention
 - Porsche red (`#d5001c`) reserved for 911 GT badging, horse-and-shield crest, rare configurator highlights, never a section background, never a CTA fill on standard product pages
 - Stuttgart horse-and-shield crest (gold-and-red coat-of-arms) appears as a sub-mark beneath the 'PORSCHE' wordmark
-- Cinematic motorsport photography (911s on Alpine roads, paddock close-ups, engine-bay portraits) refusing the polished-on-white showroom convention
-- Engineering-document copy (lateral-G performance, lap times, kilowatt outputs, drag coefficients) Porsche-spec, never marketing-spec
+- Cinematic motorsport photography (911s on Alpine roads, paddock close-ups, engine-bay portraits), refusing the polished-on-white showroom convention
+- Engineering-document copy (lateral-G performance, lap times, kilowatt outputs, drag coefficients): Porsche-spec, never marketing-spec
 
 ## What they DON'T do
 - No fashion-serif substitution for Porsche Next: the grotesk IS the engineering voice

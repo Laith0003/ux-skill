@@ -7,7 +7,7 @@ Substack is writer-first warmth: a cream canvas (`#f9f7f1`) with the signature S
 - **Primary:** `#ff6719` (Substack Orange)
 - **Primary deep:** `#e6571a`
 - **Canvas:** `#f9f7f1` (Cream Paper)
-- **Surface alt:** `#ffffff`, White (used inside subscriber-only article frames)
+- **Surface alt:** `#ffffff` (White: used inside subscriber-only article frames)
 - **Surface card:** `#ffffff`
 - **Ink:** `#1a1a1a` (Ink)
 - **Body:** `#363636`

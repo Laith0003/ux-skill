@@ -323,7 +323,7 @@ The black-canvas hero and footer chapters are the system's "headline moments": a
 
 ## Colors
 
-> **Source pages:** `/tr-tr/` (primary homepage), `/en-eu/industries/healthcare-life-sciences/`, `/en-eu/solutions/ai/`, `/en-eu/ai/foundry/`. The chrome palette is identical across all four, only photography and copy vary.
+> **Source pages:** `/tr-tr/` (primary homepage), `/en-eu/industries/healthcare-life-sciences/`, `/en-eu/solutions/ai/`, `/en-eu/ai/foundry/`. The chrome palette is identical across all four; only photography and copy vary.
 
 ### Brand & Accent
 - **NVIDIA Green** (`{colors.primary}`, `#76b900`): the brand. Every primary CTA, every active state, every link affordance on dark surfaces, every corner square, and the brand wordmark itself.
@@ -636,5 +636,5 @@ All interactive elements meet WCAG AA (≥ 44×44px). `{component.button-primary
 - **Mobile screenshots not captured**: responsive behavior synthesizes NVIDIA's known mobile pattern (hamburger drawer, accordion footer, 1-up card grid, hero downscale) from desktop evidence and the documented breakpoint stack.
 - **Hover states not documented** by system policy.
 - **Dialog / modal styling** beyond the locale-selector overlay not visible in the captured surfaces.
-- **Form field styling** for full sign-up / contact forms is not present in the captured surfaces, only inline search and basic text inputs are documented.
+- **Form field styling** for full sign-up / contact forms is not present in the captured surfaces; only inline search and basic text inputs are documented.
 - **Login / authenticated chrome** not in the captured pages.

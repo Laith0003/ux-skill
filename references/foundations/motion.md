@@ -308,8 +308,8 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - [ ] Staggered orchestration on list and grid mounts at 30 to 80ms per item (severity: Medium)
 - [ ] `useEffect` animations have cleanup functions (severity: Critical)
 - [ ] Perpetual motion isolated in memoized leaf client components (severity: High)
-- [ ] No `window.addEventListener('scroll')`, `IntersectionObserver` used instead (severity: High)
-- [ ] No `useState` for continuous animations, `useMotionValue` and `useTransform` used instead (severity: High)
+- [ ] No `window.addEventListener('scroll')`: `IntersectionObserver` used instead (severity: High)
+- [ ] No `useState` for continuous animations: `useMotionValue` and `useTransform` used instead (severity: High)
 - [ ] `backdrop-blur` applied only to fixed or sticky elements (severity: High)
 - [ ] Grain or noise filters on fixed `pointer-events-none` pseudo-elements (severity: High)
 - [ ] No GSAP mixed with motion library in the same component tree (severity: High)
@@ -326,7 +326,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - [ ] Mobile reduces motion intensity by 2 levels below 768px (severity: Medium)
 - [ ] Layout transitions use `layoutId` for shared element morphs (severity: Medium)
 - [ ] Cursor-tracked tilt capped at 4 to 8 degrees rotation (severity: Cosmetic)
-- [ ] First-paint motion budget under 400ms, text appears before heavy assets (severity: High)
+- [ ] First-paint motion budget under 400ms: text appears before heavy assets (severity: High)
 - [ ] Brand wordmark animations play once on load, not on loop (severity: Cosmetic)
 
 ## Related

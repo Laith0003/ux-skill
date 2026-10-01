@@ -720,7 +720,7 @@ const exampleUser = { name: 'Maya Iqbal', email: 'maya@northwind.co' };
 
 #### 18. Fake brand names
 
-**Why it's bad**: "Acme," "Nexus," "SmartFlow," "Zenith," "Stellar", these are the canonical "fake startup names" that have appeared in every tutorial, every starter template, every screenshot from a content farm. The reader has seen them a thousand times. They register as "this product hasn't done its research."
+**Why it's bad**: "Acme," "Nexus," "SmartFlow," "Zenith," "Stellar": these are the canonical "fake startup names" that have appeared in every tutorial, every starter template, every screenshot from a content farm. The reader has seen them a thousand times. They register as "this product hasn't done its research."
 
 **How to detect**:
 

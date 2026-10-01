@@ -4,13 +4,13 @@
 Fly.io is the edge-compute platform brand with a deeply contrarian voice: engineering blog as marketing, irreverent copy, dense long-form posts wrapped in a hot-pink-to-violet gradient identity. The canvas is a warm near-black (#0a0a0f), body type is a literary serif (Lora), and the chrome is mono-heavy with real shell snippets embedded throughout. The brand reads like an old-internet engineering newsletter that happens to sell global infrastructure.
 
 ## Color
-- **Primary (gradient start):** `#ff007a`, Hot Pink (the voltage)
-- **Primary (gradient end):** `#8957ff`, Violet (the voltage)
-- **Accent (cream):** `#f5f5f0`, Warm Off-White (text on dark)
+- **Primary (gradient start):** `#ff007a` (Hot Pink: the voltage)
+- **Primary (gradient end):** `#8957ff` (Violet: the voltage)
+- **Accent (cream):** `#f5f5f0` (Warm Off-White: text on dark)
 - **Canvas:** `#0a0a0f` (Warm Near-Black)
 - **Surface card:** `#161620` (Elevated near-black)
 - **Surface alt:** `#1f1f2c` (Selected band background)
-- **Surface code:** `#0a0a0f`, Code block background (slightly inset)
+- **Surface code:** `#0a0a0f` (Code block background: slightly inset)
 - **Ink:** `#f5f5f0` (Warm off-white text)
 - **Body:** `#c4c4be` (Secondary text)
 - **Muted:** `#8a8a82` (Captions, metadata)

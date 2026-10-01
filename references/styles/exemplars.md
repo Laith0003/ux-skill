@@ -179,7 +179,7 @@ The structural spine of a premium marketing page. Different cohorts converge on 
 2. **Trust strip**: 6-12 customer logos, monochrome, evenly weighted.
 3. **Three-up value props**: what the product gives you, in 3 cards or 3 columns.
 4. **Deep-feature section #1**: a single feature blown out, often with a real code sample or terminal as the visual.
-5. **Deep-feature section #2**: a different angle (integrations, scale, security, pricing) visualized with a diagram or a dashboard fragment.
+5. **Deep-feature section #2**: a different angle (integrations, scale, security, pricing), visualized with a diagram or a dashboard fragment.
 6. **Quotes / testimonials**: 2-4 quotes from named engineers at known companies. Photo, name, title, company. Often with a measurable result attached.
 7. **Tertiary content**: blog/changelog teaser, docs callout, community card.
 8. **Footer CTA**: large display headline restating the value prop, primary CTA, secondary "talk to us" link.
@@ -370,7 +370,7 @@ A catalog of voice moves observed across premium surfaces. Voice converges acros
 - Confident statement of position. Reads like the opening line of an essay.
 
 **Headline + deflating qualifier**
-"Make anything possible: in one tool."
+"Make anything possible, in one tool."
 "Build better sites, faster."
 - Big claim + small honest constraint. The constraint is what makes the claim believable.
 
@@ -721,7 +721,7 @@ Pin the visual, scrub through 4-6 states as the user scrolls. Storytelling witho
 A grid of actual user projects. Doubles as inspiration content for SEO.
 
 ### Headline + deflating qualifier structure
-"Make anything possible: in one tool." Big claim + small honest constraint.
+"Make anything possible, in one tool." Big claim + small honest constraint.
 
 ### A savings or ROI calculator on the homepage
 Interactive input that estimates value. Converts abstract value into a personal number.

@@ -31,7 +31,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 
 2. **Semantic tokens, never raw hex in components**: Define semantic names (`primary`, `secondary`, `surface`, `on-surface`, `error`, `success`, `warning`) and reference them everywhere. Raw hex values scattered across components break theming, dark mode, and accessibility.
 
-3. **Three-layer token architecture**. Primitive (raw values: `--color-blue-600: #2563EB`), semantic (purpose aliases: `--color-primary: var(--color-blue-600)`), component (component-specific: `--button-bg: var(--color-primary)`). Components reference component tokens; component tokens reference semantic; semantic references primitive.
+3. **Three-layer token architecture**: Primitive (raw values: `--color-blue-600: #2563EB`), semantic (purpose aliases: `--color-primary: var(--color-blue-600)`), component (component-specific: `--button-bg: var(--color-primary)`). Components reference component tokens; component tokens reference semantic; semantic references primitive.
 
 4. **Light and dark are designed together**: Dark mode is not an inversion. Re-tune accents, re-calibrate text, rebuild the elevation ladder. The same hex never appears in both modes.
 
@@ -285,7 +285,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 ## Checklist (severity-tagged)
 
 - [ ] All foreground/background pairs verified at 4.5:1 minimum (severity: Critical)
-- [ ] Color is never the only signal, every color signal pairs with an icon or text (severity: Critical)
+- [ ] Color is never the only signal: every color signal pairs with an icon or text (severity: Critical)
 - [ ] Pure `#000000` not used in product chrome (severity: High)
 - [ ] Pure `#FFFFFF` not used as canvas; off-white preferred (severity: Medium)
 - [ ] One accent color in chrome, applied surgically (severity: High)
@@ -314,7 +314,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 - [ ] Border and divider colors visible in both light and dark modes (severity: High)
 - [ ] Brand mark color preserved through redesigns (equity preservation) (severity: Medium)
 - [ ] Single brand accent applied surgically, not as decoration (severity: High)
-- [ ] No multiple-color logo walls, customer logos forced to single muted color (severity: Medium)
+- [ ] No multiple-color logo walls: customer logos forced to single muted color (severity: Medium)
 - [ ] No glowing AI / neural-net / brain iconography (severity: Medium)
 - [ ] Noise / grain overlays on fixed `pointer-events-none` layers only (severity: Critical)
 - [ ] Backdrop blur only on fixed or sticky elements; never on scrolling containers (severity: Critical)

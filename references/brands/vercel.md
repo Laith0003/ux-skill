@@ -402,7 +402,7 @@ Surfaces use a four-step ladder: `{colors.canvas}` (pure white for cards), `{col
 - A single black-ink primary CTA `{colors.primary}` carries every conversion target, paired with white-on-white `button-secondary` for the secondary action. The brand uses 100 px pill shape for marketing CTAs and a tight 6 px square shape for in-app nav buttons.
 - A multi-stop mesh gradient (cyan-blue-magenta-amber) is the only decorative chrome: used at hero scale and inside feature-band atmospheric backdrops. It is the brand.
 - Every section eyebrow and small label uses the monospace face `{typography.caption-mono}` or `{typography.code}`; everything else is in the geometric sans.
-- Subtle stacked-shadow elevation (three offsets layered with 4-12 % black opacity) never a single heavy drop-shadow.
+- Subtle stacked-shadow elevation (three offsets layered with 4-12 % black opacity), never a single heavy drop-shadow.
 - A complete 100 to 1000 gray + blue + red + amber + green + teal + purple + pink colour scale exists as a system token set, but the marketing surface uses only the `100`, `1000`, and `700`-level tones; the rest stay in the design-system tokens for in-product surfaces.
 - An "Active CPU" pricing rhythm: `pricing-card` lays out 3-up on the pricing page with `pricing-card-featured` (Pro tier) polarity-flipped to `{colors.primary}` against white-card siblings.
 
@@ -546,7 +546,7 @@ The `button-primary` pill renders at ~32 px tall in nav and ~48 px tall in marke
 | Level 4: Float Stack | `0px 2px 2px #0000000a, 0px 8px 16px -4px #0000000a` plus inset hairline. | "Large" elevation: pricing cards, callout panels. |
 | Level 5: Modal | `0px 1px 1px #00000005, 0px 8px 16px -4px #0000000a, 0px 24px 32px -8px #0000000f` plus inset hairline. | Modal / dialog surfaces and dropdown menus. |
 
-The brand uses STACKED shadows (multiple small offsets layered to fake natural light) never a single 8-px-blur generic drop. Inset hairline rings are always added so the card edge stays crisp.
+The brand uses STACKED shadows (multiple small offsets layered to fake natural light), never a single 8-px-blur generic drop. Inset hairline rings are always added so the card edge stays crisp.
 
 ### Decorative Depth
 - **Mesh gradient as atmospheric depth**: the hero's multi-stop gradient is the brand's only "atmospheric" effect (applied as a flat 2-D backdrop rather than a 3-D illustration).

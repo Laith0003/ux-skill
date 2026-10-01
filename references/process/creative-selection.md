@@ -26,7 +26,7 @@ This is not anti-thinking. The thinking is real. But the thinking shows up in th
 
 ## Demo culture
 
-The practical expression of this principle is demo culture. Every meeting that matters is a demo. Every milestone is a working artifact in front of a decision-maker. Every Friday (or Monday, or whenever the rhythm lands) the team shows what they have made since the last show.
+The practical expression of this principle is demo culture. Every meeting that matters is a demo. Every milestone is a working artifact in front of a decision-maker. Every Friday (or Monday, or whenever the rhythm lands), the team shows what they have made since the last show.
 
 The demo is not a presentation. A presentation is the maker explaining what they intended to make. A demo is the artifact itself, in the room, with the maker holding it so the decision-maker can see it and react. The decision-maker may speak less than the maker, and that is correct. The artifact is doing the talking.
 
@@ -92,7 +92,7 @@ The classic failure of design-by-committee. Six stakeholders review the work. Ea
 
 The defense is to refuse synthesis at the point of feedback. The taste-keeper hears the suggestions, decides which one is right (often zero of them), and tells the maker the single direction to pursue. The maker does not try to honor all six voices. They pursue one direction with conviction.
 
-When two strong directions are both worth pursuing (and they sometimes are) the answer is not to blend. The answer is to make two versions, see them both, and pick. Or to pick one for this iteration, ship it, and try the other next iteration if the first one doesn't fly. Never blend, because blending loses what is best about each direction and keeps what is worst.
+When two strong directions are both worth pursuing (and they sometimes are), the answer is not to blend. The answer is to make two versions, see them both, and pick. Or to pick one for this iteration, ship it, and try the other next iteration if the first one doesn't fly. Never blend, because blending loses what is best about each direction and keeps what is worst.
 
 A specific tell: when the maker shows a new iteration and the team can list which feedback note inspired which part, the iteration is a frankenstein. A coherent iteration has feedback woven into a unified vision; you cannot tear it apart and assign credit. If you can, the work was assembled, not designed.
 
@@ -192,7 +192,7 @@ The method translates directly to working with an AI assistant on design and pro
 
 **One artifact in flight.** When the conversation has three half-finished directions, none of them improve. The assistant proposes which one to push to completion first, completes it, then comes back to the others. Multiple half-things produce no taste signal; one whole thing does.
 
-**Restraint.** When the user asks for more (more options, more variants, more features) the assistant first asks whether something should come out to make room. Not always; sometimes the additions are right. But the question is asked, and the default leans toward less.
+**Restraint.** When the user asks for more (more options, more variants, more features), the assistant first asks whether something should come out to make room. Not always; sometimes the additions are right. But the question is asked, and the default leans toward less.
 
 **Demo each turn.** The assistant ends each iteration with the artifact in a state the user can see and react to. Not "I'll have it ready by tomorrow." Not "let me think about it." Now, in this turn, the thing the user asked for, as concrete as it can be made.
 
@@ -266,7 +266,7 @@ The method is powerful but not universal. Recognize the conditions under which i
 
 **When the user is highly heterogeneous.** This method works best when there is a clear target user with a clear set of needs. If the user base is so varied that no single artifact can serve all of them well, you may need a different approach: perhaps building configurable systems rather than opinionated artifacts.
 
-**When craft is not valued.** If the buyer of the work doesn't care about quality (they buy on price, or on feature checklist, or on speed) investment in craft does not pay. The method optimizes for craft and decisiveness; if those are not rewarded, the investment is wasted.
+**When craft is not valued.** If the buyer of the work doesn't care about quality (they buy on price, or on feature checklist, or on speed), investment in craft does not pay. The method optimizes for craft and decisiveness; if those are not rewarded, the investment is wasted.
 
 Recognizing when not to use the method is as important as knowing how to use it. Force-fitting it to the wrong context produces worse outcomes than just running a different method honestly.
 

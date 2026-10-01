@@ -4,9 +4,9 @@
 MUJI (無印良品, 'no-brand quality goods') is the Japanese lifestyle retailer whose brand strategy is to have no brand. Canvas is pure white or kraft-paper beige (`#f0ebe1`). Type runs a mixed Japanese-Latin grotesk (Yu Gothic / Hiragino Kaku Gothic / Helvetica Neue) at modest 11 to 13px sizes, never large display. Product photography is shot on shadowless white with the object floating in negative space. Color is reserved for the deep MUJI red (`#8a1538`) used only on the brand mark and on price tags. Everything else is the kraft-and-cotton palette of un-bleached materials. The page reads as a department-store catalog from 1985: quiet, dense, anti-marketing.
 
 ## Color
-- **Primary:** `#8a1538`, Deep MUJI red (wordmark + price tags only)
+- **Primary:** `#8a1538` (Deep MUJI red: wordmark + price tags only)
 - **Canvas:** `#ffffff` (Pure white)
-- **Canvas kraft:** `#f0ebe1`, Kraft-paper beige (gift-wrap and stationery bands)
+- **Canvas kraft:** `#f0ebe1` (Kraft-paper beige: gift-wrap and stationery bands)
 - **Ink:** `#1a1a1a` (Type running color)
 - **Muted:** `#878787` (Captions, secondary metadata)
 - **Body:** `#3a3a3a`
@@ -37,7 +37,7 @@ Almost-zero motion. Image hover changes opacity only: no scale, no shadow lift. 
 
 ## Trademark signals
 - Product-floating-in-white photography: every product shot on a shadowless pure-white background with the object centered in generous negative space, no styling, no props
-- Tiny type at every tier (11 to 13px body, 14 to 16px display) refusing the SaaS-marketing 48px hero convention
+- Tiny type at every tier (11 to 13px body, 14 to 16px display), refusing the SaaS-marketing 48px hero convention
 - Kraft-paper texture (`#f0ebe1`) as secondary canvas: an actual paper-fiber surface, not a flat fill
 - Deep MUJI red (`#8a1538`) reserved for the wordmark and red price tags, never a CTA fill, never a section background
 - Dense vertical product lists: the page reads like a 1985 mail-order catalog, not a 2026 e-commerce hero

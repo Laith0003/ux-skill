@@ -4,9 +4,9 @@
 Obsidian is the personal-knowledge-management tool that worships the knowledge graph. Canvas is a deep slate-purple-black (`#202020`) in dark mode (the default), or a parchment-cream (`#f6f3ee`) in light. The signature visual element is the force-directed graph of nodes (purple glowing dots connected by faint white edges) that appears as both the product's centerpiece and the marketing hero. Type is a precise grotesk (Inter / Söhne) with markdown-derived hierarchy: H1 / H2 / H3 styled to mirror raw markdown rendering. The brand reads as 'private, infinite, sovereign': the antithesis of cloud-collab.
 
 ## Color
-- **Primary:** `#a882ff`, Obsidian purple (CTAs + knowledge-graph node glow)
-- **Canvas:** `#202020`, Slate-purple-black (dark mode, the default)
-- **Canvas light:** `#f6f3ee`, Parchment-cream (light mode)
+- **Primary:** `#a882ff` (Obsidian purple: CTAs + knowledge-graph node glow)
+- **Canvas:** `#202020` (Slate-purple-black: dark mode, the default)
+- **Canvas light:** `#f6f3ee` (Parchment-cream: light mode)
 - **Ink (dark):** `#dcddde`
 - **Ink (light):** `#1a1a1a`
 - **Accent:** `#7f6df2` (Secondary purple for emphasis and active states)
@@ -39,7 +39,7 @@ Knowledge-graph nodes drift in slow physics simulation: gentle force-directed ji
 - `footer-minimal-dark`: dark footer with vault metaphor
 
 ## Trademark signals
-- Force-directed knowledge graph (purple glowing nodes connected by faint white edges on slate-purple-black) marketing hero + product centerpiece + decorative motif
+- Force-directed knowledge graph (purple glowing nodes connected by faint white edges on slate-purple-black): marketing hero + product centerpiece + decorative motif
 - Dark slate-purple canvas (`#202020`) as default: Obsidian is dark-mode-first; light mode is the second-class citizen
 - Markdown-rendered hierarchy on the marketing page itself: H1s with the same styling as in-product H1, code-blocks in identical syntax-highlight palette
 - Plugin-grid ecosystem showcase: 1500+ community plugins displayed as a dense card grid reinforces the 'infinitely extensible' message

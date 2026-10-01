@@ -4,10 +4,10 @@
 dbt Labs is the analytics-engineering platform brand: a dual-canvas system pairing a soft cream (#fefcf7) marketing surface with a deep navy-violet (#262a38) product surface, a signature dbt-orange (#ff694a) accent, and a recurring isometric pixel-cube glyph assembled from small orange-and-violet pixels. The brand reads as half data-warehouse-serious, half developer-tool-friendly, with a real SQL editor as the brand's most consistent hero device.
 
 ## Color
-- **Primary:** `#ff694a`, dbt Orange (CTAs, key display words, pixel-cube highlights)
-- **Accent (violet):** `#7a5af8`, Pixel Violet (sub-accent on the pixel-cube mark, hover states on dark)
-- **Canvas (light):** `#fefcf7`, Cream (marketing surface)
-- **Canvas (dark):** `#262a38`, Navy Violet (product surface, pre-footer CTAs, footer)
+- **Primary:** `#ff694a` (dbt Orange: CTAs, key display words, pixel-cube highlights)
+- **Accent (violet):** `#7a5af8` (Pixel Violet: sub-accent on the pixel-cube mark, hover states on dark)
+- **Canvas (light):** `#fefcf7` (Cream: marketing surface)
+- **Canvas (dark):** `#262a38` (Navy Violet: product surface, pre-footer CTAs, footer)
 - **Surface card (light):** `#ffffff` (White card on cream)
 - **Surface card (dark):** `#1e2230` (Elevated navy-violet for cards)
 - **Surface code:** `#161928` (Deeper navy for code blocks)

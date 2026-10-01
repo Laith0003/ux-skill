@@ -6,7 +6,7 @@ Loom's web presence is async-video-for-work chrome: a deep purple primary (#625d
 
 The Loom Purple (#625df5) is the brand voltage. It is a specific lavender-leaning purple: neither blue, nor magenta. The color appears on CTAs, on the wordmark, and as accent moments inside illustrations (the recorder avatar's border, the play button color). The purple is generous on the brand presence and scarce on individual chrome elements.
 
-The video-message thumbnail is the brand's signature visual unit. Every screenshot mockup on the marketing site shows a video frame with a circular recorder avatar overlaid in the bottom-left corner, that's the Loom convention: the recorder's face is part of the message. Replacing this thumbnail style with a generic video player thumbnail flattens the brand.
+The video-message thumbnail is the brand's signature visual unit. Every screenshot mockup on the marketing site shows a video frame with a circular recorder avatar overlaid in the bottom-left corner. That's the Loom convention: the recorder's face is part of the message. Replacing this thumbnail style with a generic video player thumbnail flattens the brand.
 
 **Key Characteristics:**
 - Loom Purple (#625df5): chromatic voltage on CTAs, wordmark, accents

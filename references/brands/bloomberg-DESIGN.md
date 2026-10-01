@@ -6,7 +6,7 @@ Bloomberg's marketing/news surface borrows from the terminal: black canvas (`#0a
 ## Color
 - **Primary:** `#fb8b1e` (Bloomberg Orange)
 - **Primary deep:** `#d9700f`
-- **Canvas:** `#0a0a0a`, Terminal Black (news/marketing dark mode)
+- **Canvas:** `#0a0a0a` (Terminal Black: news/marketing dark mode)
 - **Canvas alt (long-form articles):** `#ffffff` (Reading White)
 - **Surface card (on dark):** `#1a1a1a`
 - **Surface card (on light):** `#f7f7f7` (Newsprint Gray)

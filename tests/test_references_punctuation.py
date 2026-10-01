@@ -7,6 +7,8 @@ properties (--color-x), table separator rows and horizontal rules.
 """
 from __future__ import annotations
 
+import importlib.util
+import json
 import re
 from pathlib import Path
 
@@ -128,8 +130,26 @@ def test_the_check_skips_code_and_catches_prose(tmp_path):
     assert [f.split(":")[1] for f in found] == ["14", "15", "16"]
 
 
+def _backfill():
+    path = ROOT / "scripts" / "backfill-brand-designs.py"
+    spec = importlib.util.spec_from_file_location("backfill_brand_designs", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
-def test_the_script_that_writes_brand_references_writes_no_dashes():
-    script = (Path(__file__).resolve().parents[1] / "scripts" /
-              "backfill-brand-designs.py").read_text(encoding="utf-8")
-    assert "—" not in script and "–" not in script
+
+BRANDS = sorted(p for p in (ROOT / "data" / "brands").glob("*.json") if p.stem != "_index")
+
+
+@pytest.mark.parametrize("path", BRANDS, ids=lambda p: p.stem)
+def test_every_rendered_brand_reference_has_no_dash_punctuation(path):
+    body = _backfill().render(path.stem, json.loads(path.read_text(encoding="utf-8")))
+    for char, name in DASHES.items():
+        assert char not in body, f"{path.stem}: rendered reference holds an {name}"
+    assert " -- " not in body, f"{path.stem}: rendered reference holds ' -- '"
+
+
+def test_a_dash_entity_becomes_a_comma_with_one_space():
+    unescape = _backfill().html_unescape_lite
+    assert unescape("calm &mdash; never loud") == "calm, never loud"
+    assert unescape("calm&mdash;never loud") == "calm, never loud"

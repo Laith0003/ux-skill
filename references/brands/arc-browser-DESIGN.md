@@ -4,10 +4,10 @@
 Arc is The Browser Company's post-Chrome browser that treats the address bar as the enemy. The brand canvas is a soft warm off-white (`#f5f3ed`) with deep ink, or alternatively a watercolor-gradient hero band sweeping pastel coral, peach, and lavender across a hand-drawn marketing page. The voice is wide-eyed earnest tech-utopianism: sentence-case headlines, generous serif accents (Söhne or Inter for body, with proprietary curvilinear display nameplates), and animation that feels closer to children's illustration than browser-chrome. Arc is the brand where motion IS the marketing.
 
 ## Color
-- **Primary:** `#ff7a5c`, Arc coral (the brand's coral-peach voltage)
-- **Canvas:** `#f5f3ed`, Warm off-white (deliberately not pure white)
+- **Primary:** `#ff7a5c` (Arc coral: the brand's coral-peach voltage)
+- **Canvas:** `#f5f3ed` (Warm off-white: deliberately not pure white)
 - **Ink:** `#1a1a1a` (Deep warm-ink for type)
-- **Accent:** `#bca7e8`, Lavender pastel (secondary in hero gradients)
+- **Accent:** `#bca7e8` (Lavender pastel: secondary in hero gradients)
 - **Watercolor gradient stops:** coral `#ff7a5c` → peach `#ffb89e` → lavender `#bca7e8` (full-bleed hero backgrounds)
 - **Body:** `#3a3a3a`
 - **Muted:** `#7a7a7a`

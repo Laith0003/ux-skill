@@ -108,7 +108,7 @@ The default case study has seven sections, in this order:
 - (F) Chance: the bet the team made and the constraint it accepted.
 - (G) Target Audience, who the product is built for, precisely.
 
-A case study may use a different section set, but the alphabetic codes still march. If a case study has five sections (say About, Process, Outcomes, Lessons, Future) it codes them (A) through (E).
+A case study may use a different section set, but the alphabetic codes still march. If a case study has five sections (say About, Process, Outcomes, Lessons, Future), it codes them (A) through (E).
 
 Section titles are noun phrases, set in title case. "About," not "About the product." "Outcomes," not "Our Outcomes." The title is the system; the body is the content.
 

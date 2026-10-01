@@ -297,7 +297,7 @@ The footer flips to `{colors.surface-dark}` (#101010): a deep near-black that vi
 ### Brand & Accent
 - **Primary** (`{colors.primary}`, #111111): The dominant action color. All primary CTAs, h1/h2 display type. Press state shifts to `{colors.primary-active}` (#242424).
 - **Brand Accent** (`{colors.brand-accent}`, #3b82f6): Used sparely on inline links and on a small badge / "Customer story" highlight. Cal.com is a near-monochrome brand: the blue appears rarely.
-- **Badge Pastels**, a small pastel set for category badges and avatar fills: `{colors.badge-orange}` (#fb923c), `{colors.badge-pink}` (#ec4899), `{colors.badge-violet}` (#8b5cf6), `{colors.badge-emerald}` (#34d399). These appear on tag pills and small accent moments inside product UI fragments, never on hero CTAs.
+- **Badge Pastels**. A small pastel set for category badges and avatar fills: `{colors.badge-orange}` (#fb923c), `{colors.badge-pink}` (#ec4899), `{colors.badge-violet}` (#8b5cf6), `{colors.badge-emerald}` (#34d399). These appear on tag pills and small accent moments inside product UI fragments, never on hero CTAs.
 
 ### Surface
 - **Canvas** (`{colors.canvas}`, #ffffff): The default page floor.

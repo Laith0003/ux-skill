@@ -5,8 +5,8 @@ Rolls-Royce Motor Cars is the British ultra-luxury house at the apex of automoti
 
 ## Color
 - **Primary / Ink:** `#1a1a1a` (Deep ink for type and rare CTAs)
-- **Canvas:** `#f5f1e9`, Bone-cream (craft sections)
-- **Canvas velvet:** `#0a0a0a`, Velvet-black (product sections)
+- **Canvas:** `#f5f1e9` (Bone-cream: craft sections)
+- **Canvas velvet:** `#0a0a0a` (Velvet-black: product sections)
 - **Ink:** `#1a1a1a`
 - **Accent (restrained gold):** `#7a6035` (Subtle gold for hairlines and emphasis)
 - **Body:** `#3a3a3a`
@@ -41,7 +41,7 @@ Almost-zero motion. Hero photography cross-fades over 3 seconds: the slowest in 
 - Spirit of Ecstasy ornament rendered in delicate silver line art: appears on every page as a quiet sub-mark, never large, never animated
 - Roman-inscriptional display serif at 60 to 120px: the typeface IS the brand voice; sans-serif would read as Mercedes off-brand
 - Macro-photography of craft details: hand-stitched leather seams, marquetry inlay, starlight-headliner LEDs, monogrammed treadplates
-- 'Effortless' as a recurring word in the voice (quiet observations about silence, weight, hand-finishing) never feature lists, never spec sheets
+- 'Effortless' as a recurring word in the voice (quiet observations about silence, weight, hand-finishing), never feature lists, never spec sheets
 
 ## What they DON'T do
 - No modern grotesk substitution: Roman-inscriptional serif IS the brand voice

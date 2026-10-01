@@ -4,12 +4,12 @@
 Snowflake is the data-cloud-platform-of-record brand: institutional, slightly editorial, anchored by a glacier-blue gradient (#29B5E8 light → #11567f deep) that runs through the brand mark, the hero bands, and the pre-footer CTA. Display headlines lift the surface out of the all-sans data-platform default with Tiempos Headline serif at 56 to 80px. The hexagon snowflake-lattice motif is the recurring background pattern and the brand mark.
 
 ## Color
-- **Primary:** `#29b5e8`, Glacier Blue Light (the brighter gradient end)
-- **Accent (deep):** `#11567f`, Glacier Blue Deep (the deeper gradient end, also used for ink)
+- **Primary:** `#29b5e8` (Glacier Blue Light: the brighter gradient end)
+- **Accent (deep):** `#11567f` (Glacier Blue Deep: the deeper gradient end, also used for ink)
 - **Canvas:** `#ffffff` (Pure White)
 - **Surface card:** `#ffffff` (White card with hairline border)
-- **Surface alt:** `#f0f8fc`, Glacier Tint (very pale blue-white for selected bands)
-- **Surface dark:** `#001f3f`, Glacier Deep Ink (pre-footer CTA bands, footer)
+- **Surface alt:** `#f0f8fc` (Glacier Tint: very pale blue-white for selected bands)
+- **Surface dark:** `#001f3f` (Glacier Deep Ink: pre-footer CTA bands, footer)
 - **Ink:** `#11567f` (Deep glacier blue for headlines and primary text)
 - **Body:** `#3e4a5a` (Default running text)
 - **Muted:** `#7a8494` (Captions, metadata)

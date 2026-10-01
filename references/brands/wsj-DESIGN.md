@@ -4,13 +4,13 @@
 The Wall Street Journal is the American financial-newspaper-of-record brand: 135 years old, built on a strict black-on-white broadsheet canvas, the Escrow display family (a Hoefler-designed sibling of the historic Cheltenham face the WSJ used for over a century), hedcut portraits (the dot-stippled portrait illustrations in continuous use since 1979) as the brand's most-recognized graphic signature, and a market-data ticker bar at the masthead. The brand reads as American financial authority.
 
 ## Color
-- **Primary:** `#000000`, Pure Black (masthead, every headline)
+- **Primary:** `#000000` (Pure Black: masthead, every headline)
 - **Accent (WSJ Red):** `#c4262e` (used very sparingly on brand-mark moments and selected display words)
 - **Market up:** `#0a8537` (Green for positive ticker movements)
-- **Market down:** `#c4262e`, Red for negative ticker movements (same as WSJ Red)
+- **Market down:** `#c4262e` (Red for negative ticker movements: same as WSJ Red)
 - **Canvas:** `#ffffff` (Pure White)
 - **Surface card:** `#ffffff` (White card with hairline border)
-- **Surface alt:** `#f7f5f0`, Newsprint cream (subscriber-only sections, sponsored content)
+- **Surface alt:** `#f7f5f0` (Newsprint cream: subscriber-only sections, sponsored content)
 - **Ink:** `#0d0d0d` (Near-pure-black for body text)
 - **Body:** `#3a3a3a` (Default running text)
 - **Muted:** `#6b6b6b` (Captions, dates, bylines)

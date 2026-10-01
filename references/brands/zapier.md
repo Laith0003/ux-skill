@@ -306,7 +306,7 @@ Cards are universally `{rounded.md}` 12 px. Buttons share the same 12 px radius,
 - Deep coffee ink `{colors.ink}` (`#201515`), not pure black. Warmth carries through to text.
 - Proprietary Degular Display for hero-scale, Inter for everything else. Two-face system.
 - `{rounded.md}` 12 px for buttons and cards: the brand's middle-radius signature.
-- A muted cream / coffee neutral ladder, `{colors.canvas-soft}` (`#f8f4f0`), `{colors.mute}` (`#c5c0b1`), `{colors.body-mid}` (`#939084`), `{colors.body}` (`#605d52`), every neutral carries warmth, none are cool grey.
+- A muted cream / coffee neutral ladder, `{colors.canvas-soft}` (`#f8f4f0`), `{colors.mute}` (`#c5c0b1`), `{colors.body-mid}` (`#939084`), `{colors.body}` (`#605d52`): every neutral carries warmth, none are cool grey.
 
 ## Colors
 

@@ -385,7 +385,7 @@ When Domaine Display is unavailable, clamp `lineHeight` to 1.0 explicitly and ap
 - **Max content width** ≈ 1200px on body sections.
 - **Feature grid**: 3 columns at desktop, 2 at tablet, 1 at mobile.
 - **Pricing**: 3-tier grid centred at desktop; centre tier promotes to `{component.pricing-tier-featured}` (one-step-elevated surface).
-- **Code-story splits**: a 2-up split (narrative copy left, `{component.code-window}` right) collapsing to stacked at < 1024px.
+- **Code-story splits**: a 2-up split (narrative copy left, `{component.code-window}` right), collapsing to stacked at < 1024px.
 - **Email mockup band**: a single white card (640px max width) centred in the dark canvas with generous vertical padding to read like a print magazine inset.
 
 ### Whitespace Philosophy
@@ -570,7 +570,7 @@ The system has **no traditional drop shadow language**. Every surface either get
 
 ## Iteration Guide
 
-1. Focus on ONE component at a time. Most surfaces share `{colors.surface-card}` or `{colors.surface-elevated}` with `{rounded.lg}`, only the role-specific tokens (`{colors.primary}`, `{component.code-window}`) shift between variants.
+1. Focus on ONE component at a time. Most surfaces share `{colors.surface-card}` or `{colors.surface-elevated}` with `{rounded.lg}`; only the role-specific tokens (`{colors.primary}`, `{component.code-window}`) shift between variants.
 2. Reference component names and tokens directly (`{colors.primary}`, `{component.button-primary-pressed}`, `{rounded.lg}`): do not paraphrase.
 3. Run `npx @google/design.md lint DESIGN.md` after edits; orphaned-tokens warnings will catch unused entries.
 4. Add new variants as separate entries (`-pressed`, `-featured`, `-disabled`): do not bury them in prose.

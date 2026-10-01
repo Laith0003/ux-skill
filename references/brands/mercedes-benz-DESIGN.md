@@ -5,8 +5,8 @@ Mercedes-Benz is the Stuttgart luxury automotive house whose brand language has 
 
 ## Color
 - **Primary (EQ blue):** `#00adef` (Electric-line accent, EQ sub-brand only)
-- **Canvas:** `#1a1d24`, Graphite-cool dark (flagship product pages)
-- **Canvas light:** `#ffffff`, Warm cream-white (heritage and editorial pages)
+- **Canvas:** `#1a1d24` (Graphite-cool dark: flagship product pages)
+- **Canvas light:** `#ffffff` (Warm cream-white: heritage and editorial pages)
 - **Ink (light mode):** `#1a1d24`
 - **Ink (dark mode):** `#ffffff`
 - **Accent (chrome silver):** `#c0c0c0` (Three-pointed-star mark on dark)
@@ -38,10 +38,10 @@ Cinematic luxury. Hero videos auto-play silent with slow tracking shots: S-Class
 - `footer-stuttgart-corporate`: multi-language corporate footer
 
 ## Trademark signals
-- Three-pointed star mark (the most-recognized automotive logo on the planet) chrome silver on dark, ink-on-light, never tinted, never restyled
+- Three-pointed star mark (the most-recognized automotive logo on the planet): chrome silver on dark, ink-on-light, never tinted, never restyled
 - Mercedes blue (`#00adef`): electric-line accent reserved for EQ sub-brand pages and EV configurator highlights
-- Dual canvas (graphite-cool dark for flagship product, warm cream-white for heritage and corporate editorial) the brand chooses canvas by content type, never mixes within a page
-- Cinematic studio photography (S-Class sedans under dramatic side-light, EQ vehicles in architectural settings, AMG cars on race tracks) never lifestyle staging with families
+- Dual canvas (graphite-cool dark for flagship product, warm cream-white for heritage and corporate editorial); the brand chooses canvas by content type, never mixes within a page
+- Cinematic studio photography (S-Class sedans under dramatic side-light, EQ vehicles in architectural settings, AMG cars on race tracks), never lifestyle staging with families
 - Corporate A grotesk at every tier: refusing the serif-luxury convention of Rolls-Royce or Bentley
 
 ## What they DON'T do

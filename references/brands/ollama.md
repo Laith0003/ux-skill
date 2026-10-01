@@ -2,7 +2,7 @@
 version: alpha
 name: Ollama-design-analysis
 description: |
-  An almost defiantly minimal documentation-first system that treats the home page like a Markdown README, paper-white canvas, 36px center-aligned heading, a single black pill CTA, an inline terminal install snippet, and a hand-drawn llama mascot as the only ornamental element. No gradient, no hero photography, no marketing pyrotechnics. The chrome is a tiny utility palette of pure black, pure white, and three neutral grays; every interactive element is fully rounded into a pill (`{rounded.full}`); typography is SF Pro Rounded for headings paired with system sans for body and ui-monospace for code. Pricing tiers, FAQs, and "your data stays yours" guarantees all sit on the same flat canvas inside thin-border cards, the system is the documentation, and the documentation is the system.
+  An almost defiantly minimal documentation-first system that treats the home page like a Markdown README, paper-white canvas, 36px center-aligned heading, a single black pill CTA, an inline terminal install snippet, and a hand-drawn llama mascot as the only ornamental element. No gradient, no hero photography, no marketing pyrotechnics. The chrome is a tiny utility palette of pure black, pure white, and three neutral grays; every interactive element is fully rounded into a pill (`{rounded.full}`); typography is SF Pro Rounded for headings paired with system sans for body and ui-monospace for code. Pricing tiers, FAQs, and "your data stays yours" guarantees all sit on the same flat canvas inside thin-border cards; the system is the documentation, and the documentation is the system.
 
 colors:
   primary: "#000000"
@@ -249,7 +249,7 @@ components:
 
 Ollama's site is the most aggressively under-designed marketing surface in the AI tooling space, and that is the entire point. The home page reads like a Markdown README rendered with care: a 36px center-aligned heading sits above an inline `curl` install snippet inside a soft-gray pill, a single black "Download" CTA, and a hand-drawn llama mascot as the only ornament. Everything else: automate-your-work block, "Start local. Scale cloud." pricing pair, "Your data stays yours" guarantee strip, FAQ wall on `/pricing`: sits on the same paper-white canvas (`{colors.canvas}`) with quiet `{colors.body}` neutrals carrying the prose. The system is the documentation, and the documentation is the system.
 
-The design philosophy is geometric: every interactive element collapses to `{rounded.full}` (9999px), buttons, search pills, install-snippet pills, text inputs, and the terminal-traffic-light dots. There are no decorative drop shadows, no gradients, no hero illustrations beyond the llama. Cards (the rare ones, on `/pricing`) use a soft `{rounded.lg}` (12px) and a 1px hairline. The single inverted moment in the entire system is the dark "Max" pricing tier (`{colors.surface-dark}` with white text) which acts as the only attention-grabbing surface in an otherwise studiously flat layout.
+The design philosophy is geometric: every interactive element collapses to `{rounded.full}` (9999px), buttons, search pills, install-snippet pills, text inputs, and the terminal-traffic-light dots. There are no decorative drop shadows, no gradients, no hero illustrations beyond the llama. Cards (the rare ones, on `/pricing`) use a soft `{rounded.lg}` (12px) and a 1px hairline. The single inverted moment in the entire system is the dark "Max" pricing tier (`{colors.surface-dark}` with white text), which acts as the only attention-grabbing surface in an otherwise studiously flat layout.
 
 Typography pairs SF Pro Rounded (display headings, weight 500 to 600) with the operating system's default sans (`ui-sans-serif`) for body and `ui-monospace` for code. The roundness of the heading face is the only "personality" the chrome carries. It gently echoes the `{rounded.full}` button geometry without being decorative about it.
 
@@ -264,7 +264,7 @@ Typography pairs SF Pro Rounded (display headings, weight 500 to 600) with the o
 
 ## Colors
 
-> **Source pages:** `/` (home) and `/pricing`. The chrome palette is identical across both, only content changes.
+> **Source pages:** `/` (home) and `/pricing`. The chrome palette is identical across both; only content changes.
 
 ### Brand & Accent
 - **Pure Black** (`{colors.primary}`, `#000000`): the brand. Every primary CTA, every black pill, every link in the nav, and every solid icon. There is no other "brand color."

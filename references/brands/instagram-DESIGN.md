@@ -7,7 +7,7 @@ Instagram is the photo-and-video social platform brand: a white canvas (light mo
 - **Primary (gradient stop 1):** `#fcb045` (Yellow)
 - **Primary (gradient stop 2):** `#fd1d1d` (Orange-Red)
 - **Primary (gradient stop 3):** `#833ab4` (Magenta-Purple)
-- **Accent (heart-liked):** `#ed1c84`, Heart Pink (the only single-color accent in the system, used on liked-state heart icons)
+- **Accent (heart-liked):** `#ed1c84` (Heart Pink: the only single-color accent in the system, used on liked-state heart icons)
 - **Canvas (light):** `#ffffff` (Pure White)
 - **Canvas (dark):** `#000000` (Pure Black)
 - **Surface card (light):** `#ffffff` with hairline border
@@ -17,7 +17,7 @@ Instagram is the photo-and-video social platform brand: a white canvas (light mo
 - **Muted:** `#8e8e8e` (Captions, timestamps, secondary metadata)
 - **Hairlines (light):** `#dbdbdb` (1px borders and dividers)
 - **Hairlines (dark):** `#262626` (1px borders on dark)
-- **Inline-link:** `#00376b`, the body-link blue (subtle, deep navy-blue)
+- **Inline-link:** `#00376b` (the body-link blue: subtle, deep navy-blue)
 
 ## Typography
 - **Display:** Instagram Sans / Helvetica Neue, weight 600, tracking -0.01em, sizes 24 to 48px (Instagram doesn't have a true display tier: the content is the display)

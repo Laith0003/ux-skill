@@ -6,7 +6,7 @@ Tesla's website is an exercise in radical subtraction: a digital showroom where 
 
 The color philosophy is almost ascetic: a single blue (`#3E6AE1`) for primary calls to action, three shades of dark gray for text hierarchy, and white for everything else. The entire emotional weight is carried by photography: sprawling landscape shots, studio-lit vehicle profiles, and atmospheric environmental compositions that stretch edge-to-edge across each viewport-height section. The UI chrome dissolves into the imagery. The navigation bar floats above the hero with no visible background, border, or shadow: the TESLA wordmark and five navigation labels simply exist in the space, trusting the content beneath them to provide sufficient contrast.
 
-Typography recently transitioned from Gotham to Universal Sans (a custom family split into "Display" for headlines and "Text" for body/UI elements) unifying the website, mobile app, and in-car software into a single typographic voice. The Display variant renders hero titles at 40px weight 500, while the Text variant handles everything from navigation (14px/500) to body copy (14px/400). The font carries a geometric precision with slightly humanist terminals that feels engineered rather than designed: exactly matching Tesla's brand identity of technology that doesn't need to announce itself. There are no text shadows, no text gradients, no decorative type treatments. Every letterform earns its place through clarity alone.
+Typography recently transitioned from Gotham to Universal Sans (a custom family split into "Display" for headlines and "Text" for body/UI elements), unifying the website, mobile app, and in-car software into a single typographic voice. The Display variant renders hero titles at 40px weight 500, while the Text variant handles everything from navigation (14px/500) to body copy (14px/400). The font carries a geometric precision with slightly humanist terminals that feels engineered rather than designed: exactly matching Tesla's brand identity of technology that doesn't need to announce itself. There are no text shadows, no text gradients, no decorative type treatments. Every letterform earns its place through clarity alone.
 
 **Key Characteristics:**
 - Full-viewport hero sections (100vh) dominated by cinematic car photography with minimal overlay UI
@@ -85,7 +85,7 @@ Typography recently transitioned from Gotham to Universal Sans (a custom family 
 ### Buttons
 All buttons use barely-rounded rectangles (4px border-radius): creating a sharp, technical aesthetic that mirrors the precision of the vehicles.
 
-**Primary CTA**, the main action button:
+**Primary CTA**. The main action button:
 - Default: bg `#3E6AE1` (Electric Blue), text `#FFFFFF`, fontSize 14px, fontWeight 500, padding 4px with inner content centering, borderRadius 4px, minHeight 40px, width 200px
 - Border: 3px solid transparent (reserves space for focus/active border animation)
 - Box Shadow: `rgba(0,0,0,0) 0px 0px 0px 2px inset` (invisible at rest, animates to visible on focus)
@@ -93,7 +93,7 @@ All buttons use barely-rounded rectangles (4px border-radius): creating a sharp,
 - Hover: subtle darkening of blue background
 - Used for: "Order Now" calls to action
 
-**Secondary CTA**, the alternative action button:
+**Secondary CTA**. The alternative action button:
 - Default: bg `#FFFFFF`, text `#393C41` (Graphite), same dimensions and border pattern as primary
 - Transition: identical timing to primary (0.33s)
 - Used for: "View Inventory" alongside primary CTA
@@ -281,6 +281,6 @@ Tesla's approach to elevation is essentially "none." The site avoids box-shadows
 When refining existing screens generated with this design system:
 1. Focus on ONE component at a time: Tesla's system is so minimal that each element must be pixel-perfect
 2. Reference specific color names and hex codes from this document: there are only 6-7 colors in the entire system
-3. Use natural language descriptions, not CSS values, "barely rounded corners" not "border-radius: 4px"
-4. Describe the desired "feel" alongside specific measurements, "gallery-like silence between sections" communicates the whitespace philosophy better than "margin-bottom: 100vh"
+3. Use natural language descriptions, not CSS values: "barely rounded corners" not "border-radius: 4px"
+4. Describe the desired "feel" alongside specific measurements: "gallery-like silence between sections" communicates the whitespace philosophy better than "margin-bottom: 100vh"
 5. Always verify that photography is doing the emotional heavy-lifting: if the UI itself feels "designed," it's too much

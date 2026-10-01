@@ -11,7 +11,7 @@ Render's marketing surface pairs a deep aubergine purple (`#5a2d8c`) with a warm
 - **Ink:** `#231f29` (Plum Near-Black)
 - **Body:** `#4a3f55` (Plum Muted)
 - **Hairlines/dividers:** `rgba(35,31,41,0.10)`
-- **Accent (signals only):** `#ff6b35`, Burnt Orange (status / "live" indicators)
+- **Accent (signals only):** `#ff6b35` (Burnt Orange: status / "live" indicators)
 
 ## Typography
 - **Display:** Söhne / Inter Display, weight 500, tracking -0.015em, sizes 56-88px hero

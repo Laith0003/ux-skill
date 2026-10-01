@@ -12,7 +12,7 @@ Ramp is the modernist-fintech brand: a white canvas paired with the signature si
 - **Ink:** `#0e0e0e` (Near-Black)
 - **Body:** `#3a3a3a`
 - **Hairlines:** `rgba(14,14,14,0.10)`
-- **Accent (savings highlight):** `#1b6b4e`, Forest Green (used on "you saved $X" callouts only)
+- **Accent (savings highlight):** `#1b6b4e` (Forest Green: used on "you saved $X" callouts only)
 - **Semantic warning:** `#d68a2e`
 
 ## Typography

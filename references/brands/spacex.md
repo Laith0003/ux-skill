@@ -196,7 +196,7 @@ The brand has no accent colors. Black and white do all the chromatic work; photo
 
 The display tier is **D-DIN-Bold**: a condensed industrial sans inspired by the German DIN 1451 standard (used on autobahn road signage and engineering blueprints). When unavailable, fall back to **Arial Narrow**, then Arial, then Verdana: the fallback chain prioritizes width compression over ornament.
 
-The UI tier is **D-DIN** (regular weight) (the same family at standard width) used for body, button labels, and captions.
+The UI tier is **D-DIN** (regular weight), the same family at standard width, used for body, button labels, and captions.
 
 D-DIN is freely available from the **DIN Type Foundry** (and a free version under the same name is widely distributed). For maximum brand fidelity, use D-DIN directly; as a substitute, **Inter** at heavy weights (700+) with letter-spacing of 1.6px positive tracking approximates the rhythm. Avoid serif or humanist sans alternatives.
 

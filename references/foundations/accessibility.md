@@ -22,7 +22,7 @@
 
 9. **Reduced motion is a contract**: Honor `prefers-reduced-motion: reduce`. Replace `translateY` reveals with opacity-only fades. Pause ambient motion. Drop blur from scroll entries. Never opt the user back in by default.
 
-10. **Errors name the cause AND the fix**. Never "form contains errors" or "invalid input." Always specific: name the field, name the problem, name the fix. "Email needs an @ sign" not "Invalid email."
+10. **Errors name the cause AND the fix**: Never "form contains errors" or "invalid input." Always specific: name the field, name the problem, name the fix. "Email needs an @ sign" not "Invalid email."
 
 11. **Common courtesy in design**: Don't make users think. Make obvious things obvious. Don't ask for unnecessary effort. Provide visible affordances. Apologize for failures and explain the recovery path.
 
@@ -363,7 +363,7 @@ Honor at every level. Never assume the user "will be fine."
 ## Checklist (severity-tagged)
 
 - [ ] All foreground/background pairs verified at 4.5:1 minimum (severity: Critical)
-- [ ] Color is never the only signal, icon or text accompanies every color signal (severity: Critical)
+- [ ] Color is never the only signal: icon or text accompanies every color signal (severity: Critical)
 - [ ] Visible focus ring on every interactive element, 2 to 4px high-contrast (severity: Critical)
 - [ ] `outline: none` never used without a replacement (severity: Critical)
 - [ ] Tab order matches visual order (severity: Critical)

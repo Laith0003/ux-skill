@@ -4,7 +4,7 @@
 Netflix is the streaming entertainment brand whose visual language is the world's most-copied dark-canvas content grid. Canvas is true cinema-black (`#141414`): the deepest dark in the streaming category. The signature is Netflix red (`#e50914`): a pure red used only on the wordmark, on the play-button overlay, and on the primary 'Sign In' / 'Sign Up' CTA. Type runs the custom Netflix Sans (a precise grotesk with subtle aperture tweaks) at modest scale: the brand voice is 'content is the hero, chrome stays invisible'. The signature visual is the horizontal-scroll row of poster-art tiles: each row is a curated category ('Continue Watching', 'Top 10', 'Because you watched...') of poster-art rectangles, the brand-defining UI pattern in the streaming category.
 
 ## Color
-- **Primary:** `#e50914`, Netflix red (wordmark + play-button + Sign In CTA)
+- **Primary:** `#e50914` (Netflix red: wordmark + play-button + Sign In CTA)
 - **Canvas:** `#141414` (True cinema-black)
 - **Canvas deep:** `#000000` (Full-bleed video underlays)
 - **Ink:** `#ffffff` (White type on dark)
@@ -36,9 +36,9 @@ Hero auto-plays muted clip: typically 30 seconds of a featured show with slow ca
 - `footer-dark-multi-language`: black footer with language selector
 
 ## Trademark signals
-- True cinema-black canvas (`#141414`) (the deepest dark in the streaming category) never a gray, never a navy
-- Netflix red (`#e50914`) (pure red, used only on the wordmark, play-button overlays, 'Sign In' CTA) never a section background or category divider
-- Horizontal-scroll poster-art rows (each row is a category title above a horizontal-scroll strip of poster-art rectangles) the brand-defining UI pattern
+- True cinema-black canvas (`#141414`), the deepest dark in the streaming category, never a gray, never a navy
+- Netflix red (`#e50914`), pure red, used only on the wordmark, play-button overlays, 'Sign In' CTA, never a section background or category divider
+- Horizontal-scroll poster-art rows (each row is a category title above a horizontal-scroll strip of poster-art rectangles): the brand-defining UI pattern
 - Auto-playing hero clip: top-of-app or top-of-page video that runs muted with subtle volume-control affordance
 - Custom Netflix Sans typography: grotesk with extremely subtle aperture variations that distinguish it from generic Inter / Helvetica
 

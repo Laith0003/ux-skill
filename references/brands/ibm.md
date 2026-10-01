@@ -546,5 +546,5 @@ The brand commits to flat 0px corners. The other tokens exist for product / mobi
 
 - IBM's product surfaces (cloud-pak, watson, datacap) have richer Carbon component usage (data tables, graph cells, breadcrumbs, contextual menus) that aren't present on the marketing pages inspected. Those components live in Carbon's documentation rather than in the marketing extraction.
 - Form-field error and validation styling is documented in Carbon docs; the inspected pages didn't render error states.
-- Dark mode is documented in Carbon as Gray-100 theme but isn't exposed on these marketing pages, only the footer inverts. The full dark theme is a separate Carbon palette not extracted here.
+- Dark mode is documented in Carbon as Gray-100 theme but isn't exposed on these marketing pages; only the footer inverts. The full dark theme is a separate Carbon palette not extracted here.
 - The community.ibm.com sub-domain uses a different chrome (community-platform white-label) that approximates Carbon but isn't strict: the documented system applies to ibm.com proper.

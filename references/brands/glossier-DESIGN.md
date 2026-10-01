@@ -4,11 +4,11 @@
 Glossier matured. The brand still owns its signature millennial pink (`#fbe1d6`) but the 2024+ rebrand pairs it with a sober monochrome ink and an editorial type system that reads more like a beauty magazine than an Instagram-era startup. Display is a custom serif (Glossier Sans/Display) with magazine-weight pull-quotes; body is a humanist sans. Pink is now a surface tone, not a button color.
 
 ## Color
-- **Primary:** `#000000`, Editorial Black (used for type and primary CTAs)
+- **Primary:** `#000000` (Editorial Black: used for type and primary CTAs)
 - **Canvas:** `#ffffff` (White)
-- **Surface signature:** `#fbe1d6`, Glossier Pink (a tinted band, not a button color)
+- **Surface signature:** `#fbe1d6` (Glossier Pink: a tinted band, not a button color)
 - **Surface alt:** `#f5efe7` (Cream)
-- **Accent (lip / signature):** `#c24a3c`, Glossier Red (used on `You` lipstick and select brand moments)
+- **Accent (lip / signature):** `#c24a3c` (Glossier Red: used on `You` lipstick and select brand moments)
 - **Ink:** `#000000`
 - **Body:** `#2a2a2a`
 - **Hairlines:** `rgba(0,0,0,0.10)`

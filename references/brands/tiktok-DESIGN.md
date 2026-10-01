@@ -4,9 +4,9 @@
 TikTok is the short-form-video platform brand: a pure black canvas, a signature cyan-and-magenta chromatic-aberration (Aqua #25F4EE + Magenta #FE2C55) reserved for the brand mark and selected moments, a vertical 9:16 video feed taking 100% of viewport, and a "content is the entire surface" approach where chrome floats over content. The brand reads as youthful, kinetic, slightly glitch-aesthetic.
 
 ## Color
-- **Primary:** `#fe2c55`, TikTok Magenta (CTAs, heart-liked, brand-mark voltage)
-- **Accent (aqua):** `#25f4ee`, Cyan (brand mark only, never as chrome)
-- **Canvas:** `#000000`, Pure Black (the brand's structural canvas)
+- **Primary:** `#fe2c55` (TikTok Magenta: CTAs, heart-liked, brand-mark voltage)
+- **Accent (aqua):** `#25f4ee` (Cyan: brand mark only, never as chrome)
+- **Canvas:** `#000000` (Pure Black: the brand's structural canvas)
 - **Surface card:** `#161616` (Elevated near-black for comment overlays)
 - **Surface alt:** `#1f1f1f` (Selected band background)
 - **Ink:** `#ffffff` (Pure white text on black)

@@ -4,12 +4,12 @@
 Mercury is the startup-bank-for-startups brand: restrained monochrome canvas, a single warm-muted accent (mercury silver-gray), and a literary serif display (Söhne Breit / GT America serif). The brand intentionally distances itself from both legacy-bank gold/navy and consumer-fintech brightness. Type is the brand's voltage; color is barely there.
 
 ## Color
-- **Primary:** `#191b1f`, Mercury Ink (used for type and CTAs)
+- **Primary:** `#191b1f` (Mercury Ink: used for type and CTAs)
 - **Canvas:** `#fafafa` (Off-White)
 - **Surface alt:** `#f0eee9` (Warm Bone)
 - **Surface card:** `#ffffff` (White)
-- **Accent (muted warm):** `#c4a777`, Mercury Bronze (used sparingly on highlights and brand-mark accents)
-- **Accent (signal):** `#1c7d56`, Account Green (positive balance only)
+- **Accent (muted warm):** `#c4a777` (Mercury Bronze: used sparingly on highlights and brand-mark accents)
+- **Accent (signal):** `#1c7d56` (Account Green: positive balance only)
 - **Ink:** `#191b1f`
 - **Body:** `#52555c`
 - **Hairlines:** `rgba(25,27,31,0.10)` (visible 1px borders, used generously)

@@ -2,7 +2,7 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Starbucks' design system is a **warm, confident retail flagship** wearing the green of their storefront apron across every surface. The canvas alternates between a neutral-warm cream (`#f2f0eb`) and a ceramic off-white (`#edebe9`) (colors that reference actual store materials: the paper napkins, the café walls, the wood finishes) while the signature **Starbucks Green** (`#006241`) anchors the brand moment on hero bands, CTAs, and the Rewards experience. The greens come in four calibrated shades (Starbucks, Accent, House, Uplift) each mapped to a specific surface role, and gold (`#cba258`) appears only around Rewards-status ceremony, not as a general accent.
+Starbucks' design system is a **warm, confident retail flagship** wearing the green of their storefront apron across every surface. The canvas alternates between a neutral-warm cream (`#f2f0eb`) and a ceramic off-white (`#edebe9`), colors that reference actual store materials: the paper napkins, the café walls, the wood finishes, while the signature **Starbucks Green** (`#006241`) anchors the brand moment on hero bands, CTAs, and the Rewards experience. The greens come in four calibrated shades (Starbucks, Accent, House, Uplift) each mapped to a specific surface role, and gold (`#cba258`) appears only around Rewards-status ceremony, not as a general accent.
 
 Typography carries most of the brand voice. The proprietary **SoDoSans** typeface (custom to Starbucks) sits across nearly every surface with a tight `-0.16px` letter-spacing. It reads confident and friendly rather than fashion-magazine severe. What's unusual: the Rewards page switches to a warm serif (`"Lander Tall", "Iowan Old Style", Georgia`) for specific headline moments, subtly echoing the nostalgic feel of a coffeehouse chalkboard. And the Careers pages use a handwritten script (`"Kalam", "Comic Sans MS", cursive`) for personal cup-name touches. Three typefaces, three contexts: the system is disciplined about when each appears.
 
@@ -80,7 +80,7 @@ No structural gradient tokens observed. Surface hierarchy is solid-color-block t
 - **Primary:** `SoDoSans, "Helvetica Neue", Helvetica, Arial, sans-serif` (Starbucks' proprietary corporate typeface, used across nearly every surface)
 - **Loading Fallback:** `"Helvetica Neue", Helvetica, Arial, sans-serif` (what users see before SoDoSans loads)
 - **Rewards Serif:** `"Lander Tall", "Iowan Old Style", Georgia, serif` (used on specific Rewards-page headline moments for a warm editorial feel)
-- **Careers Script:** `"Kalam", "Comic Sans MS", cursive`, used exclusively for Careers-page "cup name" decorative touches, referencing the hand-written names on Starbucks cups
+- **Careers Script:** `"Kalam", "Comic Sans MS", cursive` (used exclusively for Careers-page "cup name" decorative touches, referencing the hand-written names on Starbucks cups)
 
 No OpenType stylistic sets explicitly activated at `:root`.
 
@@ -551,7 +551,7 @@ Inferred from component width tokens and progressive nav heights:
 
 6. "Design a gift-card tile: card radius matches `12px`, fills with an illustrated photograph (hand-drawn watercolor-painted feel) as the entire surface. Subtle drop shadow makes it feel like a physical card on the cream canvas. Group under a category label ('Spring', 'Thank You', 'Birthday') in SoDoSans 24px weight 400 above the grid."
 
-7. "Create a Starbucks product-detail header: House Green (`#1E3932`) band with breadcrumb 'Menu / Refreshers / Pink Energy Drink' in 14/400 white above the product title in SoDoSans 32/700 uppercase white. Product photograph centered below title. Below photo: a 4-up size selector row, each cup-icon button shows a vertical cup silhouette, size name ('Tall' / 'Grande' / 'Venti' / 'Trenta') in 16/700 white, and fluid-ounce in 13/400 Text White Soft. Selected size wraps the cup icon in a `2px solid #00754A` circular ring."
+7. "Create a Starbucks product-detail header: House Green (`#1E3932`) band with breadcrumb 'Menu / Refreshers / Pink Energy Drink' in 14/400 white above the product title in SoDoSans 32/700 uppercase white. Product photograph centered below title. Below photo: a 4-up size selector row: each cup-icon button shows a vertical cup silhouette, size name ('Tall' / 'Grande' / 'Venti' / 'Trenta') in 16/700 white, and fluid-ounce in 13/400 Text White Soft. Selected size wraps the cup icon in a `2px solid #00754A` circular ring."
 
 8. "Build a Starbucks customize flow: under the size selector, 3 stacked outlined-rectangle input rows (white bg, `1px solid #d6dbde` border, `4px` radius). Each has a floating label ('Add-ins', 'Milk', 'Add-ins') above the top border in 13/700 Text Black uppercase. Value centered (e.g., 'Ice', 'Coconut'). Right side: chevron-down in Text Black Soft. For the scoop row, embed a numeric stepper (`−` `1` `+` with circular `32px` outlined buttons). Below all three fields: outlined green 'Customize' pill with gold sparkle icon, `50px` radius, `14px 40px` padding. Pair with a Green Accent filled 'Add to Order' pill in the same row."
 

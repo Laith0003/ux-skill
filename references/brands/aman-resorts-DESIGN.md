@@ -1,11 +1,11 @@
 # Aman Resorts: DESIGN.md
 
 ## Overview
-Aman is the Singapore-founded ultra-luxury collection of 30+ properties known internally as "the world's most discreet hotel brand." Where Four Seasons whispers, Aman is nearly silent. Canvas is bone-white (`#f4f0e8`) or deep monsoon-black. Type is a restrained serif (custom Aman Serif / Garamond) at modest sizes: refusing the 80px display headlines every other luxury brand has adopted. Photography is meditative travel-photography: no people, no smiles, no tables-with-wine, instead, single tatami rooms at dawn, fog over a Bhutanese valley, water-lily ponds at dusk. The brand voice is "sanctuary": a word Aman uses in every property description. Chrome is so reduced it nearly disappears, treating each property as a privately-owned retreat the visitor is being granted access to.
+Aman is the Singapore-founded ultra-luxury collection of 30+ properties known internally as "the world's most discreet hotel brand." Where Four Seasons whispers, Aman is nearly silent. Canvas is bone-white (`#f4f0e8`) or deep monsoon-black. Type is a restrained serif (custom Aman Serif / Garamond) at modest sizes: refusing the 80px display headlines every other luxury brand has adopted. Photography is meditative travel-photography: no people, no smiles, no tables-with-wine; instead, single tatami rooms at dawn, fog over a Bhutanese valley, water-lily ponds at dusk. The brand voice is "sanctuary": a word Aman uses in every property description. Chrome is so reduced it nearly disappears, treating each property as a privately-owned retreat the visitor is being granted access to.
 
 ## Color
 - **Primary / Ink:** `#1a1a1a` (used for type and rare CTAs)
-- **Canvas:** `#f4f0e8`, Bone-white (the brand's signature surface)
+- **Canvas:** `#f4f0e8` (Bone-white: the brand's signature surface)
 - **Canvas dark:** `#0a0a0a` (Deep monsoon-black for evening-mode and full-bleed pages)
 - **Accent:** `#8b6f47` (Restrained warm-bronze, used on hairlines and inline emphasis)
 - **Body:** `#3a3a3a`
@@ -39,7 +39,7 @@ Meditative. Hero images cross-fade extremely slowly (4 to 6 seconds between fram
 - Bone-white canvas with modest serif type: refusing every luxury convention of large display headlines
 - People-free photography: every Aman image is the empty room at dawn, the misty valley
 - 'Aman' wordmark in lowercase or sentence-case serif lockup, never shouts, never bolds
-- Property-name as koan ('Amanjiwo', 'Amankora', 'Amanyangyun') combining 'Aman' (Sanskrit: peace) with a regional word
+- Property-name as koan ('Amanjiwo', 'Amankora', 'Amanyangyun'), combining 'Aman' (Sanskrit: peace) with a regional word
 - Long-form single-column property essays: 200+ words of contemplative prose before any photo grid or booking CTA
 
 ## What they DON'T do

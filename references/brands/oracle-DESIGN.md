@@ -2,7 +2,7 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Oracle's web presence is the database-as-institution brand. The chrome is white, the chromatic anchor is Oracle Red (#c74634) (a specific saturated tomato-brick-red used on the wordmark and CTAs) and the typography is a Roboto-family humanist sans. Where consumer SaaS competitors lean on illustration, motion, and editorial photography, Oracle leans on dense taxonomy navigation, documentation-style chrome, and rectilinear cards with sharp corners. The brand reads as serious enterprise IT, for the customer who is comparing TCO, support tiers, and feature matrices, not for the customer hunting aspiration.
+Oracle's web presence is the database-as-institution brand. The chrome is white, the chromatic anchor is Oracle Red (#c74634), a specific saturated tomato-brick-red used on the wordmark and CTAs, and the typography is a Roboto-family humanist sans. Where consumer SaaS competitors lean on illustration, motion, and editorial photography, Oracle leans on dense taxonomy navigation, documentation-style chrome, and rectilinear cards with sharp corners. The brand reads as serious enterprise IT, for the customer who is comparing TCO, support tiers, and feature matrices, not for the customer hunting aspiration.
 
 The Oracle Red is the brand's most recognized asset. It is not pure red and it is not coral. It is a saturated brick-tomato hex that, paired with the corporate sans wordmark, instantly reads as Oracle. The CTAs use the red as a solid fill with white text; the wordmark uses it as a solid letter color. Replacing the red with a warmer coral or a "modern" pink is a recognition failure.
 

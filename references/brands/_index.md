@@ -1,6 +1,6 @@
 # Brand library: 160 production-grade DESIGN.md files
 
-When a user asks for a specific brand's aesthetic ("build me a landing in Stripe's style", "match the Notion editorial feel", "make it like Linear") read the matching file in this directory. Every brand here has a full design system spec: colors, typography, layout, components, motion, content tone, do/don't pairs.
+When a user asks for a specific brand's aesthetic ("build me a landing in Stripe's style", "match the Notion editorial feel", "make it like Linear"), read the matching file in this directory. Every brand here has a full design system spec: colors, typography, layout, components, motion, content tone, do/don't pairs.
 
 The frontend-engineer sub-agent MUST consult the relevant brand file before producing output when the user has named a specific brand. The brand's design language overrides defaults; the plugin's anti-AI-slop discipline still applies on top.
 

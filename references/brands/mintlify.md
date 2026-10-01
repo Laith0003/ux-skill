@@ -681,7 +681,7 @@ The radius scale is tightly disciplined: the brand never uses a corner softening
 **`segmented-tab`** + **`segmented-tab-active`**: Underline-style tab navigation (used inside docs Tabs component for "First tab / Second tab / Third tab").
 - Inactive: text `{colors.steel}`, transparent background, padding `{spacing.sm} {spacing.md}`. Active: text `{colors.ink}`, 2px bottom border in `{colors.ink}`.
 
-**`pill-tab`** + **`pill-tab-active`**. Pill-style tab nav (top of pricing page: "Pricing / Roadmap").
+**`pill-tab`** + **`pill-tab-active`**: Pill-style tab nav (top of pricing page: "Pricing / Roadmap").
 - Inactive: background `{colors.canvas}`, text `{colors.steel}`, border `1px solid {colors.hairline}`, padding `8px 16px`, rounded `{rounded.full}`.
 - Active: background `{colors.primary}`, text `{colors.on-primary}`, no border.
 

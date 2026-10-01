@@ -486,7 +486,7 @@ Imagery is part of the design, not a nice-to-have. Every layout must accommodate
 
 ### Stacked-card collage
 **Use when**: hero compositions when a single screenshot doesn't convey breadth.
-**What it is**: 2-4 UI fragments layered at varying z-depths (a panel, an overlay, a tooltip, a popup) creating dimensional composition. Suggests "here are several features at once." Choreographed; layers overlap intentionally to imply depth without obscuring meaning.
+**What it is**: 2-4 UI fragments layered at varying z-depths (a panel, an overlay, a tooltip, a popup), creating dimensional composition. Suggests "here are several features at once." Choreographed; layers overlap intentionally to imply depth without obscuring meaning.
 **Cost**: medium (z-stacking + intentional crop).
 
 ### Ghost-cursor screenshot

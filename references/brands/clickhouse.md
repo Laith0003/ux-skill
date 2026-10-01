@@ -398,7 +398,7 @@ ClickHouse uses dense, slightly-compressed whitespace appropriate for a develope
 The system uses no drop shadows. Depth comes from the contrast between black canvas and `{colors.surface-card}` (a barely-lighter-than-canvas tone): the contrast is subtle, more like an "engineering-grade dim panel" than an "elevated card."
 
 ### Decorative Depth
-- Code-window cards carry their own internal product chrome (line numbers, syntax highlighting, status bars at the bottom) adding visual density without external shadows.
+- Code-window cards carry their own internal product chrome (line numbers, syntax highlighting, status bars at the bottom), adding visual density without external shadows.
 - The yellow-on-black contrast does most of the elevation work for CTAs.
 
 ## Shapes
@@ -537,7 +537,7 @@ The system uses no drop shadows. Depth comes from the contrast between black can
 ## Known Gaps
 
 - The exact yellow hex (#faff69) was sampled from the screenshot; ClickHouse may publish an official brand color slightly differently.
-- Inter weight axis values beyond 400 / 500 / 600 / 700 are not formalized, only the static weights observed are documented.
+- Inter weight axis values beyond 400 / 500 / 600 / 700 are not formalized; only the static weights observed are documented.
 - Animation and transition timings (code typewriter effects, stat counter animations) are not in scope.
 - Form validation states beyond `{component.text-input-focused}` are not extracted.
 - The actual ClickHouse Cloud product surface (query console, monitoring dashboards, table browser) shares some tokens with the marketing site but adds many product-specific components that are out of scope.

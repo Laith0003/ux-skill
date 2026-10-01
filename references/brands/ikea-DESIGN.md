@@ -1,11 +1,11 @@
 # IKEA: DESIGN.md
 
 ## Overview
-IKEA is the Swedish flat-pack democracy. Canvas is pure white. The brand-asset trinity is the IKEA blue (`#0058a3`), the IKEA yellow (`#ffdb00`), and the wordmark lockup of the two used together at full saturation on the navigation. Type runs a custom geometric grotesk (Noto IKEA / Verdana) at a precise scale. Photography is room-staging (fully furnished rooms with real-looking models, kids, dogs, breakfast tables) never product-on-white. The voice is 'practical, democratic, Swedish': a meatball-and-flatpack-instructions sensibility wrapped in clean editorial scale.
+IKEA is the Swedish flat-pack democracy. Canvas is pure white. The brand-asset trinity is the IKEA blue (`#0058a3`), the IKEA yellow (`#ffdb00`), and the wordmark lockup of the two used together at full saturation on the navigation. Type runs a custom geometric grotesk (Noto IKEA / Verdana) at a precise scale. Photography is room-staging (fully furnished rooms with real-looking models, kids, dogs, breakfast tables), never product-on-white. The voice is 'practical, democratic, Swedish': a meatball-and-flatpack-instructions sensibility wrapped in clean editorial scale.
 
 ## Color
-- **Primary:** `#0058a3`, IKEA blue (nav bar + primary CTA + wordmark)
-- **Accent (yellow):** `#ffdb00`, IKEA yellow (price tags + wordmark + 'Low price' callouts)
+- **Primary:** `#0058a3` (IKEA blue: nav bar + primary CTA + wordmark)
+- **Accent (yellow):** `#ffdb00` (IKEA yellow: price tags + wordmark + 'Low price' callouts)
 - **Canvas:** `#ffffff` (Pure white)
 - **Canvas warm:** `#f5f0e8` (Warm cream for editorial/lifestyle bands)
 - **Ink:** `#111111` (Deep ink for type)

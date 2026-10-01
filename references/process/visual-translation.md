@@ -148,7 +148,7 @@ The structural anchor is whichever image is closest to the actual product surfac
 
 For missing states (loading, empty, error, hover, focus), invent only after preserving everything else. The new state must inherit the reference's component family, radius logic, spacing rhythm, and mood. Do not let a missing state become an excuse to introduce a foreign visual language.
 
-When you invent a state, document it: "Loading state inferred (used skeleton matching card structure, 600ms fade-in.") This makes the invention reviewable and prevents the build from accumulating invented details that nobody can explain.
+When you invent a state, document it: "Loading state inferred: used skeleton matching card structure, 600ms fade-in." This makes the invention reviewable and prevents the build from accumulating invented details that nobody can explain.
 
 ---
 

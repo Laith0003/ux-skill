@@ -4,10 +4,10 @@
 Dezeen is the world's most-read architecture-and-design magazine brand: confident, image-forward, anti-chrome. The canvas is a strict monochrome white-and-near-black duet, Dezeen Display serif carries every headline, and a 4-column masonry grid of beautifully-shot architecture photography carries ~80% of the visual surface area on every page. The brand reads as the design publication of record.
 
 ## Color
-- **Primary:** `#000000`, Pure Black (every CTA, footer fill, brand mark)
+- **Primary:** `#000000` (Pure Black: every CTA, footer fill, brand mark)
 - **Canvas:** `#ffffff` (Pure White)
 - **Surface card:** `#ffffff` (White card with hairline border)
-- **Surface alt:** `#f5f5f5`, Selected gray-tint band background (rare)
+- **Surface alt:** `#f5f5f5` (Selected gray-tint band background: rare)
 - **Ink:** `#1a1a1a` (Near-pure-black for headlines and primary text)
 - **Body:** `#3a3a3a` (Default running text)
 - **Muted:** `#7a7a7a` (Captions, photographer credits, dates)

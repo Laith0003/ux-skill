@@ -999,7 +999,7 @@ Navigation:
 - A single warm accent color used in links, pull quotes, and the rare CTA.
 - Marginal notes in a narrow right-rail, set in sans at small size.
 - Numbered footnotes anchored to the section bottom.
-- Section dingbats (small hairline ornaments) separating subsections.
+- Section dingbats (small hairline ornaments), separating subsections.
 - A cover image treatment that mimics a magazine plate: full bleed, large caption, single sentence subhead.
 
 ### Banned in this style
@@ -2481,7 +2481,7 @@ These imports work because they are single moves carried across, not entire patt
 
 ### Rule 3: When in doubt, retreat to the chosen style.
 
-If a pattern is borderline (a magnetic button in a minimalist surface, a glassmorphism panel in a brutalist surface, a hazard-red accent in a high-end surface) retreat to the chosen style. The retreat costs nothing; the import risks coherence. The audience's eye will sense the dissonance even if they can't name it.
+If a pattern is borderline (a magnetic button in a minimalist surface, a glassmorphism panel in a brutalist surface, a hazard-red accent in a high-end surface), retreat to the chosen style. The retreat costs nothing; the import risks coherence. The audience's eye will sense the dissonance even if they can't name it.
 
 The only time to violate Rule 3 is when the import is doing measurable clarity work that no native pattern would. If the magnetic button is the only way to communicate "this is a hero CTA" with sufficient signal weight on an otherwise quiet minimalist page, the import is justified. If the magnetic button is being added because it looks cool, retreat.
 

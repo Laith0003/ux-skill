@@ -235,7 +235,7 @@ components:
 
 ## Overview
 
-Slacc's design language centers on a deep aubergine primary (`{colors.primary}`) (the brand's most enduring visual asset) applied as the dominant button color, the footer band, the featured pricing tier, and the brand wordmark. Around that aubergine the system stages an unusually delicate ecosystem: cream-lavender hero canvases with soft pastel-mesh gradients (peachy oranges, lavenders, dusty greens) that pulse behind floating product UI mockups, with the actual interface chrome rendered in fine detail at 3:2 aspect.
+Slacc's design language centers on a deep aubergine primary (`{colors.primary}`), the brand's most enduring visual asset, applied as the dominant button color, the footer band, the featured pricing tier, and the brand wordmark. Around that aubergine the system stages an unusually delicate ecosystem: cream-lavender hero canvases with soft pastel-mesh gradients (peachy oranges, lavenders, dusty greens) that pulse behind floating product UI mockups, with the actual interface chrome rendered in fine detail at 3:2 aspect.
 
 Typography splits between two proprietary humanist sans families. The display tier runs at 700 weight at sizes 32 to 64px with negative letter-spacing for tight optical density on hero headlines. The UI tier uses the second family at 400 to 700 with slightly relaxed leading (1.55): the brand's body copy reads quietly without competing with the aubergine moments.
 

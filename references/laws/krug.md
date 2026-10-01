@@ -228,7 +228,7 @@ A scanner gets the value in two seconds. A reader gets more if they scroll.
 
 ### Definition
 
-A user should look at any page and, in five seconds (at highway speed, with one glance) be able to answer two questions: "What is this page?" and "What can I do on it?"
+A user should look at any page and, in five seconds (at highway speed, with one glance), be able to answer two questions: "What is this page?" and "What can I do on it?"
 
 The billboard test is a thought experiment. Imagine your page on a billboard at the side of the road. A driver gets three seconds of glance time. Can they identify what is being advertised?
 

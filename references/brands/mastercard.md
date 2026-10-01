@@ -330,14 +330,14 @@ Circular portraits scale proportionally (maintaining the perfect circle at every
 ## 9. Agent Prompt Guide
 
 ### Quick Color Reference
-- Primary CTA: "Ink Black (`#141413`), the warm near-black used for primary pill buttons and footer"
-- Background: "Canvas Cream (`#F3F0EE`), warm putty body canvas, never pure white"
-- Lifted surface: "Lifted Cream (`#FCFBFA`), one step lighter than canvas for nested sections"
+- Primary CTA: "Ink Black (`#141413`): the warm near-black used for primary pill buttons and footer"
+- Background: "Canvas Cream (`#F3F0EE`): warm putty body canvas, never pure white"
+- Lifted surface: "Lifted Cream (`#FCFBFA`): one step lighter than canvas for nested sections"
 - Heading text: "Ink Black (`#141413`)"
 - Body text: "Ink Black (`#141413`) at weight 450"
 - Muted text: "Slate Gray (`#696969`)"
-- Signal / Consent: "Signal Orange (`#CF4500`), reserve for cookie consent and legal actions"
-- Accent arc: "Light Signal Orange (`#F37338`), orbital decorative lines only"
+- Signal / Consent: "Signal Orange (`#CF4500`): reserve for cookie consent and legal actions"
+- Accent arc: "Light Signal Orange (`#F37338`): orbital decorative lines only"
 - Border / Outline: "Ink Black at 1.5px for pill buttons; 1px at low opacity elsewhere"
 - Footer: "Ink Black (`#141413`) with White text"
 

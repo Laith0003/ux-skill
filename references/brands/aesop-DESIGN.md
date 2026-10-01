@@ -4,11 +4,11 @@
 Aesop's surface is the deepest apothecary in beauty: a sepia canvas (`#dccfb6`) with chocolate-ink type (`#241f17`) and a Walbaum-feel serif display. Every page reads like a 19th-century botanical pharmacopeia translated to the screen. Photography is sparse, restrained, often product-only on warm gradient floors. The brand's UI vocabulary intentionally feels handset rather than designed-in-Figma.
 
 ## Color
-- **Primary:** `#241f17`, Chocolate Ink (used for type and CTAs)
+- **Primary:** `#241f17` (Chocolate Ink: used for type and CTAs)
 - **Canvas:** `#dccfb6` (Sepia Cream)
 - **Surface alt:** `#c8b598` (Sepia Deep)
 - **Surface card (rare):** `#f0e6d2` (Pale Tan)
-- **Accent (botanical):** `#5a4a2e`, Dried Herb (used in apothecary illustrations)
+- **Accent (botanical):** `#5a4a2e` (Dried Herb: used in apothecary illustrations)
 - **Ink:** `#241f17`
 - **Body:** `#3d342a`
 - **Hairlines:** `rgba(36,31,23,0.20)` (visible 1px hairlines, never subtle)

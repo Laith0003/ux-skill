@@ -356,7 +356,7 @@ components:
 
 ## Overview
 
-PostHog's marketing system is built on the visual contradiction at the heart of the brand: a serious open-source product analytics platform rendered as if it were a friendly engineering sketchbook. The chrome runs on a warm cream canvas (`{colors.canvas}`, `#eeefe9`) (not white) and every page is dotted with hand-drawn hedgehog mascots in lab coats, lounge chairs, terminals, and reading glasses, scattered across the layout like marginalia in a textbook. Type sits in IBM Plex Sans Variable at olive-gray (`{colors.body}`, `#4d4f46`) for body and deep olive-charcoal (`{colors.ink}`, `#23251d`) for headlines, with weights stepped tightly between 400, 600, 700, and 800 to create hierarchy without color. The single saturated yellow-orange pill (`{colors.primary}`, `#f7a501`) is the brand's only loud chromatic moment; everything else is cream, olive, white card, and the occasional pastel callout band.
+PostHog's marketing system is built on the visual contradiction at the heart of the brand: a serious open-source product analytics platform rendered as if it were a friendly engineering sketchbook. The chrome runs on a warm cream canvas (`{colors.canvas}`, `#eeefe9`), not white, and every page is dotted with hand-drawn hedgehog mascots in lab coats, lounge chairs, terminals, and reading glasses, scattered across the layout like marginalia in a textbook. Type sits in IBM Plex Sans Variable at olive-gray (`{colors.body}`, `#4d4f46`) for body and deep olive-charcoal (`{colors.ink}`, `#23251d`) for headlines, with weights stepped tightly between 400, 600, 700, and 800 to create hierarchy without color. The single saturated yellow-orange pill (`{colors.primary}`, `#f7a501`) is the brand's only loud chromatic moment; everything else is cream, olive, white card, and the occasional pastel callout band.
 
 The system has a distinctive **two-mode body layout**: marketing pages (home, workflows, pricing) lean on alternating-pastel callout bands and feature tiles in white cards on cream, while documentation pages add a sticky 240px left sidebar with a rounded outline-icon section list. Code samples are full-width dark blocks on `{colors.surface-dark}` (the same olive-charcoal that carries body ink, used inverted) inside white doc cards, creating the system's most distinctive visual moment: a dark-on-dark code island floating inside a white card on a cream canvas, with a hedgehog mascot doodled in the margin.
 
@@ -373,7 +373,7 @@ Sections stack at `{spacing.section}` (80px) rhythm with cream canvas continuing
 
 ## Colors
 
-> **Source pages:** `/` (home), `/pricing` (pricing detail), `/docs/product-analytics` (docs article), `/workflows` (product feature page). The chrome palette is identical across all four pages, only doc-specific accents (callout-banner pastels, code-block dark surface) appear exclusively inside the docs experience.
+> **Source pages:** `/` (home), `/pricing` (pricing detail), `/docs/product-analytics` (docs article), `/workflows` (product feature page). The chrome palette is identical across all four pages; only doc-specific accents (callout-banner pastels, code-block dark surface) appear exclusively inside the docs experience.
 
 ### Brand & Accent
 - **PostHog Yellow** (`{colors.primary}`, `#f7a501`): the universal primary CTA. Sticky "Get started: free" pill in the top-right of every nav, hero CTAs, pricing-tier subscribe buttons, footer signup pill. The system's only saturated chromatic moment.
@@ -512,7 +512,7 @@ There is no photography. Visual elements are limited to:
 
 **`button-primary`**: the universal PostHog CTA
 - Background `{colors.primary}` (yellow-orange), text `{colors.on-primary}` (deep olive), type `{typography.button-md}`, padding `8px 16px`, height `40px`, rounded `{rounded.md}`.
-- Used for "Get started, free" (sticky top-nav CTA), "Sign up", "Try it free", "Subscribe", every primary action.
+- Used for "Get started: free" (sticky top-nav CTA), "Sign up", "Try it free", "Subscribe": every primary action.
 - Pressed state lives in `button-primary-pressed`: background drops to `{colors.primary-pressed}`.
 
 **`button-secondary`**: soft alternative on cream canvas
@@ -594,7 +594,7 @@ There is no photography. Visual elements are limited to:
 
 **`primary-nav`**
 - Background `{colors.canvas}` (cream: same as the page), text `{colors.ink}`, height `56px`, type `{typography.body-strong}`, rounded `{rounded.none}`.
-- Layout (desktop): PostHog wordmark + hedgehog logo at left, nav menu cluster ("Pricing · Docs · Community · Company"), right cluster with a search-glyph, "Login" link, and the always-yellow `{component.button-primary}` "Get started (free" pill anchored to the far right).
+- Layout (desktop): PostHog wordmark + hedgehog logo at left, nav menu cluster ("Pricing · Docs · Community · Company"), right cluster with a search-glyph, "Login" link, and the always-yellow `{component.button-primary}` "Get started: free" pill anchored to the far right.
 
 **`sub-nav-strip`**: secondary nav bar (under primary)
 - Background `{colors.surface-soft}`, text `{colors.body}` in `{typography.body-xs}`, height `40px`, rounded `{rounded.none}`.

@@ -366,7 +366,7 @@ If implementing without access to figmaSans / figmaMono, suitable open-source su
 - Card interior padding: `{spacing.lg}` (24px) on pricing cards and template tiles.
 - Form input padding: `{spacing.sm}` 12px vertical · 14px horizontal.
 - Button padding: `{spacing.xs}` 8px vertical · `{spacing.lg}` 24px horizontal for pill buttons (the asymmetric `8px 18px 10px` extracted on `button-secondary` nudges the type optically inside the pill).
-- Universal rhythm constant: `{spacing.section}` (96px), the vertical gap between major content sections holds across home, pricing, and FigJam pages.
+- Universal rhythm constant: `{spacing.section}` (96px); the vertical gap between major content sections holds across home, pricing, and FigJam pages.
 
 ### Grid & Container
 

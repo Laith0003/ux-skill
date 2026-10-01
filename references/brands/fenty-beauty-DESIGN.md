@@ -4,7 +4,7 @@
 Fenty Beauty is Rihanna's inclusive beauty empire that redrew the cosmetics industry around radical shade range. Canvas is pure black (`#0a0a0a`) or near-black with deep saturated ink. Type runs a precise grotesk display (Söhne / Inter / proprietary all-caps face) often paired with an italic serif accent. The voice is luxurious, club-night, unapologetically Black and unapologetically Caribbean: gold filigree on black, full-bleed product hero shots, model casting that spans every Pantone of human skin. The signature 50-shade Pro Filt'r foundation grid IS the brand: it appears on hero, product, and editorial pages as a strip of swatches that demonstrates the brand's core promise visually before any copy lands.
 
 ## Color
-- **Primary (gold):** `#d4af37`, Muted-warm gold (wordmark + dividers)
+- **Primary (gold):** `#d4af37` (Muted-warm gold: wordmark + dividers)
 - **Canvas:** `#0a0a0a` (Pure-black canvas)
 - **Canvas warm:** `#1a0f0a` (Slight warmth on editorial bands)
 - **Ink:** `#ffffff` (White type on black)

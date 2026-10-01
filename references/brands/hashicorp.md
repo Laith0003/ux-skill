@@ -275,7 +275,7 @@ The signature device is the **product-card** family: each HashiCorp product gets
 - Black-canvas marketing system: `{colors.canvas}` is the surface for hero, body, pricing, comparison tables, and footer alike.
 - **Per-product color identity**: Terraform `{colors.product-terraform}`, Vault `{colors.product-vault}`, Waypoint `{colors.product-waypoint}`, Vagrant `{colors.product-vagrant}`, Consul `{colors.product-consul}`, Nomad `{colors.product-nomad}`, Boundary `{colors.product-boundary}` (each with its own button + card variant).
 - Display headlines run hashicorpSans 600/700 with line-height 1.17 to 1.21 (tight); body runs the same family at 500 with 1.50 to 1.71 (relaxed): the proportional gap is the brand's voice.
-- CTA shape is `{rounded.md}` 8px (not a pill) keeping the system reading as developer-tool rather than consumer-app.
+- CTA shape is `{rounded.md}` 8px (not a pill), keeping the system reading as developer-tool rather than consumer-app.
 - Charcoal surface lift (canvas → surface-1 → surface-2) instead of shadow-driven elevation.
 - 1px translucent gray hairlines (`rgba(178,182,189,0.1)`) define cards and dividers: the borders are felt more than seen.
 - Eyebrow typography (12 to 13px, 600 weight, 0.6px positive tracking, uppercase) marks every section as a category label.

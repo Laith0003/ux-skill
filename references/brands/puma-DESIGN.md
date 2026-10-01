@@ -6,7 +6,7 @@ Puma's web presence is sport-and-culture chrome: the leaping cat logo, bright-en
 
 The leaping cat logo is the brand mark: used pure black on white or pure white on black, never colored. The wordmark sometimes pairs with the cat (the cat sits beside the PUMA letterforms); sometimes the cat appears alone. Both treatments are brand-correct.
 
-Puma Red (#e21e26) (the brand's "Forever Faster" red) is the seasonal voltage. It appears on campaign banners, on certain product CTAs, and as a signature accent on athletic product pages. The red is generous on campaign moments (a full-bleed red banner heralding a new drop) and scarce on individual elements.
+Puma Red (#e21e26), the brand's "Forever Faster" red, is the seasonal voltage. It appears on campaign banners, on certain product CTAs, and as a signature accent on athletic product pages. The red is generous on campaign moments (a full-bleed red banner heralding a new drop) and scarce on individual elements.
 
 **Key Characteristics:**
 - Leaping cat logo: the brand mark, pure black or pure white

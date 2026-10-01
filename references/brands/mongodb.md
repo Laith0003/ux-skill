@@ -611,7 +611,7 @@ Marketing surfaces give content generous breathing room: `{spacing.hero}` (120px
 
 ### Tabs
 
-**`pill-tab`** + **`pill-tab-active`**. Pill-style tab nav (top of pricing: "MongoDB Atlas / Enterprise Advanced").
+**`pill-tab`** + **`pill-tab-active`**: Pill-style tab nav (top of pricing: "MongoDB Atlas / Enterprise Advanced").
 - Inactive: text `{colors.steel}`, border `1px solid {colors.hairline}`, padding `{spacing.xs} {spacing.md}`, rounded `{rounded.full}`.
 - Active: background `{colors.ink}`, text `{colors.on-dark}`.
 

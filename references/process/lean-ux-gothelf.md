@@ -361,7 +361,7 @@ The method does not exist alone. It connects to and supports other ways of worki
 
 **With OKRs.** Quarterly objectives and key results, when written well, name the outcomes a team is pursuing. Lean UX is one way to actually achieve those outcomes. The OKR is the destination; Lean UX is the way the team walks there. Badly written OKRs that name outputs ("ship three features") undercut Lean UX; well-written OKRs that name outcomes ("increase weekly active partners by 20%") reinforce it.
 
-**With service design.** When the product extends across multiple touchpoints (software, human service, physical experience) service design tools (journey maps, service blueprints, role definitions) layer on top of Lean UX. The hypothesis-driven posture remains; the artifacts get more comprehensive to handle the cross-touchpoint nature of the work.
+**With service design.** When the product extends across multiple touchpoints (software, human service, physical experience), service design tools (journey maps, service blueprints, role definitions) layer on top of Lean UX. The hypothesis-driven posture remains; the artifacts get more comprehensive to handle the cross-touchpoint nature of the work.
 
 ---
 

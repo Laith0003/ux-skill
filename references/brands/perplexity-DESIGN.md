@@ -4,9 +4,9 @@
 Perplexity is the answer-engine brand: built on a near-black graphite canvas (with a 2026 cream marketing surface), a signature peacock-teal (#20B8CD) as the single accent, the FK Grotesk Neue family at every tier, and a search input that IS the hero. The brand reads as a technical answer engine, not a chat product: dense, sourced, slightly serious, with the source-cite ribbon as a recurring visual signature.
 
 ## Color
-- **Primary:** `#20b8cd`, Peacock Teal (the single brand accent, used for CTAs, links, focus rings)
-- **Canvas (app):** `#0f1416`, Graphite Near-Black (the app surface)
-- **Canvas (marketing):** `#fbfaf4`, Cream (2026 marketing-only surface)
+- **Primary:** `#20b8cd` (Peacock Teal: the single brand accent, used for CTAs, links, focus rings)
+- **Canvas (app):** `#0f1416` (Graphite Near-Black: the app surface)
+- **Canvas (marketing):** `#fbfaf4` (Cream: 2026 marketing-only surface)
 - **Surface card (dark):** `#1a1f22` (Elevated graphite for answer cards)
 - **Surface card (light):** `#ffffff` (White card on cream marketing surface)
 - **Surface alt:** `#091114` (Deeper graphite for footer and modals)

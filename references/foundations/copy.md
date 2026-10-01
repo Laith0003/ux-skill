@@ -10,7 +10,7 @@
 
 3. **Numbers beat adjectives**: "75ms latency" beats "blazingly fast." "1.5% cashback" beats "industry-leading rewards." "Ship in 1 to 3 days" beats "ship fast." A specific number is worth ten adjectives.
 
-4. **Errors name the cause AND the fix**. Never "form contains errors" or "invalid input." Always specific: name the field, name the problem, name the fix. Every error includes a clear recovery path.
+4. **Errors name the cause AND the fix**: Never "form contains errors" or "invalid input." Always specific: name the field, name the problem, name the fix. Every error includes a clear recovery path.
 
 5. **Empty states explain the path forward**: "Connect your first source to start" beats "No data yet." The empty state is the start of a relationship, not a failure to load.
 
@@ -41,7 +41,7 @@
 | "Building foundational [X] to do [ambitious thing]" | "Revolutionizing the future of [industry]" |
 | "98% of the top 100 cloud companies" | "Trusted by leaders worldwide" |
 | "Ship in 1 to 3 days" | "Ship fast" |
-| "Make anything possible: in one tool." | "Unleash your team's potential!" |
+| "Make anything possible, in one tool." | "Unleash your team's potential!" |
 | Use sentence case for headlines | Use Title Case For Every Word |
 | Quantify in headlines ("21x faster," "60% reduction") | Use vague modifiers ("amazing," "powerful") |
 | Use specific named outcomes | Use abstract benefit statements |
@@ -61,7 +61,7 @@
 - "Stop reading documents. Start making decisions."
 - "Run an entire company with agents."
 - "Replace manual work with automated workflows."
-- "Make anything possible: in one tool."
+- "Make anything possible, in one tool."
 - "Build sites that ship."
 
 The verb does heavy lifting. The noun grounds it. Verbs lead headlines: "Make," "Build," "Ship," "Meet," "Turn," "Bring," "Get," "Run," "Replace," "Stop."

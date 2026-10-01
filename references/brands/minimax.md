@@ -677,7 +677,7 @@ The system runs predominantly flat. Elevation is reserved for sticky panels, dro
 - Section headers in `{typography.body-sm-medium}` `{colors.on-dark}`.
 
 **`footer-link`**: Individual link entry inside the footer column.
-- Background transparent, text `{colors.muted}`, typography `{typography.body-sm}`, padding `{spacing.xxs} 0`. Active/visited states do not change color, only opacity shifts on activation.
+- Background transparent, text `{colors.muted}`, typography `{typography.body-sm}`, padding `{spacing.xxs} 0`. Active/visited states do not change color; only opacity shifts on activation.
 
 ## Do's and Don'ts
 

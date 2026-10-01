@@ -11,7 +11,7 @@ Datadog's marketing surface is built around the brand's signature deep purple (`
 - **Ink:** `#1c1d26` (Indigo Near-Black)
 - **Body:** `#4d4f60`
 - **Hairlines/dividers:** `rgba(28,29,38,0.10)`
-- **Accent secondary:** `#ff7300`, Bark Orange (used on dog-mascot, status indicators, "live" badges)
+- **Accent secondary:** `#ff7300` (Bark Orange: used on dog-mascot, status indicators, "live" badges)
 
 ## Typography
 - **Display:** Tiempos Headline / Domaine Display, weight 400 (regular), tracking -0.01em, sizes 56-96px on hero

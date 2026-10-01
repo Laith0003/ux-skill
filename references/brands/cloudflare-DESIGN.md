@@ -4,7 +4,7 @@
 Cloudflare is the global-network infrastructure brand that operationalizes a single chromatic asset: orange. The orange (`#f48120`) is reserved with monastic discipline for the brand mark and primary CTAs. Canvas is white-to-near-white with cool blue-gray ink. Type runs a precise grotesk (Cloudflare Sans / Inter / IBM Plex) and the brand projects 'global, infrastructural, calm', never SaaS-marketing kinetic. The mark (a stylized orange cloud) appears on the navigation; the rest of the page reads as quiet, dense, technical documentation.
 
 ## Color
-- **Primary:** `#f48120`, Cloudflare orange (the single chromatic asset)
+- **Primary:** `#f48120` (Cloudflare orange: the single chromatic asset)
 - **Canvas:** `#ffffff` (Pure white)
 - **Ink:** `#0d1620` (Cool blue-tinted near-black for type)
 - **Accent:** `#003682` (Cool blue, used on emphasized inline links and chart series)
@@ -39,13 +39,13 @@ Almost-no-motion. Section reveals fade in over 400ms with no translate. Global-n
 ## Trademark signals
 - Single-asset orange (`#f48120`), only on brand mark, primary CTAs, and rare inline highlight; never as a section background, never as a gradient stop
 - Map-of-the-world hero: global network map with arc-paths between data centers, often as a watermark or full-bleed
-- Dense technical content blocks with semantic hierarchy (sub-headers, mono code excerpts, tabular data) the brand reads as documentation more than marketing
+- Dense technical content blocks with semantic hierarchy (sub-headers, mono code excerpts, tabular data); the brand reads as documentation more than marketing
 - Cool blue secondary (`#003682`) for inline links and chart series, never replaces orange as primary CTA fill
 - Generous white-space rhythm: the brand projects 'infrastructure scale' through breathing room, not visual density
 
 ## What they DON'T do
 - No second saturated color: orange is the single chromatic asset; emphasis comes from weight and spacing
-- No dark canvas on marketing, only the developer docs pivot to a dark code-block treatment
+- No dark canvas on marketing; only the developer docs pivot to a dark code-block treatment
 - No fast-spinning network animations: the slow 12s loop IS the 'we are infrastructure' voice
 - No thin display weights: display tiers stay at 600+
 - No stock vector blob illustrations: the brand favors the network globe, real data viz, and clean data-center photography

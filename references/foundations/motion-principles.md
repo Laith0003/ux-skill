@@ -360,7 +360,7 @@ When a popover, tooltip, or context menu opens, its `transform-origin` should po
 
 ### Tooltip enter delay only on first hover
 
-Tooltips have a delay before they appear (typically 400ms) so they don't flash on every cursor passthrough. But on sustained interaction (the user hovered one tooltip, moved to a sibling within ~1 second), the delay should be skipped. The user is now actively reading; making them wait 400ms per item is hostile.
+Tooltips have a delay before they appear (typically 400ms), so they don't flash on every cursor passthrough. But on sustained interaction (the user hovered one tooltip, moved to a sibling within ~1 second), the delay should be skipped. The user is now actively reading; making them wait 400ms per item is hostile.
 
 ```js
 // Pseudocode pattern
@@ -383,7 +383,7 @@ const handleEnter = () => {
 
 ### Blur during crossfade hides imperfect alignment
 
-When two elements crossfade (one fading out, another fading in, occupying the same screen position) even pixel-perfect alignment looks off because the two elements briefly co-exist at 50% opacity. A blur on both during the crossfade hides that artifact.
+When two elements crossfade (one fading out, another fading in, occupying the same screen position), even pixel-perfect alignment looks off because the two elements briefly co-exist at 50% opacity. A blur on both during the crossfade hides that artifact.
 
 ```css
 .crossfade-out, .crossfade-in {

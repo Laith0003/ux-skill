@@ -2,7 +2,7 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Sonos's web presence is premium-home-audio editorial: black-and-white product photography on white seamless, generous lifestyle imagery in muted Scandi-modern interiors, and a clean chrome with a single near-pure-black CTA. The atmosphere is design-magazine considered. Where Bose stays purely product-on-white and JBL leans bright-lifestyle-colorful, Sonos splits the difference: product imagery is studio-clean, lifestyle imagery is styled-room, a Sonos Era 300 on a walnut sideboard in a sunlit minimalist living room, a Sonos Arc beneath a wall-mounted television in a styled space, a Sonos Roam on a kitchen counter beside a ceramic vase.
+Sonos's web presence is premium-home-audio editorial: black-and-white product photography on white seamless, generous lifestyle imagery in muted Scandi-modern interiors, and a clean chrome with a single near-pure-black CTA. The atmosphere is design-magazine considered. Where Bose stays purely product-on-white and JBL leans bright-lifestyle-colorful, Sonos splits the difference: product imagery is studio-clean, lifestyle imagery is styled-room: a Sonos Era 300 on a walnut sideboard in a sunlit minimalist living room, a Sonos Arc beneath a wall-mounted television in a styled space, a Sonos Roam on a kitchen counter beside a ceramic vase.
 
 The lifestyle photography is where Sonos differentiates from peers. The interiors are deliberately Scandi-modern: walnut, oak, white walls, indoor plants, ceramic objects, natural light. The styling reads as Architectural Digest more than Best Buy. The speakers are objects of design intent placed in spaces that aspire to taste. This is the brand selling itself to customers who value the look of audio gear as much as the sound.
 

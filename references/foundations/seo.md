@@ -536,7 +536,7 @@ Each public page type has a defined SEO surface. Use the matching checklist on e
 ### 404 page
 
 - `<meta name="robots" content="noindex,nofollow">` on the 404 itself.
-- HTTP status code 404 (not 200 with 404 content, that is a soft-404 and a known issue).
+- HTTP status code 404 (not 200 with 404 content; that is a soft-404 and a known issue).
 - Helpful navigation back to indexable content (search, popular pages, category links).
 - `<title>404 — Page not found | Brand</title>` so the SERP-displayed title is clear when the 404 is somehow indexed by accident.
 

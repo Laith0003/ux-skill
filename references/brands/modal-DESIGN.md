@@ -4,8 +4,8 @@
 Modal is the serverless-Python-for-AI platform brand: a stark white canvas, a signature warm mustard (#FFB949) as primary accent, a 12-column grid that exposes its own vertical dividers, and a hero that IS a live Python code block running real Modal functions. The brand reads as "look, here is the actual primitive": anti-marketing, command-line-confident, geometric.
 
 ## Color
-- **Primary:** `#ffb949`, Modal Mustard (the brand voltage: CTAs, link underlines, highlights)
-- **Accent (ember):** `#ff7a30`, Ember Orange (sub-accent on the largest CTAs and pricing emphasis)
+- **Primary:** `#ffb949` (Modal Mustard: the brand voltage: CTAs, link underlines, highlights)
+- **Accent (ember):** `#ff7a30` (Ember Orange: sub-accent on the largest CTAs and pricing emphasis)
 - **Canvas:** `#ffffff` (Pure White)
 - **Surface card:** `#fafafa` (Off-White card backgrounds)
 - **Surface alt:** `#f2f2ed` (Buttery cream for callout bands)
