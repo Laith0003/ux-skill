@@ -1,19 +1,19 @@
 # Laws of UX
 
-A reference catalog of thirty cognitive laws that govern how users perceive, decide, and act inside interfaces. Use this when you need to name what is wrong with a screen — or what is right — in language that survives stakeholder challenge.
+A reference catalog of thirty cognitive laws that govern how users perceive, decide, and act inside interfaces. Use this when you need to name what is wrong with a screen (or what is right) in language that survives stakeholder challenge.
 
 ## Primary source
 
-This catalog is synthesized from production design work. The canonical reference for the named laws is **[lawsofux.com](https://lawsofux.com)** by Jon Yablonski — each law there has an illustrated card, the original research citation, and worked examples. When ux-skill's `/ux-critique` cites a named law, link to the corresponding lawsofux.com page so readers reach the canonical card in one click.
+This catalog is synthesized from production design work. The canonical reference for the named laws is **[lawsofux.com](https://lawsofux.com)** by Jon Yablonski: each law there has an illustrated card, the original research citation, and worked examples. When ux-skill's `/ux-critique` cites a named law, link to the corresponding lawsofux.com page so readers reach the canonical card in one click.
 
 Other foundational sources cited throughout:
 
-- Don Norman — *The Design of Everyday Things* (see `references/laws/norman.md`)
-- Steve Krug — *Don't Make Me Think* (see `references/laws/krug.md`)
-- Susan Weinschenk — *100 Things Every Designer Needs to Know About People*
-- Daniel Kahneman — *Thinking, Fast and Slow* (cognitive bias laws)
+- Don Norman: *The Design of Everyday Things* (see `references/laws/norman.md`)
+- Steve Krug: *Don't Make Me Think* (see `references/laws/krug.md`)
+- Susan Weinschenk: *100 Things Every Designer Needs to Know About People*
+- Daniel Kahneman: *Thinking, Fast and Slow* (cognitive bias laws)
 
-### Source link index — by canonical name
+### Source link index: by canonical name
 
 | Law | Primary source |
 |---|---|
@@ -50,7 +50,7 @@ Other foundational sources cited throughout:
 
 ## How to read this file
 
-Each law has the same shape: a one-line definition, when it applies, how to use it in design, the violation pattern that ships in default AI-slop output, and a fix example you can copy. The laws compound. A screen that violates one is uncomfortable. A screen that violates four is unusable. A screen that obeys all thirty is rare — design is the practice of choosing which ones matter most for this surface, this user, this moment.
+Each law has the same shape: a one-line definition, when it applies, how to use it in design, the violation pattern that ships in default AI-slop output, and a fix example you can copy. The laws compound. A screen that violates one is uncomfortable. A screen that violates four is unusable. A screen that obeys all thirty is rare: design is the practice of choosing which ones matter most for this surface, this user, this moment.
 
 Treat the catalog as a vocabulary. The job is not to memorize all thirty. The job is to recognize the pattern fast enough that you can name it during a review, debate it without hedging, and fix it without breaking the next law.
 
@@ -165,7 +165,7 @@ For a settings page, group into named sections: Profile, Notifications, Billing,
 
 ### Definition
 
-Users do not make rational decisions. They are biased — by anchoring, by loss aversion, by social proof, by framing, by recency. Design either accounts for biases or stumbles over them.
+Users do not make rational decisions. They are biased, by anchoring, by loss aversion, by social proof, by framing, by recency. Design either accounts for biases or stumbles over them.
 
 ### When it applies
 
@@ -285,7 +285,7 @@ The time to acquire a target is a function of the distance to the target and the
 
 ### When it applies
 
-- Buttons, links, taps, drags — every interactive element.
+- Buttons, links, taps, drags: every interactive element.
 - Especially: primary CTAs, mobile controls, controls used in sequence.
 
 ### How to use it in design
@@ -293,7 +293,7 @@ The time to acquire a target is a function of the distance to the target and the
 - Make primary actions large.
 - Place frequent actions near the user's natural pointer position. On desktop, near the current cursor. On mobile, in the thumb zone.
 - Group sequential actions so the next one is close to the last.
-- Edges and corners are "infinite" targets — the cursor stops there. Use them for high-frequency controls (menu bars at the top, close button at the corner).
+- Edges and corners are "infinite" targets: the cursor stops there. Use them for high-frequency controls (menu bars at the top, close button at the corner).
 
 ### Violation pattern
 
@@ -527,7 +527,7 @@ Objects near each other are perceived as related. Objects far from each other ar
 
 - Place a label close to its field. The visual distance signals the relationship.
 - Group items that belong together; separate items that do not.
-- Use spacing intentionally — every gap communicates "these are not the same group."
+- Use spacing intentionally: every gap communicates "these are not the same group."
 
 ### Violation pattern
 
@@ -674,7 +674,7 @@ The user sees that "How often?" only applies when the parent is checked.
 
 ### Definition
 
-A mental model is the user's compressed, working understanding of how a system behaves. It is built from the system image — everything the user sees, hears, reads, and remembers about the product.
+A mental model is the user's compressed, working understanding of how a system behaves. It is built from the system image: everything the user sees, hears, reads, and remembers about the product.
 
 The user's mental model does not have to be accurate. It has to be useful enough that the user can predict what will happen next.
 
@@ -687,7 +687,7 @@ The user's mental model does not have to be accurate. It has to be useful enough
 
 ### How to use it in design
 
-- Pick a clear, consistent metaphor and use it everywhere — UI, docs, marketing, error messages.
+- Pick a clear, consistent metaphor and use it everywhere: UI, docs, marketing, error messages.
 - Surface hidden state. If the system is doing something, show it.
 - Avoid magic. Magic looks great until it breaks; when it breaks, the user has no model to recover.
 - Match the model to the user's prior expectations when possible. Diverge only when the divergence has a clear benefit.
@@ -1017,7 +1017,7 @@ In a list, the first and last items are remembered best. Items in the middle are
 
 In a nav: Home, Products, Pricing, Customers, Docs, Account. The two ends are anchors. Place the most important sections at the start or end.
 
-In a pricing table of three plans, the middle plan is often used because it is the recommended one — and to defeat the serial position effect, it is also visually distinguished (a different background, a "Most popular" badge).
+In a pricing table of three plans, the middle plan is often used because it is the recommended one, and to defeat the serial position effect, it is also visually distinguished (a different background, a "Most popular" badge).
 
 ---
 
@@ -1025,7 +1025,7 @@ In a pricing table of three plans, the middle plan is often used because it is t
 
 ### Definition
 
-Every system has an irreducible minimum of complexity. The question is not whether complexity exists; the question is who pays the cost — the system or the user.
+Every system has an irreducible minimum of complexity. The question is not whether complexity exists; the question is who pays the cost: the system or the user.
 
 ### When it applies
 

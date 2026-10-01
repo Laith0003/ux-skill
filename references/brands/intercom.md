@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Intercom-design-analysis
-description: "An editorial customer-service marketing canvas built around a soft cream-white ground, charcoal type set in Saans (Intercom's proprietary geometric sans), and a single confident Fin Orange (#ff5600) reserved for the Fin AI brand. Cards live as floating white tiles with thin hairline borders and minimal radii (8–16px). Display headlines run Saans at weight 500 with measured negative tracking. The system reads as a careful, product-led publication: product screenshots dominate, ornament is rare, and the only place chromatic energy enters is the Fin Orange CTA."
+description: "An editorial customer-service marketing canvas built around a soft cream-white ground, charcoal type set in Saans (Intercom's proprietary geometric sans), and a single confident Fin Orange (#ff5600) reserved for the Fin AI brand. Cards live as floating white tiles with thin hairline borders and minimal radii (8 to 16px). Display headlines run Saans at weight 500 with measured negative tracking. The system reads as a careful, product-led publication: product screenshots dominate, ornament is rare, and the only place chromatic energy enters is the Fin Orange CTA."
 
 colors:
   primary: "#111111"
@@ -254,50 +254,50 @@ components:
 
 ## Overview
 
-Intercom's marketing canvas is a soft cream-white ground (`{colors.canvas}` ≈ #f5f1ec) — not pure white. The warmth is the brand's signal: this is editorial, calm, and product-focused, not bright SaaS. On top of the cream canvas sit white floating cards (`{colors.surface-1}`), thin hairline dividers (`{colors.hairline}`), and charcoal type (`{colors.ink}` #111111).
+Intercom's marketing canvas is a soft cream-white ground (`{colors.canvas}` ≈ #f5f1ec), not pure white. The warmth is the brand's signal: this is editorial, calm, and product-focused, not bright SaaS. On top of the cream canvas sit white floating cards (`{colors.surface-1}`), thin hairline dividers (`{colors.hairline}`), and charcoal type (`{colors.ink}` #111111).
 
-Display type is **Saans** — Intercom's proprietary geometric sans — set at weight 500 with measured negative letter-spacing (-2.0px on 72px display). Body type is the same family at weight 400. The single proprietary mono is **SaansMono**, used sparingly for code snippets and product UI screenshots embedded in the marketing surface.
+Display type is **Saans** (Intercom's proprietary geometric sans) set at weight 500 with measured negative letter-spacing (-2.0px on 72px display). Body type is the same family at weight 400. The single proprietary mono is **SaansMono**, used sparingly for code snippets and product UI screenshots embedded in the marketing surface.
 
-The single chromatic accent is **Fin Orange** (`{colors.fin-orange}` #ff5600) — Intercom's AI-product brand color. It surfaces on the Fin product CTA, the Fin badge in pricing, and a few inline emphasis moments. It is NOT a system primary; the system primary is charcoal `{colors.ink}`. Intercom also maintains a small **report palette** (`{colors.report-blue}`, `{colors.report-green}`, `{colors.report-pink}`, `{colors.report-lime}`) used inside in-product analytics surfaces shown in mockups.
+The single chromatic accent is **Fin Orange** (`{colors.fin-orange}` #ff5600): Intercom's AI-product brand color. It surfaces on the Fin product CTA, the Fin badge in pricing, and a few inline emphasis moments. It is NOT a system primary; the system primary is charcoal `{colors.ink}`. Intercom also maintains a small **report palette** (`{colors.report-blue}`, `{colors.report-green}`, `{colors.report-pink}`, `{colors.report-lime}`) used inside in-product analytics surfaces shown in mockups.
 
 The page rhythm is heavy on **product mockups**: every section's payload is a high-fidelity screenshot of Intercom's product UI, framed in white cards with `{rounded.xl}` 16px corners. The marketing chrome is intentionally quiet so the product can be the protagonist.
 
 **Key Characteristics:**
-- **Cream canvas** (`{colors.canvas}` #f5f1ec) is the brand's defining surface — neither white nor gray, deliberately warm.
+- **Cream canvas** (`{colors.canvas}` #f5f1ec) is the brand's defining surface: neither white nor gray, deliberately warm.
 - Product-screenshot-led page rhythm: every section centers a product mockup card, marketing chrome stays minimal.
 - **Saans** proprietary sans-serif carries the entire hierarchy; SaansMono for code-only contexts.
-- **Charcoal** `{colors.ink}` (#111111) is the system primary — buttons, headlines, body type all sit on charcoal.
-- **Fin Orange** (`{colors.fin-orange}` #ff5600) is the AI product color — used on the Fin CTA and Fin badge, never decoratively.
+- **Charcoal** `{colors.ink}` (#111111) is the system primary: buttons, headlines, body type all sit on charcoal.
+- **Fin Orange** (`{colors.fin-orange}` #ff5600) is the AI product color: used on the Fin CTA and Fin badge, never decoratively.
 - Display tracking pulls aggressively negative (-2.0px on 72px); body stays at 0.
-- Card corners stay modest at `{rounded.lg}` 12px and `{rounded.xl}` 16px — never pill-rounded; never square.
+- Card corners stay modest at `{rounded.lg}` 12px and `{rounded.xl}` 16px, never pill-rounded; never square.
 
 ## Colors
 
 > Source pages: intercom.com (home), /pricing, /helpdesk, /customers, /helpdesk/inbox.
 
 ### Brand & Accent
-- **Charcoal** ({colors.ink}): The system primary surface. Headlines, body type, primary CTA pill background — all charcoal.
+- **Charcoal** ({colors.ink}): The system primary surface. Headlines, body type, primary CTA pill background: all charcoal.
 - **White** ({colors.on-primary}): Text on charcoal CTAs; canvas of floating cards.
 - **Fin Orange** ({colors.fin-orange}): The AI-product accent. Used on the Fin CTA, Fin badge, and a small set of inline emphasis moments.
 - **Report Orange** ({colors.report-orange}): A slightly different orange used inside the report / analytics palette for in-product mockups.
-- **Brand Blue** ({colors.brand-blue}): Saturated brand blue (#0007cb) — used on a small set of marketing illustrations.
+- **Brand Blue** ({colors.brand-blue}): Saturated brand blue (#0007cb), used on a small set of marketing illustrations.
 
 ### Surface
-- **Canvas** ({colors.canvas}): Default page background — soft cream-white #f5f1ec.
-- **Surface 1** ({colors.surface-1}): Pure white — used for floating cards (pricing, feature, product-mockup).
-- **Surface 2** ({colors.surface-2}): Slightly darker cream — startup-discount banner, alt-row stripes.
-- **Hairline** ({colors.hairline}): 1px borders on cards — soft warm gray (#d3cec6).
+- **Canvas** ({colors.canvas}): Default page background (soft cream-white #f5f1ec).
+- **Surface 1** ({colors.surface-1}): Pure white, used for floating cards (pricing, feature, product-mockup).
+- **Surface 2** ({colors.surface-2}): Slightly darker cream (startup-discount banner, alt-row stripes).
+- **Hairline** ({colors.hairline}): 1px borders on cards, soft warm gray (#d3cec6).
 - **Hairline Soft** ({colors.hairline-soft}): Even softer dividers between FAQ rows and footer columns.
-- **Inverse Canvas** ({colors.inverse-canvas}): Pure black — only on the testimonial / quote callout strip.
-- **Inverse Surface 1** ({colors.inverse-surface-1}): One step lighter — hovered footer items in dark contexts.
+- **Inverse Canvas** ({colors.inverse-canvas}): Pure black, only on the testimonial / quote callout strip.
+- **Inverse Surface 1** ({colors.inverse-surface-1}): One step lighter (hovered footer items in dark contexts).
 
 ### Text
-- **Ink** ({colors.ink}): All headlines, body type, button labels — charcoal #111111.
-- **Ink Muted** ({colors.ink-muted}): Secondary type at #626260 — meta info, deselected pricing tabs.
-- **Ink Subtle** ({colors.ink-subtle}): Tertiary type at #7b7b78 — footer columns, helper text.
-- **Ink Tertiary** ({colors.ink-tertiary}): Quaternary type at #9c9fa5 — disabled, footnotes.
-- **Inverse Ink** ({colors.inverse-ink}): White on black — quote-strip type.
-- **Inverse Ink Muted** ({colors.inverse-ink-muted}): Light gray on black — quote-strip meta.
+- **Ink** ({colors.ink}): All headlines, body type, button labels (charcoal #111111).
+- **Ink Muted** ({colors.ink-muted}): Secondary type at #626260 (meta info, deselected pricing tabs).
+- **Ink Subtle** ({colors.ink-subtle}): Tertiary type at #7b7b78 (footer columns, helper text).
+- **Ink Tertiary** ({colors.ink-tertiary}): Quaternary type at #9c9fa5 (disabled, footnotes).
+- **Inverse Ink** ({colors.inverse-ink}): White on black (quote-strip type).
+- **Inverse Ink Muted** ({colors.inverse-ink-muted}): Light gray on black (quote-strip meta).
 
 ### Semantic & Report Palette (in-product mockups)
 - **Error Red** ({colors.semantic-error}): Form validation, destructive states.
@@ -307,14 +307,14 @@ The page rhythm is heavy on **product mockups**: every section's payload is a hi
 - **Report Lime** ({colors.report-lime}): Analytics chart lime.
 - **Report Cyan** ({colors.report-cyan}): Phone country selector accent.
 
-The report palette appears INSIDE product UI mockups — these are Intercom's in-product chart colors, not marketing surface colors.
+The report palette appears INSIDE product UI mockups: these are Intercom's in-product chart colors, not marketing surface colors.
 
 ## Typography
 
 ### Font Family
 
-- **Saans** — Intercom's proprietary geometric sans, fallback `Saans Fallback, ui-sans-serif, system-ui`. Carries display, body, eyebrow, and button.
-- **SaansMono** — Proprietary mono, fallback `SaansMono Fallback, ui-monospace`. Used inside code snippets shown in product mockups.
+- **Saans**: Intercom's proprietary geometric sans, fallback `Saans Fallback, ui-sans-serif, system-ui`. Carries display, body, eyebrow, and button.
+- **SaansMono**: Proprietary mono, fallback `SaansMono Fallback, ui-monospace`. Used inside code snippets shown in product mockups.
 
 The same family carries the entire hierarchy. Hierarchy is carried by size + weight + tracking, not by family change.
 
@@ -342,7 +342,7 @@ The same family carries the entire hierarchy. Hierarchy is carried by size + wei
 - **Negative letter-spacing scales with size.** -2.0px at 72px (≈3% of size), down to 0 on body.
 - **Line-heights tighten on display, relax on body.** 1.05 at display-xl, 1.50 at body.
 - **No mono on chrome.** SaansMono lives in product UI; marketing chrome stays in Saans.
-- **Eyebrow uses sentence case** at 14px / 500 weight — no all-caps tracking.
+- **Eyebrow uses sentence case** at 14px / 500 weight: no all-caps tracking.
 
 ### Note on Font Substitutes
 
@@ -362,7 +362,7 @@ If implementing without Saans, suitable substitutes include **Söhne** (paid), *
 - Max content width sits around 1280px.
 - Card grids are 3-up at desktop, 2-up at tablet, 1-up at mobile.
 - Pricing tier grid is 3-up; comparison strip below shows checkmarks per tier.
-- Product mockup cards span full content width — they're the protagonist of every section.
+- Product mockup cards span full content width: they're the protagonist of every section.
 
 ### Whitespace Philosophy
 
@@ -381,7 +381,7 @@ Intercom resists drop shadows. Depth is communicated by the white-on-cream surfa
 
 ### Decorative Depth
 
-- **Product UI mockups** dominate every section's right column or center band — these are screenshots, not illustrations.
+- **Product UI mockups** dominate every section's right column or center band. These are screenshots, not illustrations.
 - **No atmospheric gradients, no spotlight cards, no pastel section blocks.** The cream + white system is deliberately restrained.
 
 ## Shapes
@@ -402,83 +402,83 @@ Intercom resists drop shadows. Depth is communicated by the white-on-cream surfa
 ### Photography & Illustration Geometry
 
 - Product UI screenshots dominate the marketing surface; they sit in `{rounded.xl}` 16px tiles.
-- Customer logo tiles render at small sizes (~24–32px logo height) on `{colors.canvas}` cream with no border.
-- Avatar circles in testimonial cards use `{rounded.full}` at 40–48px sizes.
+- Customer logo tiles render at small sizes (~24 to 32px logo height) on `{colors.canvas}` cream with no border.
+- Avatar circles in testimonial cards use `{rounded.full}` at 40 to 48px sizes.
 
 ## Components
 
 ### Buttons
 
-**`button-primary`** — Charcoal CTA. The default primary CTA across all pages.
+**`button-primary`**: Charcoal CTA. The default primary CTA across all pages.
 - Background `{colors.ink}`, text `{colors.on-primary}`, type `{typography.button}`, padding 10px 18px, rounded `{rounded.md}`.
 - Pressed state lives in `button-primary-pressed`.
 
-**`button-secondary`** — White button on cream. Used for secondary CTAs.
+**`button-secondary`**: White button on cream. Used for secondary CTAs.
 - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.button}`, padding 10px 18px, rounded `{rounded.md}`. 1px `{colors.hairline}` border.
 
-**`button-tertiary`** — Plain text button.
+**`button-tertiary`**: Plain text button.
 - Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.button}`, rounded `{rounded.md}`, padding 10px 18px.
 
-**`button-fin`** — Fin Orange CTA — reserved for Fin AI product CTAs.
+**`button-fin`**: Fin Orange CTA (reserved for Fin AI product CTAs).
 - Background `{colors.fin-orange}`, text `{colors.on-primary}`, type `{typography.button}`, rounded `{rounded.md}`, padding 10px 18px.
 
 ### Pricing Tabs
 
-**`pricing-tab-default`** + **`pricing-tab-selected`** — Pill-toggle on `/pricing`.
+**`pricing-tab-default`** + **`pricing-tab-selected`**: Pill-toggle on `/pricing`.
 - Default: `{colors.canvas}` background, `{colors.ink-muted}` text, rounded `{rounded.pill}`.
-- Selected: `{colors.surface-1}` white background, `{colors.ink}` text — selected = lift onto white.
+- Selected: `{colors.surface-1}` white background, `{colors.ink}` text (selected = lift onto white).
 
 ### Cards & Containers
 
-**`pricing-card`** — Each tier on `/pricing`.
+**`pricing-card`**: Each tier on `/pricing`.
 - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.lg}`, padding 24px.
 
-**`pricing-card-featured`** — Featured / recommended tier — inverts to charcoal.
+**`pricing-card-featured`**: Featured / recommended tier (inverts to charcoal).
 - Background `{colors.ink}`, text `{colors.on-primary}`, otherwise identical structure.
 
-**`feature-card`** — Generic feature highlight.
+**`feature-card`**: Generic feature highlight.
 - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.lg}`, padding 24px.
 
-**`product-mockup-card`** — The dominant card type — frames a high-fidelity product UI screenshot.
+**`product-mockup-card`**: The dominant card type (frames a high-fidelity product UI screenshot).
 - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.xl}`, padding 24px.
 
-**`testimonial-card`** — Customer quote with avatar + name + company.
+**`testimonial-card`**: Customer quote with avatar + name + company.
 - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body-lg}`, rounded `{rounded.lg}`, padding 32px.
 
-**`startup-discount-card`** — The "Startups get 90% off" tinted card.
+**`startup-discount-card`**: The "Startups get 90% off" tinted card.
 - Background `{colors.surface-2}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.lg}`, padding 32px.
 
-**`customer-logo-tile`** — Small tile in the customer marquee.
+**`customer-logo-tile`**: Small tile in the customer marquee.
 - Background `{colors.canvas}`, text `{colors.ink-muted}`, type `{typography.caption}`, rounded `{rounded.xs}`, padding 16px.
 
-**`cta-banner`** — Closing CTA panel near page bottom.
+**`cta-banner`**: Closing CTA panel near page bottom.
 - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.headline}`, rounded `{rounded.lg}`, padding 48px.
 
 ### Inputs & Forms
 
-**`text-input`** + **`text-input-focused`** — Form fields on contact and search overlays.
+**`text-input`** + **`text-input-focused`**: Form fields on contact and search overlays.
 - Background `{colors.surface-1}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.md}`, padding 10px 14px.
 
 ### FAQ
 
-**`faq-row`** — Expandable accordion row in the pricing FAQ.
+**`faq-row`**: Expandable accordion row in the pricing FAQ.
 - Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.body}`, rounded `{rounded.md}`, padding 24px. 1px `{colors.hairline-soft}` bottom rule.
 
 ### Navigation
 
-**`top-nav`** — Sticky cream bar with the Intercom wordmark left, nav links centered, log-in + sign-up pair right.
+**`top-nav`**: Sticky cream bar with the Intercom wordmark left, nav links centered, log-in + sign-up pair right.
 - Background `{colors.canvas}`, text `{colors.ink}`, type `{typography.body-sm}`, height 56px.
 
 ### Footer
 
-**`footer`** — Dense link grid on `{colors.canvas}` cream with the Intercom wordmark left.
+**`footer`**: Dense link grid on `{colors.canvas}` cream with the Intercom wordmark left.
 - Background `{colors.canvas}`, text `{colors.ink-muted}`, type `{typography.caption}`, padding 64px 32px.
 
 ## Do's and Don'ts
 
 ### Do
 
-- Reserve `{colors.canvas}` cream as the system's anchor surface — never replace with pure white.
+- Reserve `{colors.canvas}` cream as the system's anchor surface, never replace with pure white.
 - Lift cards from cream onto white (`{colors.surface-1}`) for hierarchy.
 - Use **`button-fin`** Fin Orange ONLY on Fin AI product CTAs and Fin badges.
 - Pair Saans display at weight 500 with body at 400.

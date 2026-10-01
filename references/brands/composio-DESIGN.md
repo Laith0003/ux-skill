@@ -3,7 +3,7 @@
 > A developer-tools brand for AI-agent tool integration whose marketing surfaces lean into a dark, technical aesthetic with a single deep-electric-blue voltage (#0007cd).
 
 **Category:** Developer Tools
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/composio.json`](../../data/brands/composio.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

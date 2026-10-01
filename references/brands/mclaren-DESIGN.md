@@ -2,17 +2,17 @@
 
 ## 1. Visual Theme & Atmosphere
 
-McLaren's web presence is hypercar-racing chrome — McLaren Orange (#ff8000) as the chromatic anchor, dark cinematic photography in racing-circuit lighting, and a layout grammar that reads as Formula 1 mission control. The atmosphere is racing-engineered. Where Ferrari plays "Italian luxury heritage" and Lamborghini plays "fighter-jet aggressive," McLaren plays "F1 engineering excellence translated into road cars." The chrome references aerodynamic precision, lap times, and engineering provenance at every section break.
+McLaren's web presence is hypercar-racing chrome: McLaren Orange (#ff8000) as the chromatic anchor, dark cinematic photography in racing-circuit lighting, and a layout grammar that reads as Formula 1 mission control. The atmosphere is racing-engineered. Where Ferrari plays "Italian luxury heritage" and Lamborghini plays "fighter-jet aggressive," McLaren plays "F1 engineering excellence translated into road cars." The chrome references aerodynamic precision, lap times, and engineering provenance at every section break.
 
-McLaren Orange is the brand's chromatic voltage — drawn from the F1 racing program's papaya livery. The specific saturated hex (#ff8000) is non-negotiable; replacing with a tinted coral or a "modern" orange is a recognition failure. The orange appears on CTAs, on telemetry-style numerical readouts, on the wordmark accent, and as a signature accent on configurator surfaces.
+McLaren Orange is the brand's chromatic voltage: drawn from the F1 racing program's papaya livery. The specific saturated hex (#ff8000) is non-negotiable; replacing with a tinted coral or a "modern" orange is a recognition failure. The orange appears on CTAs, on telemetry-style numerical readouts, on the wordmark accent, and as a signature accent on configurator surfaces.
 
-The dark canvas (#0a0a0a) is the brand's atmosphere. Hypercars are photographed in racing-circuit lighting — pit-lane, garage, night-time circuit, paddock — and the dark backdrop makes the carbon-fiber bodywork and orange accents glow. The chrome's job is to recede so the car can perform.
+The dark canvas (#0a0a0a) is the brand's atmosphere. Hypercars are photographed in racing-circuit lighting (pit-lane, garage, night-time circuit, paddock) and the dark backdrop makes the carbon-fiber bodywork and orange accents glow. The chrome's job is to recede so the car can perform.
 
 **Key Characteristics:**
-- McLaren Orange (#ff8000) — chromatic voltage drawn from F1 papaya livery
-- Dark cinematic canvas (#0a0a0a) — racing-circuit lighting backdrop
-- F1-mission-control aesthetic — telemetry readouts, tabular lap-time figures
-- Rectilinear UI (0–4px radius) — engineering precision
+- McLaren Orange (#ff8000): chromatic voltage drawn from F1 papaya livery
+- Dark cinematic canvas (#0a0a0a): racing-circuit lighting backdrop
+- F1-mission-control aesthetic: telemetry readouts, tabular lap-time figures
+- Rectilinear UI (0 to 4px radius): engineering precision
 - Auto-playing engineering-cinematic video heroes
 - Carbon-fiber texture as occasional surface accent
 - Configurator with livery picker (papaya, deep black, racing greens)
@@ -20,7 +20,7 @@ The dark canvas (#0a0a0a) is the brand's atmosphere. Hypercars are photographed 
 ## 2. Color Palette & Roles
 
 ### Primary
-- **McLaren Orange / Papaya** (`#ff8000`): The brand voltage — CTAs, wordmark accent, telemetry readouts
+- **McLaren Orange / Papaya** (`#ff8000`): The brand voltage (CTAs, wordmark accent, telemetry readouts)
 - **Orange Hover** (`#cc6600`): Press state
 - **Pure Black** (`#0a0a0a`): The canvas anchor
 
@@ -52,35 +52,35 @@ The dark canvas (#0a0a0a) is the brand's atmosphere. Hypercars are photographed 
 ## 3. Typography Rules
 
 ### Font Family
-- **Display**: `McLaren Display, Helvetica Neue, sans-serif` — heavy modern display sans
-- **Body**: `McLaren Sans, Helvetica Neue, sans-serif` — clean sans
+- **Display**: `McLaren Display, Helvetica Neue, sans-serif` (heavy modern display sans)
+- **Body**: `McLaren Sans, Helvetica Neue, sans-serif` (clean sans)
 
 ### Hierarchy
-- **Hero h1** — 64–96px McLaren Display weight 800, line-height 1.0, all caps optional
-- **Section h2** — 36–48px weight 700
-- **Card title** — 20–24px weight 700
-- **Body** — 16px weight 400, line-height 1.5
-- **Caption** — 13–14px weight 500
-- **Telemetry readout** — Monospace tabular figures for lap times, 0-60 mph
-- **Button label** — 14–16px weight 700, uppercase with 1.5px tracking
+- **Hero h1**: 64 to 96px McLaren Display weight 800, line-height 1.0, all caps optional
+- **Section h2**: 36 to 48px weight 700
+- **Card title**: 20 to 24px weight 700
+- **Body**: 16px weight 400, line-height 1.5
+- **Caption**: 13 to 14px weight 500
+- **Telemetry readout**: Monospace tabular figures for lap times, 0-60 mph
+- **Button label**: 14 to 16px weight 700, uppercase with 1.5px tracking
 
 ### Principles
-- Weight 800 for hero h1 — heavy engineering display
+- Weight 800 for hero h1: heavy engineering display
 - Uppercase tracking on CTAs and section labels
-- Tabular monospace for technical readouts — F1-mission-control aesthetic
+- Tabular monospace for technical readouts: F1-mission-control aesthetic
 
 ## 4. Layout & Spacing
 
-The site uses a 12-column grid with a max content width of 1440–1600px. Section padding is 80–120px vertical. Hypercar hero sections use full-bleed cinematic photography or auto-playing video.
+The site uses a 12-column grid with a max content width of 1440 to 1600px. Section padding is 80 to 120px vertical. Hypercar hero sections use full-bleed cinematic photography or auto-playing video.
 
 ## 5. Componentry Feel
 
-- **Hypercar hero video** — Full-viewport auto-playing video of the car on a circuit or in pit lane, muted default, audio toggle. Vehicle model name overlaid in display sans weight 800
-- **Primary CTA (orange rect)** — McLaren Orange fill, white text, 0–4px radius, 48px height, weight-700 uppercase label
-- **Vehicle card (dark rectilinear)** — Dark surface, 0–4px radius, vehicle render with subtle orange-edge highlight on hover, title + key spec (0-60 mph or power figure)
-- **Spec telemetry readout** — Tabular monospace numerals presenting 0-60, top speed, power, weight in F1-mission-control format
-- **Configurator livery picker** — Horizontal row of livery swatches (Papaya, Deep Black, Racing Green) for exterior color
-- **Carbon-fiber surface accent** — Carbon-fiber texture used sparingly on spec callout backgrounds
+- **Hypercar hero video**: Full-viewport auto-playing video of the car on a circuit or in pit lane, muted default, audio toggle. Vehicle model name overlaid in display sans weight 800
+- **Primary CTA (orange rect)**: McLaren Orange fill, white text, 0 to 4px radius, 48px height, weight-700 uppercase label
+- **Vehicle card (dark rectilinear)**: Dark surface, 0 to 4px radius, vehicle render with subtle orange-edge highlight on hover, title + key spec (0-60 mph or power figure)
+- **Spec telemetry readout**: Tabular monospace numerals presenting 0-60, top speed, power, weight in F1-mission-control format
+- **Configurator livery picker**: Horizontal row of livery swatches (Papaya, Deep Black, Racing Green) for exterior color
+- **Carbon-fiber surface accent**: Carbon-fiber texture used sparingly on spec callout backgrounds
 
 ## 6. Voice / Microcopy Do's & Don'ts
 

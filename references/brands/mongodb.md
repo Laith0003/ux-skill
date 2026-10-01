@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: MongoDB-design-analysis
-description: MongoDB carries a strong dual-mode visual identity — dark deep-teal hero bands with bright MongoDB green ({colors.brand-green}) CTAs paired with stark white documentation surfaces. The signature green pill button is unmistakable across product, pricing, learning, and AI use-case surfaces. The system uses Euclid Circular A as its display face, anchors a 3-tier pricing comparison (Free / Flex / Dedicated), and presents extensive course catalogs in card grids with colored category tags. Coverage spans homepage, Atlas product page, Community Edition, MongoDB University, AI use cases, and pricing.
+description: MongoDB carries a strong dual-mode visual identity, dark deep-teal hero bands with bright MongoDB green ({colors.brand-green}) CTAs paired with stark white documentation surfaces. The signature green pill button is unmistakable across product, pricing, learning, and AI use-case surfaces. The system uses Euclid Circular A as its display face, anchors a 3-tier pricing comparison (Free / Flex / Dedicated), and presents extensive course catalogs in card grids with colored category tags. Coverage spans homepage, Atlas product page, Community Edition, MongoDB University, AI use cases, and pricing.
 
 colors:
   primary: "#00ed64"
@@ -404,9 +404,9 @@ components:
 
 ## Overview
 
-MongoDB carries a strong dual-mode visual identity — dark deep-teal hero bands with the unmistakable bright MongoDB green ({colors.brand-green}) CTA pill paired with stark white documentation and pricing surfaces. The homepage opens with "One data platform. Unlimited AI potential." headline over a deep navy hero, the green pill sitting at the visual center as the primary CTA. Lower on the page, embedded code mockup cards (terminal-aesthetic) sit on the dark hero band, breaking out into white feature cards below. The pricing page renders a 3-tier comparison (Free / Flex / Dedicated) with a featured tier highlighted in soft mint background and bright green border. The MongoDB University page presents a course catalog grid where each tile carries a colored category tag (orange, purple, green, teal) — these are MongoDB's category-encoding accent colors and are the only place outside the brand green where saturated color appears.
+MongoDB carries a strong dual-mode visual identity: dark deep-teal hero bands with the unmistakable bright MongoDB green ({colors.brand-green}) CTA pill paired with stark white documentation and pricing surfaces. The homepage opens with "One data platform. Unlimited AI potential." headline over a deep navy hero, the green pill sitting at the visual center as the primary CTA. Lower on the page, embedded code mockup cards (terminal-aesthetic) sit on the dark hero band, breaking out into white feature cards below. The pricing page renders a 3-tier comparison (Free / Flex / Dedicated) with a featured tier highlighted in soft mint background and bright green border. The MongoDB University page presents a course catalog grid where each tile carries a colored category tag (orange, purple, green, teal). These are MongoDB's category-encoding accent colors and are the only place outside the brand green where saturated color appears.
 
-The system uses Euclid Circular A as its display face. The face is contemporary geometric — confident but not overly playful — and pairs naturally with both the developer-tool aesthetic of the database product and the educational positioning of the learning surfaces. Cards use `{rounded.lg}` (12px) corners; buttons use `{rounded.full}` pills universally. The brand-teal palette ({colors.brand-teal-deep}) anchors hero bands, footer, code mockups, and the dark CTA banners.
+The system uses Euclid Circular A as its display face. The face is contemporary geometric (confident but not overly playful) and pairs naturally with both the developer-tool aesthetic of the database product and the educational positioning of the learning surfaces. Cards use `{rounded.lg}` (12px) corners; buttons use `{rounded.full}` pills universally. The brand-teal palette ({colors.brand-teal-deep}) anchors hero bands, footer, code mockups, and the dark CTA banners.
 
 **Key Characteristics:**
 - Deep navy/teal hero bands ({colors.brand-teal-deep}) with bright MongoDB green ({colors.brand-green}) CTA pills
@@ -421,7 +421,7 @@ The system uses Euclid Circular A as its display face. The face is contemporary 
 > Source pages: mongodb.com/ (homepage), /products/platform/atlas-database (Atlas product), /products/self-managed/community-edition, learn.mongodb.com/ (MongoDB University), /solutions/use-cases/artificial-intelligence (AI), /pricing (3-tier comparison). Token coverage was identical across all six pages.
 
 ### Brand & Accent
-- **MongoDB Green** ({colors.brand-green}): The brand's most recognizable signal — bright pill-CTA color
+- **MongoDB Green** ({colors.brand-green}): The brand's most recognizable signal (bright pill-CTA color)
 - **Green Dark** ({colors.brand-green-dark}): Inline link color, secondary green
 - **Green Mid** ({colors.brand-green-mid}): Mid-spectrum green for atmospheric tints
 - **Green Soft** ({colors.brand-green-soft}): Pale-mint background tint for success badges and featured pricing tier
@@ -506,7 +506,7 @@ The system uses Euclid Circular A as its display face. The face is contemporary 
 - AI use cases: 2-column hero with atmospheric illustration
 
 ### Whitespace Philosophy
-Marketing surfaces give content generous breathing room — `{spacing.hero}` (120px) hero padding for deep teal bands. Pricing/learn surfaces tighten dramatically.
+Marketing surfaces give content generous breathing room: `{spacing.hero}` (120px) hero padding for deep teal bands. Pricing/learn surfaces tighten dramatically.
 
 ## Elevation & Depth
 
@@ -540,7 +540,7 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 ### Photography Geometry
 - Hero illustrations sit on full-bleed dark backgrounds
 - Course tile thumbnails use `{rounded.lg}` corners
-- Customer logos wall: wordmarks at consistent 60–80px height
+- Customer logos wall: wordmarks at consistent 60 to 80px height
 
 ## Components
 
@@ -548,154 +548,154 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 
 ### Buttons
 
-**`button-primary`** — Bright MongoDB green pill primary CTA, the dominant action.
+**`button-primary`**: Bright MongoDB green pill primary CTA, the dominant action.
 - Background `{colors.brand-green}`, text `{colors.on-primary}` (deep navy), typography `{typography.button-md}`, padding `10px 22px`, rounded `{rounded.full}`.
 - Pressed state `button-primary-pressed` deepens to `{colors.primary-pressed}`.
 - Disabled state `button-primary-disabled` uses `{colors.hairline}` background.
 
-**`button-secondary`** — Outlined pill for secondary actions.
+**`button-secondary`**: Outlined pill for secondary actions.
 - Background transparent, text `{colors.ink}`, border `1px solid {colors.hairline-strong}`, typography `{typography.button-md}`, padding `10px 22px`, rounded `{rounded.full}`.
 
-**`button-on-dark`** — Bright green pill on dark hero bands.
+**`button-on-dark`**: Bright green pill on dark hero bands.
 - Background `{colors.brand-green}`, text `{colors.on-primary}`, typography `{typography.button-md}`, padding `10px 22px`, rounded `{rounded.full}`.
 
-**`button-secondary-on-dark`** — Outlined pill on dark backgrounds.
+**`button-secondary-on-dark`**: Outlined pill on dark backgrounds.
 - Background transparent, text `{colors.on-dark}`, border `1px solid {colors.hairline-dark}`, typography `{typography.button-md}`, padding `10px 22px`, rounded `{rounded.full}`.
 
-**`button-ghost`** — Quieter rectangular ghost button.
+**`button-ghost`**: Quieter rectangular ghost button.
 - Background transparent, text `{colors.ink}`, typography `{typography.button-md}`, padding `8px 12px`, rounded `{rounded.md}`.
 
-**`button-link`** — Inline green text link.
+**`button-link`**: Inline green text link.
 - Background transparent, text `{colors.brand-green-dark}`, typography `{typography.body-sm-medium}`, padding `0`.
 
 ### Cards & Containers
 
-**`card-base`** — Standard content card.
+**`card-base`**: Standard content card.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline}`.
 
-**`card-feature`** — Feature card with larger padding.
+**`card-feature`**: Feature card with larger padding.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline}`.
 
-**`card-product-deploy`** — Product deployment card ("MongoDB Atlas / Community").
+**`card-product-deploy`**: Product deployment card ("MongoDB Atlas / Community").
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline}`.
 
-**`card-feature-dark`** — Dark teal feature card on hero band.
+**`card-feature-dark`**: Dark teal feature card on hero band.
 - Background `{colors.brand-teal-deep}`, text `{colors.on-dark}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`.
 
-**`card-course`** — MongoDB University course tile.
+**`card-course`**: MongoDB University course tile.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline}`.
 - Top: colored category tag. Below: title `{typography.heading-5}`, description `{typography.body-sm}`, "Get Started →" link.
 
-**`card-cert`** — Certification card.
+**`card-cert`**: Certification card.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline}`.
 
-**`pricing-card`** — Standard pricing tier card.
+**`pricing-card`**: Standard pricing tier card.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline}`.
 
-**`pricing-card-featured`** — Featured pricing tier (Flex tier, mint background + green border).
+**`pricing-card-featured`**: Featured pricing tier (Flex tier, mint background + green border).
 - Background `{colors.surface-feature}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `2px solid {colors.brand-green}`.
 
 ### Inputs & Forms
 
-**`text-input`** — Standard text field.
+**`text-input`**: Standard text field.
 - Background `{colors.canvas}`, text `{colors.ink}`, border `1px solid {colors.hairline-strong}`, rounded `{rounded.md}`, padding `{spacing.sm} {spacing.md}`, height 44px.
 
-**`text-input-focused`** — Activated state.
+**`text-input-focused`**: Activated state.
 - Border switches to `2px solid {colors.brand-green-dark}`.
 
-**`search-pill`** — Standard 44px search bar.
+**`search-pill`**: Standard 44px search bar.
 - Background `{colors.surface}`, text `{colors.steel}`, typography `{typography.body-md}`, rounded `{rounded.md}`, height 44px, border `1px solid {colors.hairline-strong}`.
 
-**`search-pill-large`** — Large 56px search bar (top of MongoDB University catalog).
+**`search-pill-large`**: Large 56px search bar (top of MongoDB University catalog).
 - Background `{colors.canvas}`, text `{colors.steel}`, typography `{typography.body-md}`, rounded `{rounded.md}`, height 56px, border `1px solid {colors.hairline-strong}`.
 
 ### Tabs
 
-**`pill-tab`** + **`pill-tab-active`** — Pill-style tab nav (top of pricing: "MongoDB Atlas / Enterprise Advanced").
+**`pill-tab`** + **`pill-tab-active`**. Pill-style tab nav (top of pricing: "MongoDB Atlas / Enterprise Advanced").
 - Inactive: text `{colors.steel}`, border `1px solid {colors.hairline}`, padding `{spacing.xs} {spacing.md}`, rounded `{rounded.full}`.
 - Active: background `{colors.ink}`, text `{colors.on-dark}`.
 
-**`segmented-tab`** + **`segmented-tab-active`** — Underline-style tab navigation.
+**`segmented-tab`** + **`segmented-tab-active`**: Underline-style tab navigation.
 - Inactive: text `{colors.steel}`, no border. Active: text `{colors.brand-green-dark}`, 2px bottom border in `{colors.brand-green-dark}`.
 
 ### Badges & Status
 
-**`badge-green`** — Bright green badge for new product highlights.
+**`badge-green`**: Bright green badge for new product highlights.
 - Background `{colors.brand-green}`, text `{colors.on-primary}`, typography `{typography.caption-bold}`, rounded `{rounded.sm}`, padding `2px 8px`.
 
-**`badge-green-soft`** — Pale-mint pill for success/free indicators.
+**`badge-green-soft`**: Pale-mint pill for success/free indicators.
 - Background `{colors.brand-green-soft}`, text `{colors.brand-green-dark}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`badge-purple`** — Purple course category tag.
+**`badge-purple`**: Purple course category tag.
 - Background `{colors.accent-purple}`, text `{colors.on-dark}`, typography `{typography.caption-bold}`, rounded `{rounded.sm}`, padding `2px 8px`.
 
-**`badge-orange`** — Orange course category tag.
+**`badge-orange`**: Orange course category tag.
 - Background `{colors.accent-orange}`, text `{colors.on-dark}`, typography `{typography.caption-bold}`, rounded `{rounded.sm}`, padding `2px 8px`.
 
-**`badge-popular`** — "Most Popular" tier indicator (dark teal pill with green text).
+**`badge-popular`**: "Most Popular" tier indicator (dark teal pill with green text).
 - Background `{colors.brand-teal-deep}`, text `{colors.brand-green}`, typography `{typography.caption-bold}`, rounded `{rounded.full}`, padding `4px 10px`.
 
-**`promo-banner`** — Dark teal sticky promo strip ABOVE the top nav.
+**`promo-banner`**: Dark teal sticky promo strip ABOVE the top nav.
 - Background `{colors.brand-teal-deep}`, text `{colors.on-dark}`, typography `{typography.body-sm-medium}`, padding `{spacing.sm} {spacing.md}`.
 
 ### Code
 
-**`code-block`** — Code container.
+**`code-block`**: Code container.
 - Background `{colors.canvas-dark}`, text `{colors.on-dark}`, typography `{typography.code-md}`, rounded `{rounded.md}`, padding `{spacing.md}`.
 
-**`code-mockup-card`** — Embedded code mockup on hero band.
+**`code-mockup-card`**: Embedded code mockup on hero band.
 - Background `{colors.canvas-dark}`, text `{colors.on-dark}`, rounded `{rounded.lg}`, padding `{spacing.lg}`. Carries terminal-aesthetic code snippet.
 
 ### Tables
 
-**`comparison-table`** — Pricing feature comparison table.
+**`comparison-table`**: Pricing feature comparison table.
 - Background `{colors.canvas}`, text `{colors.ink}`, typography `{typography.body-sm}`, rounded `{rounded.md}`, border `1px solid {colors.hairline}`.
 
-**`comparison-row`** — Individual feature row.
+**`comparison-row`**: Individual feature row.
 - Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.md} {spacing.lg}`, bottom border `1px solid {colors.hairline-soft}`.
 
 ### Documentation Components
 
-**`service-tile`** — Tile in "Customize your deployment" 6-up grid.
+**`service-tile`**: Tile in "Customize your deployment" 6-up grid.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xl}`, border `1px solid {colors.hairline}`.
 
-**`why-card`** — "Loved by builders" feature card.
+**`why-card`**: "Loved by builders" feature card.
 - Background `{colors.surface}`, rounded `{rounded.lg}`, padding `{spacing.xl}`.
 
-**`customer-testimonial-card`** — Customer quote card.
+**`customer-testimonial-card`**: Customer quote card.
 - Background `{colors.canvas}`, rounded `{rounded.lg}`, padding `{spacing.xxl}`, border `1px solid {colors.hairline}`.
 
-**`logo-wall-item`** — Customer logo wordmark cell.
+**`logo-wall-item`**: Customer logo wordmark cell.
 - Background transparent, text `{colors.steel}`, typography `{typography.body-md-medium}`, padding `{spacing.lg}`.
 
-**`faq-accordion-item`** — FAQ panel.
+**`faq-accordion-item`**: FAQ panel.
 - Background `{colors.canvas}`, rounded `{rounded.md}`, padding `{spacing.xl}`, bottom border `1px solid {colors.hairline}`.
 
 ### Navigation
 
-**Top Navigation (Marketing)** — Sticky white bar.
+**Top Navigation (Marketing)**: Sticky white bar.
 - Background `{colors.canvas}`, height ~64px, bottom border `1px solid {colors.hairline}`.
 - Left: MongoDB leaf logo + "Solutions / Resources / Company / Pricing" links.
 - Right: "Sign In" link + bright-green pill "Try Free" CTA.
 
 ### Signature Components
 
-**`hero-band-dark`** — Deep teal hero band with embedded code mockup.
+**`hero-band-dark`**: Deep teal hero band with embedded code mockup.
 - Background `{colors.brand-teal-deep}`, text `{colors.on-dark}`, padding `{spacing.hero}`.
 - Layout: centered headline `{typography.hero-display}`, subtitle, button row, `code-mockup-card` below.
 
-**`hero-platform-card`** — Lighter-teal platform showcase card on dark hero.
+**`hero-platform-card`**: Lighter-teal platform showcase card on dark hero.
 - Background `{colors.brand-teal-mid}`, text `{colors.on-dark}`, rounded `{rounded.xl}`, padding `{spacing.xxl}`.
 
-**`cta-banner-dark`** — Dark CTA banner at the bottom of feature pages.
+**`cta-banner-dark`**: Dark CTA banner at the bottom of feature pages.
 - Background `{colors.brand-teal-deep}`, text `{colors.on-dark}`, rounded `{rounded.lg}`, padding `{spacing.section}`.
 
-**`footer-region`** — Dark teal multi-column footer.
+**`footer-region`**: Dark teal multi-column footer.
 - Background `{colors.brand-teal-deep}`, padding `{spacing.section} {spacing.xxl}`.
 - 6-column link grid.
 - Section headings in `{typography.body-sm-medium}` `{colors.on-dark}`.
 
-**`footer-link`** — Individual footer link.
+**`footer-link`**: Individual footer link.
 - Background transparent, text `{colors.on-dark-muted}`, typography `{typography.body-sm}`, padding `{spacing.xxs} 0`.
 
 ## Do's and Don'ts
@@ -723,13 +723,13 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile (small) | < 480px | Single column. Hero 36px. Pricing 1-up. Course catalog 1-up. |
-| Mobile (large) | 480 – 767px | Course tiles 2-up. Hero 48px. |
-| Tablet | 768 – 1023px | 2-column feature grids. Hero 56px. |
-| Desktop | 1024 – 1279px | 3-tier pricing card row. 3-up course catalog. Hero 64px. |
+| Mobile (large) | 480 to 767px | Course tiles 2-up. Hero 48px. |
+| Tablet | 768 to 1023px | 2-column feature grids. Hero 56px. |
+| Desktop | 1024 to 1279px | 3-tier pricing card row. 3-up course catalog. Hero 64px. |
 | Wide Desktop | ≥ 1280px | Full 72px hero presentation. |
 
 ### Touch Targets
-- Pill buttons render at 40–44px effective height
+- Pill buttons render at 40 to 44px effective height
 - Form inputs render at 44px height
 - Search pill (large) renders at 56px
 - Pill tabs ~32px → 44px on mobile
@@ -746,7 +746,7 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 ### Image Behavior
 - Atmospheric AI imagery uses 16:9 ratio with full-bleed scaling
 - Code mockup card content remains readable across breakpoints
-- Customer logo wall: wordmarks at consistent 60–80px height
+- Customer logo wall: wordmarks at consistent 60 to 80px height
 
 ## Iteration Guide
 
@@ -762,6 +762,6 @@ Marketing surfaces give content generous breathing room — `{spacing.hero}` (12
 ## Known Gaps
 
 - Specific dark-mode token values for canvas/surface beyond hero bands not surfaced
-- Animation/transition timings not extracted; recommend 150–200ms ease
+- Animation/transition timings not extracted; recommend 150 to 200ms ease
 - Form validation success state not explicitly captured
 - Course-tile category color mappings are observation-based

@@ -1,17 +1,17 @@
-# Monzo — DESIGN.md
+# Monzo: DESIGN.md
 
 ## Overview
-Monzo is hot coral on white — the brand's signature card color (`#ff4f40`) is one of the most-recognized hues in consumer fintech. The marketing surface pairs the coral with a friendly geometric sans (FK Display / ABC Diatype) and a deliberately illustrated UI style (rounded characters, simplified objects). It feels closer to a children's book illustration system than a traditional bank.
+Monzo is hot coral on white: the brand's signature card color (`#ff4f40`) is one of the most-recognized hues in consumer fintech. The marketing surface pairs the coral with a friendly geometric sans (FK Display / ABC Diatype) and a deliberately illustrated UI style (rounded characters, simplified objects). It feels closer to a children's book illustration system than a traditional bank.
 
 ## Color
-- **Primary:** `#ff4f40` — Hot Coral (the card)
+- **Primary:** `#ff4f40`, Hot Coral (the card)
 - **Primary deep:** `#e3382a`
-- **Canvas:** `#ffffff` — White
-- **Surface alt:** `#fff5f1` — Coral Wash
-- **Ink:** `#091723` — Deep Navy
+- **Canvas:** `#ffffff` (White)
+- **Surface alt:** `#fff5f1` (Coral Wash)
+- **Ink:** `#091723` (Deep Navy)
 - **Body:** `#4d5560`
 - **Hairlines:** `rgba(9,23,35,0.10)`
-- **Accent palette:** `#ffd166` (sunshine yellow), `#06aed5` (cyan), `#2d6a4f` (forest green) — used in illustration only
+- **Accent palette:** `#ffd166` (sunshine yellow), `#06aed5` (cyan), `#2d6a4f` (forest green), used in illustration only
 - **Semantic success:** `#2d6a4f`
 - **Semantic warning:** `#ffd166`
 
@@ -35,18 +35,18 @@ Monzo is hot coral on white — the brand's signature card color (`#ff4f40`) is 
 - `app-screenshot-card-rounded` (real app UI in a rounded device frame)
 
 ## Trademark signals
-- Hot coral card render — the card IS the brand, rendered photorealistically in nearly every hero
-- Pill-shape CTAs at full radius — never square, never less than full pill
-- Illustrated objects with simplified geometry — coins, plants, characters, all hand-drawn-feeling
-- Industry-first coral circle badges — small, restrained, distinctive
+- Hot coral card render: the card IS the brand, rendered photorealistically in nearly every hero
+- Pill-shape CTAs at full radius, never square, never less than full pill
+- Illustrated objects with simplified geometry: coins, plants, characters, all hand-drawn-feeling
+- Industry-first coral circle badges: small, restrained, distinctive
 - Cyan/yellow/green accents used in illustration, never as buttons
 
 ## What they DON'T do
 - No dark-mode hero on marketing site
-- No emoji — illustrated objects fill that role with brand consistency
+- No emoji: illustrated objects fill that role with brand consistency
 - No square buttons
-- No 3D rendered hyper-realistic finance geometry — illustration style is deliberately flat-friendly
-- No coral type on white — coral is reserved for surfaces and the card
+- No 3D rendered hyper-realistic finance geometry: illustration style is deliberately flat-friendly
+- No coral type on white: coral is reserved for surfaces and the card
 
 ## Exemplar pages
 - https://monzo.com/
@@ -55,4 +55,4 @@ Monzo is hot coral on white — the brand's signature card color (`#ff4f40`) is 
 - https://monzo.com/help/
 
 ## When to reference
-Reach for Monzo when the user wants a consumer-fintech brand surface with maximum personality and approachability. The hot-coral + illustrated-objects + pill-CTA combination is appropriate for any consumer financial product targeting a younger or design-aware audience — neobanks, budgeting apps, paying-friends apps. Especially useful when the user wants warmth without losing trust.
+Reach for Monzo when the user wants a consumer-fintech brand surface with maximum personality and approachability. The hot-coral + illustrated-objects + pill-CTA combination is appropriate for any consumer financial product targeting a younger or design-aware audience: neobanks, budgeting apps, paying-friends apps. Especially useful when the user wants warmth without losing trust.

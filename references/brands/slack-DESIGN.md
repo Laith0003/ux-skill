@@ -1,9 +1,9 @@
 # Slack
 
-> An inspired interpretation of Slacc's design language — a workplace messaging brand built on a deep aubergine primary, with cream-lavender hero gradients, blue inline links, and pill CTAs.
+> An inspired interpretation of Slacc's design language: a workplace messaging brand built on a deep aubergine primary, with cream-lavender hero gradients, blue inline links, and pill CTAs.
 
 **Category:** Developer Tools
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/slack.json`](../../data/brands/slack.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-An inspired interpretation of Slacc's design language — a workplace messaging brand built on a deep aubergine primary, with cream-lavender hero gradients, blue inline links, and pill CTAs.
+An inspired interpretation of Slacc's design language: a workplace messaging brand built on a deep aubergine primary, with cream-lavender hero gradients, blue inline links, and pill CTAs.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

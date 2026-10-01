@@ -18,7 +18,7 @@ Every page, every label, every interaction should be self-evident. The user shou
 
 When self-evident is not achievable, the design should be self-explanatory: a brief glance answers the question. The user might pause for half a second, but they should not pause for two seconds and then have to read.
 
-Anything that makes the user pause longer than that — a confusing label, a non-obvious interactive element, a mysterious icon — is a small tax. Each tax alone is fine. Pile them up and the user leaves.
+Anything that makes the user pause longer than that (a confusing label, a non-obvious interactive element, a mysterious icon) is a small tax. Each tax alone is fine. Pile them up and the user leaves.
 
 ### What causes thinking-friction
 
@@ -228,7 +228,7 @@ A scanner gets the value in two seconds. A reader gets more if they scroll.
 
 ### Definition
 
-A user should look at any page and, in five seconds — at highway speed, with one glance — be able to answer two questions: "What is this page?" and "What can I do on it?"
+A user should look at any page and, in five seconds (at highway speed, with one glance) be able to answer two questions: "What is this page?" and "What can I do on it?"
 
 The billboard test is a thought experiment. Imagine your page on a billboard at the side of the road. A driver gets three seconds of glance time. Can they identify what is being advertised?
 
@@ -306,7 +306,7 @@ By default, follow conventions. The benefit of being unique is rarely worth the 
 
 ### Fix example
 
-Use the conventions. Save the design budget for the parts of the product where the convention does not exist — your specific product features, your novel interactions, your unique value.
+Use the conventions. Save the design budget for the parts of the product where the convention does not exist: your specific product features, your novel interactions, your unique value.
 
 ### How to spot violations in review
 
@@ -394,7 +394,7 @@ A user landing on the home page should be able to answer all four questions in s
 ### Violation pattern
 
 - A home page that opens with a video and no text. The user must wait to see the heading.
-- A heading that uses brand voice but does not say what the product is. ("Reimagine your day." — what is this?)
+- A heading that uses brand voice but does not say what the product is. ("Reimagine your day." What is this?)
 - No clear navigation. The user cannot tell what else exists.
 - A primary CTA labeled "Get started" with no context. Started doing what?
 

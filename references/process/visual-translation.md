@@ -1,6 +1,6 @@
 # Visual Translation
 
-How to translate a visual reference — a screenshot, mockup, photograph, sketch, or generated image — into working frontend code. The job is not to "be inspired by" the reference. The job is to translate it faithfully into real frontend, then resolve the gaps the reference leaves behind.
+How to translate a visual reference (a screenshot, mockup, photograph, sketch, or generated image) into working frontend code. The job is not to "be inspired by" the reference. The job is to translate it faithfully into real frontend, then resolve the gaps the reference leaves behind.
 
 Drift kills more designs than ambition. This document codifies the discipline that prevents drift.
 
@@ -22,7 +22,7 @@ Direct-code-first is acceptable only when the task is a bug fix, a structural re
 
 ## Methodology phases
 
-The work has six phases. They are sequential — each phase consumes the output of the prior phase. Skipping ahead produces drift.
+The work has six phases. They are sequential: each phase consumes the output of the prior phase. Skipping ahead produces drift.
 
 ### Phase 1: Extract structure
 
@@ -63,12 +63,12 @@ Hex values where readable. Approximation where not.
 - **Surface.** Card backgrounds, section backgrounds, panels. Often slightly different from the main background.
 - **Primary text.** The default reading color. Rarely pure black even on white backgrounds.
 - **Secondary text.** Metadata, captions, deemphasized content.
-- **Accent.** The single brand color or the action color. Note where it appears — buttons, links, highlights, chrome.
+- **Accent.** The single brand color or the action color. Note where it appears: buttons, links, highlights, chrome.
 - **Border.** The color of dividers, card borders, input borders.
 - **Shadow tint.** Pure black shadows on white look harsh. Tinted shadows (slightly blue, slightly warm) match the background hue.
 - **Image grade.** If photographs appear, what is the color grade? Cool, warm, desaturated, high-contrast?
 
-Extract hex values where the reference allows. Where it does not, note "approximately" and proceed — the goal is a system close enough that a real implementation reads as faithful, not a pixel-perfect color-pick of an image that may not have rendered at full fidelity.
+Extract hex values where the reference allows. Where it does not, note "approximately" and proceed: the goal is a system close enough that a real implementation reads as faithful, not a pixel-perfect color-pick of an image that may not have rendered at full fidelity.
 
 ### Phase 4: Extract spacing rhythm
 
@@ -93,7 +93,7 @@ Before writing any code, list the components the reference contains.
 - **Cards.** Border, fill, shadow, radius. Internal structure (header, body, footer). Hover affordance if implied.
 - **Badges and pills.** Used decoratively or for status? What rounding?
 - **Dividers.** Hairlines or thicker? What color?
-- **Inputs.** If the reference contains forms — what is the input style? Underline, outlined, filled?
+- **Inputs.** If the reference contains forms: what is the input style? Underline, outlined, filled?
 - **Navbar treatment.** Sticky, transparent, solid? Logo placement? Item spacing? Mobile collapse pattern?
 - **Footer treatment.** Dense or sparse? Single column or multi-column?
 - **Image system.** Aspect ratios, framing, crop logic. Are images square, 16:9, golden ratio? Cropped tight or generous?
@@ -114,7 +114,7 @@ Only after phases 1-5 is implementation acceptable. The order in the build:
 7. Add motion if the reference implies it.
 8. Self-review the build against the reference.
 
-If you find yourself building a component that was not in the inventory, stop. Either the inventory was incomplete (return to phase 5) or you are inventing something the reference did not have (this is drift — interrogate it).
+If you find yourself building a component that was not in the inventory, stop. Either the inventory was incomplete (return to phase 5) or you are inventing something the reference did not have (this is drift: interrogate it).
 
 ---
 
@@ -124,15 +124,15 @@ The fidelity of the reference governs how much you invent.
 
 ### Photograph or polished mockup
 
-Treat as a hard spec. Match layout, type scale, color, spacing within the limits of the medium. Invent only what is genuinely missing — hover states, focus rings, empty states, error states. The polished mockup is rarely the source of those states; you supply them, in the same visual language.
+Treat as a hard spec. Match layout, type scale, color, spacing within the limits of the medium. Invent only what is genuinely missing: hover states, focus rings, empty states, error states. The polished mockup is rarely the source of those states; you supply them, in the same visual language.
 
 ### High-fidelity screenshot
 
-Treat as truth. Pixel-match where reasonable. Preserve the type ramp. Preserve the palette. Preserve the spacing language. If the screenshot is from a shipped product, you are translating production-quality work — the screenshot is the spec.
+Treat as truth. Pixel-match where reasonable. Preserve the type ramp. Preserve the palette. Preserve the spacing language. If the screenshot is from a shipped product, you are translating production-quality work: the screenshot is the spec.
 
 ### Sketch or wireframe
 
-The skeleton is binding; the surface is yours. Hold the structure, hierarchy, and content density that the wireframe specifies. Choose the typography, color, and motion to serve the implied product — not your default taste. A sketch implies a system; the system is your call within the sketch's bounds.
+The skeleton is binding; the surface is yours. Hold the structure, hierarchy, and content density that the wireframe specifies. Choose the typography, color, and motion to serve the implied product, not your default taste. A sketch implies a system; the system is your call within the sketch's bounds.
 
 ### Mood image or photo reference
 
@@ -140,7 +140,7 @@ Atmosphere is binding; structure is yours. Extract the palette, texture, and moo
 
 ### Mixed reference set
 
-Pick one image as the structural anchor. Treat the rest as palette or atmosphere supporting evidence. Do not average across them. Averaging produces mush — the structure from A blended with the palette from B blended with the spacing from C is incoherent.
+Pick one image as the structural anchor. Treat the rest as palette or atmosphere supporting evidence. Do not average across them. Averaging produces mush: the structure from A blended with the palette from B blended with the spacing from C is incoherent.
 
 The structural anchor is whichever image is closest to the actual product surface. The others are critique, not parts.
 
@@ -148,7 +148,7 @@ The structural anchor is whichever image is closest to the actual product surfac
 
 For missing states (loading, empty, error, hover, focus), invent only after preserving everything else. The new state must inherit the reference's component family, radius logic, spacing rhythm, and mood. Do not let a missing state become an excuse to introduce a foreign visual language.
 
-When you invent a state, document it: "Loading state inferred — used skeleton matching card structure, 600ms fade-in." This makes the invention reviewable and prevents the build from accumulating invented details that nobody can explain.
+When you invent a state, document it: "Loading state inferred (used skeleton matching card structure, 600ms fade-in.") This makes the invention reviewable and prevents the build from accumulating invented details that nobody can explain.
 
 ---
 
@@ -160,7 +160,7 @@ The reference is silent on many details. The question is which silences require 
 
 - The choice affects the product's positioning or audience. "Is this a consumer-facing or B2B product?" governs voice, copy, and density.
 - The choice has high cost to reverse. If the typography is the wrong call, the entire build needs reworking. If the radius is wrong, it is a quick swap.
-- The reference is genuinely ambiguous on a load-bearing element. A reference that shows a hero but no nav cannot be interpreted as "no nav" — confirm.
+- The reference is genuinely ambiguous on a load-bearing element. A reference that shows a hero but no nav cannot be interpreted as "no nav": confirm.
 - The brief implies constraints the reference does not respect. If the brief says "no JavaScript animations" and the reference clearly implies parallax, surface the conflict.
 
 ### Make a sensible call when:
@@ -182,7 +182,7 @@ The reference type strongly suggests the right stack. Match the stack to the sur
 
 ### Marketing site, landing page, or hero-driven brand page
 
-Static framework or server-side rendering with utility-first CSS for fast iteration. Plain HTML + utility-first CSS or vanilla CSS modules. Heavy component libraries are rarely needed — image quality, type discipline, and motion polish matter more than the framework.
+Static framework or server-side rendering with utility-first CSS for fast iteration. Plain HTML + utility-first CSS or vanilla CSS modules. Heavy component libraries are rarely needed: image quality, type discipline, and motion polish matter more than the framework.
 
 ### Product UI, dashboard, or data-dense app
 
@@ -190,7 +190,7 @@ Component library with strong primitives (Button, Modal, Form, Table, Card, Navb
 
 ### Editorial site, portfolio, or creative agency
 
-Vanilla CSS modules or utility-first with a custom typography pipeline. Motion library only when it earns its weight. Heavy component frameworks fight editorial layouts more than they help — the layouts are unique per page and a card primitive made for SaaS feels wrong in a magazine.
+Vanilla CSS modules or utility-first with a custom typography pipeline. Motion library only when it earns its weight. Heavy component frameworks fight editorial layouts more than they help: the layouts are unique per page and a card primitive made for SaaS feels wrong in a magazine.
 
 ### Internal tool or admin panel
 
@@ -216,19 +216,19 @@ A reference's atmosphere is real; its system is what you extract by counting thi
 
 ### Confusing decoration for structure
 
-A grain overlay, a noise texture, or a subtle gradient is not the design system. Strip the surface treatment, see the bones, then add the texture back as a final layer. A grainy reference and a clean reference can share the same bones — start with the bones.
+A grain overlay, a noise texture, or a subtle gradient is not the design system. Strip the surface treatment, see the bones, then add the texture back as a final layer. A grainy reference and a clean reference can share the same bones: start with the bones.
 
 ### Conflating display and body
 
-Display type is loud and lies about the scale. Find the body and the labels — that is where the system lives. A reference with a 96px hero headline and 16px body has a body system of 16px; the 96px is one specific moment, not the system.
+Display type is loud and lies about the scale. Find the body and the labels. That is where the system lives. A reference with a 96px hero headline and 16px body has a body system of 16px; the 96px is one specific moment, not the system.
 
 ### Hero clean-up bias
 
-When a hero looks crowded in the reference, the temptation is to "clean it up." Don't. The crowd is the design. Either reduce the words in the headline (a copy decision, surfaced separately) or regenerate the reference cleaner — do not silently drop elements during translation.
+When a hero looks crowded in the reference, the temptation is to "clean it up." Don't. The crowd is the design. Either reduce the words in the headline (a copy decision, surfaced separately) or regenerate the reference cleaner: do not silently drop elements during translation.
 
 ### Centering everything because some things are centered
 
-Asymmetry in the reference is intentional. Preserve it. If the hero is left-aligned and the testimonials are centered, both alignments are deliberate. Do not center the hero "for consistency" — the inconsistency is the design.
+Asymmetry in the reference is intentional. Preserve it. If the hero is left-aligned and the testimonials are centered, both alignments are deliberate. Do not center the hero "for consistency": the inconsistency is the design.
 
 ### Replacing distinctive components with generic equivalents
 
@@ -236,7 +236,7 @@ A "card" in the reference might be a one-off layered frame, not a re-usable card
 
 ### Mistaking pseudo-system labels for real UI
 
-Decorative micro-text — "00 orchestration layer," "system marker 03," "intelligence vector 7.2" — often appears in moodier references. It is rarely real UI and almost never adds value in the build. It is set dressing. Reduce or remove during translation. A real product does not ship with "00 orchestration layer" stamped on its header.
+Decorative micro-text ("00 orchestration layer," "system marker 03," "intelligence vector 7.2") often appears in moodier references. It is rarely real UI and almost never adds value in the build. It is set dressing. Reduce or remove during translation. A real product does not ship with "00 orchestration layer" stamped on its header.
 
 ### Pulling proportions from cropped zooms
 
@@ -254,7 +254,7 @@ If the reference has a hero, three feature sections, a testimonials block, a pri
 
 ### Skipping analysis because the reference "looks easy"
 
-Easy references are the ones that get translated into generic defaults. The simpler the reference, the more its quality depends on the small choices — the exact tracking, the precise hex, the deliberate spacing rhythm. Skip the analysis on an "easy" reference and you will produce something that looks like the reference at a glance but reads as generic on inspection.
+Easy references are the ones that get translated into generic defaults. The simpler the reference, the more its quality depends on the small choices: the exact tracking, the precise hex, the deliberate spacing rhythm. Skip the analysis on an "easy" reference and you will produce something that looks like the reference at a glance but reads as generic on inspection.
 
 ### Inventing details before regenerating the reference
 
@@ -262,11 +262,11 @@ When a region of the reference is unclear, generate one more clean image of that
 
 ### Substituting "good defaults" for the reference's specific choices
 
-The defaults are exactly what the reference was built to escape. Inter is the default; the reference probably uses something with character. 8px radius is the default; the reference probably uses 4px or 16px. White is the default; the reference probably uses off-white. Match the reference's choices, not the defaults — defaults are what produce convergence to a generic look.
+The defaults are exactly what the reference was built to escape. Inter is the default; the reference probably uses something with character. 8px radius is the default; the reference probably uses 4px or 16px. White is the default; the reference probably uses off-white. Match the reference's choices, not the defaults: defaults are what produce convergence to a generic look.
 
 ### Section-by-section drift
 
-The implementation drifts so that section 1 looks like the reference and section 6 looks like a different website. The fix: after each section is built, hold the build next to the reference and check for drift. Catch it early or it compounds — section 6 disagrees with section 5 which disagrees with section 4 which disagrees with the reference.
+The implementation drifts so that section 1 looks like the reference and section 6 looks like a different website. The fix: after each section is built, hold the build next to the reference and check for drift. Catch it early or it compounds: section 6 disagrees with section 5 which disagrees with section 4 which disagrees with the reference.
 
 ### Inventing components mid-build
 
@@ -282,7 +282,7 @@ A faithful translation produces two artifacts.
 
 A working frontend file (or files) that implements the reference. The code uses the tokens extracted in phases 2-4. The code uses the components inventoried in phase 5. The code respects the structure extracted in phase 1.
 
-The code should be reviewable in isolation — a teammate should be able to read the code without seeing the reference and understand the design choices.
+The code should be reviewable in isolation: a teammate should be able to read the code without seeing the reference and understand the design choices.
 
 ### The self-review
 
@@ -308,13 +308,13 @@ Flagged for confirmation:
 - The footer was partially cropped; assumed two-column layout with social on the right
 ```
 
-The self-review is what makes the translation reviewable. Without it, the next reader cannot tell which decisions were the reference's and which were yours. With it, every inferred decision is auditable — the stakeholder can confirm or correct, and the next pass either accepts or revises.
+The self-review is what makes the translation reviewable. Without it, the next reader cannot tell which decisions were the reference's and which were yours. With it, every inferred decision is auditable: the stakeholder can confirm or correct, and the next pass either accepts or revises.
 
 ---
 
 ## The translation discipline
 
-When implementing from a reference, follow it. Preserve layout logic, spacing rhythm, section order, text-image balance, typography mood, component style. The goal is not "inspired by" — the goal is "visually faithful, translated into real frontend."
+When implementing from a reference, follow it. Preserve layout logic, spacing rhythm, section order, text-image balance, typography mood, component style. The goal is not "inspired by": the goal is "visually faithful, translated into real frontend."
 
 Do not "improve" the reference by replacing it with a generic coded layout. Improve it by executing it well. The reference is what the stakeholder agreed to; the build is the translation of that agreement into code. Drift is the silent failure mode that takes a faithful translation and turns it into a different design.
 
@@ -334,7 +334,7 @@ Hold these and the translation reads as faithful. Skip any and drift sneaks in. 
 
 ## When the reference is generated, not sourced
 
-When you produce the reference yourself (e.g., via image generation), the translation pipeline is the same — but the production of the reference is itself a phase.
+When you produce the reference yourself (e.g., via image generation), the translation pipeline is the same, but the production of the reference is itself a phase.
 
 ### Generating the reference
 
@@ -345,7 +345,7 @@ When you produce the reference yourself (e.g., via image generation), the transl
 
 ### The fidelity ceiling
 
-A generated reference is not pixel-canonical truth — it is a high-fidelity sketch. The build interprets it; the build does not enslave to it. If the generated reference shows a font you cannot license, the build picks the nearest licensed equivalent. If the generated reference shows a layout that does not respond well at mobile widths, the build adapts.
+A generated reference is not pixel-canonical truth: it is a high-fidelity sketch. The build interprets it; the build does not enslave to it. If the generated reference shows a font you cannot license, the build picks the nearest licensed equivalent. If the generated reference shows a layout that does not respond well at mobile widths, the build adapts.
 
 The generated reference is a strong reference, but its purpose is to anchor the system, not to dictate every pixel.
 

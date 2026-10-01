@@ -2,17 +2,17 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Sonos's web presence is premium-home-audio editorial — black-and-white product photography on white seamless, generous lifestyle imagery in muted Scandi-modern interiors, and a clean chrome with a single near-pure-black CTA. The atmosphere is design-magazine considered. Where Bose stays purely product-on-white and JBL leans bright-lifestyle-colorful, Sonos splits the difference: product imagery is studio-clean, lifestyle imagery is styled-room — a Sonos Era 300 on a walnut sideboard in a sunlit minimalist living room, a Sonos Arc beneath a wall-mounted television in a styled space, a Sonos Roam on a kitchen counter beside a ceramic vase.
+Sonos's web presence is premium-home-audio editorial: black-and-white product photography on white seamless, generous lifestyle imagery in muted Scandi-modern interiors, and a clean chrome with a single near-pure-black CTA. The atmosphere is design-magazine considered. Where Bose stays purely product-on-white and JBL leans bright-lifestyle-colorful, Sonos splits the difference: product imagery is studio-clean, lifestyle imagery is styled-room, a Sonos Era 300 on a walnut sideboard in a sunlit minimalist living room, a Sonos Arc beneath a wall-mounted television in a styled space, a Sonos Roam on a kitchen counter beside a ceramic vase.
 
 The lifestyle photography is where Sonos differentiates from peers. The interiors are deliberately Scandi-modern: walnut, oak, white walls, indoor plants, ceramic objects, natural light. The styling reads as Architectural Digest more than Best Buy. The speakers are objects of design intent placed in spaces that aspire to taste. This is the brand selling itself to customers who value the look of audio gear as much as the sound.
 
-The chrome around the photography stays restrained. Headlines are set in Saans (the brand's geometric humanist sans) at modest sizes. CTAs are pure-black rectangles or pills. Cards are rectilinear (0–8px radius). The chrome's job is to recede.
+The chrome around the photography stays restrained. Headlines are set in Saans (the brand's geometric humanist sans) at modest sizes. CTAs are pure-black rectangles or pills. Cards are rectilinear (0 to 8px radius). The chrome's job is to recede.
 
 **Key Characteristics:**
 - Pure white canvas with premium product-on-white and styled-room lifestyle photography
-- Saans typography — modern geometric sans with humanist warmth
-- Pure black CTA (#000000) — minimalist primary action
-- Rectilinear cards (0–8px radius)
+- Saans typography: modern geometric sans with humanist warmth
+- Pure black CTA (#000000): minimalist primary action
+- Rectilinear cards (0 to 8px radius)
 - Scandi-modern interior lifestyle imagery in muted earth tones
 - Color-swatch picker on speaker product pages (white / black / soft / shadow palette)
 - Room-by-room product recommender as a brand IA pattern
@@ -25,7 +25,7 @@ The chrome around the photography stays restrained. Headlines are set in Saans (
 
 ### Surface & Background
 - **Pure White** (`#ffffff`): Page canvas
-- **Surface Soft** (`#f7f7f5`): Alternating section bands — slight warmth
+- **Surface Soft** (`#f7f7f5`): Alternating section bands (slight warmth)
 - **Surface Card** (`#fafaf8`): Hover state
 - **Hairline** (`#dedede`): 1px borders
 
@@ -50,34 +50,34 @@ The chrome around the photography stays restrained. Headlines are set in Saans (
 ## 3. Typography Rules
 
 ### Font Family
-- **Display + Body**: `Saans` (proprietary) or `Inter` / `Söhne` as substitute — geometric humanist sans
+- **Display + Body**: `Saans` (proprietary) or `Inter` / `Söhne` as substitute (geometric humanist sans)
 
 ### Hierarchy
-- **Hero h1** — 48–64px Saans weight 500, line-height 1.1
-- **Section h2** — 32–40px weight 500
-- **Card title** — 20–24px weight 500
-- **Body** — 16–18px weight 400, line-height 1.5
-- **Caption** — 13–14px weight 400
-- **Button label** — 14–16px weight 500
+- **Hero h1**: 48 to 64px Saans weight 500, line-height 1.1
+- **Section h2**: 32 to 40px weight 500
+- **Card title**: 20 to 24px weight 500
+- **Body**: 16 to 18px weight 400, line-height 1.5
+- **Caption**: 13 to 14px weight 400
+- **Button label**: 14 to 16px weight 500
 
 ### Principles
-- Weight 500 is the workhorse — the brand commits to medium weight, never bold
+- Weight 500 is the workhorse: the brand commits to medium weight, never bold
 - Display headlines lean on generous size, not heavy weight
-- Body sits at 16–18px for editorial reading pace
+- Body sits at 16 to 18px for editorial reading pace
 - Tracking neutral (0)
 
 ## 4. Layout & Spacing
 
-The site uses a 12-column grid with a max content width of 1280–1440px. Section padding is 96–120px vertical — generous to give the lifestyle photography room. Product card grids run 3-up at desktop.
+The site uses a 12-column grid with a max content width of 1280 to 1440px. Section padding is 96 to 120px vertical: generous to give the lifestyle photography room. Product card grids run 3-up at desktop.
 
 ## 5. Componentry Feel
 
-- **Lifestyle photo hero** — Full-bleed styled-room photograph with the brand wordmark + headline overlaid in white or black depending on photo tone
-- **Primary CTA (dark rect)** — Pure black fill, white text, 0–4px radius, 48px height, weight-500 label
-- **Color swatch picker** — Horizontal row of round color swatches on speaker product pages, active swatch shows a thin ring outline
-- **Product detail stacked** — Long-scroll product page with hero (product on white), spec callouts, lifestyle photography mid-page, technical details
-- **Room-by-room recommender** — Quiz-style flow ("How big is the room? How do you listen?") returning recommended Sonos configurations
-- **Footer** — Minimal soft surface footer, multi-column site-map, region switcher
+- **Lifestyle photo hero**: Full-bleed styled-room photograph with the brand wordmark + headline overlaid in white or black depending on photo tone
+- **Primary CTA (dark rect)**: Pure black fill, white text, 0 to 4px radius, 48px height, weight-500 label
+- **Color swatch picker**: Horizontal row of round color swatches on speaker product pages, active swatch shows a thin ring outline
+- **Product detail stacked**: Long-scroll product page with hero (product on white), spec callouts, lifestyle photography mid-page, technical details
+- **Room-by-room recommender**: Quiz-style flow ("How big is the room? How do you listen?") returning recommended Sonos configurations
+- **Footer**: Minimal soft surface footer, multi-column site-map, region switcher
 
 ## 6. Voice / Microcopy Do's & Don'ts
 
@@ -87,7 +87,7 @@ The site uses a 12-column grid with a max content width of 1280–1440px. Sectio
 
 ## 7. Motion Vocabulary
 
-Editorial fade-in reveals on scroll (250ms ease-out). Carousel cross-fade at 1.2–1.5s: deliberately slow. Hover on product cards is a slight 100ms opacity dip on the price line. The motion philosophy matches the prestige restraint.
+Editorial fade-in reveals on scroll (250ms ease-out). Carousel cross-fade at 1.2 to 1.5s: deliberately slow. Hover on product cards is a slight 100ms opacity dip on the price line. The motion philosophy matches the prestige restraint.
 
 ## 8. Anti-patterns to Avoid
 

@@ -4,27 +4,27 @@
 
 ## Principles
 
-1. **Accessibility is non-negotiable, not a feature** — Every rule in this foundation is a release blocker. Color contrast, focus visibility, keyboard navigation, semantic markup, alt text, and reduced-motion support are preconditions for shipping, not nice-to-haves.
+1. **Accessibility is non-negotiable, not a feature**: Every rule in this foundation is a release blocker. Color contrast, focus visibility, keyboard navigation, semantic markup, alt text, and reduced-motion support are preconditions for shipping, not nice-to-haves.
 
-2. **Color is never the only signal** — Every color signal pairs with an icon, text, or pattern. Error states need red color AND an icon AND a text message. Color-blind users and screen reader users must get the same information.
+2. **Color is never the only signal**: Every color signal pairs with an icon, text, or pattern. Error states need red color AND an icon AND a text message. Color-blind users and screen reader users must get the same information.
 
-3. **Keyboard must reach everything** — Every interactive control reachable and operable by keyboard alone. Tab order matches visual order. If you offer drag-and-drop, also offer a keyboard alternative.
+3. **Keyboard must reach everything**: Every interactive control reachable and operable by keyboard alone. Tab order matches visual order. If you offer drag-and-drop, also offer a keyboard alternative.
 
-4. **Focus must be visible** — 2 to 4px visible focus ring on every interactive element, high-contrast against background. Never `outline: none` without a replacement. After page transition, move focus to main content. After submit fails, auto-focus the first invalid field.
+4. **Focus must be visible**: 2 to 4px visible focus ring on every interactive element, high-contrast against background. Never `outline: none` without a replacement. After page transition, move focus to main content. After submit fails, auto-focus the first invalid field.
 
-5. **Semantic HTML carries half the load** — Use `<nav>`, `<main>`, `<article>`, `<aside>`, `<section>`, `<button>`, `<label>`, `<table>`, headings in sequence. Generic `<div>` and `<span>` used as buttons break screen readers and keyboard nav.
+5. **Semantic HTML carries half the load**: Use `<nav>`, `<main>`, `<article>`, `<aside>`, `<section>`, `<button>`, `<label>`, `<table>`, headings in sequence. Generic `<div>` and `<span>` used as buttons break screen readers and keyboard nav.
 
-6. **Sequential heading hierarchy** — `h1` → `h2` → `h3` → `h4` → `h5` → `h6`. Never skip levels. Each page has exactly one `h1`.
+6. **Sequential heading hierarchy**: `h1` → `h2` → `h3` → `h4` → `h5` → `h6`. Never skip levels. Each page has exactly one `h1`.
 
-7. **Labels are explicit, never inferred** — Every input gets a visible `<label for="...">`. Placeholder text is not a label. Icon-only buttons get `aria-label`. Native apps use `accessibilityLabel`.
+7. **Labels are explicit, never inferred**: Every input gets a visible `<label for="...">`. Placeholder text is not a label. Icon-only buttons get `aria-label`. Native apps use `accessibilityLabel`.
 
-8. **Dynamic Type without breaking** — Support system text scaling. Layouts must not truncate or break as text grows. Test at the largest accessibility text size.
+8. **Dynamic Type without breaking**: Support system text scaling. Layouts must not truncate or break as text grows. Test at the largest accessibility text size.
 
-9. **Reduced motion is a contract** — Honor `prefers-reduced-motion: reduce`. Replace `translateY` reveals with opacity-only fades. Pause ambient motion. Drop blur from scroll entries. Never opt the user back in by default.
+9. **Reduced motion is a contract**: Honor `prefers-reduced-motion: reduce`. Replace `translateY` reveals with opacity-only fades. Pause ambient motion. Drop blur from scroll entries. Never opt the user back in by default.
 
-10. **Errors name the cause AND the fix** — Never "form contains errors" or "invalid input." Always specific: name the field, name the problem, name the fix. "Email needs an @ sign" not "Invalid email."
+10. **Errors name the cause AND the fix**. Never "form contains errors" or "invalid input." Always specific: name the field, name the problem, name the fix. "Email needs an @ sign" not "Invalid email."
 
-11. **Common courtesy in design** — Don't make users think. Make obvious things obvious. Don't ask for unnecessary effort. Provide visible affordances. Apologize for failures and explain the recovery path.
+11. **Common courtesy in design**: Don't make users think. Make obvious things obvious. Don't ask for unnecessary effort. Provide visible affordances. Apologize for failures and explain the recovery path.
 
 ## Do / Don't
 
@@ -54,11 +54,11 @@
 ## Examples
 
 ### Pattern: Visible focus ring
-**Use when**: Every interactive element — button, link, input, card, tab.
+**Use when**: Every interactive element (button, link, input, card, tab).
 **Anti-pattern**: `outline: none` with no replacement, or 1px gray ring invisible on the surface.
 **How**: The system's focus ring role (`color.focus.ring`), a solid outline 2 to 4px wide with an offset that clears the control, at 3:1 against every surface it sits on (1.4.11). Its width and offset come from the system, the same for every component:
 
-The focus state is not just `:focus-visible` — actually visible. `:focus-visible` should style the focus, but never rely on it without ensuring the style is genuinely perceivable.
+The focus state is not just `:focus-visible`: actually visible. `:focus-visible` should style the focus, but never rely on it without ensuring the style is genuinely perceivable.
 
 ### Pattern: Error summary with anchor links
 **Use when**: Forms with multiple potential errors.
@@ -94,11 +94,11 @@ Validation on `blur`, not on every keystroke. The user finishes typing, then see
 ### Pattern: Sequential heading hierarchy
 **Use when**: Every page.
 **Anti-pattern**: Skipping from `h1` directly to `h3` because the design wanted smaller text, or using `h2` for "Header" and `h2` again for "Footer" (only one h1 per page; never two).
-**How**: Each page has exactly one `<h1>` carrying the page's primary topic. `<h2>` for major sections. `<h3>` for subsections. Never skip a level for visual reasons — use CSS to style. Screen reader users navigate by heading; broken hierarchy reads as chaos.
+**How**: Each page has exactly one `<h1>` carrying the page's primary topic. `<h2>` for major sections. `<h3>` for subsections. Never skip a level for visual reasons: use CSS to style. Screen reader users navigate by heading; broken hierarchy reads as chaos.
 
 ### Pattern: Touch target with hitSlop
 **Use when**: Small icons or thin edges that need to be tappable.
-**Anti-pattern**: 16px icon with no padding — impossible to tap accurately.
+**Anti-pattern**: 16px icon with no padding (impossible to tap accurately).
 **How**: Minimum 44x44pt (iOS), 48x48dp (Android), 44x44px (web). For small visual elements, extend the hit area beyond visual bounds via `hitSlop` (React Native) or padding (web). 8px minimum gap between adjacent touch targets.
 
 ### Pattern: Aria-label on icon-only buttons
@@ -146,7 +146,7 @@ Honor at every level. Never assume the user "will be fine."
 
 ### Pattern: Color-blind safe palette
 **Use when**: Charts, data viz, status indicators.
-**Anti-pattern**: Red and green as the only signals (red = bad, green = good) — fails ~8% of male users.
+**Anti-pattern**: Red and green as the only signals (red = bad, green = good), fails ~8% of male users.
 **How**:
 - Diverging scales: blue → gray → red (not red → green)
 - Sequential: single-hue gradient (light to dark)
@@ -188,14 +188,14 @@ Honor at every level. Never assume the user "will be fine."
 
 ### Pattern: Common courtesy in design
 **Use when**: Designing any user-facing surface.
-**Anti-pattern**: Asking the user to do unnecessary work — re-entering their phone number, re-finding their place after a route change, parsing a vague error message.
+**Anti-pattern**: Asking the user to do unnecessary work, re-entering their phone number, re-finding their place after a route change, parsing a vague error message.
 **How**: Apply these principles:
-- Don't make me think — make obvious things obvious
-- Don't ask for unnecessary effort — autofill, pre-fill, save drafts
-- Provide visible affordances — clickable things must look clickable
+- Don't make me think: make obvious things obvious
+- Don't ask for unnecessary effort: autofill, pre-fill, save drafts
+- Provide visible affordances: clickable things must look clickable
 - Apologize for failures and explain the recovery path
-- Honor convention — search is a magnifying glass, logo is top-left, primary CTA is filled
-- Provide error tolerance — undo for destructive actions, confirmation for irreversible ones
+- Honor convention: search is a magnifying glass, logo is top-left, primary CTA is filled
+- Provide error tolerance: undo for destructive actions, confirmation for irreversible ones
 
 ### Pattern: Aria-busy during loading
 **Use when**: A component or section loads dynamically.
@@ -206,11 +206,11 @@ Honor at every level. Never assume the user "will be fine."
 **Use when**: Toast notifications, status updates, validation errors after user action.
 **Anti-pattern**: Toast appears visually only; screen reader user misses critical state.
 **How**:
-- `aria-live="polite"` for non-urgent updates (most cases) — screen reader waits until current speech finishes
-- `aria-live="assertive"` for urgent errors only — interrupts current speech (use sparingly)
+- `aria-live="polite"` for non-urgent updates (most cases): screen reader waits until current speech finishes
+- `aria-live="assertive"` for urgent errors only: interrupts current speech (use sparingly)
 - `role="alert"` is equivalent to `aria-live="assertive"`
 - `role="status"` is equivalent to `aria-live="polite"`
-- Wrap toasts and dynamic messages in a persistent live region — adding/removing the region itself does not trigger announcement
+- Wrap toasts and dynamic messages in a persistent live region: adding/removing the region itself does not trigger announcement
 
 ### Pattern: Drag-and-drop alternative
 **Use when**: Sortable lists, kanban boards, reorderable items.
@@ -228,7 +228,7 @@ Honor at every level. Never assume the user "will be fine."
 **How**:
 - Use `dir="rtl"` and ensure every layout works mirrored
 - Use logical properties (`margin-inline-start`, `padding-inline-end`) rather than `margin-left` / `padding-right`
-- Stagger animations are direction-aware — mirror on RTL
+- Stagger animations are direction-aware: mirror on RTL
 - Number formatting locale-aware
 - Date formatting locale-aware
 - Text expansion: translations may be 30 to 50% longer; layouts must flex
@@ -236,7 +236,7 @@ Honor at every level. Never assume the user "will be fine."
 
 ### Pattern: Focus outline with high contrast
 **Use when**: Every interactive element.
-**Anti-pattern**: 1px gray focus ring on a gray background — technically present, practically invisible.
+**Anti-pattern**: 1px gray focus ring on a gray background (technically present, practically invisible).
 **How**: Focus outline must clear 3:1 contrast against ALL adjacent colors. On gradients or photo backgrounds, use double-layer outlines (white + accent, or accent + black) to ensure visibility everywhere. 2 to 4px width. Offset 0 to 4px from element edge.
 
 ## Tokens / values
@@ -286,7 +286,7 @@ Honor at every level. Never assume the user "will be fine."
 - `aria-busy="true"` during loading states
 
 ### Form patterns
-- Visible `<label for>` on every input — never placeholder-only
+- Visible `<label for>` on every input, never placeholder-only
 - Required indicators inline (`*` or "(required)")
 - Helper text via `aria-describedby`
 - Error text below field via `aria-describedby`
@@ -345,14 +345,14 @@ Honor at every level. Never assume the user "will be fine."
 - Long-pressed or right-click as the only path to an action
 
 ### Common courtesy principles
-- Don't make the user think — make obvious things obvious
+- Don't make the user think: make obvious things obvious
 - Don't ask for unnecessary effort (autofill, pre-fill, save drafts)
 - Make clickable things obviously clickable
 - Apologize for failures and explain the recovery path
 - Honor convention (logo top-left, nav top, search = magnifying glass)
 - Provide error tolerance (undo for destructive, confirm for irreversible)
-- Three sources of noise to eliminate: shouting, disorganization, clutter — fix by removal, not addition
-- Clarity over consistency — when making something significantly clearer requires slight inconsistency, choose clarity every time
+- Three sources of noise to eliminate: shouting, disorganization, clutter (fix by removal, not addition)
+- Clarity over consistency: when making something significantly clearer requires slight inconsistency, choose clarity every time
 
 ### Web Content Accessibility Guidelines (WCAG) baseline
 - 2.1 AA at minimum across all surfaces
@@ -363,7 +363,7 @@ Honor at every level. Never assume the user "will be fine."
 ## Checklist (severity-tagged)
 
 - [ ] All foreground/background pairs verified at 4.5:1 minimum (severity: Critical)
-- [ ] Color is never the only signal — icon or text accompanies every color signal (severity: Critical)
+- [ ] Color is never the only signal, icon or text accompanies every color signal (severity: Critical)
 - [ ] Visible focus ring on every interactive element, 2 to 4px high-contrast (severity: Critical)
 - [ ] `outline: none` never used without a replacement (severity: Critical)
 - [ ] Tab order matches visual order (severity: Critical)

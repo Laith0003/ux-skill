@@ -1,4 +1,4 @@
-# Case Study Style — Editorial Long-Form Output
+# Case Study Style: Editorial Long-Form Output
 
 This is the house style for `/ux-case-study` and any long-form report the plugin produces. It is editorial, monochrome, and restrained. The aesthetic is the wide-margin design book: black ink, white paper, generous breath, evidence over claim.
 
@@ -42,7 +42,7 @@ Headlines are display-scale and tight.
 - Document title: `text-8xl` to `text-9xl`, `font-medium`, `letter-spacing: -0.045em`.
 - Subheadings under a section: `text-3xl` to `text-4xl`, `font-medium`, `tracking-tight`.
 
-Headlines wrap. Long headlines wrap deliberately — do not shrink them to fit. Two-line and three-line headlines are correct.
+Headlines wrap. Long headlines wrap deliberately: do not shrink them to fit. Two-line and three-line headlines are correct.
 
 ### Two-Tone Body Emphasis
 
@@ -91,7 +91,7 @@ The layout works under both `dir="ltr"` and `dir="rtl"`.
 - Margins flip. Section codes move to the right margin under RTL.
 - Headlines remain tight in both languages.
 - For Arabic, use `font-family: "SF Arabic", "IBM Plex Sans Arabic", system-ui, -apple-system, sans-serif;`. Latin numerals are acceptable; if Eastern Arabic numerals are used, they are used consistently.
-- Line-height under Arabic increases by 4%–8% to accommodate diacritics.
+- Line-height under Arabic increases by 4% to 8% to accommodate diacritics.
 - Test the document under RTL before delivery. Mirrored layout that reads incorrectly is a Critical ship-block under the polaris style.
 
 ---
@@ -100,15 +100,15 @@ The layout works under both `dir="ltr"` and `dir="rtl"`.
 
 The default case study has seven sections, in this order:
 
-- (A) About — what the product is and who it is for.
-- (B) Mission — the principle that drives the work.
-- (C) Outcomes — what was achieved, in numbers where possible.
-- (D) Impact — what changed for the user and the business.
-- (E) Market — where the product sits and what it competes with.
-- (F) Chance — the bet the team made and the constraint it accepted.
-- (G) Target Audience — who the product is built for, precisely.
+- (A) About: what the product is and who it is for.
+- (B) Mission: the principle that drives the work.
+- (C) Outcomes: what was achieved, in numbers where possible.
+- (D) Impact: what changed for the user and the business.
+- (E) Market, where the product sits and what it competes with.
+- (F) Chance: the bet the team made and the constraint it accepted.
+- (G) Target Audience, who the product is built for, precisely.
 
-A case study may use a different section set, but the alphabetic codes still march. If a case study has five sections — say About, Process, Outcomes, Lessons, Future — it codes them (A) through (E).
+A case study may use a different section set, but the alphabetic codes still march. If a case study has five sections (say About, Process, Outcomes, Lessons, Future) it codes them (A) through (E).
 
 Section titles are noun phrases, set in title case. "About," not "About the product." "Outcomes," not "Our Outcomes." The title is the system; the body is the content.
 
@@ -161,7 +161,7 @@ Default stack:
 font-family: -apple-system, BlinkMacSystemFont, "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 ```
 
-Inter is acceptable. Serifs are allowed for case studies — unlike dashboards, a case study may set body type in a serif if the design calls for it. Acceptable serifs:
+Inter is acceptable. Serifs are allowed for case studies: unlike dashboards, a case study may set body type in a serif if the design calls for it. Acceptable serifs:
 
 - IBM Plex Serif
 - Source Serif Pro
@@ -193,17 +193,17 @@ When delivering Markdown, the file renders cleanly in any Markdown previewer. Ta
 
 Before the case study is delivered, verify every item.
 
-- [ ] Monochrome verified — no chromatic content, no hue with non-zero saturation.
-- [ ] Section codes present — alphabetic, in order, no gaps.
-- [ ] Hairline separators only — no boxes, no cards, no shadows.
-- [ ] Two-tone body emphasis used — black for important phrases, gray for context.
-- [ ] No marketing language — no "elevate," "unleash," "seamless," "robust."
-- [ ] No source attributions inside the content — no name-checked authorities, no inline citations.
-- [ ] RTL tested — document renders correctly under `dir="rtl"` with mirrored margins and section codes.
-- [ ] Typography stack specified — Latin and Arabic faces both named.
+- [ ] Monochrome verified: no chromatic content, no hue with non-zero saturation.
+- [ ] Section codes present: alphabetic, in order, no gaps.
+- [ ] Hairline separators only: no boxes, no cards, no shadows.
+- [ ] Two-tone body emphasis used: black for important phrases, gray for context.
+- [ ] No marketing language: no "elevate," "unleash," "seamless," "robust."
+- [ ] No source attributions inside the content: no name-checked authorities, no inline citations.
+- [ ] RTL tested: document renders correctly under `dir="rtl"` with mirrored margins and section codes.
+- [ ] Typography stack specified: Latin and Arabic faces both named.
 - [ ] Images are full-bleed, unframed, grayscale.
 - [ ] Captions are short, italic, gray.
-- [ ] Length is honest — the case study runs as long as it needs to and no longer.
+- [ ] Length is honest: the case study runs as long as it needs to and no longer.
 - [ ] No emoji.
 
 A case study that fails any item is rewritten before send.
@@ -233,11 +233,11 @@ One paragraph. Names the product, the market, the launch date, the team size. Tw
 
 ### (B) Mission
 
-One paragraph. Names the principle. Not a slogan — the operating principle behind the product. "Phone is the only customer identity." That is a mission. "Empowering merchants" is not.
+One paragraph. Names the principle. Not a slogan: the operating principle behind the product. "Phone is the only customer identity." That is a mission. "Empowering merchants" is not.
 
 ### (C) Outcomes
 
-A list or a table. Numbers where possible. Each outcome is a single line. No prose around the outcomes — the outcomes are the prose.
+A list or a table. Numbers where possible. Each outcome is a single line. No prose around the outcomes: the outcomes are the prose.
 
 ### (D) Impact
 
@@ -249,11 +249,11 @@ One paragraph or a short table. Where the product sits and what it competes with
 
 ### (F) Chance
 
-One paragraph. The bet the team made — the constraint it accepted in exchange for a specific advantage. "We accepted that we would not support Western markets in year one so we could ship Arabic-first." That is a chance.
+One paragraph. The bet the team made: the constraint it accepted in exchange for a specific advantage. "We accepted that we would not support Western markets in year one so we could ship Arabic-first." That is a chance.
 
 ### (G) Target Audience
 
-One paragraph. Who the product is for, precisely. Not "small businesses" but "single-location retail merchants in Amman, Riyadh, and Dubai with 1–5 staff and no POS integration prior to onboarding."
+One paragraph. Who the product is for, precisely. Not "small businesses" but "single-location retail merchants in Amman, Riyadh, and Dubai with 1 to 5 staff and no POS integration prior to onboarding."
 
 A case study that follows these section patterns reads as a system, not a one-off document.
 
@@ -263,9 +263,9 @@ A case study that follows these section patterns reads as a system, not a one-of
 
 The title sits alone on the opening view. The reader sees:
 
-- Document title — `text-8xl` to `text-9xl`, `font-medium`, `letter-spacing: -0.045em`.
-- One-line subtitle — `text-xl` `text-zinc-500`, set below the title with `mt-8`.
-- Date and author — small caps, `text-xs uppercase tracking-widest text-zinc-400`, set below the subtitle with `mt-12`.
+- Document title: `text-8xl` to `text-9xl`, `font-medium`, `letter-spacing: -0.045em`.
+- One-line subtitle: `text-xl` `text-zinc-500`, set below the title with `mt-8`.
+- Date and author: small caps, `text-xs uppercase tracking-widest text-zinc-400`, set below the subtitle with `mt-12`.
 
 Below the title block is `py-48` of breath, then the (A) section begins.
 

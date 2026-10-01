@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Ferrari-design-analysis
-description: A luxury-automotive brand whose marketing surfaces read as cinematic editorial. The base canvas is **near-black** (`#181818`) holding pure white display type; white-canvas bands appear only inside specific editorial contexts (preowned listings, pricing tables). The single brand voltage is **Rosso Corsa** (`#da291c`) — the iconic Ferrari racing red — used scarcely on primary CTAs, the Cavallino mark, and Formula 1 race-position highlights. Type runs **FerrariSans** at modest weights (display 500, body 400) — never bombastic. Spacing follows an explicit 8px token ladder (`xxxs` 4px through `super` 128px); generous editorial pacing throughout. The brand's strongest visual signature is the **full-bleed cinematic hero photograph** that fills the viewport top with car photography, model details, or trackside livery — followed by a tighter editorial body layout below.
+description: A luxury-automotive brand whose marketing surfaces read as cinematic editorial. The base canvas is **near-black** (`#181818`) holding pure white display type; white-canvas bands appear only inside specific editorial contexts (preowned listings, pricing tables). The single brand voltage is **Rosso Corsa** (`#da291c`) (the iconic Ferrari racing red) used scarcely on primary CTAs, the Cavallino mark, and Formula 1 race-position highlights. Type runs **FerrariSans** at modest weights (display 500, body 400), never bombastic. Spacing follows an explicit 8px token ladder (`xxxs` 4px through `super` 128px); generous editorial pacing throughout. The brand's strongest visual signature is the **full-bleed cinematic hero photograph** that fills the viewport top with car photography, model details, or trackside livery, followed by a tighter editorial body layout below.
 
 colors:
   primary: "#da291c"
@@ -271,57 +271,57 @@ components:
 
 ## Overview
 
-Ferrari's marketing site reads as cinematic editorial — closer to a luxury-magazine spread than a typical car-OEM site. The base canvas is **near-black** (`{colors.canvas}` — #181818) holding pure white display type; white-canvas bands appear only inside specific editorial contexts (preowned listings, pricing tables, dealer surfaces). The single brand voltage is **Rosso Corsa** (`{colors.primary}` — #da291c), the iconic Ferrari racing red, used scarcely on primary CTAs, the Cavallino mark, and Formula 1 race-position highlights.
+Ferrari's marketing site reads as cinematic editorial: closer to a luxury-magazine spread than a typical car-OEM site. The base canvas is **near-black** (`{colors.canvas}`, #181818) holding pure white display type; white-canvas bands appear only inside specific editorial contexts (preowned listings, pricing tables, dealer surfaces). The single brand voltage is **Rosso Corsa** (`{colors.primary}`, #da291c), the iconic Ferrari racing red, used scarcely on primary CTAs, the Cavallino mark, and Formula 1 race-position highlights.
 
-Type runs **FerrariSans** as the single sans family at modest weights — display 500, body 400. CTA labels render in uppercase with generous tracking (1.1-1.4px). The brand never uses bold display copy.
+Type runs **FerrariSans** as the single sans family at modest weights: display 500, body 400. CTA labels render in uppercase with generous tracking (1.1-1.4px). The brand never uses bold display copy.
 
-The brand's strongest visual signature is the **full-bleed cinematic hero photograph** — top-of-page imagery shows car photography, model details, or trackside livery without any chrome competing with it. Headlines float over the bottom of the photo or sit in a tight band beneath. Spacing follows the explicit 8px token ladder: `xxxs` 4 / `xxs` 8 / `xs` 16 / `sm` 24 / `md` 32 / `lg` 48 / `xl` 64 / `xxl` 96 / `super` 128.
+The brand's strongest visual signature is the **full-bleed cinematic hero photograph**: top-of-page imagery shows car photography, model details, or trackside livery without any chrome competing with it. Headlines float over the bottom of the photo or sit in a tight band beneath. Spacing follows the explicit 8px token ladder: `xxxs` 4 / `xxs` 8 / `xs` 16 / `sm` 24 / `md` 32 / `lg` 48 / `xl` 64 / `xxl` 96 / `super` 128.
 
 **Key Characteristics:**
 - Single accent: `{colors.primary}` (Rosso Corsa #da291c) for primary CTAs, the Cavallino, F1 race-position highlights. Used scarcely.
-- Near-black canvas (#181818) — never pure black. White-canvas bands only inside editorial contexts.
+- Near-black canvas (#181818), never pure black. White-canvas bands only inside editorial contexts.
 - Single sans family: FerrariSans across every text role.
-- Display weight stays at 500 — never bold.
+- Display weight stays at 500, never bold.
 - CTA labels render uppercase with 1.4px tracking.
-- Sharp `{rounded.none}` (0px) corners on every CTA, card, and band — luxury-automotive precision.
+- Sharp `{rounded.none}` (0px) corners on every CTA, card, and band: luxury-automotive precision.
 - Full-bleed cinematic hero photography is the page chrome.
 - Explicit 8px spacing token ladder with named scale (xxxs through super).
-- Hairlines + photographic depth — no drop shadow tiers.
+- Hairlines + photographic depth: no drop shadow tiers.
 
 ## Colors
 
 ### Brand & Accent
-- **Rosso Corsa** (`{colors.primary}` — #da291c): The iconic Ferrari racing red. Primary CTA fill, Cavallino mark, F1 driver-position highlights. Used scarcely.
-- **Rosso Corsa Active** (`{colors.primary-active}` — #b01e0a): Press state.
-- **Rosso Corsa Hover-darker** (`{colors.primary-hover}` — #9d2211): Documented for completeness; per the no-hover policy this is not used in preview HTML.
-- **Hypersail Yellow** (`{colors.accent-yellow-hypersail}` — #fff200) + **Yellow** (`{colors.accent-yellow}` — #f6e500): Sub-brand accents reserved for the Hypersail sailing program and the global focus-ring color. Not part of the main automotive palette.
+- **Rosso Corsa** (`{colors.primary}`, #da291c): The iconic Ferrari racing red. Primary CTA fill, Cavallino mark, F1 driver-position highlights. Used scarcely.
+- **Rosso Corsa Active** (`{colors.primary-active}`, #b01e0a): Press state.
+- **Rosso Corsa Hover-darker** (`{colors.primary-hover}`, #9d2211): Documented for completeness; per the no-hover policy this is not used in preview HTML.
+- **Hypersail Yellow** (`{colors.accent-yellow-hypersail}`, #fff200) + **Yellow** (`{colors.accent-yellow}`, #f6e500): Sub-brand accents reserved for the Hypersail sailing program and the global focus-ring color. Not part of the main automotive palette.
 
 ### Surface
-- **Canvas** (`{colors.canvas}` — #181818): Near-black page floor — never pure black, slight warmth.
-- **Canvas Elevated** (`{colors.canvas-elevated}` — #303030): Cards and panels on dark canvas.
-- **Canvas Light** (`{colors.canvas-light}` — #ffffff): White editorial bands (preowned listings, pricing).
-- **Surface Card** (`{colors.surface-card}` — #303030): Same as canvas-elevated — driver cards, livery photo plates.
-- **Surface Soft Light** (`{colors.surface-soft-light}` — #f7f7f7): Light editorial alternating band.
-- **Surface Strong Light** (`{colors.surface-strong-light}` — #ebebeb): Light-canvas dividers, badges.
+- **Canvas** (`{colors.canvas}`, #181818): Near-black page floor, never pure black, slight warmth.
+- **Canvas Elevated** (`{colors.canvas-elevated}`, #303030): Cards and panels on dark canvas.
+- **Canvas Light** (`{colors.canvas-light}`, #ffffff): White editorial bands (preowned listings, pricing).
+- **Surface Card** (`{colors.surface-card}`, #303030): Same as canvas-elevated (driver cards, livery photo plates).
+- **Surface Soft Light** (`{colors.surface-soft-light}`, #f7f7f7): Light editorial alternating band.
+- **Surface Strong Light** (`{colors.surface-strong-light}`, #ebebeb): Light-canvas dividers, badges.
 
 ### Hairlines
-- **Hairline** (`{colors.hairline}` — #303030): 1px divider on dark — same hex as `{colors.canvas-elevated}`.
-- **Hairline On Light** (`{colors.hairline-on-light}` — #d2d2d2): 1px divider on light bands.
-- **Hairline Soft** (`{colors.hairline-soft}` — #ebebeb): Lighter divider.
+- **Hairline** (`{colors.hairline}`, #303030): 1px divider on dark (same hex as `{colors.canvas-elevated}`).
+- **Hairline On Light** (`{colors.hairline-on-light}`, #d2d2d2): 1px divider on light bands.
+- **Hairline Soft** (`{colors.hairline-soft}`, #ebebeb): Lighter divider.
 
 ### Text
-- **Ink** (`{colors.ink}` — #ffffff): Display, body emphasis on dark.
-- **Body** (`{colors.body}` — #969696): Default running-text on dark.
-- **Body Strong** (`{colors.body-strong}` — #ffffff): Same as ink.
-- **Body On Light** (`{colors.body-on-light}` — #181818): Default text on light bands.
-- **Muted** (`{colors.muted}` — #666666): Sub-titles, captions on dark.
-- **Muted Soft** (`{colors.muted-soft}` — #8f8f8f): Disabled link text.
-- **On Primary** (`{colors.on-primary}` — #ffffff): White text on Rosso Corsa.
+- **Ink** (`{colors.ink}`, #ffffff): Display, body emphasis on dark.
+- **Body** (`{colors.body}`, #969696): Default running-text on dark.
+- **Body Strong** (`{colors.body-strong}`, #ffffff): Same as ink.
+- **Body On Light** (`{colors.body-on-light}`, #181818): Default text on light bands.
+- **Muted** (`{colors.muted}`, #666666): Sub-titles, captions on dark.
+- **Muted Soft** (`{colors.muted-soft}`, #8f8f8f): Disabled link text.
+- **On Primary** (`{colors.on-primary}`, #ffffff): White text on Rosso Corsa.
 
 ### Semantic
-- **Info** (`{colors.semantic-info}` — #4c98b9): Info badges, callout backgrounds.
-- **Success** (`{colors.semantic-success}` — #03904a): Confirmation.
-- **Warning** (`{colors.semantic-warning}` — #f13a2c): Validation warnings.
+- **Info** (`{colors.semantic-info}`, #4c98b9): Info badges, callout backgrounds.
+- **Success** (`{colors.semantic-success}`, #03904a): Confirmation.
+- **Warning** (`{colors.semantic-warning}`, #f13a2c): Validation warnings.
 
 ## Typography
 
@@ -347,7 +347,7 @@ The brand's strongest visual signature is the **full-bleed cinematic hero photog
 | `{typography.number-display}` | 80px | 700 | 1.0 | -1.6px | Race position highlights, spec values |
 
 ### Principles
-- **Display weight stays at 500.** Editorial confidence, not bombastic. The cinematic photography is doing the visual heavy-lifting — type doesn't need to compete.
+- **Display weight stays at 500.** Editorial confidence, not bombastic. The cinematic photography is doing the visual heavy-lifting: type doesn't need to compete.
 - **CTA labels are uppercase with 1.4px tracking.** Luxury-precision feel.
 - **Nav labels are uppercase with 0.65px tracking.** Consistent with CTA voice.
 - **Negative letter-spacing on display only.** -0.36px to -1.6px on display sizes; body stays at 0.
@@ -395,7 +395,7 @@ The system uses **photographic depth + brightness-step** elevation. No drop shad
 
 | Token | Value | Use |
 |---|---|---|
-| `{rounded.none}` | 0px | Every CTA, card, band — dominant radius |
+| `{rounded.none}` | 0px | Every CTA, card, band: dominant radius |
 | `{rounded.xs}` | 2px | Tight badges (rare) |
 | `{rounded.sm}` | 4px | Form inputs |
 | `{rounded.md}` | 6px | Compact cards (rare) |
@@ -403,90 +403,90 @@ The system uses **photographic depth + brightness-step** elevation. No drop shad
 | `{rounded.xl}` | 12px | Modal/dialog corners (rare) |
 | `{rounded.full}` | 9999px | Avatar plates, badge pills |
 
-The radius vocabulary is **sharp by default**. Sharp 0px corners are the brand button shape — never rounded pills. Pill geometry is reserved for badge labels only.
+The radius vocabulary is **sharp by default**. Sharp 0px corners are the brand button shape, never rounded pills. Pill geometry is reserved for badge labels only.
 
 ## Components
 
 ### Top Navigation
 
-**`top-nav-on-dark`** — Default top nav on dark hero pages. Background `{colors.canvas}`, text `{colors.ink}`, height 64px. Layout: Cavallino mark left, primary horizontal menu (Models / F1 / Lifestyle / Owners / Preowned), language picker + utilities right. Menu items render uppercase with 0.65px tracking.
+**`top-nav-on-dark`**: Default top nav on dark hero pages. Background `{colors.canvas}`, text `{colors.ink}`, height 64px. Layout: Cavallino mark left, primary horizontal menu (Models / F1 / Lifestyle / Owners / Preowned), language picker + utilities right. Menu items render uppercase with 0.65px tracking.
 
-**`top-nav-on-light`** — White-canvas variant for editorial light bands.
+**`top-nav-on-light`**: White-canvas variant for editorial light bands.
 
 ### Buttons
 
-**`button-primary`** — The signature Rosso Corsa CTA. Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button}` (14px / 700 / 1.4px tracking, uppercase), padding 14px × 32px, height 48px, **rounded `{rounded.none}` (0px — sharp corners)**.
+**`button-primary`**: The signature Rosso Corsa CTA. Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button}` (14px / 700 / 1.4px tracking, uppercase), padding 14px × 32px, height 48px, **rounded `{rounded.none}` (0px, sharp corners)**.
 
-**`button-primary-active`** — Press state. Background `{colors.primary-active}`.
+**`button-primary-active`**: Press state. Background `{colors.primary-active}`.
 
-**`button-outline-on-dark`** — Transparent with 1px white border. Background transparent, text `{colors.ink}`, 1px white border, same sharp 0px corners.
+**`button-outline-on-dark`**: Transparent with 1px white border. Background transparent, text `{colors.ink}`, 1px white border, same sharp 0px corners.
 
-**`button-outline-on-light`** — Transparent with 1px ink border on light bands.
+**`button-outline-on-light`**: Transparent with 1px ink border on light bands.
 
-**`button-tertiary-text`** — Inline text link, uppercase tracking.
+**`button-tertiary-text`**: Inline text link, uppercase tracking.
 
 ### Hero Bands
 
-**`hero-band-cinema`** — Full-bleed cinematic photograph. Background `{colors.canvas}` underneath, but the photo fills the viewport. Display headline floats over the bottom of the photo or sits in a tight band beneath, in `{typography.display-mega}` (80px / 500 / -1.6px). One primary CTA + one outline CTA. Zero padding — the photo fills edge-to-edge.
+**`hero-band-cinema`**: Full-bleed cinematic photograph. Background `{colors.canvas}` underneath, but the photo fills the viewport. Display headline floats over the bottom of the photo or sits in a tight band beneath, in `{typography.display-mega}` (80px / 500 / -1.6px). One primary CTA + one outline CTA. Zero padding: the photo fills edge-to-edge.
 
-**`hero-band-light`** — White-canvas variant for editorial bands. Background `{colors.canvas-light}`, text `{colors.body-on-light}`, padding 96px.
+**`hero-band-light`**: White-canvas variant for editorial bands. Background `{colors.canvas-light}`, text `{colors.body-on-light}`, padding 96px.
 
 ### Cards
 
-**`feature-card-photo`** — Image-first card. Background `{colors.canvas}`, text `{colors.ink}`, rounded `{rounded.none}`. Image fills the top edge-to-edge; title + body sit beneath in tight typography.
+**`feature-card-photo`**: Image-first card. Background `{colors.canvas}`, text `{colors.ink}`, rounded `{rounded.none}`. Image fills the top edge-to-edge; title + body sit beneath in tight typography.
 
-**`feature-card-light`** — White-canvas variant. Background `{colors.canvas-light}`, text `{colors.body-on-light}`, rounded `{rounded.none}`, padding 32px.
+**`feature-card-light`**: White-canvas variant. Background `{colors.canvas-light}`, text `{colors.body-on-light}`, rounded `{rounded.none}`, padding 32px.
 
-**`driver-card`** — F1 driver portrait card. Background `{colors.canvas-elevated}`, text `{colors.ink}`, rounded `{rounded.none}`, padding 24px. Layout: driver portrait + name + race number + team badge.
+**`driver-card`**: F1 driver portrait card. Background `{colors.canvas-elevated}`, text `{colors.ink}`, rounded `{rounded.none}`, padding 24px. Layout: driver portrait + name + race number + team badge.
 
 ### Editorial Surfaces
 
-**`livery-band`** — A full-width Rosso Corsa accent band. Background `{colors.primary}`, text `{colors.ink}`, type `{typography.display-lg}`, 96px padding. Used as a standout livery callout between dark editorial bands.
+**`livery-band`**: A full-width Rosso Corsa accent band. Background `{colors.primary}`, text `{colors.ink}`, type `{typography.display-lg}`, 96px padding. Used as a standout livery callout between dark editorial bands.
 
-**`preowned-listing-card`** — Used in the preowned Ferrari listing grid. Background `{colors.canvas-light}`, text `{colors.body-on-light}`, rounded `{rounded.none}`, padding 24px. Layout: car photo top + model name + year/mileage + price.
+**`preowned-listing-card`**: Used in the preowned Ferrari listing grid. Background `{colors.canvas-light}`, text `{colors.body-on-light}`, rounded `{rounded.none}`, padding 24px. Layout: car photo top + model name + year/mileage + price.
 
 ### Spec & Race Surfaces
 
-**`spec-cell`** — Technical spec callout. Transparent background, value in `{typography.number-display}` (80px / 700 / -1.6px white), label below in `{typography.caption-uppercase}`.
+**`spec-cell`**: Technical spec callout. Transparent background, value in `{typography.number-display}` (80px / 700 / -1.6px white), label below in `{typography.caption-uppercase}`.
 
-**`race-position-cell`** — F1 driver finishing position. Same number-display geometry but text in `{colors.primary}` Rosso Corsa for the brand's racing identity.
+**`race-position-cell`**: F1 driver finishing position. Same number-display geometry but text in `{colors.primary}` Rosso Corsa for the brand's racing identity.
 
-**`race-calendar-row`** — Hairline-divided row in the F1 race calendar. Layout: date column left, race name + circuit middle, results column right.
+**`race-calendar-row`**: Hairline-divided row in the F1 race calendar. Layout: date column left, race name + circuit middle, results column right.
 
 ### Forms & Tags
 
-**`text-input-on-dark`** — Background `{colors.canvas}`, text `{colors.ink}`, rounded `{rounded.sm}` (4px), padding 14px × 16px, height 48px, 1px `{colors.hairline}` border.
+**`text-input-on-dark`**: Background `{colors.canvas}`, text `{colors.ink}`, rounded `{rounded.sm}` (4px), padding 14px × 16px, height 48px, 1px `{colors.hairline}` border.
 
-**`text-input-on-light`** — White-canvas variant.
+**`text-input-on-light`**: White-canvas variant.
 
-**`badge-pill`** — Small uppercase pill. Background `{colors.canvas-elevated}`, text `{colors.ink}`, type `{typography.caption-uppercase}` (11px / 600 / 1.1px tracking, uppercase), rounded `{rounded.full}` (9999px), padding 4px × 12px. The only place pill geometry is used.
+**`badge-pill`**: Small uppercase pill. Background `{colors.canvas-elevated}`, text `{colors.ink}`, type `{typography.caption-uppercase}` (11px / 600 / 1.1px tracking, uppercase), rounded `{rounded.full}` (9999px), padding 4px × 12px. The only place pill geometry is used.
 
 ### Newsletter / CTA / Footer
 
-**`newsletter-input-band`** — Newsletter signup band. Background `{colors.canvas-elevated}`, padding 32px, rounded `{rounded.sm}`. Holds an inline email input + primary CTA.
+**`newsletter-input-band`**: Newsletter signup band. Background `{colors.canvas-elevated}`, padding 32px, rounded `{rounded.sm}`. Holds an inline email input + primary CTA.
 
-**`cta-band-dark`** — Pre-footer band. Background `{colors.canvas}`, centered display headline in `{typography.display-lg}`, single Rosso Corsa CTA. 96px padding.
+**`cta-band-dark`**: Pre-footer band. Background `{colors.canvas}`, centered display headline in `{typography.display-lg}`, single Rosso Corsa CTA. 96px padding.
 
-**`footer-dark`** — Closing dark footer. Background `{colors.canvas}`, text `{colors.body}`. 5-column link list. 64×48px padding.
+**`footer-dark`**: Closing dark footer. Background `{colors.canvas}`, text `{colors.body}`. 5-column link list. 64×48px padding.
 
-**`footer-link`** — Background transparent, text `{colors.body}`, type `{typography.body-sm}`.
+**`footer-link`**: Background transparent, text `{colors.body}`, type `{typography.body-sm}`.
 
 ## Do's and Don'ts
 
 ### Do
 - Reserve `{colors.primary}` (Rosso Corsa) for primary CTAs, the Cavallino mark, and F1 race-position highlights.
-- Set every CTA at `{rounded.none}` (0px sharp corners) — the brand's signature precision.
+- Set every CTA at `{rounded.none}` (0px sharp corners): the brand's signature precision.
 - Render CTA labels in uppercase with 1.4px tracking via `{typography.button}`.
-- Pair every hero with a full-bleed cinematic photograph — the photograph IS the depth.
+- Pair every hero with a full-bleed cinematic photograph: the photograph IS the depth.
 - Use the explicit 8px spacing ladder (`xxxs` through `super`) rather than ad-hoc px values.
-- Keep display weight at 500 — never bold.
+- Keep display weight at 500, never bold.
 
 ### Don't
 - Don't introduce a saturated brand color other than Rosso Corsa.
-- Don't use rounded or pill CTAs — sharp 0px corners are the brand button.
+- Don't use rounded or pill CTAs: sharp 0px corners are the brand button.
 - Don't bold display copy. The cinematic photography does the visual heavy-lifting.
 - Don't use Hypersail yellow outside the Hypersail sailing program context.
-- Don't use pure black canvas. The brand canvas is `{colors.canvas}` (#181818) — slightly warm.
+- Don't use pure black canvas. The brand canvas is `{colors.canvas}` (#181818): slightly warm.
 - Don't add drop shadow tiers. Photography + brightness-step elevation carry the depth.
 - Don't extract a CTA color from a third-party widget (cookie consent, OneTrust). The brand's CTA color is what appears on actual product CTAs, not on injected modals.
 
@@ -497,17 +497,17 @@ The radius vocabulary is **sharp by default**. Sharp 0px corners are the brand b
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile | < 640px | Hero photograph crops vertically; hero h1 80→32px; feature card grid 1-up; nav hamburger; preowned listing 1-up. |
-| Tablet | 640–1024px | Hero h1 56px; feature card grid 2-up; preowned listing 2-up. |
-| Desktop | 1024–1280px | Full hero h1 80px; feature card grid 3-up; preowned listing 4-up. |
+| Tablet | 640 to 1024px | Hero h1 56px; feature card grid 2-up; preowned listing 2-up. |
+| Desktop | 1024 to 1280px | Full hero h1 80px; feature card grid 3-up; preowned listing 4-up. |
 | Wide | > 1280px | Editorial body content caps at 1280px; hero photography continues full-bleed. |
 
 ### Touch Targets
-- Primary CTA at 48px height — at WCAG AAA (44 × 44).
+- Primary CTA at 48px height: at WCAG AAA (44 × 44).
 - Nav items render uppercase with 0.65px tracking, padded for an effective 48px tap area.
 
 ### Collapsing Strategy
 - Top nav switches to hamburger below 768px.
-- Hero photograph reframes per breakpoint via art direction — desktop carries wide cinematic; mobile crops tighter or shifts to vertical.
+- Hero photograph reframes per breakpoint via art direction: desktop carries wide cinematic; mobile crops tighter or shifts to vertical.
 - Feature card grid: 4-up → 3-up → 2-up → 1-up.
 - F1 driver cards: 2-up at desktop, 1-up at mobile.
 
@@ -516,10 +516,10 @@ The radius vocabulary is **sharp by default**. Sharp 0px corners are the brand b
 1. Focus on a single component at a time.
 2. CTAs default to `{rounded.none}` (0px sharp). Cards use `{rounded.none}` too. Pill is reserved for badges.
 3. Variants live as separate entries inside `components:`.
-4. Use `{token.refs}` everywhere — never inline hex.
+4. Use `{token.refs}` everywhere, never inline hex.
 5. Hover state never documented.
 6. FerrariSans 500 for display, 400/700 for body. Uppercase + tracking on CTAs and nav.
-7. Rosso Corsa stays scarce — primary CTAs, Cavallino, race-position highlights only.
+7. Rosso Corsa stays scarce: primary CTAs, Cavallino, race-position highlights only.
 8. Use the explicit 8px named spacing ladder.
 
 ## Known Gaps
@@ -528,4 +528,4 @@ The radius vocabulary is **sharp by default**. Sharp 0px corners are the brand b
 - Animation timings (hero parallax, livery band entrance, race position counter) out of scope.
 - In-product surfaces (preowned configurator, F1 telemetry overlays) only partially captured via marketing surfaces.
 - Form validation states beyond focus not visible on captured surfaces.
-- Hypersail yellow tokens are extracted but only appear in the Hypersail sailing program context — documented as scoped accents.
+- Hypersail yellow tokens are extracted but only appear in the Hypersail sailing program context: documented as scoped accents.

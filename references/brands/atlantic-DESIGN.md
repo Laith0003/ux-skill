@@ -1,19 +1,19 @@
-# The Atlantic — DESIGN.md
+# The Atlantic: DESIGN.md
 
 ## Overview
-The Atlantic is American long-form editorial — a paper-warm canvas (`#fcf9f4`) with a modern serif display (Atlantic Condensed / Domaine Display) and a deep editorial red (`#c8102e`) for the masthead and section accents. The site reads as a literary magazine: long single-column articles, full-bleed essay-cover photography, drop caps on feature openers, byline blocks treated as art.
+The Atlantic is American long-form editorial: a paper-warm canvas (`#fcf9f4`) with a modern serif display (Atlantic Condensed / Domaine Display) and a deep editorial red (`#c8102e`) for the masthead and section accents. The site reads as a literary magazine: long single-column articles, full-bleed essay-cover photography, drop caps on feature openers, byline blocks treated as art.
 
 ## Color
-- **Primary:** `#c8102e` — Atlantic Red (masthead, section heads, link hover)
-- **Canvas:** `#fcf9f4` — Paper Cream
-- **Surface alt:** `#f3ede2` — Aged Paper
+- **Primary:** `#c8102e`, Atlantic Red (masthead, section heads, link hover)
+- **Canvas:** `#fcf9f4` (Paper Cream)
+- **Surface alt:** `#f3ede2` (Aged Paper)
 - **Surface card:** `#ffffff`
-- **Ink:** `#000000` — Newsprint Black
+- **Ink:** `#000000` (Newsprint Black)
 - **Body:** `#1a1a1a` (very dark, near-black for reading)
-- **Hairlines:** `rgba(0,0,0,0.15)` — visible 1px rules
-- **Section accent (Books):** `#3b5f3b` — Forest
+- **Hairlines:** `rgba(0,0,0,0.15)` (visible 1px rules)
+- **Section accent (Books):** `#3b5f3b` (Forest)
 - **Section accent (Politics):** `#c8102e` (the red)
-- **Section accent (Science):** `#2c5d8f` — Steel Blue
+- **Section accent (Science):** `#2c5d8f` (Steel Blue)
 
 ## Typography
 - **Masthead:** Atlantic Condensed (custom), weight 700, condensed sans, 96-128px masthead-only
@@ -38,10 +38,10 @@ Almost none. 150ms ease-out hover on link hover. Long-form article scrolls have 
 - `audio-narration-player` (subtle play button, "Listen to this article")
 
 ## Trademark signals
-- Atlantic Red as the brand's only voltage — used on masthead, section names, link hover
-- Drop caps on feature article openers — magazine convention preserved
-- Domaine Text body at 19px — larger than most digital pubs, signals "we expect you to read"
-- Audio-narration option on most long-form articles — accessibility as editorial feature
+- Atlantic Red as the brand's only voltage: used on masthead, section names, link hover
+- Drop caps on feature article openers: magazine convention preserved
+- Domaine Text body at 19px: larger than most digital pubs, signals "we expect you to read"
+- Audio-narration option on most long-form articles: accessibility as editorial feature
 - Full-bleed essay cover photography with type overlay
 
 ## What they DON'T do
@@ -58,4 +58,4 @@ Almost none. 150ms ease-out hover on link hover. Long-form article scrolls have 
 - https://www.theatlantic.com/projects/
 
 ## When to reference
-Reach for The Atlantic when the user wants long-form literary editorial — the most reading-first surface in the catalog. The paper-cream + Domaine + drop-cap + 19px body combination is appropriate for any publication, newsletter, essay platform, or content product whose value proposition is "people will sit and read for 30 minutes."
+Reach for The Atlantic when the user wants long-form literary editorial: the most reading-first surface in the catalog. The paper-cream + Domaine + drop-cap + 19px body combination is appropriate for any publication, newsletter, essay platform, or content product whose value proposition is "people will sit and read for 30 minutes."

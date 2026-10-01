@@ -1,4 +1,4 @@
-# Style library — twelve distinct aesthetic systems
+# Style library: twelve distinct aesthetic systems
 
 Twelve style systems for use as design directions. Each has its own typography, color, layout, motion, and component logic. When picking a style for a brief, choose ONE and commit. Don't blend.
 
@@ -19,7 +19,7 @@ This file covers, in order:
 - Anti-Design Web
 - A decision tree for picking between them
 - Cross-style discipline (rules that apply regardless of the system chosen)
-- Mixing rules — when and why blending is acceptable, and when it isn't
+- Mixing rules: when and why blending is acceptable, and when it isn't
 
 ---
 
@@ -64,7 +64,7 @@ Textural disruption (sparingly, often once per page):
 
 ### Color
 
-Uncompromising. Modern translucency, soft shadows, and full-spectrum gradients are banned. Pick ONE substrate per project — light industrial print or dark tactical telemetry — and stay there.
+Uncompromising. Modern translucency, soft shadows, and full-spectrum gradients are banned. Pick ONE substrate per project (light industrial print or dark tactical telemetry) and stay there.
 
 Light industrial print substrate:
 
@@ -74,7 +74,7 @@ Light industrial print substrate:
 
 Dark tactical telemetry substrate:
 
-- Background: deactivated CRT black, `#0A0A0A` to `#121212`. Avoid pure `#000000` — the slight lift reads as a real screen rather than an empty void.
+- Background: deactivated CRT black, `#0A0A0A` to `#121212`. Avoid pure `#000000`: the slight lift reads as a real screen rather than an empty void.
 - Foreground: white phosphor, `#EAEAEA`. The primary text color.
 - Accent: the same hazard red, used under the same rules.
 - An optional terminal green (`#4AF626`) may appear, but only on a single specific element such as one status indicator or one live readout. Never as a general body color. If it doesn't serve a clear purpose, omit it.
@@ -114,14 +114,14 @@ Geometry:
 
 ### Motion
 
-Motion is restrained, mechanical, and information-dense. Avoid spring physics and graceful eases — they read as consumer-soft.
+Motion is restrained, mechanical, and information-dense. Avoid spring physics and graceful eases. They read as consumer-soft.
 
 Appropriate motion:
 
 - Step-function reveals using `steps(N)` easing, simulating CRT redraw or mechanical advancement.
 - Instant snap states for hover and focus. Outlines invert their fill in zero milliseconds.
 - Slot-machine numeric counters that tick through digits with a discrete clack rather than a smooth lerp.
-- Optional CRT flicker on key elements — a low-opacity scanline that drifts slowly down the viewport at very slow speeds.
+- Optional CRT flicker on key elements: a low-opacity scanline that drifts slowly down the viewport at very slow speeds.
 - Glitch or RGB-split events on critical alerts, used once or twice per page maximum.
 
 Inappropriate motion:
@@ -142,15 +142,15 @@ Buttons:
 
 Cards / panels:
 
-- Bordered rectangles with visible header strips. The header strip contains an ID code, a revision number, and a status pill — all monospace, uppercase.
-- Internal content sits flush against the border. Padding is minimal — often `8px` to `16px`. The crowded feel is intentional.
+- Bordered rectangles with visible header strips. The header strip contains an ID code, a revision number, and a status pill: all monospace, uppercase.
+- Internal content sits flush against the border. Padding is minimal, often `8px` to `16px`. The crowded feel is intentional.
 - Optional corner crosshairs (`+`) at each interior corner reinforce the technical-drawing aesthetic.
 
 Forms:
 
 - Inputs are bare. No background fill, single bottom border that becomes the accent red on focus.
 - Labels sit above inputs in uppercase monospace, with field codes preceding them (e.g., `F-01 / NAME`).
-- Errors appear inline as red monospace text with a leading directional marker (`>>>`) — never softened into a toast.
+- Errors appear inline as red monospace text with a leading directional marker (`>>>`), never softened into a toast.
 
 Navigation:
 
@@ -173,7 +173,7 @@ Charts and data visualization:
 ### Visual moves (signature elements)
 
 - ASCII syntax decoration framing structural elements: `[ DELIVERY SYSTEMS ]`, `< RE-IND >`, `>>>`, `///`, `\\\\`.
-- Registration, copyright, and trademark symbols (`®`, `©`, `™`) used as structural ornaments — large, set apart, functioning geometrically rather than legally.
+- Registration, copyright, and trademark symbols (`®`, `©`, `™`) used as structural ornaments: large, set apart, functioning geometrically rather than legally.
 - Crosshairs (`+`) at grid intersections.
 - Repeating vertical line patterns reading as barcodes or punch-card edges.
 - Thick horizontal hazard stripes in red used as section dividers.
@@ -218,7 +218,7 @@ Charts and data visualization:
 Reach for this when the product wants to feel calm, premium, and editorial. Specifically:
 
 - Premium SaaS workspace and productivity products.
-- Fintech aimed at considered, deliberate users — wealth, accounting, treasury.
+- Fintech aimed at considered, deliberate users: wealth, accounting, treasury.
 - Editorial publications and reader-first publishing platforms.
 - High-end consumer hardware companion apps where the device, not the app, should feel like the hero.
 - B2B platforms where the buyer is paying for restraint and clarity, not visual showmanship.
@@ -251,19 +251,19 @@ Monospace (code, keystrokes, metadata, small status text):
 
 Text colors:
 
-- Body never uses absolute black (`#000000`). Off-black or charcoal — `#111111` or warm charcoal around `#2F3437` — paired with generous line-height for legibility.
+- Body never uses absolute black (`#000000`). Off-black or charcoal (`#111111` or warm charcoal around `#2F3437`) paired with generous line-height for legibility.
 - Secondary text is muted gray, around `#787774`.
 - Tertiary text and metadata sit lighter still, around `#9B9A97`.
 
 Casing:
 
-- Title case for headlines (or sentence case — both work; commit to one).
+- Title case for headlines (or sentence case: both work; commit to one).
 - Sentence case for body and UI.
 - Uppercase reserved for eyebrow labels and small status pills, always with wide tracking (`0.05em` to `0.1em`).
 
 ### Color
 
-Color is a scarce resource. It carries semantic meaning or subtle accent — never decoration.
+Color is a scarce resource. It carries semantic meaning or subtle accent, never decoration.
 
 Canvas and surfaces:
 
@@ -283,7 +283,7 @@ Restrictions:
 
 - No primary-colored backgrounds for large elements or hero sections. No bright blue heroes, no green CTAs filling a viewport.
 - No gradients, no neon, no full glassmorphism beyond perhaps a faint navbar blur.
-- No saturated brand color used as a layout background. If the brand has a strong color, it appears as an accent dot, a single button fill, or a small mark — not as a wall.
+- No saturated brand color used as a layout background. If the brand has a strong color, it appears as an accent dot, a single button fill, or a small mark, not as a wall.
 
 ### Layout
 
@@ -313,12 +313,12 @@ Density:
 
 ### Motion
 
-Motion exists, but it should feel invisible — present but never demanding attention. The goal is quiet sophistication, not spectacle.
+Motion exists, but it should feel invisible: present but never demanding attention. The goal is quiet sophistication, not spectacle.
 
 Scroll entry:
 
 - Elements fade in gently as they enter the viewport. Use `translateY(12px)` combined with `opacity: 0`, resolving over `600ms` with a curve like `cubic-bezier(0.16, 1, 0.3, 1)`.
-- Implementation via `IntersectionObserver`. Never `window.addEventListener('scroll')` — it kills frame rates.
+- Implementation via `IntersectionObserver`. Never `window.addEventListener('scroll')`: it kills frame rates.
 
 Hover states:
 
@@ -331,7 +331,7 @@ Staggered reveals:
 
 Background ambient motion:
 
-- Optional. A single, very slow-moving radial gradient blob — `animation-duration: 20s` or longer — at very low opacity (`0.02` to `0.04`), drifting behind a hero. Applied to a `position: fixed; pointer-events: none` layer only. Never on a scrolling container.
+- Optional. A single, very slow-moving radial gradient blob (`animation-duration: 20s` or longer) at very low opacity (`0.02` to `0.04`), drifting behind a hero. Applied to a `position: fixed; pointer-events: none` layer only. Never on a scrolling container.
 
 Performance constraints:
 
@@ -361,7 +361,7 @@ Tags and status badges:
 Accordions and FAQs:
 
 - Strip all container boxes. Separate items only with `border-bottom: 1px solid #EAEAEA`.
-- Toggle icon is a clean, sharp `+` and `-` — never a chevron arrow.
+- Toggle icon is a clean, sharp `+` and `-`, never a chevron arrow.
 
 Keystroke and shortcut UI:
 
@@ -387,7 +387,7 @@ Charts and data visualization:
 
 - Line charts use single charcoal lines with minimal styling. Axes are hairline `#EAEAEA`.
 - Data point highlights use the pastel accent system.
-- Number formatting is honest — no inflated decimals, no false precision.
+- Number formatting is honest: no inflated decimals, no false precision.
 
 ### Visual moves (signature elements)
 
@@ -409,7 +409,7 @@ Charts and data visualization:
 - Primary-colored hero sections (bright blue, bright green, bright red).
 - Gradients, neon colors, 3D glassmorphism beyond a subtle navbar blur.
 - Pill-shaped containers used for non-tag elements (no pill cards, no pill primary buttons).
-- Emojis anywhere — in code, markup, headings, alt text, microcopy. Replace with crisp icons or SVG primitives.
+- Emojis anywhere: in code, markup, headings, alt text, microcopy. Replace with crisp icons or SVG primitives.
 - Generic placeholder content. No "John Doe", no "Acme Corp", no "Lorem Ipsum". Use realistic, contextual content even in mockups.
 - AI copywriting clichés: "elevate," "seamless," "unleash," "next-gen," "game-changer," "delve." Write plain, specific language.
 - Flat empty backgrounds. Even quiet sections should have ambient depth via low-opacity imagery, soft radial light, or geometric line patterns.
@@ -419,7 +419,7 @@ Charts and data visualization:
 - A well-bound paperback, all interior pages, no cover photography.
 - The reading room of a private library on a slow weekday afternoon.
 - A high-end stationery store catalog photographed in soft window light.
-- An architect's monograph — heavy paper, generous margins, careful captions.
+- An architect's monograph: heavy paper, generous margins, careful captions.
 - A boutique hotel printed brochure with one accent ink on cotton stock.
 - A workspace tool that respects the work more than the workspace.
 - A whitepaper that earns its margins.
@@ -451,7 +451,7 @@ Display headlines:
 
 - Modern variable display sans-serifs with wide proportions, or contemporary display serifs with high optical contrast. Suitable choices include wide geometric grotesks, expressive editorial serifs with personality, or modern neo-grotesques with optical sizes.
 - Scale is enormous on hero surfaces. Headlines occupy a meaningful percentage of the viewport height.
-- Tracking is finely tuned per size — tight at display scale, neutral at section scale.
+- Tracking is finely tuned per size: tight at display scale, neutral at section scale.
 - Line-height at display scale is compressed: `0.95` to `1.05`.
 
 Body and UI:
@@ -499,7 +499,7 @@ Universal rules:
 
 - No banned defaults. No bright primary shadows, no harsh `rgba(0,0,0,0.3)` shadows.
 - No flat solid color hero blocks; every section has texture, ambient light, or depth.
-- When using saturated color, restrict it to a small surface area — never a full-bleed hero wall.
+- When using saturated color, restrict it to a small surface area, never a full-bleed hero wall.
 
 ### Layout
 
@@ -510,7 +510,7 @@ Macro-whitespace:
 - Section padding is at least `py-24`, often `py-32` to `py-40`. The design breathes heavily.
 - Inside premium containers, padding is similarly generous.
 
-Layout archetypes — pick ONE per project:
+Layout archetypes, pick ONE per project:
 
 **Asymmetrical bento:**
 
@@ -539,7 +539,7 @@ Eyebrow rhythm:
 
 ### Motion
 
-Motion is cinematic, premium, controlled. Every transition must simulate real-world mass and spring physics — never default eases.
+Motion is cinematic, premium, controlled. Every transition must simulate real-world mass and spring physics, never default eases.
 
 Easing:
 
@@ -568,7 +568,7 @@ Scroll interpolation:
 Performance constraints:
 
 - Animate via `transform` and `opacity` only.
-- Apply `backdrop-blur` only to fixed or sticky elements (navbars, overlays, modals). Never apply blur filters to scrolling content or large always-on areas — this causes continuous GPU repaints and severe mobile frame drops.
+- Apply `backdrop-blur` only to fixed or sticky elements (navbars, overlays, modals). Never apply blur filters to scrolling content or large always-on areas. This causes continuous GPU repaints and severe mobile frame drops.
 - Grain and noise overlays attach exclusively to fixed, `pointer-events-none` pseudo-elements. Never to scrolling containers.
 - Reserve high `z-index` values for systemic layers (sticky nav, modals, overlays, tooltips). No arbitrary `z-50` or `z-[9999]`.
 
@@ -580,9 +580,9 @@ Buttons:
 - The nested icon chip is mandatory for any CTA with a trailing icon. The arrow (or other glyph) never sits naked next to the text: it lives inside its own circular wrapper, flush with the main button's right inner padding. The wrapper has its own subtle background and ring, distinct from the parent button.
 - Secondary buttons echo the same pill shape with reduced fill (`bg-black/5`, `bg-white/10`) and a hairline ring.
 
-Cards and feature containers — the double-bezel pattern:
+Cards and feature containers, the double-bezel pattern:
 
-- Never place a premium card flatly on the background. Cards must look like physical, machined hardware — a glass plate sitting in an aluminum tray.
+- Never place a premium card flatly on the background. Cards must look like physical, machined hardware: a glass plate sitting in an aluminum tray.
 - Outer shell: a wrapper element with a subtle background (`bg-black/5` or `bg-white/5`), a hairline outer border (`ring-1 ring-black/5` or `border border-white/10`), specific padding (`p-1.5` or `p-2`), and a large outer radius (`rounded-[2rem]`).
 - Inner core: the actual content container inside the shell. It has its own distinct background color, an inner highlight (`shadow-[inset_0_1px_1px_rgba(255,255,255,0.15)]`), and a mathematically calculated smaller radius (e.g., `rounded-[calc(2rem-0.375rem)]`) so the inner and outer radii are visibly concentric.
 
@@ -590,7 +590,7 @@ Navigation:
 
 - Floating glass pill detached from the viewport top with substantial top margin.
 - Pill content includes the brand mark, a small set of primary links, and a primary CTA.
-- On scroll past the hero, the pill darkens or its backdrop blur intensifies — but it never glues to the edge.
+- On scroll past the hero, the pill darkens or its backdrop blur intensifies, but it never glues to the edge.
 
 Forms:
 
@@ -614,16 +614,16 @@ Eyebrow tags:
 
 ### Visual moves (signature elements)
 
-- Mesh gradients in the background — radial orbs of color that bleed and overlap softly behind hero text.
+- Mesh gradients in the background: radial orbs of color that bleed and overlap softly behind hero text.
 - Liquid glass cards with backdrop blur, hairline borders, and inset highlights, suggesting machined hardware on glass.
-- Holographic or iridescent micro-accents — small reflective elements on otherwise restrained surfaces.
+- Holographic or iridescent micro-accents: small reflective elements on otherwise restrained surfaces.
 - Cinematic scroll entries: text and imagery rising from below with motion blur dissolving as they settle.
 - The nested icon chip with magnetic hover physics.
 - The double-bezel concentric radius pattern, applied consistently to every premium container.
 - Floating glass pill navigation that detaches from the viewport edge.
 - Eyebrow tags preceding every major headline.
 - Subtle film-grain overlays at very low opacity providing physical paper or sensor texture.
-- Hero imagery rendered as if it's a physical artifact — framed, tilted, lit, never bare.
+- Hero imagery rendered as if it's a physical artifact: framed, tilted, lit, never bare.
 - Massive display typography at scales that border on the editorial-architectural.
 
 ### Banned in this style
@@ -679,12 +679,12 @@ Avoid this style for: consumer entertainment, products targeting teenagers or im
 
 ### Typography
 
-Grotesque sans-serif is the sole voice. Hierarchy comes from weight, scale, and position on the grid — never from face variance.
+Grotesque sans-serif is the sole voice. Hierarchy comes from weight, scale, and position on the grid, never from face variance.
 
 Display sans (headlines, section anchors):
 
 - Use a neo-grotesque sans-serif at semibold or bold. Suitable choices include classical industrial grotesques and modern variable grotesques with neutral character.
-- Display scales sit at `48px` to `96px` depending on viewport. Avoid going above `120px` — extreme scales contradict the system's restraint.
+- Display scales sit at `48px` to `96px` depending on viewport. Avoid going above `120px`: extreme scales contradict the system's restraint.
 - Tracking is neutral at display scale: `0` to `-0.01em`. The Swiss aesthetic does not want tight or expanded display tracking.
 - Line-height is compressed: `1.0` to `1.1` for display, `1.4` for body.
 
@@ -692,12 +692,12 @@ Body sans:
 
 - Same family at regular weight, `16px` to `17px`.
 - Generous leading: `1.5` to `1.65`.
-- Color: a strong, but not pure, black. `#111` or `#1a1a1a`. The system rejects mid-grays for body — clarity is the discipline.
+- Color: a strong, but not pure, black. `#111` or `#1a1a1a`. The system rejects mid-grays for body: clarity is the discipline.
 
 Eyebrow labels and section codes:
 
 - Uppercase, tracked at `+0.08em` to `+0.12em`, at `10px` to `12px`.
-- Used liberally — section numbers, category labels, navigation slots. They are the system's punctuation.
+- Used liberally: section numbers, category labels, navigation slots. They are the system's punctuation.
 
 Numerals:
 
@@ -722,7 +722,7 @@ Ink:
 
 Accent (a single one, used sparingly):
 
-- One restrained color, applied to category labels, links, and the single CTA per section. Suitable choices: a deep brand red around `#B61F1F`, a navy around `#0E2D5B`, an academic burgundy around `#5C1A1A`. The accent is small and exact — never used as a fill, never bled across a hero.
+- One restrained color, applied to category labels, links, and the single CTA per section. Suitable choices: a deep brand red around `#B61F1F`, a navy around `#0E2D5B`, an academic burgundy around `#5C1A1A`. The accent is small and exact, never used as a fill, never bled across a hero.
 
 Rules across substrates:
 
@@ -739,12 +739,12 @@ Grid logic:
 
 - Twelve-column grid with a `24px` gutter on desktop, `16px` on tablet, `12px` on mobile.
 - Vertical rhythm via a `4px` baseline grid. Every line of body, every margin, every heading offset sits on a baseline multiple.
-- Section divisions are hairline horizontal rules at `1px solid #DCDCDC` or a `48px` of pure whitespace — never both.
+- Section divisions are hairline horizontal rules at `1px solid #DCDCDC` or a `48px` of pure whitespace, never both.
 
 Alignment:
 
 - Left-aligned text is the default. Right alignment is reserved for numerals, captions, or marginalia.
-- Center alignment appears once per surface, at most — typically the masthead lockup or a final standalone callout.
+- Center alignment appears once per surface, at most, typically the masthead lockup or a final standalone callout.
 - Margins are generous and asymmetric. A surface may carry a wide right-rail margin where notes, side metadata, or context live.
 
 Density:
@@ -813,9 +813,9 @@ Charts:
 
 ### Visual moves (signature elements)
 
-- Visible baseline grid hints — small registration marks at section openings.
+- Visible baseline grid hints: small registration marks at section openings.
 - Marginal notes in a narrow right-rail at `12px` body type, used as scholarly footnotes.
-- Section numerals set in large display weight, used as chapter signposting (but only when the surface genuinely is a journey — never decoratively).
+- Section numerals set in large display weight, used as chapter signposting (but only when the surface genuinely is a journey, never decoratively).
 - Pull quotes set inside a thin top and bottom hairline rule, never inside a tinted block.
 - Captions set in uppercase tracked label style under every figure.
 - Body type set with optical kerning and hung punctuation where the framework supports it.
@@ -875,14 +875,14 @@ Body serif (the primary reading face):
 Display serif (occasional, for major openings):
 
 - A high-contrast display serif with optical clarity at large sizes.
-- Used surgically — masthead, lead article opener, major section title.
+- Used surgically: masthead, lead article opener, major section title.
 - Tracking tightened: `-0.01em` to `-0.03em` at display scale.
 
 Sans (for UI, captions, eyebrows, navigation):
 
 - A neutral grotesque or geometric sans, used for everything that is not body or display headline.
 - One weight family, three weights at most: regular, medium, bold.
-- Used at small sizes — `12px` to `14px` for captions, `13px` to `15px` for nav.
+- Used at small sizes: `12px` to `14px` for captions, `13px` to `15px` for nav.
 
 Monospace (for code, statistics, citations):
 
@@ -891,7 +891,7 @@ Monospace (for code, statistics, citations):
 Drop caps and ornaments:
 
 - Drop caps are allowed and encouraged on lead articles. Three-line minimum, six-line maximum.
-- Section ornaments — small hairline dingbats, asterisks, fleurons — separate longform sections. Used sparingly.
+- Section ornaments (small hairline dingbats, asterisks, fleurons) separate longform sections. Used sparingly.
 
 ### Color
 
@@ -900,7 +900,7 @@ Color is editorial. The substrate carries warmth; accents are restrained and mea
 Substrate:
 
 - Warm cream or off-white: `#FAF8F3`, `#F7F3EB`, `#F5F0E6`. The page reads as printed paper.
-- Dark mode option: a warm dark, `#1E1B17` or `#1A1814`. Avoid neutral grays — the publication should hold its warmth even at night.
+- Dark mode option: a warm dark, `#1E1B17` or `#1A1814`. Avoid neutral grays: the publication should hold its warmth even at night.
 
 Ink:
 
@@ -936,7 +936,7 @@ Article openers:
 
 Margins:
 
-- Body column is bounded — `max-w-prose` or `max-w-2xl`. Long line lengths kill reading.
+- Body column is bounded: `max-w-prose` or `max-w-2xl`. Long line lengths kill reading.
 - Generous outer margins on desktop; narrower but never absent on mobile.
 
 ### Motion
@@ -946,7 +946,7 @@ Motion is invisible. The page is a printed object. Reveals are slow fades; nothi
 Appropriate motion:
 
 - Fade-in on scroll for figure embeds at `600ms` with no translation.
-- A subtle parallax on hero imagery — `0.05` to `0.1` of scroll speed — used at most once per article.
+- A subtle parallax on hero imagery (`0.05` to `0.1` of scroll speed) used at most once per article.
 - Highlighted text reveal on click for annotated passages.
 
 Inappropriate motion:
@@ -969,7 +969,7 @@ Article cards:
 Pull quotes:
 
 - Large body serif at `28px` to `36px`, tightened tracking, generous left and right margins.
-- Hairline rule above and below — or a single hairline rule on the left if the quote sits in a margin rail.
+- Hairline rule above and below, or a single hairline rule on the left if the quote sits in a margin rail.
 
 Inline callouts:
 
@@ -999,7 +999,7 @@ Navigation:
 - A single warm accent color used in links, pull quotes, and the rare CTA.
 - Marginal notes in a narrow right-rail, set in sans at small size.
 - Numbered footnotes anchored to the section bottom.
-- Section dingbats — small hairline ornaments — separating subsections.
+- Section dingbats (small hairline ornaments) separating subsections.
 - A cover image treatment that mimics a magazine plate: full bleed, large caption, single sentence subhead.
 
 ### Banned in this style
@@ -1033,7 +1033,7 @@ Reach for Quiet Emptiness when restraint is the message. The surface communicate
 
 - Gallery, atelier, and museum sites where the work is the content.
 - Conceptual retail brands targeting customers who recognize the discipline.
-- Premium designer marketing for an audience of designers — peer-facing work.
+- Premium designer marketing for an audience of designers: peer-facing work.
 - Wabi-sabi-adjacent product lines emphasizing simplicity and natural materials.
 - Conceptual fashion drops where the absence of marketing language is the marketing.
 - Architecture firms, interior studios, and craft-led brands.
@@ -1043,7 +1043,7 @@ Avoid this style for: anything that needs to convert quickly, data-dense interfa
 
 ### Typography
 
-Type is whisper-quiet. Single family throughout. The font choice is not the move — the negative space around it is.
+Type is whisper-quiet. Single family throughout. The font choice is not the move: the negative space around it is.
 
 Single typeface across the system:
 
@@ -1056,7 +1056,7 @@ Single typeface across the system:
 Color of type:
 
 - Primary text is muted: `#2A2A2A` against light substrate, never pure black. The reduction in contrast is intentional.
-- Secondary text: a pale gray, `#9A9A9A`. Almost too quiet to be functional — that is the point.
+- Secondary text: a pale gray, `#9A9A9A`. Almost too quiet to be functional. That is the point.
 
 No display drama:
 
@@ -1080,7 +1080,7 @@ Ink:
 
 Accent (if any):
 
-- A single soft tone — pale terracotta, dusty sage, warm ochre — used surgically, often in a brand mark or a single rule line. Saturation low (`30-40%`), value high.
+- A single soft tone (pale terracotta, dusty sage, warm ochre) used surgically, often in a brand mark or a single rule line. Saturation low (`30-40%`), value high.
 - Most surfaces should ship without any accent at all.
 
 ### Layout
@@ -1099,7 +1099,7 @@ Asymmetry:
 
 Grid logic:
 
-- A loose grid. Twelve columns, but most content spans three to five — never the full width.
+- A loose grid. Twelve columns, but most content spans three to five, never the full width.
 - Images sit on the grid but at small fractional widths, sometimes a single column wide, sometimes spanning seven.
 
 Mobile:
@@ -1127,7 +1127,7 @@ Inappropriate motion:
 
 Buttons:
 
-- Almost absent. When present, a single hairline border around small sans text — `1px solid #E0DDD7`, `8px` padding, no fill.
+- Almost absent. When present, a single hairline border around small sans text: `1px solid #E0DDD7`, `8px` padding, no fill.
 - Hover state: a subtle border darken at `400ms`. No background change.
 - Primary CTA is the only filled button on the entire surface, and even then, the fill is the ink color at low contrast.
 
@@ -1148,7 +1148,7 @@ Forms:
 Images:
 
 - Photographs sit at small fractional widths, often centered within a much larger empty column.
-- Aspect ratios vary intentionally — square, portrait, occasional wide landscape — but never random.
+- Aspect ratios vary intentionally (square, portrait, occasional wide landscape) but never random.
 
 Galleries:
 
@@ -1157,7 +1157,7 @@ Galleries:
 ### Visual moves (signature elements)
 
 - Massive negative space, 60-70 percent of the visible viewport at all times.
-- A single small detail — a hairline, a small caption, a single photograph — placed in vast emptiness.
+- A single small detail (a hairline, a small caption, a single photograph) placed in vast emptiness.
 - Asymmetric anchoring. Content never centers.
 - Type set at small sizes against vast canvases. Whisper, never shout.
 - A single muted accent used once, if at all.
@@ -1213,7 +1213,7 @@ Type is loud and varied. Multiple display faces appear in a single layout. Weigh
 
 Display stack:
 
-- Pick two display faces — one expressive (a stylized display sans, an extreme grotesque, a decorative serif) and one workhorse (a clean geometric sans).
+- Pick two display faces: one expressive (a stylized display sans, an extreme grotesque, a decorative serif) and one workhorse (a clean geometric sans).
 - Display scales are aggressive: `120px` to `280px`. Headlines occupy half the viewport.
 - Tracking: tight at display scale, `-0.02em` to `-0.05em`.
 - Weight contrast: ultra-bold paired with light. Both extremes carry weight in a single section.
@@ -1226,11 +1226,11 @@ Body:
 Eyebrows and microcopy:
 
 - Uppercase tracked at sizes that match the energy: `14px` to `18px`, not the conventional `10px`.
-- Used as section signposts but loud — high contrast against the body.
+- Used as section signposts but loud: high contrast against the body.
 
 Decorative type:
 
-- A third decorative face — a stylized serif, a script, an extreme display — may appear once per surface as an accent moment. Used surgically.
+- A third decorative face (a stylized serif, a script, an extreme display) may appear once per surface as an accent moment. Used surgically.
 
 ### Color
 
@@ -1238,13 +1238,13 @@ Saturated, layered, fearless. Multiple colors per surface. Backgrounds carry chr
 
 Palette:
 
-- A primary palette of three to five saturated colors — a hot red, a cobalt, a chartreuse, a deep purple, a sunny yellow. Saturation `70-90%`.
+- A primary palette of three to five saturated colors: a hot red, a cobalt, a chartreuse, a deep purple, a sunny yellow. Saturation `70-90%`.
 - Each color carries semantic or section meaning. Sections shift palette as the page progresses.
 - Background colors are bold. A section may sit on a full-bleed cobalt. The next sits on chartreuse. The next on cream.
 
 Type color:
 
-- Type adapts to the substrate. White on dark sections, dark on light. Never mid-gray — the contrast is the point.
+- Type adapts to the substrate. White on dark sections, dark on light. Never mid-gray: the contrast is the point.
 
 Accents:
 
@@ -1259,7 +1259,7 @@ Grid logic:
 
 - A grid exists, but breakage is intentional. Elements that span two grid cells, elements offset by a quarter-column.
 - Overlapping content: an oversized headline that bleeds across a photographic background.
-- Rotated elements at `-2deg` to `5deg` — a card askew, a label tilted.
+- Rotated elements at `-2deg` to `5deg`: a card askew, a label tilted.
 
 Composition:
 
@@ -1322,18 +1322,18 @@ Forms:
 Imagery:
 
 - Photography is high-contrast, saturated, occasionally cut-out with hard edges.
-- Custom illustration is welcome — bold, flat, oversized.
+- Custom illustration is welcome: bold, flat, oversized.
 - Photo treatments include duotones in brand palette pairs.
 
 Headlines:
 
 - Frequently span multiple lines with intentional line-breaks for rhythm.
-- Mix faces within a single headline — display sans for the noun, decorative serif for the verb.
+- Mix faces within a single headline: display sans for the noun, decorative serif for the verb.
 
 ### Visual moves (signature elements)
 
 - Oversized typography that crops at the viewport edge.
-- Multiple display faces in a single layout — two minimum, three in headlines that combine moods.
+- Multiple display faces in a single layout: two minimum, three in headlines that combine moods.
 - Saturated full-bleed color blocks as section dividers.
 - Layered illustration with depth and overlap.
 - Rotated cards and labels at small angles (`-3deg` to `3deg`).
@@ -1348,8 +1348,8 @@ Headlines:
 - Restrained motion. Everything moves with intent.
 - Generic stock photography. Imagery is custom or curated.
 - Hairline borders. Borders, when present, are heavy and saturated.
-- Glassmorphism in the high-end manner — Bold Maximalism uses solid color, not translucency.
-- Centered, balanced compositions as a default — asymmetric overlap is the move.
+- Glassmorphism in the high-end manner: Bold Maximalism uses solid color, not translucency.
+- Centered, balanced compositions as a default: asymmetric overlap is the move.
 - Emoji as icons. Use custom illustrated marks instead.
 
 ### Reference moods
@@ -1368,7 +1368,7 @@ Headlines:
 
 ### When to use
 
-Refined Minimalism shares restraint with the broader Minimalist system but adds a deliberate signature touch. Reach for it when the brief asks for "considered" — calm but distinctive — rather than "quiet." Specifically:
+Refined Minimalism shares restraint with the broader Minimalist system but adds a deliberate signature touch. Reach for it when the brief asks for "considered" (calm but distinctive) rather than "quiet." Specifically:
 
 - Premium fintech and treasury products targeting deliberate audiences.
 - Design-tool marketing pages aimed at designers and developers.
@@ -1377,7 +1377,7 @@ Refined Minimalism shares restraint with the broader Minimalist system but adds 
 - Premium hardware companion apps where the device is the hero but the app has personality.
 - Single-purpose tools whose marketing should outshine its enterprise competitors.
 
-Avoid this style for: any context where the basic Minimalist system serves better — long-form publishing, dashboards, documentation. Reach for it specifically when the brief calls for restraint with a signature.
+Avoid this style for: any context where the basic Minimalist system serves better (long-form publishing, dashboards, documentation). Reach for it specifically when the brief calls for restraint with a signature.
 
 ### Typography
 
@@ -1385,7 +1385,7 @@ Sans-only system. One distinctive display face, one workhorse body face. The dis
 
 Display sans (the brand's voice):
 
-- A distinctive contemporary display sans. Suitable choices include modern variable sans-serifs with character — clean, considered, slightly idiosyncratic in proportion or detail.
+- A distinctive contemporary display sans. Suitable choices include modern variable sans-serifs with character: clean, considered, slightly idiosyncratic in proportion or detail.
 - Display size: `48px` to `96px`. Restrained relative to maximalist styles but confident.
 - Tracking: tight at display, `-0.02em` to `-0.04em`.
 - Weight: medium to semibold. Not heavy.
@@ -1393,7 +1393,7 @@ Display sans (the brand's voice):
 
 Body sans:
 
-- A workhorse sans paired with the display. Should be visually quieter — neutral grotesque, clean geometric.
+- A workhorse sans paired with the display. Should be visually quieter: neutral grotesque, clean geometric.
 - Body size: `16px` to `17px`. Generous for screen.
 - Line-height: `1.55` to `1.65`.
 
@@ -1433,12 +1433,12 @@ Generous whitespace with deliberate composition. Asymmetric splits, intentional 
 Grid logic:
 
 - A twelve-column grid with deliberate column-span variance. Hero sits at `7/12` on the left or right, with whitespace filling the rest.
-- Bento layouts where each card has a defined column span — `4/12`, `8/12`, `5/12`, `7/12`. Mathematical, not random.
+- Bento layouts where each card has a defined column span: `4/12`, `8/12`, `5/12`, `7/12`. Mathematical, not random.
 - Section breaks: `96px` to `160px` of vertical whitespace.
 
 Alignment:
 
-- Left-aligned by default. Center alignment is a deliberate choice for one or two surfaces — a final CTA, a major lockup.
+- Left-aligned by default. Center alignment is a deliberate choice for one or two surfaces: a final CTA, a major lockup.
 - Right-aligned for numerals and small captions only.
 
 Cards:
@@ -1498,7 +1498,7 @@ Forms:
 
 Charts:
 
-- Single-line charts in the accent color against a subtle background gradient (very subtle — `2%` opacity).
+- Single-line charts in the accent color against a subtle background gradient (very subtle, `2%` opacity).
 - Data points highlighted with small filled dots in the accent.
 - Tooltips rendered as small white cards with a hairline border.
 
@@ -1514,7 +1514,7 @@ Tables:
 - The distinctive display sans as the signature voice.
 - Asymmetric bento with mathematically intentional spans.
 - Hairline borders in `rgba(0,0,0,0.06)`.
-- A small detail — an offset shape, a single inline keystroke key, a subtle highlight — that reads as the craft signature.
+- A small detail (an offset shape, a single inline keystroke key, a subtle highlight) that reads as the craft signature.
 - Generous whitespace but never the severity of the quiet-emptiness system.
 - A single eyebrow per major section, tracked and consistent.
 - Subtle scroll-entry motion that never calls attention to itself.
@@ -1546,7 +1546,7 @@ Tables:
 
 ### When to use
 
-Reach for Aurora Glass when the brief asks for "magic" — atmospheric, generative, cinematic. The surface communicates leap and possibility. Specifically:
+Reach for Aurora Glass when the brief asks for "magic": atmospheric, generative, cinematic. The surface communicates leap and possibility. Specifically:
 
 - AI products targeting broad consumer or creator audiences.
 - Creator tools and generative-art platforms where the surface should match the tool's output.
@@ -1592,10 +1592,10 @@ Mesh gradient backgrounds:
 
 - Radial orbs of color bleed and overlap softly behind hero text.
 - Hue palettes (pick one per project):
-  - Deep purple to indigo to magenta — for AI, creator tools.
-  - Emerald to teal to deep blue — for technical premium.
-  - Warm amber to deep rose to violet — for hospitality, luxury.
-  - Cool cyan to electric blue to midnight — for data and music.
+  - Deep purple to indigo to magenta: for AI, creator tools.
+  - Emerald to teal to deep blue: for technical premium.
+  - Warm amber to deep rose to violet: for hospitality, luxury.
+  - Cool cyan to electric blue to midnight: for data and music.
 - Saturation moderate (`60-70%`); never crass. Brightness modest so type stays legible.
 
 Surfaces (glass cards):
@@ -1606,7 +1606,7 @@ Surfaces (glass cards):
 
 Accents:
 
-- One vibrant accent per project — a single saturated color used for CTA fills, primary glyphs, and the brand mark.
+- One vibrant accent per project: a single saturated color used for CTA fills, primary glyphs, and the brand mark.
 
 ### Layout
 
@@ -1649,7 +1649,7 @@ Easing:
 Scroll entries:
 
 - Combined `translate-y-16` with `blur-md` resolving to neutral over `800ms`.
-- The blur element is critical — it gives the surface its "settling into focus" quality.
+- The blur element is critical: it gives the surface its "settling into focus" quality.
 
 Background animation:
 
@@ -1695,7 +1695,7 @@ Modals:
 
 Imagery:
 
-- Product mockups wrapped in the double-bezel at hero scale. Subtle perspective tilt — `rotateX(8deg)` paired with `rotateY(-4deg)`.
+- Product mockups wrapped in the double-bezel at hero scale. Subtle perspective tilt: `rotateX(8deg)` paired with `rotateY(-4deg)`.
 
 Eyebrow tags:
 
@@ -1711,7 +1711,7 @@ Eyebrow tags:
 - Cinematic scroll entries with motion blur dissolving into focus.
 - Magnetic button hover physics with the nested icon chip.
 - Subtle film-grain overlay at very low opacity (`0.03`) on fixed layers.
-- Hero imagery rendered as a physical artifact — framed, tilted, lit.
+- Hero imagery rendered as a physical artifact: framed, tilted, lit.
 
 ### Banned in this style
 
@@ -1724,7 +1724,7 @@ Eyebrow tags:
 - CTAs with naked trailing arrows.
 - Z-index sprawl.
 - Auto-playing audio.
-- Phone-tilt parallax — pointer events only.
+- Phone-tilt parallax: pointer events only.
 - Emoji of any kind.
 
 ### Reference moods
@@ -1762,7 +1762,7 @@ Pixel marks paired with workhorse sans. Decorative type is the signature; body t
 
 Display:
 
-- A pixel face or a stylized bitmap face for accent moments. Used surgically — page header, key callouts, button labels.
+- A pixel face or a stylized bitmap face for accent moments. Used surgically: page header, key callouts, button labels.
 - A modern geometric sans for primary display headlines. Scale `64px` to `144px`.
 - Tracking: tight at display, `-0.02em` to `-0.04em`.
 
@@ -1792,7 +1792,7 @@ Type color:
 
 Gradients:
 
-- Holographic blends — pink to cyan, gold to violet — used on small surfaces (a button hover state, a single header glyph, a logo treatment). Never as full-page substrate.
+- Holographic blends (pink to cyan, gold to violet) used on small surfaces (a button hover state, a single header glyph, a logo treatment). Never as full-page substrate.
 
 ### Layout
 
@@ -1805,7 +1805,7 @@ Grid logic:
 
 Composition:
 
-- Layered illustration with depth — chrome 3D objects, holographic stickers, pixel-art icons.
+- Layered illustration with depth: chrome 3D objects, holographic stickers, pixel-art icons.
 - Type interacting with imagery: words wrapping blobby shapes, type set inside chrome plates.
 
 Density:
@@ -1831,7 +1831,7 @@ Appropriate motion:
 Inappropriate motion:
 
 - Quiet restraint. The system rejects subtlety.
-- Pure linear easing. Motion bounces, glitches, or shimmers — never just slides.
+- Pure linear easing. Motion bounces, glitches, or shimmers, never just slides.
 
 ### Components
 
@@ -1862,7 +1862,7 @@ Imagery:
 
 - Chrome 3D renders, holographic stickers, pixel-art accents.
 - Layered illustration with depth.
-- Custom illustration only — stock imagery breaks the aesthetic instantly.
+- Custom illustration only: stock imagery breaks the aesthetic instantly.
 
 Stickers and ornaments:
 
@@ -1875,7 +1875,7 @@ Stickers and ornaments:
 - Holographic gradients on highlights and brand marks.
 - Pixel-face type as decorative accent.
 - Blobby SVG shapes as section dividers and backgrounds.
-- Layered illustration with depth — chrome objects, holographic stickers, pixel icons.
+- Layered illustration with depth: chrome objects, holographic stickers, pixel icons.
 - Glitch motion on key interactions.
 - Cursor-following holographic highlights on small surfaces.
 - Saturated candy palette with deep substrate anchoring.
@@ -1885,10 +1885,10 @@ Stickers and ornaments:
 - Pure neutrals only. The system requires color and chrome.
 - Modern flat illustrations. Illustration must carry depth and reflectivity.
 - Restrained motion. Everything bounces, glitches, or shimmers.
-- Default humanist sans alone — the pixel face must appear somewhere.
+- Default humanist sans alone: the pixel face must appear somewhere.
 - Generic stock photography.
 - Hairline-only borders. Borders are chromatic or chrome.
-- Glassmorphism in the aurora manner — this system uses chrome reflection, not translucent blur.
+- Glassmorphism in the aurora manner: this system uses chrome reflection, not translucent blur.
 
 ### Reference moods
 
@@ -1911,7 +1911,7 @@ Reach for Organic Hand-drawn when warmth is the primary brand requirement. The s
 - Consumer wellness products targeting calm and care.
 - Family and kids' education tools where friendliness is the contract.
 - Indie creator newsletters and personal brands where the writer is the product.
-- Boutique consumer goods — soap, candles, ceramics, niche apparel.
+- Boutique consumer goods: soap, candles, ceramics, niche apparel.
 - Plant, garden, and craft platforms.
 - Community-led platforms where personality is the differentiator from enterprise alternatives.
 - Holiday and gift-giving microsites.
@@ -1930,13 +1930,13 @@ Body sans:
 
 Display sans:
 
-- A geometric sans with character — rounded geometric, friendly grotesque. Display size `40px` to `72px`.
+- A geometric sans with character: rounded geometric, friendly grotesque. Display size `40px` to `72px`.
 - Weight: medium to semibold. Never heavy.
 - Tracking: tight to neutral.
 
 Hand-lettered accents:
 
-- A single hand-lettered face used surgically — for a brand mark, a single headline emphasis, a callout label. Never for body or general headlines.
+- A single hand-lettered face used surgically: for a brand mark, a single headline emphasis, a callout label. Never for body or general headlines.
 - Suitable choices: a casual script, a hand-drawn marker face. Used sparingly so it remains charming.
 
 ### Color
@@ -1969,18 +1969,18 @@ Rounded, soft, generous. Hard edges and grid rigidity give way to organic shapes
 Grid logic:
 
 - A loose grid. Twelve columns at desktop but heavy reliance on uneven spans and floated layouts.
-- Cards have generous rounded radii — `16px` to `24px`.
+- Cards have generous rounded radii: `16px` to `24px`.
 - Section dividers are often custom illustrations or soft gradient washes, not hairlines.
 
 Composition:
 
 - Custom illustration paired with type. Illustrations are warm, hand-feel, occasionally watercolor.
-- Type often offset by small illustrated elements — a sprig, a leaf, a small drawn flourish.
+- Type often offset by small illustrated elements: a sprig, a leaf, a small drawn flourish.
 
 Margins:
 
 - Generous. The page breathes.
-- Asymmetric padding allowed — a section may have wider padding on one side, narrower on the other.
+- Asymmetric padding allowed: a section may have wider padding on one side, narrower on the other.
 
 Mobile:
 
@@ -2018,7 +2018,7 @@ Cards:
 - Generous rounded radii (`20px` to `24px`).
 - Cream or layered surface fill with a subtle warm shadow (`0 8px 24px rgba(58, 46, 37, 0.06)`).
 - Internal padding: `24px` to `32px`.
-- Optional illustrated accent — a small drawn element in a corner.
+- Optional illustrated accent: a small drawn element in a corner.
 
 Navigation:
 
@@ -2034,7 +2034,7 @@ Forms:
 
 Illustration:
 
-- Custom illustration sets are mandatory — Lucide and Heroicons stand out and break the aesthetic.
+- Custom illustration sets are mandatory: Lucide and Heroicons stand out and break the aesthetic.
 - Suitable styles: hand-drawn outline, soft watercolor, simple flat illustration with subtle texture.
 - Illustrations carry warm color and have visible "made by hand" qualities.
 
@@ -2049,7 +2049,7 @@ Imagery:
 - Generous rounded radii on every interactive element.
 - Warm cream substrate with one to two accent tones (coral, sage, terracotta).
 - A single hand-lettered face used surgically for a brand mark or single callout.
-- Soft drawn flourishes — sprigs, leaves, small organic shapes — between sections.
+- Soft drawn flourishes (sprigs, leaves, small organic shapes) between sections.
 - Photography with warm overlays and natural light.
 - A small illustrated mascot or recurring motif that signals the brand's personality.
 - Section dividers made from soft watercolor washes or hand-drawn elements.
@@ -2057,11 +2057,11 @@ Imagery:
 ### Banned in this style
 
 - Sharp `90°` corners on interactive elements.
-- Default Lucide / Heroicons icon sets — they stand out as machine.
+- Default Lucide / Heroicons icon sets: they stand out as machine.
 - Lorem ipsum or generic stock photography.
 - Cool, technical color palettes.
 - Heavy drop shadows. Shadows here are warm and diffuse.
-- Bold maximalist gestures — the system is warm, not loud.
+- Bold maximalist gestures: the system is warm, not loud.
 - Multiple hand-lettered faces in one layout. One, used surgically.
 - Emoji as substitutes for illustrated marks. Custom illustration only.
 
@@ -2107,7 +2107,7 @@ Body type:
 Display type:
 
 - Same system fonts at larger sizes. No display face brought in.
-- Optional appropriation: a casual face used as if by mistake — for an inappropriate context. The juxtaposition is the move.
+- Optional appropriation: a casual face used as if by mistake, for an inappropriate context. The juxtaposition is the move.
 
 Casing and weight:
 
@@ -2125,7 +2125,7 @@ Web-native primaries. Harsh blue, harsh red, harsh yellow. White or institutiona
 Substrate:
 
 - Pure white `#FFFFFF` or a default institutional gray `#C0C0C0`.
-- Dark variant: pure black `#000000` — the only place pure black is permitted in this library, and it's permitted because the system is making a point.
+- Dark variant: pure black `#000000`, the only place pure black is permitted in this library, and it's permitted because the system is making a point.
 
 Type:
 
@@ -2184,7 +2184,7 @@ Inappropriate motion:
 
 Buttons:
 
-- Default `<button>` styling. The native browser render — boxy, gray, beveled where the OS still bevels.
+- Default `<button>` styling. The native browser render: boxy, gray, beveled where the OS still bevels.
 - No CSS reset. No customization.
 - Hover state: the browser's default.
 
@@ -2235,7 +2235,7 @@ Images:
 - Sophisticated motion design.
 - Glassmorphism, blur, gradient anything.
 - Drop shadows beyond the browser's defaults.
-- Rounded radii (browsers default to square corners — keep them).
+- Rounded radii (browsers default to square corners: keep them).
 - Modern icon systems. Use default emoji-like character glyphs, or no icons at all.
 
 ### Reference moods
@@ -2318,7 +2318,7 @@ For any brief, ask these three questions in order. Combine the answers to land o
 
 ### Tiebreakers
 
-When two styles seem plausible, default to whichever one the audience would reward more for restraint. A brutalist developer tool that happens to have premium-product positioning should still lean brutalist — the audience reads polish as a tell.
+When two styles seem plausible, default to whichever one the audience would reward more for restraint. A brutalist developer tool that happens to have premium-product positioning should still lean brutalist: the audience reads polish as a tell.
 
 When the brief says "modern, clean, premium" without further specifics, default to minimalist. It is the safest direction across audiences and the least likely to misfire.
 
@@ -2334,17 +2334,17 @@ When the brief mentions "AI" but the target audience is consumer or creator, lea
 
 ## Cross-style discipline
 
-These rules apply regardless of the style chosen — Brutalist, Minimalist, High-End, Swiss Grid, Editorial Magazine, Quiet Emptiness, Bold Maximalism, Refined Minimalism, Aurora Glass, Retro-Futurist, Organic Hand-drawn, or Anti-Design Web. All twelve systems share the same floor on the items below. They are non-negotiable.
+These rules apply regardless of the style chosen: Brutalist, Minimalist, High-End, Swiss Grid, Editorial Magazine, Quiet Emptiness, Bold Maximalism, Refined Minimalism, Aurora Glass, Retro-Futurist, Organic Hand-drawn, or Anti-Design Web. All twelve systems share the same floor on the items below. They are non-negotiable.
 
 The cross-style floor exists because brand identity is a separate decision from professional baseline. Anti-slop discipline, SEO foundations, accessibility, intentional imagery, and the full set of interaction states must ship regardless of which aesthetic was chosen. The Bold Maximalist landing page that ships without alt text is still broken. The Anti-Design Web statement piece that animates `width` instead of `transform` is still broken. The Quiet Emptiness gallery site with placeholder names is still broken. Style is brand voice; cross-style discipline is craft baseline.
 
 ### Accessibility
 
 - Body text contrast must meet WCAG AA at minimum: `4.5:1` against its background for normal text, `3:1` for large text. Verify in both light and dark variants if both exist.
-- Focus states must be visible on every interactive element. Each style handles them differently — brutalist uses hard inversion, minimalist uses a 2px solid focus ring in the brand accent, high-end uses a soft outer glow combined with a ring, Swiss Grid uses a hairline outline, Editorial Magazine uses an underlined word, Quiet Emptiness uses a muted color shift, Bold Maximalism uses a saturated ring, Refined Minimalism uses an accent-color outline, Aurora Glass uses a tinted glow keyed to the vibe, Retro-Futurist uses a chrome highlight, Organic Hand-drawn uses a warm-tinted ring, Anti-Design Web uses the browser's default outline. Never rely on color alone in any style.
+- Focus states must be visible on every interactive element. Each style handles them differently: brutalist uses hard inversion, minimalist uses a 2px solid focus ring in the brand accent, high-end uses a soft outer glow combined with a ring, Swiss Grid uses a hairline outline, Editorial Magazine uses an underlined word, Quiet Emptiness uses a muted color shift, Bold Maximalism uses a saturated ring, Refined Minimalism uses an accent-color outline, Aurora Glass uses a tinted glow keyed to the vibe, Retro-Futurist uses a chrome highlight, Organic Hand-drawn uses a warm-tinted ring, Anti-Design Web uses the browser's default outline. Never rely on color alone in any style.
 - All interactive controls reachable by keyboard and operable without a mouse. Tab order matches visual order.
 - All images have descriptive alt text or are explicitly marked decorative.
-- Form fields have programmatically associated labels — not just visual proximity.
+- Form fields have programmatically associated labels, not just visual proximity.
 - Error messages are announced to screen readers via appropriate ARIA roles, not just visually styled.
 - Touch targets are at least `44px` by `44px` on mobile, regardless of how the design renders them visually.
 - Color is never the only signal. Status pills include a text label, error fields include an icon or prefix, success states include a check or word.
@@ -2368,11 +2368,11 @@ The cross-style floor exists because brand identity is a separate decision from 
   - High-end: drop the blur portion of scroll entries; replace cinematic interpolations with simple fades; pause background mesh animations.
 - Never auto-play sound. Any video that auto-plays must be muted, looped if short, and accompanied by a pause control.
 - Avoid flashing or rapidly-strobing effects above three flashes per second.
-- Avoid motion parallax that depends on device orientation sensors. Cursor-driven parallax is acceptable; phone-tilt parallax is not — it requires sensor permissions that erode trust.
+- Avoid motion parallax that depends on device orientation sensors. Cursor-driven parallax is acceptable; phone-tilt parallax is not. It requires sensor permissions that erode trust.
 
 ### Mandatory imagery
 
-Every style requires deliberate imagery — none of them can rest on a blank substrate alone.
+Every style requires deliberate imagery: none of them can rest on a blank substrate alone.
 
 - Brutalist: imagery is degraded into halftones, dithers, or scanline overlays. Photographs are processed into 1-bit or low-bit visual artifacts. Diagrams, schematics, and technical drawings are welcome at full fidelity.
 - Minimalist: imagery is high-quality, desaturated, warm-toned. Subtle warm grain overlay at very low opacity blends photos into the monochrome canvas. Stock photography that reads as oversaturated is banned.
@@ -2399,7 +2399,7 @@ Every interactive element ships with the full set of states. Missing states are 
 - High-end: magnetic button physics with nested icon translation, scale, and color shift over `300ms` to `500ms` with custom cubic-bezier.
 
 **Focus state:**
-- Visible on keyboard navigation. Not just `:focus-visible` — actually visible.
+- Visible on keyboard navigation. Not just `:focus-visible`: actually visible.
 - Brutalist: hard 2px solid accent outline with zero offset.
 - Minimalist: 2px solid focus ring in a paired accent pastel, offset by `2px`.
 - High-end: combined ring and soft outer glow keyed to the active vibe accent.
@@ -2422,7 +2422,7 @@ Every interactive element ships with the full set of states. Missing states are 
 **Error state:**
 - Inline, specific, actionable. Tell the user what's wrong and what to do.
 - Never use a vague catch-all like "form contains errors." Name the field. Name the fix.
-- All three styles use red sparingly and specifically — never a tidal wave of error color across a form.
+- All three styles use red sparingly and specifically, never a tidal wave of error color across a form.
 
 **Success state:**
 - Quietly confirmed. A success isn't a celebration unless it's an exceptional moment. Toasts, pills, and inline confirmations are sufficient for most flows.
@@ -2435,7 +2435,7 @@ Every interactive element ships with the full set of states. Missing states are 
 
 These are banned in every style:
 
-- Emojis anywhere — code, markup, microcopy, alt text, headings, error messages. Use SVG icons or plain text.
+- Emojis anywhere: code, markup, microcopy, alt text, headings, error messages. Use SVG icons or plain text.
 - Generic placeholder names: "John Doe", "Acme Corp", "Lorem Ipsum", "Test User", "example@example.com". Use contextual content even in mockups.
 - AI copywriting clichés: "elevate," "seamless," "unleash," "next-gen," "game-changer," "delve," "leverage" used as a verb, "robust" applied to anything.
 - Default font fallback chains (the standard humanist sans-serifs most platforms ship). Even if the brief doesn't specify fonts, choose intentionally.
@@ -2450,7 +2450,7 @@ These are banned in every style:
 - If the brief is unclear, ask before committing to a style. Switching halfway through a project is more expensive than asking on day one.
 - If two styles seem to fit, pick the one whose audience would reward restraint more.
 - Once a style is chosen, every screen on the same product carries the same style. There is no "this one screen is brutalist for fun." Consistency is the point.
-- Build a token system early. Colors, typography scales, radii, shadow definitions, spacing units — all live in tokens. No magic numbers scattered across components.
+- Build a token system early. Colors, typography scales, radii, shadow definitions, spacing units: all live in tokens. No magic numbers scattered across components.
 - Document why the style was chosen. The next person on the project should be able to read the decision and stay inside it without asking.
 
 ---
@@ -2481,7 +2481,7 @@ These imports work because they are single moves carried across, not entire patt
 
 ### Rule 3: When in doubt, retreat to the chosen style.
 
-If a pattern is borderline — a magnetic button in a minimalist surface, a glassmorphism panel in a brutalist surface, a hazard-red accent in a high-end surface — retreat to the chosen style. The retreat costs nothing; the import risks coherence. The audience's eye will sense the dissonance even if they can't name it.
+If a pattern is borderline (a magnetic button in a minimalist surface, a glassmorphism panel in a brutalist surface, a hazard-red accent in a high-end surface) retreat to the chosen style. The retreat costs nothing; the import risks coherence. The audience's eye will sense the dissonance even if they can't name it.
 
 The only time to violate Rule 3 is when the import is doing measurable clarity work that no native pattern would. If the magnetic button is the only way to communicate "this is a hero CTA" with sufficient signal weight on an otherwise quiet minimalist page, the import is justified. If the magnetic button is being added because it looks cool, retreat.
 
@@ -2494,13 +2494,13 @@ Before shipping, ask:
 - Is every motion choice native? (No spring physics in a brutalist page; no step-function reveals in a high-end page; no scanline drift in a minimalist page.)
 - Is every imagery treatment native? (No halftone dither in a high-end page; no bezel-wrapped product mock in a brutalist page; no mesh-gradient background in a minimalist page.)
 
-When any one of these answers is "no," check Rule 2 — is this a single surgical import, or am I drifting between systems? If it's drift, retreat. If it's a justified single import, document why.
+When any one of these answers is "no," check Rule 2: is this a single surgical import, or am I drifting between systems? If it's drift, retreat. If it's a justified single import, document why.
 
 ---
 
 ## Closing reflection
 
-The twelve style systems exist not because there are only twelve ways to design — but because most successful premium products converge on one of them. Each system has a discipline: what to include, what to exclude, what to commit to. The discipline is what produces coherence.
+The twelve style systems exist not because there are only twelve ways to design, but because most successful premium products converge on one of them. Each system has a discipline: what to include, what to exclude, what to commit to. The discipline is what produces coherence.
 
 Output that reads as "premium" is rarely doing something unusual. It is committing fully to one of these systems and refusing the templated defaults that would dilute it. The brutalist developer tool that ships in a templated SaaS aesthetic loses its audience. The minimalist fintech that ships with mesh gradients loses its audience. The high-end creator tool that ships with hairline borders loses its audience. The Swiss Grid editorial site that adds spring physics loses its authority. The Aurora Glass AI product that adds chrome retro accents loses its leap. The Organic Hand-drawn wellness brand that ships with Lucide icons loses its warmth. The Anti-Design Web statement piece that adds a design system loses its joke.
 

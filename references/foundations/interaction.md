@@ -1,30 +1,30 @@
 # Interaction
 
-> Tactile feedback within 100ms is what makes an interface feel alive. Every tap, hover, and gesture must respond visibly — or the user starts tapping twice.
+> Tactile feedback within 100ms is what makes an interface feel alive. Every tap, hover, and gesture must respond visibly, or the user starts tapping twice.
 
 ## Principles
 
-1. **Touch targets are 44pt iOS, 48dp Android, 44px web — minimum** — Extend hit areas beyond visual bounds via `hitSlop` or padding when icons are smaller. Never require pixel-perfect taps on small icons or thin edges.
+1. **Touch targets are 44pt iOS, 48dp Android, 44px web (minimum**) Extend hit areas beyond visual bounds via `hitSlop` or padding when icons are smaller. Never require pixel-perfect taps on small icons or thin edges.
 
-2. **Tap feedback lands within 80 to 150ms** — Ripple, opacity change, elevation change, or color flash. Pick one and apply consistently. Material state layers are a solid baseline.
+2. **Tap feedback lands within 80 to 150ms**: Ripple, opacity change, elevation change, or color flash. Pick one and apply consistently. Material state layers are a solid baseline.
 
-3. **Press states use tactile transforms** — `-translate-y-[1px]` or `scale-[0.98]` on `:active` to simulate a physical push. Duration 80 to 150ms. Restore on release.
+3. **Press states use tactile transforms**: `-translate-y-[1px]` or `scale-[0.98]` on `:active` to simulate a physical push. Duration 80 to 150ms. Restore on release.
 
-4. **Hover never carries primary interaction** — Touch devices have no hover. Primary CTAs never live behind a hover state. Shape, location, and formatting must signal clickability before interaction.
+4. **Hover never carries primary interaction**: Touch devices have no hover. Primary CTAs never live behind a hover state. Shape, location, and formatting must signal clickability before interaction.
 
-5. **One primary gesture per region** — Avoid nested tap/drag conflicts. If a card supports both tap-to-open and swipe-to-delete, the swipe needs a visible affordance (chevron, label, onboarding hint).
+5. **One primary gesture per region**: Avoid nested tap/drag conflicts. If a card supports both tap-to-open and swipe-to-delete, the swipe needs a visible affordance (chevron, label, onboarding hint).
 
-6. **Platform-standard gestures are not redefined** — Swipe-back on iOS, pinch-zoom, predictive back on Android. Don't override them. Don't block system gestures (Control Center swipe, back swipe, edge gestures).
+6. **Platform-standard gestures are not redefined**: Swipe-back on iOS, pinch-zoom, predictive back on Android. Don't override them. Don't block system gestures (Control Center swipe, back swipe, edge gestures).
 
-7. **Drag thresholds prevent accidents** — 8 to 12px movement threshold before drag starts. Below the threshold, the gesture is treated as a tap.
+7. **Drag thresholds prevent accidents**: 8 to 12px movement threshold before drag starts. Below the threshold, the gesture is treated as a tap.
 
-8. **Magnetic micro-physics use motion values, never state** — `useMotionValue` and `useTransform` for continuous hover and cursor-tracked motion. `useState` triggers re-renders that collapse performance on mobile.
+8. **Magnetic micro-physics use motion values, never state**: `useMotionValue` and `useTransform` for continuous hover and cursor-tracked motion. `useState` triggers re-renders that collapse performance on mobile.
 
 9. **Tactile feedback is the difference between toy and tool**: Press states with translation, scale, or elevation shift. Hover states on cards shift border or background, never elevation. Color shift on links. The user feels the interface respond.
 
-10. **System gestures are sacred** — Pinch-zoom is preserved (never `user-scalable=no`). Predictive back works. Tab Bar swipe doesn't block content scroll. Don't fight the OS.
+10. **System gestures are sacred**: Pinch-zoom is preserved (never `user-scalable=no`). Predictive back works. Tab Bar swipe doesn't block content scroll. Don't fight the OS.
 
-11. **Visible affordances signal interactivity** — Buttons look like buttons. Links look like links. Don't rely on hover for discoverability. Mobile users see no hover; affordances must be visible at rest.
+11. **Visible affordances signal interactivity**: Buttons look like buttons. Links look like links. Don't rely on hover for discoverability. Mobile users see no hover; affordances must be visible at rest.
 
 ## Do / Don't
 
@@ -51,7 +51,7 @@
 ## Examples
 
 ### Pattern: Standard tap feedback
-**Use when**: Every tappable element — button, card, link, list row.
+**Use when**: Every tappable element (button, card, link, list row).
 **Anti-pattern**: No visual response on tap; user taps twice thinking it didn't register.
 **How**: Visible response within 80 to 150ms. Pick one feedback type and apply consistently:
 - Ripple (Material): expanding circle from tap point
@@ -72,7 +72,7 @@
 ### Pattern: Magnetic button (high-end)
 **Use when**: Hero CTAs in premium marketing surfaces.
 **Anti-pattern**: Button jumps wildly toward cursor or lags behind it.
-**How**: Use `useMotionValue` and `useTransform` (never `useState`) to track cursor position. Button translates 4 to 8px maximum toward cursor. Spring physics damp the motion. On press, scale down to `0.98`. NEVER use React `useState` for magnetic hover — performance collapses on mobile.
+**How**: Use `useMotionValue` and `useTransform` (never `useState`) to track cursor position. Button translates 4 to 8px maximum toward cursor. Spring physics damp the motion. On press, scale down to `0.98`. NEVER use React `useState` for magnetic hover: performance collapses on mobile.
 
 ### Pattern: Nested icon chip
 **Use when**: CTA with a trailing icon (arrow, chevron) in premium aesthetic.
@@ -82,7 +82,7 @@
 ### Pattern: Gesture with visible affordance
 **Use when**: Swipe-to-delete, swipe-to-archive, swipe-to-reply.
 **Anti-pattern**: Hidden gesture with no visible hint, user has no idea it exists.
-**How**: Visible affordance (chevron, partial reveal of the action button, label, or onboarding hint) signals the gesture. First-time user sees the action; repeat users develop muscle memory. Always provide a tappable alternative — never gesture-only for critical actions.
+**How**: Visible affordance (chevron, partial reveal of the action button, label, or onboarding hint) signals the gesture. First-time user sees the action; repeat users develop muscle memory. Always provide a tappable alternative, never gesture-only for critical actions.
 
 ### Pattern: Drag threshold
 **Use when**: Drag-and-drop interfaces, draggable list items.
@@ -102,7 +102,7 @@
 ### Pattern: Haptic feedback discipline
 **Use when**: Mobile native apps confirming important actions.
 **Anti-pattern**: Haptic on every tap (exhausting; battery cost).
-**How**: Haptic on confirmations, errors, and important state changes — not on every tap. Successful payment: heavy haptic. Failed validation: error haptic. Toggle switch: medium haptic. Tap on a list item: no haptic.
+**How**: Haptic on confirmations, errors, and important state changes, not on every tap. Successful payment: heavy haptic. Failed validation: error haptic. Toggle switch: medium haptic. Tap on a list item: no haptic.
 
 ### Pattern: Disabled state
 **Use when**: Buttons or inputs that should not respond.
@@ -111,8 +111,8 @@
 
 ### Pattern: Semantic native controls
 **Use when**: Building interactive elements.
-**Anti-pattern**: `<div onclick="...">` used as a button — breaks screen readers, keyboard nav, focus management.
-**How**: Use `<button>`, `<a href>`, `<input>`, native equivalents (`<Pressable>` in React Native). They come with built-in keyboard handling, focus management, screen reader support, and platform conventions. If you must use a `<div>` for styling reasons, add `role="button"`, `tabindex="0"`, and keyboard event handlers — but you almost never should.
+**Anti-pattern**: `<div onclick="...">` used as a button (breaks screen readers, keyboard nav, focus management).
+**How**: Use `<button>`, `<a href>`, `<input>`, native equivalents (`<Pressable>` in React Native). They come with built-in keyboard handling, focus management, screen reader support, and platform conventions. If you must use a `<div>` for styling reasons, add `role="button"`, `tabindex="0"`, and keyboard event handlers, but you almost never should.
 
 ### Pattern: Cursor-driven parallax
 **Use when**: Subtle depth effect on hero illustrations or hero canvas.
@@ -121,7 +121,7 @@
 
 ### Pattern: Gesture conflict prevention
 **Use when**: Card lists with both tap and swipe gestures.
-**Anti-pattern**: Tap on card opens detail, swipe on card deletes, but the touch handler can't distinguish between them — both fire.
+**Anti-pattern**: Tap on card opens detail, swipe on card deletes, but the touch handler can't distinguish between them (both fire).
 **How**: One primary gesture per region. If a card supports both:
 - Tap = open detail (primary)
 - Swipe-left = delete (secondary, with visible affordance)
@@ -154,8 +154,8 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 
 ### Pattern: Cursor on web
 **Use when**: Every web interactive element.
-**Anti-pattern**: Default cursor on a `<div onclick="...">` — looks not clickable.
-**How**: Apply `cursor: pointer` to all clickable elements (buttons, links, clickable cards, custom controls). Apply `cursor: not-allowed` to disabled elements. Apply `cursor: text` only on text inputs (browser default). Never use custom cursor images — accessibility hostile and performance hit.
+**Anti-pattern**: Default cursor on a `<div onclick="...">` (looks not clickable).
+**How**: Apply `cursor: pointer` to all clickable elements (buttons, links, clickable cards, custom controls). Apply `cursor: not-allowed` to disabled elements. Apply `cursor: text` only on text inputs (browser default). Never use custom cursor images: accessibility hostile and performance hit.
 
 ## Tokens / values
 
@@ -166,7 +166,7 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 - Mobile input field height: ≥44px
 - Touch spacing: ≥8px gap between adjacent targets
 - Extend hit area beyond visual bounds via `hitSlop` (RN) or padding (web) for smaller icons
-- Test at largest Dynamic Type setting — targets must remain 44pt+
+- Test at largest Dynamic Type setting: targets must remain 44pt+
 
 ### Feedback timings
 - Tap visual response: 80 to 150ms
@@ -224,7 +224,7 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 - Medium tap (confirmation): toggle, button activation
 - Heavy tap (success): payment confirmation, action completion
 - Error: distinct error pattern (double pulse)
-- Avoid haptic on every interaction — reserve for moments
+- Avoid haptic on every interaction: reserve for moments
 
 ### Loading patterns
 - Button loading: spinner beside the label inside the button, the button keeps its label and width, click disabled
@@ -273,10 +273,10 @@ Threshold disambiguates: short tap with no movement = tap; sustained movement pa
 - [ ] Tap feedback lands within 80 to 150ms (severity: High)
 - [ ] Press states use `-translate-y-[1px]` or `scale-[0.98]` (severity: Medium)
 - [ ] Card hover changes border or background only, never elevation (severity: Medium)
-- [ ] No hover-only primary interactions — primary CTAs work without hover (severity: Critical)
+- [ ] No hover-only primary interactions, primary CTAs work without hover (severity: Critical)
 - [ ] `cursor: pointer` on all clickable elements (web) (severity: High)
 - [ ] `touch-action: manipulation` removes 300ms tap delay (web) (severity: Medium)
-- [ ] Pinch-zoom preserved — viewport meta does not set `user-scalable=no` (severity: Critical)
+- [ ] Pinch-zoom preserved, viewport meta does not set `user-scalable=no` (severity: Critical)
 - [ ] Drag threshold of 8 to 12px before drag starts (severity: High)
 - [ ] One primary gesture per region; gesture conflicts disambiguated (severity: High)
 - [ ] Critical actions have both gesture AND tappable control (severity: Critical)

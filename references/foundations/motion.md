@@ -4,12 +4,12 @@
 
 ## Recommended engines (first-class in `/ux-motion`)
 
-ux-skill's `/ux-motion` command accepts a `--engine` flag selecting one of three first-class implementations. Each one is fully supported in `data/motion-presets.json` — every preset has a snippet for all three.
+ux-skill's `/ux-motion` command accepts a `--engine` flag selecting one of three first-class implementations. Each one is fully supported in `data/motion-presets.json`: every preset has a snippet for all three.
 
 | Engine | URL | Use when |
 |---|---|---|
 | **Framer Motion** (default) | https://www.framer.com/motion/ | React projects, declarative API, ~30 KB gzipped. Best balance of power and ergonomics for most apps. |
-| **GSAP** | https://gsap.com | Cinematic scroll-pinned scenes, SVG path animation, complex timelines. The crown of web animation — every motion preset in our manifest ships with a GSAP snippet you can copy. Free for commercial use as of 2024-05 (Webflow acquisition). |
+| **GSAP** | https://gsap.com | Cinematic scroll-pinned scenes, SVG path animation, complex timelines. The crown of web animation: every motion preset in our manifest ships with a GSAP snippet you can copy. Free for commercial use as of 2024-05 (Webflow acquisition). |
 | **CSS keyframes** | https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes | Server-rendered or no-JS surfaces. Smallest cost. ux-skill outputs CSS-only when the picked style or brief requires it (e.g. <code>SSR-static</code>, <code>JS-disabled-allowed</code> must-have). |
 
 **Invocation:**
@@ -24,25 +24,25 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 
 ## Principles
 
-1. **Motion communicates, never decorates** — Every animation expresses a cause-effect relationship: a state change, a hierarchy shift, a confirmation, a spatial transition. Decoration-only motion is noise that drains attention and battery.
+1. **Motion communicates, never decorates**. Every animation expresses a cause-effect relationship: a state change, a hierarchy shift, a confirmation, a spatial transition. Decoration-only motion is noise that drains attention and battery.
 
 2. **Motion is judged by when it answers.** The system's roles set the durations from the brand: reveal and swap 200 to 450ms, expand 250 to 500, page 300 to 600, arrive 350 to 800, state 150 to 240, slower for a formal brand and quicker for a loud one. Length alone decides nothing; the curve does. A direct response (press, hover, state, swap, indicator) is half done within 70ms and nine tenths within 220ms, an entrance half within 140ms (motion.settle_ms). Reduced motion keeps 100ms or less.
 
-3. **Easing has direction and meaning** — `ease-out` (`cubic-bezier(0.16, 1, 0.3, 1)`) for entering. `ease-in` for exiting. `linear` never on UI transitions (linear motion reads mechanical and dated). Spring physics or custom cubic-beziers for natural feel.
+3. **Easing has direction and meaning**: `ease-out` (`cubic-bezier(0.16, 1, 0.3, 1)`) for entering. `ease-in` for exiting. `linear` never on UI transitions (linear motion reads mechanical and dated). Spring physics or custom cubic-beziers for natural feel.
 
-4. **Exit is faster than enter** — Exit animations run at 60 to 70% of enter duration. The asymmetry feels more responsive. A modal that opens in 300ms closes in 200ms.
+4. **Exit is faster than enter**: Exit animations run at 60 to 70% of enter duration. The asymmetry feels more responsive. A modal that opens in 300ms closes in 200ms.
 
 5. **Animate `transform` and `opacity`.** These hit the compositor without laying the page out again. Animating `width`, `height`, `top` or `left` on an element in flow moves everything beside it. Two moves reflow nothing and are allowed: `grid-template-rows` from 0fr to 1fr on a single disclosure, and the inline size of a moving indicator (`motion.indicator`).
 
-6. **Respect reduced-motion at every level** — `prefers-reduced-motion: reduce` is a contract. Replace `translateY` reveals with opacity-only fades. Pause background ambient motion. Drop blur from scroll entries. Never opt the user back in by default.
+6. **Respect reduced-motion at every level**: `prefers-reduced-motion: reduce` is a contract. Replace `translateY` reveals with opacity-only fades. Pause background ambient motion. Drop blur from scroll entries. Never opt the user back in by default.
 
-7. **Interruptibility is mandatory** — User tap, scroll, or gesture cancels in-progress animation immediately. Animations never block input. UI stays interactive during motion.
+7. **Interruptibility is mandatory**: User tap, scroll, or gesture cancels in-progress animation immediately. Animations never block input. UI stays interactive during motion.
 
-8. **Stagger lists, not chrome** — List or grid items enter with a 30 to 50ms cascade between siblings. The wave is direction-aware (left-to-right LTR, mirrored RTL). All-at-once entries flatten composition; too-slow staggers (100ms+) feel theatrical.
+8. **Stagger lists, not chrome**: List or grid items enter with a 30 to 50ms cascade between siblings. The wave is direction-aware (left-to-right LTR, mirrored RTL). All-at-once entries flatten composition; too-slow staggers (100ms+) feel theatrical.
 
 9. **Springs for things a person drags or toggles.** Drag handles, toggles and sheets settle on a spring rather than a curve, so they carry weight. The spring takes the role's duration and a bounce that follows the brand's overshoot (character.overshoot), for example `{ type: "spring", duration: 0.35, bounce: 0.2 }`; a still, formal brand sets the bounce near 0.
 
-10. **Perpetual motion is isolated and memoized** — Any infinite loop or perpetual animation lives in its own microscopic memoized client component. A floating ambient pulse must not re-render the page it sits on.
+10. **Perpetual motion is isolated and memoized**: Any infinite loop or perpetual animation lives in its own microscopic memoized client component. A floating ambient pulse must not re-render the page it sits on.
 
 ## Do / Don't
 
@@ -116,12 +116,12 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 ### Pattern: Animated number counter
 **Use when**: Hero stats, dashboard metrics that benefit from the count-up effect.
 **Anti-pattern**: Counter that ticks endlessly, or that overshoots and settles.
-**How**: Tick from 0 to target over 800 to 1500ms with `ease-out`. Triggers once on enter view, not on every scroll. Ends exactly on the target number with no settling jitter. Use sparingly — 2 to 3 counters max per section.
+**How**: Tick from 0 to target over 800 to 1500ms with `ease-out`. Triggers once on enter view, not on every scroll. Ends exactly on the target number with no settling jitter. Use sparingly: 2 to 3 counters max per section.
 
 ### Pattern: Infinite logo marquee
 **Use when**: Customer logo strips that need to feel alive without forcing attention.
 **Anti-pattern**: 4-second loop that grabs attention every time it cycles.
-**How**: 20 to 60 second full cycle, seamless via `x: ["0%", "-100%"]`. Duplicate the row 2 to 3x in the DOM to mask the seam. Pause on hover so users can read the logo they are focused on. Sub-conscious speed — the eye does not snap to it.
+**How**: 20 to 60 second full cycle, seamless via `x: ["0%", "-100%"]`. Duplicate the row 2 to 3x in the DOM to mask the seam. Pause on hover so users can read the logo they are focused on. Sub-conscious speed: the eye does not snap to it.
 
 ### Pattern: Magnetic button physics
 **Use when**: Hero CTAs or signature interactive buttons in high-end aesthetic.
@@ -141,7 +141,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 ### Pattern: Perpetual ambient pulse
 **Use when**: Live status indicators, "online now" dots, breathing badges.
 **Anti-pattern**: Every interactive element pulsing constantly.
-**How**: Soft scale or opacity breathing — `scale: [1, 1.1, 1]` over 2 to 3 second loops. Use sparingly: maximum 2 per viewport, only on truly live elements. Isolate in a memoized leaf client component so the page does not re-render with each frame.
+**How**: Soft scale or opacity breathing (`scale: [1, 1.1, 1]` over 2 to 3 second loops). Use sparingly: maximum 2 per viewport, only on truly live elements. Isolate in a memoized leaf client component so the page does not re-render with each frame.
 
 ### Pattern: Brutalist step-function reveal
 **Use when**: Industrial, mechanical, terminal-adjacent aesthetics.
@@ -166,16 +166,16 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 ### Pattern: Sticky scroll stack (cards stack as user scrolls)
 **Use when**: A series of feature cards needs to demonstrate progression.
 **Anti-pattern**: Cards rendered flat, with no spatial story of progression.
-**How**: Cards stick to the top and physically stack on top of each other from the bottom as the user scrolls down. Each card has its own `position: sticky` offset. The stack creates spatial depth — newer cards layer over older. Disable under reduced-motion and below 768px.
+**How**: Cards stick to the top and physically stack on top of each other from the bottom as the user scrolls down. Each card has its own `position: sticky` offset. The stack creates spatial depth: newer cards layer over older. Disable under reduced-motion and below 768px.
 
 ### Pattern: Variable-axis weight on hover
 **Use when**: Premium high-end aesthetic with variable fonts.
 **Anti-pattern**: Animating font weight on every label across the page.
-**How**: Use sparingly — one or two elements per page. A label tightens from `font-variation-settings: 'wght' 400` to `wght 600` as the cursor approaches. Animate via `transform`-compatible setup; respect `prefers-reduced-motion`.
+**How**: Use sparingly (one or two elements per page). A label tightens from `font-variation-settings: 'wght' 400` to `wght 600` as the cursor approaches. Animate via `transform`-compatible setup; respect `prefers-reduced-motion`.
 
 ### Pattern: Scroll progress in nav, not in side rail
 **Use when**: Long-form pages where progress feedback is valuable.
-**Anti-pattern**: Fixed-position SVG drawing lines down the left or right edge as the user scrolls — known stale pattern that signals AI generation.
+**Anti-pattern**: Fixed-position SVG drawing lines down the left or right edge as the user scrolls (known stale pattern that signals AI generation).
 **How**: Integrate progress feedback into the navigation bar (horizontal top progress bar) or into section anchors (active state on nav links as sections enter view). Never as a parasitic edge element.
 
 ### Pattern: Crossfade for content replacement
@@ -228,7 +228,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - Medium list (6 to 12 items): 50 to 80ms per item
 - Wide grid (12+ items): 60 to 120ms per item
 - Headline word-by-word: 80 to 120ms per word cascade
-- Never exceed 150ms stagger between siblings — feels theatrical
+- Never exceed 150ms stagger between siblings: feels theatrical
 
 ### Hover state values (cards and links)
 - Background brighten: 2 to 4% L shift
@@ -239,11 +239,11 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - Trailing icon translate: 4 to 6px right
 
 ### Perpetual motion archetypes
-- **Pulse** — `scale: [1, 1.1, 1]` over 2 to 3s loop; for status indicators and live elements
-- **Typewriter** — multi-step text cycling with blinking cursor; for command and search inputs
-- **Float** — `translateY: [0, -6px, 0]` over 4 to 6s; for hero badges and decorative elements
-- **Shimmer** — horizontal light gradient sliding across; for skeletal placeholders and active cards
-- **Carousel** — `x: ["0%", "-100%"]` seamless infinite at 15 to 25s for data streams
+- **Pulse**: `scale: [1, 1.1, 1]` over 2 to 3s loop; for status indicators and live elements
+- **Typewriter**: multi-step text cycling with blinking cursor; for command and search inputs
+- **Float**: `translateY: [0, -6px, 0]` over 4 to 6s; for hero badges and decorative elements
+- **Shimmer**: horizontal light gradient sliding across; for skeletal placeholders and active cards
+- **Carousel**: `x: ["0%", "-100%"]` seamless infinite at 15 to 25s for data streams
 
 ### Performance constraints
 - Animate only `transform` and `opacity`
@@ -308,8 +308,8 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - [ ] Staggered orchestration on list and grid mounts at 30 to 80ms per item (severity: Medium)
 - [ ] `useEffect` animations have cleanup functions (severity: Critical)
 - [ ] Perpetual motion isolated in memoized leaf client components (severity: High)
-- [ ] No `window.addEventListener('scroll')` — `IntersectionObserver` used instead (severity: High)
-- [ ] No `useState` for continuous animations — `useMotionValue` and `useTransform` used instead (severity: High)
+- [ ] No `window.addEventListener('scroll')`, `IntersectionObserver` used instead (severity: High)
+- [ ] No `useState` for continuous animations, `useMotionValue` and `useTransform` used instead (severity: High)
 - [ ] `backdrop-blur` applied only to fixed or sticky elements (severity: High)
 - [ ] Grain or noise filters on fixed `pointer-events-none` pseudo-elements (severity: High)
 - [ ] No GSAP mixed with motion library in the same component tree (severity: High)
@@ -326,7 +326,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - [ ] Mobile reduces motion intensity by 2 levels below 768px (severity: Medium)
 - [ ] Layout transitions use `layoutId` for shared element morphs (severity: Medium)
 - [ ] Cursor-tracked tilt capped at 4 to 8 degrees rotation (severity: Cosmetic)
-- [ ] First-paint motion budget under 400ms — text appears before heavy assets (severity: High)
+- [ ] First-paint motion budget under 400ms, text appears before heavy assets (severity: High)
 - [ ] Brand wordmark animations play once on load, not on loop (severity: Cosmetic)
 
 ## Related

@@ -1,9 +1,9 @@
 # Mintlify
 
-> Mintlify presents documentation infrastructure with a dual-mode aesthetic — atmospheric sky-gradient marketing heroes (cloud illustration backdrops, soft cream-to-blue washes) paired with dense developer-grade documentation surfaces.
+> Mintlify presents documentation infrastructure with a dual-mode aesthetic: atmospheric sky-gradient marketing heroes (cloud illustration backdrops, soft cream-to-blue washes) paired with dense developer-grade documentation surfaces.
 
 **Category:** Developer Tools
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/mintlify.json`](../../data/brands/mintlify.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-Mintlify presents documentation infrastructure with a dual-mode aesthetic — atmospheric sky-gradient marketing heroes (cloud illustration backdrops, soft cream-to-blue washes) paired with dense developer-grade documentation surfaces.
+Mintlify presents documentation infrastructure with a dual-mode aesthetic: atmospheric sky-gradient marketing heroes (cloud illustration backdrops, soft cream-to-blue washes) paired with dense developer-grade documentation surfaces.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

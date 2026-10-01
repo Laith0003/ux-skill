@@ -1,17 +1,17 @@
-# Datadog — DESIGN.md
+# Datadog: DESIGN.md
 
 ## Overview
-Datadog's marketing surface is built around the brand's signature deep purple (`#632ca6`) and the dog-mascot illustration system. The canvas is white, the purple is generous on hero bands and CTAs, and an editorial geometric serif (Tiempos / Domaine) carries display headlines — the type choice is what makes the brand feel like an institution, not a startup. Body sits in a humanist sans (Söhne / Inter).
+Datadog's marketing surface is built around the brand's signature deep purple (`#632ca6`) and the dog-mascot illustration system. The canvas is white, the purple is generous on hero bands and CTAs, and an editorial geometric serif (Tiempos / Domaine) carries display headlines: the type choice is what makes the brand feel like an institution, not a startup. Body sits in a humanist sans (Söhne / Inter).
 
 ## Color
-- **Primary:** `#632ca6` — Datadog Purple
-- **Primary dark:** `#4a1d82` — Active Purple
-- **Canvas:** `#ffffff` — White
-- **Surface alt:** `#f7f5fc` — Lavender Wash
-- **Ink:** `#1c1d26` — Indigo Near-Black
+- **Primary:** `#632ca6` (Datadog Purple)
+- **Primary dark:** `#4a1d82` (Active Purple)
+- **Canvas:** `#ffffff` (White)
+- **Surface alt:** `#f7f5fc` (Lavender Wash)
+- **Ink:** `#1c1d26` (Indigo Near-Black)
 - **Body:** `#4d4f60`
 - **Hairlines/dividers:** `rgba(28,29,38,0.10)`
-- **Accent secondary:** `#ff7300` — Bark Orange (used on dog-mascot, status indicators, "live" badges)
+- **Accent secondary:** `#ff7300`, Bark Orange (used on dog-mascot, status indicators, "live" badges)
 
 ## Typography
 - **Display:** Tiempos Headline / Domaine Display, weight 400 (regular), tracking -0.01em, sizes 56-96px on hero
@@ -33,18 +33,18 @@ Datadog's marketing surface is built around the brand's signature deep purple (`
 - `customer-logo-strip-mono`
 
 ## Trademark signals
-- Bark, the dog mascot — appears in nearly every hero band, the only place in dev-observability where a literal mascot survives
-- Purple-on-white with a single bark-orange accent — never any other secondary
-- Serif display headlines in an industry of geometric sans — the editorial weight is the brand differentiator
+- Bark, the dog mascot: appears in nearly every hero band, the only place in dev-observability where a literal mascot survives
+- Purple-on-white with a single bark-orange accent, never any other secondary
+- Serif display headlines in an industry of geometric sans: the editorial weight is the brand differentiator
 - Five-tier pricing tables (rare; most products show 3) signaling enterprise depth
 - Dashboard mockups carry actual product chrome, never abstract data viz
 
 ## What they DON'T do
 - No dark-mode hero on the marketing site
 - No emoji or playful UI illustrations beyond the Bark mascot
-- No geometric-sans display headlines — the serif is the brand voice
-- No saturated rainbow data viz in marketing screenshots — Datadog dashboards skew muted
-- No second mascot or sibling characters — Bark stands alone
+- No geometric-sans display headlines: the serif is the brand voice
+- No saturated rainbow data viz in marketing screenshots: Datadog dashboards skew muted
+- No second mascot or sibling characters: Bark stands alone
 
 ## Exemplar pages
 - https://www.datadoghq.com/

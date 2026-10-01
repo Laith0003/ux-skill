@@ -3,7 +3,7 @@
 > A photography-first discovery system organized around the Pinterest Red CTA, the masonry pin grid, and a soft warm-cream chrome that gets out of the imagery's way.
 
 **Category:** Consumer / Lifestyle / Retail
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/pinterest.json`](../../data/brands/pinterest.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

@@ -1,7 +1,7 @@
 ---
 version: alpha
 name: Zapier-design-analysis
-description: An inspired interpretation of Zapier's design language — a workflow-automation platform whose surface combines warm-cream neutrals (`#fffefb` canvas, `#f8f4f0` soft cream) with deep coffee ink (`#201515`) and a single saturated orange CTA accent (`#ff4f00`); typography pairs the proprietary Degular Display family at hero scale with Inter for sub-displays and body, giving the brand a confident-warm rather than cool-tech voice.
+description: An inspired interpretation of Zapier's design language, a workflow-automation platform whose surface combines warm-cream neutrals (`#fffefb` canvas, `#f8f4f0` soft cream) with deep coffee ink (`#201515`) and a single saturated orange CTA accent (`#ff4f00`); typography pairs the proprietary Degular Display family at hero scale with Inter for sub-displays and body, giving the brand a confident-warm rather than cool-tech voice.
 
 colors:
   primary: "#ff4f00"
@@ -228,7 +228,7 @@ components:
     typography: "{typography.body-sm}"
     padding: "{spacing.3xl} {spacing.xl}"
 
-  # ─── Examples (illustrative) — auto-derived; resolve any TO_FILL markers below ───
+  # ─── Examples (illustrative), auto-derived; resolve any TO_FILL markers below ───
   ex-pricing-tier:
     description: "Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface."
     backgroundColor: "{colors.canvas-soft}"
@@ -237,18 +237,18 @@ components:
     rounded: "{rounded.md}"
     padding: "{spacing.xl}"
   ex-pricing-tier-featured:
-    description: "Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode)."
+    description: "Featured/highlighted tier: polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode)."
     backgroundColor: "{colors.ink}"
     textColor: "{colors.on-primary}"
     rounded: "{rounded.md}"
     padding: "{spacing.xl}"
   ex-product-selector:
-    description: "What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery)."
+    description: "What's Included summary card: re-purposed for SaaS / B2B verticals (NOT a literal product gallery)."
     backgroundColor: "{colors.canvas-soft}"
     rounded: "{rounded.md}"
     padding: "{spacing.xl}"
   ex-cart-drawer:
-    description: "Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart)."
+    description: "Subscription summary: re-purposed for SaaS / B2B (line items per add-on, not literal cart)."
     backgroundColor: "{colors.canvas}"
     rounded: "{rounded.md}"
     padding: "{spacing.xl}"
@@ -272,7 +272,7 @@ components:
     rounded: "{rounded.md}"
     padding: "{spacing.xl}"
   ex-modal-card:
-    description: "Modal dialog surface — same chrome as feature-card with elevated shadow."
+    description: "Modal dialog surface: same chrome as feature-card with elevated shadow."
     backgroundColor: "{colors.canvas}"
     rounded: "{rounded.md}"
     padding: "{spacing.xl}"
@@ -283,7 +283,7 @@ components:
     padding: "{spacing.3xl}"
     captionTypography: "{typography.body-md}"
   ex-toast:
-    description: "Toast notification surface — feature-card shape + medium shadow."
+    description: "Toast notification surface: feature-card shape + medium shadow."
     backgroundColor: "{colors.canvas}"
     rounded: "{rounded.md}"
     padding: "{spacing.md} {spacing.lg}"
@@ -294,36 +294,36 @@ components:
 
 ## Overview
 
-Zapier is the original "connect your apps" workflow automation platform — and the marketing surface today reads as confidently-mature. The brand pairs a warm-cream canvas `{colors.canvas}` (`#fffefb`) with a deep coffee-ink `{colors.ink}` (`#201515`) and a single saturated orange `{colors.primary}` (`#ff4f00`) CTA. The warmth in the neutrals — slightly cream rather than pure white — is the brand's defining temperature signal.
+Zapier is the original "connect your apps" workflow automation platform, and the marketing surface today reads as confidently-mature. The brand pairs a warm-cream canvas `{colors.canvas}` (`#fffefb`) with a deep coffee-ink `{colors.ink}` (`#201515`) and a single saturated orange `{colors.primary}` (`#ff4f00`) CTA. The warmth in the neutrals (slightly cream rather than pure white) is the brand's defining temperature signal.
 
-Type carries the second voice. The proprietary `Degular Display` family carries hero displays at weight 500. The brand uses `Inter` for everything else — sub-displays, body, button, eyebrow. The two-face pairing reads as "the brand has its own typeface for the loud moments and uses the workhorse for the rest" — modest and unflashy.
+Type carries the second voice. The proprietary `Degular Display` family carries hero displays at weight 500. The brand uses `Inter` for everything else: sub-displays, body, button, eyebrow. The two-face pairing reads as "the brand has its own typeface for the loud moments and uses the workhorse for the rest": modest and unflashy.
 
-Cards are universally `{rounded.md}` 12 px. Buttons share the same 12 px radius — not pills, not square. The brand sits between the friendly-rounded and the technical-square camps with a deliberate middle position.
+Cards are universally `{rounded.md}` 12 px. Buttons share the same 12 px radius, not pills, not square. The brand sits between the friendly-rounded and the technical-square camps with a deliberate middle position.
 
 **Key Characteristics:**
-- A single primary CTA color `{colors.primary}` (`#ff4f00`) — saturated orange. The brand's conversion signature.
-- Warm-cream canvas `{colors.canvas}` (`#fffefb`) — not pure white. The temperature IS the brand voice.
-- Deep coffee ink `{colors.ink}` (`#201515`) — not pure black. Warmth carries through to text.
+- A single primary CTA color `{colors.primary}` (`#ff4f00`): saturated orange. The brand's conversion signature.
+- Warm-cream canvas `{colors.canvas}` (`#fffefb`), not pure white. The temperature IS the brand voice.
+- Deep coffee ink `{colors.ink}` (`#201515`), not pure black. Warmth carries through to text.
 - Proprietary Degular Display for hero-scale, Inter for everything else. Two-face system.
-- `{rounded.md}` 12 px for buttons and cards — the brand's middle-radius signature.
-- A muted cream / coffee neutral ladder — `{colors.canvas-soft}` (`#f8f4f0`), `{colors.mute}` (`#c5c0b1`), `{colors.body-mid}` (`#939084`), `{colors.body}` (`#605d52`) — every neutral carries warmth, none are cool grey.
+- `{rounded.md}` 12 px for buttons and cards: the brand's middle-radius signature.
+- A muted cream / coffee neutral ladder, `{colors.canvas-soft}` (`#f8f4f0`), `{colors.mute}` (`#c5c0b1`), `{colors.body-mid}` (`#939084`), `{colors.body}` (`#605d52`), every neutral carries warmth, none are cool grey.
 
 ## Colors
 
 ### Brand & Accent
-- **Zapier Orange** (`{colors.primary}` — `#ff4f00`): The single brand accent. Every primary CTA pill, every conversion target. The saturated orange IS the brand.
+- **Zapier Orange** (`{colors.primary}`, `#ff4f00`): The single brand accent. Every primary CTA pill, every conversion target. The saturated orange IS the brand.
 
 ### Surface
-- **Canvas** (`{colors.canvas}` — `#fffefb`): Warm off-white page background.
-- **Canvas Soft** (`{colors.canvas-soft}` — `#f8f4f0`): Cream-tinted soft surface for cards / inset regions.
+- **Canvas** (`{colors.canvas}`, `#fffefb`): Warm off-white page background.
+- **Canvas Soft** (`{colors.canvas-soft}`, `#f8f4f0`): Cream-tinted soft surface for cards / inset regions.
 
 ### Text
-- **Ink** (`{colors.ink}` — `#201515`): Deep coffee — every heading and primary text.
-- **Ink Soft** (`{colors.ink-soft}` — `#2f2a26`): Near-black with brown warmth.
-- **Ink Mid** (`{colors.ink-mid}` — `#36342e`): Mid-emphasis text.
-- **Body** (`{colors.body}` — `#605d52`): Default body text color.
-- **Body Mid** (`{colors.body-mid}` — `#939084`): Secondary body / metadata.
-- **Mute** (`{colors.mute}` — `#c5c0b1`): Lowest-priority text — fine print, low-emphasis captions.
+- **Ink** (`{colors.ink}`, `#201515`): Deep coffee (every heading and primary text).
+- **Ink Soft** (`{colors.ink-soft}`, `#2f2a26`): Near-black with brown warmth.
+- **Ink Mid** (`{colors.ink-mid}`, `#36342e`): Mid-emphasis text.
+- **Body** (`{colors.body}`, `#605d52`): Default body text color.
+- **Body Mid** (`{colors.body-mid}`, `#939084`): Secondary body / metadata.
+- **Mute** (`{colors.mute}`, `#c5c0b1`): Lowest-priority text (fine print, low-emphasis captions).
 
 ### Semantic
 The brand doesn't surface a separate semantic palette on its marketing pages. Status / validation cues borrow from the ink + orange hierarchy.
@@ -332,8 +332,8 @@ The brand doesn't surface a separate semantic palette on its marketing pages. St
 
 ### Font Family
 Two faces ladder the system:
-1. **Degular Display** — proprietary geometric display sans used for hero headlines at weight 500. The brand's typographic signature.
-2. **Inter** — used for sub-displays, body, links, buttons, and eyebrows. Weights 400 / 500 / 600 / 700 are present.
+1. **Degular Display**: proprietary geometric display sans used for hero headlines at weight 500. The brand's typographic signature.
+2. **Inter**: used for sub-displays, body, links, buttons, and eyebrows. Weights 400 / 500 / 600 / 700 are present.
 
 ### Hierarchy
 
@@ -358,13 +358,13 @@ Two faces ladder the system:
 
 ### Principles
 - **Degular Display 500 for hero, Inter for everything else.** Strict role separation.
-- **Positive tracking on the Degular eyebrow** — `1 px` at 14 px is the brand's signature label style.
+- **Positive tracking on the Degular eyebrow**: `1 px` at 14 px is the brand's signature label style.
 - **Sentence-case headlines.** The brand never uppercases display sizes.
 
 ### Note on Font Substitutes
 Degular Display is proprietary. Open-source substitutes:
-- **Display** — *Inter* weight 500 at hero scale comes closest. *Mona Sans* weight 500 is a softer alternative.
-- **Sub-display + body** — *Inter* is the brand's actual second face.
+- **Display**: *Inter* weight 500 at hero scale comes closest. *Mona Sans* weight 500 is a softer alternative.
+- **Sub-display + body**: *Inter* is the brand's actual second face.
 
 ## Layout
 
@@ -386,7 +386,7 @@ Degular Display is proprietary. Open-source substitutes:
 | Name | Width | Key Changes |
 |---|---|---|
 | Mobile | < 768px | Hero stacks; grids 1-up; hamburger nav. |
-| Tablet | 768–1023px | 2-up grids. |
+| Tablet | 768 to 1023px | 2-up grids. |
 | Desktop | ≥ 1024px | Full grids; hero split. |
 
 #### Touch Targets
@@ -399,9 +399,9 @@ The brand uses illustrative SVGs of zaps / workflows + product screenshots insid
 
 | Level | Treatment | Use |
 |---|---|---|
-| Level 0 — Flat | No shadow, no border. | Default for hero. |
-| Level 1 — Hairline | 1 px solid `{colors.ink}` border. | Pricing-tier card chrome, outline buttons. |
-| Level 2 — Soft Card | `{colors.canvas-soft}` cream fill against `{colors.canvas}` page. | Default content cards — surface contrast carries elevation. |
+| Level 0: Flat | No shadow, no border. | Default for hero. |
+| Level 1: Hairline | 1 px solid `{colors.ink}` border. | Pricing-tier card chrome, outline buttons. |
+| Level 2: Soft Card | `{colors.canvas-soft}` cream fill against `{colors.canvas}` page. | Default content cards: surface contrast carries elevation. |
 
 ## Shapes
 
@@ -419,103 +419,103 @@ The brand uses illustrative SVGs of zaps / workflows + product screenshots insid
 
 ### Buttons
 
-**`button-primary`** — the orange CTA.
+**`button-primary`**: the orange CTA.
 - Background `{colors.primary}`, text `{colors.on-primary}` (warm white), label `{typography.button-md}`, padding `{spacing.md} {spacing.xl}`, shape `{rounded.md}` 12 px.
 
-**`button-secondary`** — the dark coffee-ink CTA.
+**`button-secondary`**: the dark coffee-ink CTA.
 - Background `{colors.ink}`, text `{colors.on-primary}`, same typography / padding / shape.
 
-**`button-tertiary`** — the outline CTA.
+**`button-tertiary`**: the outline CTA.
 - Background `{colors.canvas}`, text `{colors.ink}`, 1 px solid `{colors.ink}` border, same typography / padding / shape.
 
-**`button-text`** — text-only CTA used inside cards / nav.
+**`button-text`**: text-only CTA used inside cards / nav.
 - Background `{colors.canvas}`, text `{colors.ink}`, body in `{typography.button-sm}`, padding `{spacing.sm} {spacing.lg}`, shape `{rounded.md}`.
 
 ### Cards & Containers
 
-**`card-content`** — the default cream content card.
+**`card-content`**: the default cream content card.
 - Background `{colors.canvas-soft}`, text `{colors.ink}`, padding `{spacing.xl}`, shape `{rounded.md}`.
 
-**`card-feature-cream`** — the cream feature card.
+**`card-feature-cream`**: the cream feature card.
 - Same chrome as `card-content`. Hosts headline + body + illustration.
 
-**`card-feature-dark`** — the polarity-flipped dark coffee card.
+**`card-feature-dark`**: the polarity-flipped dark coffee card.
 - Background `{colors.ink}`, text `{colors.on-primary}`, padding `{spacing.xl}`, shape `{rounded.md}`.
 
-**`pricing-card`** — the default pricing tier card.
+**`pricing-card`**: the default pricing tier card.
 - Background `{colors.canvas}`, text `{colors.ink}`, 1 px solid `{colors.ink}` border, padding `{spacing.xl}`, shape `{rounded.md}`.
 
-**`pricing-card-featured`** — the polarity-flipped featured pricing tier.
+**`pricing-card-featured`**: the polarity-flipped featured pricing tier.
 - Background `{colors.ink}`, text `{colors.on-primary}`, same shape / padding.
 
 ### Inputs & Forms
 
-**`text-input`** — the canonical text input.
+**`text-input`**: the canonical text input.
 - Background `{colors.canvas}`, text `{colors.ink}`, 1 px solid `{colors.ink}` border, body in `{typography.body-md}`, padding `{spacing.md} {spacing.lg}`, shape `{rounded.sm}` 6 px.
 
 ### Navigation
 
-**`nav-bar`** — the sticky top nav.
+**`nav-bar`**: the sticky top nav.
 - Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.md} {spacing.xl}`.
 
-**`nav-link`** — link items inside nav.
+**`nav-link`**: link items inside nav.
 - Text `{colors.ink}`, set in `{typography.body-sm}`.
 
-**`footer`** — the dark coffee footer.
+**`footer`**: the dark coffee footer.
 - Background `{colors.ink}`, text `{colors.canvas-soft}`, padding `{spacing.3xl} {spacing.xl}`. Body in `{typography.body-sm}`.
 
 ### Signature Components
 
-**`hero-band`** — the cream hero band.
+**`hero-band`**: the cream hero band.
 - Background `{colors.canvas}`, text `{colors.ink}`, padding `{spacing.4xl} {spacing.xl}`. Headline in `{typography.display-xl}` (Degular Display 56 px / 500).
 
-**`hero-band-dark`** — the polarity-flipped dark coffee hero.
+**`hero-band-dark`**: the polarity-flipped dark coffee hero.
 - Background `{colors.ink}`, text `{colors.on-primary}`, same scale.
 
-**`content-band-cream`** — the cream content band that follows hero.
+**`content-band-cream`**: the cream content band that follows hero.
 - Background `{colors.canvas-soft}`, text `{colors.ink}`, padding `{spacing.4xl} {spacing.xl}`. Section headline in `{typography.display-lg}`.
 
-**`content-band-light`** — the white content band.
+**`content-band-light`**: the white content band.
 - Background `{colors.canvas}`, text `{colors.ink}`, same padding / scale.
 
-**`eyebrow-uppercase`** — the small UPPERCASE Degular eyebrow above section headlines.
+**`eyebrow-uppercase`**: the small UPPERCASE Degular eyebrow above section headlines.
 - Text `{colors.ink}`, set in `{typography.eyebrow-uppercase}` (14 px / 500 / `1 px` tracking).
 
-**`badge-pill`** — the inline pill for metadata / tag.
+**`badge-pill`**: the inline pill for metadata / tag.
 - Background `{colors.canvas-soft}`, text `{colors.ink}`, body in `{typography.body-sm}`, padding `{spacing.xs} {spacing.md}`, shape `{rounded.pill}`.
 
 ### Examples (illustrative)
 
-> Auto-derived kit-mirror demonstration surfaces (`scripts/derive-examples-block.mjs`). Each `ex-*` entry references brand-native primitives so downstream consumers (`/preview-design`, `/generate-kit`) re-skin the same 10 surfaces consistently. `TO_FILL` markers indicate missing primitives — resolve in the LLM judgment pass.
+> Auto-derived kit-mirror demonstration surfaces (`scripts/derive-examples-block.mjs`). Each `ex-*` entry references brand-native primitives so downstream consumers (`/preview-design`, `/generate-kit`) re-skin the same 10 surfaces consistently. `TO_FILL` markers indicate missing primitives: resolve in the LLM judgment pass.
 
-**`ex-pricing-tier`** — Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface.
+**`ex-pricing-tier`**: Default Pricing tier card. Re-uses feature-card chrome with brand canvas-soft surface.
 - Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
 
-**`ex-pricing-tier-featured`** — Featured/highlighted tier — polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode).
+**`ex-pricing-tier-featured`**: Featured/highlighted tier, polarity-flipped surface (dark fill + light text in light mode, light fill + dark text in dark mode).
 - Properties: `backgroundColor`, `textColor`, `rounded`, `padding`
 
-**`ex-product-selector`** — What's Included summary card — re-purposed for SaaS / B2B verticals (NOT a literal product gallery).
+**`ex-product-selector`**: What's Included summary card, re-purposed for SaaS / B2B verticals (NOT a literal product gallery).
 - Properties: `backgroundColor`, `rounded`, `padding`
 
-**`ex-cart-drawer`** — Subscription summary — re-purposed for SaaS / B2B (line items per add-on, not literal cart).
+**`ex-cart-drawer`**: Subscription summary, re-purposed for SaaS / B2B (line items per add-on, not literal cart).
 - Properties: `backgroundColor`, `rounded`, `padding`, `item-divider`
 
-**`ex-app-shell-row`** — Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator.
+**`ex-app-shell-row`**: Sidebar nav row inside the App Shell example. Active state uses brand primary as the indicator.
 - Properties: `backgroundColor`, `activeIndicator`, `rounded`, `padding`
 
-**`ex-data-table-cell`** — Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm.
+**`ex-data-table-cell`**: Default data-table th + td chrome. Header uses mono-caps eyebrow typography; body uses body-sm.
 - Properties: `headerBackground`, `headerTypography`, `bodyTypography`, `cellPadding`, `rowBorder`
 
-**`ex-auth-form-card`** — Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside.
+**`ex-auth-form-card`**: Sign-in / sign-up card. Re-uses feature-card chrome with text-input primitives inside.
 - Properties: `backgroundColor`, `rounded`, `padding`
 
-**`ex-modal-card`** — Modal dialog surface — same chrome as feature-card with elevated shadow.
+**`ex-modal-card`**: Modal dialog surface (same chrome as feature-card with elevated shadow).
 - Properties: `backgroundColor`, `rounded`, `padding`
 
-**`ex-empty-state-card`** — Empty-state illustration frame.
+**`ex-empty-state-card`**: Empty-state illustration frame.
 - Properties: `backgroundColor`, `rounded`, `padding`, `captionTypography`
 
-**`ex-toast`** — Toast notification surface — feature-card shape + medium shadow.
+**`ex-toast`**: Toast notification surface (feature-card shape + medium shadow).
 - Properties: `backgroundColor`, `rounded`, `padding`, `typography`
 
 
@@ -523,15 +523,15 @@ The brand uses illustrative SVGs of zaps / workflows + product screenshots insid
 
 ### Do
 - Reserve `{colors.primary}` Zapier orange for every primary CTA. The saturated orange IS the conversion signature.
-- Keep canvas WARM — `{colors.canvas}` `#fffefb` cream, not pure white. The temperature is the brand voice.
+- Keep canvas WARM: `{colors.canvas}` `#fffefb` cream, not pure white. The temperature is the brand voice.
 - Set hero headlines in `{typography.display-xl}` Degular Display weight 500. Sentence-case, no uppercase.
 - Pair Degular Display (hero, eyebrow) with Inter (everything else). Two faces, two roles.
 - Use `{rounded.md}` 12 px for buttons + cards. The middle radius is the brand's signature.
-- Pair orange CTA with ink-dark text on cream backgrounds — the three-token rhythm is the brand's whole conversion story.
+- Pair orange CTA with ink-dark text on cream backgrounds: the three-token rhythm is the brand's whole conversion story.
 
 ### Don't
 - Don't replace cream canvas with pure white. The warmth is the brand.
 - Don't use pure black ink. The coffee-warmth in `#201515` carries through every text color.
 - Don't render CTAs as pills. The brand's button is 12 px rounded rectangle.
 - Don't introduce a second chromatic accent. Orange + cream + coffee is the entire palette.
-- Don't substitute Degular Display with a cool geometric sans (e.g., generic Helvetica) — the brand's display face has warm proportions that the substitute doesn't capture.
+- Don't substitute Degular Display with a cool geometric sans (e.g., generic Helvetica): the brand's display face has warm proportions that the substitute doesn't capture.

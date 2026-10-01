@@ -1,6 +1,6 @@
 # Generation Modes
 
-How to choose the right working mode for a design task. There are three primary modes — Direct Generation, Shotgun Exploration, and Consultation — and the work of the first sixty seconds is picking which one applies. The wrong mode wastes hours; the right mode compounds.
+How to choose the right working mode for a design task. There are three primary modes (Direct Generation, Shotgun Exploration, and Consultation) and the work of the first sixty seconds is picking which one applies. The wrong mode wastes hours; the right mode compounds.
 
 This document codifies how to choose, how each mode flows, and how exploration converts back into a single committed direction.
 
@@ -47,7 +47,7 @@ This document codifies how to choose, how each mode flows, and how exploration c
 
 **Time profile.** Front-loaded. Most of the time is in producing comparable variants and presenting them well. The decision itself is fast once the variants are visible.
 
-**Failure mode.** Frankenstein synthesis — taking the type from variant A, the color from variant B, the layout from variant C, and gluing them together. This destroys the coherence that made each variant good. The fix: iterate the winning variant, treat the losers as critique, never average across.
+**Failure mode.** Frankenstein synthesis: taking the type from variant A, the color from variant B, the layout from variant C, and gluing them together. This destroys the coherence that made each variant good. The fix: iterate the winning variant, treat the losers as critique, never average across.
 
 ---
 
@@ -67,7 +67,7 @@ This document codifies how to choose, how each mode flows, and how exploration c
 
 **Time profile.** Front-loaded on discovery, then a single coherent proposal, then iteration. The build phase is fast once the consultation lands because there is nothing left to decide.
 
-**Failure mode.** Death by options — presenting every aesthetic, every palette, every font, every layout as a menu. The stakeholder cannot evaluate; the consultant has dodged the work of recommending. The fix: have an opinion. Propose the whole system. Defend the moves. Adjust on pushback.
+**Failure mode.** Death by options: presenting every aesthetic, every palette, every font, every layout as a menu. The stakeholder cannot evaluate; the consultant has dodged the work of recommending. The fix: have an opinion. Propose the whole system. Defend the moves. Adjust on pushback.
 
 ---
 
@@ -96,9 +96,9 @@ The default is **direct generation**. Most tasks have enough specificity that on
 
 - No brief exists. The work starts with "we need a design for X" and nothing else.
 - Multiple stakeholders disagree on what the product is.
-- Brand equity is in play — there is something to preserve, and the rules of preservation have not been articulated.
+- Brand equity is in play: there is something to preserve, and the rules of preservation have not been articulated.
 - The success metric is undefined. "Looks better" is not a metric and the consultation is what makes one concrete.
-- The product is genuinely new — no precedent in the codebase, no analog in the team's history.
+- The product is genuinely new: no precedent in the codebase, no analog in the team's history.
 - The stakeholder is asking for a recommendation, not a design.
 
 ---
@@ -115,7 +115,7 @@ Stakeholders
    4+             Consult     Direct (with sign-off)
 ```
 
-**Brief is sharp.** Direct, regardless of stakeholders. With multiple stakeholders, get sign-off before building — but build, do not workshop.
+**Brief is sharp.** Direct, regardless of stakeholders. With multiple stakeholders, get sign-off before building, but build, do not workshop.
 
 **Brief is vague, one stakeholder.** Shotgun. Produce three variants, let the single decision-maker pick. Conversation can resolve the rest after they have something visual to react to.
 
@@ -142,9 +142,9 @@ The frame should produce four things:
 
 If items 1-4 are concrete, the mode is **direct**.
 
-If item 2 is "to discover" but 1, 3, 4 are sharp, the mode is **shotgun** — variants explore axis 2 while holding the others constant.
+If item 2 is "to discover" but 1, 3, 4 are sharp, the mode is **shotgun**: variants explore axis 2 while holding the others constant.
 
-If items 1, 3, and 4 are themselves fuzzy, the mode is **consultation** — the frame itself needs more work before any visual production starts.
+If items 1, 3, and 4 are themselves fuzzy, the mode is **consultation**: the frame itself needs more work before any visual production starts.
 
 ### The flow into each mode
 
@@ -190,7 +190,7 @@ Clean grotesk vs expressive display vs editorial serif-sans pairing. Use when th
 
 ### Picking the axis
 
-The strongest shotguns vary one axis sharply and let the consequences fall where they may. Trying to vary every axis at once produces incomparable variants — three variants that disagree on everything cannot be compared at all.
+The strongest shotguns vary one axis sharply and let the consequences fall where they may. Trying to vary every axis at once produces incomparable variants: three variants that disagree on everything cannot be compared at all.
 
 If the team cannot agree which axis is the contested one, that is itself a signal: the brief is too fuzzy and consultation comes before shotgun.
 
@@ -208,7 +208,7 @@ The most tempting failure mode in shotgun work is to take "the typography from A
 
 ### Why synthesis fails
 
-- **Choices are coherent because they were made together.** Taking the type from A removes it from the structure that made it work. The serif/grotesk pairing in A was chosen against A's spacing rhythm and A's palette. Drop it into B's environment and it stops working — the rhythm is different, the contrast is different, the proportions disagree.
+- **Choices are coherent because they were made together.** Taking the type from A removes it from the structure that made it work. The serif/grotesk pairing in A was chosen against A's spacing rhythm and A's palette. Drop it into B's environment and it stops working: the rhythm is different, the contrast is different, the proportions disagree.
 
 - **The synthesis has no author.** Every variant was a deliberate point of view; the synthesis is a committee. The synthesis is what each individual variant was designed not to be.
 
@@ -224,11 +224,11 @@ Take the variant that wins on the most important axis. Refine it with feedback f
 
 **2. Treat the others as critique, not parts.**
 
-What did A do well that B could absorb without breaking? Often the answer is "B was too restrained — borrow A's confidence with type scale." That is a refinement, not a frankenstein. The principle from A is absorbed; the literal element is not transplanted.
+What did A do well that B could absorb without breaking? Often the answer is "B was too restrained: borrow A's confidence with type scale." That is a refinement, not a frankenstein. The principle from A is absorbed; the literal element is not transplanted.
 
 **3. Run a second shotgun.**
 
-If the answer is genuinely "the right direction is none of these but somewhere in between," run another round with new concepts informed by the first. The second round's concepts are not averages of the first — they are new positions that absorb the lessons.
+If the answer is genuinely "the right direction is none of these but somewhere in between," run another round with new concepts informed by the first. The second round's concepts are not averages of the first. They are new positions that absorb the lessons.
 
 ### The boundary
 
@@ -238,7 +238,7 @@ The boundary between legitimate iteration and Frankenstein synthesis is the word
 
 ## Converting exploration output back into a commit-to-one decision
 
-The shotgun is the start of the work, not the end. Once the winner is picked, the mode switches back to direct generation — and the discipline is to actually commit.
+The shotgun is the start of the work, not the end. Once the winner is picked, the mode switches back to direct generation, and the discipline is to actually commit.
 
 ### The handoff
 
@@ -268,7 +268,7 @@ Save the losing variants as evidence of "directions rejected" for future session
 
 2. **The decision log is auditable.** If a stakeholder asks "why didn't we try X?" the answer is either "we did, and we rejected it because Y" or "we did not, here is why." Both are better than a shrug.
 
-The saves go into the project's design archive — not deleted, not lost, but clearly marked as not-the-direction.
+The saves go into the project's design archive, not deleted, not lost, but clearly marked as not-the-direction.
 
 ---
 
@@ -282,7 +282,7 @@ You started direct, you are halfway through, and you cannot decide between two g
 
 ### Escalate direct → consultation
 
-You started direct, you are halfway through, and you realize the brief is wrong — the product is not what you thought, the audience is different, the constraints are heavier than disclosed. Stop. Do not push through. Surface the ambiguity and run a consultation conversation. The cost of pausing is far less than the cost of shipping a design built on the wrong assumptions.
+You started direct, you are halfway through, and you realize the brief is wrong: the product is not what you thought, the audience is different, the constraints are heavier than disclosed. Stop. Do not push through. Surface the ambiguity and run a consultation conversation. The cost of pausing is far less than the cost of shipping a design built on the wrong assumptions.
 
 ### Escalate shotgun → consultation
 
@@ -290,7 +290,7 @@ You generated three variants, none of them are landing, and the stakeholder cann
 
 ### Downgrade consultation → direct
 
-You started a consultation, the stakeholder is decisive, the system fell into place fast. Skip the long discovery — propose the system, defend it, get the call, build.
+You started a consultation, the stakeholder is decisive, the system fell into place fast. Skip the long discovery: propose the system, defend it, get the call, build.
 
 ### Downgrade shotgun → direct
 
@@ -312,7 +312,7 @@ These hold whether the mode is direct, shotgun, or consultation:
 
 5. **Default to the more restrained option.** When the stakeholder is genuinely torn, recommend the quieter choice. Restraint compounds; loudness does not.
 
-6. **Commit and ship.** Litigation after commit is overhead. Demo-driven iteration is progress. The mode picks itself when the question is "what should I do?" — but once chosen, the mode is closed until the work ships or the brief changes.
+6. **Commit and ship.** Litigation after commit is overhead. Demo-driven iteration is progress. The mode picks itself when the question is "what should I do?", but once chosen, the mode is closed until the work ships or the brief changes.
 
 ---
 
@@ -328,7 +328,7 @@ These hold whether the mode is direct, shotgun, or consultation:
 
 - **Synthesis after a shotgun.** Already covered: never take the type from A, color from B, layout from C and call it a fourth option. Iterate the winner instead.
 
-- **Skipping the decision log in consultation.** A consultation that produces no written record of decisions and rationale is not a consultation — it is a meeting. The log is the artifact that prevents re-litigation.
+- **Skipping the decision log in consultation.** A consultation that produces no written record of decisions and rationale is not a consultation. It is a meeting. The log is the artifact that prevents re-litigation.
 
 - **Refusing to commit.** "I could go either way" is not a consultation; it is a deferral. The consultant's job is to have the way. Defer only when new information is genuinely needed.
 
@@ -344,7 +344,7 @@ Every working session opens with the same three questions, and the answers deter
 
 2. **Is the visual direction known?** If yes, direct. If no, shotgun (for vague direction) or consultation (for absent direction).
 
-3. **Who decides?** If one stakeholder, the work can move fast. If multiple stakeholders disagree, consultation comes first — variants without alignment produce more disagreement, not less.
+3. **Who decides?** If one stakeholder, the work can move fast. If multiple stakeholders disagree, consultation comes first: variants without alignment produce more disagreement, not less.
 
 These three questions are the cheapest part of the session and they prevent the most expensive failure mode: spending hours producing the wrong artifact in the wrong mode.
 
@@ -358,6 +358,6 @@ Each mode teaches the system.
 - **Shotgun mode** builds range. The more variants you produce, the more clearly you see what differentiates aesthetics and the less likely you are to default to a generic answer.
 - **Consultation mode** builds judgment. The more discoveries you run, the better you get at recognizing fuzz before it costs hours and at proposing systems that actually hold together.
 
-The goal is not to specialize in one mode; it is to know which mode applies and to switch fluidly. A senior designer runs all three in the same week and barely notices the switching — the mode is part of the work, not separate from it.
+The goal is not to specialize in one mode; it is to know which mode applies and to switch fluidly. A senior designer runs all three in the same week and barely notices the switching: the mode is part of the work, not separate from it.
 
 Hold the rules. Pick the mode. Ship the work. The next project gets easier.

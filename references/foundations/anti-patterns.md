@@ -1,8 +1,8 @@
-# Anti-patterns — lintable AI fingerprints
+# Anti-patterns: lintable AI fingerprints
 
 > The 30 rules below are DETERMINISTIC. Each one has a regex or DOM-query that detects it without an LLM. Run them as a pre-commit hook, in CI, or via the plugin's `/ux-lint` command. Where `styles/anti-slop.md` catalogs the aesthetic feel of AI-generated output, this file catalogs the patterns a linter can flag mechanically.
 
-These are not preferences. They are mechanical tells — patterns the unconstrained generator reaches for reflexively, and that mark output as machine-made within seconds of a human review. Strip them at ship time. Strip them in CI. Don't ship them.
+These are not preferences. They are mechanical tells: patterns the unconstrained generator reaches for reflexively, and that mark output as machine-made within seconds of a human review. Strip them at ship time. Strip them in CI. Don't ship them.
 
 ---
 
@@ -118,7 +118,7 @@ body { color: #09090b; background: #fafaf8; }
 
 #### 3. Pure white `#FFFFFF` canvas on premium marketing
 
-**Why it's bad**: Pure white reads as "default" — the value the editor shipped with, not a value that was chosen. On premium marketing surfaces, a warm off-white in the `#FAFAF8` to `#F7F6F3` range carries the same airy feel without the unintentional-looking sterility.
+**Why it's bad**: Pure white reads as "default" (the value the editor shipped with, not a value that was chosen). On premium marketing surfaces, a warm off-white in the `#FAFAF8` to `#F7F6F3` range carries the same airy feel without the unintentional-looking sterility.
 
 **How to detect**:
 
@@ -132,7 +132,7 @@ body { color: #09090b; background: #fafaf8; }
 
 In marketing / landing surfaces (files under `/marketing`, `/landing`, `/website`, `/(home|hero|brand)`), flag every occurrence.
 
-**Better alternative**: Warm off-white — `#FAFAF8`, `#F7F6F3`, `#F5F4F0`. Adjust toward the brand's temperature.
+**Better alternative**: Warm off-white (`#FAFAF8`, `#F7F6F3`, `#F5F4F0`). Adjust toward the brand's temperature.
 
 **Severity**: Medium
 **Mode**: brand-only
@@ -153,7 +153,7 @@ In marketing / landing surfaces (files under `/marketing`, `/landing`, `/website
 
 #### 4. Default shadcn slate palette unmodified
 
-**Why it's bad**: The default shadcn token set — slate-50 through slate-950 mapped onto the standard component primitives — is a known fingerprint. Anyone who has built one shadcn app recognizes the look within two seconds. Customization is required.
+**Why it's bad**: The default shadcn token set (slate-50 through slate-950 mapped onto the standard component primitives) is a known fingerprint. Anyone who has built one shadcn app recognizes the look within two seconds. Customization is required.
 
 **How to detect**: Look for the unmodified token names in CSS / Tailwind config:
 
@@ -198,7 +198,7 @@ Or detect the default `globals.css` from init with no token modification:
 
 #### 5. Three-stop rainbow gradient
 
-**Why it's bad**: Three-stop gradients with broad hue ranges (pink-purple-blue, orange-pink-purple, blue-cyan-green) read as decorative noise. The eye can't parse them as intentional color choices — they look like color test panels.
+**Why it's bad**: Three-stop gradients with broad hue ranges (pink-purple-blue, orange-pink-purple, blue-cyan-green) read as decorative noise. The eye can't parse them as intentional color choices. They look like color test panels.
 
 **How to detect**:
 
@@ -237,7 +237,7 @@ Then check the hue distance: if `from` and `to` are more than 60 degrees apart i
 
 #### 6. Inter as the brand display face
 
-**Why it's bad**: Inter is a strong body face — its hinting, x-height, and metrics are tuned for screen body copy. As a display face on a brand surface, it reads as "the default font for shipping a startup landing page from 2022." Every other product is using it; using it for display gives up the chance to have a typographic identity.
+**Why it's bad**: Inter is a strong body face (its hinting, x-height, and metrics are tuned for screen body copy). As a display face on a brand surface, it reads as "the default font for shipping a startup landing page from 2022." Every other product is using it; using it for display gives up the chance to have a typographic identity.
 
 **Inter as body type is fine.** Inter as the display face is the violation.
 
@@ -255,7 +255,7 @@ font-(?:display|hero|headline|title)[^:]*:[^;]*Inter
 
 Also flag Tailwind's `font-sans` declaration in tailwind.config when it points only to Inter and is used on display elements.
 
-**Better alternative**: A distinctive display face — Geist, Satoshi, Cabinet Grotesk, General Sans, Outfit, Suisse, or a brand-specific variable sans. Pair with Inter (or a workhorse sans) for body.
+**Better alternative**: A distinctive display face (Geist, Satoshi, Cabinet Grotesk, General Sans, Outfit, Suisse, or a brand-specific variable sans). Pair with Inter (or a workhorse sans) for body.
 
 **Severity**: High
 **Mode**: brand-only
@@ -352,7 +352,7 @@ uppercase[^"']*(?:text-(?:base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl))
 
 #### 9. Serif on dashboards / admin / app surfaces
 
-**Why it's bad**: Serif faces have higher visual texture and lower screen-reading legibility at small sizes. They belong on editorial, marketing, and brand surfaces — never on data-dense product UI. Serif in a dashboard reads as "an editor styled a database admin like a magazine."
+**Why it's bad**: Serif faces have higher visual texture and lower screen-reading legibility at small sizes. They belong on editorial, marketing, and brand surfaces, never on data-dense product UI. Serif in a dashboard reads as "an editor styled a database admin like a magazine."
 
 **How to detect**: Find serif font-family declarations in files matching dashboard / admin / app paths:
 
@@ -391,7 +391,7 @@ Also flag Tailwind `font-serif` utility used inside those file paths.
 
 #### 10. Display weight set to bold (700+)
 
-**Why it's bad**: Modern display type carries its weight through tracking, size, and contrast — not through bold weight. Display set to 700 or heavier reads as a default editor setting rather than a typographic decision. The premium look uses medium (500) or semibold (600) at large sizes.
+**Why it's bad**: Modern display type carries its weight through tracking, size, and contrast, not through bold weight. Display set to 700 or heavier reads as a default editor setting rather than a typographic decision. The premium look uses medium (500) or semibold (600) at large sizes.
 
 **How to detect**:
 
@@ -428,7 +428,7 @@ Tailwind:
 
 #### 11. Three equal cards in a row ("feature row" cliché)
 
-**Why it's bad**: Three equal cards with three icons, three short titles, three short paragraphs — this is the strongest layout fingerprint in AI-generated marketing surfaces. The generator reaches for it on every "features" prompt because it's the safest default. Users skim past it without registering content.
+**Why it's bad**: Three equal cards with three icons, three short titles, three short paragraphs (this is the strongest layout fingerprint in AI-generated marketing surfaces). The generator reaches for it on every "features" prompt because it's the safest default. Users skim past it without registering content.
 
 **How to detect**:
 
@@ -515,7 +515,7 @@ Or Tailwind: `bg-cover` with a centered h1 inside.
 
 #### 13. `h-screen` on mobile hero
 
-**Why it's bad**: `h-screen` resolves to `100vh`. On iOS Safari, `100vh` includes the address bar even when it's visible — which means the hero is taller than the viewport while the bar is showing, then suddenly correct when it collapses. The result: a layout that jumps when the user scrolls, and a hero that's not actually full-height when they first land.
+**Why it's bad**: `h-screen` resolves to `100vh`. On iOS Safari, `100vh` includes the address bar even when it's visible, which means the hero is taller than the viewport while the bar is showing, then suddenly correct when it collapses. The result: a layout that jumps when the user scrolls, and a hero that's not actually full-height when they first land.
 
 **How to detect**:
 
@@ -685,7 +685,7 @@ Also flag bare `<a>` text inside buttons:
 
 #### 17. Generic placeholder names
 
-**Why it's bad**: "John Doe" / "Jane Doe" / "Sarah Chan" / "John Smith" are content slop fingerprints. They signal to the reader (and to anyone reviewing the work) that nobody actually thought about who would be using the product. Real names — even placeholder real names that fit the product's market — make the surface read as considered.
+**Why it's bad**: "John Doe" / "Jane Doe" / "Sarah Chan" / "John Smith" are content slop fingerprints. They signal to the reader (and to anyone reviewing the work) that nobody actually thought about who would be using the product. Real names (even placeholder real names that fit the product's market) make the surface read as considered.
 
 **How to detect**:
 
@@ -720,7 +720,7 @@ const exampleUser = { name: 'Maya Iqbal', email: 'maya@northwind.co' };
 
 #### 18. Fake brand names
 
-**Why it's bad**: "Acme," "Nexus," "SmartFlow," "Zenith," "Stellar" — these are the canonical "fake startup names" that have appeared in every tutorial, every starter template, every screenshot from a content farm. The reader has seen them a thousand times. They register as "this product hasn't done its research."
+**Why it's bad**: "Acme," "Nexus," "SmartFlow," "Zenith," "Stellar", these are the canonical "fake startup names" that have appeared in every tutorial, every starter template, every screenshot from a content farm. The reader has seen them a thousand times. They register as "this product hasn't done its research."
 
 **How to detect**:
 
@@ -728,7 +728,7 @@ const exampleUser = { name: 'Maya Iqbal', email: 'maya@northwind.co' };
 \b(?:Acme|Acme\s+Corp|Acme\s+Inc|Nexus|SmartFlow|Zenith|Stellar|Lorem|Ipsum|Globex|Initech|Cyberdyne)\b
 ```
 
-**Better alternative**: Use real customer names where available. Where unavailable, use names that sound like they could be real products in the target market — short, distinctive, not generic-tech-vocabulary.
+**Better alternative**: Use real customer names where available. Where unavailable, use names that sound like they could be real products in the target market: short, distinctive, not generic-tech-vocabulary.
 
 **Severity**: Medium
 **Mode**: brand-only
@@ -874,7 +874,7 @@ class="[^"]*(?:icon|emoji)[^"]*"[^>]*>[\u{1F300}-\u{1F9FF}]
 
 #### 22. Icon-only button without `aria-label`
 
-**Why it's bad**: Icon-only buttons have no accessible name. A screen reader user hears "button" with no further information. The button is unusable for them — they have to guess, or skip it entirely. WCAG 2.1 Success Criterion 4.1.2 (Name, Role, Value) requires every interactive element to have an accessible name.
+**Why it's bad**: Icon-only buttons have no accessible name. A screen reader user hears "button" with no further information. The button is unusable for them. They have to guess, or skip it entirely. WCAG 2.1 Success Criterion 4.1.2 (Name, Role, Value) requires every interactive element to have an accessible name.
 
 **How to detect**:
 
@@ -968,7 +968,7 @@ Or if a button is impossible:
 
 #### 24. Anchor without `href` used as button
 
-**Why it's bad**: `<a>` without `href` is not focusable by default, has no role announcement, and looks like a link to a sighted user (who expects link behavior — middle-click to new tab, drag to bookmark) while behaving like a button. Misleading on every axis.
+**Why it's bad**: `<a>` without `href` is not focusable by default, has no role announcement, and looks like a link to a sighted user (who expects link behavior: middle-click to new tab, drag to bookmark) while behaving like a button. Misleading on every axis.
 
 **How to detect**:
 
@@ -1150,7 +1150,7 @@ For CSS:
 (?:div|span|p|li|article|section)[^{]*\{[^}]*cursor:\s*pointer
 ```
 
-(Naive — also requires checking the same selector or descendants for actual click handlers. The regex catches the obvious case.)
+(Naive: also requires checking the same selector or descendants for actual click handlers. The regex catches the obvious case.)
 
 **Better alternative**: Use `cursor: pointer` only on elements that respond to a click. If the element shouldn't be clickable, drop the cursor.
 
@@ -1178,7 +1178,7 @@ button, a, [role="button"] { cursor: pointer; }
 
 #### 29. Missing `alt` attribute on `<img>`
 
-**Why it's bad**: Three failures at once. Screen readers cannot describe the image to their user — accessibility failure (WCAG 2.1 SC 1.1.1). Search engines cannot index the image — SEO failure. When the image fails to load, the user sees a broken-image icon with no context — UX failure.
+**Why it's bad**: Three failures at once. Screen readers cannot describe the image to their user: accessibility failure (WCAG 2.1 SC 1.1.1). Search engines cannot index the image: SEO failure. When the image fails to load, the user sees a broken-image icon with no context: UX failure.
 
 **How to detect**:
 
@@ -1223,7 +1223,7 @@ For decorative:
 
 #### 30. Missing `width` and `height` attributes on `<img>`
 
-**Why it's bad**: Without explicit width and height, the browser cannot reserve space for the image before it loads. When the image finally arrives, it pushes content around, causing layout shift (CLS). High CLS scores are a Core Web Vitals failure and a direct SEO ranking penalty. They also visually annoy the user — text they were reading jumps as images load below.
+**Why it's bad**: Without explicit width and height, the browser cannot reserve space for the image before it loads. When the image finally arrives, it pushes content around, causing layout shift (CLS). High CLS scores are a Core Web Vitals failure and a direct SEO ranking penalty. They also visually annoy the user: text they were reading jumps as images load below.
 
 **How to detect**:
 
@@ -1265,7 +1265,7 @@ import Image from 'next/image';
 
 ---
 
-## Quick reference — all 30 in a single table
+## Quick reference: all 30 in a single table
 
 | # | Rule | Severity | Mode | Detect (short regex / selector) |
 |---|---|---|---|---|

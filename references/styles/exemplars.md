@@ -1,8 +1,8 @@
-# Exemplar patterns — the world-class premium catalog
+# Exemplar patterns: the world-class premium catalog
 
 A distilled catalog of patterns observed across premium real-world surfaces. Each pattern is described in functional terms: when to use it, what it costs, what makes it distinctive.
 
-Use this catalog to build surfaces that compete with the best in the world. Each pattern has been seen multiple times across high-end products; the convergence isn't accident — it's the shape of premium taste in this era. Pick patterns that match the brief, execute them with precision, ship them.
+Use this catalog to build surfaces that compete with the best in the world. Each pattern has been seen multiple times across high-end products; the convergence isn't accident. It's the shape of premium taste in this era. Pick patterns that match the brief, execute them with precision, ship them.
 
 This file is organized by surface and intent:
 - Premium SaaS catalog overview
@@ -63,84 +63,84 @@ A catalog of nav treatments across premium surfaces. Pick by the style system an
 
 - **When to use**: most premium marketing surfaces.
 - **Distinctive marker**: nav was always there but politely. The transition kicks in after first scroll, not before.
-- **Cost**: low — CSS sticky + scroll listener.
+- **Cost**: low (CSS sticky + scroll listener).
 
 ### Floating glass pill nav
-Detached from the viewport top with substantial top margin. Content includes brand mark, primary links, primary CTA. On scroll past hero, backdrop blur intensifies — but the pill never glues to the edge.
+Detached from the viewport top with substantial top margin. Content includes brand mark, primary links, primary CTA. On scroll past hero, backdrop blur intensifies, but the pill never glues to the edge.
 
 - **When to use**: high-end maximalist styles, premium product marketing.
 - **Distinctive marker**: the detachment. The pill floats; it doesn't sit.
-- **Cost**: low — CSS backdrop-filter + position fixed.
+- **Cost**: low (CSS backdrop-filter + position fixed).
 
 ### Minimal split nav
 Logo left, primary actions right, single accent on the active item. Thin horizontal rail, no background fill, sits on canvas. Optionally subtle backdrop blur after first scroll.
 
 - **When to use**: minimalist styles, content-led SaaS.
 - **Distinctive marker**: the nav sits on canvas. No rail background, no fill, just type.
-- **Cost**: zero — pure layout.
+- **Cost**: zero (pure layout).
 
 ### Mega menu on hover
-Hover-revealed nav panels are not just link lists — they include preview thumbnails, feature highlights, and a "what's new" callout. Multi-column layout grouped by job-to-be-done.
+Hover-revealed nav panels are not just link lists: they include preview thumbnails, feature highlights, and a "what's new" callout. Multi-column layout grouped by job-to-be-done.
 
 - **When to use**: products with many sub-categories or audiences.
 - **Distinctive marker**: the mega menu is treated as a micro-page.
-- **Cost**: medium — staggered reveal + content composition.
+- **Cost**: medium (staggered reveal + content composition).
 
 ### Status indicator in nav
 A 6px green dot + 12px caps text saying "All systems operational" in the nav. Links to a status page.
 
 - **When to use**: infrastructure products, developer tools, fintech.
 - **Distinctive marker**: tiny but powerful trust signal.
-- **Cost**: zero — small element with link.
+- **Cost**: zero (small element with link).
 
 ### "What's new" badge in nav
 A top-nav item ("What's new" or "Changelog") with a small dot or badge for recency.
 
 - **When to use**: products with active development cadence.
 - **Distinctive marker**: signals active development to engineers; gives returning visitors a destination.
-- **Cost**: zero — badge UI.
+- **Cost**: zero (badge UI).
 
 ### Dock-style magnification nav
 Navbar at the edge with icons that scale fluidly on hover; neighbors grow proportionally less.
 
 - **When to use**: creative tools, design-forward portfolios.
 - **Distinctive marker**: the fluid magnification. The hover state is the entire interaction.
-- **Cost**: low — CSS scale + cubic-bezier easing.
+- **Cost**: low (CSS scale + cubic-bezier easing).
 
 ### Morphing status pill
 Pill-shaped component that morphs to show status / alerts. Pop-up notification badge that emerges with overshoot spring, stays 3 seconds, vanishes.
 
 - **When to use**: products with live data, status surfaces.
 - **Distinctive marker**: the overshoot spring. The badge has weight.
-- **Cost**: medium — layout animation + shared element IDs.
+- **Cost**: medium (layout animation + shared element IDs).
 
 ### Floating speed dial
 FAB that springs out into a curved line of secondary actions.
 
 - **When to use**: mobile-first surfaces, action-heavy dashboards.
 - **Distinctive marker**: the radial expansion. Actions arc out, not stack.
-- **Cost**: medium — spring physics + path math.
+- **Cost**: medium (spring physics + path math).
 
 ### Sticky in-page secondary nav
 Once the user scrolls past the hero, a thin secondary nav often pins to the top with section anchors (Overview, Features, Pricing, FAQ).
 
 - **When to use**: long marketing pages, product pages with deep content.
 - **Distinctive marker**: quietly provides a table of contents without forcing it.
-- **Cost**: low — sticky position + scroll-spy.
+- **Cost**: low (sticky position + scroll-spy).
 
 ### Persona-led nav dropdown
 "Solutions" or "Use cases" as a dropdown, with entries oriented to user roles (startups, agencies, finance teams, creators) rather than to features.
 
 - **When to use**: products serving multiple verticals or personas.
 - **Distinctive marker**: the orientation is "who you are" not "what we do."
-- **Cost**: low — content discipline + dropdown.
+- **Cost**: low (content discipline + dropdown).
 
 ### Brutalist horizontal rail
 Uppercase monospace links separated by vertical bars (`|`) or directional markers. Active state inverts: link sits inside a solid block of foreground color with background-colored text.
 
 - **When to use**: industrial / brutalist styles.
-- **Distinctive marker**: the inversion. No hover lift, no underline animation — the inversion is the entire interaction.
-- **Cost**: zero — CSS.
+- **Distinctive marker**: the inversion. No hover lift, no underline animation: the inversion is the entire interaction.
+- **Cost**: zero (CSS).
 
 ---
 
@@ -150,50 +150,50 @@ The structural spine of a premium marketing page. Different cohorts converge on 
 
 ### Canonical premium B2B flow
 
-1. **Hero** — value-prop + sub + 1-2 CTAs + product image or short motion. Above-the-fold on a 1440×900 viewport with room to spare.
-2. **Social proof strip** — logo marquee of customers, single row, monochrome. Immediately after hero.
-3. **Problem framing / "old way vs. new way"** — short section naming the friction users experience today. Sometimes a side-by-side comparison.
-4. **Core feature pillars (3-4)** — each pillar is a row with screenshot + headline + 2-3 bullet outcomes. Alternating image-left, image-right.
-5. **"How it works" — numbered step sequence (3-5 steps)** — each step with number, title, short description, small visual.
-6. **Use-case / industry / persona section** — platform applied to different contexts.
-7. **Outcome / ROI section** — customer quote + headline metric ("21x faster", "$3M saved").
-8. **Trust & security section** — compliance badges + short paragraph on posture.
-9. **FAQ section (optional)** — 5-8 questions, accordion-collapsed.
-10. **Final CTA section** — restated value-prop, single filled CTA, tinted background.
-11. **Footer** — navigation + secondary links + small print.
+1. **Hero**: value-prop + sub + 1-2 CTAs + product image or short motion. Above-the-fold on a 1440×900 viewport with room to spare.
+2. **Social proof strip**: logo marquee of customers, single row, monochrome. Immediately after hero.
+3. **Problem framing / "old way vs. new way"**: short section naming the friction users experience today. Sometimes a side-by-side comparison.
+4. **Core feature pillars (3-4)**: each pillar is a row with screenshot + headline + 2-3 bullet outcomes. Alternating image-left, image-right.
+5. **"How it works", numbered step sequence (3-5 steps)**, each step with number, title, short description, small visual.
+6. **Use-case / industry / persona section**: platform applied to different contexts.
+7. **Outcome / ROI section**: customer quote + headline metric ("21x faster", "$3M saved").
+8. **Trust & security section**: compliance badges + short paragraph on posture.
+9. **FAQ section (optional)**: 5-8 questions, accordion-collapsed.
+10. **Final CTA section**: restated value-prop, single filled CTA, tinted background.
+11. **Footer**: navigation + secondary links + small print.
 
 ### Editorial / AI / fintech flow (pyramid descent)
 
-1. **Hero / thesis** — one big statement of what we are.
-2. **Product pillars** — small number (often three) of named product modules, each with its own card.
-3. **Feature deep-dives** — alternating column rhythm walking through the most important capabilities.
-4. **Evidence layer** — customer logos, then a testimonial or two, then a stat strip.
-5. **Trust/safety/security band** — relevant especially to fintech and AI, framed in calm UI rather than dramatic icons.
-6. **Press / external validation** — headline-style mentions, treated like newspaper clippings.
-7. **Final CTA** — repeat of the hero CTA.
-8. **Footer sitemap** — dense, navigable.
+1. **Hero / thesis**: one big statement of what we are.
+2. **Product pillars**: small number (often three) of named product modules, each with its own card.
+3. **Feature deep-dives**: alternating column rhythm walking through the most important capabilities.
+4. **Evidence layer**: customer logos, then a testimonial or two, then a stat strip.
+5. **Trust/safety/security band**: relevant especially to fintech and AI, framed in calm UI rather than dramatic icons.
+6. **Press / external validation**: headline-style mentions, treated like newspaper clippings.
+7. **Final CTA**: repeat of the hero CTA.
+8. **Footer sitemap**: dense, navigable.
 
 ### Developer-tooling flow
 
-1. **Hero** — headline + subhead + primary/secondary CTA + product fragment (code sample, terminal, dashboard fragment).
-2. **Trust strip** — 6-12 customer logos, monochrome, evenly weighted.
-3. **Three-up value props** — what the product gives you, in 3 cards or 3 columns.
-4. **Deep-feature section #1** — a single feature blown out, often with a real code sample or terminal as the visual.
-5. **Deep-feature section #2** — a different angle — integrations, scale, security, pricing — visualized with a diagram or a dashboard fragment.
-6. **Quotes / testimonials** — 2-4 quotes from named engineers at known companies. Photo, name, title, company. Often with a measurable result attached.
-7. **Tertiary content** — blog/changelog teaser, docs callout, community card.
-8. **Footer CTA** — large display headline restating the value prop, primary CTA, secondary "talk to us" link.
-9. **Site footer** — 4-8 column link map, status indicator, locale switcher.
+1. **Hero**: headline + subhead + primary/secondary CTA + product fragment (code sample, terminal, dashboard fragment).
+2. **Trust strip**: 6-12 customer logos, monochrome, evenly weighted.
+3. **Three-up value props**: what the product gives you, in 3 cards or 3 columns.
+4. **Deep-feature section #1**: a single feature blown out, often with a real code sample or terminal as the visual.
+5. **Deep-feature section #2**: a different angle (integrations, scale, security, pricing) visualized with a diagram or a dashboard fragment.
+6. **Quotes / testimonials**: 2-4 quotes from named engineers at known companies. Photo, name, title, company. Often with a measurable result attached.
+7. **Tertiary content**: blog/changelog teaser, docs callout, community card.
+8. **Footer CTA**: large display headline restating the value prop, primary CTA, secondary "talk to us" link.
+9. **Site footer**: 4-8 column link map, status indicator, locale switcher.
 
 ### Creative / productivity flow
 
-1. **Hero** — short headline + 1-line subhead + 2 CTAs sits in the top 40% of the fold; the bottom 60% is an interactive demo, an animated product cluster, or a hero canvas with the product in motion.
-2. **Logo wall** — customer trust within the first 800-1000px of scroll. The logo wall is a permission slip for the deep-scroll.
-3. **Three to five major feature sections** — deep visuals, not 8-12 thin tiles.
-4. **Templates and community gallery** — horizontal-scroll carousel of templates or example projects.
-5. **Pricing teaser** — single line + link to full pricing.
-6. **Final CTA section** — full-bleed accent color, 100+ pixel display headline, single CTA.
-7. **Footer** — 4-6 columns sprawling but disciplined.
+1. **Hero**: short headline + 1-line subhead + 2 CTAs sits in the top 40% of the fold; the bottom 60% is an interactive demo, an animated product cluster, or a hero canvas with the product in motion.
+2. **Logo wall**: customer trust within the first 800-1000px of scroll. The logo wall is a permission slip for the deep-scroll.
+3. **Three to five major feature sections**: deep visuals, not 8-12 thin tiles.
+4. **Templates and community gallery**: horizontal-scroll carousel of templates or example projects.
+5. **Pricing teaser**: single line + link to full pricing.
+6. **Final CTA section**: full-bleed accent color, 100+ pixel display headline, single CTA.
+7. **Footer**: 4-6 columns sprawling but disciplined.
 
 ### AIDA mapping (cross-cohort)
 
@@ -201,7 +201,7 @@ The structural spine of a premium marketing page. Different cohorts converge on 
 - **Interest**: problem framing + core feature pillars.
 - **Desire**: how it works + ROI + customer outcomes.
 - **Action**: final CTA.
-- **Trust/security pre-empts Desire-to-Action objections** — placed deliberately just before the close.
+- **Trust/security pre-empts Desire-to-Action objections**: placed deliberately just before the close.
 
 ### Section flow rules
 
@@ -225,13 +225,13 @@ Hero, features, and proof sections lean overwhelmingly on real (or realistic-loo
 - **Source**: real screenshots, or pixel-perfect HTML/CSS rebuilds for scalability.
 
 ### Annotated UI screenshots
-Product UI shown with subtle callouts, inline labels, or small badges pointing to specific features. Annotations are restrained — a thin line and a short label, never a giant numbered circle.
+Product UI shown with subtle callouts, inline labels, or small badges pointing to specific features. Annotations are restrained: a thin line and a short label, never a giant numbered circle.
 
 - **Distinctive marker**: the screenshot becomes a small editorial diagram.
 - **Source**: overlay markup on the screenshot.
 
 ### Close-cropped feature shots
-Not the whole app at 30% zoom — a tight crop on the specific feature being discussed. Real-looking data inside (real-sounding company names, plausible numbers, realistic timestamps).
+Not the whole app at 30% zoom: a tight crop on the specific feature being discussed. Real-looking data inside (real-sounding company names, plausible numbers, realistic timestamps).
 
 - **Distinctive marker**: the crop. Premium screenshots show ONE thing well.
 - **Source**: design discipline.
@@ -249,7 +249,7 @@ Subtle Y-axis tilt + perspective shadow turns a screenshot from "documentation" 
 - **Source**: CSS transform.
 
 ### Stacked-card collage
-2-4 UI fragments layered at varying z-depths — a panel, an overlay, a tooltip, a popup. Creates dimensional composition.
+2-4 UI fragments layered at varying z-depths: a panel, an overlay, a tooltip, a popup. Creates dimensional composition.
 
 - **Distinctive marker**: choreographed overlap. Implies "several features at once" without overwhelming.
 - **Source**: z-stacking + intentional crop.
@@ -278,20 +278,20 @@ For AI products: sample images, audio waveforms with transcript captions, sample
 The logo wall and its placement rules live in `references/surfaces/landing.md` (Proof).
 
 ### Auto-scrolling logo marquee
-Customer logo rows infinite-scroll horizontally at 20-40 seconds per loop — slow enough that the eye doesn't snap to motion, fast enough that the row never feels static.
+Customer logo rows infinite-scroll horizontally at 20-40 seconds per loop: slow enough that the eye doesn't snap to motion, fast enough that the row never feels static.
 
 - **Distinctive marker**: sub-conscious speed. Pauses on hover so users can read.
 - **Source**: CSS keyframe animation.
 
 ### Editorial-framed customer portrait
-Photography of founders or customers shot in real environments (offices, studios) and treated with editorial restraint — natural lighting, no heavy retouching, no stock-photo gloss. Portraits at 4:5 or near-square with generous negative space.
+Photography of founders or customers shot in real environments (offices, studios) and treated with editorial restraint: natural lighting, no heavy retouching, no stock-photo gloss. Portraits at 4:5 or near-square with generous negative space.
 
 - **When to use**: testimonials, customer proof, founder stories.
 - **Distinctive marker**: real environments. Stock-photo gloss is absent.
 - **Source**: real photography production. Multiple aspect-ratio crops for responsive art direction.
 
 ### OS chrome preserved
-Real macOS / Windows / iOS chrome around product screenshots — the menubar, traffic lights, status bar — grounds the product as software you actually run.
+Real macOS / Windows / iOS chrome around product screenshots (the menubar, traffic lights, status bar) grounds the product as software you actually run.
 
 - **Distinctive marker**: stripping OS chrome makes screenshots look like prototypes. Keeping it grounds them.
 - **Source**: design discipline.
@@ -304,7 +304,7 @@ Real macOS / Windows / iOS chrome around product screenshots — the menubar, tr
 - **Source**: CSS radial gradients + slow animation.
 
 ### Per-section accent color in product UI
-The product itself often shows interface chrome tinted to match the section accent — a "color match" between marketing surface and product surface. The screenshot is a styled render where the accent is tuned to the surrounding context.
+The product itself often shows interface chrome tinted to match the section accent: a "color match" between marketing surface and product surface. The screenshot is a styled render where the accent is tuned to the surrounding context.
 
 - **Distinctive marker**: coherence signal almost no enterprise site bothers with.
 - **Source**: per-section asset variants.
@@ -317,7 +317,7 @@ Flat-vector or low-poly 3D in the site's accent palette. Geometric blobs, abstra
 - **Source**: custom illustration work.
 
 ### Diagrams matching the visual system
-Flowchart-style explainer diagrams (boxes with arrows, layered stacks, network meshes) appear for architecture or workflow features where a screenshot would mislead. Styled to match the rest of the visual system — same corner radii, same accent colors, same line weights.
+Flowchart-style explainer diagrams (boxes with arrows, layered stacks, network meshes) appear for architecture or workflow features where a screenshot would mislead. Styled to match the rest of the visual system: same corner radii, same accent colors, same line weights.
 
 - **Distinctive marker**: the diagrams feel like part of the system, not a Visio export.
 - **Source**: design discipline.
@@ -370,7 +370,7 @@ A catalog of voice moves observed across premium surfaces. Voice converges acros
 - Confident statement of position. Reads like the opening line of an essay.
 
 **Headline + deflating qualifier**
-"Make anything possible — in one tool."
+"Make anything possible: in one tool."
 "Build better sites, faster."
 - Big claim + small honest constraint. The constraint is what makes the claim believable.
 
@@ -386,7 +386,7 @@ Common rookie mistake: subhead restates the headline in different words. Premium
 
 **Action-verb CTAs naming the next concrete step**
 "Book a demo", "Start free", "See it in action", "Open account", "Run the demo".
-- Avoid "Learn more" — verb of inaction.
+- Avoid "Learn more": verb of inaction.
 - The CTA verb matches the product verb. If the product deploys, the CTA is "Deploy." If it queries, "Run a query."
 
 **Single primary action per section**
@@ -435,11 +435,11 @@ Words like "everywhere", "every team", "always", "the only" appear at most once 
 
 **Empty states are invitations**
 "Connect your first integration to start" beats "No data yet."
-"Nothing here yet — start with a template, or build from scratch" beats "Empty."
+"Nothing here yet: start with a template, or build from scratch" beats "Empty."
 - Premium products assume the user is smart and just needs the next move named.
 
 **Errors are specific and helpful**
-"Phone number missing — add a number to continue" beats "Form contains errors."
+"Phone number missing: add a number to continue" beats "Form contains errors."
 "Couldn't reach the server. Try again, or check status" beats "Something went wrong."
 - Errors name the field and the action.
 
@@ -468,7 +468,7 @@ First-person plural ("we help you...", "we believe...", "our mission") rare in h
 Third-person abstraction ("users can...", "the platform provides...") treated as a failure of intimacy.
 
 **Honest about AI limits**
-Where AI features are described, premium products tend to use "drafts", "suggests", "tries" — not "writes", "creates", "knows".
+Where AI features are described, premium products tend to use "drafts", "suggests", "tries", not "writes", "creates", "knows".
 The user remains the protagonist; the AI is the tool.
 
 ### Voice avoidances
@@ -498,7 +498,7 @@ The user remains the protagonist; the AI is the tool.
 - Naming a thing makes it real; describing a thing makes it brochure.
 
 **Single-word feature names treated as proper nouns**
-"Agents", "Spaces", "Boosts" — short, memorable, consistently capitalized.
+"Agents", "Spaces", "Boosts": short, memorable, consistently capitalized.
 - Becomes brand asset that gets reused across blog, docs, product.
 
 ---
@@ -515,7 +515,7 @@ Color discipline converges by cohort. The category signals the palette.
 
 **Accent**: single hue (saturated blue-cyan, sometimes violet, sometimes neutral-warm) carries CTA, link, and focus. Saturation high but lightness balanced for legibility. Separate tokens for light/dark modes, not a single hex.
 
-**Semantic color**: reserved for semantics (green success, red error, amber warning). Shows up in product mockups, status pills, log lines — never as decoration.
+**Semantic color**: reserved for semantics (green success, red error, amber warning). Shows up in product mockups, status pills, log lines, never as decoration.
 
 **Surface elevation**: 4-5 step lightness ladder (page → card → raised → popover → overlay). Each step ~3-5% L lift.
 
@@ -527,7 +527,7 @@ Color discipline converges by cohort. The category signals the palette.
 
 **Text**: deep charcoal in the `#171717` to `#1F1F1F` range. Brand mark and emphasized UI controls can drop to true black for contrast.
 
-**Accent**: single restrained accent — often a saturated blue, muted teal, or warm tone. Appears exclusively on primary CTAs, key icons, small marker dots.
+**Accent**: single restrained accent, often a saturated blue, muted teal, or warm tone. Appears exclusively on primary CTAs, key icons, small marker dots.
 
 **Semantic color**: surgically used in product screenshots, not in marketing chrome.
 
@@ -537,24 +537,24 @@ Color discipline converges by cohort. The category signals the palette.
 
 **Background**: near-monochrome foundation. True white or off-white canvas. Near-black text.
 
-**Accent**: at most one accent applied surgically. Often a desaturated tan, ochre, sand, or calibrated grey-blue — explicitly NOT purple-to-pink.
+**Accent**: at most one accent applied surgically. Often a desaturated tan, ochre, sand, or calibrated grey-blue: explicitly NOT purple-to-pink.
 
 **Notable absence**: brain icons, sparkle icons, neural-network nodes, glowing dots, mesh gradients in the purple-pink window. The semantic vocabulary of AI iconography is absent.
 
-**Substitute**: editorial language about research and direction. Numbers around accuracy, latency, model capability. Calm interface chrome around AI features — the same restrained neutral palette as the rest of the design.
+**Substitute**: editorial language about research and direction. Numbers around accuracy, latency, model capability. Calm interface chrome around AI features: the same restrained neutral palette as the rest of the design.
 
 ### Creative tools (more permissive of color)
 
 **Background**: pure neutrals form the chassis (white or near-white canvas with deep ink text).
 
-**Accent**: bright, saturated, confident — not pastel. Electric teal, hot coral, vivid violet, acid green, deep magenta.
+**Accent**: bright, saturated, confident, not pastel. Electric teal, hot coral, vivid violet, acid green, deep magenta.
 
 **Color use rules**:
 - Accent used as full-bleed feature backgrounds, never as text color over white.
 - Pastels appear only in soft-gradient backgrounds, never as primary accents.
 - Two-color accent pairings rotated across sections rather than splattered both at once.
 
-**Mesh and orb gradients** sit behind hero moments — soft blurred radial gradients (60-80% noise opacity, gaussian blur ~120px) in 2-4 colors. Animated subtly.
+**Mesh and orb gradients** sit behind hero moments: soft blurred radial gradients (60-80% noise opacity, gaussian blur ~120px) in 2-4 colors. Animated subtly.
 
 **Per-feature color codes** as a navigational device: a feature stack of 4-6 items will assign each a distinct color, then preserve that color in subnav, icon, and product UI screenshot tinting.
 
@@ -572,12 +572,12 @@ Color discipline converges by cohort. The category signals the palette.
 
 **Accent**: a single aviation or hazard red (`#E61919`, `#FF2A2A`). Strike-throughs, structural dividers, warning stripes, vital data highlights. Never decorative.
 
-**Optional terminal green** (`#4AF626`) on dark substrate — but only on a single specific element. Never as a general body color.
+**Optional terminal green** (`#4AF626`) on dark substrate, but only on a single specific element. Never as a general body color.
 
 ### Cross-category color rules
 
 - Pure black (`#000000`) is uncommon. The "black" used for body text is typically a near-black with a slight blue or warm undertone.
-- White is rarely `#FFFFFF` either. Off-whites in the `#FAFAFA` — `#F7F7F5` range give a paper-like warmth.
+- White is rarely `#FFFFFF` either. Off-whites in the `#FAFAFA`: `#F7F7F5` range give a paper-like warmth.
 - Customer logos go monochrome. Never in their native brand colors.
 - Section anchors via subtle background-color shifts (off-white → slightly-darker-off-white → near-black for one moment).
 - One gradient feature per page, max.
@@ -611,7 +611,7 @@ Motion is restrained in premium cohorts. The premium ones tend to be slower and 
 
 **Code/terminal types itself**: a code block or terminal cursors a single line into existence on entry, then holds still. Once, not on loop.
 
-**Spring physics on UI gestures**: drag handles, toggles, modal open/close use spring physics rather than cubic-bezier — the motion feels like the user moved something with weight.
+**Spring physics on UI gestures**: drag handles, toggles, modal open/close use spring physics rather than cubic-bezier (the motion feels like the user moved something with weight).
 
 ### Creative-cohort motion variations
 
@@ -629,11 +629,11 @@ Motion is restrained in premium cohorts. The premium ones tend to be slower and 
 
 ### Editorial / AI / research motion (most restrained)
 
-**Motion is content-driven, not chrome-driven**. The largest motion surface is video — full-bleed product or generated output looping silently in the hero.
+**Motion is content-driven, not chrome-driven**. The largest motion surface is video: full-bleed product or generated output looping silently in the hero.
 
 **Quiet entrance animations**: sections fade or rise into view as the user scrolls, but the distance is small (8-16px) and the duration is short (240-320ms).
 
-**No parallax tricks, no scroll-jacking**. Refuses dramatic scroll hijacking — no horizontal-snap section, no pinned-3d-element, no scroll-controlled video scrubbing. The page scrolls like a magazine.
+**No parallax tricks, no scroll-jacking**. Refuses dramatic scroll hijacking: no horizontal-snap section, no pinned-3d-element, no scroll-controlled video scrubbing. The page scrolls like a magazine.
 
 **Hover states are subtle and immediate**: links shift color or underline weight on hover without any decorative micro-animation.
 
@@ -721,7 +721,7 @@ Pin the visual, scrub through 4-6 states as the user scrolls. Storytelling witho
 A grid of actual user projects. Doubles as inspiration content for SEO.
 
 ### Headline + deflating qualifier structure
-"Make anything possible — in one tool." Big claim + small honest constraint.
+"Make anything possible: in one tool." Big claim + small honest constraint.
 
 ### A savings or ROI calculator on the homepage
 Interactive input that estimates value. Converts abstract value into a personal number.
@@ -730,7 +730,7 @@ Interactive input that estimates value. Converts abstract value into a personal 
 20-40 second loops on customer logos.
 
 ### Dark mode as a first-class surface
-Not just inverted — separately art-directed gradients, separately calibrated accents.
+Not just inverted: separately art-directed gradients, separately calibrated accents.
 
 ### Templates and example projects as a section
 Horizontal scroll carousel of starting points. Lets the user see "what I could make" before committing.
@@ -784,7 +784,7 @@ Crop the product interface tightly, add a single thin line + label callout for e
 Show generated outputs in the layout as if they were portfolio pieces. The output is the proof.
 
 ### Research / timeline band in the main scroll
-For AI products and category-defining companies, a chronological band — model releases, milestones, papers.
+For AI products and category-defining companies, a chronological band: model releases, milestones, papers.
 
 ### Greyscale logo strips with consistent vertical alignment
 Make the partner logo band a band of muted neutrals at identical heights.
@@ -841,7 +841,7 @@ Logos near the hero. Quantified outcomes mid-page. Security and compliance pre-C
 
 ### One voice across surfaces
 
-Marketing copy, in-product empty states, error messages, blog posts, docs — all sound like they were written by the same person. This is the discipline most companies break at the marketing/product seam; premium companies hold it tight.
+Marketing copy, in-product empty states, error messages, blog posts, docs: all sound like they were written by the same person. This is the discipline most companies break at the marketing/product seam; premium companies hold it tight.
 
 ### Sentence-case display is the modern default
 
@@ -877,11 +877,11 @@ Dense, multi-column, navigable. The footer compensates for an aggressively minim
 
 ### One accent, used like punctuation
 
-Premium pages have a single accent color used surgically — primary CTA, link state, focus ring, occasionally a small marker dot. Anything beyond this gets justified. The accent does not appear in section backgrounds, card chrome, illustration fills, or decorative dividers.
+Premium pages have a single accent color used surgically: primary CTA, link state, focus ring, occasionally a small marker dot. Anything beyond this gets justified. The accent does not appear in section backgrounds, card chrome, illustration fills, or decorative dividers.
 
 ### The brief is the spec
 
-Premium pages are short. If a section can be cut without losing the value-prop, cut it. The discipline isn't what to include — it's what to leave out.
+Premium pages are short. If a section can be cut without losing the value-prop, cut it. The discipline isn't what to include. It's what to leave out.
 
 ### Whitespace is a design element, not a deficit
 
@@ -897,16 +897,16 @@ When making something significantly clearer requires slight inconsistency, choos
 
 ### Eliminate noise
 
-Three sources of noise: shouting (too many things demanding attention), disorganization (things not grouped logically), clutter (too much stuff). Fix noise by removal, not addition. Start with the assumption every element is visual noise — guilty until proven innocent.
+Three sources of noise: shouting (too many things demanding attention), disorganization (things not grouped logically), clutter (too much stuff). Fix noise by removal, not addition. Start with the assumption every element is visual noise: guilty until proven innocent.
 
 ---
 
 ## Closing principle
 
-The exemplar catalog is descriptive, not prescriptive. Every pattern here has been observed multiple times in premium real-world surfaces because the pattern works. The convergence isn't accident — it's the shape of taste in the current era.
+The exemplar catalog is descriptive, not prescriptive. Every pattern here has been observed multiple times in premium real-world surfaces because the pattern works. The convergence isn't accident. It's the shape of taste in the current era.
 
 Build with these patterns, not from a void. Pick the ones that fit the brief. Execute them with precision. Refuse the templated defaults that would dilute them.
 
-The hardest pattern to copy is the discipline to leave things out. That is what every premium surface in every cohort shares — the restraint to refuse what doesn't serve the work.
+The hardest pattern to copy is the discipline to leave things out. That is what every premium surface in every cohort shares: the restraint to refuse what doesn't serve the work.
 
 Output that competes with the best in the world is built on subtraction more than addition. Read these patterns as a kit of moves and a longer list of things not to do. The taste is in the negative space.

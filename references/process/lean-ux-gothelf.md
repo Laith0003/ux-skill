@@ -1,4 +1,4 @@
-# Lean UX — Team-Oriented, Hypothesis-Driven Design
+# Lean UX: Team-Oriented, Hypothesis-Driven Design
 
 ## What this is for
 
@@ -24,11 +24,11 @@ When you only run design thinking, you over-explore and never ship. When you onl
 
 ## The shift from deliverables to outcomes
 
-The old design model rewarded artifacts. You wrote a 90-page wireframe document, signed it off, threw it over the wall, and the wall threw the build back six months later — by which point the document was wrong and the team had stopped reading it.
+The old design model rewarded artifacts. You wrote a 90-page wireframe document, signed it off, threw it over the wall, and the wall threw the build back six months later, by which point the document was wrong and the team had stopped reading it.
 
 You are leaving that model behind. The new question is not "what artifact did you produce" but "what outcome did you create for users that changed a business metric."
 
-This has practical consequences. You stop sizing UX work in document pages. You stop measuring designers by how thick their Figma file is. You stop treating handoff as a phase. Designers stay with the team across the whole loop — research, sketch, build, measure, learn, sketch again — and the artifacts they make are throwaway scaffolding for a conversation, not contracts.
+This has practical consequences. You stop sizing UX work in document pages. You stop measuring designers by how thick their Figma file is. You stop treating handoff as a phase. Designers stay with the team across the whole loop (research, sketch, build, measure, learn, sketch again) and the artifacts they make are throwaway scaffolding for a conversation, not contracts.
 
 The artifacts shrink. The conversations grow. The decisions get faster.
 
@@ -52,7 +52,7 @@ An assumption is anything the team believes about the world that is not yet vali
 
 For each category, the team writes down everything it currently believes. Many of the items will feel obvious; write them anyway. The act of writing makes them visible. Some will be controversial; write those too, even if the team is split.
 
-The output is a board with 30 to 100 assumptions, organized by category. The board is alive — the team adds to it as new assumptions surface, and crosses off assumptions as evidence validates or refutes them.
+The output is a board with 30 to 100 assumptions, organized by category. The board is alive: the team adds to it as new assumptions surface, and crosses off assumptions as evidence validates or refutes them.
 
 **Risk ranking.** Not all assumptions are equally important. The team ranks them on two axes: how risky is this assumption (how badly would the work suffer if it turned out to be wrong) and how unknown is it (how much evidence do we currently have). The assumptions that are high-risk and high-unknown are the ones that become hypotheses; the assumptions that are low-risk or already well-evidenced are noted but not tested.
 
@@ -68,14 +68,14 @@ The template you commit to memory:
 
 > We believe **[this outcome]** will be achieved if **[these users]** attain **[this benefit]** with **[this feature]**.
 
-Read each clause carefully — they all do work.
+Read each clause carefully: they all do work.
 
 - **This outcome** is the business or user behavior you want to change. "Repeat purchases go up," "support tickets about onboarding drop," "weekly active partners increases." It is measurable. It is not "users will like the new design."
 - **These users** is a specific, narrow segment. Not "users." Not "everyone." A particular cohort with a particular problem in a particular context. "New partners in their first 14 days who joined via the self-serve path." Specificity is what makes the hypothesis testable.
-- **This benefit** is the user-perceived value you believe the feature delivers. Not the feature itself — the thing the feature gives them. "Confidence that they set the loyalty rules up correctly" is a benefit. "A wizard" is not a benefit.
+- **This benefit** is the user-perceived value you believe the feature delivers. Not the feature itself: the thing the feature gives them. "Confidence that they set the loyalty rules up correctly" is a benefit. "A wizard" is not a benefit.
 - **This feature** is the smallest version of the thing you will build to test the hypothesis. If you cannot describe the feature in one sentence, the hypothesis is not ready.
 
-The point of writing it this way is that you can be wrong. A hypothesis you cannot fail is not a hypothesis — it is a plan in disguise. The moment you write "we believe weekly active partners will go up if we make the UI more beautiful," you have written nothing. Force the specificity.
+The point of writing it this way is that you can be wrong. A hypothesis you cannot fail is not a hypothesis. It is a plan in disguise. The moment you write "we believe weekly active partners will go up if we make the UI more beautiful," you have written nothing. Force the specificity.
 
 You also write hypotheses at multiple altitudes. There are program hypotheses (the bet behind a quarter of work), feature hypotheses (the bet behind one sprint), and design hypotheses (the bet behind a single screen). They nest. The lower ones inform the higher ones.
 
@@ -103,15 +103,15 @@ Hypotheses are not one-off artifacts. They accumulate. The team maintains a back
 
 Each hypothesis in the backlog has a state: not yet started, in flight, decided. The "in flight" set is what the team is currently testing. The "decided" set is what the team has resolved, with a brief note on the outcome and the change it produced.
 
-The backlog is reviewed weekly. New hypotheses get added as assumptions surface. Existing hypotheses get reprioritized as new information arrives. Stale hypotheses — ones that were urgent six weeks ago but no longer matter — get archived rather than executed.
+The backlog is reviewed weekly. New hypotheses get added as assumptions surface. Existing hypotheses get reprioritized as new information arrives. Stale hypotheses (ones that were urgent six weeks ago but no longer matter) get archived rather than executed.
 
 Why a backlog and not a single hypothesis at a time? Because the team's bandwidth is enough to run two or three hypotheses in parallel without losing focus, and the backlog ensures that as soon as one hypothesis resolves, the team has the next one queued. Idle time between hypotheses is wasted learning capacity.
 
-How big should the backlog be? Smaller than you think. Twenty live hypotheses is too many — the team will not finish them, and the prioritization debate consumes more time than the execution. Five to eight active hypotheses, with a reserve of another ten that the team has scoped but not started, is a healthy size.
+How big should the backlog be? Smaller than you think. Twenty live hypotheses is too many: the team will not finish them, and the prioritization debate consumes more time than the execution. Five to eight active hypotheses, with a reserve of another ten that the team has scoped but not started, is a healthy size.
 
 ---
 
-## Vision and framing — the upfront work
+## Vision and framing: the upfront work
 
 You do not just sprint blind from day one. There is a short, intense framing exercise before any iteration loop begins. It is days, not weeks, and it produces five artifacts.
 
@@ -119,7 +119,7 @@ You do not just sprint blind from day one. There is a short, intense framing exe
 
 **Assumptions.** Everything you currently believe about the user, the problem, and the solution that is not yet validated. Write them down. There will be more than you expect. The act of writing surfaces the ones you didn't know you were carrying.
 
-**Hypotheses.** Convert the riskiest assumptions into the hypothesis template. Rank them by risk — what would hurt the most if it turned out to be wrong.
+**Hypotheses.** Convert the riskiest assumptions into the hypothesis template. Rank them by risk: what would hurt the most if it turned out to be wrong.
 
 **MVPs.** For each top-ranked hypothesis, design the smallest possible experiment that would tell you whether the hypothesis holds. An MVP in this method is a learning instrument, not a product launch. It may be a clickable prototype, a landing page, a Wizard-of-Oz demo, a five-user concierge test.
 
@@ -131,17 +131,17 @@ These five artifacts fit on one wall. Not in one binder. The wall is the contrac
 
 ## Collaborative design
 
-The lone designer who emerges from a cave with a perfect comp is finished. Not because design is unimportant — because the cave is wrong. The work is better when the team makes it together.
+The lone designer who emerges from a cave with a perfect comp is finished. Not because design is unimportant, because the cave is wrong. The work is better when the team makes it together.
 
-The core technique is the **design studio**. It is a time-boxed working session, usually two to three hours, with a mixed group — designers, engineers, product, sometimes a partner-facing voice. Everyone sketches. Engineers sketch. Product managers sketch. The sketches are bad and that is fine. The point is to get every idea into the open before anyone commits to one.
+The core technique is the **design studio**. It is a time-boxed working session, usually two to three hours, with a mixed group: designers, engineers, product, sometimes a partner-facing voice. Everyone sketches. Engineers sketch. Product managers sketch. The sketches are bad and that is fine. The point is to get every idea into the open before anyone commits to one.
 
 The studio runs in rounds. First round: each person, alone, sketches three to six ideas for the problem on paper. Second round: each person presents their sketches to the group in three minutes, no defending. Third round: the group critiques, picks elements, recombines. Fourth round: each person sketches one refined concept. Fifth round: the group converges on one direction to prototype.
 
-This works because it kills two enemies of good design. The first enemy is groupthink — the loudest voice wins, the quiet voice never gets the idea out, the team converges before it has explored. Sketching alone, first, fixes this. The second enemy is design-by-committee — every stakeholder injecting their preference into a single artifact until the artifact has no spine. The studio gives each idea a fair hearing and then commits to one direction.
+This works because it kills two enemies of good design. The first enemy is groupthink: the loudest voice wins, the quiet voice never gets the idea out, the team converges before it has explored. Sketching alone, first, fixes this. The second enemy is design-by-committee: every stakeholder injecting their preference into a single artifact until the artifact has no spine. The studio gives each idea a fair hearing and then commits to one direction.
 
 You still need a single point of authority on the final visual and interaction direction. The studio is convergence with input, not democracy.
 
-A few rules to enforce: no laptops, no slides, no rehearsed pitches. Pen on paper or markers on whiteboard. Time-box every round to the minute. The facilitator is not a participant — they run the clock.
+A few rules to enforce: no laptops, no slides, no rehearsed pitches. Pen on paper or markers on whiteboard. Time-box every round to the minute. The facilitator is not a participant. They run the clock.
 
 ---
 
@@ -161,23 +161,23 @@ A few MVP archetypes you will use repeatedly.
 
 **The landing-page test.** A real page describing the product, with real ad spend driving traffic, to measure conversion to a waitlist or pre-order. Tests whether the value proposition lands before the build.
 
-**The single-feature live test.** You ship one feature behind a flag to a small cohort and measure outcome against a control. The "real" MVP — but only after the cheaper MVPs have ruled out the obvious wrong directions.
+**The single-feature live test.** You ship one feature behind a flag to a small cohort and measure outcome against a control. The "real" MVP, but only after the cheaper MVPs have ruled out the obvious wrong directions.
 
 The discipline is to always pick the cheapest MVP that can produce the answer. Building the live feature when a clickable prototype would have answered the question is a tax on every other thing the team could have learned in the same week.
 
 ---
 
-## Feedback and research — continuous
+## Feedback and research: continuous
 
 In the old model, research was a phase. There was a "research kickoff" before the design phase and maybe a "validation study" at the end. In between, the team flew blind and trusted the brief.
 
-In this model, research is continuous. Every week the team is in front of users. Not a heavy "study" — small, regular contact. Two to five users per week, 30 minutes each, no production. Some weeks it is a usability test on an in-progress prototype. Some weeks it is an open conversation with a recent signup about what surprised them. Some weeks it is watching a partner use the live product over a shared screen.
+In this model, research is continuous. Every week the team is in front of users. Not a heavy "study": small, regular contact. Two to five users per week, 30 minutes each, no production. Some weeks it is a usability test on an in-progress prototype. Some weeks it is an open conversation with a recent signup about what surprised them. Some weeks it is watching a partner use the live product over a shared screen.
 
 The cadence matters more than the perfection of any one session. A team that talks to two users every week beats a team that runs one beautiful 12-user study per quarter.
 
 Everyone on the team attends. Not just the designer. The engineer who built the feature watches the user struggle with it. The product manager hears the question that the user actually asks. The team holds the same picture of who they are building for. This is the single highest-leverage habit in the whole method.
 
-Make a few practical commitments. A recruiting pipeline that is always warm — you do not start finding users when you need them. A standing weekly time slot — the team treats it like any other ceremony. A simple debrief format — what we expected, what we saw, what we will change. Save the conversations. Don't make them ceremonial. Make them cheap to do, so you do them often.
+Make a few practical commitments. A recruiting pipeline that is always warm. You do not start finding users when you need them. A standing weekly time slot: the team treats it like any other ceremony. A simple debrief format: what we expected, what we saw, what we will change. Save the conversations. Don't make them ceremonial. Make them cheap to do, so you do them often.
 
 ---
 
@@ -187,13 +187,13 @@ Lean UX lives inside an agile cadence, not next to it. You design at the speed o
 
 A few specific integrations.
 
-**Sprint zero.** Before the first iteration, the team runs the framing exercise. Problem statement, assumptions, hypotheses, MVPs, learning loops. Usually one week. The output is not a complete design — it is enough alignment that the first sprint can pick up real work without inventing context.
+**Sprint zero.** Before the first iteration, the team runs the framing exercise. Problem statement, assumptions, hypotheses, MVPs, learning loops. Usually one week. The output is not a complete design. It is enough alignment that the first sprint can pick up real work without inventing context.
 
-**Story mapping.** Before the team commits sprint scope, lay out the end-to-end user journey on a wall, story by story. Prioritize the top row — the spine — and slice horizontally to define each release. Story mapping replaces the requirements document and beats it on every axis.
+**Story mapping.** Before the team commits sprint scope, lay out the end-to-end user journey on a wall, story by story. Prioritize the top row (the spine) and slice horizontally to define each release. Story mapping replaces the requirements document and beats it on every axis.
 
 **Design at story-time.** Designers do not work a sprint ahead of engineers in a separate track. Design happens at the moment a story is picked up, with the engineer and the designer pairing on the screen for an hour, with the user research from last week still fresh. Decisions get made together. Implementation starts the same day.
 
-**Design debt as a tracked item.** Some decisions are deferred — you ship a quick version because the priority is learning, not polish. Those deferrals are tickets in the backlog like any other technical debt item. They are visible. They get scheduled. They do not pile up silently and then ambush the team six months later.
+**Design debt as a tracked item.** Some decisions are deferred. You ship a quick version because the priority is learning, not polish. Those deferrals are tickets in the backlog like any other technical debt item. They are visible. They get scheduled. They do not pile up silently and then ambush the team six months later.
 
 **Definition of done includes the outcome.** A story is not done when the code merges. It is done when the team has instrumented and observed the outcome the story was meant to produce. This is a slow change and it will fight you. Hold the line.
 
@@ -223,13 +223,13 @@ The outcome focus only works if the team measures the outcomes. A few practical 
 
 **Define the metric precisely.** "Weekly active users" sounds clean until you ask what counts as active. Logged in? Performed a key action? Completed a task? The team agrees on the operational definition before measurement starts. Otherwise, the metric becomes whatever the most motivated person says it is.
 
-**Baseline before you change.** You cannot tell if a change worked if you do not know what the metric was before the change. Establish the baseline. Run the experiment. Compare. The baseline window should be long enough to capture normal variance — a week or more for most metrics, longer for low-frequency behaviors.
+**Baseline before you change.** You cannot tell if a change worked if you do not know what the metric was before the change. Establish the baseline. Run the experiment. Compare. The baseline window should be long enough to capture normal variance: a week or more for most metrics, longer for low-frequency behaviors.
 
 **Statistical significance is not the only bar.** Sometimes a small movement matters. Sometimes a large movement is noise. The team uses statistical thinking but does not surrender to it. A pattern that holds across multiple experiments, even when no single experiment is significant, is real. A single significant experiment that contradicts everything else may be a fluke. Judgment is part of measurement.
 
-**Leading vs lagging indicators.** Outcome metrics are often lagging — they tell you what happened, not what is about to happen. Pair them with leading indicators that move earlier. If your outcome is "monthly revenue per partner," a leading indicator might be "weekly active sessions" or "feature adoption in the first 14 days." The leading indicator lets the team adjust before the lagging metric confirms a problem.
+**Leading vs lagging indicators.** Outcome metrics are often lagging. They tell you what happened, not what is about to happen. Pair them with leading indicators that move earlier. If your outcome is "monthly revenue per partner," a leading indicator might be "weekly active sessions" or "feature adoption in the first 14 days." The leading indicator lets the team adjust before the lagging metric confirms a problem.
 
-**Counter-metrics.** Some changes that move the primary metric in the right direction also move other metrics in the wrong direction. A feature that increases short-term engagement may decrease long-term retention. Track counter-metrics — the things the team would not be okay with if they moved badly — alongside the primary. A primary that wins at the cost of a counter-metric is not actually a win.
+**Counter-metrics.** Some changes that move the primary metric in the right direction also move other metrics in the wrong direction. A feature that increases short-term engagement may decrease long-term retention. Track counter-metrics (the things the team would not be okay with if they moved badly) alongside the primary. A primary that wins at the cost of a counter-metric is not actually a win.
 
 **Cohort views.** Aggregate metrics hide important variation. The change that helped new partners may have hurt experienced ones, and the aggregate may be flat. Look at the metric by cohort: new vs experienced, by segment, by acquisition channel. The patterns inside the aggregate are usually more informative than the aggregate itself.
 
@@ -269,7 +269,7 @@ The team does not work in a vacuum. There are executives, investors, partners, s
 
 **Push back when the request is wrong.** Stakeholders sometimes ask for features that contradict what the team has learned. The team's job is not to comply; it is to surface the contradiction. "We can build this, but our user research suggests it will not move the outcome you care about. Here is the evidence. Here is what we propose instead." Some stakeholders will accept the redirect; some will override it. Either way, the team is not silently building the wrong thing.
 
-**Protect the team's calendar.** Stakeholders have an unlimited appetite for status updates. The team's time is finite. Establish a regular rhythm — a fortnightly executive update, a monthly business review, a quarterly outcome readout — and stick to it. Out-of-cycle requests are handled in a lightweight way, but the team's working time is not consumed by ad-hoc reporting.
+**Protect the team's calendar.** Stakeholders have an unlimited appetite for status updates. The team's time is finite. Establish a regular rhythm (a fortnightly executive update, a monthly business review, a quarterly outcome readout) and stick to it. Out-of-cycle requests are handled in a lightweight way, but the team's working time is not consumed by ad-hoc reporting.
 
 ---
 
@@ -287,7 +287,7 @@ The method is not about tools, but a few practical notes on what supports it wel
 
 **Communication.** A team channel where the team works visibly. Research findings, design iterations, build progress, metric updates all flow through it. Stakeholders who need to follow along subscribe; the team does not produce a separate stream of stakeholder-friendly updates.
 
-The principle behind all the tooling choices: prefer tools that put the work in the open and that minimize the cost of the next iteration. Heavy tools — complex project management software, formal design hand-off systems, ceremony-heavy review workflows — slow the loop. The team that fights for fast tools is fighting for the work.
+The principle behind all the tooling choices: prefer tools that put the work in the open and that minimize the cost of the next iteration. Heavy tools (complex project management software, formal design hand-off systems, ceremony-heavy review workflows) slow the loop. The team that fights for fast tools is fighting for the work.
 
 ---
 
@@ -301,11 +301,11 @@ The method is designed for one team. When the organization grows past one team, 
 
 **Shared infrastructure.** Multiple teams running research need a shared research repository, shared recruiting pipeline, shared instrumentation tooling. Building all of this per team is wasteful; building it as shared infrastructure that each team uses is efficient.
 
-**Shared vocabulary.** Hypotheses, outcomes, MVPs, learning loops — the terms mean the same thing across the organization. New team members are trained in the shared vocabulary so that conversations across teams do not require translation.
+**Shared vocabulary.** Hypotheses, outcomes, MVPs, learning loops: the terms mean the same thing across the organization. New team members are trained in the shared vocabulary so that conversations across teams do not require translation.
 
 **Communities of practice.** Researchers across teams meet. Designers across teams meet. Engineers across teams meet. The communities share craft, tooling, and patterns. They are not management structures; they are peer learning networks that strengthen the practice at the discipline level.
 
-The risk at scale is process bureaucracy — the method that worked for one team gets formalized into rules and ceremonies that slow ten teams down. Resist this. Keep the practice principles strong; let the specific implementations vary by team. The principle is "outcomes over outputs," not "every team must use the same template."
+The risk at scale is process bureaucracy: the method that worked for one team gets formalized into rules and ceremonies that slow ten teams down. Resist this. Keep the practice principles strong; let the specific implementations vary by team. The principle is "outcomes over outputs," not "every team must use the same template."
 
 ---
 
@@ -343,7 +343,7 @@ A few patterns appear in nearly every team that adopts this method and gets it p
 
 **The "lab rat" failure.** The team runs lots of small experiments, but no single experiment is meaningful enough to move a metric. The team produces a churn of small wins and small losses with no overall direction. The cure: occasional bigger bets. Some experiments must be at the level where, if they work, the product is meaningfully better; if they don't, the team has learned something significant. Always-small is a way to avoid risk while feeling busy.
 
-**The "research as a stage" failure.** The team treats research as a step that ends before build starts. "Research is done; now we build." The cure: research never ends. The team is always in the field. The build phase has research running in parallel — small sessions on in-progress prototypes, ongoing user contacts, continuous observation. Research is not a phase; it is a posture.
+**The "research as a stage" failure.** The team treats research as a step that ends before build starts. "Research is done; now we build." The cure: research never ends. The team is always in the field. The build phase has research running in parallel: small sessions on in-progress prototypes, ongoing user contacts, continuous observation. Research is not a phase; it is a posture.
 
 ---
 
@@ -353,15 +353,15 @@ The method does not exist alone. It connects to and supports other ways of worki
 
 **With agile.** Agile gives the cadence and the ceremonies. Lean UX gives the substance of what the team works on during each iteration. Agile without Lean UX produces predictable delivery of features that may or may not matter. Lean UX without agile produces good thinking that does not ship reliably. They need each other.
 
-**With design thinking.** Design thinking, fully practiced, includes the discovery and framing work — empathy, problem definition, ideation, prototyping, testing. Lean UX uses the same building blocks but runs them in a tight, continuous loop rather than a sequenced project. Design thinking workshops are a useful intervention at the start of a major initiative; Lean UX is the ongoing day-to-day after the workshop produces an opening direction.
+**With design thinking.** Design thinking, fully practiced, includes the discovery and framing work: empathy, problem definition, ideation, prototyping, testing. Lean UX uses the same building blocks but runs them in a tight, continuous loop rather than a sequenced project. Design thinking workshops are a useful intervention at the start of a major initiative; Lean UX is the ongoing day-to-day after the workshop produces an opening direction.
 
 **With lean startup.** Lean startup contributed the validated-learning posture, the build-measure-learn loop, the pivot-or-persevere decision. Lean UX is the design and product practice that operationalizes those ideas for a product team. You can think of Lean UX as lean startup applied to the design discipline.
 
-**With outcome-driven roadmaps.** A roadmap built around outcomes — quarterly bets on user behavior changes — is the planning artifact that complements Lean UX delivery. Feature roadmaps and Lean UX work against each other; outcome roadmaps and Lean UX work together.
+**With outcome-driven roadmaps.** A roadmap built around outcomes (quarterly bets on user behavior changes) is the planning artifact that complements Lean UX delivery. Feature roadmaps and Lean UX work against each other; outcome roadmaps and Lean UX work together.
 
 **With OKRs.** Quarterly objectives and key results, when written well, name the outcomes a team is pursuing. Lean UX is one way to actually achieve those outcomes. The OKR is the destination; Lean UX is the way the team walks there. Badly written OKRs that name outputs ("ship three features") undercut Lean UX; well-written OKRs that name outcomes ("increase weekly active partners by 20%") reinforce it.
 
-**With service design.** When the product extends across multiple touchpoints — software, human service, physical experience — service design tools (journey maps, service blueprints, role definitions) layer on top of Lean UX. The hypothesis-driven posture remains; the artifacts get more comprehensive to handle the cross-touchpoint nature of the work.
+**With service design.** When the product extends across multiple touchpoints (software, human service, physical experience) service design tools (journey maps, service blueprints, role definitions) layer on top of Lean UX. The hypothesis-driven posture remains; the artifacts get more comprehensive to handle the cross-touchpoint nature of the work.
 
 ---
 
@@ -373,7 +373,7 @@ The named roles in a Lean UX team are deliberately fluid. The work is collaborat
 
 **The designer.** Carries the most visual and interaction craft on the team. Is the single point of authority on the visual direction and interaction patterns. Pairs with engineers throughout the build. Sketches in design studios and converts the studio output into the artifacts that get tested. Spends most of their time in the team's workflow, not in a separate design tool. Does not produce 90-page specifications. Their artifacts are sketches, prototypes, and code-friendly handoff materials.
 
-**The engineer.** Builds the artifacts that the team tests and ships. Participates in design — sketches, critiques, helps the designer understand feasibility. Pairs with the designer on screens. Watches user research sessions. Owns the instrumentation that measures the outcomes. Is not a service provider implementing handed-off specs; is a peer who contributes to the design and product decisions.
+**The engineer.** Builds the artifacts that the team tests and ships. Participates in design: sketches, critiques, helps the designer understand feasibility. Pairs with the designer on screens. Watches user research sessions. Owns the instrumentation that measures the outcomes. Is not a service provider implementing handed-off specs; is a peer who contributes to the design and product decisions.
 
 **The researcher.** When the team is large enough to have a dedicated researcher, they own the recruiting pipeline, the conversation protocols, and the synthesis of findings. When the team is small, the designer or product manager runs research with the team's help. Either way, the researcher (or research function) makes sure the team is in front of users continuously and that the learning compounds.
 

@@ -13,7 +13,7 @@ When the brief is open and you need to explore palettes before locking one in, t
 | **Colourcode** | https://colourco.de | Cursor-position-driven palette explorer. Best for taste calibration when you don't know what you want yet. |
 | **Colir** | https://colir.io | Web color browser organized by hue family. Useful for finding the right shade family before fine-tuning. |
 | **Coolors** | https://coolors.co | The mainstream palette generator. Best when you need 5-color schemes fast and don't have a strong brief. |
-| **PhysicallyBased.info** | https://physicallybased.info | Public PBR materials database — real-world albedo / roughness / IOR values for actual materials (oak, brushed aluminium, glass, leather). Cite this when you need an *honest* L-value for a designed surface rather than guessing. |
+| **PhysicallyBased.info** | https://physicallybased.info | Public PBR materials database: real-world albedo / roughness / IOR values for actual materials (oak, brushed aluminium, glass, leather). Cite this when you need an *honest* L-value for a designed surface rather than guessing. |
 
 **For verifying contrast after picking colors:**
 
@@ -21,31 +21,31 @@ When the brief is open and you need to explore palettes before locking one in, t
 |---|---|---|
 | WebAIM Contrast Checker | https://webaim.org/resources/contrastchecker/ | The canonical WCAG AA/AAA verifier |
 | OKLCH Color Picker | https://oklch.com | For palettes designed in OKLCH (the perceptual space) |
-| APCA contrast | https://www.myndex.com/APCA/ | Newer perceptual contrast standard (WCAG 3 draft) — use for forward-compat checks |
+| APCA contrast | https://www.myndex.com/APCA/ | Newer perceptual contrast standard (WCAG 3 draft): use for forward-compat checks |
 
 ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA contrast on body text. When you pick one of those, you've already cleared the contrast bar. When you build a new one from these tools, run it through WebAIM before shipping.
 
 ## Principles
 
-1. **Color is a scarce resource** — Build the foundation in neutrals. Reserve chromatic energy for action (CTAs, links, focus rings, status indicators). Decoration uses spacing, typography, and contrast; not color.
+1. **Color is a scarce resource**: Build the foundation in neutrals. Reserve chromatic energy for action (CTAs, links, focus rings, status indicators). Decoration uses spacing, typography, and contrast; not color.
 
-2. **Semantic tokens, never raw hex in components** — Define semantic names (`primary`, `secondary`, `surface`, `on-surface`, `error`, `success`, `warning`) and reference them everywhere. Raw hex values scattered across components break theming, dark mode, and accessibility.
+2. **Semantic tokens, never raw hex in components**: Define semantic names (`primary`, `secondary`, `surface`, `on-surface`, `error`, `success`, `warning`) and reference them everywhere. Raw hex values scattered across components break theming, dark mode, and accessibility.
 
-3. **Three-layer token architecture** — Primitive (raw values: `--color-blue-600: #2563EB`), semantic (purpose aliases: `--color-primary: var(--color-blue-600)`), component (component-specific: `--button-bg: var(--color-primary)`). Components reference component tokens; component tokens reference semantic; semantic references primitive.
+3. **Three-layer token architecture**. Primitive (raw values: `--color-blue-600: #2563EB`), semantic (purpose aliases: `--color-primary: var(--color-blue-600)`), component (component-specific: `--button-bg: var(--color-primary)`). Components reference component tokens; component tokens reference semantic; semantic references primitive.
 
-4. **Light and dark are designed together** — Dark mode is not an inversion. Re-tune accents, re-calibrate text, rebuild the elevation ladder. The same hex never appears in both modes.
+4. **Light and dark are designed together**: Dark mode is not an inversion. Re-tune accents, re-calibrate text, rebuild the elevation ladder. The same hex never appears in both modes.
 
-5. **Color carries reinforcement, not meaning** — Pair every color signal with an icon, text, or pattern. Red errors include a red color AND an icon AND a text message. Color-blind users and screen reader users get the same signal.
+5. **Color carries reinforcement, not meaning**: Pair every color signal with an icon, text, or pattern. Red errors include a red color AND an icon AND a text message. Color-blind users and screen reader users get the same signal.
 
-6. **Never pure black, never pure white** — Pure `#000000` is banned in product chrome (use `#050505` to `#1A1A1A`). Pure `#FFFFFF` reads as default; warm or cool off-whites at `#FAFAFA` to `#F7F7F4` read as designed.
+6. **Never pure black, never pure white**: Pure `#000000` is banned in product chrome (use `#050505` to `#1A1A1A`). Pure `#FFFFFF` reads as default; warm or cool off-whites at `#FAFAFA` to `#F7F7F4` read as designed.
 
-7. **One accent, not three** — One primary brand accent appears on CTAs, focus rings, and the rare semantic highlight. Three or four accents fight for attention and dilute meaning.
+7. **One accent, not three**: One primary brand accent appears on CTAs, focus rings, and the rare semantic highlight. Three or four accents fight for attention and dilute meaning.
 
 8. **The color budget follows energy.** The share of the interface in a chromatic color is the system's `color.budget.chromatic`, 2 percent for a calm brand to 20 percent for a loud one, and bands add `color.budget.bands`. lint --render measures both on the page.
 
-9. **Semantic state colors are reserved** — Green = success, red = destructive, amber = warning. Never repurpose semantic colors as brand colors. If the brand color happens to be green, success notifications get a different green (shifted in chroma) so meaning stays unambiguous.
+9. **Semantic state colors are reserved**: Green = success, red = destructive, amber = warning. Never repurpose semantic colors as brand colors. If the brand color happens to be green, success notifications get a different green (shifted in chroma) so meaning stays unambiguous.
 
-10. **Logos and partner marks render monochrome** — Customer logo strips use a single muted color at uniform optical height. Native-color logo walls fight the page's palette and read as uncurated.
+10. **Logos and partner marks render monochrome**: Customer logo strips use a single muted color at uniform optical height. Native-color logo walls fight the page's palette and read as uncurated.
 
 ## Do / Don't
 
@@ -101,7 +101,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 
 ### Pattern: Semantic color discipline
 **Use when**: Status pills, error states, success confirmations, dashboard data.
-**Anti-pattern**: Using red as a brand accent and then a red error state — the meaning collapses.
+**Anti-pattern**: Using red as a brand accent and then a red error state (the meaning collapses).
 **How**: Reserve red for destructive and error states. Reserve green for success and live. Reserve amber for warning. Reserve a single neutral or branded blue for informational. These four colors do not appear as brand colors or section backgrounds; they appear only in pills, badges, dashboard data, log lines, and validation states.
 
 ### Pattern: Greyscale logo strip
@@ -111,23 +111,23 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 
 ### Pattern: Subtle gradient on a single hero
 **Use when**: One section of a long page needs ambient depth or atmospheric color.
-**Anti-pattern**: Three gradient sections in a single page — the palette reads uncertain.
+**Anti-pattern**: Three gradient sections in a single page (the palette reads uncertain).
 **How**: Apply one gradient to the hero or one feature section. Use 2 to 3 stops max with a narrow hue spread (30 to 60 degree window). Saturation stays low; the gradient adds light, not color. Mesh gradients of 3 to 5 blurred radial orbs in brand colors, gaussian blur 120px, drift slowly (4 to 8s loops, 3 to 6px translation), positioned outside the safe text area.
 
 ### Pattern: Per-feature color codes
 **Use when**: A feature stack of 4 to 6 items needs navigational distinction.
 **Anti-pattern**: Random color assignment with no semantic logic.
-**How**: Assign each feature a distinct color and preserve that color throughout — subnav highlight, icon tint, product UI screenshot accent. Section A is teal-on-ink; section B is coral-on-ink; section C returns to neutral. The colors form a memorable system: teal = collaboration, coral = AI, violet = automation. The product UI carries the color forward so marketing surface and product surface match.
+**How**: Assign each feature a distinct color and preserve that color throughout (subnav highlight, icon tint, product UI screenshot accent). Section A is teal-on-ink; section B is coral-on-ink; section C returns to neutral. The colors form a memorable system: teal = collaboration, coral = AI, violet = automation. The product UI carries the color forward so marketing surface and product surface match.
 
 ### Pattern: Brutalist light-print substrate
 **Use when**: High contrast, low warmth and geometric type, light scheme: the loud, technical end of the axes.
 **Anti-pattern**: Glassmorphism, soft drop shadows, or full-spectrum gradients on a brutalist substrate.
-**How**: Background warm matte off-white (`#F4F4F0` to `#EAE8E3`) — unbleached documentation paper, not bright SaaS white. Foreground near-black carbon ink (`#050505` to `#111111`). Accent a single aviation or hazard red (`#E61919` or `#FF2A2A`), used as strike-throughs, structural dividers, or vital data highlights. The hazard red carries all chromatic load. No gradients, no soft shadows, no translucency beyond simulated noise overlays.
+**How**: Background warm matte off-white (`#F4F4F0` to `#EAE8E3`), unbleached documentation paper, not bright SaaS white. Foreground near-black carbon ink (`#050505` to `#111111`). Accent a single aviation or hazard red (`#E61919` or `#FF2A2A`), used as strike-throughs, structural dividers, or vital data highlights. The hazard red carries all chromatic load. No gradients, no soft shadows, no translucency beyond simulated noise overlays.
 
 ### Pattern: Brutalist dark tactical substrate
 **Use when**: High contrast, low warmth and geometric type, dark scheme.
 **Anti-pattern**: Pure `#000000` background that reads as raw HTML, not designed.
-**How**: Background deactivated CRT black (`#0A0A0A` to `#121212`). Foreground white phosphor (`#EAEAEA`). Same hazard red accent. An optional terminal green (`#4AF626`) may appear on a single specific element (one status indicator or one live readout) — never as a general body color.
+**How**: Background deactivated CRT black (`#0A0A0A` to `#121212`). Foreground white phosphor (`#EAEAEA`). Same hazard red accent. An optional terminal green (`#4AF626`) may appear on a single specific element (one status indicator or one live readout), never as a general body color.
 
 ### Pattern: High-end ethereal glass substrate
 **Use when**: Dark scheme, high contrast, cool hue and a deep elevation ramp (`depth` high).
@@ -136,7 +136,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 
 ### Pattern: High-end editorial luxury substrate
 **Use when**: Warm, formal and humanist: warmth high, formality high, type personality humanist.
-**Anti-pattern**: Generic SaaS off-white with cool gray neutrals — reads as templated.
+**Anti-pattern**: Generic SaaS off-white with cool gray neutrals (reads as templated).
 **How**: A warm cream page (or a deep brown for the dark scheme), accents taken from muted earth tones near the brand's hue, and at most one saturated tone used in one place. A serif display at a large size carries the voice; a faint grain on a fixed, non-interactive layer adds a paper feel.
 
 ### Pattern: High-end soft structuralism substrate
@@ -152,11 +152,11 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 ### Pattern: Grain / noise overlay
 **Use when**: Solid color blocks that would otherwise read as flat or "stock."
 **Anti-pattern**: Applying grain to scrolling containers (triggers continuous GPU repaints; mobile frame rate collapses).
-**How**: A 3 to 6% opacity high-frequency noise texture sits over solid color blocks to break up the digital flatness. The grain is barely perceptible — but its absence is what makes a flat color look stock. The noise must attach EXCLUSIVELY to fixed `pointer-events-none` pseudo-elements. Never on scrolling content.
+**How**: A 3 to 6% opacity high-frequency noise texture sits over solid color blocks to break up the digital flatness. The grain is barely perceptible, but its absence is what makes a flat color look stock. The noise must attach EXCLUSIVELY to fixed `pointer-events-none` pseudo-elements. Never on scrolling content.
 
 ### Pattern: Per-section accent color propagating to product UI
 **Use when**: Marketing surfaces showing product screenshots embedded inside feature sections.
-**Anti-pattern**: Marketing surface in teal, product screenshot in default blue — visual disconnect.
+**Anti-pattern**: Marketing surface in teal, product screenshot in default blue (visual disconnect).
 **How**: Each feature section gets a section accent color (teal = collaboration, coral = AI, violet = automation). The product UI screenshot embedded inside that section has interface chrome tinted to match the section accent. The "color match" between marketing surface and product surface signals the team controls both ends. The screenshot is a styled render where the accent is tuned to the surrounding context.
 
 ## Tokens / values
@@ -212,7 +212,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 - These colors do NOT appear as primary brand colors. If the brand happens to be green, success uses a different green shifted in chroma.
 
 ### Tonal scales
-- Build each color as a 50–100–200–300–400–500–600–700–800–900 ramp
+- Build each color as a 50 to 100 to 200 to 300 to 400 to 500 to 600 to 700 to 800 to 900 ramp
 - 50 to 200 = soft backgrounds, badge fills
 - 300 to 500 = secondary surfaces, borders
 - 500 to 700 = primary text, CTAs
@@ -222,14 +222,14 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 ### Tinted shadow formulas
 - Default: `0 8px 32px` at 8 to 14% alpha in the brand or accent hue
 - Grounded: pair with `0 1px 2px` black at 6%
-- Diffuse premium: `shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]` — wide-spreading, low-opacity
+- Diffuse premium: `shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]` (wide-spreading, low-opacity)
 - Brutalist: hard offset `4px 4px 0 var(--ink)` reading as printed registration mark, NOT a soft drop shadow
 
 ### Off-color discipline
 - Avoid `#FFFFFF` as canvas; prefer off-whites
 - Avoid `#000000` as text or background; use `#050505`, `#0A0A0A`, `#111111`, `#171717`, `#1A1A1A`, `#1F1F1F`
 - Avoid pure-saturated accents in dark mode (reduce chroma 10 to 15%)
-- Avoid "AI purple gradient" (purple-to-blue on white) — banned
+- Avoid "AI purple gradient" (purple-to-blue on white): banned
 
 ### Palettes come from the brand
 - The engine builds every palette from the brand color and the seven axes: the neutrals lean along the brand, the support hue follows warmth and contrast, the band chroma follows energy. No palette is picked by the kind of business.
@@ -262,7 +262,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 - Diverging: blue → gray → red (negative-positive scales); never red → green
 - Sequential: single-hue gradient (light to dark) for ordered data
 - Qualitative: maximum 7 to 8 distinct hues; perceptually uniform
-- Colorblind-safe families: Viridis, Cividis, Magma — perceptually uniform across colorblind variants
+- Colorblind-safe families: Viridis, Cividis, Magma (perceptually uniform across colorblind variants)
 - Validate using a color-blindness simulator (deuteranopia, protanopia, tritanopia)
 - Always supplement color with patterns, textures, shapes, or icons
 
@@ -270,7 +270,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 - Single-color icons match the surrounding type color OR carry the brand accent
 - One icon family across the entire product (same stroke width, same corner radius)
 - Icon contrast meets WCAG 4.5:1 for small glyphs, 3:1 for larger
-- Filled vs outline discipline — one style per hierarchy level
+- Filled vs outline discipline: one style per hierarchy level
 - Filled for active/selected states, outlined for resting states
 - Standardize stroke width (1.5px or 2px); mixing weights is a visible AI tell
 
@@ -285,7 +285,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 ## Checklist (severity-tagged)
 
 - [ ] All foreground/background pairs verified at 4.5:1 minimum (severity: Critical)
-- [ ] Color is never the only signal — every color signal pairs with an icon or text (severity: Critical)
+- [ ] Color is never the only signal, every color signal pairs with an icon or text (severity: Critical)
 - [ ] Pure `#000000` not used in product chrome (severity: High)
 - [ ] Pure `#FFFFFF` not used as canvas; off-white preferred (severity: Medium)
 - [ ] One accent color in chrome, applied surgically (severity: High)
@@ -313,8 +313,8 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 - [ ] Disabled states use reduced opacity (0.38 to 0.5) + cursor change (severity: Medium)
 - [ ] Border and divider colors visible in both light and dark modes (severity: High)
 - [ ] Brand mark color preserved through redesigns (equity preservation) (severity: Medium)
-- [ ] Single brand accent applied surgically — not as decoration (severity: High)
-- [ ] No multiple-color logo walls — customer logos forced to single muted color (severity: Medium)
+- [ ] Single brand accent applied surgically, not as decoration (severity: High)
+- [ ] No multiple-color logo walls, customer logos forced to single muted color (severity: Medium)
 - [ ] No glowing AI / neural-net / brain iconography (severity: Medium)
 - [ ] Noise / grain overlays on fixed `pointer-events-none` layers only (severity: Critical)
 - [ ] Backdrop blur only on fixed or sticky elements; never on scrolling containers (severity: Critical)
