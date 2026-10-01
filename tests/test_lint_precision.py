@@ -200,9 +200,36 @@ def test_component_files_with_runtime_classes_keep_their_utilities():
     assert "text-ink-at-low-alpha" in _ids("Alert.vue", sfc)
 
 
-def test_repeats_of_one_rule_cost_what_they_cost_before():
+def test_repeats_of_one_rule_cost_what_they_cost_before_up_to_the_knee():
     assert compute_score([_f("r", "high")] * 4) == 60
     assert compute_score([_f("r", "high")] * 50) < 50
+
+
+def test_past_the_knee_a_repeated_rule_weighs_less_than_as_many_rules():
+    # 149 placeholder links are one pattern; 149 different rules are not.
+    one_rule = compute_score([_f("r", "high")] * 149)
+    many = compute_score([_f(f"r{i}", "high") for i in range(149)])
+    assert many == 1 and one_rule > many
+
+
+def test_a_page_of_distinct_rules_scores_as_before():
+    from engine.linter.core import SCORE_KNEE, SCORE_TAIL
+    import math
+    for n in (6, 12, 30):
+        findings = [_f(f"r{i}", "high") for i in range(n)]
+        flat = 10 * n
+        want = round(100 - flat) if flat <= SCORE_KNEE else max(
+            1, round(SCORE_KNEE * math.exp(-(flat - SCORE_KNEE) / SCORE_TAIL)))
+        assert compute_score(findings) == want
+
+
+def test_another_repeat_never_raises_the_score():
+    findings, last = [], 100
+    for i in range(300):
+        findings.append(_f(f"r{i % 7}", "high" if i % 3 else "medium"))
+        score = compute_score(findings)
+        assert score <= last, (i, score, last)
+        last = score
 
 
 def test_an_is_with_a_combinator_inside_keeps_its_meaning():

@@ -213,3 +213,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Photos show what only this business has](photos-show-this-business.md)
 - [The display fit measures a headline word by its letters, the space left out](display-measures-each-letter.md)
 - [Lint reads dashboards as admin templates build them](lint-reads-dashboard-templates.md)
+- [Past the knee the quality score counts a repeated rule lightly](score-weighs-repeats-past-the-knee.md)

@@ -196,6 +196,11 @@ dark and high contrast, and writes only what passes. 3.x users: start with
   pseudo-element at opacity 0 is never a hidden control. Over fourteen
   public admin dashboards this removed 175 findings, none of them a real
   problem.
+- The quality score counts a repeated rule lightly past 50 points of
+  penalty: the n-th finding of a rule weighs 1/n there, so 149 links to
+  "#" read as one pattern, not 149 problems. Every score of 50 and up, and
+  every page of distinct problems, scores as before. Over 114 real pages,
+  scores of 1 or 2 fell from 35 to 11.
 
 ### Deprecated
 These seven commands are now aliases. Each one says where it moved and
