@@ -9,8 +9,8 @@ import re
 from typing import Dict, List, Optional, Set
 
 from engine.linter.structure import (
-    Block, FileContext, _blocks, _children, _focus_kind, _matching_elements,
-    _same_container, _shares, attr_values, block_at, compounds, tokens,
+    Block, FileContext, _blocks, _children, _focus_kind, _same_container, _shares,
+    _tag_tokens, attr_values, block_at, compounds, tokens,
 )
 from engine.linter.views import View
 
@@ -31,6 +31,77 @@ FOCUSABLE_TAGS = {"a", "button", "input", "select", "textarea", "summary", "ifra
 _CONTROL_WORD = re.compile(r"(?<![\w-])(?:a|button|input|select|textarea|summary)(?![\w-])"
                            r"|\[(?:tabindex|href)|btn|button|link|menu|popover|dropdown|drawer"
                            r"|dialog|modal|sheet|nav", re.I)
+
+
+_ONE_ARG = re.compile(r":(?:where|is)\(([^(),]*)\)")
+_UNESCAPE = re.compile(r"\\(.)")
+_ATTR_NAME = re.compile(r"\[\s*([\w:-]+)")
+
+
+def _expand(selector: str) -> str:
+    """The selector with each one-argument :where() or :is() opened in
+    place, so the tests inside them count when the selector is matched."""
+    prev = None
+    while prev != selector:
+        prev, selector = selector, _ONE_ARG.sub(r"\1", selector)
+    return selector
+
+
+def _needs(compound: str) -> Set[str]:
+    """What an element must carry to match a compound: its tag, classes
+    (unescaped) and id, and the names of the attributes it tests."""
+    out: Set[str] = set()
+    for t in tokens(compound):
+        if t.startswith("["):
+            m = _ATTR_NAME.match(t)
+            if m:
+                out.add("[" + m.group(1).lower() + "]")
+        else:
+            out.add(_UNESCAPE.sub(r"\1", t))
+    return out
+
+
+def _carries(ctx: FileContext, i: int) -> Set[str]:
+    tag = ctx.tree()[0][i]
+    have = set(_tag_tokens(ctx, tag))
+    have.update("[" + name.lower() + "]" for name in attr_values(ctx.text, tag))
+    return have
+
+
+def _elements(ctx: FileContext, selector: str) -> List[int]:
+    """Elements a selector can match, judged by tags, classes, ids and the
+    attributes it tests; states and pseudo-classes are not evaluated, so
+    this is a superset of what the browser matches."""
+    parts = [_needs(c) for c in compounds(_expand(selector))]
+    if not parts:
+        return []
+    tags, _ends, parents = ctx.tree()
+    out = []
+    for i in range(len(tags)):
+        if not parts[-1] <= _carries(ctx, i):
+            continue
+        j, k = len(parts) - 2, parents[i]
+        while j >= 0 and k >= 0:
+            if parts[j] <= _carries(ctx, k):
+                j -= 1
+            k = parents[k]
+        if j < 0:
+            out.append(i)
+    return out
+
+
+def _named_in_scripts(ctx: FileContext, selector: str) -> bool:
+    """A class or id of the selector appears in the page outside its
+    styles (a script adds it), so the element may exist at run time."""
+    names = re.findall(r"[.#]((?:[\w-]|\\.)+)", _expand(selector))
+    return any(re.search(r"(?<![\w-])" + re.escape(_UNESCAPE.sub(r"\1", n)) + r"(?![\w-])",
+                         _outside_styles(ctx)) for n in names)
+
+
+def _outside_styles(ctx: FileContext) -> str:
+    def build() -> str:
+        return re.sub(r"<style\b[^>]*>.*?</style\s*>", " ", ctx.text, flags=re.S | re.I)
+    return ctx.cached("components:outside-styles", build)  # type: ignore[return-value]
 
 
 def _focusable(ctx: FileContext, i: int) -> bool:
@@ -104,14 +175,15 @@ def focusable_hidden_by_opacity(ctx: FileContext, view: View, match: re.Match, s
     matched = False
     for c in pages:
         for sel in block.selectors:
-            parts = compounds(sel)
-            if not parts:
-                continue
-            for i in _matching_elements(c, [tokens(x) for x in parts]):
+            for i in _elements(c, sel):
                 matched = True
                 if _holds_focusable(c, i) and not _shut(c, i):
                     return True
     if matched:
+        return False
+    # With markup to read, a selector that matches nothing styles nothing on
+    # these pages, unless a script names its class or id and may add it.
+    if pages and not any(_named_in_scripts(c, sel) for c in pages for sel in block.selectors):
         return False
     return any(_CONTROL_WORD.search(compounds(s)[-1] if compounds(s) else s)
                for s in block.selectors)

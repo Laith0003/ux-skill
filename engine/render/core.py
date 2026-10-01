@@ -67,10 +67,10 @@ _MEASURE_JS = r"""(tol) => {
   }
 
   const root = document.scrollingElement;
+  const clipped = e => { for (let a = e.parentElement; a; a = a.parentElement) {
+    const o = getComputedStyle(a).overflowX; if (o === 'hidden' || o === 'clip' || o === 'auto' || o === 'scroll') return a !== document.body && a !== document.documentElement; } return false; };
+  const culprits = [];
   if (root.scrollWidth > root.clientWidth + 1) {
-    const clipped = e => { for (let a = e.parentElement; a; a = a.parentElement) {
-      const o = getComputedStyle(a).overflowX; if (o === 'hidden' || o === 'clip' || o === 'auto' || o === 'scroll') return a !== document.body && a !== document.documentElement; } return false; };
-    const culprits = [];
     for (const e of document.body.querySelectorAll('*')) {
       const r = e.getBoundingClientRect();
       if ((r.right > vw + 1 || r.left < -1) && !clipped(e)
@@ -95,6 +95,26 @@ _MEASURE_JS = r"""(tol) => {
       rule: 'horizontal-overflow', sel: sel(e), cls: e.className || '', text: text(e).slice(0, 60),
       drift: Math.round(root.scrollWidth - root.clientWidth), dir});
   }
+
+  // Text that runs past its own box lies over whatever sits beside it, even
+  // when the page does not scroll: an unbreakable word in a narrow column,
+  // a display size wider than its column. The deepest such text is named,
+  // once, and not again when it already made the page scroll.
+  const TEXTY = 'h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,th,td';
+  const spill = e => {
+    const cs = getComputedStyle(e);
+    return !cs.display.startsWith('inline') && cs.overflowX === 'visible' && e.clientWidth > 0
+      && e.scrollWidth > e.clientWidth + 2 && !clipped(e);
+  };
+  const spilling = [...document.body.querySelectorAll(TEXTY)].filter(spill);
+  let named = 0;
+  for (const e of spilling) {
+    if (named >= 3) break;
+    if (spilling.some(o => o !== e && e.contains(o)) || culprits.some(c => c === e || c.contains(e))) continue;
+    named++;
+    out.push({rule: 'text-overflows-its-box', sel: sel(e), cls: e.className || '',
+              text: text(e).slice(0, 60), drift: Math.round(e.scrollWidth - e.clientWidth), dir});
+  }
   return {vw, findings: out};
 }"""
 
@@ -112,6 +132,13 @@ _RULES = {
              "min-width: 0 on flex children, overflow-wrap: anywhere on long strings) "
              "instead of hiding overflow on the body."),
         what="page is {drift}px wider than the viewport ({dir}, {vw}px viewport)"),
+    "text-overflows-its-box": dict(
+        name="Text runs past its own box", severity="high", category="Layout",
+        fix=("A word or line is wider than the box it sits in and lies over what is beside "
+             "it. Give the text the column it needs (a smaller type role at this width, a "
+             "wider column, min-width: 0 on a grid or flex child) or let long strings break "
+             "(overflow-wrap: anywhere)."),
+        what="text is {drift}px wider than its box ({dir}, {vw}px viewport)"),
     "render-failed": dict(
         name="Page could not be rendered", severity="medium", category="Layout",
         fix=("The render check could not load or measure this page, so its layout is "

@@ -409,6 +409,58 @@ def block_at(ctx: FileContext, view: View, pos: int) -> Optional[Block]:
     return None
 
 
+# Utilities a page's bundle carries for other routes
+
+_UTILITY = re.compile(r"^\.((?:[\w-]|\\.)+)((?:::?[\w-]+(?:\([^()]*\))?)*)$")
+_UNESC = re.compile(r"\\(.)")
+# At-rules whose blocks hold no element selectors.
+_NO_ELEMENTS = ("@keyframes", "@-webkit-keyframes", "@font-face", "@property", "@page",
+                "@counter-style", "@font-feature-values")
+
+
+def _page_classes(ctx: FileContext) -> FrozenSet[str]:
+    def build() -> FrozenSet[str]:
+        out: Set[str] = set()
+        for tag in ctx.tree()[0]:
+            out.update(t[1:] for t in _tag_tokens(ctx, tag) if t.startswith("."))
+        return frozenset(out)
+    return ctx.cached("page-classes", build)  # type: ignore[return-value]
+
+
+def _outside_styles(ctx: FileContext) -> str:
+    def build() -> str:
+        return re.sub(r"<style\b[^>]*>.*?</style\s*>", " ", ctx.text, flags=re.S | re.I)
+    return ctx.cached("outside-styles", build)  # type: ignore[return-value]
+
+
+def unused_utility(ctx: FileContext, view: View, pos: int) -> bool:
+    """True when ``pos`` sits in a page's own styles, in a block whose every
+    selector is one class with its states (a utility, such as
+    ``.h-screen`` or ``.md\\:grid-cols-3``), and no element on the page
+    carries that class and nothing outside the styles names it (a script
+    that adds it). A compiled stylesheet carries the utilities of every
+    route; only the ones this page uses are its own. A stylesheet with no
+    markup of its own is read as before."""
+    if not ctx.tree()[0]:
+        return False
+    block = block_at(ctx, view, pos)
+    if block is None or not block.selectors:
+        return False
+    if any(a.startswith(_NO_ELEMENTS) for a in block.atrules):
+        return False
+    names = []
+    for sel in block.selectors:
+        m = _UTILITY.match(sel.strip())
+        if not m:
+            return False
+        names.append(_UNESC.sub(r"\1", m.group(1)))
+    if any(n in _page_classes(ctx) for n in names):
+        return False
+    outside = _outside_styles(ctx)
+    return not any(re.search(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", outside)
+                   for n in names)
+
+
 # Selector anatomy
 
 @lru_cache(maxsize=4096)
@@ -1094,9 +1146,10 @@ def document_or_app_surface(ctx: FileContext) -> bool:
 
     1. A page with no text (a single-page app root) or ``role="application"``
        is an app.
-    2. A hero (an h1 followed by a call to action) makes it a landing page.
-    3. A sidebar or table of contents beside the content makes it a docs page
-       or an app shell.
+    2. A sidebar or table of contents beside the content makes it a docs page
+       or an app shell, even when its header pairs the title with an action
+       (a dashboard's "New order").
+    3. A hero (an h1 followed by a call to action) makes it a landing page.
     4. Otherwise, with navigation left out, the page is a document or app when
        one article, form, table, code listing, list or grid holds at least 60
        percent of the main text, or those regions do together. A form that
@@ -1106,11 +1159,10 @@ def document_or_app_surface(ctx: FileContext) -> bool:
         s, e = _region(low, "main") or _region(low, "body") or (0, len(low))
         if not _visible_len(low[s:e]) or re.search(r"role\s*=\s*[\"']?application\b", low):
             return True
+        if _sidebars(ctx):
+            return True
         if _has_hero(low[s:e]):
             return False
-        side = _sidebars(ctx)
-        if side:
-            return True
         chars = list(low)
         for name in ("nav", "header", "footer"):
             for a, b in zip(*ctx.element_ranges(name)):
