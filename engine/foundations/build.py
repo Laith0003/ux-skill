@@ -86,8 +86,9 @@ def _check_inputs(axes: Any, brand_hex: Any, arabic: Any) -> None:
 
 
 def _check_words(words: Any) -> None:
-    """words is None or {"latin": n, "arabic": m} with whole letter counts
-    from 1 to 40."""
+    """words is None or {"latin": n, "arabic": m} with letter counts from 1
+    to 40: a Latin count in average letters, so it may be fractional, an
+    Arabic one whole."""
     if words is None:
         return
     if not isinstance(words, Mapping):
@@ -95,9 +96,12 @@ def _check_words(words: Any) -> None:
     for key, n in words.items():
         if key not in ("latin", "arabic"):
             raise ValueError(f"words names {key!r}; use \"latin\" or \"arabic\"")
-        if isinstance(n, bool) or not isinstance(n, int) or not 1 <= n <= 40:
+        whole = key == "arabic"
+        if isinstance(n, bool) or not isinstance(n, int if whole else (int, float)) \
+                or not 1 <= n <= 40:
+            kind = "a whole number" if whole else "a number of average letters"
             raise ValueError(f"words[{key!r}] is {n!r}; give the letters of the longest "
-                             "headline word, a whole number from 1 to 40")
+                             f"headline word, {kind} from 1 to 40")
 
 
 def _select(foundations: Optional[Sequence[str]]) -> Tuple[Foundation, ...]:
@@ -257,7 +261,7 @@ def check_system(ts: TokenSet, foundations: Optional[Sequence[str]] = None, *,
 def build_system(axes: AxisValues, brand_hex: str, *, arabic: bool = True,
                  foundations: Optional[Sequence[str]] = None,
                  audience: Optional[Audience] = None,
-                 words: Optional[Mapping[str, int]] = None) -> BuildResult:
+                 words: Optional[Mapping[str, float]] = None) -> BuildResult:
     """Generate every foundation (or the named ones, in build order),
     validate the merged set and gate it.
 

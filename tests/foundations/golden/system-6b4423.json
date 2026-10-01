@@ -10320,7 +10320,7 @@
     "vw": {
       "phone": {
         "$type": "number",
-        "$value": 13.91,
+        "$value": 12.9,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -10329,7 +10329,7 @@
       },
       "tablet": {
         "$type": "number",
-        "$value": 14.29,
+        "$value": 13.26,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"

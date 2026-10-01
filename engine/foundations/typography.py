@@ -25,7 +25,9 @@ names is reported once by the build's role-types check and skipped here.
 from __future__ import annotations
 
 import math
+import unicodedata
 from dataclasses import dataclass
+from types import MappingProxyType
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations import character, fonts
@@ -151,14 +153,33 @@ FOLLOWS = {"type.text.figure": "type.text.heading-1",
 # From the tablet breakpoint up each style in PHONE_ROLES takes a fit factor
 # per tier: at most 1, and small enough that the page's longest headline
 # word (FIT_WORD letters when the brief does not give it) fits the
-# headline's column, measured with the face's own average advance (Latin
-# and Arabic), each style still MIN_LEVEL_RATIO above the next, and never
+# headline's column, measured with the face's own letter advance (the
+# Latin one without the space, word_em), each style still MIN_LEVEL_RATIO above the next, and never
 # smaller on a wider tier. The column is the page's content width (its
 # width less both landing margins, within the landing container), all of
 # it on a phone and a tablet and, from the laptop up, the columns of
 # twelve the composition sets the headline in (HEADLINE_COLUMNS).
 FIT_TIERS = ("tablet", "laptop", "desktop")
 FIT_WORD = {"latin": 13, "arabic": 10}
+# A Latin headline word is as wide as its letters, and they are not alike:
+# an m or a W sets near twice the face's letter advance, an i or an l near
+# half. Each letter's share of its face's frequency-weighted letter advance,
+# averaged over the proportional Latin faces and rounded up
+# (scripts/measure_face_letters.py), so the brief's headline counts its
+# longest word in average letters (fit_letters). WORD_SLACK covers how far
+# one face's letters stray from the average; with it no word measured in
+# any face (tests/foundations/data/face_word_widths.json) comes in over the
+# estimate. A FIT_WORD default is a word of average letters.
+LETTER_WIDTHS: Mapping[str, float] = MappingProxyType({
+    "a": 1.07, "b": 1.18, "c": 1.0, "d": 1.19, "e": 1.08, "f": 0.7, "g": 1.14, "h": 1.17,
+    "i": 0.52, "j": 0.52, "k": 1.05, "l": 0.53, "m": 1.75, "n": 1.17, "o": 1.16, "p": 1.19,
+    "q": 1.18, "r": 0.78, "s": 0.94, "t": 0.75, "u": 1.15, "v": 1.04, "w": 1.56, "x": 1.03,
+    "y": 1.04, "z": 0.95,
+    "A": 1.31, "B": 1.28, "C": 1.34, "D": 1.42, "E": 1.17, "F": 1.08, "G": 1.43, "H": 1.46,
+    "I": 0.6, "J": 0.89, "K": 1.29, "L": 1.09, "M": 1.72, "N": 1.45, "O": 1.49, "P": 1.22,
+    "Q": 1.49, "R": 1.27, "S": 1.14, "T": 1.19, "U": 1.41, "V": 1.28, "W": 1.87, "X": 1.27,
+    "Y": 1.19, "Z": 1.18})
+WORD_SLACK = 1.08
 HEADLINE_COLUMNS = {"split": 7, "stacked": 12, "bento": 12, "editorial-column": 8,
                     "full-bleed-media": 12}
 GRID_COLUMNS = 12
@@ -229,9 +250,29 @@ def frame_of(axes: AxisValues, columns: int = GRID_COLUMNS) -> Frame:
 
 def word_em(face: fonts.Face, script: str, letters: float) -> float:
     """The width of a word of `letters` letters in `script` set in `face`,
-    in em."""
-    avg = face.metrics.arabic_avg if script == "arabic" else face.metrics.latin_avg
-    return letters * (avg or 0) / face.metrics.upm
+    in em: a Latin word at the face's letter advance without the space
+    (latin_letters, else latin_avg), an Arabic one at arabic_avg."""
+    m = face.metrics
+    avg = m.arabic_avg if script == "arabic" else (m.latin_letters or m.latin_avg)
+    return letters * (avg or 0) / m.upm
+
+
+def letter_count(word: str) -> float:
+    """The letters of a Latin word in average letters: each letter at its
+    LETTER_WIDTHS share, an accented letter as its base letter, any other
+    letter as one. Marks, digits and punctuation count for nothing."""
+    total = 0.0
+    for ch in word:
+        if ch.isalpha():
+            base = unicodedata.normalize("NFD", ch)[0]
+            total += LETTER_WIDTHS.get(base, 1.0)
+    return total
+
+
+def fit_letters(word: str) -> float:
+    """The letters the fit takes for a Latin headline word: its
+    letter_count with WORD_SLACK, rounded up to a tenth."""
+    return math.ceil(round(letter_count(word) * WORD_SLACK * 10, 6)) / 10
 
 
 def word_px(face: fonts.Face, px: float, script: str, letters: Optional[float] = None) -> float:

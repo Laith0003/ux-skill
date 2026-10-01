@@ -83,7 +83,7 @@ def test_a_loud_brief_keeps_its_full_display_at_the_desktop_tier():
 
 
 def test_a_wide_arabic_face_never_shrinks_the_latin_headline():
-    ts = build_system(MID, "#3366FF").tokens
+    ts = build_system(MID, "#3366FF", words={"latin": 11}).tokens
     latin = ts.resolve("type.fit.display.desktop", LTR)
     arabic = ts.resolve("type.fit.display.desktop", "contrast:standard,direction:rtl")
     assert latin == 1.0 and arabic < latin
@@ -97,7 +97,8 @@ def test_a_shorter_known_word_lets_the_phone_display_grow():
         default.resolve("type.fluid.display.phone", LTR)
 
 
-@pytest.mark.parametrize("words", [{"latin": 0}, {"greek": 5}, {"latin": 4.5}, "seven"])
+@pytest.mark.parametrize("words", [{"latin": 0}, {"greek": 5}, {"arabic": 4.5}, {"latin": 41},
+                                   {"latin": True}, "seven"])
 def test_a_bad_word_count_is_refused_naming_the_input(words):
     with pytest.raises((TypeError, ValueError), match="words"):
         build_system(MID, "#3366FF", words=words)
@@ -128,11 +129,20 @@ def test_tokens_css_sets_the_display_fluid_between_the_hero_and_its_factor():
 
 
 def test_the_fluid_display_reaches_its_size_at_the_reference_width():
+    # Its size there is the display token (less when the desktop fit holds
+    # a long word inside the column), unless the word stops it sooner: then
+    # the word fills the column at the desktop's narrowest width.
+    from engine.foundations.typography import FIT_WORD, frame_of, word_em
     for a in (CALM, MID, LOUD):
         ts = build_system(a, "#3366FF").tokens
-        at_1440 = min(ts.resolve("type.fluid.display.desktop", LTR) * 14.4,
-                      display_px(ts) * ts.resolve("type.fit.display.desktop", LTR))
-        assert at_1440 == pytest.approx(display_px(ts), abs=1.5)
+        fitted = display_px(ts) * ts.resolve("type.fit.display.desktop", LTR)
+        vw = ts.resolve("type.fluid.display.desktop", LTR)
+        at_1440 = min(vw * 14.4, fitted)
+        if at_1440 < fitted - 1.5:
+            word = word_em(fonts.choose(a).display, "latin", FIT_WORD["latin"]) * vw * 12.8
+            assert word == pytest.approx(frame_of(a).column("desktop", 1280), rel=0.01)
+        else:
+            assert at_1440 == pytest.approx(fitted, abs=1.5)
 
 
 # 3. Display leading: tight at large sizes, never colliding.

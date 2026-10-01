@@ -728,8 +728,8 @@
   --type-fit-section-title-tablet: var(--type-tier-scale-7-tablet);
   --type-fit-section-title-laptop: var(--type-tier-scale-7-laptop);
   --type-fit-section-title-desktop: var(--type-tier-scale-7-desktop);
-  --type-vw-phone: 13.91;
-  --type-vw-tablet: 14.29;
+  --type-vw-phone: 12.9;
+  --type-vw-tablet: 13.26;
   --type-vw-laptop: 4.79;
   --type-vw-desktop: 4.79;
   --type-vw-arabic-phone: 11.78;
