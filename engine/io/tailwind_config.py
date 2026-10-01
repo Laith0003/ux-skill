@@ -80,17 +80,26 @@ class ThemeMap:
     (file, line, text, why), and the namespaces the theme replaces, in the
     order read: a Tailwind 3 theme key set outside extend (spacing), or a
     Tailwind 4 reset (--spacing-*: initial; "*" for --*: initial), so
-    Tailwind's own values in it are gone."""
+    Tailwind's own values in it are gone. `unsure` holds each part of the
+    theme the reader could not read as a whole (a preset from a package
+    or one it cannot find, a spread, a computed key, an export it cannot
+    read), any of which may replace a namespace; `spacing` is the Tailwind
+    4 base --spacing an @theme block sets, which each spacing step
+    multiplies."""
     entries: Dict[Tuple[str, str], ThemeEntry] = field(default_factory=dict)
     files: List[str] = field(default_factory=list)
     not_read: List[Tuple[str, int, str, str]] = field(default_factory=list)
     replaced: List[str] = field(default_factory=list)
+    unsure: List[str] = field(default_factory=list)
+    spacing: Optional[ThemeEntry] = None
 
     def keeps(self, namespace: str) -> bool:
         """Whether Tailwind's own values in a namespace still apply: a
-        theme was read (a config or an @theme block) and it does not
-        replace the namespace."""
-        return bool(self.files) and not {namespace, "*"} & set(self.replaced)
+        theme was read in full (a config with its presets, or an @theme
+        block) and it does not replace the namespace. A theme with a part
+        not read keeps nothing, since that part may replace it."""
+        return bool(self.files) and not self.unsure \
+            and not {namespace, "*"} & set(self.replaced)
 
     def get(self, namespace: str, name: str) -> Optional[ThemeEntry]:
         return self.entries.get((namespace, name))
@@ -414,6 +423,7 @@ class _Reader:
         if not isinstance(exported, _Obj):
             if exported is not None:
                 self.out.not_read.append((name, 1, "the config", _WHY_EXPORT))
+                self.out.unsure.append(name)
             return None
         merged: Dict[str, Tuple[bool, List[ThemeEntry]]] = {}
         members = {k: (v, pos) for k, v, pos in exported.members if k is not None}
@@ -429,22 +439,26 @@ class _Reader:
                 for ns, v, pos in obj.members:
                     if ns is None:
                         self.not_read(name, text, v)
+                        self.out.unsure.append(name)
                     elif ns == "extend":
                         ext = self.bound(v, names)
                         if isinstance(ext, _Obj):
                             for ens, ev, epos in ext.members:
                                 if ens is None:
                                     self.not_read(name, text, ev)
+                                    self.out.unsure.append(name)
                                     continue
                                 got = self.namespace(ens, ev, names, name, text)
                                 had = merged.get(ens, (False, []))
                                 merged[ens] = (had[0], had[1] + got)
                         else:
                             self.not_read(name, text, ext)
+                            self.out.unsure.append(name)
                     else:
                         merged[ns] = (True, self.namespace(ns, v, names, name, text))
             else:
                 self.not_read(name, text, obj)
+                self.out.unsure.append(name)
         return merged
 
     def preset(self, item: Any, names: Dict[str, Any], near: Path, text: str, name: str,
@@ -454,11 +468,13 @@ class _Reader:
             if not item.ref.startswith("."):
                 self.out.not_read.append((name, _line(text, item.pos),
                                           f"preset {item.ref}", _WHY_PACKAGE))
+                self.out.unsure.append(name)
                 return
             found = _resolve_file(item.ref, near)
             if found is None:
                 self.out.not_read.append((name, _line(text, item.pos),
                                           f"preset {item.ref}", _WHY_MISSING))
+                self.out.unsure.append(name)
                 return
             got = self.theme_of(found, depth + 1)
             for ns, (replace, entries) in (got or {}).items():
@@ -470,8 +486,10 @@ class _Reader:
             self.out.not_read.append((name, _line(text, item.pos), "an inline preset",
                                       "is written in the config; move it into a file of its "
                                       "own and name it with require() to have it read"))
+            self.out.unsure.append(name)
         else:
             self.not_read(name, text, item)
+            self.out.unsure.append(name)
 
     @staticmethod
     def bound(value: Any, names: Dict[str, Any]) -> Any:
@@ -548,6 +566,13 @@ def _theme_blocks(path: Path, label: str, out: ThemeMap) -> None:
                 # A reset clears Tailwind's own values in the namespace.
                 if d.value.strip() == "initial" and (ns or "*") not in out.replaced:
                     out.replaced.append(ns or "*")
+                read = True
+                continue
+            if prop == "spacing":
+                # The base each spacing step multiplies (px-6 is 6 of it).
+                m = _VAR.match(d.value.strip())
+                out.spacing = ThemeEntry("spacing", "", d.value.strip(),
+                                         m.group(1) if m else "", label, d.line)
                 read = True
                 continue
             if not ns:

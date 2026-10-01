@@ -45,8 +45,11 @@ JSON); a numeric spacing class reads the v4 --spacing step. An arbitrary
 class (p-[13px]) is a raw value, and a bare value Tailwind writes as it is
 (z-10, duration-150, border-2) is raw too, and so is a step of Tailwind's
 own spacing scale (px-6 is 24px, inset-0 is 0px) when the project's theme
-keeps that scale: a config or preset that extends spacing rather than
-replacing it, or an @theme block with no spacing reset. A value class that names no
+keeps that scale: a config read in full, presets included, that extends
+spacing rather than replacing it, or an @theme block with no spacing
+reset. Each step is that many of the @theme block's --spacing base (4px
+when it sets none); a base that is not a length is listed as not
+measured. A value class that names no
 token is listed apart in unknown_classes, with the namespaces it was
 looked up in and a token of its name outside them (bg-primary against a
 bare --primary); a class that sets a keyword
@@ -1211,9 +1214,19 @@ class _Scanner:
                 and self.theme.keeps("spacing"):
             # Tailwind's own spacing step, kept by a theme that extends the
             # scale rather than replacing it: a raw value, never a missing
-            # token.
-            px = 1 if name == "px" else float(name) * TAILWIND_STEP_PX
+            # token, at the base --spacing the theme sets (0.25rem when it
+            # sets none).
             self.tailwind = True
+            step = self._spacing_step()
+            if step is None and name != "px":
+                base = self.theme.spacing
+                self.note(at, "class", named, (
+                    f"is a step of Tailwind's spacing scale, whose base --spacing is "
+                    f"{base.value} at {base.file}:{base.line}, which this reader cannot read "
+                    "as a length; write --spacing as a length such as 0.25rem to have it "
+                    "measured"))
+                return
+            px = 1 if name == "px" else float(name) * step
             self.add(at, utility, "space", "raw", _signed(f"{px:g}px", negative), text, state,
                      from_class=True)
             return
@@ -1230,6 +1243,24 @@ class _Scanner:
             return
         looked = tuple(space for space, family in spaces if name or family != "color")
         self.unknown(at, named, looked, self.near(name, spaces, kinds), name)
+
+    def _spacing_step(self) -> Optional[float]:
+        """The px of one spacing step: the base --spacing the theme sets,
+        else Tailwind's own 4px; None when the base does not read as a
+        length."""
+        base = self.theme.spacing
+        if base is None:
+            return float(TAILWIND_STEP_PX)
+        try:
+            kind, literal = _read(base.value)
+        except NotRead:
+            return None
+        if kind != "dimension":
+            return None
+        try:
+            return dimension_px(literal)
+        except (KeyError, TypeError, ValueError):
+            return None
 
     @staticmethod
     def _bare(prefix: str, name: str, spaces: _Namespaces) -> Optional[Tuple[str, str]]:

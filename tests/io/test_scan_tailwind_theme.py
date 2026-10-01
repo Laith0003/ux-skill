@@ -186,6 +186,37 @@ def test_tailwinds_default_spacing_steps_are_raw_values_when_a_preset_extends_th
     assert all(u.family == "space" for u in found.usages)
 
 
+def test_a_theme_not_read_in_full_keeps_no_default_step(tmp_path):
+    # A preset from a package, or a spread, may replace the scale: no guess.
+    ts = TokenSet({})
+    for case, config in (
+            ("package", "module.exports = {\n  presets: [require('some-preset')],\n"
+                        "  theme: { extend: { spacing: { rail: '2px' } } },\n};\n"),
+            ("spread", "const base = require('./base');\nmodule.exports = {\n"
+                       "  theme: { ...base, extend: { spacing: { rail: '2px' } } },\n};\n")):
+        root = tmp_path / case
+        _write(root, "tailwind.config.js", config)
+        _write(root, "src/page.html", '<main class="md:flex px-6">x</main>')
+        found = scan([root / "src"], ts)
+        assert [u.cls for u in found.unknown_classes] == ["px-6"], case
+        assert not read_theme([root / "src"]).keeps("spacing")
+
+
+def test_a_v4_spacing_base_sets_each_step(tmp_path):
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n  --spacing: 2px;\n"
+                                "  --color-ink: #111111;\n}\n")
+    _write(tmp_path, "page.html", '<main class="px-6 p-px">x</main>')
+    used = {(u.prop, u.kind, u.value) for u in scan([tmp_path], TokenSet({})).usages}
+    assert {("px-6", "raw", "12px"), ("p-px", "raw", "1px")} <= used
+    # A base this reader cannot read as a length gives no px value; it says why.
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n"
+                                "  --spacing: var(--unit);\n  --color-ink: #111111;\n}\n")
+    found = scan([tmp_path], TokenSet({}))
+    assert not [u for u in found.usages if u.prop == "px-6"]
+    [missed] = [n for n in found.not_read if n.text == "px-6"]
+    assert "--spacing" in missed.why and "app.css:3" in missed.why and "0.25rem" in missed.why
+
+
 def test_a_preset_that_replaces_the_spacing_scale_leaves_no_default_step(tmp_path):
     found = _preset_project(tmp_path, "theme")
     assert sorted({u.cls for u in found.unknown_classes}) == [
