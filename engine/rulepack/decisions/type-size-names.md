@@ -15,7 +15,7 @@ Many systems keep type as separate tokens per field: type.size-body, font-size-d
 
 ## Decision
 
-propose() maps a dimension token whose name says a text role's size to that role's fontSize field, by name, with the vocabulary "type size names" (adapter.TYPE_SIZES): size-display, size-hero, size-h1 to size-h3 and the heading words, size-title, size-body, size-base, size-text, size-small, size-ui, size-label, size-caption, size-fine and size-code, read after a type, font or size group word. Only fontSize is proposed; the other four fields wait for the owner, and the view's note names each one. A scale step (size-md, size-lg) and a word with no role of its own (size-lead) are left to the owner. A token of another type is never proposed.
+propose() maps a dimension token whose name says type, font or text, then size, then a text role's own name (type.size-body, font-size-display, text-size-label, fontSize.h1) to that role's fontSize field, by name, with the vocabulary "type size names" (adapter.TYPE_SIZES). The role names are the engine's own: display, hero, h1 to h3 and heading-1 to heading-3, section-title, figure, body, body-small, ui, ui-large, label, fine and code. Only fontSize is proposed; the other four fields wait for the owner, and the view's note names each one. A bare size name (size-display, sizes.label) does not say it is type, so it is not proposed; enhance names each one with the role it names and how to map it (adapter.unclaimed_sizes). A scale step or a word that is no role's own name (size-md, size-base, size-small, size-lead) is left to the owner. A token of another type is never proposed.
 
 ## Why
 
@@ -23,7 +23,7 @@ A size name says one field and nothing more, so proposing the rest would be a gu
 
 ## What it touches
 
-adapter.TYPE_SIZES, adapter.propose, adapter.VOCABULARY_EXAMPLES; commands/ux-system.md.
+adapter.TYPE_SIZES, adapter.propose, adapter.unclaimed_sizes, adapter.VOCABULARY_EXAMPLES, enhance's decisions; commands/ux-system.md.
 
 ## Consequences
 

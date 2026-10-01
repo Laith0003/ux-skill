@@ -71,7 +71,7 @@ from engine.foundations.tokens import AliasError, TokenSet, alias_target, is_ali
 from engine.foundations.validate import validate
 from engine.io.adapter import (
     AXIS_LEFT_OUT, ROLE_LEFT_OUT, ROLE_TYPES, VOCABULARY_EXAMPLES, Mapping, deleted_axes,
-    reduced_pairs, reduced_twins, their_names, unclaimed, view)
+    reduced_pairs, reduced_twins, their_names, unclaimed, unclaimed_sizes, view)
 from engine.io.report import Imported
 from engine.io.scan import (
     ERROR_PAGE, ERROR_ROUTE, FAMILY_WORDS, LINE_WORDS, MAIL_FOLDER, MAIL_SUFFIX, RADIUS_WORDS,
@@ -1309,6 +1309,13 @@ def enhance(imported: Imported, mapping: Mapping, scanned: Optional[Scan] = None
         decisions.append("The system has names the vocabularies know but give no role, so they "
                          f"were not proposed: {_and_few(left, FEW)}; if one plays one of the "
                          f"engine's roles, map it in {mapping_name}.")
+    sizes = unclaimed_sizes(ts, mapping)
+    if sizes:
+        decisions.append(
+            "The system has size names that name a text role but do not say type, font or "
+            f"text, so they were not proposed: {_and_few([f'{t} ({r})' for t, r in sizes], FEW)};"
+            f" if one is that role's size, map it in {mapping_name} as the role's fontSize "
+            'field: "fields": {"fontSize": {"token": "<your token>", "by": "owner"}}.')
     for axis, m in mapping.axes.items():
         if m.by == "name" and m.source is not None:
             values = ""

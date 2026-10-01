@@ -642,7 +642,7 @@ def test_a_tailwind_4_stylesheet_is_proposed_and_viewed_in_our_roles():
 def test_a_tailwind_3_theme_is_proposed_and_viewed_in_our_roles():
     ts = read_tailwind(FIXTURES / "tailwind" / "v3" / "tailwind-theme.json").tokens
     _, checked = _owner_view(ts, "colors.moss.950", "colors.moss.50", {},
-                             sized=("type.text.hero", "type.text.body"))
+                             sized=("type.text.hero",))
     assert dict(checked.axes) == {}
     assert checked.get("color.surface.page").value == ts.get("colors.moss.50").value
 
