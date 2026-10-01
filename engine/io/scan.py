@@ -260,7 +260,8 @@ _UTILITIES: List[Tuple[re.Pattern, _Namespaces, Dict[str, str]]] = [
      {"dimension": "tracking"}),
     (re.compile(r"ease"), (("ease", "motion"), ("transitionTimingFunction", "motion")),
      {"cubicBezier": "motion"}),
-    (re.compile(r"duration"), (("duration", "duration"), ("transitionDuration", "duration")),
+    # Tailwind 4 has no duration namespace; a Tailwind 3 theme has transitionDuration.
+    (re.compile(r"duration"), (("transitionDuration", "duration"),),
      {"duration": "duration"}),
     (re.compile(r"z"), (("z", "z"), ("zIndex", "z")), {"number": "z"}),
 ]

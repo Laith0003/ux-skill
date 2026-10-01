@@ -49,6 +49,8 @@ NAMESPACES: Tuple[str, ...] = (
     "tracking", "leading", "breakpoint", "container", "spacing", "radius", "shadow", "blur",
     "perspective", "aspect", "ease", "animate")
 _VAR = re.compile(r"^var\(\s*--([A-Za-z0-9_-]+)\s*(?:,[^)]*)?\)$")
+# Theme variables a Tailwind 4 duration utility might be taken to read.
+_DURATIONS = ("duration-", "transition-duration-")
 _WHY_COMPUTED = ("is computed in JavaScript, so its value is not read; write it as a string, "
                  "such as 'var(--x)' or '#0B5F4A', so the theme can be read without running "
                  "the config")
@@ -576,6 +578,14 @@ def _theme_blocks(path: Path, label: str, out: ThemeMap) -> None:
                 read = True
                 continue
             if not ns:
+                if prop.startswith(_DURATIONS):
+                    # Tailwind 4 has no duration namespace: said, never
+                    # passed over.
+                    out.not_read.append((label, d.line, d.name, (
+                        "is outside Tailwind 4's theme namespaces, so no utility reads it and "
+                        f"a class named for it does nothing; write the class as "
+                        f"duration-[var({d.name})], or use a number such as duration-150")))
+                    read = True
                 continue
             name = prop[len(ns) + 1:]
             m = _VAR.match(d.value.strip())

@@ -248,3 +248,17 @@ def test_a_v4_theme_block_is_read_in_tailwinds_own_namespaces(tmp_path):
                                 "  --duration-quick: 150ms;\n  --text-body: 1rem;\n}\n")
     theme = read_theme([tmp_path], [tmp_path / "app.css"])
     assert sorted(theme.entries) == [("text", "body"), ("text-shadow", "soft")]
+    # The duration is never passed over in silence: it is listed with the fix.
+    [(file, line, text, why)] = theme.not_read
+    assert (file, line, text) == ("app.css", 4, "--duration-quick")
+    assert why.startswith("is outside Tailwind 4's theme namespaces, so no utility reads it")
+    assert "duration-[var(--duration-quick)]" in why
+
+
+def test_a_transition_duration_in_a_v4_theme_is_listed_with_the_fix(tmp_path):
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n"
+                                "  --transition-duration-slow: var(--motion-slow);\n}\n")
+    _write(tmp_path, "page.html", '<main class="md:flex duration-slow">x</main>')
+    found = scan([tmp_path], TokenSet({}))
+    [missed] = [n for n in found.not_read if n.text == "--transition-duration-slow"]
+    assert missed.line == 3 and "duration-[var(--transition-duration-slow)]" in missed.why
