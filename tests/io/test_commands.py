@@ -494,6 +494,35 @@ def test_an_in_place_extend_rebuilds_the_report_and_the_art(tmp_path):
     assert "system-report.md" in done["message"] or "system-report.md" in done["written"]
 
 
+def test_added_imagery_says_no_art_was_written_unless_art_is_drawn(tmp_path):
+    from engine.foundations.art import FILES
+    ds = tmp_path / "ds"
+    _own_system_with_report(ds)
+    for name in FILES:   # a build whose art the owner removed
+        (ds / name).unlink()
+    done = run_extend(ds / "tokens.json", add=["imagery"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    assert "No art was written" in done["report"]
+    assert not any((ds / n).exists() for n in FILES)
+    # With the art beside it, the art is drawn again and the line is not said.
+    drawn = tmp_path / "drawn"
+    _own_system_with_report(drawn)
+    done = run_extend(drawn / "tokens.json", add=["imagery"], out=drawn, force=True)
+    assert done["status"] == "written", done["message"]
+    assert "No art was written" not in done["report"]
+
+
+def test_an_engine_stylesheet_extended_in_place_says_no_art_was_written(tmp_path):
+    from engine.existing import stamp_digest
+    ds = tmp_path / "ds"
+    _own_system_with_report(ds)
+    ts = build_system(NEUTRAL, "#3366FF", foundations=("color",)).tokens
+    (ds / "theme.css").write_text(stamp_digest(to_css(ts), css=True), encoding="utf-8")
+    done = run_extend(ds / "theme.css", add=["imagery"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    assert "No art was written" in done["report"]
+
+
 def test_a_report_the_owner_edited_is_left_with_the_art(tmp_path):
     from engine.foundations.art import FILES
     ds = tmp_path / "ds"

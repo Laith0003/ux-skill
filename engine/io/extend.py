@@ -916,8 +916,8 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                 f"{AXES[axis][0]} only and add no {axis} axis; to add one, ask for it with "
                 f"{mode_label} {axis}.")
         decisions += [f"{e.line()}." for e in effects(audience, axes)]
-        if "imagery" in foundations and not (in_place and (_folder(imported) / _REPORT).is_file()):
-            decisions.append("No art was written: the art files (art/pattern.svg, "
+        if "imagery" in foundations:
+            decisions.append(_NO_ART + ": the art files (art/pattern.svg, "
                              "art/shapes.svg and art/gradient.svg) come with a system the "
                              "engine builds, so build one with uxskill system build to get "
                              "them.")
@@ -1204,6 +1204,10 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
         try:
             system, result.load = _system_files(imported, engine_set, engine_added, earlier,
                                                 ext_names, in_place, decisions)
+            if any(n.startswith(_ART_DIR) for n in system):
+                # The art beside the engine's own system is drawn again, so
+                # the line saying no art was written does not hold.
+                decisions[:] = [d for d in decisions if not d.startswith(_NO_ART)]
         except (InputError, ValueError) as exc:
             problems.append(str(exc))
     report = _report(imported, result, list(foundations), roles, list(contract_files),
@@ -1491,6 +1495,8 @@ def _built_beside(imported: Imported, ts: TokenSet, decisions: List[str],
 
 
 _REPORT = "system-report.md"
+_ART_DIR = "art/"
+_NO_ART = "No art was written"
 
 
 def _report_and_art(folder: Path, ts: TokenSet, decisions: List[str],
