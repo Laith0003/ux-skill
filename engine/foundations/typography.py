@@ -25,7 +25,9 @@ names is reported once by the build's role-types check and skipped here.
 from __future__ import annotations
 
 import math
+import unicodedata
 from dataclasses import dataclass
+from types import MappingProxyType
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from engine.foundations import character, fonts
@@ -151,14 +153,52 @@ FOLLOWS = {"type.text.figure": "type.text.heading-1",
 # From the tablet breakpoint up each style in PHONE_ROLES takes a fit factor
 # per tier: at most 1, and small enough that the page's longest headline
 # word (FIT_WORD letters when the brief does not give it) fits the
-# headline's column, measured with the face's own average advance (Latin
-# and Arabic), each style still MIN_LEVEL_RATIO above the next, and never
+# headline's column, measured with the face's own letter advance (the
+# Latin one without the space, word_em), each style still MIN_LEVEL_RATIO above the next, and never
 # smaller on a wider tier. The column is the page's content width (its
 # width less both landing margins, within the landing container), all of
 # it on a phone and a tablet and, from the laptop up, the columns of
 # twelve the composition sets the headline in (HEADLINE_COLUMNS).
 FIT_TIERS = ("tablet", "laptop", "desktop")
-FIT_WORD = {"latin": 13, "arabic": 10}
+# A headline word is as wide as its letters, and they are not alike: an m
+# or a W sets near twice the face's letter advance, an i or an l near half.
+# LETTER_WIDTHS holds each letter's share of its face's frequency-weighted
+# lowercase advance over the proportional Latin faces, rounded up: the
+# average share for a lowercase letter and the widest for a capital, since
+# capitals differ far more between faces (scripts/measure_face_letters.py).
+# The brief's headline counts its longest Latin word in average letters
+# (fit_letters). WORD_SLACK covers how far one face's letters stray from
+# the average, and ARABIC_SLACK how far a joined Arabic word strays from
+# the face's average advance; with them no word measured in any face
+# (tests/foundations/data/face_word_widths.json, words the slack was not
+# chosen on included) comes in over the estimate. The default word,
+# FIT_LETTERS letters of average width, takes the same slack (FIT_WORD), so
+# a brief that gives a word of average letters fits as the default does.
+# English letter frequencies in percent, a to z: how often each letter
+# falls in running text, which weighs a face's letter advance.
+LETTER_FREQ = (8.167, 1.492, 2.782, 4.253, 12.702, 2.228, 2.015, 6.094, 6.966, 0.153, 0.772,
+               4.025, 2.406, 6.749, 7.507, 1.929, 0.095, 5.987, 6.327, 9.056, 2.758, 0.978,
+               2.360, 0.150, 1.974, 0.074)
+LETTER_WIDTHS: Mapping[str, float] = MappingProxyType({
+    "a": 1.08, "b": 1.17, "c": 0.99, "d": 1.18, "e": 1.06, "f": 0.72, "g": 1.12, "h": 1.17,
+    "i": 0.55, "j": 0.55, "k": 1.08, "l": 0.56, "m": 1.73, "n": 1.17, "o": 1.14, "p": 1.18,
+    "q": 1.17, "r": 0.81, "s": 0.94, "t": 0.76, "u": 1.15, "v": 1.04, "w": 1.55, "x": 1.05,
+    "y": 1.05, "z": 0.95,
+    "A": 1.56, "B": 1.41, "C": 1.46, "D": 1.61, "E": 1.36, "F": 1.26, "G": 1.56, "H": 1.71,
+    "I": 0.83, "J": 1.13, "K": 1.56, "L": 1.31, "M": 2.06, "N": 1.56, "O": 1.61, "P": 1.33,
+    "Q": 1.63, "R": 1.46, "S": 1.21, "T": 1.41, "U": 1.61, "V": 1.51, "W": 2.13, "X": 1.56,
+    "Y": 1.46, "Z": 1.31})
+WORD_SLACK = 1.08
+ARABIC_SLACK = 1.06
+FIT_LETTERS = {"latin": 13, "arabic": 10}
+
+
+def _tenth_up(x: float) -> float:
+    return math.ceil(round(x * 10, 6)) / 10
+
+
+FIT_WORD = {"latin": _tenth_up(FIT_LETTERS["latin"] * WORD_SLACK),
+            "arabic": _tenth_up(FIT_LETTERS["arabic"] * ARABIC_SLACK)}
 HEADLINE_COLUMNS = {"split": 7, "stacked": 12, "bento": 12, "editorial-column": 8,
                     "full-bleed-media": 12}
 GRID_COLUMNS = 12
@@ -229,9 +269,68 @@ def frame_of(axes: AxisValues, columns: int = GRID_COLUMNS) -> Frame:
 
 def word_em(face: fonts.Face, script: str, letters: float) -> float:
     """The width of a word of `letters` letters in `script` set in `face`,
-    in em."""
-    avg = face.metrics.arabic_avg if script == "arabic" else face.metrics.latin_avg
-    return letters * (avg or 0) / face.metrics.upm
+    in em: a Latin word at the face's letter advance without the space
+    (latin_letters, else latin_avg), an Arabic one at arabic_avg."""
+    m = face.metrics
+    avg = m.arabic_avg if script == "arabic" else (m.latin_letters or m.latin_avg)
+    return letters * (avg or 0) / m.upm
+
+
+def capitals_letters(face: fonts.Face, letters: float, tracking: float) -> float:
+    """The letters a Latin word of `letters` takes when the display sets it
+    in capitals with `tracking` em between letters: each letter at the
+    face's capital advance (latin_capitals) over its lowercase one, plus
+    the tracking, rounded up to a tenth. A face without both advances
+    keeps the count."""
+    m = face.metrics
+    if not (m.latin_capitals and m.latin_letters):
+        return letters
+    return _tenth_up(letters * (m.latin_capitals / m.latin_letters
+                                + tracking * m.upm / m.latin_letters))
+
+
+def letter_count(word: str) -> float:
+    """The letters of a Latin word in average letters: each letter at its
+    LETTER_WIDTHS share, an accented letter as its base letter, any other
+    letter as one. Marks, digits and punctuation count for nothing."""
+    total = 0.0
+    for ch in word:
+        if ch.isalpha():
+            base = unicodedata.normalize("NFD", ch)[0]
+            total += LETTER_WIDTHS.get(base, 1.0)
+    return total
+
+
+# The report calls for the display in capitals from character.CAPITALS_FROM,
+# and display-caps takes the display's factors, so from there the fit
+# measures the Latin word in capitals; over the CAPS_RAMP below it the
+# measure moves from lowercase to capitals in step with the lean, so the
+# display never jumps as the axes move.
+CAPS_RAMP = 0.2
+
+
+def caps_fit_letters(axes: AxisValues, face: fonts.Face, letters: float) -> float:
+    """The Latin letters the fit takes in `face` at these axes: `letters`,
+    moving to capitals_letters as character.capitals rises over CAPS_RAMP
+    to CAPITALS_FROM, rounded up to a tenth."""
+    lean = character.clamp((character.capitals(axes) - character.CAPITALS_FROM + CAPS_RAMP)
+                           / CAPS_RAMP)
+    if lean <= 0:
+        return letters
+    caps = capitals_letters(face, letters, character.capitals_tracking(axes))
+    return _tenth_up(letters + lean * (caps - letters))
+
+
+def fit_letters(word: str) -> float:
+    """The letters the fit takes for a Latin headline word: its
+    letter_count with WORD_SLACK, rounded up to a tenth."""
+    return _tenth_up(letter_count(word) * WORD_SLACK)
+
+
+def arabic_fit_letters(letters: int) -> float:
+    """The letters the fit takes for an Arabic headline word of `letters`
+    letters: with ARABIC_SLACK, rounded up to a tenth."""
+    return _tenth_up(letters * ARABIC_SLACK)
 
 
 def word_px(face: fonts.Face, px: float, script: str, letters: Optional[float] = None) -> float:
@@ -667,6 +766,7 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
     choice = fonts.choose(axes, book_depth)
     columns = GRID_COLUMNS if columns is None else columns
     fit_words = dict(FIT_WORD, **(words or {}))
+    fit_words["latin"] = caps_fit_letters(axes, choice.display, fit_words["latin"])
     frame = frame_of(axes, columns)
     ts = TokenSet()
     faces = {
@@ -1279,8 +1379,9 @@ def fit_problems(ts: TokenSet, mode: str = "") -> List[str]:
                     factor = phone_token("type.text.display") if tier == "phone" \
                         else fit_token("type.text.display", tier)
                     out.append(f"type.text.display at {w}px wide ({tier}) sets a "
-                               f"{_letters(ts, script):g} letter {script} word {width:.0f}px "
-                               f"wide in a {col:.0f}px column; point {factor}"
+                               f"{script} word of {_letters(ts, script):g} average letters "
+                               f"(type.fit-word.{script}) {width:.0f}px wide in a "
+                               f"{col:.0f}px column; point {factor}"
                                + (f" or {fluid_token(tier)}" if fluid else "")
                                + " at a smaller value that fits it")
                     break

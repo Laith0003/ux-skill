@@ -409,6 +409,69 @@ def block_at(ctx: FileContext, view: View, pos: int) -> Optional[Block]:
     return None
 
 
+# Utilities a page's bundle carries for other routes
+
+_UTILITY = re.compile(r"^\.((?:[\w-]|\\[0-9a-fA-F]{1,6}\s?|\\.)+)((?:::?[\w-]+(?:\([^()]*\))?)*)$")
+_CSS_ESCAPE = re.compile(r"\\(?:([0-9a-fA-F]{1,6})\s?|(.))")
+_EXTERNAL_SCRIPT = re.compile(r"<script\b[^>]*\bsrc\s*=", re.I)
+
+
+def css_unescape(name: str) -> str:
+    """A CSS identifier with its escapes read: a hex escape (\\32 for "2")
+    and a backslash before any other character."""
+    return _CSS_ESCAPE.sub(lambda m: chr(int(m.group(1), 16)) if m.group(1) else m.group(2), name)
+# At-rules whose blocks hold no element selectors.
+_NO_ELEMENTS = ("@keyframes", "@-webkit-keyframes", "@font-face", "@property", "@page",
+                "@counter-style", "@font-feature-values")
+
+
+def _page_classes(ctx: FileContext) -> FrozenSet[str]:
+    def build() -> FrozenSet[str]:
+        out: Set[str] = set()
+        for tag in ctx.tree()[0]:
+            out.update(t[1:] for t in _tag_tokens(ctx, tag) if t.startswith("."))
+        return frozenset(out)
+    return ctx.cached("page-classes", build)  # type: ignore[return-value]
+
+
+def _outside_styles(ctx: FileContext) -> str:
+    def build() -> str:
+        return re.sub(r"<style\b[^>]*>.*?</style\s*>", " ", ctx.text, flags=re.S | re.I)
+    return ctx.cached("outside-styles", build)  # type: ignore[return-value]
+
+
+def unused_utility(ctx: FileContext, view: View, pos: int) -> bool:
+    """True when ``pos`` sits in a page's own styles, in a block whose every
+    selector is one class with its states (a utility, such as
+    ``.h-screen`` or ``.md\\:grid-cols-3``), and no element on the page
+    carries that class and nothing outside the styles names it (a script
+    that adds it). A compiled stylesheet carries the utilities of every
+    route; only the ones this page uses are its own. Only a plain HTML page
+    that loads no external script is read this way: a stylesheet with no
+    markup of its own, a component file whose classes are built at run
+    time, and a page a script mounts or restyles are read whole."""
+    if ctx.path.suffix.lower() not in (".html", ".htm") or not ctx.tree()[0]:
+        return False
+    if _EXTERNAL_SCRIPT.search(ctx.text):
+        return False
+    block = block_at(ctx, view, pos)
+    if block is None or not block.selectors:
+        return False
+    if any(a.startswith(_NO_ELEMENTS) for a in block.atrules):
+        return False
+    names = []
+    for sel in block.selectors:
+        m = _UTILITY.match(sel.strip())
+        if not m:
+            return False
+        names.append(css_unescape(m.group(1)))
+    if any(n in _page_classes(ctx) for n in names):
+        return False
+    outside = _outside_styles(ctx)
+    return not any(re.search(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", outside)
+                   for n in names)
+
+
 # Selector anatomy
 
 @lru_cache(maxsize=4096)
@@ -1089,15 +1152,44 @@ def _sidebars(ctx: FileContext) -> List[Tuple[int, int]]:
     return out
 
 
+_DRAWER = re.compile(r"drawer|offcanvas|off-canvas|mobile|modal|overlay|popup|menu", re.I)
+
+
+def _beside_main(ctx: FileContext, start: int) -> bool:
+    """The navigation column of an app shell: the sidebar at ``start`` is
+    a sibling of ``<main>`` (or of the element that holds it), shown, and
+    not a drawer, a menu or a panel that opens over the page."""
+    tags, ends, parents = ctx.tree()
+    i = next((k for k, t in enumerate(tags) if t.start == start), -1)
+    if i < 0:
+        return False
+    attrs = attr_values(ctx.text, tags[i])
+    if "hidden" in attrs or attrs.get("aria-hidden", ("", ""))[1].lower() == "true":
+        return False
+    if _DRAWER.search(attrs.get("class", ("", ""))[1] + " " + attrs.get("id", ("", ""))[1]):
+        return False
+    mains = [k for k, t in enumerate(tags) if t.name.lower() == "main"]
+    for m in mains:
+        k = m
+        while k >= 0:
+            if parents[k] == parents[i] and k != i:
+                return True
+            k = parents[k]
+    return False
+
+
 def document_or_app_surface(ctx: FileContext) -> bool:
     """True when the page is a document or an app surface, not a landing page.
 
     1. A page with no text (a single-page app root) or ``role="application"``
        is an app.
-    2. A hero (an h1 followed by a call to action) makes it a landing page.
-    3. A sidebar or table of contents beside the content makes it a docs page
-       or an app shell.
-    4. Otherwise, with navigation left out, the page is a document or app when
+    2. A navigation column beside <main> (an app shell's sidebar, shown,
+       not a drawer or a menu) makes it an app surface, even when its
+       header pairs the title with an action (a dashboard's "New order").
+    3. A hero (an h1 followed by a call to action) makes it a landing page.
+    4. Any other sidebar or table of contents beside the content makes it a
+       docs page or an app shell.
+    5. Otherwise, with navigation left out, the page is a document or app when
        one article, form, table, code listing, list or grid holds at least 60
        percent of the main text, or those regions do together. A form that
        wraps several sections is the page itself and does not count."""
@@ -1106,9 +1198,11 @@ def document_or_app_surface(ctx: FileContext) -> bool:
         s, e = _region(low, "main") or _region(low, "body") or (0, len(low))
         if not _visible_len(low[s:e]) or re.search(r"role\s*=\s*[\"']?application\b", low):
             return True
+        side = _sidebars(ctx)
+        if any(_beside_main(ctx, a) for a, _ in side):
+            return True
         if _has_hero(low[s:e]):
             return False
-        side = _sidebars(ctx)
         if side:
             return True
         chars = list(low)

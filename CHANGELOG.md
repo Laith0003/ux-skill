@@ -71,6 +71,13 @@ dark and high contrast, and writes only what passes. 3.x users: start with
   and a press that still moves under reduced motion.
 - Inner pages (pricing, about, contact, customers, customer story, legal)
   with their own sequences, built in one run as one page family.
+- Six category colors for nominal data: `color.category.1` to
+  `color.category.6`, each with a soft fill (a pill or a tile), a strong
+  tone (a chart mark), text, and text on the strong tone, in light, dark
+  and high contrast. The first sits on the brand's hue and the rest step
+  round the wheel; neighbors also differ in lightness. Every system gains
+  24 roles and the gate measures them on every surface. Import a shadcn
+  theme and `chart-1` to `chart-5` map to the category marks.
 - 25 MCP tools on one shared command layer.
 - `figma-skill/`: ux-skill as a skill for Figma's agent.
 - Release checks (`scripts/release_checks.py`): 600 sampled briefs build,
@@ -79,6 +86,29 @@ dark and high contrast, and writes only what passes. 3.x users: start with
   ships nothing private.
 
 ### Changed
+- The dashboard playbook teaches the product dashboard people check many
+  times a day: every figure carries its comparison, date or count; states
+  take the category colors and outcomes the status colors, never color
+  alone; panels share one anatomy (icon, title, one control); one icon set;
+  a product's own photo is content. The cockpit rules stay for dense briefs.
+- The photo direction asks for the client's own photos first, describes
+  each missing shot by what it shows, lets stock stand-ins that pass the
+  direction fill the gap until then, and names the stock cliches to avoid
+  (handshakes, laptops showing charts, glowing locks, posed teams).
+- Lint reads what a page uses. On a page with its own markup, a rule on a
+  utility class no element carries (the rest of a compiled stylesheet) is
+  not reported, nor a library rule whose selector matches nothing there;
+  a dashboard with a sidebar is an app shell even when its header has a
+  button. Over a hundred pages from AI builders this removed a quarter of
+  the findings, none on an element the page has.
+- The quality score tells heavy pages apart: past 50 points of penalty it
+  decays toward 0 instead of stopping there. Scores of 50 and up are
+  unchanged.
+- `lint --render` reports text that runs past its own box
+  (`text-overflows-its-box`), such as a display word wider than its column.
+- The render color budget reads the status and category colors of a linked
+  `tokens.css` on a page opened from disk, where the sheet's rules cannot
+  be read, so they count as meaning there too.
 - 25 slash commands become 18. Each merged command keeps every step and
   flag of the ones it absorbed:
   - `/ux-discover` takes `--frame` (the four-field framing block) and
@@ -145,6 +175,19 @@ dark and high contrast, and writes only what passes. 3.x users: start with
 - `lint --render` adds the color budget, the photo grade lock, accent text
   on every ground it lands on, loops under reduced motion and a pause
   control for anything that moves on its own for more than five seconds.
+
+### Fixed
+- The landing display fits the headline word the face really sets. The
+  fit measured words with an advance that counted the space, so every
+  proportional face came out 9 to 19 percent narrow and a short headline
+  could run sideways at tablet width. Each Latin face now carries its
+  letter advance without the space, and a headline the brief gives counts
+  its longest word by its letters: an m or a W for more, an i or an l for
+  less. Faces are measured at a display size and the heaviest display
+  weight, a brand that sets its display in capitals has its word measured
+  in capitals, and an Arabic word takes the same care. Where the default
+  word binds, the display comes down; give the brief's headline and a
+  short one stands at full size.
 
 ### Deprecated
 These seven commands are now aliases. Each one says where it moved and

@@ -8,7 +8,9 @@ average advance of Latin letters weighted by English letter frequency and,
 for Arabic faces, of the Arabic letters), the weights it ships, the Arabic
 face drawn to sit beside it, and where it sits on the axes (formality,
 warmth, roundness, type personality, contrast). Metrics were measured from
-the published font files with fontTools.
+the published font files with fontTools; the Latin letter advances without
+the space (latin_letters, latin_capitals) in Chromium
+(scripts/measure_face_letters.py).
 
 choose(axes) picks, for each role, the face nearest the axes by weighted
 distance, ties broken by name: never an industry or keyword table. The
@@ -42,9 +44,14 @@ CDN = "https://fonts.googleapis.com/css2"
 @dataclass(frozen=True)
 class Metrics:
     """Measured in font units. latin_avg and arabic_avg are average
-    advances (Latin weighted by English letter frequency, space included;
-    Arabic over the 28 letters and space); arabic_body is the median top
-    of the Arabic letters that have no ascender."""
+    advances (Latin weighted by English letter frequency, space included,
+    as a line of running text sets it; Arabic over the 28 letters and
+    space); arabic_body is the median top of the Arabic letters that have
+    no ascender. latin_letters and latin_capitals are the advances of a to
+    z and of A to Z, weighted by English letter frequency with the space
+    left out, as a headline word sets them, measured at a display size and
+    the heaviest display weight (scripts/measure_face_letters.py); None for
+    a face that has no Latin face of its own."""
     upm: int
     ascent: int
     descent: int
@@ -54,6 +61,8 @@ class Metrics:
     latin_avg: Optional[float]
     arabic_avg: Optional[float]
     arabic_body: Optional[float]
+    latin_letters: Optional[float] = None
+    latin_capitals: Optional[float] = None
 
 
 @dataclass(frozen=True)
@@ -108,53 +117,53 @@ def _m(*v: Optional[float]) -> Metrics:
 FACES: Tuple[Face, ...] = (
     # text faces
     Face("IBM Plex Sans", "text", "sans-serif", (100, 700), True,
-         _m(1000, 1025, 275, 0, 516, 698, 454.1, None, None),
+         _m(1000, 1025, 275, 0, 516, 698, 454.1, None, None, 517.1, 646.4),
          (0.8, 0.35, 0.3, 0.45, 0.45), "IBM Plex Sans Arabic", ink=(740, 212), italic=True),
     Face("Source Sans 3", "text", "sans-serif", (200, 900), True,
-         _m(1000, 1024, 400, 0, 478, 660, 403.4, None, None),
+         _m(1000, 1024, 400, 0, 478, 660, 403.4, None, None, 481.6, 575.7),
          (0.6, 0.6, 0.45, 0.8, 0.4), "Noto Naskh Arabic", ink=(724, 224), italic=True),
     Face("Manrope", "text", "sans-serif", (200, 800), True,
-         _m(2000, 2132, 600, 0, 1080, 1440, 899.3, None, None),
+         _m(2000, 2132, 600, 0, 1080, 1440, 899.3, None, None, 1078.9, 1278.5),
          (0.5, 0.4, 0.6, 0.1, 0.5), "Readex Pro", ink=(735, 255)),
     Face("Nunito Sans", "text", "sans-serif", (200, 1000), True,
-         _m(1000, 1011, 353, 0, 484, 705, 439.4, None, None),
+         _m(1000, 1011, 353, 0, 484, 705, 439.4, None, None, 506.2, 662.2),
          (0.3, 0.8, 0.85, 0.55, 0.4), "Tajawal", ink=(708, 193), italic=True),
     Face("Noto Sans", "text", "sans-serif", (100, 900), True,
-         _m(1000, 1069, 293, 0, 536, 714, 479.0, None, None),
+         _m(1000, 1069, 293, 0, 536, 714, 479.0, None, None, 553.1, 648.1),
          (0.55, 0.5, 0.45, 0.5, 0.45), "Noto Sans Arabic", ink=(765, 240), italic=True),
     # display faces
     Face("Fraunces", "display", "serif", (100, 900), True,
-         _m(2000, 1956, 510, 0, 964, 1400, 1042.1, None, None),
+         _m(2000, 1956, 510, 0, 964, 1400, 1042.1, None, None, 1095.0, 1449.6),
          (0.35, 0.9, 0.75, 0.9, 0.7), "El Messiri", ink=(738, 245), italic=True, ubiquity=0.034),
     Face("Playfair Display", "display", "serif", (400, 900), True,
-         _m(1000, 1082, 251, 0, 514, 708, 456.4, None, None),
+         _m(1000, 1082, 251, 0, 514, 708, 456.4, None, None, 502.9, 665.6),
          (0.9, 0.55, 0.35, 0.85, 0.85), "Amiri", ink=(784, 188), italic=True, ubiquity=0.034),
     Face("Space Grotesk", "display", "sans-serif", (300, 700), True,
-         _m(1000, 984, 292, 0, 486, 700, 497.7, None, None),
+         _m(1000, 984, 292, 0, 486, 700, 497.7, None, None, 540.3, 604.8),
          (0.55, 0.2, 0.3, 0.05, 0.65), "Readex Pro", ink=(700, 200), ubiquity=0.034),
     Face("Bricolage Grotesque", "display", "sans-serif", (200, 800), True,
-         _m(1000, 930, 270, 0, 528, 660, 453.6, None, None),
+         _m(1000, 930, 270, 0, 528, 660, 453.6, None, None, 541.5, 653.6),
          (0.15, 0.7, 0.55, 0.5, 0.85), "Baloo Bhaijaan 2", ink=(704, 184), ubiquity=0.034),
     Face("Sora", "display", "sans-serif", (100, 800), True,
-         _m(1000, 970, 290, 0, 534, 730, 512.1, None, None),
+         _m(1000, 970, 290, 0, 534, 730, 512.1, None, None, 575.5, 705.8),
          (0.65, 0.35, 0.55, 0.15, 0.5), "Alexandria", ink=(734, 208), ubiquity=0.079),
     Face("Outfit", "display", "sans-serif", (100, 900), True,
-         _m(1000, 1000, 260, 0, 460, 676, 444.0, None, None),
+         _m(1000, 1000, 260, 0, 460, 676, 444.0, None, None, 508.1, 650.3),
          (0.4, 0.6, 0.8, 0.3, 0.45), "Alexandria", ink=(724, 209), ubiquity=0.104),
     Face("Newsreader", "display", "serif", (200, 800), True,
-         _m(2000, 1470, 530, 0, 852, 1340, 816.1, None, None),
+         _m(2000, 1470, 530, 0, 852, 1340, 816.1, None, None, 996.2, 1438.5),
          (0.8, 0.6, 0.4, 1.0, 0.5), "Noto Naskh Arabic", ink=(715, 260), italic=True,
          ubiquity=0.034),
     Face("Baloo 2", "display", "sans-serif", (400, 800), True,
-         _m(1000, 1078, 524, 0, 460, 602, 435.4, None, None),
+         _m(1000, 1078, 524, 0, 460, 602, 435.4, None, None, 500.2, 590.5),
          (0.05, 0.95, 1.0, 0.6, 0.6), "Baloo Bhaijaan 2", ink=(670, 202)),
     # mono faces
     Face("IBM Plex Mono", "mono", "monospace", (100, 700), False,
-         _m(1000, 1025, 275, 0, 516, 698, 600.0, None, None),
+         _m(1000, 1025, 275, 0, 516, 698, 600.0, None, None, 600.0, 600.0),
          (0.75, 0.45, 0.35, 0.5, 0.4), stops=(100, 200, 300, 400, 500, 600, 700),
          ink=(740, 212), italic=True),
     Face("JetBrains Mono", "mono", "monospace", (100, 800), True,
-         _m(1000, 1020, 300, 0, 550, 730, 600.0, None, None),
+         _m(1000, 1020, 300, 0, 550, 730, 600.0, None, None, 600.0, 600.0),
          (0.5, 0.3, 0.45, 0.1, 0.55), ink=(730, 180), italic=True),
     # Arabic partners
     Face("IBM Plex Sans Arabic", "arabic", "sans-serif", (100, 700), False,

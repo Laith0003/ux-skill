@@ -436,6 +436,38 @@ def axes_support_hue(axes: AxisValues) -> float:
     return (cool + (warm - cool) * axes.warmth) % 360.0
 
 
+# Hues for nominal data: chart series, order states, segments and tags.
+CATEGORY_COUNT = 6
+# Neighbors alternate between these OKLCH lightnesses, so two adjacent
+# categories differ in lightness as well as hue and stay apart for readers
+# who do not see the hue difference.
+CATEGORY_L = (0.56, 0.66)
+
+
+def category_seed(index: int, axes: AxisValues, brand_hue: float,
+                  brand_chroma: float) -> Tuple[float, float, float]:
+    """(L, C, H) of category `index`, counted from 0. The first sits on the
+    brand's hue, as far as the brand has one (hue_weight); a grey brand
+    starts from axes_support_hue, so warmth still moves it, except within
+    STATUS_FADE of that hue's opposite, where the pull fades so the start
+    has no seam. Category hues cross the status hues (six hues cannot all
+    keep clear of four), so a category always carries its word and never
+    reports an outcome (decisions/categories-for-nominal-data.md). The others step
+    round the wheel by 360 / CATEGORY_COUNT degrees from there, lightness
+    alternates between CATEGORY_L, and chroma follows the contrast axis as
+    the status seeds do, so a muted brief gets quiet categories."""
+    support = axes_support_hue(axes)
+    d = hue_delta(brand_hue, support)
+    # How far the start leaves the brand for the support hue: all the way
+    # for a grey brand, none for one with a hue, fading to none within
+    # STATUS_FADE of the support hue's opposite, so the start moves
+    # continuously with the brand hue and chroma and has no seam.
+    pull = (1.0 - hue_weight(brand_chroma)) * clamp((180.0 - abs(d)) / STATUS_FADE)
+    start = (brand_hue + d * pull) % 360.0
+    hue = (start + index * 360.0 / CATEGORY_COUNT) % 360.0
+    return CATEGORY_L[index % 2], 0.07 + 0.11 * axes.contrast, hue
+
+
 def saturation(chroma: float) -> float:
     """0 for a grey brand (SAT_CHROMA[0] and below) to 1 for a saturated one
     (SAT_CHROMA[1] and above), in proportion between."""

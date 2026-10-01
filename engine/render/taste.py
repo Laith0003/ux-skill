@@ -57,17 +57,28 @@ _PAGE_JS = r"""(limits) => {
   const out = {findings: [], photos: [], grade: null};
   const CHROMATIC = limits.chromatic, ACCENT = limits.accent;
   // Status colors: every custom property named for a status, as the page
-  // resolves it. They carry meaning, so the budget leaves them out.
+  // resolves it. They carry meaning, so the budget leaves them out, and so are
+  // the category colors (color.category.*) that tell states and series apart.
   const status = new Set();
   const walk = rules => { for (const r of rules) {
     if (r.cssRules) walk(r.cssRules);
     if (!r.style) continue;
     for (const name of r.style) if (name.startsWith('--')
-        && /status|error|danger|success|warning|info|positive|negative|critical/i.test(name)) {
+        && /status|error|danger|success|warning|info|positive|negative|critical|category/i.test(name)) {
       const v = root.getPropertyValue(name).trim();
       if (v) { const c = rgba(v); if (c[3] > 0) status.add(hex(c)); }
     } } };
   for (const s of document.styleSheets) { try { walk(s.cssRules); } catch (e) {} }
+  // A sheet whose rules cannot be read (a page opened from disk linking
+  // tokens.css) still sets its custom properties on the root: read the
+  // status and category names from the computed style too.
+  const MEANING = /status|error|danger|success|warning|info|positive|negative|critical|category/i;
+  for (let i = 0; i < root.length; i++) {
+    const name = root[i];
+    if (!name.startsWith('--') || !MEANING.test(name)) continue;
+    const v = root.getPropertyValue(name).trim();
+    if (v) { const c = rgba(v); if (c[3] > 0) status.add(hex(c)); }
+  }
 
   // Text: characters in a chromatic color, and accent text on its ground.
   const skip = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE']);

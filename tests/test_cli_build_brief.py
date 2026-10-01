@@ -29,13 +29,15 @@ def _run(*args):
 
 def test_the_headline_gives_its_longest_word_per_script():
     assert brief_words(None) is None and brief_words({"tone": ["calm"]}) is None
-    assert brief_words({"headline": "Pay anyone in seconds"}) == {"latin": 7}
+    # A Latin word counts in average letters: "seconds" is 8.1, an s narrower and
+    # an n and an o wider than average, with the fit's slack.
+    assert brief_words({"headline": "Pay anyone in seconds"}) == {"latin": 8.1}
     assert brief_words({"headline": ["Well-made", "مرحبا "
                                                   "بالعالم"]}) \
-        == {"latin": 4, "arabic": 7}
-    assert brief_words({"answers": {"headline": "Go far"}}) == {"latin": 3}
+        == {"latin": 5.5, "arabic": 7.5}
+    assert brief_words({"answers": {"headline": "Go far"}}) == {"latin": 3.0}
     # A browser does not reliably break after a slash: and/or is one word.
-    assert brief_words({"headline": "Buy and/or sell"}) == {"latin": 5}
+    assert brief_words({"headline": "Buy and/or sell"}) == {"latin": 5.9}
     assert unread_lines({"tone": ["calm"], "headline": "Go far"}) == []
 
 
@@ -44,9 +46,12 @@ def test_the_headline_gives_its_longest_word_per_script():
         '"headline": "Pay anyone in seconds", or a list of the page\'s headlines'),
     ("12 !", "brief field headline is '12 !', which has no word; give the page's headline as "
              'text, for example "headline": "Pay anyone in seconds"'),
-    ("a" * 41, "brief field headline has the word aaaaaaaaaaaaaaaaaaaa... of 41 letters; the "
+    ("i" * 41, "brief field headline has the word iiiiiiiiiiiiiiiiiiii... of 41 letters; the "
                "display fits words of up to 40, so break it or write the headline as the page "
                "shows it"),
+    ("a" * 38, "brief field headline has the word aaaaaaaaaaaaaaaaaaaa... of 38 letters, as wide "
+               "as 44.4 average letters; the display fits words of up to 40, so break it or write "
+               "the headline as the page shows it"),
 ])
 def test_a_headline_that_cannot_be_read_names_the_field_and_the_fix(value, message):
     with pytest.raises(InputError) as exc:
@@ -65,11 +70,11 @@ def test_the_briefs_headline_sizes_the_display_on_system_build(tmp_path):
                      encoding="utf-8")
     result, _ = _run("system", "build", "--brand", "#3366FF", "--brief", str(brief), "--out",
                      str(tmp_path / "a"))
-    assert result.exit_code == 0 and _fit(tmp_path / "a") == 7
+    assert result.exit_code == 0 and _fit(tmp_path / "a") == 8.1
     brief.write_text(json.dumps({"tone": ["calm"]}), encoding="utf-8")
     result, _ = _run("system", "build", "--brand", "#3366FF", "--brief", str(brief), "--out",
                      str(tmp_path / "c"))
-    assert result.exit_code == 0 and _fit(tmp_path / "c") == 13
+    assert result.exit_code == 0 and _fit(tmp_path / "c") == 14.1
     brief.write_text(json.dumps({"tone": ["calm"], "headline": ["Go", 4]}), encoding="utf-8")
     bad, _ = _run("system", "build", "--brand", "#3366FF", "--brief", str(brief), "--out",
                   str(tmp_path / "b"))

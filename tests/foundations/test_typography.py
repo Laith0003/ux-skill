@@ -505,12 +505,16 @@ def test_the_largest_styles_step_down_on_a_phone_and_keep_their_order(a, mode):
 
 
 def test_the_phone_factor_is_continuous_in_the_contrast_axis():
+    # Sizes round to whole pixels, so beside the slope the factor may move
+    # by one pixel of the hero's phone size between two samples.
     prev = None
     for i in range(21):
-        f = build_system(axes(contrast=i / 20), "#3366FF").tokens.resolve("type.phone.hero")
+        ts = build_system(axes(contrast=i / 20), "#3366FF").tokens
+        f = ts.resolve("type.phone.hero")
         assert 0 < f <= 1
+        phone_px = ts.resolve("type.size.latin.9")["value"] * 16 * f
         if prev is not None:
-            assert abs(f - prev) < 0.05
+            assert abs(f - prev) < 0.05 + 1 / phone_px
         prev = f
 
 
