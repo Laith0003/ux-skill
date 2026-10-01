@@ -4660,26 +4660,24 @@
       "1": {
         "soft": {
           "$type": "color",
-          "$value": "{color.category-1.soft-100}",
+          "$value": "{color.category-1.200}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-1.soft-50}",
-                "scheme:dark": "{color.category-1.soft-900}",
-                "scheme:dark,contrast:high": "{color.category-1.soft-950}"
+                "scheme:dark": "{color.category-1.900}"
               }
             }
           }
         },
         "strong": {
           "$type": "color",
-          "$value": "{color.category-1.600}",
+          "$value": "{color.category-1.700}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-1.700}",
+                "contrast:high": "{color.category-1.800}",
                 "scheme:dark": "{color.category-1.400}",
                 "scheme:dark,contrast:high": "{color.category-1.300}"
               }
@@ -4688,12 +4686,12 @@
         },
         "text": {
           "$type": "color",
-          "$value": "{color.category-1.700}",
+          "$value": "{color.category-1.800}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-1.800}",
+                "contrast:high": "{color.category-1.900}",
                 "scheme:dark": "{color.category-1.300}",
                 "scheme:dark,contrast:high": "{color.category-1.200}"
               }
@@ -4716,21 +4714,19 @@
       "2": {
         "soft": {
           "$type": "color",
-          "$value": "{color.category-2.soft-100}",
+          "$value": "{color.category-2.200}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-2.soft-50}",
-                "scheme:dark": "{color.category-2.soft-900}",
-                "scheme:dark,contrast:high": "{color.category-2.soft-950}"
+                "scheme:dark": "{color.category-2.900}"
               }
             }
           }
         },
         "strong": {
           "$type": "color",
-          "$value": "{color.category-2.600}",
+          "$value": "{color.category-2.700}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
@@ -4744,12 +4740,12 @@
         },
         "text": {
           "$type": "color",
-          "$value": "{color.category-2.700}",
+          "$value": "{color.category-2.800}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-2.800}",
+                "contrast:high": "{color.category-2.900}",
                 "scheme:dark": "{color.category-2.300}",
                 "scheme:dark,contrast:high": "{color.category-2.200}"
               }
@@ -4772,26 +4768,24 @@
       "3": {
         "soft": {
           "$type": "color",
-          "$value": "{color.category-3.soft-100}",
+          "$value": "{color.category-3.200}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-3.soft-50}",
-                "scheme:dark": "{color.category-3.soft-900}",
-                "scheme:dark,contrast:high": "{color.category-3.soft-950}"
+                "scheme:dark": "{color.category-3.900}"
               }
             }
           }
         },
         "strong": {
           "$type": "color",
-          "$value": "{color.category-3.600}",
+          "$value": "{color.category-3.700}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-3.700}",
+                "contrast:high": "{color.category-3.800}",
                 "scheme:dark": "{color.category-3.400}",
                 "scheme:dark,contrast:high": "{color.category-3.300}"
               }
@@ -4800,12 +4794,12 @@
         },
         "text": {
           "$type": "color",
-          "$value": "{color.category-3.700}",
+          "$value": "{color.category-3.800}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-3.800}",
+                "contrast:high": "{color.category-3.900}",
                 "scheme:dark": "{color.category-3.300}",
                 "scheme:dark,contrast:high": "{color.category-3.200}"
               }
@@ -4828,26 +4822,24 @@
       "4": {
         "soft": {
           "$type": "color",
-          "$value": "{color.category-4.soft-100}",
+          "$value": "{color.category-4.200}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-4.soft-50}",
-                "scheme:dark": "{color.category-4.soft-900}",
-                "scheme:dark,contrast:high": "{color.category-4.soft-950}"
+                "scheme:dark": "{color.category-4.900}"
               }
             }
           }
         },
         "strong": {
           "$type": "color",
-          "$value": "{color.category-4.600}",
+          "$value": "{color.category-4.700}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-4.700}",
+                "contrast:high": "{color.category-4.800}",
                 "scheme:dark": "{color.category-4.400}",
                 "scheme:dark,contrast:high": "{color.category-4.300}"
               }
@@ -4856,12 +4848,12 @@
         },
         "text": {
           "$type": "color",
-          "$value": "{color.category-4.700}",
+          "$value": "{color.category-4.800}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-4.800}",
+                "contrast:high": "{color.category-4.900}",
                 "scheme:dark": "{color.category-4.300}",
                 "scheme:dark,contrast:high": "{color.category-4.200}"
               }
@@ -4884,26 +4876,24 @@
       "5": {
         "soft": {
           "$type": "color",
-          "$value": "{color.category-5.soft-100}",
+          "$value": "{color.category-5.200}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-5.soft-50}",
-                "scheme:dark": "{color.category-5.soft-900}",
-                "scheme:dark,contrast:high": "{color.category-5.soft-950}"
+                "scheme:dark": "{color.category-5.900}"
               }
             }
           }
         },
         "strong": {
           "$type": "color",
-          "$value": "{color.category-5.600}",
+          "$value": "{color.category-5.700}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-5.700}",
+                "contrast:high": "{color.category-5.800}",
                 "scheme:dark": "{color.category-5.400}",
                 "scheme:dark,contrast:high": "{color.category-5.300}"
               }
@@ -4912,12 +4902,12 @@
         },
         "text": {
           "$type": "color",
-          "$value": "{color.category-5.700}",
+          "$value": "{color.category-5.800}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-5.800}",
+                "contrast:high": "{color.category-5.900}",
                 "scheme:dark": "{color.category-5.300}",
                 "scheme:dark,contrast:high": "{color.category-5.200}"
               }
@@ -4940,26 +4930,24 @@
       "6": {
         "soft": {
           "$type": "color",
-          "$value": "{color.category-6.soft-100}",
+          "$value": "{color.category-6.200}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-6.soft-50}",
-                "scheme:dark": "{color.category-6.soft-900}",
-                "scheme:dark,contrast:high": "{color.category-6.soft-950}"
+                "scheme:dark": "{color.category-6.900}"
               }
             }
           }
         },
         "strong": {
           "$type": "color",
-          "$value": "{color.category-6.600}",
+          "$value": "{color.category-6.700}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-6.700}",
+                "contrast:high": "{color.category-6.800}",
                 "scheme:dark": "{color.category-6.400}",
                 "scheme:dark,contrast:high": "{color.category-6.300}"
               }
@@ -4968,12 +4956,12 @@
         },
         "text": {
           "$type": "color",
-          "$value": "{color.category-6.700}",
+          "$value": "{color.category-6.800}",
           "$extensions": {
             "io.github.laith0003.ux-skill": {
               "layer": "semantic",
               "modes": {
-                "contrast:high": "{color.category-6.800}",
+                "contrast:high": "{color.category-6.900}",
                 "scheme:dark": "{color.category-6.300}",
                 "scheme:dark,contrast:high": "{color.category-6.200}"
               }

@@ -142,3 +142,66 @@ def test_the_gate_checks_that_categories_stand_apart():
                                                   layer="semantic")
     found = _categories_distinct(ts, "scheme:light,contrast:standard")
     assert found and "color.category.2.strong" in found[0] and "point" in found[0]
+
+
+# ------------------------------------------------ review fixes
+
+@pytest.mark.parametrize("chroma", [0.0, 0.005, 0.01, 0.02, 0.03, 0.039, 0.04])
+def test_the_start_has_no_seam_for_a_nearly_grey_brand(chroma):
+    prev = None
+    for tenth in range(0, 3601):
+        cur = character.category_seed(0, AXES, tenth / 10.0, chroma)[2]
+        if prev is not None:
+            assert _hue_gap(prev, cur) <= 2.5, (chroma, tenth / 10.0, prev, cur)
+        prev = cur
+
+
+@pytest.mark.parametrize("seed", SEEDS)
+def test_resolved_strong_tones_alternate_in_lightness_in_every_context(seed):
+    for contrast_axis in (0.0, 0.5, 1.0):
+        ts = generate_color(_with(contrast=contrast_axis), seed).tokens
+        for mode in COLOR_CONTEXTS:
+            L = [hex_to_oklch(ts.resolve(f"color.category.{k}.strong", mode))[0]
+                 for k in range(1, N + 1)]
+            steps = [b - a for a, b in zip(L, L[1:])]
+            # The ramp narrows toward black, so the gap is smaller at 800.
+            floor = 0.035 if "contrast:high" in mode else 0.05
+            assert all(abs(s) >= floor for s in steps), (seed, contrast_axis, mode, L)
+            assert all(a * b < 0 for a, b in zip(steps, steps[1:])), (seed, contrast_axis, mode, L)
+
+
+@pytest.mark.parametrize("seed", SEEDS)
+def test_soft_fills_stand_apart_in_every_context(seed):
+    for contrast_axis in (0.0, 1.0):
+        ts = generate_color(_with(contrast=contrast_axis), seed).tokens
+        for mode in COLOR_CONTEXTS:
+            fills = [ts.resolve(f"color.category.{k}.soft", mode) for k in range(1, N + 1)]
+            for a, b in itertools.combinations(fills, 2):
+                assert oklab_distance(a, b) >= 0.04, (seed, contrast_axis, mode, a, b)
+
+
+def test_category_text_and_marks_are_measured_on_every_surface():
+    from engine.foundations.color import LINE_SURFACES, TEXT_SURFACES
+    pairs = {(p.fg, p.bg) for p in PAIRINGS}
+    for k in range(1, N + 1):
+        for bg in TEXT_SURFACES:
+            assert (f"color.category.{k}.text", bg) in pairs, (k, bg)
+        for bg in LINE_SURFACES:
+            assert (f"color.category.{k}.strong", bg) in pairs, (k, bg)
+
+
+def test_a_contract_binding_a_category_names_a_second_cue():
+    from engine.contracts.schema import COLOR_SIGNALS
+    assert any("color.category.1.soft".startswith(s) for s in COLOR_SIGNALS)
+
+
+def test_chart_tokens_map_to_the_category_marks():
+    from engine.foundations.tokens import Token, TokenSet
+    from engine.io.adapter import propose, unclaimed
+    ts = TokenSet()
+    for k in range(1, 6):
+        ts.add(Token(f"chart-{k}", "color", "#336699"))
+    mapping = propose(ts)
+    for k in range(1, 6):
+        assert mapping.roles[f"color.category.{k}.strong"].token == f"chart-{k}"
+    assert unclaimed(ts, mapping) == []

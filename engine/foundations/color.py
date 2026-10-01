@@ -16,6 +16,7 @@ build_system validates and gates them with PAIRINGS and CHECKS, then asks
 seed_hint for advice on the failing pairings the brand seed controls."""
 from __future__ import annotations
 
+import itertools
 import math
 from dataclasses import dataclass
 from types import MappingProxyType
@@ -150,12 +151,17 @@ for _s in STATUS_HUES:
 # Each category as a status family is drawn: a soft fill for a pill or a
 # tile, a strong tone for a chart mark, text for the fill and the page, and
 # text on the strong tone.
+# The soft fills keep their step's full chroma (200 in light, 900 in dark),
+# so six pills stay apart from each other; status soft fills can be quiet
+# because a status pill stands alone. The strong tones start at 700 in
+# light, which clears 3:1 on every surface a chart sits on for every hue,
+# so none is moved and neighbors keep their lightness alternation.
 for _k in CATEGORIES:
-    _SEMANTIC[f"color.category.{_k}.soft"] = (f"color.category-{_k}.soft-100",
-                                               f"color.category-{_k}.soft-900")
-    _SEMANTIC[f"color.category.{_k}.strong"] = (f"color.category-{_k}.600",
+    _SEMANTIC[f"color.category.{_k}.soft"] = (f"color.category-{_k}.200",
+                                               f"color.category-{_k}.900")
+    _SEMANTIC[f"color.category.{_k}.strong"] = (f"color.category-{_k}.700",
                                                  f"color.category-{_k}.400")
-    _SEMANTIC[f"color.category.{_k}.text"] = (f"color.category-{_k}.700",
+    _SEMANTIC[f"color.category.{_k}.text"] = (f"color.category-{_k}.800",
                                                f"color.category-{_k}.300")
     _SEMANTIC[f"color.category.{_k}.on-strong"] = ("color.base.white", "color.base.black")
 CATEGORY_ROLES: Tuple[str, ...] = tuple(
@@ -240,12 +246,16 @@ for _s in STATUS_HUES:
     _HIGH[f"color.status.{_s}.text"] = (f"color.{_s}.800", f"color.{_s}.200")
     _HIGH[f"color.status.{_s}.soft"] = (f"color.{_s}.soft-50", f"color.{_s}.soft-950")
     _HIGH[f"color.status.{_s}.strong"] = (f"color.{_s}.800", f"color.{_s}.200")
+# Under high contrast the fills stay on 200 and 900 and the text moves out;
+# every strong tone goes to 800 (300 in dark), where white (black) text
+# clears 7:1 for every hue, so none is moved and the lightness alternation
+# between neighbors holds.
 for _k in CATEGORIES:
-    _HIGH[f"color.category.{_k}.soft"] = (f"color.category-{_k}.soft-50",
-                                           f"color.category-{_k}.soft-950")
-    _HIGH[f"color.category.{_k}.strong"] = (f"color.category-{_k}.700",
+    _HIGH[f"color.category.{_k}.soft"] = (f"color.category-{_k}.200",
+                                           f"color.category-{_k}.900")
+    _HIGH[f"color.category.{_k}.strong"] = (f"color.category-{_k}.800",
                                              f"color.category-{_k}.300")
-    _HIGH[f"color.category.{_k}.text"] = (f"color.category-{_k}.800",
+    _HIGH[f"color.category.{_k}.text"] = (f"color.category-{_k}.900",
                                            f"color.category-{_k}.200")
 HIGH_CONTRAST: Mapping[str, Tuple[str, str]] = MappingProxyType(_HIGH)
 
@@ -281,7 +291,8 @@ BRAND_ROLES: Tuple[str, ...] = ("fill", "accent", "edge")
 # gets every pairing it needs; build_pairings writes them.
 TEXT_ROLES: Tuple[str, ...] = ("color.text.default", "color.text.muted", "color.text.link") \
     + tuple(f"color.status.{s}.text" for s in STATUS_HUES) \
-    + ("color.text.accent", "color.text.support")
+    + ("color.text.accent", "color.text.support") \
+    + tuple(f"color.category.{k}.text" for k in CATEGORIES)
 TEXT_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
                                   "color.surface.sunken", "color.surface.raised",
                                   "color.surface.selected", "color.surface.tint",
@@ -363,7 +374,7 @@ def _extra_text_bgs(role: str) -> Tuple[str, ...]:
     action link), status text on its own soft fill."""
     if role in ("color.text.default", "color.text.muted", "color.text.link"):
         return tuple(f"color.status.{s}.soft" for s in STATUS_HUES)
-    if role.startswith("color.status.") and role.endswith(".text"):
+    if role.startswith(("color.status.", "color.category.")) and role.endswith(".text"):
         return (role[:-len("text")] + "soft",)
     return ()
 
@@ -416,17 +427,14 @@ def build_pairings(text_roles: Tuple[str, ...] = TEXT_ROLES,
         + [Pairing(role, bg, DECORATIVE_FLOOR, "system", high=DECORATIVE_FLOOR)
            for role in DECORATIVE_ROLES for bg in ("color.surface.page", "color.surface.card")]
         + [Pairing("color.logo", "color.surface.page", LOGO_FLOOR, "system", high=LOGO_FLOOR)]
-        # A category's text sits on its own soft fill (a pill, a tile) and
-        # on the page and card (a legend, a label); its strong tone is a
-        # chart mark, a non-text part against the page and card, with its
-        # own text on it.
-        + [Pairing(f"color.category.{k}.text", bg, 4.5, "1.4.3")
-           for k in CATEGORIES
-           for bg in (f"color.category.{k}.soft", "color.surface.page", "color.surface.card")]
+        # A category's text is a text role (TEXT_ROLES): every text surface
+        # and its own soft fill. Its strong tone is a chart mark or a legend
+        # swatch, a non-text part against every surface a chart or a
+        # control sits on, with its own text on it.
         + [Pairing(f"color.category.{k}.on-strong", f"color.category.{k}.strong", 4.5, "1.4.3")
            for k in CATEGORIES]
         + [Pairing(f"color.category.{k}.strong", bg, 3.0, "1.4.11")
-           for k in CATEGORIES for bg in ("color.surface.page", "color.surface.card")]
+           for k in CATEGORIES for bg in line_surfaces]
     )
 
 
@@ -474,7 +482,7 @@ GROUPS: Tuple[_Group, ...] = (
                  grounds=CONTROL_SURFACES if s == "danger" else ("color.surface.page",))
           for s in STATUS_HUES) \
     + tuple(_Group(f"color.category.{k}.strong", f"color.category.{k}.on-strong",
-                   grounds=("color.surface.page", "color.surface.card")) for k in CATEGORIES) \
+                   grounds=LINE_SURFACES) for k in CATEGORIES) \
     + (_Group("color.surface.brand", "color.text.on-brand", grounds=(), brand=True),
        # After the band: the button on it clears the band as solved.
        _Group("color.action.on-brand", "color.text.on-brand-action",
@@ -1174,24 +1182,23 @@ def _disabled_distinct(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
-# Our floor for how far apart, in OKLab distance, any two categories'
-# strong tones stand, so two chart series or two order states never read
-# as one color.
-CATEGORY_APART = 0.06
+# Our floors for how far apart, in OKLab distance, any two categories'
+# strong tones and soft fills stand, so two chart series or two order
+# state pills never read as one color.
+CATEGORY_APART = {"strong": 0.06, "soft": 0.04}
 
 
 def _categories_distinct(ts: TokenSet, mode: str) -> List[str]:
-    roles = [f"color.category.{k}.strong" for k in CATEGORIES
-             if _typed(ts, f"color.category.{k}.strong")]
     out = []
-    for i, a in enumerate(roles):
-        for b in roles[i + 1:]:
-            ha, hb = ts.resolve(a, mode), ts.resolve(b, mode)
-            if oklab_distance(ha, hb) < CATEGORY_APART:
-                out.append(f"{b} ({hb}) sits {oklab_distance(ha, hb):.3f} from {a} ({ha}) in "
-                           f"OKLab ({mode}), under the {CATEGORY_APART} floor, so the two read "
-                           f"as one color; point {b} at a step of its own ramp that stands "
-                           "further off")
+    for part, floor in CATEGORY_APART.items():
+        tones = [(f"color.category.{k}.{part}", ts.resolve(f"color.category.{k}.{part}", mode))
+                 for k in CATEGORIES if _typed(ts, f"color.category.{k}.{part}")]
+        for (a, ha), (b, hb) in itertools.combinations(tones, 2):
+            d = oklab_distance(ha, hb)
+            if d < floor:
+                out.append(f"{b} ({hb}) sits {d:.3f} from {a} ({ha}) in OKLab ({mode}), under "
+                           f"the {floor} floor, so the two read as one color; point {b} at a "
+                           "step of its own ramp that stands further off")
     return out
 
 
