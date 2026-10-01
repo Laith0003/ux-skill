@@ -11,9 +11,12 @@ Read as tokens:
   that name no known axis make an axis named after both headers, the first
   the base (Brand and Partner give brand-partner). Each such table is
   noted;
-- a column that names each token's alias (Alias, References, Maps to, or
-  Token beside a name column) reads as the value where it holds a
-  reference, {a.b} or a backticked name;
+- a column that names each token's alias (Alias, Alias of, References,
+  Maps to, or Token beside a name column) reads as the value where it
+  holds a reference, {a.b} or a backticked name; one named for a mode
+  (Dark alias) holds the reference in that mode, beside the mode's value
+  column or without one. An alias cell that names several tokens is
+  noted with the fix and not read;
 - a palette keyed by step (a Step column of 50, 100 ... 900 and a column per
   family, or the steps across the top): each cell is a primitive named
   family.step;
@@ -438,6 +441,26 @@ class _Table:
     guidance: str = ""
     # A typography table: each field's column, when the table has all five.
     fields: Dict[str, int] = field(default_factory=dict)
+    # An alias column for a mode (Dark alias): (column, axis).
+    mode_aliases: List[Tuple[int, str]] = field(default_factory=list)
+
+
+# The words of an alias column's header ("Alias of", "Maps to"); any other
+# word names the mode the column holds the reference in ("Dark alias").
+_ALIAS_WORDS = frozenset(("alias", "aliases", "aliased", "reference", "references", "ref",
+                          "refs", "maps", "points", "refers"))
+_ALIAS_FILLER = frozenset(("to", "of", "for", "token", "mode"))
+
+
+def _alias_mode(header: str) -> Optional[str]:
+    """None when a header does not name an alias column, "" for one that
+    holds the base's reference (Alias, Alias of, Maps to, Light alias),
+    or the words that name its mode (Dark alias gives dark)."""
+    found = re.findall(r"[a-z0-9]+", header.lower())
+    if not set(found) & _ALIAS_WORDS:
+        return None
+    rest = " ".join(w for w in found if w not in _ALIAS_WORDS and w not in _ALIAS_FILLER)
+    return "" if not rest or is_base(rest) else rest
 
 
 def _guidance(raw: List[str], low: List[str]) -> str:
@@ -531,11 +554,16 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
     name = next((low.index(h) for h in _NAME_PREFERENCE if h in low), None)
     if name is None:
         return None
-    alias = next((c for c, h in enumerate(low) if c != name and h in ALIAS_HEADERS), -1)
-    value = [c for c, h in enumerate(low) if c not in (name, alias) and h in VALUE_HEADERS]
+    alias = next((c for c, h in enumerate(low)
+                  if c != name and (h in ALIAS_HEADERS or _alias_mode(h) == "")), -1)
+    # Alias columns for a mode (Dark alias): never a value or a mode column.
+    by_mode = [c for c, h in enumerate(low) if c not in (name, alias) and _alias_mode(h)]
+    value = [c for c, h in enumerate(low)
+             if c not in (name, alias, *by_mode) and h in VALUE_HEADERS]
     other = [c for c, h in enumerate(low)
-             if c not in (name, alias) and h and h not in VALUE_HEADERS and h not in NAME_HEADERS
-             and not _prose_header(h) and h not in GUIDANCE_DO + GUIDANCE_AVOID]
+             if c not in (name, alias, *by_mode) and h and h not in VALUE_HEADERS
+             and h not in NAME_HEADERS and not _prose_header(h)
+             and h not in GUIDANCE_DO + GUIDANCE_AVOID]
     if alias < 0 and not value and not other and low[name] == "token":
         # A Token column of references beside a column of names: the names
         # are the tokens, and the Token column holds what each aliases.
@@ -557,7 +585,7 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
     if len(typed) == len(TYPOGRAPHY_FIELDS):
         table.fields = {f: typed[f] for f in TYPOGRAPHY_FIELDS}
         heads = _and([raw[c] for c in table.fields.values()])
-        for c in [c for c in value + other + ([alias] if alias >= 0 else [])
+        for c in [c for c in value + other + ([alias] if alias >= 0 else []) + by_mode
                   if c not in table.fields.values()]:
             table.dropped.append((raw[c], (
                 f"is not a typography field, so its column was not read; this table reads "
@@ -565,6 +593,21 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
                 f"{raw[c]} in a table of its own")))
         table.alias = -1
         return table
+    for c in by_mode:
+        words = str(_alias_mode(low[c]))
+        axis = mode_of(words, [raw[c]])
+        held = next((raw[k] for k, a in table.mode_aliases if a == axis), None)
+        if axis is None:
+            table.dropped.append((raw[c], (
+                f"is an alias column for {words}, which names no mode, so it was not read; head "
+                "it with a mode name and alias, such as Dark alias, or put it in a table of its "
+                "own")))
+        elif held is not None:
+            table.dropped.append((raw[c], (
+                f"is a second alias column for the {axis} axis, which {held} holds, so it was "
+                "not read; keep one alias column per mode")))
+        else:
+            table.mode_aliases.append((c, axis))
     props = [c for c in other if _property(low[c])]
     if props:
         other = [c for c in other if c not in props]
@@ -624,10 +667,13 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
                                    "names such as Light and Dark")))
         return table
     if not all(found):
+        bad = [raw[c] for c, word in zip(other, found) if not word]
+        which = "that column" if len(bad) == 1 else "those columns"
         table.whole = True
-        table.dropped.append(("", (f"a table with the columns {columns} was not read, since a "
-                                   "mode is named with letters; head them with mode names such "
-                                   "as Light and Dark")))
+        table.dropped.append(("", (f"a table with the columns {columns} was not read, since "
+                                   f"{_and(bad)} cannot name a mode, whose name starts with a "
+                                   f"letter; head {which} with a mode name such as Dark or High "
+                                   "contrast")))
         return table
     table.base, mode = other
     table.modes.append((mode, f"{found[0]}-{found[1]}", (found[0], found[1])))
@@ -901,17 +947,40 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         contexts = [(c, f"{axis}:{values[1]}") for c, axis, values in table.modes]
         for _, axis, values in table.modes:
             axes.setdefault(axis, values)
+        # Alias columns for a mode hold the reference in that mode.
+        by_alias = [(c, f"{axis}:{AXES[axis][1]}") for c, axis in table.mode_aliases]
+        for _, axis in table.mode_aliases:
+            axes.setdefault(axis, AXES[axis][:2])
         head = raw[table.base] if table.base >= 0 else raw[table.alias]
-        if contexts:
+        if contexts or by_alias:
             if len(contexts) == 1:
                 read = f"{head} was read as the base and {raw[contexts[0][0]]} as {contexts[0][1]}"
-            else:
+            elif contexts:
                 read = f"{head} was read as the base, " + _and(
                     [f"{raw[c]} as {ctx}" for c, ctx in contexts])
-            notes.append(Item(where, "", (
-                f"a table with {_and([head] + [raw[c] for c, _ in contexts])} columns; {read}")))
+            else:
+                read = f"{head} was read as the base"
+            read += "".join(f"; {raw[c]} was read as the reference in {ctx} where it holds one"
+                            for c, ctx in by_alias)
+            listed = [head] + [raw[c] for c, _ in contexts + by_alias]
+            notes.append(Item(where, "", f"a table with {_and(listed)} columns; {read}"))
         columns = [table.name] + [c for c in (table.base, table.alias) if c >= 0] \
-            + [c for c, _ in contexts]
+            + [c for c, _ in contexts + by_alias]
+
+        def several(cell: str, column: int, name: str, at: str) -> bool:
+            """True, with a note, for an alias cell that names more than one
+            token: a token references one, so the cell is not read."""
+            parts = split_top(cell.strip())
+            if len(parts) < 2 or not all(_refish(p) for p in parts):
+                return False
+            own = _row_name(name)
+            notes.append(Item(at, own, (
+                f"in the {raw[column]} column, {cell.strip()} holds more than one name, and a "
+                "token references one, so the cell was not read; if they are other names for "
+                f"{own}, write each as a row of its own with `{own}` in the {raw[column]} "
+                "column")))
+            return True
+
         for r, cells in rows:
             at = f"{file_name}:{r}"
             if len(cells) <= max(columns):
@@ -923,6 +992,8 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 continue
             base = cells[table.base] if table.base >= 0 else ""
             alias = cells[table.alias] if table.alias >= 0 else ""
+            if alias.strip() and several(alias, table.alias, cells[table.name], at):
+                alias = ""
             if alias.strip() and (_refish(alias) or not base.strip()):
                 values = {"": _as_reference(alias) if _refish(alias) else alias}
                 labels = {"": raw[table.alias], "name": raw[table.name]}
@@ -937,6 +1008,14 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
             for c, ctx in contexts:
                 values[ctx], labels[ctx] = cells[c], raw[c]
                 units[ctx] = table.units.get(c, "")
+            for c, ctx in by_alias:
+                cell = cells[c]
+                if not cell.strip() or several(cell, c, cells[table.name], at):
+                    continue
+                if _refish(cell) or not values.get(ctx, "").strip():
+                    values[ctx] = _as_reference(cell) if _refish(cell) else cell
+                    labels[ctx], units[ctx] = raw[c], table.units.get(c, "")
+                    aliased += (ctx,)
             add(cells[table.name], at, values, labels, units, aliased)
 
     def unread_line(file_name: str, at: int, line: str) -> None:

@@ -258,9 +258,9 @@ def test_a_table_with_more_mode_columns_than_its_axes_reads_the_rest():
 def test_mode_columns_that_cannot_name_an_axis_are_not_read():
     text = "| Token | 100% | 200% |\n|---|---|---|\n| `z` | 1 | 2 |\n"
     assert _rows(_import(text).report.not_read) == [
-        ("rules.md:1", "", "a table with the columns 100% and 200% was not read, since a mode "
-                           "is named with letters; head them with mode names such as Light and "
-                           "Dark")]
+        ("rules.md:1", "", "a table with the columns 100% and 200% was not read, since 100% "
+                           "and 200% cannot name a mode, whose name starts with a letter; head "
+                           "those columns with a mode name such as Dark or High contrast")]
 
 
 def test_prose_tables_and_code_blocks_are_not_tokens():
@@ -818,6 +818,82 @@ def test_an_alias_column_reads_a_reference_or_a_backticked_name(head):
     assert ts.get("text.body").value == "{gray.900}" and ts.get("text.muted").value == \
         "{gray.900}"
     assert ts.get("text.body").layer == "semantic" and imported.report.not_read == []
+
+
+@pytest.mark.parametrize("head", ["Alias of", "Aliased to", "Alias for", "Reference to"])
+def test_an_alias_header_with_a_preposition_is_the_alias_column(head):
+    text = (f"| Token | Value | {head} |\n|---|---|---|\n| `gray.900` | #111111 | |\n"
+            "| `text.body` | | `gray.900` |\n")
+    imported = _import(text)
+    assert imported.tokens.get("text.body").value == "{gray.900}"
+    assert imported.report.not_read == []
+
+
+def test_an_alias_column_for_a_mode_holds_the_reference_in_that_mode():
+    text = ("| Token | Light | Dark | Dark alias |\n|---|---|---|---|\n"
+            "| `gray.100` | #EEEEEE | #EEEEEE | |\n| `gray.900` | #111111 | #111111 | |\n"
+            "| `text.body` | {gray.900} | | `gray.100` |\n"
+            "| `text.muted` | {gray.900} | #777777 | |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    body = ts.get("text.body")
+    assert (body.value, body.modes) == ("{gray.900}", {"scheme:dark": "{gray.100}"})
+    assert ts.get("text.muted").modes == {"scheme:dark": "#777777"}
+    assert imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "a table with Light, Dark and Dark alias columns; Light was read as "
+                           "the base and Dark as scheme:dark; Dark alias was read as the "
+                           "reference in scheme:dark where it holds one")]
+
+
+def test_alias_columns_named_for_each_mode_read_without_value_columns():
+    text = ("| Token | Light alias | Dark alias |\n|---|---|---|\n"
+            "| `gray.100` | #EEEEEE | #EEEEEE |\n| `gray.900` | #111111 | #111111 |\n"
+            "| `text.body` | `gray.900` | `gray.100` |\n")
+    imported = _import(text)
+    body = imported.tokens.get("text.body")
+    assert (body.value, body.modes) == ("{gray.900}", {"scheme:dark": "{gray.100}"})
+    assert imported.report.not_read == []
+
+
+def test_an_alias_column_for_no_mode_or_a_second_one_names_the_fix():
+    text = ("| Token | Value | Brand alias | Dark alias | Dark mode alias |\n"
+            "|---|---|---|---|---|\n| `gray.900` | #111111 | | | |\n")
+    rows = _rows(_import(text).report.not_read)
+    assert rows == [
+        ("rules.md:1", "Brand alias", "is an alias column for brand, which names no mode, so it "
+                                      "was not read; head it with a mode name and alias, such "
+                                      "as Dark alias, or put it in a table of its own"),
+        ("rules.md:1", "Dark mode alias", "is a second alias column for the scheme axis, which "
+                                          "Dark alias holds, so it was not read; keep one alias "
+                                          "column per mode")]
+
+
+def test_an_alias_cell_with_several_names_is_noted_with_the_fix():
+    text = ("| Token | Value | Aliases |\n|---|---|---|\n"
+            "| `gray.900` | #111111 | `text.body`, `text.title` |\n")
+    imported = _import(text)
+    assert imported.tokens.get("gray.900").value == "#111111"
+    assert ("rules.md:3", "gray.900",
+            "in the Aliases column, `text.body`, `text.title` holds more than one name, and a "
+            "token references one, so the cell was not read; if they are other names for "
+            "gray.900, write each as a row of its own with `gray.900` in the Aliases column") \
+        in _rows(imported.report.notes)
+
+
+def test_a_guidance_column_beside_a_value_column_is_not_a_mode():
+    text = "| Token | Value | Avoid |\n|---|---|---|\n| `gray.900` | #111111 | On photos. |\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {} and imported.report.not_read == []
+
+
+def test_a_column_that_cannot_name_a_mode_names_itself_and_the_fix():
+    text = "| Token | Light | 2x |\n|---|---|---|\n| `gray.900` | #111111 | #222222 |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:1", "", "a table with the columns Light and 2x was not read, since 2x cannot "
+                           "name a mode, whose name starts with a letter; head that column with "
+                           "a mode name such as Dark or High contrast")]
 
 
 def test_a_token_column_beside_a_name_column_is_the_alias():
