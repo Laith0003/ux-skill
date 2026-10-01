@@ -95,3 +95,51 @@ def test_the_direction_is_in_the_tokens_and_the_report():
     assert "- Grade lock: every photo within" in section and "- Search words: " in section
     none = make_system("#3366FF", NEUTRAL, NEUTRAL_SOURCE, no_photography=True).report
     assert "forbids photography" in none
+
+
+# ------------------------------------------------ owned photos, no stock cliches
+
+def _lines(**kw):
+    from engine.foundations.imagery import photo_direction, photo_lines
+    from engine.synthesizer.axes import AxisValues
+    return photo_lines(photo_direction(AxisValues(*[0.5] * 7), "#3366FF", **kw))
+
+
+def test_the_report_names_the_stock_cliches_to_avoid():
+    from engine.foundations.imagery import STOCK_CLICHES
+    avoid = next(l for l in _lines(product_type="software") if l.startswith("Avoid:"))
+    for c in STOCK_CLICHES:
+        assert c in avoid, c
+    for words in ("high-fives", "showing charts", "pointing at a screen", "glowing"):
+        assert any(words in c for c in STOCK_CLICHES), words
+
+
+def test_the_report_asks_for_the_clients_own_photos_first():
+    source = next(l for l in _lines(product_type="app") if l.startswith("Source:"))
+    assert "own photos" in source and "this counter" in source
+
+
+def test_subjects_describe_a_specific_scene_not_a_generic_one():
+    from engine.foundations.imagery import SUBJECTS
+    for kind, text in SUBJECTS.items():
+        assert "people at work with the product" not in text, kind
+    assert "mid-task" in SUBJECTS["software"] and "mid-task" in SUBJECTS["app"]
+
+
+def test_the_search_words_carry_no_operators_photo_sites_ignore():
+    from engine.foundations.imagery import photo_direction
+    from engine.synthesizer.axes import AxisValues
+    q = photo_direction(AxisValues(*[0.5] * 7), "#3366FF", product_type="software").query()
+    assert " -" not in q and not q.startswith("-")
+
+
+def test_stock_stand_ins_stay_allowed_when_they_pass_the_direction():
+    source = next(l for l in _lines(product_type="app") if l.startswith("Source:"))
+    avoid = next(l for l in _lines(product_type="app") if l.startswith("Avoid:"))
+    assert "stock" in source and "pass" in source
+    assert "stock search" not in avoid
+
+
+def test_staged_lifestyle_means_the_goods_in_a_room_not_people_posing():
+    kinds = next(l for l in _lines(product_type="commerce") if l.startswith("Kinds:"))
+    assert "staged lifestyle (" in kinds and "posed" in kinds
