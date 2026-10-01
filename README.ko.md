@@ -2,24 +2,77 @@
 
 # ux-skill: Claude Code, Cursor, 그리고 모든 AI 코딩 도구를 위한 디자인 인텔리전스 엔진
 
-> **v3.1.0 안정판, THE BRAIN.** AI 코딩을 위한 가장 강력한 UX 플러그인. 11개의 쿼리 가능한 JSON 매니페스트(84개 스타일, 176개 팔레트, 70개 타입 페어링, 148개 컴포넌트, 184개 산업, 35개 차트 타입, 57개 모션 프리셋, 112개 UX 법칙, 145개 안티패턴 규칙, 25개 기술 스택, 160개 브랜드 사양), 22개의 슬래시 명령, 5개의 서브에이전트, 그리고 결정론적 반 AI-슬롭 린터를 갖춘 Python 추론 코어. 크로스 IDE: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline에 탑재됩니다.
+**AI가 만든 UI를 평범하지 않고 개성 있게 만드는 디자인 인텔리전스 엔진.** 17개 AI 코딩 도구 중 어디에 넣어도 결과물이 더 이상 AI가 만든 것처럼 보이지 않습니다. 무료, MIT, 오프라인, LLM 없음.
 
-> **브랜드 이름은 `ux-skill`입니다.** PyPI / npm 패키지명은 그대로 `uxskill`입니다. GitHub 저장소는 [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill)에 있습니다.
+```bash
+pip install uxskill
+```
 
-**사이트:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **모든 Claude UX 플러그인과의 비교:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+**[GitHub에서 ux-skill에 스타 주기](https://github.com/Laith0003/ux-skill)**: 도움이 됐다면 이것이 프로젝트를 돕는 가장 손쉬운 방법입니다. 처음이신가요? [60초 둘러보기](#빠른-설치)로 시작하거나 [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)에서 실제로 확인하세요.
 
-[![Version](https://img.shields.io/badge/version-3.1.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+![전: 흔한 스톡 사진 히어로, 옅은 보라색 그라데이션, 브랜드 정체성 없음. 후: 어두운 스크림 아래의 실제 공사 현장 사진, 호박색 포인트를 준 에디토리얼 헤드라인, 히어로에 들어간 견적 요청 폼. 같은 프롬프트라도 ux-skill이 제약을 주면 결과가 달라집니다.](https://raw.githubusercontent.com/Laith0003/ux-skill/main/docs/blog/skiphire-redesign.png)
+
+*전: 흔한 스톡 사진 SEO 슬롭. 후: 어두운 스크림 아래 실제 공사 현장 사진을 쓴 히어로, 호박색 포인트의 에디토리얼 헤드라인, 히어로 안의 견적 폼. 같은 AI 코딩 도구, 같은 프롬프트라도 ux-skill이 제약을 주면 결과가 달라집니다.*
+
+> **v4.0, FOUNDATIONS: 명령 하나로 WCAG 검사를 통과한 완전한 디자인 시스템을 만들고, 아랍어와 오른쪽에서 왼쪽 쓰기를 기본 지원합니다.** AI 코딩을 위한 가장 강력한 UX 플러그인. 결정론적 7축 신시사이저를 갖춘 Python 추론 코어, 쿼리 가능한 JSON 매니페스트 12개(스타일 84개, 팔레트 176개, 타입 페어링 70개, 컴포넌트 148개, 산업 184개, 차트 유형 35개, 모션 프리셋 57개, UX 법칙 112개, 안티패턴 규칙 171개, 기술 스택 25개, 브랜드 스펙 160개), 슬래시 명령 18개, 서브에이전트 5개, MCP 도구 25개, 그리고 결정론적 반-AI 슬롭 린터. 크로스 IDE: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline에 설치됩니다.
+
+> **브랜드 이름은 `ux-skill`입니다.** PyPI / npm 패키지 이름은 `uxskill` 그대로입니다. GitHub 저장소는 [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill)에 있습니다.
+
+**만든 사람:** [Laith Aljunaidy](https://laithjunaidy.com), 암만의 디자이너이자 CTO · **사이트:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **모든 Claude UX 플러그인과 비교:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+
+[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#17-ide-인스톨러)
+[![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### 4.0의 새 기능: 파운데이션
+
+브랜드 색 하나를 넣으면 디자인 시스템이 나오고, 그 대비는 받기 전에 이미 검사되어 있습니다.
+
+```bash
+pip install --upgrade uxskill
+uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
+```
+
+Python 3.10 이상. MCP 서버는 `pip install --upgrade 'uxskill[mcp]'`. pipx라면 `pipx install uxskill`(이미 설치된 3.x 위에는 `pipx upgrade uxskill`). npm이라면 `npx uxskill@latest`. 3.x에서 오셨나요? [마이그레이션 가이드](docs/migrating-to-4.md)가 3.x의 모든 토큰을 4.0의 역할에 대응시킵니다.
+
+**제품이나 랜딩 페이지를 만드나요?** 페이지에서 연결할 `tokens.css`, 선택한 서체에 메트릭을 맞춘 대체 글꼴이 담긴 `fonts.css`, 서체를 직접 가진 파일에서 불러오는 `fonts-self-host.css`, 도구용 `tokens.json`, `art/`에 담긴 장식용 브랜드 아트, 그리고 무엇을 왜 만들었는지, 어떤 페이지 구성에서 시작하면 되는지 쉬운 말로 설명하는 `system-report.md`를 받습니다. 스타일은 역할(`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`)로 지정하고, 다크 모드, 고대비, 촘촘한 간격, 오른쪽에서 왼쪽, 동작 줄이기는 `<html>`의 속성 하나로 전환합니다. 서체는 보고서가 알려 주는 Google Fonts 링크나 `fonts-self-host.css`와 `fonts/` 폴더로 불러오고, 어느 쪽이든 `fonts.css`를 `tokens.css`보다 먼저 연결하세요. 두 파일 모두 수정하지 마세요. `--brief`를 쓰면 브리프에 산업과 톤이 있을 때 모양새가 그것을 따르고, 구조화된 필드(연령, 언어, 기본 스킴, 읽는 상황)가 글자 크기, 터치 영역, 문자 체계, 처음 열리는 스킴을 정합니다. discovery는 산업을 묻지 않으므로 `/ux-system create`가 묻습니다. Claude Code에서는 `/ux-system create`가 설치된 버전을 확인하고, 빌드를 실행하고, 보고서를 설명합니다.
+
+**디자인 시스템을 설계하나요?** 아홉 가지 파운데이션(색, 타이포그래피, 간격, 레이아웃, 모서리, 테두리, 엘리베이션, 모션, 이미지)이 일곱 개 축에 따라 연속적으로 바뀌며, 프리미티브와 시맨틱 역할을 갖추고, 모든 모드의 값을 담은 W3C 디자인 토큰 형식(DTCG 2025.10)으로 나옵니다. 입력이 같으면 바이트까지 같습니다. MCP에서는 `ux_system_build`가 보고서, 게이트 결과, 각 파일의 크기를 돌려주고, `out`을 주면 명령과 같은 파일을 씁니다.
+
+- **WCAG 게이트.** 텍스트, 컨트롤, 포커스의 모든 색 조합을 라이트와 다크, 표준 대비와 고대비에서 측정합니다. 표준 대비에서는 WCAG 1.4.3(텍스트 4.5:1)과 1.4.11(비텍스트 3:1), 고대비에서는 WCAG 1.4.6(텍스트 7:1)을 적용하고, WCAG가 비텍스트의 강화 기준을 정하지 않기 때문에 대부분의 비텍스트 요소에는 고대비에서 4.5:1이라는 자체 하한을 더합니다. 통과하지 못한 시스템은 쓰지 않으며, 메시지가 무엇을 바꿔야 하는지 알려 줍니다.
+- **기본적으로 안전.** 내용이 다른 파일은 절대 덮어쓰지 않습니다. `--force`는 요청할 때만 파일을 교체합니다.
+- **아랍어.** `dir="rtl"` 아래에서는 텍스트가 자체 크기와 줄 높이를 가진 아랍어 서체로 바뀝니다. 간격은 논리 속성을 쓰고 모션은 좌우가 뒤집힙니다. `--latin-only`로 뺄 수 있습니다.
+
+**이미 가진 시스템.** `/ux-system enhance --from`은 기존 시스템을 원래 이름 그대로 읽고(DTCG 토큰, CSS 사용자 정의 속성, Tailwind 테마, markdown 규칙 파일, Figma 변수 내보내기), 같은 게이트로 검사하고, 코드가 실제로 그것을 어떻게 쓰는지 측정합니다. 아무것도 다시 쓰지 않습니다. `/ux-system extend --from`은 기존 토큰을 하나도 바꾸지 않고 파운데이션, 역할, 계약을 옆에 두는 확장 파일에 더하고, `uxskill system export`는 tokens.css, Tailwind 4 테마, Figma 변수로 써 냅니다. 4.2에서는 신뢰 레이어(쓸 때마다 lint, 마무리 리뷰어)와 출시가 더해집니다. [changelog](CHANGELOG.md)를 참고하세요.
+
+**컴포넌트와 섹션.** 23개의 컴포넌트 계약은 컨트롤의 각 부분이 상태마다 어떤 토큰에 묶이는지, 각 상태가 어떻게 움직이는지를 정합니다. 상태 변화는 `motion.state`로 전환되고, 누르기는 `motion.press.scale`로 크기가 바뀌며(동작 줄이기에서는 멈춰 있음), 탭, 메뉴, 세그먼트 컨트롤은 인디케이터 하나를 밀어 움직입니다. 14개의 섹션 계약(히어로, 가격, FAQ, 푸터 등)은 각 섹션의 역할, 슬롯에 들어가는 컴포넌트, 필요한 근거, 휴대폰에서 쌓이는 방식을 정합니다. 이것으로 만든 페이지는 사진을 씁니다. 인터페이스 조각은 추가 이미지일 뿐, 사진을 대신하지 않습니다.
+
+**페이지를 읽는 린터.** 171개 규칙 중 다수가 파싱된 CSS와 마크업을 추가로 검사하며 페이지 자체의 시스템을 읽습니다. 모션은 그 곡선에서 타이밍을 재고, 디스플레이 제목의 줄 높이는 엔진의 하한을 지키게 하며, 숨겨진 컨트롤은 탭 순서에서 빠져야 합니다. `uxskill lint --render`는 각 페이지를 헤드리스 Chromium에서 데스크톱 폭과 휴대폰 폭으로 열고 직접 조작해, 보이지 않거나 잘린 포커스 링, 늦게 반응하는 호버와 누르기, Escape 후 사라지는 포커스, 동작 줄이기에서도 여전히 움직이는 누르기를 잡아냅니다.
+
+**명령은 더 적게.** 슬래시 명령 25개가 18개로 줄었습니다. `/ux-discover`는 `--frame`과 `--recommend`를, `/ux-design`은 `--component`, `--dashboard`, `--from-image`를 받고, `/ux-polish`는 점수가 90에 이르거나 세 라운드가 지날 때까지 lint, 수정, 재 lint를 반복하며, `/ux-init`은 `--stats`를 받습니다. 이전 이름 일곱 개는 별칭으로 계속 쓸 수 있고 4.1에서 사라집니다. [별칭](#별칭-41에서-제거)을 참고하세요.
+
+**화면별 플레이북.** 랜딩, 대시보드, 컴포넌트 규칙은 `references/surfaces/`에 각각 플레이북 하나씩 있습니다. `/ux-design`은 모드에 맞춰 정확히 하나만 불러오므로, 대시보드 빌드가 히어로 규칙을 읽을 일은 없습니다.
+
+테스트 **9764개 통과**. 오프라인. 결정론적. LLM은 절대 호출하지 않습니다.
+
+### v3.1의 새 기능: 브랜드에 충실, 반응형, 생동감
+
+- **브랜드 충실도는 기대가 아니라 강제입니다.** 기본 색은 로고의 픽셀에서 읽습니다(가장 많이 칠해진 CSS가 아니라). 기본 글꼴은 로고의 글자 스타일에 맞지 않으면 거부됩니다. 추출한 브랜드는 `recommend` -> `synthesize`로 전달되고, `evaluate`의 **엄격한 하한**이 브랜드 색이나 로고를 잃거나 실제 이미지가 없는 출력을 실패 처리합니다. 공개 `brand.md` 규약과 양방향 상호 운용(렌더 + 가져오기).
+- **모바일 우선, 게이트로 보장.** 새로운 크래프트 파운데이션(`responsive.md`, `component-behaviors.md`)과 줄바꿈을 인식하는 게이트가 가로 스크롤, 줄이 넘어가는 내비, 워드마크, 버튼 레이블, 지나치게 높은 고정 헤더를 실패 처리합니다.
+- **와우 레이어.** 엔진이 페이지마다 서로 맞물린 시그니처 순간 2-3개를 끌어냅니다. "와우는 사용자에게서만 나온다"는 원칙은 뒤집혔습니다.
+- **더 날카로운 린터**(152개 규칙): 필수 이미지와 아이콘 전용 요소 감지, 플레이스홀더 토큰과 `100vw` 규칙. 시드가 있는 picsum은 유지하고 무작위는 제거.
+
+전체 노트는 [CHANGELOG.md](CHANGELOG.md)에 있습니다.
 
 ### v3에서 새로워진 점
 
@@ -28,7 +81,7 @@
 - **세 가지 자동 디스패치 모드**: `strict_brand` (단일 브랜드 100%), `brand_anchor` (단일 브랜드 70% + 형제 브랜드에서 축 적응 30%), `pure_synthesis` (브랜드 미지정, 축 일치 예제 8개에서 증류).
 - **결정 원장이 추천기를 재정렬합니다.** `.ux/decisions.jsonl`이 동일한 `(industry, ui_type)` 버킷의 과거 승리로 후보를 재정렬합니다. 콜드스타트 안전. `lint_score >= 80` + `user_accepted = true`인 결정만 카운트합니다.
 - **축 상호작용 행렬**: 경쟁 축 간의 명시적 충돌 해결 (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius). 더 이상 침묵의 임시 규칙 없음.
-- **`/ux-evolve` 자동 루프**: 점수 ≥ 90, 정체기, 또는 5라운드까지 lint → polish → re-lint. 품질 게이트는 65.
+- **`/ux-evolve` 자동 루프**(4.0에서는 `/ux-polish`의 기본 루프): 점수 ≥ 90, 정체기, 또는 4.0에서는 3라운드(v3에서는 5)까지 lint → polish → re-lint. 품질 게이트는 65.
 - **3개의 신규 MCP 도구** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
 - **로컬 통계 대시보드**: `uxskill stats --html`이 **당신의** 설치가 무엇을 배웠는지 보여주는 `.ux/stats.html`을 씁니다. 텔레메트리 없음, 글로벌 집계 없음.
 - **223개 테스트 통과.** 오프라인. 결정론적. LLM 한 번도 호출 안 함.
@@ -45,7 +98,7 @@
 
 ux-skill은 AI 코딩 도구를 위한 **디자인 인텔리전스 엔진**입니다. Python 패키지로(`pip install uxskill`), Claude Code 플러그인으로, 그리고 17 IDE용 멀티 인스톨러로 동작합니다. 엔진은 프로젝트 브리프(산업, 청중, 톤, 필수 항목, 금지 항목, 스택, 지역)를 받아 추천 디자인 시스템 한 벌을 반환합니다: 스타일, 팔레트, 타입 페어, 모션 프리셋, 컴포넌트, 연구할 브랜드 본보기, 그리고 지켜야 할 안티패턴 가드레일. 추천은 결정론적입니다, 같은 입력은 항상 같은 출력을 만들어냅니다.
 
-플러그인은 당신과 AI 코딩 도구 사이에 자리합니다. Claude Code, Cursor 또는 다른 AI 어시스턴트에게 "핀테크 랜딩 페이지 만들어줘"라고 요청하면, 어시스턴트는 보통 즉흥적으로 만듭니다, 그리고 결과는 5초 안에 AI 생성으로 식별됩니다(보라색에서 파란색 그라데이션, 같은 크기의 카드 세 개, 디스플레이 크기의 Inter, 추천사의 "John Doe", 기본 300ms 트랜지션, 가운데 정렬 히어로, CTA의 튀는 화살표). ux-skill은 즉흥을 **구조화된 제약**으로 대체합니다: `/ux-discover`로 브리프를 잡고, `/ux-recommend`로 시스템을 고르고, `/ux-design`으로 코드를 만들고, `/ux-lint`로 커밋 전에 145개의 결정론적 반 AI-슬롭 규칙을 통과하는지 검증합니다.
+플러그인은 당신과 AI 코딩 도구 사이에 자리합니다. Claude Code, Cursor 또는 다른 AI 어시스턴트에게 "핀테크 랜딩 페이지 만들어줘"라고 요청하면, 어시스턴트는 보통 즉흥적으로 만들고, 그 결과는 5초 안에 AI 생성으로 식별됩니다(보라색에서 파란색 그라데이션, 같은 크기의 카드 세 개, 디스플레이 크기의 Inter, 추천사의 "John Doe", 기본 300ms 트랜지션, 가운데 정렬 히어로, 튀는 화살표 CTA). ux-skill은 즉흥을 **구조화된 제약**으로 바꿉니다. `/ux-discover`로 브리프를 담고 시스템을 고르고, `/ux-design`으로 코드를 생성하고, `/ux-lint`로 커밋 전에 171개의 결정론적 반-AI 슬롭 규칙을 통과하는지 확인합니다.
 
 이 README가 정전(正典) 참조입니다. 모든 명령, 모든 서브에이전트, 모든 데이터 매니페스트, 모든 설치 경로, 모든 브랜드 사양, 모든 안티패턴 카테고리, 전부 여기에 문서화되어 있습니다. Claude Code 디자인 플러그인을 찾고 있거나 Cursor, Windsurf, Codex용 AI 디자인 도구를 비교하고 있다면, 이걸 처음부터 끝까지 읽고 [compare.html](https://uxskill.laithjunaidy.com/compare.html)을 나란히 두고 보세요.
 
@@ -57,10 +110,10 @@ ux-skill은 AI 코딩 도구를 위한 **디자인 인텔리전스 엔진**입�
 2. [빠른 설치](#빠른-설치)
 3. [숫자, 상위 8개 Claude UX 스킬과의 실시간 비교](#숫자-상위-8개-claude-ux-스킬과의-실시간-비교)
 4. [아키텍처, 부품들이 어떻게 맞물리는가](#아키텍처-부품들이-어떻게-맞물리는가)
-5. [22개의 슬래시 명령, 상세 레퍼런스](#22개의-슬래시-명령-상세-레퍼런스)
+5. [18개 슬래시 명령, 상세 참조](#18개-슬래시-명령-상세-참조)
 6. [5개의 서브에이전트](#5개의-서브에이전트)
 7. [11개의 데이터 매니페스트](#11개의-데이터-매니페스트)
-8. [145개의 반 AI-슬롭 규칙, 린터](#145개의-반-ai-슬롭-규칙-린터)
+8. [171개 반-AI 슬롭 규칙, 린터](#171개-반-ai-슬롭-규칙-린터)
 9. [160개의 브랜드 DESIGN.md 사양, 카테고리별](#160개의-브랜드-designmd-사양-카테고리별)
 10. [MCP 서버, 비대칭 한 수](#mcp-서버-비대칭-한-수)
 11. [17 IDE 인스톨러](#17-ide-인스톨러)
@@ -80,7 +133,7 @@ v3.1.0은 ux-skill 역사상 가장 큰 아키텍처 전환입니다. 추천기�
 
 세 가지 자동 디스패치 모드: `strict_brand` (`reference_brands=[stripe] strict=True` → 100% Stripe 토큰, 최단 경로); `brand_anchor` (`reference_brands=[stripe]` → 70% Stripe + 4개 형제 브랜드에서 축 적응 30%); `pure_synthesis` (브랜드 미지정 → 무한 공간, 축 일치 예제 8개를 새 디자인 언어로 증류). 경쟁 축은 문서화된 **축 상호작용 행렬**로 해결됩니다, dense + corporate는 4px로 컴파일(density 승, Bloomberg 학파), airy + corporate는 12px(formality 승, 럭셔리), soft + playful은 18px radius, sharp + corporate는 2px. 구현에 숨은 임시 규칙 없음.
 
-**결정 원장** (`.ux/decisions.jsonl`, 스키마 `_v: 1` 잠금)이 피드백 루프를 닫습니다. 추천기는 이제 동일한 `(industry, ui_type)` 버킷의 과거 승리로 후보를 재정렬합니다. 콜드스타트 안전, 사전 데이터 3건 미만이면 건너뜁니다. `lint_score >= 80` AND `user_accepted = true`인 결정만 카운트합니다. 또한 `/ux-evolve`는 점수 ≥ 90, 정체기, 또는 5라운드까지 lint → polish → re-lint를 돌리고, 65 미만의 출력은 `--force` 없이 거부됩니다. 결과적으로 각 설치는 자신의 코퍼스 위에서 더 똑똑해지고, 각 실행은 머신 간에 재현 가능하며, 엔진은 완전히 오프라인으로 유지됩니다.
+**결정 원장** (`.ux/decisions.jsonl`, 스키마 `_v: 1` 잠금)이 피드백 루프를 닫습니다. 추천기는 이제 같은 `(industry, ui_type)` 버킷의 과거 성공을 바탕으로 후보를 재정렬합니다. 콜드 스타트에도 안전하며, 이전 결정이 3건 미만이면 재정렬을 건너뜁니다. `lint_score >= 80` AND `user_accepted = true`인 결정만 셉니다. 또한 `/ux-polish`는 점수 ≥ 90, 정체기, 또는 3라운드까지 lint → polish → re-lint를 돌리고, 65라는 품질 게이트 아래의 출력은 `--force` 없이는 거부합니다. 결과적으로 모든 설치는 자기 코퍼스로 더 똑똑해지고, 모든 실행은 머신 사이에서 재현되며, 엔진은 완전히 오프라인으로 남습니다.
 
 ---
 
@@ -97,7 +150,7 @@ Claude Code 안에서 일한다면, 플러그인 마켓플레이스를 통해 �
 /plugin install ux@ux-skill
 ```
 
-이것으로 22개의 슬래시 명령과 5개의 서브에이전트가 Claude Code 세션에 연결됩니다. 설치 후 `/ux-init`을 실행해서 프로젝트별 `.ux/` 상태 디렉터리를 설정하고 Python 엔진이 도달 가능한지 검증하세요.
+이것으로 슬래시 명령 18개(4.1까지 별칭으로 남는 이전 이름 7개 포함)와 서브에이전트 5개가 Claude Code 세션에 연결됩니다. 설치 후 `/ux-init`을 실행해서 프로젝트별 `.ux/` 상태 디렉터리를 설정하고 Python 엔진이 도달 가능한지 검증하세요.
 
 ### 경로 2: pip(범용)
 
@@ -105,9 +158,9 @@ Claude Code 밖에서 일한다면(Cursor, Windsurf, CLI, CI), Python 패키지�
 
 ```bash
 pip install uxskill
-uxskill init                       # IDE를 자동 감지하고, 올바른 아티팩트를 설치
-uxskill stats                      # 매니페스트 개수를 출력해 설치를 검증
-uxskill lint .                     # 현재 디렉터리에 린터 실행
+uxskill init                       # auto-detects your IDE, installs the right artifact
+uxskill stats                      # print manifest counts to verify install
+uxskill lint .                     # run the linter against the current directory
 ```
 
 패키지는 CLI 진입점으로 `ux`와 `uxskill` 두 가지를 노출합니다, 같은 바이너리입니다.
@@ -117,7 +170,7 @@ uxskill lint .                     # 현재 디렉터리에 린터 실행
 Python을 직접 관리하고 싶지 않다면, npx 래퍼가 `pipx`를 통해 모든 것을 부트스트랩합니다:
 
 ```bash
-npx uxskill init                  # 최초 실행 시 pipx + uxskill을 다운로드
+npx uxskill init                  # downloads pipx + uxskill on first run
 npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-app-router
 ```
 
@@ -126,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "3.1.0-stable",
+#   "version": "4.0.0",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -137,13 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 145,
+#     "anti-patterns": 171,
+#     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-개수가 0으로 반환되면 JSON 파일이 누락된 것입니다, [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues)에 이슈를 열어주세요.
+이 개수들을 모두 더하면 1,262개 항목입니다. 개수가 0으로 반환되면 JSON 파일이 누락된 것이니 [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues)에 이슈를 열어주세요.
 
 ---
 
@@ -161,7 +215,7 @@ ux stats
 | dominikmartn/nothing-design-skill | **2,391** | 단일 미학 스킬 | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | 반 슬롭 디자인 스킬 | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 컴포넌트 + 감사 | 1 | - | (MD3 전용) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 엔진 + 11개 매니페스트 + 22개 명령 + 5개 서브에이전트 + CI 린터** | **22** | **145개 regex 규칙** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 엔진 + 매니페스트 12개 + 명령 18개 + 서브에이전트 5개 + CI 린터** | **18** | **결정론적 규칙 171개** | **160** | **148** | **57** | **17** |
 
 ### 지는 곳
 
@@ -173,10 +227,10 @@ ux stats
 
 - **컴포넌트 라이브러리:** 해부, 상태, 사용한 토큰, 모션 사양을 포함한 148개의 문서화된 컴포넌트. 다른 8개 중 어느 것도 컴포넌트 매니페스트를 출시하지 않습니다.
 - **모션 프리셋:** 스택 준비된 57개 항목(Framer Motion, GSAP, CSS), reduced-motion 폴백 포함. 다른 어떤 곳도 모션 매니페스트를 출시하지 않습니다.
-- **안티패턴 린터:** 145개의 결정론적 regex 규칙, CI에서 실행되며 Critical/High에서 비영(非零) 종료. 다른 어떤 곳도 결정론적 린터를 출시하지 않습니다.
+- **안티패턴 린터:** 결정론적 규칙 171개, CI에서 실행되며 Critical/High에서 0이 아닌 코드로 종료. 다른 어떤 곳도 결정론적 린터를 내놓지 않습니다.
 - **브랜드 사양:** 160개의 실제 DESIGN.md 사양(Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude 외 96개). 다른 어떤 곳도 브랜드 라이브러리를 출시하지 않습니다.
 - **17 IDE 지원:** 같은 엔진, IDE마다 다른 접착제.
-- **22개의 슬래시 명령:** discovery, 생성, 감사, lint, 폴리시, 수정 루프, 케이스 스터디, 워크숍, 카피, 모션, a11y, 대시보드, 컨덕터, 완전히 통합.
+- **슬래시 명령 18개:** discovery, 생성(페이지, 컴포넌트, 대시보드, 이미지에서), 감사, lint, 폴리시 루프, 수정 루프, 케이스 스터디, 워크숍, 카피, 모션, a11y, 컨덕터, 완전히 통합.
 
 전체 컬럼별 비교는 [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)에 있습니다.
 
@@ -185,149 +239,139 @@ ux stats
 ## 아키텍처: 부품들이 어떻게 맞물리는가
 
 ```
-ux-skill (패키지명: uxskill)
+ux-skill (package name: uxskill)
 │
-├── data/                              두뇌, 쿼리 가능한 JSON 매니페스트
-│   ├── styles.json                    84개 디자인 스타일 + when/skip + tokens
-│   ├── palettes.json                  176개 팔레트(라이트/다크, 명도대비 검증)
-│   ├── type-pairs.json                70개 display × body × mono 트리플렛
-│   ├── components.json                148개 컴포넌트(해부, 상태, 모션)
-│   ├── industries.json                184개 산업 규칙 + 청중 시그널
-│   ├── chart-types.json               35개 차트 타입(when/skip, 인코딩)
-│   ├── tech-stacks.json               25개 스택(Next, Astro, SvelteKit, Blade...)
-│   ├── ux-guidelines.json             112개 명명된 UX 법칙(Hick, Fitts, Miller...)
-│   ├── motion-presets.json            57개 모션 프리셋(진입, 퇴장, 호버...)
-│   ├── anti-patterns.json             145개 regex 규칙(CI 안전 린터 소스)
-│   └── brands/*.json                  160개 브랜드 DESIGN 사양 + _index.json
+├── data/                              The brain, queryable JSON manifests
+│   ├── styles.json                    84 design styles + when/skip + tokens
+│   ├── palettes.json                  176 palettes (light/dark, contrast verified)
+│   ├── type-pairs.json                70 display × body × mono triplets
+│   ├── components.json                148 components (anatomy, states, motion)
+│   ├── industries.json                184 industry rules + audience signals
+│   ├── chart-types.json               35 chart types (when/skip, encoding)
+│   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
+│   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
+│   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
+│   ├── anti-patterns.json             171 rules (CI-safe linter source)
+│   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
-├── engine/                            Python, 추론 층
-│   ├── synthesizer/                   v3, 결정론적 7축 컴파일러
-│   ├── decisions/                     v3, .ux/decisions.jsonl 원장 + 추천기 재정렬
-│   ├── recommender/                   5병렬 검색 머지 엔진
-│   ├── linter/                        결정론적 반-슬롭 스캐너
-│   ├── discovery/                     10 필드 강제 프로토콜
-│   ├── generator/                     토큰 + 매니페스트 발행기
-│   ├── installer/                     17 IDE용 멀티 인스톨러
-│   └── cli/                           `ux` / `uxskill` 진입점
+├── engine/                            Python, the reasoning
+│   ├── synthesizer/                   v3-7-axis deterministic compiler
+│   ├── decisions/                     v3, .ux/decisions.jsonl ledger + recommender re-rank
+│   ├── recommender/                   5-parallel-search merge engine (re-ranked by decisions)
+│   ├── linter/                        Deterministic anti-slop scanner
+│   ├── discovery/                     10-field forcing protocol
+│   ├── generator/                     Token + manifest emitter
+│   ├── installer/                     17-IDE multi-installer
+│   └── cli/                           `ux` / `uxskill` entry point
 │
-├── commands/                          22개 Claude Code 슬래시 명령(.md)
-│   ├── ux-init.md                     부트스트랩
-│   ├── ux-stats.md                    인벤토리 스냅샷
-│   ├── ux-discover.md                 10 필드 인테이크(게이트)
-│   ├── ux-recommend.md                기함, 5병렬 검색
-│   ├── ux-lint.md                     결정론적 린터
-│   ├── ux-design.md                   프런트엔드 코드 생성
-│   ├── ux-component.md                단일 컴포넌트 생성
-│   ├── ux-system.md                   전체 디자인 시스템 생성
-│   ├── ux-dashboard.md                대시보드 화면 생성
-│   ├── ux-motion.md                   모션 처리 + 감사
-│   ├── ux-audit.md                    6렌즈 디자인 감사
-│   ├── ux-a11y.md                     WCAG 2.1 AA 감사
-│   ├── ux-critique.md                 안목 평점(3승, 3패, 1수)
-│   ├── ux-copy.md                     마이크로카피 감사 + 재작성
-│   ├── ux-fix.md                      소견을 원자 커밋으로 적용
-│   ├── ux-polish.md                   폴리시 + AI-슬롭 제거
-│   ├── ux-frame.md                    4 필드 프레이밍 블록
-│   ├── ux-research.md                 리서치 계획 + 통합
-│   ├── ux-workshop.md                 5단계 디자인 사고 워크숍
-│   ├── ux-case-study.md               발행 가능한 Wfrah 편집체 케이스 스터디
-│   ├── ux-next.md                     워크플로 컨덕터(읽기 전용)
-│   └── ux-expert.md                   컨설팅 훅
+├── commands/                          18 Claude Code slash commands (.md) + 7 aliases
+│   ├── ux-init.md                     bootstrap + inventory snapshot (--stats)
+│   ├── ux-discover.md                 10-field intake (gate), --frame, --recommend
+│   ├── ux-lint.md                     deterministic linter
+│   ├── ux-design.md                   generate a page, --component, --dashboard, --from-image
+│   ├── ux-system.md                   generate full design system
+│   ├── ux-motion.md                   motion treatment + audit
+│   ├── ux-audit.md                    6-lens design audit
+│   ├── ux-a11y.md                     WCAG 2.1 AA audit
+│   ├── ux-critique.md                 taste critique (3 wins, 3 misses, 1 move)
+│   ├── ux-copy.md                     microcopy review + rewrite
+│   ├── ux-fix.md                      apply findings as atomic commits
+│   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
+│   ├── ux-research.md                 research planning + synthesis
+│   ├── ux-workshop.md                 5-phase design thinking workshop
+│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-next.md                     workflow conductor (read-only)
+│   ├── ux-expert.md                   consulting hook
+│   ├── ux-mcp.md                      MCP server
+│   └── ux-frame.md, ux-recommend.md, ux-stats.md, ux-evolve.md,
+│       ux-component.md, ux-dashboard.md, ux-image-to-code.md
+│                                      aliases, removed in 4.1
 │
-├── agents/                            5개 서브에이전트(.md)
+├── agents/                            5 sub-agents (.md)
 │   ├── frontend-engineer.md           React/Next/Vue/Blade/Astro
 │   ├── motion-engineer.md             Framer Motion / GSAP / CSS
-│   ├── copy-writer.md                 브랜드 보이스의 마이크로카피
-│   ├── research-synthesizer.md        인터뷰 + 분석 + 경쟁사
-│   └── design-system-architect.md     토큰 / 컴포넌트 / 기초
+│   ├── copy-writer.md                 microcopy in brand voice
+│   ├── research-synthesizer.md        interviews + analytics + competitors
+│   └── design-system-architect.md     tokens / components / foundations
 │
-├── references/                        데이터의 산문 소스 + 데모 페이지
-│   ├── foundations/                   anti-patterns.md, 원칙, 안목
-│   ├── laws/                          UX 법칙 장문
-│   ├── process/                       discovery-protocol.md(핵심)
-│   ├── styles/                        스타일별 산문(anti-slop.md 등)
-│   ├── components/                    컴포넌트 장문
-│   ├── output/                        출력 루브릭
-│   └── conditional/                   스택별 안내
+├── references/                        Prose source for the data + demo pages
+│   ├── foundations/                   anti-patterns.md, principles, taste
+│   ├── laws/                          UX laws long-form
+│   ├── process/                       discovery-protocol.md (load-bearing)
+│   ├── styles/                        per-style prose (anti-slop.md, etc.)
+│   ├── components/                    component long-form
+│   ├── output/                        output rubrics
+│   └── conditional/                   stack-specific guidance
 │
 ├── bin/
-│   ├── uxskill.mjs                    npx 래퍼 -> Python 엔진
-│   ├── ux-lint.py                     v2 린터(우선)
-│   └── ux-lint.sh                     v1 폴백(bash + perl-PCRE)
+│   ├── uxskill.mjs                    npx wrapper -> Python engine
+│   ├── ux-lint.py                     v2 linter (preferred)
+│   └── ux-lint.sh                     v1 fallback (bash + perl-PCRE)
 │
-└── .ux/                               (프로젝트마다 생성)
-    ├── last-discovery.json            브리프 스냅샷
-    ├── last-recommendation.json       선택된 시스템
-    ├── last-frame.json                프레이밍 블록
+└── .ux/                               (created per project)
+    ├── last-discovery.json            brief snapshot
+    ├── last-recommendation.json       picked system
+    ├── last-frame.json                framing block
     ├── last-audit.json / last-a11y.json / last-copy.json / last-motion.json
     ├── last-design.json / last-component.json / last-dashboard.json
     └── last-critique.json / last-polish.json / last-research.json / last-workshop.json / last-case-study.json
 ```
 
-### 엔진은 실제로 어떻게 작동하는가
+### 엔진이 실제로 동작하는 방식
 
-1. **입력.** 브리프를 제공합니다, `/ux-discover`로 대화식(10 필드) 또는 `ux recommend`에 플래그를 넘겨 비대화식.
-2. **5병렬 검색.** 엔진이 매니페스트를 가로질러 다섯 개의 조회를 동시에 실행합니다:
-   - **산업 → 추천 스타일**(industries.json)
-   - **스타일 → 팔레트 + 타입 + 모션 호환성**(styles.json)
-   - **톤 × 필수 항목 → 팔레트 필터**(palettes.json)
-   - **스택 → 컴포넌트 호환성 + 모션 프리셋**(tech-stacks.json, motion-presets.json)
-   - **금지 + 지역 → 가드레일 + 브랜드 본보기 후보**(anti-patterns.json, brands/)
-3. **머지.** 결정론적 머저(merger)가 후보의 순위를 매기고 충돌을 해결하며(예: 다크 모드 필수가 팔레트 모드를 강제), 단일 추천 시스템을 발행합니다.
-4. **출력.** 선택된 스타일, 팔레트, 타입 페어, 상위 5 모션 프리셋, 상위 12 컴포넌트, 상위 5 브랜드 본보기, 그리고 145개 안티패턴 가드레일 모두 활성을 담은 JSON 문서. 각 선택의 근거 블록까지.
-5. **생성.** 다운스트림 명령(`/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard`)이 추천을 소비하여 서브에이전트를 통해 실제 코드를 생성합니다.
-6. **검증.** `/ux-lint`가 생성된 코드를 145개 regex 규칙에 대해 다시 스캔합니다. CI에서 Critical/High에 부딪히면 비영 종료.
+1. **입력.** 브리프를 줍니다. `/ux-discover`로 대화형으로(10개 필드) 주거나 `ux recommend`에 플래그를 넘겨 비대화형으로 줍니다.
+2. **5개의 병렬 검색.** 엔진은 매니페스트 전반에서 다섯 가지 조회를 동시에 실행합니다:
+   - **산업 → recommended_styles** (industries.json)
+   - **스타일 → 팔레트 + 타입 + 모션 호환성** (styles.json)
+   - **톤 × 필수 요건 → 팔레트 필터** (palettes.json)
+   - **스택 → 컴포넌트 호환성 + 모션 프리셋** (tech-stacks.json, motion-presets.json)
+   - **금지 사항 + 지역 → 가드레일 + 브랜드 본보기 후보** (anti-patterns.json, brands/)
+3. **병합.** 결정론적 병합기가 후보의 순위를 매기고, 충돌을 해결하고(예를 들어 필수 다크 모드가 팔레트 모드를 정함), 추천 시스템 하나를 내놓습니다.
+4. **출력.** 선택된 스타일, 팔레트, 타입 페어, 상위 5개 모션 프리셋, 상위 12개 컴포넌트, 상위 5개 브랜드 본보기, 그리고 활성화된 171개 안티패턴 가드레일 전부를 담은 JSON 문서. 여기에 각 선택을 설명하는 근거 블록이 붙습니다.
+5. **생성.** 이후 명령(페이지, 컴포넌트, 대시보드, 이미지 모드의 `/ux-design`과 `/ux-system`)이 추천을 받아 서브에이전트를 통해 실제 코드를 생성합니다.
+6. **검증.** `/ux-lint`가 생성된 코드를 171개 규칙으로 다시 스캔합니다. CI에서 Critical/High가 있으면 0이 아닌 코드로 종료.
 
-**Python이 생각한다. HTML이 보여준다. Markdown이 연결한다.**
+**v3에서 추가된 것.** 추천기는 이제 `.ux/decisions.jsonl`을 사용해 `engine/decisions/`에서 후보를 재정렬합니다(`lint_score >= 80` AND `user_accepted = true`인 결정만 세고, 이전 결정이 3건 미만이면 콜드 스타트로 안전하게 처리). 생성 경로는 `engine/synthesizer/`로 넘길 수도 있습니다. 이것은 결정론적 7축 컴파일러로, 카탈로그에서 템플릿을 고르는 대신 브리프마다 새로운 팔레트 + 타입 + 간격 + 모서리 + 모션 토큰을 만듭니다. 자세한 내용은 [브레인, v3.0이란 무엇인가](#브레인-v30이란-무엇인가)를 보세요.
+
+**Python은 생각하고, HTML은 보여 주고, Markdown은 잇습니다.**
 
 ---
 
-## 22개의 슬래시 명령: 상세 레퍼런스
+## 18개 슬래시 명령: 상세 참조
 
-각 명령은 `commands/` 아래에 `.md` 파일로 배포되며 `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process`, `output state file`을 포함합니다. 아래 설명은 압축본입니다; 전체 소스가 정전의 사양입니다.
+모든 명령은 `commands/` 아래 `.md` 파일로 제공되며 `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process`, `output state file`을 담고 있습니다. 아래 설명은 요약이고, 공식 사양은 원본 전체입니다.
 
-명령은 다섯 가지 버킷으로 묶입니다: **부트스트랩 & 인벤토리**, **discovery & 추천**, **생성**, **감사 & 검증**, **수정 & 폴리시**, 그리고 **컨덕터**.
+명령은 일곱 묶음으로 나뉩니다: **부트스트랩과 인벤토리**, **discovery와 추천**, **생성**, **감사와 검증**, **수정과 폴리시**, **discovery와 내러티브**, **컨덕터**. 3.x의 이름 일곱 개는 4.1까지 [별칭](#별칭-41에서-제거)으로 계속 쓸 수 있습니다.
 
 ### 부트스트랩 & 인벤토리
 
 #### `/ux-init`: 프로젝트 부트스트랩
 
-- **무엇:** 어떤 IDE를 쓰고 있는지(`.claude/`, `.cursor/`, `.windsurf/` 등) 감지하고, 올바른 아티팩트를 설치하고, Python 엔진이 도달 가능한지 검증하고, 통계 스냅샷을 인쇄합니다.
-- **사용 시점:** 새 프로젝트에 처음 설치할 때. ux-skill을 쓰는 프로젝트를 clone한 뒤. `pip install --upgrade uxskill` 뒤.
-- **건너뛸 시점:** 이미 이 프로젝트에서 실행했고 아무것도 바뀌지 않았다.
-- **호출:** `/ux-init`(인자 없음) 또는 CLI에서 `uxskill init`.
-- **출력:** IDE별 아티팩트([17 IDE 인스톨러](#17-ide-인스톨러) 참조) + `.ux/` 디렉터리 + stdout 요약.
-- **다음:** `/ux-discover`.
+- **무엇:** 어떤 IDE를 쓰고 있는지(`.claude/`, `.cursor/`, `.windsurf/` 등) 감지하고, 올바른 아티팩트를 설치하고, Python 엔진이 도달 가능한지 검증하고, 통계 스냅샷을 인쇄합니다. `--stats`는 스냅샷만 인쇄합니다: 버전 + 데이터 매니페스트의 항목 수.
+- **사용 시점:** 새 프로젝트에 처음 설치할 때. ux-skill을 쓰는 프로젝트를 clone한 뒤. `pip install --upgrade uxskill` 뒤. `--stats`는 설치 후, 업그레이드 후, 또는 추천이 뜻밖의 결과를 내서 매니페스트가 불완전하다고 의심될 때.
+- **건너뛸 시점:** 이미 이 프로젝트에서 실행했고 아무것도 바뀌지 않았다. `--stats`는 건너뛸 필요가 없습니다: 50ms짜리 읽기입니다.
+- **호출:** `/ux-init`(인자 없음), `/ux-init --stats`, 또는 CLI에서 `uxskill init` / `uxskill stats`. `--decisions`는 결정 원장 요약을 더하고, `--html`은 `.ux/stats.html`을 씁니다.
+- **출력:** IDE별 아티팩트([17 IDE 인스톨러](#17-ide-인스톨러) 참조) + `.ux/` 디렉터리 + stdout 요약. `--stats`: stdout으로 JSON(위의 [설치 검증](#설치-검증) 참조).
+- **다음:** `/ux-discover`. `--stats`는 진단용입니다.
 
-#### `/ux-stats`: 데이터 인벤토리 인쇄
+#### `/ux-mcp`: 엔진을 MCP 서버로 실행
 
-- **무엇:** 버전 + 11개 데이터 매니페스트의 항목 수를 인쇄하여 무엇이 설치되어 있는지 검증할 수 있게 합니다.
-- **사용 시점:** 설치 후, 업그레이드 후. `/ux-recommend`가 의외의 선택을 반환하고 매니페스트가 불완전한지 의심될 때.
-- **건너뛸 시점:** 절대 없음, 50ms 읽기 전용 명령입니다.
-- **호출:** `/ux-stats` 또는 `uxskill stats`.
-- **출력:** stdout으로 JSON(위 [설치 검증](#설치-검증) 참조).
-- **다음:** 진단 전용; 다운스트림을 먹이지 않습니다.
+- **무엇:** 엔진을 stdio 위의 Model Context Protocol 서버로 시작합니다. 25개 도구(추천기, 린터, 영속화, 신시사이저, 결정 원장, 이미지 추출, 데이터 매니페스트, 그리고 디자인 시스템의 빌드, 가져오기, 개선, 확장, 내보내기, 검사)를 플러그인 없이 MCP를 지원하는 어떤 호스트에서든 호출할 수 있습니다.
+- **사용 시점:** MCP를 지원하는 다른 호스트에서 작업하면서 같은 엔진을 쓰고 싶다. 디자인 제약의 단일 출처가 필요한 멀티 에이전트 파이프라인을 돌린다. 추천기나 린터를 CI에서 상주 프로세스로 쓰고 싶다.
+- **건너뛸 시점:** 플러그인이 설치된 Claude Code 안에 있다. 슬래시 명령이 이미 엔진에 닿습니다. 한 번만 답이 필요하다. `uxskill recommend`나 `uxskill lint`가 더 간단합니다.
+- **호출:** `/ux-mcp`, 또는 `pip install 'uxskill[mcp]'` 후 셸에서 `ux-mcp`.
+- **출력:** stdio JSON-RPC 서버. 클라이언트별 설정은 [MCP 서버](#mcp-서버-비대칭-한-수)와 `commands/ux-mcp.md`를 참고하세요.
+- **다음:** 없음. 단계가 아니라 전송 계층입니다.
 
 ### discovery & 추천
 
-#### `/ux-discover`: 강제 함수(10 필드 인테이크)
+#### `/ux-discover`: 강제 관문(10개 필드 입력, 프레이밍, 추천)
 
-- **무엇:** 생성 명령 이전에 모든 프로젝트가 거치는 의무적인 10 필드 인테이크. 프로젝트 타입, 청중, 주요 목표, 톤, 필수 항목, 금지 항목, 참조 브랜드, 스택, 지역, 성공 지표. **즉흥 금지.** 금지된 문구("modern", "clean")가 사용자에게 구체적이게 만듭니다.
-- **사용 시점:** `/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard` 이전. 이전 브리프가 낡았을 때.
-- **건너뛸 시점:** 버그를 고치고 있다(`/ux-fix`). 린터만 실행한다(`/ux-lint`). 브리프가 지난 세션과 동일하다.
-- **호출:** `/ux-discover`. 플러그인이 묻고, 당신이 답합니다.
-- **출력:** `.ux/last-discovery.json`(10 필드 브리프)을 씁니다.
-- **다음:** `/ux-recommend` → discovery로 스타일 + 팔레트 + 타입 + 모션 + 컴포넌트 선택. `/ux-design [추가 브리프]` → 추천에 기초한 프런트엔드 코드 생성. `/ux-component <이름>` → discovery 제약에 맞는 단일 컴포넌트 생성.
-
-#### `/ux-recommend`: 기함 5병렬 검색 엔진
-
-- **무엇:** 11개 매니페스트에 걸쳐 Python 엔진의 5병렬 검색을 실행하고 병합된 디자인 시스템 하나를 반환합니다. 산업 → 스타일 → 팔레트 → 타입 → 모션 + 컴포넌트 + 브랜드 본보기 + 가드레일.
-- **사용 시점:** 새 프로젝트를 0에서 시작한다. 지친 제품을 피벗한다. `/ux-design`이나 `/ux-component` 전의 사전 점검.
-- **건너뛸 시점:** 이미 `/ux-discover`를 실행하고 브리프를 저장했다, 그 흐름에서 `/ux-recommend`는 자동입니다. 버그 한 개를 고치고 있다(`/ux-fix`를 쓴다). 린트만 필요하다(`/ux-lint`를 쓴다).
-- **호출(Claude Code):**
-  ```
-  /ux-recommend
-  ```
+- **무엇:** 모든 프로젝트가 생성 명령 전에 반드시 거치는 10개 필드의 필수 입력. 프로젝트 유형, 대상, 주요 목표, 톤, 필수 요건, 금지 사항, 참고 브랜드, 스택, 지역, 성공 지표. **즉흥 금지.** 금지 문구("모던", "깔끔한")가 사용자에게 구체성을 요구합니다. 이어서 추천기를 실행합니다. Python 엔진이 12개 매니페스트에 걸친 5개의 병렬 검색으로 통합된 디자인 시스템 하나를 돌려줍니다(산업 → 스타일 → 팔레트 → 타입 → 모션 + 컴포넌트 + 브랜드 본보기 + 가드레일).
+- **모드:** `--frame`은 누구를 위한 것인지, 결과, 가설, 성공 신호를 네 필드짜리 프레이밍 블록에 담습니다. 전체 입력보다 가볍습니다. `--recommend`는 저장된 브리프나 일회성 플래그로 추천기만 실행합니다.
+- **사용 시점:** 모든 `/ux-design` 또는 `/ux-system` 전. 이전 브리프가 낡았을 때. `--frame`은 프로젝트, 스프린트, 일회성 작업을 시작할 때나 대화가 옆길로 샜을 때 중간에. `--recommend`는 지쳐 보이는 제품의 방향을 바꿀 때.
+- **건너뛸 시점:** 버그를 고치는 중이다(`/ux-fix`). 린터 패스만 돌린다(`/ux-lint`). 지난 세션 이후 브리프가 그대로다.
+- **호출(Claude Code):** `/ux-discover`, `/ux-discover --frame "loyalty wallet for a MENA retail pilot"`, 또는 `/ux-discover --recommend`.
   **호출(CLI):**
   ```bash
   ux recommend \
@@ -339,46 +383,32 @@ ux-skill (패키지명: uxskill)
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **출력:** `.ux/last-recommendation.json`을 씁니다, 선택된 스타일, 선택된 팔레트, 선택된 타입 페어, 상위 5 모션 프리셋, 상위 12 컴포넌트, 상위 5 브랜드 본보기, 145개 안티패턴 가드레일 모두 활성, 그리고 근거.
-- **다음:** `/ux-design [브리프]` → 추천 토큰으로 프런트엔드 코드 생성. `/ux-system` → 추천에서 전체 디자인 시스템. `/ux-component <이름>` → 추천 스타일을 쓰는 한 개의 컴포넌트. `/ux-lint` → 생성된 코드를 검증.
+- **출력:** `.ux/last-discovery.json`(10개 필드 브리프), `.ux/last-recommendation.json`(선택된 스타일, 팔레트, 타입 페어, 상위 5개 모션 프리셋, 상위 12개 컴포넌트, 상위 5개 브랜드 본보기, 활성화된 171개 안티패턴 가드레일 전부, 그리고 근거), `--frame`을 쓰면 `.ux/last-frame.json`(`{audience, outcome, hypothesis, success_signal}`).
+- **다음:** `/ux-design [extra brief]` → 추천에 기반한 프런트엔드 코드. `/ux-design --component <name>` → 파악된 제약에 맞춘 컴포넌트 하나. `/ux-system` → 추천에서 나온 완전한 디자인 시스템. `/ux-lint` → 생성된 코드 검증.
 
 ### 생성
 
 #### `/ux-design`: 브리프에서 아름답고 반-슬롭인 화면 생성
 
-- **무엇:** discovery 브리프 + 추천에서 완전한 프로덕션급 프런트엔드 아티팩트(랜딩, 마케팅 사이트, 앱 셸)를 생성합니다. 반-슬롭과 arsenal 참조의 창작 지침 아래 `frontend-engineer`를 파견합니다.
-- **사용 시점:** "디자인해 줘", "만들어 줘", "랜딩 페이지 생성", "대시보드 만들기", "컴포넌트 만들기", 자유 형식 시각 산출물 요청 일체.
-- **건너뛸 시점:** 빌드가 아닌 리뷰가 필요하다(`/ux-audit` 또는 `/ux-critique`). 컴포넌트 하나만 원한다(`/ux-component`). 백엔드/인프라 작업.
-- **호출:** `/ux-design MENA 네오뱅크 핀테크 랜딩 생성, 따뜻한 editorial 톤, 다크 AA, 보라 그라데이션 금지`.
-- **출력:** 생성된 코드(HTML / Blade / JSX / Vue / Astro), 그리고 `.ux/last-design.json`.
+- **무엇:** discovery 브리프 + 추천에서 완전한 프로덕션급 프런트엔드 아티팩트(랜딩, 마케팅 사이트, 앱 셸)를 생성합니다. 반-슬롭과 arsenal 참조의 창작 지침 아래 `frontend-engineer`를 파견합니다. 브리프나 플래그가 네 가지 모드 중 하나를 고릅니다:
+  - **페이지**(기본): 완전한 페이지나 여러 섹션으로 된 화면. `.ux/last-design.json`을 씁니다.
+  - **`--component [name]`**: 프로덕션급 컴포넌트 하나(버튼, 모달, 내비바, 사이드바, 카드, 테이블, 폼, 차트). 네 가지 상호작용 상태 전부, 접근성, 브랜드 일치. 먼저 `.ux/last-recommendation.json`에서 컴포넌트를 찾고, 없으면 매니페스트를 직접 조회합니다. `.ux/last-component.json`을 씁니다.
+  - **`--dashboard`**: 데이터 밀도 규율, 벤토 레이아웃, 표 형식 고정폭 숫자, 스파크라인 패턴, 카드 남용 방지, 의미 있는 상태 색, 절제된 모션. 차트를 붙여 놓은 마케팅 사이트가 아닙니다. `.ux/last-dashboard.json`을 씁니다.
+  - **`--from-image <path>`**: 디자인 참고 이미지(PNG/JPG/WebP)를 순수 Pillow 컴퓨터 비전으로 읽고(주된 팔레트, 캔버스 명암, 타입 신호), 팔레트와 스타일 매니페스트에 대조한 뒤 그 추천으로 빌드합니다. `--extract-only`는 추출 후 멈춥니다. `.ux/last-image-extract.json`을 씁니다.
+- **사용 시점:** "디자인해 줘", "만들어 줘", "랜딩 페이지 생성", "대시보드 만들기", "컴포넌트 만들기", "버튼 만들기", "관리자 패널 디자인", "운영자 콘솔", "KPI 보드", "이 스크린샷처럼 만들어 줘", 자유 형식 시각 산출물 요청 일체.
+- **건너뛸 시점:** 빌드가 아닌 리뷰가 필요하다(`/ux-audit` 또는 `/ux-critique`). 백엔드/인프라 작업.
+- **호출:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`, `/ux-design --component pricing-card-trio --brief="fintech, dark, monospace numbers"`, `/ux-design --dashboard`, `/ux-design --from-image ref.png`.
+- **출력:** 생성된 코드(HTML / Blade / JSX / Vue / Astro)와 모드별 상태 파일.
 - **다음:** `/ux-lint` → 가드레일 검증. `/ux-polish` → 폴리시. `/ux-a11y` → 접근성 감사. `/ux-copy` → 마이크로카피 감사. `/ux-fix` → 소견을 원자 커밋으로.
-
-#### `/ux-component`: 단일 컴포넌트 생성
-
-- **무엇:** 사양에서 단일 프로덕션급 컴포넌트(버튼, 모달, 내비바, 사이드바, 카드, 테이블, 폼, 차트)를 생산합니다. 4가지 상호작용 상태 완비, 접근 가능, 브랜드에 맞춤. 먼저 `.ux/last-recommendation.json`에서 컴포넌트를 찾고, 매니페스트 직접 쿼리로 폴백합니다.
-- **사용 시점:** 단일 요소 요청 일체, "버튼 만들기", "가격 카드 만들기", "모달 만들기", "내비바 추가", "사이드바 디자인", "데이터 테이블 필요", "폼 만들기", "차트 컴포넌트 만들기".
-- **건너뛸 시점:** 전체 페이지나 다중 섹션 화면(`/ux-design`). 백엔드/인프라.
-- **호출:** `/ux-component pricing-card-trio --brief="핀테크, 다크, 모노스페이스 숫자"`.
-- **출력:** 생성된 컴포넌트 코드, 그리고 `.ux/last-component.json`.
-- **다음:** `/ux-lint` → 검증. `/ux-polish` → 다듬기.
 
 #### `/ux-system`: 완전한 스타터 디자인 시스템 생성
 
 - **무엇:** 디자인 시스템이 없는 프로젝트에 완전한 스타터 시스템을 제안합니다, 토큰(색, 타입, 공간, 모션, 모서리, 그림자), 기초 문서, 컴포넌트 계약, 다크 모드 페어링, 테마 스위처. `design-system-architect`를 파견합니다.
 - **사용 시점:** "디자인 시스템이 없다", "우리에게 시스템을 만들어 줘", "토큰을 제안해 줘", "테마는 어때야 하나", "DS를 셋업해 줘".
-- **건너뛸 시점:** 프로젝트에 이미 디자인 시스템이 있다, 그러면 기존 시스템에 `/ux-component`를 사용. 백엔드/인프라.
-- **호출:** `/ux-system`(파일에 없으면 먼저 discovery).
+- **건너뛸 시점:** 프로젝트에 이미 디자인 시스템이 있다면 대신 기존 시스템에 `/ux-design --component`를 사용. 백엔드/인프라.
+- **호출:** `/ux-system create`(파운데이션 엔진), `/ux-system enhance --from <file>`(이미 가진 시스템을 측정), `/ux-system extend --from <file> --add <foundation>`(바꾸지 않고 덧붙이기), 또는 `/ux-system`(3.x 흐름. 파일에 없으면 먼저 discovery).
 - **출력:** `tokens.json`, `foundations.md`, `components/*.md` 계약, 선택적 Tailwind / vanilla / SCSS 출력. 연결 컨텍스트를 위해 `.ux/last-system.json`을 씁니다.
-- **다음:** `/ux-component` → 새 시스템에 대해 빌드. `/ux-design` → 새 토큰으로 화면 생성.
-
-#### `/ux-dashboard`: 특화 대시보드 생성
-
-- **무엇:** 데이터 밀도 규율의 대시보드, 벤토 레이아웃, 표 모노스페이스 숫자, 스파크라인 패턴, 카드 과용 방지, 시맨틱 상태 색, 절제된 모션. 차트를 붙인 마케팅 페이지가 아닙니다.
-- **사용 시점:** "대시보드 만들기", "관리자 패널 디자인", "지표 페이지", "오퍼레이터 콘솔", "분석 뷰", "KPI 보드", "모니터링 화면".
-- **건너뛸 시점:** 통계가 있는 마케팅 랜딩(`/ux-design`). 위젯 하나만(`/ux-component`). 백엔드/인프라.
-- **호출:** `/ux-dashboard`.
-- **출력:** 생성된 대시보드 코드 + `.ux/last-dashboard.json`.
-- **다음:** `/ux-lint`, `/ux-audit`, `/ux-a11y`.
+- **다음:** `/ux-design --component` → 새 시스템 위에서 빌드. `/ux-design` → 새 토큰으로 화면 생성.
 
 #### `/ux-motion`: 모션 처리
 
@@ -393,8 +423,8 @@ ux-skill (패키지명: uxskill)
 
 #### `/ux-lint`: 결정론적 regex 기반 린터(LLM 없음, CI 안전)
 
-- **무엇:** 코드에 대해 145개 regex 규칙을 실행합니다. LLM 호출 없음. CI에서 Critical/High에 부딪히면 비영 종료. 소스: `data/anti-patterns.json`. 규칙은 A11y(23), 콘텐츠(15), 레이아웃(13), 타이포그래피(10), 색(9), 품질(9), 시각(9), 모션(8), 성능(4)을 커버합니다.
-- **사용 시점:** 사전 커밋 훅. CI 게이트. `/ux-audit` 비용을 치르기 전에 대형 코드베이스에 대한 빠른 첫 패스. `/ux-design`이나 `/ux-component` 후 생성 검증.
+- **무엇:** 코드에 대해 171개 규칙을 실행합니다. LLM 호출 없음. CI에서 Critical/High에 부딪히면 0이 아닌 코드로 종료. 소스: `data/anti-patterns.json`. 규칙은 A11y(45), 콘텐츠(35), 레이아웃(18), 타이포그래피(16), 모션(14), 시각(14), 품질(12), 색(10), 성능(5), 깊이(2)를 커버합니다.
+- **사용 시점:** 사전 커밋 훅. CI 게이트. `/ux-audit` 비용을 치르기 전에 대형 코드베이스에 대한 빠른 첫 패스. 어떤 모드든 `/ux-design` 후 생성 검증.
 - **건너뛸 시점:** 수정 루프가 필요하다(린터는 보고만 합니다, 편집하지 않음, `/ux-polish --fix`나 `/ux-fix`로 연결). 안목 판단이 필요하다(`/ux-critique`).
 - **호출(슬래시):** `/ux-lint src/`.
 - **호출(CLI):** `uxskill lint .` 또는 `python3 bin/ux-lint.py .` 또는 `bash bin/ux-lint.sh --ci --fail-on high`.
@@ -453,49 +483,40 @@ ux-skill (패키지명: uxskill)
 - **출력:** 소견당 원자 커밋. 원래 명령을 다시 실행하고 `.ux/last-*.json`을 업데이트. 요약 인쇄.
 - **다음:** `/ux-next` → 컨덕터가 다음 수를 선택.
 
-#### `/ux-polish`: 폴리시 + AI-슬롭 제거
+#### `/ux-polish`: lint, 수정, 재 lint 루프 + AI 슬롭 제거
 
-- **무엇:** 간격 리듬, 위계 날카로움, AI-슬롭 탐지, 토큰 일관성. `/ux-lint`의 LLM 구동 대응물, 안목 판단을 당신을 대신해 행사.
-- **사용 시점:** 구조는 맞는데 실행이 헐겁다. "폴리시", "다듬기", "AI-슬롭 제거", "프리미엄으로", "AI 같지 않게", "간격이 어색", "이거 일반적", "안목이 더 필요".
-- **건너뛸 시점:** 화면이 핵심 기능을 잃었다(그것부터 고치기). 폴리시가 아닌 재설계가 필요(`/ux-design`). 카피 문제(`/ux-copy`). 모션 문제(`/ux-motion`). a11y 문제(`/ux-a11y`).
-- **호출:** `/ux-polish src/components/Hero.tsx`.
-- **출력:** 업데이트된 코드 + 변경 사항을 기술하는 `.ux/last-polish.json`.
+- **무엇:** 먼저 로컬 HTML 파일에 대한 결정론적 루프: lint, 멱등적인 폴리시 패스 여섯 개, 재 lint를 점수가 90에 이르거나, 정체되거나, 세 라운드가 지날 때까지 반복합니다(`--rounds`로 상한 변경). 기본적으로 루프 결과는 `<file>.evolved.html`에 남고 원본은 절대 건드리지 않습니다. 원본을 교체하는 것은 `--loop-only`나 `--fix`뿐이며, 작업 트리가 깨끗한지 확인한 뒤에만 하고, 65의 품질 게이트가 실패한 결과의 교체를 `--force` 없이는 막습니다. `--brand-file`을 쓰면 어느 종료 지점에서든 브랜드 충실도 하한이 지켜집니다. 그다음 취향 패스: 간격 리듬, 위계 다듬기, AI 슬롭 감지, 토큰 일관성. `/ux-lint`의 LLM 구동판으로, 취향 판단에는 여러분의 판단을 씁니다. `--loop-only`는 루프만, `--no-loop`는 취향 패스만 실행하고, `--fix`는 취향 지적을 적용합니다.
+- **사용 시점:** 구조는 맞지만 실행이 느슨하다. "폴리시해 줘", "다듬어 줘", "AI 슬롭 없애 줘", "프리미엄하게", "덜 AI 같게", "간격이 어색해", "평범해 보여", "취향이 더 필요해", "점수 90 이상까지 개선", "출시할 수 있게 만들어 줘".
+- **건너뛸 시점:** 화면에 핵심 기능이 빠져 있다(그것부터 고치기). 폴리시가 아니라 재설계가 필요하다(`/ux-design` 사용). 카피 문제(`/ux-copy` 사용). 모션 문제(`/ux-motion` 사용). a11y 문제(`/ux-a11y` 사용).
+- **호출:** `/ux-polish src/components/Hero.tsx`, `/ux-polish out/landing.html --css out/landing.css`, `/ux-polish out/landing.html --loop-only --rounds 5`.
+- **출력:** 루프의 `<file>.evolved.html`(`--loop-only`나 `--fix`일 때만 원본으로 승격), `--fix`에서 업데이트된 코드, `.ux/last-evolve.json`, `.ux/decisions.jsonl`의 한 줄, 그리고 취향 지적을 설명하는 `.ux/last-polish.json`.
 - **다음:** `/ux-lint` → 폴리시가 유지되는지 검증. `/ux-a11y` → 접근성 재확인.
 
 ### discovery & 내러티브
-
-#### `/ux-frame`: 4 필드 프레이밍 블록
-
-- **무엇:** 누구를 위한 것인지, 결과, 가설, 성공 신호를 구조화된 프레이밍 블록에 포착합니다. 디자인 작업은 없습니다, 모호한 요청을 작동하는 브리프로 바꾸는 4 필드 인테이크. `/ux-discover`보다 가볍다(4 필드 vs 10).
-- **사용 시점:** 모든 프로젝트, 스프린트, 단발 약속의 시작. 대화가 표류한 중도에. "프레이밍", "브리프가 뭐냐", "프로젝트 셋업", "프레이밍".
-- **건너뛸 시점:** 이미 프레이밍됨(`.ux/last-frame.json` 확인). 프레이밍 영향이 없는 단발 컴포넌트 빌드. 백엔드/인프라.
-- **호출:** `/ux-frame "MENA Bashiti 파일럿용 로열티 월렛"`.
-- **출력:** `.ux/last-frame.json`을 씁니다, `{audience, outcome, hypothesis, success_signal}`.
-- **다음:** `/ux-discover` → 프레임을 10 필드 브리프로 확장. `/ux-design` → 프레임을 닻으로 생성.
 
 #### `/ux-research`: 리서치 계획 + 통합
 
 - **무엇:** 계획 모드: 인터뷰 스크립트, 설문, 모집 스크리너 작성. 통합 모드(`--synthesize`): 인터뷰, 분석, 경쟁사 사이트, A/B 결과, 지원 티켓을 추천으로 소화. `research-synthesizer`를 파견.
 - **사용 시점:** "리서치 연구 계획", "인터뷰 질문 필요", "설문 디자인", "사용자 어떻게 모집", "사용자 테스트 계획", "다이어리 연구", "선호 테스트", "fake door", "smoke test", "내 인터뷰 노트 통합".
 - **건너뛸 시점:** 답이 이미 높은 자신감으로 알려졌다. 저위험 가역 결정. 백엔드/인프라.
-- **호출:** `/ux-research --plan "MENA 로열티 월렛 채택"` 또는 `/ux-research --synthesize interviews/*.md`.
+- **호출:** `/ux-research --plan "loyalty wallet adoption in MENA"` 또는 `/ux-research --synthesize interviews/*.md`.
 - **출력:** `.ux/last-research.json`을 씁니다, 리서치 계획 또는 통합된 테마 + 증거 + 추천.
-- **다음:** `/ux-frame` → 발견을 프레임에 통합. `/ux-design` → 발견에서 생성. `/ux-workshop` → 리서치를 입력으로 워크숍 실행.
+- **다음:** `/ux-discover --frame` → 발견을 프레임에 통합. `/ux-design` → 발견에서 생성. `/ux-workshop` → 리서치를 입력으로 워크숍 진행.
 
 #### `/ux-workshop`: 5단계 디자인 사고 워크숍
 
 - **무엇:** discovery / 디자인 사고 워크숍을 끝에서 끝까지 진행. 다섯 개의 순차 단계(탐색 → 히트맵 → 이해관계자 지도 → 솔루션 스케치 → 게임 플랜). 시간 박싱. 단계별 구체적 산출물. "흥미로운 발견"이 아닌 결정으로 끝납니다.
 - **사용 시점:** 진짜 질문, 진짜 참가자, 진짜 시간 예산. "워크숍 진행", "discovery 진행", "디자인 사고 세션", "이해관계자가 한 시간 있다, 뭐 할까", "프로젝트 킥오프".
-- **건너뛸 시점:** 브리프가 이미 명확하고 범위 잡혔다. 단독 브레인스토밍(`/ux-design` 또는 `/ux-frame`). 팀이 실행 중, discovery에 없다.
-- **호출:** `/ux-workshop "로열티 월렛 피벗" --participants="PM 2명, 디자이너 1명, 엔지 리드 1명, 고객 담당 1명" --minutes=90`.
+- **건너뛸 시점:** 브리프가 이미 명확하고 범위가 정해졌다. 혼자 하는 브레인스토밍(`/ux-design` 또는 `/ux-discover --frame` 사용). 팀이 discovery가 아니라 실행 한가운데에 있다.
+- **호출:** `/ux-workshop "loyalty wallet pivot" --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" --minutes=90`.
 - **출력:** `.ux/last-workshop.json`을 씁니다, 게임 플랜 + 단계별 산출물.
 - **다음:** `/ux-design` → 게임 플랜 실행. `/ux-research` → 워크숍이 드러낸 간극 채우기. `/ux-case-study` → 여정을 발행.
 
 #### `/ux-case-study`: 발행 가능한 케이스 스터디(Wfrah 편집체)
 
-- **무엇:** 프로젝트 케이스 스터디를 순수 모노크롬 편집체로 생성합니다, Wfrah 타이포, 헤어라인 구분선, (A)–(G) 번호 섹션 코드, 양언어 안전 레이아웃. 문서이지 마케팅 브로슈어가 아닙니다. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`에서 읽습니다.
+- **무엇:** 순수 흑백 에디토리얼 형식의 프로젝트 케이스 스터디를 생성합니다. Wfrah 타이포그래피, 헤어라인 구분선, (A)부터 (G)까지 번호 붙은 섹션 코드, 이중 언어에 안전한 레이아웃. 마케팅 브로슈어가 아닌 문서입니다. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`에서 읽습니다.
 - **사용 시점:** 출시 후. 별개 이정표 후. "케이스 스터디 작성", "이 프로젝트 케이스 스터디로", "마무리 문서", "이 작업 발행", "포트폴리오 작품".
-- **건너뛸 시점:** 프로젝트에 (A)–(G)를 채울 데이터가 없다. 사용자가 마케팅 랜딩을 원한다, 케이스 스터디가 아니다(`/ux-design`).
+- **건너뛸 시점:** 프로젝트에 (A)부터 (G)까지의 섹션을 채울 데이터가 없다. 사용자가 케이스 스터디가 아닌 마케팅 랜딩을 원한다(`/ux-design` 사용).
 - **호출:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
 - **출력:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **다음:** 종단 명령, 보통 프로젝트의 끝.
@@ -519,35 +540,45 @@ ux-skill (패키지명: uxskill)
 - **호출:** `/ux-expert`.
 - **출력:** LinkedIn / 이메일 / 저장소가 있는 짧은 연락 카드.
 
+### 별칭, 4.1에서 제거
+
+3.x의 명령 일곱 개가 위의 18개로 합쳐졌습니다. 이전 이름은 한 릴리스 동안 계속 동작합니다. 각 별칭은 어디로 옮겨졌는지 알려 준 뒤 같은 인자로 새 명령을 실행합니다.
+
+| 이전 명령 | 현재 | 비고 |
+|---|---|---|
+| `/ux-frame` | `/ux-discover --frame` | 같은 프레이밍 블록, 같은 `.ux/last-frame.json` |
+| `/ux-recommend` | `/ux-discover --recommend` | `ux_recommend` MCP 도구는 그대로 |
+| `/ux-stats` | `/ux-init --stats` | 읽기 전용 스냅샷 |
+| `/ux-evolve` | `/ux-polish --loop-only --rounds 5` | 별칭은 예전의 다섯 라운드 상한을 유지. `/ux-polish` 단독은 세 라운드에서 멈춤 |
+| `/ux-component` | `/ux-design --component` | 같은 `.ux/last-component.json` |
+| `/ux-dashboard` | `/ux-design --dashboard` | 같은 `.ux/last-dashboard.json` |
+| `/ux-image-to-code` | `/ux-design --extract-only --from-image` | 이미지로 빌드하려면 `--extract-only`를 빼세요 |
+
 ### 명령 체이닝 그래프
 
 ```
                   ┌──────────────────────┐
-                  │  /ux-init            │
-                  │  /ux-stats           │
+                  │  /ux-init            │  --stats: inventory
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-frame           │  4 필드 프레이밍 블록
+                  │  /ux-discover        │  10-field intake (FORCING GATE)
+                  │                      │  --frame: 4-field framing block
+                  │                      │  then 5 parallel searches -> merged system
                   └────────────┬─────────┘
-                               │
-                  ┌────────────▼─────────┐
-                  │  /ux-discover        │  10 필드 인테이크(강제 게이트)
-                  └────────────┬─────────┘
-                               │ .ux/last-discovery.json 쓰기
-                  ┌────────────▼─────────┐
-                  │  /ux-recommend       │  5병렬 검색 -> 병합 시스템
-                  └────────────┬─────────┘
-                               │ .ux/last-recommendation.json 쓰기
+                               │ writes .ux/last-discovery.json
+                               │ writes .ux/last-recommendation.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
-   │ /ux-design     │ │ /ux-component   │ │ /ux-system  │
-   │ /ux-dashboard  │ │ /ux-motion      │ │             │
+   │ /ux-design     │ │ /ux-motion      │ │ /ux-system  │
+   │  --component   │ │                 │ │             │
+   │  --dashboard   │ │                 │ │             │
+   │  --from-image  │ │                 │ │             │
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ .ux/last-<surface>.json 쓰기
+                               │ writes .ux/last-<surface>.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
@@ -556,19 +587,19 @@ ux-skill (패키지명: uxskill)
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ .ux/last-<lens>.json 쓰기
+                               │ writes .ux/last-<lens>.json
                   ┌────────────▼─────────┐
-                  │  /ux-fix             │  소견을 커밋으로 적용
+                  │  /ux-fix             │  apply findings as commits
                   │  /ux-polish          │
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-case-study      │  발행 가능한 아티팩트
+                  │  /ux-case-study      │  publishable artifact
                   └──────────────────────┘
 
                   ┌──────────────────────┐
-                  │  /ux-next            │  컨덕터, 읽기 전용
-                  │  /ux-expert          │  컨설팅 훅
+                  │  /ux-next            │  conductor, read-only
+                  │  /ux-expert          │  consulting hook
                   └──────────────────────┘
 ```
 
@@ -576,12 +607,12 @@ ux-skill (패키지명: uxskill)
 
 ## 5개의 서브에이전트
 
-서브에이전트는 명령이 파견하는 역할 특화 생성기입니다. 단독으로 실행되지 않습니다, `/ux-design`, `/ux-component`, `/ux-system`, `/ux-fix`, `/ux-research` 등에 의해 호출됩니다. 각 에이전트는 명확한 소유 경계를 가집니다: 브리프를 결정하지 않으며, 브리프에 대해 실행합니다.
+서브에이전트는 명령이 파견하는 역할 특화 생성기입니다. 단독으로 실행되지 않으며, `/ux-design`, `/ux-system`, `/ux-fix`, `/ux-research` 등에 의해 호출됩니다. 각 에이전트는 명확한 책임 범위를 가집니다. 브리프를 결정하지 않고, 브리프에 따라 실행합니다.
 
 ### `frontend-engineer`
 
 - **소유:** 프로덕션급 프런트엔드 코드(React, Next.js, Vue, Blade+Alpine, vanilla HTML, Astro)에 반-AI-슬롭 규율을 적용.
-- **파견자:** `/ux-design`, `/ux-component`, `/ux-dashboard`, `/ux-fix`.
+- **파견자:** `/ux-design`(페이지, 컴포넌트, 대시보드, 이미지 모드), `/ux-fix`.
 - **입력:** 브리프 + 창작 지침 + 토큰(`.ux/last-recommendation.json`에서).
 - **출력:** 일반 AI 출력과 구별 가능한 작동 코드. 보라 그라데이션 없음, 가운데 정렬 히어로 없음, 같은 크기 카드 셋 없음, 디스플레이 크기 Inter 없음, "John Doe" 없음, 이모지 없음, 300ms 기본 없음.
 - **도구:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -589,7 +620,7 @@ ux-skill (패키지명: uxskill)
 ### `motion-engineer`
 
 - **소유:** 프로덕션 프런트엔드 코드의 모션, Framer Motion, GSAP, CSS 애니메이션. 지속 시간, 이징, 안무, reduced-motion 폴백, 성능 규율.
-- **파견자:** `/ux-design`, `/ux-motion --fix`, `/ux-component`.
+- **파견자:** `/ux-design`(모든 모드), `/ux-motion --fix`.
 - **입력:** 모션 브리프 + 토큰 + `data/motion-presets.json`의 57개 모션 프리셋.
 - **출력:** 그 자리를 차지할 자격이 있는 모션. 항상 `prefers-reduced-motion` 폴백으로 감쌈. 항상 Core Web Vitals에 대해 테스트.
 - **도구:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -597,7 +628,7 @@ ux-skill (패키지명: uxskill)
 ### `copy-writer`
 
 - **소유:** 배포되는 문자열, 에러 메시지, 빈 상태, CTA, 로딩 상태, 성공 메시지, 토스트, 헬퍼 텍스트, 폼 레이블, 버튼 텍스트.
-- **파견자:** `/ux-copy --fix`, `/ux-design`, `/ux-frame`, `/ux-component`.
+- **파견자:** `/ux-copy --fix`, `/ux-design`(모든 모드), `/ux-discover --frame`.
 - **입력:** 보이스 프로필(이름 지정 또는 붙여넣기) + 화면의 문자열.
 - **출력:** 화면의 모든 상태에 걸쳐 일관되게 적용되어 제품이 열 개가 아닌 하나처럼 들리게 하는 프로덕션 마이크로카피. 금지: "form contains errors", "John Doe", AI 쾌활 축하 카피, 일반 CTA, 죽은 빈 상태.
 - **도구:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -605,7 +636,7 @@ ux-skill (패키지명: uxskill)
 ### `research-synthesizer`
 
 - **소유:** 리서치 입력(인터뷰, 분석, 경쟁 사이트, A/B 결과, 지원 티켓)을 실행 가능한 디자인 추천으로 소화.
-- **파견자:** `/ux-research`, `/ux-workshop`, `/ux-frame`.
+- **파견자:** `/ux-research`, `/ux-workshop`, `/ux-discover --frame`.
 - **입력:** 원천 리서치, 녹취, 내보내기, 경쟁 URL, 지원 클러스터.
 - **출력:** 테마, 증거, 추천. 답을 디자인하지 않음, 디자이너가 디자인할 기질을 줍니다.
 - **도구:** `Read, Write, WebFetch, Bash, Glob, Grep`.
@@ -613,7 +644,7 @@ ux-skill (패키지명: uxskill)
 ### `design-system-architect`
 
 - **소유:** 완전한 디자인 시스템, 토큰(색, 타입, 공간, 모션, 모서리, 그림자), 기초 문서, 컴포넌트 계약, 다크 모드 페어링, 테마 층.
-- **파견자:** `/ux-system`, 시스템이 없을 때 `/ux-component`에서.
+- **파견자:** `/ux-system`, 시스템이 없을 때의 `/ux-design --component`.
 - **입력:** 브랜드 브리프 + `.ux/last-recommendation.json`(스타일 + 팔레트 + 타입 페어 + 모션 프리셋).
 - **출력:** 다운스트림 에이전트가 기본을 재결정하지 않고도 빌드할 수 있는 일관되고 의견 있는 프로덕션 준비 시스템. 토큰 JSON, 기초 MD, 컴포넌트 계약, 다크 모드 매핑.
 - **도구:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -624,7 +655,7 @@ ux-skill (패키지명: uxskill)
 
 1. 브리프 / 추천(`.ux/`에서 로드).
 2. 관련 매니페스트 슬라이스(예: `frontend-engineer`는 선택된 스타일 + 팔레트 + 컴포넌트를 받음; `motion-engineer`는 선택된 모션 프리셋을 받음).
-3. 145개 안티패턴 가드레일(항상 활성).
+3. 171개 안티패턴 가드레일(항상 활성).
 4. 성공 기준(아티팩트가 무엇을 해야 하나).
 
 서브에이전트가 반환합니다:
@@ -650,7 +681,7 @@ ux-skill (패키지명: uxskill)
 | `categories` | Minimalist / Swiss, Brutalist, Editorial, Glassmorphism, Neumorphism, Bento, Skeuomorphic, Industrial, Maximalist, AI-Futurist, MENA-modern, Vaporwave 등 |
 | `sample entry` | `swiss-international`, "그리드는 법. 타입이 무거운 일을 한다. 장식은 실패다." |
 
-사용: `/ux-recommend`, `/ux-system`, `/ux-design`. 스키마: [data/SCHEMAS.md](data/SCHEMAS.md).
+사용: `/ux-discover`, `/ux-system`, `/ux-design`. 스키마: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `palettes.json`: 176개 컬러 팔레트
 
@@ -661,7 +692,7 @@ ux-skill (패키지명: uxskill)
 | `tones` | warm, editorial, magazine, clinical, playful, brutalist, monochrome, jewel-tone, MENA-warm, dev-tools-dark 등 |
 | `sample entry` | `claude-warm-editorial`, 라이트, warm/editorial/magazine, canvas #faf9f5, primary #cc785c |
 
-사용: `/ux-recommend`, `/ux-system`. AA / AAA에 대해 명도대비 검증. 스키마: [data/SCHEMAS.md](data/SCHEMAS.md).
+사용: `/ux-discover`, `/ux-system`. AA / AAA에 대해 명도대비 검증. 스키마: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `type-pairs.json`: 70개 타입 페어링
 
@@ -671,7 +702,7 @@ ux-skill (패키지명: uxskill)
 | `keys per entry` | `id`, `name`, `display`(family + weights + source + license + URL), `body`, `mono`, `compatible_styles`, `taste_score` |
 | `sample entry` | `cormorant-inter-jetbrains`, Cormorant Garamond × Inter × JetBrains Mono |
 
-모든 패밀리에 라이선스 + 소스 URL이 있습니다. `/ux-recommend`, `/ux-system`에서 사용.
+모든 글꼴 패밀리에 라이선스 + 출처 URL이 있습니다. `/ux-discover`, `/ux-system`에서 사용.
 
 ### `components.json`: 148개 컴포넌트
 
@@ -693,7 +724,7 @@ ux-skill (패키지명: uxskill)
 | `categories` | Financial Services, Healthcare, Education, E-commerce, SaaS B2B, SaaS B2C, Developer Tools, Media, Gaming, Travel, Real Estate, MENA-specific 등 |
 | `sample entry` | `fintech-neobank`, 높은 신뢰, 규제 공시, 잔액/거래 주력 UI, 일상 사용을 위한 모바일 우선 |
 
-`/ux-recommend`가 첫 병렬 검색 축으로 사용.
+추천기(`/ux-discover`)가 첫 병렬 검색 축으로 사용.
 
 ### `chart-types.json`: 35개 차트 타입
 
@@ -702,9 +733,9 @@ ux-skill (패키지명: uxskill)
 | `entries` | 35 |
 | `keys per entry` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
 | `categories` | Comparison, Time Series, Distribution, Composition, Relationship, Flow, Geographic |
-| `sample entry` | `bar-vertical`, 4–15개의 이산 카테고리 비교. x축 위치가 카테고리에, 높이가 값에 매핑. |
+| `sample entry` | `bar-vertical`, 4개에서 15개의 이산 카테고리 비교. x축 위치가 카테고리를, 높이가 값을 나타냄. |
 
-`/ux-dashboard`, `/ux-component`(차트 인스턴스)에서 사용.
+`/ux-design --dashboard`와 `/ux-design --component`(차트 인스턴스)에서 사용.
 
 ### `tech-stacks.json`: 25개 스택
 
@@ -739,15 +770,15 @@ ux-skill (패키지명: uxskill)
 
 모든 프리셋에 reduced-motion 변형이 있습니다. Framer Motion, GSAP, 순수 CSS에 대한 스택 준비 코드.
 
-### `anti-patterns.json`: 145개 regex 규칙
+### `anti-patterns.json`: 171개 규칙
 
 | 필드 | 설명 |
 |---|---|
-| `entries` | 152 |
-| `keys per entry` | `id`, `name`, `severity`(critical/high/medium/low), `category`, `detection`(type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
-| `categories` | A11y(23), Content(15), Layout(13), Typography(10), Color(9), Quality(9), Visual(9), Motion(8), Performance(4) |
+| `entries` | 171 |
+| `keys per entry` | `id`, `name`, `severity`(critical/high/medium/low), `category`, `detection`(유형, 패턴, 플래그, 범위, 그리고 많은 규칙에서 파싱된 파일에 대한 `post` 검사), `why`, `fix` |
+| `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-전체 규칙 목록은 [145개의 반 AI-슬롭 규칙](#145개의-반-ai-슬롭-규칙-린터)에 있습니다.
+전체 규칙 목록은 [171개 반-AI 슬롭 규칙](#171개-반-ai-슬롭-규칙-린터)에 있습니다.
 
 ### `brands/*.json`: 160개 브랜드 사양
 
@@ -761,88 +792,15 @@ ux-skill (패키지명: uxskill)
 
 ---
 
-## 145개의 반 AI-슬롭 규칙: 린터
+## 171개 반-AI 슬롭 규칙: 린터
 
-ux-skill은 결정론적 regex 기반 린터를 출시합니다. **LLM 없음.** **API 없음.** **네트워크 없음.** 전형적인 Next.js 앱에서 CI에서 ~200ms로 실행됩니다. `--fail-on high` 설정 시 Critical / High에 부딪히면 비영 종료.
+ux-skill은 결정론적 린터를 제공합니다. 각 규칙은 패턴이고, 많은 규칙이 파싱된 CSS와 마크업에 대한 검사를 더하므로, 일치는 규칙이 지정한 맥락에서만 셉니다. **LLM 없음.** **API 없음.** **네트워크 없음.** 일반적인 Next.js 앱에서 CI로 ~200ms에 실행됩니다. `--fail-on high`를 설정하면 Critical / High 지적에서 0이 아닌 코드로 종료합니다.
 
-규칙은 `data/anti-patterns.json`(v2 우선)에서 가져오며, `references/foundations/anti-patterns.md`(v1 bash) 폴백이 있습니다. 두 개의 바이너리를 출시합니다: `bin/ux-lint.py`(Python, 빠르고 확장 가능)와 `bin/ux-lint.sh`(Bash + perl-PCRE, Python 없는 환경용).
+규칙은 `data/anti-patterns.json`(v2, 권장)에서 가져오고 `references/foundations/anti-patterns.md`(v1, bash)를 대체 경로로 씁니다. 바이너리 두 개가 함께 제공됩니다: `bin/ux-lint.py`(Python, 빠르고 확장 가능)와 `bin/ux-lint.sh`(Bash + perl-PCRE, Python이 없는 환경용).
 
 ### 카테고리별 규칙
 
-#### 타이포그래피(3개 규칙)
-
-| 심각도 | 규칙 ID | 이름 |
-|---|---|---|
-| high | `inter-as-display` | Inter를 디스플레이 폰트로 사용 |
-| medium | `hero-text-arbitrary-90px` | 임의의 히어로 폰트 크기 |
-| low | `font-system-only` | 선택된 타입페이스 없는 시스템 폰트 스택만 |
-
-#### 색(6개 규칙)
-
-| 심각도 | 규칙 ID | 이름 |
-|---|---|---|
-| high | `purple-to-blue-gradient` | 기본 보라-파랑 AI 그라데이션 |
-| high | `dark-text-on-dark-card` | 카드 위 낮은 명도대비 텍스트 |
-| medium | `gradient-text-rainbow` | 다중 스톱 그라데이션 텍스트 |
-| medium | `card-glow-purple-shadow` | 카드 위 보라 글로우 그림자 |
-| medium | `gradient-mesh-purple-pink` | 히어로 보라-분홍 메시 그라데이션 |
-| low | `tailwind-color-named-vague` | 시맨틱 토큰 없는 명명된 Tailwind 색 |
-
-#### 레이아웃(5개 규칙)
-
-| 심각도 | 규칙 ID | 이름 |
-|---|---|---|
-| high | `three-equal-card-grid` | 한 줄에 같은 크기 카드 셋 |
-| medium | `centered-everything-hero` | 가운데 정렬 히어로 구성 |
-| medium | `avatar-stack-overlapping` | 일반적인 겹친 아바타 스택 |
-| low | `pill-rounded-full-everywhere` | 모든 것에 적용된 `rounded-full` |
-| low | `nav-equal-hamburger-desktop` | 데스크톱의 햄버거 메뉴 |
-
-#### 콘텐츠(5개 규칙)
-
-| 심각도 | 규칙 ID | 이름 |
-|---|---|---|
-| high | `lorem-ipsum-leak` | 배포 코드의 Lorem ipsum |
-| high | `emoji-in-ui` | UI 요소로 사용된 이모지 |
-| high | `icon-emoji-stamp` | 아이콘 스탬프로 사용된 이모지 |
-| high | `testimonial-fake-five-stars` | 하드코딩된 별 다섯 추천사 |
-| medium | `fake-name-john-doe` | 일반 자리표시 이름 |
-
-#### 모션(3개 규칙)
-
-| 심각도 | 규칙 ID | 이름 |
-|---|---|---|
-| medium | `cta-arrow-rightward-bouncing` | CTA의 튀는 화살표 |
-| low | `timing-300ms-default` | 기본 300ms 트랜지션 타이밍 |
-| low | `cubic-bezier-material-only` | 어디서나 Material 기본 이징 |
-
-#### A11y(6개 규칙)
-
-| 심각도 | 규칙 ID | 이름 |
-|---|---|---|
-| high | `inline-svg-no-aria` | aria-label이나 aria-hidden 없는 SVG |
-| high | `img-no-alt` | alt 속성 누락된 이미지 |
-| high | `link-onclick-no-href` | onClick은 있지만 href 없는 앵커 |
-| medium | `button-no-type` | type 속성 누락된 버튼 |
-| medium | `heading-skip-h1-h3` | 건너뛴 헤딩 레벨 |
-| medium | `infinite-scroll-no-pagination` | 키보드 폴백 없는 무한 스크롤 |
-
-#### 품질(6개 규칙)
-
-| 심각도 | 규칙 ID | 이름 |
-|---|---|---|
-| high | `console-log-leak` | 컴포넌트 코드에 `console.log` |
-| medium | `inline-style-attribute` | 인라인 style 속성 |
-| medium | `any-type-leak` | TypeScript `any` 타입 |
-| medium | `arbitrary-z-index-9999` | 게으른 z-index 값 |
-| low | `shadcn-default-everywhere` | 변경 없는 shadcn 기본 토큰 블록 |
-| low | `todo-fixme-comment` | 배포 코드에 TODO 또는 FIXME |
-
-#### 시각(1개 규칙)
-
-| 심각도 | 규칙 ID | 이름 |
-|---|---|---|
-| low | `blur-bg-only-decoration` | 글래스 표면 없는 backdrop blur |
+171개 규칙 전체를 카테고리별, 이어서 심각도순으로 정리한 카탈로그는 `data/anti-patterns.json`에서 [영어 README](README.md#rules-by-category)로 생성됩니다. 규칙 ID와 이름은 린터가 출력하는 그대로 실려 있습니다. 규칙 범위: A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
 
 ### 린터 사용법
 
@@ -850,9 +808,9 @@ ux-skill은 결정론적 regex 기반 린터를 출시합니다. **LLM 없음.**
 
 ```bash
 uxskill lint .
-# 또는
+# or
 python3 bin/ux-lint.py src/
-# 또는
+# or
 bash bin/ux-lint.sh src/
 ```
 
@@ -879,7 +837,7 @@ src/components/Hero.tsx:24  [high]   purple-to-blue-gradient
   evidence: bg-gradient-to-br from-purple-500 to-blue-500
   fix: replace with the recommended palette's primary gradient or remove gradient
 
-src/components/Pricing.tsx:12  [high] three-equal-card-grid
+src/components/Pricing.tsx:11  [high] three-equal-card-grid
   evidence: grid grid-cols-3 gap-6 (3 equal Card children)
   fix: feature one card; flank with two reduced-emphasis cards
 
@@ -931,13 +889,13 @@ BMW, BMW M, Bugatti, Ferrari, Lamborghini, Renault, SpaceX, Tesla
 
 ## MCP 서버: 비대칭 한 수
 
-ux-skill은 **Model Context Protocol 서버**를 출시합니다. `ux-mcp`를 실행하면 엔진이 장기 실행 stdio 프로세스가 되어, MCP 호환 호스트 누구나, Claude Desktop, Cursor, Windsurf, 일반 에이전트, 호출할 수 있습니다. 열네 개의 도구: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. 슬래시 명령이 사용하는 것과 같은 Python 핸들러, 같은 데이터 매니페스트, 같은 결정론적 추천기.
+ux-skill은 **Model Context Protocol 서버**를 제공합니다. `ux-mcp`를 실행하면 엔진이 상주 stdio 프로세스가 되어, MCP를 지원하는 어떤 호스트(Claude Desktop, Cursor, Windsurf, 일반 에이전트)든 호출할 수 있습니다. 25개 도구: `ux_recommend`, `ux_system_detect`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`, `ux_image_extract`, `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`, `ux_system_build`, `ux_system_import`, `ux_system_enhance`, `ux_system_extend`, `ux_system_export`, `ux_contracts_check`. 슬래시 명령이 쓰는 것과 같은 Python 핸들러, 같은 데이터 매니페스트, 같은 결정론적 추천기입니다.
 
 **왜 이것이 비대칭 한 수인가:** 상위 여덟의 Claude UX 스킬(ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) 중 어느 것도 MCP 서버를 출시하지 않습니다. 그들은 Claude Code의 플러그인 런타임에 갇혀 있습니다. ux-skill은 MCP를 말하는 어떤 호스트에서도 도달 가능합니다, Claude Code 플러그인을 들어본 적 없는 에이전트도.
 
 ```bash
-pip install 'uxskill[mcp]'             # mcp는 옵트인 extra
-ux-mcp                                  # stdio JSON-RPC 서버 시작
+pip install 'uxskill[mcp]'             # mcp is an opt-in extra
+ux-mcp                                  # stdio JSON-RPC server starts
 ```
 
 클라이언트를 `ux-mcp` 바이너리에 가리키세요. 완전한 도구 문서, JSON 예시, Claude Desktop, Cursor, Windsurf용 클라이언트별 설정은 [docs/mcp.html](docs/mcp.html)과 `commands/ux-mcp.md`에 있습니다.
@@ -950,7 +908,7 @@ ux-mcp                                  # stdio JSON-RPC 서버 시작
 
 | IDE / 도구 | 감지 시그널 | 설치된 아티팩트 |
 |---|---|---|
-| Claude Code | `.claude/` 또는 `CLAUDE.md` | `.claude-plugin/plugin.json`의 플러그인 매니페스트 + 22개 명령 모두 + 5개 서브에이전트 모두 |
+| Claude Code | `.claude/` 또는 `CLAUDE.md` | `.claude-plugin/plugin.json`의 플러그인 매니페스트 + 명령 18개 전부(그리고 별칭 7개) + 서브에이전트 5개 전부 |
 | Cursor | `.cursor/` 또는 `.cursorrules` | 엔진을 가리키는 `.cursorrules` 프롬프트 헤더 |
 | Windsurf | `.windsurf/` 또는 `.windsurfrules` | 같은 프롬프트 헤더의 `.windsurfrules` |
 | GitHub Copilot | `.github/copilot-instructions.md` 또는 `.vscode/` | `.github/copilot-instructions.md` |
@@ -982,8 +940,8 @@ Cursor에서 MENA 네오뱅크 대시보드 작업 중입니다. 플러그인을
 
 ```bash
 pip install uxskill
-uxskill init                                # Cursor를 감지, .cursorrules 작성
-uxskill discover                            # 10 필드 인테이크
+uxskill init                                # detects Cursor, writes .cursorrules
+uxskill discover                            # 10-field intake
 uxskill recommend \
   --project-type=dashboard \
   --industry=fintech-neobank \
@@ -1002,24 +960,24 @@ uxskill recommend \
 /plugin marketplace add Laith0003/ux-skill
 /plugin install ux@ux-skill
 /ux-discover
-> 프로젝트 타입? landing
-> 산업? fintech-payments
-> 톤? 진지함, 기술적, 자신감
-> 필수 항목? dark-mode, AA, 모바일 우선
-> 금지 항목? purple-gradients, three-equal-cards
-> 참조 브랜드? stripe
-> 스택? nextjs-15-app-router
-> 지역? 글로벌
-> 성공 지표? 가입 전환
+> Project type? landing
+> Industry? fintech-payments
+> Tone? serious, technical, confident
+> Must have? dark-mode, AA, mobile-first
+> Forbidden? purple-gradients, three-equal-cards
+> Reference brands? stripe
+> Stack? nextjs-15-app-router
+> Region? global
+> Success metric? signup conversion
 
-/ux-recommend
-> [선택된 스타일, 팔레트, 타입 페어, 모션 프리셋, 컴포넌트, 브랜드 본보기 반환]
+/ux-discover --recommend
+> [returns picked style, palette, type pair, motion presets, components, brand exemplars]
 
-/ux-design "Stripe 브랜드 사양을 본보기로 랜딩 생성"
-> [frontend-engineer가 페이지 생성]
+/ux-design "generate the landing using the Stripe brand spec as exemplar"
+> [frontend-engineer generates the page]
 
 /ux-lint .
-> [통과, Stripe 브랜드 사양이 존중됨]
+> [passes, Stripe brand spec was respected]
 ```
 
 ### 3. AI 슬롭을 위한 CI에서 기존 코드 감사
@@ -1049,16 +1007,16 @@ jobs:
 
 ```
 /ux-critique src/components/Hero.tsx
-> [3승, 3패, 1수, 견해는 솔직]
+> [3 wins, 3 misses, 1 strategic move, the take is honest]
 
 /ux-lint src/
-> [15개의 높은 심각도 AI 지문이 표시됨]
+> [15 high-severity AI fingerprints flagged]
 
 /ux-polish src/components/Hero.tsx
-> [LLM 구동 폴리시 + AI-슬롭 제거]
+> [LLM-driven cosmetic pass + AI-slop kill]
 
 /ux-fix
-> [소견을 원자 커밋으로 적용, 린터 재실행]
+> [applies findings as atomic commits, re-runs the linter]
 ```
 
 세 개의 명령, 하나의 폴리시된 화면, 수정마다 원자 커밋.
@@ -1066,10 +1024,10 @@ jobs:
 ### 5. Linear 스타일 커맨드 팔레트 디자인
 
 ```
-/ux-component command-palette --brief="Linear 스타일, 다크, 모노스페이스 단축키, 최근 항목 우선"
-> [data/brands/linear.app.json에서 토큰 + 시그니처 무브 읽기]
-> [data/components.json에서 command-palette 해부 + 상태 읽기]
-> [명시적 Linear 사양으로 frontend-engineer 파견]
+/ux-design --component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
+> [reads data/brands/linear.app.json for tokens + signature moves]
+> [reads data/components.json for the command-palette anatomy + states]
+> [dispatches frontend-engineer with explicit Linear spec]
 ```
 
 생성된 컴포넌트는 Linear의 실제 색 토큰, 타입 스택, 모션 규약, 헤어라인 밀도를 사용합니다, "일반 다크 UI"가 아닙니다.
@@ -1079,8 +1037,8 @@ jobs:
 5명을 90분. 그들이 "분위기"가 아닌 게임 플랜과 함께 떠나길 원합니다.
 
 ```
-/ux-workshop "로열티 월렛 피벗" \
-  --participants="PM 2명, 디자이너 1명, 엔지 리드 1명, 고객 담당 1명" \
+/ux-workshop "loyalty wallet pivot" \
+  --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" \
   --minutes=90
 ```
 
@@ -1092,9 +1050,9 @@ jobs:
 
 ```
 /ux-case-study --format=html --slug=bashiti-loyalty
-> [.ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json 읽기]
-> [(A)-(G) 번호 섹션, 헤어라인 구분선, 양언어 안전 레이아웃의 Wfrah 편집체 케이스 스터디 생성]
-> [case-studies/bashiti-loyalty.html 작성]
+> [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
+> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/bashiti-loyalty.html]
 ```
 
 케이스 스터디는 완성된 발행 가능한 아티팩트입니다, 초안이 아닙니다. 순수 모노크롬, 편집체 타이포, 포트폴리오에 바로 배포할 준비가 된.
@@ -1105,7 +1063,7 @@ jobs:
 
 ```bash
 uxskill discover
-# 10 필드 인테이크, .ux/last-discovery.json에 저장
+# 10-field intake, saves to .ux/last-discovery.json
 
 cat .ux/last-discovery.json
 # {
@@ -1119,7 +1077,7 @@ JSON을 팀에 건네거나, Notion 문서에 붙이거나, 별도 AI 도구에 
 
 ### 9. MASTER.md 지속성: 저장소 안의 디자인 결정
 
-`/ux-recommend` 후, 선택된 스타일 + 팔레트 + 타입 + 모션 + 컴포넌트 + 브랜드 본보기 + 가드레일을 팀이 리뷰하고, 차이를 보고, 버전 관리할 수 있는 사람이 읽기 쉬운 Markdown 파일로 지속시킵니다.
+`/ux-discover`(또는 `/ux-discover --recommend`) 후, 선택된 스타일 + 팔레트 + 타입 + 모션 + 컴포넌트 + 브랜드 본보기 + 가드레일을 팀이 리뷰하고, 차이를 보고, 버전 관리할 수 있는 읽기 쉬운 Markdown 파일로 저장합니다.
 
 ```bash
 python3 -m engine.cli.main persist save --project-root .
@@ -1135,11 +1093,11 @@ python3 -m engine.cli.main persist save --project-root .
 
 | 차원 | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
-| 슬래시 명령 | **22** | 1 | 19 | 1 | 1 | 다수 | 1 | 1 | 1 |
+| 슬래시 명령 | **18** | 1 | 19 | 1 | 1 | 다수 | 1 | 1 | 1 |
 | 컴포넌트 | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | 모션 프리셋 | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 브랜드 사양 | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 안티패턴 규칙 | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 안티패턴 규칙 | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI 안전 결정론적 린터 | **예** | 아니오 | 아니오 | 아니오 | 아니오 | 아니오 | 아니오 | 아니오 | 아니오 |
 | 지원 IDE | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery 게이트 | **10 필드** | 암묵 | 암묵 | 암묵 | 암묵 | 암묵 | 암묵 | 암묵 | 암묵 |
@@ -1159,24 +1117,21 @@ python3 -m engine.cli.main persist save --project-root .
 
 ## 로드맵
 
-### v2.1: 린터 완성(2026 Q3)
+다음 작업(릴리스 시기는 미정):
 
-- **+17개의 미루어진 안티패턴 규칙**으로 총 52개. 타깃: dark-on-dark 호버 상태, 색만으로 상태 인코딩, 잉여 z-index 에스컬레이션, JS의 하드코딩 브레이크포인트, disabled 상태 대신 opacity 등.
-- **기계적으로 수정 가능한 소견의 안전한 재작성을 위한 `uxskill lint --fix`**(`button-no-type`, `img-no-alt` 빈 문자열, `console-log-leak` 제거).
-- **린터 소견을 인라인으로 표시하는 VS Code 확장**(CI 실행 불필요).
+- **Figma 스타일**: 그림자용 이펙트 스타일, 그리드 스타일, 필드 변수에 묶인 텍스트 스타일을 라이브 파일에 씁니다.
+- **컴포넌트 매핑**: Figma 컴포넌트와 그 베리언트를 코드 컴포넌트와 그 props에 대응시키고, 핸드오프 내내 유지합니다.
+- **라이브 사이트 가져오기**: 공개된 사이트가 실제로 렌더링하는 시스템을 파일 가져오기와 나란히 읽습니다.
+- **빌드된 시스템의 문서 페이지**: 토큰, 역할, 계약을 사람이 보기 좋게 보여 줍니다.
 
-### v2.2: 컴포넌트 매니페스트 확장(2026 Q4)
+그 밖에 열려 있는 것:
 
-- **+50 컴포넌트**로 총 198. 새로움: 비동기 필터 콤보박스, 최근 항목 휴리스틱 커맨드 팔레트, 조건부 폼 스텝, payment-element 변형, RTL 인식 데이트 피커, MENA 전용 전화 입력, 히즈리 오버레이가 있는 캘린더 그리드.
-- **6개 스택에서 컴포넌트별 코드 발행**(Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, vanilla HTML/CSS).
-- **컴포넌트 플레이그라운드**가 uxskill.laithjunaidy.com/playground에, 추천 엔진 시도와 라이브 컴포넌트 미리보기.
-
-### v3: 마켓플레이스 + 락인(2027)
-
-- **브랜드 사양 마켓플레이스**: 커뮤니티 브랜드 사양 발행과 발견. 모더레이션을 지원하는 유료 발행.
-- **커스텀 안티패턴 규칙**: 프로젝트가 `data/anti-patterns.local.json`에서 자체 regex 규칙을 정의(v2에 이미 출시; v3에서 발견 + 공유 추가).
-- **`uxskill plan`**: 브리프에서 단일 화면이 아닌 전체 다중 페이지 사이트 계획.
-- **Figma 플러그인 패리티**: 같은 추천 엔진을 Figma에서 표면화.
+- **안전한 재작성을 위한 `uxskill lint --fix`**: 기계적으로 고칠 수 있는 지적 대상(button-no-type, img-no-alt 빈 문자열, console-log-leak 제거).
+- lint 지적을 인라인으로 보여 주는 **VS Code 확장**.
+- 여섯 개 스택에서의 **컴포넌트별 코드 출력**(Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, 순수 HTML/CSS).
+- **브랜드 스펙 마켓플레이스**: 커뮤니티 브랜드 스펙을 게시하고 찾기.
+- **사용자 정의 안티패턴 규칙**: 프로젝트가 `data/anti-patterns.local.json`에 정의한 규칙을 찾고 공유하기.
+- **`uxskill plan`**: 화면 하나가 아니라 브리프로부터 여러 페이지 사이트를 계획.
 
 ---
 
@@ -1239,6 +1194,6 @@ MIT. 사용, 포크, 그 위에 빌드. AI 슬롭을 출시하는 것을 막아�
 
 ---
 
-**ux-skill** · **v3.1.0-stable** · Claude Code, Cursor, Windsurf 그리고 다른 모든 AI 코딩 도구가 AI 생성으로 읽히지 않는 프런트엔드를 출력하도록 빌드.
+**ux-skill** · **v4.0.0** · Claude Code, Cursor, Windsurf 그리고 다른 모든 AI 코딩 도구가 AI 생성으로 읽히지 않는 프런트엔드를 출력하도록 빌드.
 
 > [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)에서 저장소에 스타 · `pip install uxskill` 또는 `npx uxskill init`으로 설치 · [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)에서 비교 둘러보기

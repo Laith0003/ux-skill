@@ -2,24 +2,77 @@
 
 # ux-skill: Claude Code, Cursor ve diğer her AI coding aracı için design intelligence motoru
 
-> **v3.1.0 stable, THE BRAIN.** AI coding için en güçlü UX plugin'i. 12 sorgulanabilir JSON manifesti olan Python akıl yürütme çekirdeği (84 stil, 176 palet, 70 tipografik eşleşme, 148 component, 184 sektör, 35 chart tipi, 57 motion preset, 112 UX yasası, 152 anti-pattern kuralı, 25 tech stack, 160 brand specs), 25 slash komutu, 5 sub-agent ve deterministik anti-AI-slop linter. IDE'ler arası: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer ve Roo Cline'a dağıtılır.
+**AI tarafından üretilen arayüzü sıradan değil, ayırt edici kılan bir design intelligence motoru.** 17 AI coding aracından herhangi birine ekle, çıktın artık AI işi gibi görünmesin. Ücretsiz, MIT, çevrimdışı, LLM yok.
 
-> **Brand adı `ux-skill`.** PyPI / npm paket adı `uxskill` olarak kalır. GitHub deposu [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill) adresinde.
+```bash
+pip install uxskill
+```
 
-**Site:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Her Claude UX plugin'i ile karşılaştırma:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+**[GitHub'da ux-skill'e yıldız ver](https://github.com/Laith0003/ux-skill)**, işine yarıyorsa projeye yardım etmenin en kolay yolu bu. Yeni misin? [60 saniyelik turla](#hızlı-kurulum) başla ya da canlı olarak [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) adresinde gör.
 
-[![Version](https://img.shields.io/badge/version-3.1.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+![Önce: sıradan stok fotoğraflı hero, yumuşak mor gradyan, marka kimliği yok. Sonra: koyu bir perdenin altında gerçek şantiye fotoğrafı, kehribar vurgulu editoryal başlık ve hero'ya yerleştirilmiş teklif isteme formu. Aynı prompt, kısıtları ux-skill verdiğinde farklı sonuç.](https://raw.githubusercontent.com/Laith0003/ux-skill/main/docs/blog/skiphire-redesign.png)
+
+*Önce: sıradan, stok fotoğraflı SEO slop. Sonra: koyu bir perdenin altında gerçek şantiye fotoğraflı hero, kehribar vurgulu editoryal başlık, hero içinde teklif formu. Aynı AI coding aracı, aynı prompt, kısıtları ux-skill verdiğinde farklı sonuç.*
+
+> **v4.0, FOUNDATIONS: tek bir komut, WCAG'ye göre denetlenmiş eksiksiz bir tasarım sistemi kurar; Arapça ve sağdan sola yazım yerleşik gelir.** AI coding için en güçlü UX plugin'i. Deterministik 7 eksenli bir sentezleyiciye sahip Python akıl yürütme çekirdeği, sorgulanabilir 12 JSON manifest (84 stil, 176 palet, 70 tipografi eşleşmesi, 148 component, 184 sektör, 35 grafik türü, 57 motion preset'i, 112 UX yasası, 171 anti-pattern kuralı, 25 teknoloji stack'i, 160 marka spec'i), 18 slash komutu, 5 sub-agent, 25 MCP aracı ve deterministik bir anti-AI-slop linter. Cross-IDE: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer ve Roo Cline'a kurulur.
+
+> **Marka adı `ux-skill`.** PyPI / npm paket adı `uxskill` olarak kalır. GitHub reposu [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill) adresinde.
+
+**Yazar:** [Laith Aljunaidy](https://laithjunaidy.com), Amman'da tasarımcı ve CTO · **Site:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Tüm Claude UX plugin'leriyle karşılaştırma:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+
+[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#17-ide-yükleyicisi)
+[![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### 4.0'da yeni: temeller
+
+Bir marka rengi girer, bir tasarım sistemi çıkar; kontrastı da sana ulaşmadan önce denetlenmiş olur.
+
+```bash
+pip install --upgrade uxskill
+uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
+```
+
+Python 3.10 veya daha yenisi. MCP sunucusu için `pip install --upgrade 'uxskill[mcp]'`. pipx ile `pipx install uxskill` (kurulu bir 3.x'in üzerine `pipx upgrade uxskill`). npm ile `npx uxskill@latest`. 3.x'ten mi geliyorsun? [Geçiş rehberi](docs/migrating-to-4.md) her 3.x token'ını 4.0'daki rolüne eşler.
+
+**Bir ürün ya da landing page mi yapıyorsun?** Sayfana bağlayacağın `tokens.css`, seçilen yazı tipleri için metrikleri eşlenmiş yedek fontlarla `fonts.css`, yazı tiplerini kendi dosyalarından yükleyen `fonts-self-host.css`, araçlar için `tokens.json`, `art/` altında dekoratif marka görselleri ve neyin neden kurulduğunu, hangi sayfa kompozisyonuyla başlanacağını sade bir dille anlatan `system-report.md` elde edersin. Stilleri rollerle ver (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`), koyu modu, yüksek kontrastı, sıkı boşluğu, sağdan sola yazımı ya da azaltılmış hareketi `<html>` üzerindeki tek bir attribute ile aç kapa. Yazı tiplerini raporun verdiği Google Fonts bağlantısıyla ya da `fonts-self-host.css` ve bir `fonts/` klasörüyle yükle; her iki durumda da `fonts.css`'i `tokens.css`'ten önce bağla; iki dosyayı da düzenleme. `--brief` ile görünüm, brief sektörü ve tonu belirttiğinde onları izler; yapılandırılmış alanlar (yaş, diller, varsayılan şema, okuma bağlamı) metin boyutunu, dokunma alanlarını, yazı sistemlerini ve açılışta hangi şemanın geleceğini belirler; discovery sektör sormaz, bu yüzden `/ux-system create` sorar. Claude Code'da `/ux-system create` kurulu sürümü kontrol eder, build'i çalıştırır ve raporu açıklar.
+
+**Bir tasarım sistemi mi tasarlıyorsun?** Dokuz temel (renk, tipografi, boşluk, yerleşim, köşe yarıçapı, kenarlık, yükselti, hareket, görsel), her biri yedi eksenle sürekli olarak değişir; primitive'ler ve semantik rollerle, W3C design tokens biçiminde (DTCG 2025.10) ve her modun değerleriyle. Aynı girdiler, aynı byte'lar. MCP üzerinden `ux_system_build` raporu, denetim sonucunu ve her dosyanın boyutunu döndürür; `out` verildiğinde komutla aynı dosyaları yazar.
+
+- **WCAG denetimi.** Her metin, kontrol ve odak renk eşleşmesi açık ve koyu modda, standart ve yüksek kontrastta ölçülür: standart kontrastta WCAG 1.4.3 (metin 4.5:1) ve 1.4.11 (metin dışı 3:1), yüksek kontrastta WCAG 1.4.6 (metin 7:1); buna ek olarak, WCAG metin dışı öğeler için gelişmiş bir seviye tanımlamadığından, metin dışı öğelerin çoğu için yüksek kontrastta bize ait 4.5:1'lik bir alt sınır. Denetimden geçemeyen sistem yazılmaz; mesaj neyin değişmesi gerektiğini söyler.
+- **Varsayılan olarak güvenli.** Farklı olan bir dosyanın üzerine asla yazmaz. `--force` dosyaları yalnızca sen istediğinde değiştirir.
+- **Arapça.** `dir="rtl"` altında metin, kendi boyutları ve satır yüksekliği olan bir Arapça yazı tipine geçer; boşluklar mantıksal özellikler kullanır, hareket aynalanır. `--latin-only` bunu dışarıda bırakır.
+
+**Zaten sahip olduğun bir sistem.** `/ux-system enhance --from` sistemi kendi adlarıyla okur (DTCG token'ları, CSS özel özellikleri, bir Tailwind teması, markdown kural dosyaları ya da bir Figma değişken dışa aktarımı), aynı denetimden geçirir ve kodunun onunla gerçekte ne yaptığını ölçer; hiçbir şey yeniden yazılmaz. `/ux-system extend --from` mevcut hiçbir token'ı değiştirmeden temeller, roller veya sözleşmeler ekler, bunu yanındaki bir uzantı dosyasında yapar; `uxskill system export` ise sistemi tokens.css, Tailwind 4 teması ya da Figma değişkenleri olarak yazar. 4.2 güven katmanını (her yazımda lint, bir son kontrol incelemecisi) ve lansmanı getiriyor. [Changelog](CHANGELOG.md)'a bak.
+
+**Component'ler ve bölümler.** 23 component sözleşmesi, bir kontrolün her parçasının her durumda hangi token'lara bağlandığını ve her durumun nasıl hareket ettiğini söyler: durum değişikliği `motion.state` ile geçiş yapar, basma `motion.press.scale` ile ölçeklenir (azaltılmış harekette sabit kalır), sekmeler, menüler ve segmentli kontroller tek bir göstergeyi kaydırır. 14 bölüm sözleşmesi (hero, fiyatlandırma, SSS, footer ve diğerleri) her bölümün görevini, slot'larının aldığı component'leri, ihtiyaç duyduğu kanıtı ve telefonda nasıl üst üste dizildiğini belirtir. Bunlarla kurulan sayfalar fotoğraf kullanır; arayüz parçaları ek görseldir, asla yerine geçmez.
+
+**Sayfayı okuyan bir linter.** 171 kural, çoğu ayrıştırılmış CSS ve markup üzerinde ek bir kontrolle, sayfanın kendi sistemini okur: hareketin zamanlaması kendi eğrisinden alınır, display başlıkların satır yüksekliği motorun alt sınırında tutulur, gizli bir kontrol sekme sırasından çıkmak zorundadır. `uxskill lint --render` her sayfayı headless Chromium'da masaüstü ve telefon genişliğinde açar ve kullanır: görünmeyen ya da kırpılan odak halkaları, geç yanıt veren hover ve basma, Escape sonrası kaybolan odak ve azaltılmış harekette hâlâ hareket eden bir basma.
+
+**Daha az komut.** 25 slash komutu 18'e iner. `/ux-discover` `--frame` ve `--recommend` alır, `/ux-design` `--component`, `--dashboard` ve `--from-image` alır, `/ux-polish` skor 90'a ulaşana ya da üç tur geçene kadar lint, fix, re-lint döngüsünü çalıştırır, `/ux-init` ise `--stats` alır. Yedi eski ad takma ad olarak çalışmaya devam eder ve 4.1'de kalkar; [takma adlara](#takma-adlar-41de-kaldırılıyor) bak.
+
+**Yüzey playbook'ları.** Landing, dashboard ve component kuralları `references/surfaces/` altında, her biri için bir playbook olarak durur. `/ux-design` moduna göre seçilen tam olarak birini yükler; böylece bir dashboard build'i hero kurallarını hiç okumaz.
+
+Testler: **9764 geçiyor**. Çevrimdışı. Deterministik. Hiçbir zaman LLM çağrılmaz.
+
+### v3.1'de yeni: markaya sadık, duyarlı, canlı
+
+- **Marka sadakati umulmaz, zorunlu kılınır.** Ana renk LOGONUN piksellerinden okunur (en çok boyanan CSS'ten değil); varsayılan fontlar logonun harf stiline uymadığında reddedilir. Çıkarılan marka `recommend` -> `synthesize` yolunu izler ve `evaluate` içindeki **katı bir alt sınır**, marka rengini ya da logosunu kaybeden veya gerçek görsel içermeyen her çıktıyı BAŞARISIZ sayar. Açık `brand.md` kuralıyla iki yönlü uyum (render + içe aktarma).
+- **Mobile-first, denetimli.** Yeni zanaat temelleri (`responsive.md`, `component-behaviors.md`) ve satır kaydırmayı dikkate alan bir denetim: yatay kaydırmada, satıra bölünen bir nav, logo ya da buton etiketinde veya fazla yüksek bir sticky header'da başarısız olur.
+- **Wow katmanı.** Motor sayfa başına 2-3 eşgüdümlü imza anı türetir; «wow yalnızca kullanıcıdan gelebilir» doktrini geride kalır.
+- **Daha keskin linter** (152 kural): zorunlu görsel ve yalnızca ikon tespiti, placeholder token ve `100vw` kuralları; seed'li picsum korunur, rastgele olan çıkarılır.
+
+Notların tamamı [CHANGELOG.md](CHANGELOG.md) dosyasında.
 
 ### v3'te yeni neler var
 
@@ -28,7 +81,7 @@
 - **Üç otomatik mod**: `strict_brand` (tek bir markanın %100'ü), `brand_anchor` (%70 tek marka + %30 kardeş markalardan eksen uyarlamalı), `pure_synthesis` (marka adı yok, eksen eşleşmeli 8 örnekten damıtma).
 - **Decisions ledger recommender'ı yeniden sıralıyor.** `.ux/decisions.jsonl` aynı `(industry, ui_type)` kovasındaki geçmiş kazanımlara göre adayları re-rank ediyor. Cold-start güvenli. Sadece `lint_score >= 80` + `user_accepted = true` olan kararlar sayılır.
 - **Eksen etkileşim matrisi**: rakip eksenler arasında açık çatışma çözümü (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius). Artık sessiz ad-hoc kural yok.
-- **`/ux-evolve` otomatik döngüsü**: skor ≥ 90 olana, plato olana veya 5 tura kadar lint → polish → re-lint. Kalite kapısı 65'te.
+- **`/ux-evolve` otomatik döngüsü** (4.0'da `/ux-polish`'in varsayılan döngüsü): skor ≥ 90 olana, plato olana veya 4.0'da 3 tura (v3'te 5) kadar lint → polish → re-lint. Kalite kapısı 65'te.
 - **3 yeni MCP aracı** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
 - **Yerel stats panosu**: `uxskill stats --html` SENİN kurulumunun öğrendiklerini `.ux/stats.html`'e yazar. Telemetri yok, küresel toplam yok.
 - **223 test geçiyor.** Çevrimdışı. Deterministik. LLM hiç çağrılmıyor.
@@ -45,7 +98,7 @@ Tüm detaylar [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain) içinde.
 
 ux-skill, AI coding araçları için bir **design intelligence motoru**. Bir Python paketi olarak (`pip install uxskill`), Claude Code plugin'i olarak ve 17 IDE'lik multi-yükleyici olarak çalışır. Motor bir proje brief'ini (sektör, hedef kitle, ton, must-have, yasaklı hamleler, stack, bölge) alır ve eksiksiz bir önerilen design sistemi döndürür: stil, palet, tipografik çift, motion preset'leri, component'ler, çalışılacak örnek brand'ler ve tutulması gereken anti-pattern guardrail'ları. Öneri deterministik, aynı girdi her zaman aynı çıktıyı verir.
 
-Plugin, sen ve AI coding aracı arasında durur. Claude Code'a, Cursor'a veya başka bir AI asistanına «bir fintech landing oluştur» dediğinde, asistan tipik olarak doğaçlama yapar, ve sonuç beş saniye içinde AI üretimi olarak okunur (mor-mavi gradyanlar, üç eşit card, display boyutunda Inter, testimonial'larda «John Doe», 300ms varsayılan geçişler, ortalanmış hero, zıplayan ok CTA'lar). ux-skill doğaçlamayı **yapılandırılmış kısıtlamalarla** değiştirir: brief'i yakalamak için `/ux-discover`, sistemi seçmek için `/ux-recommend`, kodu üretmek için `/ux-design` ve commit'ten önce 152 deterministik anti-AI-slop kuralından geçtiğini doğrulamak için `/ux-lint` çalıştırırsın.
+Plugin, sen ve AI coding aracı arasında durur. Claude Code'a, Cursor'a veya başka bir AI asistanına «bir fintech landing oluştur» dediğinde, asistan tipik olarak doğaçlama yapar ve sonuç beş saniye içinde AI üretimi olarak okunur (mor-mavi gradyanlar, üç eşit card, display boyutunda Inter, testimonial'larda «John Doe», 300ms varsayılan geçişler, ortalanmış hero, zıplayan ok CTA'lar). ux-skill doğaçlamayı **yapılandırılmış kısıtlamalarla** değiştirir: brief'i yakalayıp sistemi seçmek için `/ux-discover`, kodu üretmek için `/ux-design` ve commit'ten önce 171 deterministik anti-AI-slop kuralından geçtiğini doğrulamak için `/ux-lint` çalıştırırsın.
 
 Bu README kanonik referans. Her komut, her sub-agent, her data manifest, her install yolu, her brand spec, her anti-pattern kategorisi, hepsi burada belgelendi. Eğer Claude Code için bir design plugin'i arıyorsan ya da Cursor, Windsurf veya Codex için AI design araçlarını karşılaştırıyorsan, bunu baştan sona [compare.html](https://uxskill.laithjunaidy.com/compare.html) ile birlikte oku.
 
@@ -57,10 +110,10 @@ Bu README kanonik referans. Her komut, her sub-agent, her data manifest, her ins
 2. [Hızlı kurulum](#hızlı-kurulum)
 3. [Sayılar, top 8 Claude UX skill'ine karşı canlı karşılaştırma](#sayılar-top-8-claude-ux-skilline-karşı-canlı-karşılaştırma)
 4. [Mimari, parçalar nasıl birleşiyor](#mimari-parçalar-nasıl-birleşiyor)
-5. [25 slash komutu, detaylı referans](#25-slash-komutu-detaylı-referans)
+5. [18 slash komutu, ayrıntılı başvuru](#18-slash-komutu-ayrıntılı-başvuru)
 6. [5 sub-agent](#5-sub-agent)
-7. [12 data manifest'i](#12-data-manifesti)
-8. [152 anti-AI-slop kuralı, linter](#152-anti-ai-slop-kuralı-linter)
+7. [11 data manifest'i](#11-data-manifesti)
+8. [171 anti-AI-slop kuralı, linter](#171-anti-ai-slop-kuralı-linter)
 9. [160 brand DESIGN.md spec'i, kategoriye göre](#160-brand-designmd-speci-kategoriye-göre)
 10. [MCP sunucusu, asimetrik hamle](#mcp-sunucusu-asimetrik-hamle)
 11. [17 IDE yükleyicisi](#17-ide-yükleyicisi)
@@ -80,7 +133,7 @@ Derleyici, **deterministik 7 eksenli sentezleyicidir**, warmth, contrast, densit
 
 Üç otomatik mod var: `strict_brand` (`reference_brands=[stripe] strict=True` → %100 Stripe token, en hızlı yol); `brand_anchor` (`reference_brands=[stripe]` → %70 Stripe + %30 4 kardeş markadan eksen uyarlamalı); ve `pure_synthesis` (marka adı yok → sonsuz uzay, eksen eşleşmeli 8 örnekten damıtılmış yeni bir tasarım dili). Çatışan eksenler belgelenmiş bir **eksen etkileşim matrisi** ile çözülür, dense + corporate 4px'e derlenir (density kazanır, Bloomberg ekolü), airy + corporate 12px'e (formality kazanır, lüks), soft + playful 18px radius'a, sharp + corporate 2px'e. Uygulamada sessiz ad-hoc kural yok.
 
-**Decisions ledger** (`.ux/decisions.jsonl`, schema `_v: 1` kilitli) geri besleme döngüsünü kapatır. Recommender artık aynı `(industry, ui_type)` kovasındaki geçmiş kazanımlara göre adayları re-rank ediyor. Cold-start güvenli, 3 prior altında atlar. Sadece `lint_score >= 80` VE `user_accepted = true` olan kararları sayar. Ayrıca `/ux-evolve` skor ≥ 90 olana, plato olana veya 5 tura kadar lint → polish → re-lint çalıştırır; 65'in altında çıktı `--force` olmadan reddedilir. Sonuç: her kurulum kendi külliyatı üzerinde daha akıllı hale gelir, her çalıştırma makineler arasında tekrarlanabilir, motor tamamen çevrimdışı kalır.
+**Decisions ledger** (`.ux/decisions.jsonl`, schema `_v: 1` kilitli) geri besleme döngüsünü kapatır. Recommender artık aynı `(industry, ui_type)` kovasındaki geçmiş kazanımlara göre adayları yeniden sıralıyor. Soğuk başlangıçta güvenli: 3 önceki kararın altında sıralamayı atlar. Yalnızca `lint_score >= 80` VE `user_accepted = true` olan kararları sayar. Ayrıca `/ux-polish` skor ≥ 90 olana, plato olana veya 3 tura kadar lint → polish → re-lint çalıştırır; 65'lik kalite kapısının altındaki çıktı `--force` olmadan reddedilir. Sonuç: her kurulum kendi külliyatı üzerinde daha akıllı hale gelir, her çalıştırma makineler arasında tekrarlanabilir, motor tamamen çevrimdışı kalır.
 
 ---
 
@@ -97,7 +150,7 @@ Claude Code'da yaşıyorsan, plugin marketplace üzerinden kur:
 /plugin install ux@ux-skill
 ```
 
-Bu, 25 slash komutunun ve 5 sub-agent'ın hepsini Claude Code oturumuna bağlar. Kurulumdan sonra, projeye özel `.ux/` state dizinini kurmak ve Python motorunun erişilebilir olduğunu doğrulamak için `/ux-init` çalıştır.
+Bu, 18 slash komutunun hepsini (artı 4.1'e kadar takma ad olarak kalan 7 eski adı) ve 5 sub-agent'ı Claude Code oturumuna bağlar. Kurulumdan sonra, projeye özel `.ux/` state dizinini kurmak ve Python motorunun erişilebilir olduğunu doğrulamak için `/ux-init` çalıştır.
 
 ### Yol 2: pip (evrensel)
 
@@ -105,9 +158,9 @@ Claude Code dışında yaşıyorsan (Cursor, Windsurf, CLI, CI), Python paketini
 
 ```bash
 pip install uxskill
-uxskill init                       # IDE'ni otomatik algılar, doğru artefaktı kurar
-uxskill stats                      # kurulumu doğrulamak için manifest sayılarını yazdırır
-uxskill lint .                     # geçerli dizine karşı linter'ı çalıştırır
+uxskill init                       # auto-detects your IDE, installs the right artifact
+uxskill stats                      # print manifest counts to verify install
+uxskill lint .                     # run the linter against the current directory
 ```
 
 Paket hem `ux` hem de `uxskill`'i CLI entry point'i olarak sunar, aynı binary.
@@ -117,7 +170,7 @@ Paket hem `ux` hem de `uxskill`'i CLI entry point'i olarak sunar, aynı binary.
 Python'u doğrudan yönetmek istemiyorsan, npx wrapper her şeyi `pipx` üzerinden bootstrap'ler:
 
 ```bash
-npx uxskill init                  # ilk çalıştırmada pipx + uxskill indirir
+npx uxskill init                  # downloads pipx + uxskill on first run
 npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-app-router
 ```
 
@@ -126,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "3.1.0-stable",
+#   "version": "4.0.0",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -137,13 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 145,
+#     "anti-patterns": 171,
+#     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-Herhangi bir sayı 0 dönerse, JSON dosyası eksik, [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues) adresinde bir issue aç.
+On iki sayının toplamı 1.262 giriş eder. Herhangi bir sayı 0 dönerse JSON dosyası eksiktir; [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues) adresinde bir issue aç.
 
 ---
 
@@ -161,7 +215,7 @@ Yıldız sayıları en son **2026-05-28**'de `gh api` ile doğrulandı. ux-skill
 | dominikmartn/nothing-design-skill | **2.391** | Tek estetik skill'i | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2.164** | Anti-slop design skill'i | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 component'ler + audit | 1 | - | (sadece MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python motoru + 12 manifest + 25 komut + 5 sub-agent + CI linter** | **22** | **152 regex kuralı** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python motoru + 12 manifest + 18 komut + 5 sub-agent + CI linter** | **18** | **171 deterministik kural** | **160** | **148** | **57** | **17** |
 
 ### Nerede kaybediyoruz
 
@@ -173,10 +227,10 @@ Yıldız sayıları en son **2026-05-28**'de `gh api` ile doğrulandı. ux-skill
 
 - **Component kütüphanesi:** Anatomi, durumlar, kullanılan token'lar ve motion özellikleri ile 148 belgelenmiş component. Diğer 8'in hiçbiri component manifest'i dağıtmıyor.
 - **Motion preset'leri:** Reduced-motion fallback'leriyle stack-ready 57 giriş (Framer Motion, GSAP, CSS). Diğerlerinin hiçbiri motion manifest'i dağıtmıyor.
-- **Anti-pattern linter:** 152 deterministik regex kuralı, CI'da çalışır, Critical/High'ta non-zero ile çıkar. Diğerlerinin hiçbiri deterministik linter dağıtmıyor.
+- **Anti-pattern linter:** 171 deterministik kural, CI'da çalışır, Critical/High'ta non-zero ile çıkar. Diğerlerinin hiçbiri deterministik linter dağıtmıyor.
 - **Brand spec'leri:** 160 gerçek DESIGN.md spec (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude ve 96 daha). Diğerlerinin hiçbiri brand kütüphanesi dağıtmıyor.
 - **17 desteklenen IDE:** aynı motor, IDE başına farklı yapıştırıcı.
-- **25 slash komutu:** discovery, üretim, audit, lint, polish, fix loop, case-study, workshop, copy, motion, a11y, dashboard, conductor, tamamen entegre.
+- **18 slash komutu:** discovery, üretim (sayfalar, component'ler, dashboard'lar, bir görselden), audit, lint, polish döngüsü, fix döngüsü, case-study, workshop, copy, motion, a11y, conductor, tamamen entegre.
 
 Tam tablo bazlı yan yana karşılaştırma için: [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -185,149 +239,139 @@ Tam tablo bazlı yan yana karşılaştırma için: [uxskill.laithjunaidy.com/com
 ## Mimari: parçalar nasıl birleşiyor
 
 ```
-ux-skill (paket adı: uxskill)
+ux-skill (package name: uxskill)
 │
-├── data/                              Beyin, sorgulanabilir JSON manifest'ler
-│   ├── styles.json                    84 design stili + when/skip + token'lar
-│   ├── palettes.json                  176 palet (light/dark, kontrast doğrulanmış)
-│   ├── type-pairs.json                70 display × body × mono üçlüsü
-│   ├── components.json                148 component (anatomi, durumlar, motion)
-│   ├── industries.json                184 sektör kuralı + hedef kitle sinyalleri
-│   ├── chart-types.json               35 chart tipi (when/skip, encoding)
-│   ├── tech-stacks.json               25 stack (Next, Astro, SvelteKit, Blade...)
-│   ├── ux-guidelines.json             112 isimli UX yasası (Hick, Fitts, Miller...)
-│   ├── motion-presets.json            57 motion preset'i (entry, exit, hover...)
-│   ├── anti-patterns.json             152 regex kuralı (CI-safe linter kaynağı)
-│   └── brands/*.json                  160 brand DESIGN spec'i + _index.json
+├── data/                              The brain, queryable JSON manifests
+│   ├── styles.json                    84 design styles + when/skip + tokens
+│   ├── palettes.json                  176 palettes (light/dark, contrast verified)
+│   ├── type-pairs.json                70 display × body × mono triplets
+│   ├── components.json                148 components (anatomy, states, motion)
+│   ├── industries.json                184 industry rules + audience signals
+│   ├── chart-types.json               35 chart types (when/skip, encoding)
+│   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
+│   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
+│   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
+│   ├── anti-patterns.json             171 rules (CI-safe linter source)
+│   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
-├── engine/                            Python, akıl yürütme
-│   ├── synthesizer/                   v3, deterministik 7 eksenli derleyici
+├── engine/                            Python, the reasoning
+│   ├── synthesizer/                   v3-7-axis deterministic compiler
 │   ├── decisions/                     v3, .ux/decisions.jsonl ledger + recommender re-rank
-│   ├── recommender/                   5-paralel-arama merge motoru
-│   ├── linter/                        Deterministik anti-slop tarayıcı
-│   ├── discovery/                     10 alanlı zorlayıcı protokol
-│   ├── generator/                     Token + manifest emitter'ı
-│   ├── installer/                     17 IDE multi-yükleyicisi
-│   └── cli/                           `ux` / `uxskill` entry point'i
+│   ├── recommender/                   5-parallel-search merge engine (re-ranked by decisions)
+│   ├── linter/                        Deterministic anti-slop scanner
+│   ├── discovery/                     10-field forcing protocol
+│   ├── generator/                     Token + manifest emitter
+│   ├── installer/                     17-IDE multi-installer
+│   └── cli/                           `ux` / `uxskill` entry point
 │
-├── commands/                          25 Claude Code slash komutu (.md)
-│   ├── ux-init.md                     bootstrap
-│   ├── ux-stats.md                    envanter anlık görüntüsü
-│   ├── ux-discover.md                 10 alanlı intake (gate)
-│   ├── ux-recommend.md                FLAGSHIP, 5 paralel arama
-│   ├── ux-lint.md                     deterministik linter
-│   ├── ux-design.md                   frontend kodu üretir
-│   ├── ux-component.md                bir component üretir
-│   ├── ux-system.md                   eksiksiz design sistemi üretir
-│   ├── ux-dashboard.md                dashboard yüzeyi üretir
-│   ├── ux-motion.md                   motion işlemi + audit
-│   ├── ux-audit.md                    6 lensli design audit'i
-│   ├── ux-a11y.md                     WCAG 2.1 AA audit'i
-│   ├── ux-critique.md                 taste eleştirisi (3 kazanım, 3 ıskalama, 1 hamle)
-│   ├── ux-copy.md                     microcopy incelemesi + yeniden yazım
-│   ├── ux-fix.md                      bulguları atomik commit olarak uygular
-│   ├── ux-polish.md                   kozmetik geçiş + AI-slop'u öldürme
-│   ├── ux-frame.md                    4 alanlı framing bloğu
-│   ├── ux-research.md                 araştırma planlama + sentez
-│   ├── ux-workshop.md                 5 fazlı design thinking workshop'u
-│   ├── ux-case-study.md               yayınlanabilir Wfrah-editorial case study
-│   ├── ux-next.md                     workflow yöneticisi (read-only)
-│   └── ux-expert.md                   danışmanlık bağlantısı
+├── commands/                          18 Claude Code slash commands (.md) + 7 aliases
+│   ├── ux-init.md                     bootstrap + inventory snapshot (--stats)
+│   ├── ux-discover.md                 10-field intake (gate), --frame, --recommend
+│   ├── ux-lint.md                     deterministic linter
+│   ├── ux-design.md                   generate a page, --component, --dashboard, --from-image
+│   ├── ux-system.md                   generate full design system
+│   ├── ux-motion.md                   motion treatment + audit
+│   ├── ux-audit.md                    6-lens design audit
+│   ├── ux-a11y.md                     WCAG 2.1 AA audit
+│   ├── ux-critique.md                 taste critique (3 wins, 3 misses, 1 move)
+│   ├── ux-copy.md                     microcopy review + rewrite
+│   ├── ux-fix.md                      apply findings as atomic commits
+│   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
+│   ├── ux-research.md                 research planning + synthesis
+│   ├── ux-workshop.md                 5-phase design thinking workshop
+│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-next.md                     workflow conductor (read-only)
+│   ├── ux-expert.md                   consulting hook
+│   ├── ux-mcp.md                      MCP server
+│   └── ux-frame.md, ux-recommend.md, ux-stats.md, ux-evolve.md,
+│       ux-component.md, ux-dashboard.md, ux-image-to-code.md
+│                                      aliases, removed in 4.1
 │
-├── agents/                            5 sub-agent (.md)
+├── agents/                            5 sub-agents (.md)
 │   ├── frontend-engineer.md           React/Next/Vue/Blade/Astro
 │   ├── motion-engineer.md             Framer Motion / GSAP / CSS
-│   ├── copy-writer.md                 brand sesiyle microcopy
-│   ├── research-synthesizer.md        görüşmeler + analytics + rakipler
-│   └── design-system-architect.md     token'lar / component'ler / foundation'lar
+│   ├── copy-writer.md                 microcopy in brand voice
+│   ├── research-synthesizer.md        interviews + analytics + competitors
+│   └── design-system-architect.md     tokens / components / foundations
 │
-├── references/                        Veri + demo sayfaları için düzyazı kaynağı
-│   ├── foundations/                   anti-patterns.md, prensipler, taste
-│   ├── laws/                          UX yasaları uzun form
+├── references/                        Prose source for the data + demo pages
+│   ├── foundations/                   anti-patterns.md, principles, taste
+│   ├── laws/                          UX laws long-form
 │   ├── process/                       discovery-protocol.md (load-bearing)
-│   ├── styles/                        stil başına düzyazı (anti-slop.md, vs.)
-│   ├── components/                    component uzun form
-│   ├── output/                        output rubrikleri
-│   └── conditional/                   stack-spesifik rehberlik
+│   ├── styles/                        per-style prose (anti-slop.md, etc.)
+│   ├── components/                    component long-form
+│   ├── output/                        output rubrics
+│   └── conditional/                   stack-specific guidance
 │
 ├── bin/
-│   ├── uxskill.mjs                    npx wrapper -> Python motoru
-│   ├── ux-lint.py                     v2 linter (tercih edilen)
+│   ├── uxskill.mjs                    npx wrapper -> Python engine
+│   ├── ux-lint.py                     v2 linter (preferred)
 │   └── ux-lint.sh                     v1 fallback (bash + perl-PCRE)
 │
-└── .ux/                               (her proje için oluşturulur)
-    ├── last-discovery.json            brief anlık görüntüsü
-    ├── last-recommendation.json       seçilen sistem
-    ├── last-frame.json                framing bloğu
+└── .ux/                               (created per project)
+    ├── last-discovery.json            brief snapshot
+    ├── last-recommendation.json       picked system
+    ├── last-frame.json                framing block
     ├── last-audit.json / last-a11y.json / last-copy.json / last-motion.json
     ├── last-design.json / last-component.json / last-dashboard.json
     └── last-critique.json / last-polish.json / last-research.json / last-workshop.json / last-case-study.json
 ```
 
-### Motor gerçekten nasıl çalışıyor
+### Motor gerçekte nasıl çalışır
 
-1. **Girdi.** Bir brief sağlarsın, `/ux-discover` (10 alan) ile interaktif olarak veya `ux recommend`'a flag'lerle non-interaktif olarak.
-2. **5 paralel arama.** Motor manifest'ler üzerinde beş lookup'ı eşzamanlı çalıştırır:
+1. **Girdi.** Brief'i ya `/ux-discover` (10 alan) ile etkileşimli olarak ya da `ux recommend` bayraklarıyla etkileşimsiz olarak verirsin.
+2. **5 paralel arama.** Motor manifest'ler üzerinde aynı anda beş sorgu çalıştırır:
    - **Sektör → recommended_styles** (industries.json)
-   - **Stil → palet + tip + motion uyumluluğu** (styles.json)
-   - **Ton × must-have → palet filtresi** (palettes.json)
+   - **Stil → palet + tipografi + motion uyumluluğu** (styles.json)
+   - **Ton × olmazsa olmaz → palet filtresi** (palettes.json)
    - **Stack → component uyumluluğu + motion preset'leri** (tech-stacks.json, motion-presets.json)
-   - **Forbidden + bölge → guardrail'lar + brand örnek kısa listesi** (anti-patterns.json, brands/)
-3. **Merge.** Deterministik bir merger adayları sıralar, çakışmaları çözer (örn. must-have dark-mode palet modunu zorlar) ve tek bir önerilen sistem emit eder.
-4. **Çıktı.** Seçilen stil, palet, tipografik çift, top 5 motion preset'i, top 12 component, top 5 brand örneği ve aktif 152 anti-pattern guardrail'ının hepsiyle bir JSON dokümanı. Artı her seçimi açıklayan bir rationale bloğu.
-5. **Üretim.** Aşağı komutlar (`/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard`) sub-agent'lar aracılığıyla gerçek kod üretmek için öneriyi tüketir.
-6. **Doğrulama.** `/ux-lint` üretilen kodu 152 regex kuralına karşı yeniden tarar. CI'da Critical/High'ta non-zero ile çıkar.
+   - **Yasaklar + bölge → guardrail'lar + örnek marka kısa listesi** (anti-patterns.json, brands/)
+3. **Birleştirme.** Deterministik bir birleştirici adayları sıralar, çakışmaları çözer (örneğin olmazsa olmaz koyu mod palet modunu belirler) ve tek bir önerilen sistem çıkarır.
+4. **Çıktı.** Seçilen stil, palet, tipografi çifti, en iyi 5 motion preset'i, en iyi 12 component, en iyi 5 örnek marka ve 171 anti-pattern guardrail'ının tamamı etkin olarak içeren bir JSON belgesi. Artı her seçimi açıklayan bir gerekçe bloğu.
+5. **Üretim.** Sonraki komutlar (sayfa, component, dashboard ve görsel modlarıyla `/ux-design` ile `/ux-system`) öneriyi kullanarak sub-agent'lar aracılığıyla gerçek kod üretir.
+6. **Doğrulama.** `/ux-lint` üretilen kodu 171 kurala karşı yeniden tarar. CI'da Critical/High'ta non-zero ile çıkar.
+
+**v3 eklemeleri.** Recommender artık adayları `engine/decisions/` üzerinden `.ux/decisions.jsonl` kullanarak yeniden sıralıyor (yalnızca `lint_score >= 80` VE `user_accepted = true` olan kararlar sayılır; 3 önceki kararın altında soğuk başlangıçta güvenli). Üretim yolu, bir katalogdan şablon seçmek yerine her brief için taze palet + tipografi + boşluk + köşe yarıçapı + motion token'ları üreten deterministik 7 eksenli derleyici `engine/synthesizer/`'a yönlenebilir. Ayrıntılar için [Beyin, v3.0 nedir](#beyin-v30-nedir).
 
 **Python düşünür. HTML gösterir. Markdown zincirler.**
 
 ---
 
-## 25 slash komutu: detaylı referans
+## 18 slash komutu: ayrıntılı başvuru
 
-Her komut `commands/` altında `.md` dosyası olarak dağıtılır: `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process` ve `output state file` ile. Aşağıdaki açıklamalar yoğunlaştırılmış; tam kaynak kanonik spec'tir.
+Her komut `commands/` altında `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process` ve `output state file` içeren bir `.md` dosyası olarak gelir. Aşağıdaki açıklamalar kısaltılmıştır; tam kaynak, asıl spesifikasyondur.
 
-Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & öneri**, **üretim**, **audit & doğrulama**, **fix & polish** ve **conductor**.
+Komutlar yedi grupta toplanır: **bootstrap ve envanter**, **discovery ve öneri**, **üretim**, **audit ve doğrulama**, **fix ve polish**, **discovery ve anlatı** ve **conductor**. 3.x'ten yedi ad 4.1'e kadar [takma ad](#takma-adlar-41de-kaldırılıyor) olarak çalışmaya devam eder.
 
 ### Bootstrap & envanter
 
 #### `/ux-init`: projeyi bootstrap'le
 
-- **Ne yapar:** Hangi IDE'yi kullandığını algılar (`.claude/`, `.cursor/`, `.windsurf/`, vs.), doğru artefaktı kurar, Python motorunun erişilebilir olduğunu doğrular, bir istatistik anlık görüntüsü yazdırır.
-- **Ne zaman kullan:** Yeni bir projeye ilk yükleme. ux-skill kullanan bir projeyi klonladıktan sonra. `pip install --upgrade uxskill` sonrası.
-- **Ne zaman atla:** Bu projede zaten çalıştırdın ve hiçbir şey değişmedi.
-- **Çağırma:** `/ux-init` (argüman yok) veya CLI'dan `uxskill init`.
-- **Çıktı:** IDE başına artefakt ([17 IDE yükleyicisi](#17-ide-yükleyicisi)'ne bak) + `.ux/` dizini + stdout özeti.
-- **Bağlanır:** Sırada `/ux-discover`.
+- **Ne yapar:** Hangi IDE'yi kullandığını algılar (`.claude/`, `.cursor/`, `.windsurf/`, vs.), doğru artefaktı kurar, Python motorunun erişilebilir olduğunu doğrular ve bir istatistik anlık görüntüsü yazdırır. `--stats` yalnızca anlık görüntüyü yazdırır: sürüm + veri manifest'lerindeki giriş sayıları.
+- **Ne zaman kullan:** Yeni bir projeye ilk yükleme. ux-skill kullanan bir projeyi klonladıktan sonra. `pip install --upgrade uxskill` sonrası. `--stats` kurulumdan sonra, güncellemeden sonra ya da bir öneri şaşırtıcı seçimler döndürdüğünde ve manifest'lerin eksik olduğundan şüphelendiğinde.
+- **Ne zaman atla:** Bu projede zaten çalıştırdın ve hiçbir şey değişmedi. `--stats` asla atlanması gereken bir şey değil: 50ms'lik bir okuma.
+- **Çağırma:** `/ux-init` (argüman yok), `/ux-init --stats` ya da CLI'dan `uxskill init` / `uxskill stats`. `--decisions` decisions ledger özetini ekler; `--html` `.ux/stats.html` dosyasını yazar.
+- **Çıktı:** IDE başına artefakt ([17 IDE yükleyicisi](#17-ide-yükleyicisi)'ne bak) + `.ux/` dizini + stdout özeti. `--stats`: stdout'a JSON (yukarıdaki [Kurulumu doğrula](#kurulumu-doğrula) bölümüne bak).
+- **Bağlanır:** Sırada `/ux-discover`. `--stats` yalnızca tanı içindir.
 
-#### `/ux-stats`: veri envanterini yazdır
+#### `/ux-mcp`: motoru bir MCP sunucusu olarak çalıştır
 
-- **Ne yapar:** 12 data manifest'i için sürüm + giriş sayılarını yazdırır, böylece neyin kurulu olduğunu doğrulayabilirsin.
-- **Ne zaman kullan:** Kurulum sonrası. Yükseltme sonrası. `/ux-recommend` şaşırtıcı seçimler döndürdüğünde ve manifest'lerin eksik olduğundan şüphelendiğinde.
-- **Ne zaman atla:** Asla, 50ms'lik read-only bir komut.
-- **Çağırma:** `/ux-stats` veya `uxskill stats`.
-- **Çıktı:** stdout'a JSON (yukarıdaki [Kurulumu doğrula](#kurulumu-doğrula)'ya bak).
-- **Bağlanır:** Sadece tanı; aşağıyı beslemez.
+- **Ne yapar:** Motoru stdio üzerinden bir Model Context Protocol sunucusu olarak başlatır. 25 araç (recommender, linter, kalıcılık, sentezleyici, decisions ledger, görselden çıkarım, veri manifest'leri ve bir tasarım sistemini kurma, içe aktarma, iyileştirme, genişletme, dışa aktarma ve denetleme) plugin olmadan MCP destekli herhangi bir host'tan çağrılabilir hale gelir.
+- **Ne zaman kullan:** MCP destekli başka bir host'ta çalışıyorsun ve aynı motoru istiyorsun. Tek bir tasarım kısıtı kaynağına ihtiyaç duyan çok agent'lı bir pipeline çalıştırıyorsun. Recommender'ı ya da linter'ı CI'da uzun ömürlü bir süreç olarak istiyorsun.
+- **Ne zaman atla:** Plugin'i kurulu Claude Code içindesin; slash komutları motora zaten ulaşıyor. Tek seferlik bir cevaba ihtiyacın var; `uxskill recommend` ya da `uxskill lint` daha basit.
+- **Çağırma:** `/ux-mcp` ya da `pip install 'uxskill[mcp]'` sonrası shell'den `ux-mcp`.
+- **Çıktı:** Bir stdio JSON-RPC sunucusu. İstemci başına yapılandırma için [MCP sunucusu](#mcp-sunucusu-asimetrik-hamle) ve `commands/ux-mcp.md` dosyasına bak.
+- **Bağlanır:** Hiçbir şeye; bir taşıma katmanıdır, bir adım değil.
 
 ### Discovery & öneri
 
-#### `/ux-discover`: zorlayıcı fonksiyon (10 alanlı intake)
+#### `/ux-discover`: zorlayıcı işlev (10 alanlı giriş, çerçeveleme, öneri)
 
-- **Ne yapar:** Her projenin herhangi bir üretim komutundan önce geçtiği zorunlu 10 alanlı intake. Proje tipi, hedef kitle, birincil hedef, ton, must-have, forbidden, referans brand'ler, stack, bölge, başarı metriği. **Doğaçlama yok.** Yasaklı ifadeler («modern», «clean») kullanıcıyı spesifik olmaya zorlar.
-- **Ne zaman kullan:** Herhangi bir `/ux-design`, `/ux-component`, `/ux-system` veya `/ux-dashboard`'dan önce. Önceki bir brief eskidiğinde.
-- **Ne zaman atla:** Bir bug'ı düzeltiyorsun (`/ux-fix`). Sadece bir linter geçişi çalıştırıyorsun (`/ux-lint`). Brief son oturumdan değişmedi.
-- **Çağırma:** `/ux-discover`. Plugin sorar; sen cevaplarsın.
-- **Çıktı:** `.ux/last-discovery.json` yazar (10 alanlı brief).
-- **Bağlanır:** `/ux-recommend` → stil + palet + tip + motion + component'leri seçmek için discovery'yi kullanır. `/ux-design [ek brief]` → öneriye dayalı frontend kodu üretir. `/ux-component <isim>` → keşfedilen kısıtlamalara uygun bir component üretir.
-
-#### `/ux-recommend`: flagship 5-paralel-arama motoru
-
-- **Ne yapar:** Python motorunun 12 manifest üzerindeki 5-paralel-aramasını çalıştırır ve birleşik bir design sistemi döndürür. Sektör → Stil → Palet → Tip → Motion + Component'ler + Brand Örnekleri + Guardrail'lar.
-- **Ne zaman kullan:** Sıfırdan yeni bir projeye başlarken. Yorgun görünümlü bir ürünü pivotlarken. Herhangi bir `/ux-design` veya `/ux-component`'tan önce pre-flight.
-- **Ne zaman atla:** `/ux-discover`'ı zaten çalıştırdın ve bir brief kaydettin, o akışta `/ux-recommend` otomatik. Bir bug'ı düzeltiyorsun (`/ux-fix` kullan). Sadece lint çalıştırman gerek (`/ux-lint` kullan).
-- **Çağırma (Claude Code):**
-  ```
-  /ux-recommend
-  ```
+- **Ne yapar:** Her projenin herhangi bir üretim komutundan önce geçtiği zorunlu 10 alanlı giriş. Proje türü, hedef kitle, birincil hedef, ton, olmazsa olmazlar, yasaklar, referans markalar, stack, bölge, başarı metriği. **Doğaçlama yok.** Yasaklı ifadeler («modern», «temiz») kullanıcıyı somut olmaya zorlar. Ardından recommender'ı çalıştırır: Python motorunun 12 manifest üzerindeki 5 paralel araması tek bir birleştirilmiş tasarım sistemi döndürür (Sektör → Stil → Palet → Tipografi → Motion + Component'ler + Örnek markalar + Guardrail'lar).
+- **Modlar:** `--frame` kimin için, sonuç, hipotez ve başarı sinyalini dört alanlı bir çerçeveleme bloğunda toplar; tam girişten daha hafiftir. `--recommend` yalnızca recommender'ı, kayıtlı bir brief'ten ya da tek seferlik bayraklardan çalıştırır.
+- **Ne zaman kullan:** Herhangi bir `/ux-design` ya da `/ux-system` öncesinde. Önceki brief eskidiğinde. `--frame` bir projenin, sprintin ya da tek seferlik bir işin başında veya bir konuşma rotadan çıktığında yolun ortasında. `--recommend` yorgun görünen bir ürünü yeniden konumlandırırken.
+- **Ne zaman atla:** Bir hatayı düzeltiyorsun (`/ux-fix`). Yalnızca bir linter geçişi çalıştırıyorsun (`/ux-lint`). Brief son oturumdan beri değişmedi.
+- **Çağırma (Claude Code):** `/ux-discover`, `/ux-discover --frame "loyalty wallet for a MENA retail pilot"` ya da `/ux-discover --recommend`.
   **Çağırma (CLI):**
   ```bash
   ux recommend \
@@ -339,46 +383,32 @@ Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & �
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **Çıktı:** `.ux/last-recommendation.json` yazar, seçilen stil, seçilen palet, seçilen tipografik çift, top 5 motion preset'i, top 12 component, top 5 brand örneği, aktif 152 anti-pattern guardrail'ı, artı rationale.
-- **Bağlanır:** `/ux-design [brief]` → önerilen token'ları kullanan frontend kodu. `/ux-system` → öneriden eksiksiz design sistemi. `/ux-component <isim>` → önerilen stili kullanan bir component. `/ux-lint` → üretilen kodu doğrula.
+- **Çıktı:** `.ux/last-discovery.json` (10 alanlı brief), `.ux/last-recommendation.json` (seçilen stil, palet, tipografi çifti, en iyi 5 motion preset'i, en iyi 12 component, en iyi 5 örnek marka, 171 anti-pattern guardrail'ının tamamı etkin, artı gerekçe) ve `--frame` ile `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
+- **Bağlanır:** `/ux-design [extra brief]` → öneriye dayanan frontend kodu. `/ux-design --component <name>` → ortaya çıkan kısıtlara uyumlu tek bir component. `/ux-system` → öneriden eksiksiz tasarım sistemi. `/ux-lint` → üretilen kodu doğrula.
 
 ### Üretim
 
 #### `/ux-design`: brief'ten güzel, anti-slop bir yüzey üretir
 
-- **Ne yapar:** Discovery brief'i + öneriden eksiksiz, production-grade bir frontend artefaktı (landing, marketing sitesi, app shell) üretir. anti-slop ve arsenal referanslarından gelen yaratıcı yönlendirmeyle `frontend-engineer`'ı görevlendirir.
-- **Ne zaman kullan:** «Design a», «build me a», «generate a landing page», «create a dashboard», «make a component», serbest formatlı görsel teslimat isteği.
-- **Ne zaman atla:** İnceleme istiyorsun, build değil (`/ux-audit` veya `/ux-critique` kullan). Sadece bir component istiyorsun (`/ux-component` kullan). Backend veya altyapı işi.
-- **Çağırma:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`.
-- **Çıktı:** Üretilen kod (HTML / Blade / JSX / Vue / Astro), artı `.ux/last-design.json`.
+- **Ne yapar:** Discovery brief'i + öneriden eksiksiz, production-grade bir frontend artefaktı (landing, marketing sitesi, app shell) üretir. anti-slop ve arsenal referanslarından gelen yaratıcı yönlendirmeyle `frontend-engineer`'ı görevlendirir. Brief ya da bir bayrak dört moddan birini seçer:
+  - **sayfa** (varsayılan): tam bir sayfa ya da çok bölümlü bir yüzey. `.ux/last-design.json` yazar.
+  - **`--component [name]`**: tek bir production-grade component (buton, modal, navbar, sidebar, card, tablo, form, grafik). Dört etkileşim durumunun hepsi, erişilebilir, markaya uygun. Component'i önce `.ux/last-recommendation.json` içinde arar, bulamazsa doğrudan manifest'i sorgular. `.ux/last-component.json` yazar.
+  - **`--dashboard`**: veri yoğunluğu disiplini, bento layout, tablo hizalı monospace rakamlar, sparkline pattern'leri, card aşırılığına karşı tutum, semantik durum renkleri, ölçülü motion. Üzerine grafikler yapıştırılmış bir marketing sitesi değil. `.ux/last-dashboard.json` yazar.
+  - **`--from-image <path>`**: bir referans görseli (PNG/JPG/WebP) saf Pillow görüntü işlemeyle okur (baskın palet, zemin kutupluluğu, tipografi sinyali), palet ve stil manifest'leriyle eşleştirir ve ortaya çıkan öneriden kurar. `--extract-only` çıkarımdan sonra durur. `.ux/last-image-extract.json` yazar.
+- **Ne zaman kullan:** «Design a», «build me a», «generate a landing page», «create a dashboard», «make a component», «build a button», «design the admin panel», «operator console», «KPI board», «build it like this screenshot», serbest formatlı görsel teslimat isteği.
+- **Ne zaman atla:** İnceleme istiyorsun, build değil (`/ux-audit` veya `/ux-critique` kullan). Backend veya altyapı işi.
+- **Çağırma:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`, `/ux-design --component pricing-card-trio --brief="fintech, dark, monospace numbers"`, `/ux-design --dashboard`, `/ux-design --from-image ref.png`.
+- **Çıktı:** Üretilen kod (HTML / Blade / JSX / Vue / Astro) artı modun state dosyası.
 - **Bağlanır:** `/ux-lint` → guardrail'lara karşı doğrula. `/ux-polish` → kozmetik geçiş. `/ux-a11y` → erişilebilirlik audit'i. `/ux-copy` → microcopy incelemesi. `/ux-fix` → bulguları atomik commit olarak uygula.
-
-#### `/ux-component`: bir component üretir
-
-- **Ne yapar:** Bir spec'ten tek bir production-grade component üretir (button, modal, navbar, sidebar, card, table, form, chart). Dört etkileşim durumunun hepsi, erişilebilir, on-brand. Önce `.ux/last-recommendation.json`'da component'i arar, doğrudan manifest sorgusuna geri döner.
-- **Ne zaman kullan:** Herhangi bir tek-element isteği, «build a button», «create a pricing card», «make a modal», «add a navbar», «design a sidebar», «I need a data table», «build a form», «make a chart component».
-- **Ne zaman atla:** Tam sayfa veya çok bölümlü yüzey (`/ux-design` kullan). Backend veya altyapı.
-- **Çağırma:** `/ux-component pricing-card-trio --brief="fintech, dark, monospace numbers"`.
-- **Çıktı:** Üretilen component kodu, artı `.ux/last-component.json`.
-- **Bağlanır:** `/ux-lint` → doğrula. `/ux-polish` → sıkıştır.
 
 #### `/ux-system`: eksiksiz başlangıç design sistemi üretir
 
 - **Ne yapar:** Sahip olmayan bir proje için eksiksiz bir başlangıç design sistemi önerir, token'lar (renk, tip, boşluk, motion, yarıçap, gölge), foundation belgeleri, component kontratları, dark-mode eşleşmeleri, theme switcher. `design-system-architect`'i görevlendirir.
 - **Ne zaman kullan:** «Bir design sistemimiz yok», «bize bir sistem kur», «token öner», «temamız ne olmalı», «DS'mizi kur».
-- **Ne zaman atla:** Projenin zaten bir design sistemi var, mevcut sisteme karşı `/ux-component` kullan. Backend veya altyapı.
-- **Çağırma:** `/ux-system` (henüz kayıtta yoksa önce discovery çalıştırır).
+- **Ne zaman atla:** Projenin zaten bir tasarım sistemi var; bunun yerine mevcut sistem üzerinde `/ux-design --component` kullan. Backend veya altyapı.
+- **Çağırma:** `/ux-system create` (temeller motoru), `/ux-system enhance --from <file>` (zaten sahip olduğun bir sistemi ölç), `/ux-system extend --from <file> --add <foundation>` (onu değiştirmeden genişlet) ya da `/ux-system` (3.x akışı; henüz kayıtta yoksa önce discovery çalıştırır).
 - **Çıktı:** `tokens.json`, `foundations.md`, `components/*.md` kontratları, opsiyonel Tailwind / vanilla / SCSS emit. Zincir bağlamı için `.ux/last-system.json` yazar.
-- **Bağlanır:** `/ux-component` → yeni sisteme karşı inşa et. `/ux-design` → yeni token'ları kullanarak bir yüzey üret.
-
-#### `/ux-dashboard`: uzmanlaşmış dashboard üretimi
-
-- **Ne yapar:** Veri yoğunluğu disiplini olan dashboard, bento layout, tablo monospace rakamlar, sparkline pattern'leri, anti-card-overuse, semantik durum renkleri, az motion. Üzerine grafikler yapıştırılmış bir marketing sitesi değil.
-- **Ne zaman kullan:** «Bir dashboard kur», «admin panelini tasarla», «bir metrik sayfası yap», «operatör konsolu», «analitik görünüm», «KPI panosu», «monitoring ekranı».
-- **Ne zaman atla:** İstatistikli marketing landing'i (`/ux-design` kullan). Sadece bir widget (`/ux-component` kullan). Backend veya altyapı.
-- **Çağırma:** `/ux-dashboard`.
-- **Çıktı:** Üretilen dashboard kodu + `.ux/last-dashboard.json`.
-- **Bağlanır:** `/ux-lint`, `/ux-audit`, `/ux-a11y`.
+- **Bağlanır:** `/ux-design --component` → yeni sistem üzerine kur. `/ux-design` → yeni token'larla bir yüzey üret.
 
 #### `/ux-motion`: motion işlemi
 
@@ -393,8 +423,8 @@ Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & �
 
 #### `/ux-lint`: deterministik regex tabanlı linter (LLM yok, CI-safe)
 
-- **Ne yapar:** Kodun üzerinde 152 regex kuralı çalıştırır. LLM çağrısı yok. CI'da Critical / High'ta non-zero ile çıkar. Kaynak: `data/anti-patterns.json`. Kurallar A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4) kapsar.
-- **Ne zaman kullan:** Pre-commit hook. CI gate. `/ux-audit` maliyetini ödemeden önce büyük bir codebase'de hızlı ilk geçiş. Üretimi doğrulamak için `/ux-design` veya `/ux-component` sonrası.
+- **Ne yapar:** Kodun üzerinde 171 kural çalıştırır. LLM çağrısı yok. CI'da Critical / High'ta non-zero ile çıkar. Kaynak: `data/anti-patterns.json`. Kurallar A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) kapsar.
+- **Ne zaman kullan:** Pre-commit hook. CI gate. `/ux-audit` maliyetini ödemeden önce büyük bir codebase'de hızlı ilk geçiş. Üretimi doğrulamak için herhangi bir moddaki `/ux-design` sonrası.
 - **Ne zaman atla:** Bir fix loop istiyorsun (linter raporlar, düzenlemez, `/ux-polish --fix` veya `/ux-fix`'e bağla). Taste yargısı istiyorsun (`/ux-critique` kullan).
 - **Çağırma (slash):** `/ux-lint src/`.
 - **Çağırma (CLI):** `uxskill lint .` veya `python3 bin/ux-lint.py .` veya `bash bin/ux-lint.sh --ci --fail-on high`.
@@ -453,25 +483,16 @@ Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & �
 - **Çıktı:** Bulgu başına atomik commit'ler. Kaynak komutu yeniden çalıştırır ve `.ux/last-*.json` dosyasını günceller. Bir özet yazdırır.
 - **Bağlanır:** `/ux-next` → conductor sonraki hamleyi seçer.
 
-#### `/ux-polish`: kozmetik geçiş + AI-slop'u öldür
+#### `/ux-polish`: lint, fix, re-lint döngüsü + AI-slop'u öldür
 
-- **Ne yapar:** Boşluk ritmi, hiyerarşi keskinleştirme, AI-slop tespiti, token tutarlılığı. `/ux-lint`'in LLM-driven karşılığı, taste çağrılarında senin yargını kullanır.
-- **Ne zaman kullan:** Yapı doğru ama uygulama gevşek. «Cilala», «bunu sıkıştır», «AI-slop'u kaldır», «premium yap», «daha az AI görünümlü yap», «boşluk yanlış geliyor», «bu genel görünüyor», «daha fazla taste gerek».
-- **Ne zaman atla:** Yüzeyde temel işlevsellik eksik (önce onu düzelt). Polish değil, redesign gerekiyor (`/ux-design` kullan). Copy sorunları (`/ux-copy` kullan). Motion sorunları (`/ux-motion` kullan). A11y sorunları (`/ux-a11y` kullan).
-- **Çağırma:** `/ux-polish src/components/Hero.tsx`.
-- **Çıktı:** Güncellenmiş kod + değişiklikleri açıklayan `.ux/last-polish.json`.
-- **Bağlanır:** `/ux-lint` → polish'in tuttuğunu doğrula. `/ux-a11y` → erişilebilirliği tekrar kontrol et.
+- **Ne yapar:** Önce yerel bir HTML dosyası üzerinde deterministik bir döngü: lint, altı idempotent polish geçişi, re-lint; skor 90'a ulaşana, yerinde sayana ya da üç tur geçene kadar (`--rounds` sınırı değiştirir). Varsayılan olarak döngü çıktısı `<file>.evolved.html` içinde kalır ve orijinale asla dokunulmaz. Orijinali yalnızca `--loop-only` ya da `--fix` değiştirir, temiz çalışma ağacı kontrolünden sonra; 65'lik kalite kapısı başarısız bir sonucun `--force` olmadan onun yerine geçmesini engeller; `--brand-file` ile marka sadakati alt sınırı her çıkışta geçerlidir. Ardından zevk geçişi: boşluk ritmi, hiyerarşinin keskinleştirilmesi, AI-slop tespiti, token tutarlılığı. `/ux-lint`'in LLM güdümlü karşılığı, zevk kararlarında senin yargını kullanır. `--loop-only` yalnızca döngüyü çalıştırır; `--no-loop` yalnızca zevk geçişini; `--fix` zevk bulgularını uygular.
+- **Ne zaman kullan:** Yapı doğru ama uygulama gevşek. «Cilala», «bunu sıkılaştır», «AI-slop'u kaldır», «premium yap», «daha az AI görünümlü yap», «boşluk yanlış geliyor», «bu sıradan görünüyor», «daha fazla zevk gerek», «skor 90+ olana kadar iyileştir», «yayına hazır hale getir».
+- **Ne zaman atla:** Yüzeyde temel işlevsellik eksik (önce onu düzelt). Polish değil yeniden tasarım gerekiyor (`/ux-design` kullan). Metin sorunları (`/ux-copy` kullan). Motion sorunları (`/ux-motion` kullan). A11y sorunları (`/ux-a11y` kullan).
+- **Çağırma:** `/ux-polish src/components/Hero.tsx`, `/ux-polish out/landing.html --css out/landing.css`, `/ux-polish out/landing.html --loop-only --rounds 5`.
+- **Çıktı:** Döngüden `<file>.evolved.html` (orijinalin yerine yalnızca `--loop-only` ya da `--fix` ile geçer), `--fix` ile güncellenmiş kod, `.ux/last-evolve.json`, `.ux/decisions.jsonl` içinde bir satır ve zevk bulgularını anlatan `.ux/last-polish.json`.
+- **Bağlanır:** `/ux-lint` → polish'in tuttuğunu doğrula. `/ux-a11y` → erişilebilirliği yeniden kontrol et.
 
 ### Discovery & anlatı
-
-#### `/ux-frame`: 4 alanlı framing bloğu
-
-- **Ne yapar:** Kim için olduğu, outcome, hipotez ve başarı sinyalini yapılandırılmış bir framing bloğunda yakalar. Design işi yok, sadece belirsiz bir isteği çalışan bir brief'e dönüştüren dört alanlı intake. `/ux-discover`'dan daha hafif (4 alan vs 10).
-- **Ne zaman kullan:** Herhangi bir proje, sprint veya tek-seferlik engagement'ın başlangıcı. Bir konuşma yoldan çıktığında orta akışta. «Bunu çerçevele», «brief ne», «projeyi kur», «framing».
-- **Ne zaman atla:** Zaten çerçevelendi (`.ux/last-frame.json`'a bak). Framing implikasyonu olmayan one-off component build'i. Backend veya altyapı.
-- **Çağırma:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`.
-- **Çıktı:** `.ux/last-frame.json` yazar, `{audience, outcome, hypothesis, success_signal}`.
-- **Bağlanır:** `/ux-discover` → frame'i 10 alanlı brief'e genişlet. `/ux-design` → frame'i çapa olarak kullanarak üret.
 
 #### `/ux-research`: araştırma planlama + sentez
 
@@ -480,22 +501,22 @@ Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & �
 - **Ne zaman atla:** Cevap yüksek güvenle zaten biliniyor. Düşük riskli geri alınabilir kararlar. Backend veya altyapı.
 - **Çağırma:** `/ux-research --plan "loyalty wallet adoption in MENA"` veya `/ux-research --synthesize interviews/*.md`.
 - **Çıktı:** `.ux/last-research.json` yazar, araştırma planı veya sentezlenmiş temalar + kanıt + öneriler.
-- **Bağlanır:** `/ux-frame` → bulguları bir frame'e entegre et. `/ux-design` → bulgulardan üret. `/ux-workshop` → araştırmayı girdi olarak kullanarak bir workshop yürüt.
+- **Bağlanır:** `/ux-discover --frame` → bulguları bir çerçeveye entegre et. `/ux-design` → bulgulardan üret. `/ux-workshop` → araştırmayı girdi olarak kullanan bir workshop yürüt.
 
 #### `/ux-workshop`: 5 fazlı design thinking workshop'u
 
 - **Ne yapar:** Bir discovery / design-thinking workshop'unu uçtan uca kolaylaştırır. Beş ardışık faz (keşif → heat map → stakeholder haritası → çözüm eskizi → game plan). Zaman kutulu. Faz başına somut artefaktlar. «İlginç bulgularla» değil, bir kararla biter.
 - **Ne zaman kullan:** Gerçek soru, gerçek katılımcılar, gerçek zaman bütçesi. «Bir workshop yürüt», «bir discovery kolaylaştır», «design thinking oturumu yapalım», «bir saatliğine stakeholder'larım var, ne yapıyoruz», «projeyi başlat».
-- **Ne zaman atla:** Brief zaten net ve scope'lu. Solo brainstorm (`/ux-design` veya `/ux-frame` kullan). Takım discovery'de değil, yürütme ortasında.
+- **Ne zaman atla:** Brief zaten net ve kapsamı belli. Tek başına beyin fırtınası (`/ux-design` ya da `/ux-discover --frame` kullan). Takım discovery'de değil, uygulamanın ortasında.
 - **Çağırma:** `/ux-workshop "loyalty wallet pivot" --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" --minutes=90`.
 - **Çıktı:** `.ux/last-workshop.json` yazar, game plan + faz başına artefaktlar.
 - **Bağlanır:** `/ux-design` → game plan'i yürüt. `/ux-research` → workshop'un yüzeye çıkardığı boşlukları doldur. `/ux-case-study` → yolculuğu yayımla.
 
 #### `/ux-case-study`: yayınlanabilir case study (Wfrah-editorial formatı)
 
-- **Ne yapar:** Saf monokrom editorial formatında bir proje case study'si üretir, Wfrah tipografi, hairline ayırıcılar, numaralandırılmış (A)–(G) bölüm kodları, çift-dil-güvenli layout. Bir doküman, marketing broşürü değil. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`'dan okur.
+- **Ne yapar:** Saf monokrom editoryal formatta bir proje vaka çalışması üretir: Wfrah tipografisi, ince ayırıcılar, (A) ile (G) arasında numaralı bölüm kodları, iki dilli içeriğe güvenli yerleşim. Bir belge, pazarlama broşürü değil. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json` dosyalarından okur.
 - **Ne zaman kullan:** Lansman sonrası. Ayrık bir milestone'dan sonra. «Bir case study yaz», «bu projeyi case study yap», «wrap-up belgesini yap», «bu işi yayımla», «portfolio parçası».
-- **Ne zaman atla:** Projede (A)–(G) bölümlerini doldurmak için veri eksik. Kullanıcı marketing landing'i istiyor, case study değil (`/ux-design` kullan).
+- **Ne zaman atla:** Projede (A) ile (G) arasındaki bölümleri dolduracak veri yok. Kullanıcı vaka çalışması değil, pazarlama landing'i istiyor (`/ux-design` kullan).
 - **Çağırma:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
 - **Çıktı:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Bağlanır:** Terminal komutu, genellikle bir projenin sonu.
@@ -519,35 +540,45 @@ Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & �
 - **Çağırma:** `/ux-expert`.
 - **Çıktı:** LinkedIn / email / repo ile kısa iletişim kartı.
 
+### Takma adlar, 4.1'de kaldırılıyor
+
+3.x'ten yedi komut yukarıdaki 18 komutun içine katıldı. Adları bir sürüm daha çalışır: her takma ad nereye taşındığını söyler, sonra yeni komutu aynı argümanlarla çalıştırır.
+
+| Eski komut | Şimdi | Notlar |
+|---|---|---|
+| `/ux-frame` | `/ux-discover --frame` | Aynı çerçeveleme bloğu, aynı `.ux/last-frame.json` |
+| `/ux-recommend` | `/ux-discover --recommend` | `ux_recommend` MCP aracı değişmedi |
+| `/ux-stats` | `/ux-init --stats` | Salt okunur anlık görüntü |
+| `/ux-evolve` | `/ux-polish --loop-only --rounds 5` | Takma ad eski beş turluk sınırı korur; `/ux-polish` tek başına üçte durur |
+| `/ux-component` | `/ux-design --component` | Aynı `.ux/last-component.json` |
+| `/ux-dashboard` | `/ux-design --dashboard` | Aynı `.ux/last-dashboard.json` |
+| `/ux-image-to-code` | `/ux-design --extract-only --from-image` | Görselden kurmak için `--extract-only`'yi kaldır |
+
 ### Komut zincir grafı
 
 ```
                   ┌──────────────────────┐
-                  │  /ux-init            │
-                  │  /ux-stats           │
+                  │  /ux-init            │  --stats: inventory
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-frame           │  4 alanlı framing bloğu
+                  │  /ux-discover        │  10-field intake (FORCING GATE)
+                  │                      │  --frame: 4-field framing block
+                  │                      │  then 5 parallel searches -> merged system
                   └────────────┬─────────┘
-                               │
-                  ┌────────────▼─────────┐
-                  │  /ux-discover        │  10 alanlı intake (FORCING GATE)
-                  └────────────┬─────────┘
-                               │ .ux/last-discovery.json yazar
-                  ┌────────────▼─────────┐
-                  │  /ux-recommend       │  5 paralel arama -> birleştirilmiş sistem
-                  └────────────┬─────────┘
-                               │ .ux/last-recommendation.json yazar
+                               │ writes .ux/last-discovery.json
+                               │ writes .ux/last-recommendation.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
-   │ /ux-design     │ │ /ux-component   │ │ /ux-system  │
-   │ /ux-dashboard  │ │ /ux-motion      │ │             │
+   │ /ux-design     │ │ /ux-motion      │ │ /ux-system  │
+   │  --component   │ │                 │ │             │
+   │  --dashboard   │ │                 │ │             │
+   │  --from-image  │ │                 │ │             │
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ .ux/last-<surface>.json yazar
+                               │ writes .ux/last-<surface>.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
@@ -556,19 +587,19 @@ Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & �
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ .ux/last-<lens>.json yazar
+                               │ writes .ux/last-<lens>.json
                   ┌────────────▼─────────┐
-                  │  /ux-fix             │  bulguları commit olarak uygula
+                  │  /ux-fix             │  apply findings as commits
                   │  /ux-polish          │
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-case-study      │  yayınlanabilir artefakt
+                  │  /ux-case-study      │  publishable artifact
                   └──────────────────────┘
 
                   ┌──────────────────────┐
                   │  /ux-next            │  conductor, read-only
-                  │  /ux-expert          │  danışmanlık bağlantısı
+                  │  /ux-expert          │  consulting hook
                   └──────────────────────┘
 ```
 
@@ -576,12 +607,12 @@ Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & �
 
 ## 5 sub-agent
 
-Sub-agent'lar komutlar tarafından görevlendirilen rol-spesifik üreticilerdir. Asla bağımsız çalışmazlar, `/ux-design`, `/ux-component`, `/ux-system`, `/ux-fix`, `/ux-research` vs. tarafından çağrılırlar. Her agent'ın tanımlı bir sahiplik sınırı vardır: brief'e karar VERMEZLER; ona karşı yürütürler.
+Sub-agent'lar komutlar tarafından görevlendirilen role özgü üreticilerdir. Asla bağımsız çalışmazlar; `/ux-design`, `/ux-system`, `/ux-fix`, `/ux-research` vs. tarafından çağrılırlar. Her agent'ın tanımlı bir sorumluluk sınırı vardır: brief'e karar VERMEZ; onu uygular.
 
 ### `frontend-engineer`
 
 - **Sahibi:** Anti-AI-slop disiplini ile production-grade frontend kodu (React, Next.js, Vue, Blade+Alpine, vanilla HTML, Astro).
-- **Görevlendiren:** `/ux-design`, `/ux-component`, `/ux-dashboard`, `/ux-fix`.
+- **Görevlendiren:** `/ux-design` (sayfa, component, dashboard ve görsel modları), `/ux-fix`.
 - **Girdiler:** Brief + yaratıcı yönlendirme + token'lar (`.ux/last-recommendation.json`'dan).
 - **Çıktılar:** Genel AI çıktısından ayırt edilebilir çalışan kod. Mor gradyan yok, ortalanmış hero yok, üç eşit card yok, display boyutunda Inter yok, «John Doe» yok, emoji yok, 300ms varsayılan yok.
 - **Araçlar:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -589,7 +620,7 @@ Sub-agent'lar komutlar tarafından görevlendirilen rol-spesifik üreticilerdir.
 ### `motion-engineer`
 
 - **Sahibi:** Production frontend kodunda motion, Framer Motion, GSAP, CSS animasyonları. Süreler, easing'ler, koreografi, reduced-motion fallback'leri, performans disiplini.
-- **Görevlendiren:** `/ux-design`, `/ux-motion --fix`, `/ux-component`.
+- **Görevlendiren:** `/ux-design` (her mod), `/ux-motion --fix`.
 - **Girdiler:** Motion brief'i + token'lar + `data/motion-presets.json`'dan 57 motion preset'i.
 - **Çıktılar:** Yerini kazanan motion. Her zaman `prefers-reduced-motion` fallback'leriyle sarılır. Her zaman Core Web Vitals'a karşı test edilir.
 - **Araçlar:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -597,7 +628,7 @@ Sub-agent'lar komutlar tarafından görevlendirilen rol-spesifik üreticilerdir.
 ### `copy-writer`
 
 - **Sahibi:** Ship'lenen string'ler, hata mesajları, empty state'ler, CTA'lar, loading state'leri, başarı mesajları, toast'lar, helper text, form etiketleri, button text'i.
-- **Görevlendiren:** `/ux-copy --fix`, `/ux-design`, `/ux-frame`, `/ux-component`.
+- **Görevlendiren:** `/ux-copy --fix`, `/ux-design` (her mod), `/ux-discover --frame`.
 - **Girdiler:** Ses profili (isimli veya yapıştırılmış) + yüzeyin string'leri.
 - **Çıktılar:** Ürünün on değil, tek bir ürün gibi ses çıkarması için bir yüzeyin her durumunda tutarlı şekilde uygulanan production microcopy. Yasaklar: «form contains errors», «John Doe», AI-neşeli kutlayıcı copy, genel CTA'lar, ölü empty state'ler.
 - **Araçlar:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -605,7 +636,7 @@ Sub-agent'lar komutlar tarafından görevlendirilen rol-spesifik üreticilerdir.
 ### `research-synthesizer`
 
 - **Sahibi:** Araştırma girdilerini (görüşmeler, analytics, rekabetçi siteler, A/B sonuçları, support ticket'ları) eyleme geçirilebilir design önerilerine sindirme.
-- **Görevlendiren:** `/ux-research`, `/ux-workshop`, `/ux-frame`.
+- **Görevlendiren:** `/ux-research`, `/ux-workshop`, `/ux-discover --frame`.
 - **Girdiler:** Ham araştırma, transkriptler, export'lar, rakip URL'ler, support cluster'ları.
 - **Çıktılar:** Temalar, kanıtlar, öneriler. Cevabı asla tasarlamaz, designer'a tasarımdan başlayacağı substratı verir.
 - **Araçlar:** `Read, Write, WebFetch, Bash, Glob, Grep`.
@@ -613,7 +644,7 @@ Sub-agent'lar komutlar tarafından görevlendirilen rol-spesifik üreticilerdir.
 ### `design-system-architect`
 
 - **Sahibi:** Eksiksiz design sistemleri, token'lar (renk, tip, boşluk, motion, yarıçap, gölge), foundation belgeleri, component kontratları, dark-mode eşleşmeleri, theming katmanı.
-- **Görevlendiren:** `/ux-system`, sistem yoksa `/ux-component`.
+- **Görevlendiren:** `/ux-system`, sistem yokken `/ux-design --component`.
 - **Girdiler:** Brand brief'i + `.ux/last-recommendation.json` (stil + palet + tipografik çift + motion preset'leri).
 - **Çıktılar:** Aşağı agent'ların temelleri yeniden karara bağlamadan inşa edebileceği tutarlı, görüş sahibi, production-ready bir sistem. Token JSON, foundation MD, component kontratları, dark-mode mapping.
 - **Araçlar:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -624,7 +655,7 @@ Bir komut bir sub-agent'ı görevlendirdiğinde, şunları geçirir:
 
 1. Brief / öneri (`.ux/`'den yüklenir).
 2. İlgili manifest dilimi (örn. `frontend-engineer` seçilen stil + palet + component'leri alır; `motion-engineer` seçilen motion preset'lerini alır).
-3. 152 anti-pattern guardrail'ı (her zaman aktif).
+3. 171 anti-pattern guardrail'ı (her zaman aktif).
 4. Bir başarı kriteri (artefaktın ne yapması gerektiği).
 
 Sub-agent'lar şunu döndürür:
@@ -637,7 +668,7 @@ Sub-agent'lar şunu döndürür:
 
 ---
 
-## 12 data manifest'i
+## 11 data manifest'i
 
 Data katmanı beyindir. Her komut ondan okur; motor onun üzerinden merge eder; linter ona karşı tarar. Tüm dosyalar `data/` altında yaşar ve schema sürümlemesi için girişlerini `{_meta, entries}`'e sarar.
 
@@ -646,41 +677,41 @@ Data katmanı beyindir. Her komut ondan okur; motor onun üzerinden merge eder; 
 | Alan | Açıklama |
 |---|---|
 | `entries` | 84 |
-| `giriş başına anahtarlar` | `id`, `name`, `category`, `philosophy`, `when_to_use`, `when_to_skip`, `tokens`, `references`, `compatible_palettes`, `compatible_type_pairs`, `compatible_motion`, `compatible_industries`, `taste_score` |
-| `kategoriler` | Minimalist / Swiss, Brutalist, Editorial, Glassmorphism, Neumorphism, Bento, Skeuomorphic, Industrial, Maximalist, AI-Futurist, MENA-modern, Vaporwave, vs. |
-| `örnek giriş` | `swiss-international`, «Grid yasa. Tipografi ağır işi yapar. Dekorasyon başarısızlıktır.» |
+| `keys per entry` | `id`, `name`, `category`, `philosophy`, `when_to_use`, `when_to_skip`, `tokens`, `references`, `compatible_palettes`, `compatible_type_pairs`, `compatible_motion`, `compatible_industries`, `taste_score` |
+| `categories` | Minimalist / Swiss, Brutalist, Editorial, Glassmorphism, Neumorphism, Bento, Skeuomorphic, Industrial, Maximalist, AI-Futurist, MENA-modern, Vaporwave, vs. |
+| `sample entry` | `swiss-international`, «Grid yasa. Tipografi ağır işi yapar. Dekorasyon başarısızlıktır.» |
 
-Kullanan: `/ux-recommend`, `/ux-system`, `/ux-design`. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
+Kullanan: `/ux-discover`, `/ux-system`, `/ux-design`. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `palettes.json`: 176 renk paleti
 
 | Alan | Açıklama |
 |---|---|
 | `entries` | 176 |
-| `giriş başına anahtarlar` | `id`, `name`, `mode` (light/dark), `tone`, `colors` (canvas, surface, ink, body, muted, primary, primary_active, hairline, success, warning, danger, accent), `wcag_contrast_audit`, `compatible_industries` |
-| `tonlar` | warm, editorial, magazine, clinical, playful, brutalist, monochrome, jewel-tone, MENA-warm, dev-tools-dark, vs. |
-| `örnek giriş` | `claude-warm-editorial`, light, warm/editorial/magazine, canvas #faf9f5, primary #cc785c |
+| `keys per entry` | `id`, `name`, `mode` (light/dark), `tone`, `colors` (canvas, surface, ink, body, muted, primary, primary_active, hairline, success, warning, danger, accent), `wcag_contrast_audit`, `compatible_industries` |
+| `tones` | warm, editorial, magazine, clinical, playful, brutalist, monochrome, jewel-tone, MENA-warm, dev-tools-dark, vs. |
+| `sample entry` | `claude-warm-editorial`, light, warm/editorial/magazine, canvas #faf9f5, primary #cc785c |
 
-Kullanan: `/ux-recommend`, `/ux-system`. Kontrast AA / AAA'da doğrulanmış. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
+Kullanan: `/ux-discover`, `/ux-system`. Kontrast AA / AAA'da doğrulanmış. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `type-pairs.json`: 70 tipografik eşleşme
 
 | Alan | Açıklama |
 |---|---|
 | `entries` | 70 |
-| `giriş başına anahtarlar` | `id`, `name`, `display` (aile + ağırlıklar + kaynak + lisans + URL), `body`, `mono`, `compatible_styles`, `taste_score` |
-| `örnek giriş` | `cormorant-inter-jetbrains`, Cormorant Garamond × Inter × JetBrains Mono |
+| `keys per entry` | `id`, `name`, `display` (aile + ağırlıklar + kaynak + lisans + URL), `body`, `mono`, `compatible_styles`, `taste_score` |
+| `sample entry` | `cormorant-inter-jetbrains`, Cormorant Garamond × Inter × JetBrains Mono |
 
-Tüm ailelerin lisansı + kaynak URL'si var. `/ux-recommend`, `/ux-system` tarafından kullanılır.
+Tüm aileler lisans + kaynak URL'sine sahip. Kullanan: `/ux-discover`, `/ux-system`.
 
 ### `components.json`: 148 component
 
 | Alan | Açıklama |
 |---|---|
 | `entries` | 148 |
-| `giriş başına anahtarlar` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `accessibility`, `compatible_styles`, `compatible_industries`, `code_skeleton` |
-| `kategoriler` | Navigation, Forms, Data Display, Feedback, Overlays, Layout, Content, Marketing, E-commerce, Auth, Dashboard, Charts, Empty States, Loading States, Error States |
-| `örnek giriş` | `mega-nav-product-grid`, Mega Navigation, Product Grid, 6 parçalı anatomi, 4 durum |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `accessibility`, `compatible_styles`, `compatible_industries`, `code_skeleton` |
+| `categories` | Navigation, Forms, Data Display, Feedback, Overlays, Layout, Content, Marketing, E-commerce, Auth, Dashboard, Charts, Empty States, Loading States, Error States |
+| `sample entry` | `mega-nav-product-grid`, Mega Navigation, Product Grid, 6 parçalı anatomi, 4 durum |
 
 Bu en büyük hendeğimiz. Başka hiçbir Claude UX plugin'i yapılandırılmış component manifest'i dağıtmıyor.
 
@@ -689,31 +720,31 @@ Bu en büyük hendeğimiz. Başka hiçbir Claude UX plugin'i yapılandırılmı�
 | Alan | Açıklama |
 |---|---|
 | `entries` | 184 |
-| `giriş başına anahtarlar` | `id`, `name`, `category`, `characteristics`, `audience_signals`, `recommended_styles`, `recommended_palettes`, `recommended_type_pairs`, `recommended_motion`, `regulatory_notes`, `regional_notes` |
-| `kategoriler` | Financial Services, Healthcare, Education, E-commerce, SaaS B2B, SaaS B2C, Developer Tools, Media, Gaming, Travel, Real Estate, MENA-specific, vs. |
-| `örnek giriş` | `fintech-neobank`, yüksek güven, regülasyon disclosure'ları, bakiye/işlem birincil UI, mobile-first günlük kullanım |
+| `keys per entry` | `id`, `name`, `category`, `characteristics`, `audience_signals`, `recommended_styles`, `recommended_palettes`, `recommended_type_pairs`, `recommended_motion`, `regulatory_notes`, `regional_notes` |
+| `categories` | Financial Services, Healthcare, Education, E-commerce, SaaS B2B, SaaS B2C, Developer Tools, Media, Gaming, Travel, Real Estate, MENA-specific, vs. |
+| `sample entry` | `fintech-neobank`, yüksek güven, regülasyon disclosure'ları, bakiye/işlem birincil UI, mobile-first günlük kullanım |
 
-`/ux-recommend` tarafından ilk paralel arama ekseni olarak kullanılır.
+Recommender (`/ux-discover`) tarafından ilk paralel arama ekseni olarak kullanılır.
 
 ### `chart-types.json`: 35 chart tipi
 
 | Alan | Açıklama |
 |---|---|
 | `entries` | 35 |
-| `giriş başına anahtarlar` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
-| `kategoriler` | Comparison, Time Series, Distribution, Composition, Relationship, Flow, Geographic |
-| `örnek giriş` | `bar-vertical`, 4–15 ayrık kategoriyi karşılaştır. x-ekseni boyunca konum kategoriyi, yükseklik değeri map'ler. |
+| `keys per entry` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
+| `categories` | Comparison, Time Series, Distribution, Composition, Relationship, Flow, Geographic |
+| `sample entry` | `bar-vertical`, 4 ile 15 arasında ayrık kategoriyi karşılaştırır. x ekseni boyunca konum kategoriyi, yükseklik değeri gösterir. |
 
-`/ux-dashboard`, `/ux-component` (chart instance'ları) tarafından kullanılır.
+`/ux-design --dashboard` ve `/ux-design --component` (grafik örnekleri) tarafından kullanılır.
 
 ### `tech-stacks.json`: 25 stack
 
 | Alan | Açıklama |
 |---|---|
 | `entries` | 25 |
-| `giriş başına anahtarlar` | `id`, `name`, `category`, `tier`, `languages`, `ssr`, `rsc`, `compatible_styling`, `scaffold_command`, `compatible_motion`, `gotchas` |
-| `tier'lar` | production, prerelease, experimental |
-| `örnek giriş` | `nextjs-15-app-router`, Next.js 15 (App Router), TS/JS, SSR, RSC, Tailwind 4 / CSS Modules / vanilla-extract / styled-components / panda-css ile uyumlu |
+| `keys per entry` | `id`, `name`, `category`, `tier`, `languages`, `ssr`, `rsc`, `compatible_styling`, `scaffold_command`, `compatible_motion`, `gotchas` |
+| `tiers` | production, prerelease, experimental |
+| `sample entry` | `nextjs-15-app-router`, Next.js 15 (App Router), TS/JS, SSR, RSC, Tailwind 4 / CSS Modules / vanilla-extract / styled-components / panda-css ile uyumlu |
 
 Diğer stack'ler arasında Astro, SvelteKit, Remix, Nuxt 3, Solid Start, Qwik, Blade+Alpine, Hotwire, Phoenix LiveView, Hydrogen 2025 var.
 
@@ -722,9 +753,9 @@ Diğer stack'ler arasında Astro, SvelteKit, Remix, Nuxt 3, Solid Start, Qwik, B
 | Alan | Açıklama |
 |---|---|
 | `entries` | 112 |
-| `giriş başına anahtarlar` | `id`, `name`, `category`, `source`, `principle`, `application`, `examples`, `caveats`, `related_laws` |
-| `kategoriler` | Decision Cost, Attention, Memory, Motor Control, Visual Perception, Social, Emotional, Form, Error Handling, Onboarding, Empty State, vs. |
-| `örnek giriş` | `hicks-law`, Karar süresi sunulan seçim sayısıyla logaritmik olarak büyür |
+| `keys per entry` | `id`, `name`, `category`, `source`, `principle`, `application`, `examples`, `caveats`, `related_laws` |
+| `categories` | Decision Cost, Attention, Memory, Motor Control, Visual Perception, Social, Emotional, Form, Error Handling, Onboarding, Empty State, vs. |
+| `sample entry` | `hicks-law`, Karar süresi sunulan seçim sayısıyla logaritmik olarak büyür |
 
 `/ux-audit` (6 lensli puanlama) ve `/ux-critique` (taste çapası) tarafından kullanılır.
 
@@ -733,116 +764,43 @@ Diğer stack'ler arasında Astro, SvelteKit, Remix, Nuxt 3, Solid Start, Qwik, B
 | Alan | Açıklama |
 |---|---|
 | `entries` | 57 |
-| `giriş başına anahtarlar` | `id`, `name`, `category`, `tokens` (duration_ms, easing, transform_from/to, opacity_from/to), `stacks` (framer_motion, gsap, css), `accessibility` (reduced-motion fallback), `when_to_use` |
-| `kategoriler` | Entry, Exit, Hover, Focus, Tap, Loading, Empty, Success, Error, Scroll-linked |
-| `örnek giriş` | `fade-up-12px`, 360ms, `cubic-bezier(0.16, 1, 0.3, 1)`, translateY(12px) → 0, opacity 0 → 1 |
+| `keys per entry` | `id`, `name`, `category`, `tokens` (duration_ms, easing, transform_from/to, opacity_from/to), `stacks` (framer_motion, gsap, css), `accessibility` (reduced-motion fallback), `when_to_use` |
+| `categories` | Entry, Exit, Hover, Focus, Tap, Loading, Empty, Success, Error, Scroll-linked |
+| `sample entry` | `fade-up-12px`, 360ms, `cubic-bezier(0.16, 1, 0.3, 1)`, translateY(12px) → 0, opacity 0 → 1 |
 
 Her preset'in bir reduced-motion varyantı var. Framer Motion, GSAP ve saf CSS için stack-ready kod.
 
-### `anti-patterns.json`: 152 regex kuralı
+### `anti-patterns.json`: 171 kural
 
 | Alan | Açıklama |
 |---|---|
-| `entries` | 152 |
-| `giriş başına anahtarlar` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
-| `kategoriler` | A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4) |
+| `entries` | 171 |
+| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (tür, desen, bayraklar, kapsam ve birçok kural için ayrıştırılmış dosya üzerinde bir `post` kontrolü), `why`, `fix` |
+| `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-Tam kural listesi [152 anti-AI-slop kuralı](#152-anti-ai-slop-kuralı-linter)'nda.
+Kuralların tam listesi [171 anti-AI-slop kuralı](#171-anti-ai-slop-kuralı-linter) bölümünde.
 
 ### `brands/*.json`: 160 brand specs'i
 
 | Alan | Açıklama |
 |---|---|
 | `entries` | 160 (artı tümünü listeleyen `_index.json`) |
-| `giriş başına anahtarlar` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
-| `kategoriler` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automotive (8) |
+| `keys per entry` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
+| `categories` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automotive (8) |
 
 Tam liste [160 brand DESIGN.md spec'i](#160-brand-designmd-speci-kategoriye-göre)'nde.
 
 ---
 
-## 152 anti-AI-slop kuralı: linter
+## 171 anti-AI-slop kuralı: linter
 
-ux-skill deterministik regex tabanlı bir linter dağıtır. **LLM yok.** **API yok.** **Ağ yok.** Tipik bir Next.js app'inde CI'da ~200ms'de çalışır. `--fail-on high` set olduğunda Critical / High bulgularda non-zero ile çıkar.
+ux-skill deterministik bir linter ile gelir: her kural bir desendir ve birçoğu ayrıştırılmış CSS ve markup üzerinde ek bir kontrol yapar; böylece bir eşleşme yalnızca kuralın belirttiği bağlamda sayılır. **LLM yok.** **API yok.** **Ağ yok.** Tipik bir Next.js uygulamasında CI'da ~200ms'de çalışır. `--fail-on high` ayarlandığında Critical / High bulgularda non-zero ile çıkar.
 
-Kurallar `data/anti-patterns.json`'dan (v2 tercih edilir) `references/foundations/anti-patterns.md` fallback'iyle (v1 bash) kaynaklanır. İki binary dağıtılır: `bin/ux-lint.py` (Python, hızlı, genişletilebilir) ve `bin/ux-lint.sh` (Bash + perl-PCRE, Python'suz ortamlar için).
+Kurallar `data/anti-patterns.json` (v2, tercih edilen) kaynağından, `references/foundations/anti-patterns.md` yedeğiyle (v1, bash) gelir. İki binary dağıtılır: `bin/ux-lint.py` (Python, hızlı, genişletilebilir) ve `bin/ux-lint.sh` (Bash + perl-PCRE, Python olmayan ortamlar için).
 
 ### Kategoriye göre kurallar
 
-#### Typography (3 kural)
-
-| Severity | Kural ID'si | İsim |
-|---|---|---|
-| high | `inter-as-display` | Inter display font olarak kullanılmış |
-| medium | `hero-text-arbitrary-90px` | Keyfi hero font boyutu |
-| low | `font-system-only` | Seçilmiş typeface olmadan sistem font stack'i |
-
-#### Color (6 kural)
-
-| Severity | Kural ID'si | İsim |
-|---|---|---|
-| high | `purple-to-blue-gradient` | Varsayılan mor-mavi AI gradyanı |
-| high | `dark-text-on-dark-card` | Card üzerinde düşük kontrastlı metin |
-| medium | `gradient-text-rainbow` | Çok-stop gradient text |
-| medium | `card-glow-purple-shadow` | Card'larda mor glow gölgesi |
-| medium | `gradient-mesh-purple-pink` | Mor-pembe mesh gradient hero |
-| low | `tailwind-color-named-vague` | Semantik token olmadan isimli Tailwind renkleri |
-
-#### Layout (5 kural)
-
-| Severity | Kural ID'si | İsim |
-|---|---|---|
-| high | `three-equal-card-grid` | Bir sırada üç eşit card |
-| medium | `centered-everything-hero` | Ortalanmış hero kompozisyonu |
-| medium | `avatar-stack-overlapping` | Genel üst üste binmiş avatar stack |
-| low | `pill-rounded-full-everywhere` | Her şeye uygulanmış `rounded-full` |
-| low | `nav-equal-hamburger-desktop` | Desktop'ta hamburger menü |
-
-#### Content (5 kural)
-
-| Severity | Kural ID'si | İsim |
-|---|---|---|
-| high | `lorem-ipsum-leak` | Ship edilen kodda Lorem ipsum |
-| high | `emoji-in-ui` | UI elementi olarak emoji kullanımı |
-| high | `icon-emoji-stamp` | İkon damgası olarak emoji kullanımı |
-| high | `testimonial-fake-five-stars` | Hardcoded beş yıldızlı testimonial |
-| medium | `fake-name-john-doe` | Genel placeholder isimler |
-
-#### Motion (3 kural)
-
-| Severity | Kural ID'si | İsim |
-|---|---|---|
-| medium | `cta-arrow-rightward-bouncing` | CTA'da zıplayan ok |
-| low | `timing-300ms-default` | Varsayılan 300ms geçiş timing'i |
-| low | `cubic-bezier-material-only` | Her yerde Material varsayılan easing |
-
-#### A11y (6 kural)
-
-| Severity | Kural ID'si | İsim |
-|---|---|---|
-| high | `inline-svg-no-aria` | aria-label veya aria-hidden olmayan SVG |
-| high | `img-no-alt` | alt attribute'u eksik image |
-| high | `link-onclick-no-href` | onClick'li ama href'siz anchor |
-| medium | `button-no-type` | type attribute'u eksik button |
-| medium | `heading-skip-h1-h3` | Atlanmış heading seviyesi |
-| medium | `infinite-scroll-no-pagination` | Klavye fallback'siz sonsuz scroll |
-
-#### Quality (6 kural)
-
-| Severity | Kural ID'si | İsim |
-|---|---|---|
-| high | `console-log-leak` | Component kodunda `console.log` |
-| medium | `inline-style-attribute` | Inline style attribute |
-| medium | `any-type-leak` | TypeScript `any` tipi |
-| medium | `arbitrary-z-index-9999` | Tembel z-index değeri |
-| low | `shadcn-default-everywhere` | Değiştirilmemiş varsayılan shadcn token bloğu |
-| low | `todo-fixme-comment` | Ship edilen kodda TODO veya FIXME |
-
-#### Visual (1 kural)
-
-| Severity | Kural ID'si | İsim |
-|---|---|---|
-| low | `blur-bg-only-decoration` | Glass yüzeyi olmadan backdrop blur |
+171 kuralın tamamını önce kategoriye, sonra önem derecesine göre listeleyen katalog, `data/anti-patterns.json` dosyasından [İngilizce README](README.md#rules-by-category) içine üretilir; kural kimlikleri ve adları orada linter'ın yazdırdığı haliyle yer alır. Kurallar A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) kapsar.
 
 ### Linter kullanımı
 
@@ -850,9 +808,9 @@ Kurallar `data/anti-patterns.json`'dan (v2 tercih edilir) `references/foundation
 
 ```bash
 uxskill lint .
-# veya
+# or
 python3 bin/ux-lint.py src/
-# veya
+# or
 bash bin/ux-lint.sh src/
 ```
 
@@ -874,17 +832,17 @@ bash bin/ux-lint.sh --staged --fail-on high
 **Çıktı (örnek):**
 
 ```
-─── /ux-lint raporu ───
+─── /ux-lint report ───
 src/components/Hero.tsx:24  [high]   purple-to-blue-gradient
-  kanıt: bg-gradient-to-br from-purple-500 to-blue-500
-  fix: önerilen paletin primary gradient'i ile değiştir veya gradient'i kaldır
+  evidence: bg-gradient-to-br from-purple-500 to-blue-500
+  fix: replace with the recommended palette's primary gradient or remove gradient
 
-src/components/Pricing.tsx:12  [high] three-equal-card-grid
-  kanıt: grid grid-cols-3 gap-6 (3 eşit Card çocuğu)
-  fix: bir card'ı öne çıkar; iki azaltılmış vurgulu card ile yanına yerleştir
+src/components/Pricing.tsx:11  [high] three-equal-card-grid
+  evidence: grid grid-cols-3 gap-6 (3 equal Card children)
+  fix: feature one card; flank with two reduced-emphasis cards
 
-3 dosya tarandı · 2 high · 0 medium · 0 low · exit 1
-Önerilen sıradaki: /ux-polish --fix (LLM-driven, hem lint-edilebilir hem estetik bulguları ele alır)
+3 files scanned · 2 high · 0 medium · 0 low · exit 1
+Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aesthetic findings)
 ```
 
 ---
@@ -931,13 +889,13 @@ Diğer 8 popüler Claude UX plugin'i «modern minimal» veya «clean dashboard»
 
 ## MCP sunucusu: asimetrik hamle
 
-ux-skill bir **Model Context Protocol sunucusu** dağıtır. `ux-mcp`'yi çalıştır ve motor herhangi bir MCP-yetenekli host'un, Claude Desktop, Cursor, Windsurf, generic agent'lar, çağırabileceği long-running bir stdio process'i olur. On dört araç: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. Slash komutlarının kullandığı aynı Python handler'ları; aynı data manifest'leri; aynı deterministik recommender.
+ux-skill bir **Model Context Protocol sunucusu** dağıtır. `ux-mcp`'yi çalıştır; motor, MCP destekli herhangi bir host'un (Claude Desktop, Cursor, Windsurf, genel agent'lar) çağırabileceği uzun ömürlü bir stdio süreci olur. 25 araç: `ux_recommend`, `ux_system_detect`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`, `ux_image_extract`, `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`, `ux_system_build`, `ux_system_import`, `ux_system_enhance`, `ux_system_extend`, `ux_system_export`, `ux_contracts_check`. Slash komutlarının kullandığı aynı Python handler'ları; aynı veri manifest'leri; aynı deterministik recommender.
 
 **Bu neden asimetrik hamle:** top sekiz Claude UX skill'inin hiçbiri (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) MCP sunucusu dağıtmaz. Claude Code'un plugin runtime'ı içinde kilitliler. ux-skill, Claude Code plugin'ini hiç duymamış agent'lar dahil MCP konuşan herhangi bir host'tan ulaşılabilir.
 
 ```bash
-pip install 'uxskill[mcp]'             # mcp opt-in bir extra'dır
-ux-mcp                                  # stdio JSON-RPC sunucusu başlar
+pip install 'uxskill[mcp]'             # mcp is an opt-in extra
+ux-mcp                                  # stdio JSON-RPC server starts
 ```
 
 Client'ını `ux-mcp` binary'sine yönelt. Claude Desktop, Cursor ve Windsurf için tam araç dokümanları, JSON örnekleri ve client başına config [docs/mcp.html](docs/mcp.html)'de ve `commands/ux-mcp.md`'de yaşar.
@@ -950,7 +908,7 @@ Client'ını `ux-mcp` binary'sine yönelt. Claude Desktop, Cursor ve Windsurf i�
 
 | IDE / Araç | Tespit sinyali | Kurulan artefakt |
 |---|---|---|
-| Claude Code | `.claude/` veya `CLAUDE.md` | `.claude-plugin/plugin.json`'da plugin manifest'i + 25 komutun hepsi + 5 sub-agent'ın hepsi |
+| Claude Code | `.claude/` veya `CLAUDE.md` | `.claude-plugin/plugin.json` konumunda plugin manifest'i + 18 komutun tamamı (ve 7 takma ad) + 5 sub-agent'ın tamamı |
 | Cursor | `.cursor/` veya `.cursorrules` | Motoru işaret eden `.cursorrules` prompt header'ı |
 | Windsurf | `.windsurf/` veya `.windsurfrules` | Aynı prompt header'lı `.windsurfrules` |
 | GitHub Copilot | `.github/copilot-instructions.md` veya `.vscode/` | `.github/copilot-instructions.md` |
@@ -982,8 +940,8 @@ Cursor'da bir MENA neobank dashboard'u üzerinde çalışıyorsun. Plugin'i kura
 
 ```bash
 pip install uxskill
-uxskill init                                # Cursor'ı algılar, .cursorrules yazar
-uxskill discover                            # 10 alanlı intake
+uxskill init                                # detects Cursor, writes .cursorrules
+uxskill discover                            # 10-field intake
 uxskill recommend \
   --project-type=dashboard \
   --industry=fintech-neobank \
@@ -1002,24 +960,24 @@ Sonra Cursor'da sor: *«.ux/last-recommendation.json'daki öneriyi kullanarak da
 /plugin marketplace add Laith0003/ux-skill
 /plugin install ux@ux-skill
 /ux-discover
-> Proje tipi? landing
-> Sektör? fintech-payments
-> Ton? serious, technical, confident
+> Project type? landing
+> Industry? fintech-payments
+> Tone? serious, technical, confident
 > Must have? dark-mode, AA, mobile-first
 > Forbidden? purple-gradients, three-equal-cards
-> Referans brand'ler? stripe
+> Reference brands? stripe
 > Stack? nextjs-15-app-router
-> Bölge? global
-> Başarı metriği? signup conversion
+> Region? global
+> Success metric? signup conversion
 
-/ux-recommend
-> [seçilen stili, paleti, tipografik çifti, motion preset'lerini, component'leri, brand örneklerini döndürür]
+/ux-discover --recommend
+> [returns picked style, palette, type pair, motion presets, components, brand exemplars]
 
 /ux-design "generate the landing using the Stripe brand spec as exemplar"
-> [frontend-engineer sayfayı üretir]
+> [frontend-engineer generates the page]
 
 /ux-lint .
-> [geçer, Stripe brand spec'ine uyuldu]
+> [passes, Stripe brand spec was respected]
 ```
 
 ### 3. CI'da AI slop için mevcut kodu denetleme
@@ -1049,16 +1007,16 @@ Diğer her AI-üretilmiş SaaS sitesi gibi görünen bir React app'i miras aldı
 
 ```
 /ux-critique src/components/Hero.tsx
-> [3 kazanım, 3 ıskalama, 1 stratejik hamle, take dürüst]
+> [3 wins, 3 misses, 1 strategic move, the take is honest]
 
 /ux-lint src/
-> [15 high-severity AI parmak izi işaretlendi]
+> [15 high-severity AI fingerprints flagged]
 
 /ux-polish src/components/Hero.tsx
-> [LLM-driven kozmetik geçiş + AI-slop öldürme]
+> [LLM-driven cosmetic pass + AI-slop kill]
 
 /ux-fix
-> [bulguları atomik commit olarak uygular, linter'ı yeniden çalıştırır]
+> [applies findings as atomic commits, re-runs the linter]
 ```
 
 Üç komut, bir parlatılmış yüzey, fix başına atomik commit'ler.
@@ -1066,10 +1024,10 @@ Diğer her AI-üretilmiş SaaS sitesi gibi görünen bir React app'i miras aldı
 ### 5. Linear stili bir command palette tasarlama
 
 ```
-/ux-component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
-> [token'lar + imza hamleleri için data/brands/linear.app.json okur]
-> [command-palette anatomisi + durumları için data/components.json okur]
-> [açık Linear spec'iyle frontend-engineer'ı görevlendirir]
+/ux-design --component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
+> [reads data/brands/linear.app.json for tokens + signature moves]
+> [reads data/components.json for the command-palette anatomy + states]
+> [dispatches frontend-engineer with explicit Linear spec]
 ```
 
 Üretilen component Linear'ın gerçek renk token'larını, tip stack'ini, motion konvansiyonlarını, hairline yoğunluklarını kullanır, «generic dark UI» değil.
@@ -1092,9 +1050,9 @@ Loyalty wallet'i ship ettin. Bir portfolio parçası istiyorsun.
 
 ```
 /ux-case-study --format=html --slug=bashiti-loyalty
-> [.ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json okur]
-> [numaralandırılmış (A)-(G) bölümler, hairline ayırıcılar, çift-dil-güvenli layout ile Wfrah-editorial case study üretir]
-> [case-studies/bashiti-loyalty.html yazar]
+> [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
+> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/bashiti-loyalty.html]
 ```
 
 Case study tamamlanmış, yayınlanabilir bir artefakt, taslak değil. Saf monokrom, editorial tipografi, portfolio'na ship'lemeye hazır.
@@ -1105,7 +1063,7 @@ Bir projeyi scope'luyorsun. Henüz bir öneri lazım değil, yapılandırılmı�
 
 ```bash
 uxskill discover
-# 10 alanlı intake, .ux/last-discovery.json'a kaydeder
+# 10-field intake, saves to .ux/last-discovery.json
 
 cat .ux/last-discovery.json
 # {
@@ -1119,7 +1077,7 @@ JSON'u takımına verebilir, bir Notion belgesine yapıştırabilir veya ayrı b
 
 ### 9. MASTER.md persistence: design kararların, repo'da
 
-`/ux-recommend`'dan sonra, seçilen stil + palet + tip + motion + component'ler + brand örnekleri + guardrail'ları takımın inceleyebileceği, diff alabileceği ve sürüm kontrolü yapabileceği insan-okunabilir bir Markdown dosyası olarak kalıcı yap.
+`/ux-discover` (ya da `/ux-discover --recommend`) sonrasında, seçilen stil + palet + tipografi + motion + component'ler + örnek markalar + guardrail'ları takımının inceleyebileceği, diff alabileceği ve sürüm kontrolüne koyabileceği okunaklı bir Markdown dosyası olarak kaydet.
 
 ```bash
 python3 -m engine.cli.main persist save --project-root .
@@ -1135,11 +1093,11 @@ Kısa özet tablosu. Tam tablo bazlı karşılaştırma [uxskill.laithjunaidy.co
 
 | Boyut | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
-| Slash komutları | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
+| Slash komutları | **18** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Component'ler | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Motion preset'leri | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Brand spec'leri | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Anti-pattern kuralları | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Anti-pattern kuralları | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI-safe deterministik linter | **evet** | hayır | hayır | hayır | hayır | hayır | hayır | hayır | hayır |
 | Desteklenen IDE'ler | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery gate | **10 alan** | örtük | örtük | örtük | örtük | örtük | örtük | örtük | örtük |
@@ -1159,24 +1117,21 @@ Her boyut için tam detay için: [compare.html](https://uxskill.laithjunaidy.com
 
 ## Roadmap
 
-### v2.1: Linter tamlığı (Q3 2026)
+Sırada, belirli bir sürüme bağlı olmadan:
 
-- **52 toplama ulaşmak için +17 ertelenen anti-pattern kuralı.** Hedefler: dark-on-dark hover state'leri, sadece-renk state encoding, gereksiz z-index escalation, JS'te hardcoded breakpoint'ler, disabled state yerine opacity, vs.
-- **Mekanik olarak düzeltilebilir bulgular için güvenli yeniden yazımlar için `uxskill lint --fix`** (button-no-type, img-no-alt boş-string, console-log-leak kaldırma).
-- **Lint bulgularını inline yüzeye çıkaran VS Code extension'ı** (CI çalıştırmaya gerek yok).
+- **Figma stilleri**: gölgeler için efekt stilleri, grid stilleri ve alan değişkenlerine bağlı metin stilleri, canlı bir dosyaya yazılır.
+- **Component eşleme**: bir Figma component'i ve varyantları, bir kod component'ine ve onun props'larına eşlenir; devir teslim boyunca korunur.
+- **Canlı site içe aktarıcı**: yayındaki bir sitenin gerçekte render ettiği sistemi okumak, dosya içe aktarıcılarının yanında.
+- **Kurulmuş bir sistem için doküman sayfaları**: token'larının, rollerinin ve sözleşmelerinin insan için görünümü.
 
-### v2.2: Component manifest'i genişletmesi (Q4 2026)
+Ayrıca açık olanlar:
 
-- **198 toplama ulaşmak için +50 component.** Net-yeni: async filter'lı combobox, recent-items heuristic'li command-palette, conditional-form-step, payment-element varyantları, RTL-aware date picker, MENA-spesifik phone input, hijri overlay'li calendar grid.
-- **6 stack'te per-component kod emit** (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, vanilla HTML/CSS).
-- **Component playground'u** uxskill.laithjunaidy.com/playground'da, öneri motorunu dene + canlı component preview gör.
-
-### v3: Marketplace + lock-in (2027)
-
-- **Brand spec marketplace**: topluluk brand spec'lerini yayımla ve keşfet. Moderasyonu finanse etmek için pay-to-publish.
-- **Custom anti-pattern kuralları**: projeler kendi regex kurallarını `data/anti-patterns.local.json`'da tanımlayabilir (zaten v2'de var; v3 discovery + paylaşım ekler).
-- **`uxskill plan`**: sadece bir yüzey değil, brief'ten tam multi-page site planlama.
-- **Figma plugin pariteti**: aynı öneri motoru, Figma'da yüzeye çıkmış.
+- **Güvenli yeniden yazımlar için `uxskill lint --fix`**: mekanik olarak düzeltilebilir bulgular (button-no-type, img-no-alt boş dize, console-log-leak kaldırma).
+- Lint bulgularını satır içinde gösteren **VS Code eklentisi**.
+- Altı stack'te **component başına kod üretimi** (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, vanilla HTML/CSS).
+- **Marka spec'i pazaryeri**: topluluk marka spec'lerini yayınla ve keşfet.
+- **Özel anti-pattern kuralları**: projelerin `data/anti-patterns.local.json` içinde tanımladığı kuralları keşfetme ve paylaşma.
+- **`uxskill plan`**: yalnızca tek bir yüzey değil, bir brief'ten çok sayfalı site planlaması.
 
 ---
 
@@ -1239,6 +1194,6 @@ MIT. Kullan, fork'la, üstüne inşa et. Eğer seni AI slop ship etmekten kurtar
 
 ---
 
-**ux-skill** · **v3.1.0-stable** · Claude Code, Cursor, Windsurf ve diğer her AI coding aracının AI üretilmiş gibi okunmayan frontend çıktısı vermesi için inşa edildi.
+**ux-skill** · **v4.0.0** · Claude Code, Cursor, Windsurf ve diğer her AI coding aracının AI üretilmiş gibi okunmayan frontend çıktısı vermesi için inşa edildi.
 
 > Repo'ya [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) adresinden yıldız ver · `pip install uxskill` veya `npx uxskill init` ile kur · Karşılaştırmaya [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) adresinden göz at

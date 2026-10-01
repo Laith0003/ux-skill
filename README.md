@@ -179,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "3.0.0-stable",
+#   "version": "4.0.0",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -190,13 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 145,
+#     "anti-patterns": 171,
+#     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-If any count returns 0, the JSON file is missing, open an issue at [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
+The twelve counts add up to 1,262 entries. If any count returns 0, the JSON file is missing, open an issue at [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
 
 ---
 
@@ -214,7 +215,7 @@ Star counts last verified via `gh api` on **2026-05-28**. ux-skill (Laith0003/ux
 | dominikmartn/nothing-design-skill | **2,391** | Single-aesthetic skill | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | Anti-slop design skill | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 components + audit | 1 | - | (MD3 only) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python engine + 12 manifests + 18 commands + 5 sub-agents + CI linter** | **22** | **171 deterministic rules** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python engine + 12 manifests + 18 commands + 5 sub-agents + CI linter** | **18** | **171 deterministic rules** | **160** | **148** | **57** | **17** |
 
 ### Where we lose
 
@@ -355,7 +356,7 @@ Commands are grouped into seven buckets: **bootstrap & inventory**, **discovery 
 
 #### `/ux-mcp`: run the engine as an MCP server
 
-- **What:** Starts the engine as a Model Context Protocol server over stdio. Eighteen tools (recommender, linter, persistence, synthesizer, decisions ledger, image extraction, and the data manifests) become callable from any MCP-capable host without the plugin.
+- **What:** Starts the engine as a Model Context Protocol server over stdio. 25 tools (the recommender, linter, persistence, synthesizer, decisions ledger, image extraction, the data manifests, and building, importing, enhancing, extending, exporting and checking a design system) become callable from any MCP-capable host without the plugin.
 - **When to use:** You work in another MCP-capable host and want the same engine. You run a multi-agent pipeline that needs one source of design constraints. You want the recommender or linter as a long-running process in CI.
 - **When to skip:** You are inside Claude Code with the plugin installed; the slash commands already reach the engine. You need a one-shot answer; `uxskill recommend` or `uxskill lint` is simpler.
 - **Invocation:** `/ux-mcp`, or `ux-mcp` from the shell after `pip install 'uxskill[mcp]'`.
@@ -513,9 +514,9 @@ Commands are grouped into seven buckets: **bootstrap & inventory**, **discovery 
 
 #### `/ux-case-study`: publishable case study (Wfrah-editorial format)
 
-- **What:** Generates a project case study in pure-monochrome editorial format, Wfrah typography, hairline separators, numbered (A)–(G) section codes, bilingual-safe layout. A document, not a marketing brochure. Reads from `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **What:** Generates a project case study in pure-monochrome editorial format, Wfrah typography, hairline separators, numbered (A) to (G) section codes, bilingual-safe layout. A document, not a marketing brochure. Reads from `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **When to use:** Post-launch. After a discrete milestone. "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece".
-- **When to skip:** Project lacks data to populate (A)–(G) sections. User wants a marketing landing, not a case study (use `/ux-design`).
+- **When to skip:** Project lacks data to populate (A) to (G) sections. User wants a marketing landing, not a case study (use `/ux-design`).
 - **Invocation:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Chains to:** Terminal command, usually the end of a project.
@@ -732,7 +733,7 @@ Used by the recommender (`/ux-discover`) as the first parallel search axis.
 | `entries` | 35 |
 | `keys per entry` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
 | `categories` | Comparison, Time Series, Distribution, Composition, Relationship, Flow, Geographic |
-| `sample entry` | `bar-vertical`, Compare 4–15 discrete categories. Position along x-axis maps category; height maps value. |
+| `sample entry` | `bar-vertical`, Compare 4 to 15 discrete categories. Position along x-axis maps category; height maps value. |
 
 Used by `/ux-design --dashboard` and `/ux-design --component` (chart instances).
 
@@ -1110,7 +1111,7 @@ The other 8 popular Claude UX plugins generate "modern minimal" or "clean dashbo
 
 ## MCP server: the asymmetric move
 
-ux-skill ships a **Model Context Protocol server**. Run `ux-mcp` and the engine becomes a long-running stdio process that any MCP-capable host, Claude Desktop, Cursor, Windsurf, generic agents, can call into. Eighteen tools: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`, `ux_image_extract`, `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`. Same Python handlers the slash commands use; same data manifests; same deterministic recommender.
+ux-skill ships a **Model Context Protocol server**. Run `ux-mcp` and the engine becomes a long-running stdio process that any MCP-capable host, Claude Desktop, Cursor, Windsurf, generic agents, can call into. 25 tools: `ux_recommend`, `ux_system_detect`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`, `ux_image_extract`, `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`, `ux_system_build`, `ux_system_import`, `ux_system_enhance`, `ux_system_extend`, `ux_system_export`, `ux_contracts_check`. Same Python handlers the slash commands use; same data manifests; same deterministic recommender.
 
 **Why this is the asymmetric move:** none of the top eight Claude UX skills (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) ship an MCP server. They are locked inside Claude Code's plugin runtime. ux-skill is reachable from any host that speaks MCP, including agents that have never heard of a Claude Code plugin.
 
@@ -1314,11 +1315,11 @@ Short summary table. Full table-by-table comparison is at [uxskill.laithjunaidy.
 
 | Dimension | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
-| Slash commands | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
+| Slash commands | **18** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Components | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Motion presets | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Brand specs | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Anti-pattern rules | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Anti-pattern rules | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI-safe deterministic linter | **yes** | no | no | no | no | no | no | no | no |
 | IDEs supported | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery gate | **10 fields** | implicit | implicit | implicit | implicit | implicit | implicit | implicit | implicit |
@@ -1415,6 +1416,6 @@ MIT. Use it, fork it, build on it. If it saves you from shipping AI slop, star t
 
 ---
 
-**ux-skill** · **v3.0.0-stable** · Built so Claude Code, Cursor, Windsurf, and every other AI coding tool output frontend that doesn't read as AI-generated.
+**ux-skill** · **v4.0.0** · Built so Claude Code, Cursor, Windsurf, and every other AI coding tool output frontend that doesn't read as AI-generated.
 
 > Star the repo at [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · Install via `pip install uxskill` or `npx uxskill init` · Browse the comparison at [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)

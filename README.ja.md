@@ -2,24 +2,77 @@
 
 # ux-skill：Claude Code、Cursor、その他すべての AI コーディングツールのためのデザイン知能エンジン
 
-> **v3.1.0 安定版、THE BRAIN.** AI コーディング向け最強の UX プラグイン。 12 個のクエリ可能な JSON マニフェスト(84 のスタイル、176 のパレット、70 のタイプペアリング、148 のコンポーネント、184 の業種、35 のチャートタイプ、57 のモーションプリセット、112 の UX ロー、152 のアンチパターンルール、25 の技術スタック、160 のブランド仕様)、25 のスラッシュコマンド、5 つのサブエージェント、そして決定論的な反 AI スロップリンターを備えた Python 推論コア。クロス IDE 対応:Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer、Roo Cline に同梱されます。
+**AI が生成する UI を、ありきたりではなく個性あるものにするデザイン知能エンジン。** 17 の AI コーディングツールのどれに組み込んでも、出力が AI 製に見えなくなります。無料、MIT、オフライン、LLM なし。
+
+```bash
+pip install uxskill
+```
+
+**[GitHub で ux-skill にスターを付ける](https://github.com/Laith0003/ux-skill)**：役に立ったなら、これがプロジェクトを支援するいちばん手軽な方法です。はじめての方は [60 秒ツアー](#クイックインストール)から、または [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) で実際の動きをご覧ください。
+
+![ビフォー：ありがちなストックフォトのヒーロー、淡い紫のグラデーション、ブランドらしさはゼロ。アフター：暗いスクリムを敷いた本物の建設現場の写真、琥珀色のアクセントを効かせたエディトリアルな見出し、ヒーローに組み込まれた見積もり依頼フォーム。同じプロンプトでも、ux-skill が制約を与えると結果が変わります。](https://raw.githubusercontent.com/Laith0003/ux-skill/main/docs/blog/skiphire-redesign.png)
+
+*ビフォー：ありがちなストックフォトの SEO スロップ。アフター：暗いスクリムを敷いた本物の建設現場写真のヒーロー、琥珀色のアクセントを効かせたエディトリアルな見出し、ヒーロー内の見積もりフォーム。同じ AI コーディングツール、同じプロンプトでも、ux-skill が制約を与えると結果が変わります。*
+
+> **v4.0、FOUNDATIONS：コマンドひとつで、WCAG で検証された完全なデザインシステムを構築。アラビア語と右から左への表記にも標準対応。** AI コーディング向け最強の UX プラグイン。決定論的な 7 軸シンセサイザーを備えた Python の推論コア、12 個のクエリ可能な JSON マニフェスト(84 のスタイル、176 のパレット、70 のタイプペアリング、148 のコンポーネント、184 の業種、35 のチャートタイプ、57 のモーションプリセット、112 の UX ロー、171 のアンチパターンルール、25 の技術スタック、160 のブランド仕様)、18 のスラッシュコマンド、5 つのサブエージェント、25 の MCP ツール、そして決定論的な反 AI スロップリンター。クロス IDE：Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer、Roo Cline に導入できます。
 
 > **ブランド名は `ux-skill`。** PyPI / npm のパッケージ名は `uxskill` のままです。GitHub リポジトリは [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill) にあります。
 
-**サイト:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **すべての Claude UX プラグインとの比較:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+**作者:** [Laith Aljunaidy](https://laithjunaidy.com)、アンマン在住のデザイナー兼 CTO · **サイト:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **すべての Claude UX プラグインとの比較:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-3.1.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#17-ide-向けインストーラー)
+[![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### 4.0 の新機能：基盤
+
+ブランドカラーをひとつ入れると、デザインシステムが出てくる。コントラストは手元に届く前に確認済みです。
+
+```bash
+pip install --upgrade uxskill
+uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
+```
+
+Python 3.10 以降が必要です。MCP サーバーには `pip install --upgrade 'uxskill[mcp]'`。pipx なら `pipx install uxskill`(インストール済みの 3.x を更新するなら `pipx upgrade uxskill`)。npm なら `npx uxskill@latest`。3.x から移行しますか。[移行ガイド](docs/migrating-to-4.md)が 3.x のすべてのトークンを 4.0 のロールに対応付けています。
+
+**プロダクトやランディングページを作るなら。** ページから読み込む `tokens.css`、選んだ書体のメトリクスに合わせたフォールバックを含む `fonts.css`、書体を自前のファイルから読み込む `fonts-self-host.css`、ツール向けの `tokens.json`、`art/` に入った装飾用のブランドアート、そして何をなぜ作ったのか、どのページ構成から始めるべきかを平易な言葉で説明する `system-report.md` が手に入ります。スタイルはロール(`var(--color-action-primary)`、`var(--color-text-default)`、`var(--color-surface-page)`)で指定し、ダークモード、ハイコントラスト、コンパクトな余白、右から左、動きを減らす設定は `<html>` の属性ひとつで切り替えます。書体はレポートが示す Google Fonts のリンクか、`fonts-self-host.css` と `fonts/` フォルダで読み込み、どちらの場合も `fonts.css` を `tokens.css` より先に読み込んでください。どちらのファイルも編集しないでください。`--brief` を付けると、ブリーフに業種とトーンがあれば見た目がそれに従い、構造化フィールド(年齢、言語、既定のスキーム、読まれる状況)が文字サイズ、タップ領域、文字体系、最初に開くスキームを決めます。discovery は業種を尋ねないので、`/ux-system create` が尋ねます。Claude Code では、`/ux-system create` がインストール済みのバージョンを確認し、ビルドを実行してレポートを説明します。
+
+**デザインシステムを設計するなら。** 9 つの基盤(カラー、タイプ、スペース、レイアウト、角丸、ボーダー、エレベーション、モーション、イメージ)が 7 つの軸に合わせて連続的に変化し、プリミティブとセマンティックなロールを備え、すべてのモードの値を含む W3C デザイントークン形式(DTCG 2025.10)で出力されます。入力が同じならバイト単位で同じ結果。MCP では `ux_system_build` がレポート、ゲートの結果、各ファイルのサイズを返し、`out` を渡せばコマンドと同じファイルを書き出します。
+
+- **WCAG ゲート。** テキスト、コントロール、フォーカスのすべての色の組み合わせを、ライトとダーク、標準コントラストとハイコントラストで測定します。標準コントラストでは WCAG 1.4.3(テキスト 4.5:1)と 1.4.11(非テキスト 3:1)、ハイコントラストでは WCAG 1.4.6(テキスト 7:1)。さらに、WCAG は非テキストの高い水準を定めていないため、ほとんどの非テキスト部分にはハイコントラスト時 4.5:1 という独自の下限を設けています。基準を満たさないシステムは書き出されず、メッセージが何を直すべきかを伝えます。
+- **既定で安全。** 内容が異なるファイルは決して上書きしません。`--force` を付けたときだけファイルを置き換えます。
+- **アラビア語。** `dir="rtl"` のもとでは、テキストが独自のサイズと行の高さを持つアラビア文字の書体に切り替わります。余白は論理プロパティを使い、モーションは左右反転します。`--latin-only` で除外できます。
+
+**すでにあるシステムを使うなら。** `/ux-system enhance --from` は既存のシステムを元の名前のまま読み込み(DTCG トークン、CSS カスタムプロパティ、Tailwind のテーマ、markdown のルールファイル、Figma 変数のエクスポート)、同じゲートで確認し、コードが実際にそれをどう使っているかを測定します。何も書き換えません。`/ux-system extend --from` は既存のトークンを一切変えずに基盤、ロール、コントラクトを追加し、隣に置く拡張ファイルに書き出します。`uxskill system export` は tokens.css、Tailwind 4 のテーマ、Figma 変数として書き出します。4.2 では信頼レイヤー(書き込みごとの lint、仕上げのレビュアー)とローンチが加わります。[changelog](CHANGELOG.md) をご覧ください。
+
+**コンポーネントとセクション。** 23 のコンポーネントコントラクトが、コントロールの各パーツがどの状態でどのトークンに結び付くか、各状態がどう動くかを定めます。状態の変化は `motion.state` で遷移し、押下は `motion.press.scale` で拡縮し(動きを減らす設定では静止)、タブ、メニュー、セグメンテッドコントロールはひとつのインジケーターをスライドさせます。14 のセクションコントラクト(ヒーロー、料金、FAQ、フッターなど)は、各セクションの役割、スロットに入るコンポーネント、必要な裏付け、スマートフォンでの積み重ね方を定めます。これらで組んだページは写真を使います。インターフェースの断片はあくまで追加のイメージで、写真の代わりにはなりません。
+
+**ページを読むリンター。** 171 のルールの多くは、パース済みの CSS とマークアップに対する検査を伴い、ページ自身のシステムを読み取ります。モーションはそのカーブからタイミングを測り、ディスプレイ見出しの行の高さはエンジンの下限を守らせ、非表示のコントロールはタブ順から外れていなければなりません。`uxskill lint --render` は各ページをヘッドレス Chromium でデスクトップ幅とスマートフォン幅で開いて実際に操作し、表示されない、または切れているフォーカスリング、反応の遅いホバーと押下、Escape 後に失われるフォーカス、動きを減らす設定でもまだ動く押下を検出します。
+
+**コマンドを整理。** 25 のスラッシュコマンドが 18 になりました。`/ux-discover` は `--frame` と `--recommend` を、`/ux-design` は `--component`、`--dashboard`、`--from-image` を受け付け、`/ux-polish` はスコアが 90 に達するか 3 ラウンド経つまで lint、修正、再 lint を繰り返し、`/ux-init` は `--stats` を受け付けます。古い 7 つの名前はエイリアスとして引き続き使え、4.1 で廃止されます。[エイリアス](#エイリアス41-で廃止)を参照してください。
+
+**画面別プレイブック。** ランディング、ダッシュボード、コンポーネントのルールは `references/surfaces/` にそれぞれひとつずつのプレイブックとして置かれています。`/ux-design` はモードに応じてちょうどひとつだけを読み込むので、ダッシュボードのビルドがヒーローのルールを読むことはありません。
+
+テスト **9764 件合格**。オフライン。決定論的。LLM は一切呼び出しません。
+
+### v3.1 の新機能：ブランドに忠実、レスポンシブ、生き生き
+
+- **ブランドへの忠実さは期待ではなく強制。** プライマリカラーはロゴのピクセルから読み取ります(最も多く塗られた CSS からではありません)。既定のフォントはロゴの字形スタイルに合わなければ却下されます。抽出したブランドは `recommend` -> `synthesize` へと受け渡され、`evaluate` の**厳格な下限**が、ブランドカラーやロゴを落とした出力、本物のイメージを含まない出力を不合格にします。オープンな `brand.md` 規約との双方向の相互運用(レンダリング + 取り込み)。
+- **モバイルファーストをゲートで担保。** 新しいクラフトの基盤(`responsive.md`、`component-behaviors.md`)に加え、折り返しを考慮したゲートが、横スクロール、折り返したナビ、ワードマーク、ボタンのラベル、高すぎる固定ヘッダーを不合格にします。
+- **ワウのレイヤー。** エンジンがページごとに 2-3 の連動したシグネチャーモーメントを導き出します。「ワウはユーザーからしか生まれない」という考え方は覆されました。
+- **より鋭いリンター**(152 ルール):必須イメージとアイコンのみの要素の検出、プレースホルダートークンと `100vw` のルール。シード付きの picsum は残し、ランダムなものは除去。
+
+詳細は [CHANGELOG.md](CHANGELOG.md) にあります。
 
 ### v3 の新機能
 
@@ -28,7 +81,7 @@
 - **3 つの自動振り分けモード**：`strict_brand`(単一ブランドの 100%)、`brand_anchor`(単一ブランド 70% + 兄弟ブランドから軸適応された 30%)、`pure_synthesis`(ブランド指定なし、軸が一致する 8 例から蒸留)。
 - **決定台帳がレコメンダーをリランクします。** `.ux/decisions.jsonl` が同じ `(industry, ui_type)` バケットでの過去の勝者で候補をリランクします。コールドスタートに安全。`lint_score >= 80` かつ `user_accepted = true` の決定のみカウントします。
 - **軸相互作用マトリックス**：競合軸間の明示的な衝突解決(dense + corporate → 4px、airy + corporate → 12px、soft + playful → 18px radius)。もうサイレントな場当たりルールはありません。
-- **`/ux-evolve` 自動ループ**：スコア ≥ 90、プラトー、または 5 ラウンドまで lint → polish → re-lint。品質ゲートは 65。
+- **`/ux-evolve` 自動ループ**(4.0 では `/ux-polish` の既定のループ):スコア ≥ 90、プラトー、または 4.0 では 3 ラウンド(v3 では 5)まで lint → polish → re-lint。品質ゲートは 65。
 - **3 つの新 MCP ツール**(15 → 18):`ux_synthesize`、`ux_decisions_query`、`ux_decisions_stats`。
 - **ローカル統計ダッシュボード**：`uxskill stats --html` が `.ux/stats.html` を書き、**あなたの**インストールが何を学んだかを示します。テレメトリなし、グローバル集約なし。
 - **223 テスト通過。** オフライン。決定論的。LLM を呼ばない。
@@ -45,7 +98,7 @@
 
 ux-skill は AI コーディングツールのための**デザイン知能エンジン**です。Python パッケージとして(`pip install uxskill`)、Claude Code プラグインとして、そして 17 IDE 向けマルチインストーラーとして動作します。エンジンはプロジェクトのブリーフ(業種、オーディエンス、トーン、必須項目、禁止事項、スタック、地域)を取り込み、推奨デザインシステム一式を返します:スタイル、パレット、タイプペア、モーションプリセット、コンポーネント、研究すべきブランド事例、そして守らねばならないアンチパターンのガードレール。推奨は決定論的です、同じ入力は常に同じ出力を生みます。
 
-このプラグインはあなたと AI コーディングツールの間に座ります。Claude Code、Cursor、その他の AI アシスタントに「フィンテックのランディングページを作って」と頼むと、アシスタントは通常即興で作ります、そして結果は 5 秒で AI 生成と見抜かれます(紫から青のグラデーション、等大の 3 枚カード、ディスプレイサイズの Inter、推薦文の「John Doe」、デフォルト 300ms のトランジション、中央寄せのヒーロー、CTA で跳ねる矢印)。ux-skill は即興を**構造化された制約**で置き換えます:`/ux-discover` でブリーフを取り、`/ux-recommend` でシステムを選び、`/ux-design` でコードを生成し、`/ux-lint` でコミット前に 152 個の決定論的な反 AI スロップルールを通すことを検証します。
+このプラグインはあなたと AI コーディングツールの間に入ります。Claude Code、Cursor、その他の AI アシスタントに「フィンテックのランディングページを作って」と頼むと、アシスタントはたいてい即興で作り、その結果は 5 秒で AI 生成と見抜かれます(紫から青のグラデーション、等大の 3 枚カード、ディスプレイサイズの Inter、推薦文の「John Doe」、デフォルト 300ms のトランジション、中央寄せのヒーロー、CTA で跳ねる矢印)。ux-skill は即興を**構造化された制約**に置き換えます。`/ux-discover` でブリーフを取り込んでシステムを選び、`/ux-design` でコードを生成し、`/ux-lint` でコミット前に 171 の決定論的な反 AI スロップルールを通過することを確かめます。
 
 この README が正典のリファレンスです。すべてのコマンド、すべてのサブエージェント、すべてのデータマニフェスト、すべてのインストール経路、すべてのブランド仕様、すべてのアンチパターンカテゴリ、すべてここに記録されています。Claude Code のデザインプラグインを探している、または Cursor、Windsurf、Codex 向けの AI デザインツールを比較しているなら、これを最初から最後まで読み、[compare.html](https://uxskill.laithjunaidy.com/compare.html) と並べてご覧ください。
 
@@ -57,10 +110,10 @@ ux-skill は AI コーディングツールのための**デザイン知能エ�
 2. [クイックインストール](#クイックインストール)
 3. [数字、トップ 8 の Claude UX スキルとのライブ比較](#数字トップ-8-の-claude-ux-スキルとのライブ比較)
 4. [アーキテクチャ、各部品がどう噛み合うか](#アーキテクチャ各部品がどう噛み合うか)
-5. [25 のスラッシュコマンド、詳細リファレンス](#25-のスラッシュコマンド詳細リファレンス)
+5. [18 のスラッシュコマンド、詳細リファレンス](#18-のスラッシュコマンド詳細リファレンス)
 6. [5 つのサブエージェント](#5-つのサブエージェント)
-7. [12 のデータマニフェスト](#12-のデータマニフェスト)
-8. [152 の反 AI スロップルール、リンター](#152-の反-ai-スロップルールリンター)
+7. [11 のデータマニフェスト](#11-のデータマニフェスト)
+8. [171 の反 AI スロップルール、リンター](#171-の反-ai-スロップルールリンター)
 9. [160 のブランド DESIGN.md 仕様、カテゴリ別](#160-のブランド-designmd-仕様カテゴリ別)
 10. [MCP サーバー、非対称な一手](#mcp-サーバー非対称な一手)
 11. [17 IDE 向けインストーラー](#17-ide-向けインストーラー)
@@ -80,7 +133,7 @@ v3.1.0 は ux-skill 史上最大のアーキテクチャ的シフトです。レ
 
 自動振り分けの 3 モード:`strict_brand`(`reference_brands=[stripe] strict=True` → 100% Stripe トークン、最速パス);`brand_anchor`(`reference_brands=[stripe]` → 70% Stripe + 4 兄弟ブランドから軸適応の 30%);そして `pure_synthesis`(ブランド指定なし → 無限空間、軸が一致する 8 例を新しいデザイン言語に蒸留)。軸の衝突は文書化された**軸相互作用マトリックス**で解決されます、dense + corporate は 4px にコンパイル(density 勝ち、ブルームバーグ流派)、airy + corporate は 12px(formality 勝ち、ラグジュアリー)、soft + playful は 18px radius、sharp + corporate は 2px。実装に隠れた場当たりルールはありません。
 
-**決定台帳**(`.ux/decisions.jsonl`、スキーマ `_v: 1` ロック)がフィードバックループを閉じます。レコメンダーは同じ `(industry, ui_type)` バケットでの過去の勝者により候補をリランクします。コールドスタートに安全、事前データが 3 件未満ならスキップ。`lint_score >= 80` かつ `user_accepted = true` の決定のみカウント。さらに `/ux-evolve` はスコア ≥ 90、プラトー、または 5 ラウンドまで lint → polish → re-lint を回し、65 を下回る出力は `--force` なしに拒否されます。結果として、各インストールは自身のコーパスで賢くなり、各実行はマシン間で再現可能になり、エンジンは完全にオフラインのままです。
+**決定台帳**(`.ux/decisions.jsonl`、スキーマ `_v: 1` 固定)がフィードバックループを閉じます。レコメンダーは同じ `(industry, ui_type)` バケットでの過去の成功をもとに候補を並べ替えます。コールドスタートでも安全で、過去の決定が 3 件未満なら並べ替えを行いません。`lint_score >= 80` かつ `user_accepted = true` の決定だけを数えます。さらに `/ux-polish` はスコア ≥ 90、プラトー、または 3 ラウンドまで lint → polish → re-lint を回し、65 という品質ゲートを下回る出力は `--force` なしでは拒否します。結果として、どのインストールも自分のコーパスで賢くなり、どの実行もマシン間で再現でき、エンジンは完全にオフラインのままです。
 
 ---
 
@@ -97,7 +150,7 @@ Claude Code に常駐しているなら、プラグインマーケットプレ�
 /plugin install ux@ux-skill
 ```
 
-これで 25 のスラッシュコマンドと 5 つのサブエージェントが Claude Code セッションに接続されます。インストール後、`/ux-init` を実行してプロジェクト単位の `.ux/` 状態ディレクトリをセットアップし、Python エンジンが到達可能であることを検証してください。
+これで 18 のスラッシュコマンド(加えて 4.1 までエイリアスとして残る古い 7 つの名前)と 5 つのサブエージェントが Claude Code セッションに接続されます。インストール後、`/ux-init` を実行してプロジェクト単位の `.ux/` 状態ディレクトリをセットアップし、Python エンジンが到達可能であることを確認してください。
 
 ### 経路 2：pip(汎用)
 
@@ -105,9 +158,9 @@ Claude Code の外で作業している場合(Cursor、Windsurf、CLI、CI)、Py
 
 ```bash
 pip install uxskill
-uxskill init                       # IDE を自動検出し、対応するアーティファクトを配置
-uxskill stats                      # マニフェスト件数を表示してインストールを検証
-uxskill lint .                     # カレントディレクトリにリンターを実行
+uxskill init                       # auto-detects your IDE, installs the right artifact
+uxskill stats                      # print manifest counts to verify install
+uxskill lint .                     # run the linter against the current directory
 ```
 
 パッケージは CLI エントリポイントとして `ux` と `uxskill` の両方を公開します、同じバイナリです。
@@ -117,7 +170,7 @@ uxskill lint .                     # カレントディレクトリにリンタ�
 Python を直接管理したくない場合、npx ラッパーが `pipx` 経由で一切を起動します:
 
 ```bash
-npx uxskill init                  # 初回実行時に pipx + uxskill をダウンロード
+npx uxskill init                  # downloads pipx + uxskill on first run
 npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-app-router
 ```
 
@@ -126,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "3.1.0-stable",
+#   "version": "4.0.0",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -137,13 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 145,
+#     "anti-patterns": 171,
+#     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-いずれかの件数が 0 を返したら、JSON ファイルが欠けています、[github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues) に issue を立ててください。
+これらの件数を合計すると 1,262 エントリになります。いずれかの件数が 0 を返したら JSON ファイルが欠けているので、[github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues) に issue を立ててください。
 
 ---
 
@@ -161,7 +215,7 @@ ux stats
 | dominikmartn/nothing-design-skill | **2,391** | 単一美学スキル | 1 | - |、| 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | 反スロップデザインスキル | 1 | - |、| 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 コンポーネント + 監査 | 1 | - | (MD3 のみ) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python エンジン + 12 マニフェスト + 25 コマンド + 5 サブエージェント + CI リンター** | **22** | **152 の正規表現ルール** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python エンジン + 12 マニフェスト + 18 コマンド + 5 サブエージェント + CI リンター** | **18** | **171 の決定論的ルール** | **160** | **148** | **57** | **17** |
 
 ### 負けているところ
 
@@ -173,10 +227,10 @@ ux stats
 
 - **コンポーネントライブラリ:** 148 個のドキュメント化されたコンポーネント。解剖、ステート、使用 token、モーション仕様付き。他の 8 つはどれもコンポーネントマニフェストを同梱していません。
 - **モーションプリセット:** 57 個のスタック対応エントリ(Framer Motion、GSAP、CSS)、reduced-motion フォールバック付き。他のどこもモーションマニフェストを同梱していません。
-- **アンチパターンリンター:** 152 個の決定論的な正規表現ルール、CI で実行し Critical/High で非ゼロ終了。他のどこも決定論的リンターを同梱していません。
+- **アンチパターンリンター:** 171 個の決定論的ルール、CI で実行し Critical/High で非ゼロ終了。他のどこも決定論的リンターを同梱していません。
 - **ブランド仕様:** 160 個の実在 DESIGN.md 仕様(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude ほか 96 件)。他のどこもブランドライブラリを同梱していません。
 - **17 IDE 対応:** 同じエンジン、IDE ごとに違う糊。
-- **25 のスラッシュコマンド:** discovery、生成、監査、lint、ポリッシュ、修正ループ、ケーススタディ、ワークショップ、コピー、モーション、a11y、ダッシュボード、コンダクター、完全に統合済み。
+- **18 のスラッシュコマンド:** discovery、生成(ページ、コンポーネント、ダッシュボード、画像から)、監査、lint、ポリッシュループ、修正ループ、ケーススタディ、ワークショップ、コピー、モーション、a11y、コンダクター、完全に統合済み。
 
 完全な列ごとの比較表は [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) で。
 
@@ -185,80 +239,79 @@ ux stats
 ## アーキテクチャ：各部品がどう噛み合うか
 
 ```
-ux-skill (パッケージ名: uxskill)
+ux-skill (package name: uxskill)
 │
-├── data/                              脳、クエリ可能な JSON マニフェスト
-│   ├── styles.json                    84 のデザインスタイル + when/skip + tokens
-│   ├── palettes.json                  176 のパレット(明/暗、コントラスト検証済み)
-│   ├── type-pairs.json                70 の display × body × mono トリプレット
-│   ├── components.json                148 のコンポーネント(解剖、ステート、モーション)
-│   ├── industries.json                184 の業種ルール + オーディエンスシグナル
-│   ├── chart-types.json               35 のチャートタイプ(when/skip、エンコーディング)
-│   ├── tech-stacks.json               25 のスタック(Next、Astro、SvelteKit、Blade…)
-│   ├── ux-guidelines.json             112 の名前付き UX ロー(Hick、Fitts、Miller…)
-│   ├── motion-presets.json            57 のモーションプリセット(入場、退場、ホバー…)
-│   ├── anti-patterns.json             152 の正規表現ルール(CI 対応リンターのソース)
-│   └── brands/*.json                  160 のブランド DESIGN 仕様 + _index.json
+├── data/                              The brain, queryable JSON manifests
+│   ├── styles.json                    84 design styles + when/skip + tokens
+│   ├── palettes.json                  176 palettes (light/dark, contrast verified)
+│   ├── type-pairs.json                70 display × body × mono triplets
+│   ├── components.json                148 components (anatomy, states, motion)
+│   ├── industries.json                184 industry rules + audience signals
+│   ├── chart-types.json               35 chart types (when/skip, encoding)
+│   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
+│   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
+│   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
+│   ├── anti-patterns.json             171 rules (CI-safe linter source)
+│   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
-├── engine/                            Python、推論層
-│   ├── synthesizer/                   v3、決定論的 7 軸コンパイラー
-│   ├── decisions/                     v3、.ux/decisions.jsonl 台帳 + レコメンダーのリランク
-│   ├── recommender/                   5 並列検索のマージエンジン
-│   ├── linter/                        決定論的な反スロップスキャナー
-│   ├── discovery/                     10 フィールドの強制プロトコル
-│   ├── generator/                     token + マニフェストエミッター
-│   ├── installer/                     17 IDE 向けマルチインストーラー
-│   └── cli/                           `ux` / `uxskill` エントリポイント
+├── engine/                            Python, the reasoning
+│   ├── synthesizer/                   v3-7-axis deterministic compiler
+│   ├── decisions/                     v3, .ux/decisions.jsonl ledger + recommender re-rank
+│   ├── recommender/                   5-parallel-search merge engine (re-ranked by decisions)
+│   ├── linter/                        Deterministic anti-slop scanner
+│   ├── discovery/                     10-field forcing protocol
+│   ├── generator/                     Token + manifest emitter
+│   ├── installer/                     17-IDE multi-installer
+│   └── cli/                           `ux` / `uxskill` entry point
 │
-├── commands/                          25 の Claude Code スラッシュコマンド (.md)
-│   ├── ux-init.md                     ブートストラップ
-│   ├── ux-stats.md                    インベントリのスナップショット
-│   ├── ux-discover.md                 10 フィールドのインテーク(ゲート)
-│   ├── ux-recommend.md                旗艦、5 並列検索
-│   ├── ux-lint.md                     決定論的リンター
-│   ├── ux-design.md                   フロントエンドコード生成
-│   ├── ux-component.md                単一コンポーネント生成
-│   ├── ux-system.md                   完全なデザインシステム生成
-│   ├── ux-dashboard.md                ダッシュボード画面生成
-│   ├── ux-motion.md                   モーション処理 + 監査
-│   ├── ux-audit.md                    6 レンズのデザイン監査
-│   ├── ux-a11y.md                     WCAG 2.1 AA 監査
-│   ├── ux-critique.md                 審美的講評(3 つの勝ち、3 つの負け、1 つの一手)
-│   ├── ux-copy.md                     マイクロコピーの監査 + 書き換え
-│   ├── ux-fix.md                      所見をアトミックなコミットとして適用
-│   ├── ux-polish.md                   仕上げ + AI スロップの除去
-│   ├── ux-frame.md                    4 フィールドのフレーミングブロック
-│   ├── ux-research.md                 リサーチの計画 + 統合
-│   ├── ux-workshop.md                 5 段階のデザインシンキングワークショップ
-│   ├── ux-case-study.md               公開可能な Wfrah エディトリアル形式のケーススタディ
-│   ├── ux-next.md                     ワークフローコンダクター(読み取り専用)
-│   └── ux-expert.md                   コンサルティングのフック
+├── commands/                          18 Claude Code slash commands (.md) + 7 aliases
+│   ├── ux-init.md                     bootstrap + inventory snapshot (--stats)
+│   ├── ux-discover.md                 10-field intake (gate), --frame, --recommend
+│   ├── ux-lint.md                     deterministic linter
+│   ├── ux-design.md                   generate a page, --component, --dashboard, --from-image
+│   ├── ux-system.md                   generate full design system
+│   ├── ux-motion.md                   motion treatment + audit
+│   ├── ux-audit.md                    6-lens design audit
+│   ├── ux-a11y.md                     WCAG 2.1 AA audit
+│   ├── ux-critique.md                 taste critique (3 wins, 3 misses, 1 move)
+│   ├── ux-copy.md                     microcopy review + rewrite
+│   ├── ux-fix.md                      apply findings as atomic commits
+│   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
+│   ├── ux-research.md                 research planning + synthesis
+│   ├── ux-workshop.md                 5-phase design thinking workshop
+│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-next.md                     workflow conductor (read-only)
+│   ├── ux-expert.md                   consulting hook
+│   ├── ux-mcp.md                      MCP server
+│   └── ux-frame.md, ux-recommend.md, ux-stats.md, ux-evolve.md,
+│       ux-component.md, ux-dashboard.md, ux-image-to-code.md
+│                                      aliases, removed in 4.1
 │
-├── agents/                            5 つのサブエージェント (.md)
+├── agents/                            5 sub-agents (.md)
 │   ├── frontend-engineer.md           React/Next/Vue/Blade/Astro
 │   ├── motion-engineer.md             Framer Motion / GSAP / CSS
-│   ├── copy-writer.md                 ブランドボイスのマイクロコピー
-│   ├── research-synthesizer.md        インタビュー + 分析 + 競合
-│   └── design-system-architect.md     tokens / コンポーネント / 基盤
+│   ├── copy-writer.md                 microcopy in brand voice
+│   ├── research-synthesizer.md        interviews + analytics + competitors
+│   └── design-system-architect.md     tokens / components / foundations
 │
-├── references/                        データの散文ソース + デモページ
-│   ├── foundations/                   anti-patterns.md、原則、審美眼
-│   ├── laws/                          UX ローの長文
-│   ├── process/                       discovery-protocol.md(要)
-│   ├── styles/                        スタイルごとの散文(anti-slop.md など)
-│   ├── components/                    コンポーネントの長文
-│   ├── output/                        出力ルーブリック
-│   └── conditional/                   スタック別ガイダンス
+├── references/                        Prose source for the data + demo pages
+│   ├── foundations/                   anti-patterns.md, principles, taste
+│   ├── laws/                          UX laws long-form
+│   ├── process/                       discovery-protocol.md (load-bearing)
+│   ├── styles/                        per-style prose (anti-slop.md, etc.)
+│   ├── components/                    component long-form
+│   ├── output/                        output rubrics
+│   └── conditional/                   stack-specific guidance
 │
 ├── bin/
-│   ├── uxskill.mjs                    npx ラッパー -> Python エンジン
-│   ├── ux-lint.py                     v2 リンター(優先)
-│   └── ux-lint.sh                     v1 フォールバック(bash + perl-PCRE)
+│   ├── uxskill.mjs                    npx wrapper -> Python engine
+│   ├── ux-lint.py                     v2 linter (preferred)
+│   └── ux-lint.sh                     v1 fallback (bash + perl-PCRE)
 │
-└── .ux/                               (プロジェクトごとに作成)
-    ├── last-discovery.json            ブリーフのスナップショット
-    ├── last-recommendation.json       選定システム
-    ├── last-frame.json                フレーミングブロック
+└── .ux/                               (created per project)
+    ├── last-discovery.json            brief snapshot
+    ├── last-recommendation.json       picked system
+    ├── last-frame.json                framing block
     ├── last-audit.json / last-a11y.json / last-copy.json / last-motion.json
     ├── last-design.json / last-component.json / last-dashboard.json
     └── last-critique.json / last-polish.json / last-research.json / last-workshop.json / last-case-study.json
@@ -266,68 +319,59 @@ ux-skill (パッケージ名: uxskill)
 
 ### エンジンが実際にどう動くか
 
-1. **入力。** ブリーフを提供します、`/ux-discover` 経由でインタラクティブに(10 フィールド)、または `ux recommend` にフラグを渡して非インタラクティブに。
-2. **5 並列検索。** エンジンはマニフェスト全体に対して 5 つのルックアップを同時実行します:
-   - **業種 → 推奨スタイル**(industries.json)
-   - **スタイル → パレット + タイプ + モーション互換性**(styles.json)
-   - **トーン × 必須項目 → パレットフィルター**(palettes.json)
-   - **スタック → コンポーネント互換性 + モーションプリセット**(tech-stacks.json、motion-presets.json)
-   - **禁止事項 + 地域 → ガードレール + ブランド事例の候補**(anti-patterns.json、brands/)
-3. **マージ。** 決定論的なマージャーが候補をランク付けし、衝突を解決します(例:必須のダークモードはパレットモードを強制)、最終的に推奨システムを 1 つ提示します。
-4. **出力。** 選定スタイル、選定パレット、選定タイプペア、上位 5 モーションプリセット、上位 12 コンポーネント、上位 5 ブランド事例、152 のアンチパターンガードレールすべて有効を含む JSON ドキュメント。加えて各選定の根拠ブロック。
-5. **生成。** 下流コマンド(`/ux-design`、`/ux-component`、`/ux-system`、`/ux-dashboard`)が推奨を消費し、サブエージェント経由で実コードを生成します。
-6. **検証。** `/ux-lint` が生成コードを 152 の正規表現ルールに対して再スキャンします。CI で Critical/High に当たると非ゼロ終了。
+1. **入力。** ブリーフを渡します。`/ux-discover` で対話的に(10 フィールド)、または `ux recommend` にフラグを渡して非対話的に。
+2. **5 つの並列検索。** エンジンはマニフェストをまたいで 5 つの検索を同時に実行します:
+   - **業種 → recommended_styles** (industries.json)
+   - **スタイル → パレット + タイプ + モーションの互換性** (styles.json)
+   - **トーン × 必須要件 → パレットの絞り込み** (palettes.json)
+   - **スタック → コンポーネントの互換性 + モーションプリセット** (tech-stacks.json, motion-presets.json)
+   - **禁止事項 + 地域 → ガードレール + ブランド事例の候補** (anti-patterns.json, brands/)
+3. **統合。** 決定論的なマージャーが候補を順位付けし、競合を解決し(たとえば必須のダークモードがパレットのモードを決める)、推奨システムをひとつ出力します。
+4. **出力。** 選ばれたスタイル、パレット、タイプペア、上位 5 つのモーションプリセット、上位 12 のコンポーネント、上位 5 つのブランド事例、そして有効な 171 のアンチパターンガードレールすべてを含む JSON ドキュメント。加えて、各選択の理由を説明するブロック。
+5. **生成。** 後続のコマンド(ページ、コンポーネント、ダッシュボード、画像の各モードの `/ux-design` と `/ux-system`)が推奨を使い、サブエージェントを通じて実際のコードを生成します。
+6. **検証。** `/ux-lint` が生成されたコードを 171 のルールで再スキャンします。CI で Critical/High があれば非ゼロ終了。
 
-**Python が考える。HTML が見せる。Markdown が繋ぐ。**
+**v3 での追加。** レコメンダーは `.ux/decisions.jsonl` を使って `engine/decisions/` から候補を並べ替えます(`lint_score >= 80` かつ `user_accepted = true` の決定だけを数え、過去の決定が 3 件未満ならコールドスタートとして安全に扱います)。生成の経路は `engine/synthesizer/` に回すこともできます。これは決定論的な 7 軸コンパイラーで、カタログからテンプレートを選ぶのではなく、ブリーフごとに新しいパレット + タイプ + 余白 + 角丸 + モーションのトークンを生み出します。詳しくは [ブレイン、v3.0 とは何か](#ブレインv30-とは何か) を参照してください。
+
+**Python が考え、HTML が見せ、Markdown がつなぐ。**
 
 ---
 
-## 25 のスラッシュコマンド：詳細リファレンス
+## 18 のスラッシュコマンド：詳細リファレンス
 
-各コマンドは `commands/` 下の `.md` ファイルとして配布されており、`description`、`allowed-tools`、`triggers`、`when to use`、`when to skip`、`input`、`process`、`output state file` を持ちます。以下の説明は要約版です;完全なソースが正典の仕様です。
+各コマンドは `commands/` 配下の `.md` ファイルとして同梱され、`description`、`allowed-tools`、`triggers`、`when to use`、`when to skip`、`input`、`process`、`output state file` を備えています。以下の説明は要約で、正式な仕様はソース全文です。
 
-コマンドは 5 つのバケットに分類されます:**ブートストラップ & インベントリ**、**discovery & 推奨**、**生成**、**監査 & 検証**、**修正 & 仕上げ**、そして**コンダクター**。
+コマンドは 7 つのグループに分かれます:**ブートストラップと棚卸し**、**discovery と推奨**、**生成**、**監査と検証**、**修正とポリッシュ**、**discovery とナラティブ**、**コンダクター**。3.x の 7 つの名前は 4.1 まで[エイリアス](#エイリアス41-で廃止)として使えます。
 
 ### ブートストラップ & インベントリ
 
 #### `/ux-init`：プロジェクトをブートストラップする
 
-- **何をするか:** どの IDE を使っているか(`.claude/`、`.cursor/`、`.windsurf/` など)を検出し、対応するアーティファクトをインストールし、Python エンジンが到達可能であることを検証し、統計スナップショットを表示します。
-- **使うタイミング:** 新規プロジェクトに初めてインストールするとき。ux-skill を使うプロジェクトを clone した後。`pip install --upgrade uxskill` 後。
-- **スキップするタイミング:** すでにこのプロジェクトで実行済みで、何も変わっていない。
-- **呼び出し方:** `/ux-init`(引数なし)または CLI から `uxskill init`。
-- **出力:** IDE ごとのアーティファクト([17 IDE 向けインストーラー](#17-ide-向けインストーラー)参照)+ `.ux/` ディレクトリ + 標準出力サマリー。
-- **次に繋がる:** 次は `/ux-discover`。
+- **何をするか:** どの IDE を使っているか(`.claude/`、`.cursor/`、`.windsurf/` など)を検出し、対応するアーティファクトをインストールし、Python エンジンが到達可能であることを検証し、統計スナップショットを表示します。`--stats` はスナップショットだけを表示します:バージョン + データマニフェストのエントリ数。
+- **使うタイミング:** 新規プロジェクトに初めてインストールするとき。ux-skill を使うプロジェクトを clone した後。`pip install --upgrade uxskill` 後。`--stats` はインストール後、アップグレード後、または推奨が意外な選択を返してマニフェストの欠けが疑われるとき。
+- **スキップするタイミング:** すでにこのプロジェクトで実行済みで、何も変わっていない。`--stats` はスキップする必要がありません:50ms の読み取りです。
+- **呼び出し方:** `/ux-init`(引数なし)、`/ux-init --stats`、または CLI から `uxskill init` / `uxskill stats`。`--decisions` で決定台帳のサマリーを追加し、`--html` で `.ux/stats.html` を書き出します。
+- **出力:** IDE ごとのアーティファクト([17 IDE 向けインストーラー](#17-ide-向けインストーラー)参照)+ `.ux/` ディレクトリ + 標準出力サマリー。`--stats`:標準出力に JSON(上の[インストール検証](#インストール検証)参照)。
+- **次に繋がる:** 次は `/ux-discover`。`--stats` は診断専用です。
 
-#### `/ux-stats`：データインベントリを表示する
+#### `/ux-mcp`：エンジンを MCP サーバーとして動かす
 
-- **何をするか:** バージョン + 12 データマニフェストのエントリ件数を表示し、何がインストールされているか検証できるようにします。
-- **使うタイミング:** インストール後、アップグレード後、`/ux-recommend` が予想外の結果を返してマニフェストが不完全なのではと疑うとき。
-- **スキップするタイミング:** 決してない、50ms の読み取り専用コマンドです。
-- **呼び出し方:** `/ux-stats` または `uxskill stats`。
-- **出力:** 標準出力への JSON(上記の [インストール検証](#インストール検証) 参照)。
-- **次に繋がる:** 診断専用;下流には何も流しません。
+- **何をするか:** エンジンを stdio 上の Model Context Protocol サーバーとして起動します。25 のツール(レコメンダー、リンター、永続化、シンセサイザー、決定台帳、画像からの抽出、データマニフェスト、そしてデザインシステムの構築、取り込み、強化、拡張、書き出し、検査)を、プラグインなしで任意の MCP 対応ホストから呼び出せます。
+- **使うタイミング:** 別の MCP 対応ホストで作業していて、同じエンジンを使いたい。デザイン制約の唯一の情報源を必要とするマルチエージェントのパイプラインを動かしている。レコメンダーやリンターを CI で常駐プロセスとして使いたい。
+- **スキップするタイミング:** プラグインを入れた Claude Code の中にいる。スラッシュコマンドがすでにエンジンに届いています。一度きりの答えが欲しい。`uxskill recommend` か `uxskill lint` のほうが簡単です。
+- **呼び出し方:** `/ux-mcp`、または `pip install 'uxskill[mcp]'` の後にシェルから `ux-mcp`。
+- **出力:** stdio の JSON-RPC サーバー。クライアントごとの設定は [MCP サーバー](#mcp-サーバー非対称な一手)と `commands/ux-mcp.md` を参照。
+- **次に繋がる:** なし。これは手順ではなくトランスポートです。
 
 ### discovery & 推奨
 
-#### `/ux-discover`：強制関数(10 フィールドのインテーク)
+#### `/ux-discover`：強制ゲート(10 フィールドの取り込み、フレーミング、推奨)
 
-- **何をするか:** どのプロジェクトも生成コマンドの前に通る必須の 10 フィールドインテーク。プロジェクトタイプ、オーディエンス、主要ゴール、トーン、必須項目、禁止事項、参照ブランド、スタック、地域、成功指標。**即興は禁止。** 禁止フレーズ(「モダン」「クリーン」)がユーザーに具体的な言葉を強います。
-- **使うタイミング:** `/ux-design`、`/ux-component`、`/ux-system`、`/ux-dashboard` の前。以前のブリーフが古びたとき。
-- **スキップするタイミング:** バグを直している(`/ux-fix`)。リンターパスだけ実行する(`/ux-lint`)。ブリーフが前回セッションから変わっていない。
-- **呼び出し方:** `/ux-discover`。プラグインが質問し、あなたが答えます。
-- **出力:** `.ux/last-discovery.json`(10 フィールドのブリーフ)を書き出します。
-- **次に繋がる:** `/ux-recommend` → discovery を使ってスタイル + パレット + タイプ + モーション + コンポーネントを選ぶ。`/ux-design [追加ブリーフ]` → 推奨に基礎付けてフロントエンドコードを生成。`/ux-component <名前>` → discovery 制約に沿った単一コンポーネントを生成。
-
-#### `/ux-recommend`：旗艦の 5 並列検索エンジン
-
-- **何をするか:** Python エンジンの 5 並列検索を 12 マニフェスト横断で実行し、マージされたデザインシステムを 1 つ返します。業種 → スタイル → パレット → タイプ → モーション + コンポーネント + ブランド事例 + ガードレール。
-- **使うタイミング:** 新規プロジェクトをゼロから開始する。疲れた見た目の製品をピボットする。`/ux-design` や `/ux-component` の前の事前点検。
-- **スキップするタイミング:** すでに `/ux-discover` を実行してブリーフを保存している、そのフローでは `/ux-recommend` は自動。1 つのバグを修正している(`/ux-fix` を使う)。lint だけ必要(`/ux-lint` を使う)。
-- **呼び出し方(Claude Code):**
-  ```
-  /ux-recommend
-  ```
+- **何をするか:** あらゆるプロジェクトが生成コマンドの前に必ず通る、10 フィールドの必須の取り込み。プロジェクトの種類、オーディエンス、主目的、トーン、必須要件、禁止事項、参考ブランド、スタック、地域、成功指標。**即興はなし。** 禁止フレーズ(「モダン」「クリーン」)でユーザーに具体性を求めます。続いてレコメンダーを実行し、Python エンジンが 12 のマニフェストをまたぐ 5 つの並列検索から、統合されたデザインシステムをひとつ返します(業種 → スタイル → パレット → タイプ → モーション + コンポーネント + ブランド事例 + ガードレール)。
+- **モード:** `--frame` は誰のためか、アウトカム、仮説、成功シグナルを 4 フィールドのフレーミングブロックにまとめます。フルの取り込みより軽量です。`--recommend` は保存済みのブリーフか単発のフラグから、レコメンダーだけを実行します。
+- **使うタイミング:** `/ux-design` や `/ux-system` の前。以前のブリーフが古くなったとき。`--frame` はプロジェクト、スプリント、単発の案件の始まり、または会話が脱線したときの途中で。`--recommend` はくたびれて見えるプロダクトを立て直すときに。
+- **スキップするタイミング:** バグを直している(`/ux-fix`)。リンターのパスだけを実行している(`/ux-lint`)。前回のセッションからブリーフが変わっていない。
+- **呼び出し方(Claude Code):** `/ux-discover`、`/ux-discover --frame "loyalty wallet for a MENA retail pilot"`、または `/ux-discover --recommend`。
   **呼び出し方(CLI):**
   ```bash
   ux recommend \
@@ -339,46 +383,32 @@ ux-skill (パッケージ名: uxskill)
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **出力:** `.ux/last-recommendation.json` を書き出します、選定スタイル、選定パレット、選定タイプペア、上位 5 モーションプリセット、上位 12 コンポーネント、上位 5 ブランド事例、152 のアンチパターンガードレールすべて有効、加えて根拠。
-- **次に繋がる:** `/ux-design [ブリーフ]` → 推奨 token でフロントエンドコードを生成。`/ux-system` → 推奨から完全なデザインシステムを生成。`/ux-component <名前>` → 推奨スタイルで単一コンポーネントを生成。`/ux-lint` → 生成コードを検証。
+- **出力:** `.ux/last-discovery.json`(10 フィールドのブリーフ)、`.ux/last-recommendation.json`(選ばれたスタイル、パレット、タイプペア、上位 5 つのモーションプリセット、上位 12 のコンポーネント、上位 5 つのブランド事例、有効な 171 のアンチパターンガードレールすべて、加えて理由)、`--frame` を付けた場合は `.ux/last-frame.json`(`{audience, outcome, hypothesis, success_signal}`)。
+- **次に繋がる:** `/ux-design [extra brief]` → 推奨に基づくフロントエンドコード。`/ux-design --component <name>` → 判明した制約に沿ったコンポーネントひとつ。`/ux-system` → 推奨からの完全なデザインシステム。`/ux-lint` → 生成されたコードを検証。
 
 ### 生成
 
 #### `/ux-design`：ブリーフから美しい、反スロップな画面を生成する
 
-- **何をするか:** discovery ブリーフ + 推奨から完全なプロダクション級フロントエンドアーティファクト(ランディング、マーケティングサイト、アプリシェル)を生成します。反スロップと arsenal リファレンスからのクリエイティブディレクションのもと、`frontend-engineer` を派遣します。
-- **使うタイミング:** 「~をデザインして」「~を作って」「ランディングページを生成して」「ダッシュボードを作って」「コンポーネントを作って」、自由形式の視覚成果物のリクエストすべて。
-- **スキップするタイミング:** 構築ではなくレビューが欲しい(`/ux-audit` または `/ux-critique` を使う)。コンポーネント 1 つだけ欲しい(`/ux-component` を使う)。バックエンドやインフラの作業。
-- **呼び出し方:** `/ux-design MENA のネオバンク向けフィンテックランディングを生成、暖色エディトリアルトーン、ダーク AA、紫グラデーション禁止`。
-- **出力:** 生成されたコード(HTML / Blade / JSX / Vue / Astro)、加えて `.ux/last-design.json`。
+- **何をするか:** discovery ブリーフ + 推奨から完全なプロダクション級フロントエンドアーティファクト(ランディング、マーケティングサイト、アプリシェル)を生成します。反スロップと arsenal リファレンスからのクリエイティブディレクションのもと、`frontend-engineer` を派遣します。ブリーフかフラグで、次の 4 つのモードからひとつを選びます:
+  - **ページ**(既定):完全なページ、または複数セクションの画面。`.ux/last-design.json` を書き出します。
+  - **`--component [name]`**:プロダクション級のコンポーネントひとつ(ボタン、モーダル、ナビバー、サイドバー、カード、テーブル、フォーム、チャート)。4 つのインタラクション状態をすべて備え、アクセシブルでブランドに忠実。まず `.ux/last-recommendation.json` でコンポーネントを探し、なければマニフェストを直接参照します。`.ux/last-component.json` を書き出します。
+  - **`--dashboard`**:データ密度の規律、ベントーレイアウト、表形式の等幅数字、スパークラインのパターン、カードの多用を避ける設計、意味のある状態色、控えめなモーション。チャートを貼り付けただけのマーケティングサイトではありません。`.ux/last-dashboard.json` を書き出します。
+  - **`--from-image <path>`**:デザインの参考画像(PNG/JPG/WebP)を純粋な Pillow のコンピュータービジョンで読み取り(支配的なパレット、キャンバスの明暗、タイプの手がかり)、パレットとスタイルのマニフェストに照らし合わせ、得られた推奨から構築します。`--extract-only` は抽出の後で止まります。`.ux/last-image-extract.json` を書き出します。
+- **使うタイミング:** 「~をデザインして」「~を作って」「ランディングページを生成して」「ダッシュボードを作って」「コンポーネントを作って」「ボタンを作って」「管理画面をデザインして」「オペレーターコンソール」「KPI ボード」「このスクリーンショットのように作って」、自由形式の視覚成果物のリクエストすべて。
+- **スキップするタイミング:** 構築ではなくレビューが欲しい(`/ux-audit` または `/ux-critique` を使う)。バックエンドやインフラの作業。
+- **呼び出し方:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`、`/ux-design --component pricing-card-trio --brief="fintech, dark, monospace numbers"`、`/ux-design --dashboard`、`/ux-design --from-image ref.png`。
+- **出力:** 生成されたコード(HTML / Blade / JSX / Vue / Astro)、加えてモードごとの状態ファイル。
 - **次に繋がる:** `/ux-lint` → ガードレール検証。`/ux-polish` → 仕上げ。`/ux-a11y` → アクセシビリティ監査。`/ux-copy` → マイクロコピー監査。`/ux-fix` → 所見をアトミックコミットとして適用。
-
-#### `/ux-component`：単一コンポーネントを生成する
-
-- **何をするか:** 仕様から単一のプロダクション級コンポーネント(ボタン、モーダル、ナビバー、サイドバー、カード、テーブル、フォーム、チャート)を生成します。4 種のインタラクションステートを完備、アクセシブル、ブランドに沿う。まず `.ux/last-recommendation.json` でコンポーネントを検索、フォールバックでマニフェストを直接クエリ。
-- **使うタイミング:** 任意の単一要素リクエスト、「ボタンを作って」「価格カードを作って」「モーダルを作って」「ナビバーを追加して」「サイドバーをデザインして」「データテーブルが必要」「フォームを作って」「チャートコンポーネントを作って」。
-- **スキップするタイミング:** ページ全体や複数セクションの画面(`/ux-design` を使う)。バックエンドやインフラ。
-- **呼び出し方:** `/ux-component pricing-card-trio --brief="フィンテック、ダーク、等幅数字"`。
-- **出力:** 生成されたコンポーネントコード、加えて `.ux/last-component.json`。
-- **次に繋がる:** `/ux-lint` → 検証。`/ux-polish` → 締め。
 
 #### `/ux-system`：完全なスターターデザインシステムを生成する
 
 - **何をするか:** デザインシステムがまだないプロジェクトに完全なスタータシステムを提案します、tokens(色、タイプ、空間、モーション、角丸、影)、基盤ドキュメント、コンポーネントコントラクト、ダークモードペアリング、テーマスイッチャー。`design-system-architect` を派遣。
 - **使うタイミング:** 「デザインシステムがない」「システムを作って」「token を提案して」「テーマはどうあるべき」「DS をセットアップして」。
-- **スキップするタイミング:** プロジェクトにすでにデザインシステムがある、その場合は既存システムに対して `/ux-component` を使う。バックエンドやインフラ。
-- **呼び出し方:** `/ux-system`(まだなら discovery を先に実行)。
+- **スキップするタイミング:** プロジェクトにすでにデザインシステムがある場合は、代わりに既存システムに対して `/ux-design --component` を使う。バックエンドやインフラ。
+- **呼び出し方:** `/ux-system create`(基盤エンジン)、`/ux-system enhance --from <file>`(すでにあるシステムを測定)、`/ux-system extend --from <file> --add <foundation>`(変更せずに追加)、または `/ux-system`(3.x の流れ。まだなら discovery を先に実行)。
 - **出力:** `tokens.json`、`foundations.md`、`components/*.md` のコントラクト、オプションで Tailwind / vanilla / SCSS の出力。チェーンのため `.ux/last-system.json` を書き出します。
-- **次に繋がる:** `/ux-component` → 新システムに対して構築。`/ux-design` → 新 token で画面を生成。
-
-#### `/ux-dashboard`：ダッシュボード専用生成
-
-- **何をするか:** データ密度の規律を伴うダッシュボード、bento レイアウト、表組み用の等幅数字、スパークラインのパターン、カードの濫用回避、セマンティックなステート色、控えめなモーション。チャートを貼り付けたマーケサイトではありません。
-- **使うタイミング:** 「ダッシュボードを作って」「admin パネルをデザインして」「メトリクスページを作って」「オペレーターコンソール」「分析ビュー」「KPI ボード」「監視画面」。
-- **スキップするタイミング:** 統計付きのマーケランディング(`/ux-design` を使う)。1 つのウィジェットだけ(`/ux-component` を使う)。バックエンドやインフラ。
-- **呼び出し方:** `/ux-dashboard`。
-- **出力:** 生成されたダッシュボードコード + `.ux/last-dashboard.json`。
-- **次に繋がる:** `/ux-lint`、`/ux-audit`、`/ux-a11y`。
+- **次に繋がる:** `/ux-design --component` → 新システムに対して構築。`/ux-design` → 新しいトークンで画面を生成。
 
 #### `/ux-motion`：モーション処理
 
@@ -393,8 +423,8 @@ ux-skill (パッケージ名: uxskill)
 
 #### `/ux-lint`：決定論的な正規表現ベースのリンター(LLM なし、CI 安全)
 
-- **何をするか:** あなたのコードに対して 152 の正規表現ルールを実行します。LLM 呼び出しなし。CI で Critical / High に当たると非ゼロ終了。ソース:`data/anti-patterns.json`。ルールカバレッジ:A11y(23)、コンテンツ(15)、レイアウト(13)、タイポ(10)、色(9)、品質(9)、ビジュアル(9)、モーション(8)、パフォーマンス(4)。
-- **使うタイミング:** プリコミットフック。CI ゲート。`/ux-audit` のコストを払う前の大規模コードベースへの素早い初回パス。`/ux-design` や `/ux-component` の後の生成検証。
+- **何をするか:** あなたのコードに対して 171 のルールを実行します。LLM 呼び出しなし。CI で Critical / High に当たると非ゼロ終了。ソース:`data/anti-patterns.json`。ルールカバレッジ:A11y(45)、コンテンツ(35)、レイアウト(18)、タイポ(16)、モーション(14)、ビジュアル(14)、品質(12)、色(10)、パフォーマンス(5)、デプス(2)。
+- **使うタイミング:** プリコミットフック。CI ゲート。`/ux-audit` のコストを払う前の大規模コードベースへの素早い初回パス。どのモードでも `/ux-design` の後の生成検証。
 - **スキップするタイミング:** 修正ループが欲しい(リンターは報告のみ、編集しません、`/ux-polish --fix` か `/ux-fix` にチェーン)。審美的判断が欲しい(`/ux-critique` を使う)。
 - **呼び出し方(slash):** `/ux-lint src/`。
 - **呼び出し方(CLI):** `uxskill lint .` または `python3 bin/ux-lint.py .` または `bash bin/ux-lint.sh --ci --fail-on high`。
@@ -453,49 +483,40 @@ ux-skill (パッケージ名: uxskill)
 - **出力:** 所見ごとのアトミックなコミット。元コマンドを再実行して `.ux/last-*.json` を更新。サマリーを表示。
 - **次に繋がる:** `/ux-next` → コンダクターが次の一手を選ぶ。
 
-#### `/ux-polish`：仕上げ + AI スロップ除去
+#### `/ux-polish`：lint、修正、再 lint のループ + AI スロップ退治
 
-- **何をするか:** 余白のリズム、ヒエラルキーの鋭利化、AI スロップ検出、token の一貫性。`/ux-lint` の LLM ドリブン対応物、審美的判断はあなたの代わりに行います。
-- **使うタイミング:** 構造は正しいが実装が緩い。「ポリッシュ」「引き締めて」「AI スロップを除去」「プレミアムにして」「AI っぽさを減らして」「余白がおかしい」「汎用に見える」「もっと品が欲しい」。
-- **スキップするタイミング:** 画面が中核機能を欠く(まずそれを修正)。仕上げでなく再設計が必要(`/ux-design` を使う)。コピー問題(`/ux-copy` を使う)。モーション問題(`/ux-motion` を使う)。a11y 問題(`/ux-a11y` を使う)。
-- **呼び出し方:** `/ux-polish src/components/Hero.tsx`。
-- **出力:** 更新されたコード + 変更を記述した `.ux/last-polish.json`。
-- **次に繋がる:** `/ux-lint` → 仕上げが保持されたか検証。`/ux-a11y` → アクセシビリティ再確認。
+- **何をするか:** まずローカルの HTML ファイルに対する決定論的なループ。lint、6 つの冪等なポリッシュパス、再 lint を、スコアが 90 に達する、頭打ちになる、または 3 ラウンド経つまで繰り返します(`--rounds` で上限を変更)。既定ではループの出力は `<file>.evolved.html` に残り、元のファイルには一切触れません。元のファイルを置き換えるのは `--loop-only` か `--fix` のときだけで、作業ツリーがクリーンかを確認したうえで行い、65 の品質ゲートが不合格の結果による置き換えを `--force` なしでは防ぎます。`--brand-file` を付けると、どの終了時点でもブランド忠実度の下限が守られます。続いてテイストのパス:余白のリズム、階層の明確化、AI スロップの検出、トークンの一貫性。`/ux-lint` の LLM 駆動版で、テイストの判断にはあなたの判断を使います。`--loop-only` はループだけ、`--no-loop` はテイストのパスだけを実行し、`--fix` はテイストの指摘を適用します。
+- **使うタイミング:** 構造は正しいが仕上げが甘い。「ポリッシュして」「引き締めて」「AI スロップを取り除いて」「プレミアムにして」「AI っぽさを減らして」「余白がしっくりこない」「ありきたりに見える」「もっとテイストが欲しい」「スコア 90 以上まで改善して」「出荷できる状態にして」。
+- **スキップするタイミング:** 画面に中核機能が欠けている(まずそれを直す)。ポリッシュではなく再設計が必要(`/ux-design` を使う)。コピーの問題(`/ux-copy` を使う)。モーションの問題(`/ux-motion` を使う)。a11y の問題(`/ux-a11y` を使う)。
+- **呼び出し方:** `/ux-polish src/components/Hero.tsx`、`/ux-polish out/landing.html --css out/landing.css`、`/ux-polish out/landing.html --loop-only --rounds 5`。
+- **出力:** ループからの `<file>.evolved.html`(`--loop-only` か `--fix` のときだけ元のファイルに昇格)、`--fix` での更新済みコード、`.ux/last-evolve.json`、`.ux/decisions.jsonl` への 1 行、そしてテイストの指摘を記した `.ux/last-polish.json`。
+- **次に繋がる:** `/ux-lint` → ポリッシュが保たれているか検証。`/ux-a11y` → アクセシビリティを再確認。
 
 ### discovery & 物語
-
-#### `/ux-frame`：4 フィールドのフレーミングブロック
-
-- **何をするか:** 誰のためか、アウトカム、仮説、成功シグナルを構造化されたフレーミングブロックに収めます。デザインは行わない、漠然としたリクエストを動くブリーフに変える 4 フィールドのインテーク。`/ux-discover` より軽い(4 フィールド vs 10)。
-- **使うタイミング:** どのプロジェクト、スプリント、単発エンゲージメントの始点でも。会話が脱線した中盤で。「フレーミングして」「ブリーフは?」「プロジェクトをセットアップ」「フレーミング」。
-- **スキップするタイミング:** 既にフレーミング済み(`.ux/last-frame.json` を確認)。フレーミング影響のない単発コンポーネント構築。バックエンドやインフラ。
-- **呼び出し方:** `/ux-frame "MENA Bashiti パイロット向けロイヤルティウォレット"`。
-- **出力:** `.ux/last-frame.json` を書き出します、`{audience, outcome, hypothesis, success_signal}`。
-- **次に繋がる:** `/ux-discover` → フレームを 10 フィールドブリーフに拡張。`/ux-design` → フレームを錨に生成。
 
 #### `/ux-research`：リサーチ計画 + 統合
 
 - **何をするか:** 計画モード:インタビュースクリプト、サーベイ、リクルートのスクリーナーを書きます。統合モード(`--synthesize`):インタビュー、分析、競合サイト、A/B 結果、サポートチケットを推奨に消化します。`research-synthesizer` を派遣。
 - **使うタイミング:** 「リサーチ研究を計画」「インタビューの質問が必要」「サーベイを設計」「ユーザーをどう募集」「ユーザーテスト計画」「ダイアリースタディ」「プリファレンステスト」「フェイクドア」「スモークテスト」「インタビューメモを統合」。
 - **スキップするタイミング:** 答えが高い確信度で既知。低リスクで可逆的な決定。バックエンドやインフラ。
-- **呼び出し方:** `/ux-research --plan "MENA ロイヤルティウォレット採用"` または `/ux-research --synthesize interviews/*.md`。
+- **呼び出し方:** `/ux-research --plan "loyalty wallet adoption in MENA"` または `/ux-research --synthesize interviews/*.md`。
 - **出力:** `.ux/last-research.json` を書き出します、リサーチプランか、統合されたテーマ + エビデンス + 推奨。
-- **次に繋がる:** `/ux-frame` → 知見をフレームに統合。`/ux-design` → 知見から生成。`/ux-workshop` → リサーチを入力にワークショップを実行。
+- **次に繋がる:** `/ux-discover --frame` → 知見をフレームに統合。`/ux-design` → 知見から生成。`/ux-workshop` → リサーチを入力にワークショップを実行。
 
 #### `/ux-workshop`：5 段階のデザインシンキングワークショップ
 
 - **何をするか:** discovery / デザインシンキングのワークショップを端から端まで進行します。5 つの順序段階(探索 → ヒートマップ → ステークホルダーマップ → 解決策スケッチ → ゲームプラン)。時間枠付き。段階ごとに具体的なアーティファクト。「興味深い発見」ではなく決定で終わります。
 - **使うタイミング:** 真の問い、真の参加者、真の時間予算。「ワークショップを進行」「discovery を進行」「デザインシンキングをやろう」「ステークホルダーが 1 時間いる、何をする」「プロジェクトをキックオフ」。
-- **スキップするタイミング:** ブリーフがすでに明確でスコープされている。単独でのブレスト(`/ux-design` か `/ux-frame` を使う)。チームが実行中で discovery にいない。
-- **呼び出し方:** `/ux-workshop "ロイヤルティウォレットのピボット" --participants="2 PM、1 デザイナー、1 エンジニアリードと、1 顧客担当" --minutes=90`。
+- **スキップするタイミング:** ブリーフがすでに明確でスコープされている。単独でのブレスト(`/ux-design` か `/ux-discover --frame` を使う)。チームが実行中で discovery にいない。
+- **呼び出し方:** `/ux-workshop "loyalty wallet pivot" --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" --minutes=90`。
 - **出力:** `.ux/last-workshop.json` を書き出します、ゲームプラン + 段階別アーティファクト。
 - **次に繋がる:** `/ux-design` → ゲームプランを実行。`/ux-research` → ワークショップが浮かび上がらせたギャップを埋める。`/ux-case-study` → 旅路を公開。
 
 #### `/ux-case-study`：公開可能なケーススタディ(Wfrah エディトリアル形式)
 
-- **何をするか:** 純モノクロのエディトリアル形式でプロジェクトケーススタディを生成します、Wfrah タイポ、ヘアライン区切り、(A)–(G) 番号付きセクションコード、バイリンガル対応レイアウト。ドキュメントであり、マーケのパンフレットではありません。`.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json` から読み込みます。
+- **何をするか:** 純モノクロのエディトリアル形式でプロジェクトのケーススタディを生成します。Wfrah タイポ、ヘアラインの区切り、(A) から (G) までの番号付きセクションコード、バイリンガル対応のレイアウト。ドキュメントであり、マーケティングのパンフレットではありません。`.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json` から読み込みます。
 - **使うタイミング:** ローンチ後。個別マイルストーン後。「ケーススタディを書いて」「このプロジェクトをケーススタディに」「まとめドキュメントを作って」「この仕事を公開して」「ポートフォリオ作品」。
-- **スキップするタイミング:** プロジェクトに (A)–(G) を埋めるデータがない。マーケランディングが欲しい、ケーススタディではない(`/ux-design` を使う)。
+- **スキップするタイミング:** プロジェクトに (A) から (G) のセクションを埋めるデータがない。ケーススタディではなくマーケティングのランディングが欲しい(`/ux-design` を使う)。
 - **呼び出し方:** `/ux-case-study --format=html --slug=bashiti-loyalty`。
 - **出力:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`。
 - **次に繋がる:** ターミナルコマンド、通常はプロジェクトの終止符。
@@ -519,35 +540,45 @@ ux-skill (パッケージ名: uxskill)
 - **呼び出し方:** `/ux-expert`。
 - **出力:** LinkedIn / メール / リポジトリの簡潔なコンタクトカード。
 
+### エイリアス、4.1 で廃止
+
+3.x の 7 つのコマンドは上の 18 に統合されました。古い名前はもう 1 リリースの間使えます。各エイリアスは移動先を示したうえで、同じ引数で新しいコマンドを実行します。
+
+| 旧コマンド | 現在 | 備考 |
+|---|---|---|
+| `/ux-frame` | `/ux-discover --frame` | 同じフレーミングブロック、同じ `.ux/last-frame.json` |
+| `/ux-recommend` | `/ux-discover --recommend` | MCP ツール `ux_recommend` は変更なし |
+| `/ux-stats` | `/ux-init --stats` | 読み取り専用のスナップショット |
+| `/ux-evolve` | `/ux-polish --loop-only --rounds 5` | エイリアスは従来の 5 ラウンドの上限を維持。`/ux-polish` 単体は 3 で止まる |
+| `/ux-component` | `/ux-design --component` | 同じ `.ux/last-component.json` |
+| `/ux-dashboard` | `/ux-design --dashboard` | 同じ `.ux/last-dashboard.json` |
+| `/ux-image-to-code` | `/ux-design --extract-only --from-image` | 画像から構築するには `--extract-only` を外す |
+
 ### コマンドチェーンのグラフ
 
 ```
                   ┌──────────────────────┐
-                  │  /ux-init            │
-                  │  /ux-stats           │
+                  │  /ux-init            │  --stats: inventory
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-frame           │  4 フィールドのフレーミングブロック
+                  │  /ux-discover        │  10-field intake (FORCING GATE)
+                  │                      │  --frame: 4-field framing block
+                  │                      │  then 5 parallel searches -> merged system
                   └────────────┬─────────┘
-                               │
-                  ┌────────────▼─────────┐
-                  │  /ux-discover        │  10 フィールドインテーク(強制ゲート)
-                  └────────────┬─────────┘
-                               │ .ux/last-discovery.json に書き込み
-                  ┌────────────▼─────────┐
-                  │  /ux-recommend       │  5 並列検索 -> マージされたシステム
-                  └────────────┬─────────┘
-                               │ .ux/last-recommendation.json に書き込み
+                               │ writes .ux/last-discovery.json
+                               │ writes .ux/last-recommendation.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
-   │ /ux-design     │ │ /ux-component   │ │ /ux-system  │
-   │ /ux-dashboard  │ │ /ux-motion      │ │             │
+   │ /ux-design     │ │ /ux-motion      │ │ /ux-system  │
+   │  --component   │ │                 │ │             │
+   │  --dashboard   │ │                 │ │             │
+   │  --from-image  │ │                 │ │             │
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ .ux/last-<surface>.json に書き込み
+                               │ writes .ux/last-<surface>.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
@@ -556,19 +587,19 @@ ux-skill (パッケージ名: uxskill)
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ .ux/last-<lens>.json に書き込み
+                               │ writes .ux/last-<lens>.json
                   ┌────────────▼─────────┐
-                  │  /ux-fix             │  所見をコミットとして適用
+                  │  /ux-fix             │  apply findings as commits
                   │  /ux-polish          │
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-case-study      │  公開可能なアーティファクト
+                  │  /ux-case-study      │  publishable artifact
                   └──────────────────────┘
 
                   ┌──────────────────────┐
-                  │  /ux-next            │  コンダクター、読み取り専用
-                  │  /ux-expert          │  コンサルティングフック
+                  │  /ux-next            │  conductor, read-only
+                  │  /ux-expert          │  consulting hook
                   └──────────────────────┘
 ```
 
@@ -576,12 +607,12 @@ ux-skill (パッケージ名: uxskill)
 
 ## 5 つのサブエージェント
 
-サブエージェントはコマンドが派遣する役割特化型のジェネレーターです。単独で実行されません、`/ux-design`、`/ux-component`、`/ux-system`、`/ux-fix`、`/ux-research` などから呼ばれます。各エージェントには明確な責任境界があります:ブリーフを決めるのではなく、ブリーフに対して実行します。
+サブエージェントはコマンドが派遣する役割特化型のジェネレーターです。単独では実行されず、`/ux-design`、`/ux-system`、`/ux-fix`、`/ux-research` などから呼ばれます。各エージェントには明確な責任範囲があり、ブリーフを決めるのではなく、ブリーフに沿って実行します。
 
 ### `frontend-engineer`
 
 - **担当:** プロダクション級フロントエンドコード(React、Next.js、Vue、Blade+Alpine、純 HTML、Astro)を反 AI スロップの規律で。
-- **派遣元:** `/ux-design`、`/ux-component`、`/ux-dashboard`、`/ux-fix`。
+- **派遣元:** `/ux-design`(ページ、コンポーネント、ダッシュボード、画像の各モード)、`/ux-fix`。
 - **入力:** ブリーフ + クリエイティブディレクション + tokens(`.ux/last-recommendation.json` から)。
 - **出力:** 汎用 AI 出力と区別できる動くコード。紫グラデーションなし、ヒーロー中央寄せなし、等大 3 カードなし、ディスプレイサイズの Inter なし、「John Doe」なし、絵文字なし、300ms デフォルトなし。
 - **ツール:** `Read, Write, Edit, Bash, Glob, Grep`。
@@ -589,7 +620,7 @@ ux-skill (パッケージ名: uxskill)
 ### `motion-engineer`
 
 - **担当:** プロダクションフロントエンドコード内のモーション、Framer Motion、GSAP、CSS アニメーション。デュレーション、イージング、振り付け、reduced-motion フォールバック、パフォーマンス規律。
-- **派遣元:** `/ux-design`、`/ux-motion --fix`、`/ux-component`。
+- **派遣元:** `/ux-design`(全モード)、`/ux-motion --fix`。
 - **入力:** モーションブリーフ + tokens + `data/motion-presets.json` から 57 のモーションプリセット。
 - **出力:** その場所を勝ち取るモーション。常に `prefers-reduced-motion` フォールバックで包む。常に Core Web Vitals に対してテスト。
 - **ツール:** `Read, Write, Edit, Bash, Glob, Grep`。
@@ -597,15 +628,15 @@ ux-skill (パッケージ名: uxskill)
 ### `copy-writer`
 
 - **担当:** 出荷される文字列、エラーメッセージ、空ステート、CTA、ローディングステート、成功メッセージ、トースト、ヘルパーテキスト、フォームラベル、ボタンテキスト。
-- **派遣元:** `/ux-copy --fix`、`/ux-design`、`/ux-frame`、`/ux-component`。
+- **派遣元:** `/ux-copy --fix`、`/ux-design`(全モード)、`/ux-discover --frame`。
 - **入力:** ボイスプロファイル(名前指定または貼り付け) + 画面の文字列。
-- **出力:** 画面のすべてのステート横断で一貫適用されるプロダクションマイクロコピーで、製品が 10 個ではなく 1 つに聞こえる。禁止:「フォームにエラーがあります」「John Doe」、AI 的にはしゃぐ祝賀コピー、汎用 CTA、生気のない空ステート。
+- **出力:** 画面のすべてのステート横断で一貫適用されるプロダクションマイクロコピーで、製品がばらばらの十個ではなく、ひとつの製品として聞こえる。禁止:「フォームにエラーがあります」「John Doe」、AI 的にはしゃぐ祝賀コピー、汎用 CTA、生気のない空ステート。
 - **ツール:** `Read, Write, Edit, Bash, Glob, Grep`。
 
 ### `research-synthesizer`
 
 - **担当:** リサーチ入力(インタビュー、分析、競合サイト、A/B 結果、サポートチケット)を実行可能なデザイン推奨に消化する。
-- **派遣元:** `/ux-research`、`/ux-workshop`、`/ux-frame`。
+- **派遣元:** `/ux-research`、`/ux-workshop`、`/ux-discover --frame`。
 - **入力:** 生のリサーチ素材、トランスクリプト、エクスポート、競合 URL、サポートクラスター。
 - **出力:** テーマ、エビデンス、推奨。答えをデザインしない、デザイナーがデザインするための基層を渡します。
 - **ツール:** `Read, Write, WebFetch, Bash, Glob, Grep`。
@@ -613,7 +644,7 @@ ux-skill (パッケージ名: uxskill)
 ### `design-system-architect`
 
 - **担当:** 完全なデザインシステム、tokens(色、タイプ、空間、モーション、角丸、影)、基盤ドキュメント、コンポーネントコントラクト、ダークモードペアリング、テーマ層。
-- **派遣元:** `/ux-system`、システムが存在しないとき `/ux-component` から。
+- **派遣元:** `/ux-system`、システムが存在しないときの `/ux-design --component`。
 - **入力:** ブランドブリーフ + `.ux/last-recommendation.json`(スタイル + パレット + タイプペア + モーションプリセット)。
 - **出力:** 一貫性、立場、プロダクション準備が揃ったシステムで、下流エージェントが基礎を再決定せず構築できる。tokens JSON、基盤 MD、コンポーネントコントラクト、ダークモードマッピング。
 - **ツール:** `Read, Write, Edit, Bash, Glob, Grep`。
@@ -624,7 +655,7 @@ ux-skill (パッケージ名: uxskill)
 
 1. ブリーフ / 推奨(`.ux/` からロード)。
 2. 関連するマニフェストスライス(例:`frontend-engineer` は選定スタイル + パレット + コンポーネントを得る;`motion-engineer` は選定モーションプリセットを得る)。
-3. 152 のアンチパターンガードレール(常に有効)。
+3. 171 のアンチパターンガードレール(常に有効)。
 4. 成功基準(アーティファクトは何を満たすべきか)。
 
 サブエージェントが返すもの:
@@ -637,7 +668,7 @@ ux-skill (パッケージ名: uxskill)
 
 ---
 
-## 12 のデータマニフェスト
+## 11 のデータマニフェスト
 
 データ層が脳です。すべてのコマンドはそこから読み、エンジンはそれを横断してマージし、リンターはそれに対してスキャンします。すべてのファイルは `data/` 下にあり、エントリを `{_meta, entries}` で包んでスキーマバージョニングを行います。
 
@@ -650,7 +681,7 @@ ux-skill (パッケージ名: uxskill)
 | `categories` | Minimalist / Swiss、Brutalist、Editorial、Glassmorphism、Neumorphism、Bento、Skeuomorphic、Industrial、Maximalist、AI-Futurist、MENA-modern、Vaporwave など |
 | `sample entry` | `swiss-international`、「グリッドは法。タイプが重労働をこなす。装飾は失敗。」 |
 
-使用:`/ux-recommend`、`/ux-system`、`/ux-design`。スキーマ:[data/SCHEMAS.md](data/SCHEMAS.md)。
+使用:`/ux-discover`、`/ux-system`、`/ux-design`。スキーマ:[data/SCHEMAS.md](data/SCHEMAS.md)。
 
 ### `palettes.json`：176 のカラーパレット
 
@@ -661,7 +692,7 @@ ux-skill (パッケージ名: uxskill)
 | `tones` | warm、editorial、magazine、clinical、playful、brutalist、monochrome、jewel-tone、MENA-warm、dev-tools-dark など |
 | `sample entry` | `claude-warm-editorial`、明、warm/editorial/magazine、canvas #faf9f5、primary #cc785c |
 
-使用:`/ux-recommend`、`/ux-system`。コントラストは AA / AAA で検証済み。スキーマ:[data/SCHEMAS.md](data/SCHEMAS.md)。
+使用:`/ux-discover`、`/ux-system`。コントラストは AA / AAA で検証済み。スキーマ:[data/SCHEMAS.md](data/SCHEMAS.md)。
 
 ### `type-pairs.json`：70 のタイプペアリング
 
@@ -671,7 +702,7 @@ ux-skill (パッケージ名: uxskill)
 | `keys per entry` | `id`、`name`、`display`(family + weights + source + license + URL)、`body`、`mono`、`compatible_styles`、`taste_score` |
 | `sample entry` | `cormorant-inter-jetbrains`、Cormorant Garamond × Inter × JetBrains Mono |
 
-すべてのファミリーにライセンス + ソース URL があります。`/ux-recommend`、`/ux-system` で使用。
+すべてのファミリーにライセンス + ソース URL があります。`/ux-discover`、`/ux-system` で使用。
 
 ### `components.json`：148 のコンポーネント
 
@@ -693,7 +724,7 @@ ux-skill (パッケージ名: uxskill)
 | `categories` | Financial Services、Healthcare、Education、E-commerce、SaaS B2B、SaaS B2C、Developer Tools、Media、Gaming、Travel、Real Estate、MENA-specific など |
 | `sample entry` | `fintech-neobank`、高信頼、規制開示、残高/取引が主 UI、日次利用のモバイル優先 |
 
-`/ux-recommend` が最初の並列検索軸として使用。
+レコメンダー(`/ux-discover`)が最初の並列検索軸として使用。
 
 ### `chart-types.json`：35 のチャートタイプ
 
@@ -702,9 +733,9 @@ ux-skill (パッケージ名: uxskill)
 | `entries` | 35 |
 | `keys per entry` | `id`、`name`、`category`、`when_to_use`、`when_to_skip`、`encoding`、`accessibility`、`data_shape`、`compatible_styles` |
 | `categories` | Comparison、Time Series、Distribution、Composition、Relationship、Flow、Geographic |
-| `sample entry` | `bar-vertical`、4–15 の離散カテゴリを比較。x 軸の位置がカテゴリに、高さが値にマッピング。 |
+| `sample entry` | `bar-vertical`、4 から 15 の離散カテゴリを比較。x 軸の位置がカテゴリに、高さが値に対応。 |
 
-`/ux-dashboard`、`/ux-component`(チャートインスタンス)で使用。
+`/ux-design --dashboard` と `/ux-design --component`(チャートのインスタンス)で使用。
 
 ### `tech-stacks.json`：25 のスタック
 
@@ -739,15 +770,15 @@ ux-skill (パッケージ名: uxskill)
 
 各プリセットに reduced-motion バリアントがあります。Framer Motion、GSAP、純 CSS 向けのスタック対応コード。
 
-### `anti-patterns.json`：152 の正規表現ルール
+### `anti-patterns.json`：171 のルール
 
 | フィールド | 説明 |
 |---|---|
-| `entries` | 152 |
-| `keys per entry` | `id`、`name`、`severity`(critical/high/medium/low)、`category`、`detection`(type、pattern、flags、scope)、`evidence_template`、`fix`、`references` |
-| `categories` | A11y(23)、Content(15)、Layout(13)、Typography(10)、Color(9)、Quality(9)、Visual(9)、Motion(8)、Performance(4) |
+| `entries` | 171 |
+| `keys per entry` | `id`、`name`、`severity`(critical/high/medium/low)、`category`、`detection`(種類、パターン、フラグ、スコープ、多くのルールではパース済みファイルに対する `post` 検査)、`why`、`fix` |
+| `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-完全なルール一覧は [152 の反 AI スロップルール](#152-の反-ai-スロップルールリンター)。
+ルールの全一覧は [171 の反 AI スロップルール](#171-の反-ai-スロップルールリンター)にあります。
 
 ### `brands/*.json`：160 のブランド仕様
 
@@ -761,88 +792,15 @@ ux-skill (パッケージ名: uxskill)
 
 ---
 
-## 152 の反 AI スロップルール：リンター
+## 171 の反 AI スロップルール：リンター
 
-ux-skill は決定論的な正規表現ベースのリンターを同梱します。**LLM なし。** **API なし。** **ネットワークなし。** 典型的な Next.js アプリで CI で ~200ms で実行されます。`--fail-on high` 設定時、Critical / High に当たると非ゼロ終了。
+ux-skill は決定論的なリンターを同梱しています。各ルールはパターンで、多くはパース済みの CSS とマークアップに対する検査を加えるため、一致はルールが示す文脈でのみ数えられます。**LLM なし。** **API なし。** **ネットワークなし。** 一般的な Next.js アプリなら CI で ~200ms で動きます。`--fail-on high` を設定すると、Critical / High の指摘で非ゼロ終了します。
 
-ルールは `data/anti-patterns.json`(v2 が優先)から取得され、`references/foundations/anti-patterns.md`(v1 bash)がフォールバック。2 つのバイナリ:`bin/ux-lint.py`(Python、高速、拡張可能)と `bin/ux-lint.sh`(Bash + perl-PCRE、Python のない環境向け)。
+ルールは `data/anti-patterns.json`(v2、推奨)を元にし、フォールバックとして `references/foundations/anti-patterns.md`(v1、bash)を使います。同梱されるバイナリは 2 つ:`bin/ux-lint.py`(Python、高速、拡張可能)と `bin/ux-lint.sh`(Bash + perl-PCRE、Python のない環境向け)。
 
 ### カテゴリ別ルール
 
-#### タイポグラフィ(3 ルール)
-
-| 重大度 | ルール ID | 名前 |
-|---|---|---|
-| high | `inter-as-display` | Inter をディスプレイフォントとして使用 |
-| medium | `hero-text-arbitrary-90px` | 任意のヒーロー文字サイズ |
-| low | `font-system-only` | システムフォントスタックのみで指定タイプフェイスなし |
-
-#### 色(6 ルール)
-
-| 重大度 | ルール ID | 名前 |
-|---|---|---|
-| high | `purple-to-blue-gradient` | デフォルトの紫から青の AI グラデーション |
-| high | `dark-text-on-dark-card` | カード上の低コントラストテキスト |
-| medium | `gradient-text-rainbow` | 多段グラデーションテキスト |
-| medium | `card-glow-purple-shadow` | カード上の紫グロー影 |
-| medium | `gradient-mesh-purple-pink` | ヒーローの紫-ピンクメッシュグラデーション |
-| low | `tailwind-color-named-vague` | セマンティック token のない命名 Tailwind カラー |
-
-#### レイアウト(5 ルール)
-
-| 重大度 | ルール ID | 名前 |
-|---|---|---|
-| high | `three-equal-card-grid` | 並ぶ等大 3 カード |
-| medium | `centered-everything-hero` | 中央寄せのヒーロー構成 |
-| medium | `avatar-stack-overlapping` | 汎用的に重なるアバタースタック |
-| low | `pill-rounded-full-everywhere` | すべてに適用された `rounded-full` |
-| low | `nav-equal-hamburger-desktop` | デスクトップ上のハンバーガーメニュー |
-
-#### コンテンツ(5 ルール)
-
-| 重大度 | ルール ID | 名前 |
-|---|---|---|
-| high | `lorem-ipsum-leak` | 出荷コード中の Lorem ipsum |
-| high | `emoji-in-ui` | UI 要素としての絵文字 |
-| high | `icon-emoji-stamp` | アイコンスタンプとしての絵文字 |
-| high | `testimonial-fake-five-stars` | ハードコードされた五つ星のお客様の声 |
-| medium | `fake-name-john-doe` | 汎用プレースホルダー名 |
-
-#### モーション(3 ルール)
-
-| 重大度 | ルール ID | 名前 |
-|---|---|---|
-| medium | `cta-arrow-rightward-bouncing` | CTA で跳ねる矢印 |
-| low | `timing-300ms-default` | デフォルトの 300ms トランジションタイミング |
-| low | `cubic-bezier-material-only` | どこでも Material デフォルトのイージング |
-
-#### A11y(6 ルール)
-
-| 重大度 | ルール ID | 名前 |
-|---|---|---|
-| high | `inline-svg-no-aria` | aria-label も aria-hidden もない SVG |
-| high | `img-no-alt` | alt 属性のない画像 |
-| high | `link-onclick-no-href` | onClick はあるが href のないアンカー |
-| medium | `button-no-type` | type 属性のないボタン |
-| medium | `heading-skip-h1-h3` | 飛び級の見出しレベル |
-| medium | `infinite-scroll-no-pagination` | キーボードフォールバックのない無限スクロール |
-
-#### 品質(6 ルール)
-
-| 重大度 | ルール ID | 名前 |
-|---|---|---|
-| high | `console-log-leak` | コンポーネントコード中の `console.log` |
-| medium | `inline-style-attribute` | インライン style 属性 |
-| medium | `any-type-leak` | TypeScript `any` 型 |
-| medium | `arbitrary-z-index-9999` | 雑な z-index 値 |
-| low | `shadcn-default-everywhere` | shadcn デフォルト token のブロックそのまま |
-| low | `todo-fixme-comment` | 出荷コード中の TODO や FIXME |
-
-#### ビジュアル(1 ルール)
-
-| 重大度 | ルール ID | 名前 |
-|---|---|---|
-| low | `blur-bg-only-decoration` | ガラス表面のない backdrop blur |
+171 のルールすべてをカテゴリ別、続いて重大度順に並べたカタログは、`data/anti-patterns.json` から[英語版 README](README.md#rules-by-category) に生成されます。ルール ID と名前はリンターが出力するとおりに載っています。ルールカバレッジ:A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2)。
 
 ### リンターの使用
 
@@ -850,9 +808,9 @@ ux-skill は決定論的な正規表現ベースのリンターを同梱しま�
 
 ```bash
 uxskill lint .
-# または
+# or
 python3 bin/ux-lint.py src/
-# または
+# or
 bash bin/ux-lint.sh src/
 ```
 
@@ -879,7 +837,7 @@ src/components/Hero.tsx:24  [high]   purple-to-blue-gradient
   evidence: bg-gradient-to-br from-purple-500 to-blue-500
   fix: replace with the recommended palette's primary gradient or remove gradient
 
-src/components/Pricing.tsx:12  [high] three-equal-card-grid
+src/components/Pricing.tsx:11  [high] three-equal-card-grid
   evidence: grid grid-cols-3 gap-6 (3 equal Card children)
   fix: feature one card; flank with two reduced-emphasis cards
 
@@ -931,13 +889,13 @@ BMW、BMW M、Bugatti、Ferrari、Lamborghini、Renault、SpaceX、Tesla
 
 ## MCP サーバー：非対称な一手
 
-ux-skill は **Model Context Protocol サーバー** を同梱します。`ux-mcp` を実行するとエンジンは長期実行の stdio プロセスになり、任意の MCP 対応ホスト、Claude Desktop、Cursor、Windsurf、汎用エージェント、から呼び出せます。14 のツール:`ux_recommend`、`ux_lint`、`ux_styles`、`ux_palettes`、`ux_type_pairs`、`ux_components`、`ux_industries`、`ux_motion_presets`、`ux_anti_patterns`、`ux_brands`、`ux_landing_patterns`、`ux_persist_save`、`ux_persist_load`、`ux_stats`。スラッシュコマンドが使うのと同じ Python ハンドラ、同じデータマニフェスト、同じ決定論的レコメンダー。
+ux-skill は **Model Context Protocol サーバー** を同梱します。`ux-mcp` を実行するとエンジンは常駐の stdio プロセスになり、任意の MCP 対応ホスト(Claude Desktop、Cursor、Windsurf、汎用エージェント)から呼び出せます。25 のツール:`ux_recommend`、`ux_system_detect`、`ux_lint`、`ux_styles`、`ux_palettes`、`ux_type_pairs`、`ux_components`、`ux_industries`、`ux_motion_presets`、`ux_anti_patterns`、`ux_brands`、`ux_landing_patterns`、`ux_persist_save`、`ux_persist_load`、`ux_stats`、`ux_image_extract`、`ux_synthesize`、`ux_decisions_query`、`ux_decisions_stats`、`ux_system_build`、`ux_system_import`、`ux_system_enhance`、`ux_system_extend`、`ux_system_export`、`ux_contracts_check`。スラッシュコマンドが使うのと同じ Python ハンドラー、同じデータマニフェスト、同じ決定論的レコメンダーです。
 
 **なぜこれが非対称な一手か:** トップ 8 の Claude UX スキル(ui-ux-pro-max-skill、open-design、taste-skill、huashu-design、stitch、nothing-design、hallmark、material-3)はどれも MCP サーバーを同梱していません。Claude Code のプラグインランタイムに閉じ込められています。ux-skill は MCP を話す任意のホストから到達可能で、Claude Code プラグインを聞いたこともないエージェントからも届きます。
 
 ```bash
-pip install 'uxskill[mcp]'             # mcp はオプトインの extra
-ux-mcp                                  # stdio JSON-RPC サーバーが起動
+pip install 'uxskill[mcp]'             # mcp is an opt-in extra
+ux-mcp                                  # stdio JSON-RPC server starts
 ```
 
 クライアントを `ux-mcp` バイナリに向けてください。完全なツールドキュメント、JSON 例、Claude Desktop、Cursor、Windsurf のクライアント別設定は [docs/mcp.html](docs/mcp.html) と `commands/ux-mcp.md` に。
@@ -950,7 +908,7 @@ ux-mcp                                  # stdio JSON-RPC サーバーが起動
 
 | IDE / ツール | 検出シグナル | インストールされるアーティファクト |
 |---|---|---|
-| Claude Code | `.claude/` または `CLAUDE.md` | `.claude-plugin/plugin.json` のプラグインマニフェスト + 全 25 コマンド + 全 5 サブエージェント |
+| Claude Code | `.claude/` または `CLAUDE.md` | `.claude-plugin/plugin.json` のプラグインマニフェスト + 全 18 コマンド(と 7 つのエイリアス)+ 全 5 サブエージェント |
 | Cursor | `.cursor/` または `.cursorrules` | エンジンを指す `.cursorrules` プロンプトヘッダ |
 | Windsurf | `.windsurf/` または `.windsurfrules` | 同じプロンプトヘッダの `.windsurfrules` |
 | GitHub Copilot | `.github/copilot-instructions.md` または `.vscode/` | `.github/copilot-instructions.md` |
@@ -982,8 +940,8 @@ Cursor で MENA ネオバンクのダッシュボードを作っています。�
 
 ```bash
 pip install uxskill
-uxskill init                                # Cursor を検出、.cursorrules を書き出し
-uxskill discover                            # 10 フィールドインテーク
+uxskill init                                # detects Cursor, writes .cursorrules
+uxskill discover                            # 10-field intake
 uxskill recommend \
   --project-type=dashboard \
   --industry=fintech-neobank \
@@ -1002,24 +960,24 @@ uxskill recommend \
 /plugin marketplace add Laith0003/ux-skill
 /plugin install ux@ux-skill
 /ux-discover
-> プロジェクトタイプ? landing
-> 業種? fintech-payments
-> トーン? 真剣、技術的、自信
-> 必須項目? dark-mode、AA、mobile-first
-> 禁止事項? purple-gradients、three-equal-cards
-> 参照ブランド? stripe
-> スタック? nextjs-15-app-router
-> 地域? global
-> 成功指標? サインアップコンバージョン
+> Project type? landing
+> Industry? fintech-payments
+> Tone? serious, technical, confident
+> Must have? dark-mode, AA, mobile-first
+> Forbidden? purple-gradients, three-equal-cards
+> Reference brands? stripe
+> Stack? nextjs-15-app-router
+> Region? global
+> Success metric? signup conversion
 
-/ux-recommend
-> [選定スタイル、パレット、タイプペア、モーションプリセット、コンポーネント、ブランド事例を返す]
+/ux-discover --recommend
+> [returns picked style, palette, type pair, motion presets, components, brand exemplars]
 
-/ux-design "Stripe のブランド仕様を事例に使ってランディングを生成"
-> [frontend-engineer がページを生成]
+/ux-design "generate the landing using the Stripe brand spec as exemplar"
+> [frontend-engineer generates the page]
 
 /ux-lint .
-> [パス、Stripe のブランド仕様が尊重された]
+> [passes, Stripe brand spec was respected]
 ```
 
 ### 3. CI で既存コードを AI スロップに対して監査
@@ -1049,16 +1007,16 @@ jobs:
 
 ```
 /ux-critique src/components/Hero.tsx
-> [3 つの勝ち、3 つの負け、1 つの戦略的一手、講評は正直]
+> [3 wins, 3 misses, 1 strategic move, the take is honest]
 
 /ux-lint src/
-> [15 件の高重大度 AI 指紋がフラグされる]
+> [15 high-severity AI fingerprints flagged]
 
 /ux-polish src/components/Hero.tsx
-> [LLM ドリブンの仕上げ + AI スロップ除去]
+> [LLM-driven cosmetic pass + AI-slop kill]
 
 /ux-fix
-> [所見をアトミックコミットとして適用、リンターを再実行]
+> [applies findings as atomic commits, re-runs the linter]
 ```
 
 3 つのコマンド、1 つのポリッシュされた画面、修正ごとにアトミックなコミット。
@@ -1066,10 +1024,10 @@ jobs:
 ### 5. Linear スタイルのコマンドパレットを設計
 
 ```
-/ux-component command-palette --brief="Linear スタイル、ダーク、等幅ショートカット、最近のアイテムを先頭"
-> [data/brands/linear.app.json から token + シグネチャムーブを読み込む]
-> [data/components.json から command-palette の解剖 + ステートを読み込む]
-> [明示的な Linear 仕様で frontend-engineer を派遣]
+/ux-design --component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
+> [reads data/brands/linear.app.json for tokens + signature moves]
+> [reads data/components.json for the command-palette anatomy + states]
+> [dispatches frontend-engineer with explicit Linear spec]
 ```
 
 生成されるコンポーネントは Linear の実際のカラー token、タイプスタック、モーション規約、ヘアライン密度を使用します、「汎用ダーク UI」ではなく。
@@ -1079,8 +1037,8 @@ jobs:
 5 人を 90 分。「雰囲気」ではなくゲームプランを持って退室してほしい。
 
 ```
-/ux-workshop "ロイヤルティウォレットのピボット" \
-  --participants="2 PM、1 デザイナー、1 エンジニアリードと、1 顧客担当" \
+/ux-workshop "loyalty wallet pivot" \
+  --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" \
   --minutes=90
 ```
 
@@ -1092,9 +1050,9 @@ jobs:
 
 ```
 /ux-case-study --format=html --slug=bashiti-loyalty
-> [.ux/last-frame.json、last-workshop.json、last-research.json、last-design.json、last-a11y.json、last-polish.json、last-recommendation.json、last-discovery.json を読む]
-> [(A)-(G) 番号付きセクション、ヘアライン区切り、バイリンガル対応レイアウトの Wfrah エディトリアルケーススタディを生成]
-> [case-studies/bashiti-loyalty.html を書き出す]
+> [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
+> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/bashiti-loyalty.html]
 ```
 
 ケーススタディは完成された公開可能なアーティファクト、草稿ではありません。純モノクロ、エディトリアルタイポ、あなたのポートフォリオに即出荷可能。
@@ -1105,7 +1063,7 @@ jobs:
 
 ```bash
 uxskill discover
-# 10 フィールドインテーク、.ux/last-discovery.json に保存
+# 10-field intake, saves to .ux/last-discovery.json
 
 cat .ux/last-discovery.json
 # {
@@ -1119,7 +1077,7 @@ JSON をチームに渡せます、Notion ドキュメントに貼れます、�
 
 ### 9. MASTER.md 永続化：リポジトリ内のデザイン決定
 
-`/ux-recommend` の後、選定したスタイル + パレット + タイプ + モーション + コンポーネント + ブランド事例 + ガードレールを、チームがレビュー、差分、バージョン管理できる人間可読の Markdown ファイルとして永続化します。
+`/ux-discover`(または `/ux-discover --recommend`)の後、選定したスタイル + パレット + タイプ + モーション + コンポーネント + ブランド事例 + ガードレールを、チームがレビュー、差分確認、バージョン管理できる読みやすい Markdown ファイルとして保存します。
 
 ```bash
 python3 -m engine.cli.main persist save --project-root .
@@ -1135,11 +1093,11 @@ python3 -m engine.cli.main persist save --project-root .
 
 | 次元 | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
-| スラッシュコマンド | **22** | 1 | 19 | 1 | 1 | 複数 | 1 | 1 | 1 |
+| スラッシュコマンド | **18** | 1 | 19 | 1 | 1 | 複数 | 1 | 1 | 1 |
 | コンポーネント | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | モーションプリセット | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ブランド仕様 | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| アンチパターンルール | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| アンチパターンルール | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI 安全な決定論的リンター | **はい** | いいえ | いいえ | いいえ | いいえ | いいえ | いいえ | いいえ | いいえ |
 | 対応 IDE | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery ゲート | **10 フィールド** | 暗黙 | 暗黙 | 暗黙 | 暗黙 | 暗黙 | 暗黙 | 暗黙 | 暗黙 |
@@ -1159,24 +1117,21 @@ python3 -m engine.cli.main persist save --project-root .
 
 ## ロードマップ
 
-### v2.1：リンター完備(2026 Q3)
+今後(リリース時期は未定):
 
-- **+17 の延期されたアンチパターンルール** で合計 52。ターゲット:dark-on-dark のホバーステート、色のみによるステートエンコーディング、冗長な z-index エスカレーション、JS 中のハードコードブレークポイント、disabled ステートの代わりの opacity など。
-- **機械的に修正可能な所見の安全な書き換えに対する `uxskill lint --fix`**(`button-no-type`、`img-no-alt` 空文字列、`console-log-leak` 除去)。
-- **インラインでリンターの所見を表示する VS Code 拡張機能**(CI を回す必要なし)。
+- **Figma スタイル**:影のエフェクトスタイル、グリッドスタイル、フィールド変数に結び付いたテキストスタイルを、ライブのファイルに書き込みます。
+- **コンポーネントのマッピング**:Figma のコンポーネントとそのバリアントを、コードのコンポーネントとその props に対応付け、ハンドオフを通じて保持します。
+- **ライブサイトのインポーター**:公開サイトが実際にレンダリングしているシステムを、ファイルのインポーターと並んで読み取ります。
+- **構築済みシステムのドキュメントページ**:トークン、ロール、コントラクトを人が読める形で見せます。
 
-### v2.2：コンポーネントマニフェスト拡張(2026 Q4)
+ほかに検討中のもの:
 
-- **+50 コンポーネント** で合計 198。新規:非同期フィルタ付き combobox、最近のアイテムのヒューリスティック付き command-palette、条件付きフォームステップ、payment-element バリアント、RTL 認識デートピッカー、MENA 専用電話入力、ヒジュラ暦オーバーレイ付きカレンダーグリッド。
-- **6 スタックでのコンポーネント別コード生成**(Next.js + React、Vue 3 + Nuxt、SvelteKit、Astro、Blade + Alpine、純 HTML/CSS)。
-- **コンポーネントプレイグラウンド** が uxskill.laithjunaidy.com/playground に、推奨エンジンを試し、ライブコンポーネントプレビューを確認。
-
-### v3：マーケットプレイス + ロックイン(2027)
-
-- **ブランド仕様マーケットプレイス**：コミュニティのブランド仕様を公開、発見。モデレーションを賄うための有料公開。
-- **カスタムアンチパターンルール**：プロジェクトが `data/anti-patterns.local.json` で独自の正規表現ルールを定義(v2 で出荷済み;v3 で発見 + 共有を追加)。
-- **`uxskill plan`**：ブリーフから単一画面ではなくフルマルチページサイトの計画。
-- **Figma プラグインパリティ**：同じ推奨エンジンを Figma に表面化。
+- **`uxskill lint --fix` による安全な書き換え**:機械的に直せる指摘が対象(button-no-type、img-no-alt の空文字列、console-log-leak の削除)。
+- lint の指摘をインラインで表示する **VS Code 拡張**。
+- 6 つのスタックでの**コンポーネント単位のコード出力**(Next.js + React、Vue 3 + Nuxt、SvelteKit、Astro、Blade + Alpine、素の HTML/CSS)。
+- **ブランド仕様のマーケットプレイス**:コミュニティのブランド仕様を公開し、見つけられる場所。
+- **独自のアンチパターンルール**:プロジェクトが `data/anti-patterns.local.json` で定義するルールの発見と共有。
+- **`uxskill plan`**:ひとつの画面だけでなく、ブリーフから複数ページのサイトを計画。
 
 ---
 
@@ -1239,6 +1194,6 @@ MIT。使う、フォークする、その上に構築する。AI スロップ�
 
 ---
 
-**ux-skill** · **v3.1.0-stable** · Claude Code、Cursor、Windsurf、その他すべての AI コーディングツールが、AI 生成と読まれないフロントエンドを出力するために構築。
+**ux-skill** · **v4.0.0** · Claude Code、Cursor、Windsurf、その他すべての AI コーディングツールが、AI 生成と読まれないフロントエンドを出力するために構築。
 
 > [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) でリポジトリにスター · `pip install uxskill` または `npx uxskill init` でインストール · [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) で比較をブラウズ

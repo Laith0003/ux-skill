@@ -2,24 +2,77 @@
 
 # ux-skill: bộ máy trí tuệ thiết kế cho Claude Code, Cursor và mọi công cụ lập trình AI khác
 
-> **v3.1.0 stable, THE BRAIN.** Plugin UX mạnh nhất cho lập trình AI. Một lõi suy luận Python với 12 manifest JSON truy vấn được (84 phong cách, 176 bảng màu, 70 cặp typography, 148 component, 184 ngành nghề, 35 loại biểu đồ, 57 preset chuyển động, 112 quy luật UX, 152 quy tắc anti-pattern, 25 tech stack, 160 spec thương hiệu), 25 slash command, 5 sub-agent và một bộ linter chống AI-slop xác định. Liên-IDE: triển khai vào Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer và Roo Cline.
+**Một bộ máy trí tuệ thiết kế giúp UI do AI tạo ra có bản sắc thay vì rập khuôn.** Gắn nó vào bất kỳ công cụ nào trong 17 công cụ lập trình AI và sản phẩm của bạn thôi trông như do AI làm. Miễn phí, MIT, ngoại tuyến, không LLM.
 
-> **Tên thương hiệu là `ux-skill`.** Tên gói PyPI / npm vẫn là `uxskill`. Kho GitHub nằm tại [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
+```bash
+pip install uxskill
+```
 
-**Trang chủ:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **So sánh với mọi plugin UX cho Claude:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+**[Gắn sao cho ux-skill trên GitHub](https://github.com/Laith0003/ux-skill)** nếu nó hữu ích: đó là cách đơn giản nhất để giúp dự án. Mới đến? Bắt đầu với [tour 60 giây](#cài-đặt-nhanh) hoặc xem trực tiếp tại [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com).
 
-[![Version](https://img.shields.io/badge/version-3.1.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+![Trước: hero ảnh stock rập khuôn, gradient tím nhạt, không có bản sắc thương hiệu. Sau: ảnh công trường thật dưới lớp phủ tối, tiêu đề kiểu biên tập với điểm nhấn màu hổ phách, và form yêu cầu báo giá đặt ngay trong hero. Cùng một prompt, kết quả khác khi ux-skill cung cấp các ràng buộc.](https://raw.githubusercontent.com/Laith0003/ux-skill/main/docs/blog/skiphire-redesign.png)
+
+*Trước: SEO slop rập khuôn với ảnh stock. Sau: hero ảnh công trường thật dưới lớp phủ tối, tiêu đề kiểu biên tập với điểm nhấn màu hổ phách, form báo giá ngay trong hero. Cùng công cụ lập trình AI, cùng prompt, kết quả khác khi ux-skill cung cấp các ràng buộc.*
+
+> **v4.0, FOUNDATIONS: một lệnh dựng nên hệ thống thiết kế hoàn chỉnh, được kiểm tra theo WCAG, tích hợp sẵn tiếng Ả Rập và chiều viết phải sang trái.** Plugin UX mạnh nhất cho lập trình bằng AI. Một lõi suy luận Python với bộ tổng hợp 7 trục xác định, 12 manifest JSON truy vấn được (84 phong cách, 176 bảng màu, 70 cặp chữ, 148 component, 184 ngành, 35 loại biểu đồ, 57 preset chuyển động, 112 định luật UX, 171 quy tắc anti-pattern, 25 tech stack, 160 đặc tả thương hiệu), 18 slash command, 5 sub-agent, 25 tool MCP và một linter chống AI-slop xác định. Đa IDE: cài vào Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer và Roo Cline.
+
+> **Tên thương hiệu là `ux-skill`.** Tên gói trên PyPI / npm vẫn là `uxskill`. Repo GitHub nằm tại [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
+
+**Tác giả:** [Laith Aljunaidy](https://laithjunaidy.com), nhà thiết kế và CTO tại Amman · **Trang:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **So sánh với mọi plugin UX cho Claude:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+
+[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#trình-cài-đặt-17-ide)
+[![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### Mới trong 4.0: các nền tảng
+
+Một màu thương hiệu vào, một hệ thống thiết kế ra, với độ tương phản đã được kiểm tra trước khi đến tay bạn.
+
+```bash
+pip install --upgrade uxskill
+uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
+```
+
+Python 3.10 trở lên. Với máy chủ MCP, `pip install --upgrade 'uxskill[mcp]'`. Với pipx, `pipx install uxskill` (cài đè lên bản 3.x đã có, `pipx upgrade uxskill`). Với npm, `npx uxskill@latest`. Đang dùng 3.x? [Hướng dẫn chuyển đổi](docs/migrating-to-4.md) ánh xạ mọi token 3.x sang vai trò của nó trong 4.0.
+
+**Đang xây sản phẩm hay landing page?** Bạn nhận được `tokens.css` để liên kết từ trang, `fonts.css` với font dự phòng khớp số đo cho các kiểu chữ đã chọn, `fonts-self-host.css` tải kiểu chữ từ chính tệp của bạn, `tokens.json` cho công cụ, hình ảnh trang trí thương hiệu trong `art/`, và `system-report.md`, nói bằng lời đơn giản những gì đã được dựng, vì sao, và nên bắt đầu từ bố cục trang nào. Tạo kiểu bằng các vai trò (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`), và bật tắt chế độ tối, tương phản cao, khoảng cách gọn, phải sang trái hay giảm chuyển động bằng một thuộc tính trên `<html>`. Tải kiểu chữ bằng liên kết Google Fonts mà báo cáo đưa ra, hoặc bằng `fonts-self-host.css` cùng thư mục `fonts/`, và liên kết `fonts.css` với cách nào cũng được, trước `tokens.css`; đừng sửa tệp nào trong hai tệp đó. Với `--brief`, diện mạo đi theo ngành và giọng điệu khi brief nêu chúng, còn các trường có cấu trúc (độ tuổi, ngôn ngữ, chế độ mặc định, bối cảnh đọc) quyết định cỡ chữ, vùng chạm, hệ chữ và chế độ nào mở ra trước; discovery không hỏi ngành, nên `/ux-system create` sẽ hỏi. Trong Claude Code, `/ux-system create` kiểm tra phiên bản đã cài, chạy build và giải thích báo cáo.
+
+**Đang thiết kế một hệ thống thiết kế?** Chín nền tảng (màu, chữ, khoảng cách, bố cục, bo góc, viền, độ nổi, chuyển động, hình ảnh), mỗi nền tảng thay đổi liên tục theo bảy trục, với primitive và vai trò ngữ nghĩa, theo định dạng W3C design tokens (DTCG 2025.10) kèm giá trị của mọi chế độ. Cùng đầu vào, cùng từng byte. Qua MCP, `ux_system_build` trả về báo cáo, kết quả kiểm tra và kích thước từng tệp, và ghi đúng các tệp như lệnh khi được truyền `out`.
+
+- **Cổng WCAG.** Mọi cặp màu cho chữ, điều khiển và focus đều được đo ở chế độ sáng và tối, ở tương phản chuẩn và cao: WCAG 1.4.3 (chữ 4.5:1) và 1.4.11 (phi văn bản 3:1) ở tương phản chuẩn, WCAG 1.4.6 (chữ 7:1) ở tương phản cao, cộng thêm ngưỡng sàn 4.5:1 ở tương phản cao cho phần lớn thành phần phi văn bản do chúng tôi tự đặt, vì WCAG không quy định mức nâng cao cho phi văn bản. Hệ thống không đạt sẽ không được ghi ra; thông báo cho biết cần sửa gì.
+- **An toàn mặc định.** Không bao giờ ghi đè một tệp đã khác đi. `--force` chỉ thay tệp khi bạn yêu cầu.
+- **Tiếng Ả Rập.** Dưới `dir="rtl"` chữ chuyển sang phông Ả Rập với cỡ chữ và chiều cao dòng riêng; khoảng cách dùng thuộc tính logic và chuyển động được lật gương. `--latin-only` bỏ phần này.
+
+**Một hệ thống bạn đã có.** `/ux-system enhance --from` đọc nó theo đúng tên gọi của nó (token DTCG, thuộc tính tùy biến CSS, theme Tailwind, tệp quy tắc markdown hoặc bản xuất biến Figma), kiểm tra qua cùng cổng đó và đo xem code của bạn thực sự dùng nó ra sao; không có gì bị viết lại. `/ux-system extend --from` thêm nền tảng, vai trò hay hợp đồng mà không đổi token nào đang có, trong một tệp mở rộng đặt cạnh, và `uxskill system export` ghi nó ra thành tokens.css, theme Tailwind 4 hoặc biến Figma. Bản 4.2 bổ sung lớp tin cậy (lint mỗi lần ghi, một bước rà soát hoàn thiện) và đợt ra mắt. Xem [changelog](CHANGELOG.md).
+
+**Component và section.** 23 hợp đồng component nêu rõ mỗi phần của một điều khiển gắn với token nào ở từng trạng thái và mỗi trạng thái chuyển động ra sao: đổi trạng thái thì chuyển tiếp theo `motion.state`, nhấn thì co giãn theo `motion.press.scale` (và đứng yên khi giảm chuyển động), còn tab, menu và segmented control trượt một chỉ báo duy nhất. 14 hợp đồng section (hero, bảng giá, FAQ, footer và các phần còn lại) nêu nhiệm vụ của từng section, các component mà slot của nó nhận, bằng chứng nó cần và cách nó xếp chồng trên điện thoại. Các trang dựng từ chúng dùng ảnh chụp; mảnh giao diện chỉ là hình ảnh bổ sung, không bao giờ thay thế.
+
+**Một linter đọc cả trang.** 171 quy tắc, nhiều quy tắc có thêm bước kiểm tra trên CSS và markup đã phân tích, đọc chính hệ thống của trang: chuyển động được canh thời gian theo đường cong của nó, chiều cao dòng của tiêu đề display được giữ ở ngưỡng sàn của bộ máy, và một điều khiển bị ẩn phải rời khỏi thứ tự tab. `uxskill lint --render` mở từng trang trong Chromium headless ở bề rộng desktop và điện thoại rồi thao tác thật: vòng focus không hiện hoặc bị cắt, hover và nhấn phản hồi chậm, focus bị mất sau Escape, và cú nhấn vẫn chuyển động khi đã giảm chuyển động.
+
+**Ít lệnh hơn.** 25 slash command còn 18. `/ux-discover` nhận `--frame` và `--recommend`, `/ux-design` nhận `--component`, `--dashboard` và `--from-image`, `/ux-polish` lặp lint, fix, re-lint cho đến khi điểm đạt 90 hoặc qua ba vòng, và `/ux-init` nhận `--stats`. Bảy tên cũ vẫn chạy như alias và sẽ bị bỏ ở 4.1; xem [các alias](#alias-bị-bỏ-ở-41).
+
+**Playbook theo bề mặt.** Quy tắc cho landing, dashboard và component nằm trong `references/surfaces/`, mỗi loại một playbook. `/ux-design` nạp đúng một playbook, chọn theo chế độ của nó, nên build dashboard không bao giờ đọc quy tắc hero.
+
+Test: **9764 đạt**. Ngoại tuyến. Xác định. Không bao giờ gọi LLM.
+
+### Mới trong v3.1: đúng thương hiệu, responsive, sống động
+
+- **Độ trung thành thương hiệu được cưỡng chế, không phải trông chờ.** Màu chủ đạo được đọc từ điểm ảnh của LOGO (không phải từ CSS được tô nhiều nhất); font mặc định bị loại để theo kiểu chữ của logo. Thương hiệu trích xuất đi theo `recommend` -> `synthesize`, và một **ngưỡng sàn cứng** trong `evaluate` đánh TRƯỢT mọi đầu ra làm mất màu hoặc logo thương hiệu hay không có hình ảnh thật. Tương thích hai chiều với quy ước mở `brand.md` (render + nhập).
+- **Mobile-first, có cổng kiểm tra.** Các nền tảng tay nghề mới (`responsive.md`, `component-behaviors.md`) cùng một cổng nhận biết xuống dòng, đánh trượt khi có cuộn ngang, nhãn nav, wordmark hay nút bị xuống dòng, hoặc header sticky quá cao.
+- **Lớp wow.** Bộ máy tạo ra 2-3 khoảnh khắc đặc trưng phối hợp trên mỗi trang; học thuyết "wow chỉ có thể đến từ người dùng" bị đảo ngược.
+- **Linter sắc hơn** (152 quy tắc): phát hiện hình ảnh bắt buộc và phần tử chỉ có icon, quy tắc token placeholder và `100vw`; picsum có seed được giữ, loại ngẫu nhiên bị gỡ.
+
+Ghi chú đầy đủ trong [CHANGELOG.md](CHANGELOG.md).
 
 ### Có gì mới trong v3
 
@@ -28,7 +81,7 @@
 - **Ba chế độ tự động phân phối**: `strict_brand` (100% một thương hiệu), `brand_anchor` (70% một thương hiệu + 30% thích ứng theo trục từ thương hiệu anh em), `pure_synthesis` (không thương hiệu nào được nêu, chưng cất từ 8 ví dụ khớp trục).
 - **Sổ cái quyết định xếp hạng lại recommender.** `.ux/decisions.jsonl` xếp hạng lại ứng viên theo chiến thắng quá khứ trong cùng bucket `(industry, ui_type)`. An toàn cold-start. Chỉ đếm các quyết định có `lint_score >= 80` + `user_accepted = true`.
 - **Ma trận tương tác trục**: giải quyết xung đột rõ ràng giữa các trục cạnh tranh (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius). Không còn quy tắc tùy biến im lặng.
-- **Vòng lặp tự động `/ux-evolve`**: lint → polish → re-lint cho đến khi điểm ≥ 90, chững lại, hoặc 5 vòng. Quality gate ở 65.
+- **Vòng lặp tự động `/ux-evolve`** (ở 4.0, là vòng lặp mặc định của `/ux-polish`): lint → polish → re-lint cho đến khi điểm ≥ 90, chững lại, hoặc 3 vòng ở 4.0 (5 ở v3). Quality gate ở 65.
 - **3 công cụ MCP mới** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
 - **Bảng điều khiển stats cục bộ**: `uxskill stats --html` ghi `.ux/stats.html` cho biết cài đặt **của bạn** đã học được gì. Không telemetry, không tổng hợp toàn cục.
 - **223 test đậu.** Offline. Tất định. Không bao giờ gọi LLM.
@@ -45,7 +98,7 @@ Chi tiết đầy đủ trong [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-b
 
 ux-skill là một **bộ máy trí tuệ thiết kế** dành cho các công cụ lập trình AI. Nó chạy như một gói Python (`pip install uxskill`), như một plugin của Claude Code, và như một trình cài đặt đa-IDE cho 17 môi trường. Bộ máy nhận vào một brief dự án (ngành nghề, đối tượng, tone, yêu-cầu-bắt-buộc, điều-cấm-kỵ, stack, khu vực) và trả về một hệ thống thiết kế được khuyến nghị đầy đủ: phong cách, bảng màu, cặp typography, preset chuyển động, component, các thương hiệu hình mẫu để nghiên cứu và những rào chắn anti-pattern phải tuân thủ. Khuyến nghị mang tính xác định, cùng một đầu vào luôn tạo ra cùng một đầu ra.
 
-Plugin nằm giữa bạn và công cụ lập trình AI. Khi bạn yêu cầu Claude Code, Cursor hay bất kỳ trợ lý AI nào "xây một landing page fintech", trợ lý thường ứng tác, và kết quả lộ ra là do AI tạo ra trong vòng năm giây (gradient từ tím sang xanh, ba thẻ bằng nhau, Inter ở kích thước display, "John Doe" trong testimonial, transition mặc định 300ms, hero căn giữa, mũi tên CTA nảy lên xuống). ux-skill thay thế việc ứng tác bằng **những ràng buộc có cấu trúc**: bạn chạy `/ux-discover` để nắm bắt brief, `/ux-recommend` để chọn hệ thống, `/ux-design` để sinh mã, và `/ux-lint` để xác minh code vượt qua 152 quy tắc chống AI-slop xác định trước khi commit.
+Plugin nằm giữa bạn và công cụ lập trình AI. Khi bạn yêu cầu Claude Code, Cursor hay bất kỳ trợ lý AI nào "xây một landing page fintech", trợ lý thường ứng tác, và kết quả lộ ra là do AI tạo ra trong vòng năm giây (gradient từ tím sang xanh, ba thẻ bằng nhau, Inter ở kích thước display, "John Doe" trong testimonial, transition mặc định 300ms, hero căn giữa, mũi tên CTA nảy lên xuống). ux-skill thay thế việc ứng tác bằng **những ràng buộc có cấu trúc**: bạn chạy `/ux-discover` để nắm bắt brief và chọn hệ thống, `/ux-design` để sinh mã, và `/ux-lint` để xác minh code vượt qua 171 quy tắc chống AI-slop xác định trước khi commit.
 
 README này là tài liệu tham chiếu chính thức. Mọi command, mọi sub-agent, mọi data manifest, mọi đường cài đặt, mọi spec thương hiệu, mọi danh mục anti-pattern, tất cả đều được tài liệu hóa ở đây. Nếu bạn đang tìm một plugin thiết kế cho Claude Code hoặc so sánh các công cụ thiết kế AI cho Cursor, Windsurf hay Codex, hãy đọc tài liệu này từ đầu đến cuối song song với [compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -57,10 +110,10 @@ README này là tài liệu tham chiếu chính thức. Mọi command, mọi sub
 2. [Cài đặt nhanh](#cài-đặt-nhanh)
 3. [Những con số, so sánh trực tiếp với 8 skill UX hàng đầu cho Claude](#những-con-số-so-sánh-trực-tiếp-với-8-skill-ux-hàng-đầu-cho-claude)
 4. [Kiến trúc, các mảnh ghép khớp với nhau thế nào](#kiến-trúc-các-mảnh-ghép-khớp-với-nhau-thế-nào)
-5. [25 slash command, tham chiếu chi tiết](#25-slash-command-tham-chiếu-chi-tiết)
+5. [18 slash command, tham chiếu chi tiết](#18-slash-command-tham-chiếu-chi-tiết)
 6. [5 sub-agent](#5-sub-agent)
-7. [12 data manifest](#12-data-manifest)
-8. [152 quy tắc chống AI-slop, bộ linter](#152-quy-tắc-chống-ai-slop-bộ-linter)
+7. [11 data manifest](#11-data-manifest)
+8. [171 quy tắc chống AI-slop, bộ linter](#171-quy-tắc-chống-ai-slop-bộ-linter)
 9. [160 spec DESIGN.md thương hiệu, theo danh mục](#160-spec-designmd-thương-hiệu-theo-danh-mục)
 10. [Máy chủ MCP, nước cờ bất đối xứng](#máy-chủ-mcp-nước-cờ-bất-đối-xứng)
 11. [Trình cài đặt 17 IDE](#trình-cài-đặt-17-ide)
@@ -80,7 +133,7 @@ Compiler là **synthesizer tất định 7 trục**, warmth, contrast, density, 
 
 Có ba chế độ tự động phân phối: `strict_brand` (`reference_brands=[stripe] strict=True` → 100% token Stripe, đường nhanh nhất); `brand_anchor` (`reference_brands=[stripe]` → 70% Stripe + 30% thích ứng theo trục từ 4 thương hiệu anh em); và `pure_synthesis` (không thương hiệu nào được nêu → không gian vô hạn, chưng cất 8 ví dụ khớp trục thành ngôn ngữ thiết kế mới). Các trục cạnh tranh được giải quyết bằng **ma trận tương tác trục** đã tài liệu hóa, dense + corporate biên dịch thành 4px (density thắng, trường phái Bloomberg), airy + corporate thành 12px (formality thắng, sang trọng), soft + playful thành 18px radius, sharp + corporate thành 2px. Không quy tắc tùy biến im lặng trong triển khai.
 
-**Sổ cái quyết định** (`.ux/decisions.jsonl`, schema `_v: 1` khóa) đóng vòng phản hồi. Recommender giờ xếp hạng lại ứng viên theo chiến thắng quá khứ trong cùng bucket `(industry, ui_type)`. An toàn cold-start, bỏ qua khi dưới 3 priors. Chỉ đếm các quyết định có `lint_score >= 80` VÀ `user_accepted = true`. Thêm vào đó `/ux-evolve` chạy lint → polish → re-lint cho đến khi điểm ≥ 90, chững lại, hoặc 5 vòng, với quality gate ở 65 mà dưới đó output bị từ chối nếu không có `--force`. Kết quả: mỗi cài đặt thông minh hơn trên corpus của chính mình, mỗi lần chạy tái lập được giữa các máy, và engine vẫn hoàn toàn offline.
+**Sổ cái quyết định** (`.ux/decisions.jsonl`, schema `_v: 1` khóa) đóng vòng phản hồi. Recommender giờ xếp hạng lại ứng viên theo chiến thắng quá khứ trong cùng bucket `(industry, ui_type)`. An toàn khi khởi động nguội: bỏ qua bước xếp hạng lại khi có dưới 3 quyết định trước đó. Chỉ đếm các quyết định có `lint_score >= 80` VÀ `user_accepted = true`. Thêm vào đó `/ux-polish` chạy lint → polish → re-lint cho đến khi điểm ≥ 90, chững lại, hoặc 3 vòng, với quality gate ở 65 mà dưới đó output bị từ chối nếu không có `--force`. Kết quả: mỗi cài đặt thông minh hơn trên corpus của chính mình, mỗi lần chạy tái lập được giữa các máy, và engine vẫn hoàn toàn offline.
 
 ---
 
@@ -97,7 +150,7 @@ Nếu bạn làm việc trong Claude Code, cài qua chợ plugin:
 /plugin install ux@ux-skill
 ```
 
-Điều đó kết nối toàn bộ 25 slash command và 5 sub-agent vào phiên Claude Code của bạn. Sau khi cài, chạy `/ux-init` để thiết lập thư mục state `.ux/` cho dự án và xác minh rằng bộ máy Python có thể truy cập được.
+Điều đó kết nối toàn bộ 18 slash command (cộng 7 tên cũ được giữ làm alias đến 4.1) và 5 sub-agent vào phiên Claude Code của bạn. Sau khi cài, chạy `/ux-init` để thiết lập thư mục state `.ux/` cho dự án và xác minh rằng bộ máy Python có thể truy cập được.
 
 ### Đường 2: pip (đa năng)
 
@@ -105,9 +158,9 @@ Nếu bạn làm việc ngoài Claude Code (Cursor, Windsurf, CLI, CI), cài gó
 
 ```bash
 pip install uxskill
-uxskill init                       # tự phát hiện IDE, cài đúng artifact
-uxskill stats                      # in ra số đếm manifest để xác minh cài đặt
-uxskill lint .                     # chạy linter trên thư mục hiện tại
+uxskill init                       # auto-detects your IDE, installs the right artifact
+uxskill stats                      # print manifest counts to verify install
+uxskill lint .                     # run the linter against the current directory
 ```
 
 Gói cung cấp cả `ux` và `uxskill` làm entry point CLI, chúng là cùng một binary.
@@ -117,7 +170,7 @@ Gói cung cấp cả `ux` và `uxskill` làm entry point CLI, chúng là cùng m
 Nếu bạn không muốn quản lý Python trực tiếp, wrapper npx tự bootstrap mọi thứ qua `pipx`:
 
 ```bash
-npx uxskill init                  # tải pipx + uxskill ngay lần chạy đầu
+npx uxskill init                  # downloads pipx + uxskill on first run
 npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-app-router
 ```
 
@@ -126,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "3.1.0-stable",
+#   "version": "4.0.0",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -137,13 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 145,
+#     "anti-patterns": 171,
+#     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-Nếu bất kỳ số đếm nào trả về 0, file JSON đang thiếu, mở một issue tại [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
+Mười hai số đếm cộng lại thành 1.262 mục. Nếu bất kỳ số đếm nào trả về 0, file JSON đang thiếu: mở một issue tại [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
 
 ---
 
@@ -161,7 +215,7 @@ Số sao được xác minh lần cuối qua `gh api` vào **2026-05-28**. ux-sk
 | dominikmartn/nothing-design-skill | **2.391** | Skill thẩm mỹ đơn nhất | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2.164** | Skill thiết kế anti-slop | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | Component MD3 + audit | 1 | - | (chỉ MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Bộ máy Python + 12 manifest + 25 command + 5 sub-agent + linter CI** | **22** | **152 quy tắc regex** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Bộ máy Python + 12 manifest + 18 command + 5 sub-agent + linter CI** | **18** | **171 quy tắc xác định** | **160** | **148** | **57** | **17** |
 
 ### Chỗ chúng tôi thua
 
@@ -173,10 +227,10 @@ Số sao được xác minh lần cuối qua `gh api` vào **2026-05-28**. ux-sk
 
 - **Thư viện component:** 148 component được tài liệu hóa với anatomy, state, token sử dụng, và spec chuyển động. Không có cái nào trong 8 plugin kia ship được manifest component.
 - **Preset chuyển động:** 57 entry sẵn sàng theo stack (Framer Motion, GSAP, CSS) với fallback reduced-motion. Không có ai trong số còn lại ship manifest chuyển động.
-- **Linter anti-pattern:** 152 quy tắc regex xác định, chạy trong CI, exit khác 0 ở mức Critical/High. Không có ai trong số còn lại ship một linter xác định.
-- **Spec thương hiệu:** 160 spec DESIGN.md thật (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, và 146 thương hiệu khác). Không có ai trong số còn lại ship một thư viện thương hiệu.
+- **Linter anti-pattern:** 171 quy tắc xác định, chạy trong CI, exit khác 0 ở mức Critical/High. Không có ai trong số còn lại ship một linter xác định.
+- **Spec thương hiệu:** 160 spec DESIGN.md thật (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, và 96 thương hiệu khác). Không có ai trong số còn lại ship một thư viện thương hiệu.
 - **17 IDE được hỗ trợ:** cùng một bộ máy, keo dán khác nhau cho mỗi IDE.
-- **25 slash command:** discovery, generation, audit, lint, polish, vòng lặp fix, case study, workshop, copy, motion, a11y, dashboard, conductor, tích hợp đầy đủ.
+- **18 slash command:** discovery, generation (trang, component, dashboard, từ một hình ảnh), audit, lint, vòng lặp polish, vòng lặp fix, case study, workshop, copy, motion, a11y, conductor, tích hợp đầy đủ.
 
 Bảng so sánh đầy đủ cạnh nhau tại [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -185,149 +239,139 @@ Bảng so sánh đầy đủ cạnh nhau tại [uxskill.laithjunaidy.com/compare
 ## Kiến trúc: các mảnh ghép khớp với nhau thế nào
 
 ```
-ux-skill (tên gói: uxskill)
+ux-skill (package name: uxskill)
 │
-├── data/                              Bộ não, các manifest JSON truy vấn được
-│   ├── styles.json                    84 phong cách thiết kế + when/skip + token
-│   ├── palettes.json                  176 bảng màu (sáng/tối, đã xác minh contrast)
-│   ├── type-pairs.json                70 bộ ba display × body × mono
-│   ├── components.json                148 component (anatomy, state, motion)
-│   ├── industries.json                184 quy tắc ngành nghề + tín hiệu đối tượng
-│   ├── chart-types.json               35 loại biểu đồ (when/skip, encoding)
-│   ├── tech-stacks.json               25 stack (Next, Astro, SvelteKit, Blade...)
-│   ├── ux-guidelines.json             112 quy luật UX có tên (Hick, Fitts, Miller...)
-│   ├── motion-presets.json            57 preset chuyển động (entry, exit, hover...)
-│   ├── anti-patterns.json             152 quy tắc regex (nguồn linter CI-safe)
-│   └── brands/*.json                  160 spec DESIGN thương hiệu + _index.json
+├── data/                              The brain, queryable JSON manifests
+│   ├── styles.json                    84 design styles + when/skip + tokens
+│   ├── palettes.json                  176 palettes (light/dark, contrast verified)
+│   ├── type-pairs.json                70 display × body × mono triplets
+│   ├── components.json                148 components (anatomy, states, motion)
+│   ├── industries.json                184 industry rules + audience signals
+│   ├── chart-types.json               35 chart types (when/skip, encoding)
+│   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
+│   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
+│   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
+│   ├── anti-patterns.json             171 rules (CI-safe linter source)
+│   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
-├── engine/                            Python, phần suy luận
-│   ├── synthesizer/                   v3, compiler tất định 7 trục
-│   ├── decisions/                     v3, sổ cái .ux/decisions.jsonl + xếp hạng lại recommender
-│   ├── recommender/                   bộ máy merge 5 tìm kiếm song song
-│   ├── linter/                        bộ quét anti-slop xác định
-│   ├── discovery/                     giao thức ép buộc 10 trường
-│   ├── generator/                     bộ phát token + manifest
-│   ├── installer/                     trình cài đặt đa 17 IDE
-│   └── cli/                           entry point `ux` / `uxskill`
+├── engine/                            Python, the reasoning
+│   ├── synthesizer/                   v3-7-axis deterministic compiler
+│   ├── decisions/                     v3, .ux/decisions.jsonl ledger + recommender re-rank
+│   ├── recommender/                   5-parallel-search merge engine (re-ranked by decisions)
+│   ├── linter/                        Deterministic anti-slop scanner
+│   ├── discovery/                     10-field forcing protocol
+│   ├── generator/                     Token + manifest emitter
+│   ├── installer/                     17-IDE multi-installer
+│   └── cli/                           `ux` / `uxskill` entry point
 │
-├── commands/                          25 slash command Claude Code (.md)
-│   ├── ux-init.md                     khởi động
-│   ├── ux-stats.md                    chụp nhanh kiểm kê
-│   ├── ux-discover.md                 thu thập 10 trường (cổng)
-│   ├── ux-recommend.md                CHỦ LỰC, tìm kiếm song song 5 luồng
-│   ├── ux-lint.md                     linter xác định
-│   ├── ux-design.md                   sinh code frontend
-│   ├── ux-component.md                sinh một component
-│   ├── ux-system.md                   sinh hệ thống thiết kế đầy đủ
-│   ├── ux-dashboard.md                sinh bề mặt dashboard
-│   ├── ux-motion.md                   xử lý chuyển động + audit
-│   ├── ux-audit.md                    audit thiết kế 6 lăng kính
-│   ├── ux-a11y.md                     audit WCAG 2.1 AA
-│   ├── ux-critique.md                 phê bình thẩm mỹ (3 điểm thắng, 3 điểm trượt, 1 nước cờ)
-│   ├── ux-copy.md                     đánh giá + viết lại microcopy
-│   ├── ux-fix.md                      áp dụng phát hiện thành các commit nguyên tử
-│   ├── ux-polish.md                   pass mỹ thuật + diệt AI-slop
-│   ├── ux-frame.md                    khối framing 4 trường
-│   ├── ux-research.md                 lên kế hoạch + tổng hợp nghiên cứu
-│   ├── ux-workshop.md                 workshop design thinking 5 giai đoạn
-│   ├── ux-case-study.md               case study có thể xuất bản phong cách Wfrah-editorial
-│   ├── ux-next.md                     nhạc trưởng workflow (chỉ đọc)
-│   └── ux-expert.md                   móc nối tư vấn
+├── commands/                          18 Claude Code slash commands (.md) + 7 aliases
+│   ├── ux-init.md                     bootstrap + inventory snapshot (--stats)
+│   ├── ux-discover.md                 10-field intake (gate), --frame, --recommend
+│   ├── ux-lint.md                     deterministic linter
+│   ├── ux-design.md                   generate a page, --component, --dashboard, --from-image
+│   ├── ux-system.md                   generate full design system
+│   ├── ux-motion.md                   motion treatment + audit
+│   ├── ux-audit.md                    6-lens design audit
+│   ├── ux-a11y.md                     WCAG 2.1 AA audit
+│   ├── ux-critique.md                 taste critique (3 wins, 3 misses, 1 move)
+│   ├── ux-copy.md                     microcopy review + rewrite
+│   ├── ux-fix.md                      apply findings as atomic commits
+│   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
+│   ├── ux-research.md                 research planning + synthesis
+│   ├── ux-workshop.md                 5-phase design thinking workshop
+│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-next.md                     workflow conductor (read-only)
+│   ├── ux-expert.md                   consulting hook
+│   ├── ux-mcp.md                      MCP server
+│   └── ux-frame.md, ux-recommend.md, ux-stats.md, ux-evolve.md,
+│       ux-component.md, ux-dashboard.md, ux-image-to-code.md
+│                                      aliases, removed in 4.1
 │
-├── agents/                            5 sub-agent (.md)
+├── agents/                            5 sub-agents (.md)
 │   ├── frontend-engineer.md           React/Next/Vue/Blade/Astro
 │   ├── motion-engineer.md             Framer Motion / GSAP / CSS
-│   ├── copy-writer.md                 microcopy theo giọng thương hiệu
-│   ├── research-synthesizer.md        phỏng vấn + analytics + đối thủ
-│   └── design-system-architect.md     token / component / nền tảng
+│   ├── copy-writer.md                 microcopy in brand voice
+│   ├── research-synthesizer.md        interviews + analytics + competitors
+│   └── design-system-architect.md     tokens / components / foundations
 │
-├── references/                        Nguồn văn xuôi cho dữ liệu + trang demo
-│   ├── foundations/                   anti-patterns.md, nguyên tắc, gu thẩm mỹ
-│   ├── laws/                          quy luật UX dạng dài
-│   ├── process/                       discovery-protocol.md (cốt lõi)
-│   ├── styles/                        văn xuôi theo phong cách (anti-slop.md, v.v.)
-│   ├── components/                    component dạng dài
-│   ├── output/                        rubric đầu ra
-│   └── conditional/                   hướng dẫn riêng theo stack
+├── references/                        Prose source for the data + demo pages
+│   ├── foundations/                   anti-patterns.md, principles, taste
+│   ├── laws/                          UX laws long-form
+│   ├── process/                       discovery-protocol.md (load-bearing)
+│   ├── styles/                        per-style prose (anti-slop.md, etc.)
+│   ├── components/                    component long-form
+│   ├── output/                        output rubrics
+│   └── conditional/                   stack-specific guidance
 │
 ├── bin/
-│   ├── uxskill.mjs                    wrapper npx -> bộ máy Python
-│   ├── ux-lint.py                     linter v2 (ưu tiên)
-│   └── ux-lint.sh                     fallback v1 (bash + perl-PCRE)
+│   ├── uxskill.mjs                    npx wrapper -> Python engine
+│   ├── ux-lint.py                     v2 linter (preferred)
+│   └── ux-lint.sh                     v1 fallback (bash + perl-PCRE)
 │
-└── .ux/                               (tạo ra cho mỗi dự án)
-    ├── last-discovery.json            ảnh chụp brief
-    ├── last-recommendation.json       hệ thống đã chọn
-    ├── last-frame.json                khối framing
+└── .ux/                               (created per project)
+    ├── last-discovery.json            brief snapshot
+    ├── last-recommendation.json       picked system
+    ├── last-frame.json                framing block
     ├── last-audit.json / last-a11y.json / last-copy.json / last-motion.json
     ├── last-design.json / last-component.json / last-dashboard.json
     └── last-critique.json / last-polish.json / last-research.json / last-workshop.json / last-case-study.json
 ```
 
-### Bộ máy thực sự hoạt động như thế nào
+### Bộ máy thực sự hoạt động thế nào
 
-1. **Đầu vào.** Bạn cung cấp một brief, tương tác qua `/ux-discover` (10 trường) hoặc không tương tác qua flag truyền vào `ux recommend`.
-2. **5 tìm kiếm song song.** Bộ máy chạy năm lookup đồng thời trên các manifest:
-   - **Ngành nghề → recommended_styles** (industries.json)
-   - **Phong cách → tương thích bảng màu + typography + chuyển động** (styles.json)
-   - **Tone × yêu-cầu-bắt-buộc → bộ lọc bảng màu** (palettes.json)
+1. **Đầu vào.** Bạn cung cấp một brief, hoặc tương tác qua `/ux-discover` (10 trường), hoặc không tương tác qua các flag của `ux recommend`.
+2. **5 tìm kiếm song song.** Bộ máy chạy đồng thời năm truy vấn trên các manifest:
+   - **Ngành → recommended_styles** (industries.json)
+   - **Phong cách → tương thích bảng màu + chữ + chuyển động** (styles.json)
+   - **Giọng điệu × bắt buộc → bộ lọc bảng màu** (palettes.json)
    - **Stack → tương thích component + preset chuyển động** (tech-stacks.json, motion-presets.json)
-   - **Điều-cấm-kỵ + khu vực → rào chắn + danh sách rút gọn thương hiệu hình mẫu** (anti-patterns.json, brands/)
-3. **Merge.** Một bộ merger xác định xếp hạng các ứng viên, giải quyết xung đột (ví dụ, yêu-cầu-bắt-buộc dark-mode ép chế độ bảng màu), và phát ra một hệ thống được khuyến nghị duy nhất.
-4. **Đầu ra.** Một tài liệu JSON với phong cách đã chọn, bảng màu đã chọn, cặp typography, top 5 preset chuyển động, top 12 component, top 5 thương hiệu hình mẫu và toàn bộ 152 rào chắn anti-pattern được kích hoạt. Cộng với một khối lý giải cho từng lựa chọn.
-5. **Sinh code.** Các command phía sau (`/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard`) tiêu thụ khuyến nghị để sinh ra code thật qua các sub-agent.
-6. **Xác minh.** `/ux-lint` quét lại code đã sinh trên 152 quy tắc regex. Exit khác 0 ở Critical/High trong CI.
+   - **Cấm + khu vực → rào chắn + danh sách rút gọn thương hiệu hình mẫu** (anti-patterns.json, brands/)
+3. **Hợp nhất.** Một bộ hợp nhất xác định xếp hạng ứng viên, giải quyết xung đột (ví dụ chế độ tối bắt buộc quyết định chế độ bảng màu) và xuất ra một hệ thống khuyến nghị duy nhất.
+4. **Đầu ra.** Một tài liệu JSON gồm phong cách đã chọn, bảng màu, cặp chữ, 5 preset chuyển động hàng đầu, 12 component hàng đầu, 5 thương hiệu hình mẫu hàng đầu, và toàn bộ 171 rào chắn anti-pattern đang bật. Kèm một khối lý giải cho từng lựa chọn.
+5. **Sinh mã.** Các lệnh phía sau (`/ux-design` ở các chế độ trang, component, dashboard và hình ảnh, cùng `/ux-system`) dùng khuyến nghị để sinh code thật qua các sub-agent.
+6. **Xác minh.** `/ux-lint` quét lại code đã sinh theo 171 quy tắc. Exit khác 0 ở Critical/High trong CI.
+
+**Bổ sung của v3.** Recommender giờ xếp hạng lại ứng viên từ `engine/decisions/` dựa trên `.ux/decisions.jsonl` (chỉ đếm quyết định có `lint_score >= 80` VÀ `user_accepted = true`; an toàn khi khởi động nguội dưới 3 quyết định trước đó). Luồng sinh mã có thể chuyển sang `engine/synthesizer/`, một trình biên dịch 7 trục xác định tạo token bảng màu + chữ + khoảng cách + bo góc + chuyển động mới cho từng brief thay vì chọn template từ danh mục. Chi tiết tại [Bộ não, v3.0 là gì](#bộ-não-v30-là-gì).
 
 **Python suy nghĩ. HTML hiển thị. Markdown nối chuỗi.**
 
 ---
 
-## 25 slash command: tham chiếu chi tiết
+## 18 slash command: tham chiếu chi tiết
 
-Mỗi command được ship như một file `.md` dưới `commands/` với `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process`, và `output state file`. Mô tả bên dưới là rút gọn; nguồn đầy đủ chính là spec chính thức.
+Mỗi lệnh được ship dưới dạng một tệp `.md` trong `commands/` với `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process` và `output state file`. Mô tả dưới đây đã được rút gọn; mã nguồn đầy đủ mới là đặc tả chuẩn.
 
-Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **discovery & khuyến nghị**, **sinh code**, **audit & xác minh**, **fix & polish**, và **nhạc trưởng**.
+Các lệnh được chia thành bảy nhóm: **khởi tạo & kiểm kê**, **discovery & khuyến nghị**, **sinh mã**, **kiểm tra & xác minh**, **sửa & đánh bóng**, **discovery & tường thuật**, và **điều phối**. Bảy tên từ 3.x vẫn chạy như [alias](#alias-bị-bỏ-ở-41) cho đến 4.1.
 
 ### Khởi động & kiểm kê
 
 #### `/ux-init`: khởi động dự án
 
-- **Là gì:** Phát hiện IDE bạn đang dùng (`.claude/`, `.cursor/`, `.windsurf/`, v.v.), cài đúng artifact, xác minh bộ máy Python có thể truy cập được, in ra ảnh chụp số liệu.
-- **Khi dùng:** Lần đầu cài trong một dự án mới. Sau khi clone một dự án dùng ux-skill. Sau `pip install --upgrade uxskill`.
-- **Khi bỏ qua:** Bạn đã chạy trong dự án này và không có gì thay đổi.
-- **Gọi:** `/ux-init` (không tham số) hoặc `uxskill init` từ CLI.
-- **Đầu ra:** Artifact theo IDE (xem [Trình cài đặt 17 IDE](#trình-cài-đặt-17-ide)) + thư mục `.ux/` + tóm tắt qua stdout.
-- **Nối vào:** `/ux-discover` kế tiếp.
+- **Là gì:** Phát hiện IDE bạn đang dùng (`.claude/`, `.cursor/`, `.windsurf/`, v.v.), cài đúng artifact, xác minh bộ máy Python có thể truy cập được, in ra ảnh chụp số liệu. `--stats` chỉ in ảnh chụp: phiên bản + số mục trong các manifest dữ liệu.
+- **Khi dùng:** Lần đầu cài trong một dự án mới. Sau khi clone một dự án dùng ux-skill. Sau `pip install --upgrade uxskill`. `--stats` sau khi cài, sau khi nâng cấp, hoặc khi một khuyến nghị đưa ra lựa chọn bất ngờ và bạn nghi manifest chưa đầy đủ.
+- **Khi bỏ qua:** Bạn đã chạy trong dự án này và không có gì thay đổi. `--stats` không bao giờ cần bỏ qua: chỉ là một lần đọc 50ms.
+- **Gọi:** `/ux-init` (không tham số), `/ux-init --stats`, hoặc `uxskill init` / `uxskill stats` từ CLI. `--decisions` thêm phần tóm tắt sổ cái quyết định; `--html` ghi ra `.ux/stats.html`.
+- **Đầu ra:** Artifact theo IDE (xem [Trình cài đặt 17 IDE](#trình-cài-đặt-17-ide)) + thư mục `.ux/` + tóm tắt qua stdout. `--stats`: JSON ra stdout (xem [Xác minh cài đặt](#xác-minh-cài-đặt) ở trên).
+- **Nối vào:** `/ux-discover` kế tiếp. `--stats` chỉ để chẩn đoán.
 
-#### `/ux-stats`: in kiểm kê dữ liệu
+#### `/ux-mcp`: chạy bộ máy như một máy chủ MCP
 
-- **Là gì:** In version + số đếm entry cho 12 data manifest, để bạn có thể xác minh những gì đã cài.
-- **Khi dùng:** Sau khi cài. Sau khi nâng cấp. Khi `/ux-recommend` trả về lựa chọn bất ngờ và bạn nghi ngờ manifest chưa đầy đủ.
-- **Khi bỏ qua:** Không bao giờ, đây là command chỉ đọc 50ms.
-- **Gọi:** `/ux-stats` hoặc `uxskill stats`.
-- **Đầu ra:** JSON ra stdout (xem [Xác minh cài đặt](#xác-minh-cài-đặt) ở trên).
-- **Nối vào:** Chỉ chẩn đoán; không nối vào bước sau.
+- **Là gì:** Khởi động bộ máy như một máy chủ Model Context Protocol qua stdio. 25 tool (recommender, linter, lưu trữ, bộ tổng hợp, sổ cái quyết định, trích xuất từ hình ảnh, các manifest dữ liệu, cùng việc dựng, nhập, cải thiện, mở rộng, xuất và kiểm tra một hệ thống thiết kế) có thể được gọi từ bất kỳ host nào hỗ trợ MCP, không cần plugin.
+- **Khi dùng:** Bạn làm việc trong một host khác hỗ trợ MCP và muốn cùng bộ máy. Bạn chạy pipeline nhiều agent cần một nguồn ràng buộc thiết kế duy nhất. Bạn muốn recommender hoặc linter là một tiến trình chạy lâu dài trong CI.
+- **Khi bỏ qua:** Bạn đang ở trong Claude Code với plugin đã cài; slash command đã chạm tới bộ máy. Bạn cần câu trả lời một lần; `uxskill recommend` hoặc `uxskill lint` đơn giản hơn.
+- **Gọi:** `/ux-mcp`, hoặc `ux-mcp` từ shell sau `pip install 'uxskill[mcp]'`.
+- **Đầu ra:** Một máy chủ JSON-RPC qua stdio. Xem [Máy chủ MCP](#máy-chủ-mcp-nước-cờ-bất-đối-xứng) và `commands/ux-mcp.md` để cấu hình cho từng client.
+- **Nối vào:** Không gì cả; đây là lớp truyền tải, không phải một bước.
 
 ### Discovery & khuyến nghị
 
-#### `/ux-discover`: hàm cưỡng bức (thu thập 10 trường)
+#### `/ux-discover`: hàm cưỡng chế (intake 10 trường, framing, khuyến nghị)
 
-- **Là gì:** Bước thu thập 10 trường bắt buộc mà mọi dự án đi qua trước bất kỳ command sinh code nào. Loại dự án, đối tượng, mục tiêu chính, tone, yêu-cầu-bắt-buộc, điều-cấm-kỵ, thương hiệu tham chiếu, stack, khu vực, chỉ số thành công. **Không ứng tác.** Các cụm từ bị cấm ("modern", "clean") ép người dùng phải cụ thể.
-- **Khi dùng:** Trước bất kỳ `/ux-design`, `/ux-component`, `/ux-system`, hoặc `/ux-dashboard` nào. Bất cứ khi brief trước đã cũ.
-- **Khi bỏ qua:** Bạn đang sửa lỗi (`/ux-fix`). Bạn chỉ chạy linter (`/ux-lint`). Brief không thay đổi từ phiên trước.
-- **Gọi:** `/ux-discover`. Plugin hỏi; bạn trả lời.
-- **Đầu ra:** Ghi `.ux/last-discovery.json` (brief 10 trường).
-- **Nối vào:** `/ux-recommend` → dùng discovery để chọn phong cách + bảng màu + typography + motion + component. `/ux-design [brief bổ sung]` → sinh code frontend neo theo khuyến nghị. `/ux-component <tên>` → sinh một component khớp với các ràng buộc được khám phá.
-
-#### `/ux-recommend`: bộ máy chủ lực 5 tìm kiếm song song
-
-- **Là gì:** Chạy 5-tìm-kiếm-song-song của bộ máy Python trên 12 manifest và trả về một hệ thống thiết kế được merge. Ngành nghề → Phong cách → Bảng màu → Typography → Motion + Component + Thương hiệu hình mẫu + Rào chắn.
-- **Khi dùng:** Bắt đầu một dự án mới từ con số không. Pivot một sản phẩm đã mệt. Bay tiền trạm trước bất kỳ `/ux-design` hay `/ux-component` nào.
-- **Khi bỏ qua:** Bạn đã chạy `/ux-discover` và lưu một brief, `/ux-recommend` tự động trong flow đó. Bạn đang sửa một lỗi (dùng `/ux-fix`). Bạn chỉ cần lint (dùng `/ux-lint`).
-- **Gọi (Claude Code):**
-  ```
-  /ux-recommend
-  ```
+- **Là gì:** Bản intake 10 trường bắt buộc mà mọi dự án phải qua trước bất kỳ lệnh sinh mã nào. Loại dự án, đối tượng, mục tiêu chính, giọng điệu, yêu cầu bắt buộc, điều cấm, thương hiệu tham chiếu, stack, khu vực, chỉ số thành công. **Không ứng tác.** Các cụm từ bị cấm ("modern", "clean") buộc người dùng phải cụ thể. Sau đó chạy recommender: 5 tìm kiếm song song của bộ máy Python trên 12 manifest trả về một hệ thống thiết kế hợp nhất (Ngành → Phong cách → Bảng màu → Chữ → Chuyển động + Component + Thương hiệu hình mẫu + Rào chắn).
+- **Chế độ:** `--frame` ghi nhận cho ai, kết quả, giả thuyết và tín hiệu thành công trong một khối framing bốn trường, nhẹ hơn bản intake đầy đủ. `--recommend` chỉ chạy recommender, từ brief đã lưu hoặc từ flag một lần.
+- **Khi dùng:** Trước bất kỳ `/ux-design` hay `/ux-system` nào. Bất cứ khi nào brief trước đã cũ. `--frame` khi bắt đầu dự án, sprint hay một việc lẻ, hoặc giữa chừng khi cuộc trao đổi đã lạc hướng. `--recommend` khi định vị lại một sản phẩm trông đã mệt mỏi.
+- **Khi bỏ qua:** Bạn đang sửa bug (`/ux-fix`). Bạn chỉ chạy một lượt linter (`/ux-lint`). Brief không đổi so với phiên trước.
+- **Gọi (Claude Code):** `/ux-discover`, `/ux-discover --frame "loyalty wallet for a MENA retail pilot"`, hoặc `/ux-discover --recommend`.
   **Gọi (CLI):**
   ```bash
   ux recommend \
@@ -339,46 +383,32 @@ Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **Đầu ra:** Ghi `.ux/last-recommendation.json`, phong cách đã chọn, bảng màu đã chọn, cặp typography đã chọn, top 5 preset chuyển động, top 12 component, top 5 thương hiệu hình mẫu, toàn bộ 152 rào chắn anti-pattern được kích hoạt, kèm lý giải.
-- **Nối vào:** `/ux-design [brief]` → code frontend dùng token được khuyến nghị. `/ux-system` → hệ thống thiết kế đầy đủ từ khuyến nghị. `/ux-component <tên>` → một component dùng phong cách được khuyến nghị. `/ux-lint` → xác minh code đã sinh.
+- **Đầu ra:** `.ux/last-discovery.json` (brief 10 trường), `.ux/last-recommendation.json` (phong cách đã chọn, bảng màu, cặp chữ, 5 preset chuyển động hàng đầu, 12 component hàng đầu, 5 thương hiệu hình mẫu hàng đầu, toàn bộ 171 rào chắn anti-pattern đang bật, kèm lý giải), và với `--frame`, `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
+- **Nối vào:** `/ux-design [extra brief]` → code frontend bám sát khuyến nghị. `/ux-design --component <name>` → một component khớp với các ràng buộc đã tìm ra. `/ux-system` → hệ thống thiết kế đầy đủ từ khuyến nghị. `/ux-lint` → xác minh code đã sinh.
 
 ### Sinh code
 
 #### `/ux-design`: sinh một bề mặt đẹp, chống slop từ một brief
 
-- **Là gì:** Sinh một artifact frontend hoàn chỉnh, chất lượng production (landing, marketing site, app shell) từ brief discovery + khuyến nghị. Điều phối `frontend-engineer` với hướng sáng tạo từ tham chiếu anti-slop và kho vũ khí.
-- **Khi dùng:** "Design a", "build me a", "generate a landing page", "create a dashboard", "make a component", bất kỳ yêu cầu sản phẩm hình ảnh tự do nào.
-- **Khi bỏ qua:** Bạn muốn review, không phải build (dùng `/ux-audit` hoặc `/ux-critique`). Bạn chỉ muốn một component (dùng `/ux-component`). Việc backend hay hạ tầng.
-- **Gọi:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`.
-- **Đầu ra:** Code được sinh (HTML / Blade / JSX / Vue / Astro), cộng với `.ux/last-design.json`.
+- **Là gì:** Sinh một artifact frontend hoàn chỉnh, chất lượng production (landing, marketing site, app shell) từ brief discovery + khuyến nghị. Điều phối `frontend-engineer` với hướng sáng tạo từ tham chiếu anti-slop và kho vũ khí. Brief, hoặc một flag, chọn một trong bốn chế độ:
+  - **trang** (mặc định): một trang đầy đủ hoặc một bề mặt nhiều section. Ghi `.ux/last-design.json`.
+  - **`--component [name]`**: một component đơn lẻ chất lượng production (button, modal, navbar, sidebar, card, bảng, form, biểu đồ). Đủ bốn trạng thái tương tác, dễ tiếp cận, đúng thương hiệu. Tìm component trong `.ux/last-recommendation.json` trước, nếu không có thì truy vấn thẳng manifest. Ghi `.ux/last-component.json`.
+  - **`--dashboard`**: kỷ luật mật độ dữ liệu, layout bento, số monospace dạng bảng, mẫu sparkline, chống lạm dụng card, màu trạng thái có nghĩa, chuyển động tiết chế. Không phải trang marketing dán chart lên. Ghi `.ux/last-dashboard.json`.
+  - **`--from-image <path>`**: đọc một ảnh tham chiếu thiết kế (PNG/JPG/WebP) bằng thị giác máy tính thuần Pillow (bảng màu chủ đạo, cực tính nền, tín hiệu chữ), đối chiếu với các manifest bảng màu và phong cách, rồi dựng từ khuyến nghị thu được. `--extract-only` dừng sau bước trích xuất. Ghi `.ux/last-image-extract.json`.
+- **Khi dùng:** "Design a", "build me a", "generate a landing page", "create a dashboard", "make a component", "build a button", "design the admin panel", "operator console", "KPI board", "build it like this screenshot", bất kỳ yêu cầu sản phẩm hình ảnh tự do nào.
+- **Khi bỏ qua:** Bạn muốn review, không phải build (dùng `/ux-audit` hoặc `/ux-critique`). Việc backend hay hạ tầng.
+- **Gọi:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`, `/ux-design --component pricing-card-trio --brief="fintech, dark, monospace numbers"`, `/ux-design --dashboard`, `/ux-design --from-image ref.png`.
+- **Đầu ra:** Code được sinh (HTML / Blade / JSX / Vue / Astro), cộng tệp trạng thái của chế độ đó.
 - **Nối vào:** `/ux-lint` → xác minh đối chiếu rào chắn. `/ux-polish` → pass mỹ thuật. `/ux-a11y` → audit khả năng truy cập. `/ux-copy` → review microcopy. `/ux-fix` → áp dụng phát hiện thành các commit nguyên tử.
-
-#### `/ux-component`: sinh một component
-
-- **Là gì:** Tạo ra một component đơn lẻ chất lượng production (button, modal, navbar, sidebar, card, table, form, chart) từ một spec. Đủ bốn trạng thái tương tác, có khả năng truy cập, đúng thương hiệu. Tra component trong `.ux/last-recommendation.json` trước, dự phòng truy vấn trực tiếp manifest.
-- **Khi dùng:** Bất kỳ yêu cầu một-thành-phần nào, "build a button", "create a pricing card", "make a modal", "add a navbar", "design a sidebar", "I need a data table", "build a form", "make a chart component".
-- **Khi bỏ qua:** Trang đầy đủ hoặc bề mặt nhiều section (dùng `/ux-design`). Backend hay hạ tầng.
-- **Gọi:** `/ux-component pricing-card-trio --brief="fintech, dark, monospace numbers"`.
-- **Đầu ra:** Code component được sinh, cộng với `.ux/last-component.json`.
-- **Nối vào:** `/ux-lint` → xác minh. `/ux-polish` → siết chặt.
 
 #### `/ux-system`: sinh một hệ thống thiết kế khởi đầu đầy đủ
 
 - **Là gì:** Đề xuất một hệ thống thiết kế khởi đầu đầy đủ cho dự án chưa có, token (màu, typography, không gian, motion, radius, shadow), tài liệu nền tảng, hợp đồng component, cặp dark-mode, công tắc theme. Điều phối `design-system-architect`.
 - **Khi dùng:** "We don't have a design system", "build us a system", "propose tokens", "what should our theme be", "set up our DS".
-- **Khi bỏ qua:** Dự án đã có hệ thống thiết kế, dùng `/ux-component` đối chiếu hệ thống hiện có thay vào. Backend hay hạ tầng.
-- **Gọi:** `/ux-system` (chạy discovery trước nếu chưa có sẵn file).
+- **Khi bỏ qua:** Dự án đã có hệ thống thiết kế; thay vào đó hãy dùng `/ux-design --component` trên hệ thống hiện có. Backend hay hạ tầng.
+- **Gọi:** `/ux-system create` (bộ máy nền tảng), `/ux-system enhance --from <file>` (đo một hệ thống bạn đã có), `/ux-system extend --from <file> --add <foundation>` (bổ sung mà không thay đổi nó), hoặc `/ux-system` (luồng của 3.x; chạy discovery trước nếu chưa có sẵn file).
 - **Đầu ra:** `tokens.json`, `foundations.md`, các hợp đồng `components/*.md`, phát Tailwind / vanilla / SCSS tùy chọn. Ghi `.ux/last-system.json` cho ngữ cảnh chuỗi.
-- **Nối vào:** `/ux-component` → build đối chiếu hệ thống mới. `/ux-design` → sinh một bề mặt dùng token mới.
-
-#### `/ux-dashboard`: sinh dashboard chuyên dụng
-
-- **Là gì:** Dashboard với kỷ luật mật độ dữ liệu, layout bento, số monospace dạng bảng, mẫu sparkline, chống lạm dụng card, màu state có nghĩa, motion tiết chế. Không phải landing marketing dán chart lên.
-- **Khi dùng:** "Build a dashboard", "design the admin panel", "make a metrics page", "operator console", "analytics view", "KPI board", "monitoring screen".
-- **Khi bỏ qua:** Landing marketing có thống kê (dùng `/ux-design`). Chỉ một widget (dùng `/ux-component`). Backend hay hạ tầng.
-- **Gọi:** `/ux-dashboard`.
-- **Đầu ra:** Code dashboard được sinh + `.ux/last-dashboard.json`.
-- **Nối vào:** `/ux-lint`, `/ux-audit`, `/ux-a11y`.
+- **Nối vào:** `/ux-design --component` → dựng trên hệ thống mới. `/ux-design` → sinh một bề mặt dùng token mới.
 
 #### `/ux-motion`: xử lý chuyển động
 
@@ -393,8 +423,8 @@ Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **
 
 #### `/ux-lint`: linter dựa trên regex xác định (không LLM, CI-safe)
 
-- **Là gì:** Chạy 152 quy tắc regex trên code của bạn. Không gọi LLM. Exit khác 0 ở Critical / High trong CI. Nguồn: `data/anti-patterns.json`. Quy tắc bao trùm A11y (23), Nội dung (15), Layout (13), Typography (10), Màu (9), Chất lượng (9), Visual (9), Motion (8), Hiệu năng (4).
-- **Khi dùng:** Pre-commit hook. Cổng CI. Pass đầu nhanh trên codebase lớn trước khi trả giá `/ux-audit`. Sau `/ux-design` hoặc `/ux-component` để xác minh việc sinh.
+- **Là gì:** Chạy 171 quy tắc trên code của bạn. Không gọi LLM. Exit khác 0 ở Critical / High trong CI. Nguồn: `data/anti-patterns.json`. Quy tắc bao trùm A11y (45), Nội dung (35), Layout (18), Typography (16), Motion (14), Visual (14), Chất lượng (12), Màu (10), Hiệu năng (5), Chiều sâu (2).
+- **Khi dùng:** Pre-commit hook. Cổng CI. Pass đầu nhanh trên codebase lớn trước khi trả giá `/ux-audit`. Sau `/ux-design` ở bất kỳ chế độ nào để xác minh việc sinh.
 - **Khi bỏ qua:** Bạn muốn vòng lặp fix (linter báo cáo, không sửa, nối vào `/ux-polish --fix` hoặc `/ux-fix`). Bạn muốn phán xét gu thẩm mỹ (dùng `/ux-critique`).
 - **Gọi (slash):** `/ux-lint src/`.
 - **Gọi (CLI):** `uxskill lint .` hoặc `python3 bin/ux-lint.py .` hoặc `bash bin/ux-lint.sh --ci --fail-on high`.
@@ -453,25 +483,16 @@ Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **
 - **Đầu ra:** Các commit nguyên tử cho mỗi phát hiện. Chạy lại command gốc và cập nhật file `.ux/last-*.json`. In ra một tóm tắt.
 - **Nối vào:** `/ux-next` → nhạc trưởng chọn nước cờ kế tiếp.
 
-#### `/ux-polish`: pass mỹ thuật + diệt AI-slop
+#### `/ux-polish`: vòng lặp lint, fix, re-lint + diệt AI-slop
 
-- **Là gì:** Nhịp khoảng cách, mài sắc phân cấp, phát hiện AI-slop, tính nhất quán token. Đối tác được dẫn dắt bởi LLM của `/ux-lint`, dùng phán xét của bạn cho các quyết định gu thẩm mỹ.
-- **Khi dùng:** Cấu trúc đúng nhưng thực thi lỏng lẻo. "Polish", "tighten this up", "remove the AI-slop", "make it premium", "make this less AI-looking", "the spacing feels off", "this looks generic", "needs more taste".
-- **Khi bỏ qua:** Bề mặt thiếu chức năng cốt lõi (sửa cái đó trước). Cần redesign, không phải polish (dùng `/ux-design`). Vấn đề copy (dùng `/ux-copy`). Vấn đề motion (dùng `/ux-motion`). Vấn đề a11y (dùng `/ux-a11y`).
-- **Gọi:** `/ux-polish src/components/Hero.tsx`.
-- **Đầu ra:** Code cập nhật + `.ux/last-polish.json` mô tả các thay đổi.
-- **Nối vào:** `/ux-lint` → xác minh polish đứng vững. `/ux-a11y` → kiểm tra lại khả năng truy cập.
+- **Là gì:** Trước tiên là một vòng lặp xác định trên tệp HTML cục bộ: lint, áp sáu lượt polish idempotent, re-lint, cho đến khi điểm đạt 90, chững lại, hoặc qua ba vòng (`--rounds` đổi giới hạn). Mặc định kết quả vòng lặp nằm ở `<file>.evolved.html` và tệp gốc không bao giờ bị động đến. Chỉ `--loop-only` hoặc `--fix` mới thay tệp gốc, sau khi kiểm tra working tree sạch, và quality gate ở 65 ngăn một kết quả không đạt thay thế nó nếu không có `--force`; với `--brand-file`, ngưỡng sàn trung thành thương hiệu được giữ ở mọi lối ra. Sau đó là lượt gu thẩm mỹ: nhịp khoảng cách, phân cấp sắc nét hơn, phát hiện AI-slop, tính nhất quán token. Phiên bản dẫn dắt bởi LLM tương ứng với `/ux-lint`, dùng phán đoán của bạn cho các quyết định về gu. `--loop-only` chỉ chạy vòng lặp; `--no-loop` chỉ chạy lượt gu; `--fix` áp dụng các phát hiện về gu.
+- **Khi dùng:** Cấu trúc đúng nhưng thực thi lỏng lẻo. "Polish", "tighten this up", "remove the AI-slop", "make it premium", "make this less AI-looking", "the spacing feels off", "this looks generic", "needs more taste", "improve until score 90+", "make it ship-ready".
+- **Khi bỏ qua:** Bề mặt còn thiếu chức năng cốt lõi (sửa cái đó trước). Cần thiết kế lại, không phải đánh bóng (dùng `/ux-design`). Vấn đề về chữ nghĩa (dùng `/ux-copy`). Vấn đề chuyển động (dùng `/ux-motion`). Vấn đề a11y (dùng `/ux-a11y`).
+- **Gọi:** `/ux-polish src/components/Hero.tsx`, `/ux-polish out/landing.html --css out/landing.css`, `/ux-polish out/landing.html --loop-only --rounds 5`.
+- **Đầu ra:** `<file>.evolved.html` từ vòng lặp (chỉ thay tệp gốc khi có `--loop-only` hoặc `--fix`), code đã cập nhật khi có `--fix`, `.ux/last-evolve.json`, một dòng trong `.ux/decisions.jsonl`, và `.ux/last-polish.json` mô tả các phát hiện về gu.
+- **Nối vào:** `/ux-lint` → xác minh phần đánh bóng còn giữ. `/ux-a11y` → kiểm tra lại khả năng tiếp cận.
 
 ### Discovery & tự sự
-
-#### `/ux-frame`: khối framing 4 trường
-
-- **Là gì:** Nắm bắt dành-cho-ai, outcome, giả thuyết, và tín hiệu thành công trong một khối framing có cấu trúc. Không có việc thiết kế nào diễn ra, chỉ là thu thập bốn trường biến một yêu cầu mơ hồ thành một brief làm việc. Nhẹ hơn `/ux-discover` (4 trường so với 10).
-- **Khi dùng:** Bắt đầu bất kỳ dự án, sprint, hay engagement một-lần nào. Giữa dòng khi một cuộc trò chuyện đã trôi dạt. "Frame this", "what's the brief", "set up the project", "framing".
-- **Khi bỏ qua:** Đã framed (kiểm tra `.ux/last-frame.json`). Build component một-lần không có ý nghĩa framing. Backend hay hạ tầng.
-- **Gọi:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`.
-- **Đầu ra:** Ghi `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
-- **Nối vào:** `/ux-discover` → mở rộng frame thành brief 10 trường. `/ux-design` → sinh dùng frame làm neo.
 
 #### `/ux-research`: lên kế hoạch + tổng hợp nghiên cứu
 
@@ -480,22 +501,22 @@ Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **
 - **Khi bỏ qua:** Câu trả lời đã biết với độ tin cậy cao. Quyết định có thể đảo ngược, rủi ro thấp. Backend hay hạ tầng.
 - **Gọi:** `/ux-research --plan "loyalty wallet adoption in MENA"` hoặc `/ux-research --synthesize interviews/*.md`.
 - **Đầu ra:** Ghi `.ux/last-research.json`, kế hoạch nghiên cứu hoặc các chủ đề được tổng hợp + bằng chứng + khuyến nghị.
-- **Nối vào:** `/ux-frame` → tích hợp phát hiện vào frame. `/ux-design` → sinh từ phát hiện. `/ux-workshop` → chạy workshop dùng nghiên cứu làm đầu vào.
+- **Nối vào:** `/ux-discover --frame` → đưa phát hiện vào một frame. `/ux-design` → sinh từ phát hiện. `/ux-workshop` → chạy workshop với nghiên cứu làm đầu vào.
 
 #### `/ux-workshop`: workshop design thinking 5 giai đoạn
 
 - **Là gì:** Hỗ trợ một workshop discovery / design-thinking đầu cuối. Năm giai đoạn tuần tự (khám phá → bản đồ nhiệt → bản đồ bên liên quan → phác thảo giải pháp → kế hoạch chơi). Có giới hạn thời gian. Artifact cụ thể cho mỗi giai đoạn. Kết thúc bằng một quyết định, không phải "phát hiện thú vị".
 - **Khi dùng:** Câu hỏi thật, người tham gia thật, ngân sách thời gian thật. "Run a workshop", "facilitate a discovery", "let's do a design thinking session", "I have stakeholders for an hour, what do we do", "kick off the project".
-- **Khi bỏ qua:** Brief đã rõ và có phạm vi. Brainstorm một mình (dùng `/ux-design` hoặc `/ux-frame`). Đội đang ở giữa thực thi, không phải discovery.
+- **Khi bỏ qua:** Brief đã rõ ràng và có phạm vi. Brainstorm một mình (dùng `/ux-design` hoặc `/ux-discover --frame`). Đội đang giữa giai đoạn thực thi, không phải discovery.
 - **Gọi:** `/ux-workshop "loyalty wallet pivot" --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" --minutes=90`.
 - **Đầu ra:** Ghi `.ux/last-workshop.json`, kế hoạch chơi + artifact theo giai đoạn.
 - **Nối vào:** `/ux-design` → thực thi kế hoạch chơi. `/ux-research` → lấp các khoảng trống workshop làm nổi lên. `/ux-case-study` → xuất bản hành trình.
 
 #### `/ux-case-study`: case study có thể xuất bản (định dạng Wfrah-editorial)
 
-- **Là gì:** Sinh ra một case study dự án ở định dạng editorial đơn sắc tinh khôi, typography Wfrah, đường ngăn nét tóc, mã section đánh số (A)–(G), layout an toàn song ngữ. Một tài liệu, không phải brochure marketing. Đọc từ `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Là gì:** Sinh case study dự án theo định dạng biên tập đơn sắc thuần, chữ Wfrah, đường phân cách mảnh, mã section đánh số từ (A) đến (G), layout an toàn cho song ngữ. Một tài liệu, không phải brochure marketing. Đọc từ `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Khi dùng:** Sau khi launch. Sau một mốc rời rạc. "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece".
-- **Khi bỏ qua:** Dự án thiếu dữ liệu để điền các section (A)–(G). Người dùng muốn landing marketing, không phải case study (dùng `/ux-design`).
+- **Khi bỏ qua:** Dự án thiếu dữ liệu để điền các section từ (A) đến (G). Người dùng muốn landing marketing, không phải case study (dùng `/ux-design`).
 - **Gọi:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
 - **Đầu ra:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Nối vào:** Command tận cùng, thường là kết thúc một dự án.
@@ -519,35 +540,45 @@ Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **
 - **Gọi:** `/ux-expert`.
 - **Đầu ra:** Thẻ liên hệ ngắn với LinkedIn / email / repo.
 
+### Alias, bị bỏ ở 4.1
+
+Bảy lệnh của 3.x đã gộp vào 18 lệnh ở trên. Tên của chúng vẫn chạy thêm một bản phát hành: mỗi alias cho biết nó đã chuyển đi đâu, rồi chạy lệnh mới với cùng tham số.
+
+| Lệnh cũ | Hiện tại | Ghi chú |
+|---|---|---|
+| `/ux-frame` | `/ux-discover --frame` | Cùng khối framing, cùng `.ux/last-frame.json` |
+| `/ux-recommend` | `/ux-discover --recommend` | Tool MCP `ux_recommend` không đổi |
+| `/ux-stats` | `/ux-init --stats` | Ảnh chụp chỉ đọc |
+| `/ux-evolve` | `/ux-polish --loop-only --rounds 5` | Alias giữ giới hạn cũ năm vòng; riêng `/ux-polish` dừng ở ba |
+| `/ux-component` | `/ux-design --component` | Cùng `.ux/last-component.json` |
+| `/ux-dashboard` | `/ux-design --dashboard` | Cùng `.ux/last-dashboard.json` |
+| `/ux-image-to-code` | `/ux-design --extract-only --from-image` | Bỏ `--extract-only` để dựng từ hình ảnh |
+
 ### Đồ thị nối chuỗi command
 
 ```
                   ┌──────────────────────┐
-                  │  /ux-init            │
-                  │  /ux-stats           │
+                  │  /ux-init            │  --stats: inventory
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-frame           │  khối framing 4 trường
+                  │  /ux-discover        │  10-field intake (FORCING GATE)
+                  │                      │  --frame: 4-field framing block
+                  │                      │  then 5 parallel searches -> merged system
                   └────────────┬─────────┘
-                               │
-                  ┌────────────▼─────────┐
-                  │  /ux-discover        │  thu thập 10 trường (CỔNG CƯỠNG BỨC)
-                  └────────────┬─────────┘
-                               │ ghi .ux/last-discovery.json
-                  ┌────────────▼─────────┐
-                  │  /ux-recommend       │  5 tìm kiếm song song -> hệ thống merged
-                  └────────────┬─────────┘
-                               │ ghi .ux/last-recommendation.json
+                               │ writes .ux/last-discovery.json
+                               │ writes .ux/last-recommendation.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
-   │ /ux-design     │ │ /ux-component   │ │ /ux-system  │
-   │ /ux-dashboard  │ │ /ux-motion      │ │             │
+   │ /ux-design     │ │ /ux-motion      │ │ /ux-system  │
+   │  --component   │ │                 │ │             │
+   │  --dashboard   │ │                 │ │             │
+   │  --from-image  │ │                 │ │             │
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ ghi .ux/last-<surface>.json
+                               │ writes .ux/last-<surface>.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
@@ -556,19 +587,19 @@ Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ ghi .ux/last-<lens>.json
+                               │ writes .ux/last-<lens>.json
                   ┌────────────▼─────────┐
-                  │  /ux-fix             │  áp dụng phát hiện thành commit
+                  │  /ux-fix             │  apply findings as commits
                   │  /ux-polish          │
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-case-study      │  artifact có thể xuất bản
+                  │  /ux-case-study      │  publishable artifact
                   └──────────────────────┘
 
                   ┌──────────────────────┐
-                  │  /ux-next            │  nhạc trưởng, chỉ đọc
-                  │  /ux-expert          │  móc nối tư vấn
+                  │  /ux-next            │  conductor, read-only
+                  │  /ux-expert          │  consulting hook
                   └──────────────────────┘
 ```
 
@@ -576,12 +607,12 @@ Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **
 
 ## 5 sub-agent
 
-Sub-agent là các trình sinh chuyên vai trò được điều phối bởi command. Chúng không bao giờ chạy độc lập, chúng được gọi bởi `/ux-design`, `/ux-component`, `/ux-system`, `/ux-fix`, `/ux-research`, v.v. Mỗi agent có một ranh giới quyền sở hữu được định nghĩa: chúng KHÔNG quyết định brief; chúng thực thi đối chiếu brief.
+Sub-agent là các trình sinh chuyên vai trò được điều phối bởi command. Chúng không bao giờ chạy độc lập: chúng được gọi bởi `/ux-design`, `/ux-system`, `/ux-fix`, `/ux-research`, v.v. Mỗi agent có một phạm vi trách nhiệm rõ ràng: chúng KHÔNG quyết định brief; chúng thực thi theo brief.
 
 ### `frontend-engineer`
 
 - **Sở hữu:** Code frontend chất lượng production (React, Next.js, Vue, Blade+Alpine, HTML thuần, Astro) với kỷ luật chống AI-slop.
-- **Được điều phối bởi:** `/ux-design`, `/ux-component`, `/ux-dashboard`, `/ux-fix`.
+- **Được điều phối bởi:** `/ux-design` (các chế độ trang, component, dashboard và hình ảnh), `/ux-fix`.
 - **Đầu vào:** Brief + hướng sáng tạo + token (từ `.ux/last-recommendation.json`).
 - **Đầu ra:** Code chạy được, phân biệt được với output AI chung chung. Không gradient tím, không hero căn giữa, không ba card bằng nhau, không Inter ở kích thước display, không "John Doe", không emoji, không mặc định 300ms.
 - **Tool:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -589,7 +620,7 @@ Sub-agent là các trình sinh chuyên vai trò được điều phối bởi co
 ### `motion-engineer`
 
 - **Sở hữu:** Chuyển động trong code frontend production, Framer Motion, GSAP, CSS animation. Thời lượng, easing, biên đạo, fallback reduced-motion, kỷ luật hiệu năng.
-- **Được điều phối bởi:** `/ux-design`, `/ux-motion --fix`, `/ux-component`.
+- **Được điều phối bởi:** `/ux-design` (mọi chế độ), `/ux-motion --fix`.
 - **Đầu vào:** Brief chuyển động + token + 57 preset chuyển động từ `data/motion-presets.json`.
 - **Đầu ra:** Chuyển động xứng đáng có chỗ đứng. Luôn được bọc trong fallback `prefers-reduced-motion`. Luôn được thử nghiệm đối chiếu Core Web Vitals.
 - **Tool:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -597,7 +628,7 @@ Sub-agent là các trình sinh chuyên vai trò được điều phối bởi co
 ### `copy-writer`
 
 - **Sở hữu:** Các chuỗi được ship, thông điệp lỗi, empty state, CTA, loading state, thông điệp thành công, toast, helper text, label form, text button.
-- **Được điều phối bởi:** `/ux-copy --fix`, `/ux-design`, `/ux-frame`, `/ux-component`.
+- **Được điều phối bởi:** `/ux-copy --fix`, `/ux-design` (mọi chế độ), `/ux-discover --frame`.
 - **Đầu vào:** Hồ sơ giọng nói (được đặt tên hoặc dán vào) + các chuỗi của bề mặt.
 - **Đầu ra:** Microcopy production được áp dụng nhất quán qua mọi trạng thái của một bề mặt để sản phẩm nghe như một sản phẩm, không phải mười. Cấm: "form contains errors", "John Doe", copy AI vui mừng tưng bừng, CTA chung chung, empty state chết.
 - **Tool:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -605,7 +636,7 @@ Sub-agent là các trình sinh chuyên vai trò được điều phối bởi co
 ### `research-synthesizer`
 
 - **Sở hữu:** Tiêu hóa đầu vào nghiên cứu (phỏng vấn, analytics, trang đối thủ, kết quả A/B, ticket hỗ trợ) thành khuyến nghị thiết kế hành động được.
-- **Được điều phối bởi:** `/ux-research`, `/ux-workshop`, `/ux-frame`.
+- **Được điều phối bởi:** `/ux-research`, `/ux-workshop`, `/ux-discover --frame`.
 - **Đầu vào:** Nghiên cứu thô, transcript, export, URL đối thủ, cụm hỗ trợ.
 - **Đầu ra:** Chủ đề, bằng chứng, khuyến nghị. Không bao giờ thiết kế câu trả lời, trao cho nhà thiết kế nền tảng để thiết kế từ đó.
 - **Tool:** `Read, Write, WebFetch, Bash, Glob, Grep`.
@@ -613,7 +644,7 @@ Sub-agent là các trình sinh chuyên vai trò được điều phối bởi co
 ### `design-system-architect`
 
 - **Sở hữu:** Hệ thống thiết kế đầy đủ, token (màu, typography, không gian, motion, radius, shadow), tài liệu nền tảng, hợp đồng component, cặp dark-mode, lớp theming.
-- **Được điều phối bởi:** `/ux-system`, `/ux-component` khi không có hệ thống.
+- **Được điều phối bởi:** `/ux-system`, `/ux-design --component` khi chưa có hệ thống.
 - **Đầu vào:** Brief thương hiệu + `.ux/last-recommendation.json` (phong cách + bảng màu + cặp typography + preset chuyển động).
 - **Đầu ra:** Một hệ thống mạch lạc, có chính kiến, sẵn sàng production mà các agent phía sau có thể xây dựng đối chiếu mà không cần quyết định lại nền tảng. Token JSON, foundations MD, hợp đồng component, ánh xạ dark-mode.
 - **Tool:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -624,7 +655,7 @@ Khi một command điều phối một sub-agent, nó truyền:
 
 1. Brief / khuyến nghị (được load từ `.ux/`).
 2. Lát manifest liên quan (ví dụ, `frontend-engineer` nhận phong cách + bảng màu + component đã chọn; `motion-engineer` nhận preset chuyển động đã chọn).
-3. 152 rào chắn anti-pattern (luôn được kích hoạt).
+3. 171 rào chắn anti-pattern (luôn được kích hoạt).
 4. Một tiêu chí thành công (artifact phải làm gì).
 
 Sub-agent trả về:
@@ -637,7 +668,7 @@ Command gọi sau đó tự động chạy `/ux-lint` trước khi tuyên bố h
 
 ---
 
-## 12 data manifest
+## 11 data manifest
 
 Lớp dữ liệu là bộ não. Mọi command đọc từ nó; bộ máy merge xuyên qua nó; linter quét đối chiếu nó. Mọi file sống dưới `data/` và bọc entry của chúng trong `{_meta, entries}` cho versioning schema.
 
@@ -650,7 +681,7 @@ Lớp dữ liệu là bộ não. Mọi command đọc từ nó; bộ máy merge 
 | `categories` | Minimalist / Swiss, Brutalist, Editorial, Glassmorphism, Neumorphism, Bento, Skeuomorphic, Industrial, Maximalist, AI-Futurist, MENA-modern, Vaporwave, v.v. |
 | `sample entry` | `swiss-international`, "Grid là luật. Typography làm việc nặng. Trang trí là thất bại." |
 
-Được dùng bởi: `/ux-recommend`, `/ux-system`, `/ux-design`. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
+Được dùng bởi: `/ux-discover`, `/ux-system`, `/ux-design`. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `palettes.json`: 176 bảng màu
 
@@ -661,7 +692,7 @@ Lớp dữ liệu là bộ não. Mọi command đọc từ nó; bộ máy merge 
 | `tones` | warm, editorial, magazine, clinical, playful, brutalist, monochrome, jewel-tone, MENA-warm, dev-tools-dark, v.v. |
 | `sample entry` | `claude-warm-editorial`, sáng, warm/editorial/magazine, canvas #faf9f5, primary #cc785c |
 
-Được dùng bởi: `/ux-recommend`, `/ux-system`. Contrast đã xác minh ở AA / AAA. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
+Được dùng bởi: `/ux-discover`, `/ux-system`. Contrast đã xác minh ở AA / AAA. Schema: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `type-pairs.json`: 70 cặp typography
 
@@ -671,7 +702,7 @@ Lớp dữ liệu là bộ não. Mọi command đọc từ nó; bộ máy merge 
 | `keys per entry` | `id`, `name`, `display` (family + weight + nguồn + license + URL), `body`, `mono`, `compatible_styles`, `taste_score` |
 | `sample entry` | `cormorant-inter-jetbrains`, Cormorant Garamond × Inter × JetBrains Mono |
 
-Mọi family đều có license + URL nguồn. Được dùng bởi `/ux-recommend`, `/ux-system`.
+Mọi family đều có giấy phép + URL nguồn. Được dùng bởi `/ux-discover`, `/ux-system`.
 
 ### `components.json`: 148 component
 
@@ -693,7 +724,7 @@ Mọi family đều có license + URL nguồn. Được dùng bởi `/ux-recomme
 | `categories` | Financial Services, Healthcare, Education, E-commerce, SaaS B2B, SaaS B2C, Developer Tools, Media, Gaming, Travel, Real Estate, MENA-specific, v.v. |
 | `sample entry` | `fintech-neobank`, độ tin cậy cao, công bố quy định, UI chính cho số dư/giao dịch, mobile-first sử dụng hàng ngày |
 
-Được dùng bởi `/ux-recommend` làm trục tìm kiếm song song đầu tiên.
+Được recommender (`/ux-discover`) dùng làm trục tìm kiếm song song đầu tiên.
 
 ### `chart-types.json`: 35 loại biểu đồ
 
@@ -702,9 +733,9 @@ Mọi family đều có license + URL nguồn. Được dùng bởi `/ux-recomme
 | `entries` | 35 |
 | `keys per entry` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
 | `categories` | Comparison, Time Series, Distribution, Composition, Relationship, Flow, Geographic |
-| `sample entry` | `bar-vertical`, So sánh 4–15 danh mục rời rạc. Vị trí trên trục x ánh xạ danh mục; chiều cao ánh xạ giá trị. |
+| `sample entry` | `bar-vertical`, so sánh từ 4 đến 15 danh mục rời rạc. Vị trí trên trục x biểu thị danh mục; chiều cao biểu thị giá trị. |
 
-Được dùng bởi `/ux-dashboard`, `/ux-component` (instance chart).
+Được dùng bởi `/ux-design --dashboard` và `/ux-design --component` (instance chart).
 
 ### `tech-stacks.json`: 25 stack
 
@@ -739,15 +770,15 @@ Các stack khác gồm Astro, SvelteKit, Remix, Nuxt 3, Solid Start, Qwik, Blade
 
 Mọi preset đều có biến thể reduced-motion. Code sẵn sàng theo stack cho Framer Motion, GSAP, và CSS thuần.
 
-### `anti-patterns.json`: 152 quy tắc regex
+### `anti-patterns.json`: 171 quy tắc
 
 | Trường | Mô tả |
 |---|---|
-| `entries` | 152 |
-| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
-| `categories` | A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4) |
+| `entries` | 171 |
+| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (loại, mẫu, flag, phạm vi, và với nhiều quy tắc là một bước kiểm tra `post` trên tệp đã phân tích), `why`, `fix` |
+| `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-Danh sách quy tắc đầy đủ ở [152 quy tắc chống AI-slop](#152-quy-tắc-chống-ai-slop-bộ-linter).
+Danh sách quy tắc đầy đủ nằm ở [171 quy tắc chống AI-slop](#171-quy-tắc-chống-ai-slop-bộ-linter).
 
 ### `brands/*.json`: 160 spec thương hiệu
 
@@ -761,88 +792,15 @@ Danh sách đầy đủ ở [160 spec DESIGN.md thương hiệu](#160-spec-desig
 
 ---
 
-## 152 quy tắc chống AI-slop: bộ linter
+## 171 quy tắc chống AI-slop: bộ linter
 
-ux-skill ship một linter dựa trên regex xác định. **Không LLM.** **Không API.** **Không mạng.** Chạy trong CI trong ~200ms trên một app Next.js điển hình. Exit khác 0 ở Critical / High khi đặt `--fail-on high`.
+ux-skill ship một linter xác định: mỗi quy tắc là một mẫu, và nhiều quy tắc thêm bước kiểm tra trên CSS và markup đã phân tích, nên một kết quả khớp chỉ được tính trong ngữ cảnh mà quy tắc nêu ra. **Không LLM.** **Không API.** **Không mạng.** Chạy trong CI mất ~200ms với một ứng dụng Next.js điển hình. Exit khác 0 với phát hiện Critical / High khi đặt `--fail-on high`.
 
-Quy tắc được lấy từ `data/anti-patterns.json` (ưu tiên v2) với fallback `references/foundations/anti-patterns.md` (v1 bash). Hai binary được ship: `bin/ux-lint.py` (Python, nhanh, có thể mở rộng) và `bin/ux-lint.sh` (Bash + perl-PCRE, cho môi trường không có Python).
+Quy tắc lấy từ `data/anti-patterns.json` (v2, ưu tiên) với dự phòng `references/foundations/anti-patterns.md` (v1, bash). Hai binary được ship: `bin/ux-lint.py` (Python, nhanh, mở rộng được) và `bin/ux-lint.sh` (Bash + perl-PCRE, cho môi trường không có Python).
 
 ### Quy tắc theo danh mục
 
-#### Typography (3 quy tắc)
-
-| Mức độ | ID quy tắc | Tên |
-|---|---|---|
-| high | `inter-as-display` | Inter được dùng làm font display |
-| medium | `hero-text-arbitrary-90px` | Kích thước font hero tùy tiện |
-| low | `font-system-only` | Stack font hệ thống không có typeface được chọn |
-
-#### Màu (6 quy tắc)
-
-| Mức độ | ID quy tắc | Tên |
-|---|---|---|
-| high | `purple-to-blue-gradient` | Gradient AI mặc định tím-sang-xanh |
-| high | `dark-text-on-dark-card` | Text tương phản thấp trên card |
-| medium | `gradient-text-rainbow` | Gradient text nhiều stop |
-| medium | `card-glow-purple-shadow` | Shadow phát sáng tím trên card |
-| medium | `gradient-mesh-purple-pink` | Hero gradient mesh tím-hồng |
-| low | `tailwind-color-named-vague` | Màu Tailwind có tên không có semantic token |
-
-#### Layout (5 quy tắc)
-
-| Mức độ | ID quy tắc | Tên |
-|---|---|---|
-| high | `three-equal-card-grid` | Ba card bằng nhau trên một hàng |
-| medium | `centered-everything-hero` | Bố cục hero căn giữa mọi thứ |
-| medium | `avatar-stack-overlapping` | Stack avatar chồng lấn chung chung |
-| low | `pill-rounded-full-everywhere` | `rounded-full` áp dụng cho mọi thứ |
-| low | `nav-equal-hamburger-desktop` | Menu hamburger trên desktop |
-
-#### Nội dung (5 quy tắc)
-
-| Mức độ | ID quy tắc | Tên |
-|---|---|---|
-| high | `lorem-ipsum-leak` | Lorem ipsum trong code ship |
-| high | `emoji-in-ui` | Emoji được dùng như element UI |
-| high | `icon-emoji-stamp` | Emoji được dùng như icon stamp |
-| high | `testimonial-fake-five-stars` | Testimonial năm sao hard-code |
-| medium | `fake-name-john-doe` | Tên placeholder chung chung |
-
-#### Chuyển động (3 quy tắc)
-
-| Mức độ | ID quy tắc | Tên |
-|---|---|---|
-| medium | `cta-arrow-rightward-bouncing` | Mũi tên nảy trên CTA |
-| low | `timing-300ms-default` | Timing transition mặc định 300ms |
-| low | `cubic-bezier-material-only` | Easing mặc định Material khắp nơi |
-
-#### A11y (6 quy tắc)
-
-| Mức độ | ID quy tắc | Tên |
-|---|---|---|
-| high | `inline-svg-no-aria` | SVG không có aria-label hoặc aria-hidden |
-| high | `img-no-alt` | Ảnh thiếu thuộc tính alt |
-| high | `link-onclick-no-href` | Anchor có onClick nhưng không có href |
-| medium | `button-no-type` | Button thiếu thuộc tính type |
-| medium | `heading-skip-h1-h3` | Bỏ qua cấp heading |
-| medium | `infinite-scroll-no-pagination` | Infinite scroll không có fallback bàn phím |
-
-#### Chất lượng (6 quy tắc)
-
-| Mức độ | ID quy tắc | Tên |
-|---|---|---|
-| high | `console-log-leak` | `console.log` trong code component |
-| medium | `inline-style-attribute` | Thuộc tính style inline |
-| medium | `any-type-leak` | Kiểu TypeScript `any` |
-| medium | `arbitrary-z-index-9999` | Giá trị z-index lười biếng |
-| low | `shadcn-default-everywhere` | Khối token shadcn mặc định không sửa |
-| low | `todo-fixme-comment` | TODO hoặc FIXME trong code ship |
-
-#### Visual (1 quy tắc)
-
-| Mức độ | ID quy tắc | Tên |
-|---|---|---|
-| low | `blur-bg-only-decoration` | Backdrop blur không có bề mặt glass |
+Danh mục đầy đủ của 171 quy tắc, theo nhóm rồi theo mức độ, được sinh từ `data/anti-patterns.json` vào [README tiếng Anh](README.md#rules-by-category); ở đó ID và tên quy tắc giữ nguyên như linter in ra. Quy tắc bao trùm A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
 
 ### Cách dùng linter
 
@@ -850,9 +808,9 @@ Quy tắc được lấy từ `data/anti-patterns.json` (ưu tiên v2) với fal
 
 ```bash
 uxskill lint .
-# hoặc
+# or
 python3 bin/ux-lint.py src/
-# hoặc
+# or
 bash bin/ux-lint.sh src/
 ```
 
@@ -874,17 +832,17 @@ bash bin/ux-lint.sh --staged --fail-on high
 **Đầu ra (mẫu):**
 
 ```
-─── báo cáo /ux-lint ───
+─── /ux-lint report ───
 src/components/Hero.tsx:24  [high]   purple-to-blue-gradient
   evidence: bg-gradient-to-br from-purple-500 to-blue-500
-  fix: thay bằng gradient primary của bảng màu được khuyến nghị hoặc bỏ gradient
+  fix: replace with the recommended palette's primary gradient or remove gradient
 
-src/components/Pricing.tsx:12  [high] three-equal-card-grid
-  evidence: grid grid-cols-3 gap-6 (3 Card con bằng nhau)
-  fix: feature một card; kẹp hai bên bằng hai card giảm nhấn mạnh
+src/components/Pricing.tsx:11  [high] three-equal-card-grid
+  evidence: grid grid-cols-3 gap-6 (3 equal Card children)
+  fix: feature one card; flank with two reduced-emphasis cards
 
-3 file được quét · 2 high · 0 medium · 0 low · exit 1
-Khuyến nghị kế tiếp: /ux-polish --fix (do LLM dẫn dắt, xử lý cả phát hiện lintable lẫn thẩm mỹ)
+3 files scanned · 2 high · 0 medium · 0 low · exit 1
+Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aesthetic findings)
 ```
 
 ---
@@ -931,13 +889,13 @@ BMW, BMW M, Bugatti, Ferrari, Lamborghini, Renault, SpaceX, Tesla
 
 ## Máy chủ MCP: nước cờ bất đối xứng
 
-ux-skill ship một **máy chủ Model Context Protocol**. Chạy `ux-mcp` và bộ máy trở thành một process stdio chạy lâu dài mà bất kỳ host nào hỗ trợ MCP, Claude Desktop, Cursor, Windsurf, agent chung, có thể gọi vào. Mười bốn tool: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. Cùng các handler Python mà slash command dùng; cùng các data manifest; cùng bộ recommender xác định.
+ux-skill ship một **máy chủ Model Context Protocol**. Chạy `ux-mcp` và bộ máy trở thành một tiến trình stdio chạy lâu dài mà bất kỳ host nào hỗ trợ MCP (Claude Desktop, Cursor, Windsurf, agent chung) đều có thể gọi vào. 25 tool: `ux_recommend`, `ux_system_detect`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`, `ux_image_extract`, `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`, `ux_system_build`, `ux_system_import`, `ux_system_enhance`, `ux_system_extend`, `ux_system_export`, `ux_contracts_check`. Cùng các handler Python mà slash command dùng; cùng các data manifest; cùng bộ recommender xác định.
 
 **Vì sao đây là nước cờ bất đối xứng:** không một trong tám skill UX Claude hàng đầu (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) nào ship máy chủ MCP. Chúng bị khóa bên trong runtime plugin của Claude Code. ux-skill có thể truy cập từ bất kỳ host nào nói MCP, bao gồm cả các agent chưa bao giờ nghe đến plugin Claude Code.
 
 ```bash
-pip install 'uxskill[mcp]'             # mcp là extra opt-in
-ux-mcp                                  # máy chủ stdio JSON-RPC khởi động
+pip install 'uxskill[mcp]'             # mcp is an opt-in extra
+ux-mcp                                  # stdio JSON-RPC server starts
 ```
 
 Trỏ client của bạn đến binary `ux-mcp`. Tài liệu tool đầy đủ, ví dụ JSON, và cấu hình theo client cho Claude Desktop, Cursor, và Windsurf sống tại [docs/mcp.html](docs/mcp.html) và trong `commands/ux-mcp.md`.
@@ -950,7 +908,7 @@ Trỏ client của bạn đến binary `ux-mcp`. Tài liệu tool đầy đủ, 
 
 | IDE / công cụ | Tín hiệu phát hiện | Artifact được cài |
 |---|---|---|
-| Claude Code | `.claude/` hoặc `CLAUDE.md` | Manifest plugin tại `.claude-plugin/plugin.json` + toàn bộ 25 command + toàn bộ 5 sub-agent |
+| Claude Code | `.claude/` hoặc `CLAUDE.md` | Manifest plugin tại `.claude-plugin/plugin.json` + toàn bộ 18 command (và 7 alias) + toàn bộ 5 sub-agent |
 | Cursor | `.cursor/` hoặc `.cursorrules` | Header prompt `.cursorrules` trỏ về bộ máy |
 | Windsurf | `.windsurf/` hoặc `.windsurfrules` | `.windsurfrules` với cùng header prompt |
 | GitHub Copilot | `.github/copilot-instructions.md` hoặc `.vscode/` | `.github/copilot-instructions.md` |
@@ -982,8 +940,8 @@ Bạn đang ở trong Cursor làm dashboard cho neobank MENA. Bạn cài plugin 
 
 ```bash
 pip install uxskill
-uxskill init                                # phát hiện Cursor, ghi .cursorrules
-uxskill discover                            # thu thập 10 trường
+uxskill init                                # detects Cursor, writes .cursorrules
+uxskill discover                            # 10-field intake
 uxskill recommend \
   --project-type=dashboard \
   --industry=fintech-neobank \
@@ -1012,14 +970,14 @@ Sau đó trong Cursor, hỏi: *"Generate the dashboard surface using the recomme
 > Region? global
 > Success metric? signup conversion
 
-/ux-recommend
-> [trả về phong cách, bảng màu, cặp typography, preset chuyển động, component, thương hiệu hình mẫu đã chọn]
+/ux-discover --recommend
+> [returns picked style, palette, type pair, motion presets, components, brand exemplars]
 
 /ux-design "generate the landing using the Stripe brand spec as exemplar"
-> [frontend-engineer sinh trang]
+> [frontend-engineer generates the page]
 
 /ux-lint .
-> [pass, spec thương hiệu Stripe được tôn trọng]
+> [passes, Stripe brand spec was respected]
 ```
 
 ### 3. Audit code hiện có cho AI slop trong CI
@@ -1049,16 +1007,16 @@ Bạn thừa kế một app React trông như mọi trang SaaS AI khác. Bạn m
 
 ```
 /ux-critique src/components/Hero.tsx
-> [3 điểm thắng, 3 điểm trượt, 1 nước cờ chiến lược, quan điểm thẳng thắn]
+> [3 wins, 3 misses, 1 strategic move, the take is honest]
 
 /ux-lint src/
-> [15 dấu vân tay AI mức high được gắn cờ]
+> [15 high-severity AI fingerprints flagged]
 
 /ux-polish src/components/Hero.tsx
-> [pass mỹ thuật được LLM dẫn dắt + diệt AI-slop]
+> [LLM-driven cosmetic pass + AI-slop kill]
 
 /ux-fix
-> [áp dụng phát hiện thành commit nguyên tử, chạy lại linter]
+> [applies findings as atomic commits, re-runs the linter]
 ```
 
 Ba command, một bề mặt được polish, commit nguyên tử cho mỗi fix.
@@ -1066,10 +1024,10 @@ Ba command, một bề mặt được polish, commit nguyên tử cho mỗi fix.
 ### 5. Thiết kế command palette theo phong cách Linear
 
 ```
-/ux-component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
-> [đọc data/brands/linear.app.json cho token + nước cờ chữ ký]
-> [đọc data/components.json cho anatomy + state của command-palette]
-> [điều phối frontend-engineer với spec Linear rõ ràng]
+/ux-design --component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
+> [reads data/brands/linear.app.json for tokens + signature moves]
+> [reads data/components.json for the command-palette anatomy + states]
+> [dispatches frontend-engineer with explicit Linear spec]
 ```
 
 Component sinh ra dùng đúng token màu, stack typography, quy ước motion, mật độ hairline thực của Linear, không phải "dark UI chung chung".
@@ -1092,9 +1050,9 @@ Bạn ship ví loyalty. Bạn muốn một tác phẩm portfolio.
 
 ```
 /ux-case-study --format=html --slug=bashiti-loyalty
-> [đọc .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [sinh case study Wfrah-editorial với các section đánh số (A)-(G), đường ngăn nét tóc, layout an toàn song ngữ]
-> [ghi case-studies/bashiti-loyalty.html]
+> [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
+> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/bashiti-loyalty.html]
 ```
 
 Case study là một artifact hoàn thiện, có thể xuất bản, không phải bản nháp. Đơn sắc tinh khôi, typography editorial, sẵn sàng ship lên portfolio của bạn.
@@ -1105,7 +1063,7 @@ Bạn đang phạm vi hóa một dự án. Bạn chưa cần khuyến nghị, b�
 
 ```bash
 uxskill discover
-# thu thập 10 trường, lưu vào .ux/last-discovery.json
+# 10-field intake, saves to .ux/last-discovery.json
 
 cat .ux/last-discovery.json
 # {
@@ -1119,7 +1077,7 @@ Bạn có thể trao JSON cho đội của mình, dán vào tài liệu Notion, 
 
 ### 9. MASTER.md bền vững: quyết định thiết kế của bạn, trong repo
 
-Sau `/ux-recommend`, lưu trữ phong cách + bảng màu + typography + motion + component + thương hiệu hình mẫu + rào chắn đã chọn dưới dạng một file Markdown người-đọc-được mà đội bạn có thể review, diff, và version-control.
+Sau `/ux-discover` (hoặc `/ux-discover --recommend`), lưu phong cách + bảng màu + chữ + chuyển động + component + thương hiệu hình mẫu + rào chắn đã chọn thành một tệp Markdown dễ đọc mà đội bạn có thể review, diff và quản lý phiên bản.
 
 ```bash
 python3 -m engine.cli.main persist save --project-root .
@@ -1135,11 +1093,11 @@ Bảng tóm tắt ngắn. So sánh đầy đủ từng-bảng tại [uxskill.lai
 
 | Chiều | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
-| Slash command | **22** | 1 | 19 | 1 | 1 | nhiều | 1 | 1 | 1 |
+| Slash command | **18** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Component | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Preset chuyển động | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Spec thương hiệu | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Quy tắc anti-pattern | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Quy tắc anti-pattern | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Linter xác định CI-safe | **có** | không | không | không | không | không | không | không | không |
 | IDE hỗ trợ | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Cổng discovery | **10 trường** | ngầm | ngầm | ngầm | ngầm | ngầm | ngầm | ngầm | ngầm |
@@ -1159,24 +1117,21 @@ Bảng tóm tắt ngắn. So sánh đầy đủ từng-bảng tại [uxskill.lai
 
 ## Lộ trình
 
-### v2.1: Hoàn thiện linter (Q3 2026)
+Tiếp theo, không gắn với bản phát hành cố định:
 
-- **+17 quy tắc anti-pattern hoãn lại** để đạt tổng 52. Mục tiêu: state hover dark-on-dark, mã hóa state chỉ-bằng-màu, leo z-index dư thừa, breakpoint hardcode trong JS, opacity thay vì state disabled, v.v.
-- **`uxskill lint --fix` cho các viết-lại an toàn** của các phát hiện có thể sửa máy móc (button-no-type, img-no-alt chuỗi-rỗng, xóa console-log-leak).
-- **Extension VS Code** đưa phát hiện lint nổi lên inline (không cần chạy CI).
+- **Style Figma**: effect style cho đổ bóng, grid style và text style gắn với biến của trường, ghi lên một tệp đang mở.
+- **Ánh xạ component**: một component Figma và các biến thể của nó được nối với một component trong code và props của nó, giữ nguyên qua bước bàn giao.
+- **Trình nhập từ site đang chạy**: đọc hệ thống mà một site đã xuất bản thực sự render, bên cạnh các trình nhập từ tệp.
+- **Trang tài liệu cho một hệ thống đã dựng**: góc nhìn cho con người về token, vai trò và hợp đồng của nó.
 
-### v2.2: Mở rộng manifest component (Q4 2026)
+Vẫn còn mở:
 
-- **+50 component** để đạt tổng 198. Mới hoàn toàn: combobox với async filter, command-palette với heuristic recent-items, conditional-form-step, biến thể payment-element, date picker nhận biết RTL, phone input riêng MENA, lưới calendar với overlay hijri.
-- **Phát code theo từng component** trong 6 stack (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, HTML/CSS thuần).
-- **Component playground** tại uxskill.laithjunaidy.com/playground, thử bộ máy khuyến nghị + xem preview component trực tiếp.
-
-### v3: Chợ + khóa chặt (2027)
-
-- **Chợ spec thương hiệu**: xuất bản và khám phá spec thương hiệu cộng đồng. Trả-tiền-để-xuất-bản để tài trợ kiểm duyệt.
-- **Quy tắc anti-pattern tùy chỉnh**: dự án có thể định nghĩa quy tắc regex riêng trong `data/anti-patterns.local.json` (đã ship trong v2; v3 thêm khám phá + chia sẻ).
-- **`uxskill plan`**: lập kế hoạch trang nhiều-trang đầy đủ từ một brief, không chỉ một bề mặt.
-- **Tương đương plugin Figma**: cùng bộ máy khuyến nghị, được đưa lên trong Figma.
+- **`uxskill lint --fix` cho các lần viết lại an toàn** đối với phát hiện sửa được một cách máy móc (button-no-type, img-no-alt chuỗi rỗng, gỡ console-log-leak).
+- **Tiện ích VS Code** hiển thị phát hiện lint ngay trong code.
+- **Sinh code theo component** cho sáu stack (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, HTML/CSS thuần).
+- **Chợ đặc tả thương hiệu**: đăng và khám phá đặc tả thương hiệu của cộng đồng.
+- **Quy tắc anti-pattern tùy chỉnh**: khám phá và chia sẻ các quy tắc mà dự án định nghĩa trong `data/anti-patterns.local.json`.
+- **`uxskill plan`**: lập kế hoạch site nhiều trang từ một brief, không chỉ một bề mặt.
 
 ---
 
@@ -1239,6 +1194,6 @@ MIT. Hãy dùng, fork, xây dựng dựa trên. Nếu nó cứu bạn khỏi vi�
 
 ---
 
-**ux-skill** · **v3.1.0-stable** · Được xây để Claude Code, Cursor, Windsurf, và mọi công cụ lập trình AI khác xuất ra frontend không đọc lên như AI tạo.
+**ux-skill** · **v4.0.0** · Được xây để Claude Code, Cursor, Windsurf, và mọi công cụ lập trình AI khác xuất ra frontend không đọc lên như AI tạo.
 
 > Gắn sao repo tại [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · Cài qua `pip install uxskill` hoặc `npx uxskill init` · Xem so sánh tại [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)
