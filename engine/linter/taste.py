@@ -148,6 +148,9 @@ class System:
         self.durations: Set[float] = set()
         self.curves: List[List[float]] = []
         self.colors: List[Tuple[int, int, int]] = []
+        self.leadings: Set[float] = set()
+        # type.capitals: how far the system leans to a capitals display.
+        self.capitals: Optional[float] = None
         self.caps = any("caps" in name for name in props)
         self.formality: Optional[float] = None
         for name in props:
@@ -165,6 +168,10 @@ class System:
                 self.sizes.append(px)
         if ("tracking" in name or "letter-spacing" in name) and n is not None:
             self.tracking.append(n)
+        if name == "--type-capitals" and n is not None and n[1] == "":
+            self.capitals = n[0]
+        if ("leading" in name or "line-height" in name) and n is not None and n[1] == "":
+            self.leadings.add(n[0])
         t = ms(low)
         if t is not None:
             self.durations.add(t)
@@ -327,10 +334,13 @@ _CAPS_SIZE = re.compile(r"font-size\s*:\s*(\d+(?:\.\d+)?)\s*(px|rem)?", re.I)
 
 def capitals_outside_system(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
     """Capitals at a large size pass when the page's system has a capitals
-    display role, the size is one of the system's two largest and the
-    letters are not tracked tight."""
+    display role, leans to capitals (type.capitals at CAPITALS_FROM or
+    more, when the system emits it), the size is one of the system's two
+    largest and the letters are not tracked tight."""
     sys_ = system(ctx)
     if not (sys_.caps and sys_.sizes):
+        return True
+    if sys_.capitals is not None and sys_.capitals < character.CAPITALS_FROM:
         return True
     m = _CAPS_SIZE.search(match.group(0))
     if not m:
@@ -1052,3 +1062,111 @@ TASTE_CHECKS = {
     "infinite-animation-unguarded": infinite_animation_unguarded,
     "layout-transition-reflows": layout_transition_reflows,
 }
+
+
+# ---------------------------------------------------------------------------
+# display-line-height-under-floor
+# ---------------------------------------------------------------------------
+
+_RTL_SELECTOR = re.compile(r":lang\(\s*['\"]?(?:ar|fa|ur|he)\b|\[lang\s*[|^*~]?=\s*['\"]?(?:ar|fa|ur|he)\b"
+                           r"|\[dir\s*=\s*['\"]?rtl|:dir\(\s*rtl", re.I)
+_RTL_PAGE = re.compile(r"<html\b[^>]*\b(?:dir\s*=\s*['\"]?rtl|lang\s*=\s*['\"]?(?:ar|fa|ur|he)\b)", re.I)
+_ARABIC_FACE = re.compile(r"arabic|naskh|kufi|thuluth|nastaliq", re.I)
+_SHORT_FONT = re.compile(r"(\d*\.?\d+)\s*(px|rem)\s*/\s*(\d*\.?\d+)\s*(px|rem|%)?", re.I)
+# Tailwind's display sizes and line-height utilities.
+_TW_TEXT = {"5xl": 48.0, "6xl": 60.0, "7xl": 72.0, "8xl": 96.0, "9xl": 128.0}
+_TW_LEADING = {"none": 1.0, "tight": 1.25, "snug": 1.375}
+_TW_TEXT_CLASS = re.compile(r"(?<![\w:/-])text-(?:([5-9]xl)|\[(\d*\.?\d+)(px|rem)\])(?![\w-])", re.I)
+_TW_LEAD_CLASS = re.compile(r"(?<![\w:/-])leading-(?:(none|tight|snug)|\[(\d*\.?\d+)\])(?![\w-])", re.I)
+
+
+def _font_size_px(ctx: FileContext, value: str) -> Optional[float]:
+    """A font size in px: a length, a var() into the page's system, or the
+    largest length inside clamp(), min() or max()."""
+    value = value.strip()
+    m = _ONLY_VAR.match(value)
+    if m:
+        for v in literals(system(ctx).props, m.group(1).lower()):
+            px = _font_size_px(ctx, v)
+            if px:
+                return px
+        return None
+    if "(" in value:
+        found = [length_px(x) for x in re.findall(r"\d*\.?\d+(?:px|rem)", value, re.I)]
+        found = [x for x in found if x]
+        return max(found) if found else None
+    return length_px(value)
+
+
+def _ratio(value: str, font_px: float) -> Optional[float]:
+    """A line height as a multiple of the font size; None for a var(),
+    normal or anything unreadable."""
+    n = number(value.strip())
+    if n is None:
+        m = re.match(r"^(\d*\.?\d+)%$", value.strip())
+        return float(m.group(1)) / 100.0 if m else None
+    v, unit = n
+    if unit == "":
+        return v
+    px = length_px(value.strip(), font_px)
+    return px / font_px if px is not None else None
+
+
+def _rtl_block(ctx: FileContext, block) -> bool:
+    if any(_RTL_SELECTOR.search(s) for s in block.selectors):
+        return True
+    family = _decl_map(block.body).get("font-family", "")
+    if _ARABIC_FACE.search(family):
+        return True
+    raw = ctx.views.get("raw")
+    return bool(raw is not None and _RTL_PAGE.search(raw.text))
+
+
+def _leading_in_system(sys_: System, ratio: float) -> bool:
+    return any(abs(ratio - v) <= 0.005 for v in sys_.leadings)
+
+
+def display_leading_outside_floor(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """A display line height (40px and up) under the engine's floor for its
+    size (typography.display_leading_floor, 0.15 higher for Arabic) is a
+    finding unless the page's system has that line height."""
+    from engine.foundations.typography import DISPLAY_LEAD_PX, display_leading_floor
+    text = match.group(0)
+    sys_ = system(ctx)
+    if text.lower().startswith("class="):
+        size = _TW_TEXT_CLASS.search(text)
+        lead = _TW_LEAD_CLASS.search(text)
+        if not (size and lead):
+            return False
+        px = _TW_TEXT[size.group(1).lower()] if size.group(1) else (
+            float(size.group(2)) * (REM_PX if size.group(3).lower() == "rem" else 1.0))
+        ratio = _TW_LEADING[lead.group(1).lower()] if lead.group(1) else float(lead.group(2))
+        raw = ctx.views.get("raw")
+        rtl = bool(raw is not None and _RTL_PAGE.search(raw.text))
+    else:
+        block = block_at(ctx, view, match.start())
+        if block is None:
+            return False
+        decls = _decl_map(block.body)
+        short = _SHORT_FONT.search(decls.get("font", "")) if "font" in decls else None
+        if text.lower().lstrip().startswith("font") and not text.lower().lstrip().startswith("font-"):
+            if not short:
+                return False
+            px = float(short.group(1)) * (REM_PX if short.group(2).lower() == "rem" else 1.0)
+            ratio = _ratio(short.group(3) + (short.group(4) or ""), px)
+        else:
+            if "font-size" not in decls:
+                return False
+            px = _font_size_px(ctx, decls["font-size"])
+            if px is None:
+                return False
+            ratio = _ratio(decls.get("line-height", text.split(":", 1)[-1]), px)
+        rtl = _rtl_block(ctx, block)
+    if ratio is None or px is None or px < DISPLAY_LEAD_PX[0]:
+        return False
+    if ratio >= display_leading_floor(px, arabic=rtl) - 0.005:
+        return False
+    return not _leading_in_system(sys_, ratio)
+
+
+TASTE_CHECKS["display-leading-outside-floor"] = display_leading_outside_floor

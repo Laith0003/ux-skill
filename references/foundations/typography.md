@@ -12,7 +12,7 @@
 
 4. **Tracking tightens as type grows, loosens as it shrinks.** The display tightens with contrast; capitals track at 0 or open, since they already sit close. Labels open up with formality. Body stays at default tracking.
 
-5. **Sentence case is the default.** Reserve title case for proper nouns and trademarked product names. Capitals belong to short labels, and to the display of a loud brand whose system leans to capitals (character.capitals, `type.text.display-caps`). Title-case headlines on every word read as enterprise from a previous decade.
+5. **Sentence case is the default.** Reserve title case for proper nouns and trademarked product names. Capitals belong to short labels, and to the display of a loud brand whose system leans to capitals (character.capitals, emitted as `type.capitals`: under 0.5 the lint reports a capitals display; `type.text.display-caps`). Title-case headlines on every word read as enterprise from a previous decade.
 
 6. **Line length is policed.** The measure counts characters of the text face: 42 to 56 on a landing page (`layout.measure.landing`), 60 to 70 for reading, 60 to 66 for a long read. Headlines wrap balanced (`text-wrap: balance`), paragraphs pretty (`text-wrap: pretty`).
 

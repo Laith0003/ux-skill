@@ -1,0 +1,15 @@
+:root {
+  --type-weight-400: 400;
+  --type-weight-700: 700;
+  --type-size-latin-3: 1rem;
+  --type-size-latin-9: 3.75rem;
+  --type-size-latin-10: 7.5rem;
+  --type-tracking-step-10: -2.4px;
+  --type-tracking-caps: 1.8px;
+  --type-text-display-caps-letter-spacing: var(--type-tracking-caps);
+  --type-capitals: 0.8;
+  --motion-duration-300: 300ms;
+  --motion-duration-500: 500ms;
+  --motion-duration-800: 800ms;
+  --motion-curve-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

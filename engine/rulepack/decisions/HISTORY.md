@@ -191,3 +191,5 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Anything that moves on its own stops under reduced motion and can be paused](moving-content-pauses.md)
 - [A layout transition is flagged when it moves what sits beside it](layout-transitions-that-reflow.md)
 - [Inner pages have their own sequences and share one header, closing band and footer](inner-pages-one-family.md)
+- [The lint holds a display line height to the least the engine builds for its size](display-leading-floor-in-lint.md)
+- [The system says how far it leans to capitals, and the lint reads it](capitals-follow-the-signal.md)

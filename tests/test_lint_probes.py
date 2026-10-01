@@ -151,6 +151,10 @@ EXPECT = {
     # An unwritten curve is the default one, judged the same as ease.
     "taste/t11-default-curve.css": {"transition-duration-500ms-or-longer": [2, 3],
                                     "timing-300ms-default": [5, 6]},
+    # A display line height under the engine's floor for its size and script.
+    "taste/t12-display-leading.css": {"display-line-height-under-floor": [2, 3, 5, 7]},
+    # A calm system (type.capitals under 0.5) reports display capitals.
+    "taste/t13-capitals-signal.html": {"all-caps-large": [4]},
     # other review probes
     "misc/d1.tsx": {"div-onclick-no-role": [3, 4]},
     "misc/e1.html": {"emoji-in-ui": [1, 2, 5]},

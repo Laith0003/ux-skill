@@ -620,11 +620,17 @@ def capitals_tracking(axes: AxisValues) -> float:
     return round(0.005 + 0.02 * axes.formality, 4)
 
 
+# The lean from which a brand sets its display in capitals: the report calls
+# for them, the hero centres, and lint lets a capitals display pass.
+CAPITALS_FROM = 0.5
+
+
 def capitals(axes: AxisValues) -> float:
     """How far the brand leans to a display in capitals, 0 to 1: nothing
     up to an expressiveness of 0.5, rising to 1 at 0.9, held back by
     formality. Measured award pages set capital headlines on the louder
-    half only. The report calls for capitals at 0.5 and above."""
+    half only. The report calls for capitals at CAPITALS_FROM and above;
+    the system emits it as type.capitals."""
     return round(clamp((expressiveness(axes) - 0.5) / 0.4) * (1.0 - 0.8 * axes.formality), 4)
 
 

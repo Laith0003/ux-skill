@@ -636,6 +636,8 @@
   --type-switch-on: 1;
   --type-emphasis-tone: var(--type-tone-50);
   --type-emphasis-italic: var(--type-switch-off);
+  --type-lean-capitals: 0;
+  --type-capitals: var(--type-lean-capitals);
   --imagery-aspect-4-5: 0.8;
   --imagery-aspect-3-2: 1.5;
   --imagery-aspect-16-9: 1.7778;
