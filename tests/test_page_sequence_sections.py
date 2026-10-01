@@ -40,3 +40,15 @@ def test_a_dropped_section_gives_its_contracts_reason():
 def test_the_split_rows_stay_prose_only_with_their_rule():
     rows = [s for _, s in ROWS if s["section"].startswith("Split feature rows")]
     assert rows and all(s.get("prose_only") for s in rows)
+
+
+@pytest.mark.parametrize("sid,section", [(i, s) for i, s in ROWS if s.get("contract")])
+def test_a_section_whose_contract_needs_proof_names_its_proof(sid, section):
+    if SECTIONS[section["contract"]].section.proof_kinds:
+        assert section.get("proof"), (sid, section["section"])
+
+
+def test_a_section_keeps_its_place_with_another_proof_its_contract_takes():
+    seq = select_for_brief({"product_type": "software", "proof": ["reviews"]})
+    quotes = [s for s in seq["section_sequence"] if s.get("contract") == "named-quote"]
+    assert quotes and all(s["proof"] == "reviews" for s in quotes)

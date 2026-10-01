@@ -9,7 +9,7 @@ parts:
   - {name: heading, rtlBehavior: logical}
   - {name: logo, rtlBehavior: logical}
 slots:
-  - {name: logo, takes: [photograph], required: true}
+  - {name: logo, takes: [logo], required: true}
 variants:
   - {name: density, values: [standard, compact], default: standard}
 states: [default]

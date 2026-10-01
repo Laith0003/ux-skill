@@ -44,6 +44,7 @@ def seed_sources() -> Dict[str, str]:
     return {f.name: f.read_text(encoding="utf-8") for f in sorted(SEED_DIR.glob("*.yaml"))}
 
 
+@lru_cache(maxsize=1)
 def component_names() -> Tuple[str, ...]:
     """The seed component contracts' names, read from their file names."""
     return tuple(sorted(f.stem for f in SEED_DIR.glob("*.yaml")))

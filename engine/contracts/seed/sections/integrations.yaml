@@ -11,7 +11,7 @@ parts:
   - {name: logo, rtlBehavior: logical}
   - {name: media, rtlBehavior: logical}
 slots:
-  - {name: logo, takes: [photograph], required: true}
+  - {name: logo, takes: [logo], required: true}
   - {name: media, takes: [photograph, interface-fragment], required: false}
 variants:
   - {name: density, values: [standard, compact], default: standard}

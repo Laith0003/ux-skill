@@ -67,7 +67,9 @@ def test_each_section_renders_clean_at_1440_and_390(name, browser_page, tmp_path
     (tmp_path / "photo.webp").write_bytes(photo)
     css = to_css(build_system(AxisValues(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5), "#3366FF",
                               arabic=False).tokens)
-    markup, section_css = render_section(SECTIONS[name], photos=[("photo.webp", "The dining room")])
+    markup, section_css = render_section(
+        SECTIONS[name], photos=[("photo.webp", "The dining room")],
+        logos=[("photo.webp", f"Partner organisation {i}") for i in range(1, 7)])
     f = tmp_path / f"{name}.html"
     f.write_text('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" '
                  'content="width=device-width, initial-scale=1"><title>Section</title><style>'

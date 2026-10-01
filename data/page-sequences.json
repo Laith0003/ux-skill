@@ -380,7 +380,7 @@
           "section": "Editor's pick / pull-quote",
           "job": "explanation",
           "purpose": "A highlighted piece or a pull-quote that carries the editorial point of view, with attribution.",
-          "contract": "named-quote"
+          "prose_only": true
         },
         {
           "section": "Newsletter signup",

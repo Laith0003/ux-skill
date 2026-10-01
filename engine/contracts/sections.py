@@ -109,7 +109,8 @@ def _items(kind: str, n: int, photos: Sequence[Tuple[str, str]]) -> str:
 
 
 def _slot_html(c: Contract, slot: str, takes: Sequence[str], variant: Mapping[str, str],
-               photos: Sequence[Tuple[str, str]]) -> str:
+               photos: Sequence[Tuple[str, str]], fragments: Sequence[Tuple[str, str]] = (),
+               logos: Sequence[Tuple[str, str]] = ()) -> str:
     """The markup one slot holds, by what it takes."""
     first = photos[0] if photos else ("", "")
     if "button" in takes:
@@ -139,7 +140,7 @@ def _slot_html(c: Contract, slot: str, takes: Sequence[str], variant: Mapping[st
     if "card" in takes:
         if slot == "plan":
             return _plans(c)
-        return _items("card", 4 if c.name == "bento" else 3, photos)
+        return _items("card", 5 if c.name == "bento" else 3, photos)
     if slot == "stat":
         stats = (("1,200", "tables served each week, 2026"), ("4.8", "average rating, 2026"),
                  ("12", "years on the same street"))
@@ -153,14 +154,15 @@ def _slot_html(c: Contract, slot: str, takes: Sequence[str], variant: Mapping[st
                 '<span class="role">Office manager, Harbour Studio</span></figcaption></figure>')
     if slot == "item":
         return _items("steps", 3, photos)
-    if slot == "logo":
+    if "logo" in takes:
         return '<ul class="logos" role="list">' + "".join(
-            f'<li><img class="logo" src="{_esc(first[0])}" alt="Partner {i + 1}" width="120" '
-            'height="40"></li>' for i in range(6)) + "</ul>"
+            f'<li><img class="logo" src="{_esc(src)}" alt="{_esc(alt)}" width="120" '
+            'height="40"></li>' for src, alt in logos) + "</ul>"
     if "interface-fragment" in takes and "photograph" not in takes:
-        if variant.get("media") not in ("photograph-and-fragment", "fragment"):
+        if variant.get("media") != "photograph-and-fragment" or not fragments:
             return ""
-        return (f'<img class="fragment" src="{_esc(first[0])}" alt="The booking screen" '
+        src, alt = fragments[0]
+        return (f'<img class="fragment" src="{_esc(src)}" alt="{_esc(alt)}" '
                 'width="800" height="600">')
     if "photograph" in takes:
         if not first[0]:
@@ -206,8 +208,7 @@ def _layout_css(c: Contract) -> str:
         "var(--space-control-padding-inline-large); border-radius: var(--radius-control); "
         "background-color: var(--color-action-primary); color: var(--color-text-on-action); "
         "font-weight: 600; text-decoration: none; justify-self: start; }",
-        f"{s} .item, {s} .plan {{ display: grid; gap: var(--space-text-gap); "
-        "align-content: start; }",
+        f"{s} .item, {s} .plan {{ display: grid; align-content: start; }}",
         f"{s} .stats dd {{ margin: 0; }} {s} .stats > div {{ display: flex; "
         "flex-direction: column-reverse; gap: var(--space-text-gap); }",
         f"{s} .quote {{ margin: 0; }} {s} .quote-figure {{ margin: 0; display: grid; "
@@ -276,10 +277,14 @@ def _layout_css(c: Contract) -> str:
 
 
 def render_section(c: Contract, variant: Optional[Mapping[str, str]] = None,
-                   photos: Sequence[Tuple[str, str]] = ()) -> Tuple[str, str]:
+                   photos: Sequence[Tuple[str, str]] = (), *,
+                   fragments: Sequence[Tuple[str, str]] = (),
+                   logos: Sequence[Tuple[str, str]] = ()) -> Tuple[str, str]:
     """(markup, css) for one section contract. ``variant`` names a value per
-    variant (a left-out variant takes its default); ``photos`` are (src,
-    alt) pairs the media slots take in turn."""
+    variant (a left-out variant takes its default); ``photos``, ``fragments``
+    and ``logos`` are (src, alt) pairs the slots that take each draw in
+    turn. The layout comes first in the CSS and the contract's bindings
+    after it, so a binding wins."""
     if c.section is None:
         raise ValueError(f"{c.name}: render_section takes a section contract, category "
                          f"section; {c.name} is {c.category}")
@@ -288,6 +293,17 @@ def render_section(c: Contract, variant: Optional[Mapping[str, str]] = None,
     if bad:
         raise ValueError(f"{c.name}: variant {bad} is not a variant of this section; use "
                          f"{sorted(chosen) or 'none'}")
+    for v in c.variants:
+        if chosen[v.name] not in v.values:
+            raise ValueError(f"{c.name}: variant {v.name} is {chosen[v.name]!r}; use one of "
+                             f"{', '.join(v.values)}")
+    if chosen.get("media") == "photograph-and-fragment" and not fragments:
+        raise ValueError(f"fragments: {c.name} with media photograph-and-fragment needs an "
+                         "interface fragment; pass (src, alt) pairs, or choose media "
+                         "photograph")
+    if any("logo" in s.takes and s.required for s in c.section.slots) and not logos:
+        raise ValueError(f"logos: {c.name} shows the client's real marks; pass (src, alt) pairs "
+                         "with each organisation's name, or drop the section with its reason")
     needs = any("photograph" in s.takes and s.required for s in c.section.slots)
     if needs and not photos:
         raise ValueError(f"photos: {c.name} needs a photograph; pass (src, alt) pairs sourced "
@@ -308,7 +324,7 @@ def render_section(c: Contract, variant: Optional[Mapping[str, str]] = None,
         if not slot.required and "photograph" in slot.takes:
             return True  # an optional photograph is the page's choice, not the skeleton's
         return "plan" in names and slot.name == "action"
-    slots = ["" if held(s) else _slot_html(c, s.name, s.takes, chosen, photos)
+    slots = ["" if held(s) else _slot_html(c, s.name, s.takes, chosen, photos, fragments, logos)
              for s in c.section.slots]
     text_side = head + body + "".join(x for s, x in zip(c.section.slots, slots)
                                       if s.name in ("action",))
@@ -318,4 +334,4 @@ def render_section(c: Contract, variant: Optional[Mapping[str, str]] = None,
     markup = (f'<section class="s-{c.name}" {attrs} aria-labelledby="h-{c.name}">'
               f'<div class="inner{" has-media" if media else ""}"><div class="text">'
               f'{text_side}</div>{rest}</div></section>')
-    return markup, _rules(c, chosen) + "\n" + _layout_css(c)
+    return markup, _layout_css(c) + "\n" + _rules(c, chosen)

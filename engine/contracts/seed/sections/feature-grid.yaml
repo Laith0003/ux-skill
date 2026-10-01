@@ -15,7 +15,7 @@ slots:
   - {name: item, takes: [card], required: true}
   - {name: media, takes: [photograph, interface-fragment], required: true}
 variants:
-  - {name: media, values: [photograph, fragment], default: photograph}
+  - {name: media, values: [photograph, photograph-and-fragment], default: photograph}
   - {name: density, values: [standard, compact], default: standard}
 states: [default]
 tokens:

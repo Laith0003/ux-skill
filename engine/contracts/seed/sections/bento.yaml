@@ -2,7 +2,7 @@
 name: bento
 status: experimental
 category: section
-description: Four to six tiles of different sizes, each showing one capability with its photograph or fragment, one tile leading.
+description: Five to eight tiles of different sizes, each showing one capability with its photograph or fragment, one tile leading.
 job: Prove the product's range at a glance, with one capability leading.
 parts:
   - {name: container, rtlBehavior: logical}
@@ -15,7 +15,7 @@ slots:
   - {name: item, takes: [card], required: true}
   - {name: media, takes: [photograph, interface-fragment], required: true}
 variants:
-  - {name: media, values: [photograph, fragment], default: photograph}
+  - {name: media, values: [photograph, photograph-and-fragment], default: photograph}
   - {name: density, values: [standard, compact], default: standard}
 states: [default]
 tokens:

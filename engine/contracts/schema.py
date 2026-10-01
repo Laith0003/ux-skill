@@ -33,7 +33,7 @@ CATEGORIES: Tuple[str, ...] = ("action", "input", "selection", "container", "ove
 SECTION = "section"
 SECTION_KEYS: Tuple[str, ...] = ("job", "slots", "proof", "phone")
 # What a section's slots take besides component contracts.
-MEDIA_KINDS: Tuple[str, ...] = ("photograph", "interface-fragment", "text")
+MEDIA_KINDS: Tuple[str, ...] = ("photograph", "interface-fragment", "logo", "text")
 # Section variants are named by what differs.
 SECTION_VARIANTS: Tuple[str, ...] = ("media", "alignment", "density")
 # The phone recomposition, applied in this order: drop decorative layers,
@@ -43,8 +43,7 @@ SECTION_VARIANTS: Tuple[str, ...] = ("media", "alignment", "density")
 PHONE_ORDER: Tuple[str, ...] = ("drop-decorative-layers", "fold-side-columns",
                                 "pair-small-items", "plan-switcher", "recrop-fragments")
 # The proof a section can need: the page sequence's proof kinds.
-PROOF_KINDS: Tuple[str, ...] = ("case-studies", "certifications", "logos", "press", "reviews",
-                                "stats", "testimonials")
+from engine.page_sequence.core import PROOF_KINDS  # noqa: E402
 # Categories a person operates directly: they need a target size, a focus
 # state and a focus ring.
 INTERACTIVE: Tuple[str, ...] = ("action", "input", "selection")
@@ -461,18 +460,27 @@ def _tokens(c: _Checker, raw: Any, parts: Tuple[Part, ...], variants: Tuple[Vari
 
 
 def _section(c: _Checker, data: Dict[str, Any], variants: Tuple[Variant, ...],
-             parts: Tuple[Part, ...]) -> Optional[SectionSpec]:
-    """A section's job, slots, proof and phone recomposition."""
+             folder: Optional[Path]) -> Optional[SectionSpec]:
+    """A section's job, slots, proof and phone recomposition. A slot takes
+    a seed component or a component contract in the section's own folder."""
     from engine.contracts.library import component_names
     job = data.get("job")
     if not _is_text(job) or not job.strip().endswith(".") or ". " in job.strip()[:-1]:
         c.add("bad-section", f"job is {job!r}; say in one sentence, ending in a period, what the "
                              "section must prove")
+    for v in variants:
+        if v.name == "media":
+            alone = [x for x in v.values if "fragment" in x and "photograph" not in x]
+            if alone:
+                c.add("bad-section", f"variants media values {alone} show a fragment without a "
+                                     "photograph; a fragment is extra imagery, never a "
+                                     "replacement, so name the value photograph-and-fragment")
     bad = [v.name for v in variants if v.name not in SECTION_VARIANTS]
     if bad:
         c.add("bad-section", f"variants {bad} are not named by what differs; name a section's "
                              f"variants {', '.join(SECTION_VARIANTS)}")
-    known = set(component_names()) | set(MEDIA_KINDS)
+    local = {f.stem for f in folder.glob("*.yaml")} if folder and folder.is_dir() else set()
+    known = set(component_names()) | local | set(MEDIA_KINDS)
     slots: List[Slot] = []
     raw = data.get("slots")
     if not isinstance(raw, list) or not raw:
@@ -491,7 +499,8 @@ def _section(c: _Checker, data: Dict[str, Any], variants: Tuple[Variant, ...],
         unknown = [t for t in item["takes"] if t not in known]
         if unknown:
             c.add("bad-section", f"{where}.takes names {unknown}; take a component contract "
-                                 f"({', '.join(sorted(component_names()))}) or "
+                                 f"({', '.join(sorted(set(component_names()) | local))}, or "
+                                 "one in the section's own folder) or "
                                  f"{', '.join(MEDIA_KINDS)}")
             continue
         slots.append(Slot(str(item["name"]), tuple(item["takes"]), item["required"]))
@@ -739,7 +748,8 @@ def promotion_problems(contract: Contract) -> List[ContractProblem]:
     return c.problems
 
 
-def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[ContractProblem]]:
+def contract_problems(data: Any, source: str, folder: Optional[Path] = None
+                      ) -> Tuple[Optional[Contract], List[ContractProblem]]:
     """Read one contract's data. Returns the contract (None when it cannot
     be built) and every structural problem. `source` is the file name or
     a label; a name that differs from a .yaml file's stem is a problem."""
@@ -763,7 +773,9 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
                + (SECTION_KEYS if is_section else ())]
     if missing:
         c.add("missing-key", f"missing {', '.join(missing)}; every contract has "
-                             f"{', '.join(REQUIRED_KEYS)}")
+                             f"{', '.join(REQUIRED_KEYS)}"
+                             + (f", and a section also has {', '.join(SECTION_KEYS)}"
+                                if is_section else ""))
     if unknown:
         what = "is not a contract field" if len(unknown) == 1 else "are not contract fields"
         extra = ("" if is_section else f" ({', '.join(SECTION_KEYS)} belong to a section, "
@@ -824,7 +836,7 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
         do = c.texts(usage["do"], "usage.do", "rules")
         dont = c.texts(usage["dont"], "usage.dont", "rules")
     provenance = _provenance(c, data["provenance"])
-    section = _section(c, data, variants, parts) if is_section else None
+    section = _section(c, data, variants, folder) if is_section else None
     if c.problems:
         return None, c.problems
     contract = Contract(name, status, category, data["description"].strip(), replacement,
@@ -841,14 +853,16 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
     return (None if c.problems else contract), c.problems
 
 
-def read_contract(text: str, source: str = "<contract>") -> Contract:
+def read_contract(text: str, source: str = "<contract>",
+                  folder: Optional[Path] = None) -> Contract:
     """Read a contract from YAML text. Raises ContractError with every
-    problem, a YAML error included."""
+    problem, a YAML error included. ``folder`` is where the file sits, so a
+    section may take the component contracts beside it."""
     try:
         data = loads(text, source)
     except YamlError as exc:
         raise ContractError([ContractProblem(Path(source).stem, "yaml", str(exc))]) from None
-    contract, problems = contract_problems(data, source)
+    contract, problems = contract_problems(data, source, folder)
     if contract is None:
         raise ContractError(problems)
     return contract
@@ -863,4 +877,4 @@ def load_contract(path: Union[str, Path]) -> Contract:
         raise ContractError([ContractProblem(p.stem, "unreadable",
                                              f"{p} cannot be read ({type(exc).__name__}); save it "
                                              "as UTF-8 text in a folder you can read")]) from None
-    return read_contract(text, p.name)
+    return read_contract(text, p.name, p.parent)

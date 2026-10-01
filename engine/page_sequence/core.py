@@ -397,6 +397,14 @@ def _with_phone_sign_in(seq: Dict[str, Any], sign_in: Optional[List[str]]) -> bo
     return phone
 
 
+def _contract_kinds(section: Mapping[str, Any]) -> Tuple[str, ...]:
+    """The proof kinds a section's contract takes; none for prose only."""
+    from engine.contracts.library import seed_sections
+    name = section.get("contract")
+    found = next((c for c in seed_sections() if c.name == name), None)
+    return found.section.proof_kinds if found and found.section else ()
+
+
 def _contract_drop(section: Mapping[str, Any]) -> str:
     """The section contract's own reason for dropping, after a space, or
     nothing for a prose-only section."""
@@ -417,6 +425,14 @@ def _drop_unproven(seq: Dict[str, Any], proof: Optional[List[str]],
         kept = []
         for s in seq["section_sequence"]:
             kind = s.get("proof")
+            other = [k for k in _contract_kinds(s) if k in proof] if kind and kind not in proof \
+                else []
+            if other:
+                # The section's contract also takes proof the client has: it
+                # keeps its place, shown with that proof.
+                s = dict(s, proof=other[0])
+                kept.append(s)
+                continue
             if kind and kind not in proof:
                 dropped.append({"section": s["section"], "reason": (
                     f"{s['section']} needs the client's real {PROOF_LABELS.get(kind, kind)} "
