@@ -25,6 +25,8 @@ A structured field picks the page, never a word of the brief or an industry. The
 
 engine/page_sequence/core.py (PAGES, INNER_PAGES, select_for_brief); data/page-sequences.json (six sequences); references/surfaces/landing.md (Pages of one site); commands/ux-design.md (the page field); tests/test_page_sequence_inner.py.
 
+engine/page_sequence/family.py builds a family's skeleton pages in one run: the header, closing band and footer are written once and placed on every page, the header marking its own page with aria-current; tests/test_page_family_render.py renders three of them at 1440 and 390.
+
 ## Consequences
 
 An inner page never repeats the home page's hero claim. A page family built across two runs has to reuse the first run's header and footer by hand.

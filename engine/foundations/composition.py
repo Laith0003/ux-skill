@@ -54,7 +54,7 @@ def hero_anchor(axes: AxisValues) -> str:
     award pages anchor 16 of 35 headlines in the lower half, start-aligned
     over media, and centre mostly poster-style heroes."""
     from engine.foundations import character
-    return "center" if character.capitals(axes) >= 0.5 else "bottom-start"
+    return "center" if character.capitals(axes) >= character.CAPITALS_FROM else "bottom-start"
 
 
 def _terms_split(a: AxisValues, aud: Audience) -> Terms:

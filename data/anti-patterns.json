@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 165,
+    "entries": 166,
     "last_updated": "2026-09-30",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -1084,7 +1084,7 @@
       "category": "Typography",
       "detection": {
         "type": "regex",
-        "pattern": "text-transform\\s*:\\s*uppercase[^}]*font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,})",
+        "pattern": "text-transform\\s*:\\s*uppercase[^}]*font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,}|\\d*\\.?\\d+r?em\\b|var\\(|clamp\\(|calc\\()|font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,}|\\d*\\.?\\d+r?em\\b|var\\(|clamp\\(|calc\\()[^}]*text-transform\\s*:\\s*uppercase",
         "flags": "i",
         "scope": [
           "css",
@@ -1097,8 +1097,34 @@
         "target": "css",
         "post": "capitals-outside-system"
       },
-      "why": "Capitals at reading size slow reading, because word shapes are lost. A loud brand can set its display in capitals: when the page's system has a capitals display role, a capitals style at one of the system's two largest sizes, tracked at 0 or open, passes. Body, subhead and tight-tracked capitals are still reported.",
+      "why": "Capitals at reading size slow reading, because word shapes are lost. A loud brand can set its display in capitals: when the page's system has a capitals display role and leans to capitals (--type-capitals at 0.5 or more, when the system emits it), a capitals style at one of the system's two largest sizes, tracked at 0 or open, passes. A calm system's display capitals, and body, subhead and tight-tracked capitals, are still reported.",
       "fix": "Set body and subhead text in sentence case; keep capitals for short labels. For a capitals display, bind the system's display-caps role (--type-text-display-caps-*), which tracks at 0 or open."
+    },
+    {
+      "id": "display-line-height-under-floor",
+      "name": "Display line height under the engine's floor",
+      "severity": "low",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?<![\\w-])line-height\\s*:\\s*[^;{}]+|(?<![\\w-])font\\s*:\\s*[^;{}]*\\d(?:px|rem)\\s*/\\s*[\\d.]+[^;{}]*|class=\"(?=[^\"\\n]*(?<![\\w:/-])text-(?:[5-9]xl|\\[\\d+(?:\\.\\d+)?(?:px|rem)\\])(?![\\w-]))[^\"\\n]*",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": [
+          "css",
+          "classes"
+        ],
+        "post": "display-leading-outside-floor"
+      },
+      "why": "A display set tighter than the engine ever builds for its size reads cramped, and the tightest settings bring descenders onto the ascenders of the next line; Arabic marks above and below the letters need more room still. The engine's floor falls from 1.12 at 40px to 0.92 at 160px and above as size and contrast rise, and Arabic display stays at least 0.15 above Latin. With no system the lint holds a page to the floor at the boldest contrast; when the page carries its own system, a line height its tokens define passes: the system decided it.",
+      "fix": "Bind the display line height to the system's leading token (--type-leading-latin-step-N, or the Arabic one under rtl). With no system, keep the line height at or above the floor for the size: 1.12 at 40px, about 1.02 at 80px, 0.92 at 160px and above, and 0.15 more for Arabic."
     },
     {
       "id": "cursor-pointer-non-interactive",

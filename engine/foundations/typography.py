@@ -450,6 +450,7 @@ ROLE_TYPES: Dict[str, str] = {
     **{fit_token(role, tier): "number" for role in PHONE_ROLES for tier in FIT_TIERS},
     **{fluid_token(tier): "number" for tier in TIER_WIDTHS},
     "type.emphasis.tone": "number", "type.emphasis.italic": "number",
+    "type.capitals": "number",
 }
 
 
@@ -519,6 +520,18 @@ def display_leading(axes: AxisValues, px: float, face: Optional[fonts.Face] = No
     t = character.log_position(max(px, 1.0), *DISPLAY_LEAD_PX)
     floor = clearance(face) if face is not None else MIN_DISPLAY_LEADING
     return max(round(top + (large - top) * t, 2), floor)
+
+
+def display_leading_floor(px: float, arabic: bool = False) -> float:
+    """The least line height the engine builds for a display style at
+    `px`, at any contrast: DISPLAY_LEAD[0] at DISPLAY_LEAD_PX[0] and below,
+    falling on a log scale of size to DISPLAY_LEAD[2] at DISPLAY_LEAD_PX[1]
+    and above, never under MIN_DISPLAY_LEADING. Arabic sits
+    ARABIC_DISPLAY_GAP above Latin. lint holds a page with no system to it."""
+    top, _, bold = DISPLAY_LEAD
+    t = character.log_position(max(px, 1.0), *DISPLAY_LEAD_PX)
+    floor = max(round(top + (bold - top) * t, 2), MIN_DISPLAY_LEADING)
+    return round(floor + (ARABIC_DISPLAY_GAP if arabic else 0.0), 2)
 
 
 def lead_token(role: str, script: str) -> str:
@@ -844,6 +857,10 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
                  "{type.switch.%s}" % ("on" if italic else "off"),
                  modes={"direction:rtl": "{type.switch.off}"} if arabic and italic else {},
                  layer="semantic"))
+    # How far the brand leans to a capitals display (character.capitals):
+    # lint reports display capitals under CAPITALS_FROM.
+    ts.add(Token("type.lean.capitals", "number", character.capitals(axes)))
+    ts.add(Token("type.capitals", "number", "{type.lean.capitals}", layer="semantic"))
     hero_n = ROLES["type.text.hero"][0]
     notes = [f"type: display {choice.display.family}, text {choice.text.family}, mono "
              f"{choice.mono.family}" + (f", Arabic {choice.arabic.family} and "

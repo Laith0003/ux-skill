@@ -8653,6 +8653,26 @@
           }
         }
       }
+    },
+    "lean": {
+      "capitals": {
+        "$type": "number",
+        "$value": 0.0,
+        "$extensions": {
+          "io.github.laith0003.ux-skill": {
+            "layer": "primitive"
+          }
+        }
+      }
+    },
+    "capitals": {
+      "$type": "number",
+      "$value": "{type.lean.capitals}",
+      "$extensions": {
+        "io.github.laith0003.ux-skill": {
+          "layer": "semantic"
+        }
+      }
     }
   },
   "imagery": {
