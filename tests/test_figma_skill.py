@@ -48,3 +48,31 @@ def test_every_relative_link_resolves_and_the_text_is_plain():
         for link in re.findall(r"\]\(([^)#:]+)\)", text):
             assert (f.parent / link).is_file(), (f, link)
         assert not re.search("[–—]", text) and " -- " not in text, f
+
+
+def test_every_command_the_skill_names_parses_with_its_arguments():
+    """Each `uxskill ...` command in the skill carries the arguments and
+    options the CLI requires, so the agent never stops at a usage error. A
+    placeholder such as <file> stands for a path, so only a missing or
+    unknown argument fails here, not a path that does not exist."""
+    import shlex
+
+    import click
+
+    from engine.cli.main import cli
+    text = "\n".join(f.read_text(encoding="utf-8") for f in sorted(PACK.rglob("*.md")))
+    commands = re.findall(r"`uxskill ([^`]+)`", text)
+    assert len(commands) >= 5
+    for line in commands:
+        args = [a.replace("<", "").replace(">", "") for a in shlex.split(line)]
+        group = cli
+        while isinstance(group, click.Group):
+            name, args = args[0], args[1:]
+            group = group.get_command(click.Context(cli), name)
+            assert group is not None, (line, name)
+        try:
+            group.make_context(group.name, list(args))
+        except click.BadParameter as exc:
+            assert "does not exist" in str(exc), (line, exc)
+        except click.UsageError as exc:
+            raise AssertionError(f"{line}: {exc}")

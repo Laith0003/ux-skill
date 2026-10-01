@@ -5,11 +5,11 @@
     "density": 0.25,
     "formality": 0.396,
     "geometry": 0.248,
-    "motion": 0.76,
+    "motion": 0.639,
     "type_personality": 0.5,
     "warmth": 0.85
   },
-  "axes_source": "Read from data/brands/netflix.json: warmth from the hue and chroma of the primary #E50914 and the canvas #141414; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #E50914; density from its 8px spacing base; geometry from its radii 2, 4, 6px; formality from the chroma of its primary and ink; motion from its stated durations 30000ms, 200ms, 6000ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "axes_source": "Read from data/brands/netflix.json: warmth from the hue and chroma of the primary #E50914 and the canvas #141414; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #E50914; density from its 8px spacing base; geometry from its radii 2, 4, 6px; formality from the chroma of its primary and ink; motion from its stated durations 200ms, 6000ms; type personality at 0.5 since neither face is in the engine's catalog.",
   "brand": "#E50914",
   "brand_rule": "The primary #E50914 reaches 3.84:1 on the canvas #141414, at least the 3:1 a control needs, so it carries the action.",
   "digest": {
@@ -28,7 +28,7 @@
     "radius_control": "4px",
     "state_duration": "200ms",
     "tokens": 729,
-    "tokens_sha256": "9897f0a4a7d3b5da"
+    "tokens_sha256": "808c21d42f1c98f9"
   },
   "id": "netflix",
   "name": "Netflix",

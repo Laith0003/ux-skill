@@ -12,25 +12,31 @@ and exits 1 when anything failed.
   reader knows, each with its own brand color, build with no failure.
 - roundtrip: every system in the gallery (data/gallery) and the fixture
   systems is exported to DTCG, CSS, Tailwind 4 and Figma variables and read
-  back by the engine's own importers; every token read back resolves to
-  the value it was written with, in every mode.
+  back by the engine's own importers; every token written is read back
+  (every field of a text style included, unless the export names it as one
+  it does not write), every token read back stands for one written, and
+  each resolves to the value it was written with, in every mode. A gallery
+  entry that cannot be built fails the check, naming its file.
 - digest: a build's files hash the same under several PYTHONHASHSEED values.
-- wheel: the built wheel holds engine/io and engine/foundations and nothing
-  private (no plan, state, cache or secret files).
+- wheel: a wheel built from a clean copy of the tracked sources holds
+  engine/io and engine/foundations and nothing private (no plan, state,
+  cache or secret files).
 """
 from __future__ import annotations
 
+import functools
 import hashlib
 import json
 import os
 import random
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
 import zipfile
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Sequence, Tuple
+from typing import Any, Collection, Dict, Iterable, List, Optional, Sequence, Tuple
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -103,21 +109,47 @@ def check_briefs(pairs: Iterable[Tuple[str, Dict[str, Any]]]) -> List[str]:
 # ---------------------------------------------------------------- round trip
 
 
-def systems() -> List[Tuple[str, Any]]:
-    """(label, token set) for every gallery system and every fixture."""
-    from engine.foundations import build_system
-    from engine.synthesizer.axes import AxisValues
-    out = []
-    for brand, axes in FIXTURES:
-        out.append((f"fixture {brand}", build_system(AxisValues(*axes), brand).tokens))
+def gallery_problems() -> List[str]:
+    """Every gallery entry the round trip cannot build, named with the field
+    it lacks, so a broken entry fails the check instead of dropping out."""
+    problems = []
     for f in sorted(GALLERY.glob("*.json")) if GALLERY.is_dir() else []:
         entry = json.loads(f.read_text(encoding="utf-8"))
-        if "brand" not in entry or "axes" not in entry:
-            continue
-        ts = build_system(AxisValues(**entry["axes"]), entry["brand"],
-                          arabic=entry.get("arabic", True)).tokens
-        out.append((f"gallery {f.stem}", ts))
+        missing = [k for k in ("brand", "axes") if k not in entry]
+        if missing:
+            problems.append(f"data/gallery/{f.name} has no {' or '.join(missing)}; rebuild it "
+                            "with python scripts/build_gallery.py")
+    return problems
+
+
+def labels() -> List[str]:
+    """The label of every system the round trip builds: each fixture, then
+    each gallery entry gallery_problems does not name."""
+    out = [f"fixture {brand}" for brand, _ in FIXTURES]
+    for f in sorted(GALLERY.glob("*.json")) if GALLERY.is_dir() else []:
+        entry = json.loads(f.read_text(encoding="utf-8"))
+        if "brand" in entry and "axes" in entry:
+            out.append(f"gallery {f.stem}")
     return out
+
+
+@functools.lru_cache(maxsize=None)
+def system(label: str) -> Any:
+    """The token set behind one label from labels(), built once."""
+    from engine.foundations import build_system
+    from engine.synthesizer.axes import AxisValues
+    kind, name = label.split(" ", 1)
+    if kind == "fixture":
+        axes = dict(FIXTURES)[name]
+        return build_system(AxisValues(*axes), name).tokens
+    entry = json.loads((GALLERY / f"{name}.json").read_text(encoding="utf-8"))
+    return build_system(AxisValues(**entry["axes"]), entry["brand"],
+                        arabic=entry.get("arabic", True)).tokens
+
+
+def systems() -> List[Tuple[str, Any]]:
+    """(label, token set) for every gallery system and every fixture."""
+    return [(label, system(label)) for label in labels()]
 
 
 def _flat(value: Any) -> Any:
@@ -139,30 +171,76 @@ def _flat(value: Any) -> Any:
     return value
 
 
-def _compare(label: str, fmt: str, ts: Any, back: Any) -> Tuple[List[str], int]:
-    """Mismatches between a system and what one format read back, and the
-    number of token values compared. A stylesheet reads tokens back under
-    their custom property names, so those are matched to the system's paths.
-    A Figma variable holds one font family, so a family stack is compared by
-    its first face (the export says so in its notes)."""
+# A text style's fields as a stylesheet or a Figma variable names them one
+# by one: --type-text-display-font-size, type.text.display.font-size.
+TEXT_FIELDS = {"font-family": "fontFamily", "font-size": "fontSize", "font-weight": "fontWeight",
+               "letter-spacing": "letterSpacing", "line-height": "lineHeight"}
+
+
+def _locate(name: str, written: Any, by_css: Dict[str, str]) -> Tuple[Optional[str], Optional[str]]:
+    """The written token (and the text style field, if any) a name read
+    back stands for, or (None, None)."""
+    path = by_css.get(name, name)
+    if written.has(path):
+        return path, None
+    for kebab, field in TEXT_FIELDS.items():
+        for sep in (".", "-"):
+            if name.endswith(sep + kebab):
+                base = name[:-len(sep + kebab)]
+                base = by_css.get(base, base)
+                if written.has(base) and written.get(base).type == "typography":
+                    return base, field
+    return None, None
+
+
+def _compare(label: str, fmt: str, written: Any, back: Any,
+             skipped: Collection[str] = ()) -> Tuple[List[str], int]:
+    """Mismatches between the tokens a format wrote and what it read back,
+    and the number of values compared. Every token read back must stand for
+    a written one (by its path, its custom property name, or one field of a
+    text style), and every written token must be read back, every field of
+    a text style included, unless the export named it as one it does not
+    write (`skipped`). A Figma variable holds one font family, so a family
+    stack is compared by its first face (the export says so in its notes)."""
     from engine.foundations.modes import contexts
     from engine.foundations.tokens import css_property
     problems: List[str] = []
     compared = 0
-    by_css = {css_property(t.path).lstrip("-"): t.path for t in ts.tokens()}
-    pairs = [(by_css.get(t.path, t.path), t.path) for t in back.tokens()]
-    shared = [(mine, theirs) for mine, theirs in pairs if ts.has(mine)]
-    axes = [a for a in ts.axes if a in back.axes]
-    for path, theirs in shared:
-        family = ts.get(path).type == "fontFamily" and fmt == "figma"
-        for ctx in contexts(tuple(axes), ts.axes) or [""]:
-            want, got = _flat(ts.resolve(path, ctx)), _flat(back.resolve(theirs, ctx))
-            if family and isinstance(want, list) and isinstance(got, list):
-                want, got = want[:1], got[:1]
+    by_css = {css_property(t.path).lstrip("-"): t.path for t in written.tokens()}
+    axes = [a for a in written.axes if a in back.axes]
+    seen: Dict[str, set] = {}
+    for t in back.tokens():
+        path, field = _locate(t.path, written, by_css)
+        if path is None:
+            problems.append(f"{label} {fmt}: read back {t.path}, which stands for no token the "
+                            "export wrote")
+            continue
+        seen.setdefault(path, set()).add(field)
+        family = (field == "fontFamily" or written.get(path).type == "fontFamily") \
+            and fmt == "figma"
+        for ctx in contexts(tuple(axes), written.axes) or [""]:
+            want = written.resolve(path, ctx)
+            want = _flat(want[field] if field else want)
+            got = _flat(back.resolve(t.path, ctx))
+            if family and isinstance(want, list):
+                want, got = want[:1], got[:1] if isinstance(got, list) else [got]
             compared += 1
             if want != got:
-                problems.append(f"{label} {fmt}: {path} in {ctx or 'the base'} wrote {want!r} "
+                where = f"{path}{' ' + field if field else ''}"
+                problems.append(f"{label} {fmt}: {where} in {ctx or 'the base'} wrote {want!r} "
                                 f"and read back {got!r}")
+    for t in written.tokens():
+        if t.path in skipped:
+            continue
+        got = seen.get(t.path)
+        if not got:
+            problems.append(f"{label} {fmt}: {t.path} was written and nothing was read back for "
+                            "it")
+        elif None not in got and t.type == "typography":
+            lost = sorted(set(written.resolve(t.path)) - got)
+            if lost:
+                problems.append(f"{label} {fmt}: {t.path} lost {', '.join(lost)} on the way "
+                                "back")
     return problems, compared
 
 
@@ -175,6 +253,7 @@ def round_trip(label: str, ts: Any) -> Tuple[List[str], Dict[str, int]]:
     from engine.io.figma_out import as_export, to_figma
     from engine.io.report import Source
     from engine.io.tailwind_in import import_tailwind_css
+    from engine.io.tailwind_out import roles_set as tailwind_roles
     from engine.io.tailwind_out import to_tailwind
 
     def src(text: str, name: str, fmt: str) -> Source:
@@ -182,24 +261,30 @@ def round_trip(label: str, ts: Any) -> Tuple[List[str], Dict[str, int]]:
         return Source(path=name, format=fmt, sha256=hashlib.sha256(data).hexdigest(),
                       size=len(data))
 
+    figma = to_figma(ts)
+    # Each format is compared with what it writes: the system itself, or
+    # for Tailwind the roles under their theme names (tailwind_out's own
+    # set), and Figma leaves out the tokens its export names as skipped.
     texts = {
-        "dtcg": (dump_dtcg(ts), "tokens.json", import_dtcg),
-        "css": (to_css(ts), "tokens.css", import_css),
-        "tailwind": (to_tailwind(ts, roles=True), "theme.css", import_tailwind_css),
-        "figma": (json.dumps(as_export(to_figma(ts))), "variables.json", import_figma),
+        "dtcg": (dump_dtcg(ts), "tokens.json", import_dtcg, ts, ()),
+        "css": (to_css(ts), "tokens.css", import_css, ts, ()),
+        "tailwind": (to_tailwind(ts, roles=True), "theme.css", import_tailwind_css,
+                     tailwind_roles(ts), ()),
+        "figma": (json.dumps(as_export(figma)), "variables.json", import_figma, ts,
+                  {s["token"] for s in figma.get("skipped", [])}),
     }
     problems: List[str] = []
     counts: Dict[str, int] = {}
-    for fmt, (text, name, reader) in texts.items():
+    for fmt, (text, name, reader, written, skipped) in texts.items():
         back = reader(text, src(text, name, fmt)).tokens
-        found, n = _compare(label, fmt, ts, back)
+        found, n = _compare(label, fmt, written, back, skipped)
         problems.extend(found)
         counts[fmt] = n
     return problems, counts
 
 
 def check_round_trips() -> List[str]:
-    problems: List[str] = []
+    problems: List[str] = gallery_problems()
     for label, ts in systems():
         found, counts = round_trip(label, ts)
         problems.extend(found)
@@ -260,9 +345,35 @@ def check_wheel_names(names: Sequence[str]) -> List[str]:
     return problems
 
 
+def tracked_files() -> List[str]:
+    """The files git tracks in the checkout (modified ones included), or
+    an empty list outside a git checkout."""
+    run = subprocess.run(["git", "-C", str(ROOT), "ls-files", "-z"], capture_output=True,
+                         check=False)
+    if run.returncode != 0:
+        return []
+    return [n for n in run.stdout.decode().split("\0") if n]
+
+
+def source_tree(dest: Path) -> Path:
+    """A clean copy of the tracked sources in `dest`, so a build never picks
+    up a stale build/ folder or an untracked file; the checkout itself
+    outside git."""
+    names = tracked_files()
+    if not names:
+        return ROOT
+    for name in names:
+        src = ROOT / name
+        if src.is_file():
+            (dest / name).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, dest / name)
+    return dest
+
+
 def build_wheel(out: Path) -> Path:
+    tree = source_tree(out / "src")
     run = subprocess.run([sys.executable, "-m", "pip", "wheel", "--no-deps", "--no-build-isolation",
-                          "-w", str(out), str(ROOT)], capture_output=True, text=True, check=False)
+                          "-w", str(out), str(tree)], capture_output=True, text=True, check=False)
     if run.returncode != 0:
         raise RuntimeError(f"pip wheel failed: {run.stderr[-600:]}")
     wheels = sorted(out.glob("uxskill-*.whl"))

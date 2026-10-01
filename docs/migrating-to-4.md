@@ -13,7 +13,7 @@ Nothing is rewritten for you. Pick one of the two paths below.
 
 ## Path 2: keep your 3.x system and extend it
 
-A system pack's `DESIGN.md` and `tokens.css` are read as they are: `uxskill system import --from DESIGN.md` (or `--from tokens.css`) reports what it read and lists every entry it did not read with how to write it. `uxskill system enhance --from DESIGN.md --out design-system` measures your system against the 4.0 checks and writes the roles it lacks beside it, never over it. `uxskill system extend --from tokens.css --add motion` adds a foundation in an extension file next to the source.
+A system pack's `DESIGN.md` and `tokens.css` are read as they are: `uxskill system import --from DESIGN.md` (or `--from tokens.css`) reports what it read and lists every entry it did not read with how to write it. `uxskill system enhance --from DESIGN.md --out design-system` measures your system against the 4.0 checks and writes a report of what it lacks and how to add it; it changes nothing. `uxskill system extend --from tokens.css --add motion` adds what is missing (a foundation, roles or contracts) in an extension file next to the source, never over a token you have.
 
 ## 3.x names and their 4.0 roles
 

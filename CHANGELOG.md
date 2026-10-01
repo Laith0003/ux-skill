@@ -34,9 +34,9 @@ dark and high contrast, and writes only what passes. 3.x users: start with
   `--space-4`, `--motion-base` is `--motion-state-duration`); the full table
   is in the guide.
 - Or keep the 3.x system: `uxskill system import --from DESIGN.md` reads it
-  as it is, `system enhance` writes the roles it lacks beside it, and
-  `system extend` adds a foundation in an extension file. Nothing is
-  rewritten.
+  as it is, `system enhance` reports what it lacks and how to add it, and
+  `system extend` adds the missing foundations, roles or contracts in an
+  extension file beside it. Nothing is rewritten.
 
 ### Added
 - Nine foundations (color, type, space, layout, radius, border, elevation,

@@ -198,8 +198,13 @@ def test_the_primary_stays_when_no_accent_does_better():
 
 
 def test_an_alpha_ink_is_read_over_the_canvas():
+    # Black at alpha 230 of 255 over white is #191919: the ink reads as that,
+    # not as black.
     spec = _invented(color_ink="#000000e6", color_canvas="#FFFFFF")
-    assert bg.spec_axes(spec)[0].contrast > bg.spec_axes(_invented(color_ink="#999999"))[0].contrast
+    contrast = bg.spec_axes(spec)[0].contrast
+    assert bg._color("#000000e6") == "#191919"
+    assert contrast == bg.spec_axes(_invented(color_ink="#191919", color_canvas="#FFFFFF"))[0].contrast
+    assert contrast != bg.spec_axes(_invented(color_ink="#000000", color_canvas="#FFFFFF"))[0].contrast
 
 
 def test_a_spec_without_a_readable_primary_is_named_with_the_fix():
@@ -208,3 +213,9 @@ def test_a_spec_without_a_readable_primary_is_named_with_the_fix():
         bg.brand_hex(spec)
     message = str(exc.value)
     assert "invented-studio" in message and "color_primary" in message and "#RRGGBB" in message
+
+
+def test_a_count_in_prose_is_not_read_as_a_duration():
+    text = "911s carving through mountain passes, then a 0.3s ease and a 200ms fade"
+    assert bg._durations({"motion_signature": text}) == [300.0, 200.0]
+    assert bg._durations({"motion_signature": "a 12 seconds loop"}) == []

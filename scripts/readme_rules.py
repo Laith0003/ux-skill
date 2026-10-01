@@ -27,9 +27,25 @@ def _cell(text: str) -> str:
     return text.replace("|", "\\|")
 
 
+def check(rules: Sequence[Mapping[str, str]]) -> None:
+    """Raise ValueError naming the rule, the field and the fix for a rule the
+    catalogue cannot place: no id, no name, no category, or a severity
+    outside SEVERITY."""
+    for i, r in enumerate(rules):
+        rid = r.get("id") or f"entry {i}"
+        for field in ("id", "name", "category"):
+            if not isinstance(r.get(field), str) or not r.get(field):
+                raise ValueError(f"data/anti-patterns.json: rule {rid} has no {field}; give it "
+                                 f"a {field} as text")
+        if r.get("severity") not in SEVERITY:
+            raise ValueError(f"data/anti-patterns.json: rule {rid} has severity "
+                             f"{r.get('severity')!r}; use one of {', '.join(SEVERITY)}")
+
+
 def coverage(rules: Sequence[Mapping[str, str]]) -> str:
     """Each category with its rule count, largest first, as the README
     states it in prose."""
+    check(rules)
     counts: Dict[str, int] = defaultdict(int)
     for r in rules:
         counts[r["category"]] += 1
@@ -38,6 +54,7 @@ def coverage(rules: Sequence[Mapping[str, str]]) -> str:
 
 def render(rules: Sequence[Mapping[str, str]]) -> str:
     """The markdown between the markers."""
+    check(rules)
     groups: Dict[str, List[Mapping[str, str]]] = defaultdict(list)
     for r in rules:
         groups[r["category"]].append(r)

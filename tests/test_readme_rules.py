@@ -5,6 +5,8 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 README = (ROOT / "README.md").read_text(encoding="utf-8")
 RULES = json.loads((ROOT / "data" / "anti-patterns.json").read_text(encoding="utf-8"))["entries"]
@@ -29,10 +31,24 @@ def test_the_readme_tables_match_the_rules():
     assert block == readme_rules.render(RULES), "run python scripts/readme_rules.py"
 
 
-def test_every_rule_is_listed_once():
-    block = readme_rules.render(RULES)
+def test_every_rule_is_listed_once_in_the_readme():
+    start, end = readme_rules.START, readme_rules.END
+    block = README[README.index(start) + len(start):README.index(end)]
     ids = re.findall(r"^\| \w+ \| `([^`]+)` \|", block, re.M)
     assert sorted(ids) == sorted(r["id"] for r in RULES)
+
+
+@pytest.mark.parametrize("change,message", [
+    ({"severity": "info"}, "rule demo-rule has severity 'info'; use one of critical, high, "
+                           "medium, low"),
+    ({"category": None}, "rule demo-rule has no category; give it a category as text"),
+    ({"name": ""}, "rule demo-rule has no name; give it a name as text"),
+])
+def test_a_rule_the_catalogue_cannot_place_is_named_with_the_fix(change, message):
+    rule = {"id": "demo-rule", "name": "Demo", "category": "Color", "severity": "low", **change}
+    with pytest.raises(ValueError) as exc:
+        readme_rules.render([rule])
+    assert str(exc.value) == f"data/anti-patterns.json: {message}"
 
 
 def test_the_readme_states_the_rule_count_and_no_other():

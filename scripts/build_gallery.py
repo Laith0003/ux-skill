@@ -98,6 +98,10 @@ PRIMARY_FULL, CANVAS_FULL, INK_FULL = 0.4, 0.1, 0.4
 RADIUS_CAP = 32.0
 RADIUS_SCALE = 14.0
 MOTION_FLOOR_MS, MOTION_TOP_MS = 100.0, 1200.0
+# A number in seconds reads as a duration only up to this many seconds: an
+# interface moves in well under that, so "911s" in prose is a count, not a
+# duration.
+SECONDS_CAP = 10.0
 _DURATION = re.compile(r"(\d+(?:\.\d+)?)\s*-?\s*(ms|seconds?|secs?|s)\b", re.I)
 _NUMBER = re.compile(r"\d+(?:\.\d+)?")
 _COLOR = re.compile(r"#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})")
@@ -243,7 +247,10 @@ def _durations(dl: Mapping[str, Any]) -> List[float]:
         return []
     out = []
     for number, unit in _DURATION.findall(text):
-        ms = float(number) * (1.0 if unit.lower() == "ms" else 1000.0)
+        seconds = unit.lower() != "ms"
+        if seconds and float(number) > SECONDS_CAP:
+            continue
+        ms = float(number) * (1000.0 if seconds else 1.0)
         if ms > 0:
             out.append(ms)
     return out

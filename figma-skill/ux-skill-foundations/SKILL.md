@@ -14,7 +14,7 @@ ux-skill builds a design system from a brand color and a brief (or reads one a t
 
 Pick one source, in this order:
 
-1. **The team's own tokens.** A DTCG tokens.json, a CSS file of custom properties, a Tailwind 4 theme, Markdown rule files or a Figma variables export. Read it as it is, never rebuilt: `uxskill system import --from <file>` reports what it read and lists every entry it did not read with how to write it. An existing system is fixed input; extend it beside its source with `uxskill system extend`, never rewrite it.
+1. **The team's own tokens.** A DTCG tokens.json, a CSS file of custom properties, a Tailwind 4 theme, Markdown rule files or a Figma variables export. Read it as it is, never rebuilt: `uxskill system import --from <file>` reports what it read and lists every entry it did not read with how to write it. An existing system is fixed input; extend it beside its source with `uxskill system extend --from <file> --add <foundation> --out <folder>`, never rewrite it.
 2. **A brand color and a brief.** `uxskill system build --brand '#3366FF' --brief .ux/system-brief.json --out design-system`. The look follows the brand and the brief's axes as continuous values, never a preset by industry. Read `design-system/system-report.md` before going on: it says what was built and what the engine moved to pass contrast.
 
 Stop and tell the user when the build reports a failure: nothing was written, and the message names the token and the change to make.
@@ -37,7 +37,7 @@ ux-skill ships component contracts (`engine/contracts/seed/*.yaml`) and section 
 - Bind every fill, stroke, text color, padding, gap and radius to the role's variable. Never type a hex or a number the contract does not name.
 - A state is a variant property value (Default, Hover, Pressed, Focus, Selected, Disabled), and a part that changes under hover, selected or pressed carries the transition the contract binds (motion.state, or motion.press for a press) in its prototype interaction.
 - The focus ring is the system's (color.focus.ring, border.focus-ring.width and offset), drawn outside the part.
-- Run `uxskill contracts check` after the build to confirm every binding and pairing against the tokens.
+- When the team writes component contracts, check them against the system after the build: `uxskill contracts check <contracts-folder> --tokens design-system/tokens.json` confirms every role each contract binds and every pairing it declares, in every mode.
 
 ## 4. Pages built from sections
 
