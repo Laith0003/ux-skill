@@ -136,7 +136,7 @@ def read_system(path: Any, fmt: str = "auto", label: str = "--from",
         root = Path(path).expanduser()
         imported = read_sources(_proposed(root, label), "auto", label, second_modes,
                                 modes_label, format_label)
-        return _root_direction(imported, root)
+        return pages_direction(imported, [root])
     if second_modes and found != "figma":
         raise InputError(f"{modes_label} is for a Figma variables export, and {label} "
                          f"{Path(path).name} is read as {found}; drop {modes_label}")
@@ -147,26 +147,46 @@ def read_system(path: Any, fmt: str = "auto", label: str = "--from",
     return imported
 
 
-def _root_direction(imported: Imported, root: Path) -> Imported:
-    """A project whose pages read right to left (<html dir="rtl">) holds
-    its rtl values on the root: a direction axis read with the root as its
-    base and ltr as its mode is rtl-based, said so in a note. The base is
-    what the root holds, never a guess from the selectors."""
-    from engine.existing import detect_existing_system
+# The note css_in leaves on the rule that rebases the direction axis.
+_REBASED = "read as one axis, direction,"
+
+
+def pages_direction(imported: Imported, places: Sequence[Any],
+                    label: Optional[str] = None) -> Imported:
+    """A system whose pages read right to left (<html dir="rtl">) holds its
+    rtl values on the root: a direction axis read with the root as its base
+    and ltr as its mode is rtl-based. `places` are the folders or pages
+    read with the system: the project folder it was found in, or the code
+    folders given with --scan (`label` names that input in the note). The
+    base is what the root holds, never a guess from the selectors. One
+    note says how the axis was read: the stylesheet's note on the rule
+    that sets the mode, said again with rtl as the base, or a note of its
+    own when the source has none."""
+    from engine.existing.detect import pages_read_rtl
     from engine.foundations.tokens import ROOT_BASE
     axis = imported.tokens.axes.get("direction")
     if not axis or axis[0] != ROOT_BASE or "rtl" in axis:
         return imported
-    if detect_existing_system(root).get("declared", {}).get("direction") != "rtl":
+    found = next((Path(p).expanduser() for p in places if pages_read_rtl(p)), None)
+    if found is None:
         return imported
     ts = TokenSet({**imported.tokens.axes, "direction": ("rtl", *axis[1:])})
     for t in imported.tokens.tokens():
         ts.add(t)
     imported.tokens = ts
     imported.report.axes = {a: tuple(v) for a, v in ts.axes.items()}
-    imported.report.notes.append(Item(root.name, "direction", (
-        "the pages set dir=\"rtl\" on <html>, so the root holds the rtl values: rtl is the "
-        "direction axis's base and ltr its mode")))
+    who = f"the pages in {label} {found.name}" if label else "the pages"
+    modes = list(axis[1:])
+    shown = (", ".join(modes[:-1]) + " and " + modes[-1]) if len(modes) > 1 else modes[0]
+    why = (f"{who} set dir=\"rtl\" on <html>, so the root holds the rtl values: "
+           f"[dir] was read as one axis, direction, with rtl, what :root holds, as its base "
+           f"and {shown} as its {'mode' if len(modes) == 1 else 'modes'}")
+    notes = imported.report.notes
+    at = next((n for n, i in enumerate(notes) if _REBASED in i.message), None)
+    if at is None:
+        notes.append(Item(found.name, "direction", why))
+    else:
+        notes[at] = replace(notes[at], message=f"sets values that differ from :root; {why}")
     return imported
 
 

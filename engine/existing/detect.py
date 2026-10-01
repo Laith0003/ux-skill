@@ -804,7 +804,12 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     hover and focus paints are not counted, and class strings in cva, clsx
     and cn calls are. ``primary_candidates`` lists each with its count and
     ``primary_why`` says which was chosen and why; ``primary_note`` says why
-    none was, when no candidate can carry text.
+    none was, when no candidate can carry text. When the rendered page
+    shows another value for the primary's token (a stylesheet that wins
+    the cascade sets it again; see ``disagreements``), ``primary`` still
+    reports the value of the file it was read from, the token file first,
+    and ``primary_reports`` says so: that value with its file and line, the
+    page's value with the file that wins, and the fix.
 
     ``dark`` lists where the project keeps its dark values, wherever they
     live (the system's own stylesheet, or a site's globals beside it): each
@@ -883,6 +888,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
 
     token_docs: List[Any] = []
     built_docs: List[Any] = []
+    built_paths: List[Tuple[Path, Any]] = []
     css_files: List[Path] = []
     built_css: List[Path] = []
     for path in files:
@@ -895,6 +901,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
             if doc is not None:
                 if _is_built(path, base):
                     built_docs.append(doc)
+                    built_paths.append((path, doc))
                     add("built-output", path)
                 else:
                     token_docs.append(doc)
@@ -964,9 +971,11 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     colors: List[Tuple[str, str]] = []
     font_tokens: List[Tuple[str, str]] = []
     raw_colors: List[Tuple[str, str]] = []
+    read_from: List[Any] = []
     for tier in (source_docs, token_docs, built_docs):
         if tier:
             colors, font_tokens, raw_colors = _read_colors(tier)
+            read_from = tier
             if colors:
                 break
 
@@ -987,6 +996,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
             css_fonts.append((name.lstrip("-"), _first_family(resolved, css_props)))
 
     declared: Dict[str, Any] = {}
+    primary_file: Optional[Path] = None
     from engine.io.tailwind_config import read_theme  # engine.io imports this package
     theme = read_theme([base], [p for p in html_files if survey.is_style(p)], base=base)
     cands = _primary_candidates(colors)
@@ -1002,6 +1012,8 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
             declared["primary"] = p_hex
             declared["primary_token"] = p_name
             declared["primary_from"] = p_from
+            primary_file = _primary_file(p_name, p_hex, p_from, read_from,
+                                         [*doc_paths, *built_paths], css_files + built_css)
             if len(cands) > 1 or cands[0][2] not in _PRIMARY_WORDS:
                 declared["primary_why"] = why
         else:
@@ -1059,6 +1071,9 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
         html_files, _reading, flatten_dtcg)
     if disagree:
         declared["disagreements"] = disagree
+        reports = _primary_reports(declared, disagree, base, primary_file)
+        if reports:
+            declared["primary_reports"] = reports
 
     result["sources"] = sources
     result["declared"] = declared
@@ -1066,11 +1081,80 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     return result
 
 
+def _primary_file(name: str, hx: str, kind: str, tier: List[Any],
+                  docs: List[Tuple[Path, Any]], sheets: List[Path]) -> Optional[Path]:
+    """The file detect read the primary from: the token file in the tier
+    it read whose token of that name holds the value, or the first
+    stylesheet that sets the property, as the stylesheets are read."""
+    if kind == "tokens":
+        for path, doc in docs:
+            if any(doc is d for d in tier) and any(
+                    n == name and (normalize_color(t.get("value")) or "").upper() == hx.upper()
+                    for n, t in flatten_dtcg(doc).items()):
+                return path
+        return None
+    for path in sheets:
+        if name in css_custom_properties(_read_text(path)):
+            return path
+    return None
+
+
+def _primary_reports(declared: Dict[str, Any], disagree: List[Dict[str, Any]], base: Path,
+                     read: Optional[Path]) -> str:
+    """Which value ``primary`` reports when the file it was read from and
+    the rendered page disagree on it: that file's value, named by file and
+    line, and the value the page shows from the file that wins the
+    cascade, with the fix. Empty when they agree, when the cascade does not
+    decide the page's value, or when the file read is not known."""
+    hx, name = declared.get("primary"), declared.get("primary_token", "")
+    if not hx or not name or read is None:
+        return ""
+    try:
+        rel = read.relative_to(base).as_posix()
+    except ValueError:
+        rel = read.name
+    key = survey.token_key(name)
+    for entry in disagree:
+        if entry.get("theme") or not entry.get("wins"):
+            continue
+        rows = entry["values"]
+        if not any(survey.token_key(r["token"]) == key for r in rows):
+            continue
+        shown = [r for r in rows if r["path"] == entry["wins"]]
+        page = normalize_color(shown[0]["value"]) if shown else None
+        if not page or page.upper() == hx.upper():
+            return ""
+        own = next((r for r in rows if r["path"] == rel), None)
+        where = f"{rel}:{own['line']}" if own else rel
+        token = own["token"] if own else name
+        why = ("detect reads the token file first, as the system's own word"
+               if declared.get("primary_from") == "tokens"
+               else "the first stylesheet detect read that sets it")
+        return (f"primary is {hx}, the value {where} gives {token}: {why}. The rendered page "
+                f"shows {page}, set in {shown[0]['path']}:{shown[0]['line']}, which wins the "
+                f"cascade. Make the two agree (disagreements names every place), or pass "
+                f"{page} as the brand primary by hand to build from what the page shows.")
+    return ""
+
+
 def _surveyed(path: Path) -> bool:
     """A file the survey reads: a stylesheet, a page or template, a JSON
     file (tokens, a package manifest, a locale) or a locale file."""
     return survey.is_style(path) or survey.is_template(path) \
         or path.suffix.lower() == ".json" or bool(survey.locale_of(path))
+
+
+def pages_read_rtl(place: Any) -> bool:
+    """Whether the pages under a folder, or one page, read right to left,
+    as detect_existing_system declares direction: dir="rtl" on <html> or
+    <body>, and the rest survey.languages counts. The folder is walked to
+    detect's caps whether or not it holds a design system."""
+    base = Path(place).expanduser()
+    if base.is_file():
+        return survey.languages([base])[1]
+    files: List[Path] = []
+    _walk(base, 0, set(), files, _surveyed)
+    return survey.languages(files)[1]
 
 
 _FONT_TOKEN_RE = re.compile(r"^--font-(?!size|weight|feature|variation|style|stretch|"

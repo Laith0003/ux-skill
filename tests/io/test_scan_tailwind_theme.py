@@ -159,3 +159,106 @@ def test_lines_inside_a_config_wrapper_are_the_files_own(tmp_path):
     theme = read_theme([tmp_path])
     assert theme.get("colors", "ink").line == 7
     assert [(line, text) for _, line, text, _ in theme.not_read] == [(9, "makeScale()")]
+
+
+def _preset_project(tmp_path, where):
+    preset = ("module.exports = {\n  theme: {\n"
+              + ("    extend: {\n      spacing: { gutter: 'var(--space-gutter)' },\n    },\n"
+                 if where == "extend" else "    spacing: { gutter: 'var(--space-gutter)' },\n")
+              + "  },\n};\n")
+    _write(tmp_path, "design/preset.js", preset)
+    _write(tmp_path, "tailwind.config.js", "module.exports = {\n"
+                                           "  presets: [require('./design/preset')],\n};\n")
+    _write(tmp_path, "src/page.html",
+           '<main class="px-6 inset-0 -mt-1.5 p-px md:gap-4 px-gutter">x</main>')
+    ts = TokenSet({})
+    ts.add(Token("space.gutter", "dimension", {"value": 20, "unit": "px"}))
+    return scan([tmp_path / "src"], ts)
+
+
+def test_tailwinds_default_spacing_steps_are_raw_values_when_a_preset_extends_them(tmp_path):
+    found = _preset_project(tmp_path, "extend")
+    assert found.unknown_classes == []
+    used = {(u.prop, u.kind, u.value) for u in found.usages}
+    assert {("px-6", "raw", "24px"), ("inset-0", "raw", "0px"), ("-mt-1.5", "raw", "-6px"),
+            ("p-px", "raw", "1px"), ("gap-4", "raw", "16px"),
+            ("px-gutter", "token", "space.gutter")} <= used
+    assert all(u.family == "space" for u in found.usages)
+
+
+def test_a_theme_not_read_in_full_keeps_no_default_step(tmp_path):
+    # A preset from a package, or a spread, may replace the scale: no guess.
+    ts = TokenSet({})
+    for case, config in (
+            ("package", "module.exports = {\n  presets: [require('some-preset')],\n"
+                        "  theme: { extend: { spacing: { rail: '2px' } } },\n};\n"),
+            ("spread", "const base = require('./base');\nmodule.exports = {\n"
+                       "  theme: { ...base, extend: { spacing: { rail: '2px' } } },\n};\n")):
+        root = tmp_path / case
+        _write(root, "tailwind.config.js", config)
+        _write(root, "src/page.html", '<main class="md:flex px-6">x</main>')
+        found = scan([root / "src"], ts)
+        assert [u.cls for u in found.unknown_classes] == ["px-6"], case
+        assert not read_theme([root / "src"]).keeps("spacing")
+
+
+def test_a_v4_spacing_base_sets_each_step(tmp_path):
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n  --spacing: 2px;\n"
+                                "  --color-ink: #111111;\n}\n")
+    _write(tmp_path, "page.html", '<main class="px-6 p-px">x</main>')
+    used = {(u.prop, u.kind, u.value) for u in scan([tmp_path], TokenSet({})).usages}
+    assert {("px-6", "raw", "12px"), ("p-px", "raw", "1px")} <= used
+    # A base this reader cannot read as a length gives no px value; it says why.
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n"
+                                "  --spacing: var(--unit);\n  --color-ink: #111111;\n}\n")
+    found = scan([tmp_path], TokenSet({}))
+    assert not [u for u in found.usages if u.prop == "px-6"]
+    [missed] = [n for n in found.not_read if n.text == "px-6"]
+    assert "--spacing" in missed.why and "app.css:3" in missed.why and "0.25rem" in missed.why
+
+
+def test_a_preset_that_replaces_the_spacing_scale_leaves_no_default_step(tmp_path):
+    found = _preset_project(tmp_path, "theme")
+    assert sorted({u.cls for u in found.unknown_classes}) == [
+        "-mt-1.5", "gap-4", "inset-0", "p-px", "px-6"]
+
+
+def test_a_v4_theme_that_resets_spacing_leaves_no_default_step(tmp_path):
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n  --spacing-*: initial;\n"
+                                "  --spacing-gutter: var(--space-gutter);\n}\n")
+    _write(tmp_path, "page.html", '<main class="px-6 px-gutter">x</main>')
+    ts = TokenSet({})
+    ts.add(Token("space.gutter", "dimension", {"value": 20, "unit": "px"}))
+    found = scan([tmp_path], ts)
+    assert [u.cls for u in found.unknown_classes] == ["px-6"]
+    theme = read_theme([tmp_path], [tmp_path / "app.css"])
+    assert theme.replaced == ["spacing"] and ("spacing", "*") not in theme.entries
+    # Without the reset, a step is Tailwind's own: 0.25rem each.
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n"
+                                "  --spacing-gutter: var(--space-gutter);\n}\n")
+    found = scan([tmp_path], ts)
+    assert found.unknown_classes == []
+    assert ("px-6", "raw", "24px") in {(u.prop, u.kind, u.value) for u in found.usages}
+
+
+def test_a_v4_theme_block_is_read_in_tailwinds_own_namespaces(tmp_path):
+    # text-shadow is a namespace of its own; a duration is in none.
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n"
+                                "  --text-shadow-soft: 0 1px 2px #0003;\n"
+                                "  --duration-quick: 150ms;\n  --text-body: 1rem;\n}\n")
+    theme = read_theme([tmp_path], [tmp_path / "app.css"])
+    assert sorted(theme.entries) == [("text", "body"), ("text-shadow", "soft")]
+    # The duration is never passed over in silence: it is listed with the fix.
+    [(file, line, text, why)] = theme.not_read
+    assert (file, line, text) == ("app.css", 4, "--duration-quick")
+    assert why.startswith("is outside Tailwind 4's theme namespaces, so no utility reads it")
+    assert "duration-[var(--duration-quick)]" in why
+
+
+def test_a_transition_duration_in_a_v4_theme_is_listed_with_the_fix(tmp_path):
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n"
+                                "  --transition-duration-slow: var(--motion-slow);\n}\n")
+    _write(tmp_path, "page.html", '<main class="md:flex duration-slow">x</main>')
+    found = scan([tmp_path], TokenSet({}))
+    [missed] = [n for n in found.not_read if n.text == "--transition-duration-slow"]
+    assert missed.line == 3 and "duration-[var(--transition-duration-slow)]" in missed.why

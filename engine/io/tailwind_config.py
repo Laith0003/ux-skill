@@ -38,12 +38,19 @@ _SKIP = frozenset(("node_modules", ".git", "dist", "build", "vendor", ".next", "
                    "coverage", ".uxskill"))
 _MAX_DEPTH = 4
 _MAX_UP = 6
-# Tailwind 4 theme namespaces, longest first, so --font-weight-bold is
-# font-weight and --font-display is font.
-_V4 = ("font-weight", "inset-shadow", "drop-shadow", "text-shadow", "color", "font", "text",
-       "tracking", "leading", "breakpoint", "container", "spacing", "radius", "shadow", "blur",
-       "perspective", "aspect", "ease", "animate", "duration")
+# Tailwind 4's theme namespaces: a variable in one of them makes utilities.
+# The one list the reader here and the exporter (tailwind_out) share.
+# Longest first, so --font-weight-bold is font-weight and --font-display
+# is font, --text-shadow-soft is text-shadow and --text-body is text. A
+# duration is in none: Tailwind's duration utilities take a number, and
+# no theme variable makes one.
+NAMESPACES: Tuple[str, ...] = (
+    "font-weight", "inset-shadow", "drop-shadow", "text-shadow", "color", "font", "text",
+    "tracking", "leading", "breakpoint", "container", "spacing", "radius", "shadow", "blur",
+    "perspective", "aspect", "ease", "animate")
 _VAR = re.compile(r"^var\(\s*--([A-Za-z0-9_-]+)\s*(?:,[^)]*)?\)$")
+# Theme variables a Tailwind 4 duration utility might be taken to read.
+_DURATIONS = ("duration-", "transition-duration-")
 _WHY_COMPUTED = ("is computed in JavaScript, so its value is not read; write it as a string, "
                  "such as 'var(--x)' or '#0B5F4A', so the theme can be read without running "
                  "the config")
@@ -71,11 +78,30 @@ class ThemeEntry:
 
 @dataclass
 class ThemeMap:
-    """(namespace, name) -> entry, the files read, and what was not read as
-    (file, line, text, why)."""
+    """(namespace, name) -> entry, the files read, what was not read as
+    (file, line, text, why), and the namespaces the theme replaces, in the
+    order read: a Tailwind 3 theme key set outside extend (spacing), or a
+    Tailwind 4 reset (--spacing-*: initial; "*" for --*: initial), so
+    Tailwind's own values in it are gone. `unsure` holds each part of the
+    theme the reader could not read as a whole (a preset from a package
+    or one it cannot find, a spread, a computed key, an export it cannot
+    read), any of which may replace a namespace; `spacing` is the Tailwind
+    4 base --spacing an @theme block sets, which each spacing step
+    multiplies."""
     entries: Dict[Tuple[str, str], ThemeEntry] = field(default_factory=dict)
     files: List[str] = field(default_factory=list)
     not_read: List[Tuple[str, int, str, str]] = field(default_factory=list)
+    replaced: List[str] = field(default_factory=list)
+    unsure: List[str] = field(default_factory=list)
+    spacing: Optional[ThemeEntry] = None
+
+    def keeps(self, namespace: str) -> bool:
+        """Whether Tailwind's own values in a namespace still apply: a
+        theme was read in full (a config with its presets, or an @theme
+        block) and it does not replace the namespace. A theme with a part
+        not read keeps nothing, since that part may replace it."""
+        return bool(self.files) and not self.unsure \
+            and not {namespace, "*"} & set(self.replaced)
 
     def get(self, namespace: str, name: str) -> Optional[ThemeEntry]:
         return self.entries.get((namespace, name))
@@ -373,6 +399,8 @@ class _Reader:
         for ns, (replace, entries) in theme.items():
             if replace:
                 self.out.entries = {k: v for k, v in self.out.entries.items() if k[0] != ns}
+                if ns not in self.out.replaced:
+                    self.out.replaced.append(ns)
             for e in entries:
                 self.out.entries[(ns, e.name)] = e
 
@@ -397,6 +425,7 @@ class _Reader:
         if not isinstance(exported, _Obj):
             if exported is not None:
                 self.out.not_read.append((name, 1, "the config", _WHY_EXPORT))
+                self.out.unsure.append(name)
             return None
         merged: Dict[str, Tuple[bool, List[ThemeEntry]]] = {}
         members = {k: (v, pos) for k, v, pos in exported.members if k is not None}
@@ -412,22 +441,26 @@ class _Reader:
                 for ns, v, pos in obj.members:
                     if ns is None:
                         self.not_read(name, text, v)
+                        self.out.unsure.append(name)
                     elif ns == "extend":
                         ext = self.bound(v, names)
                         if isinstance(ext, _Obj):
                             for ens, ev, epos in ext.members:
                                 if ens is None:
                                     self.not_read(name, text, ev)
+                                    self.out.unsure.append(name)
                                     continue
                                 got = self.namespace(ens, ev, names, name, text)
                                 had = merged.get(ens, (False, []))
                                 merged[ens] = (had[0], had[1] + got)
                         else:
                             self.not_read(name, text, ext)
+                            self.out.unsure.append(name)
                     else:
                         merged[ns] = (True, self.namespace(ns, v, names, name, text))
             else:
                 self.not_read(name, text, obj)
+                self.out.unsure.append(name)
         return merged
 
     def preset(self, item: Any, names: Dict[str, Any], near: Path, text: str, name: str,
@@ -437,11 +470,13 @@ class _Reader:
             if not item.ref.startswith("."):
                 self.out.not_read.append((name, _line(text, item.pos),
                                           f"preset {item.ref}", _WHY_PACKAGE))
+                self.out.unsure.append(name)
                 return
             found = _resolve_file(item.ref, near)
             if found is None:
                 self.out.not_read.append((name, _line(text, item.pos),
                                           f"preset {item.ref}", _WHY_MISSING))
+                self.out.unsure.append(name)
                 return
             got = self.theme_of(found, depth + 1)
             for ns, (replace, entries) in (got or {}).items():
@@ -453,8 +488,10 @@ class _Reader:
             self.out.not_read.append((name, _line(text, item.pos), "an inline preset",
                                       "is written in the config; move it into a file of its "
                                       "own and name it with require() to have it read"))
+            self.out.unsure.append(name)
         else:
             self.not_read(name, text, item)
+            self.out.unsure.append(name)
 
     @staticmethod
     def bound(value: Any, names: Dict[str, Any]) -> Any:
@@ -526,8 +563,29 @@ def _theme_blocks(path: Path, label: str, out: ThemeMap) -> None:
             continue
         for d in rule.declarations:
             prop = d.name[2:]
-            ns = next((n for n in _V4 if prop.startswith(n + "-")), "")
+            ns = next((n for n in NAMESPACES if prop.startswith(n + "-")), "")
+            if prop == "*" or (ns and prop == ns + "-*"):
+                # A reset clears Tailwind's own values in the namespace.
+                if d.value.strip() == "initial" and (ns or "*") not in out.replaced:
+                    out.replaced.append(ns or "*")
+                read = True
+                continue
+            if prop == "spacing":
+                # The base each spacing step multiplies (px-6 is 6 of it).
+                m = _VAR.match(d.value.strip())
+                out.spacing = ThemeEntry("spacing", "", d.value.strip(),
+                                         m.group(1) if m else "", label, d.line)
+                read = True
+                continue
             if not ns:
+                if prop.startswith(_DURATIONS):
+                    # Tailwind 4 has no duration namespace: said, never
+                    # passed over.
+                    out.not_read.append((label, d.line, d.name, (
+                        "is outside Tailwind 4's theme namespaces, so no utility reads it and "
+                        f"a class named for it does nothing; write the class as "
+                        f"duration-[var({d.name})], or use a number such as duration-150")))
+                    read = True
                 continue
             name = prop[len(ns) + 1:]
             m = _VAR.match(d.value.strip())

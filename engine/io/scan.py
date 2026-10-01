@@ -43,7 +43,13 @@ namespace, in the names the Tailwind importer gives them (bg-ink reads
 color-ink from a v4 @theme, or colors.ink from a v3 theme exported as
 JSON); a numeric spacing class reads the v4 --spacing step. An arbitrary
 class (p-[13px]) is a raw value, and a bare value Tailwind writes as it is
-(z-10, duration-150, border-2) is raw too. A value class that names no
+(z-10, duration-150, border-2) is raw too, and so is a step of Tailwind's
+own spacing scale (px-6 is 24px, inset-0 is 0px) when the project's theme
+keeps that scale: a config read in full, presets included, that extends
+spacing rather than replacing it, or an @theme block with no spacing
+reset. Each step is that many of the @theme block's --spacing base (4px
+when it sets none); a base that is not a length is listed as not
+measured. A value class that names no
 token is listed apart in unknown_classes, with the namespaces it was
 looked up in and a token of its name outside them (bg-primary against a
 bare --primary); a class that sets a keyword
@@ -215,6 +221,12 @@ FAMILY_WORDS: Dict[str, Tuple[str, ...]] = {
     "weight": ("weight", "bold"), "z": ("z", "layer", "zindex")}
 # Tailwind's default spacing step: p-6 is 6 of them, 24px.
 TAILWIND_STEP_PX = 4
+# The steps of Tailwind's default spacing scale (px is 1px); each is a raw
+# value when the project's theme keeps the scale (ThemeMap.keeps).
+TAILWIND_SPACING = frozenset((
+    "px", "0", "0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4", "5", "6", "7", "8", "9", "10",
+    "11", "12", "14", "16", "20", "24", "28", "32", "36", "40", "44", "48", "52", "56", "60",
+    "64", "72", "80", "96"))
 
 # Tailwind: utility prefix -> the theme namespaces its value may name, with
 # the family of a token found in each (v4 @theme names first, then v3 theme
@@ -248,7 +260,8 @@ _UTILITIES: List[Tuple[re.Pattern, _Namespaces, Dict[str, str]]] = [
      {"dimension": "tracking"}),
     (re.compile(r"ease"), (("ease", "motion"), ("transitionTimingFunction", "motion")),
      {"cubicBezier": "motion"}),
-    (re.compile(r"duration"), (("duration", "duration"), ("transitionDuration", "duration")),
+    # Tailwind 4 has no duration namespace; a Tailwind 3 theme has transitionDuration.
+    (re.compile(r"duration"), (("transitionDuration", "duration"),),
      {"duration": "duration"}),
     (re.compile(r"z"), (("z", "z"), ("zIndex", "z")), {"number": "z"}),
 ]
@@ -1198,6 +1211,26 @@ class _Scanner:
                 and self.token("spacing"):
             self.add(at, utility, "space", "token", self.token("spacing")[0], text, state)
             return
+        if ("spacing", "space") in spaces and name in TAILWIND_SPACING \
+                and self.theme.keeps("spacing"):
+            # Tailwind's own spacing step, kept by a theme that extends the
+            # scale rather than replacing it: a raw value, never a missing
+            # token, at the base --spacing the theme sets (0.25rem when it
+            # sets none).
+            self.tailwind = True
+            step = self._spacing_step()
+            if step is None and name != "px":
+                base = self.theme.spacing
+                self.note(at, "class", named, (
+                    f"is a step of Tailwind's spacing scale, whose base --spacing is "
+                    f"{base.value} at {base.file}:{base.line}, which this reader cannot read "
+                    "as a length; write --spacing as a length such as 0.25rem to have it "
+                    "measured"))
+                return
+            px = 1 if name == "px" else float(name) * step
+            self.add(at, utility, "space", "raw", _signed(f"{px:g}px", negative), text, state,
+                     from_class=True)
+            return
         literal = self._bare(prefix, name, spaces)
         if literal is not None:
             kind, value = literal
@@ -1211,6 +1244,24 @@ class _Scanner:
             return
         looked = tuple(space for space, family in spaces if name or family != "color")
         self.unknown(at, named, looked, self.near(name, spaces, kinds), name)
+
+    def _spacing_step(self) -> Optional[float]:
+        """The px of one spacing step: the base --spacing the theme sets,
+        else Tailwind's own 4px; None when the base does not read as a
+        length."""
+        base = self.theme.spacing
+        if base is None:
+            return float(TAILWIND_STEP_PX)
+        try:
+            kind, literal = _read(base.value)
+        except NotRead:
+            return None
+        if kind != "dimension":
+            return None
+        try:
+            return dimension_px(literal)
+        except (KeyError, TypeError, ValueError):
+            return None
 
     @staticmethod
     def _bare(prefix: str, name: str, spaces: _Namespaces) -> Optional[Tuple[str, str]]:

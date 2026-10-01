@@ -63,6 +63,8 @@ EXPECTED = {
     "dark-text-sets-lighter",
     "bands-follow-energy", "lines-in-ink", "bottom-anchored-hero", "faces-cost-their-ubiquity",
     "photo-direction",
+    "own-system-rebuilt-in-place", "extension-carried-forward", "type-size-names",
+    "tailwind-spacing-steps",
     "figma-modes-on-one-axis", "bare-sizes-read-as-px",
 }
 # Records a later record replaced; each names its replacement.

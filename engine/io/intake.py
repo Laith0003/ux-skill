@@ -16,7 +16,10 @@ and before anything else it:
    the engine wrote that still matches (engine.existing.record: listed in
    the folder's record at its digest, or carrying the engine's stamp);
    any other file is replaced only when the caller also passes
-   replace_client;
+   replace_client. A file the caller names in rewrite (an extension file
+   an earlier extend wrote, which the step read first and carries
+   forward) is replaced without force while the engine's record still
+   matches it, and is backed up the same way;
 4. records the sources, the files written and the backups in
    <out>/.uxskill/intake/<intake id>.json, adding to the record a
    write from the same sources made before, and each file written, with
@@ -34,6 +37,7 @@ bytes.
 """
 from __future__ import annotations
 
+import dataclasses
 import hashlib
 import json
 import os
@@ -160,7 +164,8 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
                       force_label: str = "--force",
                       replace_label: str = "--replace-client-files",
                       out_label: str = "--out", plan_only: bool = False,
-                      beside: str = "", own: str = "") -> Dict[str, Any]:
+                      beside: str = "", own: str = "",
+                      rewrite: Iterable[str] = ()) -> Dict[str, Any]:
     """Write `files` into out_dir after the intake step (see the module
     docstring). `sources` is a Source, an ImportReport (its source and every
     file in also_read) or a list of either. The labels name the caller's
@@ -175,7 +180,10 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
     the way rather than to pass another out folder, which would not move
     it. `own` names the engine's own system when out_dir is its folder and
     it is written again in place: a refusal then says force rewrites it
-    after a backup."""
+    after a backup. `rewrite` names files the write may replace without
+    force while the engine wrote them and they still match (engine_wrote):
+    an extension file an earlier extend wrote, whose content the new one
+    carries forward; each is backed up like any replaced file."""
     from engine.foundations.emit import check_name, conflict_message, plan_writes, write_files
 
     out = Path(out_dir).expanduser()
@@ -219,28 +227,33 @@ def write_with_intake(out_dir: Any, files: Mapping[str, str], sources: Sources, 
         return (f"{'it sits' if one else 'they sit'} beside {beside}, where the extension has "
                 f"to load from, so {out_label} does not move {'it' if one else 'them'}")
 
-    if plan.conflicts and not force:
+    again = set(rewrite)
+    # The conflicts force has to allow: all but the engine's own earlier
+    # files that the caller carries forward.
+    waiting = [n for n in plan.conflicts if not (n in again and engine_wrote(out, n))]
+    if waiting and not force:
         if own:
-            one = len(plan.conflicts) == 1
+            one = len(waiting) == 1
             return _outcome("refused", (
-                f"Nothing was written: {', '.join(str(out / n) for n in plan.conflicts)} "
+                f"Nothing was written: {', '.join(str(out / n) for n in waiting)} "
                 f"{'differs' if one else 'differ'} from what the extension writes. {own} is "
                 "the system ux-skill wrote, and extend writes it again in place with the files "
                 f"built from it; pass {force_label} to rewrite "
                 f"{'it' if one else 'them'} after a backup."),
-                unchanged=plan.unchanged, conflicts=plan.conflicts)
+                unchanged=plan.unchanged, conflicts=waiting)
         if beside:
-            one = len(plan.conflicts) == 1
+            one = len(waiting) == 1
             return _outcome("refused", (
-                f"Nothing was written: {', '.join(str(out / n) for n in plan.conflicts)} "
+                f"Nothing was written: {', '.join(str(out / n) for n in waiting)} "
                 f"already {'exists' if one else 'exist'} with different content, and "
-                f"{in_the_way(plan.conflicts)}. Pass {force_label} to replace "
+                f"{in_the_way(waiting)}. Pass {force_label} to replace "
                 f"{'it' if one else 'them'} after a backup, or rename your "
                 f"file{'' if one else 's'} of that name."),
-                unchanged=plan.unchanged, conflicts=plan.conflicts)
-        return _outcome("refused", conflict_message(out, plan, force_label, out_label),
-                        unchanged=plan.unchanged, conflicts=plan.conflicts)
-    if plan.conflicts and not replace_client:
+                unchanged=plan.unchanged, conflicts=waiting)
+        shown = dataclasses.replace(plan, conflicts=tuple(waiting))
+        return _outcome("refused", conflict_message(out, shown, force_label, out_label),
+                        unchanged=plan.unchanged, conflicts=waiting)
+    if waiting and not replace_client:
         # Force replaces only a file the engine wrote that still matches:
         # listed in the folder's record at its digest, or stamped.
         theirs = [n for n in plan.conflicts if not engine_wrote(out, n)]

@@ -568,3 +568,30 @@ def test_a_foreign_export_names_its_tokens_into_tailwind_namespaces(tmp_path):
     assert " *   --motion-duration-fast\n" in text
     assert {"token": "layout.breakpoint-md", "variable": "--breakpoint-md"} \
         in result["namespaced"]
+
+
+def test_the_reader_and_the_exporter_share_one_list_of_namespaces():
+    from engine.io import tailwind_config, tailwind_out
+    assert tailwind_out.NAMESPACES is tailwind_config.NAMESPACES
+    assert "text-shadow" in tailwind_out.NAMESPACES
+    assert "duration" not in tailwind_out.NAMESPACES
+    # Longest first, so --font-weight-bold is font-weight, not font.
+    ns = tailwind_out.NAMESPACES
+    assert all(ns.index(a) < ns.index(b) for a in ns for b in ns
+               if a != b and a.startswith(b + "-"))
+
+
+def test_a_text_shadow_is_emitted_and_a_duration_is_reported_outside():
+    from engine.io.tailwind_out import namespaced
+    ts = TokenSet({})
+    ts.add(Token("effect.text-shadow-soft", "shadow", "0 1px 2px #00000033"))
+    ts.add(Token("heading.text-shadow", "shadow", "0 2px 4px #00000033"))
+    ts.add(Token("card.shadow", "shadow", "0 1px 3px #00000033"))
+    ts.add(Token("text-shadow-glow", "shadow", "0 0 6px #3366FF"))
+    ts.add(Token("duration-quick", "duration", {"value": 150, "unit": "ms"}))
+    ts.add(Token("motion.duration-slow", "duration", {"value": 400, "unit": "ms"}))
+    out, placed, outside = namespaced(ts)
+    assert placed == [("effect.text-shadow-soft", "text-shadow-soft"),
+                      ("heading.text-shadow", "text-shadow-heading"),
+                      ("card.shadow", "shadow-card")]
+    assert outside == ["duration-quick", "motion.duration-slow"]

@@ -46,7 +46,7 @@ CLI: Dict[str, str] = {
     "add_role": "--add-role", "to": "--to", "brand": "--brand", "axes": "--axes",
     "brief": "--brief", "tokens": "--tokens", "latin_only": "--latin-only",
     "scheme": "--scheme", "figma_mode": "--figma-mode", "import": "system import",
-    "add_mode": "--add-mode"}
+    "add_mode": "--add-mode", "scan": "--scan"}
 MAPPING = "mapping.json"
 
 
@@ -194,8 +194,13 @@ def run_enhance(source: Any, *, fmt: str = "auto", mapping: Any = None,
     report only; with out it is written as enhance-report.md and
     enhance.json. A mapping file is merged with a proposal first."""
     from engine.io.enhance import enhance
+    from engine.io.read import pages_direction
     from engine.io.scan import scan as scan_code
     imported = _read(source, fmt, second_modes, labels)
+    if scan:
+        # Pages read right to left make the root's values the rtl ones,
+        # as in a project folder read whole.
+        imported = pages_direction(imported, list(scan), labels.get("scan", "--scan"))
     from engine.foundations.emit import check_out_dir
     here = check_out_dir(out, labels["out"]) if out is not None else _source_folder(imported)
     maps, notes, name, used = _mapping(imported, mapping, labels, here)

@@ -382,6 +382,35 @@ def test_extend_keeps_an_owners_mapping_in_out_instead_of_refusing(tmp_path):
     assert (out / "extend-report.md").is_file()
 
 
+def test_a_second_extend_into_another_out_folder_adds_to_the_first(tmp_path):
+    from pathlib import Path
+    f = _files(tmp_path)
+    first = run_extend(f / "theme.css", add=["space"], out=tmp_path / "one")
+    assert first["status"] == "written"
+    ext = (f / "theme-ext.css").read_text()
+    second = run_extend(f / "theme.css", add=["radius"], out=tmp_path / "two")
+    assert second["status"] == "written", second["message"]
+    after = (f / "theme-ext.css").read_text()
+    # What the first extension added is kept, and the new additions follow.
+    assert "--space-" in after and "--radius-" in after
+    assert (f / "theme.css").read_text() == THEME
+    # The earlier extension is backed up before it is written again.
+    backup = Path(second["replaced"][str(f / "theme-ext.css")])
+    assert backup.read_text() == ext
+    # Each folder keeps its own intake record of what was written there.
+    for out in (tmp_path / "one", tmp_path / "two"):
+        [record] = (out / INTAKE_DIR / "intake").glob("*.json")
+        assert json.loads(record.read_text())["writes"] == ["mapping.json", "extend-report.md"]
+    [beside] = (f / INTAKE_DIR / "intake").glob("*.json")
+    assert json.loads(beside.read_text())["writes"] == ["theme-ext.css"]
+    assert second["where"]["out"]["folder"] == str(tmp_path / "two")
+    # An extension the owner edited is theirs: it is not written over.
+    (f / "theme-ext.css").write_text(after + "/* mine */\n", encoding="utf-8")
+    third = run_extend(f / "theme.css", add=["border"], out=tmp_path / "three")
+    assert third["status"] == "refused"
+    assert "theme-ext.css" in third["message"] and "--force" in third["message"]
+
+
 def test_a_file_in_the_way_beside_the_source_is_named_with_the_right_fix(tmp_path):
     f = _files(tmp_path)
     (f / "theme-ext.css").write_text("/* mine */\n", encoding="utf-8")
@@ -414,6 +443,122 @@ def test_the_engines_own_system_is_rewritten_with_force_and_its_outputs_follow(t
     # tokens.css is built again from the extended tokens.json.
     assert css == to_css(read_system(ds / "tokens.json").tokens)
     assert "radius" in doc
+
+
+def _own_system_with_report(ds, art_axes=NEUTRAL):
+    """The engine's own system, built with color only, beside the report
+    and art a build writes: the report says it was built from #3366FF at
+    every axis 0.5, and the art was drawn at `art_axes`."""
+    from engine.existing.record import record_text
+    from engine.foundations.art import art_files
+    from engine.foundations.emit import make_system
+    ds.mkdir()
+    ts = build_system(NEUTRAL, "#3366FF", foundations=("color",)).tokens
+    built = make_system("#3366FF", NEUTRAL, "every axis at 0.5", arabic=False)
+    files = {"tokens.json": dump_dtcg(ts), "tokens.css": to_css(ts),
+             "system-report.md": built.files["system-report.md"],
+             **art_files(ts, art_axes, "#3366FF")}
+    for name, text in files.items():
+        (ds / name).parent.mkdir(parents=True, exist_ok=True)
+        (ds / name).write_text(text, encoding="utf-8")
+    (ds / ".uxskill").mkdir()
+    (ds / RECORD).write_text(record_text(ds, files), encoding="utf-8")
+    return built.files["system-report.md"]
+
+
+def test_an_in_place_extend_rebuilds_the_report_and_the_art(tmp_path):
+    from engine.existing.record import engine_wrote
+    from engine.foundations.art import FILES, art_files
+    ds = tmp_path / "ds"
+    # Art drawn at other axes than the report records: the rebuild follows
+    # the report, the record of what the system was built from.
+    old = _own_system_with_report(ds, art_axes=AxisValues(*[0.9] * 7))
+    done = run_extend(ds / "tokens.json", add=["radius"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    ts = read_system(ds / "tokens.json").tokens
+    assert ts.has("radius.card")
+    for name, text in art_files(ts, NEUTRAL, "#3366FF").items():
+        assert (ds / name).read_text() == text
+    assert set(FILES) <= set(done["written"])
+    report = (ds / "system-report.md").read_text()
+    # What it was built from stays; what extend added is said, with where
+    # to read why.
+    built_from = report.split("## Built from")[1].split("## WCAG gate")[0]
+    assert built_from == old.split("## Built from")[1].split("## WCAG gate")[0]
+    # The opening says what the system holds now and that it was extended.
+    opening = report.split("\n\n")[1]
+    assert opening.startswith("A design system for #3366FF, built by ux-skill and extended in "
+                              "place since: color and radius,")
+    assert "complete" not in opening
+    assert "## Extended in place" in report
+    added = report.split("## Extended in place")[1].split("## Files")[0]
+    assert f"- Added {done['added']} tokens: radius." in added
+    assert "radius.chip" in added and "extend-report.md" in added
+    assert report.endswith(old[old.index("## Files"):])
+    # Each rebuilt file is the engine's, so a later force can replace it.
+    assert all(engine_wrote(ds, n) for n in ("system-report.md", *FILES))
+    assert "system-report.md" in done["message"] or "system-report.md" in done["written"]
+
+
+def test_the_rebuilt_report_says_the_brand_color_from_the_tokens(tmp_path):
+    from engine.existing.record import record_text
+    from engine.foundations.emit import _FIDELITY_LEAD
+    ds = tmp_path / "ds"
+    old = _own_system_with_report(ds)
+    # A report written before the system had its brand color section.
+    start = old.index("## Brand color")
+    cut = old[:start] + old[old.index("## Notes"):]
+    (ds / "system-report.md").write_text(cut, encoding="utf-8")
+    (ds / RECORD).write_text(record_text(ds, {"system-report.md": cut}), encoding="utf-8")
+    done = run_extend(ds / "tokens.json", add=["radius"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    report = (ds / "system-report.md").read_text()
+    section = report.split("## Brand color")[1].split("## Notes")[0]
+    assert _FIDELITY_LEAD in section and "- Light mode: the button is" in section
+    assert report.index("## Brand color") < report.index("## Notes")
+
+
+def test_added_imagery_says_no_art_was_written_unless_art_is_drawn(tmp_path):
+    from engine.foundations.art import FILES
+    ds = tmp_path / "ds"
+    _own_system_with_report(ds)
+    for name in FILES:   # a build whose art the owner removed
+        (ds / name).unlink()
+    done = run_extend(ds / "tokens.json", add=["imagery"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    assert "No art was written" in done["report"]
+    assert not any((ds / n).exists() for n in FILES)
+    # With the art beside it, the art is drawn again and the line is not said.
+    drawn = tmp_path / "drawn"
+    _own_system_with_report(drawn)
+    done = run_extend(drawn / "tokens.json", add=["imagery"], out=drawn, force=True)
+    assert done["status"] == "written", done["message"]
+    assert "No art was written" not in done["report"]
+
+
+def test_an_engine_stylesheet_extended_in_place_says_no_art_was_written(tmp_path):
+    from engine.existing import stamp_digest
+    ds = tmp_path / "ds"
+    _own_system_with_report(ds)
+    ts = build_system(NEUTRAL, "#3366FF", foundations=("color",)).tokens
+    (ds / "theme.css").write_text(stamp_digest(to_css(ts), css=True), encoding="utf-8")
+    done = run_extend(ds / "theme.css", add=["imagery"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    assert "No art was written" in done["report"]
+
+
+def test_a_report_the_owner_edited_is_left_with_the_art(tmp_path):
+    from engine.foundations.art import FILES
+    ds = tmp_path / "ds"
+    _own_system_with_report(ds, art_axes=AxisValues(*[0.9] * 7))
+    edited = (ds / "system-report.md").read_text() + "\nOur notes.\n"
+    (ds / "system-report.md").write_text(edited, encoding="utf-8")
+    art = {n: (ds / n).read_text() for n in FILES}
+    done = run_extend(ds / "tokens.json", add=["radius"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    assert (ds / "system-report.md").read_text() == edited
+    assert {n: (ds / n).read_text() for n in FILES} == art
+    assert "system-report.md" in done["report"] and "uxskill system build" in done["report"]
 
 
 def test_a_foreign_radius_token_does_not_block_added_radius(tmp_path):
