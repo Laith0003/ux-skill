@@ -200,24 +200,36 @@ def _block_scalar(raws: List[str], at: int, indent: int, head: str, m: "re.Match
     else:
         parent = indent
     least = max(1, parent + 1)
-    text = "\n".join(raws[at + 1:])
-    pos, col, line = 0, 0, at + 1
+    # A cursor over the lines after the header: each line but the last ends
+    # with a line break, and the last ends the document. It moves line by
+    # line, so a block reads only to its own end.
+    col, line = 0, at + 1
+    last = len(raws) - 1
 
     def peek() -> str:
-        return text[pos] if pos < len(text) else "\0"
+        if line > last:
+            return "\0"
+        raw = raws[line]
+        if col < len(raw):
+            return raw[col]
+        return "\n" if line < last else "\0"
+
+    def next_line() -> None:
+        nonlocal col, line
+        col, line = 0, line + 1
 
     def breaks_to(width: int) -> List[str]:
         """The line breaks of the empty lines ahead, each line's spaces up
         to `width` skipped."""
-        nonlocal pos, col, line
+        nonlocal col
         found: List[str] = []
         while True:
             while col < width and peek() == " ":
-                pos, col = pos + 1, col + 1
+                col += 1
             if peek() != "\n":
                 return found
             found.append("\n")
-            pos, col, line = pos + 1, 0, line + 1
+            next_line()
 
     deepest = (0, 0)   # (the most spaces on a line before the text, its line)
     if digit:
@@ -228,9 +240,9 @@ def _block_scalar(raws: List[str], at: int, indent: int, head: str, m: "re.Match
         while peek() in " \n":
             if peek() == "\n":
                 breaks.append("\n")
-                pos, col, line = pos + 1, 0, line + 1
+                next_line()
             else:
-                pos, col = pos + 1, col + 1
+                col += 1
                 deepest = max(deepest, (col, line))
         width = max(least, deepest[0])
     chunks: List[str] = []
@@ -238,16 +250,15 @@ def _block_scalar(raws: List[str], at: int, indent: int, head: str, m: "re.Match
     while col == width and peek() != "\0":
         chunks.extend(breaks)
         plain = peek() not in " \t"
-        start = pos
-        while peek() not in "\0\n":
-            pos, col = pos + 1, col + 1
-        if _CONTROL.search(text[start:pos]):
+        content = raws[line][col:]
+        if _CONTROL.search(content):
             raise _fail(source, line + 1, "the block text holds a control character; remove it")
-        chunks.append(text[start:pos])
+        chunks.append(content)
+        col = len(raws[line])
         line_break = ""
         if peek() == "\n":
             line_break = "\n"
-            pos, col, line = pos + 1, 0, line + 1
+            next_line()
         breaks = breaks_to(width)
         if col != width or peek() == "\0":
             break
@@ -271,7 +282,8 @@ def _block_scalar(raws: List[str], at: int, indent: int, head: str, m: "re.Match
         chunks.append(line_break)
     if chomp == "+":
         chunks.extend(breaks)
-    return "".join(chunks), line
+    # At the end of the document every line was read, the last included.
+    return "".join(chunks), (len(raws) if peek() == "\0" else line)
 
 
 def _as_quoted(text: str) -> str:

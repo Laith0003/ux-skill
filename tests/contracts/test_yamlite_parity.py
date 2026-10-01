@@ -151,13 +151,24 @@ def _dates_as_text(value):
     return value
 
 
-def _compare(yaml, documents):
+def _compare(yaml, documents, strict=False):
+    """Each document read by both readers. A refusal counts as agreement
+    unless `strict`: then only when PyYAML refuses the document too, for
+    the forms yamlite reads in full, such as block text."""
     counts = {"same": 0, "refused": 0}
     wrong = []
     for doc in documents:
         try:
             ours = loads(doc)
-        except YamlError:
+        except YamlError as exc:
+            if strict:
+                try:
+                    theirs = yaml.safe_load(doc)
+                except yaml.YAMLError:
+                    pass
+                else:
+                    wrong.append((doc, f"yamlite refused it ({exc}); PyYAML read {theirs!r}"))
+                    continue
             counts["refused"] += 1
             continue
         except Exception as exc:  # noqa: BLE001  any other error is reported as a failure
@@ -198,7 +209,7 @@ def test_spaces_past_a_block_indent_are_text_as_pyyaml_reads_them():
         "a: |+\n  x\n    \nb: 1\n", "a: >\n  x\n    \n  y\n", "a: |-\n  x\n     \n  y\n   \n",
         "- |\n  x\n    \n  y\n", "a: |\n  x\n\n  y\n",
     ]
-    counts, wrong = _compare(yaml, documents)
+    counts, wrong = _compare(yaml, documents, strict=True)
     assert wrong == [] and counts["same"] == len(documents)
 
 
@@ -234,8 +245,10 @@ def test_block_text_reads_as_pyyaml_reads_it_or_is_refused():
         "a: |\n  x\n    ", "- |\n  x", "- |1\n  ",
         # Keep chomping keeps the breaks there are, and no more.
         "a: |+\n", "a: |+\n\n", "- |+\n \n",
+        # Block text that ends the document with no final line break is read once.
+        "a: |\n  x", "- |\n  x", "a: >\n  x", "k:\n  a: |\n    x", "a: |\n  x\n  y",
     ]
-    counts, wrong = _compare(yaml, named + _block_documents(SEED, 3000))
+    counts, wrong = _compare(yaml, named + _block_documents(SEED, 3000), strict=True)
     assert wrong == [], wrong[:5]
     assert counts["same"] >= 1500, counts
 
@@ -245,3 +258,12 @@ def test_a_blank_line_deeper_than_the_first_line_of_block_text_is_refused():
     with pytest.raises(YamlError, match=r"line 2: this line of spaces before the block text "
                                         r"holds more spaces than its first line"):
         loads("a: |\n    \n  x\n", "c.yaml")
+
+
+def test_a_long_document_of_block_texts_reads_in_time():
+    import time
+    doc = "".join(f"k{i}: |\n  line {i}\n" for i in range(20000))
+    start = time.perf_counter()
+    assert loads(doc)["k3999"] == "line 3999\n"
+    # Each block reads to its own end, never through the rest of the file.
+    assert time.perf_counter() - start < 2
