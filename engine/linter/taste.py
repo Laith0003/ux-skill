@@ -21,14 +21,14 @@ import math
 import re
 from functools import lru_cache
 from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Set, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
 from engine.foundations import character
 from engine.foundations.imagery import GRADE_SPREAD
 from engine.foundations.motion import DIRECT_T50, DIRECT_T90, ENTRANCE_T50, settle_ms
 from engine.linter.structure import (
-    FileContext, _children, _class_list, _decl_map, _heads_a_heading, _linked_sheets,
-    _matching_elements, _named_eyebrow, _split_top, _utility_eyebrow, attr_values, block_at,
+    FileContext, _children, _class_list, _decl_map, _declarations, _heads_a_heading,
+    _linked_sheets, _matching_elements, _named_eyebrow, _split_top, _utility_eyebrow, attr_values, block_at,
     compounds, css_blocks, document_or_app_surface, pseudos, tokens,
 )
 from engine.linter.views import View
@@ -149,6 +149,8 @@ class System:
         self.curves: List[List[float]] = []
         self.colors: List[Tuple[int, int, int]] = []
         self.leadings: Set[float] = set()
+        self.leadings_latin: Set[float] = set()
+        self.leadings_arabic: Set[float] = set()
         # type.capitals: how far the system leans to a capitals display.
         self.capitals: Optional[float] = None
         self.caps = any("caps" in name for name in props)
@@ -172,6 +174,7 @@ class System:
             self.capitals = n[0]
         if ("leading" in name or "line-height" in name) and n is not None and n[1] == "":
             self.leadings.add(n[0])
+            (self.leadings_arabic if "arabic" in name else self.leadings_latin).add(n[0])
         t = ms(low)
         if t is not None:
             self.durations.add(t)
@@ -329,30 +332,32 @@ def size_outside_system(ctx: FileContext, view: View, match: re.Match, start: in
     return not (sys_.sizes and m and sys_.has_size(float(m.group(1))))
 
 
-_CAPS_SIZE = re.compile(r"font-size\s*:\s*(\d+(?:\.\d+)?)\s*(px|rem)?", re.I)
+# Our threshold for capitals that read as display rather than a label.
+CAPS_DISPLAY_PX = 20.0
 
 
 def capitals_outside_system(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
-    """Capitals at a large size pass when the page's system has a capitals
-    display role, leans to capitals (type.capitals at CAPITALS_FROM or
-    more, when the system emits it), the size is one of the system's two
-    largest and the letters are not tracked tight."""
+    """Capitals at 20px and up (the size read through the page's system)
+    pass when the page's system has a capitals display role, leans to
+    capitals (type.capitals at CAPITALS_FROM or more, when the system emits
+    it), the size is one of the system's two largest and the letters are
+    not tracked tight."""
+    block = block_at(ctx, view, match.start())
+    decls = _decl_map(block.body) if block else {}
+    px = _font_size_px(ctx, decls["font-size"]) if "font-size" in decls else None
+    if px is None or px < CAPS_DISPLAY_PX:
+        return False
     sys_ = system(ctx)
     if not (sys_.caps and sys_.sizes):
         return True
     if sys_.capitals is not None and sys_.capitals < character.CAPITALS_FROM:
         return True
-    m = _CAPS_SIZE.search(match.group(0))
-    if not m:
-        return True
-    px = float(m.group(1)) * (REM_PX if (m.group(2) or "").lower() == "rem" else 1.0)
     top = sorted(set(round(s, 2) for s in sys_.sizes))[-2:]
     if not any(abs(px - t) <= 0.5 for t in top):
         return True
-    block = block_at(ctx, view, match.start())
-    spacing = _decl_map(block.body).get("letter-spacing", "") if block else ""
-    n = number(spacing) if spacing else None
-    return bool(n and n[0] < 0)
+    spacing = decls.get("letter-spacing", "")
+    tracked = _Expr(ctx).read(spacing) if spacing else None
+    return bool(tracked is not None and tracked < 0)
 
 
 # ---------------------------------------------------------------------------
@@ -1070,103 +1075,252 @@ TASTE_CHECKS = {
 
 _RTL_SELECTOR = re.compile(r":lang\(\s*['\"]?(?:ar|fa|ur|he)\b|\[lang\s*[|^*~]?=\s*['\"]?(?:ar|fa|ur|he)\b"
                            r"|\[dir\s*=\s*['\"]?rtl|:dir\(\s*rtl", re.I)
-_RTL_PAGE = re.compile(r"<html\b[^>]*\b(?:dir\s*=\s*['\"]?rtl|lang\s*=\s*['\"]?(?:ar|fa|ur|he)\b)", re.I)
+_NOT = re.compile(r":not\((?:[^()]|\([^()]*\))*\)", re.I)
+_RTL_PAGE = re.compile(r"<html\b[^>]*\b(?:dir\s*=\s*['\"]?rtl|lang\s*=\s*['\"]?(?:ar|fa|ur|he)\b)",
+                       re.I)
 _ARABIC_FACE = re.compile(r"arabic|naskh|kufi|thuluth|nastaliq", re.I)
 _SHORT_FONT = re.compile(r"(\d*\.?\d+)\s*(px|rem)\s*/\s*(\d*\.?\d+)\s*(px|rem|%)?", re.I)
-# Tailwind's display sizes and line-height utilities.
+_MAX_WIDTH = re.compile(r"max-width\s*:\s*(\d+(?:\.\d+)?)\s*(px|rem|em)", re.I)
+# Tailwind's display sizes, each with its default line height of 1, and its
+# line-height utilities.
 _TW_TEXT = {"5xl": 48.0, "6xl": 60.0, "7xl": 72.0, "8xl": 96.0, "9xl": 128.0}
-_TW_LEADING = {"none": 1.0, "tight": 1.25, "snug": 1.375}
+_TW_LEADING = {"none": 1.0, "tight": 1.25, "snug": 1.375, "normal": 1.5, "relaxed": 1.625,
+               "loose": 2.0}
 _TW_TEXT_CLASS = re.compile(r"(?<![\w:/-])text-(?:([5-9]xl)|\[(\d*\.?\d+)(px|rem)\])(?![\w-])", re.I)
-_TW_LEAD_CLASS = re.compile(r"(?<![\w:/-])leading-(?:(none|tight|snug)|\[(\d*\.?\d+)\])(?![\w-])", re.I)
+_TW_LEAD_CLASS = re.compile(r"(?<![\w:/-])leading-(?:(none|tight|snug|normal|relaxed|loose)"
+                            r"|\[(\d*\.?\d+)\])(?![\w-])", re.I)
+# A width under which a media query holds a phone's sizes.
+PHONE_QUERY_PX = 768.0
+
+
+class _Expr:
+    """A small reader for a CSS length expression: var() followed into the
+    page's system (the largest value it can take), calc() arithmetic, and
+    the largest argument of clamp(), min() and max(). Values are in px, or
+    plain numbers; anything else (vw, %, an unknown var) reads as None."""
+
+    _TOKEN = re.compile(r"\s*(?:(\d*\.?\d+)(px|rem|em|vw|vh|%)?|(--[\w-]+)"
+                        r"|([a-z][a-z-]*)\(|([-+*/(),]))", re.I)
+
+    def __init__(self, ctx: FileContext):
+        self.props = system(ctx).props
+        self.toks: List[Tuple[str, Any]] = []
+        self.i = 0
+
+    def read(self, text: str, depth: int = 0) -> Optional[float]:
+        if depth > 8:
+            return None
+        saved = (self.toks, self.i, getattr(self, "depth", 0))
+        self.toks, self.i, self.depth = self._lex(text.strip()), 0, depth
+        try:
+            v = self._sum()
+            ok = self.i == len(self.toks)
+        except (ValueError, ZeroDivisionError, IndexError):
+            v, ok = None, False
+        self.toks, self.i, self.depth = saved
+        return v if ok else None
+
+    def _lex(self, text: str) -> List[Tuple[str, Any]]:
+        out: List[Tuple[str, Any]] = []
+        pos = 0
+        while pos < len(text):
+            m = self._TOKEN.match(text, pos)
+            if not m or m.end() == pos:
+                if text[pos:].strip():
+                    out.append(("bad", text[pos]))  # nothing the reader knows
+                break
+            if m.group(1) is not None:
+                unit = (m.group(2) or "").lower()
+                n = float(m.group(1))
+                out.append(("num", n * REM_PX if unit in ("rem", "em") else n)
+                           if unit in ("", "px", "rem", "em") else ("bad", unit))
+            elif m.group(3):
+                out.append(("name", m.group(3).lower()))
+            elif m.group(4):
+                out.append(("fn", m.group(4).lower()))
+            else:
+                out.append((m.group(5), None))
+            pos = m.end()
+        return out
+
+    def _peek(self) -> str:
+        return self.toks[self.i][0] if self.i < len(self.toks) else ""
+
+    def _take(self, kind: str) -> Any:
+        if self._peek() != kind:
+            raise ValueError(kind)
+        self.i += 1
+        return self.toks[self.i - 1][1]
+
+    def _sum(self) -> Optional[float]:
+        v = self._product()
+        while self._peek() in ("+", "-"):
+            op = self._peek()
+            self.i += 1
+            w = self._product()
+            v = None if v is None or w is None else (v + w if op == "+" else v - w)
+        return v
+
+    def _product(self) -> Optional[float]:
+        v = self._atom()
+        while self._peek() in ("*", "/"):
+            op = self._peek()
+            self.i += 1
+            w = self._atom()
+            v = None if v is None or w is None else (v * w if op == "*" else v / w)
+        return v
+
+    def _args(self) -> List[Optional[float]]:
+        args = [self._sum()]
+        while self._peek() == ",":
+            self.i += 1
+            args.append(self._sum())
+        self._take(")")
+        return args
+
+    def _atom(self) -> Optional[float]:
+        kind = self._peek()
+        if kind == "num":
+            return self._take("num")
+        if kind == "bad":
+            self.i += 1
+            return None
+        if kind == "(":
+            self.i += 1
+            v = self._sum()
+            self._take(")")
+            return v
+        if kind == "-":
+            self.i += 1
+            v = self._atom()
+            return None if v is None else -v
+        if kind == "fn":
+            name = self._take("fn")
+            if name == "var":
+                ref = self._take("name")
+                fallback = None
+                if self._peek() == ",":
+                    self.i += 1
+                    fallback = self._sum()
+                self._take(")")
+                got = [self.read(v, self.depth + 1) for v in literals(self.props, ref)]
+                got = [g for g in got if g is not None]
+                return max(got) if got else fallback
+            args = self._args()
+            if name == "calc":
+                return args[0] if len(args) == 1 else None
+            known = [a for a in args if a is not None]
+            if name in ("clamp", "max", "min"):
+                return max(known) if known else None
+            return None
+        raise ValueError(kind)
 
 
 def _font_size_px(ctx: FileContext, value: str) -> Optional[float]:
-    """A font size in px: a length, a var() into the page's system, or the
-    largest length inside clamp(), min() or max()."""
-    value = value.strip()
-    m = _ONLY_VAR.match(value)
-    if m:
-        for v in literals(system(ctx).props, m.group(1).lower()):
-            px = _font_size_px(ctx, v)
-            if px:
-                return px
-        return None
-    if "(" in value:
-        found = [length_px(x) for x in re.findall(r"\d*\.?\d+(?:px|rem)", value, re.I)]
-        found = [x for x in found if x]
-        return max(found) if found else None
-    return length_px(value)
+    """A font size in px, read through the page's system (_Expr)."""
+    return _Expr(ctx).read(value)
 
 
 def _ratio(value: str, font_px: float) -> Optional[float]:
     """A line height as a multiple of the font size; None for a var(),
     normal or anything unreadable."""
-    n = number(value.strip())
+    value = value.strip()
+    n = number(value)
     if n is None:
-        m = re.match(r"^(\d*\.?\d+)%$", value.strip())
+        m = re.match(r"^(\d*\.?\d+)%$", value)
         return float(m.group(1)) / 100.0 if m else None
     v, unit = n
     if unit == "":
         return v
-    px = length_px(value.strip(), font_px)
+    px = length_px(value, font_px)
     return px / font_px if px is not None else None
 
 
-def _rtl_block(ctx: FileContext, block) -> bool:
-    if any(_RTL_SELECTOR.search(s) for s in block.selectors):
-        return True
-    family = _decl_map(block.body).get("font-family", "")
-    if _ARABIC_FACE.search(family):
-        return True
+def _rtl_selector(selector: str) -> bool:
+    return bool(_RTL_SELECTOR.search(_NOT.sub("", selector)))
+
+
+def _rtl_page(ctx: FileContext) -> bool:
     raw = ctx.views.get("raw")
     return bool(raw is not None and _RTL_PAGE.search(raw.text))
 
 
-def _leading_in_system(sys_: System, ratio: float) -> bool:
-    return any(abs(ratio - v) <= 0.005 for v in sys_.leadings)
+def _leading_in_system(sys_: System, ratio: float, arabic: bool) -> bool:
+    pool = sys_.leadings_arabic if (arabic and sys_.leadings_arabic) else (
+        sys_.leadings_latin if sys_.leadings_arabic or not arabic else sys_.leadings)
+    return any(abs(ratio - v) <= 0.005 for v in pool)
+
+
+def _block_leading(ctx: FileContext, block) -> Tuple[Optional[float], Optional[str], str]:
+    """(font px, line height, where it came from) for a block, the
+    declarations read in order so the last one wins."""
+    px: Optional[float] = None
+    lh: Optional[str] = None
+    source = ""
+    for prop, value in _declarations(block.body):
+        if prop == "font-size":
+            px = _font_size_px(ctx, value)
+        elif prop == "font":
+            short = _SHORT_FONT.search(value)
+            if short:
+                px = float(short.group(1)) * (REM_PX if short.group(2).lower() == "rem" else 1.0)
+                lh, source = short.group(3) + (short.group(4) or ""), "font"
+            else:
+                lh, source = None, ""
+        elif prop == "line-height":
+            lh, source = value, "line-height"
+    return px, lh, source
 
 
 def display_leading_outside_floor(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
     """A display line height (40px and up) under the engine's floor for its
     size (typography.display_leading_floor, 0.15 higher for Arabic) is a
-    finding unless the page's system has that line height."""
+    finding unless the page's system has that line height. Inside a phone
+    media query (a max-width under PHONE_QUERY_PX) the floor is the large
+    end's, since the engine keeps the desktop leading as a display shrinks
+    on a phone. Each selector of a list is judged on its own."""
     from engine.foundations.typography import DISPLAY_LEAD_PX, display_leading_floor
     text = match.group(0)
     sys_ = system(ctx)
     if text.lower().startswith("class="):
         size = _TW_TEXT_CLASS.search(text)
-        lead = _TW_LEAD_CLASS.search(text)
-        if not (size and lead):
+        if not size:
             return False
+        lead = _TW_LEAD_CLASS.search(text)
         px = _TW_TEXT[size.group(1).lower()] if size.group(1) else (
             float(size.group(2)) * (REM_PX if size.group(3).lower() == "rem" else 1.0))
-        ratio = _TW_LEADING[lead.group(1).lower()] if lead.group(1) else float(lead.group(2))
-        raw = ctx.views.get("raw")
-        rtl = bool(raw is not None and _RTL_PAGE.search(raw.text))
+        if lead:
+            ratio = _TW_LEADING[lead.group(1).lower()] if lead.group(1) else float(lead.group(2))
+        elif size.group(1):
+            ratio = 1.0  # Tailwind's own line height for text-5xl and up
+        else:
+            return False
+        rtls = [_rtl_page(ctx)]
+        phone = False
     else:
         block = block_at(ctx, view, match.start())
         if block is None:
             return False
-        decls = _decl_map(block.body)
-        short = _SHORT_FONT.search(decls.get("font", "")) if "font" in decls else None
-        if text.lower().lstrip().startswith("font") and not text.lower().lstrip().startswith("font-"):
-            if not short:
-                return False
-            px = float(short.group(1)) * (REM_PX if short.group(2).lower() == "rem" else 1.0)
-            ratio = _ratio(short.group(3) + (short.group(4) or ""), px)
-        else:
-            if "font-size" not in decls:
-                return False
-            px = _font_size_px(ctx, decls["font-size"])
-            if px is None:
-                return False
-            ratio = _ratio(decls.get("line-height", text.split(":", 1)[-1]), px)
-        rtl = _rtl_block(ctx, block)
-    if ratio is None or px is None or px < DISPLAY_LEAD_PX[0]:
+        px, lh, source = _block_leading(ctx, block)
+        kind = "font" if re.match(r"\s*font\s*:", text, re.I) else "line-height"
+        if px is None or lh is None or source != kind:
+            return False
+        ratio = _ratio(lh, px)
+        family = _decl_map(block.body).get("font-family", "")
+        page_rtl = _rtl_page(ctx) or bool(_ARABIC_FACE.search(family))
+        rtls = [page_rtl or _rtl_selector(s) for s in block.selectors] or [page_rtl]
+        phone = any(m and float(m.group(1)) * (REM_PX if m.group(2).lower() != "px" else 1.0)
+                    < PHONE_QUERY_PX for m in (_MAX_WIDTH.search(a) for a in block.atrules))
+    if ratio is None or px < DISPLAY_LEAD_PX[0]:
         return False
-    if ratio >= display_leading_floor(px, arabic=rtl) - 0.005:
-        return False
-    return not _leading_in_system(sys_, ratio)
+    # The engine keeps a display step's desktop leading on a phone, where the
+    # size shrinks to fit: inside a phone query the floor is the large end's.
+    judged_px = max(px, DISPLAY_LEAD_PX[1]) if phone else px
+    for rtl in sorted(set(rtls)):
+        if ratio < display_leading_floor(judged_px, arabic=rtl) - 0.005 \
+                and not _leading_in_system(sys_, ratio, rtl):
+            return True
+    return False
 
 
 TASTE_CHECKS["display-leading-outside-floor"] = display_leading_outside_floor

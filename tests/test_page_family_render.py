@@ -1,9 +1,8 @@
 """Three inner pages built in one run are one page family: at 1440 and 390
 each page has one header, one closing band and one footer, the same
 instance on every page, one h1, and nothing wider than the viewport."""
+import base64
 import re
-import struct
-import zlib
 
 import pytest
 
@@ -14,15 +13,24 @@ from engine.synthesizer.axes import AxisValues
 PAGES = ("pricing", "about", "contact")
 
 
-def _png(rgb, size=160):
-    raw = b"".join(b"\x00" + bytes(rgb) * size for _ in range(size))
+WEBP_JS = """(rgb) => { const c = document.createElement('canvas'); c.width = 320; c.height = 240;
+  const g = c.getContext('2d'); g.fillStyle = 'rgb(' + rgb.join(',') + ')';
+  g.fillRect(0, 0, 320, 240);
+  return c.toDataURL('image/webp').split(',')[1]; }"""
 
-    def chunk(kind, data):
-        return (struct.pack(">I", len(data)) + kind + data
-                + struct.pack(">I", zlib.crc32(kind + data) & 0xFFFFFFFF))
-    head = struct.pack(">IIBBBBB", size, size, 8, 2, 0, 0, 0)
-    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", head)
-            + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b""))
+
+def _webp(colors):
+    """WebP photographs drawn by Chromium, or None when no browser runs."""
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch()
+            page = browser.new_page()
+            out = [base64.b64decode(page.evaluate(WEBP_JS, list(c))) for c in colors]
+            browser.close()
+            return out
+    except Exception:  # no Playwright or no browser: the render test skips
+        return None
 
 
 @pytest.fixture(scope="module")
@@ -30,10 +38,11 @@ def family(tmp_path_factory):
     out = tmp_path_factory.mktemp("family")
     css = to_css(build_system(AxisValues(0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5), "#3366FF",
                               arabic=False).tokens)
-    photos = ["kitchen.png", "street.png"]
-    for name, rgb in zip(photos, ((176, 150, 120), (160, 140, 118))):
-        (out / name).write_bytes(_png(rgb))
-    pages = build_family(PAGES, css, brand="Night Market", action="Book a table", photos=photos,
+    photos = ["kitchen.webp", "street.webp"]
+    for name, data in zip(photos, _webp(((176, 150, 120), (160, 140, 118))) or []):
+        (out / name).write_bytes(data)
+    pages = build_family(PAGES, css, brand="Night Market", action="Book a table",
+                         action_href="https://example.com/book", photos=photos,
                          photo_alts=["The kitchen at the start of service",
                                      "The street outside at dusk"])
     for page, text in pages.items():
@@ -62,12 +71,29 @@ def test_the_header_marks_the_page_it_sits_on(family):
 
 def test_a_family_without_photographs_is_refused():
     with pytest.raises(ValueError, match="photos"):
-        build_family(PAGES, "", brand="Night Market", action="Book a table")
+        build_family(PAGES, "", brand="Night Market", action="Book a table",
+                     action_href="/book")
 
 
 def test_an_unknown_page_is_named():
     with pytest.raises(ValueError, match="pages: home is not an inner page"):
-        build_family(("home",), "", brand="B", action="A", photos=["a.png"], photo_alts=["a"])
+        build_family(("home",), "", brand="B", action="A", action_href="/a", photos=["a.webp"],
+                     photo_alts=["a"])
+
+
+def test_an_action_that_goes_nowhere_is_refused():
+    with pytest.raises(ValueError, match="action_href"):
+        build_family(PAGES, "", brand="B", action="A", action_href="#", photos=["a.webp"],
+                     photo_alts=["a"])
+
+
+def test_the_built_pages_pass_the_lint_at_medium_and_above(family):
+    from engine.linter.core import SEVERITY_RANK, lint_text
+    _, pages = family
+    for page, text in pages.items():
+        hits = [f"{f.rule_id} ({f.severity})" for f in lint_text(f"{page}.html", text)
+                if SEVERITY_RANK[f.severity] >= SEVERITY_RANK["medium"]]
+        assert not hits, (page, hits)
 
 
 MEASURE = """() => ({

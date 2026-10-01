@@ -66,6 +66,8 @@ a{color:var(--color-text-link)}
   font-weight:var(--type-text-section-title-font-weight);
   line-height:var(--type-text-section-title-line-height);overflow-wrap:break-word}
 .section p{max-width:var(--layout-measure-text);margin:0}
+.split{display:grid;gap:var(--layout-gutter)}
+.band{padding:var(--space-8);border-radius:var(--radius-card);background:var(--color-surface-tint)}
 .closing-band{background:var(--color-surface-band);padding-block:var(--layout-landing-gap)}
 .closing-band h2{margin:0 0 var(--space-6);font-family:var(--type-text-section-title-font-family);
   font-size:var(--type-text-section-title-font-size);overflow-wrap:break-word}
@@ -74,7 +76,7 @@ a{color:var(--color-text-link)}
   gap:var(--space-2) var(--layout-gutter);margin:0;padding:0;list-style:none}
 .site-footer a{display:inline-block;min-height:24px;padding-block:var(--space-1)}
 .draft{margin:0;padding:var(--space-6);border:1px dashed var(--color-hairline)}
-@media (min-width: 1024px){.hero .frame{grid-template-columns:1fr 1fr}}
+@media (min-width: 1024px){.hero .frame,.split{grid-template-columns:1fr 1fr}}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 """
 
@@ -88,18 +90,18 @@ def _esc(text: str) -> str:
     return html.escape(text, quote=True)
 
 
-def _header(brand: str, pages: Sequence[str], action: str) -> str:
+def _header(brand: str, pages: Sequence[str], action: str, href: str) -> str:
     links = "".join(f'<li><a href="{p}.html">{_esc(TITLES[p])}</a></li>' for p in pages)
     return ('<header class="site-header" data-family="header"><div class="frame">'
             f'<a class="brand" href="index.html">{_esc(brand)}</a>'
             f'<nav class="site-nav" aria-label="Site"><ul>{links}</ul></nav>'
-            f'<a class="action" href="#start">{_esc(action)}</a></div></header>')
+            f'<a class="action" href="{_esc(href)}">{_esc(action)}</a></div></header>')
 
 
-def _closing_band(line: str, action: str) -> str:
+def _closing_band(line: str, action: str, href: str) -> str:
     return ('<section class="closing-band" data-family="closing-band" aria-labelledby="closing">'
             f'<div class="frame"><h2 id="closing">{_esc(line)}</h2>'
-            f'<a class="action" href="#start">{_esc(action)}</a></div></section>')
+            f'<a class="action" href="{_esc(href)}">{_esc(action)}</a></div></section>')
 
 
 def _footer(brand: str, pages: Sequence[str]) -> str:
@@ -109,17 +111,35 @@ def _footer(brand: str, pages: Sequence[str]) -> str:
             f'{links}</ul></nav></div></footer>')
 
 
-def _hero(page: str, purpose: str, action: str, photo: Optional[str], alt: str) -> str:
+def _hero(page: str, purpose: str, action: str, href: str, photo: Optional[str],
+          alt: str) -> str:
     figure = (f'<figure><img src="{_esc(photo)}" alt="{_esc(alt)}" width="1200" height="900">'
               '</figure>' if photo else
               '<p class="draft">No photograph: the client\'s system forbids photography.</p>')
     return ('<section class="hero" aria-labelledby="page-title"><div class="frame"><div>'
             f'<h1 id="page-title">{_esc(TITLES[page])}</h1><p>{_esc(purpose)}</p>'
-            f'<a class="action" id="start" href="#start">{_esc(action)}</a></div>'
+            f'<a class="action" href="{_esc(href)}">{_esc(action)}</a></div>'
             f'{figure}</div></section>')
 
 
-def build_family(pages: Sequence[str], css: str, *, brand: str, action: str,
+def _section(n: int, title: str, text: str) -> str:
+    """A middle section, in one of three layouts taken in turn (a stack, a
+    split with the heading beside the text, and a band on the tinted
+    surface), so no layout runs more than twice on a page of six."""
+    head = f'<h2 id="s{n}">{_esc(title)}</h2>'
+    body = f'<p>{_esc(text)}</p>'
+    kind = (n - 1) % 3
+    if kind == 0:
+        inner = head + body
+    elif kind == 1:
+        inner = f'<div class="split"><div>{head}</div><div>{body}</div></div>'
+    else:
+        inner = f'<div class="band">{head}{body}</div>'
+    return (f'<section class="section section-{("stack", "split", "band")[kind]}" '
+            f'aria-labelledby="s{n}"><div class="frame">{inner}</div></section>')
+
+
+def build_family(pages: Sequence[str], css: str, *, brand: str, action: str, action_href: str,
                  photos: Sequence[str] = (), photo_alts: Sequence[str] = (),
                  photography_forbidden: bool = False, closing_line: str = "",
                  brief: Optional[Mapping[str, object]] = None) -> Dict[str, str]:
@@ -143,12 +163,15 @@ def build_family(pages: Sequence[str], css: str, *, brand: str, action: str,
                          "photography sets photography_forbidden)")
     if photos and len(photo_alts) != len(photos):
         raise ValueError("photo_alts: give one description per photograph in photos")
+    if not action_href.strip() or action_href.strip() == "#":
+        raise ValueError("action_href: give the primary action a real destination (its page, "
+                         "form or booking address), never an empty link")
     if not brand.strip() or not action.strip():
         raise ValueError("brand and action: name the site and its primary action, in the "
                          "words the home page uses")
     seqs = {p: select_for_brief({**(brief or {}), "page": p})["section_sequence"] for p in pages}
-    header = _header(brand, pages, action)
-    closing = _closing_band(closing_line or action, action)
+    header = _header(brand, pages, action, action_href)
+    closing = _closing_band(closing_line or action, action, action_href)
     footer = _footer(brand, pages)
     out: Dict[str, str] = {}
     for i, page in enumerate(pages):
@@ -159,11 +182,10 @@ def build_family(pages: Sequence[str], css: str, *, brand: str, action: str,
         alt = photo_alts[i % len(photo_alts)] if photos else ""
         here = header.replace(f'<a href="{page}.html">',
                               f'<a href="{page}.html" aria-current="page">')
-        body: List[str] = [here, "<main>", _hero(page, secs[0]["purpose"], action, photo, alt)]
+        body: List[str] = [here, "<main>",
+                           _hero(page, secs[0]["purpose"], action, action_href, photo, alt)]
         for n, s in enumerate(middle, 1):
-            body.append(f'<section class="section" aria-labelledby="s{n}"><div class="frame">'
-                        f'<h2 id="s{n}">{_esc(_title(s["section"]))}</h2>'
-                        f'<p>{_esc(s["purpose"])}</p></div></section>')
+            body.append(_section(n, _title(s["section"]), s["purpose"]))
         body += [closing, "</main>", footer]
         out[page] = ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
                      '<meta name="viewport" content="width=device-width, initial-scale=1">'

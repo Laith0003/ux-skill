@@ -1084,7 +1084,7 @@
       "category": "Typography",
       "detection": {
         "type": "regex",
-        "pattern": "text-transform\\s*:\\s*uppercase[^}]*font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,})",
+        "pattern": "text-transform\\s*:\\s*uppercase[^}]*font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,}|\\d*\\.?\\d+r?em\\b|var\\(|clamp\\(|calc\\()|font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,}|\\d*\\.?\\d+r?em\\b|var\\(|clamp\\(|calc\\()[^}]*text-transform\\s*:\\s*uppercase",
         "flags": "i",
         "scope": [
           "css",
@@ -1107,7 +1107,7 @@
       "category": "Typography",
       "detection": {
         "type": "regex",
-        "pattern": "(?<![\\w-])line-height\\s*:\\s*[^;{}]+|(?<![\\w-])font\\s*:\\s*[^;{}]*\\d(?:px|rem)\\s*/\\s*[\\d.]+[^;{}]*|class=\"(?=[^\"\\n]*(?<![\\w:/-])text-(?:[5-9]xl|\\[\\d+(?:\\.\\d+)?(?:px|rem)\\])(?![\\w-]))(?=[^\"\\n]*(?<![\\w:/-])leading-(?:none|tight|snug|\\[\\d*\\.?\\d+\\])(?![\\w-]))[^\"\\n]*",
+        "pattern": "(?<![\\w-])line-height\\s*:\\s*[^;{}]+|(?<![\\w-])font\\s*:\\s*[^;{}]*\\d(?:px|rem)\\s*/\\s*[\\d.]+[^;{}]*|class=\"(?=[^\"\\n]*(?<![\\w:/-])text-(?:[5-9]xl|\\[\\d+(?:\\.\\d+)?(?:px|rem)\\])(?![\\w-]))[^\"\\n]*",
         "flags": "i",
         "scope": [
           "css",
