@@ -17,6 +17,7 @@ from engine.linter.core import lint_text
 PROBES = Path(__file__).resolve().parent / "lint_corpus" / "probes"
 
 IMG = "imagery-mandatory-missing"
+HSC = "h-screen-no-dvh-fallback"
 OUT = "outline-none-no-focus-visible"
 PH = "placeholder-as-label"
 SKIP = "screen-reader-only-without-class"
@@ -36,6 +37,8 @@ EXPECT = {
     "i5-articles.html": {IMG: [1]},
     "i6-two-sections-table.html": {IMG: [1]},
     "i7-docs.html": {IMG: []},
+    # a compiled stylesheet: only the utilities the page uses are its own
+    "u1-unused-utility.html": {HSC: [6, 9]},
     # outline removal: a ring counts only when it covers the same element
     "o1-ring-elsewhere.css": {OUT: [2]},
     "o2-same-tag-other-context.css": {OUT: [2]},
