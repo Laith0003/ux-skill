@@ -250,7 +250,7 @@
         ],
         "post": "default-300-answers-late"
       },
-      "why": "300ms on the default curve is the editor default: nothing about the motion was decided. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. A curve that is not declared or cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
+      "why": "300ms on the default curve is the editor default: nothing about the motion was decided. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. An unwritten curve is the default one (ease, or Tailwind's own) and is judged as written; a curve that cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
       "fix": "Bind the system's motion roles (--motion-state-*, --motion-swap-*). With no system, declare a curve that answers in time (half done within 70ms for a hover or press) and a duration chosen for the move."
     },
     {
@@ -1788,7 +1788,7 @@
         "target": "css",
         "post": "animation-answers-late"
       },
-      "why": "An animation of 800ms or more on a slow-starting curve keeps the page waiting. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. A curve that is not declared or cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
+      "why": "An animation of 800ms or more on a slow-starting curve keeps the page waiting. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. An unwritten curve is the default one (ease, or Tailwind's own) and is judged as written; a curve that cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
       "fix": "Bind the system's entrance role (--motion-arrive-duration with --motion-arrive-curve). With no system, put the long move on a strong out curve so it is half done within 140ms, or shorten it."
     },
     {
@@ -2217,7 +2217,7 @@
         "target": "css",
         "post": "transition-answers-late"
       },
-      "why": "A transition of 400ms or more that starts slowly leaves the hover or press unanswered while the pointer has moved on. Length alone is not the problem: a long move on a strong out curve is half done in 70ms. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. A curve that is not declared or cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
+      "why": "A transition of 400ms or more that starts slowly leaves the hover or press unanswered while the pointer has moved on. Length alone is not the problem: a long move on a strong out curve is half done in 70ms. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. An unwritten curve is the default one (ease, or Tailwind's own) and is judged as written; a curve that cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
       "fix": "Bind the system's motion roles (--motion-state-duration with --motion-state-curve for hover and state, --motion-reveal-* for entrances). With no system, use a strong out curve such as cubic-bezier(0.2, 0.8, 0.2, 1), or shorten the move until it is half done within 70ms."
     },
     {
@@ -3796,7 +3796,7 @@
         "target": "css",
         "post": "infinite-animation-unguarded"
       },
-      "why": "A loop that never ends (a marquee, a glow, a floating shape) keeps moving for a person who asked their system for less motion. It passes when it runs only under prefers-reduced-motion: no-preference, when a reduced-motion query stops it on its selector or on every element, or when it is a progress indicator.",
+      "why": "A loop that never ends (a marquee, a glow, a floating shape) keeps moving for a person who asked their system for less motion. It passes when it runs only under prefers-reduced-motion: no-preference (or not reduce), when a reduced-motion query stops it on its selector or on every element, or when it is a progress indicator. A loop declared inside a reduce query runs only for people who asked for less motion and is reported.",
       "fix": "Wrap the animation in @media (prefers-reduced-motion: no-preference), or stop it in @media (prefers-reduced-motion: reduce) with animation: none. Anything that moves on its own for more than five seconds beside other content also needs a pause control (2.2.2)."
     }
   ]

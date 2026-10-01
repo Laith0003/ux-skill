@@ -164,3 +164,50 @@ def test_spinner_is_progress_not_decoration(tmp_path):
            "border:2px solid #999;animation:spin 1s linear infinite}")
     body = '<div role="progressbar" aria-label="Loading" class="spinner"></div>' + PROSE
     assert _render(tmp_path, "spin.html", PAGE.format(css=css, body=body)) == []
+
+
+def test_large_accent_text_is_held_to_the_system_floor_not_cited_as_1_4_3(tmp_path):
+    body = '<h1 style="color:#3d8bfd;font-size:48px">Supper after nine</h1>' + PROSE
+    hits = _render(tmp_path, "large.html", PAGE.format(css="", body=body))
+    assert [h.rule_id for h in hits] == ["accent-text-low-contrast"]
+    assert "system's own floor" in hits[0].excerpt and "3:1 of large text" in hits[0].excerpt
+
+
+def test_small_accent_text_under_4_5_cites_1_4_3(tmp_path):
+    body = '<p><a href="/a" style="color:#3d8bfd;font-size:16px">Book a table</a></p>' + PROSE
+    hits = _render(tmp_path, "small.html", PAGE.format(css="", body=body))
+    assert [h.rule_id for h in hits] == ["accent-text-low-contrast"]
+    assert "under 4.5:1 (1.4.3)" in hits[0].excerpt
+
+
+MARQUEE = ("@keyframes slide{to{transform:translateX(-50%)}} "
+           "@media (prefers-reduced-motion:no-preference){.track{animation:slide 20s linear infinite}}")
+
+
+@pytest.mark.parametrize("button", ['<button type="button">Display options</button>',
+                                    '<button type="button">Play video</button>'])
+def test_an_unrelated_button_is_no_pause_control(tmp_path, button):
+    body = ('<section><div class="marquee"><div class="track">Open late every night</div></div>'
+            '</section>' + button + PROSE)
+    hits = _render(tmp_path, "unrelated.html", PAGE.format(css=MARQUEE, body=body))
+    assert [h.rule_id for h in hits] == ["moving-content-without-pause"]
+
+
+def test_a_pause_button_beside_the_motion_counts(tmp_path):
+    body = ('<section><div class="marquee"><div class="track">Open late every night</div></div>'
+            '<button type="button">Pause</button></section>' + PROSE)
+    assert _render(tmp_path, "beside.html", PAGE.format(css=MARQUEE, body=body)) == []
+
+
+def test_a_failed_photo_check_keeps_the_layout_result(tmp_path):
+    css = (_grade_css([(200, 170, 140)])
+           + '.wide{width:2000px;height:300px;background-image:url("http://[bad")}')
+    f = tmp_path / "broken.html"
+    f.write_text(PAGE.format(css=css, body='<div class="wide"></div>' + PROSE), encoding="utf-8")
+    try:
+        report = render_check([str(f)])
+    except RenderUnavailable as exc:
+        pytest.skip(str(exc))
+    ids = {x.rule_id for x in report.findings}
+    assert "render-failed" not in ids
+    assert ids & {"horizontal-overflow", "overflow-x"} or any("overflow" in i for i in ids), ids

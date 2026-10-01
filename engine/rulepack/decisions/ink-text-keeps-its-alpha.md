@@ -15,7 +15,7 @@ Muted text written as the ink at an alpha (rgba at 0.5, text-black/50, color-mix
 
 ## Decision
 
-text-ink-at-low-alpha reports a text color in a near-neutral ink (channels within 24 of each other) at an alpha under 0.7, written as rgba, an eight- or four-digit hex, color-mix with transparent, or a Tailwind ink with an opacity modifier. It passes when the color over white (dark ink) or black (light ink) is a color the page's own tokens define. Accent colors, backgrounds and borders are not judged here; the render check measures accent text against every ground it lands on.
+text-ink-at-low-alpha reports a text color in a near-neutral ink (channels within 24 of each other) at an alpha under 0.7, written as rgba, an eight- or four-digit hex, color-mix with transparent, or a Tailwind ink with an opacity modifier. It passes when the color over white (dark ink) or black (light ink) is a color the page's own tokens define; for Tailwind that is read for text-black and text-white, whose values are fixed, while gray scales and theme inks follow a config the lint does not read and are reported. Accent colors, backgrounds and borders are not judged here; the render check measures accent text against every ground it lands on.
 
 ## Why
 

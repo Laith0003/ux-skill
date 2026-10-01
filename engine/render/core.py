@@ -171,7 +171,13 @@ async def _measure(browser, sem, f: Path, w: int, h: int, desktop: bool = False)
             await page.add_style_tag(content=_FREEZE_CSS)
             result = await page.evaluate(_MEASURE_JS, TOLERANCE_PX)
             if desktop:  # the page's color, accents and photos, measured once
-                result["findings"].extend(await taste.page_checks(page))
+                try:
+                    result["findings"].extend(await taste.page_checks(page))
+                except Exception as exc:  # the layout result above still stands
+                    error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
+                    result["findings"].append({
+                        "rule": "render-failed", "sel": "page", "cls": "", "text": "",
+                        "error": "color and photo checks: " + error})
             return result
         except Exception as exc:  # one page that hangs or errors must not stop the run
             error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]

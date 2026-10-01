@@ -236,7 +236,7 @@ Hero component rules live in `references/surfaces/landing.md`. Dashboard card-de
 ## Tokens / numeric guardrails
 
 - **Color**: within the system's budget, `color.budget.chromatic` (2 to 20 percent of the interface by energy) plus `color.budget.bands` for bands; lint --render measures it. A client's own brand keeps its saturation (decisions/client-identity-wins.md)
-- **Contrast**: 4.5:1 for all text at any size (1.4.3; the system holds every text role to it), 3:1 for UI components and graphics (1.4.11)
+- **Contrast**: 4.5:1 for text and 3:1 for large text (1.4.3); the system holds every text role to 4.5:1 at any size, as its own floor. 3:1 for UI components and graphics (1.4.11)
 - **Spacing**: multiples of 4 (4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160)
 - **Touch targets**: ≥ 44×44 pt (iOS), ≥ 48×48 dp (Android) regardless of visual render
 - **Motion**: the system's roles. A direct response is half done within 70ms and nine tenths within 220ms, an entrance half within 140ms (motion.settle_ms); reduced motion keeps 100ms or less

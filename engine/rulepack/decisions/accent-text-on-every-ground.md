@@ -15,7 +15,7 @@ An accent checked on white can fail on the off-white card, the tinted band or th
 
 ## Decision
 
-lint --render finds every text in a color (OKLCH chroma 0.04 and up) at 1280px and measures it against the ground under it, the backgrounds of its ancestors composited on white. Under 4.5:1 is reported as accent-text-low-contrast, once per color and ground, naming both. Text over a picture, a gradient or an overlay beside media is left to the scrim check.
+lint --render finds every text in a color (OKLCH chroma 0.04 and up) at 1280px and measures it against the ground under it, the backgrounds of its ancestors composited on white. Under 4.5:1 is reported as accent-text-low-contrast, once per color and ground, naming both. Normal text under 4.5:1 cites 1.4.3. Large text (24px, or 18.66px bold) that reaches 3:1 meets 1.4.3, so the finding names 4.5:1 as the system's own floor for all text (no-large-text-relaxation); under 3:1 it cites 1.4.3 for large text. Text over a picture, a gradient or an overlay beside media is left to the scrim check.
 
 ## Why
 

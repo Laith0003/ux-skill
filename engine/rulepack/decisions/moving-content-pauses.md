@@ -15,7 +15,7 @@ Marquees, beams and floating shapes loop forever. Many run with reduced motion s
 
 ## Decision
 
-lint --render loads each page twice without freezing it. With reduced motion set, any animation that runs forever and is not a progress indicator is reported as infinite-animation-under-reduced-motion. With no motion preference, any animation that runs on its own for more than five seconds beside other content is reported as moving-content-without-pause unless the page has a control that pauses it: a button or toggle named pause, stop or play, or one whose aria-controls names the moving region.
+lint --render loads each page twice without freezing it. With reduced motion set, any animation that runs forever and is not a progress indicator is reported as infinite-animation-under-reduced-motion. With no motion preference, any animation that runs on its own for more than five seconds beside other content is reported as moving-content-without-pause unless a control pauses it: one whose aria-controls names the moving element or a region holding it, or a button or toggle in the same area of the page (its section, article, aside, header, footer, figure or region) whose name has the whole word pause or stop, or play on a toggle with aria-pressed. A button elsewhere, or one whose name only contains those letters, does not count.
 
 ## Why
 

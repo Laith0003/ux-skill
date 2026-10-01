@@ -1065,7 +1065,8 @@
         {
           "section": "Where to find us",
           "job": "explanation",
-          "purpose": "The address with a photograph of the place and how to get there, when the client has a place people visit."
+          "purpose": "The address with a photograph of the place and how to get there, when the client has a place people visit.",
+          "contact": "address"
         },
         {
           "section": "Before you write",

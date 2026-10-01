@@ -54,3 +54,34 @@ def test_customer_proof_is_dropped_when_the_client_has_none():
     seq = select_for_brief({"page": "customers", "proof": []})
     assert not [s for s in seq["section_sequence"] if s.get("proof")]
     assert seq["dropped"]
+
+
+@pytest.mark.parametrize("page", ["customers", "customer-story"])
+def test_a_pre_launch_inner_page_drops_its_proof_with_the_pre_launch_reason(page):
+    seq = select_for_brief({"page": page, "stage": "pre-launch"})
+    assert seq["id"] == INNER[page]
+    assert not [s for s in seq["section_sequence"] if s.get("proof")]
+    assert seq["dropped"] and all("not launched" in d["reason"] for d in seq["dropped"])
+    assert "stage pre-launch" in seq["why"]
+
+
+def test_where_to_find_us_needs_an_address():
+    seq = select_for_brief({"page": "contact", "contact": ["email"]})
+    names = [s["section"] for s in seq["section_sequence"]]
+    assert "Where to find us" not in names
+    reason = next(d["reason"] for d in seq["dropped"] if d.get("section") == "Where to find us")
+    assert "address" in reason and "contact" in reason
+
+
+def test_where_to_find_us_stays_with_an_address_or_an_unknown_contact_list():
+    for brief in ({"page": "contact", "contact": ["address", "email"]}, {"page": "contact"}):
+        names = [s["section"] for s in select_for_brief(brief)["section_sequence"]]
+        assert "Where to find us" in names
+
+
+def test_a_section_contact_need_names_a_contact_kind():
+    from engine.page_sequence.core import CONTACT_KINDS
+    for entry in load_sequences():
+        for s in entry["section_sequence"]:
+            if "contact" in s:
+                assert s["contact"] in CONTACT_KINDS, (entry["id"], s["section"])

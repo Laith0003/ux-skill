@@ -1,0 +1,7 @@
+.a { animation: drift 20s linear infinite; }
+.b { animation: drift 20s linear infinite; }
+.c { animation: drift 20s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .a { animation-duration: 0.01ms; } .b { animation: drift 10.1s linear infinite; } }
+@media (prefers-reduced-motion: reduce) { .d { animation: pulse 2s infinite; } }
+@media not (prefers-reduced-motion: reduce) { .e { animation: pulse 2s infinite; } }
+@media not (prefers-reduced-motion: reduce) { .c { animation: none; } }

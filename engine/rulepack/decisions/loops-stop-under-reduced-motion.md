@@ -15,7 +15,7 @@ A loop that never ends (a marquee, a glow, a floating shape) keeps moving for a 
 
 ## Decision
 
-infinite-animation-without-reduced-motion reports an infinite animation unless it runs only under prefers-reduced-motion: no-preference, a reduced-motion query stops it (animation none, paused, one iteration or a near-zero duration on its selector, a selector it matches, or every element), or it is a progress indicator. The render check confirms it on the rendered page and asks for a pause control on anything that moves on its own for more than five seconds beside other content, as 2.2.2 says.
+infinite-animation-without-reduced-motion reports an infinite animation unless it runs only under prefers-reduced-motion: no-preference (or not reduce), a reduced-motion query stops it (animation none, paused, one iteration or a duration of 10ms or less on its selector, a selector it matches, or every element), or it is a progress indicator. A loop declared inside a reduce query is reported: it runs only for people who asked for less motion. The render check confirms it on the rendered page and asks for a pause control on anything that moves on its own for more than five seconds beside other content, as 2.2.2 says.
 
 ## Why
 

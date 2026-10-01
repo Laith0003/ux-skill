@@ -52,6 +52,12 @@ TAILWIND_CURVES = {
     "ease-out": [0.0, 0.0, 0.2, 1.0], "ease-in-out": [0.4, 0.0, 0.2, 1.0],
 }
 REM_PX = 16.0
+# The curve CSS uses when a transition or animation names none, the one
+# Tailwind's transition utilities use, and both spellings of each.
+CSS_DEFAULT_CURVE = "ease"
+TAILWIND_DEFAULT_CURVE = "cubic-bezier(%s)" % ", ".join(
+    str(x) for x in TAILWIND_CURVES["ease-in-out"])
+DEFAULT_CURVES = (CSS_DEFAULT_CURVE, TAILWIND_DEFAULT_CURVE)
 
 
 def _css_texts(ctx: FileContext) -> List[str]:
@@ -407,12 +413,19 @@ def _resolve_curve(ctx: FileContext, token: Optional[str]) -> Tuple[str, Optiona
     return ("known", c) if c is not None else ("unknown", None)
 
 
-def _fires(ctx: FileContext, duration: float, token: Optional[str], direct: bool, cap: float) -> bool:
+def _fires(ctx: FileContext, duration: float, token: Optional[str], direct: bool, cap: float,
+           default_fires: bool = False) -> bool:
+    """True when the move answers late. An unwritten curve is the default
+    one (CSS_DEFAULT_CURVE, or Tailwind's for its utilities) and is judged
+    the same as the default written out; with ``default_fires`` (the 300ms
+    rule) a move on the default curve outside the system is a finding."""
     sys_ = system(ctx)
     state, c = _resolve_curve(ctx, token)
     if sys_.durations and sys_.has_duration(duration) and (
             state in ("system", "unknown") or (c is not None and sys_.has_curve(c))):
         return False
+    if default_fires and token is not None and token.strip().lower() in DEFAULT_CURVES:
+        return True
     if c is None or _is_exit(c):
         return duration >= cap
     return not answers(duration, c, direct)
@@ -454,30 +467,37 @@ def _longhand_curves(ctx: FileContext, view: View, pos: int, prop: str) -> List[
 
 
 def _motion_fires(ctx: FileContext, view: View, match: re.Match, start: int,
-                  floor: float, cap: float, animation: bool, exact: bool = False) -> bool:
+                  floor: float, cap: float, animation: bool, exact: bool = False,
+                  default_fires: bool = False) -> bool:
     """Judge every duration in the declaration at or above ``floor`` (equal
     to it when ``exact``); True when one of them answers late."""
     if view is ctx.views.get("classes"):
-        return _classes_fire(ctx, view, match, start, cap)
+        return _classes_fire(ctx, view, match, start, cap, default_fires)
     prop, value = _declaration(view, match.start())
+    if prop.startswith("--"):
+        return False  # a token definition: the system's own value
     direct = False if animation else _direct_css(ctx, view, match.start())
     if prop.endswith("-duration"):
         durations = [ms(v) for v in _split_top(value)]
         curves = _longhand_curves(ctx, view, match.start(),
                                   prop.replace("-duration", "-timing-function"))
-        items = [(d, curves[i % len(curves)] if curves else None) for i, d in enumerate(durations)]
+        items = [(d, curves[i % len(curves)] if curves else CSS_DEFAULT_CURVE)
+                 for i, d in enumerate(durations)]
     elif prop in ("transition", "animation"):
-        items = _items(value)
+        curves = _longhand_curves(ctx, view, match.start(), prop + "-timing-function")
+        items = [(d, t or (curves[i % len(curves)] if curves else CSS_DEFAULT_CURVE))
+                 for i, (d, t) in enumerate(_items(value))]
     else:
         return True
     judged = [(d, t) for d, t in items
               if d is not None and (abs(d - floor) <= 0.5 if exact else d >= floor)]
     if not judged:
         return False
-    return any(_fires(ctx, d, t, direct, cap) for d, t in judged)
+    return any(_fires(ctx, d, t, direct, cap, default_fires) for d, t in judged)
 
 
-def _classes_fire(ctx: FileContext, view: View, match: re.Match, start: int, cap: float) -> bool:
+def _classes_fire(ctx: FileContext, view: View, match: re.Match, start: int, cap: float,
+                  default_fires: bool = False) -> bool:
     tag = ctx.tag_at(start)
     if tag is not None:
         classes = _class_list(ctx, tag)
@@ -489,14 +509,15 @@ def _classes_fire(ctx: FileContext, view: View, match: re.Match, start: int, cap
     m = re.search(r"duration-(\d+)", match.group(0))
     duration = float(m.group(1)) if m else 300.0
     direct = any(_TW_STATE.search(c.rsplit(":", 1)[0]) for c in classes if ":" in c)
-    token: Optional[str] = None
+    # Tailwind's transition utilities default to its ease-in-out curve.
+    token: Optional[str] = TAILWIND_DEFAULT_CURVE
     for c in classes:
         bare = c.rsplit(":", 1)[-1]
         if bare in TAILWIND_CURVES:
             token = "cubic-bezier(%s)" % ", ".join(str(x) for x in TAILWIND_CURVES[bare])
         elif bare.startswith("ease-[") and bare.endswith("]"):
             token = bare[6:-1].replace("_", " ")
-    return _fires(ctx, duration, token, direct, cap)
+    return _fires(ctx, duration, token, direct, cap, default_fires)
 
 
 def transition_answers_late(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
@@ -510,7 +531,7 @@ def animation_answers_late(ctx: FileContext, view: View, match: re.Match, start:
 def default_300_answers_late(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
     animation = "animation" in match.group(0).lower()
     return _motion_fires(ctx, view, match, start, floor=300.0, cap=300.0, animation=animation,
-                         exact=True)
+                         exact=True, default_fires=True)
 
 
 # ---------------------------------------------------------------------------
@@ -849,6 +870,9 @@ _TW_INK = re.compile(r"(?<![\w-])text-(black|white|foreground|ink|(?:gray|slate|
                      r"/(\d{1,2}|\[0?\.\d+\])(?![\w-])")
 _MIX = re.compile(r"color-mix\(\s*in\s+[\w-]+\s*,\s*([^,]+?)\s+(\d+(?:\.\d+)?)%\s*,\s*transparent\s*\)", re.I)
 INK_ALPHA_FLOOR = 0.7
+# The Tailwind inks whose value is fixed; the gray scales and theme names
+# follow the project's config, which the lint does not read.
+_TW_INK_RGB = {"black": (0, 0, 0), "white": (255, 255, 255)}
 
 
 def _ink(rgb: Tuple[int, int, int]) -> bool:
@@ -873,7 +897,12 @@ def text_ink_at_low_alpha(ctx: FileContext, view: View, match: re.Match, start: 
         alpha = float(raw.strip("[]")) if raw.startswith("[") else int(raw) / 100.0
         if alpha >= INK_ALPHA_FLOOR:
             return False
-        return True
+        rgb = _TW_INK_RGB.get(m.group(1))
+        if rgb is None:
+            return True  # a theme color with no value the lint can read
+        flat = _composited(rgb, alpha)
+        return not any(all(abs(a - b) <= 3 for a, b in zip(flat, col))
+                       for col in system(ctx).colors)
     value = text.split(":", 1)[1].strip() if ":" in text else text
     mix = _MIX.search(value)
     if mix:
@@ -898,8 +927,38 @@ _PROGRESS = re.compile(r"spin|loader|loading|progress|busy", re.I)
 _REDUCE = re.compile(r"prefers-reduced-motion\s*(?::\s*reduce)?\s*\)", re.I)
 _NO_PREF = re.compile(r"prefers-reduced-motion\s*:\s*no-preference", re.I)
 _STOPS = re.compile(r"animation(?:-name)?\s*:\s*none|animation-play-state\s*:\s*paused"
-                    r"|animation-iteration-count\s*:\s*1\b|animation-duration\s*:\s*0*\.0*[01]m?s"
-                    r"|animation\s*:\s*[^;]*\b0*\.0*[01]m?s", re.I)
+                    r"|animation-iteration-count\s*:\s*1\b", re.I)
+_ANIMATION_DECL = re.compile(r"(?<![\w-])animation(-duration)?\s*:\s*([^;{}]*)", re.I)
+# Our ceiling for a duration that stops a loop in effect: 10ms.
+STOP_MS = 10.0
+
+
+def _stops(body: str) -> bool:
+    """The declarations stop an animation: none, paused, one iteration, or
+    a duration of STOP_MS or less (the first time in a shorthand)."""
+    if _STOPS.search(body):
+        return True
+    for m in _ANIMATION_DECL.finditer(body):
+        for item in _split_top(m.group(2)):
+            times = [ms(p) for p in _split_top(item, " ") if _TIME_TOKEN.match(p)]
+            if times and times[0] is not None and times[0] <= STOP_MS:
+                return True
+    return False
+
+
+# A query that applies only when the person has not asked for less motion.
+_NOT_REDUCE = re.compile(r"\bnot\s*\(?\s*prefers-reduced-motion\s*:\s*reduce", re.I)
+
+
+def _reduce_query(atrule: str) -> bool:
+    """An @media rule that applies when reduced motion is asked for."""
+    return (atrule.startswith("@media") and bool(_REDUCE.search(atrule))
+            and not _NOT_REDUCE.search(atrule) and not _NO_PREF.search(atrule))
+
+
+def _motion_ok_query(atrule: str) -> bool:
+    """An @media rule that applies only when no reduced motion is asked for."""
+    return bool(_NO_PREF.search(atrule) or _NOT_REDUCE.search(atrule))
 
 
 def _guards(ctx: FileContext) -> List[List[str]]:
@@ -909,8 +968,7 @@ def _guards(ctx: FileContext) -> List[List[str]]:
         out: List[List[str]] = []
         for text in _css_texts(ctx):
             for b in css_blocks(re.sub(r"/\*.*?\*/", " ", text, flags=re.S)):
-                if any(_REDUCE.search(a) and a.startswith("@media") for a in b.atrules) \
-                        and _STOPS.search(b.body):
+                if any(_reduce_query(a) for a in b.atrules) and _stops(b.body):
                     out.extend(b.selectors)
         return out
     return ctx.cached("taste:guards", build)  # type: ignore[return-value]
@@ -933,15 +991,14 @@ def _guarded(selector: str, guards: List[str]) -> bool:
 
 def infinite_animation_unguarded(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
     """An infinite animation is a finding unless it runs only under
-    prefers-reduced-motion: no-preference, a reduced-motion query stops it
-    (animation none, paused, one iteration or near zero duration, on its
-    selector or on every element), or it is a progress indicator."""
+    prefers-reduced-motion: no-preference (or not reduce), a reduced-motion
+    query stops it (animation none, paused, one iteration or a duration of
+    STOP_MS or less, on its selector or on every element), or it is a
+    progress indicator. A loop declared inside a reduce query is a finding."""
     block = block_at(ctx, view, match.start())
     if block is None:
         return True
-    if any(_NO_PREF.search(a) for a in block.atrules):
-        return False
-    if any(_REDUCE.search(a) for a in block.atrules):
+    if any(_motion_ok_query(a) for a in block.atrules):
         return False
     if any(_PROGRESS.search(s) for s in block.selectors):
         return False
