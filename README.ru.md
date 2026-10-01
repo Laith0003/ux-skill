@@ -2,24 +2,77 @@
 
 # ux-skill: движок design intelligence для Claude Code, Cursor и любого другого AI-инструмента для кодинга
 
-> **v3.1.0 stable, THE BRAIN.** Сильнейший UX-плагин для AI-кодинга. Ядро рассуждений на Python с 12 запрашиваемыми JSON-манифестами (84 стиля, 176 палитр, 70 типографических пар, 148 компонентов, 184 индустрии, 35 типов графиков, 57 motion-пресетов, 112 UX-законов, 152 правил анти-паттернов, 25 техстеков, 160 brand-спеков), 25 slash-команды, 5 саб-агентов и детерминированный linter против AI-slop. Кросс-IDE: разворачивается в Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer и Roo Cline.
+**Движок design intelligence, который делает AI-сгенерированный UI самобытным, а не шаблонным.** Подключи его к любому из 17 AI-инструментов для кодинга, и результат перестанет выглядеть как сделанный нейросетью. Бесплатно, MIT, офлайн, без LLM.
 
-> **Имя бренда, `ux-skill`.** Имя пакета на PyPI / npm остаётся `uxskill`. Репозиторий GitHub живёт по адресу [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
+```bash
+pip install uxskill
+```
 
-**Сайт:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Сравнение со всеми UX-плагинами Claude:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+**[Поставь ux-skill звезду на GitHub](https://github.com/Laith0003/ux-skill)**, если он полезен: это самый простой способ помочь проекту. Впервые здесь? Начни с [60-секундного обзора](#быстрая-установка) или посмотри вживую на [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com).
 
-[![Version](https://img.shields.io/badge/version-3.1.0-stable-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+![До: шаблонный hero со стоковым фото, мягкий фиолетовый градиент, никакой айдентики бренда. После: настоящее фото стройплощадки под тёмной подложкой, редакционный заголовок с янтарным акцентом и форма запроса сметы прямо в hero. Тот же промпт, другой результат, когда ограничения задаёт ux-skill.](https://raw.githubusercontent.com/Laith0003/ux-skill/main/docs/blog/skiphire-redesign.png)
+
+*До: шаблонный SEO-slop со стоковым фото. После: hero с настоящим фото стройки под тёмной подложкой, редакционный заголовок с янтарным акцентом, форма сметы в hero. Тот же AI-инструмент для кодинга, тот же промпт, другой результат, когда ограничения задаёт ux-skill.*
+
+> **v4.0, FOUNDATIONS: одна команда строит полную дизайн-систему, проверенную по WCAG, с арабским языком и письмом справа налево из коробки.** Самый сильный UX-плагин для AI-кодинга. Python-ядро рассуждений с детерминированным 7-осевым синтезатором, 12 запрашиваемых JSON-манифестов (84 стиля, 176 палитр, 70 шрифтовых пар, 148 компонентов, 184 отрасли, 35 типов графиков, 57 motion-пресетов, 112 законов UX, 171 правило анти-паттернов, 25 техстеков, 160 спецификаций брендов), 18 slash-команд, 5 саб-агентов, 25 MCP-инструментов и детерминированный linter против AI-slop. Кросс-IDE: ставится в Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer и Roo Cline.
+
+> **Название бренда: `ux-skill`.** Имя пакета в PyPI / npm остаётся `uxskill`. Репозиторий на GitHub находится по адресу [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
+
+**Автор:** [Laith Aljunaidy](https://laithjunaidy.com), дизайнер и CTO в Аммане · **Сайт:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Сравнение со всеми UX-плагинами для Claude:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
+
+[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#установщик-для-17-ide)
+[![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-145-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-223_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
+
+### Новое в 4.0: основы
+
+На входе цвет бренда, на выходе дизайн-система, и её контраст проверен до того, как ты её получишь.
+
+```bash
+pip install --upgrade uxskill
+uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
+```
+
+Python 3.10 или новее. Для MCP-сервера: `pip install --upgrade 'uxskill[mcp]'`. Через pipx: `pipx install uxskill` (поверх установленной 3.x: `pipx upgrade uxskill`). Через npm: `npx uxskill@latest`. Переходишь с 3.x? [Руководство по миграции](docs/migrating-to-4.md) сопоставляет каждый токен 3.x с его ролью в 4.0.
+
+**Делаешь продукт или лендинг?** Ты получаешь `tokens.css`, который подключается к странице, `fonts.css` с запасными шрифтами, подогнанными по метрикам под выбранные гарнитуры, `fonts-self-host.css`, который грузит гарнитуры из твоих собственных файлов, `tokens.json` для инструментов, декоративную бренд-графику в `art/` и `system-report.md`, где простыми словами сказано, что построено, почему и с какой композиции страницы начать. Стилизуй через роли (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`) и переключай тёмную тему, высокий контраст, компактные отступы, письмо справа налево или сокращённую анимацию одним атрибутом на `<html>`. Подключай гарнитуры по ссылке Google Fonts из отчёта или через `fonts-self-host.css` и папку `fonts/`, а `fonts.css` подключай в обоих случаях, до `tokens.css`; ни тот ни другой файл не редактируй. С `--brief` облик следует отрасли и тону, если бриф их называет, а структурированные поля (возраст, языки, схема по умолчанию, контекст чтения) задают размер текста, области касания, письменности и схему, с которой всё открывается; discovery не спрашивает отрасль, поэтому её спрашивает `/ux-system create`. В Claude Code `/ux-system create` проверяет установленную версию, запускает сборку и объясняет отчёт.
+
+**Проектируешь дизайн-систему?** Девять основ (цвет, шрифты, отступы, сетка, скругления, обводки, глубина, движение, изображения), каждая плавно меняется вместе с семью осями, с примитивами и семантическими ролями, в формате W3C design tokens (DTCG 2025.10) со значениями для каждого режима. Те же входные данные, те же байты. Через MCP `ux_system_build` возвращает отчёт, результат проверки и размер каждого файла, а если передать `out`, пишет те же файлы, что и команда.
+
+- **Проверка WCAG.** Каждая цветовая пара для текста, элементов управления и фокуса измеряется в светлой и тёмной теме, при обычном и высоком контрасте: WCAG 1.4.3 (текст 4.5:1) и 1.4.11 (нетекстовые элементы 3:1) при обычном контрасте, WCAG 1.4.6 (текст 7:1) при высоком контрасте, плюс наш собственный порог 4.5:1 в высоком контрасте для большинства нетекстовых элементов, поскольку WCAG не задаёт усиленного уровня для нетекстовых элементов. Система, которая не прошла проверку, не записывается; сообщение говорит, что изменить.
+- **Безопасно по умолчанию.** Никогда не перезаписывает файл, который отличается. `--force` заменяет файлы, только когда ты сам об этом просишь.
+- **Арабский.** При `dir="rtl"` текст переключается на арабский шрифт со своими размерами и межстрочным интервалом; отступы используют логические свойства, а анимация зеркалится. `--latin-only` это отключает.
+
+**Система, которая у тебя уже есть.** `/ux-system enhance --from` читает её в её собственных именах (токены DTCG, кастомные свойства CSS, тема Tailwind, markdown-файлы с правилами или экспорт переменных Figma), прогоняет через ту же проверку и измеряет, что твой код на самом деле с ней делает; ничего не переписывается. `/ux-system extend --from` добавляет основы, роли или контракты, не меняя ни одного существующего токена, в отдельном файле расширения рядом, а `uxskill system export` выгружает её как tokens.css, тему Tailwind 4 или переменные Figma. В 4.2 появятся слой доверия (lint при каждой записи, финальный ревьюер) и запуск. См. [changelog](CHANGELOG.md).
+
+**Компоненты и секции.** 23 контракта компонентов описывают, какие токены связывает каждая часть элемента управления в каждом состоянии и как движется каждое состояние: смена состояния идёт по `motion.state`, нажатие масштабируется по `motion.press.scale` (и замирает при сокращённой анимации), а вкладки, меню и сегментированные контролы двигают один общий индикатор. 14 контрактов секций (hero, цены, FAQ, футер и остальные) называют задачу каждой секции, компоненты для её слотов, доказательство, которое ей нужно, и то, как она складывается на телефоне. Страницы, собранные из них, используют фотографии; фрагменты интерфейса служат дополнительными изображениями, но никогда не заменой.
+
+**Linter, который читает страницу.** 171 правило, многие с проверкой по разобранному CSS и разметке, читают собственную систему страницы: тайминг анимации берётся из её кривой, межстрочный интервал display-заголовков держится на пороге движка, а скрытый элемент управления должен выпадать из порядка табуляции. `uxskill lint --render` открывает каждую страницу в headless Chromium на ширине десктопа и телефона и прогоняет её: кольца фокуса, которые не видны или обрезаны, hover и нажатие, которые отвечают с опозданием, фокус, потерянный после Escape, и нажатие, которое всё ещё двигается при сокращённой анимации.
+
+**Меньше команд.** 25 slash-команд превращаются в 18. `/ux-discover` принимает `--frame` и `--recommend`, `/ux-design` принимает `--component`, `--dashboard` и `--from-image`, `/ux-polish` гоняет lint, fix, re-lint, пока оценка не дойдёт до 90 или не пройдут три раунда, а `/ux-init` принимает `--stats`. Семь старых имён продолжают работать как алиасы и исчезнут в 4.1; см. [алиасы](#алиасы-удаляются-в-41).
+
+**Плейбуки поверхностей.** Правила для лендингов, дашбордов и компонентов лежат в `references/surfaces/`, по одному плейбуку на каждый вид. `/ux-design` загружает ровно один, выбранный по режиму, так что сборка дашборда никогда не читает правила hero.
+
+Тесты: **9764 проходят**. Офлайн. Детерминированно. LLM не вызывается никогда.
+
+### Новое в v3.1: верность бренду, адаптивность, живость
+
+- **Верность бренду обеспечивается, а не ожидается.** Основной цвет считывается с пикселей ЛОГОТИПА (а не из самого закрашенного CSS); шрифты по умолчанию отвергаются в пользу стиля букв логотипа. Извлечённый бренд проходит путь `recommend` -> `synthesize`, а **жёсткий порог** в `evaluate` ПРОВАЛИВАЕТ любой результат, который теряет цвет или логотип бренда либо не содержит настоящих изображений. Двусторонняя совместимость с открытой конвенцией `brand.md` (рендер + импорт).
+- **Mobile-first с проверкой.** Новые основы ремесла (`responsive.md`, `component-behaviors.md`) плюс проверка, учитывающая переносы строк: она падает на горизонтальной прокрутке, на переносе подписи в навигации, логотипе или кнопке и на слишком высокой sticky-шапке.
+- **Слой wow.** Движок выводит 2-3 согласованных фирменных момента на страницу; доктрина «wow может прийти только от пользователя» отменена.
+- **Более острый linter** (152 правила): обнаружение обязательных изображений и элементов только с иконкой, правила для токенов-заглушек и `100vw`; picsum с seed сохраняется, случайный удаляется.
+
+Полные заметки в [CHANGELOG.md](CHANGELOG.md).
 
 ### Что нового в v3
 
@@ -28,7 +81,7 @@
 - **Три авто-диспатчируемых режима**: `strict_brand` (100% одного бренда), `brand_anchor` (70% один бренд + 30% адаптировано по осям от родственных брендов), `pure_synthesis` (бренд не назван, дистилляция 8 примеров с совпадающими осями).
 - **Журнал решений переранжирует рекомендатор.** `.ux/decisions.jsonl` ре-ранкует кандидатов по прошлым победам в том же бакете `(industry, ui_type)`. Cold-start безопасен. Учитывает только решения с `lint_score >= 80` + `user_accepted = true`.
 - **Матрица взаимодействия осей**: явное разрешение конфликтов между конкурирующими осями (dense + corporate → 4px, airy + corporate → 12px, soft + playful → 18px radius). Больше никаких тихих ad-hoc правил.
-- **Авто-цикл `/ux-evolve`**: lint → polish → re-lint, пока оценка ≥ 90, плато или 5 раундов. Quality gate на 65.
+- **Авто-цикл `/ux-evolve`** (в 4.0 это цикл по умолчанию в `/ux-polish`): lint → polish → re-lint, пока оценка ≥ 90, плато или 3 раунда в 4.0 (5 в v3). Quality gate на 65.
 - **3 новых MCP-инструмента** (15 → 18): `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`.
 - **Локальный дашборд статистики**: `uxskill stats --html` пишет `.ux/stats.html`, показывающий, что выучила ИМЕННО ваша установка. Без телеметрии, без глобального агрегата.
 - **223 теста проходят.** Офлайн. Детерминистично. LLM ни разу не вызывается.
@@ -45,7 +98,7 @@
 
 ux-skill, это **движок design intelligence** для AI-инструментов кодинга. Он работает как пакет Python (`pip install uxskill`), как плагин для Claude Code и как мультиустановщик для 17 IDE. Движок принимает бриф проекта (индустрия, аудитория, тон, must-have, запрещённые ходы, стек, регион) и возвращает полную рекомендованную design-систему: стиль, палитру, типографическую пару, motion-пресеты, компоненты, образцовые бренды для изучения и guardrails анти-паттернов, которые надо удержать. Рекомендация детерминированная, одинаковый вход всегда даёт одинаковый выход.
 
-Плагин стоит между тобой и AI-инструментом кодинга. Когда ты просишь Claude Code, Cursor или любого другого AI-ассистента «собрать fintech-лендинг», ассистент обычно импровизирует, и результат читается как AI-сгенерированный за пять секунд (фиолетово-синие градиенты, три одинаковые карточки, Inter в размере display, «John Doe» в отзывах, переходы по умолчанию 300мс, центрированный hero, прыгающие стрелки на CTA). ux-skill заменяет импровизацию **структурными ограничениями**: ты запускаешь `/ux-discover`, чтобы захватить бриф, `/ux-recommend`, чтобы выбрать систему, `/ux-design`, чтобы сгенерировать код, и `/ux-lint`, чтобы проверить, что он проходит 152 детерминированных правил против AI-slop перед коммитом.
+Плагин стоит между тобой и AI-инструментом кодинга. Когда ты просишь Claude Code, Cursor или любого другого AI-ассистента «собрать fintech-лендинг», ассистент обычно импровизирует, и результат читается как AI-сгенерированный за пять секунд (фиолетово-синие градиенты, три одинаковые карточки, Inter в размере display, «John Doe» в отзывах, переходы по умолчанию 300мс, центрированный hero, прыгающие стрелки на CTA). ux-skill заменяет импровизацию **структурными ограничениями**: ты запускаешь `/ux-discover`, чтобы зафиксировать бриф и выбрать систему, `/ux-design`, чтобы сгенерировать код, и `/ux-lint`, чтобы перед коммитом проверить, что он проходит 171 детерминированное правило против AI-slop.
 
 Этот README, каноническая справка. Каждая команда, каждый саб-агент, каждый data-манифест, каждый путь установки, каждый brand-спек, каждая категория анти-паттернов, всё задокументировано здесь. Если ты ищешь design-плагин для Claude Code или сравниваешь AI-инструменты дизайна для Cursor, Windsurf или Codex, прочитай это от начала до конца параллельно с [compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -57,10 +110,10 @@ ux-skill, это **движок design intelligence** для AI-инструме
 2. [Быстрая установка](#быстрая-установка)
 3. [Цифры, live-сравнение с топ-8 UX-скилами Claude](#цифры-live-сравнение-с-топ-8-ux-скилами-claude)
 4. [Архитектура, как складываются части](#архитектура-как-складываются-части)
-5. [25 slash-команды, детальная справка](#25-slash-команды-детальная-справка)
+5. [18 slash-команд, подробный справочник](#18-slash-команд-подробный-справочник)
 6. [5 саб-агентов](#5-саб-агентов)
-7. [12 data-манифестов](#12-data-манифестов)
-8. [152 правил против AI-slop, linter](#152-правил-против-ai-slop-linter)
+7. [11 data-манифестов](#11-data-манифестов)
+8. [171 правило против AI-slop, linter](#171-правило-против-ai-slop-linter)
 9. [160 brand-спеков DESIGN.md, по категориям](#160-brand-спеков-designmd-по-категориям)
 10. [MCP-сервер, асимметричный ход](#mcp-сервер-асимметричный-ход)
 11. [Установщик для 17 IDE](#установщик-для-17-ide)
@@ -80,7 +133,7 @@ v3.1.0, крупнейший архитектурный сдвиг в истор
 
 Есть три авто-диспатчируемых режима: `strict_brand` (`reference_brands=[stripe] strict=True` → 100% токенов Stripe, самый быстрый путь); `brand_anchor` (`reference_brands=[stripe]` → 70% Stripe + 30% адаптировано по осям от 4 родственных брендов); и `pure_synthesis` (бренд не назван → бесконечное пространство, 8 примеров с совпадающими осями дистиллированы в новый язык дизайна). Конфликты между осями разрешает документированная **матрица взаимодействия осей**, dense + corporate компилируется в 4px (побеждает density, школа Bloomberg), airy + corporate в 12px (побеждает formality, люкс), soft + playful в 18px radius, sharp + corporate в 2px. Никаких тихих ad-hoc правил в реализации.
 
-**Журнал решений** (`.ux/decisions.jsonl`, схема `_v: 1` зафиксирована) замыкает цикл обратной связи. Рекомендатор теперь ре-ранкует кандидатов по прошлым победам в том же бакете `(industry, ui_type)`. Cold-start безопасен, пропускает при менее чем 3 priors. Учитываются только решения с `lint_score >= 80` И `user_accepted = true`. Плюс `/ux-evolve` гоняет lint → polish → re-lint, пока оценка ≥ 90, плато или 5 раундов, с quality gate на 65, ниже которого вывод отклоняется без `--force`. Итог: каждая установка становится умнее на своём корпусе, каждый прогон воспроизводим между машинами, а движок остаётся полностью офлайн.
+**Журнал решений** (`.ux/decisions.jsonl`, схема `_v: 1` зафиксирована) замыкает цикл обратной связи. Рекомендатор теперь переранжирует кандидатов по прошлым победам в том же бакете `(industry, ui_type)`. Безопасен при холодном старте: при менее чем 3 предыдущих решениях пропускает переранжирование. Учитываются только решения с `lint_score >= 80` И `user_accepted = true`. Плюс `/ux-polish` гоняет lint → polish → re-lint, пока оценка ≥ 90, плато или 3 раунда, с quality gate на 65, ниже которого вывод отклоняется без `--force`. Итог: каждая установка становится умнее на своём корпусе, каждый прогон воспроизводим между машинами, а движок остаётся полностью офлайн.
 
 ---
 
@@ -97,7 +150,7 @@ v3.1.0, крупнейший архитектурный сдвиг в истор
 /plugin install ux@ux-skill
 ```
 
-Это подключает все 25 slash-команды и 5 саб-агентов к твоей сессии Claude Code. После установки запусти `/ux-init`, чтобы настроить директорию состояния `.ux/` для проекта и проверить, что Python-движок доступен.
+Это подключает все 18 slash-команд (плюс 7 старых имён, которые остаются алиасами до 4.1) и 5 саб-агентов к твоей сессии Claude Code. После установки запусти `/ux-init`, чтобы настроить директорию состояния `.ux/` для проекта и проверить, что Python-движок доступен.
 
 ### Путь 2: pip (универсальный)
 
@@ -105,9 +158,9 @@ v3.1.0, крупнейший архитектурный сдвиг в истор
 
 ```bash
 pip install uxskill
-uxskill init                       # автоопределяет твою IDE, ставит правильный артефакт
-uxskill stats                      # печатает счётчики манифестов, чтобы проверить установку
-uxskill lint .                     # запускает linter в текущей директории
+uxskill init                       # auto-detects your IDE, installs the right artifact
+uxskill stats                      # print manifest counts to verify install
+uxskill lint .                     # run the linter against the current directory
 ```
 
 Пакет выставляет и `ux`, и `uxskill` как CLI-entry-point, это один и тот же бинарь.
@@ -117,7 +170,7 @@ uxskill lint .                     # запускает linter в текущей
 Если не хочешь управлять Python напрямую, npx-обёртка бутстрапит всё через `pipx`:
 
 ```bash
-npx uxskill init                  # скачивает pipx + uxskill при первом запуске
+npx uxskill init                  # downloads pipx + uxskill on first run
 npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-app-router
 ```
 
@@ -126,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "3.1.0-stable",
+#   "version": "4.0.0",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -137,13 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 145,
+#     "anti-patterns": 171,
+#     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-Если какой-то счётчик возвращает 0, JSON-файл отсутствует, открой issue на [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
+Двенадцать счётчиков в сумме дают 1 262 записи. Если какой-то счётчик возвращает 0, значит, JSON-файл отсутствует: открой issue на [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
 
 ---
 
@@ -161,7 +215,7 @@ ux stats
 | dominikmartn/nothing-design-skill | **2 391** | Skill одной эстетики | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2 164** | Anti-slop design skill | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | Компоненты MD3 + аудит | 1 | - | (только MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python-движок + 12 манифестов + 25 команды + 5 саб-агентов + CI-linter** | **22** | **152 regex-правил** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python-движок + 12 манифестов + 18 команд + 5 саб-агентов + CI-linter** | **18** | **171 детерминированное правило** | **160** | **148** | **57** | **17** |
 
 ### Где мы проигрываем
 
@@ -173,10 +227,10 @@ ux stats
 
 - **Библиотека компонентов:** 148 задокументированных компонентов с анатомией, состояниями, использованными токенами и motion-спецификациями. Никто из остальных 8 не поставляет манифест компонентов.
 - **Motion-пресеты:** 57 stack-ready записей (Framer Motion, GSAP, CSS) с reduced-motion-фолбэками. Никто из остальных не поставляет motion-манифест.
-- **Anti-pattern linter:** 152 детерминированных regex-правил, работает в CI, выходит с non-zero на Critical/High. Никто из остальных не поставляет детерминированный linter.
+- **Anti-pattern linter:** 171 детерминированное правило, работает в CI, выходит с non-zero на Critical/High. Никто из остальных не поставляет детерминированный linter.
 - **Brand-спеки:** 160 реальных DESIGN.md-спеков (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude и ещё 96). Никто из остальных не поставляет brand-библиотеку.
 - **17 поддерживаемых IDE:** один и тот же движок, разный клей для каждой IDE.
-- **25 slash-команды:** discovery, генерация, audit, lint, polish, fix loop, case-study, workshop, copy, motion, a11y, dashboard, conductor, полностью интегрированы.
+- **18 slash-команд:** discovery, генерация (страницы, компоненты, дашборды, по изображению), audit, lint, цикл polish, fix loop, case-study, workshop, copy, motion, a11y, conductor, полностью интегрированы.
 
 Полный stable-by-table side-by-side на [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -185,149 +239,139 @@ ux stats
 ## Архитектура: как складываются части
 
 ```
-ux-skill (имя пакета: uxskill)
+ux-skill (package name: uxskill)
 │
-├── data/                              Мозг, запрашиваемые JSON-манифесты
-│   ├── styles.json                    84 design-стиля + when/skip + токены
-│   ├── palettes.json                  176 палитр (light/dark, контраст проверен)
-│   ├── type-pairs.json                70 троек display × body × mono
-│   ├── components.json                148 компонентов (анатомия, состояния, motion)
-│   ├── industries.json                184 правила индустрий + сигналы аудитории
-│   ├── chart-types.json               35 типов графиков (when/skip, encoding)
-│   ├── tech-stacks.json               25 стеков (Next, Astro, SvelteKit, Blade...)
-│   ├── ux-guidelines.json             112 именованных UX-законов (Hick, Fitts, Miller...)
-│   ├── motion-presets.json            57 motion-пресетов (entry, exit, hover...)
-│   ├── anti-patterns.json             152 regex-правил (источник CI-safe linter)
-│   └── brands/*.json                  160 brand DESIGN-спеков + _index.json
+├── data/                              The brain, queryable JSON manifests
+│   ├── styles.json                    84 design styles + when/skip + tokens
+│   ├── palettes.json                  176 palettes (light/dark, contrast verified)
+│   ├── type-pairs.json                70 display × body × mono triplets
+│   ├── components.json                148 components (anatomy, states, motion)
+│   ├── industries.json                184 industry rules + audience signals
+│   ├── chart-types.json               35 chart types (when/skip, encoding)
+│   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
+│   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
+│   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
+│   ├── anti-patterns.json             171 rules (CI-safe linter source)
+│   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
-├── engine/                            Python, рассуждения
-│   ├── synthesizer/                   v3, детерминистический 7-осевой компилятор
-│   ├── decisions/                     v3, журнал .ux/decisions.jsonl + ре-ранкование рекомендатора
-│   ├── recommender/                   движок merge с 5 параллельными поисками
-│   ├── linter/                        детерминированный анти-slop сканер
-│   ├── discovery/                     протокол принуждения на 10 полей
-│   ├── generator/                     эмиттер токенов + манифеста
-│   ├── installer/                     мультиустановщик для 17 IDE
-│   └── cli/                           entry point `ux` / `uxskill`
+├── engine/                            Python, the reasoning
+│   ├── synthesizer/                   v3-7-axis deterministic compiler
+│   ├── decisions/                     v3, .ux/decisions.jsonl ledger + recommender re-rank
+│   ├── recommender/                   5-parallel-search merge engine (re-ranked by decisions)
+│   ├── linter/                        Deterministic anti-slop scanner
+│   ├── discovery/                     10-field forcing protocol
+│   ├── generator/                     Token + manifest emitter
+│   ├── installer/                     17-IDE multi-installer
+│   └── cli/                           `ux` / `uxskill` entry point
 │
-├── commands/                          25 slash-команды Claude Code (.md)
-│   ├── ux-init.md                     bootstrap
-│   ├── ux-stats.md                    снимок инвентаря
-│   ├── ux-discover.md                 intake на 10 полей (gate)
-│   ├── ux-recommend.md                FLAGSHIP, поиск в 5 параллельных
-│   ├── ux-lint.md                     детерминированный linter
-│   ├── ux-design.md                   генерация frontend-кода
-│   ├── ux-component.md                генерация одного компонента
-│   ├── ux-system.md                   генерация полной design-системы
-│   ├── ux-dashboard.md                генерация dashboard-поверхности
-│   ├── ux-motion.md                   motion-обработка + аудит
-│   ├── ux-audit.md                    6-линзовый design-аудит
-│   ├── ux-a11y.md                     WCAG 2.1 AA аудит
-│   ├── ux-critique.md                 taste-критика (3 выигрыша, 3 промаха, 1 ход)
-│   ├── ux-copy.md                     ревью + переписывание microcopy
-│   ├── ux-fix.md                      применить findings атомарными коммитами
-│   ├── ux-polish.md                   косметический проход + убийство AI-slop
-│   ├── ux-frame.md                    framing-блок на 4 поля
-│   ├── ux-research.md                 планирование исследования + синтез
-│   ├── ux-workshop.md                 5-фазный workshop design-thinking
-│   ├── ux-case-study.md               публикуемый case study в формате Wfrah-editorial
-│   ├── ux-next.md                     дирижёр workflow (read-only)
-│   └── ux-expert.md                   крючок для консалтинга
+├── commands/                          18 Claude Code slash commands (.md) + 7 aliases
+│   ├── ux-init.md                     bootstrap + inventory snapshot (--stats)
+│   ├── ux-discover.md                 10-field intake (gate), --frame, --recommend
+│   ├── ux-lint.md                     deterministic linter
+│   ├── ux-design.md                   generate a page, --component, --dashboard, --from-image
+│   ├── ux-system.md                   generate full design system
+│   ├── ux-motion.md                   motion treatment + audit
+│   ├── ux-audit.md                    6-lens design audit
+│   ├── ux-a11y.md                     WCAG 2.1 AA audit
+│   ├── ux-critique.md                 taste critique (3 wins, 3 misses, 1 move)
+│   ├── ux-copy.md                     microcopy review + rewrite
+│   ├── ux-fix.md                      apply findings as atomic commits
+│   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
+│   ├── ux-research.md                 research planning + synthesis
+│   ├── ux-workshop.md                 5-phase design thinking workshop
+│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-next.md                     workflow conductor (read-only)
+│   ├── ux-expert.md                   consulting hook
+│   ├── ux-mcp.md                      MCP server
+│   └── ux-frame.md, ux-recommend.md, ux-stats.md, ux-evolve.md,
+│       ux-component.md, ux-dashboard.md, ux-image-to-code.md
+│                                      aliases, removed in 4.1
 │
-├── agents/                            5 саб-агентов (.md)
+├── agents/                            5 sub-agents (.md)
 │   ├── frontend-engineer.md           React/Next/Vue/Blade/Astro
 │   ├── motion-engineer.md             Framer Motion / GSAP / CSS
-│   ├── copy-writer.md                 microcopy в голосе бренда
-│   ├── research-synthesizer.md        интервью + аналитика + конкуренты
-│   └── design-system-architect.md     токены / компоненты / основания
+│   ├── copy-writer.md                 microcopy in brand voice
+│   ├── research-synthesizer.md        interviews + analytics + competitors
+│   └── design-system-architect.md     tokens / components / foundations
 │
-├── references/                        Источник в прозе для данных + демо-страниц
-│   ├── foundations/                   anti-patterns.md, принципы, taste
-│   ├── laws/                          UX-законы long-form
+├── references/                        Prose source for the data + demo pages
+│   ├── foundations/                   anti-patterns.md, principles, taste
+│   ├── laws/                          UX laws long-form
 │   ├── process/                       discovery-protocol.md (load-bearing)
-│   ├── styles/                        проза по стилю (anti-slop.md и т.д.)
-│   ├── components/                    компоненты long-form
-│   ├── output/                        рубрики output
-│   └── conditional/                   stack-специфичные указания
+│   ├── styles/                        per-style prose (anti-slop.md, etc.)
+│   ├── components/                    component long-form
+│   ├── output/                        output rubrics
+│   └── conditional/                   stack-specific guidance
 │
 ├── bin/
-│   ├── uxskill.mjs                    npx-обёртка -> Python-движок
-│   ├── ux-lint.py                     linter v2 (предпочтительно)
-│   └── ux-lint.sh                     fallback v1 (bash + perl-PCRE)
+│   ├── uxskill.mjs                    npx wrapper -> Python engine
+│   ├── ux-lint.py                     v2 linter (preferred)
+│   └── ux-lint.sh                     v1 fallback (bash + perl-PCRE)
 │
-└── .ux/                               (создаётся для каждого проекта)
-    ├── last-discovery.json            снимок брифа
-    ├── last-recommendation.json       выбранная система
-    ├── last-frame.json                framing-блок
+└── .ux/                               (created per project)
+    ├── last-discovery.json            brief snapshot
+    ├── last-recommendation.json       picked system
+    ├── last-frame.json                framing block
     ├── last-audit.json / last-a11y.json / last-copy.json / last-motion.json
     ├── last-design.json / last-component.json / last-dashboard.json
     └── last-critique.json / last-polish.json / last-research.json / last-workshop.json / last-case-study.json
 ```
 
-### Как движок реально работает
+### Как движок работает на самом деле
 
-1. **Вход.** Ты даёшь бриф, интерактивно через `/ux-discover` (10 полей) или неинтерактивно через флаги в `ux recommend`.
-2. **5 параллельных поисков.** Движок параллельно гоняет пять lookup'ов по манифестам:
-   - **Индустрия → recommended_styles** (industries.json)
-   - **Стиль → совместимость палитры + типа + motion** (styles.json)
-   - **Тон × must-have → фильтр палитры** (palettes.json)
-   - **Стек → совместимость компонентов + motion-пресетов** (tech-stacks.json, motion-presets.json)
-   - **Forbidden + регион → guardrails + шорт-лист brand-образцов** (anti-patterns.json, brands/)
-3. **Merge.** Детерминированный merger ранжирует кандидатов, разрешает конфликты (например, must-have dark-mode форсит режим палитры) и выдаёт одну рекомендованную систему.
-4. **Выход.** JSON-документ с выбранным стилем, палитрой, типографической парой, топ-5 motion-пресетами, топ-12 компонентами, топ-5 brand-образцами и всеми 152 активными guardrails анти-паттернов. Плюс блок rationale, объясняющий каждый выбор.
-5. **Генерация.** Команды ниже по пайплайну (`/ux-design`, `/ux-component`, `/ux-system`, `/ux-dashboard`) потребляют рекомендацию для генерации реального кода через саб-агентов.
-6. **Верификация.** `/ux-lint` повторно сканирует сгенерированный код против 152 regex-правил. Выходит с non-zero на Critical/High в CI.
+1. **Вход.** Ты даёшь бриф: интерактивно через `/ux-discover` (10 полей) или неинтерактивно через флаги `ux recommend`.
+2. **5 параллельных поисков.** Движок одновременно выполняет пять запросов по манифестам:
+   - **Отрасль → recommended_styles** (industries.json)
+   - **Стиль → совместимость палитры, шрифтов и motion** (styles.json)
+   - **Тон × обязательные требования → фильтр палитр** (palettes.json)
+   - **Стек → совместимость компонентов + motion-пресеты** (tech-stacks.json, motion-presets.json)
+   - **Запреты + регион → guardrails + шорт-лист эталонных брендов** (anti-patterns.json, brands/)
+3. **Слияние.** Детерминированный механизм слияния ранжирует кандидатов, разрешает конфликты (например, обязательная тёмная тема задаёт режим палитры) и выдаёт одну рекомендованную систему.
+4. **Вывод.** JSON-документ с выбранным стилем, палитрой, шрифтовой парой, 5 лучшими motion-пресетами, 12 лучшими компонентами, 5 лучшими эталонными брендами и всеми 171 активными guardrails анти-паттернов. Плюс блок обоснования, который объясняет каждый выбор.
+5. **Генерация.** Последующие команды (`/ux-design` в режимах страницы, компонента, дашборда и изображения, а также `/ux-system`) используют рекомендацию, чтобы сгенерировать настоящий код через саб-агентов.
+6. **Проверка.** `/ux-lint` повторно сканирует сгенерированный код по 171 правилу. Выходит с non-zero на Critical/High в CI.
 
-**Python думает. HTML показывает. Markdown связывает в цепочку.**
+**Что добавила v3.** Рекомендатор теперь переранжирует кандидатов из `engine/decisions/` по `.ux/decisions.jsonl` (учитываются только решения с `lint_score >= 80` И `user_accepted = true`; безопасен при холодном старте, если предыдущих решений меньше 3). Генератор может передавать работу в `engine/synthesizer/`, детерминированный 7-осевой компилятор, который для каждого брифа выпускает свежие токены палитры + шрифтов + отступов + скруглений + motion вместо выбора шаблонов из каталога. Подробности в разделе [Мозг, что такое v3.0](#мозг-что-такое-v30).
+
+**Python думает. HTML показывает. Markdown связывает.**
 
 ---
 
-## 25 slash-команды: детальная справка
+## 18 slash-команд: подробный справочник
 
-Каждая команда поставляется как `.md`-файл в `commands/` с `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process` и `output state file`. Описания ниже сжаты; полный source, это каноническая спека.
+Каждая команда поставляется как `.md`-файл в `commands/` с `description`, `allowed-tools`, `triggers`, `when to use`, `when to skip`, `input`, `process` и `output state file`. Описания ниже сокращены; полный исходник и есть каноническая спецификация.
 
-Команды сгруппированы в пять корзин: **bootstrap & инвентарь**, **discovery & рекомендация**, **генерация**, **audit & верификация**, **fix & polish** и **conductor**.
+Команды разбиты на семь групп: **bootstrap и инвентарь**, **discovery и рекомендация**, **генерация**, **audit и проверка**, **fix и polish**, **discovery и нарратив** и **conductor**. Семь имён из 3.x продолжают работать как [алиасы](#алиасы-удаляются-в-41) до 4.1.
 
 ### Bootstrap & инвентарь
 
 #### `/ux-init`: bootstrap проекта
 
-- **Что:** Определяет, какую IDE ты используешь (`.claude/`, `.cursor/`, `.windsurf/`, и т.д.), ставит правильный артефакт, проверяет, что Python-движок доступен, печатает снимок статистики.
-- **Когда использовать:** Первая установка в новом проекте. После клонирования проекта, использующего ux-skill. После `pip install --upgrade uxskill`.
-- **Когда пропустить:** Уже запускал в этом проекте, и ничего не изменилось.
-- **Вызов:** `/ux-init` (без аргументов) или `uxskill init` из CLI.
-- **Output:** Артефакт под IDE (см. [Установщик для 17 IDE](#установщик-для-17-ide)) + директория `.ux/` + сводка в stdout.
-- **Цепляется к:** `/ux-discover` следующим.
+- **Что:** Определяет, какую IDE ты используешь (`.claude/`, `.cursor/`, `.windsurf/`, и т.д.), ставит правильный артефакт, проверяет, что Python-движок доступен, печатает снимок статистики. `--stats` печатает только снимок: версию + количество записей в манифестах данных.
+- **Когда использовать:** Первая установка в новом проекте. После клонирования проекта, использующего ux-skill. После `pip install --upgrade uxskill`. `--stats` после установки, после обновления или когда рекомендация выдаёт неожиданный выбор и есть подозрение, что манифесты неполные.
+- **Когда пропустить:** Уже запускал в этом проекте, и ничего не изменилось. `--stats` пропускать не нужно никогда: это чтение за 50мс.
+- **Вызов:** `/ux-init` (без аргументов), `/ux-init --stats` или `uxskill init` / `uxskill stats` из CLI. `--decisions` добавляет сводку журнала решений; `--html` пишет `.ux/stats.html`.
+- **Output:** Артефакт под IDE (см. [Установщик для 17 IDE](#установщик-для-17-ide)) + директория `.ux/` + сводка в stdout. `--stats`: JSON в stdout (см. [Проверка установки](#проверка-установки) выше).
+- **Цепляется к:** `/ux-discover` следующим. `--stats` нужен только для диагностики.
 
-#### `/ux-stats`: печатает инвентарь данных
+#### `/ux-mcp`: запустить движок как MCP-сервер
 
-- **Что:** Печатает версию + счётчики записей по 12 data-манифестам, чтобы ты мог проверить, что установлено.
-- **Когда использовать:** После установки. После апгрейда. Когда `/ux-recommend` возвращает неожиданные выборы, и ты подозреваешь, что манифесты неполные.
-- **Когда пропустить:** Никогда, это read-only команда на 50мс.
-- **Вызов:** `/ux-stats` или `uxskill stats`.
-- **Output:** JSON в stdout (см. [Проверка установки](#проверка-установки) выше).
-- **Цепляется к:** Только диагностика; не питает дальнейшее.
+- **Что:** Запускает движок как сервер Model Context Protocol через stdio. 25 инструментов (рекомендатор, linter, хранение состояния, синтезатор, журнал решений, извлечение из изображений, манифесты данных, а также сборка, импорт, улучшение, расширение, экспорт и проверка дизайн-системы) становятся доступны из любого MCP-совместимого хоста без плагина.
+- **Когда использовать:** Ты работаешь в другом MCP-совместимом хосте и хочешь тот же движок. У тебя мультиагентный пайплайн, которому нужен единый источник дизайн-ограничений. Тебе нужен рекомендатор или linter как долгоживущий процесс в CI.
+- **Когда пропустить:** Ты в Claude Code с установленным плагином; slash-команды и так достают до движка. Нужен разовый ответ; `uxskill recommend` или `uxskill lint` проще.
+- **Вызов:** `/ux-mcp` или `ux-mcp` из шелла после `pip install 'uxskill[mcp]'`.
+- **Output:** stdio JSON-RPC сервер. См. [MCP-сервер](#mcp-сервер-асимметричный-ход) и `commands/ux-mcp.md` для настройки под каждый клиент.
+- **Цепляется к:** Ни к чему; это транспорт, а не шаг.
 
 ### Discovery & рекомендация
 
-#### `/ux-discover`: функция принуждения (intake на 10 полей)
+#### `/ux-discover`: обязательная воронка (10 полей, framing, рекомендация)
 
-- **Что:** Обязательный intake на 10 полей, через который проходит каждый проект перед любой командой генерации. Тип проекта, аудитория, главная цель, тон, must-have, forbidden, brand-референсы, стек, регион, метрика успеха. **Никакой импровизации.** Запрещённые фразы («modern», «clean») заставляют пользователя быть конкретным.
-- **Когда использовать:** Перед любым `/ux-design`, `/ux-component`, `/ux-system` или `/ux-dashboard`. Когда предыдущий бриф устарел.
-- **Когда пропустить:** Чинишь баг (`/ux-fix`). Только проходишься linter'ом (`/ux-lint`). Бриф не менялся с последней сессии.
-- **Вызов:** `/ux-discover`. Плагин спрашивает; ты отвечаешь.
-- **Output:** Пишет `.ux/last-discovery.json` (бриф на 10 полей).
-- **Цепляется к:** `/ux-recommend` → использует discovery для выбора стиля + палитры + типа + motion + компонентов. `/ux-design [extra brief]` → генерирует frontend-код, привязанный к рекомендации. `/ux-component <name>` → генерирует один компонент, выровненный по найденным ограничениям.
-
-#### `/ux-recommend`: флагманский движок 5-параллельного поиска
-
-- **Что:** Запускает 5-параллельный поиск Python-движка по 12 манифестам и возвращает одну объединённую design-систему. Индустрия → Стиль → Палитра → Типографика → Motion + Компоненты + Brand-образцы + Guardrails.
-- **Когда использовать:** Запускаешь новый проект с нуля. Пивотишь уставший продукт. Pre-flight перед любым `/ux-design` или `/ux-component`.
-- **Когда пропустить:** Уже запустил `/ux-discover` и сохранил бриф, `/ux-recommend` автоматический в этом флоу. Чинишь один баг (используй `/ux-fix`). Нужно только lint (используй `/ux-lint`).
-- **Вызов (Claude Code):**
-  ```
-  /ux-recommend
-  ```
+- **Что:** Обязательный опрос из 10 полей, через который проходит каждый проект перед любой командой генерации. Тип проекта, аудитория, главная цель, тон, обязательные требования, запреты, референсные бренды, стек, регион, метрика успеха. **Никакой импровизации.** Запрещённые фразы («современный», «чистый») заставляют пользователя конкретизировать. Затем запускается рекомендатор: 5 параллельных поисков Python-движка по 12 манифестам возвращают одну объединённую дизайн-систему (Отрасль → Стиль → Палитра → Шрифты → Motion + Компоненты + Эталонные бренды + Guardrails).
+- **Режимы:** `--frame` фиксирует, для кого, outcome, гипотезу и сигнал успеха в framing-блоке из четырёх полей, легче полного опроса. `--recommend` запускает только рекомендатор, по сохранённому брифу или разовым флагам.
+- **Когда использовать:** Перед любым `/ux-design` или `/ux-system`. Всякий раз, когда прежний бриф устарел. `--frame` в начале проекта, спринта или разовой задачи либо посреди работы, когда разговор ушёл в сторону. `--recommend`, когда перезапускаешь продукт, который выглядит уставшим.
+- **Когда пропустить:** Ты чинишь баг (`/ux-fix`). Ты запускаешь только проход linter (`/ux-lint`). Бриф не менялся с прошлой сессии.
+- **Вызов (Claude Code):** `/ux-discover`, `/ux-discover --frame "loyalty wallet for a MENA retail pilot"` или `/ux-discover --recommend`.
   **Вызов (CLI):**
   ```bash
   ux recommend \
@@ -339,46 +383,32 @@ ux-skill (имя пакета: uxskill)
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **Output:** Пишет `.ux/last-recommendation.json`, выбранный стиль, выбранная палитра, выбранная типографическая пара, топ-5 motion-пресетов, топ-12 компонентов, топ-5 brand-образцов, все 152 активных guardrails анти-паттернов, плюс rationale.
-- **Цепляется к:** `/ux-design [brief]` → frontend-код, использующий рекомендованные токены. `/ux-system` → полная design-система из рекомендации. `/ux-component <name>` → один компонент с рекомендованным стилем. `/ux-lint` → проверка сгенерированного кода.
+- **Output:** `.ux/last-discovery.json` (бриф из 10 полей), `.ux/last-recommendation.json` (выбранный стиль, палитра, шрифтовая пара, 5 лучших motion-пресетов, 12 лучших компонентов, 5 лучших эталонных брендов, все 171 активные guardrails анти-паттернов плюс обоснование) и, с `--frame`, `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
+- **Цепляется к:** `/ux-design [extra brief]` → frontend-код на основе рекомендации. `/ux-design --component <name>` → один компонент под выявленные ограничения. `/ux-system` → полная дизайн-система из рекомендации. `/ux-lint` → проверить сгенерированный код.
 
 ### Генерация
 
 #### `/ux-design`: генерирует красивую анти-slop поверхность из брифа
 
-- **Что:** Генерирует полный production-grade frontend-артефакт (landing, маркетинговый сайт, app shell) из discovery-брифа + рекомендации. Диспатчит `frontend-engineer` с креативным направлением из anti-slop и arsenal-референсов.
-- **Когда использовать:** «Design a», «build me a», «generate a landing page», «create a dashboard», «make a component», любой free-form запрос визуального deliverable.
-- **Когда пропустить:** Нужен ревью, а не сборка (используй `/ux-audit` или `/ux-critique`). Нужен только один компонент (используй `/ux-component`). Backend или инфраструктурная работа.
-- **Вызов:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`.
-- **Output:** Сгенерированный код (HTML / Blade / JSX / Vue / Astro), плюс `.ux/last-design.json`.
+- **Что:** Генерирует полный production-grade frontend-артефакт (landing, маркетинговый сайт, app shell) из discovery-брифа + рекомендации. Диспатчит `frontend-engineer` с креативным направлением из anti-slop и arsenal-референсов. Бриф или флаг выбирает один из четырёх режимов:
+  - **страница** (по умолчанию): полная страница или поверхность из нескольких секций. Пишет `.ux/last-design.json`.
+  - **`--component [name]`**: один production-grade компонент (кнопка, модальное окно, navbar, sidebar, карточка, таблица, форма, график). Все четыре состояния взаимодействия, доступный, в стиле бренда. Сначала ищет компонент в `.ux/last-recommendation.json`, затем обращается к манифесту напрямую. Пишет `.ux/last-component.json`.
+  - **`--dashboard`**: дисциплина плотности данных, bento-лейаут, табличные моноширинные цифры, sparkline-паттерны, без злоупотребления карточками, семантические цвета состояний, скупой motion. Не маркетинговый сайт с приклеенными графиками. Пишет `.ux/last-dashboard.json`.
+  - **`--from-image <path>`**: читает референсное изображение (PNG/JPG/WebP) средствами чистого компьютерного зрения на Pillow (доминирующая палитра, полярность фона, типографический сигнал), сопоставляет его с манифестами палитр и стилей и строит по полученной рекомендации. `--extract-only` останавливается после извлечения. Пишет `.ux/last-image-extract.json`.
+- **Когда использовать:** «Design a», «build me a», «generate a landing page», «create a dashboard», «make a component», «build a button», «design the admin panel», «operator console», «KPI board», «build it like this screenshot», любой free-form запрос визуального deliverable.
+- **Когда пропустить:** Нужен ревью, а не сборка (используй `/ux-audit` или `/ux-critique`). Backend или инфраструктурная работа.
+- **Вызов:** `/ux-design generate a fintech landing for a MENA neobank, warm editorial tone, dark-mode AA, no purple gradients`, `/ux-design --component pricing-card-trio --brief="fintech, dark, monospace numbers"`, `/ux-design --dashboard`, `/ux-design --from-image ref.png`.
+- **Output:** Сгенерированный код (HTML / Blade / JSX / Vue / Astro) плюс файл состояния режима.
 - **Цепляется к:** `/ux-lint` → проверка против guardrails. `/ux-polish` → косметический проход. `/ux-a11y` → аудит доступности. `/ux-copy` → ревью microcopy. `/ux-fix` → применить findings атомарными коммитами.
-
-#### `/ux-component`: генерирует один компонент
-
-- **Что:** Производит один production-grade компонент (button, modal, navbar, sidebar, card, table, form, chart) из спеки. Все четыре состояния взаимодействия, доступный, on-brand. Сначала ищет компонент в `.ux/last-recommendation.json`, откатывается к прямому запросу к манифесту.
-- **Когда использовать:** Любой запрос одного элемента, «build a button», «create a pricing card», «make a modal», «add a navbar», «design a sidebar», «I need a data table», «build a form», «make a chart component».
-- **Когда пропустить:** Полная страница или multi-section поверхность (используй `/ux-design`). Backend или инфраструктура.
-- **Вызов:** `/ux-component pricing-card-trio --brief="fintech, dark, monospace numbers"`.
-- **Output:** Сгенерированный код компонента, плюс `.ux/last-component.json`.
-- **Цепляется к:** `/ux-lint` → проверка. `/ux-polish` → подтянуть.
 
 #### `/ux-system`: генерирует полную стартовую design-систему
 
 - **Что:** Предлагает полную стартовую design-систему для проекта, у которого её нет, токены (цвет, тип, пространство, motion, радиус, тень), foundation-документы, контракты компонентов, dark-mode-сопряжения, theme switcher. Диспатчит `design-system-architect`.
 - **Когда использовать:** «We don't have a design system», «build us a system», «propose tokens», «what should our theme be», «set up our DS».
-- **Когда пропустить:** У проекта уже есть design-система, используй `/ux-component` против существующей системы. Backend или инфраструктура.
-- **Вызов:** `/ux-system` (запускает discovery, если её ещё нет).
+- **Когда пропустить:** У проекта уже есть дизайн-система; используй вместо этого `/ux-design --component` поверх существующей системы. Backend или инфраструктура.
+- **Вызов:** `/ux-system create` (движок основ), `/ux-system enhance --from <file>` (измерить систему, которая у тебя уже есть), `/ux-system extend --from <file> --add <foundation>` (дополнить её, не меняя) или `/ux-system` (поток из 3.x; сначала запускает discovery, если брифа ещё нет).
 - **Output:** `tokens.json`, `foundations.md`, контракты `components/*.md`, опциональный emit Tailwind / vanilla / SCSS. Пишет `.ux/last-system.json` для цепочечного контекста.
-- **Цепляется к:** `/ux-component` → строит против новой системы. `/ux-design` → генерирует поверхность, использующую новые токены.
-
-#### `/ux-dashboard`: специализированная генерация dashboard
-
-- **Что:** Dashboard с дисциплиной плотности данных, bento-лейаут, табличные моноширинные цифры, sparkline-паттерны, anti-card-overuse, семантические цвета состояний, скупой motion. Не маркетинговый сайт с приклеенными графиками.
-- **Когда использовать:** «Build a dashboard», «design the admin panel», «make a metrics page», «operator console», «analytics view», «KPI board», «monitoring screen».
-- **Когда пропустить:** Маркетинговый лендинг со статистикой (используй `/ux-design`). Только один виджет (используй `/ux-component`). Backend или инфраструктура.
-- **Вызов:** `/ux-dashboard`.
-- **Output:** Сгенерированный код dashboard + `.ux/last-dashboard.json`.
-- **Цепляется к:** `/ux-lint`, `/ux-audit`, `/ux-a11y`.
+- **Цепляется к:** `/ux-design --component` → строить поверх новой системы. `/ux-design` → сгенерировать поверхность на новых токенах.
 
 #### `/ux-motion`: обработка motion
 
@@ -393,8 +423,8 @@ ux-skill (имя пакета: uxskill)
 
 #### `/ux-lint`: детерминированный regex-based linter (без LLM, CI-safe)
 
-- **Что:** Запускает 152 regex-правил против твоего кода. Никакого вызова LLM. Выходит с non-zero на Critical / High в CI. Источник: `data/anti-patterns.json`. Правила покрывают A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4).
-- **Когда использовать:** Pre-commit хук. CI gate. Быстрый первый проход по большой кодовой базе перед тратой на `/ux-audit`. После `/ux-design` или `/ux-component` для проверки генерации.
+- **Что:** Запускает 171 правило против твоего кода. Никакого вызова LLM. Выходит с non-zero на Critical / High в CI. Источник: `data/anti-patterns.json`. Правила покрывают A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
+- **Когда использовать:** Pre-commit хук. CI gate. Быстрый первый проход по большой кодовой базе перед тратой на `/ux-audit`. После `/ux-design` в любом режиме для проверки генерации.
 - **Когда пропустить:** Хочешь fix loop (linter отчитывается, не редактирует, цепляй в `/ux-polish --fix` или `/ux-fix`). Хочешь taste-суждение (используй `/ux-critique`).
 - **Вызов (slash):** `/ux-lint src/`.
 - **Вызов (CLI):** `uxskill lint .` или `python3 bin/ux-lint.py .` или `bash bin/ux-lint.sh --ci --fail-on high`.
@@ -453,25 +483,16 @@ ux-skill (имя пакета: uxskill)
 - **Output:** Атомарные коммиты на finding. Перезапускает исходную команду и обновляет файл `.ux/last-*.json`. Печатает сводку.
 - **Цепляется к:** `/ux-next` → conductor выбирает следующий ход.
 
-#### `/ux-polish`: косметический проход + убийство AI-slop
+#### `/ux-polish`: цикл lint, fix, re-lint + удаление AI-slop
 
-- **Что:** Ритм spacing'а, заточка иерархии, детекция AI-slop, согласованность токенов. LLM-driven контрпартнёр `/ux-lint`, использует твоё суждение в taste-выборах.
-- **Когда использовать:** Структура правильная, но исполнение рыхлое. «Polish», «tighten this up», «remove the AI-slop», «make it premium», «make this less AI-looking», «the spacing feels off», «this looks generic», «needs more taste».
-- **Когда пропустить:** Поверхности не хватает core-функциональности (сначала почини это). Нужен редизайн, не polish (используй `/ux-design`). Copy-проблемы (используй `/ux-copy`). Motion-проблемы (используй `/ux-motion`). A11y-проблемы (используй `/ux-a11y`).
-- **Вызов:** `/ux-polish src/components/Hero.tsx`.
-- **Output:** Обновлённый код + `.ux/last-polish.json`, описывающий изменения.
-- **Цепляется к:** `/ux-lint` → проверка, что polish удержался. `/ux-a11y` → перепроверить доступность.
+- **Что:** Сначала детерминированный цикл над локальным HTML-файлом: lint, шесть идемпотентных проходов полировки, re-lint, пока оценка не дойдёт до 90, не выйдет на плато или не пройдут три раунда (`--rounds` меняет предел). По умолчанию результат цикла остаётся в `<file>.evolved.html`, а оригинал не трогается. Заменить оригинал могут только `--loop-only` или `--fix`, после проверки чистого рабочего дерева, а quality gate на 65 не даёт провалившемуся результату заменить его без `--force`; с `--brand-file` порог верности бренду действует на каждом выходе. Затем проход вкуса: ритм отступов, более чёткая иерархия, детекция AI-slop, согласованность токенов. LLM-driven контрпартнёр `/ux-lint`, который опирается на твоё суждение в вопросах вкуса. `--loop-only` запускает только цикл; `--no-loop` только проход вкуса; `--fix` применяет замечания по вкусу.
+- **Когда использовать:** Структура правильная, но исполнение рыхлое. «Polish», «tighten this up», «remove the AI-slop», «make it premium», «make this less AI-looking», «the spacing feels off», «this looks generic», «needs more taste», «improve until score 90+», «make it ship-ready».
+- **Когда пропустить:** На поверхности не хватает базовой функциональности (сначала исправь это). Нужен редизайн, а не полировка (используй `/ux-design`). Проблемы с текстами (используй `/ux-copy`). Проблемы с анимацией (используй `/ux-motion`). Проблемы a11y (используй `/ux-a11y`).
+- **Вызов:** `/ux-polish src/components/Hero.tsx`, `/ux-polish out/landing.html --css out/landing.css`, `/ux-polish out/landing.html --loop-only --rounds 5`.
+- **Output:** `<file>.evolved.html` из цикла (заменяет оригинал только с `--loop-only` или `--fix`), обновлённый код с `--fix`, `.ux/last-evolve.json`, одна строка в `.ux/decisions.jsonl` и `.ux/last-polish.json` с описанием замечаний по вкусу.
+- **Цепляется к:** `/ux-lint` → проверить, что полировка удержалась. `/ux-a11y` → повторно проверить доступность.
 
 ### Discovery & нарратив
-
-#### `/ux-frame`: framing-блок на 4 поля
-
-- **Что:** Захватывает кому-это-для, outcome, гипотезу и signal of success в структурный framing-блок. Никакой design-работы, только intake на четыре поля, который превращает размытый запрос в рабочий бриф. Легче, чем `/ux-discover` (4 поля против 10).
-- **Когда использовать:** Начало любого проекта, спринта или разового engagement'а. В середине потока, когда разговор сошёл с курса. «Frame this», «what's the brief», «set up the project», «framing».
-- **Когда пропустить:** Уже зафреймлено (проверь `.ux/last-frame.json`). One-off сборка компонента без framing-импликаций. Backend или инфраструктура.
-- **Вызов:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`.
-- **Output:** Пишет `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
-- **Цепляется к:** `/ux-discover` → расширяет фрейм до 10-полевого брифа. `/ux-design` → генерирует, используя фрейм как якорь.
 
 #### `/ux-research`: планирование исследования + синтез
 
@@ -480,22 +501,22 @@ ux-skill (имя пакета: uxskill)
 - **Когда пропустить:** Ответ уже известен с высокой уверенностью. Низкорисковые обратимые решения. Backend или инфраструктура.
 - **Вызов:** `/ux-research --plan "loyalty wallet adoption in MENA"` или `/ux-research --synthesize interviews/*.md`.
 - **Output:** Пишет `.ux/last-research.json`, research-план или синтезированные темы + evidence + рекомендации.
-- **Цепляется к:** `/ux-frame` → интегрировать findings во фрейм. `/ux-design` → генерация из findings. `/ux-workshop` → провести воркшоп, используя research как вход.
+- **Цепляется к:** `/ux-discover --frame` → встроить находки во frame. `/ux-design` → генерировать по находкам. `/ux-workshop` → провести воркшоп с исследованием на входе.
 
 #### `/ux-workshop`: 5-фазный workshop design-thinking
 
 - **Что:** Фасилитирует discovery / design-thinking workshop end-to-end. Пять последовательных фаз (исследование → heat map → stakeholder map → решение-набросок → game plan). Тайм-боксы. Конкретные артефакты на каждую фазу. Заканчивается решением, а не «интересными находками».
 - **Когда использовать:** Реальный вопрос, реальные участники, реальный временной бюджет. «Run a workshop», «facilitate a discovery», «let's do a design thinking session», «I have stakeholders for an hour, what do we do», «kick off the project».
-- **Когда пропустить:** Бриф уже ясен и заскопирован. Сольный брейнсторм (используй `/ux-design` или `/ux-frame`). Команда в середине исполнения, не в discovery.
+- **Когда пропустить:** Бриф уже ясен и очерчен. Сольный брейншторм (используй `/ux-design` или `/ux-discover --frame`). Команда в разгаре исполнения, а не на этапе discovery.
 - **Вызов:** `/ux-workshop "loyalty wallet pivot" --participants="2 PMs, 1 designer, 1 eng lead, 1 customer rep" --minutes=90`.
 - **Output:** Пишет `.ux/last-workshop.json`, game plan + артефакты по фазам.
 - **Цепляется к:** `/ux-design` → исполнить game plan. `/ux-research` → закрыть пробелы, которые всплыл воркшоп. `/ux-case-study` → опубликовать путь.
 
 #### `/ux-case-study`: публикуемый case study (формат Wfrah-editorial)
 
-- **Что:** Генерирует case study проекта в чисто-монохромном editorial-формате, Wfrah-типографика, hairline-разделители, нумерованные секционные коды (A)–(G), bilingual-safe лейаут. Документ, а не маркетинговая брошюра. Читает из `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Что:** Генерирует кейс проекта в чисто монохромном редакционном формате: типографика Wfrah, тонкие разделители, пронумерованные коды секций от (A) до (G), раскладка, безопасная для двуязычного текста. Документ, а не маркетинговая брошюра. Читает из `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Когда использовать:** Пост-лонч. После дискретной вехи. «Write a case study», «case study this project», «do the wrap-up doc», «publish this work», «portfolio piece».
-- **Когда пропустить:** В проекте не хватает данных, чтобы заполнить секции (A)–(G). Пользователь хочет маркетинговый лендинг, а не case study (используй `/ux-design`).
+- **Когда пропустить:** У проекта нет данных, чтобы заполнить секции от (A) до (G). Пользователю нужен маркетинговый лендинг, а не кейс (используй `/ux-design`).
 - **Вызов:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Цепляется к:** Терминальная команда, обычно конец проекта.
@@ -519,35 +540,45 @@ ux-skill (имя пакета: uxskill)
 - **Вызов:** `/ux-expert`.
 - **Output:** Краткая контактная карточка с LinkedIn / email / репо.
 
+### Алиасы, удаляются в 4.1
+
+Семь команд из 3.x слились в 18 команд выше. Их имена работают ещё один релиз: каждый алиас сообщает, куда он переехал, и затем запускает новую команду с теми же аргументами.
+
+| Старая команда | Теперь | Примечания |
+|---|---|---|
+| `/ux-frame` | `/ux-discover --frame` | Тот же framing-блок, тот же `.ux/last-frame.json` |
+| `/ux-recommend` | `/ux-discover --recommend` | MCP-инструмент `ux_recommend` не меняется |
+| `/ux-stats` | `/ux-init --stats` | Снимок только для чтения |
+| `/ux-evolve` | `/ux-polish --loop-only --rounds 5` | Алиас сохраняет старый предел в пять раундов; `/ux-polish` сам по себе останавливается на трёх |
+| `/ux-component` | `/ux-design --component` | Тот же `.ux/last-component.json` |
+| `/ux-dashboard` | `/ux-design --dashboard` | Тот же `.ux/last-dashboard.json` |
+| `/ux-image-to-code` | `/ux-design --extract-only --from-image` | Убери `--extract-only`, чтобы строить по изображению |
+
 ### Граф цепочек команд
 
 ```
                   ┌──────────────────────┐
-                  │  /ux-init            │
-                  │  /ux-stats           │
+                  │  /ux-init            │  --stats: inventory
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-frame           │  framing-блок на 4 поля
+                  │  /ux-discover        │  10-field intake (FORCING GATE)
+                  │                      │  --frame: 4-field framing block
+                  │                      │  then 5 parallel searches -> merged system
                   └────────────┬─────────┘
-                               │
-                  ┌────────────▼─────────┐
-                  │  /ux-discover        │  intake на 10 полей (FORCING GATE)
-                  └────────────┬─────────┘
-                               │ пишет .ux/last-discovery.json
-                  ┌────────────▼─────────┐
-                  │  /ux-recommend       │  5 параллельных поисков -> объединённая система
-                  └────────────┬─────────┘
-                               │ пишет .ux/last-recommendation.json
+                               │ writes .ux/last-discovery.json
+                               │ writes .ux/last-recommendation.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
-   │ /ux-design     │ │ /ux-component   │ │ /ux-system  │
-   │ /ux-dashboard  │ │ /ux-motion      │ │             │
+   │ /ux-design     │ │ /ux-motion      │ │ /ux-system  │
+   │  --component   │ │                 │ │             │
+   │  --dashboard   │ │                 │ │             │
+   │  --from-image  │ │                 │ │             │
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ пишет .ux/last-<surface>.json
+                               │ writes .ux/last-<surface>.json
             ┌──────────────────┼──────────────────┐
             │                  │                  │
    ┌────────▼───────┐ ┌────────▼────────┐ ┌──────▼──────┐
@@ -556,19 +587,19 @@ ux-skill (имя пакета: uxskill)
    └────────┬───────┘ └────────┬────────┘ └──────┬──────┘
             │                  │                  │
             └──────────────────┼──────────────────┘
-                               │ пишет .ux/last-<lens>.json
+                               │ writes .ux/last-<lens>.json
                   ┌────────────▼─────────┐
-                  │  /ux-fix             │  применить findings коммитами
+                  │  /ux-fix             │  apply findings as commits
                   │  /ux-polish          │
                   └────────────┬─────────┘
                                │
                   ┌────────────▼─────────┐
-                  │  /ux-case-study      │  публикуемый артефакт
+                  │  /ux-case-study      │  publishable artifact
                   └──────────────────────┘
 
                   ┌──────────────────────┐
                   │  /ux-next            │  conductor, read-only
-                  │  /ux-expert          │  крючок для консалтинга
+                  │  /ux-expert          │  consulting hook
                   └──────────────────────┘
 ```
 
@@ -576,12 +607,12 @@ ux-skill (имя пакета: uxskill)
 
 ## 5 саб-агентов
 
-Саб-агенты, это специфичные для роли генераторы, диспатчируемые командами. Они никогда не работают независимо, их вызывают `/ux-design`, `/ux-component`, `/ux-system`, `/ux-fix`, `/ux-research`, и т.д. У каждого агента определена граница ответственности: они НЕ решают бриф; они исполняют против него.
+Саб-агенты представляют собой генераторы под конкретную роль, которых диспатчат команды. Они никогда не работают самостоятельно: их вызывают `/ux-design`, `/ux-system`, `/ux-fix`, `/ux-research` и т.д. У каждого агента чёткая зона ответственности: он НЕ решает, каким быть брифу; он его исполняет.
 
 ### `frontend-engineer`
 
 - **Владеет:** Production-grade frontend-кодом (React, Next.js, Vue, Blade+Alpine, ванильный HTML, Astro) с анти-AI-slop дисциплиной.
-- **Диспатчится:** `/ux-design`, `/ux-component`, `/ux-dashboard`, `/ux-fix`.
+- **Диспатчится:** `/ux-design` (режимы страницы, компонента, дашборда и изображения), `/ux-fix`.
 - **Входы:** Бриф + креативное направление + токены (из `.ux/last-recommendation.json`).
 - **Выходы:** Рабочий код, отличимый от общего AI-вывода. Никаких фиолетовых градиентов, никакого центрированного hero, никаких трёх одинаковых карточек, никакого Inter в display-размере, никакого «John Doe», никаких emoji, никаких дефолтов 300мс.
 - **Инструменты:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -589,7 +620,7 @@ ux-skill (имя пакета: uxskill)
 ### `motion-engineer`
 
 - **Владеет:** Motion в production frontend-коде, Framer Motion, GSAP, CSS-анимации. Длительности, easing, хореография, reduced-motion-фолбэки, perf-дисциплина.
-- **Диспатчится:** `/ux-design`, `/ux-motion --fix`, `/ux-component`.
+- **Диспатчится:** `/ux-design` (любой режим), `/ux-motion --fix`.
 - **Входы:** Motion-бриф + токены + 57 motion-пресетов из `data/motion-presets.json`.
 - **Выходы:** Motion, заслуживший своё место. Всегда обёрнут в `prefers-reduced-motion`-фолбэки. Всегда протестирован против Core Web Vitals.
 - **Инструменты:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -597,7 +628,7 @@ ux-skill (имя пакета: uxskill)
 ### `copy-writer`
 
 - **Владеет:** Строками, которые уходят в продакшен, сообщения об ошибках, empty states, CTA, состояния загрузки, success-сообщения, тосты, текст-подсказки, лейблы форм, текст кнопок.
-- **Диспатчится:** `/ux-copy --fix`, `/ux-design`, `/ux-frame`, `/ux-component`.
+- **Диспатчится:** `/ux-copy --fix`, `/ux-design` (любой режим), `/ux-discover --frame`.
 - **Входы:** Voice-профиль (названный или вставленный) + строки поверхности.
 - **Выходы:** Production-microcopy, применяемая последовательно через каждое состояние поверхности, чтобы продукт звучал как один продукт, а не десять. Запрещено: «form contains errors», «John Doe», AI-весёлая праздничная copy, общие CTA, мёртвые empty states.
 - **Инструменты:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -605,7 +636,7 @@ ux-skill (имя пакета: uxskill)
 ### `research-synthesizer`
 
 - **Владеет:** Перевариванием research-входов (интервью, аналитика, сайты конкурентов, A/B-результаты, support-тикеты) в действенные design-рекомендации.
-- **Диспатчится:** `/ux-research`, `/ux-workshop`, `/ux-frame`.
+- **Диспатчится:** `/ux-research`, `/ux-workshop`, `/ux-discover --frame`.
 - **Входы:** Сырое исследование, транскрипты, экспорты, URL'ы конкурентов, support-кластеры.
 - **Выходы:** Темы, evidence, рекомендации. Никогда не дизайнит ответ, даёт дизайнеру субстрат, от которого дизайнить.
 - **Инструменты:** `Read, Write, WebFetch, Bash, Glob, Grep`.
@@ -613,7 +644,7 @@ ux-skill (имя пакета: uxskill)
 ### `design-system-architect`
 
 - **Владеет:** Полными design-системами, токены (цвет, тип, пространство, motion, радиус, тень), foundation-документы, контракты компонентов, dark-mode-сопряжения, theming-слой.
-- **Диспатчится:** `/ux-system`, `/ux-component`, когда системы нет.
+- **Диспатчится:** `/ux-system`, `/ux-design --component`, когда системы ещё нет.
 - **Входы:** Бренд-бриф + `.ux/last-recommendation.json` (стиль + палитра + типографическая пара + motion-пресеты).
 - **Выходы:** Связная, мнение-имеющая, production-ready система, на которой downstream-агенты могут строить, не переопределяя фундаментал. Токены JSON, foundations MD, контракты компонентов, dark-mode-маппинг.
 - **Инструменты:** `Read, Write, Edit, Bash, Glob, Grep`.
@@ -624,7 +655,7 @@ ux-skill (имя пакета: uxskill)
 
 1. Бриф / рекомендацию (загруженные из `.ux/`).
 2. Релевантный срез манифеста (например, `frontend-engineer` получает выбранный стиль + палитру + компоненты; `motion-engineer` получает выбранные motion-пресеты).
-3. 152 guardrails анти-паттернов (всегда активны).
+3. 171 guardrail анти-паттернов (всегда активны).
 4. Критерий успеха (что артефакт должен делать).
 
 Саб-агенты возвращают:
@@ -637,7 +668,7 @@ ux-skill (имя пакета: uxskill)
 
 ---
 
-## 12 data-манифестов
+## 11 data-манифестов
 
 Слой данных, это мозг. Каждая команда читает из него; движок мёрджит через него; linter сканирует против него. Все файлы живут в `data/` и оборачивают записи в `{_meta, entries}` для версионирования схемы.
 
@@ -646,41 +677,41 @@ ux-skill (имя пакета: uxskill)
 | Поле | Описание |
 |---|---|
 | `entries` | 84 |
-| `ключи на запись` | `id`, `name`, `category`, `philosophy`, `when_to_use`, `when_to_skip`, `tokens`, `references`, `compatible_palettes`, `compatible_type_pairs`, `compatible_motion`, `compatible_industries`, `taste_score` |
-| `категории` | Minimalist / Swiss, Brutalist, Editorial, Glassmorphism, Neumorphism, Bento, Skeuomorphic, Industrial, Maximalist, AI-Futurist, MENA-modern, Vaporwave, и т.д. |
-| `пример записи` | `swiss-international`, «Сетка, это закон. Типографика делает тяжёлую работу. Декорация, это провал.» |
+| `keys per entry` | `id`, `name`, `category`, `philosophy`, `when_to_use`, `when_to_skip`, `tokens`, `references`, `compatible_palettes`, `compatible_type_pairs`, `compatible_motion`, `compatible_industries`, `taste_score` |
+| `categories` | Minimalist / Swiss, Brutalist, Editorial, Glassmorphism, Neumorphism, Bento, Skeuomorphic, Industrial, Maximalist, AI-Futurist, MENA-modern, Vaporwave, и т.д. |
+| `sample entry` | `swiss-international`, «Сетка, это закон. Типографика делает тяжёлую работу. Декорация, это провал.» |
 
-Используется: `/ux-recommend`, `/ux-system`, `/ux-design`. Схема: [data/SCHEMAS.md](data/SCHEMAS.md).
+Используется: `/ux-discover`, `/ux-system`, `/ux-design`. Схема: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `palettes.json`: 176 цветовых палитр
 
 | Поле | Описание |
 |---|---|
 | `entries` | 176 |
-| `ключи на запись` | `id`, `name`, `mode` (light/dark), `tone`, `colors` (canvas, surface, ink, body, muted, primary, primary_active, hairline, success, warning, danger, accent), `wcag_contrast_audit`, `compatible_industries` |
-| `тона` | warm, editorial, magazine, clinical, playful, brutalist, monochrome, jewel-tone, MENA-warm, dev-tools-dark, и т.д. |
-| `пример записи` | `claude-warm-editorial`, light, warm/editorial/magazine, canvas #faf9f5, primary #cc785c |
+| `keys per entry` | `id`, `name`, `mode` (light/dark), `tone`, `colors` (canvas, surface, ink, body, muted, primary, primary_active, hairline, success, warning, danger, accent), `wcag_contrast_audit`, `compatible_industries` |
+| `tones` | warm, editorial, magazine, clinical, playful, brutalist, monochrome, jewel-tone, MENA-warm, dev-tools-dark, и т.д. |
+| `sample entry` | `claude-warm-editorial`, light, warm/editorial/magazine, canvas #faf9f5, primary #cc785c |
 
-Используется: `/ux-recommend`, `/ux-system`. Контраст проверен на AA / AAA. Схема: [data/SCHEMAS.md](data/SCHEMAS.md).
+Используется: `/ux-discover`, `/ux-system`. Контраст проверен на AA / AAA. Схема: [data/SCHEMAS.md](data/SCHEMAS.md).
 
 ### `type-pairs.json`: 70 типографических пар
 
 | Поле | Описание |
 |---|---|
 | `entries` | 70 |
-| `ключи на запись` | `id`, `name`, `display` (family + веса + источник + лицензия + URL), `body`, `mono`, `compatible_styles`, `taste_score` |
-| `пример записи` | `cormorant-inter-jetbrains`, Cormorant Garamond × Inter × JetBrains Mono |
+| `keys per entry` | `id`, `name`, `display` (family + веса + источник + лицензия + URL), `body`, `mono`, `compatible_styles`, `taste_score` |
+| `sample entry` | `cormorant-inter-jetbrains`, Cormorant Garamond × Inter × JetBrains Mono |
 
-У всех families есть лицензия + URL источника. Используется `/ux-recommend`, `/ux-system`.
+У всех гарнитур есть лицензия + URL источника. Используется: `/ux-discover`, `/ux-system`.
 
 ### `components.json`: 148 компонентов
 
 | Поле | Описание |
 |---|---|
 | `entries` | 148 |
-| `ключи на запись` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `accessibility`, `compatible_styles`, `compatible_industries`, `code_skeleton` |
-| `категории` | Navigation, Forms, Data Display, Feedback, Overlays, Layout, Content, Marketing, E-commerce, Auth, Dashboard, Charts, Empty States, Loading States, Error States |
-| `пример записи` | `mega-nav-product-grid`, Mega Navigation, Product Grid, 6-частная анатомия, 4 состояния |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `accessibility`, `compatible_styles`, `compatible_industries`, `code_skeleton` |
+| `categories` | Navigation, Forms, Data Display, Feedback, Overlays, Layout, Content, Marketing, E-commerce, Auth, Dashboard, Charts, Empty States, Loading States, Error States |
+| `sample entry` | `mega-nav-product-grid`, Mega Navigation, Product Grid, 6-частная анатомия, 4 состояния |
 
 Это наш самый большой ров. Никакой другой UX-плагин для Claude не поставляет структурный манифест компонентов.
 
@@ -689,31 +720,31 @@ ux-skill (имя пакета: uxskill)
 | Поле | Описание |
 |---|---|
 | `entries` | 184 |
-| `ключи на запись` | `id`, `name`, `category`, `characteristics`, `audience_signals`, `recommended_styles`, `recommended_palettes`, `recommended_type_pairs`, `recommended_motion`, `regulatory_notes`, `regional_notes` |
-| `категории` | Financial Services, Healthcare, Education, E-commerce, SaaS B2B, SaaS B2C, Developer Tools, Media, Gaming, Travel, Real Estate, MENA-specific, и т.д. |
-| `пример записи` | `fintech-neobank`, высокое доверие, регуляторные раскрытия, primary-UI баланса/транзакций, mobile-first ежедневное использование |
+| `keys per entry` | `id`, `name`, `category`, `characteristics`, `audience_signals`, `recommended_styles`, `recommended_palettes`, `recommended_type_pairs`, `recommended_motion`, `regulatory_notes`, `regional_notes` |
+| `categories` | Financial Services, Healthcare, Education, E-commerce, SaaS B2B, SaaS B2C, Developer Tools, Media, Gaming, Travel, Real Estate, MENA-specific, и т.д. |
+| `sample entry` | `fintech-neobank`, высокое доверие, регуляторные раскрытия, primary-UI баланса/транзакций, mobile-first ежедневное использование |
 
-Используется `/ux-recommend` как первая ось параллельного поиска.
+Используется рекомендатором (`/ux-discover`) как первая ось параллельного поиска.
 
 ### `chart-types.json`: 35 типов графиков
 
 | Поле | Описание |
 |---|---|
 | `entries` | 35 |
-| `ключи на запись` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
-| `категории` | Comparison, Time Series, Distribution, Composition, Relationship, Flow, Geographic |
-| `пример записи` | `bar-vertical`, Сравнивает 4–15 дискретных категорий. Позиция по оси x, категория; высота, значение. |
+| `keys per entry` | `id`, `name`, `category`, `when_to_use`, `when_to_skip`, `encoding`, `accessibility`, `data_shape`, `compatible_styles` |
+| `categories` | Comparison, Time Series, Distribution, Composition, Relationship, Flow, Geographic |
+| `sample entry` | `bar-vertical`, сравнивает от 4 до 15 дискретных категорий. Позиция по оси x кодирует категорию, высота кодирует значение. |
 
-Используется `/ux-dashboard`, `/ux-component` (chart-инстансы).
+Используется `/ux-design --dashboard` и `/ux-design --component` (экземпляры графиков).
 
 ### `tech-stacks.json`: 25 стеков
 
 | Поле | Описание |
 |---|---|
 | `entries` | 25 |
-| `ключи на запись` | `id`, `name`, `category`, `tier`, `languages`, `ssr`, `rsc`, `compatible_styling`, `scaffold_command`, `compatible_motion`, `gotchas` |
+| `keys per entry` | `id`, `name`, `category`, `tier`, `languages`, `ssr`, `rsc`, `compatible_styling`, `scaffold_command`, `compatible_motion`, `gotchas` |
 | `tiers` | production, prerelease, experimental |
-| `пример записи` | `nextjs-15-app-router`, Next.js 15 (App Router), TS/JS, SSR, RSC, совместим с Tailwind 4 / CSS Modules / vanilla-extract / styled-components / panda-css |
+| `sample entry` | `nextjs-15-app-router`, Next.js 15 (App Router), TS/JS, SSR, RSC, совместим с Tailwind 4 / CSS Modules / vanilla-extract / styled-components / panda-css |
 
 Другие стеки включают Astro, SvelteKit, Remix, Nuxt 3, Solid Start, Qwik, Blade+Alpine, Hotwire, Phoenix LiveView, Hydrogen 2025.
 
@@ -722,9 +753,9 @@ ux-skill (имя пакета: uxskill)
 | Поле | Описание |
 |---|---|
 | `entries` | 112 |
-| `ключи на запись` | `id`, `name`, `category`, `source`, `principle`, `application`, `examples`, `caveats`, `related_laws` |
-| `категории` | Decision Cost, Attention, Memory, Motor Control, Visual Perception, Social, Emotional, Form, Error Handling, Onboarding, Empty State, и т.д. |
-| `пример записи` | `hicks-law`, Время решения растёт логарифмически с количеством представленных выборов |
+| `keys per entry` | `id`, `name`, `category`, `source`, `principle`, `application`, `examples`, `caveats`, `related_laws` |
+| `categories` | Decision Cost, Attention, Memory, Motor Control, Visual Perception, Social, Emotional, Form, Error Handling, Onboarding, Empty State, и т.д. |
+| `sample entry` | `hicks-law`, Время решения растёт логарифмически с количеством представленных выборов |
 
 Используется `/ux-audit` (6-линзовый scoring) и `/ux-critique` (taste-якорь).
 
@@ -733,116 +764,43 @@ ux-skill (имя пакета: uxskill)
 | Поле | Описание |
 |---|---|
 | `entries` | 57 |
-| `ключи на запись` | `id`, `name`, `category`, `tokens` (duration_ms, easing, transform_from/to, opacity_from/to), `stacks` (framer_motion, gsap, css), `accessibility` (reduced-motion-фолбэк), `when_to_use` |
-| `категории` | Entry, Exit, Hover, Focus, Tap, Loading, Empty, Success, Error, Scroll-linked |
-| `пример записи` | `fade-up-12px`, 360ms, `cubic-bezier(0.16, 1, 0.3, 1)`, translateY(12px) → 0, opacity 0 → 1 |
+| `keys per entry` | `id`, `name`, `category`, `tokens` (duration_ms, easing, transform_from/to, opacity_from/to), `stacks` (framer_motion, gsap, css), `accessibility` (reduced-motion-фолбэк), `when_to_use` |
+| `categories` | Entry, Exit, Hover, Focus, Tap, Loading, Empty, Success, Error, Scroll-linked |
+| `sample entry` | `fade-up-12px`, 360ms, `cubic-bezier(0.16, 1, 0.3, 1)`, translateY(12px) → 0, opacity 0 → 1 |
 
 У каждого пресета есть reduced-motion-вариант. Stack-ready код для Framer Motion, GSAP и чистого CSS.
 
-### `anti-patterns.json`: 152 regex-правил
+### `anti-patterns.json`: 171 правило
 
 | Поле | Описание |
 |---|---|
-| `entries` | 152 |
-| `ключи на запись` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
-| `категории` | A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4) |
+| `entries` | 171 |
+| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (тип, паттерн, флаги, область и у многих правил проверка `post` по разобранному файлу), `why`, `fix` |
+| `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-Полный список правил в [152 правил против AI-slop](#152-правил-против-ai-slop-linter).
+Полный список правил в разделе [171 правило против AI-slop](#171-правило-против-ai-slop-linter).
 
 ### `brands/*.json`: 160 brand-спеков
 
 | Поле | Описание |
 |---|---|
 | `entries` | 160 (плюс `_index.json`, листающий все) |
-| `ключи на запись` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
-| `категории` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automotive (8) |
+| `keys per entry` | `id`, `name`, `category`, `voice`, `tokens` (color, type, motion), `design_principles`, `signature_moves`, `anti-moves`, `references` |
+| `categories` | Developer Tools (36), Consumer / Lifestyle / Retail (19), Fintech / Crypto (14), Editorial / Media (13), AI / ML Platform (12), Productivity / Collaboration (8), Automotive (8) |
 
 Полный список в [160 brand-спеков DESIGN.md](#160-brand-спеков-designmd-по-категориям).
 
 ---
 
-## 152 правил против AI-slop: linter
+## 171 правило против AI-slop: linter
 
-ux-skill поставляет детерминированный regex-based linter. **Никакого LLM.** **Никаких API.** **Никакой сети.** Работает в CI за ~200мс на типичном Next.js-приложении. Выходит с non-zero на Critical / High findings, когда установлен `--fail-on high`.
+ux-skill поставляет детерминированный linter: каждое правило представляет собой паттерн, а многие добавляют проверку по разобранному CSS и разметке, так что совпадение засчитывается только в том контексте, который правило называет. **Без LLM.** **Без API.** **Без сети.** Работает в CI за ~200мс на типичном Next.js-приложении. Выходит с non-zero на находках Critical / High, если задан `--fail-on high`.
 
-Правила берутся из `data/anti-patterns.json` (предпочтительно v2) с fallback `references/foundations/anti-patterns.md` (v1 bash). Поставляются два бинаря: `bin/ux-lint.py` (Python, быстрый, расширяемый) и `bin/ux-lint.sh` (Bash + perl-PCRE, для сред без Python).
+Правила берутся из `data/anti-patterns.json` (v2, предпочтительно) с запасным вариантом `references/foundations/anti-patterns.md` (v1, bash). Поставляются два бинарника: `bin/ux-lint.py` (Python, быстрый, расширяемый) и `bin/ux-lint.sh` (Bash + perl-PCRE, для окружений без Python).
 
 ### Правила по категориям
 
-#### Typography (3 правила)
-
-| Severity | ID правила | Имя |
-|---|---|---|
-| high | `inter-as-display` | Inter использован как display-шрифт |
-| medium | `hero-text-arbitrary-90px` | Произвольный размер hero-шрифта |
-| low | `font-system-only` | Системный font-stack без выбранного typeface |
-
-#### Color (6 правил)
-
-| Severity | ID правила | Имя |
-|---|---|---|
-| high | `purple-to-blue-gradient` | Дефолтный AI-градиент фиолетовый-в-синий |
-| high | `dark-text-on-dark-card` | Низкоконтрастный текст на карточке |
-| medium | `gradient-text-rainbow` | Multi-stop градиентный текст |
-| medium | `card-glow-purple-shadow` | Фиолетовая glow-тень на карточках |
-| medium | `gradient-mesh-purple-pink` | Hero с purple-pink mesh-градиентом |
-| low | `tailwind-color-named-vague` | Именованные Tailwind-цвета без семантического токена |
-
-#### Layout (5 правил)
-
-| Severity | ID правила | Имя |
-|---|---|---|
-| high | `three-equal-card-grid` | Три одинаковых карточки в ряд |
-| medium | `centered-everything-hero` | Центрированная композиция hero |
-| medium | `avatar-stack-overlapping` | Generic перекрывающийся стек аватаров |
-| low | `pill-rounded-full-everywhere` | `rounded-full` применён ко всему |
-| low | `nav-equal-hamburger-desktop` | Гамбургер-меню на десктопе |
-
-#### Content (5 правил)
-
-| Severity | ID правила | Имя |
-|---|---|---|
-| high | `lorem-ipsum-leak` | Lorem ipsum в shipping-коде |
-| high | `emoji-in-ui` | Emoji использована как UI-элемент |
-| high | `icon-emoji-stamp` | Emoji использована как icon-штамп |
-| high | `testimonial-fake-five-stars` | Хардкоженный пятизвёздочный отзыв |
-| medium | `fake-name-john-doe` | Общие placeholder-имена |
-
-#### Motion (3 правила)
-
-| Severity | ID правила | Имя |
-|---|---|---|
-| medium | `cta-arrow-rightward-bouncing` | Прыгающая стрелка на CTA |
-| low | `timing-300ms-default` | Дефолтный timing перехода 300мс |
-| low | `cubic-bezier-material-only` | Дефолтный Material-easing повсюду |
-
-#### A11y (6 правил)
-
-| Severity | ID правила | Имя |
-|---|---|---|
-| high | `inline-svg-no-aria` | SVG без aria-label или aria-hidden |
-| high | `img-no-alt` | Изображение без атрибута alt |
-| high | `link-onclick-no-href` | Anchor с onClick, но без href |
-| medium | `button-no-type` | Button без атрибута type |
-| medium | `heading-skip-h1-h3` | Пропущенный уровень heading |
-| medium | `infinite-scroll-no-pagination` | Бесконечный скролл без keyboard-фолбэка |
-
-#### Quality (6 правил)
-
-| Severity | ID правила | Имя |
-|---|---|---|
-| high | `console-log-leak` | `console.log` в коде компонента |
-| medium | `inline-style-attribute` | Inline style-атрибут |
-| medium | `any-type-leak` | TypeScript-тип `any` |
-| medium | `arbitrary-z-index-9999` | Ленивое значение z-index |
-| low | `shadcn-default-everywhere` | Дефолтный shadcn token-блок не изменён |
-| low | `todo-fixme-comment` | TODO или FIXME в shipping-коде |
-
-#### Visual (1 правило)
-
-| Severity | ID правила | Имя |
-|---|---|---|
-| low | `blur-bg-only-decoration` | Backdrop blur без glass-поверхности |
+Полный каталог всех 171 правил, по категориям и затем по серьёзности, генерируется из `data/anti-patterns.json` в [английском README](README.md#rules-by-category); там идентификаторы и названия правил приведены так, как их печатает linter. Правила покрывают A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
 
 ### Использование linter'а
 
@@ -850,9 +808,9 @@ ux-skill поставляет детерминированный regex-based lin
 
 ```bash
 uxskill lint .
-# или
+# or
 python3 bin/ux-lint.py src/
-# или
+# or
 bash bin/ux-lint.sh src/
 ```
 
@@ -874,17 +832,17 @@ bash bin/ux-lint.sh --staged --fail-on high
 **Output (пример):**
 
 ```
-─── отчёт /ux-lint ───
+─── /ux-lint report ───
 src/components/Hero.tsx:24  [high]   purple-to-blue-gradient
   evidence: bg-gradient-to-br from-purple-500 to-blue-500
-  fix: заменить на primary-градиент рекомендованной палитры или убрать градиент
+  fix: replace with the recommended palette's primary gradient or remove gradient
 
-src/components/Pricing.tsx:12  [high] three-equal-card-grid
-  evidence: grid grid-cols-3 gap-6 (3 одинаковых Card-потомка)
-  fix: выделить одну карточку; обрамить двумя карточками с пониженным акцентом
+src/components/Pricing.tsx:11  [high] three-equal-card-grid
+  evidence: grid grid-cols-3 gap-6 (3 equal Card children)
+  fix: feature one card; flank with two reduced-emphasis cards
 
-3 файла просканировано · 2 high · 0 medium · 0 low · exit 1
-Рекомендовано далее: /ux-polish --fix (LLM-driven, адресует lintable и эстетические findings)
+3 files scanned · 2 high · 0 medium · 0 low · exit 1
+Recommended next: /ux-polish --fix (LLM-driven, addresses both lintable and aesthetic findings)
 ```
 
 ---
@@ -931,13 +889,13 @@ BMW, BMW M, Bugatti, Ferrari, Lamborghini, Renault, SpaceX, Tesla
 
 ## MCP-сервер: асимметричный ход
 
-ux-skill поставляет **сервер Model Context Protocol**. Запусти `ux-mcp`, и движок становится long-running stdio-процессом, который любой MCP-совместимый хост, Claude Desktop, Cursor, Windsurf, общие агенты, может вызывать. Четырнадцать инструментов: `ux_recommend`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`. Те же Python-handler'ы, что используют slash-команды; те же data-манифесты; тот же детерминированный recommender.
+ux-skill поставляет **сервер Model Context Protocol**. Запусти `ux-mcp`, и движок становится долгоживущим stdio-процессом, который может вызывать любой MCP-совместимый хост (Claude Desktop, Cursor, Windsurf, обычные агенты). 25 инструментов: `ux_recommend`, `ux_system_detect`, `ux_lint`, `ux_styles`, `ux_palettes`, `ux_type_pairs`, `ux_components`, `ux_industries`, `ux_motion_presets`, `ux_anti_patterns`, `ux_brands`, `ux_landing_patterns`, `ux_persist_save`, `ux_persist_load`, `ux_stats`, `ux_image_extract`, `ux_synthesize`, `ux_decisions_query`, `ux_decisions_stats`, `ux_system_build`, `ux_system_import`, `ux_system_enhance`, `ux_system_extend`, `ux_system_export`, `ux_contracts_check`. Те же Python-обработчики, что используют slash-команды; те же манифесты данных; тот же детерминированный рекомендатор.
 
 **Почему это асимметричный ход:** ни один из топ-8 UX-скилов Claude (ui-ux-pro-max-skill, open-design, taste-skill, huashu-design, stitch, nothing-design, hallmark, material-3) не поставляет MCP-сервер. Они заперты внутри runtime'а плагинов Claude Code. ux-skill достижим из любого хоста, говорящего на MCP, включая агентов, которые никогда не слышали о плагине Claude Code.
 
 ```bash
-pip install 'uxskill[mcp]'             # mcp, это opt-in extra
-ux-mcp                                  # запускается stdio JSON-RPC сервер
+pip install 'uxskill[mcp]'             # mcp is an opt-in extra
+ux-mcp                                  # stdio JSON-RPC server starts
 ```
 
 Направь своего клиента на бинарь `ux-mcp`. Полная документация инструментов, JSON-примеры и конфиги для клиентов Claude Desktop, Cursor и Windsurf живут на [docs/mcp.html](docs/mcp.html) и в `commands/ux-mcp.md`.
@@ -950,7 +908,7 @@ ux-mcp                                  # запускается stdio JSON-RPC 
 
 | IDE / инструмент | Сигнал детекции | Установленный артефакт |
 |---|---|---|
-| Claude Code | `.claude/` или `CLAUDE.md` | Plugin-манифест на `.claude-plugin/plugin.json` + все 25 команды + все 5 саб-агентов |
+| Claude Code | `.claude/` или `CLAUDE.md` | Манифест плагина в `.claude-plugin/plugin.json` + все 18 команд (и 7 алиасов) + все 5 саб-агентов |
 | Cursor | `.cursor/` или `.cursorrules` | `.cursorrules` prompt-header, указывающий на движок |
 | Windsurf | `.windsurf/` или `.windsurfrules` | `.windsurfrules` с тем же prompt-header |
 | GitHub Copilot | `.github/copilot-instructions.md` или `.vscode/` | `.github/copilot-instructions.md` |
@@ -982,8 +940,8 @@ ux-mcp                                  # запускается stdio JSON-RPC 
 
 ```bash
 pip install uxskill
-uxskill init                                # детектит Cursor, пишет .cursorrules
-uxskill discover                            # intake на 10 полей
+uxskill init                                # detects Cursor, writes .cursorrules
+uxskill discover                            # 10-field intake
 uxskill recommend \
   --project-type=dashboard \
   --industry=fintech-neobank \
@@ -1012,14 +970,14 @@ uxskill recommend \
 > Region? global
 > Success metric? signup conversion
 
-/ux-recommend
-> [возвращает выбранный стиль, палитру, типографическую пару, motion-пресеты, компоненты, brand-образцы]
+/ux-discover --recommend
+> [returns picked style, palette, type pair, motion presets, components, brand exemplars]
 
 /ux-design "generate the landing using the Stripe brand spec as exemplar"
-> [frontend-engineer генерирует страницу]
+> [frontend-engineer generates the page]
 
 /ux-lint .
-> [проходит, Stripe brand spec был соблюдён]
+> [passes, Stripe brand spec was respected]
 ```
 
 ### 3. Аудит существующего кода на AI slop в CI
@@ -1049,16 +1007,16 @@ PR'ы, вносящие фиолетово-синие градиенты, Inter 
 
 ```
 /ux-critique src/components/Hero.tsx
-> [3 выигрыша, 3 промаха, 1 стратегический ход, take честный]
+> [3 wins, 3 misses, 1 strategic move, the take is honest]
 
 /ux-lint src/
-> [15 high-severity AI-отпечатков помечено]
+> [15 high-severity AI fingerprints flagged]
 
 /ux-polish src/components/Hero.tsx
-> [LLM-driven косметический проход + убийство AI-slop]
+> [LLM-driven cosmetic pass + AI-slop kill]
 
 /ux-fix
-> [применяет findings атомарными коммитами, перезапускает linter]
+> [applies findings as atomic commits, re-runs the linter]
 ```
 
 Три команды, одна отполированная поверхность, атомарные коммиты на починку.
@@ -1066,10 +1024,10 @@ PR'ы, вносящие фиолетово-синие градиенты, Inter 
 ### 5. Дизайн Linear-стилевой command palette
 
 ```
-/ux-component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
-> [читает data/brands/linear.app.json для токенов + signature-ходов]
-> [читает data/components.json для анатомии + состояний command-palette]
-> [диспатчит frontend-engineer с явной Linear-спекой]
+/ux-design --component command-palette --brief="Linear-style, dark, monospace shortcuts, recent items first"
+> [reads data/brands/linear.app.json for tokens + signature moves]
+> [reads data/components.json for the command-palette anatomy + states]
+> [dispatches frontend-engineer with explicit Linear spec]
 ```
 
 Сгенерированный компонент использует реальные цветовые токены Linear, type-stack, motion-конвенции, hairline-плотности, не «общий dark UI».
@@ -1092,9 +1050,9 @@ PR'ы, вносящие фиолетово-синие градиенты, Inter 
 
 ```
 /ux-case-study --format=html --slug=bashiti-loyalty
-> [читает .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [генерирует Wfrah-editorial case study с нумерованными (A)-(G) секциями, hairline-разделителями, bilingual-safe лейаутом]
-> [пишет case-studies/bashiti-loyalty.html]
+> [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
+> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/bashiti-loyalty.html]
 ```
 
 Case study, это законченный, публикуемый артефакт, не черновик. Чистая монохромия, editorial-типографика, готов отгружать в портфолио.
@@ -1105,7 +1063,7 @@ Case study, это законченный, публикуемый артефак
 
 ```bash
 uxskill discover
-# intake на 10 полей, сохраняется в .ux/last-discovery.json
+# 10-field intake, saves to .ux/last-discovery.json
 
 cat .ux/last-discovery.json
 # {
@@ -1119,7 +1077,7 @@ cat .ux/last-discovery.json
 
 ### 9. MASTER.md persistence: твои design-решения в репо
 
-После `/ux-recommend` сохрани выбранный стиль + палитру + тип + motion + компоненты + brand-образцы + guardrails как human-readable Markdown-файл, который твоя команда может ревьювить, диффать и контролировать версиями.
+После `/ux-discover` (или `/ux-discover --recommend`) сохрани выбранный стиль + палитру + шрифты + motion + компоненты + эталонные бренды + guardrails в читаемый Markdown-файл, который твоя команда может ревьюить, сравнивать и держать под контролем версий.
 
 ```bash
 python3 -m engine.cli.main persist save --project-root .
@@ -1135,11 +1093,11 @@ python3 -m engine.cli.main persist save --project-root .
 
 | Измерение | ux-skill | ui-ux-pro-max | open-design | taste-skill | huashu-design | stitch-skills | nothing-design | hallmark | material-3 |
 |---|---|---|---|---|---|---|---|---|---|
-| Slash-команды | **22** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
+| Slash-команды | **18** | 1 | 19 | 1 | 1 | multi | 1 | 1 | 1 |
 | Компоненты | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Motion-пресеты | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Brand-спеки | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Правила анти-паттернов | **145** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Правила анти-паттернов | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI-safe детерминированный linter | **да** | нет | нет | нет | нет | нет | нет | нет | нет |
 | Поддерживаемые IDE | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery-gate | **10 полей** | неявный | неявный | неявный | неявный | неявный | неявный | неявный | неявный |
@@ -1159,24 +1117,21 @@ python3 -m engine.cli.main persist save --project-root .
 
 ## Roadmap
 
-### v2.1: Полнота linter'а (Q3 2026)
+Дальше, без привязки к релизу:
 
-- **+17 отложенных правил анти-паттернов** до 52 в сумме. Цели: dark-on-dark hover-состояния, кодирование состояния только цветом, избыточная z-index эскалация, хардкоженные breakpoints в JS, opacity вместо disabled-состояния, и т.д.
-- **`uxskill lint --fix` для безопасных переписываний** механически чинимых findings (button-no-type, img-no-alt empty-string, удаление console-log-leak).
-- **Расширение VS Code**, которое выводит lint-findings inline (без необходимости запускать CI).
+- **Стили Figma**: стили эффектов для теней, стили сеток и текстовые стили, привязанные к переменным полей, записанные в живой файл.
+- **Сопоставление компонентов**: компонент Figma с его вариантами сопоставляется с компонентом в коде и его props и сохраняется на всём пути передачи в разработку.
+- **Импорт с живого сайта**: прочитать систему, которую опубликованный сайт действительно рендерит, рядом с импортом из файлов.
+- **Страницы документации для построенной системы**: человеческий взгляд на её токены, роли и контракты.
 
-### v2.2: Расширение манифеста компонентов (Q4 2026)
+Также в работе:
 
-- **+50 компонентов** до 198 в сумме. Новые: combobox с async-фильтром, command-palette с heuristics recent-items, conditional-form-step, варианты payment-element, RTL-aware date picker, MENA-специфичный phone input, calendar grid с hijri-оверлеем.
-- **Per-component code emit** в 6 стеках (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, ванильный HTML/CSS).
-- **Component playground** на uxskill.laithjunaidy.com/playground, попробовать recommendation engine + увидеть live-превью компонентов.
-
-### v3: Marketplace + lock-in (2027)
-
-- **Marketplace brand-спеков**: публикуй и находи community-brand-спеки. Pay-to-publish для финансирования модерации.
-- **Custom anti-pattern rules**: проекты могут определять свои regex-правила в `data/anti-patterns.local.json` (уже в v2; v3 добавляет discovery + sharing).
-- **`uxskill plan`**: полное планирование multi-page сайта из брифа, не только одной поверхности.
-- **Паритет с Figma-плагином**: тот же recommendation engine, выведенный в Figma.
+- **`uxskill lint --fix` для безопасных правок** механически исправимых находок (button-no-type, img-no-alt с пустой строкой, удаление console-log-leak).
+- **Расширение для VS Code**, которое показывает находки linter прямо в коде.
+- **Генерация кода по компонентам** в шести стеках (Next.js + React, Vue 3 + Nuxt, SvelteKit, Astro, Blade + Alpine, ванильный HTML/CSS).
+- **Маркетплейс бренд-спецификаций**: публиковать и находить бренд-спецификации сообщества.
+- **Собственные правила анти-паттернов**: поиск и обмен правилами, которые проекты задают в `data/anti-patterns.local.json`.
+- **`uxskill plan`**: планирование многостраничных сайтов по брифу, а не только одной поверхности.
 
 ---
 
@@ -1239,6 +1194,6 @@ MIT. Используй, форкай, строй сверху. Если это 
 
 ---
 
-**ux-skill** · **v3.1.0-stable** · Построено так, чтобы Claude Code, Cursor, Windsurf и любой другой AI-инструмент кодинга выдавали frontend, который не читается как AI-сгенерированный.
+**ux-skill** · **v4.0.0** · Построено так, чтобы Claude Code, Cursor, Windsurf и любой другой AI-инструмент кодинга выдавали frontend, который не читается как AI-сгенерированный.
 
 > Поставь звезду репо на [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · Установи через `pip install uxskill` или `npx uxskill init` · Изучи сравнение на [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)
