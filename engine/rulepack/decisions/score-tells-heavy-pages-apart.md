@@ -1,10 +1,10 @@
 ---
 id: score-tells-heavy-pages-apart
 title: The quality score tells heavy pages apart
-status: active
+status: superseded
 areas: [output]
 supersedes: null
-superseded_by: null
+superseded_by: score-weighs-repeats-past-the-knee
 ---
 
 # The quality score tells heavy pages apart

@@ -58,6 +58,7 @@ EXPECTED = {
     "lint-reads-what-the-page-uses", "score-tells-heavy-pages-apart", "text-stays-in-its-box",
     "categories-for-nominal-data",
     "photos-show-this-business", "display-measures-each-letter",
+    "lint-reads-dashboard-templates", "score-weighs-repeats-past-the-knee",
     "display-follows-expressiveness", "display-lines-sit-tight", "weights-stay-light",
     "two-voice-headline", "capitals-track-open", "lines-break-balanced",
     "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",
@@ -114,7 +115,8 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "type-along-the-scale": "weights-stay-light",
               "landing-gap": "landing-rhythm-follows-the-brand",
               "layout-bounds": "measures-count-characters",
-              "motion-roles": "motion-roles-by-pace"}
+              "motion-roles": "motion-roles-by-pace",
+              "score-tells-heavy-pages-apart": "score-weighs-repeats-past-the-knee"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

@@ -1247,7 +1247,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "(?<![\\w-])box-shadow\\s*:(?:[^(),;{}]|\\([^()]*\\))*(?:,(?:[^(),;{}]|\\([^()]*\\))*){4,}",
+        "pattern": "(?<![\\w-])box-shadow\\s*:(?:[^(),;{}]|\\([^()]*\\))*(?:,(?:[^(),;{}]|\\([^()]*\\))*){4,}|(?<![\\w-])box-shadow\\s*:[^;{}]*\\bvar\\(",
         "flags": "im",
         "scope": [
           "css",
@@ -1257,7 +1257,8 @@
           "vue",
           "html"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "shadow-drawn-layers"
       },
       "why": "Stacking five or more shadow layers is the AI's idea of premium depth; reads as visual bloat and chews the GPU on paint. The rule fires at five layers, not three: careful design systems build depth from up to four layers (an elevation scale's umbra, penumbra and ambient layers, or a four-step smooth shadow), so a lower threshold would flag real work. A stacked glow of zero-offset layers is caught at any count by glow-shadow-zero-offset.",
       "fix": "Use one ambient diffusion shadow (e.g. 0 20px 40px -15px rgba(0,0,0,0.08)) and at most one tight contact shadow. Depth comes from contrast, not layer count."
@@ -2704,7 +2705,8 @@
           "blade",
           "astro"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "pointer-on-disabled"
       },
       "why": "A :disabled element with cursor: pointer signals to the user that the element is clickable - the visual affordance says 'I respond' while the actual element says 'I don't.' Confused state, immediate friction. Common when a global utility class wins over the :disabled override.",
       "fix": "Override to cursor: not-allowed (or cursor: default) inside the :disabled selector. Pair with opacity: 0.5 and pointer-events: none on the visual layer if the disabled state must be unreachable to mouse users."

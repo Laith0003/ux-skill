@@ -166,6 +166,15 @@ def _revealed_by_focus_or_hover(blocks: List[Block], hidden: Block) -> bool:
     return False
 
 
+# Pseudo-elements that draw a part of an element and never take focus;
+# ::part() and ::slotted() select real elements, and a scroll button or a
+# picker can hold focus, so they are not among them.
+_PSEUDO_ELEMENT = re.compile(r"::(?:before|after|placeholder|marker|selection|first-line|"
+                             r"first-letter|backdrop|cue|grammar-error|spelling-error|"
+                             r"target-text|highlight\([^)]*\))(?![\w-])"
+                             r"|:(?:before|after|first-line|first-letter)(?![\w-])", re.I)
+
+
 def focusable_hidden_by_opacity(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
     """A control, or a panel holding controls, left at opacity 0 with no
     visibility: hidden, display: none, inert or hidden companion is still
@@ -174,6 +183,10 @@ def focusable_hidden_by_opacity(ctx: FileContext, view: View, match: re.Match, s
     if block is None or not block.selectors or _GONE.search(block.body):
         return False
     if all(_KEYFRAME.match(s.strip()) for s in block.selectors):
+        return False
+    # A pseudo-element (a ::before mark, a ::placeholder) never takes focus.
+    if all(_PSEUDO_ELEMENT.search(compounds(s)[-1] if compounds(s) else s)
+           for s in block.selectors):
         return False
     if any(_TRANSITION_CLASS.search(s) for s in block.selectors):
         return False

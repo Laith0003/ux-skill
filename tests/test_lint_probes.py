@@ -161,6 +161,13 @@ EXPECT = {
     # other review probes
     "misc/d1.tsx": {"div-onclick-no-role": [3, 4]},
     "misc/e1.html": {"emoji-in-ui": [1, 2, 5]},
+    # Dashboards as admin templates ship them: an unused utility inside
+    # @layer, a shadow composed of custom properties, a pointer only while
+    # not disabled, a focus fill and a pseudo-element mark stay quiet; their
+    # real counterparts on the next line are reported.
+    "misc/dash1.html": {"border-radius-2xl-default": [4, 13], "box-shadow-multilayer-default": [6],
+                        "cursor-pointer-on-disabled": [8], "outline-none-no-focus-visible": [10],
+                        "focusable-at-opacity-zero": []},
     "misc/g1.css": {
         "chrome-y-multi-stop-gradient": [1],
         "animating-layout-properties": [3, 4],

@@ -1,0 +1,6 @@
+/* Tailwind composes every shadow and ring from custom properties; the
+   layers are judged where --tw-shadow is defined. */
+.shadow-sm {
+  --tw-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}

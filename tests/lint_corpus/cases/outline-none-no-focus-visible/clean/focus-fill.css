@@ -1,0 +1,2 @@
+/* The menu swaps its focus outline for a fill the keyboard user sees. */
+.menu-button:focus-visible { outline: none; background-color: #dbe4ff; }

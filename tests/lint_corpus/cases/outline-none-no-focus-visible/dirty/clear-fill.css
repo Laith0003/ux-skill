@@ -1,0 +1,2 @@
+/* A transparent fill draws nothing in place of the outline. */
+.menu-button:focus-visible { outline: none; background: transparent; }

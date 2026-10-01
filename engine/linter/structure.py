@@ -13,7 +13,7 @@ once.
 from __future__ import annotations
 
 import re
-from bisect import bisect_right
+from bisect import bisect_left, bisect_right
 from html import unescape as html_unescape
 from functools import lru_cache
 from itertools import combinations
@@ -409,6 +409,25 @@ def block_at(ctx: FileContext, view: View, pos: int) -> Optional[Block]:
     return None
 
 
+_RULE_GAP = re.compile(r"[;{}]")
+_QUOTED = re.compile(r"\"[^\"]*\"|'[^']*'")
+
+
+def rule_at(ctx: FileContext, view: View, pos: int) -> Optional[Block]:
+    """The rule a match at ``pos`` belongs to: the block whose selector holds
+    ``pos`` (a match on a class name sits before its rule's brace, inside
+    any @layer or @media around it), else the innermost block enclosing it."""
+    blocks, starts = _blocks(ctx, view)
+    i = bisect_left(starts, pos)
+    if i < len(blocks):
+        gap = view.text[pos:blocks[i].start]
+        if "\"" in gap or "'" in gap:
+            gap = _QUOTED.sub("", gap)
+        if not _RULE_GAP.search(gap):
+            return blocks[i]
+    return block_at(ctx, view, pos)
+
+
 # Utilities a page's bundle carries for other routes
 
 _UTILITY = re.compile(r"^\.((?:[\w-]|\\[0-9a-fA-F]{1,6}\s?|\\.)+)((?:::?[\w-]+(?:\([^()]*\))?)*)$")
@@ -443,7 +462,8 @@ def _outside_styles(ctx: FileContext) -> str:
 def unused_utility(ctx: FileContext, view: View, pos: int) -> bool:
     """True when ``pos`` sits in a page's own styles, in a block whose every
     selector is one class with its states (a utility, such as
-    ``.h-screen`` or ``.md\\:grid-cols-3``), and no element on the page
+    ``.h-screen`` or ``.md\\:grid-cols-3``; a match on its selector counts,
+    inside an @layer too), and no element on the page
     carries that class and nothing outside the styles names it (a script
     that adds it). A compiled stylesheet carries the utilities of every
     route; only the ones this page uses are its own. Only a plain HTML page
@@ -454,7 +474,7 @@ def unused_utility(ctx: FileContext, view: View, pos: int) -> bool:
         return False
     if _EXTERNAL_SCRIPT.search(ctx.text):
         return False
-    block = block_at(ctx, view, pos)
+    block = rule_at(ctx, view, pos)
     if block is None or not block.selectors:
         return False
     if any(a.startswith(_NO_ELEMENTS) for a in block.atrules):
@@ -683,6 +703,60 @@ def ring_kind(body: str) -> str:
     return kind
 
 
+_LONE_VAR = re.compile(r"^\s*var\(\s*(--[\w-]+)\s*(?:,\s*((?:[^()]|\([^()]*\))*))?\)\s*$", re.I)
+_CLEAR = re.compile(r"^(?:#[0-9a-f]{3}0|#[0-9a-f]{6}00|(?:rgba?|hsla?)\(.*[,/]\s*0(?:\.0*)?%?\s*\))$", re.I)
+_NO_FILL = _NO_PAINT | {"inherit", "currentcolor", "revert", "revert-layer"}
+
+
+def resolved(ctx: FileContext, value: str) -> List[str]:
+    """The values a declaration can take: itself, or for a lone var() the
+    literal values the page's custom properties give it (its fallback when
+    the page defines none, nothing when it has neither)."""
+    m = _LONE_VAR.match(value)
+    if not m:
+        return [value]
+    from engine.linter.taste import custom_properties, literals
+    got = literals(custom_properties(ctx), m.group(1).lower())
+    if got:
+        return [g.replace("!important", "").strip().lower() for g in got]
+    return [m.group(2).strip().lower()] if m.group(2) else []
+
+
+_COLOR_WORD = re.compile(r"#[0-9a-f]{3,8}\b|(?:rgba?|hsla?)\([^()]*\)", re.I)
+
+
+def _clear_colors(text: str) -> bool:
+    """The text names a fully transparent color (#0000, rgba(0, 0, 0, 0))."""
+    return any(_CLEAR.match(c.replace(" ", "")) for c in _COLOR_WORD.findall(text))
+
+
+def _visible(value: str) -> bool:
+    """A color or background value that paints: not a keyword that paints
+    nothing or keeps the current color, and not a fully transparent color."""
+    words = value.split()
+    if not words or any(w in _NO_FILL for w in words):
+        return False
+    colors = _COLOR_WORD.findall(value)
+    return not (colors and all(_CLEAR.match(c.replace(" ", "")) for c in colors)
+                and not re.search(r"url\(|gradient\(", value))
+
+
+def fill_kind(ctx: FileContext, body: str) -> str:
+    """"fill" when a block's own declarations fill the element, change its
+    text color or underline it, a visible focus indicator in place of an
+    outline; "" when they do not. A var() is read through the page's custom
+    properties, and one the page does not define does not count."""
+    for prop, value in _declarations(body):
+        if prop in ("background", "background-color", "color"):
+            values = resolved(ctx, value)
+            if values and all(_visible(v) for v in values):
+                return "fill"
+        elif prop in ("text-decoration", "text-decoration-line"):
+            if re.search(r"\b(?:underline|overline|line-through)\b", value):
+                return "fill"
+    return ""
+
+
 def _specificity(selector: str) -> Tuple[int, int, int]:
     ids = classes = tags = 0
     for part in compounds(selector):
@@ -784,7 +858,7 @@ def _rings(ctx: FileContext, view: View) -> Tuple[Dict[FrozenSet[str], List[Ring
         for b in _blocks(ctx, view)[0]:
             if not b.selectors:
                 continue
-            paint = ring_kind(b.body)
+            paint = ring_kind(b.body) or ("other" if fill_kind(ctx, b.body) else "")
             if not paint:
                 continue
             cond = _conditions(b)
@@ -927,7 +1001,9 @@ def outline_without_ring(ctx: FileContext, view: View, match: re.Match, start: i
     """Decide per rule block. A removed outline passes only when a focus rule
     that covers the whole removal selector draws a visible ring (outline,
     box-shadow or border), or a ``:focus-within`` or ``:has(:focus-visible)``
-    rule on an ancestor of that same element does."""
+    rule on an ancestor of that same element does. A focus rule that
+    removes its own outline passes when it fills the control, changes its
+    text color or underlines it instead."""
     tag = ctx.tag_at(start)
     if tag is not None:
         # Inline style: only the element's own classes can add a ring.
@@ -938,7 +1014,9 @@ def outline_without_ring(ctx: FileContext, view: View, match: re.Match, start: i
     block = block_at(ctx, view, match.start())
     if block is None or not block.selectors:
         return True
-    own_ring = bool(ring_kind(block.body))
+    # In a focus rule a fill, a text color or an underline in place of the
+    # outline is a visible indicator too (fill_kind).
+    own_ring = bool(ring_kind(block.body) or fill_kind(ctx, block.body))
     cond = _conditions(block)
     important = bool(_IMPORTANT_OUTLINE.search(block.body))
     for sel in block.selectors:
@@ -2479,11 +2557,82 @@ def blur_without_background(ctx: FileContext, view: View, match: re.Match, start
     return _BACKGROUND_DECL.search(body) is None
 
 
+SHADOW_LAYERS = 5
+
+
+def _layer_draws(layer: str) -> bool:
+    """One shadow layer that paints: an offset, blur or spread above zero,
+    in a color that is not fully transparent."""
+    words = layer.split()
+    if not words or words[0] == "none" or any(w in _NO_PAINT for w in words) or _clear_colors(layer):
+        return False
+    lengths = [w for w in words if _LENGTH.match(w)]
+    return any(not _ZERO.match(w) for w in lengths)
+
+
+def drawn_layers(ctx: FileContext, value: str) -> int:
+    """The shadow layers a box-shadow value paints. A layer that is a lone
+    var() is read through the page's custom properties (Tailwind composes
+    every shadow from var(--tw-shadow) and its siblings, which mostly hold
+    0 0 #0000), counting its most layered value; one the page does not
+    define paints nothing that can be read."""
+    count = 0
+    for layer in _split_top(value.replace("!important", "")):
+        layer = layer.strip()
+        if _LONE_VAR.match(layer):
+            count += max((sum(1 for x in _split_top(v) if _layer_draws(x.strip()))
+                          for v in resolved(ctx, layer)), default=0)
+        elif _layer_draws(layer):
+            count += 1
+    return count
+
+
+_SHADOW_DECL = re.compile(r"box-shadow\s*:((?:[^;{}()]|\((?:[^()]|\([^()]*\))*\))*)", re.I)
+
+
+def shadow_drawn_layers(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """A box-shadow paints SHADOW_LAYERS layers or more (drawn_layers),
+    its whole value read from the declaration the match starts."""
+    m = _SHADOW_DECL.match(view.text, match.start())
+    return bool(m) and drawn_layers(ctx, m.group(1)) >= SHADOW_LAYERS
+
+
+_NOT = re.compile(r":not\(", re.I)
+
+
+def _outside_not(selector: str) -> str:
+    """A selector with every :not(...) argument taken out."""
+    out, i = [], 0
+    for m in _NOT.finditer(selector):
+        if m.start() < i:
+            continue
+        out.append(selector[i:m.start()])
+        depth, j = 1, m.end()
+        while j < len(selector) and depth:
+            depth += {"(": 1, ")": -1}.get(selector[j], 0)
+            j += 1
+        i = j
+    out.append(selector[i:])
+    return "".join(out)
+
+
+def pointer_on_disabled(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """The rule selects a disabled control: a :disabled outside every
+    :not(...), so button:not(:disabled) and button:not(.x, :disabled) do
+    not count."""
+    block = rule_at(ctx, view, match.start())
+    if block is None or not block.selectors:
+        return True
+    return any(":disabled" in _outside_not(sel).lower() for sel in block.selectors)
+
+
 POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
     "blur-without-background": blur_without_background,
     "input-has-no-name": input_has_no_name,
     "svg-not-hidden": svg_not_hidden,
     "outline-without-ring": outline_without_ring,
+    "shadow-drawn-layers": shadow_drawn_layers,
+    "pointer-on-disabled": pointer_on_disabled,
     "hover-only-reveal": hover_only_reveal,
     "page-needs-imagery": page_needs_imagery,
     "import-blocks-render": import_blocks_render,
