@@ -436,6 +436,27 @@ def axes_support_hue(axes: AxisValues) -> float:
     return (cool + (warm - cool) * axes.warmth) % 360.0
 
 
+# Hues for nominal data: chart series, order states, segments and tags.
+CATEGORY_COUNT = 6
+# Neighbors alternate between these OKLCH lightnesses, so two adjacent
+# categories differ in lightness as well as hue and stay apart for readers
+# who do not see the hue difference.
+CATEGORY_L = (0.56, 0.66)
+
+
+def category_seed(index: int, axes: AxisValues, brand_hue: float,
+                  brand_chroma: float) -> Tuple[float, float, float]:
+    """(L, C, H) of category `index`, counted from 0. The first sits on the
+    brand's hue, as far as the brand has one (hue_weight); a grey brand
+    starts from axes_support_hue, so warmth still moves it. The others step
+    round the wheel by 360 / CATEGORY_COUNT degrees from there, lightness
+    alternates between CATEGORY_L, and chroma follows the contrast axis as
+    the status seeds do, so a muted brief gets quiet categories."""
+    start = mix_hue(axes_support_hue(axes), brand_hue, hue_weight(brand_chroma))
+    hue = (start + index * 360.0 / CATEGORY_COUNT) % 360.0
+    return CATEGORY_L[index % 2], 0.07 + 0.11 * axes.contrast, hue
+
+
 def saturation(chroma: float) -> float:
     """0 for a grey brand (SAT_CHROMA[0] and below) to 1 for a saturated one
     (SAT_CHROMA[1] and above), in proportion between."""

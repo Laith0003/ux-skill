@@ -866,7 +866,16 @@ def test_every_other_pairing_is_kept():
                for bg in ("color.surface.page", "color.surface.card", "color.surface.raised")]
             + [Pairing(r, bg, 1.5, "system", high=1.5) for r in color_module.DECORATIVE_ROLES
                for bg in ("color.surface.page", "color.surface.card")]
-            + [Pairing("color.logo", "color.surface.page", 3.0, "system", high=3.0)])
+            + [Pairing("color.logo", "color.surface.page", 3.0, "system", high=3.0)]
+            # decisions/categories-for-nominal-data.md
+            + [Pairing(f"color.category.{k}.text", bg, 4.5, "1.4.3")
+               for k in color_module.CATEGORIES
+               for bg in (f"color.category.{k}.soft", "color.surface.page", "color.surface.card")]
+            + [Pairing(f"color.category.{k}.on-strong", f"color.category.{k}.strong", 4.5, "1.4.3")
+               for k in color_module.CATEGORIES]
+            + [Pairing(f"color.category.{k}.strong", bg, 3.0, "1.4.11")
+               for k in color_module.CATEGORIES
+               for bg in ("color.surface.page", "color.surface.card")])
     for p in kept:
         assert p in PAIRINGS, p
     covered = len(_TEXT_ROLES) * len(_TEXT_SURFACES) + len(_LINE_ROLES) * len(_SURFACES)
