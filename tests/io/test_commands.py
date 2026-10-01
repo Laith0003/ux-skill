@@ -445,6 +445,69 @@ def test_the_engines_own_system_is_rewritten_with_force_and_its_outputs_follow(t
     assert "radius" in doc
 
 
+def _own_system_with_report(ds, art_axes=NEUTRAL):
+    """The engine's own system, built with color only, beside the report
+    and art a build writes: the report says it was built from #3366FF at
+    every axis 0.5, and the art was drawn at `art_axes`."""
+    from engine.existing.record import record_text
+    from engine.foundations.art import art_files
+    from engine.foundations.emit import make_system
+    ds.mkdir()
+    ts = build_system(NEUTRAL, "#3366FF", foundations=("color",)).tokens
+    built = make_system("#3366FF", NEUTRAL, "every axis at 0.5", arabic=False)
+    files = {"tokens.json": dump_dtcg(ts), "tokens.css": to_css(ts),
+             "system-report.md": built.files["system-report.md"],
+             **art_files(ts, art_axes, "#3366FF")}
+    for name, text in files.items():
+        (ds / name).parent.mkdir(parents=True, exist_ok=True)
+        (ds / name).write_text(text, encoding="utf-8")
+    (ds / ".uxskill").mkdir()
+    (ds / RECORD).write_text(record_text(ds, files), encoding="utf-8")
+    return built.files["system-report.md"]
+
+
+def test_an_in_place_extend_rebuilds_the_report_and_the_art(tmp_path):
+    from engine.existing.record import engine_wrote
+    from engine.foundations.art import FILES, art_files
+    ds = tmp_path / "ds"
+    # Art drawn at other axes than the report records: the rebuild follows
+    # the report, the record of what the system was built from.
+    old = _own_system_with_report(ds, art_axes=AxisValues(*[0.9] * 7))
+    done = run_extend(ds / "tokens.json", add=["radius"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    ts = read_system(ds / "tokens.json").tokens
+    assert ts.has("radius.card")
+    for name, text in art_files(ts, NEUTRAL, "#3366FF").items():
+        assert (ds / name).read_text() == text
+    assert set(FILES) <= set(done["written"])
+    report = (ds / "system-report.md").read_text()
+    # What it was built from stays; what extend added is said, with where
+    # to read why.
+    assert report.split("## WCAG gate")[0] == old.split("## WCAG gate")[0]
+    assert "## Extended in place" in report
+    added = report.split("## Extended in place")[1].split("## Files")[0]
+    assert f"- Added {done['added']} tokens: radius." in added
+    assert "radius.chip" in added and "extend-report.md" in added
+    assert report.endswith(old[old.index("## Files"):])
+    # Each rebuilt file is the engine's, so a later force can replace it.
+    assert all(engine_wrote(ds, n) for n in ("system-report.md", *FILES))
+    assert "system-report.md" in done["message"] or "system-report.md" in done["written"]
+
+
+def test_a_report_the_owner_edited_is_left_with_the_art(tmp_path):
+    from engine.foundations.art import FILES
+    ds = tmp_path / "ds"
+    _own_system_with_report(ds, art_axes=AxisValues(*[0.9] * 7))
+    edited = (ds / "system-report.md").read_text() + "\nOur notes.\n"
+    (ds / "system-report.md").write_text(edited, encoding="utf-8")
+    art = {n: (ds / n).read_text() for n in FILES}
+    done = run_extend(ds / "tokens.json", add=["radius"], out=ds, force=True)
+    assert done["status"] == "written", done["message"]
+    assert (ds / "system-report.md").read_text() == edited
+    assert {n: (ds / n).read_text() for n in FILES} == art
+    assert "system-report.md" in done["report"] and "uxskill system build" in done["report"]
+
+
 def test_a_foreign_radius_token_does_not_block_added_radius(tmp_path):
     sheet = tmp_path / "theme.css"
     sheet.write_text(":root { --ink: #1b1d22; --paper: #fdfdfb; --radius: 8px; }\n",

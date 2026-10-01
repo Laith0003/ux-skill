@@ -89,7 +89,13 @@ A foundation is generated for the brief's audience as a system build is
 says what each field changed and which words were not read. An extension
 that adds faces writes fonts.css and fonts-self-host.css beside the
 system, as a build does, so the faces load with their fallbacks. It
-writes no art: the art files belong to a system the engine builds.
+draws no new art: the art files belong to a system the engine builds.
+The engine's own system extended in place has the files its build wrote
+beside it built again from the extended tokens, while each is still as
+the engine wrote it: tokens.css, the font files, system-report.md (what
+it was built from and its notes kept, an Extended in place section
+added) and the art files, drawn from the brand color and axes the report
+records.
 """
 from __future__ import annotations
 
@@ -910,7 +916,7 @@ def extend(imported: Imported, mapping: Mapping, *, foundations: Sequence[str] =
                 f"{AXES[axis][0]} only and add no {axis} axis; to add one, ask for it with "
                 f"{mode_label} {axis}.")
         decisions += [f"{e.line()}." for e in effects(audience, axes)]
-        if "imagery" in foundations:
+        if "imagery" in foundations and not (in_place and (_folder(imported) / _REPORT).is_file()):
             decisions.append("No art was written: the art files (art/pattern.svg, "
                              "art/shapes.svg and art/gradient.svg) come with a system the "
                              "engine builds, so build one with uxskill system build to get "
@@ -1449,11 +1455,20 @@ def _figma(imported: Imported, ts: TokenSet, earlier: Optional[_Earlier],
             count)
 
 
-def _built_beside(imported: Imported, ts: TokenSet, decisions: List[str]) -> Dict[str, str]:
+def _built_beside(imported: Imported, ts: TokenSet, decisions: List[str],
+                  added: Sequence[str] = ()) -> Dict[str, str]:
     """The files a system build writes from tokens.json that sit beside
     the engine's own tokens.json unchanged since it wrote them (tokens.css,
-    fonts.css, fonts-self-host.css), built again from the extended tokens,
-    so none is left behind. tokens.css keeps the scheme it opens."""
+    fonts.css, fonts-self-host.css, system-report.md and the art files),
+    built again from the extended tokens, so none is left behind.
+    tokens.css keeps the scheme it opens. The report and the art are built
+    from what the report says the system was built from (its brand color
+    and axes, emit.report_inputs): the report keeps the build's notes and
+    gains a section on what was added (`added`), and the art is drawn from
+    the extended tokens. A report the owner edited is theirs, so it and
+    the art are left as they are, and so are both when the report does not
+    say what the system was built from; a decision line says so and how to
+    refresh them."""
     from engine.existing.record import engine_wrote
     from engine.foundations.export import SCHEME_DEFAULTS
     folder = _folder(imported)
@@ -1468,10 +1483,49 @@ def _built_beside(imported: Imported, ts: TokenSet, decisions: List[str]) -> Dic
     for name, make in (("fonts.css", fonts_css), ("fonts-self-host.css", self_host_css)):
         if (folder / name).is_file() and engine_wrote(folder, name):
             out[name] = make(ts)
+    out.update(_report_and_art(folder, ts, decisions, added))
     if out:
         decisions.append(f"{_and(list(out))} beside it {'is' if len(out) == 1 else 'are'} "
                          "built again from the extended tokens, so each still matches it.")
     return out
+
+
+_REPORT = "system-report.md"
+
+
+def _report_and_art(folder: Path, ts: TokenSet, decisions: List[str],
+                    added: Sequence[str]) -> Dict[str, str]:
+    """system-report.md and the art files beside the engine's own system,
+    built again (see _built_beside); empty when there is no report."""
+    from engine.existing.record import engine_wrote
+    from engine.foundations.art import FILES as ART, art_files
+    from engine.foundations.emit import rebuild_report, report_inputs
+    report = folder / _REPORT
+    if not report.is_file():
+        return {}
+    art = [n for n in ART if (folder / n).is_file()]
+    left = f"{_REPORT} and {'the art files' if art else 'no art'}"
+    fix = ("run uxskill system build into a new folder to get a report and art for the "
+           "extended system")
+    if not engine_wrote(folder, _REPORT):
+        decisions.append(f"{_REPORT} beside it was edited after ux-skill wrote it, so it is "
+                         f"yours: {left} {'were' if art else 'was'} left as "
+                         f"{'they are' if art else 'it is'}; {fix}.")
+        return {}
+    try:
+        text = report.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        text = ""
+    inputs = report_inputs(text)
+    if inputs is None:
+        decisions.append(f"{_REPORT} beside it does not say the brand color and axes the "
+                         f"system was built from, so {left} {'were' if art else 'was'} left "
+                         f"as {'they are' if art else 'it is'}; {fix}.")
+        return {}
+    brand, axes, _ = inputs
+    drawn = {n: t for n, t in art_files(ts, axes, brand).items()
+             if n in art and engine_wrote(folder, n)}
+    return {_REPORT: rebuild_report(text, ts, list(added), bool(art)), **drawn}
 
 
 def _system_files(imported: Imported, ts: TokenSet, added: Sequence[Token],
@@ -1485,7 +1539,8 @@ def _system_files(imported: Imported, ts: TokenSet, added: Sequence[Token],
     name = Path(source.path).name
     if in_place:
         if fmt == "dtcg":
-            return {name: dump_dtcg(ts), **_built_beside(imported, ts, decisions)}, ""
+            return {name: dump_dtcg(ts),
+                    **_built_beside(imported, ts, decisions, [t.path for t in added])}, ""
         if fmt == "css":
             return {name: stamp_digest(to_css(ts, scheme=imported.scheme, forms=imported.forms),
                                        css=True)}, ""

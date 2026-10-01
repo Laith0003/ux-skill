@@ -816,11 +816,9 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
     from, the gate result, every note or finding in plain words, and how to
     use the files, the rule pack among them when it was written. No time
     stamps, so the same inputs give the same bytes."""
-    scripts = ("Latin and Arabic. Right to left (dir=\"rtl\") switches text to the Arabic face "
-               "and type scale." if arabic else "Latin only (built with the Latin-only option).")
     lines = ["# Design system report", "", _opening(brand, gate_line, findings), "",
              *([sentence, ""] if sentence and not findings else []),
-             "## Built from", "", f"- Brand color: {brand}", f"- Scripts: {scripts}",
+             "## Built from", "", f"- Brand color: {brand}", _scripts_line(arabic),
              f"- Axes: {axes_source}.", "", *_axes_table(axes), "",
              "## WCAG gate", "", gate_line, "", _CHECKS_LINE, ""]
     if findings:
@@ -852,9 +850,7 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
         if other:
             lines += ["### Other choices", "", *[f"- {n}" for n in other], ""]
     if fonts:
-        lines += ["## Fonts", "", _FONTS_LEAD, "", *[f"- {f}" for f in fonts], "",
-                  "From Google Fonts: add these tags to the page head, then link fonts.css.",
-                  "", *[f"    {tag}" for tag in font_link], "", _FONTS_SELF_HOST, ""]
+        lines += _fonts_section(fonts, font_link)
     if composition:
         lines += ["## Page composition", "", _COMPOSITION_LEAD, "", f"- {composition}", ""]
     if photography:
@@ -875,6 +871,123 @@ def render_report(brand: str, axes: AxisValues, axes_source: str, arabic: bool,
     if rule_pack:
         lines.append(_PACK_LINE)
     return "\n".join(lines) + "\n"
+
+
+def _scripts_line(arabic: bool) -> str:
+    """The report's Scripts line under Built from."""
+    scripts = ("Latin and Arabic. Right to left (dir=\"rtl\") switches text to the Arabic face "
+               "and type scale." if arabic else "Latin only (built with the Latin-only option).")
+    return f"- Scripts: {scripts}"
+
+
+def _fonts_section(fonts: Sequence[str], font_link: Sequence[str]) -> List[str]:
+    """The report's Fonts section: each face, the Google Fonts tags and the
+    self-hosted way."""
+    return ["## Fonts", "", _FONTS_LEAD, "", *[f"- {f}" for f in fonts], "",
+            "From Google Fonts: add these tags to the page head, then link fonts.css.",
+            "", *[f"    {tag}" for tag in font_link], "", _FONTS_SELF_HOST, ""]
+
+
+_BRAND_LINE = re.compile(r"^- Brand color: (#[0-9A-Fa-f]{6})$", re.M)
+_AXES_LINE = re.compile(r"^- Axes: (.+)\.$", re.M)
+EXTENDED_HEADING = "## Extended in place"
+_EXTENDED_LEAD = ("ux-skill added to this system in place after it was built, and never changed a "
+                  "token it had. The sections above describe the system as it is now; the "
+                  "extend-report.md each extend wrote into its out folder says what it added "
+                  "and why.")
+
+
+def report_inputs(text: str) -> Optional[Tuple[str, AxisValues, str]]:
+    """The brand color, the axes and the line saying how the axes were
+    chosen that a system-report.md render_report wrote says the system was
+    built from; None when the text does not say all of them (a report that
+    did not pass, or one in another layout). The axes are as the report
+    prints them, to three places."""
+    brand, source = _BRAND_LINE.search(text), _AXES_LINE.search(text)
+    if brand is None or source is None:
+        return None
+    values: Dict[str, float] = {}
+    for name, (words, low, high) in _AXIS_WORDS.items():
+        m = re.search(rf"^\| {re.escape(words)} \| ([0-9.]+) \| {re.escape(low)} 0 to "
+                      rf"{re.escape(high)} 1 \|$", text, re.M)
+        if m is None:
+            return None
+        values[name] = float(m.group(1))
+    return brand.group(1), AxisValues(**values), source.group(1)
+
+
+def _sections(text: str) -> List[List[str]]:
+    """A report's lines cut at each ## heading, the opening first."""
+    out: List[List[str]] = [[]]
+    for line in text.rstrip("\n").split("\n"):
+        if line.startswith("## "):
+            out.append([])
+        out[-1].append(line)
+    return out
+
+
+def rebuild_report(text: str, ts: Any, added: Sequence[str], art: bool) -> str:
+    """system-report.md again for the engine's own system extended in
+    place: `text` is the report the build wrote (report_inputs reads it),
+    `ts` the extended tokens, `added` the paths extend added and `art`
+    whether the art files sit beside it. What the system was built from,
+    the notes and the guidance stay as the build wrote them; what follows
+    from the tokens is said again from them (the scripts, the gate line,
+    the brand color, the fonts, the brand art and the files), and an
+    Extended in place section lists what was added, before Files. No time
+    stamps, so the same inputs give the same bytes."""
+    from engine.foundations.build import check_system
+    parts = _sections(text)
+    arabic = ts.has("type.face.arabic")
+    gate = check_system(ts).report.summary().splitlines()[0]
+    fonts, font_link = loading_lines(ts), link_tags(ts)
+    fidelity = brand_fidelity(ts) if ts.has("color.action.primary") else []
+    out: List[List[str]] = []
+    for part in parts:
+        head = part[0] if part and part[0].startswith("## ") else ""
+        if head == "## Built from":
+            part = [_scripts_line(arabic) if line.startswith("- Scripts: ") else line
+                    for line in part]
+        elif head == "## WCAG gate" and len(part) > 2:
+            part = [*part[:2], gate, *part[3:]]
+        elif head == "## Brand color":
+            if not fidelity:
+                continue
+            lead = [line for line in part if line and not line.startswith("- ")]
+            part = [lead[0], "", *lead[1:2], "", *[f"- {f}" for f in fidelity], ""]
+        elif head == "## Fonts":
+            if not fonts:
+                continue
+            part = _fonts_section(fonts, font_link)
+        elif head == "## Brand art" and not art:
+            continue
+        elif head == EXTENDED_HEADING:
+            said = [line for line in part if line.startswith("- ")]
+            part = [head, "", _EXTENDED_LEAD, "", *said, f"- {_added_line(added)}", ""]
+        elif head == "## Files":
+            if fonts and not any(p and p[0] == "## Fonts" for p in out):
+                out.append(_fonts_section(fonts, font_link))
+            if not any(p and p[0] == EXTENDED_HEADING for p in out):
+                out.append([EXTENDED_HEADING, "", _EXTENDED_LEAD, "",
+                            f"- {_added_line(added)}", ""])
+            art_line = "- art/: generated brand art, decorative SVG (see Brand art)."
+            part = [line for line in part if line != art_line or art]
+            if art and art_line not in part:
+                at = part.index("- system-report.md: this report.") + 1 \
+                    if "- system-report.md: this report." in part else len(part)
+                part = [*part[:at], art_line, *part[at:]]
+        out.append(part)
+    lines = [line for part in out for line in part]
+    while lines and not lines[-1]:
+        lines.pop()
+    return "\n".join(lines) + "\n"
+
+
+def _added_line(added: Sequence[str]) -> str:
+    n = len(added)
+    shown = ", ".join(added[:12]) + (f" and {n - 12} more" if n > 12 else "")
+    return f"Added {n} token{'' if n == 1 else 's'}: {shown}." if n else \
+        "Added no token; the extend checked contracts or roles only."
 
 
 _ROLE_PHRASE = {"fill": "the brand fills the main action",
