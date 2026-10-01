@@ -109,6 +109,19 @@ project adheres to [Semantic Versioning](https://semver.org/).
   on every ground it lands on, loops under reduced motion and a pause
   control for anything that moves on its own for more than five seconds.
 
+### Fixed
+- The landing display fits the headline word the face really sets. The
+  fit measured words with an advance that counted the space, so every
+  proportional face came out 9 to 19 percent narrow and a short headline
+  could run sideways at tablet width. Each Latin face now carries its
+  letter advance without the space, and a headline the brief gives counts
+  its longest word by its letters: an m or a W for more, an i or an l for
+  less. Faces are measured at a display size and the heaviest display
+  weight, a brand that sets its display in capitals has its word measured
+  in capitals, and an Arabic word takes the same care. Where the default
+  word binds, the display comes down; give the brief's headline and a
+  short one stands at full size.
+
 ### Deprecated
 These seven commands are now aliases. Each one says where it moved and
 runs the new command with the same arguments. They are removed in 4.1.

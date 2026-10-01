@@ -210,3 +210,4 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The render check reports text that runs past its own box](text-stays-in-its-box.md)
 - [Nominal data takes six category hues that start on the brand](categories-for-nominal-data.md)
 - [Photos show what only this business has](photos-show-this-business.md)
+- [The display fit measures a headline word by its letters, the space left out](display-measures-each-letter.md)

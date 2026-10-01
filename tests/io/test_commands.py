@@ -589,8 +589,9 @@ def test_extend_reads_the_briefs_fields_as_a_build_does(tmp_path):
         '"arabic").']
     assert (f / "fonts.css").is_file()
     assert "Body text is 18px" in result["report"]
-    # The headline's longest word, five letters, sizes the added display.
-    assert "--type-fit-word-latin: 5;" in (f / "theme-ext.css").read_text()
+    # The headline's longest word, "comes" at 6.4 average letters, sizes the
+    # added display.
+    assert "--type-fit-word-latin: 6.4;" in (f / "theme-ext.css").read_text()
     with pytest.raises(InputError) as exc:
         run_extend(f / "theme.css", add=["type"], brief={"primary_script": "arabic"},
                    latin_only=True, out=tmp_path / "x")
