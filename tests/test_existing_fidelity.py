@@ -150,3 +150,39 @@ def test_a_mature_system_reports_its_data_face_languages_and_direction(tmp_path:
     assert {v["path"]: v["line"] for v in primary["values"]} == {
         "styles/foundations.css": 8, "site/app/globals.css": 13, "tokens/tokens.json": 9,
         "DESIGN.md": 7}
+
+
+def test_primary_says_which_value_it_reports_when_the_page_shows_another(
+        tmp_path: Path) -> None:
+    shutil.copytree(FIXTURE, tmp_path / "p")
+    declared = detect_existing_system(tmp_path / "p")["declared"]
+    assert declared["primary"] == "#0B5F4A" and declared["primary_from"] == "tokens"
+    assert declared["primary_reports"] == (
+        "primary is #0B5F4A, the value tokens/tokens.json:9 gives brand.primary: detect reads "
+        "the token file first, as the system's own word. The rendered page shows #0A6B53, set "
+        "in site/app/globals.css:13, which wins the cascade. Make the two agree (disagreements "
+        "names every place), or pass #0A6B53 as the brand primary by hand to build from what "
+        "the page shows.")
+
+
+def test_primary_read_from_a_stylesheet_names_it_when_another_wins(tmp_path: Path) -> None:
+    _write(tmp_path, "styles/tokens.css", ":root {\n  --brand-primary: #1F5FAA;\n"
+                                          "  --ink: #111111;\n  --gap: 4px;\n}\n")
+    _write(tmp_path, "app/globals.css", "html:root {\n  --brand-primary: #2A6FBB;\n"
+                                        "  --ink: #111111;\n  --gap: 4px;\n}\n")
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["primary"] == "#1F5FAA" and declared["primary_from"] == "css"
+    assert declared["primary_reports"].startswith(
+        "primary is #1F5FAA, the value styles/tokens.css:2 gives --brand-primary: the first "
+        "stylesheet detect read that sets it. The rendered page shows #2A6FBB, set in "
+        "app/globals.css:2, which wins the cascade.")
+
+
+def test_primary_says_nothing_more_when_the_page_shows_its_value(tmp_path: Path) -> None:
+    _write(tmp_path, "tokens/tokens.json",
+           '{"brand": {"primary": {"$type": "color", "$value": "#1F5FAA"}}}')
+    _write(tmp_path, "styles/tokens.css", ":root {\n  --brand-primary: #1F5FAA;\n}\n")
+    _write(tmp_path, "styles/site.css", ":root {\n  --brand-primary: #1F5FAA;\n"
+                                        "  --ink: #111111;\n}\n")
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["primary"] == "#1F5FAA" and "primary_reports" not in declared

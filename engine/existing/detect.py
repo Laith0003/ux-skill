@@ -804,7 +804,12 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     hover and focus paints are not counted, and class strings in cva, clsx
     and cn calls are. ``primary_candidates`` lists each with its count and
     ``primary_why`` says which was chosen and why; ``primary_note`` says why
-    none was, when no candidate can carry text.
+    none was, when no candidate can carry text. When the rendered page
+    shows another value for the primary's token (a stylesheet that wins
+    the cascade sets it again; see ``disagreements``), ``primary`` still
+    reports the value of the file it was read from, the token file first,
+    and ``primary_reports`` says so: that value with its file and line, the
+    page's value with the file that wins, and the fix.
 
     ``dark`` lists where the project keeps its dark values, wherever they
     live (the system's own stylesheet, or a site's globals beside it): each
@@ -1059,11 +1064,50 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
         html_files, _reading, flatten_dtcg)
     if disagree:
         declared["disagreements"] = disagree
+        reports = _primary_reports(declared, disagree)
+        if reports:
+            declared["primary_reports"] = reports
 
     result["sources"] = sources
     result["declared"] = declared
     result["found"] = True
     return result
+
+
+def _primary_reports(declared: Dict[str, Any], disagree: List[Dict[str, Any]]) -> str:
+    """Which value ``primary`` reports when the file it was read from and
+    the rendered page disagree on it: the token file's (or the first
+    stylesheet's) value, named by file and line, and the value the page
+    shows from the file that wins the cascade, with the fix. Empty when
+    they agree, or when the cascade does not decide the page's value."""
+    hx, name = declared.get("primary"), declared.get("primary_token", "")
+    if not hx or not name:
+        return ""
+    key = survey.token_key(name)
+    for entry in disagree:
+        if entry.get("theme") or not entry.get("wins"):
+            continue
+        rows = entry["values"]
+        if not any(survey.token_key(r["token"]) == key for r in rows):
+            continue
+        shown = [r for r in rows if r["path"] == entry["wins"]]
+        page = normalize_color(shown[0]["value"]) if shown else None
+        if not page or page.upper() == hx.upper():
+            return ""
+        tokens = declared.get("primary_from") == "tokens"
+        same = [r for r in rows if (normalize_color(r["value"]) or "").upper() == hx.upper()
+                and ("selector" in r) != tokens]
+        if not same:
+            return ""
+        src = same[0]
+        why = ("detect reads the token file first, as the system's own word" if tokens else
+               "the first stylesheet detect read that sets it")
+        return (f"primary is {hx}, the value {src['path']}:{src['line']} gives {src['token']}: "
+                f"{why}. The rendered page shows {page}, set in {shown[0]['path']}:"
+                f"{shown[0]['line']}, which wins the cascade. Make the two agree "
+                f"(disagreements names every place), or pass {page} as the brand primary by "
+                "hand to build from what the page shows.")
+    return ""
 
 
 def _surveyed(path: Path) -> bool:
