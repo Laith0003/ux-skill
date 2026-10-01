@@ -904,26 +904,88 @@ def _in_hover_media(block: Optional[Block]) -> bool:
     return block is not None and any(_HOVER_MEDIA.search(a) for a in block.atrules if a.startswith("@media"))
 
 
-def hover_only_reveal(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
-    """Actions hidden until hover pass when the hiding sits inside
-    ``@media (hover: hover)``, or when a focus rule on the same card reveals
-    them too."""
-    hover_block = block_at(ctx, view, match.end() - 1)
-    hidden = _OPACITY_0.search(match.group(0))
-    hidden_block = block_at(ctx, view, match.start() + hidden.start()) if hidden else None
-    if hidden_block is None and hover_block is not None:
-        bases = {" ".join(s.replace(":hover", " ").split()) for s in hover_block.selectors}
-        for b in _blocks(ctx, view)[0]:
-            if _OPACITY_0.search(b.body) and any(" ".join(s.split()) in bases for s in b.selectors):
-                hidden_block = b
-                break
-    if _in_hover_media(hidden_block or hover_block):
-        return False
-    if hover_block is None:
+_NO_HOVER_MEDIA = re.compile(r"\(\s*(?:any-)?hover\s*:\s*none\s*\)", re.I)
+_EXPANDED = re.compile(r"\[\s*aria-expanded\s*=\s*[\"']?true", re.I)
+# A class or id that names a menu trigger: menu, kebab or dropdown at the end
+# of the name, alone or before trigger, button or toggle.
+_OPENS_MENU = re.compile(r"(?:^|[-_])(?:menu|kebab|dropdown)(?:[-_](?:trigger|button|toggle))?$",
+                         re.I)
+
+
+def _same_container(hover: str, hidden: str) -> bool:
+    """The hover selector, with :hover taken out, names the hidden element
+    in the same container: equal, or sharing the outermost compound."""
+    plain = " ".join(hover.replace(":hover", " ").split())
+    if plain == " ".join(hidden.split()):
         return True
-    hover_sels = [compounds(s) for s in hover_block.selectors if ":hover" in s]
-    for b in _blocks(ctx, view)[0]:
-        if not _OPACITY_1.search(b.body):
+    ph, pd = compounds(plain), compounds(hidden)
+    if not (ph and pd):
+        return False
+    if len(pd) <= len(ph) and all(tokens(a) <= tokens(b) for a, b in zip(pd[::-1], ph[::-1])):
+        return True  # the hidden selector names the end of the hover's path
+    return bool(tokens(ph[0]) & tokens(pd[0]))
+
+
+def _shares(a: str, b: str) -> bool:
+    """Two selectors name the same element: their last compounds share a
+    class, id or tag."""
+    pa, pb = compounds(a), compounds(b)
+    return bool(pa and pb and tokens(pa[-1]) & tokens(pb[-1]))
+
+
+def _reveals(block: Block) -> bool:
+    return bool(_OPACITY_1.search(block.body)) or (
+        "opacity" not in block.body.lower() and bool(re.search(r"visibility\s*:\s*visible",
+                                                                  block.body, re.I)))
+
+
+def _owns_menu(ctx: FileContext, subjects: List[str]) -> bool:
+    """The revealed control opens a menu: its selector says so, or the
+    markup it styles holds a control with aria-haspopup or aria-expanded."""
+    for s in subjects:
+        parts = compounds(s)
+        if parts and any(_OPENS_MENU.search(t) for t in tokens(parts[-1])):
+            return True
+        if re.search(r"aria-(?:haspopup|expanded)", s, re.I):
+            return True
+    for c in [ctx, *ctx.pages]:
+        tags, _ends, _parents = c.tree()
+        if not tags:
+            continue
+        kids = _children(c)
+        for sel in subjects:
+            parts = compounds(sel.replace(":hover", ""))
+            if not parts:
+                continue
+            todo = list(_matching_elements(c, [tokens(x) for x in parts]))
+            while todo:
+                k = todo.pop()
+                if any(a.name.lower() in ("aria-haspopup", "aria-expanded") for a in tags[k].attrs):
+                    return True
+                todo.extend(kids.get(k, []))
+    return False
+
+
+def hover_only_reveal(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """Actions hidden until hover pass only when the control also shows on
+    focus inside its container, shows with no hover (the hiding sits inside
+    @media (hover: hover), or a (hover: none) rule shows it), and, when it
+    opens a menu, stays while that menu is open (an aria-expanded="true"
+    rule shows it)."""
+    hidden_block = block_at(ctx, view, match.start())
+    if hidden_block is None or not hidden_block.selectors:
+        return False
+    blocks = _blocks(ctx, view)[0]
+    subjects = [s for b in blocks if _reveals(b) for s in b.selectors
+                if ":hover" in s and any(_shares(s.replace(":hover", ""), h)
+                                         and _same_container(s, h)
+                                         for h in hidden_block.selectors)]
+    if not subjects:
+        return False  # hidden, but no hover shows it: not a hover reveal
+    hover_sels = [compounds(s) for s in subjects]
+    focus_ok = False
+    for b in blocks:
+        if not _reveals(b):
             continue
         for sel in b.selectors:
             parts = compounds(sel)
@@ -931,11 +993,17 @@ def hover_only_reveal(ctx: FileContext, view: View, match: re.Match, start: int)
             if not parts or not focus_at:
                 continue
             for hs in hover_sels:
-                if not hs or not (tokens(hs[-1]) & tokens(parts[-1])):
-                    continue
-                if any(tokens(f) & tokens(h) for f in focus_at for h in hs):
-                    return False
-    return True
+                if hs and tokens(hs[-1]) & tokens(parts[-1]) \
+                        and any(tokens(f) & tokens(h) for f in focus_at for h in hs):
+                    focus_ok = True
+    no_hover_ok = _in_hover_media(hidden_block) or any(
+        _reveals(b) and any(_NO_HOVER_MEDIA.search(a) for a in b.atrules)
+        and any(_shares(sel, h) for sel in b.selectors for h in subjects) for b in blocks)
+    menu_ok = not _owns_menu(ctx, subjects) or any(
+        _reveals(b) and _EXPANDED.search(sel)
+        and (_shares(sel, h) or _shares(sel.split(":has(")[0], h))
+        for b in blocks for sel in b.selectors for h in subjects)
+    return not (focus_ok and no_hover_ok and menu_ok)
 
 
 # ---------------------------------------------------------------------------
@@ -2339,3 +2407,9 @@ POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
 from engine.linter.taste import TASTE_CHECKS  # noqa: E402
 
 POST_CHECKS.update(TASTE_CHECKS)
+
+# The checks for how components show their states live in
+# engine/linter/components.py.
+from engine.linter.components import COMPONENT_CHECKS  # noqa: E402
+
+POST_CHECKS.update(COMPONENT_CHECKS)

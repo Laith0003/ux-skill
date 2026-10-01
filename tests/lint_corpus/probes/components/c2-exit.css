@@ -1,0 +1,5 @@
+.menu { transition: opacity 200ms ease-in; }
+.menu:not(.is-open) { opacity: 0; display: none; }
+.tip { transition: opacity 200ms ease-in, display 200ms allow-discrete; }
+.tip[data-state="closed"] { display: none; }
+.panel[hidden] { display: none; }

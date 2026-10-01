@@ -59,6 +59,9 @@ tokens:
   - {part: prefix, property: divider-color, role: color.line.subtle, when: {position: start}, state: disabled}
   - {part: suffix, property: text, role: color.text.disabled, when: {position: end}, state: disabled}
   - {part: suffix, property: divider-color, role: color.line.subtle, when: {position: end}, state: disabled}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: group, property: transition-duration, role: motion.state.duration}
+  - {part: group, property: transition-curve, role: motion.state.curve}
 contrast:
   - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.input, bg: color.surface.card, minimum: 3, criterion: "1.4.11"}

@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Page</title>
+<style>
+.menu { opacity: 0; visibility: hidden; transition: opacity 200ms ease-out, visibility 0s 200ms; }
+.menu.is-open { opacity: 1; visibility: visible; transition-delay: 0s; }
+</style></head>
+<body>
+<button type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="m">Account</button>
+<ul class="menu" id="m" role="menu"><li><a role="menuitem" href="/settings">Settings</a></li></ul>
+</body>
+</html>

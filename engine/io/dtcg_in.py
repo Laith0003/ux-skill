@@ -13,7 +13,9 @@ is a primitive.
 
 Values in the 2025.10 object forms are read as they are. Older string
 forms ("16px", "#FFFFFF"), hsl, oklch and oklab colors, and a color with a
-hex fallback are read with a note. An oklch or oklab color outside sRGB is
+hex fallback are read with a note, and so is a typography lineHeight
+written as a length, read against its fontSize in the same unit (24px
+beside 16px is 1.5). An oklch or oklab color outside sRGB is
 never refused: it is mapped into sRGB by CSS Color 4 gamut mapping, the
 same one the value reader and `system detect` use, and the report lists it
 under "Mapped into sRGB". An srgb color is its components: they are
@@ -66,7 +68,7 @@ from engine.io.graph import cycles
 from engine.io.mode_words import axis_of, is_base, mode_of, words
 from engine.io.report import (Folded, Imported, ImportReport, Item, Mapped, Source, read_source,
                               recorded)
-from engine.io.values_in import GamutMapped, NotRead, read_value
+from engine.io.values_in import GamutMapped, NotRead, leading_ratio, length_text, read_value
 
 # The weight names DTCG defines, and the number each one means.
 WEIGHT_NAMES: Dict[str, int] = {
@@ -407,7 +409,43 @@ class _Reader:
             self.notes.append(f"its typography fields {', '.join(extra)} were left out; the "
                               "engine reads fontFamily, fontSize, fontWeight, letterSpacing "
                               "and lineHeight")
-        return {k: self.field(t, raw[k]) for k, (t, _) in TYPOGRAPHY_FIELDS.items()}
+        out = {k: self.field(t, raw[k]) for k, (t, _) in TYPOGRAPHY_FIELDS.items()}
+        length = self.leading_length(raw["lineHeight"])
+        if length is None:
+            return out
+        # A line height written as a length is read against the font size,
+        # the multiple the engine keeps.
+        shown, size = length_text(length), out["fontSize"]
+        ratio, why = leading_ratio(length, size)
+        fix = "write lineHeight as a number, such as 1.5"
+        if why == "unit":
+            raise NotRead(f"its lineHeight {shown} is a length in {length['unit']} and its "
+                          f"fontSize {length_text(size)} is in {size['unit']}, so it cannot be "
+                          f"read as a multiple of the font size; {fix}, or write both in one "
+                          "unit")
+        if why:
+            what = f"the reference {size}" if why == "reference" else length_text(size)
+            raise NotRead(f"its lineHeight {shown} is a length and its fontSize is {what}, so "
+                          f"it cannot be read as a multiple of the font size here; {fix}")
+        self.notes.append(f"its lineHeight {shown} is a length; it was read against its "
+                          f"fontSize {length_text(size)} as {ratio}, the multiple of the font "
+                          f"size the engine keeps; write {ratio} to say so")
+        out["lineHeight"] = ratio
+        return out
+
+    @staticmethod
+    def leading_length(raw: Any) -> Optional[Dict[str, Any]]:
+        """A typography's lineHeight as a length literal when it is written
+        as one (24px, or {"value": 24, "unit": "px"}), else None."""
+        if isinstance(raw, dict) and set(raw) == {"value", "unit"}:
+            raw = f"{raw['value']}{raw['unit']}"
+        if not isinstance(raw, str):
+            return None
+        try:
+            kind, value = read_value(raw)
+        except NotRead:
+            return None
+        return value if kind == "dimension" else None
 
     def value(self, kind: str, raw: Any) -> Any:
         if kind in UNHELD:

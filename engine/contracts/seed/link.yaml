@@ -20,6 +20,9 @@ tokens:
   - {part: text, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: text, property: focus-ring-width, role: border.focus-ring.width, state: focus}
   - {part: text, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: underline, property: transition-duration, role: motion.state.duration}
+  - {part: underline, property: transition-curve, role: motion.state.curve}
 contrast:
   - {fg: color.text.link, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.line.accent, bg: surfaces, minimum: 3, criterion: "1.4.11"}
@@ -38,6 +41,7 @@ usage:
     - Underline every link; inline links take the text's size and are exempt from the target minimum inside a sentence (WCAG 2.5.8), standalone links meet it
     - Draw the underline under the words, with text-decoration-thickness from the underline's width and text-decoration-color from its color, never at the edge of a standalone link's target box
     - Let an arrow icon point to the end of the line, so it flips under right to left
+    - Mark a visited item, where the product tracks what a person has read or opened, with a glyph and its accessible name (a check and "read"), never color alone; the browser's :visited state may change color only, so it carries no mark of its own
     - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
   dont:
     - Do not use a link to start an action that changes data; use a button

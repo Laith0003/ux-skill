@@ -11,7 +11,7 @@ parts:
   - {name: remove, rtlBehavior: logical}
 variants:
   - {name: kind, values: [filter, input], default: filter}
-states: [default, hover, focus, selected, disabled]
+states: [default, hover, pressed, focus, selected, disabled]
 tokens:
   - {part: container, property: fill, role: color.surface.card}
   - {part: container, property: border-width, role: border.outline}
@@ -40,6 +40,13 @@ tokens:
   - {part: remove, property: focus-ring-offset, role: border.focus-ring.offset, when: {kind: input}, state: focus}
   - {part: container, property: border-color, role: color.text.disabled, state: disabled}
   - {part: label, property: text, role: color.text.disabled, state: disabled}
+  # a pressed control shrinks on motion.press.scale (1 under reduced motion)
+  - {part: container, property: press-scale, role: motion.press.scale, state: pressed}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: container, property: transition-duration, role: motion.state.duration}
+  - {part: container, property: transition-curve, role: motion.state.curve}
+  - {part: check, property: transition-duration, role: motion.state.duration}
+  - {part: check, property: transition-curve, role: motion.state.curve}
 contrast:
   - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.input, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}

@@ -27,6 +27,8 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Distinctness is measured on a grey and on four saturated reference brands, each with its corner floor](distinctness-on-saturated-brands.md)
 - [Checks compare dimensions in px and durations in ms, and read scale steps by their number](checks-read-one-unit.md)
 - [A set the engine did not generate passes the same gate, a role it lacks is skipped, and only strict fails it](imported-sets-pass.md)
+- [A Figma collection of three or more modes that name no engine axis is read whole on one axis named for it](figma-modes-on-one-axis.md)
+- [A bare number whose name says it is a size is read as px, with a note](bare-sizes-read-as-px.md)
 
 ## Roles per foundation
 
@@ -193,3 +195,9 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Inner pages have their own sequences and share one header, closing band and footer](inner-pages-one-family.md)
 - [The lint holds a display line height to the least the engine builds for its size](display-leading-floor-in-lint.md)
 - [The system says how far it leans to capitals, and the lint reads it](capitals-follow-the-signal.md)
+- [Every state a component changes under answers on the system's motion roles](states-answer-on-motion.md)
+- [Navigation, tabs, segmented controls and menus move one shared indicator](one-indicator-per-control.md)
+- [A hidden control leaves the tab order, an exit runs to its end, and a theme switch does not animate the page](hidden-controls-leave-the-tab-order.md)
+- [A state names itself in words a screen reader and a voice user can use](states-name-themselves.md)
+- [The render check drives the page with its motion running](render-drives-the-page.md)
+- [A page's sections are contracts that compose component contracts](sections-are-contracts.md)

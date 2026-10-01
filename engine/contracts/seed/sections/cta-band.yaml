@@ -1,0 +1,49 @@
+# CTA band: the page's closing ask. Every value is a semantic role.
+name: cta-band
+status: experimental
+category: section
+description: The page's closing band, the primary action in the same words as the hero, on a band when the brand's energy gives bands.
+job: Prove there is one clear next step and make it easy to take.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: action, rtlBehavior: logical}
+slots:
+  - {name: action, takes: [button], required: true}
+variants:
+  - {name: alignment, values: [start, center], default: start}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.band}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.section-title}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: max-width, role: layout.measure.landing}
+contrast:
+  - {fg: color.text.default, bg: color.surface.band, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.band, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.band]
+proof: none
+phone: [fold-side-columns]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - The action uses the hero's verb
+    - The heading names what the reader gets
+usage:
+  do:
+    - Keep one primary action in the large button size
+    - On a phone, fold the action under the heading
+  dont:
+    - Do not add a second primary action
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

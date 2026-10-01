@@ -166,7 +166,17 @@ EXPECT = {
         "body-cursor-pointer-default": [],
     },
     "misc/h1.css": {"hover-only-card-actions": [1]},
-    "misc/h2.css": {"hover-only-card-actions": []},
+    # focus inside the card, but nothing shows the actions with no hover
+    "misc/h2.css": {"hover-only-card-actions": [1]},
+    # focus, no hover and, for a control that opens a menu, the open menu
+    "misc/h3.css": {"hover-only-card-actions": [5]},
+    # A hidden control leaves the tab order with it; an exit keeps running;
+    # a theme switch is not animated; a state names itself.
+    "components/c1-opacity.html": {"focusable-at-opacity-zero": [2]},
+    "components/c2-exit.css": {"exit-cut-by-display-none": [2]},
+    "components/c3-theme.css": {"theme-switch-animates-everything": [1]},
+    "components/c4-names.html": {"repeated-action-same-name": [3],
+                                 "menu-row-disabled-without-reason": [11]},
     "misc/s.htm": {"image-format-jpg-no-webp-avif": [1], "arbitrary-z-index-9999": [2]},
     "misc/s.svelte": {"image-format-jpg-no-webp-avif": [1], "arbitrary-z-index-9999": [2]},
     # Round 3. H3: a ring with no tag, class or id on its subject covers any
@@ -407,3 +417,147 @@ def test_probe(name):
             f"probes/{name}: {rule_id} fired on lines {got}, expected {sorted(lines)}. "
             f"Fix the rule's pattern or its post check in engine/linter/structure.py"
         )
+
+
+# ---------------------------------------------------------------------------
+# The render interaction pass: pages driven with their motion running.
+# ---------------------------------------------------------------------------
+
+INTERACTION = {"focus-ring-missing", "focus-ring-clipped", "state-answers-late",
+               "focus-lost-after-escape", "press-moves-under-reduced-motion",
+               "infinite-animation-under-reduced-motion"}
+PAGE = ('<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Page</title>'
+        '<style>body{{margin:0;font:16px sans-serif}} {css}</style></head>'
+        '<body><main style="padding:24px">{body}</main></body></html>')
+
+
+def _driven(tmp_path, css, body):
+    pytest.importorskip("playwright")
+    from engine.render import RenderUnavailable, render_check
+    f = tmp_path / "page.html"
+    f.write_text(PAGE.format(css=css, body=body), encoding="utf-8")
+    try:
+        report = render_check([str(f)])
+    except RenderUnavailable as exc:
+        pytest.skip(str(exc))
+    return {x.rule_id for x in report.findings if x.rule_id in INTERACTION}, report
+
+
+def test_a_chip_ring_clipped_by_its_row_is_found(tmp_path):
+    css = (".row{display:flex;gap:8px;overflow:hidden;padding:0}"
+           ".chip{border:1px solid #555;background:#fff;padding:8px 12px;border-radius:16px}"
+           ".chip:focus-visible{outline:3px solid #1d4ed8;outline-offset:4px}")
+    body = '<div class="row"><button class="chip">Rice</button><button class="chip">Beans</button></div>'
+    ids, _ = _driven(tmp_path, css, body)
+    assert "focus-ring-clipped" in ids
+
+
+def test_outline_none_with_no_replacement_is_found(tmp_path):
+    css = "button{outline:none;border:1px solid #555;background:#fff;padding:8px 12px}"
+    ids, report = _driven(tmp_path, css, '<button type="button">Order</button>')
+    assert "focus-ring-missing" in ids
+    hit = next(x for x in report.findings if x.rule_id == "focus-ring-missing")
+    assert "2.4.7" in hit.fix
+
+
+def test_focus_dropped_on_the_body_after_escape_is_found(tmp_path):
+    css = "#m[hidden]{display:none}"
+    body = ('<button type="button" aria-haspopup="menu" aria-expanded="false" id="t">Account</button>'
+            '<ul id="m" role="menu" hidden><li><a role="menuitem" href="#a">Settings</a></li></ul>'
+            '<script>const t=document.getElementById("t"),m=document.getElementById("m");'
+            't.addEventListener("click",()=>{m.hidden=false;t.setAttribute("aria-expanded","true");'
+            'm.querySelector("a").focus();});'
+            'document.addEventListener("keydown",e=>{if(e.key==="Escape"){m.hidden=true;'
+            't.setAttribute("aria-expanded","false");document.activeElement.blur();}});</script>')
+    ids, _ = _driven(tmp_path, css, body)
+    assert "focus-lost-after-escape" in ids
+
+
+def test_focus_returned_after_escape_passes(tmp_path):
+    css = "#m[hidden]{display:none}"
+    body = ('<button type="button" aria-haspopup="menu" aria-expanded="false" id="t">Account</button>'
+            '<ul id="m" role="menu" hidden><li><a role="menuitem" href="#a">Settings</a></li></ul>'
+            '<script>const t=document.getElementById("t"),m=document.getElementById("m");'
+            't.addEventListener("click",()=>{m.hidden=false;m.querySelector("a").focus();});'
+            'document.addEventListener("keydown",e=>{if(e.key==="Escape"){m.hidden=true;t.focus();}});'
+            '</script>')
+    ids, _ = _driven(tmp_path, css, body)
+    assert "focus-lost-after-escape" not in ids
+
+
+def test_a_slow_ease_in_out_on_hover_is_found(tmp_path):
+    css = ("button{transition:all .5s ease-in-out;background:#ffffff;border:1px solid #555;"
+           "padding:8px 12px}button:hover{background:#1d4ed8;color:#fff}")
+    ids, _ = _driven(tmp_path, css, '<button type="button">Order</button>')
+    assert "state-answers-late" in ids
+
+
+def test_a_quick_strong_curve_on_hover_passes(tmp_path):
+    css = ("button{transition:background-color 200ms cubic-bezier(.2,1,.25,1);background:#fff;"
+           "border:1px solid #555;padding:8px 12px}button:hover{background:#dbeafe}"
+           "button:focus-visible{outline:2px solid #1d4ed8;outline-offset:2px}")
+    ids, _ = _driven(tmp_path, css, '<button type="button">Order</button>')
+    assert not ids & {"state-answers-late", "focus-ring-missing"}
+
+
+def test_an_infinite_shimmer_under_reduced_motion_is_found(tmp_path):
+    css = ("@keyframes shimmer{to{background-position:200% 0}}"
+           ".skeleton{height:48px;background:linear-gradient(90deg,#eee,#ddd,#eee);"
+           "background-size:200% 100%;animation:shimmer 1.2s linear infinite}")
+    body = '<div class="skeleton"></div><p>Loading the menu for tonight.</p>'
+    ids, _ = _driven(tmp_path, css, body)
+    assert "infinite-animation-under-reduced-motion" in ids
+
+
+def test_a_press_scale_that_ignores_reduced_motion_is_found(tmp_path):
+    css = ("button{transition:transform 80ms ease-out;padding:8px 12px}"
+           "button:active{transform:scale(.95)}")
+    ids, _ = _driven(tmp_path, css, '<button type="button">Order</button>')
+    assert "press-moves-under-reduced-motion" in ids
+
+
+def test_a_press_scale_bound_to_the_system_role_passes(tmp_path):
+    css = (":root{--motion-press-scale:.97}@media (prefers-reduced-motion:reduce){"
+           ":root{--motion-press-scale:1}}button{transition:transform 80ms ease-out;padding:8px 12px}"
+           "button:active{transform:scale(var(--motion-press-scale))}")
+    ids, _ = _driven(tmp_path, css, '<button type="button">Order</button>')
+    assert "press-moves-under-reduced-motion" not in ids
+
+
+def test_the_focus_pass_tabs_past_links_that_share_a_class(tmp_path):
+    css = ("a{outline:none}a.nav-link:focus-visible{outline:2px solid #1d4ed8}"
+           ".last{outline:none}.last:focus{outline:none}")
+    body = ''.join(f'<a class="nav-link" href="#p{i}">Page {i}</a> ' for i in range(5)) + \
+        '<button class="last" type="button">Order</button>'
+    ids, _ = _driven(tmp_path, css, body)
+    assert "focus-ring-missing" in ids
+
+
+def test_pressing_a_card_link_does_not_leave_the_page(tmp_path):
+    (tmp_path / "other.html").write_text("<p>Other</p>", encoding="utf-8")
+    css = "#m[hidden]{display:none}"
+    body = ('<a class="card" href="other.html">Tonight</a>'
+            '<button type="button" aria-haspopup="menu" id="t">Account</button>'
+            '<ul id="m" role="menu" hidden><li><a role="menuitem" href="#a">Settings</a></li></ul>'
+            '<script>const t=document.getElementById("t"),m=document.getElementById("m");'
+            't.addEventListener("click",()=>{m.hidden=false;m.querySelector("a").focus();});'
+            'document.addEventListener("keydown",e=>{if(e.key==="Escape"){m.hidden=true;'
+            'document.activeElement.blur();}});</script>')
+    _, report = _driven(tmp_path, css, body)
+    ids = {x.rule_id for x in report.findings}
+    assert "render-failed" not in ids and "focus-lost-after-escape" in ids
+
+
+def test_a_resting_transform_is_not_a_press_under_reduced_motion(tmp_path):
+    css = ("button{transform:rotate(-2deg);padding:8px 12px}"
+           "@media (prefers-reduced-motion:no-preference){button:active{transform:scale(.96)}}")
+    ids, _ = _driven(tmp_path, css, '<button type="button">Order</button>')
+    assert "press-moves-under-reduced-motion" not in ids
+
+
+def test_a_ring_drawn_on_a_pseudo_element_counts(tmp_path):
+    css = ("a{outline:none;position:relative}a:focus{outline:none}"
+           "a:focus-visible::after{content:'';position:absolute;inset:-4px;"
+           "box-shadow:0 0 0 2px #1d4ed8}")
+    ids, _ = _driven(tmp_path, css, '<a href="#x">Menu</a>')
+    assert "focus-ring-missing" not in ids

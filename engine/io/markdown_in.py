@@ -11,16 +11,21 @@ Read as tokens:
   that name no known axis make an axis named after both headers, the first
   the base (Brand and Partner give brand-partner). Each such table is
   noted;
-- a column that names each token's alias (Alias, References, Maps to, or
-  Token beside a name column) reads as the value where it holds a
-  reference, {a.b} or a backticked name;
+- a column that names each token's alias (Alias, Alias of, References,
+  Maps to, or Token beside a name column) reads as the value where it
+  holds a reference, {a.b} or a backticked name; one named for a mode
+  (Dark alias) holds the reference in that mode, beside the mode's value
+  column or without one. An alias cell that names several tokens is
+  noted with the fix and not read;
 - a palette keyed by step (a Step column of 50, 100 ... 900 and a column per
   family, or the steps across the top): each cell is a primitive named
   family.step;
 - a list item whose name is in backticks: "- `space.2`: 8px" or "= 8px";
 - a type table: a name column and a Font, Size, Weight, Line height and
   Letter spacing column (Family, Leading and Tracking too) reads each row
-  as one typography token.
+  as one typography token. A line height written as a length (24px) is
+  read against the row's font size in the same unit (16px gives 1.5), with
+  a note; beside a size in another unit or a reference it is not read.
 
 A column that names a property of each row's token (Line height, Weight,
 Letter spacing, Curve, Easing) is never a mode. Beside the token's value
@@ -31,10 +36,14 @@ write each curve as its own token.
 
 A unit in a column header (Value (px), Size [rem]) or in the heading above
 (## Spacing (px), ## Motion, in ms) is the unit of a bare number there,
-and of a shadow's bare offsets. A bare number for a size or a duration,
-or a shadow offset, with no unit anywhere is not read.
-Do and Avoid tables (Do and Don't, Use and Avoid, Good and Bad) are
-guidance: they make no axis and join the file's rule note.
+and of a shadow's bare offsets. A bare number whose name says it is a size
+(space, radius, container, elevation, offset) with no unit anywhere is
+read as px, with a note; a bare duration, or a bare letter spacing (a
+name with letter or tracking in it), with no unit anywhere is not read.
+Do and Avoid tables (Do and Don't, Use and Avoid, Good and Bad), and an
+Avoid column beside prose (Definition and Avoid), are guidance: they make
+no axis and join the file's rule note. A Do or Avoid column beside a
+value column joins the rule note too, and the values beside it are read.
 
 A DESIGN.md frontmatter (between --- lines at the top) is read too: each
 value under a token group (colors, typography, rounded, spacing,
@@ -76,13 +85,15 @@ from engine.foundations.tokens import Token, TokenSet
 from engine.io.mode_words import axis_of, is_base, mode_of, words as name_words
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source
 from engine.io.values_in import (COLOR_KEYWORDS, CSS_KEYWORDS, EASING_KEYWORDS, GamutMapped,
-                                 NotRead, css_alias, read_value, shadow_with_unit,
-                                 split_top)
+                                 NotRead, TIME_WORDS, UNITLESS_WORDS, bare_size_note,
+                                 bare_tracking, css_alias, leading_ratio, length_text,
+                                 read_value, shadow_with_unit, size_word, split_top)
 
 NAME_HEADERS = ("token", "name", "variable", "role", "token name", "css variable")
 VALUE_HEADERS = ("value", "hex", "color", "size", "px", "rem", "ms", "duration")
-PROSE_HEADERS = ("notes", "note", "description", "usage", "use", "purpose", "meaning",
-                 "example", "when", "why", "do", "don't", "dont")
+PROSE_HEADERS = ("notes", "note", "description", "definition", "definitions", "rationale",
+                 "usage", "use", "purpose", "meaning", "example", "when", "why", "do",
+                 "don't", "dont")
 # A column that names each token's alias, read as its value where it holds
 # a reference. Token is one too, beside another name column.
 ALIAS_HEADERS = ("alias", "aliases", "reference", "references", "maps to", "points to",
@@ -145,14 +156,6 @@ _HEADING = re.compile(r" {0,3}#{1,6}\s+(.*?)\s*#*\s*$")
 _HEADING_UNIT = re.compile(r"[(\[]\s*(px|rem|ms|s)\s*[)\]]|\bin (px|rem|ms)\b", re.I)
 _BARE_NUMBER = re.compile(r"[+-]?(?:\d+\.?\d*|\.\d+)")
 _STEP = re.compile(r"\d+")
-# Words in a name that say its number is a size or a duration, and words
-# that say it is a plain number whatever else the name says.
-_SIZE_WORDS = frozenset(("space", "spacing", "gap", "padding", "margin", "inset", "radius",
-                         "radii", "rounded", "corner", "corners", "size", "sizes", "width",
-                         "height", "gutter", "offset", "blur", "spread", "indent", "breakpoint"))
-_TIME_WORDS = frozenset(("duration", "delay"))
-_UNITLESS_WORDS = frozenset(("line", "leading", "weight", "opacity", "z", "index", "zindex",
-                             "ratio", "scale", "factor", "alpha", "order", "count", "flex"))
 # A value in running text, a cell or a code block: a hex color (three or
 # four digits only with a letter, so an issue number is not one), a color
 # function, a length in px, rem or em, and a duration.
@@ -280,14 +283,15 @@ def _heading_unit(text: str) -> str:
 
 
 def _needs_unit(path: str) -> str:
-    """"size" or "duration" when a name says its number needs a unit, or
-    "" when it may be a plain number."""
+    """"duration" when a name says its number is a time, the word that
+    says it is a size (radius in radius.card), or "" when it may be a plain
+    number."""
     found = name_words(path.replace(".", " "))
-    if found & _UNITLESS_WORDS:
+    if found & UNITLESS_WORDS:
         return ""
-    if found & _TIME_WORDS:
+    if found & TIME_WORDS:
         return "duration"
-    return "size" if found & _SIZE_WORDS else ""
+    return size_word(path)
 
 
 def _refish(cell: str) -> bool:
@@ -434,16 +438,47 @@ class _Table:
     guidance: str = ""
     # A typography table: each field's column, when the table has all five.
     fields: Dict[str, int] = field(default_factory=dict)
+    # An alias column for a mode (Dark alias): (column, axis).
+    mode_aliases: List[Tuple[int, str]] = field(default_factory=list)
+    # Do and Avoid columns beside the values: guidance, kept as a rule.
+    guide: List[str] = field(default_factory=list)
+
+
+# The words of an alias column's header ("Alias of", "Maps to"); any other
+# word names the mode the column holds the reference in ("Dark alias").
+_ALIAS_WORDS = frozenset(("alias", "aliases", "aliased", "reference", "references", "ref",
+                          "refs"))
+# Words that name an alias only as a phrase: Size (points) is no alias.
+_ALIAS_PHRASES = (("maps", "to"), ("points", "to"), ("refers", "to"))
+_ALIAS_FILLER = frozenset(("to", "of", "for", "token", "mode"))
+
+
+def _alias_mode(header: str) -> Optional[str]:
+    """None when a header does not name an alias column, "" for one that
+    holds the base's reference (Alias, Alias of, Maps to, Light alias),
+    or the words that name its mode (Dark alias gives dark)."""
+    found = re.findall(r"[a-z0-9]+", header.lower())
+    phrased = {p[0] for p in _ALIAS_PHRASES if any(
+        tuple(found[k:k + 2]) == p for k in range(len(found) - 1))}
+    if not set(found) & _ALIAS_WORDS and not phrased:
+        return None
+    rest = " ".join(w for w in found
+                    if w not in _ALIAS_WORDS and w not in _ALIAS_FILLER and w not in phrased)
+    return "" if not rest or is_base(rest) else rest
 
 
 def _guidance(raw: List[str], low: List[str]) -> str:
     """The label of a Do and Avoid table ("Do and Avoid"), or "" when the
-    table is not guidance."""
+    table is not guidance. An Avoid column beside prose (Definition and
+    Avoid, Usage and Avoid) is guidance too: what each token is for and
+    what to keep it from, never two modes."""
     body = [c for c, h in enumerate(low) if h not in NAME_HEADERS and h]
     kinds = GUIDANCE_DO + GUIDANCE_AVOID
-    if any(low[c] in GUIDANCE_DO for c in body) and any(low[c] in GUIDANCE_AVOID for c in body) \
+    do = any(low[c] in GUIDANCE_DO for c in body)
+    prose = [c for c in body if low[c] not in kinds and _prose_header(low[c])]
+    if any(low[c] in GUIDANCE_AVOID for c in body) and (do or prose) \
             and all(low[c] in kinds or _prose_header(low[c]) for c in body):
-        return _and([raw[c] for c in body if low[c] in kinds])
+        return _and([raw[c] for c in body if low[c] in kinds or (not do and c in prose)])
     return ""
 
 
@@ -523,11 +558,16 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
     name = next((low.index(h) for h in _NAME_PREFERENCE if h in low), None)
     if name is None:
         return None
-    alias = next((c for c, h in enumerate(low) if c != name and h in ALIAS_HEADERS), -1)
-    value = [c for c, h in enumerate(low) if c not in (name, alias) and h in VALUE_HEADERS]
+    alias = next((c for c, h in enumerate(low)
+                  if c != name and (h in ALIAS_HEADERS or _alias_mode(h) == "")), -1)
+    # Alias columns for a mode (Dark alias): never a value or a mode column.
+    by_mode = [c for c, h in enumerate(low) if c not in (name, alias) and _alias_mode(h)]
+    value = [c for c, h in enumerate(low)
+             if c not in (name, alias, *by_mode) and h in VALUE_HEADERS]
     other = [c for c, h in enumerate(low)
-             if c not in (name, alias) and h and h not in VALUE_HEADERS and h not in NAME_HEADERS
-             and not _prose_header(h)]
+             if c not in (name, alias, *by_mode) and h and h not in VALUE_HEADERS
+             and h not in NAME_HEADERS and not _prose_header(h)
+             and h not in GUIDANCE_DO + GUIDANCE_AVOID]
     if alias < 0 and not value and not other and low[name] == "token":
         # A Token column of references beside a column of names: the names
         # are the tokens, and the Token column holds what each aliases.
@@ -538,6 +578,8 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
                 and any(_refish(t) for _, t in cells):
             name, alias = named, name
     table = _Table(name, alias=alias, units={c: u for c, (_, u) in enumerate(split) if u})
+    table.guide = [raw[c] for c, h in enumerate(low)
+                   if c not in (name, alias, *by_mode) and h in GUIDANCE_DO + GUIDANCE_AVOID]
     # Property columns are fields of each row's token, never modes: all five
     # typography fields make a typography table; any other property column
     # beside the token's value is left out with its fix.
@@ -549,7 +591,7 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
     if len(typed) == len(TYPOGRAPHY_FIELDS):
         table.fields = {f: typed[f] for f in TYPOGRAPHY_FIELDS}
         heads = _and([raw[c] for c in table.fields.values()])
-        for c in [c for c in value + other + ([alias] if alias >= 0 else [])
+        for c in [c for c in value + other + ([alias] if alias >= 0 else []) + by_mode
                   if c not in table.fields.values()]:
             table.dropped.append((raw[c], (
                 f"is not a typography field, so its column was not read; this table reads "
@@ -557,6 +599,21 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
                 f"{raw[c]} in a table of its own")))
         table.alias = -1
         return table
+    for c in by_mode:
+        words = str(_alias_mode(low[c]))
+        axis = mode_of(words, [raw[c]])
+        held = next((raw[k] for k, a in table.mode_aliases if a == axis), None)
+        if axis is None:
+            table.dropped.append((raw[c], (
+                f"is an alias column for {words}, which names no mode, so it was not read; head "
+                "it with a mode name and alias, such as Dark alias, or put it in a table of its "
+                "own")))
+        elif held is not None:
+            table.dropped.append((raw[c], (
+                f"is a second alias column for the {axis} axis, which {held} holds, so it was "
+                "not read; keep one alias column per mode")))
+        else:
+            table.mode_aliases.append((c, axis))
     props = [c for c in other if _property(low[c])]
     if props:
         other = [c for c in other if c not in props]
@@ -616,10 +673,13 @@ def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
                                    "names such as Light and Dark")))
         return table
     if not all(found):
+        bad = [raw[c] for c, word in zip(other, found) if not word]
+        which = "that column" if len(bad) == 1 else "those columns"
         table.whole = True
-        table.dropped.append(("", (f"a table with the columns {columns} was not read, since a "
-                                   "mode is named with letters; head them with mode names such "
-                                   "as Light and Dark")))
+        table.dropped.append(("", (f"a table with the columns {columns} was not read, since "
+                                   f"{_and(bad)} cannot name a mode, whose name starts with a "
+                                   f"letter; head {which} with a mode name such as Dark or High "
+                                   "contrast")))
         return table
     table.base, mode = other
     table.modes.append((mode, f"{found[0]}-{found[1]}", (found[0], found[1])))
@@ -684,8 +744,8 @@ def _field(f: str, text: str, column: str, unit: str, entry: _Entry) -> Any:
         entry.field_aliases[value] = (column, _FIELD_FITS[f])
         return "{" + value + "}"
     if f == "lineHeight" and kind == "dimension":
-        raise NotRead(f"{text} is a length, and the engine keeps a line height as a multiple "
-                      f"of the font size; {_FIELD_FIX[f]}")
+        # A length, read against the row's font size once that is read.
+        return value
     want = TYPOGRAPHY_FIELDS[f][0]
     if f == "fontWeight" and kind == "number" and TYPES[want].check(value):
         return value
@@ -707,6 +767,28 @@ def _typography(entry: _Entry) -> Dict[str, Any]:
             out[f] = _field(f, text, column, unit, entry)
         except NotRead as exc:
             raise NotRead(f"in the {column} column, {exc}") from None
+    if isinstance(out["lineHeight"], dict):
+        # A line height written as a length is read against the row's font
+        # size, the multiple the engine keeps.
+        column = entry.fields["lineHeight"][1]
+        shown, size = length_text(out["lineHeight"]), out["fontSize"]
+        ratio, why = leading_ratio(out["lineHeight"], size)
+        fix = "write it as a number, such as 1.5"
+        if why == "unit":
+            raise NotRead(f"in the {column} column, {shown} is a length in "
+                          f"{out['lineHeight']['unit']} and the font size {length_text(size)} "
+                          f"is in {size['unit']}, so it cannot be read as a multiple of the "
+                          f"font size; {fix}, or write both in one unit")
+        if why:
+            what = f"the reference {size}" if why == "reference" else length_text(size)
+            raise NotRead(f"in the {column} column, {shown} is a length and the font size is "
+                          f"{what}, so it cannot be read as a multiple of the font size here; "
+                          f"{fix}")
+        entry.notes.append(Item(entry.where, entry.written, (
+            f"in the {column} column, {shown} is a length; it was read against the font size "
+            f"{length_text(size)} as {ratio}, the multiple of the font size the engine keeps; "
+            f"write {ratio} to say so")))
+        out["lineHeight"] = ratio
     return out
 
 
@@ -721,6 +803,8 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
     rules: Dict[str, List[Tuple[int, str]]] = {}
     # file -> [(line, label)] of Do and Avoid tables
     guidance: Dict[str, List[Tuple[int, str]]] = {}
+    # file -> [(line, labels)] of Do and Avoid columns beside a table's values
+    guide_columns: Dict[str, List[Tuple[int, List[str]]]] = {}
     # files where a rule has the shape of a font list, so the note says how
     # a font list reads
     font_rules: set = set()
@@ -766,8 +850,10 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         values = {ctx: _unquote(v) for ctx, v in values.items() if _unquote(v)}
         path = _path(written)
         # A bare number takes the unit its column or its heading names; a
-        # size or a duration with no unit anywhere is not read.
+        # size with no unit anywhere is read as px with a note, and a
+        # duration with no unit anywhere is not read.
         bare: Dict[str, str] = {}
+        sized: List[Item] = []
         for ctx, v in list(values.items()):
             unit = (units or {}).get(ctx) or section["unit"]
             if not fields and unit in ("px", "rem") and not _BARE_NUMBER.fullmatch(v):
@@ -777,20 +863,26 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
             if fields or not _BARE_NUMBER.fullmatch(v):
                 continue
             need = _needs_unit(path)
+            tracking = bare_tracking(path, v)
             if unit:
                 values[ctx] = v + unit
+            elif tracking:
+                bare[ctx] = tracking
             elif need and float(v) == 0:
                 values[ctx] = v + ("ms" if need == "duration" else "px")
+            elif need and need != "duration":
+                values[ctx] = v + "px"
+                if not sized:
+                    sized.append(Item(where, written, bare_size_note(v, need)))
             elif need:
-                example = v + ("ms" if need == "duration" else "px")
+                example = v + "ms"
                 column = labels.get(ctx, "")
                 if column:
                     fix = (f"write the unit in the cell, such as {example}, or in the column "
-                           f"header, such as {column} ({example.lstrip('0123456789.+-')})")
+                           f"header, such as {column} (ms)")
                 else:
-                    heading = "## Motion (ms)" if need == "duration" else "## Sizes (px)"
                     fix = (f"write the unit, such as {example}, or name it in the heading above, "
-                           f"such as {heading}")
+                           "such as ## Motion (ms)")
                 bare[ctx] = f"{v} has no unit, and {path} is a {need}; {fix}"
         first = found.get(path)
         if first is not None:
@@ -811,6 +903,7 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                                  "the entry"))
             return
         found[path] = _Entry(where, written, values, labels, bare=bare, aliased=aliased,
+                             notes=sized,
                              fields={f: (text, column, unit or section["unit"])
                                      for f, (text, column, unit) in (fields or {}).items()})
 
@@ -871,17 +964,40 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         contexts = [(c, f"{axis}:{values[1]}") for c, axis, values in table.modes]
         for _, axis, values in table.modes:
             axes.setdefault(axis, values)
+        # Alias columns for a mode hold the reference in that mode.
+        by_alias = [(c, f"{axis}:{AXES[axis][1]}") for c, axis in table.mode_aliases]
+        for _, axis in table.mode_aliases:
+            axes.setdefault(axis, AXES[axis][:2])
         head = raw[table.base] if table.base >= 0 else raw[table.alias]
-        if contexts:
+        if contexts or by_alias:
             if len(contexts) == 1:
                 read = f"{head} was read as the base and {raw[contexts[0][0]]} as {contexts[0][1]}"
-            else:
+            elif contexts:
                 read = f"{head} was read as the base, " + _and(
                     [f"{raw[c]} as {ctx}" for c, ctx in contexts])
-            notes.append(Item(where, "", (
-                f"a table with {_and([head] + [raw[c] for c, _ in contexts])} columns; {read}")))
+            else:
+                read = f"{head} was read as the base"
+            read += "".join(f"; {raw[c]} was read as the reference in {ctx} where it holds one"
+                            for c, ctx in by_alias)
+            listed = [head] + [raw[c] for c, _ in contexts + by_alias]
+            notes.append(Item(where, "", f"a table with {_and(listed)} columns; {read}"))
         columns = [table.name] + [c for c in (table.base, table.alias) if c >= 0] \
-            + [c for c, _ in contexts]
+            + [c for c, _ in contexts + by_alias]
+
+        def several(cell: str, column: int, name: str, at: str) -> bool:
+            """True, with a note, for an alias cell that names more than one
+            token: a token references one, so the cell is not read."""
+            parts = split_top(cell.strip())
+            if len(parts) < 2 or not all(_refish(p) for p in parts):
+                return False
+            own = _row_name(name)
+            notes.append(Item(at, own, (
+                f"in the {raw[column]} column, {cell.strip()} holds more than one name, and a "
+                "token references one, so the cell was not read; if they are other names for "
+                f"{own}, write each as a row of its own with `{own}` in the {raw[column]} "
+                "column")))
+            return True
+
         for r, cells in rows:
             at = f"{file_name}:{r}"
             if len(cells) <= max(columns):
@@ -893,6 +1009,8 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 continue
             base = cells[table.base] if table.base >= 0 else ""
             alias = cells[table.alias] if table.alias >= 0 else ""
+            if alias.strip() and several(alias, table.alias, cells[table.name], at):
+                alias = ""
             if alias.strip() and (_refish(alias) or not base.strip()):
                 values = {"": _as_reference(alias) if _refish(alias) else alias}
                 labels = {"": raw[table.alias], "name": raw[table.name]}
@@ -907,6 +1025,14 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
             for c, ctx in contexts:
                 values[ctx], labels[ctx] = cells[c], raw[c]
                 units[ctx] = table.units.get(c, "")
+            for c, ctx in by_alias:
+                cell = cells[c]
+                if not cell.strip() or several(cell, c, cells[table.name], at):
+                    continue
+                if _refish(cell) or not values.get(ctx, "").strip():
+                    values[ctx] = _as_reference(cell) if _refish(cell) else cell
+                    labels[ctx], units[ctx] = raw[c], table.units.get(c, "")
+                    aliased += (ctx,)
             add(cells[table.name], at, values, labels, units, aliased)
 
     def unread_line(file_name: str, at: int, line: str) -> None:
@@ -1093,6 +1219,8 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                         "tokens; head the value column Value, Hex or Size to read it")))
                     table = None
                 if table is not None:
+                    if table.guide:
+                        guide_columns.setdefault(file_name, []).append((i + 1, table.guide))
                     read_table(table, raw, rows, file_name, where)
                 elif not guided:
                     held = [v for _, cells in rows for c in cells for v in _held(c)]
@@ -1110,9 +1238,10 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         if block:
             unread_block(file_name, *block)
 
-    for file_name in dict.fromkeys([*rules, *guidance]):
+    for file_name in dict.fromkeys([*rules, *guidance, *guide_columns]):
         found_rules = rules.get(file_name, [])
         tables = guidance.get(file_name, [])
+        columns = guide_columns.get(file_name, [])
         parts = []
         if found_rules:
             listed = ", ".join(f"`{name}` (line {line})" for line, name in found_rules)
@@ -1124,12 +1253,15 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 "its value after the colon or in the cell, and put the rule on its own line"
                 + ("; a font list reads when its font names are quoted or it ends in a generic "
                    "family such as sans-serif" if file_name in font_rules else ""))
-        if tables:
-            one = len(tables) == 1
-            parts.append(_and([f"the {label} table (line {line})" for line, label in tables])
+        if tables or columns:
+            held = sorted([(line, f"the {label} table (line {line})") for line, label in tables]
+                          + [(line, f"the {_and(labels)} column{'s' if len(labels) > 1 else ''} "
+                                    f"of the table on line {line}") for line, labels in columns])
+            one = len(held) == 1 and not (columns and len(columns[0][1]) > 1)
+            parts.append(_and([text for _, text in held])
                          + (" holds guidance, not values, and was kept as a rule" if one else
                             " hold guidance, not values, and were kept as rules"))
-        first = min(line for line, _ in found_rules + tables)
+        first = min(line for line, _ in found_rules + tables + columns)
         notes.append(Item(f"{file_name}:{first}", "", "; ".join(parts)))
 
     # Decode each value; a reference is kept as an alias to its target.

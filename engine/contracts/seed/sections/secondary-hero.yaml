@@ -1,0 +1,53 @@
+# Secondary hero: the first band of an inner page. Every value is a semantic role.
+name: secondary-hero
+status: experimental
+category: section
+description: The first band of an inner page, the page's own name, one line and one action, under the site's shared header.
+job: Prove the reader is on the right page of the site and show what it holds.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: action, rtlBehavior: logical}
+  - {name: media, rtlBehavior: logical}
+slots:
+  - {name: action, takes: [button, link], required: true}
+  - {name: media, takes: [photograph], required: true}
+variants:
+  - {name: alignment, values: [start, split], default: start}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.heading-1}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: heading, property: stack-gap, role: space.text.gap}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: max-width, role: layout.measure.landing}
+  - {part: media, property: radius, role: radius.media}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.tint]
+proof: none
+phone: [fold-side-columns]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - The heading is the page's name, the same words as its link in the header
+usage:
+  do:
+    - Name the page in its heading, the page's one h1, and say in one line what it holds
+    - Keep one action, the site's primary action or the page's own next step
+    - On a phone, fold the photograph under the text stack
+  dont:
+    - Do not repeat the home page's hero claim
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

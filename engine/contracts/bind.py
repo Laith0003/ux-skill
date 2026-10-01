@@ -41,10 +41,35 @@ EDGE_ROLES: Tuple[str, ...] = ("border.outline", "border.emphasis", "border.acti
 # that measures below it against a surface, in any color context, draws an
 # edge there. WCAG sets no minimum for a container's edge, so this is ours.
 EDGE_FLOOR = 1.2
+# The press scale a contract accepts: a pressed control shrinks by at most
+# a twentieth, and not at all under reduced motion.
+PRESS_SCALE = (0.95, 1.0)
 
 
 def _problem(contract: Contract, rule: str, message: str) -> ContractProblem:
     return ContractProblem(contract.name, rule, f"{contract.name}: {message}")
+
+
+def _press_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
+    """A press-scale binding resolves within PRESS_SCALE in every motion
+    mode and to exactly 1 under reduced motion."""
+    out: List[ContractProblem] = []
+    lo, hi = PRESS_SCALE
+    for b in contract.tokens:
+        if b.property != "press-scale":
+            continue
+        modes = ("motion:standard", "motion:reduced") if "motion" in ts.axes else ("",)
+        for mode in modes:
+            v = ts.resolve(b.role, mode)
+            want = (1.0, 1.0) if mode == "motion:reduced" else (lo, hi)
+            where = mode or "the base context"
+            if not (isinstance(v, (int, float)) and want[0] - 1e-9 <= v <= want[1] + 1e-9):
+                need = "exactly 1" if mode == "motion:reduced" else f"{lo:g} to {hi:g}"
+                out.append(_problem(contract, "press-scale",
+                                    f"{b.label()} binds {b.role}, which resolves to {v!r} under "
+                                    f"{where}; a press scale is {need} there, so set "
+                                    f"{b.role} in that mode"))
+    return out
 
 
 def _role_problem(contract: Contract, ts: TokenSet, role: str, want: str, where: str,
@@ -93,6 +118,8 @@ def _edge_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
     for fill in (b for b in contract.tokens if b.property == "fill"):
         if not (ts.has(fill.role) and ts.get(fill.role).type == "color"):
             continue
+        if contract.category == "section" and fill.part == "container":
+            continue  # a band of the page, set apart by space or its ground, never an edge
         width = any(_covers(e, fill) and e.property == "border-width" and e.role in EDGE_ROLES
                     for e in contract.tokens)
         color = any(_covers(e, fill) and e.property == "border-color" for e in contract.tokens)
@@ -268,7 +295,7 @@ def binding_problems(contract: Contract, ts: TokenSet,
         return out
     try:
         return _edge_problems(contract, ts) + _placement_problems(contract, ts) \
-            + _contrast_problems(contract, ts)
+            + _contrast_problems(contract, ts) + _press_problems(contract, ts)
     except AliasError as exc:
         return [_problem(contract, "unresolved", f"a role it binds cannot be resolved ({exc}); "
                                                  "run validate on the token set and fix it")]
