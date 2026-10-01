@@ -106,7 +106,8 @@ def test_touched_descriptions_are_short_and_plain(name):
 
 def test_the_changelog_marks_every_alias_for_removal_in_4_1():
     text = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    start = text.index("## [Unreleased]")
+    # The deprecation ships with 4.0.0, so its release entry carries it.
+    start = text.index("## [4.0.0]")
     section = text[start:text.index("\n## [", start + 1)]
     assert "removed in 4.1" in section
     for alias in ALIASES:
