@@ -14,7 +14,7 @@ pip install uxskill
 
 *Before: generic stock-photo SEO slop. After: real construction-photo hero under a dark scrim, editorial headline with an amber accent, quote form in the hero. Same AI coding tool, same prompt, different result when ux-skill supplies the constraints.*
 
-> **v4.0, FOUNDATIONS: one command builds a complete, WCAG-gated design system, with Arabic and right to left built in.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 12 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 152 anti-pattern rules, 25 tech stacks, 160 brand specs), 18 slash commands, 5 sub-agents, 25 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
+> **v4.0, FOUNDATIONS: one command builds a complete, WCAG-gated design system, with Arabic and right to left built in.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 12 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 171 anti-pattern rules, 25 tech stacks, 160 brand specs), 18 slash commands, 5 sub-agents, 25 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
 > **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -27,7 +27,7 @@ pip install uxskill
 [![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-152-181715.svg)](data/anti-patterns.json)
+[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
 [![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
@@ -54,6 +54,10 @@ Python 3.10 or newer. For the MCP server, `pip install --upgrade 'uxskill[mcp]'`
 - **Arabic.** Under `dir="rtl"` text switches to an Arabic face with its own sizes and line height; spacing uses logical properties and motion mirrors. `--latin-only` leaves it out.
 
 **A system you already have.** `/ux-system enhance --from` reads it in its own names (DTCG tokens, CSS custom properties, a Tailwind theme, markdown rule files or a Figma variables export), checks it through the same gate and measures what your code actually does with it; nothing is rewritten. `/ux-system extend --from` adds foundations, roles or contracts without changing a token it has, in an extension file beside it, and `uxskill system export` writes it as tokens.css, a Tailwind 4 theme or Figma variables. 4.2 adds the trust layer (lint on every write, a finish reviewer) and the launch. See the [changelog](CHANGELOG.md).
+
+**Components and sections.** 23 component contracts say which tokens each part of a control binds in every state and how each state moves: a change of state transitions on `motion.state`, a press scales on `motion.press.scale` (and holds still under reduced motion), and tabs, menus and segmented controls slide one indicator. 14 section contracts (hero, pricing, FAQ, footer and the rest) name each section's job, the components its slots take, the proof it needs and how it stacks on a phone. Pages built from them use photographs; interface fragments are extra imagery, never a replacement.
+
+**A linter that reads the page.** 171 rules, many with a check on the parsed CSS and markup, read the page's own system: motion is timed from its curve, display line height is held to the engine's floor, and a hidden control must leave the tab order. `uxskill lint --render` opens each page in headless Chromium at desktop and phone width and drives it: focus rings that do not show or are clipped, hover and press that answer late, focus lost after Escape, and a press that still moves under reduced motion.
 
 **Fewer commands.** 25 slash commands become 18. `/ux-discover` takes `--frame` and `--recommend`, `/ux-design` takes `--component`, `--dashboard` and `--from-image`, `/ux-polish` loops lint, fix, re-lint until the score reaches 90 or three rounds pass, and `/ux-init` takes `--stats`. The seven old names still work as aliases and go away in 4.1; see [the aliases](#aliases-removed-in-41).
 
@@ -94,7 +98,7 @@ Full details in [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain).
 
 ux-skill is a **design intelligence engine** for AI coding tools. It runs as a Python package (`pip install uxskill`), as a Claude Code plugin, and as a 17-IDE multi-installer. The engine ingests a project brief (industry, audience, tone, must-haves, forbidden moves, stack, region) and returns a complete recommended design system: style, palette, type pair, motion presets, components, brand exemplars to study, and the anti-pattern guardrails that must hold. The recommendation is deterministic, same input always produces the same output.
 
-The plugin sits between you and the AI coding tool. When you ask Claude Code, Cursor, or any other AI assistant to "build a fintech landing page," the assistant typically improvises, and the result reads as AI-generated within five seconds (purple-to-blue gradients, three equal cards, Inter at display size, "John Doe" in testimonials, 300ms default transitions, centered hero, bouncing arrow CTAs). ux-skill replaces improvisation with **structured constraints**: you run `/ux-discover` to capture the brief and pick the system, `/ux-design` to generate the code, and `/ux-lint` to verify it passes the 152 deterministic anti-AI-slop rules before commit.
+The plugin sits between you and the AI coding tool. When you ask Claude Code, Cursor, or any other AI assistant to "build a fintech landing page," the assistant typically improvises, and the result reads as AI-generated within five seconds (purple-to-blue gradients, three equal cards, Inter at display size, "John Doe" in testimonials, 300ms default transitions, centered hero, bouncing arrow CTAs). ux-skill replaces improvisation with **structured constraints**: you run `/ux-discover` to capture the brief and pick the system, `/ux-design` to generate the code, and `/ux-lint` to verify it passes the 171 deterministic anti-AI-slop rules before commit.
 
 This README is the canonical reference. Every command, every sub-agent, every data manifest, every install path, every brand spec, every anti-pattern category, it's all documented here. If you're shopping for a Claude Code design plugin or comparing AI design tools for Cursor, Windsurf, or Codex, read this top to bottom and the [compare.html](https://uxskill.laithjunaidy.com/compare.html) side by side.
 
@@ -109,7 +113,7 @@ This README is the canonical reference. Every command, every sub-agent, every da
 5. [The 18 slash commands, detailed reference](#the-18-slash-commands-detailed-reference)
 6. [The 5 sub-agents](#the-5-sub-agents)
 7. [The 11 data manifests](#the-11-data-manifests)
-8. [The 152 anti-AI-slop rules, the linter](#the-152-anti-ai-slop-rules-the-linter)
+8. [The 171 anti-AI-slop rules, the linter](#the-171-anti-ai-slop-rules-the-linter)
 9. [The 160 brand DESIGN.md specs, by category](#the-160-brand-designmd-specs-by-category)
 10. [MCP server, the asymmetric move](#mcp-server-the-asymmetric-move)
 11. [The 17-IDE installer](#the-17-ide-installer)
@@ -210,7 +214,7 @@ Star counts last verified via `gh api` on **2026-05-28**. ux-skill (Laith0003/ux
 | dominikmartn/nothing-design-skill | **2,391** | Single-aesthetic skill | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | Anti-slop design skill | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 components + audit | 1 | - | (MD3 only) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python engine + 12 manifests + 18 commands + 5 sub-agents + CI linter** | **22** | **152 regex rules** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python engine + 12 manifests + 18 commands + 5 sub-agents + CI linter** | **22** | **171 deterministic rules** | **160** | **148** | **57** | **17** |
 
 ### Where we lose
 
@@ -222,7 +226,7 @@ Star counts last verified via `gh api` on **2026-05-28**. ux-skill (Laith0003/ux
 
 - **Component library:** 148 documented components with anatomy, states, tokens used, and motion specs. None of the other 8 ship a component manifest.
 - **Motion presets:** 57 stack-ready entries (Framer Motion, GSAP, CSS) with reduced-motion fallbacks. None of the others ship a motion manifest.
-- **Anti-pattern linter:** 152 deterministic regex rules, runs in CI, exits non-zero on Critical/High. None of the others ship a deterministic linter.
+- **Anti-pattern linter:** 171 deterministic rules, runs in CI, exits non-zero on Critical/High. None of the others ship a deterministic linter.
 - **Brand specs:** 160 real DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, and 96 more). None of the others ship a brand library.
 - **17 IDEs supported:** same engine, different glue per IDE.
 - **18 slash commands:** discovery, generation (pages, components, dashboards, from an image), audit, lint, polish loop, fix loop, case-study, workshop, copy, motion, a11y, conductor, fully integrated.
@@ -246,7 +250,7 @@ ux-skill (package name: uxskill)
 │   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
 │   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
-│   ├── anti-patterns.json             152 regex rules (CI-safe linter source)
+│   ├── anti-patterns.json             171 rules (CI-safe linter source)
 │   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
 ├── engine/                            Python, the reasoning
@@ -322,9 +326,9 @@ ux-skill (package name: uxskill)
    - **Stack → component compatibility + motion presets** (tech-stacks.json, motion-presets.json)
    - **Forbidden + region → guardrails + brand exemplar shortlist** (anti-patterns.json, brands/)
 3. **Merge.** A deterministic merger ranks candidates, resolves conflicts (e.g., must-have dark-mode forces palette mode), and emits a single recommended system.
-4. **Output.** A JSON document with the picked style, palette, type pair, top 5 motion presets, top 12 components, top 5 brand exemplars, and all 152 anti-pattern guardrails active. Plus a rationale block explaining each pick.
+4. **Output.** A JSON document with the picked style, palette, type pair, top 5 motion presets, top 12 components, top 5 brand exemplars, and all 171 anti-pattern guardrails active. Plus a rationale block explaining each pick.
 5. **Generation.** Downstream commands (`/ux-design` in its page, component, dashboard and image modes, and `/ux-system`) consume the recommendation to generate actual code via the sub-agents.
-6. **Verification.** `/ux-lint` re-scans the generated code against the 152 regex rules. Exits non-zero on Critical/High in CI.
+6. **Verification.** `/ux-lint` re-scans the generated code against the 171 rules. Exits non-zero on Critical/High in CI.
 
 **v3 additions.** The recommender now re-ranks candidates from `engine/decisions/` using `.ux/decisions.jsonl` (only counts decisions with `lint_score >= 80` AND `user_accepted = true`; cold-start safe below 3 priors). The generator path can dispatch into `engine/synthesizer/`, a deterministic 7-axis compiler that produces fresh palette + type + spacing + radius + motion tokens per brief instead of picking templates from a catalogue. See [The Brain, what v3.0 is](#the-brain-what-v30-is) for details.
 
@@ -378,7 +382,7 @@ Commands are grouped into seven buckets: **bootstrap & inventory**, **discovery 
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **Output:** `.ux/last-discovery.json` (the 10-field brief), `.ux/last-recommendation.json` (picked style, palette, type pair, top 5 motion presets, top 12 components, top 5 brand exemplars, all 152 anti-pattern guardrails active, plus rationale), and with `--frame`, `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
+- **Output:** `.ux/last-discovery.json` (the 10-field brief), `.ux/last-recommendation.json` (picked style, palette, type pair, top 5 motion presets, top 12 components, top 5 brand exemplars, all 171 anti-pattern guardrails active, plus rationale), and with `--frame`, `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
 - **Chains to:** `/ux-design [extra brief]` → frontend code grounded in the recommendation. `/ux-design --component <name>` → one component aligned to the discovered constraints. `/ux-system` → full design system from the recommendation. `/ux-lint` → verify the generated code.
 
 ### Generation
@@ -418,7 +422,7 @@ Commands are grouped into seven buckets: **bootstrap & inventory**, **discovery 
 
 #### `/ux-lint`: deterministic regex-based linter (no LLM, CI-safe)
 
-- **What:** Runs 152 regex rules against your code. No LLM call. Exits non-zero on Critical / High in CI. Source: `data/anti-patterns.json`. Rules cover A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4).
+- **What:** Runs 171 rules against your code. No LLM call. Exits non-zero on Critical / High in CI. Source: `data/anti-patterns.json`. Rules cover A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
 - **When to use:** Pre-commit hook. CI gate. Fast first pass on a large codebase before paying the cost of `/ux-audit`. After `/ux-design` in any mode to verify generation.
 - **When to skip:** You want a fix loop (the linter reports, it does not edit, chain into `/ux-polish --fix` or `/ux-fix`). You want taste judgment (use `/ux-critique`).
 - **Invocation (slash):** `/ux-lint src/`.
@@ -650,7 +654,7 @@ When a command dispatches a sub-agent, it passes:
 
 1. The brief / recommendation (loaded from `.ux/`).
 2. The relevant manifest slice (e.g., `frontend-engineer` gets the picked style + palette + components; `motion-engineer` gets the picked motion presets).
-3. The 152 anti-pattern guardrails (always active).
+3. The 171 anti-pattern guardrails (always active).
 4. A success criterion (what the artifact must do).
 
 Sub-agents return:
@@ -765,15 +769,15 @@ Used by `/ux-audit` (6-lens scoring) and `/ux-critique` (taste anchor).
 
 Every preset has a reduced-motion variant. Stack-ready code for Framer Motion, GSAP, and pure CSS.
 
-### `anti-patterns.json`: 152 regex rules
+### `anti-patterns.json`: 171 rules
 
 | Field | Description |
 |---|---|
-| `entries` | 145 |
-| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope), `evidence_template`, `fix`, `references` |
-| `categories` | A11y (23), Content (15), Layout (13), Typography (10), Color (9), Quality (9), Visual (9), Motion (8), Performance (4) |
+| `entries` | 171 |
+| `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, pattern, flags, scope, and for many rules a `post` check on the parsed file), `why`, `fix` |
+| `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-The full rule list is in [The 152 anti-AI-slop rules](#the-152-anti-ai-slop-rules-the-linter).
+The full rule list is in [The 171 anti-AI-slop rules](#the-171-anti-ai-slop-rules-the-linter).
 
 ### `brands/*.json`: 160 brand specs
 
@@ -787,88 +791,237 @@ Full list in [The 160 brand DESIGN.md specs](#the-160-brand-designmd-specs-by-ca
 
 ---
 
-## The 152 anti-AI-slop rules: the linter
+## The 171 anti-AI-slop rules: the linter
 
-ux-skill ships a deterministic regex-based linter. **No LLM.** **No API.** **No network.** Runs in CI in ~200ms on a typical Next.js app. Exits non-zero on Critical / High findings when `--fail-on high` is set.
+ux-skill ships a deterministic linter: each rule is a pattern, and many add a check on the parsed CSS and markup, so a match counts only in the context it names. **No LLM.** **No API.** **No network.** Runs in CI in ~200ms on a typical Next.js app. Exits non-zero on Critical / High findings when `--fail-on high` is set.
 
 The rules are sourced from `data/anti-patterns.json` (v2 preferred) with a `references/foundations/anti-patterns.md` fallback (v1 bash). Two binaries ship: `bin/ux-lint.py` (Python, fast, extensible) and `bin/ux-lint.sh` (Bash + perl-PCRE, for environments without Python).
 
 ### Rules by category
 
-#### Typography (3 rules)
+<!-- rules:start -->
+#### A11y (45 rules)
 
 | Severity | Rule ID | Name |
 |---|---|---|
-| high | `inter-as-display` | Inter used as display font |
-| medium | `hero-text-arbitrary-90px` | Arbitrary hero font size |
-| low | `font-system-only` | System font stack with no chosen typeface |
-
-#### Color (6 rules)
-
-| Severity | Rule ID | Name |
-|---|---|---|
-| high | `purple-to-blue-gradient` | Default purple-to-blue AI gradient |
-| high | `dark-text-on-dark-card` | Low-contrast text on card |
-| medium | `gradient-text-rainbow` | Multi-stop gradient text |
-| medium | `card-glow-purple-shadow` | Purple glow shadow on cards |
-| medium | `gradient-mesh-purple-pink` | Purple-pink mesh gradient hero |
-| low | `tailwind-color-named-vague` | Named Tailwind colors with no semantic token |
-
-#### Layout (5 rules)
-
-| Severity | Rule ID | Name |
-|---|---|---|
-| high | `three-equal-card-grid` | Three equal cards in a row |
-| medium | `centered-everything-hero` | Centered hero composition |
-| medium | `avatar-stack-overlapping` | Generic overlapping avatar stack |
-| low | `pill-rounded-full-everywhere` | `rounded-full` applied to everything |
-| low | `nav-equal-hamburger-desktop` | Hamburger menu on desktop |
-
-#### Content (5 rules)
-
-| Severity | Rule ID | Name |
-|---|---|---|
-| high | `lorem-ipsum-leak` | Lorem ipsum in shipping code |
-| high | `emoji-in-ui` | Emoji used as UI element |
-| high | `icon-emoji-stamp` | Emoji used as icon stamp |
-| high | `testimonial-fake-five-stars` | Hardcoded five-star testimonial |
-| medium | `fake-name-john-doe` | Generic placeholder names |
-
-#### Motion (3 rules)
-
-| Severity | Rule ID | Name |
-|---|---|---|
-| medium | `cta-arrow-rightward-bouncing` | Bouncing arrow on CTA |
-| low | `timing-300ms-default` | Default 300ms transition timing |
-| low | `cubic-bezier-material-only` | Material default easing everywhere |
-
-#### A11y (6 rules)
-
-| Severity | Rule ID | Name |
-|---|---|---|
-| high | `inline-svg-no-aria` | SVG without aria-label or aria-hidden |
+| critical | `aria-hidden-on-interactive` | aria-hidden on a focusable interactive element |
+| critical | `blink-tag` | <blink> element used |
+| critical | `div-onclick-no-role` | Click handler on <div> without role or tabindex |
+| critical | `onclick-on-non-button` | onclick handler on non-interactive element |
+| critical | `outline-none-no-focus-visible` | outline removed without focus-visible replacement |
+| critical | `viewport-no-zoom` | Viewport blocks pinch-zoom |
+| high | `anchor-no-href-as-button` | Anchor styled as button without href |
+| high | `aria-live-polite-on-error` | aria-live='polite' on a critical error region |
+| high | `cursor-not-allowed-no-visual` | cursor: not-allowed with no visible disabled state |
+| high | `generic-alt-image-photo-icon` | Generic alt text: image / photo / picture / icon |
+| high | `generic-alt-untitled-screenshot-logo-banner` | Generic alt text: untitled / screenshot / logo / banner |
+| high | `hover-only-card-actions` | Card actions revealed only on hover |
+| high | `iframe-without-title` | <iframe> missing title attribute |
 | high | `img-no-alt` | Image missing alt attribute |
+| high | `inline-svg-no-aria` | SVG without aria-label or aria-hidden |
+| high | `lang-attribute-missing` | <html> without lang attribute |
 | high | `link-onclick-no-href` | Anchor with onClick but no href |
+| high | `link-without-href` | <a> element without an href attribute |
+| high | `meta-refresh-redirect` | <meta http-equiv='refresh'> redirect |
+| high | `overflow-hidden-on-html` | overflow: hidden applied to <html> |
+| high | `placeholder-as-label` | Input placeholder used as the only label |
+| high | `pointer-events-none-on-link` | <a> with pointer-events: none and no aria-disabled |
+| high | `role-button-on-anchor-without-href` | <a role='button'> with no href |
+| high | `select-without-label` | <select> with no associated <label> or aria-label |
+| high | `tabindex-positive` | Positive tabindex value |
+| high | `target-blank-no-noopener` | target="_blank" without rel="noopener noreferrer" |
+| high | `text-ink-at-low-alpha` | Text in ink at low alpha |
+| high | `tooltip-on-required-info` | Load-bearing copy hidden in a title attribute |
+| high | `video-without-captions` | <video> element without <track kind='captions'> |
+| medium | `aria-busy-without-aria-live` | aria-busy='true' with no aria-live companion |
 | medium | `button-no-type` | Button missing type attribute |
+| medium | `cursor-pointer-non-interactive` | cursor:pointer on non-interactive element |
+| medium | `fieldset-without-legend` | <fieldset> missing a <legend> child |
+| medium | `focusable-at-opacity-zero` | Focusable control left at opacity 0 |
+| medium | `generic-alt-decorative-not-empty` | alt='decorative' instead of empty alt |
 | medium | `heading-skip-h1-h3` | Skipped heading level |
+| medium | `href-empty-hash` | Dead link: href="#" placeholder |
+| medium | `href-javascript-void` | Dead link: javascript: URL as href |
 | medium | `infinite-scroll-no-pagination` | Infinite scroll without keyboard fallback |
+| medium | `inline-style-display-none-no-aria` | Interactive element hidden via inline display:none without aria-hidden |
+| medium | `menu-row-disabled-without-reason` | Disabled menu row with no reason |
+| medium | `repeated-action-same-name` | Actions in repeated items share one name |
+| medium | `safe-area-inset-only-bottom` | safe-area-inset-bottom without top/left/right siblings |
+| medium | `screen-reader-only-without-class` | Skip-to-content link with no sr-only / visually-hidden class |
+| low | `scroll-to-top-button-everywhere` | Fixed scroll-to-top button on short pages |
 
-#### Quality (6 rules)
+#### Content (35 rules)
 
 | Severity | Rule ID | Name |
 |---|---|---|
-| high | `console-log-leak` | `console.log` in component code |
-| medium | `inline-style-attribute` | Inline style attribute |
-| medium | `any-type-leak` | TypeScript `any` type |
+| high | `cta-text-read-more` | Generic CTA text: Read more / View more / See more |
+| high | `emoji-in-ui` | Emoji used as UI element |
+| high | `filler-marketing-verbs` | Filler marketing verb in headline |
+| high | `generic-cta-text` | Generic CTA text (Click here, Learn more) |
+| high | `icon-emoji-stamp` | Emoji used as icon stamp |
+| high | `imagery-mandatory-missing` | Landing page with no photograph |
+| high | `lorem-ipsum-leak` | Lorem ipsum in shipping code |
+| high | `phone-field-requires-country-code` | Phone field that refuses a local number |
+| high | `picsum-photos-seed` | Random (unseeded) picsum.photos placeholder |
+| high | `placeholder-as-pricing` | Default AI pricing tier amounts |
+| high | `placeholder-com-direct` | placeholder.com direct placeholder |
+| high | `placeholder-token-shipped` | Literal placeholder token left in shipped markup |
+| high | `placeholder-via-com` | via.placeholder.com placeholder image |
+| high | `placekitten-com` | placekitten.com kitten placeholder |
+| high | `testimonial-fake-five-stars` | Hardcoded five-star testimonial |
+| high | `unsplash-photo-id-no-alt` | Unsplash photo URL with empty or missing alt |
+| medium | `before-after-100-percent` | Magnitude-default before-after claim |
+| medium | `cta-text-tap-continue-go` | Generic CTA text: Tap here / Continue / Go |
+| medium | `fake-line-of-code-count` | Unsourced large-number marketing claim |
+| medium | `fake-name-john-doe` | Generic placeholder names |
+| medium | `marketing-buzz-ai-powered-driven` | Buzzword: AI-powered / AI-driven |
+| medium | `marketing-buzz-best-in-class` | Buzzword: best-in-class |
+| medium | `marketing-buzz-cutting-edge` | Buzzword: cutting-edge |
+| medium | `marketing-buzz-game-changing` | Buzzword: game-changing / game-changer |
+| medium | `marketing-buzz-industry-leading` | Buzzword: industry-leading |
+| medium | `marketing-buzz-leverage-ai-harness` | Buzzword: leverage / harness the power of |
+| medium | `marketing-buzz-next-generation` | Buzzword: next-generation |
+| medium | `marketing-buzz-world-class` | Buzzword: world-class |
+| medium | `marketing-unlock-unleash-potential` | Buzzword: unlock / unleash the potential, reach new heights |
+| medium | `one-action-several-labels` | One action under several labels |
+| medium | `round-number-stats` | Round number marketing stat |
+| medium | `timestamp-just-now` | Fake just-now timestamp in static markup |
+| medium | `trust-badge-no-source` | Unsourced trust-by claim |
+| low | `footer-built-with-love-coffee` | Footer: Built with love / Made with coffee / Crafted with care |
+| low | `version-1-0-0-evergreen` | Hardcoded v1.0.0 in nav or footer |
+
+#### Layout (18 rules)
+
+| Severity | Rule ID | Name |
+|---|---|---|
+| high | `h-screen-no-dvh-fallback` | 100vh without 100dvh fallback for mobile |
+| high | `three-equal-card-grid` | Three equal cards in a row |
+| medium | `aspect-ratio-1-1-default` | Square aspect-ratio as default everywhere |
+| medium | `avatar-stack-overlapping` | Generic overlapping avatar stack |
+| medium | `centered-everything-hero` | Centered hero composition |
+| medium | `cta-buttons-clustered-in-hero` | Three-plus CTA buttons clustered in hero |
+| medium | `display-table-for-layout` | display: table used for layout outside data tables |
+| medium | `eyebrows-over-budget` | More eyebrows than the brand calls for |
+| medium | `fixed-height-text-block` | Pixel height on a text container |
+| medium | `full-viewport-width-overflow` | Full viewport width causes horizontal scroll |
+| medium | `layout-family-repeated` | One layout used for three sections |
+| medium | `logo-cloud-no-real-logos` | Logo cloud image with empty alt |
+| medium | `negative-margin-pull-left-right` | Large negative horizontal margin on body content |
+| medium | `split-sections-in-a-row` | More than two media-and-text splits in a row |
+| low | `flex-center-center-default` | flex + justify-center + align-center as the default block |
+| low | `grid-cols-3-1fr-default` | repeat(3, 1fr) as a default grid |
+| low | `nav-equal-hamburger-desktop` | Hamburger menu on desktop |
+| low | `pill-rounded-full-everywhere` | rounded-full applied to everything |
+
+#### Typography (16 rules)
+
+| Severity | Rule ID | Name |
+|---|---|---|
+| high | `font-weight-numeric-100-or-900-on-body` | Body or paragraph font-weight set to 100 or 900 |
+| high | `inter-as-display` | Inter used as display font |
+| medium | `all-caps-large` | ALL CAPS at body-text size or larger |
+| medium | `body-font-weight-bold-or-700-keyword` | body / p / li set to font-weight: bold or 700 |
+| medium | `body-letter-spacing-too-wide` | Excessive letter-spacing on body / paragraph |
+| medium | `body-text-shadow-on-prose` | text-shadow applied to body or prose |
+| medium | `default-font-only` | Inter or Geist as the only font, no type decision |
+| medium | `display-bold-700` | Display heading at 700+ font-weight |
+| medium | `hero-text-arbitrary-90px` | Arbitrary hero font size |
+| medium | `letterspacing-tracking-tight-display` | Tight letter-spacing on heavy display heading |
+| medium | `text-3xl-4xl-5xl-stack` | Tailwind text-3xl text-4xl text-5xl AI hero stack |
+| medium | `title-case-headlines` | Title Case On Display Headings |
+| low | `display-line-height-under-floor` | Display line height under the engine's floor |
+| low | `font-family-monospace-fallback-default` | font-family: monospace with no specific stack |
+| low | `font-system-only` | System font stack with no chosen typeface |
+| low | `text-align-justify-web` | Justified body text on the web |
+
+#### Motion (14 rules)
+
+| Severity | Rule ID | Name |
+|---|---|---|
+| high | `animating-layout-properties` | Transition on a layout property |
+| high | `autoplay-without-muted` | <video autoplay> without muted attribute |
+| high | `infinite-animation-without-reduced-motion` | Infinite animation that keeps running under reduced motion |
+| high | `marquee-tag` | <marquee> element used |
+| medium | `animation-duration-too-long` | Long animation that starts slowly |
+| medium | `cta-arrow-rightward-bouncing` | Bouncing arrow on CTA |
+| medium | `marquee-more-than-one` | More than one marquee |
+| medium | `transition-duration-500ms-or-longer` | Interactive transition that answers late |
+| medium | `transition-property-all` | transition: all (lazy property list) |
+| low | `cubic-bezier-material-only` | Material default easing everywhere |
+| low | `exit-cut-by-display-none` | Exit animation cut by display: none |
+| low | `scale-1-1-on-card-hover` | Over-the-top hover scale |
+| low | `theme-switch-animates-everything` | Theme switch animates every color on the page |
+| low | `timing-300ms-default` | Default 300ms transition timing |
+
+#### Visual (14 rules)
+
+| Severity | Rule ID | Name |
+|---|---|---|
+| high | `decorative-accent-ruler` | Decorative accent ruler (hairline ornament, fade, dot, or a line or dash beside an eyebrow) |
+| high | `emoji-bullet-marker` | Emoji at start of list item |
+| high | `lone-emoji-as-icon` | Lone emoji used as functional icon |
+| medium | `align-html-attribute` | Presentational align= HTML attribute |
+| medium | `bgcolor-html-attribute` | Presentational bgcolor= attribute |
+| medium | `box-shadow-multilayer-default` | Five-plus box-shadow layers stacked |
+| medium | `dynamic-island-glow-everywhere` | Dynamic Island inner glow on cards |
+| medium | `glass-morphism-default` | Backdrop-blur frosted-glass on four-plus surfaces |
+| medium | `noise-texture-overlay` | Repeating noise or grain texture overlay |
+| low | `blur-bg-only-decoration` | Backdrop blur with no glass surface |
+| low | `body-background-color-inherit` | body { background-color: inherit } |
+| low | `border-radius-2xl-default` | rounded-2xl or larger applied to everything |
+| low | `cursor-pointer-on-disabled` | cursor:pointer applied to :disabled state |
+| low | `loader-spinner-border-default` | Default CSS border-spin loader recipe |
+
+#### Quality (12 rules)
+
+| Severity | Rule ID | Name |
+|---|---|---|
+| high | `console-log-leak` | console.log in component code |
+| medium | `any-type-leak` | TypeScript any type |
 | medium | `arbitrary-z-index-9999` | Lazy z-index value |
+| medium | `body-cursor-pointer-default` | body or main given cursor: pointer |
+| medium | `inline-style-attribute` | Inline style attribute |
+| low | `class-multiple-utility-than-token` | Five-plus utility classes where a token would do |
+| low | `data-testid-in-production-markup` | data-testid left in production markup |
+| low | `generic-class-container-wrapper-only` | div with only 'wrapper' / 'box' / 'inner' as class |
+| low | `numbered-placeholder-classname` | Numbered placeholder class names (card-1, feature-2) |
+| low | `padding-shorthand-4-vals-zero-first` | Verbose 4-value padding/margin where 3 would do |
 | low | `shadcn-default-everywhere` | Default shadcn token block unmodified |
 | low | `todo-fixme-comment` | TODO or FIXME in shipping code |
 
-#### Visual (1 rule)
+#### Color (10 rules)
 
 | Severity | Rule ID | Name |
 |---|---|---|
-| low | `blur-bg-only-decoration` | Backdrop blur with no glass surface |
+| high | `chrome-y-multi-stop-gradient` | Chrome-y multi-stop gradient |
+| high | `dark-text-on-dark-card` | Low-contrast text on card |
+| high | `gradient-on-text-rainbow` | Rainbow gradient on display text |
+| high | `purple-to-blue-gradient` | Default purple-to-blue AI gradient |
+| medium | `card-glow-purple-shadow` | Purple glow shadow on cards |
+| medium | `glass-without-fallback` | backdrop-filter blur without background fallback |
+| medium | `gradient-mesh-purple-pink` | Purple-pink mesh gradient hero |
+| medium | `gradient-text-rainbow` | Multi-stop gradient text |
+| medium | `navy-to-purple-gradient` | Navy to purple gradient |
+| low | `tailwind-color-named-vague` | Named Tailwind colors with no semantic token |
+
+#### Performance (5 rules)
+
+| Severity | Rule ID | Name |
+|---|---|---|
+| high | `img-no-dimensions` | Image without width and height attributes |
+| medium | `css-import-render-blocking` | @import in CSS (render-blocking) |
+| medium | `event-listener-no-passive-on-scroll` | addEventListener('scroll' \| 'touchmove' \| 'wheel') without passive |
+| medium | `image-format-jpg-no-webp-avif` | <img src="*.jpg"> without <picture> source AVIF/WebP |
+| low | `animated-grain-noise-no-perf-class` | Animated grain or noise without GPU hint |
+
+#### Depth (2 rules)
+
+| Severity | Rule ID | Name |
+|---|---|---|
+| medium | `glow-shadow-zero-offset` | Glow shadow with zero offset and large blur |
+| medium | `hairline-border-heavy-shadow` | 1px border combined with a heavy drop shadow |
+
+<!-- rules:end -->
 
 ### Linter usage
 
