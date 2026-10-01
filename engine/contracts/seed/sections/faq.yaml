@@ -1,0 +1,50 @@
+# FAQ: the reader's last questions. Every value is a semantic role.
+name: faq
+status: experimental
+category: section
+description: The questions readers ask before they act, answered from the client's own material, in the FAQ accordion.
+job: Prove the reader's last objections have honest answers.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: list, rtlBehavior: logical}
+slots:
+  - {name: list, takes: [faq-accordion], required: true}
+variants:
+  - {name: density, values: [standard, compact], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: max-width, role: layout.container.max}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.section-title}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: heading, property: stack-gap, role: space.text.gap}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: max-width, role: layout.measure.landing}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.tint]
+proof: none
+phone: [fold-side-columns]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - Each question is in the customer's own words
+usage:
+  do:
+    - Use the faq-accordion contract for the list
+    - On a phone, fold a side heading into the stack above the list
+  dont:
+    - Do not answer a question the client cannot answer truthfully
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -77,7 +77,7 @@ include = ["engine*"]
 
 [tool.setuptools.package-data]
 "engine" = ["../data/**/*.json"]
-"engine.contracts" = ["seed/*.yaml"]
+"engine.contracts" = ["seed/*.yaml", "seed/sections/*.yaml"]
 "engine.rulepack" = ["decisions/*.md", "guidance/*.md"]
 "engine.io" = ["figma/*.js"]
 

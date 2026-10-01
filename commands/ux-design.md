@@ -618,6 +618,7 @@ A field outside its values stops the script with an error that names the field a
 Build it this way:
 
 - Render the sections of `section_sequence` in order, and map all the client's content into them: every sector, size, package and benefit gets its element.
+- A section with a `contract` field is built from that section contract in `engine/contracts/seed/sections/`: its parts and slots, the component contracts the slots take, the variant the composition names, and its phone recomposition in order. `engine.contracts.sections.render_section` draws its skeleton from the bindings. A section marked `prose_only` follows its purpose line.
 - A section that carries a `proof` kind renders only with the client's real proof of that kind. The picker has already dropped the ones the brief's `proof` list lacks; each entry in `dropped` gives its reason, and the self-review repeats it. When `proof_unknown` is true, ask for the proof, or drop the section and say why. Never invent a number, a quote or a logo to fill one.
 - Ship the `conversion_mechanisms` it returns; one the client cannot back is already in `dropped`, and a section's text no longer mentions a phone the client does not have.
 - Every section carries a `job`: `ask`, `proof`, `objection`, `explanation` or `navigation`. The self-review gives one line per section naming what it does for the reader; a section that does nothing is listed and cut.

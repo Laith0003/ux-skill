@@ -87,7 +87,8 @@ def test_the_seed_files_read_the_same_in_a_full_yaml_reader():
 
 def test_seed_files_ship_with_the_package():
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-    assert re.search(r'"engine\.contracts" = \["seed/\*\.yaml"\]', pyproject)
+    assert re.search(r'"engine\.contracts" = \["seed/\*\.yaml", "seed/sections/\*\.yaml"\]',
+                     pyproject)
     assert sorted(p.stem for p in SEED_DIR.glob("*.yaml")) == list(NAMES)
 
 
