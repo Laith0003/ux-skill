@@ -331,7 +331,33 @@ def test_a_mature_systems_core_roles_are_mapped_by_name_only():
         "layout.breakpoint.tablet": "layout.breakpoint-md",
         "layout.breakpoint.laptop": "layout.breakpoint-lg",
         "type.face.display": "type.family-display", "type.face.text": "type.family-body",
-        "type.face.mono": "type.family-data"}
+        "type.face.mono": "type.family-data",
+        "type.text.display": "fontSize type.size-display",
+        "type.text.body": "fontSize type.size-body"}
+
+
+def test_type_size_names_map_the_size_of_their_type_roles():
+    ts = TokenSet({})
+    for path, px in (("type.size-body", 16), ("type.size-display", 56), ("type.size-h1", 40),
+                     ("font-size-label", 13), ("type.size-lead", 20), ("type.size-small", 14)):
+        ts.add(Token(path, "dimension", {"value": px, "unit": "px"}))
+    ts.add(Token("type.size-code", "color", "#111111"))   # a size name on a color: not read
+    proposed = propose(ts)
+    fields = {r: {k: (f.token, f.by) for k, f in m.fields.items()}
+              for r, m in proposed.roles.items()}
+    assert fields == {
+        "type.text.display": {"fontSize": ("type.size-display", "name")},
+        "type.text.heading-1": {"fontSize": ("type.size-h1", "name")},
+        "type.text.body": {"fontSize": ("type.size-body", "name")},
+        "type.text.body-small": {"fontSize": ("type.size-small", "name")},
+        "type.text.label": {"fontSize": ("font-size-label", "name")}}
+    assert all(m.vocabulary == "type size names" for m in proposed.roles.values())
+    # Written field by field, and read back the same.
+    doc = json.loads(dump_mapping(proposed))
+    assert doc["roles"]["type.text.body"] == {
+        "fields": {"fontSize": {"token": "type.size-body", "by": "name"}}}
+    assert parse_mapping(dump_mapping(proposed), "mapping.json").roles["type.text.body"].fields == \
+        proposed.roles["type.text.body"].fields
 
 
 def test_a_scale_name_maps_only_a_token_of_the_roles_type():

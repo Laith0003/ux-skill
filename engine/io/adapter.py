@@ -29,7 +29,9 @@ reduced-motion value, with a note naming the pairs.
 propose() maps a role when a token's name is the role's own path
 written with other separators (color.text.default, color-text-default,
 color/text/default), a typography role to the five field properties the
-engine's CSS writes for it, and a color role when a token's name is one
+engine's CSS writes for it, a text role's fontSize alone to a dimension
+named for that role's size (TYPE_SIZES: type.size-body is type.text.body's
+fontSize, and the owner maps its other fields), and a color role when a token's name is one
 the common naming vocabularies give it (VOCABULARIES: background and
 foreground, on- pairs, brand names, bg, fg and border families, text
 names, or the role's path without color), each entry saying which
@@ -52,6 +54,7 @@ roles.
 """
 from __future__ import annotations
 
+import dataclasses
 import difflib
 import json
 import re
@@ -282,11 +285,30 @@ VOCABULARIES: Tuple[Tuple[str, str, Tuple[Tuple[str, str], ...]], ...] = (
         ("screen-md", "layout.breakpoint.tablet"), ("screen-lg", "layout.breakpoint.laptop"),
         ("screen-xl", "layout.breakpoint.desktop"))),
 )
+# Type size names: a dimension named for a text role's size (type.size-body,
+# font-size-display, fontSize.h1) is that typography role's fontSize, the
+# one field its name says; the owner maps the other fields. A scale step
+# (size-md, size-lg, size-lead) names no role and is left to the owner.
+TYPE_SIZES: Tuple[str, str, Tuple[Tuple[str, str], ...]] = (
+    "type size names", "type.size-body, font-size-display, size-h1", (
+        ("size-display", "type.text.display"), ("size-hero", "type.text.hero"),
+        ("size-h1", "type.text.heading-1"), ("size-heading-1", "type.text.heading-1"),
+        ("size-heading", "type.text.heading-1"), ("size-h2", "type.text.heading-2"),
+        ("size-heading-2", "type.text.heading-2"), ("size-h3", "type.text.heading-3"),
+        ("size-heading-3", "type.text.heading-3"), ("size-title", "type.text.section-title"),
+        ("size-section-title", "type.text.section-title"),
+        ("size-body", "type.text.body"), ("size-base", "type.text.body"),
+        ("size-text", "type.text.body"), ("size-body-small", "type.text.body-small"),
+        ("size-small", "type.text.body-small"), ("size-ui", "type.text.ui"),
+        ("size-control", "type.text.ui"), ("size-label", "type.text.label"),
+        ("size-caption", "type.text.fine"), ("size-fine", "type.text.fine"),
+        ("size-code", "type.text.code"), ("size-mono", "type.text.code")))
 # The vocabulary a token named as a color role without its color segment
 # (text-default, surface-raised, focus-ring) matches.
 ROLE_NAMES = ("role names", "a color role's own path without color, such as text-default")
 VOCABULARY_EXAMPLES: Dict[str, str] = {ROLE_NAMES[0]: ROLE_NAMES[1],
-                                       **{v: ex for v, ex, _ in VOCABULARIES}}
+                                       **{v: ex for v, ex, _ in VOCABULARIES},
+                                       TYPE_SIZES[0]: TYPE_SIZES[1]}
 
 
 # Names the vocabularies know that play no one role of the engine's: never
@@ -423,6 +445,15 @@ def propose(ts: TokenSet) -> Mapping:
             roles[role] = RoleMap(token, "name", vocabulary=vocabulary,
                                   prefix=shown if through else "")
             taken.add(token)
+    for index in tiers:
+        for name, role in TYPE_SIZES[2]:
+            found = index.get(_vocab_key(name))
+            if role in roles or found is None or found[0] in taken \
+                    or ts.get(found[0]).type != "dimension":
+                continue
+            sized = RoleMap.per_field({"fontSize": FieldMap(found[0], "name")})
+            roles[role] = dataclasses.replace(sized, vocabulary=TYPE_SIZES[0])
+            taken.add(found[0])
     return Mapping({r: roles[r] for r in ROLE_TYPES if r in roles}, _propose_axes(ts))
 
 

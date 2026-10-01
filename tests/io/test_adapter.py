@@ -621,12 +621,14 @@ def test_merge_and_the_loop_finder_are_exported():
 FIXTURES = Path(__file__).resolve().parents[1] / "fixtures"
 
 
-def _owner_view(ts, text, page, axes):
+def _owner_view(ts, text, page, axes, sized=()):
     mapping = propose(ts)
     assert mapping.axes == axes
     mapping.roles.update({"color.text.default": RoleMap(text), "color.surface.page": RoleMap(page)})
     checked, notes = view(ts, mapping)
-    assert notes == []
+    # A size name maps only a text role's fontSize; the note names the
+    # fields the owner adds.
+    assert [n.split(" maps fontSize field by field")[0] for n in notes] == list(sized)
     assert check_system(checked, structure=False).passed
     return mapping, checked
 
@@ -639,7 +641,8 @@ def test_a_tailwind_4_stylesheet_is_proposed_and_viewed_in_our_roles():
 
 def test_a_tailwind_3_theme_is_proposed_and_viewed_in_our_roles():
     ts = read_tailwind(FIXTURES / "tailwind" / "v3" / "tailwind-theme.json").tokens
-    _, checked = _owner_view(ts, "colors.moss.950", "colors.moss.50", {})
+    _, checked = _owner_view(ts, "colors.moss.950", "colors.moss.50", {},
+                             sized=("type.text.hero", "type.text.body"))
     assert dict(checked.axes) == {}
     assert checked.get("color.surface.page").value == ts.get("colors.moss.50").value
 
