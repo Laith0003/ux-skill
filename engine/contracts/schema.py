@@ -27,7 +27,23 @@ from engine.contracts.yamlite import YamlError, loads
 
 STATUSES: Tuple[str, ...] = ("experimental", "ready", "deprecated")
 CATEGORIES: Tuple[str, ...] = ("action", "input", "selection", "container", "overlay",
-                               "feedback")
+                               "feedback", "section")
+# A section composes components into one band of a page. It carries these
+# fields as well, and no other category does.
+SECTION = "section"
+SECTION_KEYS: Tuple[str, ...] = ("job", "slots", "proof", "phone")
+# What a section's slots take besides component contracts.
+MEDIA_KINDS: Tuple[str, ...] = ("photograph", "interface-fragment", "logo", "text")
+# Section variants are named by what differs.
+SECTION_VARIANTS: Tuple[str, ...] = ("media", "alignment", "density")
+# The phone recomposition, applied in this order: drop decorative layers,
+# fold side columns into the text stack, pair small items two to a row,
+# turn three or more plans into a plan switcher with the recommended plan
+# preselected, and recrop interface fragments instead of shrinking them.
+PHONE_ORDER: Tuple[str, ...] = ("drop-decorative-layers", "fold-side-columns",
+                                "pair-small-items", "plan-switcher", "recrop-fragments")
+# The proof a section can need: the page sequence's proof kinds.
+from engine.page_sequence.core import PROOF_KINDS  # noqa: E402
 # Categories a person operates directly: they need a target size, a focus
 # state and a focus ring.
 INTERACTIVE: Tuple[str, ...] = ("action", "input", "selection")
@@ -60,8 +76,12 @@ PROPERTY_TYPES: Mapping[str, str] = MappingProxyType({
     "transition-duration": "duration", "transition-curve": "cubicBezier",
     "enter-duration": "duration", "enter-curve": "cubicBezier", "enter-distance": "dimension",
     "exit-duration": "duration", "exit-curve": "cubicBezier", "exit-distance": "dimension",
-    "direction-sign": "number",
+    "direction-sign": "number", "press-scale": "number",
 })
+# States that change how a part looks: each part that changes under one
+# binds a transition, so the change answers on the system's motion roles.
+MOVING_STATES: Tuple[str, ...] = ("hover", "selected", "pressed")
+_MOTION_PROPERTIES = ("transition-", "enter-", "exit-")
 # The WCAG criteria a contract pairing may cite, with the ratio each sets.
 # Any other floor is the contract's own and says so ("system").
 CRITERIA: Mapping[str, float] = MappingProxyType({"1.4.3": 4.5, "1.4.6": 7.0, "1.4.11": 3.0})
@@ -162,6 +182,22 @@ class Provenance:
 
 
 @dataclass(frozen=True)
+class Slot:
+    name: str
+    takes: Tuple[str, ...]
+    required: bool
+
+
+@dataclass(frozen=True)
+class SectionSpec:
+    job: str
+    slots: Tuple[Slot, ...]
+    proof_kinds: Tuple[str, ...]
+    drop: str
+    phone: Tuple[str, ...]
+
+
+@dataclass(frozen=True)
 class Contract:
     name: str
     status: str
@@ -179,6 +215,7 @@ class Contract:
     do: Tuple[str, ...]
     dont: Tuple[str, ...]
     provenance: Provenance
+    section: Optional[SectionSpec] = None
 
     @property
     def interactive(self) -> bool:
@@ -422,6 +459,99 @@ def _tokens(c: _Checker, raw: Any, parts: Tuple[Part, ...], variants: Tuple[Vari
     return tuple(out)
 
 
+def _section(c: _Checker, data: Dict[str, Any], variants: Tuple[Variant, ...],
+             folder: Optional[Path]) -> Optional[SectionSpec]:
+    """A section's job, slots, proof and phone recomposition. A slot takes
+    a seed component or a component contract in the section's own folder."""
+    from engine.contracts.library import component_names
+    job = data.get("job")
+    if not _is_text(job) or not job.strip().endswith(".") or ". " in job.strip()[:-1]:
+        c.add("bad-section", f"job is {job!r}; say in one sentence, ending in a period, what the "
+                             "section must prove")
+    for v in variants:
+        if v.name == "media":
+            alone = [x for x in v.values if "fragment" in x and "photograph" not in x]
+            if alone:
+                c.add("bad-section", f"variants media values {alone} show a fragment without a "
+                                     "photograph; a fragment is extra imagery, never a "
+                                     "replacement, so name the value photograph-and-fragment")
+    bad = [v.name for v in variants if v.name not in SECTION_VARIANTS]
+    if bad:
+        c.add("bad-section", f"variants {bad} are not named by what differs; name a section's "
+                             f"variants {', '.join(SECTION_VARIANTS)}")
+    local = {f.stem for f in folder.glob("*.yaml")} if folder and folder.is_dir() else set()
+    known = set(component_names()) | local | set(MEDIA_KINDS)
+    slots: List[Slot] = []
+    raw = data.get("slots")
+    if not isinstance(raw, list) or not raw:
+        c.add("bad-section", f"slots is {raw!r}; list each slot as {{name, takes, required}}, "
+                             "takes naming component contracts or photograph, "
+                             "interface-fragment or text")
+        raw = []
+    for i, item in enumerate(raw):
+        where = f"slots[{i}]"
+        if not isinstance(item, dict) or set(item) != {"name", "takes", "required"} \
+                or not isinstance(item.get("takes"), list) or not item["takes"] \
+                or not isinstance(item.get("required"), bool):
+            c.add("bad-section", f"{where} is {item!r}; give it name, takes (a list) and "
+                                 "required (true or false)")
+            continue
+        unknown = [t for t in item["takes"] if t not in known]
+        if unknown:
+            c.add("bad-section", f"{where}.takes names {unknown}; take a component contract "
+                                 f"({', '.join(sorted(set(component_names()) | local))}, or "
+                                 "one in the section's own folder) or "
+                                 f"{', '.join(MEDIA_KINDS)}")
+            continue
+        slots.append(Slot(str(item["name"]), tuple(item["takes"]), item["required"]))
+    takes = {t for s in slots for t in s.takes}
+    if "interface-fragment" in takes and "photograph" not in takes:
+        c.add("bad-section", "slots take interface-fragment but no slot takes photograph; a "
+                             "fragment is extra imagery, never a replacement, so add photograph "
+                             "to a slot")
+    proof = data.get("proof")
+    kinds: Tuple[str, ...] = ()
+    drop = "none"
+    if proof == "none":
+        pass
+    elif isinstance(proof, dict) and set(proof) == {"kinds", "drop"} \
+            and isinstance(proof["kinds"], list) and proof["kinds"] and _is_text(proof["drop"]):
+        wrong = [k for k in proof["kinds"] if k not in PROOF_KINDS]
+        if wrong:
+            c.add("bad-section", f"proof.kinds names {wrong}; use {', '.join(PROOF_KINDS)}")
+        kinds, drop = tuple(proof["kinds"]), proof["drop"].strip()
+    else:
+        c.add("bad-section", f"proof is {proof!r}; write none, or {{kinds: [...], drop: the "
+                             "reason the section drops when the client has none}")
+    phone = data.get("phone")
+    if not isinstance(phone, list) or any(p not in PHONE_ORDER for p in phone) \
+            or list(phone) != [p for p in PHONE_ORDER if p in phone]:
+        c.add("bad-section", f"phone is {phone!r}; list the recomposition steps it takes, in "
+                             f"this order: {', '.join(PHONE_ORDER)}")
+        phone = []
+    return SectionSpec(job.strip() if _is_text(job) else "", tuple(slots), kinds, drop,
+                       tuple(phone))
+
+
+def _state_motion(c: _Checker, tokens: Tuple[Binding, ...]) -> None:
+    """Every part that changes under hover, selected or pressed binds a
+    transition duration and curve, with no state or under that state."""
+    seen = set()
+    for b in tokens:
+        if b.state not in MOVING_STATES or b.property.startswith(_MOTION_PROPERTIES) \
+                or b.property == "press-scale" or (b.part, b.state) in seen:
+            continue
+        seen.add((b.part, b.state))
+        for prop, role in (("transition-duration", "motion.state.duration"),
+                           ("transition-curve", "motion.state.curve")):
+            if not any(o.part == b.part and o.property == prop and o.state in (None, b.state)
+                       for o in tokens):
+                c.add("no-transition", f"{b.part} changes under {b.state} but binds no "
+                                       f"{prop}; add {{part: {b.part}, property: {prop}, "
+                                       f"role: {role}}} so the change answers on the system's "
+                                       "motion")
+
+
 def _contrast(c: _Checker, raw: Any, tokens: Tuple[Binding, ...],
               surfaces: Tuple[str, ...]) -> Tuple[ContrastRule, ...]:
     if not isinstance(raw, list):
@@ -618,7 +748,8 @@ def promotion_problems(contract: Contract) -> List[ContractProblem]:
     return c.problems
 
 
-def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[ContractProblem]]:
+def contract_problems(data: Any, source: str, folder: Optional[Path] = None
+                      ) -> Tuple[Optional[Contract], List[ContractProblem]]:
     """Read one contract's data. Returns the contract (None when it cannot
     be built) and every structural problem. `source` is the file name or
     a label; a name that differs from a .yaml file's stem is a problem."""
@@ -636,15 +767,21 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
         c.add("not-a-map", f"{source} holds {held}; a contract is a map of "
                            f"{', '.join(REQUIRED_KEYS)}")
         return None, c.problems
-    missing = [k for k in REQUIRED_KEYS if k not in data]
-    unknown = [k for k in data if k not in REQUIRED_KEYS + OPTIONAL_KEYS]
+    is_section = data.get("category") == SECTION
+    missing = [k for k in REQUIRED_KEYS + (SECTION_KEYS if is_section else ()) if k not in data]
+    unknown = [k for k in data if k not in REQUIRED_KEYS + OPTIONAL_KEYS
+               + (SECTION_KEYS if is_section else ())]
     if missing:
         c.add("missing-key", f"missing {', '.join(missing)}; every contract has "
-                             f"{', '.join(REQUIRED_KEYS)}")
+                             f"{', '.join(REQUIRED_KEYS)}"
+                             + (f", and a section also has {', '.join(SECTION_KEYS)}"
+                                if is_section else ""))
     if unknown:
         what = "is not a contract field" if len(unknown) == 1 else "are not contract fields"
+        extra = ("" if is_section else f" ({', '.join(SECTION_KEYS)} belong to a section, "
+                                       "category section)")
         c.add("unknown-key", f"{', '.join(map(repr, unknown))} {what}; "
-                             f"use only {', '.join(REQUIRED_KEYS + OPTIONAL_KEYS)}")
+                             f"use only {', '.join(REQUIRED_KEYS + OPTIONAL_KEYS)}{extra}")
     if missing:
         return None, c.problems
     name = data["name"]
@@ -677,6 +814,7 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
     variants = _variants(c, data["variants"])
     states = _states(c, data["states"], category)
     tokens = _tokens(c, data["tokens"], parts, variants, states)
+    _state_motion(c, tokens)
     surfaces_raw = data["surfaces"]
     if not isinstance(surfaces_raw, list):
         c.add("bad-surfaces", f"surfaces is {surfaces_raw!r}; list the surface roles the "
@@ -698,11 +836,12 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
         do = c.texts(usage["do"], "usage.do", "rules")
         dont = c.texts(usage["dont"], "usage.dont", "rules")
     provenance = _provenance(c, data["provenance"])
+    section = _section(c, data, variants, folder) if is_section else None
     if c.problems:
         return None, c.problems
     contract = Contract(name, status, category, data["description"].strip(), replacement,
                         parts, variants, states, tokens, contrast, surfaces, a11y, copy, do,
-                        dont, provenance)
+                        dont, provenance, section)
     if provenance.variant_count is not None \
             and provenance.variant_count != contract.variant_product() and not provenance.drift:
         c.add("variant-count", f"provenance.figma.variantCount is {provenance.variant_count} but "
@@ -714,14 +853,16 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
     return (None if c.problems else contract), c.problems
 
 
-def read_contract(text: str, source: str = "<contract>") -> Contract:
+def read_contract(text: str, source: str = "<contract>",
+                  folder: Optional[Path] = None) -> Contract:
     """Read a contract from YAML text. Raises ContractError with every
-    problem, a YAML error included."""
+    problem, a YAML error included. ``folder`` is where the file sits, so a
+    section may take the component contracts beside it."""
     try:
         data = loads(text, source)
     except YamlError as exc:
         raise ContractError([ContractProblem(Path(source).stem, "yaml", str(exc))]) from None
-    contract, problems = contract_problems(data, source)
+    contract, problems = contract_problems(data, source, folder)
     if contract is None:
         raise ContractError(problems)
     return contract
@@ -736,4 +877,4 @@ def load_contract(path: Union[str, Path]) -> Contract:
         raise ContractError([ContractProblem(p.stem, "unreadable",
                                              f"{p} cannot be read ({type(exc).__name__}); save it "
                                              "as UTF-8 text in a folder you can read")]) from None
-    return read_contract(text, p.name)
+    return read_contract(text, p.name, p.parent)

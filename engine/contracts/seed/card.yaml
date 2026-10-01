@@ -12,7 +12,8 @@ parts:
   - {name: actions, rtlBehavior: logical}
 variants:
   - {name: level, values: [standard, lifted], default: standard}
-states: [default]
+  - {name: interaction, values: [static, interactive], default: static}
+states: [default, hover, pressed, focus]
 tokens:
   - {part: container, property: fill, role: color.surface.card, when: {level: standard}}
   - {part: container, property: shadow, role: elevation.card, when: {level: standard}}
@@ -32,7 +33,21 @@ tokens:
   - {part: meta, property: text, role: color.text.muted}
   - {part: meta, property: font, role: type.text.fine}
   - {part: actions, property: gap, role: space.control.gap}
+  # an interactive card is one link or button: it lifts on hover, shrinks
+  # on motion.press.scale when pressed (1 under reduced motion), and shows
+  # the focus ring; its changes answer on motion.state
+  - {part: container, property: shadow, role: elevation.lifted, when: {interaction: interactive}, state: hover}
+  - {part: container, property: border-color, role: color.line.input, when: {interaction: interactive}, state: hover}
+  - {part: container, property: press-scale, role: motion.press.scale, when: {interaction: interactive}, state: pressed}
+  - {part: container, property: min-size, role: layout.target.min, when: {interaction: interactive}}
+  - {part: container, property: focus-ring, role: color.focus.ring, when: {interaction: interactive}, state: focus}
+  - {part: container, property: focus-ring-width, role: border.focus-ring.width, when: {interaction: interactive}, state: focus}
+  - {part: container, property: focus-ring-offset, role: border.focus-ring.offset, when: {interaction: interactive}, state: focus}
+  - {part: container, property: transition-duration, role: motion.state.duration}
+  - {part: container, property: transition-curve, role: motion.state.curve}
 contrast:
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.text.default, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.muted, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.default, bg: color.surface.raised, minimum: 4.5, criterion: "1.4.3"}
@@ -48,6 +63,9 @@ copy:
     - The body gives one or two facts that help a person decide whether to open it
 usage:
   do:
+    - Make a card interactive only when the whole card goes to one place; its title is the link, stretched over the card, and any other control inside it sits above that link. A card with two or more destinations stays static
+    - A static card takes no hover, pressed or focus binding; those apply only with interaction interactive
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
     - Keep an edge on every card; in light high contrast the card and the page are the same color
     - Keep the card's main content in the default text color; muted text is for metadata such as a date
     - Round inner media by the card radius minus the padding, never by the card radius itself, and never below 0; where the padding is larger than the radius, the media takes radius.joined

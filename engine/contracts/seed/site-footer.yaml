@@ -37,6 +37,9 @@ tokens:
   - {part: link, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
   - {part: legal, property: text, role: color.text.muted}
   - {part: legal, property: font, role: type.text.fine}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: link, property: transition-duration, role: motion.state.duration}
+  - {part: link, property: transition-curve, role: motion.state.curve}
 contrast:
   - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.link, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}

@@ -235,6 +235,7 @@ def build_html(rules, version):
   .ap-pre--rx {{ border-left: 2px solid var(--accent); color: var(--muted); font-size: 11px; margin-bottom: 8px; }}
   .ap-anchor {{ position: absolute; top: 18px; right: 18px; font-family: var(--mono); font-size: 10px; color: var(--muted); padding: 2px 6px; border: 1px solid var(--hairline); border-radius: 4px; opacity: 0; transition: opacity var(--t-fast) var(--ease); }}
   .ap-card:hover .ap-anchor, .ap-card:focus-within .ap-anchor {{ opacity: 1; }}
+  @media (hover: none) {{ .ap-anchor {{ opacity: 1; }} }}
   .ap-card.is-hidden {{ display: none; }}
 
   .nav {{ padding: 22px 0; border-bottom: 1px solid var(--hairline); }}

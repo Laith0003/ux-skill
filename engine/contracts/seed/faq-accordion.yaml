@@ -36,6 +36,9 @@ tokens:
   - {part: answer, property: max-width, role: layout.measure.text}
   - {part: answer, property: enter-duration, role: motion.expand.duration}
   - {part: answer, property: enter-curve, role: motion.expand.curve}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: question, property: transition-duration, role: motion.state.duration}
+  - {part: question, property: transition-curve, role: motion.state.curve}
 contrast:
   - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.link, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}

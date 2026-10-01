@@ -1,0 +1,91 @@
+# Menu: a list of actions opened from a button. Every value is a semantic
+# role.
+name: menu
+status: experimental
+category: overlay
+description: A list of actions or choices opened from a menu button, raised above the page, closed by choosing, Escape or a click outside.
+parts:
+  - {name: panel, rtlBehavior: logical}
+  - {name: row, rtlBehavior: logical}
+  - {name: icon, rtlBehavior: logical}
+  - {name: reason, rtlBehavior: logical}
+  - {name: indicator, rtlBehavior: logical}
+  - {name: notice, rtlBehavior: logical}
+variants:
+  - {name: kind, values: [actions, choice], default: actions}
+states: [default, hover, focus, selected, disabled]
+tokens:
+  - {part: panel, property: fill, role: color.surface.raised}
+  - {part: panel, property: border-width, role: border.outline}
+  - {part: panel, property: border-color, role: color.line.subtle}
+  - {part: panel, property: radius, role: radius.card}
+  - {part: panel, property: shadow, role: elevation.popover}
+  - {part: panel, property: layer, role: elevation.order.dropdown}
+  - {part: panel, property: padding-block, role: space.control.padding-block}
+  - {part: panel, property: enter-duration, role: motion.reveal.duration}
+  - {part: panel, property: enter-curve, role: motion.reveal.curve}
+  - {part: panel, property: enter-distance, role: motion.reveal.distance}
+  - {part: panel, property: exit-duration, role: motion.dismiss.duration}
+  - {part: panel, property: exit-curve, role: motion.dismiss.curve}
+  - {part: panel, property: exit-distance, role: motion.dismiss.distance}
+  - {part: row, property: text, role: color.text.default}
+  - {part: row, property: font, role: type.text.ui}
+  - {part: row, property: min-size, role: layout.target.min}
+  - {part: row, property: padding-inline, role: space.control.padding-inline}
+  - {part: row, property: gap, role: space.control.gap}
+  - {part: row, property: fill, role: color.surface.sunken, state: hover}
+  - {part: row, property: border-width, role: border.outline, state: hover}
+  - {part: row, property: border-color, role: color.line.input, state: hover}
+  - {part: row, property: text, role: color.text.disabled, state: disabled}
+  - {part: icon, property: icon, role: color.text.muted}
+  - {part: reason, property: text, role: color.text.muted}
+  - {part: reason, property: font, role: type.text.fine}
+  - {part: notice, property: text, role: color.text.muted}
+  - {part: notice, property: font, role: type.text.fine}
+  - {part: row, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: row, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: row, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  # in a choice menu one indicator marks the chosen row: it fades in the
+  # first time, slides after that and snaps under reduced motion
+  - {part: indicator, property: fill, role: color.line.selected, when: {kind: choice}}
+  - {part: indicator, property: border-width, role: border.active, when: {kind: choice}}
+  - {part: indicator, property: transition-duration, role: motion.indicator.duration}
+  - {part: indicator, property: transition-curve, role: motion.indicator.curve}
+  - {part: indicator, property: enter-duration, role: motion.indicator.duration}
+  - {part: indicator, property: enter-curve, role: motion.indicator.curve}
+  - {part: row, property: font-weight, role: type.strong, when: {kind: choice}, state: selected}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: row, property: transition-duration, role: motion.state.duration}
+  - {part: row, property: transition-curve, role: motion.state.curve}
+contrast:
+  - {fg: color.text.default, bg: color.surface.raised, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.raised, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.selected, bg: color.surface.raised, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: color.surface.raised, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: color.surface.raised, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page, color.surface.card]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: the chosen row carries aria-checked or aria-current, the heavier weight and the indicator beside it, never color alone; a disabled row carries aria-disabled and its reason in words
+copy:
+  default:
+    - Start each action row with a verb; name each choice row with the value it sets
+    - A disabled row keeps its label and says in a few words why it cannot be used now
+usage:
+  do:
+    - The menu button carries aria-haspopup, aria-expanded and aria-controls; opening moves focus to the first row, the arrow keys move between rows, and Escape closes the menu and returns focus to the button
+    - Keep a disabled row visible in its place with aria-disabled, focusable by the arrow keys, and give its reason in the reason part beside the label, so a person learns why it cannot be used
+    - In a choice menu draw one indicator beside the chosen row. It fades in the first time the menu opens, slides to a newly chosen row after that on motion.indicator, and snaps under reduced motion, where motion.indicator resolves to 0ms
+    - Keep the exit animation running until it ends before the panel is hidden, then hide it with hidden or inert so its rows leave the tab order
+    - When rows load after the menu opens, put the loading line in an aria-live="polite" region in the notice part, and a failure to load in a role="alert" region with a way to try again
+    - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, hover changes the row's fill and selected its weight, so both show
+  dont:
+    - Do not remove a row a person cannot use; disable it and say why
+    - Do not leave a closed panel at opacity 0 with its rows still focusable
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -74,6 +74,33 @@ SPAN: Mapping[str, float] = MappingProxyType({
 })
 # Control corners past this read as a pill; any larger radius looks the same.
 PILL_PX = 60.0
+# Our floor on the glance distance between two systems built at different
+# corners of the axes, read on what one section shows: below it a section
+# looks the same whatever the brand and brief.
+GLANCE_FLOOR = 0.20
+# The glance features a bound role shows, by role prefix.
+FEATURE_ROLES: Mapping[str, Tuple[str, ...]] = MappingProxyType({
+    "button": ("color.action.primary",), "link": ("color.text.link",),
+    "support": ("color.text.support", "color.surface.band", "color.text.accent"),
+    "neutral": ("color.surface.", "color.text.muted", "color.text.default", "color.line."),
+    "face.display": ("type.text.display", "type.text.hero", "type.text.heading-1",
+                     "type.text.section-title", "type.text.figure"),
+    "face.text": ("type.text.body", "type.text.ui", "type.text.fine", "type.text.label",
+                  "type.text.heading-2", "type.text.heading-3"),
+    "radius.control": ("radius.control",), "radius.card": ("radius.card", "radius.media"),
+    "hero.px": ("type.text.display", "type.text.hero"),
+    "hero.weight": ("type.text.display", "type.text.hero"),
+    "hero.tracking": ("type.text.display", "type.text.hero"),
+    "body.px": ("type.text.body",), "shadow.alpha": ("elevation.",), "shadow.blur": ("elevation.",),
+    "card.padding": ("space.card.padding",), "region.gap": ("layout.region-gap", "layout.landing-gap"),
+    "hero.ratio": ("imagery.ratio",),
+})
+
+
+def features_shown(roles) -> Tuple[str, ...]:
+    """The glance features a set of bound roles shows, in WEIGHTS order."""
+    return tuple(k for k in WEIGHTS
+                 if any(r.startswith(p) for r in roles for p in FEATURE_ROLES.get(k, ())))
 
 
 def _px(v: Dict[str, Any]) -> float:
@@ -125,10 +152,15 @@ def apart(key: str, a: Any, b: Any) -> float:
     return min(1.0, raw / SPAN[key])
 
 
-def distance(a: Dict[str, Any], b: Dict[str, Any]) -> float:
-    """The weighted mean of the glance features apart, 0 to 1."""
-    total = sum(w * apart(k, a[k], b[k]) for k, w in WEIGHTS.items())
-    return round(total / sum(WEIGHTS.values()), 4)
+def distance(a: Dict[str, Any], b: Dict[str, Any], keys=None) -> float:
+    """The weighted mean of the glance features apart, 0 to 1; with
+    ``keys``, of those features only (what one section shows)."""
+    weights = {k: w for k, w in WEIGHTS.items() if keys is None or k in keys}
+    if not weights:
+        raise ValueError("keys: name at least one glance feature, from "
+                         + ", ".join(WEIGHTS))
+    total = sum(w * apart(k, a[k], b[k]) for k, w in weights.items())
+    return round(total / sum(weights.values()), 4)
 
 
 def behavior(a: Dict[str, Any], b: Dict[str, Any]) -> float:

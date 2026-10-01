@@ -45,6 +45,10 @@ tokens:
   - {part: menu, property: layer, role: elevation.order.dropdown}
   - {part: menu, property: enter-duration, role: motion.reveal.duration}
   - {part: menu, property: enter-curve, role: motion.reveal.curve}
+  # the list leaves on motion.dismiss and keeps its exit until it ends
+  - {part: menu, property: exit-duration, role: motion.dismiss.duration}
+  - {part: menu, property: exit-curve, role: motion.dismiss.curve}
+  - {part: menu, property: exit-distance, role: motion.dismiss.distance}
   - {part: option, property: text, role: color.text.default}
   - {part: option, property: font, role: type.text.body}
   - {part: option, property: padding-inline, role: space.control.padding-inline}
@@ -94,6 +98,11 @@ tokens:
   - {part: trigger, property: border-color, role: color.line.subtle, state: disabled}
   - {part: trigger, property: text, role: color.text.disabled, state: disabled}
   - {part: chevron, property: icon, role: color.text.disabled, state: disabled}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: option, property: transition-duration, role: motion.state.duration}
+  - {part: option, property: transition-curve, role: motion.state.curve}
+  - {part: trigger, property: transition-duration, role: motion.state.duration}
+  - {part: trigger, property: transition-curve, role: motion.state.curve}
 contrast:
   - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.default, bg: color.surface.card, minimum: 4.5, criterion: "1.4.3"}
@@ -133,6 +142,8 @@ usage:
   do:
     - Draw the heavier edge of hover and error with edge-weight, keeping the border at border-width and drawing the difference inside it as an inset box-shadow in the state's border color, never an outline, which the focus ring owns, so the field never moves by a pixel
     - Use a select for five or more options; for fewer, use radio buttons so every option shows
+    - When options load after the list opens, put the loading line in an aria-live="polite" region and a failure to load in a role="alert" region with a way to try again
+    - Keep the list's exit animation running until it ends, then hide it with hidden or inert so its options leave the tab order
     - Open the list below the field and keep the chosen option in view when it opens
     - Reserve one line of the message's height under the field, so an error never moves what follows
     - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule

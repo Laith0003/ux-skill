@@ -1,0 +1,59 @@
+# Bento: a grid of tiles of different sizes. Every value is a semantic role.
+name: bento
+status: experimental
+category: section
+description: Five to eight tiles of different sizes, each showing one capability with its photograph or fragment, one tile leading.
+job: Prove the product's range at a glance, with one capability leading.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: item, rtlBehavior: logical}
+  - {name: item-title, rtlBehavior: logical}
+  - {name: media, rtlBehavior: logical}
+slots:
+  - {name: item, takes: [card], required: true}
+  - {name: media, takes: [photograph, interface-fragment], required: true}
+variants:
+  - {name: media, values: [photograph, photograph-and-fragment], default: photograph}
+  - {name: density, values: [standard, compact], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: max-width, role: layout.container.max}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.section-title}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: heading, property: stack-gap, role: space.text.gap}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: max-width, role: layout.measure.landing}
+  - {part: item, property: gap, role: space.group.gap}
+  - {part: item-title, property: font, role: type.text.heading-3}
+  - {part: item-title, property: text, role: color.text.default}
+  - {part: media, property: radius, role: radius.media}
+  - {part: item, property: radius, role: radius.card}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.tint]
+proof: none
+phone: [drop-decorative-layers, pair-small-items, recrop-fragments]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - Each tile's title names what it shows
+usage:
+  do:
+    - Let one tile lead at twice the size of the others
+    - On a phone, drop decorative layers, pair small tiles and recrop fragments
+  dont:
+    - Do not fill a tile with an icon alone
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

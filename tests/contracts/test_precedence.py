@@ -47,10 +47,11 @@ def test_every_reachable_combination_is_run():
     # button: 12 variant choices by 2**5 state sets; the row 2 by 2**5; the
     # text field 2 by 2**4.
     counts = {name: sum(1 for n, _, _ in CASES if n == name) for name in CONTRACTS}
-    assert counts == {"badge": 6, "button": 576, "card": 2, "checkbox": 48, "chip": 32,
-                      "date": 32, "dialog": 4, "faq-accordion": 4, "input-prefix": 32, "link": 8, "nav": 16,
-                      "progress": 4, "radio": 32, "select": 128, "selectable-row": 64, "site-footer": 4,
-                      "status-banner": 8, "table": 48, "text-field": 32, "textarea": 32}
+    assert counts == {"badge": 6, "button": 576, "card": 32, "checkbox": 48, "chip": 64,
+                      "date": 32, "dialog": 4, "faq-accordion": 4, "input-prefix": 32, "link": 8,
+                      "menu": 32, "nav": 16, "progress": 4, "radio": 32, "segmented-control": 32,
+                      "select": 128, "selectable-row": 64, "site-footer": 4, "status-banner": 8,
+                      "table": 48, "tabs": 16, "text-field": 32, "textarea": 32}
 
 
 @pytest.mark.parametrize("name,variant,states", CASES)
@@ -198,6 +199,8 @@ variants:
 states: [default, hover, focus]
 tokens:
   - {part: container, property: fill, role: color.surface.card, when: {tone: danger, size: large}}
+  - {part: container, property: transition-duration, role: motion.state.duration}
+  - {part: container, property: transition-curve, role: motion.state.curve}
   - {part: container, property: fill, role: color.surface.sunken, state: hover}
   - {part: container, property: fill, role: color.surface.selected, when: {tone: danger}, state: hover}
   - {part: container, property: fill, role: color.status.danger.soft, when: {tone: danger, size: large}, state: hover}

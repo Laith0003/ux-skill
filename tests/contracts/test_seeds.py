@@ -15,8 +15,9 @@ from engine.synthesizer.axes import AxisValues
 
 ROOT = Path(__file__).resolve().parents[2]
 NAMES = ("badge", "button", "card", "checkbox", "chip", "date", "dialog", "faq-accordion",
-         "input-prefix", "link", "nav", "progress", "radio", "select", "selectable-row",
-         "site-footer", "status-banner", "table", "text-field", "textarea")
+         "input-prefix", "link", "menu", "nav", "progress", "radio", "segmented-control", "select",
+         "selectable-row", "site-footer", "status-banner", "table", "tabs", "text-field",
+         "textarea")
 BRANDS = ("#3366FF", "#6B4423", "#FFD400", "#E11D48", "#16A34A", "#0EA5E9", "#7C3AED",
           "#F97316", "#111827", "#F5F5F5", "#00FFFF", "#FF00FF",
           # A near-gray brand whose selected surface matches a card in dark high
@@ -31,9 +32,10 @@ def test_the_seeds_load_and_are_experimental():
     assert tuple(c.name for c in seeds) == NAMES
     assert all(c.status == "experimental" for c in seeds)
     assert {c.name: c.variant_product() for c in seeds} == {
-        "badge": 6, "button": 18, "card": 2, "checkbox": 3, "chip": 2, "date": 1, "dialog": 2,
-        "faq-accordion": 1, "input-prefix": 2, "link": 2, "nav": 2, "progress": 2, "radio": 2, "select": 1,
-        "selectable-row": 2, "site-footer": 1, "status-banner": 4, "table": 6, "text-field": 2, "textarea": 2}
+        "badge": 6, "button": 18, "card": 4, "checkbox": 3, "chip": 2, "date": 1, "dialog": 2,
+        "faq-accordion": 1, "input-prefix": 2, "link": 2, "menu": 2, "nav": 2, "progress": 2,
+        "radio": 2, "segmented-control": 2, "select": 1, "selectable-row": 2, "site-footer": 1,
+        "status-banner": 4, "table": 6, "tabs": 1, "text-field": 2, "textarea": 2}
     assert all(c.provenance.node is None and c.provenance.drift == () for c in seeds)
 
 
@@ -85,7 +87,8 @@ def test_the_seed_files_read_the_same_in_a_full_yaml_reader():
 
 def test_seed_files_ship_with_the_package():
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-    assert re.search(r'"engine\.contracts" = \["seed/\*\.yaml"\]', pyproject)
+    assert re.search(r'"engine\.contracts" = \["seed/\*\.yaml", "seed/sections/\*\.yaml"\]',
+                     pyproject)
     assert sorted(p.stem for p in SEED_DIR.glob("*.yaml")) == list(NAMES)
 
 
