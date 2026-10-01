@@ -35,9 +35,13 @@ _SETUP_JS = r"""() => {
   const shown = e => { const r = e.getBoundingClientRect(), cs = getComputedStyle(e);
     return r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.display !== 'none'
       && parseFloat(cs.opacity) > 0; };
-  const look = e => { const cs = getComputedStyle(e);
-    return [cs.outlineStyle, cs.outlineWidth, cs.outlineColor, cs.boxShadow, cs.borderColor,
-            cs.backgroundColor, cs.color, cs.textDecorationLine].join('|'); };
+  // The element's own look, its ::before and ::after (a ring drawn on a
+  // pseudo-element) and its parent's (a ring drawn by :focus-within).
+  const one = cs => [cs.outlineStyle, cs.outlineWidth, cs.outlineColor, cs.boxShadow,
+    cs.borderColor, cs.backgroundColor, cs.color, cs.textDecorationLine, cs.content].join('|');
+  const look = e => [one(getComputedStyle(e)), one(getComputedStyle(e, '::before')),
+    one(getComputedStyle(e, '::after')),
+    e.parentElement ? one(getComputedStyle(e.parentElement)) : ''].join('#');
   const rest = new Map();
   const FOCUSABLE = 'a[href],button,input:not([type=hidden]),select,textarea,summary,'
     + '[tabindex]:not([tabindex="-1"]),[contenteditable=""],[contenteditable=true]';
@@ -50,7 +54,11 @@ _SETUP_JS = r"""() => {
     const a = c.length > 3 ? c[3] : 1;
     return [...m.slice(0, 4), m[4] / 40, m[5] / 40, c[0] / 255, c[1] / 255, c[2] / 255, a,
             parseFloat(cs.opacity)]; };
-  window.__ux = {sel, shown, look, rest, vec, rec: null};
+  window.__ux = {sel, shown, look, rest, vec, rec: null, hold: false};
+  // While a press is probed, a click goes nowhere: no link is followed, no
+  // form is sent and no handler opens a menu.
+  for (const kind of ['click', 'submit', 'auxclick']) window.addEventListener(kind, ev => {
+    if (window.__ux.hold) { ev.preventDefault(); ev.stopImmediatePropagation(); } }, true);
   window.__ux.start = (e, kind) => {
     const r = {e, samples: [], t0: null};
     const mark = () => { if (r.t0 === null) r.t0 = performance.now(); };
@@ -74,6 +82,8 @@ _SETUP_JS = r"""() => {
 _FOCUS_JS = r"""() => {
   const u = window.__ux, e = document.activeElement;
   if (!e || e === document.body || e === document.documentElement) return {none: true};
+  if (e.hasAttribute('data-ux-focused')) return {repeat: true};
+  e.setAttribute('data-ux-focused', '');
   const cs = getComputedStyle(e);
   const before = u.rest.get(e);
   const changed = before === undefined ? true : u.look(e) !== before;
@@ -120,21 +130,24 @@ _POPUPS_JS = r"""(limit) => {
 }"""
 
 
+def _flat(transform: str) -> str:
+    """A computed transform with the identity matrix read as none."""
+    return "none" if transform in ("none", "matrix(1, 0, 0, 1, 0, 0)") else transform
+
+
 def _hit(rule: str, sel: str, detail: str, cls: str = "", text: str = "") -> Dict[str, Any]:
     return {"rule": rule, "sel": sel, "cls": cls, "text": text, "detail": detail}
 
 
 async def _focus_pass(page) -> List[Dict[str, Any]]:
     hits: List[Dict[str, Any]] = []
-    seen = set()
     for _ in range(FOCUS_STEPS):
         await page.keyboard.press("Tab")
         info = await page.evaluate(_FOCUS_JS)
         if info.get("none"):
             continue
-        if info["sel"] in seen:
+        if info.get("repeat"):
             break  # the tab order came back round
-        seen.add(info["sel"])
         if not info["visible"]:
             hits.append(_hit("focus-ring-missing", info["sel"],
                              "takes focus with no visible change from its resting style",
@@ -165,13 +178,17 @@ async def _timing_pass(page, reduced: bool) -> List[Dict[str, Any]]:
             else:
                 await handle.hover(timeout=1000)
                 await page.wait_for_timeout(60)
-            await page.evaluate("(e) => window.__ux.start(e, 'pointerdown')", handle)
+            resting = await page.evaluate("(e) => getComputedStyle(e).transform", handle)
+            await page.evaluate("(e) => { window.__ux.hold = true; "
+                                "window.__ux.start(e, 'pointerdown'); }", handle)
             await page.mouse.down()
             await page.wait_for_timeout(SAMPLE_MS)
             press = await page.evaluate("() => window.__ux.stop()")
             matrix = await page.evaluate("(e) => getComputedStyle(e).transform", handle)
             await page.mouse.up()
-            if reduced and matrix not in ("none", "matrix(1, 0, 0, 1, 0, 0)"):
+            await page.wait_for_timeout(30)
+            await page.evaluate("() => { window.__ux.hold = false; }")
+            if reduced and _flat(matrix) != _flat(resting):
                 hits.append(_hit("press-moves-under-reduced-motion", name,
                                  f"pressed with reduced motion set, it takes {matrix}"))
             elif not reduced and press and press["t50"] is not None \
@@ -180,6 +197,7 @@ async def _timing_pass(page, reduced: bool) -> List[Dict[str, Any]]:
                                  f"a press reaches half its change at {round(press['t50'])}ms"))
         except Exception:  # a control covered or moved away by the page is skipped
             await page.mouse.up()
+            await page.evaluate("() => { if (window.__ux) window.__ux.hold = false; }")
             continue
         await page.mouse.move(0, 0)
     return hits
@@ -187,6 +205,7 @@ async def _timing_pass(page, reduced: bool) -> List[Dict[str, Any]]:
 
 async def _escape_pass(page) -> List[Dict[str, Any]]:
     hits: List[Dict[str, Any]] = []
+    await page.evaluate(_SETUP_JS)
     names = await page.evaluate(_POPUPS_JS, POPUP_LIMIT)
     for i, name in enumerate(names):
         handle = await page.query_selector(f'[data-ux-popup="{i}"]')

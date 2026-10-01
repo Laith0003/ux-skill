@@ -522,3 +522,42 @@ def test_a_press_scale_bound_to_the_system_role_passes(tmp_path):
            "button:active{transform:scale(var(--motion-press-scale))}")
     ids, _ = _driven(tmp_path, css, '<button type="button">Order</button>')
     assert "press-moves-under-reduced-motion" not in ids
+
+
+def test_the_focus_pass_tabs_past_links_that_share_a_class(tmp_path):
+    css = ("a{outline:none}a.nav-link:focus-visible{outline:2px solid #1d4ed8}"
+           ".last{outline:none}.last:focus{outline:none}")
+    body = ''.join(f'<a class="nav-link" href="#p{i}">Page {i}</a> ' for i in range(5)) + \
+        '<button class="last" type="button">Order</button>'
+    ids, _ = _driven(tmp_path, css, body)
+    assert "focus-ring-missing" in ids
+
+
+def test_pressing_a_card_link_does_not_leave_the_page(tmp_path):
+    (tmp_path / "other.html").write_text("<p>Other</p>", encoding="utf-8")
+    css = "#m[hidden]{display:none}"
+    body = ('<a class="card" href="other.html">Tonight</a>'
+            '<button type="button" aria-haspopup="menu" id="t">Account</button>'
+            '<ul id="m" role="menu" hidden><li><a role="menuitem" href="#a">Settings</a></li></ul>'
+            '<script>const t=document.getElementById("t"),m=document.getElementById("m");'
+            't.addEventListener("click",()=>{m.hidden=false;m.querySelector("a").focus();});'
+            'document.addEventListener("keydown",e=>{if(e.key==="Escape"){m.hidden=true;'
+            'document.activeElement.blur();}});</script>')
+    _, report = _driven(tmp_path, css, body)
+    ids = {x.rule_id for x in report.findings}
+    assert "render-failed" not in ids and "focus-lost-after-escape" in ids
+
+
+def test_a_resting_transform_is_not_a_press_under_reduced_motion(tmp_path):
+    css = ("button{transform:rotate(-2deg);padding:8px 12px}"
+           "@media (prefers-reduced-motion:no-preference){button:active{transform:scale(.96)}}")
+    ids, _ = _driven(tmp_path, css, '<button type="button">Order</button>')
+    assert "press-moves-under-reduced-motion" not in ids
+
+
+def test_a_ring_drawn_on_a_pseudo_element_counts(tmp_path):
+    css = ("a{outline:none;position:relative}a:focus{outline:none}"
+           "a:focus-visible::after{content:'';position:absolute;inset:-4px;"
+           "box-shadow:0 0 0 2px #1d4ed8}")
+    ids, _ = _driven(tmp_path, css, '<a href="#x">Menu</a>')
+    assert "focus-ring-missing" not in ids

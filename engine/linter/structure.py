@@ -906,7 +906,10 @@ def _in_hover_media(block: Optional[Block]) -> bool:
 
 _NO_HOVER_MEDIA = re.compile(r"\(\s*(?:any-)?hover\s*:\s*none\s*\)", re.I)
 _EXPANDED = re.compile(r"\[\s*aria-expanded\s*=\s*[\"']?true", re.I)
-_OPENS_MENU = re.compile(r"aria-haspopup|aria-expanded|menu|more|kebab|overflow|dropdown", re.I)
+# A class or id that names a menu trigger: menu, kebab or dropdown at the end
+# of the name, alone or before trigger, button or toggle.
+_OPENS_MENU = re.compile(r"(?:^|[-_])(?:menu|kebab|dropdown)(?:[-_](?:trigger|button|toggle))?$",
+                         re.I)
 
 
 def _same_container(hover: str, hidden: str) -> bool:
@@ -916,7 +919,11 @@ def _same_container(hover: str, hidden: str) -> bool:
     if plain == " ".join(hidden.split()):
         return True
     ph, pd = compounds(plain), compounds(hidden)
-    return bool(ph and pd and tokens(ph[0]) & tokens(pd[0]))
+    if not (ph and pd):
+        return False
+    if len(pd) <= len(ph) and all(tokens(a) <= tokens(b) for a, b in zip(pd[::-1], ph[::-1])):
+        return True  # the hidden selector names the end of the hover's path
+    return bool(tokens(ph[0]) & tokens(pd[0]))
 
 
 def _shares(a: str, b: str) -> bool:
@@ -935,8 +942,12 @@ def _reveals(block: Block) -> bool:
 def _owns_menu(ctx: FileContext, subjects: List[str]) -> bool:
     """The revealed control opens a menu: its selector says so, or the
     markup it styles holds a control with aria-haspopup or aria-expanded."""
-    if any(_OPENS_MENU.search(s) for s in subjects):
-        return True
+    for s in subjects:
+        parts = compounds(s)
+        if parts and any(_OPENS_MENU.search(t) for t in tokens(parts[-1])):
+            return True
+        if re.search(r"aria-(?:haspopup|expanded)", s, re.I):
+            return True
     for c in [ctx, *ctx.pages]:
         tags, _ends, _parents = c.tree()
         if not tags:

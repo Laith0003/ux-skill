@@ -126,3 +126,16 @@ def test_async_lists_announce_loading_politely_and_failure_as_an_alert(name):
 
 def test_the_new_seeds_bind_to_a_built_system():
     assert validate_contracts([SEEDS[n] for n in INDICATED], TS) == []
+
+
+def test_a_token_set_with_no_motion_axis_checks_the_press_scale_at_its_base():
+    from engine.contracts.bind import _press_problems
+    from engine.foundations.tokens import Token, TokenSet
+    ts = TokenSet({"scheme": ("light", "dark")})
+    ts.add(Token("motion.scale-950", "number", 0.97))
+    ts.add(Token("motion.press.scale", "number", "{motion.scale-950}", layer="semantic"))
+    assert _press_problems(SEEDS["chip"], ts) == []
+    ts2 = TokenSet({"scheme": ("light", "dark")})
+    ts2.add(Token("motion.scale-900", "number", 0.9))
+    ts2.add(Token("motion.press.scale", "number", "{motion.scale-900}", layer="semantic"))
+    assert any("0.95" in p.message for p in _press_problems(SEEDS["chip"], ts2))

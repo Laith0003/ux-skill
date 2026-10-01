@@ -58,14 +58,16 @@ def _press_problems(contract: Contract, ts: TokenSet) -> List[ContractProblem]:
     for b in contract.tokens:
         if b.property != "press-scale":
             continue
-        for mode in ("motion:standard", "motion:reduced"):
+        modes = ("motion:standard", "motion:reduced") if "motion" in ts.axes else ("",)
+        for mode in modes:
             v = ts.resolve(b.role, mode)
             want = (1.0, 1.0) if mode == "motion:reduced" else (lo, hi)
+            where = mode or "the base context"
             if not (isinstance(v, (int, float)) and want[0] - 1e-9 <= v <= want[1] + 1e-9):
                 need = "exactly 1" if mode == "motion:reduced" else f"{lo:g} to {hi:g}"
                 out.append(_problem(contract, "press-scale",
                                     f"{b.label()} binds {b.role}, which resolves to {v!r} under "
-                                    f"{mode}; a press scale is {need} there, so set "
+                                    f"{where}; a press scale is {need} there, so set "
                                     f"{b.role} in that mode"))
     return out
 

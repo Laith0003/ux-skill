@@ -22,7 +22,8 @@ _OPACITY_1 = re.compile(r"opacity\s*:\s*1(?![.\d])", re.I)
 _GONE = re.compile(r"visibility\s*:\s*hidden|display\s*:\s*none|content-visibility\s*:\s*hidden",
                    re.I)
 # Classes a framework sets for the frames of an enter or leave transition.
-_TRANSITION_CLASS = re.compile(r"enter|leave|exit|appear|from\b", re.I)
+_TRANSITION_CLASS = re.compile(r"(?:\.|-)(?:v-)?(?:enter|leave|exit|appear)"
+                               r"(?:-(?:from|to|active|done))?(?![\w-])", re.I)
 _KEYFRAME = re.compile(r"^(?:from|to|\d+(?:\.\d+)?%)$", re.I)
 FOCUSABLE_TAGS = {"a", "button", "input", "select", "textarea", "summary", "iframe"}
 # With no markup to read, a selector that names a control or a panel that
@@ -81,7 +82,7 @@ def _revealed_by_focus_or_hover(blocks: List[Block], hidden: Block) -> bool:
                 if ":hover" in sel and _shares(sel.replace(":hover", ""), h) \
                         and _same_container(sel, h):
                     return True
-                if parts and _focus_kind(parts[-1]) and _shares(sel, h):
+                if parts and any(_focus_kind(p) for p in parts) and _shares(sel, h):
                     return True
     return False
 
@@ -257,9 +258,16 @@ def menu_row_disabled_silent(ctx: FileContext, view: View, match: re.Match, star
     if tag is None:
         return False
     a = attr_values(ctx.text, tag)
-    if "disabled" in a:
+    if "disabled" in a and _value(a["disabled"]) not in ("false",):
         return True
-    return a.get("aria-disabled", ("", ""))[1].lower() == "true" and "aria-describedby" not in a
+    return _value(a.get("aria-disabled", ("", ""))) == "true" and "aria-describedby" not in a
+
+
+def _value(attr) -> str:
+    """An attribute's value with JSX braces and quotes taken off, so
+    disabled={false} reads false and aria-disabled={true} reads true."""
+    v = attr[1].strip().strip("{}").strip().strip("\"'").lower()
+    return v
 
 
 COMPONENT_CHECKS = {
