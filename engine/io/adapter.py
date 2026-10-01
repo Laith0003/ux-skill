@@ -182,7 +182,8 @@ VOCABULARIES: Tuple[Tuple[str, str, Tuple[Tuple[str, str], ...]], ...] = (
         ("destructive", "color.action.danger"),
         ("destructive-foreground", "color.text.on-danger"), ("border", "color.line.subtle"),
         ("input", "color.line.input"), ("ring", "color.focus.ring"),
-        ("focus", "color.focus.ring"), ("link", "color.text.link"))),
+        ("focus", "color.focus.ring"), ("link", "color.text.link"))
+     + tuple((f"chart-{k}", f"color.category.{k}.strong") for k in range(1, 7))),
     ("text names", "text-primary, text-secondary, text-link", (
         ("text", "color.text.default"), ("text-primary", "color.text.default"),
         ("text-base", "color.text.default"), ("text-body", "color.text.default"),
@@ -340,7 +341,7 @@ VOCABULARY_EXAMPLES: Dict[str, str] = {ROLE_NAMES[0]: ROLE_NAMES[1],
 # proposed, and named in the report so the owner can map them.
 UNCLAIMED = ("accent", "accent-foreground", "secondary", "secondary-foreground",
              "card-foreground", "popover-foreground", "sidebar", "sidebar-foreground",
-             "sidebar-primary", "sidebar-accent", "sidebar-border", "sidebar-ring", "chart")
+             "sidebar-primary", "sidebar-accent", "sidebar-border", "sidebar-ring")
 
 
 def _vocab_key(name: str) -> str:
@@ -430,7 +431,8 @@ def unclaimed_sizes(ts: TokenSet, mapping: Mapping) -> List[Tuple[str, str]]:
 def unclaimed(ts: TokenSet, mapping: Mapping) -> List[str]:
     """The color tokens the mapping does not name whose names the
     vocabularies know but give no role (accent, secondary, card-foreground,
-    sidebar-*, chart-*), in the set's order."""
+    sidebar-*), in the set's order. chart-1 to chart-6 map to the category
+    roles."""
     prefix = _shared_prefix(ts)
     used = {m.token for m in mapping.roles.values()}
     known = {_vocab_key(n) for n in UNCLAIMED}
@@ -439,7 +441,7 @@ def unclaimed(ts: TokenSet, mapping: Mapping) -> List[str]:
         if t.type != "color" or t.path in used:
             continue
         keys = {k for _, k, _ in _keys(t.path, prefix)}
-        if keys & known or any(k.split(".")[0] in ("sidebar", "chart") for k in keys):
+        if keys & known or any(k.split(".")[0] == "sidebar" for k in keys):
             out.append(t.path)
     return out
 

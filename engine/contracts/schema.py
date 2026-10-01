@@ -90,7 +90,8 @@ _CITABLE = "'1.4.3' (text, 4.5:1), '1.4.6' (text, 7:1, AAA), '1.4.11' (non-text,
 _WCAG_NUMBER = re.compile(r"[1-4]\.[0-9]+\.[0-9]+")
 SYSTEM = "system"
 # Bound roles that carry meaning by color, so the contract names a second cue.
-COLOR_SIGNALS: Tuple[str, ...] = ("color.status.", "color.action.danger", "color.line.selected",
+COLOR_SIGNALS: Tuple[str, ...] = ("color.status.", "color.category.", "color.action.danger",
+                                  "color.line.selected",
                                   "color.surface.selected", "border.active")
 # What ready needs, in words; promotion_problems checks each.
 PROMOTION: Tuple[str, ...] = (

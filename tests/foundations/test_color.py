@@ -804,7 +804,8 @@ def test_generated_line_subtle_differs_from_card_and_raised(seed):
 _TEXT_ROLES = ("color.text.default", "color.text.muted", "color.text.link",
                "color.status.danger.text", "color.status.warning.text",
                "color.status.success.text", "color.status.info.text",
-               "color.text.accent", "color.text.support")
+               "color.text.accent", "color.text.support") + tuple(
+    f"color.category.{k}.text" for k in range(1, 7))
 _TEXT_SURFACES = _BASE_SURFACES + ("color.surface.selected", "color.surface.tint",
                                    "color.surface.band", "color.surface.stripe",
                                    "color.surface.header")
@@ -866,7 +867,14 @@ def test_every_other_pairing_is_kept():
                for bg in ("color.surface.page", "color.surface.card", "color.surface.raised")]
             + [Pairing(r, bg, 1.5, "system", high=1.5) for r in color_module.DECORATIVE_ROLES
                for bg in ("color.surface.page", "color.surface.card")]
-            + [Pairing("color.logo", "color.surface.page", 3.0, "system", high=3.0)])
+            + [Pairing("color.logo", "color.surface.page", 3.0, "system", high=3.0)]
+            # decisions/categories-for-nominal-data.md
+            + [Pairing(f"color.category.{k}.text", f"color.category.{k}.soft", 4.5, "1.4.3")
+               for k in color_module.CATEGORIES]
+            + [Pairing(f"color.category.{k}.on-strong", f"color.category.{k}.strong", 4.5, "1.4.3")
+               for k in color_module.CATEGORIES]
+            + [Pairing(f"color.category.{k}.strong", bg, 3.0, "1.4.11")
+               for k in color_module.CATEGORIES for bg in _SURFACES])
     for p in kept:
         assert p in PAIRINGS, p
     covered = len(_TEXT_ROLES) * len(_TEXT_SURFACES) + len(_LINE_ROLES) * len(_SURFACES)
@@ -889,7 +897,9 @@ def test_adding_a_surface_or_a_role_to_a_table_adds_its_pairings():
         | {Pairing(r, "color.surface.extra", 4.5, "1.4.3") for r in _TEXT_ROLES}
         | {Pairing("color.line.extra", bg, 3.0, "1.4.11")
            for bg in _SURFACES + ("color.surface.extra",)}
-        | {Pairing(r, "color.surface.extra", 3.0, "1.4.11") for r in _LINE_ROLES})
+        | {Pairing(r, "color.surface.extra", 3.0, "1.4.11") for r in _LINE_ROLES}
+        | {Pairing(f"color.category.{k}.strong", "color.surface.extra", 3.0, "1.4.11")
+           for k in color_module.CATEGORIES})
     assert set(base) <= set(more)
 
 

@@ -211,3 +211,10 @@ def test_a_failed_photo_check_keeps_the_layout_result(tmp_path):
     ids = {x.rule_id for x in report.findings}
     assert "render-failed" not in ids
     assert ids & {"horizontal-overflow", "overflow-x"} or any("overflow" in i for i in ids), ids
+
+
+def test_category_colors_carry_meaning_and_sit_outside_the_budget(tmp_path):
+    css = BUDGET + ":root{--color-category-1-text:#1d4ed8;--color-category-2-text:#9d174d}"
+    body = "".join(f'<p><span style="color:var(--color-category-{1 + i % 2}-text)">Shipped order '
+                   f'{i} and its line items, one per row of the table</span></p>' for i in range(10))
+    assert _render(tmp_path, "pills.html", PAGE.format(css=css, body=body)) == []

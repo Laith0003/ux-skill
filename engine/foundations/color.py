@@ -16,6 +16,7 @@ build_system validates and gates them with PAIRINGS and CHECKS, then asks
 seed_hint for advice on the failing pairings the brand seed controls."""
 from __future__ import annotations
 
+import itertools
 import math
 from dataclasses import dataclass
 from types import MappingProxyType
@@ -37,6 +38,8 @@ COLOR_CONTEXTS = tuple(contexts(("scheme", "contrast")))
 # Each status family's own hue; character.status_seed harmonizes it to the
 # brand and the warmth axis, never more than character.STATUS_BAND away.
 STATUS_HUES = dict(character.STATUS_HUES)
+# Categories for nominal data, numbered from 1 (character.category_seed).
+CATEGORIES: Tuple[str, ...] = tuple(str(k) for k in range(1, character.CATEGORY_COUNT + 1))
 # Translucent overlays: black ("shade") and white ("tint") at these percents.
 OVERLAY_STEPS = (10, 20, 40, 60, 80)
 
@@ -145,6 +148,25 @@ for _s in STATUS_HUES:
     _SEMANTIC[f"color.status.{_s}.soft"] = (f"color.{_s}.soft-100", f"color.{_s}.soft-900")
     _SEMANTIC[f"color.status.{_s}.strong"] = (f"color.{_s}.600", f"color.{_s}.400")
     _SEMANTIC[f"color.status.{_s}.on-strong"] = ("color.base.white", "color.base.black")
+# Each category as a status family is drawn: a soft fill for a pill or a
+# tile, a strong tone for a chart mark, text for the fill and the page, and
+# text on the strong tone.
+# The soft fills keep their step's full chroma (200 in light, 900 in dark),
+# so six pills stay apart from each other; status soft fills can be quiet
+# because a status pill stands alone. The strong tones start at 700 in
+# light, which clears 3:1 on every surface a chart sits on for every hue,
+# so none is moved and neighbors keep their lightness alternation.
+for _k in CATEGORIES:
+    _SEMANTIC[f"color.category.{_k}.soft"] = (f"color.category-{_k}.200",
+                                               f"color.category-{_k}.900")
+    _SEMANTIC[f"color.category.{_k}.strong"] = (f"color.category-{_k}.700",
+                                                 f"color.category-{_k}.400")
+    _SEMANTIC[f"color.category.{_k}.text"] = (f"color.category-{_k}.800",
+                                               f"color.category-{_k}.300")
+    _SEMANTIC[f"color.category.{_k}.on-strong"] = ("color.base.white", "color.base.black")
+CATEGORY_ROLES: Tuple[str, ...] = tuple(
+    f"color.category.{k}.{part}" for k in CATEGORIES
+    for part in ("soft", "strong", "text", "on-strong"))
 
 
 def _grouped(table: Dict[str, Tuple[str, str]]) -> Dict[str, Tuple[str, str]]:
@@ -224,6 +246,17 @@ for _s in STATUS_HUES:
     _HIGH[f"color.status.{_s}.text"] = (f"color.{_s}.800", f"color.{_s}.200")
     _HIGH[f"color.status.{_s}.soft"] = (f"color.{_s}.soft-50", f"color.{_s}.soft-950")
     _HIGH[f"color.status.{_s}.strong"] = (f"color.{_s}.800", f"color.{_s}.200")
+# Under high contrast the fills stay on 200 and 900 and the text moves out;
+# every strong tone goes to 800 (300 in dark), where white (black) text
+# clears 7:1 for every hue, so none is moved and the lightness alternation
+# between neighbors holds.
+for _k in CATEGORIES:
+    _HIGH[f"color.category.{_k}.soft"] = (f"color.category-{_k}.200",
+                                           f"color.category-{_k}.900")
+    _HIGH[f"color.category.{_k}.strong"] = (f"color.category-{_k}.800",
+                                             f"color.category-{_k}.300")
+    _HIGH[f"color.category.{_k}.text"] = (f"color.category-{_k}.900",
+                                           f"color.category-{_k}.200")
 HIGH_CONTRAST: Mapping[str, Tuple[str, str]] = MappingProxyType(_HIGH)
 
 # The brand's role (character.brand_role): with "fill" the brand fills the
@@ -258,7 +291,8 @@ BRAND_ROLES: Tuple[str, ...] = ("fill", "accent", "edge")
 # gets every pairing it needs; build_pairings writes them.
 TEXT_ROLES: Tuple[str, ...] = ("color.text.default", "color.text.muted", "color.text.link") \
     + tuple(f"color.status.{s}.text" for s in STATUS_HUES) \
-    + ("color.text.accent", "color.text.support")
+    + ("color.text.accent", "color.text.support") \
+    + tuple(f"color.category.{k}.text" for k in CATEGORIES)
 TEXT_SURFACES: Tuple[str, ...] = ("color.surface.page", "color.surface.card",
                                   "color.surface.sunken", "color.surface.raised",
                                   "color.surface.selected", "color.surface.tint",
@@ -340,7 +374,7 @@ def _extra_text_bgs(role: str) -> Tuple[str, ...]:
     action link), status text on its own soft fill."""
     if role in ("color.text.default", "color.text.muted", "color.text.link"):
         return tuple(f"color.status.{s}.soft" for s in STATUS_HUES)
-    if role.startswith("color.status.") and role.endswith(".text"):
+    if role.startswith(("color.status.", "color.category.")) and role.endswith(".text"):
         return (role[:-len("text")] + "soft",)
     return ()
 
@@ -393,6 +427,14 @@ def build_pairings(text_roles: Tuple[str, ...] = TEXT_ROLES,
         + [Pairing(role, bg, DECORATIVE_FLOOR, "system", high=DECORATIVE_FLOOR)
            for role in DECORATIVE_ROLES for bg in ("color.surface.page", "color.surface.card")]
         + [Pairing("color.logo", "color.surface.page", LOGO_FLOOR, "system", high=LOGO_FLOOR)]
+        # A category's text is a text role (TEXT_ROLES): every text surface
+        # and its own soft fill. Its strong tone is a chart mark or a legend
+        # swatch, a non-text part against every surface a chart or a
+        # control sits on, with its own text on it.
+        + [Pairing(f"color.category.{k}.on-strong", f"color.category.{k}.strong", 4.5, "1.4.3")
+           for k in CATEGORIES]
+        + [Pairing(f"color.category.{k}.strong", bg, 3.0, "1.4.11")
+           for k in CATEGORIES for bg in line_surfaces]
     )
 
 
@@ -439,6 +481,8 @@ GROUPS: Tuple[_Group, ...] = (
 ) + tuple(_Group(f"color.status.{s}.strong", f"color.status.{s}.on-strong",
                  grounds=CONTROL_SURFACES if s == "danger" else ("color.surface.page",))
           for s in STATUS_HUES) \
+    + tuple(_Group(f"color.category.{k}.strong", f"color.category.{k}.on-strong",
+                   grounds=LINE_SURFACES) for k in CATEGORIES) \
     + (_Group("color.surface.brand", "color.text.on-brand", grounds=(), brand=True),
        # After the band: the button on it clears the band as solved.
        _Group("color.action.on-brand", "color.text.on-brand-action",
@@ -618,6 +662,8 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
     seeds["support"] = oklch_to_hex(*character.support_seed(axes, brand_hue, brand_chroma))
     seeds.update({s: oklch_to_hex(*character.status_seed(s, axes, brand_hue, brand_chroma))
                   for s in STATUS_HUES})
+    seeds.update({f"category-{k}": oklch_to_hex(*character.category_seed(
+        int(k) - 1, axes, brand_hue, brand_chroma)) for k in CATEGORIES})
     for family, seed in seeds.items():
         r = ramp(seed)
         if r.retuned:
@@ -651,7 +697,7 @@ def _primitives(axes: AxisValues, brand_hex: str, notes: List[str]) -> Dict[str,
             _, c50, h50 = hex_to_oklch(r.stops[50])
             card = prims[_SEMANTIC["color.surface.card"][0]]
             prims["color.neutral.code-light"] = stand_off(card, c50, h50, CODE_EDGE)
-        if family in STATUS_HUES:
+        if family in STATUS_HUES or family.startswith("category-"):
             for step in SOFT_STEPS:
                 prims[f"color.{family}.soft-{step}"] = _with_chroma(
                     r.stops[step], share=character.status_soft(axes))
@@ -1136,6 +1182,26 @@ def _disabled_distinct(ts: TokenSet, mode: str) -> List[str]:
     return out
 
 
+# Our floors for how far apart, in OKLab distance, any two categories'
+# strong tones and soft fills stand, so two chart series or two order
+# state pills never read as one color.
+CATEGORY_APART = {"strong": 0.06, "soft": 0.04}
+
+
+def _categories_distinct(ts: TokenSet, mode: str) -> List[str]:
+    out = []
+    for part, floor in CATEGORY_APART.items():
+        tones = [(f"color.category.{k}.{part}", ts.resolve(f"color.category.{k}.{part}", mode))
+                 for k in CATEGORIES if _typed(ts, f"color.category.{k}.{part}")]
+        for (a, ha), (b, hb) in itertools.combinations(tones, 2):
+            d = oklab_distance(ha, hb)
+            if d < floor:
+                out.append(f"{b} ({hb}) sits {d:.3f} from {a} ({ha}) in OKLab ({mode}), under "
+                           f"the {floor} floor, so the two read as one color; point {b} at a "
+                           "step of its own ramp that stands further off")
+    return out
+
+
 def _scheme_polarity(ts: TokenSet, mode: str) -> List[str]:
     """A light scheme has a page lighter than its text, a dark scheme the
     reverse; a set that says dark but ships a light palette is caught here."""
@@ -1330,6 +1396,7 @@ CHECKS: Tuple[Check, ...] = (
     Check("error-edge-hue", "system", _error_edge_hue, axes=("scheme", "contrast")),
     Check("states-distinct", "system", _states_distinct, axes=("scheme", "contrast")),
     Check("disabled-distinct", "system", _disabled_distinct, axes=("scheme", "contrast")),
+    Check("categories-distinct", "system", _categories_distinct, axes=("scheme", "contrast")),
     Check("disabled-visible", "system", _disabled_visible, axes=("scheme", "contrast")),
     Check("line-subtle-visible", "system", _line_subtle_visible, axes=("scheme", "contrast")),
     Check("scheme-polarity", "system", _scheme_polarity, axes=("scheme", "contrast")),

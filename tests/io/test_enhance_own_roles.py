@@ -73,7 +73,12 @@ hr {{ border-top: 1px solid {v('color.hairline')}; }}
     f"color: {v(f'color.status.{s}.text')}; }}\n"
     f".{s}-badge {{ background: {v(f'color.status.{s}.strong')}; "
     f"color: {v(f'color.status.{s}.on-strong')}; }}\n"
-    for s in ("danger", "warning", "success", "info")) + f"""
+    for s in ("danger", "warning", "success", "info")) + "".join(
+    f".pill-{k} {{ background: {v(f'color.category.{k}.soft')}; "
+    f"color: {v(f'color.category.{k}.text')}; }}\n"
+    f".bar-{k} {{ background: {v(f'color.category.{k}.strong')}; "
+    f"color: {v(f'color.category.{k}.on-strong')}; }}\n"
+    for k in range(1, 7)) + f"""
 .photo::after {{ background: {v('imagery.scrim')}; color: {v('imagery.on-scrim')}; }}
 .photo-tint {{ background: {v('imagery.tint')}; }}
 """
