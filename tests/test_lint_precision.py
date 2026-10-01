@@ -117,13 +117,6 @@ def test_small_scores_keep_their_values():
     assert compute_score([_f(f"r{i}", "high") for i in range(5)]) == 50
 
 
-def test_a_repeated_rule_counts_less_each_time():
-    once = compute_score([_f("r", "high")])
-    many = compute_score([_f("r", "high")] * 10)
-    distinct = compute_score([_f(f"r{i}", "high") for i in range(10)])
-    assert once > many > distinct
-
-
 def test_heavy_pages_still_differ():
     worse = compute_score([_f(f"r{i}", "high") for i in range(30)])
     bad = compute_score([_f(f"r{i}", "high") for i in range(12)])
@@ -165,3 +158,78 @@ def test_text_inside_a_scroller_is_its_own_concern(tmp_path):
             'A long line that scrolls inside its own container and nowhere else.</p></div>'
             '</main></body></html>')
     assert "text-overflows-its-box" not in _render_ids(tmp_path, html)
+
+
+# ------------------------------------------------ review regressions
+
+def test_a_hex_escaped_utility_matches_its_element():
+    css = r".\32xl\:h-screen { height: 100vh; }"
+    body = '<main class="2xl:h-screen"><h1>Orders</h1></main>'
+    assert "h-screen-no-dvh-fallback" in _ids("page.html", PAGE.format(css=css, body=body))
+
+
+def test_a_landing_page_with_a_drawer_still_needs_a_photograph():
+    page = """<!doctype html><html lang="en"><body>
+<aside class="drawer" hidden><a href="#a">About</a><a href="#p">Pricing</a><a href="#c">Contact</a></aside>
+<main><h1>Run your clinic's bookings</h1><a class="btn" href="#start">Start free</a>
+<section><h2>Why</h2><p>Patients book themselves.</p></section></main></body></html>"""
+    assert "imagery-mandatory-missing" in _ids("landing.html", page)
+
+
+def test_a_sibling_combinator_selector_still_reports():
+    css = "input:not(:checked) ~ nav a { opacity: 0; }"
+    body = '<input type="checkbox" aria-label="Menu"><nav><a href="/a">A</a></nav>'
+    assert "focusable-at-opacity-zero" in _ids("page.html", PAGE.format(css=css, body=body))
+
+
+def test_a_state_attribute_a_script_sets_still_reports():
+    css = '[data-state="closed"] a { opacity: 0; }'
+    body = ('<div id="m"><a href="/a">A</a></div>'
+            "<script>document.getElementById('m').dataset.state = 'closed'</script>")
+    assert "focusable-at-opacity-zero" in _ids("page.html", PAGE.format(css=css, body=body))
+
+
+def test_a_page_mounted_by_an_external_script_keeps_its_utilities():
+    body = '<div id="root"></div><script type="module" src="/assets/index.js"></script>'
+    assert "h-screen-no-dvh-fallback" in _ids("index.html", PAGE.format(css=UTILITIES, body=body))
+
+
+def test_component_files_with_runtime_classes_keep_their_utilities():
+    sfc = ('<template><div :class="`alert-${kind}`">Saved</div></template>\n'
+           "<style>.alert-muted { color: rgba(255, 255, 255, .4); }</style>")
+    assert "text-ink-at-low-alpha" in _ids("Alert.vue", sfc)
+
+
+def test_repeats_of_one_rule_cost_what_they_cost_before():
+    assert compute_score([_f("r", "high")] * 4) == 60
+    assert compute_score([_f("r", "high")] * 50) < 50
+
+
+def test_an_is_with_a_combinator_inside_keeps_its_meaning():
+    css = ".item:is(.closed *) { opacity: 0; }"
+    body = '<div class="closed"><a class="item" href="/x">X</a></div>'
+    assert "focusable-at-opacity-zero" in _ids("page.html", PAGE.format(css=css, body=body))
+
+
+def test_a_stylesheet_with_linked_pages_still_guesses():
+    from engine.linter.core import lint_text as lt
+    css = ".drawer a { opacity: 0; }"
+    page = '<!doctype html><html lang="en"><body><main><h1>Home</h1></main></body></html>'
+    ids = [f.rule_id for f in lt("site.css", css, pages=[("index.html", page)])]
+    assert "focusable-at-opacity-zero" in ids
+
+
+def test_a_hidden_dropdown_is_not_text_past_its_box(tmp_path):
+    html = ('<!doctype html><html lang="en"><body style="margin:0"><nav style="display:flex">'
+            '<ul style="display:flex;list-style:none;margin:0;padding:0">'
+            '<li style="position:relative;width:90px">Products<ul style="position:absolute;'
+            'width:260px;visibility:hidden;margin:0"><li>Every product we sell</li></ul></li>'
+            '</ul></nav><main><p>Body</p></main></body></html>')
+    assert "text-overflows-its-box" not in _render_ids(tmp_path, html)
+
+
+def test_an_inline_block_label_that_spills_is_reported(tmp_path):
+    html = ('<!doctype html><html lang="en"><body style="margin:0"><main><label style="'
+            'display:inline-block;width:80px;white-space:nowrap">A label much wider than eighty '
+            'pixels</label><p>Next</p></main></body></html>')
+    assert "text-overflows-its-box" in _render_ids(tmp_path, html)

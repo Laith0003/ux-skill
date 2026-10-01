@@ -101,19 +101,47 @@ _MEASURE_JS = r"""(tol) => {
   // a display size wider than its column. The deepest such text is named,
   // once, and not again when it already made the page scroll.
   const TEXTY = 'h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,th,td';
+  // How far the element's own text runs past its padding box: each text
+  // node's line boxes, leaving out text in a descendant that is hidden,
+  // taken out of flow (absolute, fixed) or that clips or scrolls itself.
   const spill = e => {
     const cs = getComputedStyle(e);
-    return !cs.display.startsWith('inline') && cs.overflowX === 'visible' && e.clientWidth > 0
-      && e.scrollWidth > e.clientWidth + 2 && !clipped(e);
+    if (cs.display === 'inline' || cs.display === 'contents' || cs.display === 'none'
+        || cs.visibility !== 'visible' || cs.overflowX !== 'visible' || !e.clientWidth
+        || clipped(e)) return 0;
+    const r = e.getBoundingClientRect();
+    const left = r.left + parseFloat(cs.borderLeftWidth);
+    const right = r.right - parseFloat(cs.borderRightWidth);
+    let over = 0;
+    const walk = document.createTreeWalker(e, NodeFilter.SHOW_TEXT);
+    for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+      if (!n.textContent.trim()) continue;
+      let out = false;
+      for (let a = n.parentElement; a && a !== e; a = a.parentElement) {
+        const s = getComputedStyle(a);
+        if (s.visibility !== 'visible' || s.display === 'none' || s.position === 'absolute'
+            || s.position === 'fixed' || s.overflowX !== 'visible') { out = true; break; }
+      }
+      if (out) continue;
+      const range = document.createRange();
+      range.selectNodeContents(n);
+      for (const q of range.getClientRects()) over = Math.max(over, q.right - right, left - q.left);
+    }
+    return over > 2 ? over : 0;
   };
-  const spilling = [...document.body.querySelectorAll(TEXTY)].filter(spill);
+  const spilling = [];
+  for (const e of document.body.querySelectorAll(TEXTY)) {
+    const over = spill(e);
+    if (over) spilling.push([e, over]);
+  }
   let named = 0;
-  for (const e of spilling) {
+  for (const [e, over] of spilling) {
     if (named >= 3) break;
-    if (spilling.some(o => o !== e && e.contains(o)) || culprits.some(c => c === e || c.contains(e))) continue;
+    if (spilling.some(([o]) => o !== e && e.contains(o))
+        || culprits.some(c => c === e || c.contains(e))) continue;
     named++;
     out.push({rule: 'text-overflows-its-box', sel: sel(e), cls: e.className || '',
-              text: text(e).slice(0, 60), drift: Math.round(e.scrollWidth - e.clientWidth), dir});
+              text: text(e).slice(0, 60), drift: Math.round(over), dir});
   }
   return {vw, findings: out};
 }"""

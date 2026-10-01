@@ -10,7 +10,7 @@ from typing import Dict, List, Optional, Set
 
 from engine.linter.structure import (
     Block, FileContext, _blocks, _children, _focus_kind, _same_container, _shares,
-    _tag_tokens, attr_values, block_at, compounds, tokens,
+    _tag_tokens, attr_values, block_at, compounds, css_unescape, tokens,
 )
 from engine.linter.views import View
 
@@ -33,8 +33,9 @@ _CONTROL_WORD = re.compile(r"(?<![\w-])(?:a|button|input|select|textarea|summary
                            r"|dialog|modal|sheet|nav", re.I)
 
 
-_ONE_ARG = re.compile(r":(?:where|is)\(([^(),]*)\)")
-_UNESCAPE = re.compile(r"\\(.)")
+# A one-argument :where() or :is() around a single compound, opened in place.
+_ONE_ARG = re.compile(r":(?:where|is)\(([^()\s,>+~]*)\)")
+_SIBLING = re.compile(r"[+~](?![^\[]*\])(?![^(]*\))")
 _ATTR_NAME = re.compile(r"\[\s*([\w:-]+)")
 
 
@@ -57,7 +58,7 @@ def _needs(compound: str) -> Set[str]:
             if m:
                 out.add("[" + m.group(1).lower() + "]")
         else:
-            out.add(_UNESCAPE.sub(r"\1", t))
+            out.add(css_unescape(t))
     return out
 
 
@@ -91,11 +92,18 @@ def _elements(ctx: FileContext, selector: str) -> List[int]:
 
 
 def _named_in_scripts(ctx: FileContext, selector: str) -> bool:
-    """A class or id of the selector appears in the page outside its
-    styles (a script adds it), so the element may exist at run time."""
-    names = re.findall(r"[.#]((?:[\w-]|\\.)+)", _expand(selector))
-    return any(re.search(r"(?<![\w-])" + re.escape(_UNESCAPE.sub(r"\1", n)) + r"(?![\w-])",
-                         _outside_styles(ctx)) for n in names)
+    """A class, id or attribute of the selector appears in the page outside
+    its styles (a script adds the class or sets the state), so the element
+    may match at run time. A data attribute counts in its dataset form too
+    (data-state as state)."""
+    sel = _expand(selector)
+    names = [css_unescape(n) for n in re.findall(r"[.#]((?:[\w-]|\\.)+)", sel)]
+    for attr in _ATTR_NAME.findall(sel):
+        names.append(attr)
+        if attr.startswith("data-"):
+            names.append(re.sub(r"-(\w)", lambda m: m.group(1).upper(), attr[5:]))
+    outside = _outside_styles(ctx)
+    return any(re.search(r"(?<![\w-])" + re.escape(n) + r"(?![\w-])", outside) for n in names)
 
 
 def _outside_styles(ctx: FileContext) -> str:
@@ -181,9 +189,13 @@ def focusable_hidden_by_opacity(ctx: FileContext, view: View, match: re.Match, s
                     return True
     if matched:
         return False
-    # With markup to read, a selector that matches nothing styles nothing on
-    # these pages, unless a script names its class or id and may add it.
-    if pages and not any(_named_in_scripts(c, sel) for c in pages for sel in block.selectors):
+    # A page with markup of its own: a selector that matches nothing there
+    # styles nothing, unless a script names its class, id or attribute, or
+    # it reaches its element through a sibling, which the matcher does not
+    # follow. A stylesheet read with its linked pages still guesses, since
+    # the page that holds the element may not be among them.
+    if ctx.tree()[0] and not any(_SIBLING.search(sel) or _named_in_scripts(ctx, sel)
+                                 for sel in block.selectors):
         return False
     return any(_CONTROL_WORD.search(compounds(s)[-1] if compounds(s) else s)
                for s in block.selectors)

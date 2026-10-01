@@ -56,11 +56,9 @@ SCORE_TAIL = 100.0
 def compute_score(findings: List["Finding"], files_scanned: int = 1) -> int:
     """Compute a 0-100 quality score from a list of findings.
 
-    Each finding costs its severity weight (SEVERITY_WEIGHT); a rule that
-    fires again in the same file costs half its previous cost each time, so
-    one pattern repeated across a page weighs less than as many different
-    problems. The penalty is normalized per file scanned, so a big repo is
-    not auto-penalized vs a single file.
+    Each finding costs its severity weight (SEVERITY_WEIGHT). The penalty
+    is normalized per file scanned, so a big repo is not auto-penalized vs
+    a single file.
 
     Up to SCORE_KNEE the score is 100 minus the penalty: a clean file is
     100, five mediums 80, five highs 50, and the v2.1 gate trips at 65.
@@ -69,13 +67,7 @@ def compute_score(findings: List["Finding"], files_scanned: int = 1) -> int:
     """
     if not findings:
         return 100
-    seen: Dict[Tuple[str, str], int] = {}
-    total_penalty = 0.0
-    for f in findings:
-        key = (f.file, f.rule_id)
-        n = seen.get(key, 0)
-        seen[key] = n + 1
-        total_penalty += SEVERITY_WEIGHT.get(f.severity, 4) / (2 ** n)
+    total_penalty = sum(SEVERITY_WEIGHT.get(f.severity, 4) for f in findings)
     per_file = total_penalty / max(files_scanned, 1)
     if per_file <= SCORE_KNEE:
         return max(0, min(100, int(round(100 - per_file))))
