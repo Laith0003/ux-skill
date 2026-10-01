@@ -24,8 +24,9 @@ from engine.synthesizer.axes import AxisValues
 
 NEUTRAL = AxisValues(*[0.5] * 7)
 SEEDS = ["badge", "button", "card", "checkbox", "chip", "date", "dialog", "faq-accordion",
-         "input-prefix", "link", "nav", "progress", "radio", "select", "selectable-row",
-         "site-footer", "status-banner", "table", "text-field", "textarea"]
+         "input-prefix", "link", "menu", "nav", "progress", "radio", "segmented-control",
+         "select", "selectable-row", "site-footer", "status-banner", "table", "tabs",
+         "text-field", "textarea"]
 
 
 def _tokens(tmp_path, *names):

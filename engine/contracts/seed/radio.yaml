@@ -42,6 +42,9 @@ tokens:
   - {part: dot, property: border-color, role: color.text.disabled, state: disabled}
   - {part: mark, property: icon, role: color.text.disabled, state: disabled}
   - {part: label, property: text, role: color.text.disabled, state: disabled}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: dot, property: transition-duration, role: motion.state.duration}
+  - {part: dot, property: transition-curve, role: motion.state.curve}
 contrast:
   - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.input, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}

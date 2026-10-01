@@ -70,6 +70,11 @@ tokens:
   # layout stacked: each row is a card of label and value pairs
   - {part: label, property: text, role: color.text.muted, when: {layout: stacked}}
   - {part: label, property: font, role: type.text.label, when: {layout: stacked}}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: row, property: transition-duration, role: motion.state.duration}
+  - {part: row, property: transition-curve, role: motion.state.curve}
+  - {part: sticky, property: transition-duration, role: motion.state.duration}
+  - {part: sticky, property: transition-curve, role: motion.state.curve}
 contrast:
   - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
   - {fg: color.text.default, bg: color.surface.header, minimum: 4.5, criterion: "1.4.3"}
@@ -97,6 +102,7 @@ copy:
     - The caption says what the table holds and where the numbers come from
 usage:
   do:
+    - When rows load after the table shows, put the loading line in an aria-live="polite" region next to the table and a failure to load in a role="alert" region with a way to try again
     - Put a table in a card, the one surface it names; align numbers to the end of their column in tabular figures and text to the start
     - Below the tablet breakpoint, a table of four columns or fewer keeps layout grid; with more, use layout scroll when people compare values down a column, and layout stacked when each row is read on its own
     - In layout scroll, the region scrolls sideways, is named by the caption through aria-labelledby and takes tabindex 0, so a keyboard can scroll it and shows its ring; the first column sticks at the inline start, the right edge under right to left, and takes its row's fill in every state, so cells never show through; the first header cell sticks with it and keeps the header's fill and edge; build the table with separate borders and no spacing between cells, because a browser stops drawing a sticky cell's divider once the region scrolls when borders collapse

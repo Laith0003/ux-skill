@@ -60,8 +60,12 @@ PROPERTY_TYPES: Mapping[str, str] = MappingProxyType({
     "transition-duration": "duration", "transition-curve": "cubicBezier",
     "enter-duration": "duration", "enter-curve": "cubicBezier", "enter-distance": "dimension",
     "exit-duration": "duration", "exit-curve": "cubicBezier", "exit-distance": "dimension",
-    "direction-sign": "number",
+    "direction-sign": "number", "press-scale": "number",
 })
+# States that change how a part looks: each part that changes under one
+# binds a transition, so the change answers on the system's motion roles.
+MOVING_STATES: Tuple[str, ...] = ("hover", "selected", "pressed")
+_MOTION_PROPERTIES = ("transition-", "enter-", "exit-")
 # The WCAG criteria a contract pairing may cite, with the ratio each sets.
 # Any other floor is the contract's own and says so ("system").
 CRITERIA: Mapping[str, float] = MappingProxyType({"1.4.3": 4.5, "1.4.6": 7.0, "1.4.11": 3.0})
@@ -422,6 +426,25 @@ def _tokens(c: _Checker, raw: Any, parts: Tuple[Part, ...], variants: Tuple[Vari
     return tuple(out)
 
 
+def _state_motion(c: _Checker, tokens: Tuple[Binding, ...]) -> None:
+    """Every part that changes under hover, selected or pressed binds a
+    transition duration and curve, with no state or under that state."""
+    seen = set()
+    for b in tokens:
+        if b.state not in MOVING_STATES or b.property.startswith(_MOTION_PROPERTIES) \
+                or b.property == "press-scale" or (b.part, b.state) in seen:
+            continue
+        seen.add((b.part, b.state))
+        for prop, role in (("transition-duration", "motion.state.duration"),
+                           ("transition-curve", "motion.state.curve")):
+            if not any(o.part == b.part and o.property == prop and o.state in (None, b.state)
+                       for o in tokens):
+                c.add("no-transition", f"{b.part} changes under {b.state} but binds no "
+                                       f"{prop}; add {{part: {b.part}, property: {prop}, "
+                                       f"role: {role}}} so the change answers on the system's "
+                                       "motion")
+
+
 def _contrast(c: _Checker, raw: Any, tokens: Tuple[Binding, ...],
               surfaces: Tuple[str, ...]) -> Tuple[ContrastRule, ...]:
     if not isinstance(raw, list):
@@ -677,6 +700,7 @@ def contract_problems(data: Any, source: str) -> Tuple[Optional[Contract], List[
     variants = _variants(c, data["variants"])
     states = _states(c, data["states"], category)
     tokens = _tokens(c, data["tokens"], parts, variants, states)
+    _state_motion(c, tokens)
     surfaces_raw = data["surfaces"]
     if not isinstance(surfaces_raw, list):
         c.add("bad-surfaces", f"surfaces is {surfaces_raw!r}; list the surface roles the "
