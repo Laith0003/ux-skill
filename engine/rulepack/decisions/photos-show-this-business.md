@@ -15,7 +15,7 @@ The photo direction described a subject by the kind of product ("people at work 
 
 ## Decision
 
-The direction asks for the client's own photos first: this place, these people, these goods and this work as they are. Where there are none, the report asks for each shot by what it shows (this counter, this front desk, this crew on this site), and stand-ins are sourced to the direction only until those arrive, listed for replacement. The subject sentences for software and apps name the people who use the product, mid-task, in their own place. The report names the stock cliches to avoid (STOCK_CLICHES), and the search words leave them out.
+The direction asks for the client's own photos first: this place, these people, these goods and this work as they are. Where there are none, the report asks for each shot by what it shows (this counter, this front desk, this crew on this site), and stand-ins are sourced to the direction only until those arrive, listed for replacement. The subject sentences for software and apps name the people who use the product, mid-task, in their own place. The report names the stock cliches to avoid (STOCK_CLICHES), and its Kinds line says a staged shot is the goods styled in a real room, never people posed for the camera. Stock stand-ins stay allowed when they pass the direction (decisions/photo-direction.md); this record narrows which ones, and a page always carries photographs.
 
 ## Why
 
@@ -23,8 +23,8 @@ A photograph earns its place by showing something true about the business; the s
 
 ## What it touches
 
-engine/foundations/imagery.py (SUBJECTS, STOCK_CLICHES, SEARCH_EXCLUDES, PhotoDirection.query, photo_lines); engine/rulepack/guidance/imagery.md; tests/foundations/test_photo_direction.py.
+engine/foundations/imagery.py (SUBJECTS, STOCK_CLICHES, KIND_NOTES, photo_lines); engine/rulepack/guidance/imagery.md; tests/foundations/test_photo_direction.py.
 
 ## Consequences
 
-Every system report gains Source and Avoid lines under Photography, and its search words carry exclusions. Pages still use photographs; this changes which ones.
+Every system report gains Source and Avoid lines under Photography, and its Kinds line explains the staged kind. Pages still use photographs; this changes which ones.

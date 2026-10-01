@@ -116,7 +116,7 @@ def test_the_report_names_the_stock_cliches_to_avoid():
 
 def test_the_report_asks_for_the_clients_own_photos_first():
     source = next(l for l in _lines(product_type="app") if l.startswith("Source:"))
-    assert "own photos" in source and "this" in source
+    assert "own photos" in source and "this counter" in source
 
 
 def test_subjects_describe_a_specific_scene_not_a_generic_one():
@@ -126,8 +126,20 @@ def test_subjects_describe_a_specific_scene_not_a_generic_one():
     assert "mid-task" in SUBJECTS["software"] and "mid-task" in SUBJECTS["app"]
 
 
-def test_the_search_words_keep_the_cliches_out():
+def test_the_search_words_carry_no_operators_photo_sites_ignore():
     from engine.foundations.imagery import photo_direction
     from engine.synthesizer.axes import AxisValues
     q = photo_direction(AxisValues(*[0.5] * 7), "#3366FF", product_type="software").query()
-    assert "-handshake" in q and "-stock" in q
+    assert " -" not in q and not q.startswith("-")
+
+
+def test_stock_stand_ins_stay_allowed_when_they_pass_the_direction():
+    source = next(l for l in _lines(product_type="app") if l.startswith("Source:"))
+    avoid = next(l for l in _lines(product_type="app") if l.startswith("Avoid:"))
+    assert "stock" in source and "pass" in source
+    assert "stock search" not in avoid
+
+
+def test_staged_lifestyle_means_the_goods_in_a_room_not_people_posing():
+    kinds = next(l for l in _lines(product_type="commerce") if l.startswith("Kinds:"))
+    assert "staged lifestyle (" in kinds and "posed" in kinds

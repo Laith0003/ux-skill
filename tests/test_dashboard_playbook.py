@@ -23,7 +23,7 @@ def test_the_daily_app_pattern_comes_first_and_covers_the_anatomy():
 
 
 def test_figures_carry_their_context():
-    assert "Every figure carries its context" in DOC
+    assert "Every key figure carries its context" in DOC
 
 
 def test_numerals_are_tabular_without_forcing_a_mono_face():
@@ -49,3 +49,50 @@ def test_equal_kpi_cards_are_judged_by_what_they_carry():
 def test_a_products_own_photo_is_content():
     banned = _section("### Banned dashboard patterns")
     assert "Stock photography" in banned and "own photo" in banned
+
+
+# ------------------------------------------------ review fixes
+
+import re  # noqa: E402
+
+_ROLE = re.compile(r"`((?:color|space|radius|elevation|type|layout|border|motion|imagery)\.[a-z0-9.\-N]+)`")
+
+
+def test_every_role_the_playbook_names_exists_in_a_built_system():
+    from engine.foundations import build_system
+    from engine.synthesizer.axes import AxisValues
+    ts = build_system(AxisValues(*[0.5] * 7), "#3366FF").tokens
+    names = {m.replace(".N.", ".1.") for m in _ROLE.findall(DOC)}
+    assert names, "the playbook names no role"
+    paths = [t.path for t in ts.tokens()]
+    missing = sorted(n for n in names
+                     if not ts.has(n) and not any(p.startswith(n + ".") for p in paths))
+    assert missing == [], missing
+
+
+def test_numerals_are_never_mono_outside_a_cockpit():
+    for line in DOC.splitlines():
+        if re.search(r"mono(spaced)? numerals|font-mono` for all numbers", line):
+            assert re.search(r"cockpit|codes|IDs", line, re.I), line
+
+
+def test_every_accent_rule_lets_the_current_nav_item_carry_it():
+    for line in DOC.splitlines():
+        if re.search(r"accent", line, re.I) and re.search(r"CTA|primary action", line) \
+                and re.search(r"\bonly\b", line):
+            assert re.search(r"navigation|nav item", line, re.I), line
+
+
+def test_bento_cards_keep_the_panel_anatomy_and_the_system_radius():
+    bento = _section("### Bento 2.0 (premium dashboard)")
+    assert "OUTSIDE and BELOW" not in bento and "rounded-[2.5rem]" not in bento
+    assert "radius.card" in bento
+
+
+def test_the_playbook_says_what_shows_before_the_clients_photos_arrive():
+    daily = _section("### Pattern: Daily-app dashboard")
+    assert "stand-in" in daily and "photo direction" in daily
+
+
+def test_key_figures_carry_context_not_every_cell():
+    assert "Every key figure carries its context" in DOC

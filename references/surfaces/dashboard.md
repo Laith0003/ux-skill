@@ -30,9 +30,9 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 
 10. **Mobile collapse is a separate design.** Below 768px, cockpit-density rows collapse to scrollable card stacks, not 1px-divided rows. Mobile dashboards prioritize fewer metrics per viewport with deeper drill-down.
 
-11. **Every figure carries its context.** A figure says what it compares against ("+18.6% vs yesterday"), when it applies ("Scheduled 24 Jul") or what it counts ("3.1 M (1,200 orders)"). A number with nothing beside it cannot be acted on.
+11. **Every key figure carries its context.** A figure says what it compares against ("+18.6% vs yesterday"), when it applies ("Scheduled 24 Jul") or what it counts ("3.1 M (1,200 orders)"). A number with nothing beside it cannot be acted on.
 
-12. **Real content.** A product, a listing or a property shows its own photo; a review shows the person's name; an order shows its real identifier. Placeholders and stock imagery read as unfinished.
+12. **Real content.** A product, a listing or a property shows its own photo; a review shows the person's name; an order shows its real identifier. Placeholder text and generic stock scenes read as unfinished.
 
 ## Do / Don't
 
@@ -47,11 +47,11 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 | Use status colors for outcomes and category colors for states and series | Use either as brand decoration |
 | Right-align action columns | Place action buttons in the leftmost column |
 | Use sparklines inline for at-a-glance trends | Embed a full chart for every metric |
-| Use compact stat tiles with monospaced numerals | Use 3D charts or rainbow gradients |
+| Use compact stat tiles with tabular numerals | Use 3D charts or rainbow gradients |
 | Provide tooltip on hover AND tap AND keyboard focus | Tooltip only on hover (skips mobile and keyboard) |
 | Show empty / loading / error states for every chart | Render an empty chart frame |
 | Use sticky filter bars at the top of long lists | Force users to scroll up to refilter |
-| Cap dashboard accent color use at CTA and focus only | Use accent for chrome decoration |
+| Cap dashboard accent color at the primary action, focus and the current navigation item | Use accent for chrome decoration |
 | Use breathing pulse on max 2 live indicators per viewport | Pulse every status dot on every row |
 | Use diverging or qualitative colorblind-safe palettes | Use red-green as the only chart signals |
 | Collapse cockpit-density to card stacks below 768px | Force 1px hairlines and 4px paddings on mobile |
@@ -77,7 +77,7 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 **Use when**: The default for a product's own dashboard: a store, a clinic, a team or a back office checks it many times a day (density mid, reading context glance or task).
 **Anti-pattern**: Bare figures with no comparison, panels with a title and nothing else in their header, one gray everywhere, no icons, stock photos, or the cockpit treatment (no boxes, mono numerals) on a page that is read at arm's length.
 **How**:
-- Canvas and panels: the page on `color.surface.page` (or `color.surface.tint` for a soft wash), every panel on `color.surface.card` at `radius.card` with `color.line.subtle` or `elevation.card`. Panels group; whitespace between them is `space.group-gap`.
+- Canvas and panels: the page on `color.surface.page` (or `color.surface.tint` for a soft wash), every panel on `color.surface.card` at `radius.card` with `color.line.subtle` or `elevation.card`. Panels group; whitespace between them is `space.group.gap`.
 - Page header: the page name in the heading role, one plain sentence under it that says what the page is for, and the page's own actions (Export, Add) on the right, the primary action last.
 - Figures with context: every key figure is large (figure role, tabular numerals, the face's own figures, not a mono face) and carries its context on one small line: the change against a named period with an arrow and the sign ("+18.6% vs yesterday"), a date ("Scheduled 24 Jul"), or a count in parentheses ("3.1 M (1,200 orders)"). A figure with nothing to compare against says what it counts and as of when.
 - KPI row: four or five figures, as cards or as one panel divided by hairlines. Equal cards are right here when each carries a different figure and its own context; what is banned is identical tiles that say nothing beyond a number.
@@ -86,7 +86,7 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 - Status: an order, ticket or account state is a pill in its own category (`color.category.N.soft` with `color.category.N.text`), the same category for the same state everywhere on the product. Success, warning and danger keep `color.status.*` for outcomes (paid, low stock, failed); the categories carry the states that are neither good nor bad (shipped, preparing, scheduled).
 - Grouped counts: a breakdown by state can be one tile per state on its category soft fill, with the count large in the category's text color.
 - Tables: a tinted header row (`color.surface.header`), the identifier first in the label weight, figures right aligned in tabular numerals, status pills, the row action last and named for its row.
-- Catalog photos: a product, a listing or a property shows its own photo as a thumbnail; these are content, not decoration. Stock photography stays banned.
+- Catalog photos: a product, a listing or a property shows its own photo as a thumbnail; these are content, not decoration. Until the client's photos arrive, each thumbnail takes a stand-in sourced to the system's photo direction and listed for replacement; generic stock scenes (people at laptops, handshakes) stay off dashboard surfaces.
 - People: reviews and messages show the person's name; the signed-in user sits at the foot of the navigation with a name, a role and the notifications control.
 - Charts: series take the categories in order (`color.category.1.strong` first, which sits on the brand hue), bars start at zero, and every chart has its empty, loading and error states.
 
@@ -96,7 +96,7 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 **How**:
 - Tiny paddings (4 to 12px)
 - No card boxes; 1px lines (`border-t`, `divide-y`) separate data
-- `font-mono` for all numbers
+- `font-mono` for all numbers, in a cockpit only
 - Section grouping via spacing and typography, not container boxes
 - Headers tight, columns dense, row heights compressed
 - Tabular figures aligned to invisible decimal column
@@ -238,7 +238,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - Background: off-white or near-black (depending on mode)
 - Text: charcoal or off-white
 - Borders / dividers: hairlines (`#EAEAEA` light; white at 8 to 12% alpha dark)
-- One brand accent: CTAs and focus rings only
+- One brand accent: CTAs, focus rings and the current navigation item only
 - Status and category colors: inside product data, pills and charts only
 - Chart colors: diverging or sequential, never decorative
 
@@ -292,13 +292,12 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - The remaining tile specs are in the compact stat tile pattern above.
 
 ### Bento 2.0 (premium dashboard)
-- Background: `#f9fafb`
-- Cards: pure white `#ffffff` with `border-slate-200/50` (1px)
-- Surfaces: `rounded-[2.5rem]` for major containers
-- Shadows: diffusion `shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]`
-- Typography: `Geist`, `Satoshi`, or `Cabinet Grotesk`; subtle `tracking-tight` on headers
-- Labels: titles and descriptions OUTSIDE and BELOW cards for gallery presentation
-- Padding inside cards: 32 to 40px (`p-8` to `p-10`)
+- Use when: a daily-app dashboard (density 4 to 6) that leads with a few large panels
+- Background: the page on `color.surface.page` or `color.surface.tint`
+- Cards: `color.surface.card` with a `color.line.subtle` hairline, at `radius.card` or the next radius step up for the largest panels
+- Shadows: `elevation.card`, never a second ambient layer
+- Typography: the system's display and text faces; the panel anatomy of the daily-app pattern (icon, title, one control in the header)
+- Padding inside cards: 24 to 32px (`space.card.padding` and one step up)
 - Animation engine: spring physics (`duration: 0.35, bounce: 0.2`, the role's duration and the brand's overshoot) on layout changes; a card moves when its data changes, never on a loop
 
 ### Chart type selection
@@ -372,7 +371,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 ### Restraint signals (premium dashboards)
 - Off-white or near-black background; never pure
 - Charcoal or off-white text; never pure black or pure white
-- One accent color, CTA / focus only
+- One accent color, on CTA, focus and the current navigation item only
 - Hairline borders or near-absent shadows
 - Sentence-case headlines
 - Tabular numerals everywhere data appears
@@ -391,7 +390,7 @@ or use `font-mono` (a true monospace family). Decimals align vertically. Count-u
 - [ ] No serifs in dashboard typography (severity: High)
 - [ ] Cards replaced with `border-t` / `divide-y` in cockpit-density UIs (severity: Medium)
 - [ ] Status colors for outcomes and category colors for states and series, never chrome, never without the word (severity: Critical)
-- [ ] One accent color in chrome, applied only on CTAs and focus rings (severity: High)
+- [ ] One accent color in chrome, applied only on CTAs, focus rings and the current navigation item (severity: High)
 - [ ] Chrome stays monochrome; chromatic load carried by data (severity: Medium)
 - [ ] Numbers right-aligned in tables (severity: Medium)
 - [ ] Sortable columns include `aria-sort` attribute (severity: High)

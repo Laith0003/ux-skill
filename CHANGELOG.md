@@ -25,7 +25,8 @@ project adheres to [Semantic Versioning](https://semver.org/).
   alone; panels share one anatomy (icon, title, one control); one icon set;
   a product's own photo is content. The cockpit rules stay for dense briefs.
 - The photo direction asks for the client's own photos first, describes
-  each missing shot by what it shows, and names the stock cliches to avoid
+  each missing shot by what it shows, lets stock stand-ins that pass the
+  direction fill the gap until then, and names the stock cliches to avoid
   (handshakes, laptops showing charts, glowing locks, posed teams).
 - Lint reads what a page uses. On a page with its own markup, a rule on a
   utility class no element carries (the rest of a compiled stylesheet) is

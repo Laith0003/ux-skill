@@ -197,8 +197,10 @@ STOCK_CLICHES = ("handshakes and high-fives", "a laptop or phone showing charts"
                  "locks, shields and glowing circuits", "server rooms in neon light",
                  "coins, piggy banks and growing plants", "medical props on white",
                  "faces smiling at the camera")
-# Words a photo search takes to leave the cliches out.
-SEARCH_EXCLUDES = ("-stock", "-handshake", "-illustration", "-3d")
+# What each kind of photo means where the report names it, so a staged
+# shot reads as the goods styled in a real room and never as people posed.
+KIND_NOTES = {"staged lifestyle": "the goods styled in a real room, never people posed for the "
+                                  "camera"}
 
 
 @dataclass(frozen=True)
@@ -229,9 +231,8 @@ class PhotoDirection:
                     round(target[k] + GRADE_TOLERANCE[k], 1)) for k in target}
 
     def query(self) -> str:
-        """Words for a photo search: the subject, then the look, then the
-        words that leave the stock cliches out."""
-        return ", ".join((self.subject,) + self.words) + " " + " ".join(SEARCH_EXCLUDES)
+        """Words for a photo search: the subject, then the look."""
+        return ", ".join((self.subject,) + self.words)
 
 
 def _words(d: Dict[str, float]) -> Tuple[str, ...]:
@@ -336,13 +337,13 @@ def photo_lines(direction: Optional[PhotoDirection]) -> List[str]:
     r = direction.ranges()
     return [
         f"Subject: {direction.subject}. Framing: {direction.framing}.",
-        f"Kinds: {', '.join(direction.kinds)}.",
+        "Kinds: " + ", ".join(f"{k} ({KIND_NOTES[k]})" if k in KIND_NOTES else k
+                              for k in direction.kinds) + ".",
         "Source: the client's own photos first: this place, these people, these goods and this "
         "work as they are. Where there are none, ask for each shot by what it shows (this "
-        "counter, this front desk, this crew on this site), and source stand-ins to this "
-        "direction only until those arrive, listed for replacement.",
-        f"Avoid: {', '.join(STOCK_CLICHES)}; and any subject a stock search returns first for "
-        "the industry.",
+        "counter, this front desk, this crew on this site); until those arrive, stand-ins "
+        "from a stock library that pass this direction fill the gap, listed for replacement.",
+        f"Avoid: {', '.join(STOCK_CLICHES)}.",
         f"Look: {'; '.join(direction.words)}.",
         f"Grade: mean lightness {direction.lightness:g} (L*), temperature "
         f"{direction.temperature:+g} (b*), chroma {direction.chroma:g} (C*), contrast "
