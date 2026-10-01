@@ -38,11 +38,16 @@ _SKIP = frozenset(("node_modules", ".git", "dist", "build", "vendor", ".next", "
                    "coverage", ".uxskill"))
 _MAX_DEPTH = 4
 _MAX_UP = 6
-# Tailwind 4 theme namespaces, longest first, so --font-weight-bold is
-# font-weight and --font-display is font.
-_V4 = ("font-weight", "inset-shadow", "drop-shadow", "text-shadow", "color", "font", "text",
-       "tracking", "leading", "breakpoint", "container", "spacing", "radius", "shadow", "blur",
-       "perspective", "aspect", "ease", "animate", "duration")
+# Tailwind 4's theme namespaces: a variable in one of them makes utilities.
+# The one list the reader here and the exporter (tailwind_out) share.
+# Longest first, so --font-weight-bold is font-weight and --font-display
+# is font, --text-shadow-soft is text-shadow and --text-body is text. A
+# duration is in none: Tailwind's duration utilities take a number, and
+# no theme variable makes one.
+NAMESPACES: Tuple[str, ...] = (
+    "font-weight", "inset-shadow", "drop-shadow", "text-shadow", "color", "font", "text",
+    "tracking", "leading", "breakpoint", "container", "spacing", "radius", "shadow", "blur",
+    "perspective", "aspect", "ease", "animate")
 _VAR = re.compile(r"^var\(\s*--([A-Za-z0-9_-]+)\s*(?:,[^)]*)?\)$")
 _WHY_COMPUTED = ("is computed in JavaScript, so its value is not read; write it as a string, "
                  "such as 'var(--x)' or '#0B5F4A', so the theme can be read without running "
@@ -526,7 +531,7 @@ def _theme_blocks(path: Path, label: str, out: ThemeMap) -> None:
             continue
         for d in rule.declarations:
             prop = d.name[2:]
-            ns = next((n for n in _V4 if prop.startswith(n + "-")), "")
+            ns = next((n for n in NAMESPACES if prop.startswith(n + "-")), "")
             if not ns:
                 continue
             name = prop[len(ns) + 1:]

@@ -159,3 +159,12 @@ def test_lines_inside_a_config_wrapper_are_the_files_own(tmp_path):
     theme = read_theme([tmp_path])
     assert theme.get("colors", "ink").line == 7
     assert [(line, text) for _, line, text, _ in theme.not_read] == [(9, "makeScale()")]
+
+
+def test_a_v4_theme_block_is_read_in_tailwinds_own_namespaces(tmp_path):
+    # text-shadow is a namespace of its own; a duration is in none.
+    _write(tmp_path, "app.css", "@import 'tailwindcss';\n@theme {\n"
+                                "  --text-shadow-soft: 0 1px 2px #0003;\n"
+                                "  --duration-quick: 150ms;\n  --text-body: 1rem;\n}\n")
+    theme = read_theme([tmp_path], [tmp_path / "app.css"])
+    assert sorted(theme.entries) == [("text", "body"), ("text-shadow", "soft")]
