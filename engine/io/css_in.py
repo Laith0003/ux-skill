@@ -8,7 +8,9 @@ root, never a component), on a theme selector (`[data-theme="dark"]`,
 the preference media queries prefers-color-scheme, prefers-contrast and
 prefers-reduced-motion. Each property becomes a token whose path is its
 name without the leading dashes, so the system keeps its names; a
-`var(--x)` value is an alias to x.
+`var(--x)` value is an alias to x. A bare number on a property named for a
+size (--radius-md: 8, --container-max: 1200, --elevation-raised: 2) is
+read as px, with a note that says so and how to write it.
 
 Modes: the attributes and media queries this engine writes (data-theme,
 data-contrast, data-density, dir, data-motion and the three preference
@@ -128,7 +130,8 @@ from engine.foundations.export import to_css
 from engine.foundations.modes import AXES, CSS_AXES, join
 from engine.foundations.tokens import ROOT_BASE, Token, TokenSet
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source, read_source, recorded
-from engine.io.values_in import GamutMapped, NotRead, css_alias, read_value, split_top
+from engine.io.values_in import (GamutMapped, NotRead, bare_size_note, css_alias, read_value,
+                                 size_word, split_top)
 
 # The scheme a stylesheet opens (export.SCHEME_DEFAULTS): it follows the
 # system when prefers-color-scheme sets the dark values, opens dark when
@@ -1141,6 +1144,8 @@ def import_css(text: str, source: Source) -> Imported:
         own_original: Dict[str, str] = {}
         # One note on the scaled value per property, beside any spelling note.
         scaled_noted = False
+        # One note on a bare number read as px per property.
+        sized_noted = False
         try:
             for key, (value_text, at) in by_key.items():
                 if re.search(r"!\s*important\s*$", value_text, re.I):
@@ -1180,6 +1185,14 @@ def import_css(text: str, source: Source) -> Imported:
                 else:
                     gamut: List[GamutMapped] = []
                     kind, value = read_value(value_text, gamut)
+                    word = size_word(path) if kind == "number" else ""
+                    if word:
+                        # A bare number named for a size is read as px.
+                        kind, value = "dimension", {"value": value, "unit": "px"}
+                        if value["value"] != 0 and not sized_noted:
+                            sized_noted = True
+                            own_notes.append((at, Item(f"{name}:{at}", prop, bare_size_note(
+                                value_text.strip(), word))))
                     read.append((join(dict(key), axes), kind, value, at))
                     own_mapped += [(at, Mapped.of(f"{name}:{at}", prop, g)) for g in gamut]
                     if gamut and kind == "color":

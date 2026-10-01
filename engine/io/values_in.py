@@ -327,6 +327,44 @@ def _shadow_layer(text: str, mapped: Optional[List[GamutMapped]]) -> dict:
     return layer
 
 
+# Words in a name that say its number is a size, words that say it is a
+# plain number whatever else the name says, and words that say it is a
+# time. A bare number on a size is read as px, with a note.
+SIZE_WORDS = frozenset(("space", "spacing", "gap", "padding", "margin", "inset", "radius",
+                        "radii", "rounded", "corner", "corners", "size", "sizes", "width",
+                        "height", "gutter", "offset", "blur", "spread", "indent", "breakpoint",
+                        "container", "containers", "elevation", "elevations"))
+UNITLESS_WORDS = frozenset(("line", "leading", "weight", "opacity", "z", "index", "zindex",
+                            "ratio", "scale", "factor", "alpha", "order", "count", "flex",
+                            "columns", "cols", "level", "levels", "layer", "layers",
+                            "multiplier", "stroke", "lightness", "chroma", "hue", "saturation",
+                            "temperature"))
+TIME_WORDS = frozenset(("duration", "delay"))
+_CAMEL = re.compile(r"(?<=[a-z0-9])(?=[A-Z])")
+
+
+def name_words(name: str) -> List[str]:
+    """The words of a token's name, lowercase and in order, split at
+    camelCase and at anything that is not a letter or a digit."""
+    return re.findall(r"[a-z0-9]+", _CAMEL.sub(" ", name).lower())
+
+
+def size_word(name: str) -> str:
+    """The first word of a name that says its number is a size (radius in
+    borderRadius.md), or "" when the name names no size, or a plain number
+    or a time (line-height, z-index, duration)."""
+    found = name_words(name)
+    if set(found) & (UNITLESS_WORDS | TIME_WORDS):
+        return ""
+    return next((w for w in found if w in SIZE_WORDS), "")
+
+
+def bare_size_note(text: str, word: str) -> str:
+    """The note on a bare number read as px because its name says size."""
+    return (f"{text} has no unit, and its name says it is a size ({word}), so it was read as "
+            f"{text}px; write {text}px to say so, or the unit it has if it is not px")
+
+
 def length_text(value: Any) -> str:
     """A length literal as a person writes it: 16px, 0.875rem."""
     if isinstance(value, dict) and set(value) == {"value", "unit"}:

@@ -125,6 +125,24 @@ def test_a_whole_config_reads_its_theme():
     assert [t.path for t in imported.tokens.tokens()] == ["colors.moss"]
 
 
+def test_a_bare_number_on_a_size_key_is_read_as_px_with_a_note():
+    text = json.dumps({"theme": {"borderRadius": {"md": 8}, "maxWidth": {"container": 1200},
+                                 "zIndex": {"modal": 100}, "opacity": {"scrim": 0.6}}})
+    imported = import_tailwind_json(text, Source("theme.json", "tailwind-json", "0" * 64,
+                                                 len(text)))
+    ts = imported.tokens
+    assert ts.get("borderRadius.md").value == {"value": 8, "unit": "px"}
+    assert ts.get("maxWidth.container").value == {"value": 1200, "unit": "px"}
+    assert (ts.get("zIndex.modal").value, ts.get("opacity.scrim").value) == (100, 0.6)
+    assert [(i.where, i.name, i.message) for i in imported.report.notes] == [
+        ("theme.json borderRadius.md", "borderRadius.md",
+         "8 has no unit, and its name says it is a size (radius), so it was read as 8px; "
+         "write 8px to say so, or the unit it has if it is not px"),
+        ("theme.json maxWidth.container", "maxWidth.container",
+         "1200 has no unit, and its name says it is a size (width), so it was read as 1200px; "
+         "write 1200px to say so, or the unit it has if it is not px")]
+
+
 @pytest.mark.parametrize("name", ["tailwind.config.js", "tailwind.config.ts",
                                   "tailwind.config.cjs", "tailwind.config.mjs"])
 def test_javascript_is_never_run(tmp_path, name):

@@ -703,26 +703,37 @@ def test_a_unit_in_the_heading_is_the_unit_of_a_bare_number():
     assert ts.get("motion.fast").value == {"value": 120, "unit": "ms"}
 
 
-def test_a_size_with_no_unit_anywhere_is_not_read():
+def test_a_size_with_no_unit_anywhere_is_read_as_px_and_a_duration_is_not_read():
     text = ("| Token | Value |\n|---|---|\n| `space.4` | 16 |\n| `radius.card` | 12 |\n"
-            "| `line-height.body` | 1.5 |\n| `weight.bold` | 700 |\n| `space.0` | 0 |\n\n"
+            "| `line-height.body` | 1.5 |\n| `weight.bold` | 700 |\n| `space.0` | 0 |\n"
+            "| `container.max` | 1200 |\n| `elevation.raised` | 2 |\n\n"
             "- `shadow.offset`: 2\n- `motion.delay.quick`: 120\n")
     imported = _import(text)
     ts = imported.tokens
-    assert [t.path for t in ts.tokens()] == ["line-height.body", "weight.bold", "space.0"]
+    assert [t.path for t in ts.tokens()] == [
+        "space.4", "radius.card", "line-height.body", "weight.bold", "space.0", "container.max",
+        "elevation.raised", "shadow.offset"]
     assert ts.get("line-height.body").value == 1.5 and ts.get("weight.bold").value == 700
     assert ts.get("space.0").value == {"value": 0, "unit": "px"}
+    assert {p: ts.get(p).value["value"] for p in (
+        "space.4", "radius.card", "container.max", "elevation.raised", "shadow.offset")} == {
+        "space.4": 16, "radius.card": 12, "container.max": 1200, "elevation.raised": 2,
+        "shadow.offset": 2}
+    assert ts.get("container.max").value["unit"] == "px"
+    tail = "so it was read as {v}px; write {v}px to say so, or the unit it has if it is not px"
+    assert [r for r in _rows(imported.report.notes) if "has no unit" in r[2]] == [
+        ("rules.md:3", "space.4", "16 has no unit, and its name says it is a size (space), "
+                                  + tail.format(v=16)),
+        ("rules.md:4", "radius.card", "12 has no unit, and its name says it is a size "
+                                      "(radius), " + tail.format(v=12)),
+        ("rules.md:8", "container.max", "1200 has no unit, and its name says it is a size "
+                                        "(container), " + tail.format(v=1200)),
+        ("rules.md:9", "elevation.raised", "2 has no unit, and its name says it is a size "
+                                           "(elevation), " + tail.format(v=2)),
+        ("rules.md:11", "shadow.offset", "2 has no unit, and its name says it is a size "
+                                         "(offset), " + tail.format(v=2))]
     assert _rows(imported.report.not_read) == [
-        ("rules.md:3", "space.4", "16 has no unit, and space.4 is a size; write the unit in "
-                                  "the cell, such as 16px, or in the column header, such as "
-                                  "Value (px)"),
-        ("rules.md:4", "radius.card", "12 has no unit, and radius.card is a size; write the "
-                                      "unit in the cell, such as 12px, or in the column header, "
-                                      "such as Value (px)"),
-        ("rules.md:9", "shadow.offset", "2 has no unit, and shadow.offset is a size; write the "
-                                        "unit, such as 2px, or name it in the heading above, "
-                                        "such as ## Sizes (px)"),
-        ("rules.md:10", "motion.delay.quick", "120 has no unit, and motion.delay.quick is a "
+        ("rules.md:12", "motion.delay.quick", "120 has no unit, and motion.delay.quick is a "
                                               "duration; write the unit, such as 120ms, or name "
                                               "it in the heading above, such as ## Motion (ms)")]
 

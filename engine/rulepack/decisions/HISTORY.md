@@ -28,6 +28,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [Checks compare dimensions in px and durations in ms, and read scale steps by their number](checks-read-one-unit.md)
 - [A set the engine did not generate passes the same gate, a role it lacks is skipped, and only strict fails it](imported-sets-pass.md)
 - [A Figma collection of three or more modes that name no engine axis is read whole on one axis named for it](figma-modes-on-one-axis.md)
+- [A bare number whose name says it is a size is read as px, with a note](bare-sizes-read-as-px.md)
 
 ## Roles per foundation
 

@@ -36,8 +36,10 @@ write each curve as its own token.
 
 A unit in a column header (Value (px), Size [rem]) or in the heading above
 (## Spacing (px), ## Motion, in ms) is the unit of a bare number there,
-and of a shadow's bare offsets. A bare number for a size or a duration,
-or a shadow offset, with no unit anywhere is not read.
+and of a shadow's bare offsets. A bare number whose name says it is a size
+(space, radius, container, elevation, offset) with no unit anywhere is
+read as px, with a note; a bare duration with no unit anywhere is not
+read.
 Do and Avoid tables (Do and Don't, Use and Avoid, Good and Bad), and an
 Avoid column beside prose (Definition and Avoid), are guidance: they make
 no axis and join the file's rule note.
@@ -82,7 +84,8 @@ from engine.foundations.tokens import Token, TokenSet
 from engine.io.mode_words import axis_of, is_base, mode_of, words as name_words
 from engine.io.report import Imported, ImportReport, Item, Mapped, Source
 from engine.io.values_in import (COLOR_KEYWORDS, CSS_KEYWORDS, EASING_KEYWORDS, GamutMapped,
-                                 NotRead, css_alias, leading_ratio, length_text, read_value,
+                                 NotRead, TIME_WORDS, UNITLESS_WORDS, bare_size_note, css_alias,
+                                 leading_ratio, length_text, read_value, size_word,
                                  shadow_with_unit, split_top)
 
 NAME_HEADERS = ("token", "name", "variable", "role", "token name", "css variable")
@@ -152,14 +155,6 @@ _HEADING = re.compile(r" {0,3}#{1,6}\s+(.*?)\s*#*\s*$")
 _HEADING_UNIT = re.compile(r"[(\[]\s*(px|rem|ms|s)\s*[)\]]|\bin (px|rem|ms)\b", re.I)
 _BARE_NUMBER = re.compile(r"[+-]?(?:\d+\.?\d*|\.\d+)")
 _STEP = re.compile(r"\d+")
-# Words in a name that say its number is a size or a duration, and words
-# that say it is a plain number whatever else the name says.
-_SIZE_WORDS = frozenset(("space", "spacing", "gap", "padding", "margin", "inset", "radius",
-                         "radii", "rounded", "corner", "corners", "size", "sizes", "width",
-                         "height", "gutter", "offset", "blur", "spread", "indent", "breakpoint"))
-_TIME_WORDS = frozenset(("duration", "delay"))
-_UNITLESS_WORDS = frozenset(("line", "leading", "weight", "opacity", "z", "index", "zindex",
-                             "ratio", "scale", "factor", "alpha", "order", "count", "flex"))
 # A value in running text, a cell or a code block: a hex color (three or
 # four digits only with a letter, so an issue number is not one), a color
 # function, a length in px, rem or em, and a duration.
@@ -287,14 +282,15 @@ def _heading_unit(text: str) -> str:
 
 
 def _needs_unit(path: str) -> str:
-    """"size" or "duration" when a name says its number needs a unit, or
-    "" when it may be a plain number."""
+    """"duration" when a name says its number is a time, the word that
+    says it is a size (radius in radius.card), or "" when it may be a plain
+    number."""
     found = name_words(path.replace(".", " "))
-    if found & _UNITLESS_WORDS:
+    if found & UNITLESS_WORDS:
         return ""
-    if found & _TIME_WORDS:
+    if found & TIME_WORDS:
         return "duration"
-    return "size" if found & _SIZE_WORDS else ""
+    return size_word(path)
 
 
 def _refish(cell: str) -> bool:
@@ -842,8 +838,10 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
         values = {ctx: _unquote(v) for ctx, v in values.items() if _unquote(v)}
         path = _path(written)
         # A bare number takes the unit its column or its heading names; a
-        # size or a duration with no unit anywhere is not read.
+        # size with no unit anywhere is read as px with a note, and a
+        # duration with no unit anywhere is not read.
         bare: Dict[str, str] = {}
+        sized: List[Item] = []
         for ctx, v in list(values.items()):
             unit = (units or {}).get(ctx) or section["unit"]
             if not fields and unit in ("px", "rem") and not _BARE_NUMBER.fullmatch(v):
@@ -857,16 +855,19 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                 values[ctx] = v + unit
             elif need and float(v) == 0:
                 values[ctx] = v + ("ms" if need == "duration" else "px")
+            elif need and need != "duration":
+                values[ctx] = v + "px"
+                if not sized:
+                    sized.append(Item(where, written, bare_size_note(v, need)))
             elif need:
-                example = v + ("ms" if need == "duration" else "px")
+                example = v + "ms"
                 column = labels.get(ctx, "")
                 if column:
                     fix = (f"write the unit in the cell, such as {example}, or in the column "
-                           f"header, such as {column} ({example.lstrip('0123456789.+-')})")
+                           f"header, such as {column} (ms)")
                 else:
-                    heading = "## Motion (ms)" if need == "duration" else "## Sizes (px)"
                     fix = (f"write the unit, such as {example}, or name it in the heading above, "
-                           f"such as {heading}")
+                           "such as ## Motion (ms)")
                 bare[ctx] = f"{v} has no unit, and {path} is a {need}; {fix}"
         first = found.get(path)
         if first is not None:
@@ -887,6 +888,7 @@ def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Importe
                                  "the entry"))
             return
         found[path] = _Entry(where, written, values, labels, bare=bare, aliased=aliased,
+                             notes=sized,
                              fields={f: (text, column, unit or section["unit"])
                                      for f, (text, column, unit) in (fields or {}).items()})
 
