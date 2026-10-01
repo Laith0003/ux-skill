@@ -78,7 +78,7 @@ version plus one count per manifest:
 
 ```json
 {
-  "version": "4.0.0b1",
+  "version": "4.0.0",
   "counts": {
     "styles": 84,
     "palettes": 176,
@@ -89,7 +89,7 @@ version plus one count per manifest:
     "tech-stacks": 25,
     "ux-guidelines": 112,
     "motion-presets": 57,
-    "anti-patterns": 153,
+    "anti-patterns": 171,
     "landing-patterns": 40,
     "brands": 160
   }

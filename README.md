@@ -14,13 +14,13 @@ pip install uxskill
 
 *Before: generic stock-photo SEO slop. After: real construction-photo hero under a dark scrim, editorial headline with an amber accent, quote form in the hero. Same AI coding tool, same prompt, different result when ux-skill supplies the constraints.*
 
-> **v4.0 beta, FOUNDATIONS: one command builds a complete, WCAG-gated design system, with Arabic and right to left built in.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 12 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 152 anti-pattern rules, 25 tech stacks, 160 brand specs), 18 slash commands, 5 sub-agents, 25 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
+> **v4.0, FOUNDATIONS: one command builds a complete, WCAG-gated design system, with Arabic and right to left built in.** The strongest UX plugin for AI coding. A Python reasoning core with a deterministic 7-axis synthesizer, 12 queryable JSON manifests (84 styles, 176 palettes, 70 type pairings, 148 components, 184 industries, 35 chart types, 57 motion presets, 112 UX laws, 152 anti-pattern rules, 25 tech stacks, 160 brand specs), 18 slash commands, 5 sub-agents, 25 MCP tools, and a deterministic anti-AI-slop linter. Cross-IDE: ships into Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, and Roo Cline.
 
 > **The brand name is `ux-skill`.** The PyPI / npm package name stays `uxskill`. The GitHub repo lives at [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
 **Author:** [Laith Aljunaidy](https://laithjunaidy.com), designer and CTO in Amman · **Site:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Compare vs every Claude UX plugin:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-4.0.0--beta.1-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#the-17-ide-installer)
@@ -34,16 +34,16 @@ pip install uxskill
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
 [![Discord](https://img.shields.io/badge/discord-community-cc785c?logo=discord&logoColor=white)](https://discord.gg/uxskill)
 
-### New in 4.0 beta: foundations
+### New in 4.0: foundations
 
 One brand color in, a design system out, with its contrast checked before you get it.
 
 ```bash
-pip install --upgrade --pre uxskill
+pip install --upgrade uxskill
 uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system
 ```
 
-pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` still gives 3.2. Pin the beta with `pip install uxskill==4.0.0b1`; for the MCP server, `pip install --upgrade --pre 'uxskill[mcp]'`. With pipx, `pipx install --pip-args=--pre uxskill` (over an installed 3.x, `pipx upgrade --pip-args=--pre uxskill`). With npm, `npx uxskill@beta`.
+Python 3.10 or newer. For the MCP server, `pip install --upgrade 'uxskill[mcp]'`. With pipx, `pipx install uxskill` (over an installed 3.x, `pipx upgrade uxskill`). With npm, `npx uxskill@latest`. Coming from 3.x? The [migration guide](docs/migrating-to-4.md) maps every 3.x token to its 4.0 role.
 
 **Building a product or a landing page?** You get `tokens.css` to link from your page, `fonts.css` with metric-matched fallbacks for the chosen faces, `fonts-self-host.css` that loads the faces from your own files, `tokens.json` for tools, decorative brand art in `art/`, and `system-report.md`, which says in plain words what was built, why, and which page composition to start from. Style with the roles (`var(--color-action-primary)`, `var(--color-text-default)`, `var(--color-surface-page)`), and switch dark mode, high contrast, compact spacing, right to left or reduced motion with one attribute on `<html>`. Load the faces with the Google Fonts link the report gives, or with `fonts-self-host.css` and a `fonts/` folder, and link `fonts.css` with either one, before `tokens.css`; edit neither file. With `--brief`, the look follows the industry and tone when the brief names them, and structured fields (age, languages, default scheme, reading context) set text size, targets, scripts and which scheme opens; discovery does not ask for an industry, so `/ux-system create` asks for one. In Claude Code, `/ux-system create` checks the installed version, runs the build and explains the report.
 

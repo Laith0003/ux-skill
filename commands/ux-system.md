@@ -18,7 +18,7 @@ If the project already has a design system, do not build a new one: measure it w
 
 | Mode | What it does | Status |
 |---|---|---|
-| `/ux-system create` | Builds a WCAG-gated token system with the 4.0 foundations engine. See "create mode" below. | 4.0 beta |
+| `/ux-system create` | Builds a WCAG-gated token system with the 4.0 foundations engine. See "create mode" below. | 4.0 |
 | `/ux-system` (no mode) | The 3.x starter flow: discovery, recommendation, then the design-system-architect agent writes tokens, foundation docs and component contracts. See "3.x starter flow" below. | 3.x, kept until 4.0 final |
 | `/ux-system enhance --from <src>` | Read an existing system in its own names, check it, and measure the code that uses it. A report; nothing is rewritten. See "enhance mode" below. | Works now |
 | `/ux-system extend --from <src> --add <...>` | Add foundations, roles or contracts to an existing system without changing a token it has. See "extend mode" below. | Works now |
@@ -45,21 +45,21 @@ print(report.markdown())
 
 The commands in "enhance mode" and "extend mode" below run these steps for you, check and back up every source before any write, and write whatever they add to a system ux-skill did not write as a separate extension file in the source's own format. Use the Python calls only when the commands cannot run.
 
-## create mode (4.0 beta)
+## create mode
 
 `create` builds the system with the engine, not by hand. The engine generates nine foundations (color, type, space, layout, radius, border, elevation, motion, imagery), checks every color pairing in light, dark and high contrast, and refuses to emit a system that fails. You run it, read its result, and explain it.
 
 ### 1. Check the engine version
 
-Run `uxskill --version` first. The build needs uxskill 4.0.0b1 or later, which prints, for example, `uxskill, version 4.0.0b1`. If `uxskill` is not on PATH, run `python3 -m engine.cli.main --version` instead.
+Run `uxskill --version` first. The build needs uxskill 4.0.0 or later, which prints, for example, `uxskill, version 4.0.0`. If `uxskill` is not on PATH, run `python3 -m engine.cli.main --version` instead.
 
-If the version is older than 4.0.0b1, or neither command exists, stop here and give the user the install line; do not go on, and do not change any flag. pip and pipx skip pre-releases unless asked, so a plain `pip install uxskill` still gives 3.x:
+If the version is older than 4.0.0, or neither command exists, stop here and give the user the install line; do not go on, and do not change any flag:
 
 ```bash
-pip install uxskill==4.0.0b1
+pip install --upgrade uxskill
 ```
 
-With pipx: `pipx install --force uxskill==4.0.0b1` (`--force` replaces an installed 3.x). For the MCP server: `pip install 'uxskill[mcp]==4.0.0b1'`. Run the version check again after the install.
+With pipx: `pipx upgrade uxskill` (or `pipx install uxskill` when it is not installed). For the MCP server: `pip install --upgrade 'uxskill[mcp]'`. Run the version check again after the install.
 
 ### 2. Gather the inputs
 

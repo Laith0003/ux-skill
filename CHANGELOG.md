@@ -21,6 +21,8 @@ dark and high contrast, and writes only what passes. 3.x users: start with
   server: `pip install --upgrade 'uxskill[mcp]'`. To stay on 3.x on
   purpose: `pip install 'uxskill<4'`.
 - npm: `npx uxskill@latest`.
+- Then build a system:
+  `uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system`.
 
 ### Migrating from 3.x
 - The 3.x `tokens.css` from `ux generate` and the system pack's
