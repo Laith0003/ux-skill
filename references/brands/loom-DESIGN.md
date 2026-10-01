@@ -2,24 +2,24 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Loom's web presence is async-video-for-work chrome — a deep purple primary (#625df5) as the brand voltage, soft rounded cards, illustration-driven heroes featuring people in the act of recording a video. The atmosphere is friendly workplace SaaS: approachable, animated, and confident that async video is the future of work communication. Where peer collaboration tools (Slack, Teams, Notion) lean into productivity-card density, Loom leans into the video-message as the primary content unit — every page features the signature video-thumbnail with a circular recorder avatar overlaid.
+Loom's web presence is async-video-for-work chrome: a deep purple primary (#625df5) as the brand voltage, soft rounded cards, illustration-driven heroes featuring people in the act of recording a video. The atmosphere is friendly workplace SaaS: approachable, animated, and confident that async video is the future of work communication. Where peer collaboration tools (Slack, Teams, Notion) lean into productivity-card density, Loom leans into the video-message as the primary content unit: every page features the signature video-thumbnail with a circular recorder avatar overlaid.
 
-The Loom Purple (#625df5) is the brand voltage. It is a specific lavender-leaning purple — neither blue, nor magenta. The color appears on CTAs, on the wordmark, and as accent moments inside illustrations (the recorder avatar's border, the play button color). The purple is generous on the brand presence and scarce on individual chrome elements.
+The Loom Purple (#625df5) is the brand voltage. It is a specific lavender-leaning purple: neither blue, nor magenta. The color appears on CTAs, on the wordmark, and as accent moments inside illustrations (the recorder avatar's border, the play button color). The purple is generous on the brand presence and scarce on individual chrome elements.
 
-The video-message thumbnail is the brand's signature visual unit. Every screenshot mockup on the marketing site shows a video frame with a circular recorder avatar overlaid in the bottom-left corner — that's the Loom convention: the recorder's face is part of the message. Replacing this thumbnail style with a generic video player thumbnail flattens the brand.
+The video-message thumbnail is the brand's signature visual unit. Every screenshot mockup on the marketing site shows a video frame with a circular recorder avatar overlaid in the bottom-left corner. That's the Loom convention: the recorder's face is part of the message. Replacing this thumbnail style with a generic video player thumbnail flattens the brand.
 
 **Key Characteristics:**
-- Loom Purple (#625df5) — chromatic voltage on CTAs, wordmark, accents
-- White canvas with soft-rounded cards (12–16px radius)
-- Illustration-driven heroes — people recording or watching video
-- Video-message thumbnail signature — circular recorder avatar overlaid on video frame
+- Loom Purple (#625df5): chromatic voltage on CTAs, wordmark, accents
+- White canvas with soft-rounded cards (12 to 16px radius)
+- Illustration-driven heroes: people recording or watching video
+- Video-message thumbnail signature: circular recorder avatar overlaid on video frame
 - Inter typography across chrome
 - Friendly micro-animations on cards and buttons
 
 ## 2. Color Palette & Roles
 
 ### Primary
-- **Loom Purple** (`#625df5`): The brand voltage — CTAs, wordmark, accents
+- **Loom Purple** (`#625df5`): The brand voltage (CTAs, wordmark, accents)
 - **Purple Hover** (`#4f4cc6`): Press state
 - **Purple Soft** (`#e6e5fd`): Subtle background tint on featured content
 
@@ -48,33 +48,33 @@ The video-message thumbnail is the brand's signature visual unit. Every screensh
 ## 3. Typography Rules
 
 ### Font Family
-- **Display + Body**: `Inter, system-ui, sans-serif` — modern humanist sans
+- **Display + Body**: `Inter, system-ui, sans-serif` (modern humanist sans)
 
 ### Hierarchy
-- **Hero h1** — 48–64px Inter weight 700, line-height 1.1
-- **Section h2** — 32–40px weight 700
-- **Card title** — 20–24px weight 600
-- **Body** — 16–18px weight 400, line-height 1.5
-- **Caption** — 14px weight 400
-- **Button label** — 14–16px weight 600
+- **Hero h1**: 48 to 64px Inter weight 700, line-height 1.1
+- **Section h2**: 32 to 40px weight 700
+- **Card title**: 20 to 24px weight 600
+- **Body**: 16 to 18px weight 400, line-height 1.5
+- **Caption**: 14px weight 400
+- **Button label**: 14 to 16px weight 600
 
 ### Principles
 - Weight 700 for hero h1, weight 600 for card titles
-- Body sits at 16–18px for friendly reading
+- Body sits at 16 to 18px for friendly reading
 - Tracking slightly negative at display sizes (-0.5px)
 
 ## 4. Layout & Spacing
 
-The site uses a 12-column grid with a max content width of 1280–1440px. Section padding is 80–120px vertical. Feature card grids run 3-up at desktop.
+The site uses a 12-column grid with a max content width of 1280 to 1440px. Section padding is 80 to 120px vertical. Feature card grids run 3-up at desktop.
 
 ## 5. Componentry Feel
 
-- **Video-message thumbnail** — Video frame mockup with a circular recorder avatar overlaid in the bottom-left, play button centered, duration top-right
-- **Primary CTA (purple pill)** — Loom Purple fill, white text, full-pill radius, 44px height, weight-600 label
-- **Secondary CTA** — Transparent fill, 2px Loom Purple border, purple text
-- **Hero illustration (recording)** — Illustrated person at a desk, headset on, gesturing while recording — with the Loom video-message thumbnail mocked-up in their viewport
-- **Feature card (soft radius)** — White surface, 12–16px radius, hairline border, internal padding 24px. Icon top, headline, description, optional CTA
-- **Playback controls** — Inline video player controls with the signature purple progress bar
+- **Video-message thumbnail**: Video frame mockup with a circular recorder avatar overlaid in the bottom-left, play button centered, duration top-right
+- **Primary CTA (purple pill)**: Loom Purple fill, white text, full-pill radius, 44px height, weight-600 label
+- **Secondary CTA**: Transparent fill, 2px Loom Purple border, purple text
+- **Hero illustration (recording)**: Illustrated person at a desk, headset on, gesturing while recording, with the Loom video-message thumbnail mocked-up in their viewport
+- **Feature card (soft radius)**: White surface, 12 to 16px radius, hairline border, internal padding 24px. Icon top, headline, description, optional CTA
+- **Playback controls**: Inline video player controls with the signature purple progress bar
 
 ## 6. Voice / Microcopy Do's & Don'ts
 

@@ -2,16 +2,16 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Twilio's web presence is communication-API developer chrome — Twilio Red (#f22f46) as the chromatic anchor, white canvas with developer-documentation aesthetic, and code snippets as the dominant feature visualization. The atmosphere is API-first developer-friendly. Where peer SaaS marketing (Salesforce, HubSpot) leans into character illustrations and case-study photography, Twilio leans into code — every page shows the product as code-in-action, with curl/Node/Python/Go language tabs as the hero treatment.
+Twilio's web presence is communication-API developer chrome: Twilio Red (#f22f46) as the chromatic anchor, white canvas with developer-documentation aesthetic, and code snippets as the dominant feature visualization. The atmosphere is API-first developer-friendly. Where peer SaaS marketing (Salesforce, HubSpot) leans into character illustrations and case-study photography, Twilio leans into code: every page shows the product as code-in-action, with curl/Node/Python/Go language tabs as the hero treatment.
 
-The developer-first commitment is the brand's most-important positioning decision. Twilio's marketing site reads more like docs.twilio.com than salesforce.com — sidebar TOCs, version pickers, language switchers, and code blocks dominate the visual atmosphere. The brand's open-source Paste design system is visible in the product chrome and creeps into the marketing pages.
+The developer-first commitment is the brand's most-important positioning decision. Twilio's marketing site reads more like docs.twilio.com than salesforce.com: sidebar TOCs, version pickers, language switchers, and code blocks dominate the visual atmosphere. The brand's open-source Paste design system is visible in the product chrome and creeps into the marketing pages.
 
-Twilio Red is the chromatic anchor. It is a specific saturated coral-red (#f22f46) — slightly warm, distinctive against typical CTA reds. The red appears on CTAs, on the wordmark, and as syntax-highlighting accent inside code blocks (Twilio API calls render the SDK class name in the brand red).
+Twilio Red is the chromatic anchor. It is a specific saturated coral-red (#f22f46): slightly warm, distinctive against typical CTA reds. The red appears on CTAs, on the wordmark, and as syntax-highlighting accent inside code blocks (Twilio API calls render the SDK class name in the brand red).
 
 **Key Characteristics:**
-- Twilio Red (#f22f46) — chromatic voltage on CTAs and wordmark
+- Twilio Red (#f22f46): chromatic voltage on CTAs and wordmark
 - White canvas with developer-documentation aesthetic
-- Code-snippet-as-hero — language tabs for curl/Node/Python/Go/Java
+- Code-snippet-as-hero: language tabs for curl/Node/Python/Go/Java
 - Inter typography for chrome, JetBrains Mono for code
 - Twilio Paste design system patterns
 - Feature card grids with API request/response mockups
@@ -20,7 +20,7 @@ Twilio Red is the chromatic anchor. It is a specific saturated coral-red (#f22f4
 ## 2. Color Palette & Roles
 
 ### Primary
-- **Twilio Red** (`#f22f46`): The brand voltage — CTAs, wordmark, code syntax accent
+- **Twilio Red** (`#f22f46`): The brand voltage (CTAs, wordmark, code syntax accent)
 - **Red Hover** (`#c12338`): Press state
 
 ### Surface & Background
@@ -31,7 +31,7 @@ Twilio Red is the chromatic anchor. It is a specific saturated coral-red (#f22f4
 - **Hairline** (`#e1e3ea`): 1px borders
 
 ### Neutrals & Text
-- **Ink** (`#0d122b`): Primary text — uses a deep dark blue
+- **Ink** (`#0d122b`): Primary text (uses a deep dark blue)
 - **Body** (`#3a3f51`): Default body text
 - **Muted** (`#606b85`): Captions
 - **Muted Soft** (`#9da3b3`): Fine-print
@@ -54,13 +54,13 @@ Twilio Red is the chromatic anchor. It is a specific saturated coral-red (#f22f4
 - **Mono**: `JetBrains Mono, Courier New, monospace`
 
 ### Hierarchy
-- **Hero h1** — 48–64px Inter weight 700, line-height 1.1
-- **Section h2** — 32–40px weight 700
-- **Card title** — 20–24px weight 600
-- **Body** — 16–18px weight 400, line-height 1.5
-- **Code** — 13–14px JetBrains Mono weight 400, 1.6 line-height
-- **Caption** — 14px weight 400
-- **Button label** — 14–16px weight 600
+- **Hero h1**: 48 to 64px Inter weight 700, line-height 1.1
+- **Section h2**: 32 to 40px weight 700
+- **Card title**: 20 to 24px weight 600
+- **Body**: 16 to 18px weight 400, line-height 1.5
+- **Code**: 13 to 14px JetBrains Mono weight 400, 1.6 line-height
+- **Caption**: 14px weight 400
+- **Button label**: 14 to 16px weight 600
 
 ### Principles
 - Weight 700 for hero h1
@@ -69,16 +69,16 @@ Twilio Red is the chromatic anchor. It is a specific saturated coral-red (#f22f4
 
 ## 4. Layout & Spacing
 
-The site uses a 12-column grid with a max content width of 1280–1440px. Section padding is 80–120px vertical. Feature card grids run 3-up at desktop. Product family pages use a 9-3 split with content on the left and sidebar TOC on the right.
+The site uses a 12-column grid with a max content width of 1280 to 1440px. Section padding is 80 to 120px vertical. Feature card grids run 3-up at desktop. Product family pages use a 9-3 split with content on the left and sidebar TOC on the right.
 
 ## 5. Componentry Feel
 
-- **Primary CTA (red rect)** — Twilio Red fill, white text, 4–8px radius, 44px height, weight-600 label
-- **Secondary CTA** — Transparent fill, 2px Twilio Red border, red text
-- **Code snippet (tabbed)** — Dark surface (`#0d122b`), language tabs at the top (curl, Node, Python, Go, Java), syntax-highlighted code in JetBrains Mono, copy button top-right
-- **API request/response card** — Side-by-side request/response code snippets demonstrating an API call
-- **Developer doc sidebar** — Hierarchical TOC with expand/collapse rows, current-page indicator (a 2px red bar on the left)
-- **Feature card (soft radius)** — White surface, 8–12px radius, hairline border, internal padding 24px
+- **Primary CTA (red rect)**: Twilio Red fill, white text, 4 to 8px radius, 44px height, weight-600 label
+- **Secondary CTA**: Transparent fill, 2px Twilio Red border, red text
+- **Code snippet (tabbed)**: Dark surface (`#0d122b`), language tabs at the top (curl, Node, Python, Go, Java), syntax-highlighted code in JetBrains Mono, copy button top-right
+- **API request/response card**: Side-by-side request/response code snippets demonstrating an API call
+- **Developer doc sidebar**: Hierarchical TOC with expand/collapse rows, current-page indicator (a 2px red bar on the left)
+- **Feature card (soft radius)**: White surface, 8 to 12px radius, hairline border, internal padding 24px
 
 ## 6. Voice / Microcopy Do's & Don'ts
 

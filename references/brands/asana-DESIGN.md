@@ -2,24 +2,24 @@
 
 ## 1. Visual Theme & Atmosphere
 
-Asana's web presence is project-management-as-flow chrome — a coral-orange primary (#fc636b) as the brand voltage, the three-dot brand mark referencing teams in coordination, illustration-driven heroes featuring teams in motion, and a soft-rounded card grammar that reads as approachable enterprise. The atmosphere is friendly productivity SaaS. The brand's tagline ("work without the chaos") shapes the entire chrome — every page sells the calm-after-the-storm of having work organized.
+Asana's web presence is project-management-as-flow chrome: a coral-orange primary (#fc636b) as the brand voltage, the three-dot brand mark referencing teams in coordination, illustration-driven heroes featuring teams in motion, and a soft-rounded card grammar that reads as approachable enterprise. The atmosphere is friendly productivity SaaS. The brand's tagline ("work without the chaos") shapes the entire chrome: every page sells the calm-after-the-storm of having work organized.
 
-Where peer project-management tools (Jira, Monday, Trello) lean into different aesthetic positionings (Jira is enterprise-rectilinear, Monday is colorful-grid, Trello is kanban-classic), Asana leans into warm-illustration friendliness. The hero illustrations show people collaborating, task boards in action, gantt timelines syncing — the brand is selling the feeling of coordinated work, not the database underneath.
+Where peer project-management tools (Jira, Monday, Trello) lean into different aesthetic positionings (Jira is enterprise-rectilinear, Monday is colorful-grid, Trello is kanban-classic), Asana leans into warm-illustration friendliness. The hero illustrations show people collaborating, task boards in action, gantt timelines syncing: the brand is selling the feeling of coordinated work, not the database underneath.
 
-The Asana coral (#fc636b) is the chromatic voltage. It is a specific warm coral — neither true red nor salmon — and pairs with a near-black ink to create the brand's high-warmth contrast. The coral appears on CTAs, on the three-dot brand mark, and as accents inside illustrations.
+The Asana coral (#fc636b) is the chromatic voltage. It is a specific warm coral (neither true red nor salmon) and pairs with a near-black ink to create the brand's high-warmth contrast. The coral appears on CTAs, on the three-dot brand mark, and as accents inside illustrations.
 
 **Key Characteristics:**
-- Asana coral (#fc636b) — chromatic voltage on CTAs and wordmark
-- Three-dot brand mark — circular triad referencing teams in coordination
-- Soft rounded cards (8–16px radius) — approachable enterprise
-- Friendly workflow-illustration heroes — teams collaborating
+- Asana coral (#fc636b): chromatic voltage on CTAs and wordmark
+- Three-dot brand mark: circular triad referencing teams in coordination
+- Soft rounded cards (8 to 16px radius): approachable enterprise
+- Friendly workflow-illustration heroes: teams collaborating
 - Asana Sans typography across chrome
 - Workflow-themed mockups (gantt, kanban, task cards) carry the visual atmosphere
 
 ## 2. Color Palette & Roles
 
 ### Primary
-- **Asana Coral** (`#fc636b`): The brand voltage — CTAs, wordmark, accents
+- **Asana Coral** (`#fc636b`): The brand voltage (CTAs, wordmark, accents)
 - **Coral Hover** (`#c54f56`): Press state
 - **Coral Soft** (`#fde2e3`): Subtle background tint
 
@@ -51,33 +51,33 @@ The Asana coral (#fc636b) is the chromatic voltage. It is a specific warm coral 
 ## 3. Typography Rules
 
 ### Font Family
-- **Display + Body**: `Asana Sans, Inter, system-ui, sans-serif` — proprietary humanist sans (open-source substitute: Inter)
+- **Display + Body**: `Asana Sans, Inter, system-ui, sans-serif`, proprietary humanist sans (open-source substitute: Inter)
 
 ### Hierarchy
-- **Hero h1** — 48–64px Asana Sans weight 700, line-height 1.1
-- **Section h2** — 32–40px weight 700
-- **Card title** — 20–24px weight 600
-- **Body** — 16–18px weight 400, line-height 1.5
-- **Caption** — 14px weight 400
-- **Button label** — 14–16px weight 600
+- **Hero h1**: 48 to 64px Asana Sans weight 700, line-height 1.1
+- **Section h2**: 32 to 40px weight 700
+- **Card title**: 20 to 24px weight 600
+- **Body**: 16 to 18px weight 400, line-height 1.5
+- **Caption**: 14px weight 400
+- **Button label**: 14 to 16px weight 600
 
 ### Principles
 - Weight 700 for hero h1
-- Body sits at 16–18px for friendly reading pace
+- Body sits at 16 to 18px for friendly reading pace
 - Tracking neutral (0)
 
 ## 4. Layout & Spacing
 
-The site uses a 12-column grid with a max content width of 1280–1440px. Section padding is 80–120px vertical. Feature card grids run 3-up at desktop.
+The site uses a 12-column grid with a max content width of 1280 to 1440px. Section padding is 80 to 120px vertical. Feature card grids run 3-up at desktop.
 
 ## 5. Componentry Feel
 
-- **Primary CTA (coral pill)** — Asana Coral fill, white text, full-pill radius, 44px height, weight-600 label
-- **Secondary CTA** — Transparent fill, 2px Asana Coral border, coral text
-- **Task card mockup** — Soft rounded card (12px) with task title, owner avatar, due date, priority chip — used in hero illustrations to demonstrate the product
-- **Gantt timeline visualization** — Multi-row horizontal bars in workflow colors showing project timelines
-- **Hero illustration team** — Illustrated people collaborating on a task board with the Asana task cards visible
-- **Feature card (soft radius)** — White surface, 12–16px radius, hairline border, internal padding 24px
+- **Primary CTA (coral pill)**: Asana Coral fill, white text, full-pill radius, 44px height, weight-600 label
+- **Secondary CTA**: Transparent fill, 2px Asana Coral border, coral text
+- **Task card mockup**: Soft rounded card (12px) with task title, owner avatar, due date, priority chip (used in hero illustrations to demonstrate the product)
+- **Gantt timeline visualization**: Multi-row horizontal bars in workflow colors showing project timelines
+- **Hero illustration team**: Illustrated people collaborating on a task board with the Asana task cards visible
+- **Feature card (soft radius)**: White surface, 12 to 16px radius, hairline border, internal padding 24px
 
 ## 6. Voice / Microcopy Do's & Don'ts
 

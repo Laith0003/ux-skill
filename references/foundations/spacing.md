@@ -4,25 +4,25 @@
 
 ## Principles
 
-1. **Pick a base unit and commit** — 4px or 8px. Build every gap, padding, and margin on multiples of that unit. The system is the look. Random spacing increments with no rhythm read as undisciplined.
+1. **Pick a base unit and commit**: 4px or 8px. Build every gap, padding, and margin on multiples of that unit. The system is the look. Random spacing increments with no rhythm read as undisciplined.
 
 2. **Section spacing follows the brand.** Landing sections sit `layout.landing-gap.<tier>` apart: 64 to 240px at desktop, wider for a calm or formal brand and tighter for a loud one, and 0.6 to 0.9 of that on a phone. Cramped sections (`py-12` on marketing) read as discount; the system's gap reads as composed.
 
-3. **Density mode is a deliberate choice** — Art-gallery (low density), daily-app (comfortable), cockpit (packed). Pick one per surface based on product type. Mobile caps density at "daily-app" regardless of desktop choice.
+3. **Density mode is a deliberate choice**: Art-gallery (low density), daily-app (comfortable), cockpit (packed). Pick one per surface based on product type. Mobile caps density at "daily-app" regardless of desktop choice.
 
-4. **Adaptive gutters by breakpoint** — Increase horizontal insets on larger widths and in landscape. The same narrow gutter on phone and tablet reads as unconsidered.
+4. **Adaptive gutters by breakpoint**: Increase horizontal insets on larger widths and in landscape. The same narrow gutter on phone and tablet reads as unconsidered.
 
-5. **Vertical rhythm cascades by hierarchy** — Define tiers: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128 / 160. Inside a component, gaps land on the smaller end (4 to 16). Between sections, gaps land on the larger end (64 to 160). Each tier signals a different level of separation.
+5. **Vertical rhythm cascades by hierarchy**. Define tiers: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128 / 160. Inside a component, gaps land on the smaller end (4 to 16). Between sections, gaps land on the larger end (64 to 160). Each tier signals a different level of separation.
 
-6. **Safe areas are non-negotiable** — Fixed navbars, tab bars, and CTA bars must reserve space for notch, Dynamic Island, home indicator, and scroll content insets so lists do not hide behind sticky bars.
+6. **Safe areas are non-negotiable**: Fixed navbars, tab bars, and CTA bars must reserve space for notch, Dynamic Island, home indicator, and scroll content insets so lists do not hide behind sticky bars.
 
-7. **Container max-widths cap reading distance** — 1200 to 1400px outer container, 640 to 1080px inner content depending on type of content (prose narrower, visuals wider). Beyond 1400px the eye loses anchor.
+7. **Container max-widths cap reading distance**: 1200 to 1400px outer container, 640 to 1080px inner content depending on type of content (prose narrower, visuals wider). Beyond 1400px the eye loses anchor.
 
-8. **Asymmetric whitespace is composition, not accident** — Generous one-sided whitespace (e.g., `padding-left: 20vw`) pushes content off-center deliberately. Symmetrical padding on every section produces the corporate-template look.
+8. **Asymmetric whitespace is composition, not accident**: Generous one-sided whitespace (e.g., `padding-left: 20vw`) pushes content off-center deliberately. Symmetrical padding on every section produces the corporate-template look.
 
-9. **Z-index is structural, not decorative** — Reserve high z-indexes for systemic layers: sticky nav, modals, overlays, tooltips. Document the scale. No arbitrary `z-50` spam.
+9. **Z-index is structural, not decorative**. Reserve high z-indexes for systemic layers: sticky nav, modals, overlays, tooltips. Document the scale. No arbitrary `z-50` spam.
 
-10. **Inside cards, padding earns its keep** — Generous internal padding (24 to 40px) inside premium cards; tighter (8 to 16px) inside brutalist or cockpit-dense layouts. Mixed-padding cards on the same page break the rhythm.
+10. **Inside cards, padding earns its keep**: Generous internal padding (24 to 40px) inside premium cards; tighter (8 to 16px) inside brutalist or cockpit-dense layouts. Mixed-padding cards on the same page break the rhythm.
 
 ## Do / Don't
 
@@ -47,7 +47,7 @@
 
 ### Pattern: Marketing section padding
 **Use when**: Any marketing landing section that needs to feel like a distinct cinematic chapter.
-**Anti-pattern**: `py-12` (48px) — sections feel cramped, slabs of content with no breathing room.
+**Anti-pattern**: `py-12` (48px), sections feel cramped, slabs of content with no breathing room.
 **How**: With a 4.0 design system, space sections with `var(--layout-landing-gap)`: it follows the viewport's tier and the brand, 64 to 240px at desktop (calm and formal wider, loud tighter) and 0.6 to 0.9 of that on a phone. Without one, use at least `py-16 md:py-48` (64px phone, 192px desktop). Sections breathe; the page reads as composed.
 
 ### Pattern: AIDA section vertical rhythm
@@ -57,8 +57,8 @@
 
 ### Pattern: Adaptive gutter scaling
 **Use when**: Pages that span 375px mobile to 1440px+ desktop.
-**Anti-pattern**: `px-4` everywhere from phone to desktop — wide screens look cramped against the chrome.
-**How**: Mobile: `px-4` (16px). Tablet: `px-8` (32px). Desktop: `px-12` (48px) or use `max-w-7xl mx-auto` and let outer padding scale. Landscape phones get treated as tablets for gutter purposes — the wider canvas earns wider insets.
+**Anti-pattern**: `px-4` everywhere from phone to desktop (wide screens look cramped against the chrome).
+**How**: Mobile: `px-4` (16px). Tablet: `px-8` (32px). Desktop: `px-12` (48px) or use `max-w-7xl mx-auto` and let outer padding scale. Landscape phones get treated as tablets for gutter purposes: the wider canvas earns wider insets.
 
 ### Pattern: Component internal padding by density
 **Use when**: Building cards, panels, and containers for a specific density mode.
@@ -98,7 +98,7 @@
 
 ### Pattern: Container width caps
 **Use when**: Marketing landing pages, product surfaces, documentation.
-**Anti-pattern**: Content stretching full-width on 2560px ultrawide monitors — line lengths become punishing.
+**Anti-pattern**: Content stretching full-width on 2560px ultrawide monitors (line lengths become punishing).
 **How**:
 - Outer container: `max-w-7xl mx-auto` (1280px) or `max-w-[1400px] mx-auto`
 - Inside the container: prose columns at `max-w-prose` or `max-w-[65ch]` (roughly 640 to 720px)
@@ -106,7 +106,7 @@
 - Full-bleed sections (backgrounds, hero imagery) extend to `w-screen`; constrained content inside still respects the container
 
 ### Pattern: Vertical rhythm cascade
-**Use when**: Stacking components with clear hierarchy — eyebrow → headline → body → CTA.
+**Use when**: Stacking components with clear hierarchy (eyebrow → headline → body → CTA).
 **Anti-pattern**: Identical 16px gap between every adjacent element.
 **How**:
 - 4 to 8px: between tightly related elements (icon + label, eyebrow + headline)
@@ -118,7 +118,7 @@
 ### Pattern: Brutalist grid lines via gap
 **Use when**: High contrast, geometric type and a formal grid: the technical end of the axes.
 **Anti-pattern**: Heavy `border` declarations on every cell.
-**How**: Use `display: grid; gap: 1px;` with contrasting parent/child background colors to generate razor-thin dividing lines. The grid is allowed to be visible — faint baseline grids, registration marks, and ruler tick marks reinforce the engineered feel.
+**How**: Use `display: grid; gap: 1px;` with contrasting parent/child background colors to generate razor-thin dividing lines. The grid is allowed to be visible: faint baseline grids, registration marks, and ruler tick marks reinforce the engineered feel.
 
 ### Pattern: Safe area implementation
 **Use when**: Mobile apps and PWAs with fixed headers, tab bars, or floating CTA bars.
@@ -128,14 +128,14 @@
 - Bottom: `padding-bottom: max(16px, env(safe-area-inset-bottom))` on tab bars and floating CTAs
 - Scroll containers: `padding-bottom` equal to fixed-element height + safe-area inset
 - Test on devices with notches, Dynamic Island, and gesture indicators
-- Test landscape orientation — safe areas shift to left and right edges
+- Test landscape orientation: safe areas shift to left and right edges
 - Avoid hardcoding pixel values; respect the system's variable insets
 
 ### Pattern: Premium card padding scale
 **Use when**: High-end aesthetic with major bento containers.
 **Anti-pattern**: `p-4` on every card regardless of role.
 **How**:
-- Major bento containers: `p-10` to `p-16` (40 to 64px) — generous, gallery-presentation
+- Major bento containers: `p-10` to `p-16` (40 to 64px), generous, gallery-presentation
 - Standard premium cards: `p-8` (32px)
 - Feature cards: `p-6` (24px)
 - Compact tiles: `p-4` (16px)
@@ -165,7 +165,7 @@
 ## Tokens / values
 
 ### Base unit
-- 4px or 8px — pick one and commit
+- 4px or 8px: pick one and commit
 - All gaps, paddings, margins are multiples of the base unit
 
 ### Spacing scale (8px-rhythm aligned)
@@ -226,7 +226,7 @@
 
 ### Mobile collapse rules (VARIANCE 4-10)
 - Below 768px (`md:`): any asymmetric layout falls back to `w-full px-4 py-8` single-column
-- Below 768px: cap density at "daily-app" — cockpit mode becomes scrollable card stacks, not 1px-divided rows
+- Below 768px: cap density at "daily-app" (cockpit mode becomes scrollable card stacks, not 1px-divided rows)
 - Below 768px: motion intensity drops by 2 levels
 - Below 768px: bento grids collapse to single column with `gap-4` and standard vertical spacing; no `col-span` overrides survive
 - Below 768px: remove rotations and negative-margin overlaps from z-axis cascades

@@ -3,7 +3,7 @@
 > A vibrant claymation-meets-data interface for Clay.com (GTM data-orchestration platform).
 
 **Category:** Editorial / Media
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/clay.json`](../../data/brands/clay.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

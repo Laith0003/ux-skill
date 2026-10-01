@@ -1,18 +1,18 @@
-# Ramp — DESIGN.md
+# Ramp: DESIGN.md
 
 ## Overview
-Ramp is the modernist-fintech brand — a white canvas paired with the signature signal red (`#e84a4a`) and a confident geometric serif display (GT Sectra). The brand reads as a SF design-studio-built financial product: tight, structured, with editorial pull-quotes and dashboard mockups treated as the marketing artifact. The wordmark and CTAs are red; everything else is restrained.
+Ramp is the modernist-fintech brand: a white canvas paired with the signature signal red (`#e84a4a`) and a confident geometric serif display (GT Sectra). The brand reads as a SF design-studio-built financial product: tight, structured, with editorial pull-quotes and dashboard mockups treated as the marketing artifact. The wordmark and CTAs are red; everything else is restrained.
 
 ## Color
-- **Primary:** `#e84a4a` — Ramp Red
+- **Primary:** `#e84a4a` (Ramp Red)
 - **Primary deep:** `#c43838`
-- **Canvas:** `#ffffff` — White
-- **Surface alt:** `#fafaf8` — Bone
+- **Canvas:** `#ffffff` (White)
+- **Surface alt:** `#fafaf8` (Bone)
 - **Surface card:** `#ffffff`
-- **Ink:** `#0e0e0e` — Near-Black
+- **Ink:** `#0e0e0e` (Near-Black)
 - **Body:** `#3a3a3a`
 - **Hairlines:** `rgba(14,14,14,0.10)`
-- **Accent (savings highlight):** `#1b6b4e` — Forest Green (used on "you saved $X" callouts only)
+- **Accent (savings highlight):** `#1b6b4e` (Forest Green: used on "you saved $X" callouts only)
 - **Semantic warning:** `#d68a2e`
 
 ## Typography
@@ -35,10 +35,10 @@ Ramp is the modernist-fintech brand — a white canvas paired with the signature
 - `dashboard-screenshot-card` (real Ramp UI as the hero artifact)
 
 ## Trademark signals
-- Signal red as the only brand voltage — no second accent except savings-green
-- Geometric serif display (GT Sectra) at hero scale — editorial weight in a category of geometric sans
-- Savings dollar amounts set in display-size serif numerals — money is foregrounded as type, not chart
-- Dashboard mockups are full-product chrome, never abstract — Ramp shows the actual UI
+- Signal red as the only brand voltage: no second accent except savings-green
+- Geometric serif display (GT Sectra) at hero scale: editorial weight in a category of geometric sans
+- Savings dollar amounts set in display-size serif numerals: money is foregrounded as type, not chart
+- Dashboard mockups are full-product chrome, never abstract: Ramp shows the actual UI
 - Customer quotes treated as editorial pull-quotes with large serif type
 
 ## What they DON'T do
@@ -55,4 +55,4 @@ Ramp is the modernist-fintech brand — a white canvas paired with the signature
 - https://ramp.com/pricing
 
 ## When to reference
-Reach for Ramp when the user wants a modernist B2B fintech surface that combines editorial weight with operational clarity. The serif-display + signal-red + dashboard-as-hero combination reads as "design-studio-built finance product" — appropriate for spend management, treasury, expense tools, and any product where the dashboard IS the marketing.
+Reach for Ramp when the user wants a modernist B2B fintech surface that combines editorial weight with operational clarity. The serif-display + signal-red + dashboard-as-hero combination reads as "design-studio-built finance product": appropriate for spend management, treasury, expense tools, and any product where the dashboard IS the marketing.

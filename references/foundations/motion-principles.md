@@ -1,6 +1,6 @@
 # Motion principles
 
-> Motion has measurable rules. The ones below come from shipping production UI at the highest bar — toast systems that compose without jank, drawer libraries that survive a real touch screen, modal stacks that don't make users wait. Every rule has a "do" and a "don't" pair and a code-level example where it helps. If a rule and a designer disagree, the rule wins until the designer can articulate which constraint shifts.
+> Motion has measurable rules. The ones below come from shipping production UI at the highest bar: toast systems that compose without jank, drawer libraries that survive a real touch screen, modal stacks that don't make users wait. Every rule has a "do" and a "don't" pair and a code-level example where it helps. If a rule and a designer disagree, the rule wins until the designer can articulate which constraint shifts.
 
 Motion is not decoration. It is a runtime property of the interface. Every animation costs frames, cycles, and attention; every animation that ships must earn those costs by communicating something the static interface cannot.
 
@@ -14,7 +14,7 @@ The principles below are grouped: Decision, Easing, Duration, Spring physics, Co
 
 ---
 
-## Decision — when to animate at all
+## Decision: when to animate at all
 
 ### 1. Frequency gating
 
@@ -30,7 +30,7 @@ Animations happen on infrequent events. They never fire on every keystroke, ever
 **Don't:**
 - Animate on every `onChange` of a text input.
 - Animate on every scroll event (use `IntersectionObserver`, not scroll listeners).
-- Animate on every websocket / streaming update — debounce to render once per ~250ms.
+- Animate on every websocket / streaming update: debounce to render once per ~250ms.
 
 **Code-level example:**
 
@@ -44,9 +44,9 @@ Animations happen on infrequent events. They never fire on every keystroke, ever
 
 ### 2. Never animate keyboard actions
 
-Tab, Enter, arrow keys, Escape, Space — these are the user's accelerator pedal. They expect zero latency. Any animation in the path between keypress and visible state change reads as lag, not polish. Power users will be the first to notice and the loudest to complain.
+Tab, Enter, arrow keys, Escape, Space: these are the user's accelerator pedal. They expect zero latency. Any animation in the path between keypress and visible state change reads as lag, not polish. Power users will be the first to notice and the loudest to complain.
 
-The keyboard is the primary interface for accessibility users (screen reader + keyboard navigation), and reduced motion is more than a preference for them — it is a usability requirement.
+The keyboard is the primary interface for accessibility users (screen reader + keyboard navigation), and reduced motion is more than a preference for them. It is a usability requirement.
 
 **Do:**
 - On Tab focus: snap the focus ring on instantly. The focus-visible outline can have an opacity transition under 80ms; the element itself moves zero.
@@ -55,12 +55,12 @@ The keyboard is the primary interface for accessibility users (screen reader + k
 
 **Don't:**
 - Slide focus rings across the page with a 200ms transition.
-- Animate the dropdown closing when the user presses Escape — close instantly, then optionally fade backdrop.
+- Animate the dropdown closing when the user presses Escape: close instantly, then optionally fade backdrop.
 - Stagger menu items on arrow-key navigation; the user is already past the next item.
 
 ### 3. Every animation has a purpose
 
-Every animation in shipped code falls into one of three buckets: cause-effect (the user did X, so this animates to confirm), state-change confirmation (the system transitioned, so the user sees it), or attention direction (something needs to be seen). Decorative motion — motion that exists because the surface "needed something" — is banned.
+Every animation in shipped code falls into one of three buckets: cause-effect (the user did X, so this animates to confirm), state-change confirmation (the system transitioned, so the user sees it), or attention direction (something needs to be seen). Decorative motion (motion that exists because the surface "needed something") is banned.
 
 **The audit question:** if you remove this animation entirely and the user can still tell what happened from the static interface, the animation is decorative. Cut it or earn it by carrying meaning the static frame cannot.
 
@@ -70,17 +70,17 @@ Every animation in shipped code falls into one of three buckets: cause-effect (t
 - List item fades out on delete because the user needs to see the deletion register.
 
 **Don't:**
-- Hero text fade-up that fires every time the user scrolls back — there's no event being confirmed.
-- Background ambient pulse on a CTA — the CTA is already visible; the pulse is anxiety.
-- Particle systems behind a sign-up form — pure decoration, no cause-effect.
+- Hero text fade-up that fires every time the user scrolls back. There's no event being confirmed.
+- Background ambient pulse on a CTA: the CTA is already visible; the pulse is anxiety.
+- Particle systems behind a sign-up form: pure decoration, no cause-effect.
 
 ---
 
-## Easing — the easing curves
+## Easing: the easing curves
 
 ### 4. Custom cubic-beziers required
 
-The browser ships `ease`, `ease-in`, `ease-out`, `ease-in-out` as defaults. They are too weak for product UI — the curves are gentle parabolas that hit their target without conviction. Every shipped animation uses a custom cubic-bezier. The browser defaults are reserved for prototypes and disposable code.
+The browser ships `ease`, `ease-in`, `ease-out`, `ease-in-out` as defaults. They are too weak for product UI: the curves are gentle parabolas that hit their target without conviction. Every shipped animation uses a custom cubic-bezier. The browser defaults are reserved for prototypes and disposable code.
 
 **Reference set you can copy:**
 
@@ -104,11 +104,11 @@ The browser ships `ease`, `ease-in`, `ease-out`, `ease-in-out` as defaults. They
 **Do:**
 - Define the cubic-bezier set as CSS custom properties at the design-system root.
 - Pick a curve based on direction (in / out / both) before picking duration.
-- Keep the set small — five to seven curves total across the entire surface.
+- Keep the set small: five to seven curves total across the entire surface.
 
 **Don't:**
 - Use `transition-timing-function: ease` in any shipped component.
-- Define a new cubic-bezier per component — that fragments the motion vocabulary.
+- Define a new cubic-bezier per component: that fragments the motion vocabulary.
 - Mix and match cubic-bezier and spring inside the same component.
 
 ### 5. ease-out for entrances
@@ -126,8 +126,8 @@ When something enters the screen, it should land decisively. Ease-out curves acc
 - Hero element fade-up: ease-out, duration 400-600ms.
 
 **Don't:**
-- Use ease-in on entry — the element accelerates into existence and lands hard.
-- Use ease-in-out on entry — the element drifts in without conviction.
+- Use ease-in on entry: the element accelerates into existence and lands hard.
+- Use ease-in-out on entry: the element drifts in without conviction.
 
 ### 6. ease-in for exits
 
@@ -143,14 +143,14 @@ When something leaves the screen, it should depart quickly. Ease-in starts slow,
 - Tooltip exit: ease-in, duration 80-120ms.
 
 **Don't:**
-- Use ease-out on exit — the element decelerates into nothing and the user waits.
-- Match exit duration to entry duration — the asymmetry is the polish.
+- Use ease-out on exit: the element decelerates into nothing and the user waits.
+- Match exit duration to entry duration: the asymmetry is the polish.
 
 ### 7. ease-in-out for on-screen movement
 
 When an element moves from one position to another on a surface where it already exists (a card reordering, a stepper advancing, a tab indicator sliding), the curve is ease-in-out. The motion accelerates from rest and decelerates back to rest.
 
-**Why:** the element wasn't entering or leaving — it was relocating. Both endpoints carry meaning.
+**Why:** the element wasn't entering or leaving (it was relocating). Both endpoints carry meaning.
 
 **Reference:** `cubic-bezier(0.76, 0, 0.24, 1)`.
 
@@ -160,12 +160,12 @@ When an element moves from one position to another on a surface where it already
 - Card reorder (sortable lists): ease-in-out, duration 200-300ms with `layoutId` shared-element transitions.
 
 **Don't:**
-- Use ease-out for in-place movement — it reads as "arriving" when nothing arrived.
+- Use ease-out for in-place movement: it reads as "arriving" when nothing arrived.
 - Mix ease-out and ease-in across the same logical motion path.
 
 ### 8. linear for constant motion only
 
-Linear curves are reserved for motion that should not accelerate or decelerate — loading bars filling, infinite scroll skeletons, marquee tickers, progress indicators with a known mechanical pacing.
+Linear curves are reserved for motion that should not accelerate or decelerate: loading bars filling, infinite scroll skeletons, marquee tickers, progress indicators with a known mechanical pacing.
 
 **Why:** linear is the only curve that communicates "this is happening at a constant rate." For any motion that has a beginning and an end, linear feels mechanical and dated.
 
@@ -176,11 +176,11 @@ Linear curves are reserved for motion that should not accelerate or decelerate �
 
 **Don't:**
 - Use linear on any UI transition with a start and end state (modal open, hover tint, focus ring).
-- Animate position changes with linear — reads as a robot move.
+- Animate position changes with linear: reads as a robot move.
 
 ---
 
-## Duration — per-element timing
+## Duration, per-element timing
 
 Durations are measured in milliseconds and tuned per component type. The values below are not guidelines; they are the band you ship within unless you can defend a specific exception in writing.
 
@@ -201,7 +201,7 @@ Durations are measured in milliseconds and tuned per component type. The values 
 
 ### Sub-300ms rule for micro-interactions
 
-Anything the user triggers and expects to see resolve immediately — button presses, hover states, focus rings, dropdown menus — must complete in under 300ms. The user's attention budget for a "did anything happen?" question is roughly 300ms; past that, they look elsewhere or click again.
+Anything the user triggers and expects to see resolve immediately (button presses, hover states, focus rings, dropdown menus) must complete in under 300ms. The user's attention budget for a "did anything happen?" question is roughly 300ms; past that, they look elsewhere or click again.
 
 **Do:**
 - Button press feedback: 120ms.
@@ -210,7 +210,7 @@ Anything the user triggers and expects to see resolve immediately — button pre
 
 **Don't:**
 - Ship a 400ms hover transition because "it looks smoother."
-- Stretch micro-interactions to make the surface feel "premium" — premium is faster, not slower.
+- Stretch micro-interactions to make the surface feel "premium": premium is faster, not slower.
 
 ### Asymmetric enter / exit
 
@@ -226,14 +226,14 @@ Exit duration is 60-70% of entry duration. When the user dismisses something, th
 - Pair ease-out (entry) with ease-in (exit) so curves match direction.
 
 **Don't:**
-- Mirror exit duration to entry duration — feels sluggish on dismissal.
+- Mirror exit duration to entry duration: feels sluggish on dismissal.
 - Use the same curve for both directions.
 
 ---
 
-## Spring physics — when springs vs tweens
+## Spring physics: when springs vs tweens
 
-Springs and tweens (cubic-bezier curves) are different motion paradigms. Tweens describe a fixed path from A to B over fixed time. Springs describe a physical system reaching equilibrium — the motion is shaped by stiffness, damping, mass, and initial velocity.
+Springs and tweens (cubic-bezier curves) are different motion paradigms. Tweens describe a fixed path from A to B over fixed time. Springs describe a physical system reaching equilibrium: the motion is shaped by stiffness, damping, mass, and initial velocity.
 
 ### When to use tweens (cubic-bezier)
 
@@ -278,7 +278,7 @@ Use the modern `{ duration, bounce }` config (the Apple-style API), not the olde
 
 Subtle bounce only. `bounce <= 0.2` for any motion the user sees more than once a day.
 
-Aggressive bounce (`bounce > 0.3`) is reserved for celebration moments — the confetti drop on a checkout success, the trophy reveal on a milestone, the rare flourish that the user is meant to remember. Use it twice per surface. Three times and it becomes noise.
+Aggressive bounce (`bounce > 0.3`) is reserved for celebration moments: the confetti drop on a checkout success, the trophy reveal on a milestone, the rare flourish that the user is meant to remember. Use it twice per surface. Three times and it becomes noise.
 
 **Do:**
 - Toggle flip: `{ duration: 0.3, bounce: 0.15 }`.
@@ -287,15 +287,15 @@ Aggressive bounce (`bounce > 0.3`) is reserved for celebration moments — the c
 
 **Don't:**
 - Use bounce > 0.2 on routine UI (every button, every menu).
-- Apply spring physics to every page-load reveal — page loads need predictable timing, not weight.
+- Apply spring physics to every page-load reveal: page loads need predictable timing, not weight.
 
 ---
 
-## Component motion — per-component rules
+## Component motion, per-component rules
 
 ### `:active` uses scale, never displacement
 
-When the user presses a button or tappable surface, the press feedback is `scale(0.97)` or `-translate-y-[1px]`. Never use `translate-x` (horizontal displacement) for press feedback — it reads as a swipe, not a push.
+When the user presses a button or tappable surface, the press feedback is `scale(0.97)` or `-translate-y-[1px]`. Never use `translate-x` (horizontal displacement) for press feedback. It reads as a swipe, not a push.
 
 ```css
 .btn {
@@ -313,8 +313,8 @@ When the user presses a button or tappable surface, the press feedback is `scale
 - TranslateY(-1px) for surfaces that should feel "lifted off" the page.
 
 **Don't:**
-- Scale below 0.95 — looks like the button is collapsing.
-- Use translateX on press — reads as drag.
+- Scale below 0.95: looks like the button is collapsing.
+- Use translateX on press: reads as drag.
 
 ### Never animate from `scale(0)`
 
@@ -339,7 +339,7 @@ initial={{ scale: 0.96, opacity: 0 }}
 
 ### Popover transform-origin anchors to the trigger
 
-When a popover, tooltip, or context menu opens, its `transform-origin` should point at the trigger that opened it — not at the popover's own center. The user's eye is on the trigger; the popover should appear to grow out of that point.
+When a popover, tooltip, or context menu opens, its `transform-origin` should point at the trigger that opened it, not at the popover's own center. The user's eye is on the trigger; the popover should appear to grow out of that point.
 
 ```css
 .popover {
@@ -356,11 +356,11 @@ When a popover, tooltip, or context menu opens, its `transform-origin` should po
 - Context menu on right-click: `transform-origin: top left` (grows from click point).
 
 **Don't:**
-- Default `transform-origin: center` on all popovers — feels disconnected from trigger.
+- Default `transform-origin: center` on all popovers: feels disconnected from trigger.
 
 ### Tooltip enter delay only on first hover
 
-Tooltips have a delay before they appear — typically 400ms — so they don't flash on every cursor passthrough. But on sustained interaction (the user hovered one tooltip, moved to a sibling within ~1 second), the delay should be skipped. The user is now actively reading; making them wait 400ms per item is hostile.
+Tooltips have a delay before they appear (typically 400ms), so they don't flash on every cursor passthrough. But on sustained interaction (the user hovered one tooltip, moved to a sibling within ~1 second), the delay should be skipped. The user is now actively reading; making them wait 400ms per item is hostile.
 
 ```js
 // Pseudocode pattern
@@ -378,12 +378,12 @@ const handleEnter = () => {
 - 0ms delay if previous tooltip was shown within last 1000ms.
 
 **Don't:**
-- 400ms delay on every tooltip in a list — punishes scanning.
-- Zero delay on every tooltip — they flash on cursor passthrough.
+- 400ms delay on every tooltip in a list: punishes scanning.
+- Zero delay on every tooltip: they flash on cursor passthrough.
 
 ### Blur during crossfade hides imperfect alignment
 
-When two elements crossfade — one fading out, another fading in, occupying the same screen position — even pixel-perfect alignment looks off because the two elements briefly co-exist at 50% opacity. A blur on both during the crossfade hides that artifact.
+When two elements crossfade (one fading out, another fading in, occupying the same screen position), even pixel-perfect alignment looks off because the two elements briefly co-exist at 50% opacity. A blur on both during the crossfade hides that artifact.
 
 ```css
 .crossfade-out, .crossfade-in {
@@ -402,12 +402,12 @@ When two elements crossfade — one fading out, another fading in, occupying the
 - Resolve the blur to `blur(0)` on the incoming element.
 
 **Don't:**
-- Apply blur to text crossfades — too heavy, looks broken.
-- Apply blur outside the crossfade window — it lingers.
+- Apply blur to text crossfades: too heavy, looks broken.
+- Apply blur outside the crossfade window: it lingers.
 
 ### `@starting-style` for entry-only styles
 
-For pure-CSS entry transitions with no JS state, use `@starting-style`. It lets you declare a "starting" CSS rule that applies only on the first frame after the element appears — perfect for one-shot entries without React mount logic.
+For pure-CSS entry transitions with no JS state, use `@starting-style`. It lets you declare a "starting" CSS rule that applies only on the first frame after the element appears: perfect for one-shot entries without React mount logic.
 
 ```css
 .toast {
@@ -429,15 +429,15 @@ For pure-CSS entry transitions with no JS state, use `@starting-style`. It lets 
 - Pair with `transition-behavior: allow-discrete` for entries that include `display` property changes.
 
 **Don't:**
-- Use `@starting-style` for components that toggle visibility — JS-controlled state is more reliable across browsers.
+- Use `@starting-style` for components that toggle visibility: JS-controlled state is more reliable across browsers.
 
 ---
 
-## Performance — the hardware-acceleration trap
+## Performance: the hardware-acceleration trap
 
 ### Animate `transform` and `opacity` ONLY
 
-These are the only two CSS properties that the browser compositor can animate without triggering layout or paint. Every other property — `width`, `height`, `top`, `left`, `margin`, `padding`, `color`, `background-color`, `filter`, `box-shadow`, `border-radius` — triggers either layout (which cascades through the entire DOM tree) or paint (which forces a re-rasterize). Either drops frames on mid-range hardware.
+These are the only two CSS properties that the browser compositor can animate without triggering layout or paint. Every other property (`width`, `height`, `top`, `left`, `margin`, `padding`, `color`, `background-color`, `filter`, `box-shadow`, `border-radius`) triggers either layout (which cascades through the entire DOM tree) or paint (which forces a re-rasterize). Either drops frames on mid-range hardware.
 
 **The compositor-only path:**
 
@@ -509,17 +509,17 @@ When you animate a CSS custom property on a parent element, every child that rea
 
 ### Framer Motion shorthand isn't always compositor-only
 
-When you write `animate={{ x: 100 }}` in Framer Motion, the library typically translates that to a transform — but React re-renders are involved, and edge cases (interrupted animations, layout shifts, hybrid animations mixing transform and non-transform properties) can fall off the compositor-only path.
+When you write `animate={{ x: 100 }}` in Framer Motion, the library typically translates that to a transform, but React re-renders are involved, and edge cases (interrupted animations, layout shifts, hybrid animations mixing transform and non-transform properties) can fall off the compositor-only path.
 
 For animations that must hit the compositor every frame (drag handles, scrub animations, anything tied to a continuous input), use `useMotionValue` paired with `style={{ transform }}` directly. This bypasses React's render loop entirely and writes to the DOM on every frame via the motion value subscription.
 
-**Bad — falls back to React updates under contention:**
+**Bad (falls back to React updates under contention):**
 
 ```jsx
 <motion.div animate={{ x: dragX }} />
 ```
 
-**Good — pure compositor path:**
+**Good (pure compositor path):**
 
 ```jsx
 const x = useMotionValue(0);
@@ -530,7 +530,7 @@ const transformX = useTransform(x, (val) => `translateX(${val}px)`);
 
 ### CSS animations beat JS animations under load
 
-CSS animations and transitions run on the compositor thread. JS-driven animations run on the main thread by default — even when they animate transform / opacity. Under load (during a network request, when other JS is parsing, when the user is scrolling), JS animations drop frames first.
+CSS animations and transitions run on the compositor thread. JS-driven animations run on the main thread by default, even when they animate transform / opacity. Under load (during a network request, when other JS is parsing, when the user is scrolling), JS animations drop frames first.
 
 **Rule of thumb:** if you can express the animation in CSS (keyframes, transitions), do it in CSS. Reach for JS only when you need:
 - Coordination across many elements with shared state.
@@ -544,7 +544,7 @@ CSS animations and transitions run on the compositor thread. JS-driven animation
 
 **Don't:**
 - Build a hover effect in JS when a one-liner CSS transition does the job.
-- Trigger CSS class toggles from JS just to "feel modern" — `:hover`, `:focus`, `:active` exist.
+- Trigger CSS class toggles from JS just to "feel modern": `:hover`, `:focus`, `:active` exist.
 
 ### Web Animations API for programmatic-CSS use cases
 
@@ -575,7 +575,7 @@ element.animate(
 
 ---
 
-## Gesture motion — drag, swipe, pull
+## Gesture motion: drag, swipe, pull
 
 ### Velocity-based dismissal
 
@@ -585,7 +585,7 @@ A drag dismissal is not "did the user pull past 50% of the screen?" It's "is the
 
 **Why velocity wins over distance:**
 - A user can fling 30% of the way and clearly intend to dismiss.
-- A user can hesitantly drag 70% and reconsider — distance-only would dismiss against intent.
+- A user can hesitantly drag 70% and reconsider: distance-only would dismiss against intent.
 
 ```js
 const VELOCITY_THRESHOLD = 0.11; // px/ms
@@ -603,8 +603,8 @@ const handleDragEnd = (e, info) => {
 - Combine velocity with a minimum-distance fallback (in case velocity reads near-zero on a slow drag past a clear threshold).
 
 **Don't:**
-- Use only distance — feels rigid and ignores intent.
-- Use only velocity without a distance fallback — slow deliberate drags break.
+- Use only distance: feels rigid and ignores intent.
+- Use only velocity without a distance fallback: slow deliberate drags break.
 
 ### Boundary damping
 
@@ -648,12 +648,12 @@ const handlePointerUp = (e) => {
 - Release capture on `pointerup` / `pointercancel`.
 
 **Don't:**
-- Track drags with `mousemove` / `touchmove` listeners on `document` — pointer events are unified, simpler, and more reliable.
-- Forget to release capture — leaks pointer ownership and breaks subsequent interactions.
+- Track drags with `mousemove` / `touchmove` listeners on `document`: pointer events are unified, simpler, and more reliable.
+- Forget to release capture: leaks pointer ownership and breaks subsequent interactions.
 
 ### Multi-touch protection
 
-A drag is a single-pointer interaction. If a second pointer enters the element while a drag is in progress, cancel the drag — don't try to track two fingers as one drag, and don't ignore the second pointer (which leads to ghost drags when the first pointer lifts).
+A drag is a single-pointer interaction. If a second pointer enters the element while a drag is in progress, cancel the drag: don't try to track two fingers as one drag, and don't ignore the second pointer (which leads to ghost drags when the first pointer lifts).
 
 ```js
 const activePointerId = useRef(null);
@@ -683,11 +683,11 @@ const handlePointerDown2 = (e) => {
 
 ---
 
-## Accessibility — respecting preferences
+## Accessibility: respecting preferences
 
 ### `prefers-reduced-motion: reduce` does NOT mean zero motion
 
-Reduced motion is the user telling you "I get motion-sick or distracted by animation." It does not mean "remove all visual feedback." Removing animation entirely strips signal — users still need to perceive state changes. The fix is shorter, gentler, no-bounce versions of the same animations.
+Reduced motion is the user telling you "I get motion-sick or distracted by animation." It does not mean "remove all visual feedback." Removing animation entirely strips signal: users still need to perceive state changes. The fix is shorter, gentler, no-bounce versions of the same animations.
 
 **Reduced-motion rules:**
 - Duration: <= 100ms.
@@ -717,7 +717,7 @@ Reduced motion is the user telling you "I get motion-sick or distracted by anima
 - Remove blur, scale overshoot, and bounce.
 
 **Don't:**
-- Set `animation: none` globally under reduced motion — kills state feedback.
+- Set `animation: none` globally under reduced motion: kills state feedback.
 - Skip the feature entirely for reduced-motion users.
 
 ### Hover gating with `(hover: hover) and (pointer: fine)`
@@ -741,11 +741,11 @@ The fix is to gate hover effects behind a media query that only matches true hov
 
 **Don't:**
 - Use bare `:hover` on interactive elements.
-- Rely on `:hover` to communicate state — touch users won't see it.
+- Rely on `:hover` to communicate state: touch users won't see it.
 
 ### Don't disable animations entirely for reduced-motion users
 
-This is worth saying twice because it's a common mistake. The naive implementation of reduced-motion support is `* { animation: none; transition: none; }` — which kills state-change feedback and makes the interface read as broken to the very users you're trying to help.
+This is worth saying twice because it's a common mistake. The naive implementation of reduced-motion support is `* { animation: none; transition: none; }`, which kills state-change feedback and makes the interface read as broken to the very users you're trying to help.
 
 The correct approach is graceful reduction: shorter, gentler, no-spring versions of every animation, not removed animations.
 
@@ -759,14 +759,14 @@ The correct approach is graceful reduction: shorter, gentler, no-spring versions
 
 ---
 
-## Polish — the things that separate amateur from premium
+## Polish: the things that separate amateur from premium
 
 ### Stagger lists 30-80ms per child
 
 List entries and grid reveals get a stagger between children. The right window is 30-80ms per child.
 
-- Below 30ms: reads as flashing — too fast for the eye to track each child as discrete.
-- Above 80ms: reads as slow — the user starts looking elsewhere before the last child arrives.
+- Below 30ms: reads as flashing (too fast for the eye to track each child as discrete).
+- Above 80ms: reads as slow (the user starts looking elsewhere before the last child arrives).
 
 **Reference math:**
 - Short list (3-5 items): 50ms per child.
@@ -788,13 +788,13 @@ List entries and grid reveals get a stagger between children. The right window i
 
 **Do:**
 - Stagger 30-80ms per child.
-- Cap total stagger time at 600ms — past that, the last child arrives after the user has moved on.
+- Cap total stagger time at 600ms: past that, the last child arrives after the user has moved on.
 
 **Don't:**
 - Mount all children at once (composition flattens).
 - Stagger at 100ms+ per child (theatrical).
 
-### Motion cohesion — motion personality matches component personality
+### Motion cohesion: motion personality matches component personality
 
 A heavy modal should feel heavy. A snappy tooltip should feel snappy. The curves and durations you pick should encode the same personality the static design does.
 
@@ -817,20 +817,20 @@ A heavy modal should feel heavy. A snappy tooltip should feel snappy. The curves
 
 ### Next-day review
 
-Motion looks good immediately because of novelty — the eye is excited to see something move and forgives flaws. The next day, with fresh eyes, the same motion can read as showy, slow, or wrong. Review motion the day after you ship it, when the novelty has worn off.
+Motion looks good immediately because of novelty: the eye is excited to see something move and forgives flaws. The next day, with fresh eyes, the same motion can read as showy, slow, or wrong. Review motion the day after you ship it, when the novelty has worn off.
 
 **Process:**
 1. Ship the animation on Tuesday.
 2. Don't look at it again that day.
 3. Wednesday morning, load the surface and watch the animation play once. Is it still good?
-4. If it now feels too long, too dramatic, or too frequent — cut it.
+4. If it now feels too long, too dramatic, or too frequent: cut it.
 
 **Do:**
 - Build a "motion review" pass into your sprint at +24h.
-- Test on a colleague who hasn't seen it — first-impression honesty.
+- Test on a colleague who hasn't seen it: first-impression honesty.
 
 **Don't:**
-- Ship motion that you've watched 200 times in dev — you've gone motion-blind.
+- Ship motion that you've watched 200 times in dev: you've gone motion-blind.
 
 ### Real-device gesture testing
 
@@ -844,14 +844,14 @@ For any gesture-driven motion (drag-to-dismiss, swipe-to-delete, pull-to-refresh
 **What you'll find:**
 - Velocity thresholds tuned on desktop are too low on phone (fingers move faster than expected).
 - Damping feels too aggressive on phone (touchscreens have more friction).
-- Hover-triggered animations don't fire on touch — silent regressions.
+- Hover-triggered animations don't fire on touch: silent regressions.
 
 **Do:**
 - Maintain a small device shelf: one iOS, one Android, both refreshed yearly.
 - Block ship until the gesture is verified on real device.
 
 **Don't:**
-- Trust the desktop dev tools touch emulator for gesture work — it's directionally correct but not feel-accurate.
+- Trust the desktop dev tools touch emulator for gesture work: it's directionally correct but not feel-accurate.
 
 ---
 

@@ -1,9 +1,9 @@
 # BMW
 
-> BMW's corporate site — distinct from BMW M's motorsport-bombastic variant, this is a measured and settled corporate-automotive interface.
+> BMW's corporate site: distinct from BMW M's motorsport-bombastic variant, this is a measured and settled corporate-automotive interface.
 
 **Category:** Automotive
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/bmw.json`](../../data/brands/bmw.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-BMW's corporate site — distinct from BMW M's motorsport-bombastic variant, this is a measured and settled corporate-automotive interface.
+BMW's corporate site: distinct from BMW M's motorsport-bombastic variant, this is a measured and settled corporate-automotive interface.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

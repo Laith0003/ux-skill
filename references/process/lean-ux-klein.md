@@ -1,4 +1,4 @@
-# Lean UX Research — Faster, Smarter, Smaller
+# Lean UX Research: Faster, Smarter, Smaller
 
 ## What this is for
 
@@ -44,11 +44,11 @@ Name the question first. Then pick the method.
 
 The loop has six steps. You run it constantly. The cadence is weekly, sometimes daily. The whole team participates.
 
-**Hypothesize.** State what you believe, who you believe it about, and what you think will happen. Write it down. A hypothesis you have not written is not a hypothesis — it is a feeling.
+**Hypothesize.** State what you believe, who you believe it about, and what you think will happen. Write it down. A hypothesis you have not written is not a hypothesis. It is a feeling.
 
 **Research.** Pick the smallest, cheapest method that can confirm or kill the hypothesis. The method is determined by the question.
 
-**Decide.** Look at the evidence. Decide. Pivot, persevere, or refine. The decision is recorded — what did we believe before, what do we believe now, what is the change.
+**Decide.** Look at the evidence. Decide. Pivot, persevere, or refine. The decision is recorded: what did we believe before, what do we believe now, what is the change.
 
 **Build.** Build the thing the decision implies. Small slice. Behind a flag. Instrumented.
 
@@ -56,7 +56,7 @@ The loop has six steps. You run it constantly. The cadence is weekly, sometimes 
 
 **Repeat.** Form the next hypothesis. The cycle restarts.
 
-The loop is the work. Anything that does not feed the loop is not work — it is theater. A 60-page research deck that does not change any team decision is a piece of theater. A two-paragraph debrief that produces a clear "we will change this on Friday" is the work.
+The loop is the work. Anything that does not feed the loop is not work. It is theater. A 60-page research deck that does not change any team decision is a piece of theater. A two-paragraph debrief that produces a clear "we will change this on Friday" is the work.
 
 ---
 
@@ -76,13 +76,13 @@ A few hard rules.
 
 A working interview structure, 30 to 45 minutes.
 
-*Opening, 5 minutes.* Warm up. Explain the format. Lower the stakes — "we are early, we are figuring it out, your honesty helps us more than your politeness." Establish that there are no wrong answers.
+*Opening, 5 minutes.* Warm up. Explain the format. Lower the stakes: "we are early, we are figuring it out, your honesty helps us more than your politeness." Establish that there are no wrong answers.
 
-*Recent-event probe, 15 minutes.* "Tell me about the last time you tried to do X." Then shut up. Then ask "what happened next?" Then shut up. Resist the urge to fill silence — silence is where the real answer comes out. Stay with one specific instance. When the user generalizes ("I usually..."), pull them back to the specific event ("the last time, specifically, what did you do?").
+*Recent-event probe, 15 minutes.* "Tell me about the last time you tried to do X." Then shut up. Then ask "what happened next?" Then shut up. Resist the urge to fill silence: silence is where the real answer comes out. Stay with one specific instance. When the user generalizes ("I usually..."), pull them back to the specific event ("the last time, specifically, what did you do?").
 
 *Pain probe, 10 minutes.* Inside the story they told you, find the worst moments. "When you hit X, how did you feel? What did you do? What would have made it better?" Pain is the signal. A user who shrugs at a workflow will not pay for the fix. A user who curses at it might.
 
-*Workaround probe, 5 minutes.* People who have a real problem build workarounds. The spreadsheet, the WhatsApp thread, the printout. Workarounds are gold. They tell you that the pain is real, what the user values, and what the minimum acceptable solution looks like. "How do you handle that today?" — followed by silence — is your most productive sentence.
+*Workaround probe, 5 minutes.* People who have a real problem build workarounds. The spreadsheet, the WhatsApp thread, the printout. Workarounds are gold. They tell you that the pain is real, what the user values, and what the minimum acceptable solution looks like. "How do you handle that today?" (followed by silence) is your most productive sentence.
 
 *Closing, 5 minutes.* Ask if there's anything you didn't ask that you should have. Thank them. Note their permission to follow up.
 
@@ -98,7 +98,7 @@ These are different sessions with different agendas. Mixing them is a common mis
 
 Signals you ran a good problem interview: you can describe the user's workflow in their words. You can name the specific moments of pain. You can point to a workaround. You can describe what triggers the problem to flare up. You found out something you did not already believe.
 
-**The solution interview** comes after you have a candidate solution worth testing. Now you show — a sketch, a prototype, a description, a demo — and you watch the user react. You learn whether the solution lands, whether it is comprehensible, whether the user can imagine using it, whether they would pay (in money, time, or behavior change) for it.
+**The solution interview** comes after you have a candidate solution worth testing. Now you show (a sketch, a prototype, a description, a demo) and you watch the user react. You learn whether the solution lands, whether it is comprehensible, whether the user can imagine using it, whether they would pay (in money, time, or behavior change) for it.
 
 Signals you ran a good solution interview: you watched the user try to use the thing, not just hear about it. You found at least one part that confused them. You found at least one part that surprised them positively. You came away with a list of changes.
 
@@ -108,23 +108,23 @@ A common failure: running a solution interview when the problem is not validated
 
 ## Recruitment
 
-Finding the right users to talk to is half the research. Talking to the wrong users is worse than not talking at all — it produces confident wrong answers.
+Finding the right users to talk to is half the research. Talking to the wrong users is worse than not talking at all. It produces confident wrong answers.
 
-**Where to find them.** Existing customers (best signal, easiest to reach, but biased toward the ones who already love you). Inactive customers (highest learning value; they tell you why your product failed them). Prospects from your top-of-funnel (they tell you what almost-customers think). Niche communities — forums, subreddits, professional groups, industry groups — where your target user already gathers. Referrals from existing users (warm intro, lower no-show rate). Cold outreach with a strong screener and an incentive.
+**Where to find them.** Existing customers (best signal, easiest to reach, but biased toward the ones who already love you). Inactive customers (highest learning value; they tell you why your product failed them). Prospects from your top-of-funnel (they tell you what almost-customers think). Niche communities (forums, subreddits, professional groups, industry groups) where your target user already gathers. Referrals from existing users (warm intro, lower no-show rate). Cold outreach with a strong screener and an incentive.
 
-Public recruitment platforms are a fast path when you cannot reach the segment otherwise. Treat results with appropriate skepticism — recruited panelists are a different population than organic users.
+Public recruitment platforms are a fast path when you cannot reach the segment otherwise. Treat results with appropriate skepticism: recruited panelists are a different population than organic users.
 
 **Screener design.** A screener is a short questionnaire that filters the population down to the segment you want. Two rules. First, the screener tests for behavior, not identity. "How many times in the last month did you do X?" is a behavior screen. "Are you the kind of person who values X?" is an identity screen and useless. Second, the screener does not telegraph the answer. If the screener asks "do you struggle with X?" everyone says yes. Ask about the underlying behavior and infer.
 
 A working screener has five to seven questions, takes the user two minutes, and produces a clean yes/no on whether to invite the user to a session.
 
-**Incentives.** Pay your users. Cash, gift cards, account credits, or a charitable donation in their name. A free 30-minute conversation costs the user real time and they deserve compensation. The exception is when you are interviewing existing customers about a product they love — many will do it for free, but offer anyway. Pay at a rate consistent with the user's professional value of time; underpaying produces a self-selected pool of the unemployed and undermotivated.
+**Incentives.** Pay your users. Cash, gift cards, account credits, or a charitable donation in their name. A free 30-minute conversation costs the user real time and they deserve compensation. The exception is when you are interviewing existing customers about a product they love: many will do it for free, but offer anyway. Pay at a rate consistent with the user's professional value of time; underpaying produces a self-selected pool of the unemployed and undermotivated.
 
 **Scheduling.** Default to short, frequent sessions over long, rare ones. Five 30-minute sessions per week, in two slots a day, beats one 90-minute session per month every time. Use a scheduling tool that lets the user pick their own time. Confirm 24 hours in advance. Expect 20% no-show on cold recruits, near-zero on warm referrals.
 
 ---
 
-## Survey design — and when not to
+## Survey design, and when not to
 
 Surveys are useful for a narrow band of questions. They are dangerous when applied outside that band.
 
@@ -154,17 +154,17 @@ The single highest-leverage research method per dollar. You can run it on a clic
 
 **Five users per round.** This is not a budget compromise; it is a statistical finding. Five users will surface the vast majority of meaningful usability issues. The sixth, seventh, eighth user mostly confirm what the first five found. Spend the money on more rounds, not more users per round.
 
-**Low-fi over high-fi early.** A grayscale clickable wireframe lets users react to the structure without getting distracted by the visual. High-fidelity comps cause users to comment on color and font — useful sometimes, distracting often. Save the polish for the round that needs it.
+**Low-fi over high-fi early.** A grayscale clickable wireframe lets users react to the structure without getting distracted by the visual. High-fidelity comps cause users to comment on color and font: useful sometimes, distracting often. Save the polish for the round that needs it.
 
 **Frequent over thorough.** Three rounds of five users each, each round following a real iteration, beats one round of 25 users on a single version. The learning compounds: round two tests the fixes from round one, round three tests the fixes from round two.
 
 **The task, not the interface.** Give the user a goal, not instructions. "Sign up for the loyalty program" is a task. "Click the button at the top, then click the second option" is theater. The point is to see whether the user can accomplish the task; if you have to tell them how, the test failed before it started.
 
-**Think-aloud protocol.** Ask the user to narrate. "Tell me what you are looking at. What are you trying to do? What do you expect to happen when you click that?" Their narration is the data. Silence in a usability test is bad — it means the user has gone internal and you are learning nothing.
+**Think-aloud protocol.** Ask the user to narrate. "Tell me what you are looking at. What are you trying to do? What do you expect to happen when you click that?" Their narration is the data. Silence in a usability test is bad. It means the user has gone internal and you are learning nothing.
 
-**Do not lead.** When the user gets stuck, do not save them. Wait. Watch what they try. Note where they get stuck. If they ask "is this where I would do X?" — turn it around: "where would you expect to find that?" Their answer is the data you came for.
+**Do not lead.** When the user gets stuck, do not save them. Wait. Watch what they try. Note where they get stuck. If they ask "is this where I would do X?", turn it around: "where would you expect to find that?" Their answer is the data you came for.
 
-**Run the team in the room.** Engineer, designer, PM all watch. Live, if possible — observation room or screen share. The team that watches the user struggle with the button they built builds a different button next time. The team that reads the report does not.
+**Run the team in the room.** Engineer, designer, PM all watch. Live, if possible: observation room or screen share. The team that watches the user struggle with the button they built builds a different button next time. The team that reads the report does not.
 
 **Debrief immediately.** Five minutes after the user leaves. What we expected, what we saw, what surprised us, what we will change. The notes are the artifact, not a 30-page report.
 
@@ -188,15 +188,15 @@ A working cadence. Once a week, look at the dashboards. Find the three most surp
 
 Cheaper than building. Used to answer "should I build this" before you build it.
 
-**Smoke test.** Run real ads against a real landing page describing a product you have not built. Measure click-through to signup. If nobody clicks, the value proposition does not land — and you have not written a line of code. Budget: tens to low hundreds.
+**Smoke test.** Run real ads against a real landing page describing a product you have not built. Measure click-through to signup. If nobody clicks, the value proposition does not land, and you have not written a line of code. Budget: tens to low hundreds.
 
 **Concierge MVP.** Deliver the service by hand to a small number of users. No software, no automation. The user gets the outcome, you learn what the workflow actually looks like, what edge cases matter, what language the user uses. Three to ten users. Budget: your time.
 
 **Wizard of Oz.** The interface looks real but the back-end is you, manually. Useful when the value proposition depends on a technical capability you have not yet built (search, matching, recommendation, generation). The user experiences the product; you learn whether it lands before you invest in the build. Caveat: brittle at scale, run it on five to twenty users, not five hundred.
 
-**Fake door.** A button in the live product that goes to a "coming soon" page. Measures intent to use a feature that does not yet exist. The signal is noisy — clicking is cheap — but useful when you need a directional read. Ethical note: do not leave fake doors up indefinitely; users notice and trust drops.
+**Fake door.** A button in the live product that goes to a "coming soon" page. Measures intent to use a feature that does not yet exist. The signal is noisy (clicking is cheap) but useful when you need a directional read. Ethical note: do not leave fake doors up indefinitely; users notice and trust drops.
 
-**Pre-order or paid waitlist.** Take money or a credit card hold for a product you have not finished. The strongest signal in research — willingness to pay before delivery. Best for products where the buyer can imagine the value clearly.
+**Pre-order or paid waitlist.** Take money or a credit card hold for a product you have not finished. The strongest signal in research: willingness to pay before delivery. Best for products where the buyer can imagine the value clearly.
 
 **Manual onboarding.** For early products, replace the automated onboarding flow with a human one. A 30-minute call to set up each user. You learn what users actually need help with, which becomes the spec for the automated flow you will build later.
 
@@ -234,7 +234,7 @@ Research that takes a quarter to complete cannot guide a sprint. The discipline 
 
 **Three-session decisions.** For low-stakes design questions, three sessions are enough to reveal whether a pattern holds. The team observes session one, refines the question for session two, confirms the pattern in session three. Decision is made Friday afternoon based on what was seen Thursday and Friday morning.
 
-**Continuous discovery.** The team has two standing sessions per week — every Tuesday and every Thursday, with users recruited fresh each week. The conversations are loosely themed but flexible; the most pressing question at the start of the week becomes the focus of that week's sessions. The continuous slot prevents research from becoming a thing the team has to schedule and start; it is always running.
+**Continuous discovery.** The team has two standing sessions per week: every Tuesday and every Thursday, with users recruited fresh each week. The conversations are loosely themed but flexible; the most pressing question at the start of the week becomes the focus of that week's sessions. The continuous slot prevents research from becoming a thing the team has to schedule and start; it is always running.
 
 **Lightweight prototyping.** Sessions can run on rough artifacts. A paper sketch, a clickable wireframe, a coded prototype, a live product. Lower fidelity is faster to build and faster to revise. Use the lowest fidelity that can answer the question.
 
@@ -254,7 +254,7 @@ A working report format, used after every session or round, fits on one page.
 
 *Method.* How did we learn it? How many users, what type, what protocol.
 
-*Findings.* Three to five bullets. Each one a behavior or pattern, in the user's words where possible. Not opinions — observations.
+*Findings.* Three to five bullets. Each one a behavior or pattern, in the user's words where possible. Not opinions: observations.
 
 *Decision.* What we will change as a result. Concrete. Owner. Date.
 
@@ -286,11 +286,11 @@ The skill is calibrating. A team that researches everything ships nothing. A tea
 
 The mechanics of getting research done are often what separates teams that run continuous research from teams that talk about it. A few operational practices to put in place.
 
-**A standing recruiting pipeline.** You do not start recruiting when you need a user; you keep a pipeline always warm. Sources include past participants who agreed to follow-up, customer segments who opted in to be contacted, a public recruiting platform with active campaigns, and community channels where target users hang out. The pipeline is maintained as a living list — names added, names retired as they age, response rates tracked.
+**A standing recruiting pipeline.** You do not start recruiting when you need a user; you keep a pipeline always warm. Sources include past participants who agreed to follow-up, customer segments who opted in to be contacted, a public recruiting platform with active campaigns, and community channels where target users hang out. The pipeline is maintained as a living list: names added, names retired as they age, response rates tracked.
 
 **Standard incentives.** Decide the rate the team pays and stick to it. A flat rate across most studies, with a higher rate for hard-to-recruit users (executives, niche professions, time-constrained roles). Negotiating incentives per session wastes time and creates inconsistency.
 
-**A standard session structure.** Most studies follow a similar shape — opening, behavior probes, prototype walkthrough, debrief. The variation is in the specifics. A standard template that the researcher customizes for each study saves time and produces more comparable results across sessions.
+**A standard session structure.** Most studies follow a similar shape: opening, behavior probes, prototype walkthrough, debrief. The variation is in the specifics. A standard template that the researcher customizes for each study saves time and produces more comparable results across sessions.
 
 **A research repository.** Every session is recorded (with permission), transcribed, and tagged. Findings are stored in a searchable repository so that future studies can build on past ones. Without this, every study restarts from zero and the institutional knowledge evaporates with personnel changes.
 
@@ -314,7 +314,7 @@ The user agreed to talk to you. That trust is the most valuable thing the resear
 
 **No dark-pattern recruiting.** Some platforms incentivize the user to give the answer the researcher seems to want. A user who is told "we are testing a feature for power users" will perform as a power user. Recruit and frame neutrally; describe the study without giving the user a script for how to behave.
 
-**No coercion.** Existing customers are sometimes recruited via the product itself — a prompt that appears in the live experience. Make these opt-in, with no penalty for declining. A customer who feels pressured into a session will give you compliance data, not honest data.
+**No coercion.** Existing customers are sometimes recruited via the product itself: a prompt that appears in the live experience. Make these opt-in, with no penalty for declining. A customer who feels pressured into a session will give you compliance data, not honest data.
 
 **Respect the user's time.** Sessions start on time and end on time. The user is paid promptly. Follow-ups happen when promised. The user leaves the session feeling respected; they tell other potential participants that the experience was worth it. Word-of-mouth either fills your pipeline or empties it.
 

@@ -1,32 +1,32 @@
 # Copy
 
-> Microcopy is the brand's signature. The voice you trust is built in the moments you don't expect copy — a button label, a tooltip, an error, a loading state.
+> Microcopy is the brand's signature. The voice you trust is built in the moments you don't expect copy: a button label, a tooltip, an error, a loading state.
 
 ## Principles
 
-1. **Direct, warm, brief, unpretentious** — Two sentences usually finish the thought. One if you can land it. Confident without being arrogant. Conversational without being casual.
+1. **Direct, warm, brief, unpretentious**: Two sentences usually finish the thought. One if you can land it. Confident without being arrogant. Conversational without being casual.
 
-2. **Headlines claim, subheads clarify** — The headline takes territory. The subhead gives one specific clarifying detail. The body delivers. Microcopy comforts. Each layer has a distinct job; making each layer do the others' jobs is the most common voice failure.
+2. **Headlines claim, subheads clarify**: The headline takes territory. The subhead gives one specific clarifying detail. The body delivers. Microcopy comforts. Each layer has a distinct job; making each layer do the others' jobs is the most common voice failure.
 
-3. **Numbers beat adjectives** — "75ms latency" beats "blazingly fast." "1.5% cashback" beats "industry-leading rewards." "Ship in 1 to 3 days" beats "ship fast." A specific number is worth ten adjectives.
+3. **Numbers beat adjectives**: "75ms latency" beats "blazingly fast." "1.5% cashback" beats "industry-leading rewards." "Ship in 1 to 3 days" beats "ship fast." A specific number is worth ten adjectives.
 
-4. **Errors name the cause AND the fix** — Never "form contains errors" or "invalid input." Always specific: name the field, name the problem, name the fix. Every error includes a clear recovery path.
+4. **Errors name the cause AND the fix**: Never "form contains errors" or "invalid input." Always specific: name the field, name the problem, name the fix. Every error includes a clear recovery path.
 
-5. **Empty states explain the path forward** — "Connect your first source to start" beats "No data yet." The empty state is the start of a relationship, not a failure to load.
+5. **Empty states explain the path forward**: "Connect your first source to start" beats "No data yet." The empty state is the start of a relationship, not a failure to load.
 
-6. **Calm celebration** — Success states say what happened ("50 points added"), not how the user should feel ("Congratulations! You earned 50 points!"). The system stays calm even when the user is celebrating.
+6. **Calm celebration**: Success states say what happened ("50 points added"), not how the user should feel ("Congratulations! You earned 50 points!"). The system stays calm even when the user is celebrating.
 
-7. **Active voice across all surfaces** — "Agents handle the call" beats "The call is handled by agents." Direct subject-verb-object. Passive constructions read as bureaucratic.
+7. **Active voice across all surfaces**: "Agents handle the call" beats "The call is handled by agents." Direct subject-verb-object. Passive constructions read as bureaucratic.
 
-8. **Second person, sparingly** — "You ship, you plan, you decide" works in body copy. Headlines often describe the system in third person and let the reader find themselves in it.
+8. **Second person, sparingly**: "You ship, you plan, you decide" works in body copy. Headlines often describe the system in third person and let the reader find themselves in it.
 
-9. **No marketing clichés** — "Elevate," "Seamless," "Unleash," "Next-Gen," "Empower," "Revolutionize," "Game-changer," "Delve," "Leverage" (as a verb), "Robust" (applied to anything) — banned. Use concrete verbs that describe what the product actually does.
+9. **No marketing clichés**: "Elevate," "Seamless," "Unleash," "Next-Gen," "Empower," "Revolutionize," "Game-changer," "Delve," "Leverage" (as a verb), "Robust" (applied to anything), banned. Use concrete verbs that describe what the product actually does.
 
-10. **No exclamation points outside delight micro-moments** — Even then, sparingly. Exclamation marks in marketing copy read as small-startup energy. The brand is confident; it does not shout.
+10. **No exclamation points outside delight micro-moments**: Even then, sparingly. Exclamation marks in marketing copy read as small-startup energy. The brand is confident; it does not shout.
 
-11. **Sentence case everywhere** — Title Case On Every Word reads as enterprise software circa 2014. Sentence case is the modern default for headlines, subheads, buttons, and nav.
+11. **Sentence case everywhere**: Title Case On Every Word reads as enterprise software circa 2014. Sentence case is the modern default for headlines, subheads, buttons, and nav.
 
-12. **The product is the hero, not the company** — Marketing copy talks about what the user will do, not how brilliant the team is. Company narrative lives on the about page; the homepage talks about the work.
+12. **The product is the hero, not the company**: Marketing copy talks about what the user will do, not how brilliant the team is. Company narrative lives on the about page; the homepage talks about the work.
 
 ## Do / Don't
 
@@ -41,7 +41,7 @@
 | "Building foundational [X] to do [ambitious thing]" | "Revolutionizing the future of [industry]" |
 | "98% of the top 100 cloud companies" | "Trusted by leaders worldwide" |
 | "Ship in 1 to 3 days" | "Ship fast" |
-| "Make anything possible — in one tool." | "Unleash your team's potential!" |
+| "Make anything possible, in one tool." | "Unleash your team's potential!" |
 | Use sentence case for headlines | Use Title Case For Every Word |
 | Quantify in headlines ("21x faster," "60% reduction") | Use vague modifiers ("amazing," "powerful") |
 | Use specific named outcomes | Use abstract benefit statements |
@@ -61,7 +61,7 @@
 - "Stop reading documents. Start making decisions."
 - "Run an entire company with agents."
 - "Replace manual work with automated workflows."
-- "Make anything possible — in one tool."
+- "Make anything possible, in one tool."
 - "Build sites that ship."
 
 The verb does heavy lifting. The noun grounds it. Verbs lead headlines: "Make," "Build," "Ship," "Meet," "Turn," "Bring," "Get," "Run," "Replace," "Stop."
@@ -69,7 +69,7 @@ The verb does heavy lifting. The noun grounds it. Verbs lead headlines: "Make," 
 ### Pattern: Headline + deflating qualifier
 **Use when**: Premium creative-tool category, ambitious products.
 **Anti-pattern**: Big claim with no constraint ("Unlimited possibilities!") that reads as overpromise.
-**How**: Big claim + small honest constraint. "Make anything possible — in one tool." "Build better sites, faster." "Ship in 1 to 3 days." The constraint is what makes the claim believable.
+**How**: Big claim + small honest constraint. "Make anything possible, in one tool." "Build better sites, faster." "Ship in 1 to 3 days." The constraint is what makes the claim believable.
 
 ### Pattern: Two-sentence headline (Stop X. Start Y.)
 **Use when**: There's a clear behavioral shift the product enables.
@@ -79,12 +79,12 @@ The verb does heavy lifting. The noun grounds it. Verbs lead headlines: "Make," 
 ### Pattern: Subhead that quantifies
 **Use when**: Below every hero or section headline.
 **Anti-pattern**: Subhead that restates the headline in different words.
-**How**: The subhead names a measurable outcome. "21x faster." "60% reduction in unqualified calls." "From days to minutes." "Across 22 languages." Numbers do more persuasion than adjectives. The subhead is short — often one sentence; two if the second is the proof.
+**How**: The subhead names a measurable outcome. "21x faster." "60% reduction in unqualified calls." "From days to minutes." "Across 22 languages." Numbers do more persuasion than adjectives. The subhead is short, often one sentence; two if the second is the proof.
 
 ### Pattern: CTA microcopy
 **Use when**: Every button on every page.
 **Anti-pattern**: "Get Started," "Learn More," "Click Here," "Submit."
-**How**: Specific verb + concrete next step. "Book a demo," "Start free," "See the platform," "Run a query," "Open account," "Send invite," "See how it works." The button completes the user's sentence. The CTA verb matches the product verb — if the product deploys, the CTA is "Deploy." If it queries, "Run a query."
+**How**: Specific verb + concrete next step. "Book a demo," "Start free," "See the platform," "Run a query," "Open account," "Send invite," "See how it works." The button completes the user's sentence. The CTA verb matches the product verb: if the product deploys, the CTA is "Deploy." If it queries, "Run a query."
 
 ### Pattern: Error message specificity
 **Use when**: Form validation, async failures, edge cases.
@@ -103,7 +103,7 @@ Validation runs on `blur`, not on every keystroke. Errors appear inline below th
 **Anti-pattern**: "No data yet" or a blank screen.
 **How**: Name the surface, name the path forward, name the next action. Examples:
 - "Connect your first integration to start"
-- "No notes yet — start your first meeting"
+- "No notes yet: start your first meeting"
 - "Nothing here yet. Start with a template, or build from scratch."
 - "No appointments. Book one and we'll show it here."
 
@@ -158,8 +158,8 @@ Single-word feature names get capitalization rules and become brand assets. Nami
 
 ### Pattern: Tone for AI features
 **Use when**: Describing AI-assisted capabilities.
-**Anti-pattern**: "Our AI writes your emails for you!" — positions AI as replacement, erodes user agency.
-**How**: Augmentation framing. Use "drafts," "suggests," "tries," "helps," "joins" — not "writes," "creates," "knows." The user remains the subject of the sentence; the AI is the tool joining the user's existing work. Examples:
+**Anti-pattern**: "Our AI writes your emails for you!" (positions AI as replacement, erodes user agency).
+**How**: Augmentation framing. Use "drafts," "suggests," "tries," "helps," "joins", not "writes," "creates," "knows." The user remains the subject of the sentence; the AI is the tool joining the user's existing work. Examples:
 - "Takes your raw notes and makes them better"
 - "Drafts the follow-up; you ship it"
 - "Helps you follow up with the people you met today"
@@ -181,7 +181,7 @@ Sometimes preceded by a 6 to 8px colored dot. Replaces decorative section divide
 ### Pattern: Voice consistency across surfaces
 **Use when**: Building marketing site, in-product copy, error messages, docs.
 **Anti-pattern**: Marketing copy reads polished; in-product copy reads like an engineer's stub; error messages read like 1995 console output.
-**How**: The same voice that writes a tooltip writes the homepage. Marketing copy, in-product empty states, error messages, blog posts, docs — all sound like they were written by the same person. The brand voice scales down, not up: same voice at the hero and at the tooltip.
+**How**: The same voice that writes a tooltip writes the homepage. Marketing copy, in-product empty states, error messages, blog posts, docs: all sound like they were written by the same person. The brand voice scales down, not up: same voice at the hero and at the tooltip.
 
 ### Pattern: Toast accessibility
 **Use when**: Toast notifications for system feedback.
@@ -210,7 +210,7 @@ Sometimes preceded by a 6 to 8px colored dot. Replaces decorative section divide
 - Commas freely in conversational subheads
 - Semicolons essentially absent in marketing copy
 - Question marks only when genuinely asking ("Why so slow?")
-- No exclamation points in marketing copy — except user-voice testimonials
+- No exclamation points in marketing copy, except user-voice testimonials
 
 ## Tokens / values
 
@@ -275,7 +275,7 @@ Banned CTA verbs:
 
 ### Empty state patterns
 - "Connect your first [thing] to start"
-- "No [things] yet — start your first [action]"
+- "No [things] yet: start your first [action]"
 - "Nothing here yet. [Path 1], or [Path 2]."
 - "[Reason]. Try [recovery action]."
 

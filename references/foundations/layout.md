@@ -6,15 +6,15 @@
 
 1. **Landing-page structure lives in its playbook.** AIDA is the default framing for landing pages, and it, the hero, the logo wall, the final CTA and the footer are specified in `references/surfaces/landing.md`. This file holds the layout mechanics every surface shares: containers, grids, bento, rhythm and collapse. Page hierarchy must announce itself without reading.
 
-2. **Ultra-wide containers prevent H1 failure** — H1 containers at `max-w-5xl`, `max-w-6xl`, or `w-full`. Narrow containers cause 6-line wraps and reflexive failure. The width prevents the wrap, not the font size alone.
+2. **Ultra-wide containers prevent H1 failure**: H1 containers at `max-w-5xl`, `max-w-6xl`, or `w-full`. Narrow containers cause 6-line wraps and reflexive failure. The width prevents the wrap, not the font size alone.
 
 3. **H1 line limit.** The limit lives in `references/surfaces/landing.md` (Hero composition). Ultra-wide containers (principle 2) are how a page meets it.
 
 4. **Center by choice, never by fallback.** When a hero may be centered is a landing rule (`references/surfaces/landing.md`, Hero bans). Elsewhere, center a block only when the composition calls for it; a centered-everything page is the fallback this rule bans.
 
-5. **Asymmetric beats symmetric** — Use fractional grid columns (`2fr 1fr 1fr`) instead of `grid-cols-3`. Use 7/5 or 5/7 splits, not 6/6. Asymmetry creates hierarchy without needing different sizes of typography.
+5. **Asymmetric beats symmetric**: Use fractional grid columns (`2fr 1fr 1fr`) instead of `grid-cols-3`. Use 7/5 or 5/7 splits, not 6/6. Asymmetry creates hierarchy without needing different sizes of typography.
 
-6. **Mobile-first, scale up** — Design for 375px first. Layer up through tablet (768), laptop (1024), desktop (1440). Never the reverse. High-variance desktop layouts collapse aggressively below 768px.
+6. **Mobile-first, scale up**: Design for 375px first. Layer up through tablet (768), laptop (1024), desktop (1440). Never the reverse. High-variance desktop layouts collapse aggressively below 768px.
 
 7. **Grid over flex-math**: Use CSS Grid for responsive structures, especially bento layouts. Flex percentage math (`flex-basis: calc(33.3% - 24px)`) is banned, Grid wins on responsive, gap consistency, and dense flow.
 
@@ -22,11 +22,11 @@
 
 9. **Section spacing follows the brand.** Sections sit `layout.landing-gap.<tier>` apart: 64 to 240px at desktop, wider for a calm or formal brand and tighter for a loud one, and 0.6 to 0.9 of that on a phone. Bands carry the rhythm at high energy and none at calm (`color.budget.bands`).
 
-10. **Conventions over cleverness for navigation** — Logo top-left. Nav top or left. Search = magnifying glass. Innovate when you have a better idea; otherwise honor convention so users can scan.
+10. **Conventions over cleverness for navigation**: Logo top-left. Nav top or left. Search = magnifying glass. Innovate when you have a better idea; otherwise honor convention so users can scan.
 
-11. **No 3-column equal card layouts** — The generic 3-equal-cards feature row is banned. Use 2-column zig-zag, asymmetric grid, masonry, or horizontal scroll.
+11. **No 3-column equal card layouts**: The generic 3-equal-cards feature row is banned. Use 2-column zig-zag, asymmetric grid, masonry, or horizontal scroll.
 
-12. **Mobile collapse is aggressive** — Any asymmetric layout above `md:` must fall back to `w-full px-4 py-8` strict single-column below 768px. No `col-span` overrides survive. Horizontal scrollbars from off-screen animations are a critical failure.
+12. **Mobile collapse is aggressive**: Any asymmetric layout above `md:` must fall back to `w-full px-4 py-8` strict single-column below 768px. No `col-span` overrides survive. Horizontal scrollbars from off-screen animations are a critical failure.
 
 ## Do / Don't
 
@@ -100,16 +100,16 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 ### Pattern: Sticky transparent-to-opaque nav
 **Use when**: Long-scroll marketing pages.
 **Anti-pattern**: Sticky nav with solid background fighting the hero on first paint.
-**How**: On page load, nav has no fill — hero gradient bleeds through. After ~100px scroll, a backdrop-blur or solid fill kicks in (slight transition over 150 to 200ms). The effect is "the nav was always there, but politely." A hairline bottom border appears with the scroll state.
+**How**: On page load, nav has no fill (hero gradient bleeds through). After ~100px scroll, a backdrop-blur or solid fill kicks in (slight transition over 150 to 200ms). The effect is "the nav was always there, but politely." A hairline bottom border appears with the scroll state.
 
 ### Pattern: Floating glass pill nav (premium)
 **Use when**: High-end premium marketing surfaces.
 **Anti-pattern**: Edge-to-edge sticky navbar glued to viewport top.
-**How**: Floating glass pill detached from the viewport top with substantial top margin. Pill content includes the brand mark, a small set of primary links, and a primary CTA. On scroll past the hero, the pill darkens or its backdrop blur intensifies — but it never glues to the edge.
+**How**: Floating glass pill detached from the viewport top with substantial top margin. Pill content includes the brand mark, a small set of primary links, and a primary CTA. On scroll past the hero, the pill darkens or its backdrop blur intensifies, but it never glues to the edge.
 
 ### Pattern: Adaptive container insets
 **Use when**: Layouts that span 375px to 1440px+.
-**Anti-pattern**: Same `px-4` from phone to desktop — wide screens cramped.
+**Anti-pattern**: Same `px-4` from phone to desktop (wide screens cramped).
 **How**:
 - Mobile: `px-4` (16px outer)
 - Tablet: `px-8` (32px)
@@ -186,7 +186,7 @@ Landing-page patterns (AIDA structure, section order, hero composition and hero 
 
 ### Bento layout
 - Card count: see `references/surfaces/landing.md` (When to include a section)
-- Card sizes: vary — one tall, one wide, one or two square
+- Card sizes: vary (one tall, one wide, one or two square)
 - Common arrangement: Row 1 with 3 columns, Row 2 with 2 columns split 70/30
 - Card radii: `rounded-[2rem]` to `rounded-[2.5rem]` for premium
 - Card padding: `p-6` to `p-10` depending on density
