@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><title>Orders</title>
+<style>
+@layer utilities { .rounded-2xl { border-radius: 1rem; }
+.rounded-3xl { border-radius: 1.5rem; } }
+.shadow-sm { box-shadow: var(--a), var(--b), var(--c), var(--d), var(--tw-shadow); }
+.stack { box-shadow: 0 1px 1px #0001, 0 2px 2px #0001, 0 4px 4px #0001, 0 8px 8px #0001, 0 16px 16px #0001; }
+button:not(:disabled) { cursor: pointer; }
+.ghost:disabled { cursor: pointer; }
+.menu-button:focus-visible { outline: none; background-color: #dbe4ff; }
+.tab:focus-visible { outline: none; }
+.check::before { content: ""; opacity: 0; }
+</style></head><body><main><h1>Orders</h1>
+<div class="rounded-3xl stack"><p>Today</p></div>
+<button type="button" class="ghost menu-button tab" disabled>Go</button>
+<label><input type="checkbox" class="check"> Paid</label>
+</main></body></html>

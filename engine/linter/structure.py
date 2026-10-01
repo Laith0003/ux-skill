@@ -13,7 +13,7 @@ once.
 from __future__ import annotations
 
 import re
-from bisect import bisect_right
+from bisect import bisect_left, bisect_right
 from html import unescape as html_unescape
 from functools import lru_cache
 from itertools import combinations
@@ -409,6 +409,17 @@ def block_at(ctx: FileContext, view: View, pos: int) -> Optional[Block]:
     return None
 
 
+def rule_at(ctx: FileContext, view: View, pos: int) -> Optional[Block]:
+    """The rule a match at ``pos`` belongs to: the block whose selector holds
+    ``pos`` (a match on a class name sits before its rule's brace, inside
+    any @layer or @media around it), else the innermost block enclosing it."""
+    blocks, starts = _blocks(ctx, view)
+    i = bisect_left(starts, pos)
+    if i < len(blocks) and not re.search(r"[;{}]", view.text[pos:blocks[i].start]):
+        return blocks[i]
+    return block_at(ctx, view, pos)
+
+
 # Utilities a page's bundle carries for other routes
 
 _UTILITY = re.compile(r"^\.((?:[\w-]|\\[0-9a-fA-F]{1,6}\s?|\\.)+)((?:::?[\w-]+(?:\([^()]*\))?)*)$")
@@ -443,7 +454,8 @@ def _outside_styles(ctx: FileContext) -> str:
 def unused_utility(ctx: FileContext, view: View, pos: int) -> bool:
     """True when ``pos`` sits in a page's own styles, in a block whose every
     selector is one class with its states (a utility, such as
-    ``.h-screen`` or ``.md\\:grid-cols-3``), and no element on the page
+    ``.h-screen`` or ``.md\\:grid-cols-3``; a match on its selector counts,
+    inside an @layer too), and no element on the page
     carries that class and nothing outside the styles names it (a script
     that adds it). A compiled stylesheet carries the utilities of every
     route; only the ones this page uses are its own. Only a plain HTML page
@@ -454,7 +466,7 @@ def unused_utility(ctx: FileContext, view: View, pos: int) -> bool:
         return False
     if _EXTERNAL_SCRIPT.search(ctx.text):
         return False
-    block = block_at(ctx, view, pos)
+    block = rule_at(ctx, view, pos)
     if block is None or not block.selectors:
         return False
     if any(a.startswith(_NO_ELEMENTS) for a in block.atrules):
@@ -923,11 +935,18 @@ def _removal_has_ring(ctx: FileContext, view: View, selector: str, at: int,
     return False
 
 
+_FOCUS_FILL = re.compile(r"(?<![\w-])(?:background(?:-color)?|color|text-decoration(?:-line)?)\s*:"
+                         r"\s*(?!(?:transparent|inherit|initial|unset|none|currentcolor)\s*[;}!]|$)"
+                         r"[^;}]+", re.I)
+
+
 def outline_without_ring(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
     """Decide per rule block. A removed outline passes only when a focus rule
     that covers the whole removal selector draws a visible ring (outline,
     box-shadow or border), or a ``:focus-within`` or ``:has(:focus-visible)``
-    rule on an ancestor of that same element does."""
+    rule on an ancestor of that same element does. A focus rule that
+    removes its own outline passes when it fills the control, changes its
+    text color or underlines it instead."""
     tag = ctx.tag_at(start)
     if tag is not None:
         # Inline style: only the element's own classes can add a ring.
@@ -938,7 +957,9 @@ def outline_without_ring(ctx: FileContext, view: View, match: re.Match, start: i
     block = block_at(ctx, view, match.start())
     if block is None or not block.selectors:
         return True
-    own_ring = bool(ring_kind(block.body))
+    # In a focus rule a fill, a text color or an underline in place of the
+    # outline is a visible indicator too.
+    own_ring = bool(ring_kind(block.body)) or bool(_FOCUS_FILL.search(block.body))
     cond = _conditions(block)
     important = bool(_IMPORTANT_OUTLINE.search(block.body))
     for sel in block.selectors:
@@ -2479,11 +2500,26 @@ def blur_without_background(ctx: FileContext, view: View, match: re.Match, start
     return _BACKGROUND_DECL.search(body) is None
 
 
+_LONE_VAR = re.compile(r"^\s*var\((?:[^()]|\([^()]*\))*\)\s*$", re.I)
+SHADOW_LAYERS = 5
+
+
+def shadow_drawn_layers(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
+    """A box-shadow draws SHADOW_LAYERS layers or more of its own. A layer
+    that is only a custom property (Tailwind composes every shadow and ring
+    from var(--tw-shadow) and its siblings) draws nothing here; its value is
+    judged where it is defined."""
+    value = match.group(0).split(":", 1)[1]
+    layers = _split_top(value)
+    return sum(1 for layer in layers if layer.strip() and not _LONE_VAR.match(layer)) >= SHADOW_LAYERS
+
+
 POST_CHECKS: Dict[str, Callable[[FileContext, View, re.Match, int], bool]] = {
     "blur-without-background": blur_without_background,
     "input-has-no-name": input_has_no_name,
     "svg-not-hidden": svg_not_hidden,
     "outline-without-ring": outline_without_ring,
+    "shadow-drawn-layers": shadow_drawn_layers,
     "hover-only-reveal": hover_only_reveal,
     "page-needs-imagery": page_needs_imagery,
     "import-blocks-render": import_blocks_render,

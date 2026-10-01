@@ -1,0 +1,2 @@
+/* A focus rule that removes the outline and draws nothing in its place. */
+.menu-button:focus-visible { outline: none; }

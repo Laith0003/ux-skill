@@ -58,6 +58,7 @@ EXPECTED = {
     "lint-reads-what-the-page-uses", "score-tells-heavy-pages-apart", "text-stays-in-its-box",
     "categories-for-nominal-data",
     "photos-show-this-business", "display-measures-each-letter",
+    "lint-reads-dashboard-templates",
     "display-follows-expressiveness", "display-lines-sit-tight", "weights-stay-light",
     "two-voice-headline", "capitals-track-open", "lines-break-balanced",
     "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",

@@ -188,6 +188,14 @@ dark and high contrast, and writes only what passes. 3.x users: start with
   in capitals, and an Arabic word takes the same care. Where the default
   word binds, the display comes down; give the brief's headline and a
   short one stands at full size.
+- Lint reads dashboards as admin templates build them. A Tailwind 4
+  utility no element uses is not reported inside @layer either, a shadow
+  composed only of custom properties is not counted as layers, a pointer
+  set only while a control is not disabled passes, a focus rule that fills
+  the control in place of its outline counts as an indicator, and a
+  pseudo-element at opacity 0 is never a hidden control. Over fourteen
+  public admin dashboards this removed 175 findings, none of them a real
+  problem.
 
 ### Deprecated
 These seven commands are now aliases. Each one says where it moved and

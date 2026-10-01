@@ -1257,7 +1257,8 @@
           "vue",
           "html"
         ],
-        "target": "css"
+        "target": "css",
+        "post": "shadow-drawn-layers"
       },
       "why": "Stacking five or more shadow layers is the AI's idea of premium depth; reads as visual bloat and chews the GPU on paint. The rule fires at five layers, not three: careful design systems build depth from up to four layers (an elevation scale's umbra, penumbra and ambient layers, or a four-step smooth shadow), so a lower threshold would flag real work. A stacked glow of zero-offset layers is caught at any count by glow-shadow-zero-offset.",
       "fix": "Use one ambient diffusion shadow (e.g. 0 20px 40px -15px rgba(0,0,0,0.08)) and at most one tight contact shadow. Depth comes from contrast, not layer count."
@@ -2692,7 +2693,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": ":disabled[^{]*\\{[^}]*cursor\\s*:\\s*pointer\\s*[;}]",
+        "pattern": "(?<!:not\\():disabled[^{]*\\{[^}]*cursor\\s*:\\s*pointer\\s*[;}]",
         "flags": "im",
         "scope": [
           "css",

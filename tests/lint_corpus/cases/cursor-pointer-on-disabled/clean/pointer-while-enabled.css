@@ -1,0 +1,3 @@
+/* A reset gives controls a pointer only while they are not disabled. */
+button:not(:disabled), [type="button"]:not(:disabled) { cursor: pointer; }
+.btn:not(:disabled):not(.disabled) { cursor: pointer; }
