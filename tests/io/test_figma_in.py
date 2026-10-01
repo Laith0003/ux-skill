@@ -105,7 +105,7 @@ def test_variables_keep_the_files_names_and_modes():
         ("veil", "color"), ("space.4", "dimension"), ("radius.card", "dimension"),
         ("weight.strong", "fontWeight"), ("z.dialog", "number"), ("font.body", "fontFamily"),
         ("size.body", "dimension")]
-    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert dict(ts.axes) == {"scheme": ("light", "dark"), "type": ("base", "tight", "loose")}
     assert (ts.get("ink.900").value, ts.get("ink.900").modes) == ("#171A1F", {})
     assert ts.get("ink.900").layer == "primitive"
     text = ts.get("text.Body-Copy")
@@ -117,6 +117,7 @@ def test_variables_keep_the_files_names_and_modes():
     assert ts.get("weight.strong").value == 600
     assert ts.get("z.dialog").value == 2100
     assert ts.get("size.body").value == {"value": 16, "unit": "px"}
+    assert ts.get("size.body").modes == {"type:tight": {"value": 15, "unit": "px"}}
     assert ts.get("font.body").value == ["Body Sans"]
 
 
@@ -135,9 +136,10 @@ def test_the_report_names_what_it_renamed_noted_and_did_not_read():
          "has no scope that fixes its unit, so it was read as the plain number 2100; give it "
          "a scope in Figma (Gap, Corner radius, Font size and so on) to read it as a size"),
         ("variables.json", "Type",
-         "has the modes Tight, Normal and Loose; its default mode Normal was read, and Tight "
-         "and Loose were not, since a mode axis holds two values; pass the second mode to read "
-         "with second_modes, for example {\"Type\": \"Tight\"}")]
+         "has the modes Tight, Normal and Loose, which name no axis of the engine's, so every "
+         "mode was read on one axis named for the collection, type: Normal, its default mode, "
+         "is the base, Tight is type:tight and Loose is type:loose; to read one mode beside "
+         "the default instead, pass it with second_modes, for example {\"Type\": \"Tight\"}")]
     assert _rows(report.not_read) == [
         ("brand/shared", "references v:remote in the mode Light of Color, a variable from "
                          "another file that this export does not hold; detach the variable in "
@@ -253,6 +255,70 @@ def test_modes_that_cannot_name_an_axis_read_the_default_only():
         ("Density", "has the modes 1x and 2x, which cannot name a mode axis; its default mode "
                     "1x was read and 2x was not; rename the modes in Figma so each starts with "
                     "a letter and the two differ")]
+
+
+def test_more_modes_that_name_no_axis_read_every_mode_on_one_axis_named_for_the_collection():
+    imported = _import(EXPORT)
+    assert imported.figma["collections"]["Type"] == [
+        ["Tight", "type:tight"], ["Normal", ""], ["Loose", "type:loose"]]
+    assert "Type" not in imported.figma["unread"]
+    col = _collection("c:1", "Brand Theme", ["Harbor", "Meadow", "Ember"], ["v:1"])
+    doc = _one(col, [_var("v:1", "accent", "c:1", "COLOR", {
+        "c:1:Harbor": {"r": 0, "g": 0, "b": 1, "a": 1},
+        "c:1:Meadow": {"r": 0, "g": 1, "b": 0, "a": 1},
+        "c:1:Ember": {"r": 1, "g": 0, "b": 0, "a": 1}})])
+    imported = _import(doc)
+    assert dict(imported.tokens.axes) == {"brand-theme": ("base", "meadow", "ember")}
+    accent = imported.tokens.get("accent")
+    assert (accent.value, accent.modes) == (
+        "#0000FF", {"brand-theme:meadow": "#00FF00", "brand-theme:ember": "#FF0000"})
+    assert imported.report.not_read == []
+    assert "brand-theme (the values set with no mode are the base; modes meadow, ember)" \
+        in imported.report.markdown()
+
+
+@pytest.mark.parametrize("collection, modes, why", [
+    ("Motion", ["Calm", "Brisk", "Lively"],
+     "since its name gives the axis motion, one of the engine's own axes; rename the "
+     "collection in Figma"),
+    ("Scale", ["1x", "2x", "3x"],
+     "since an axis value starts with a letter and the values differ, which 2x and 3x do "
+     "not give; rename the modes in Figma"),
+    ("Scale", ["Small", "Base", "Large"],
+     "since the mode Base would take the value base, which the engine gives the default "
+     "mode; rename it in Figma"),
+], ids=["engine-axis", "digits", "base"])
+def test_more_modes_that_cannot_make_an_axis_read_the_default_and_name_the_fix(collection,
+                                                                             modes, why):
+    col = _collection("c:1", collection, modes, ["v:1"])
+    doc = _one(col, [_var("v:1", "gap", "c:1", "FLOAT",
+                          {f"c:1:{m}": 8 + 4 * n for n, m in enumerate(modes)}, ["GAP"])])
+    imported = _import(doc)
+    assert dict(imported.tokens.axes) == {}
+    assert imported.tokens.get("gap").value == {"value": 8, "unit": "px"}
+    rest = f"{modes[1]} and {modes[2]}"
+    assert _rows(imported.report.notes) == [
+        (collection, f"has the modes {modes[0]}, {rest}; its default mode {modes[0]} was read, "
+                     f"and {rest} were not, {why}, or pass the second mode to read with "
+                     f"second_modes, for example {{\"{collection}\": \"{modes[1]}\"}}")]
+
+
+def test_two_collections_that_would_name_one_axis_with_other_modes_read_the_first():
+    first = _collection("c:1", "Brand", ["Harbor", "Meadow", "Ember"], ["v:1"])
+    second = _collection("c:2", "Brand", ["North", "South", "East"], ["v:2"])
+    doc = {"variableCollections": {"c:1": first, "c:2": second}, "variables": {
+        "v:1": _var("v:1", "accent", "c:1", "FLOAT", {"c:1:Harbor": 1, "c:1:Meadow": 2,
+                                                      "c:1:Ember": 3}, ["GAP"]),
+        "v:2": _var("v:2", "edge", "c:2", "FLOAT", {"c:2:North": 1, "c:2:South": 2,
+                                                    "c:2:East": 3}, ["GAP"])}}
+    imported = _import(doc)
+    assert dict(imported.tokens.axes) == {"brand": ("base", "meadow", "ember")}
+    assert imported.tokens.get("edge").modes == {}
+    assert ("Brand", "has the modes North, South and East; its default mode North was read, "
+                     "and South and East were not, since another collection names the axis "
+                     "brand with other modes; rename one of the two collections in Figma, or "
+                     "pass the second mode to read with second_modes, for example "
+                     "{\"Brand\": \"South\"}") in _rows(imported.report.notes)
 
 
 def test_a_color_keeps_its_alpha_and_one_outside_srgb_is_mapped():
