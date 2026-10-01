@@ -258,9 +258,9 @@ def test_a_table_with_more_mode_columns_than_its_axes_reads_the_rest():
 def test_mode_columns_that_cannot_name_an_axis_are_not_read():
     text = "| Token | 100% | 200% |\n|---|---|---|\n| `z` | 1 | 2 |\n"
     assert _rows(_import(text).report.not_read) == [
-        ("rules.md:1", "", "a table with the columns 100% and 200% was not read, since a mode "
-                           "is named with letters; head them with mode names such as Light and "
-                           "Dark")]
+        ("rules.md:1", "", "a table with the columns 100% and 200% was not read, since 100% "
+                           "and 200% cannot name a mode, whose name starts with a letter; head "
+                           "those columns with a mode name such as Dark or High contrast")]
 
 
 def test_prose_tables_and_code_blocks_are_not_tokens():
@@ -703,26 +703,48 @@ def test_a_unit_in_the_heading_is_the_unit_of_a_bare_number():
     assert ts.get("motion.fast").value == {"value": 120, "unit": "ms"}
 
 
-def test_a_size_with_no_unit_anywhere_is_not_read():
+def test_a_bare_letter_spacing_is_not_read_and_names_the_unit_to_write():
+    text = "- `letter-spacing.tight`: -0.02\n- `tracking.wide`: 0.04\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:1", "letter-spacing.tight",
+         "-0.02 has no unit, and its name says it is a letter spacing, which is often written "
+         "in em, so it was not read; write -0.02em, or the unit it has"),
+        ("rules.md:2", "tracking.wide",
+         "0.04 has no unit, and its name says it is a letter spacing, which is often written "
+         "in em, so it was not read; write 0.04em, or the unit it has")]
+
+
+def test_a_size_with_no_unit_anywhere_is_read_as_px_and_a_duration_is_not_read():
     text = ("| Token | Value |\n|---|---|\n| `space.4` | 16 |\n| `radius.card` | 12 |\n"
-            "| `line-height.body` | 1.5 |\n| `weight.bold` | 700 |\n| `space.0` | 0 |\n\n"
+            "| `line-height.body` | 1.5 |\n| `weight.bold` | 700 |\n| `space.0` | 0 |\n"
+            "| `container.max` | 1200 |\n| `elevation.raised` | 2 |\n\n"
             "- `shadow.offset`: 2\n- `motion.delay.quick`: 120\n")
     imported = _import(text)
     ts = imported.tokens
-    assert [t.path for t in ts.tokens()] == ["line-height.body", "weight.bold", "space.0"]
+    assert [t.path for t in ts.tokens()] == [
+        "space.4", "radius.card", "line-height.body", "weight.bold", "space.0", "container.max",
+        "elevation.raised", "shadow.offset"]
     assert ts.get("line-height.body").value == 1.5 and ts.get("weight.bold").value == 700
     assert ts.get("space.0").value == {"value": 0, "unit": "px"}
+    assert {p: ts.get(p).value["value"] for p in (
+        "space.4", "radius.card", "container.max", "elevation.raised", "shadow.offset")} == {
+        "space.4": 16, "radius.card": 12, "container.max": 1200, "elevation.raised": 2,
+        "shadow.offset": 2}
+    assert ts.get("container.max").value["unit"] == "px"
+    tail = "so it was read as {v}px; write {v}px to say so, or the unit it has if it is not px"
+    assert [r for r in _rows(imported.report.notes) if "has no unit" in r[2]] == [
+        ("rules.md:3", "space.4", "16 has no unit, and its name says it is a size (space), "
+                                  + tail.format(v=16)),
+        ("rules.md:4", "radius.card", "12 has no unit, and its name says it is a size "
+                                      "(radius), " + tail.format(v=12)),
+        ("rules.md:8", "container.max", "1200 has no unit, and its name says it is a size "
+                                        "(container), " + tail.format(v=1200)),
+        ("rules.md:9", "elevation.raised", "2 has no unit, and its name says it is a size "
+                                           "(elevation), " + tail.format(v=2)),
+        ("rules.md:11", "shadow.offset", "2 has no unit, and its name says it is a size "
+                                         "(offset), " + tail.format(v=2))]
     assert _rows(imported.report.not_read) == [
-        ("rules.md:3", "space.4", "16 has no unit, and space.4 is a size; write the unit in "
-                                  "the cell, such as 16px, or in the column header, such as "
-                                  "Value (px)"),
-        ("rules.md:4", "radius.card", "12 has no unit, and radius.card is a size; write the "
-                                      "unit in the cell, such as 12px, or in the column header, "
-                                      "such as Value (px)"),
-        ("rules.md:9", "shadow.offset", "2 has no unit, and shadow.offset is a size; write the "
-                                        "unit, such as 2px, or name it in the heading above, "
-                                        "such as ## Sizes (px)"),
-        ("rules.md:10", "motion.delay.quick", "120 has no unit, and motion.delay.quick is a "
+        ("rules.md:12", "motion.delay.quick", "120 has no unit, and motion.delay.quick is a "
                                               "duration; write the unit, such as 120ms, or name "
                                               "it in the heading above, such as ## Motion (ms)")]
 
@@ -776,6 +798,28 @@ def test_a_do_and_avoid_table_is_guidance_not_a_mode(head):
                             "kept as a rule")
 
 
+@pytest.mark.parametrize("head, label", [
+    ("| Token | Definition | Avoid |", "Definition and Avoid"),
+    ("| Name | Meaning | Avoid |", "Meaning and Avoid"),
+    ("| Role | Definition | Usage | Avoid |", "Definition, Usage and Avoid"),
+], ids=["definition", "meaning", "usage"])
+def test_a_definition_and_avoid_table_is_guidance_not_a_mode(head, label):
+    width = head.count("|") - 1
+    rows = ["| `color.ink` | Body text on light grounds. | Text over photographs. |",
+            "| `color.edge` | Hairlines between rows. | Borders on buttons. |"]
+    if width == 4:
+        rows = [r.replace(" | Text", " | Long reads. | Text").replace(" | Borders",
+                                                                       " | Tables. | Borders")
+                for r in rows]
+    text = "\n".join([head, "|" + "---|" * width, *rows]) + "\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {} and imported.report.tokens == 0
+    assert imported.report.not_read == []
+    [note] = imported.report.notes
+    assert note.message == (f"the {label} table (line 1) holds guidance, not values, and was "
+                            "kept as a rule")
+
+
 def test_guidance_joins_the_rules_of_its_file():
     text = "- `accent`: for links\n\n| Do | Avoid |\n|---|---|\n| a | b |\n"
     [note] = _import(text).report.notes
@@ -796,6 +840,110 @@ def test_an_alias_column_reads_a_reference_or_a_backticked_name(head):
     assert ts.get("text.body").value == "{gray.900}" and ts.get("text.muted").value == \
         "{gray.900}"
     assert ts.get("text.body").layer == "semantic" and imported.report.not_read == []
+
+
+@pytest.mark.parametrize("head", ["Alias of", "Aliased to", "Alias for", "Reference to",
+                                  "Points to", "Refers to", "Maps to"])
+def test_an_alias_header_with_a_preposition_is_the_alias_column(head):
+    text = (f"| Token | Value | {head} |\n|---|---|---|\n| `gray.900` | #111111 | |\n"
+            "| `text.body` | | `gray.900` |\n")
+    imported = _import(text)
+    assert imported.tokens.get("text.body").value == "{gray.900}"
+    assert imported.report.not_read == []
+
+
+def test_an_alias_column_for_a_mode_holds_the_reference_in_that_mode():
+    text = ("| Token | Light | Dark | Dark alias |\n|---|---|---|---|\n"
+            "| `gray.100` | #EEEEEE | #EEEEEE | |\n| `gray.900` | #111111 | #111111 | |\n"
+            "| `text.body` | {gray.900} | | `gray.100` |\n"
+            "| `text.muted` | {gray.900} | #777777 | |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    body = ts.get("text.body")
+    assert (body.value, body.modes) == ("{gray.900}", {"scheme:dark": "{gray.100}"})
+    assert ts.get("text.muted").modes == {"scheme:dark": "#777777"}
+    assert imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "a table with Light, Dark and Dark alias columns; Light was read as "
+                           "the base and Dark as scheme:dark; Dark alias was read as the "
+                           "reference in scheme:dark where it holds one")]
+
+
+def test_alias_columns_named_for_each_mode_read_without_value_columns():
+    text = ("| Token | Light alias | Dark alias |\n|---|---|---|\n"
+            "| `gray.100` | #EEEEEE | #EEEEEE |\n| `gray.900` | #111111 | #111111 |\n"
+            "| `text.body` | `gray.900` | `gray.100` |\n")
+    imported = _import(text)
+    body = imported.tokens.get("text.body")
+    assert (body.value, body.modes) == ("{gray.900}", {"scheme:dark": "{gray.100}"})
+    assert imported.report.not_read == []
+
+
+def test_an_alias_column_for_no_mode_or_a_second_one_names_the_fix():
+    text = ("| Token | Value | Brand alias | Dark alias | Dark mode alias |\n"
+            "|---|---|---|---|---|\n| `gray.900` | #111111 | | | |\n")
+    rows = _rows(_import(text).report.not_read)
+    assert rows == [
+        ("rules.md:1", "Brand alias", "is an alias column for brand, which names no mode, so it "
+                                      "was not read; head it with a mode name and alias, such "
+                                      "as Dark alias, or put it in a table of its own"),
+        ("rules.md:1", "Dark mode alias", "is a second alias column for the scheme axis, which "
+                                          "Dark alias holds, so it was not read; keep one alias "
+                                          "column per mode")]
+
+
+def test_an_alias_cell_with_several_names_is_noted_with_the_fix():
+    text = ("| Token | Value | Aliases |\n|---|---|---|\n"
+            "| `gray.900` | #111111 | `text.body`, `text.title` |\n")
+    imported = _import(text)
+    assert imported.tokens.get("gray.900").value == "#111111"
+    assert ("rules.md:3", "gray.900",
+            "in the Aliases column, `text.body`, `text.title` holds more than one name, and a "
+            "token references one, so the cell was not read; if they are other names for "
+            "gray.900, write each as a row of its own with `gray.900` in the Aliases column") \
+        in _rows(imported.report.notes)
+
+
+def test_a_guidance_column_beside_a_value_column_is_not_a_mode():
+    text = "| Token | Value | Avoid |\n|---|---|---|\n| `gray.900` | #111111 | On photos. |\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {} and imported.report.not_read == []
+
+
+def test_a_guidance_column_beside_a_value_column_joins_the_rule_note():
+    text = ("| Token | Value | Avoid |\n|---|---|---|\n| `color.brand` | #112233 | text on dark |\n"
+            "\n| Token | Value | Do | Don't |\n|---|---|---|---|\n"
+            "| `color.ink` | #111111 | body text | captions |\n")
+    imported = _import(text)
+    assert imported.tokens.get("color.brand").value == "#112233"
+    assert imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "the Avoid column of the table on line 1 and the Do and Don't columns "
+                           "of the table on line 5 hold guidance, not values, and were kept as "
+                           "rules")]
+    assert "the Avoid column of the table on line 1" in imported.report.markdown()
+
+
+@pytest.mark.parametrize("text", [
+    "| Token | Size (points) |\n|---|---|\n| `space.2` | 8px |\n",
+    "| Token | Font | Size (points) | Weight | Line height | Letter spacing |\n"
+    "|---|---|---|---|---|---|\n| `type.body` | Inter | 16px | 400 | 1.5 | 0 |\n",
+], ids=["value", "type"])
+def test_a_header_that_holds_a_word_like_points_is_not_an_alias_column(text):
+    imported = _import(text)
+    said = " ".join(i.message for i in imported.report.notes + imported.report.not_read)
+    assert "alias" not in said and "no column names the tokens" not in said
+    if "space.2" in text:
+        assert imported.tokens.get("space.2").value == {"value": 8, "unit": "px"}
+
+
+def test_a_column_that_cannot_name_a_mode_names_itself_and_the_fix():
+    text = "| Token | Light | 2x |\n|---|---|---|\n| `gray.900` | #111111 | #222222 |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:1", "", "a table with the columns Light and 2x was not read, since 2x cannot "
+                           "name a mode, whose name starts with a letter; head that column with "
+                           "a mode name such as Dark or High contrast")]
 
 
 def test_a_token_column_beside_a_name_column_is_the_alias():
@@ -873,11 +1021,52 @@ def test_a_type_field_that_cannot_be_read_names_its_column_and_the_fix():
     assert _rows(_import(fixed).report.not_read) == [
         ("rules.md:3", "type.body", "in the Weight column, bold is not a font weight; write it "
                                     "as a number from 1 to 1000, such as 700")]
-    fixed = fixed.replace("bold", "700")
-    assert _rows(_import(fixed).report.not_read) == [
-        ("rules.md:3", "type.body", "in the Line height column, 24px is a length, and the "
-                                    "engine keeps a line height as a multiple of the font size; "
-                                    "write it as a number, such as 1.5")]
+    fixed = fixed.replace("bold", "700").replace("| 0 |", "| 0.2em |")
+    assert _rows(_import(fixed).report.not_read)[0][2].startswith(
+        "in the Letter spacing column, 0.2em")
+
+
+def test_a_line_height_in_px_is_read_against_the_size_of_its_style():
+    text = ("| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | 16px | 400 | 24px | 0 |\n"
+            "| `type.small` | Inter | 0.875rem | 400 | 1.25rem | 0 |\n"
+            "| `type.note` | Inter | 14px | 400 | 20px | 0 |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert ts.get("type.body").value["lineHeight"] == 1.5
+    assert ts.get("type.small").value["lineHeight"] == 1.4286
+    assert ts.get("type.note").value["lineHeight"] == 1.4286
+    assert imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:3", "type.body", "in the Line height column, 24px is a length; it was read "
+                                    "against the font size 16px as 1.5, the multiple of the "
+                                    "font size the engine keeps; write 1.5 to say so"),
+        ("rules.md:4", "type.small", "in the Line height column, 1.25rem is a length; it was "
+                                     "read against the font size 0.875rem as 1.4286, the "
+                                     "multiple of the font size the engine keeps; write 1.4286 "
+                                     "to say so"),
+        ("rules.md:5", "type.note", "in the Line height column, 20px is a length; it was read "
+                                    "against the font size 14px as 1.4286, the multiple of the "
+                                    "font size the engine keeps; write 1.4286 to say so")]
+
+
+def test_a_line_height_in_another_unit_than_its_size_or_beside_a_reference_is_not_read():
+    text = ("| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | 1rem | 400 | 24px | 0 |\n"
+            "| `size.md` | | | | | |\n"
+            "| `type.lead` | Inter | {size.md} | 400 | 28px | 0 |\n")
+    rows = [r for r in _rows(_import(text).report.not_read) if r[1] != "size.md"]
+    assert rows == [
+        ("rules.md:3", "type.body", "in the Line height column, 24px is a length in px and the "
+                                    "font size 1rem is in rem, so it cannot be read as a "
+                                    "multiple of the font size; write it as a number, such as "
+                                    "1.5, or write both in one unit"),
+        ("rules.md:5", "type.lead", "in the Line height column, 28px is a length and the font "
+                                    "size is the reference {size.md}, so it cannot be read as a "
+                                    "multiple of the font size here; write it as a number, such "
+                                    "as 1.5")]
 
 
 def test_type_properties_beside_a_size_with_no_font_column_say_how_to_read_them():

@@ -831,3 +831,46 @@ def test_the_write_back_gives_the_spelling_back_and_lists_what_was_not_read():
     assert [(t.path, t.value, t.modes, t.extensions) for t in again.tokens.tokens()] == [
         (t.path, t.value, t.modes, t.extensions) for t in imported.tokens.tokens()]
     assert (again.forms, again.scheme) == (imported.forms, imported.scheme)
+
+
+def test_a_bare_letter_spacing_is_not_read_and_names_the_unit_to_write():
+    text = ":root {\n  --letter-spacing-tight: -0.02;\n  --tracking-wide: 0.04;\n}\n"
+    imported = _import(text)
+    assert list(imported.tokens.tokens()) == []
+    assert [(i.where, i.name, i.message) for i in imported.report.not_read] == [
+        ("theme.css:2", "--letter-spacing-tight",
+         "-0.02 has no unit, and its name says it is a letter spacing, which is often written "
+         "in em, so it was not read; write -0.02em, or the unit it has"),
+        ("theme.css:3", "--tracking-wide",
+         "0.04 has no unit, and its name says it is a letter spacing, which is often written "
+         "in em, so it was not read; write 0.04em, or the unit it has")]
+
+
+def test_a_bare_number_named_for_a_size_is_read_as_px_with_a_note():
+    text = (":root {\n  --radius-md: 8;\n  --container-max: 1200;\n  --elevation-raised: 2;\n"
+            "  --space-0: 0;\n  --z-modal: 100;\n  --line-height-body: 1.5;\n"
+            "  --container-columns: 12;\n}\n"
+            "[data-density=\"compact\"] {\n  --radius-md: 6;\n}\n")
+    imported = _import(text)
+    ts = imported.tokens
+    px = {p: (ts.get(p).type, ts.get(p).value) for p in
+          ("radius-md", "container-max", "elevation-raised", "space-0")}
+    assert px == {"radius-md": ("dimension", {"value": 8, "unit": "px"}),
+                  "container-max": ("dimension", {"value": 1200, "unit": "px"}),
+                  "elevation-raised": ("dimension", {"value": 2, "unit": "px"}),
+                  "space-0": ("dimension", {"value": 0, "unit": "px"})}
+    assert ts.get("radius-md").modes == {"density:compact": {"value": 6, "unit": "px"}}
+    assert [ts.get(p).type for p in ("z-modal", "line-height-body", "container-columns")] == [
+        "number", "number", "number"]
+    assert [(i.where, i.name, i.message) for i in imported.report.notes
+            if "has no unit" in i.message] == [
+        ("theme.css:2", "--radius-md", "8 has no unit, and its name says it is a size "
+                                       "(radius), so it was read as 8px; write 8px to say so, "
+                                       "or the unit it has if it is not px"),
+        ("theme.css:3", "--container-max", "1200 has no unit, and its name says it is a size "
+                                           "(container), so it was read as 1200px; write "
+                                           "1200px to say so, or the unit it has if it is not "
+                                           "px"),
+        ("theme.css:4", "--elevation-raised", "2 has no unit, and its name says it is a size "
+                                              "(elevation), so it was read as 2px; write 2px to "
+                                              "say so, or the unit it has if it is not px")]

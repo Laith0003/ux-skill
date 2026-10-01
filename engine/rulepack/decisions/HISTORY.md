@@ -31,6 +31,8 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [A later extend writes the engine's own extension file again without force, and each out folder keeps its own intake record](extension-carried-forward.md)
 - [A size named for a text role is proposed as that role's font size alone](type-size-names.md)
 - [Tailwind's own spacing steps are raw values while the project's theme keeps the scale](tailwind-spacing-steps.md)
+- [A Figma collection of three or more modes that name no engine axis is read whole on one axis named for it](figma-modes-on-one-axis.md)
+- [A bare number whose name says it is a size is read as px, with a note](bare-sizes-read-as-px.md)
 
 ## Roles per foundation
 

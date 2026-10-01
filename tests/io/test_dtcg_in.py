@@ -960,3 +960,43 @@ def test_where_is_the_file_and_the_name_is_the_tokens_path():
     [item] = report.not_read
     assert (item.where, item.name) == ("system.tokens.json", "gutter")
     assert item.line().startswith("- system.tokens.json `gutter`: ")
+
+
+def _type_token(size, line_height):
+    return {"type": {"$type": "typography", "body": {"$value": {
+        "fontFamily": ["Inter"], "fontSize": size, "fontWeight": 400,
+        "lineHeight": line_height, "letterSpacing": {"value": 0, "unit": "px"}}}}}
+
+
+@pytest.mark.parametrize("size, line_height, want", [
+    ({"value": 16, "unit": "px"}, {"value": 24, "unit": "px"}, 1.5),
+    ({"value": 14, "unit": "px"}, "20px", 1.4286),
+    ({"value": 1, "unit": "rem"}, {"value": 1.5, "unit": "rem"}, 1.5),
+], ids=["object", "string", "rem"])
+def test_a_line_height_written_as_a_length_is_read_against_the_font_size(size, line_height,
+                                                                         want):
+    imported = _import(_type_token(size, line_height))
+    assert imported.tokens.get("type.body").value["lineHeight"] == want
+    assert imported.report.not_read == []
+    shown = line_height if isinstance(line_height, str) else \
+        f"{line_height['value']}{line_height['unit']}"
+    [note] = [i for i in imported.report.notes if "lineHeight" in i.message]
+    assert (note.name, note.message) == (
+        "type.body", f"its lineHeight {shown} is a length; it was read against its fontSize "
+                     f"{size['value']}{size['unit']} as {want}, the multiple of the font size "
+                     f"the engine keeps; write {want} to say so")
+
+
+def test_a_line_height_length_beside_a_size_in_another_unit_or_a_reference_is_not_read():
+    imported = _import(_type_token({"value": 1, "unit": "rem"}, {"value": 24, "unit": "px"}))
+    assert [(i.name, i.message) for i in imported.report.not_read] == [
+        ("type.body", "its lineHeight 24px is a length in px and its fontSize 1rem is in rem, "
+                      "so it cannot be read as a multiple of the font size; write lineHeight "
+                      "as a number, such as 1.5, or write both in one unit")]
+    doc = _type_token("{size.md}", {"value": 24, "unit": "px"})
+    doc["size"] = {"md": {"$type": "dimension", "$value": {"value": 16, "unit": "px"}}}
+    imported = _import(doc)
+    assert [(i.name, i.message) for i in imported.report.not_read] == [
+        ("type.body", "its lineHeight 24px is a length and its fontSize is the reference "
+                      "{size.md}, so it cannot be read as a multiple of the font size here; "
+                      "write lineHeight as a number, such as 1.5")]

@@ -65,6 +65,7 @@ EXPECTED = {
     "photo-direction",
     "own-system-rebuilt-in-place", "extension-carried-forward", "type-size-names",
     "tailwind-spacing-steps",
+    "figma-modes-on-one-axis", "bare-sizes-read-as-px",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

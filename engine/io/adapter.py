@@ -22,7 +22,11 @@ one for it.
 
 A system with no motion mode may keep its reduced motion in separate
 tokens, a twin beside each token whose name adds a reduced word
-(duration-slow and duration-slow-reduced, or motion.reduced.*). When the
+(duration-slow and duration-slow-reduced, motion.reduced.*, or
+prefers-reduced-motion before the rest) or puts one where the token's
+name has a standard word (motion.standard.fast and motion.reduced.fast).
+A plain number named for time or motion pairs too, as a Figma export
+holds a duration with no unit. When the
 mapping reads no motion axis, view() reads each twin as its token's
 reduced-motion value, with a note naming the pairs.
 
@@ -813,6 +817,13 @@ def _root_axis_note(axis: str, values: Tuple[str, ...], name: str) -> str:
 # The word a token's name carries when it holds another token's value under
 # reduced motion (duration-slow-reduced, motion.reduced.pace.calm).
 REDUCED_WORDS = ("reduced", "reduce")
+# Words beside a reduced word that only say it is reduced motion
+# (prefers-reduced-motion, a11y.reduced), and the words a base token's name
+# may hold where its twin's holds the reduced word (motion.standard.fast).
+REDUCED_CONTEXT = ("motion", "prefers", "a11y", "accessibility", "accessible")
+STANDARD_WORDS = ("standard", "default", "normal", "regular", "base", "full")
+# Words that name a plain number as a time: a Figma duration has no unit.
+TIME_WORDS = frozenset(("duration", "durations", "delay", "delays", "ms"))
 REDUCED_NOTE = ("motion:reduced is read from the separate tokens the system declares for it: "
                 "{pairs}; map the motion axis in {name} to read it from a mode instead")
 
@@ -822,41 +833,60 @@ def _name_words(path: str) -> Tuple[str, ...]:
     return tuple(w.lower() for w in re.split(r"[.\-/_ ]+", spaced) if w)
 
 
+def _base_words(words: Tuple[str, ...], i: int) -> List[Tuple[str, ...]]:
+    """The names a twin's base may have, as words, for the reduced word at
+    `i`, most likely first: the reduced word taken out, then with the words
+    beside it that only say reduced motion (motion, prefers, a11y), and
+    each of those with a standard word in its place (motion.standard.fast
+    for motion.reduced.fast)."""
+    lo = hi = i
+    while lo > 0 and words[lo - 1] in REDUCED_CONTEXT:
+        lo -= 1
+    while hi + 1 < len(words) and words[hi + 1] in REDUCED_CONTEXT + REDUCED_WORDS:
+        hi += 1
+    cuts = sorted(((a, b) for a in range(lo, i + 1) for b in range(i + 1, hi + 2)),
+                  key=lambda c: (c[1] - c[0], c[0]))
+    return [words[:a] + middle + words[b:]
+            for middle in [()] + [(w,) for w in STANDARD_WORDS] for a, b in cuts]
+
+
 def reduced_pairs(ts: TokenSet) -> Dict[str, str]:
     """Each token that has a separate reduced-motion twin, and the twin: a
-    motion value (a duration, a curve, or a length named for travel) of
-    the same type whose name is the token's own with a reduced
-    word added anywhere (duration-slow-reduced, reduced-duration-slow,
-    motion.reduced.pace.calm, or reduced-motion before the rest).
-    Names only, in the set's order."""
+    motion value (a duration, a curve, a length named for travel, or a
+    plain number named for time or motion, as a Figma export holds a
+    duration) of
+    the same type whose name is the token's own with a reduced word added
+    anywhere (duration-slow-reduced, reduced-duration-slow,
+    motion.reduced.pace.calm, reduced-motion or prefers-reduced-motion
+    before the rest), or in place of a standard word (motion.standard.fast
+    and motion.reduced.fast). Names only, in the set's order."""
     by_words: Dict[Tuple[str, ...], str] = {}
     for t in ts.tokens():
         by_words.setdefault(_name_words(t.path), t.path)
     out: Dict[str, str] = {}
     for t in ts.tokens():
         words = _name_words(t.path)
+        if not _moves(t.type, words):
+            continue
         for i, word in enumerate(words):
             if word not in REDUCED_WORDS:
                 continue
-            for drop in (1, 2):
-                if drop == 2 and words[i + 1:i + 2] != ("motion",):
-                    continue
-                base = by_words.get(words[:i] + words[i + drop:])
-                if base is not None and base != t.path and base not in out \
-                        and ts.get(base).type == t.type and _moves(t.type, words):
-                    out[base] = t.path
-                    break
-            else:
-                continue
-            break
+            base = next((b for b in (by_words.get(w) for w in _base_words(words, i))
+                         if b is not None and b != t.path and b not in out
+                         and b not in out.values() and ts.get(b).type == t.type), None)
+            if base is not None:
+                out[base] = t.path
+                break
     return out
 
 
 def _moves(kind: str, words: Tuple[str, ...]) -> bool:
     """Whether a token of this type and name can be a motion value: a
-    duration, a curve, or a length named for travel (distance, offset)."""
+    duration, a curve, a length named for travel (distance, offset), or a
+    plain number named for time or motion (duration, delay, motion)."""
     return kind in ("duration", "cubicBezier") or kind == "dimension" and bool(
-        set(words) & {"distance", "travel", "offset", "motion"})
+        set(words) & {"distance", "travel", "offset", "motion"}) or kind == "number" and bool(
+        set(words) & (TIME_WORDS | {"motion"}))
 
 
 def reduced_twins(ts: TokenSet, mapping: Mapping) -> Dict[str, Tuple[str, str]]:

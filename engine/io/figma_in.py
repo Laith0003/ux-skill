@@ -48,8 +48,14 @@ the engine sets itself. A collection with more modes is read one mode per
 axis, as the other importers read one column or theme per axis: Light,
 Dark and High contrast give the base, scheme:dark and contrast:high, and a
 mode left over (Dim, or a combined High contrast dark) is listed under Not
-read with its fix. When no mode names an axis, the default mode is read
-and second_modes names the other mode to read for it. A collection in the
+read with its fix. When no mode names an axis, every mode is read on one
+axis named for the collection, its default mode the base and each other
+mode a value (Harbor, Meadow and Ember in Brand give brand: base, meadow,
+ember), the way an imported axis whose base is the root holds several
+modes; when the names cannot make that axis (the collection is named for
+one of the engine's axes, a mode's name starts with a digit), the default
+mode is read and the note names the rename. second_modes names one mode
+to read beside the default instead. A collection in the
 engine's own mode names (light standard, light high, dark standard, dark
 high, as its Figma export writes them; mode_words.engine_axes) reads every
 mode on those axes, the combined ones too.
@@ -76,7 +82,7 @@ from engine.foundations.color_math import gamut_map_oklch, rgb_to_hex, srgb_to_o
 from engine.foundations.errors import InputError
 from engine.foundations.export import PERCENT
 from engine.foundations.modes import AXES, compress, join, parse
-from engine.foundations.tokens import Token, TokenSet
+from engine.foundations.tokens import ROOT_BASE, Token, TokenSet
 from engine.io.graph import cycles
 from engine.io.mode_words import (NEEDS_AXIS_WORD, axes_named, axis_of, engine_axes, is_base,
                                   words)
@@ -121,7 +127,7 @@ class _Plan:
     name: str
     modes: Dict[str, str]
     read: List[Tuple[str, str]]
-    axis: Optional[Tuple[str, Tuple[str, str]]] = None
+    axis: Optional[Tuple[str, Tuple[str, ...]]] = None
     note: str = ""
     # Modes whose values were not read, each with why and the fix.
     unread: List[str] = field(default_factory=list)
@@ -263,14 +269,17 @@ def _plan(col: Dict[str, Any], want: Optional[str],
     if per_axis is not None and want is None:
         return per_axis
     if len(modes) > 2 and want is None:
+        every, why = _every_mode(cname, modes, default, axes)
+        if every is not None:
+            return every
         # Suggest the mode that makes a known axis with the default, if one does.
         example = next((m for m in others if _known_axis(modes[default], modes[m], cname)),
                        others[0])
         rest = [modes[m] for m in others]
         base_only.note = (f"has the modes {_and(names)}; its default mode {modes[default]} was "
-                          f"read, and {_and(rest)} were not, since a mode axis holds two "
-                          "values; pass the second mode to read with second_modes, for "
-                          f"example {json.dumps({cname: modes[example]})}")
+                          f"read, and {_and(rest)} were not, {why}, or pass the second mode to "
+                          "read with second_modes, for example "
+                          f"{json.dumps({cname: modes[example]})}")
         return base_only
     if len(modes) > 2:
         other = next((m for m in others if modes[m] == want), None)
@@ -393,6 +402,50 @@ def _per_axis(cname: str, modes: Dict[str, str], default: str) -> Optional[_Plan
         note += (f"; the default mode in Figma is {modes[default]}, and the engine's base is "
                  f"{modes[base]}")
     return _Plan(cname, modes, read, made[0], note, unread=unread, more_axes=made[1:])
+
+
+def _every_mode(cname: str, modes: Dict[str, str], default: str,
+                axes: Dict[str, Tuple[str, ...]]) -> Tuple[Optional[_Plan], str]:
+    """A collection of more than two modes that place into no axis of the
+    engine's (Harbor, Meadow and Ember), read whole on one axis named for
+    the collection: the default mode is its base and every other mode a
+    value of it, as an imported axis whose base is the root holds them.
+    (None, why it cannot be, ending in the fix) when the names cannot make
+    that axis."""
+    axis = _slug(cname)
+    if not _AXIS_WORD.fullmatch(axis):
+        return None, ("since its name cannot name an axis, which starts with a letter; rename "
+                      "the collection in Figma")
+    if axis in AXES:
+        return None, (f"since its name gives the axis {axis}, one of the engine's own axes; "
+                      "rename the collection in Figma")
+    others = [m for m in modes if m != default]
+    values: List[str] = []
+    bad: List[str] = []
+    for m in others:
+        value = _slug(modes[m])
+        if value == ROOT_BASE:
+            return None, (f"since the mode {modes[m]} would take the value {ROOT_BASE}, which "
+                          "the engine gives the default mode; rename it in Figma")
+        if not _AXIS_WORD.fullmatch(value) or value in values:
+            bad.append(modes[m])
+        values.append(value)
+    if bad:
+        verb = "does" if len(bad) == 1 else "do"
+        return None, ("since an axis value starts with a letter and the values differ, which "
+                      f"{_and(bad)} {verb} not give; rename the modes in Figma")
+    held = (ROOT_BASE, *values)
+    if axes.get(axis, held) != held:
+        return None, (f"since another collection names the axis {axis} with other modes; "
+                      "rename one of the two collections in Figma")
+    read = [(default, "")] + [(m, f"{axis}:{v}") for m, v in zip(others, values)]
+    parts = [f"{modes[m]} is {ctx}" for m, ctx in read[1:]]
+    note = (f"has the modes {_and(list(modes.values()))}, which name no axis of the engine's, "
+            f"so every mode was read on one axis named for the collection, {axis}: "
+            f"{modes[default]}, its default mode, is the base, {_and(parts)}; to read one mode "
+            "beside the default instead, pass it with second_modes, for example "
+            f"{json.dumps({cname: modes[others[0]]})}")
+    return _Plan(cname, modes, read, (axis, held), note), ""
 
 
 def _wants(second_modes: Any, collections: Dict[str, Any]) -> Dict[str, str]:
