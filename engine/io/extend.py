@@ -40,6 +40,10 @@ writes), and the report says how to load it:
   (figma_out.figma_extension).
 An extension file already beside the source is read first: what it added
 is kept, counted as part of the system, and the new additions follow it.
+While the engine's record still matches it, it is written again without
+force, after a backup, so a second extend may report into another out
+folder, each folder keeping its own intake record; one the owner edited
+is theirs and needs force.
 Where the source now sets a name the earlier extension sets too, with
 another value, the extension would replace the owner's value, so that
 blocks with the fix. A Figma extension is read as the file will be once
@@ -1727,7 +1731,12 @@ def write_extended(result: Extended, imported: Imported, *, out: Any = None,
     name = Path(imported.report.source.path).name
     # A refusal beside the source names the right fix: rename a file in the
     # way of a system ux-skill did not write, or force a rewrite of its own.
-    place = dict(own=name) if imported.owned else dict(beside=name)
+    place: Dict[str, Any] = dict(own=name) if imported.owned else dict(beside=name)
+    if not _in_place(imported):
+        # The extension an earlier extend wrote was read first and is
+        # carried forward, so it is written again without force while the
+        # engine's record still matches it; it is backed up first.
+        place["rewrite"] = [n for n in _ext_names(imported) if n in result.beside]
     if out is None or target.resolve() == here.resolve():
         return _loaded(_fonts_note(write_with_intake(here, result.files, imported.report,
                                                      **place, **labels), result, labels),

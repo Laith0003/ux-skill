@@ -382,6 +382,35 @@ def test_extend_keeps_an_owners_mapping_in_out_instead_of_refusing(tmp_path):
     assert (out / "extend-report.md").is_file()
 
 
+def test_a_second_extend_into_another_out_folder_adds_to_the_first(tmp_path):
+    from pathlib import Path
+    f = _files(tmp_path)
+    first = run_extend(f / "theme.css", add=["space"], out=tmp_path / "one")
+    assert first["status"] == "written"
+    ext = (f / "theme-ext.css").read_text()
+    second = run_extend(f / "theme.css", add=["radius"], out=tmp_path / "two")
+    assert second["status"] == "written", second["message"]
+    after = (f / "theme-ext.css").read_text()
+    # What the first extension added is kept, and the new additions follow.
+    assert "--space-" in after and "--radius-" in after
+    assert (f / "theme.css").read_text() == THEME
+    # The earlier extension is backed up before it is written again.
+    backup = Path(second["replaced"][str(f / "theme-ext.css")])
+    assert backup.read_text() == ext
+    # Each folder keeps its own intake record of what was written there.
+    for out in (tmp_path / "one", tmp_path / "two"):
+        [record] = (out / INTAKE_DIR / "intake").glob("*.json")
+        assert json.loads(record.read_text())["writes"] == ["mapping.json", "extend-report.md"]
+    [beside] = (f / INTAKE_DIR / "intake").glob("*.json")
+    assert json.loads(beside.read_text())["writes"] == ["theme-ext.css"]
+    assert second["where"]["out"]["folder"] == str(tmp_path / "two")
+    # An extension the owner edited is theirs: it is not written over.
+    (f / "theme-ext.css").write_text(after + "/* mine */\n", encoding="utf-8")
+    third = run_extend(f / "theme.css", add=["border"], out=tmp_path / "three")
+    assert third["status"] == "refused"
+    assert "theme-ext.css" in third["message"] and "--force" in third["message"]
+
+
 def test_a_file_in_the_way_beside_the_source_is_named_with_the_right_fix(tmp_path):
     f = _files(tmp_path)
     (f / "theme-ext.css").write_text("/* mine */\n", encoding="utf-8")
