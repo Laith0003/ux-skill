@@ -888,6 +888,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
 
     token_docs: List[Any] = []
     built_docs: List[Any] = []
+    built_paths: List[Tuple[Path, Any]] = []
     css_files: List[Path] = []
     built_css: List[Path] = []
     for path in files:
@@ -900,6 +901,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
             if doc is not None:
                 if _is_built(path, base):
                     built_docs.append(doc)
+                    built_paths.append((path, doc))
                     add("built-output", path)
                 else:
                     token_docs.append(doc)
@@ -969,9 +971,11 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     colors: List[Tuple[str, str]] = []
     font_tokens: List[Tuple[str, str]] = []
     raw_colors: List[Tuple[str, str]] = []
+    read_from: List[Any] = []
     for tier in (source_docs, token_docs, built_docs):
         if tier:
             colors, font_tokens, raw_colors = _read_colors(tier)
+            read_from = tier
             if colors:
                 break
 
@@ -992,6 +996,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
             css_fonts.append((name.lstrip("-"), _first_family(resolved, css_props)))
 
     declared: Dict[str, Any] = {}
+    primary_file: Optional[Path] = None
     from engine.io.tailwind_config import read_theme  # engine.io imports this package
     theme = read_theme([base], [p for p in html_files if survey.is_style(p)], base=base)
     cands = _primary_candidates(colors)
@@ -1007,6 +1012,8 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
             declared["primary"] = p_hex
             declared["primary_token"] = p_name
             declared["primary_from"] = p_from
+            primary_file = _primary_file(p_name, p_hex, p_from, read_from,
+                                         [*doc_paths, *built_paths], css_files + built_css)
             if len(cands) > 1 or cands[0][2] not in _PRIMARY_WORDS:
                 declared["primary_why"] = why
         else:
@@ -1064,7 +1071,7 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
         html_files, _reading, flatten_dtcg)
     if disagree:
         declared["disagreements"] = disagree
-        reports = _primary_reports(declared, disagree)
+        reports = _primary_reports(declared, disagree, base, primary_file)
         if reports:
             declared["primary_reports"] = reports
 
@@ -1074,15 +1081,38 @@ def detect_existing_system(root: Any = ".") -> Dict[str, Any]:
     return result
 
 
-def _primary_reports(declared: Dict[str, Any], disagree: List[Dict[str, Any]]) -> str:
+def _primary_file(name: str, hx: str, kind: str, tier: List[Any],
+                  docs: List[Tuple[Path, Any]], sheets: List[Path]) -> Optional[Path]:
+    """The file detect read the primary from: the token file in the tier
+    it read whose token of that name holds the value, or the first
+    stylesheet that sets the property, as the stylesheets are read."""
+    if kind == "tokens":
+        for path, doc in docs:
+            if any(doc is d for d in tier) and any(
+                    n == name and (normalize_color(t.get("value")) or "").upper() == hx.upper()
+                    for n, t in flatten_dtcg(doc).items()):
+                return path
+        return None
+    for path in sheets:
+        if name in css_custom_properties(_read_text(path)):
+            return path
+    return None
+
+
+def _primary_reports(declared: Dict[str, Any], disagree: List[Dict[str, Any]], base: Path,
+                     read: Optional[Path]) -> str:
     """Which value ``primary`` reports when the file it was read from and
-    the rendered page disagree on it: the token file's (or the first
-    stylesheet's) value, named by file and line, and the value the page
-    shows from the file that wins the cascade, with the fix. Empty when
-    they agree, or when the cascade does not decide the page's value."""
+    the rendered page disagree on it: that file's value, named by file and
+    line, and the value the page shows from the file that wins the
+    cascade, with the fix. Empty when they agree, when the cascade does not
+    decide the page's value, or when the file read is not known."""
     hx, name = declared.get("primary"), declared.get("primary_token", "")
-    if not hx or not name:
+    if not hx or not name or read is None:
         return ""
+    try:
+        rel = read.relative_to(base).as_posix()
+    except ValueError:
+        rel = read.name
     key = survey.token_key(name)
     for entry in disagree:
         if entry.get("theme") or not entry.get("wins"):
@@ -1094,19 +1124,16 @@ def _primary_reports(declared: Dict[str, Any], disagree: List[Dict[str, Any]]) -
         page = normalize_color(shown[0]["value"]) if shown else None
         if not page or page.upper() == hx.upper():
             return ""
-        tokens = declared.get("primary_from") == "tokens"
-        same = [r for r in rows if (normalize_color(r["value"]) or "").upper() == hx.upper()
-                and ("selector" in r) != tokens]
-        if not same:
-            return ""
-        src = same[0]
-        why = ("detect reads the token file first, as the system's own word" if tokens else
-               "the first stylesheet detect read that sets it")
-        return (f"primary is {hx}, the value {src['path']}:{src['line']} gives {src['token']}: "
-                f"{why}. The rendered page shows {page}, set in {shown[0]['path']}:"
-                f"{shown[0]['line']}, which wins the cascade. Make the two agree "
-                f"(disagreements names every place), or pass {page} as the brand primary by "
-                "hand to build from what the page shows.")
+        own = next((r for r in rows if r["path"] == rel), None)
+        where = f"{rel}:{own['line']}" if own else rel
+        token = own["token"] if own else name
+        why = ("detect reads the token file first, as the system's own word"
+               if declared.get("primary_from") == "tokens"
+               else "the first stylesheet detect read that sets it")
+        return (f"primary is {hx}, the value {where} gives {token}: {why}. The rendered page "
+                f"shows {page}, set in {shown[0]['path']}:{shown[0]['line']}, which wins the "
+                f"cascade. Make the two agree (disagreements names every place), or pass "
+                f"{page} as the brand primary by hand to build from what the page shows.")
     return ""
 
 

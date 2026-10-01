@@ -178,6 +178,24 @@ def test_primary_read_from_a_stylesheet_names_it_when_another_wins(tmp_path: Pat
         "app/globals.css:2, which wins the cascade.")
 
 
+def test_primary_names_the_token_file_detect_read_never_a_document(tmp_path: Path) -> None:
+    # Only built output holds the tokens; DESIGN.md says the same value.
+    _write(tmp_path, "tokens/dist/tokens.json",
+           '{"brand": {"primary": {"$type": "color", "$value": "#1F5FAA"},\n'
+           '  "ink": {"$type": "color", "$value": "#111111"}}}')
+    _write(tmp_path, "DESIGN.md", "# Palette\n\n| Token | Value |\n|---|---|\n"
+                                  "| `brand.primary` | #1F5FAA |\n")
+    _write(tmp_path, "styles/tokens.css", ":root {\n  --brand-primary: #1F5FAA;\n"
+                                          "  --ink: #111111;\n  --gap: 4px;\n}\n")
+    _write(tmp_path, "app/globals.css", "html:root {\n  --brand-primary: #2A6FBB;\n"
+                                        "  --ink: #111111;\n  --gap: 4px;\n}\n")
+    declared = detect_existing_system(tmp_path)["declared"]
+    assert declared["primary"] == "#1F5FAA"
+    said = declared["primary_reports"]
+    assert said.startswith("primary is #1F5FAA, the value tokens/dist/tokens.json gives brand.primary")
+    assert "DESIGN.md" not in said.split(". The rendered page")[0]
+
+
 def test_primary_says_nothing_more_when_the_page_shows_its_value(tmp_path: Path) -> None:
     _write(tmp_path, "tokens/tokens.json",
            '{"brand": {"primary": {"$type": "color", "$value": "#1F5FAA"}}}')
