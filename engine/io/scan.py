@@ -43,7 +43,10 @@ namespace, in the names the Tailwind importer gives them (bg-ink reads
 color-ink from a v4 @theme, or colors.ink from a v3 theme exported as
 JSON); a numeric spacing class reads the v4 --spacing step. An arbitrary
 class (p-[13px]) is a raw value, and a bare value Tailwind writes as it is
-(z-10, duration-150, border-2) is raw too. A value class that names no
+(z-10, duration-150, border-2) is raw too, and so is a step of Tailwind's
+own spacing scale (px-6 is 24px, inset-0 is 0px) when the project's theme
+keeps that scale: a config or preset that extends spacing rather than
+replacing it, or an @theme block with no spacing reset. A value class that names no
 token is listed apart in unknown_classes, with the namespaces it was
 looked up in and a token of its name outside them (bg-primary against a
 bare --primary); a class that sets a keyword
@@ -215,6 +218,12 @@ FAMILY_WORDS: Dict[str, Tuple[str, ...]] = {
     "weight": ("weight", "bold"), "z": ("z", "layer", "zindex")}
 # Tailwind's default spacing step: p-6 is 6 of them, 24px.
 TAILWIND_STEP_PX = 4
+# The steps of Tailwind's default spacing scale (px is 1px); each is a raw
+# value when the project's theme keeps the scale (ThemeMap.keeps).
+TAILWIND_SPACING = frozenset((
+    "px", "0", "0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4", "5", "6", "7", "8", "9", "10",
+    "11", "12", "14", "16", "20", "24", "28", "32", "36", "40", "44", "48", "52", "56", "60",
+    "64", "72", "80", "96"))
 
 # Tailwind: utility prefix -> the theme namespaces its value may name, with
 # the family of a token found in each (v4 @theme names first, then v3 theme
@@ -1197,6 +1206,16 @@ class _Scanner:
         if ("spacing", "space") in spaces and _NUMERIC.fullmatch(name) \
                 and self.token("spacing"):
             self.add(at, utility, "space", "token", self.token("spacing")[0], text, state)
+            return
+        if ("spacing", "space") in spaces and name in TAILWIND_SPACING \
+                and self.theme.keeps("spacing"):
+            # Tailwind's own spacing step, kept by a theme that extends the
+            # scale rather than replacing it: a raw value, never a missing
+            # token.
+            px = 1 if name == "px" else float(name) * TAILWIND_STEP_PX
+            self.tailwind = True
+            self.add(at, utility, "space", "raw", _signed(f"{px:g}px", negative), text, state,
+                     from_class=True)
             return
         literal = self._bare(prefix, name, spaces)
         if literal is not None:

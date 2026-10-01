@@ -76,11 +76,21 @@ class ThemeEntry:
 
 @dataclass
 class ThemeMap:
-    """(namespace, name) -> entry, the files read, and what was not read as
-    (file, line, text, why)."""
+    """(namespace, name) -> entry, the files read, what was not read as
+    (file, line, text, why), and the namespaces the theme replaces, in the
+    order read: a Tailwind 3 theme key set outside extend (spacing), or a
+    Tailwind 4 reset (--spacing-*: initial; "*" for --*: initial), so
+    Tailwind's own values in it are gone."""
     entries: Dict[Tuple[str, str], ThemeEntry] = field(default_factory=dict)
     files: List[str] = field(default_factory=list)
     not_read: List[Tuple[str, int, str, str]] = field(default_factory=list)
+    replaced: List[str] = field(default_factory=list)
+
+    def keeps(self, namespace: str) -> bool:
+        """Whether Tailwind's own values in a namespace still apply: a
+        theme was read (a config or an @theme block) and it does not
+        replace the namespace."""
+        return bool(self.files) and not {namespace, "*"} & set(self.replaced)
 
     def get(self, namespace: str, name: str) -> Optional[ThemeEntry]:
         return self.entries.get((namespace, name))
@@ -378,6 +388,8 @@ class _Reader:
         for ns, (replace, entries) in theme.items():
             if replace:
                 self.out.entries = {k: v for k, v in self.out.entries.items() if k[0] != ns}
+                if ns not in self.out.replaced:
+                    self.out.replaced.append(ns)
             for e in entries:
                 self.out.entries[(ns, e.name)] = e
 
@@ -532,6 +544,12 @@ def _theme_blocks(path: Path, label: str, out: ThemeMap) -> None:
         for d in rule.declarations:
             prop = d.name[2:]
             ns = next((n for n in NAMESPACES if prop.startswith(n + "-")), "")
+            if prop == "*" or (ns and prop == ns + "-*"):
+                # A reset clears Tailwind's own values in the namespace.
+                if d.value.strip() == "initial" and (ns or "*") not in out.replaced:
+                    out.replaced.append(ns or "*")
+                read = True
+                continue
             if not ns:
                 continue
             name = prop[len(ns) + 1:]
