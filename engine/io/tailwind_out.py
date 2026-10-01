@@ -34,8 +34,10 @@ stylesheet (namespaced) keeps each name and gives a token outside
 Tailwind 4's theme namespaces a variable in the one its name and type
 say, so utilities read it: brand.canvas as --color-brand-canvas,
 type.size-body as --text-body, layout.breakpoint-md as --breakpoint-md
-with its value. What fits no namespace is listed, never passed over in
-silence:
+with its value, heading.text-shadow as --text-shadow-heading. The
+namespaces are the one list the theme reader uses too
+(tailwind_config.NAMESPACES). What fits no namespace, a duration among
+them, is listed, never passed over in silence:
 a system imported from a Tailwind stylesheet comes back with its own
 selectors, resets, scheme and `@custom-variant dark` line, so imported and
 written again the text is the same. Whether a system is the engine's is
@@ -67,6 +69,8 @@ from engine.foundations.values import REM_PX, css_entries, dimension_px
 from engine.io.adapter import ROLE_TYPES
 from engine.io.intake import write_with_intake
 from engine.io.report import Imported
+# Tailwind 4's theme namespaces, the one list the theme reader uses too.
+from engine.io.tailwind_config import NAMESPACES
 
 # Tailwind namespaces the exporter fills and clears first.
 RESETS: Tuple[str, ...] = ("--color-*", "--radius-*", "--shadow-*", "--ease-*",
@@ -209,11 +213,6 @@ def to_tailwind(ts: TokenSet, forms: Optional[Mapping[str, Tuple[str, str]]] = N
     return "\n".join(head) + "\n" + own + "\n".join(after)
 
 
-# Tailwind 4's theme namespaces: a variable in one of them makes utilities.
-NAMESPACES: Tuple[str, ...] = (
-    "color", "font", "text", "font-weight", "tracking", "leading", "breakpoint", "container",
-    "spacing", "radius", "shadow", "inset-shadow", "drop-shadow", "blur", "perspective",
-    "aspect", "ease", "animate")
 _NS_WORDS: Tuple[Tuple[Tuple[str, ...], str, Tuple[str, ...]], ...] = (
     # (words that name it, the namespace, the token types it holds)
     (("breakpoint", "breakpoints", "screen", "screens", "bp"), "breakpoint", ("dimension",)),
@@ -255,7 +254,14 @@ def namespaced(ts: TokenSet) -> Tuple[TokenSet, List[Tuple[str, str]], List[str]
             continue
         words = _words(t.path)
         name = ""
-        for marks, ns, kinds in _NS_WORDS:
+        # A shadow named for text (text-shadow) is a text shadow: Tailwind
+        # sets it with text-shadow-*, never as a box shadow.
+        at = next((i for i in range(1, len(words)) if words[i - 1:i + 1] == ["text", "shadow"]),
+                  None)
+        if at is not None and t.type == "shadow":
+            rest = words[at + 1:] or words[:at - 1][-1:]
+            name = f"text-shadow-{'-'.join(rest)}" if rest else ""
+        for marks, ns, kinds in () if name else _NS_WORDS:
             hit = next((i for i, w in enumerate(words) if w in marks), None)
             if hit is not None and t.type in kinds and (ns != "text" or any(
                     w in ("type", "text", "font", "typography") for w in words[:hit])

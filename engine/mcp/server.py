@@ -374,7 +374,7 @@ _MCP_LABELS = {"from": "source", "format": "format", "out": "out", "force": "for
                "mapping": "mapping", "add": "add", "add_role": "add_role", "to": "to",
                "brand": "brand", "axes": "axes", "brief": "brief", "tokens": "tokens",
                "latin_only": "latin_only", "scheme": "scheme", "figma_mode": "figma_modes",
-               "import": "ux_system_import", "add_mode": "add_modes"}
+               "import": "ux_system_import", "add_mode": "add_modes", "scan": "scan"}
 # The most folded problem lines a contract check returns over MCP.
 _PROBLEM_CAP = 40
 

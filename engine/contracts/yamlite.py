@@ -179,11 +179,17 @@ _BLOCK = re.compile(r"(?P<head>(?:- )?(?:[^:\"'\[{#]*?: )?)(?P<style>[|>])"
 def _block_scalar(raws: List[str], at: int, indent: int, head: str, m: "re.Match[str]",
                   source: str) -> Tuple[str, int]:
     """(the text of the block scalar whose header is on raws[at], the index
-    of the first line after it). Its lines are those after the header
-    indented deeper than the node it is the value of (the key, the list
-    item, or nothing at the document's root), and blank lines among and
-    after them; | keeps each line break, > folds a break between two lines
-    of text into a space."""
+    of the first line after it), read as the YAML spec reads block text.
+
+    Its indentation is the digit's, counted from the node it is the value
+    of (the key, the list item, or nothing at the document's root), or else
+    the first line of text's. Each line at that indentation is a line of
+    text from there on, so spaces past it are text, a line of spaces
+    included; a shorter line of spaces is an empty line. | keeps each line
+    break and > folds a break between two lines of text that start with no
+    space into a space. Chomping then keeps the final line break (none),
+    drops it (-) or keeps every trailing one (+), and the last line of a
+    document without a final line break has no break to keep."""
     style = m.group("style")
     chomp = m.group("chomp1") or m.group("chomp2") or ""
     digit = m.group("digit1") or m.group("digit2")
@@ -193,57 +199,91 @@ def _block_scalar(raws: List[str], at: int, indent: int, head: str, m: "re.Match
         parent = indent + 2    # the key of a map that opens on a list item's line
     else:
         parent = indent
-    width = parent + int(digit) if digit else None
-    lines: List[str] = []
-    i = at + 1
-    while i < len(raws):
-        raw = raws[i]
-        if not raw.strip(" "):
-            # Spaces past the block's indent are text, as any YAML reader
-            # keeps them; a shorter blank line is an empty line.
-            lines.append(raw[width:] if width is not None and len(raw) > width else "")
-            i += 1
-            continue
-        lead = len(raw) - len(raw.lstrip(" "))
-        if width is None:
-            if lead <= parent:
-                break
-            width = lead
-        if lead < width:
-            if lead > parent:
-                raise _fail(source, i + 1, "this line of the block text is indented less than "
-                                           "its first line; line it up with the first")
-            break
-        if _CONTROL.search(raw):
-            raise _fail(source, i + 1, "the block text holds a control character; remove it")
-        lines.append(raw[width:])
-        i += 1
-    body = list(lines)
-    trailing = 0
-    while body and body[-1] == "":
-        body.pop()
-        trailing += 1
+    least = max(1, parent + 1)
+    # A cursor over the lines after the header: each line but the last ends
+    # with a line break, and the last ends the document. It moves line by
+    # line, so a block reads only to its own end.
+    col, line = 0, at + 1
+    last = len(raws) - 1
+
+    def peek() -> str:
+        if line > last:
+            return "\0"
+        raw = raws[line]
+        if col < len(raw):
+            return raw[col]
+        return "\n" if line < last else "\0"
+
+    def next_line() -> None:
+        nonlocal col, line
+        col, line = 0, line + 1
+
+    def breaks_to(width: int) -> List[str]:
+        """The line breaks of the empty lines ahead, each line's spaces up
+        to `width` skipped."""
+        nonlocal col
+        found: List[str] = []
+        while True:
+            while col < width and peek() == " ":
+                col += 1
+            if peek() != "\n":
+                return found
+            found.append("\n")
+            next_line()
+
+    deepest = (0, 0)   # (the most spaces on a line before the text, its line)
+    if digit:
+        width = least + int(digit) - 1
+        breaks = breaks_to(width)
+    else:
+        breaks = []
+        while peek() in " \n":
+            if peek() == "\n":
+                breaks.append("\n")
+                next_line()
+            else:
+                col += 1
+                deepest = max(deepest, (col, line))
+        width = max(least, deepest[0])
     chunks: List[str] = []
-    breaks, first, last_plain = 0, True, False
-    for line in body:
-        if line == "":
-            breaks += 1
-            continue
-        plain = not line.startswith((" ", "\t"))
-        if first:
-            chunks.append("\n" * breaks)
-        elif style == ">" and last_plain and plain:
-            chunks.append("\n" * breaks if breaks else " ")
+    line_break = ""
+    while col == width and peek() != "\0":
+        chunks.extend(breaks)
+        plain = peek() not in " \t"
+        content = raws[line][col:]
+        if _CONTROL.search(content):
+            raise _fail(source, line + 1, "the block text holds a control character; remove it")
+        chunks.append(content)
+        col = len(raws[line])
+        line_break = ""
+        if peek() == "\n":
+            line_break = "\n"
+            next_line()
+        breaks = breaks_to(width)
+        if col != width or peek() == "\0":
+            break
+        if style == ">" and line_break and plain and peek() not in " \t":
+            if not breaks:
+                chunks.append(" ")
         else:
-            chunks.append("\n" * (breaks + 1))
-        chunks.append(line)
-        first, breaks, last_plain = False, 0, plain
-    text = "".join(chunks)
+            chunks.append(line_break)
+    if parent < col < width and peek() not in "\0\n":
+        if digit:
+            raise _fail(source, line + 1, f"this line of the block text is indented less than "
+                                          f"the {digit} in its header asks; indent it "
+                                          f"{width} spaces, or drop the digit")
+        if not chunks and deepest[0] == width:
+            raise _fail(source, deepest[1] + 1, "this line of spaces before the block text "
+                                                "holds more spaces than its first line; remove "
+                                                "its spaces or line them up with that line")
+        raise _fail(source, line + 1, "this line of the block text is indented less than "
+                                      "its first line; line it up with the first")
+    if chomp != "-":
+        chunks.append(line_break)
     if chomp == "+":
-        text += "\n" * ((1 if body else 0) + trailing)
-    elif chomp == "" and body:
-        text += "\n"
-    return text, i
+        chunks.extend(breaks)
+    # At the end of the document every line was read, the last included.
+    return "".join(chunks), (len(raws) if peek() == "\0" else line)
 
 
 def _as_quoted(text: str) -> str:
