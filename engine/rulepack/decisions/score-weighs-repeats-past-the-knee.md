@@ -19,7 +19,7 @@ Every finding costs its severity weight. Up to 50 points of penalty the score is
 
 ## Why
 
-A rule that fires 149 times is one pattern to fix, often in one template, not 149 problems; it should weigh more than one finding and less than 149 different ones. Keeping every score of 50 and up exactly as it was keeps the gate and every near-clean page where they were. Over the 114 pages, scores of 1 or 2 fell from 35 to 11 and distinct scores rose from 45 to 50, with no score of 50 or more changed.
+A rule that fires 149 times is one pattern to fix, often in one template, not 149 problems; it should weigh more than one finding and less than 149 different ones. Keeping every score of 50 and up exactly as it was keeps the gate and every near-clean page where they were. Over the 114 pages, scores of 1 or 2 fell from 35 to 11 and distinct scores rose from 45 to 49, with no score of 50 or more changed.
 
 ## What it touches
 
