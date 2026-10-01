@@ -1,0 +1,71 @@
+# Tabs: switch between views of one subject in place. Every value is a
+# semantic role.
+name: tabs
+status: experimental
+category: selection
+description: A row of tabs that switches between views of one subject in place, with one indicator under the selected tab.
+parts:
+  - {name: list, rtlBehavior: logical}
+  - {name: tab, rtlBehavior: logical}
+  - {name: indicator, rtlBehavior: logical}
+  - {name: panel, rtlBehavior: logical}
+variants: []
+states: [default, hover, focus, selected, disabled]
+tokens:
+  - {part: list, property: gap, role: space.control.gap}
+  - {part: list, property: border-width, role: border.outline}
+  - {part: list, property: border-color, role: color.line.subtle}
+  - {part: tab, property: text, role: color.text.muted}
+  - {part: tab, property: font, role: type.text.ui}
+  - {part: tab, property: min-size, role: layout.target.min}
+  - {part: tab, property: padding-inline, role: space.control.padding-inline}
+  - {part: tab, property: padding-block, role: space.control.padding-block}
+  - {part: tab, property: text, role: color.text.default, state: hover}
+  - {part: tab, property: text, role: color.text.default, state: selected}
+  - {part: tab, property: font-weight, role: type.strong, state: selected}
+  - {part: tab, property: text, role: color.text.disabled, state: disabled}
+  - {part: tab, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: tab, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: tab, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  # one indicator for the whole list: it fades in the first time, slides to
+  # the selected tab after that, and snaps under reduced motion
+  - {part: indicator, property: fill, role: color.line.selected}
+  - {part: indicator, property: border-width, role: border.active}
+  - {part: indicator, property: transition-duration, role: motion.indicator.duration}
+  - {part: indicator, property: transition-curve, role: motion.indicator.curve}
+  - {part: indicator, property: enter-duration, role: motion.indicator.duration}
+  - {part: indicator, property: enter-curve, role: motion.indicator.curve}
+  - {part: panel, property: padding-block, role: space.group.gap}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: tab, property: transition-duration, role: motion.state.duration}
+  - {part: tab, property: transition-curve, role: motion.state.curve}
+contrast:
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page, color.surface.card]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: the selected tab carries aria-selected, the heavier weight and the indicator under it, never color alone
+copy:
+  default:
+    - Name each tab with one or two words for the view it shows, never a verb
+    - Keep every label to one line; when the labels do not fit, scroll the list rather than wrap
+usage:
+  do:
+    - Use role tablist on the list, role tab with aria-selected and aria-controls on each tab, and role tabpanel on the panel
+    - Move between tabs with the arrow keys; Tab moves into the panel, and only the selected tab is in the tab order
+    - Draw one indicator for the list at the selected tab's block end. It fades in the first time it appears, slides to the newly selected tab after that on motion.indicator, and snaps under reduced motion, where motion.indicator resolves to 0ms
+    - Animate only the indicator's inline position and inline size, never the tabs, so nothing beside it moves
+    - Keep a disabled tab visible and focusable with aria-disabled, and say near the list why it cannot be opened
+    - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, selected keeps its weight and text, and hover changes nothing more
+  dont:
+    - Do not use tabs to step through a sequence; use a progress or a stepper
+    - Do not show the selected tab by color alone
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

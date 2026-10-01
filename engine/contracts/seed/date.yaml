@@ -83,6 +83,11 @@ tokens:
   - {part: input, property: text, role: color.text.disabled, state: disabled}
   - {part: day, property: text, role: color.text.disabled, state: disabled}
   - {part: button, property: icon, role: color.text.disabled, state: disabled}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: day, property: transition-duration, role: motion.state.duration}
+  - {part: day, property: transition-curve, role: motion.state.curve}
+  - {part: input, property: transition-duration, role: motion.state.duration}
+  - {part: input, property: transition-curve, role: motion.state.curve}
 contrast:
   - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
   - {fg: color.line.input, bg: color.surface.card, minimum: 3, criterion: "1.4.11"}

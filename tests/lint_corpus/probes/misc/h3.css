@@ -1,0 +1,13 @@
+.card .actions { opacity: 0; }
+.card:hover .actions { opacity: 1; }
+.card:focus-within .actions { opacity: 1; }
+@media (hover: none) { .card .actions { opacity: 1; } }
+.row .more-menu { opacity: 0; }
+.row:hover .more-menu { opacity: 1; }
+.row:focus-within .more-menu { opacity: 1; }
+@media (hover: none) { .row .more-menu { opacity: 1; } }
+.tile .menu-trigger { opacity: 0; }
+.tile:hover .menu-trigger { opacity: 1; }
+.tile:focus-within .menu-trigger { opacity: 1; }
+.tile .menu-trigger[aria-expanded="true"] { opacity: 1; }
+@media (hover: none) { .tile .menu-trigger { opacity: 1; } }

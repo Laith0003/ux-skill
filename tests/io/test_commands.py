@@ -499,7 +499,7 @@ def test_export_opens_in_the_scheme_asked_and_a_stylesheet_keeps_its_own(tmp_pat
 def test_the_contract_check_passes_the_seeds_on_any_format(tmp_path):
     f = _files(tmp_path)
     result = run_contracts_check(SEED_DIR, f / "tokens.json")
-    assert result["status"] == "passed" and len(result["contracts"]) == 20
+    assert result["status"] == "passed" and len(result["contracts"]) == 23
     assert result["problems"] == []
     # A stylesheet is read through a mapping proposed from its names.
     css = run_contracts_check(SEED_DIR, f / "tokens.css")

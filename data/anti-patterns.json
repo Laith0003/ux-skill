@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 166,
+    "entries": 171,
     "last_updated": "2026-09-30",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -1760,17 +1760,19 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "\\.(?:card|item|tile)[^{]*\\{[^}]*\\}[\\s\\S]{0,300}?\\.(?:card|item|tile)[^:]*:hover\\s+(?:\\.[^{\\s]+|[a-z]+)[^{]*\\{[^}]*opacity\\s*:\\s*1|opacity\\s*:\\s*0(?![.\\d])[^}]*\\}[\\s\\S]{0,300}?:hover[\\s\\S]{0,100}?opacity\\s*:\\s*1",
+        "pattern": "opacity\\s*:\\s*0(?![.\\d])",
         "flags": "im",
         "scope": [
           "css",
-          "scss"
+          "scss",
+          "html",
+          "vue"
         ],
         "target": "css",
         "post": "hover-only-reveal"
       },
-      "why": "Card actions hidden at opacity: 0 and revealed only on :hover are invisible to touch users, keyboard users, and anyone using assistive tech - the action does not exist for most of your audience. WCAG 2.1.1 and 1.4.13 failure.",
-      "fix": "Show card actions persistently at reduced visual weight (lower opacity, smaller scale, secondary color), or make them reachable via a visible focus-state. Hover is a progressive disclosure, never the only path."
+      "why": "Card actions hidden at opacity: 0 and revealed only on :hover do not exist for touch users, and a keyboard user who tabs onto one sees no control and no focus indicator (2.4.7). The reveal passes only when it also shows the control on focus inside the card, shows it where there is no hover, and keeps it while a menu it opens is open.",
+      "fix": "Reveal the control on :focus-within of its card as well as :hover; hide it only inside @media (hover: hover), or show it again under @media (hover: none); and when it opens a menu, keep it shown while aria-expanded is true (.card .actions:has([aria-expanded=\"true\"]) { opacity: 1 }). Or show the actions all the time at a lower weight."
     },
     {
       "id": "aria-hidden-on-interactive",
@@ -3824,6 +3826,121 @@
       },
       "why": "A loop that never ends (a marquee, a glow, a floating shape) keeps moving for a person who asked their system for less motion. It passes when it runs only under prefers-reduced-motion: no-preference (or not reduce), when a reduced-motion query stops it on its selector or on every element, or when it is a progress indicator. A loop declared inside a reduce query runs only for people who asked for less motion and is reported.",
       "fix": "Wrap the animation in @media (prefers-reduced-motion: no-preference), or stop it in @media (prefers-reduced-motion: reduce) with animation: none. Anything that moves on its own for more than five seconds beside other content also needs a pause control (2.2.2)."
+    },
+    {
+      "id": "focusable-at-opacity-zero",
+      "name": "Focusable control left at opacity 0",
+      "severity": "medium",
+      "category": "Accessibility",
+      "detection": {
+        "type": "regex",
+        "pattern": "opacity\\s*:\\s*0(?![.\\d])",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": "css",
+        "post": "focusable-hidden-by-opacity"
+      },
+      "why": "Opacity 0 hides a control from sight and nothing else: Tab still lands on it and a screen reader still reads it, so a closed menu's links or a faded-out button take focus that no one can see (2.4.7 asks for a visible focus indicator).",
+      "fix": "Pair opacity 0 with visibility: hidden (delayed by the exit duration, so the fade still runs), display: none once the exit ends, or the inert or hidden attribute on the closed panel. A control revealed on hover is judged by hover-only-card-actions."
+    },
+    {
+      "id": "exit-cut-by-display-none",
+      "name": "Exit animation cut by display: none",
+      "severity": "low",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "display\\s*:\\s*none",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": "css",
+        "post": "exit-cut-short"
+      },
+      "why": "A popover or menu that fades on a transition but sets display: none in its closed state disappears at the first frame of its exit: the fade the system's motion.dismiss role defines never shows.",
+      "fix": "Keep the exit running until it ends: transition display with allow-discrete (transition: opacity 200ms, display 200ms allow-discrete), or set hidden or inert from script when transitionend fires."
+    },
+    {
+      "id": "theme-switch-animates-everything",
+      "name": "Theme switch animates every color on the page",
+      "severity": "low",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?<![\\w-])transition\\s*:[^;{}]+",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": "css",
+        "post": "theme-transition-unsuspended"
+      },
+      "why": "A transition on every element's colors turns a theme switch into a slow wash across the whole page, with text passing through low contrast on its way, and it fights the transitions the components declare.",
+      "fix": "Suspend transitions for the frame the theme changes in: add a class such as theme-switching to the root, set .theme-switching * { transition: none !important }, switch the theme, and remove the class on the next animation frame."
+    },
+    {
+      "id": "repeated-action-same-name",
+      "name": "Actions in repeated items share one name",
+      "severity": "medium",
+      "category": "Accessibility",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|a)\\b[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "repeated-action-same-name"
+      },
+      "why": "Three buttons named Save in a list read as Save, Save, Save in a screen reader's list of controls, and a voice user who says the name cannot pick one. The item the action belongs to has to be in its accessible name.",
+      "fix": "Put the item in the name: aria-label=\"Save Lamb flatbread\", a visually hidden span after the visible word, or aria-labelledby naming the button and the item's title."
+    },
+    {
+      "id": "menu-row-disabled-without-reason",
+      "name": "Disabled menu row with no reason",
+      "severity": "medium",
+      "category": "Accessibility",
+      "detection": {
+        "type": "regex",
+        "pattern": "<[a-z][\\w-]*\\b[^>]*\\brole\\s*=\\s*[\"']menuitem(?:checkbox|radio)?[\"'][^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "menu-row-disabled-silent"
+      },
+      "why": "A menu row disabled with the disabled attribute drops out of the arrow keys' path, so a keyboard user never learns it exists; one marked aria-disabled with no reason leaves the person guessing why it cannot be used.",
+      "fix": "Keep the row in place with aria-disabled=\"true\" instead of disabled, and give its reason in words beside the label, tied to the row with aria-describedby."
     }
   ]
 }

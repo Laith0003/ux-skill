@@ -27,6 +27,8 @@ tokens:
   - {part: track, property: fill, role: color.line.selected, state: selected}
   - {part: track, property: fill, role: color.action.danger, when: {tone: danger}, state: selected}
   - {part: track, property: min-size, role: layout.target.min}
+  - {part: track, property: transition-duration, role: motion.state.duration}
+  - {part: track, property: transition-curve, role: motion.state.curve}
   - {part: label, property: text, role: color.text.default}
   - {part: track, property: focus-ring, role: color.focus.ring, state: focus}
   - {part: track, property: focus-ring-width, role: border.focus-ring.width, state: focus}
@@ -146,7 +148,7 @@ def test_states_come_back_in_the_fixed_order():
     (lambda d: d["tokens"].pop(3), "bad-a11y",
      "toggle: a11y.target is layout.target.min, but no part binds min-size to it; bind "
      "min-size on the part a person presses"),
-    (lambda d: d["tokens"].pop(5), "bad-a11y",
+    (lambda d: d["tokens"].pop(7), "bad-a11y",
      "toggle: an action component shows focus, but no binding sets focus-ring in the focus "
      "state; bind it"),
     (lambda d: d["a11y"].update(label="english"), "bad-a11y",

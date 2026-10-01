@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Iterable, List, Sequence
 
 from engine.linter.core import Finding, LintReport, SEVERITY_RANK, compute_score
-from engine.render import taste
+from engine.render import interact, taste
 
 # Phone, large phone, tablet, desktop. Some drift only exists between
 # breakpoints (a max-width that is wider than a phone column but narrower
@@ -119,6 +119,7 @@ _RULES = {
              "never finishes loading, or a page error, in the message."),
         what="not measured: {error} ({vw}px viewport)"),
     **taste.RULES,
+    **interact.RULES,
 }
 
 
@@ -198,6 +199,19 @@ async def _motion(browser, sem, f: Path, w: int, h: int):
                 {"rule": "render-failed", "sel": "page", "cls": "", "text": "", "error": error}]}
 
 
+async def _interact(browser, sem, f: Path):
+    """Focus, timing and Escape on pages whose motion runs."""
+    async with sem:
+        try:
+            return {"vw": interact.WIDTHS[0][0],
+                    "findings": await interact.interaction_checks(browser, f)}
+        except Exception as exc:  # one page that hangs or errors must not stop the run
+            error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
+            return {"vw": interact.WIDTHS[0][0], "findings": [
+                {"rule": "render-failed", "sel": "page", "cls": "", "text": "",
+                 "error": "interaction pass: " + error}]}
+
+
 async def _run(files: List[Path], viewports: Sequence[tuple]):
     try:
         from playwright.async_api import async_playwright
@@ -214,10 +228,11 @@ async def _run(files: List[Path], viewports: Sequence[tuple]):
                 jobs.extend(_measure(browser, sem, f, w, h, desktop=(w, h) == wide)
                             for w, h in viewports)
                 jobs.append(_motion(browser, sem, f, *wide))
+                jobs.append(_interact(browser, sem, f))
             results = await asyncio.gather(*jobs)
         finally:
             await browser.close()
-    n = len(viewports) + 1
+    n = len(viewports) + 2
     return [results[i * n:(i + 1) * n] for i in range(len(files))]
 
 
@@ -242,7 +257,7 @@ def render_check(paths: Iterable[str], severity_threshold: str = "high",
                     severity=rule["severity"], category=rule["category"],
                     file=str(f), line=_locate(source, hit["cls"], hit["text"]),
                     column=0,
-                    excerpt=f'{hit["sel"]}: ' + rule["what"].format(vw=result["vw"], **hit),
+                    excerpt=f'{hit["sel"]}: ' + rule["what"].format(**{"vw": result["vw"], **hit}),
                     fix=rule["fix"]))
 
     threshold = SEVERITY_RANK.get(severity_threshold, 2)

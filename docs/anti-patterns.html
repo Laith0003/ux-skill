@@ -1,31 +1,23 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z371T0DBW5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-Z371T0DBW5');
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>152 anti-pattern rules · the ux-skill linter catalogue</title>
-<meta name="description" content="The complete catalogue of 145 AI design-slop fingerprints caught by the ux-skill linter. 50 high, 63 medium, 26 low severity. Each rule includes regex, why it's bad, and the fix.">
+<title>171 anti-pattern rules · the ux-skill linter catalogue</title>
+<meta name="description" content="The complete catalogue of 171 AI design-slop fingerprints caught by the ux-skill linter. 56 high, 79 medium, 30 low severity. Each rule includes regex, why it's bad, and the fix.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
-<meta property="og:title" content="152 anti-pattern rules · the ux-skill linter catalogue">
-<meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse 152 rules from the deterministic linter that runs in &lt;50ms.">
+<meta property="og:title" content="171 anti-pattern rules · the ux-skill linter catalogue">
+<meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse 171 rules from the deterministic linter that runs in &lt;50ms.">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="152 anti-pattern rules · the ux-skill linter">
-<meta name="twitter:description" content="The complete linter catalogue. 50 high · 63 medium · 26 low severity.">
+<meta name="twitter:title" content="171 anti-pattern rules · the ux-skill linter">
+<meta name="twitter:description" content="The complete linter catalogue. 56 high · 79 medium · 30 low severity.">
 <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","name":"152 anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
+{"@context":"https://schema.org","@type":"WebPage","name":"171 anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Anti-pattern rules","item":"https://uxskill.laithjunaidy.com/anti-patterns.html"}]}
@@ -95,6 +87,7 @@
   .ap-pre--rx { border-left: 2px solid var(--accent); color: var(--muted); font-size: 11px; margin-bottom: 8px; }
   .ap-anchor { position: absolute; top: 18px; right: 18px; font-family: var(--mono); font-size: 10px; color: var(--muted); padding: 2px 6px; border: 1px solid var(--hairline); border-radius: 4px; opacity: 0; transition: opacity var(--t-fast) var(--ease); }
   .ap-card:hover .ap-anchor, .ap-card:focus-within .ap-anchor { opacity: 1; }
+  @media (hover: none) { .ap-anchor { opacity: 1; } }
   .ap-card.is-hidden { display: none; }
 
   .nav { padding: 22px 0; border-bottom: 1px solid var(--hairline); }
@@ -108,398 +101,39 @@
   @media (max-width: 640px) {
     .grid { grid-template-columns: 1fr; }
   }
-
-    /* Arabic typography: IBM Plex Sans Arabic for the whole Arabic page (v3.0.4 sweep) */
-    html[lang="ar"] body,
-    html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3, html[lang="ar"] h4,
-    html[lang="ar"] p, html[lang="ar"] li, html[lang="ar"] a, html[lang="ar"] button,
-    html[lang="ar"] .pill-tag, html[lang="ar"] .eyebrow, html[lang="ar"] .nav__link,
-    html[lang="ar"] .wordmark { font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif !important; font-variation-settings: normal; }
-    html[lang="ar"] code, html[lang="ar"] pre { font-family: 'JetBrains Mono', ui-monospace, monospace !important; }
+  .docfig { margin: 32px 0; border: 1px solid rgba(255,255,255,0.10); border-radius: 14px; overflow: hidden; background: #0b0d12; }
+  .docfig img { display: block; width: 100%; height: auto; }
+  .docfig figcaption { margin: 0; padding: 12px 16px; font-size: 13px; line-height: 1.5; color: #8a8f96; border-top: 1px solid rgba(255,255,255,0.08); }
+  .docfig--narrow { max-width: 720px; }
 </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Bricolage Grotesque (display, variable), Inter (body), JetBrains Mono (mono) -->
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style id="unified-nav-css">
-    /* ============================================================
-       UNIFIED SITE NAV (v3.0.3)
-       Canonical source: docs/index.html
-       ============================================================ */
-    :root {
-      --nav-t-fast: 160ms;
-      --nav-t-mid: 280ms;
-      --nav-ease: cubic-bezier(0.22, 1, 0.36, 1);
-      --nav-r-pill: 999px;
-      --nav-r-md: 8px;
-      --nav-gutter: clamp(20px, 4vw, 48px);
-      --nav-max-w: 1180px;
-      --nav-canvas: #07080a;
-      --nav-ink: #f6f7f9;
-      --nav-body: #c7ccd3;
-      --nav-muted: #8a8f96;
-      --nav-hairline: rgba(246, 247, 249, 0.07);
-      --nav-hairline-2: rgba(246, 247, 249, 0.14);
-      --nav-accent-fallback: #f59e0b;
-      --nav-display: 'Bricolage Grotesque', 'Inter Tight', system-ui, sans-serif;
-      --nav-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
-      --nav-body-face: 'Inter', system-ui, -apple-system, sans-serif;
-    }
-
-    /* All canonical nav rules are prefixed with #nav or #nav-drawer
-       so they always win against page-local .nav / .wordmark / .nav__link
-       rules left over in the page CSS (specificity (0,1,1,0) > (0,0,1,0)). */
-
-    #nav.nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 80;
-      padding: 14px 0;
-      transition: backdrop-filter var(--nav-t-mid) var(--nav-ease),
-                  background-color var(--nav-t-mid) var(--nav-ease),
-                  border-color var(--nav-t-mid) var(--nav-ease);
-      border-bottom: 1px solid transparent;
-    }
-    #nav.nav.is-scrolled {
-      background: rgba(7, 8, 10, 0.72);
-      backdrop-filter: saturate(140%) blur(18px);
-      -webkit-backdrop-filter: saturate(140%) blur(18px);
-      border-bottom-color: var(--hairline, var(--nav-hairline));
-    }
-    #nav .nav__inner {
-      max-width: var(--max-w, var(--nav-max-w));
-      margin: 0 auto;
-      padding: 0 var(--gutter, var(--nav-gutter));
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 18px;
-    }
-    #nav .wordmark {
-      font-family: var(--display, var(--nav-display));
-      font-variation-settings: 'wdth' 92, 'opsz' 96, 'wght' 620;
-      font-size: 24px;
-      letter-spacing: -0.025em;
-      line-height: 1;
-      color: var(--ink, var(--nav-ink));
-      display: inline-flex;
-      align-items: baseline;
-      gap: 4px;
-      text-decoration: none;
-      text-transform: none;
-    }
-    #nav .wordmark:hover { text-decoration: none; }
-    #nav .wordmark__dot {
-      display: inline-block;
-      width: 7px; height: 7px;
-      border-radius: 2px;
-      background: var(--accent, var(--nav-accent-fallback));
-      transform: none;
-      margin-left: 0;
-    }
-    #nav .nav__links {
-      display: flex; gap: 22px;
-      align-items: center;
-    }
-    #nav .nav__link {
-      font-family: var(--mono, var(--nav-mono));
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--muted, var(--nav-muted));
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: color var(--nav-t-fast) var(--nav-ease);
-    }
-    #nav .nav__link:hover,
-    #nav .nav__link:focus-visible { color: var(--ink, var(--nav-ink)); text-decoration: none; }
-    #nav .nav__link.is-current { color: var(--ink, var(--nav-ink)); }
-    #nav .nav__cta,
-    #nav .cta-pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 14px;
-      min-height: 0;
-      background: transparent;
-      border: 1px solid var(--hairline-2, var(--nav-hairline-2));
-      border-radius: var(--r-pill, var(--nav-r-pill));
-      font-family: var(--mono, var(--nav-mono));
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--ink, var(--nav-ink));
-      text-decoration: none;
-      transition: border-color var(--nav-t-fast) var(--nav-ease),
-                  background-color var(--nav-t-fast) var(--nav-ease),
-                  transform var(--nav-t-fast) var(--nav-ease);
-    }
-    #nav .nav__cta:hover,
-    #nav .cta-pill:hover {
-      border-color: var(--accent, var(--nav-accent-fallback));
-      background: transparent;
-      transform: none;
-    }
-    #nav .nav__menu-btn {
-      display: none;
-      width: 38px; height: 38px;
-      align-items: center; justify-content: center;
-      border: 1px solid var(--hairline, var(--nav-hairline));
-      border-radius: var(--r-md, var(--nav-r-md));
-      color: var(--ink, var(--nav-ink));
-      background: transparent;
-      cursor: pointer;
-    }
-    @media (max-width: 880px) {
-      #nav .nav__links { display: none; }
-      #nav .nav__cta, #nav .cta-pill { display: none; }
-      #nav .nav__menu-btn { display: inline-flex; }
-    }
-
-    #nav-drawer.nav__drawer {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      inset: auto;
-      z-index: 90;
-      background: var(--canvas, var(--nav-canvas));
-      padding: 22px var(--gutter, var(--nav-gutter)) 44px;
-      display: flex; flex-direction: column; gap: 18px;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-8px);
-      transition: opacity var(--nav-t-mid) var(--nav-ease),
-                  transform var(--nav-t-mid) var(--nav-ease);
-      overflow-y: auto;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-    }
-    #nav-drawer.nav__drawer.is-open {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
-    #nav-drawer a {
-      font-family: var(--display, var(--nav-display));
-      font-variation-settings: 'wdth' 90, 'opsz' 80, 'wght' 540;
-      font-size: 28px;
-      letter-spacing: -0.015em;
-      color: var(--ink, var(--nav-ink));
-      text-decoration: none;
-      padding: 6px 0;
-      border-bottom: none;
-      display: block;
-    }
-    #nav-drawer .nav__drawer-top {
-      position: static;
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 4px;
-    }
-    #nav-drawer .nav__drawer-close {
-      position: static;
-      width: 38px; height: 38px;
-      display: inline-flex; align-items: center; justify-content: center;
-      border: 1px solid var(--hairline, var(--nav-hairline));
-      border-radius: var(--r-md, var(--nav-r-md));
-      color: var(--ink, var(--nav-ink));
-      background: transparent;
-      cursor: pointer;
-    }
-    #nav-drawer .nav__drawer-langs-details summary {
-      list-style: none;
-      cursor: pointer;
-      padding: 12px 0;
-      display: flex; align-items: center; justify-content: space-between;
-      border-top: 1px solid var(--hairline, var(--nav-hairline));
-      border-bottom: 1px solid var(--hairline, var(--nav-hairline));
-      font-family: var(--mono, var(--nav-mono));
-      font-size: 12px;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--muted, var(--nav-muted));
-    }
-    #nav-drawer .nav__drawer-langs-details summary::-webkit-details-marker { display: none; }
-    #nav-drawer .nav__drawer-langs-summary-label { display: inline-flex; align-items: center; gap: 10px; }
-    #nav-drawer .nav__drawer-langs-caret { transition: transform var(--nav-t-mid) var(--nav-ease); }
-    #nav-drawer .nav__drawer-langs-details[open] .nav__drawer-langs-caret { transform: rotate(180deg); }
-    #nav-drawer .nav__drawer-langs-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px 24px;
-      padding: 16px 0;
-    }
-    #nav-drawer .nav__drawer-langs-grid a {
-      font-family: var(--body-face, var(--nav-body-face));
-      font-size: 14px;
-      letter-spacing: 0;
-      text-transform: none;
-      color: var(--body, var(--nav-body));
-      padding: 4px 0;
-      border-bottom: none;
-    }
-    #nav-drawer .nav__drawer-langs-grid a:hover { color: var(--ink, var(--nav-ink)); }
-
-    /* RTL: nav inner flips */
-    html[dir="rtl"] #nav .nav__inner { direction: rtl; }
-
-    /* Defensive: when the fixed .nav is present, give layouts that
-       previously assumed an inline header (.wrap on blog/index,
-       .top/.toolbar on the catalogue pages) enough headroom so
-       content isn't hidden behind the nav. */
-    .wrap > main:first-of-type { padding-top: clamp(56px, 8vw, 80px); }
-    body > section.top:first-of-type,
-    body > .top:first-of-type { padding-top: clamp(96px, 12vw, 128px); }
-    body > section.toolbar { top: 64px; }
-  </style>
-<style id="usknav-css">  .sr-only,.skip-link:not(:focus){position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-  .skip-link:focus{position:fixed;top:8px;inset-inline-start:8px;width:auto;height:auto;clip:auto;padding:8px 14px;background:#f59e0b;color:#07080a;border-radius:6px;z-index:200;font-family:'Inter',system-ui,sans-serif;font-size:13px}
-  .usknav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:18px;
-    padding:0 clamp(16px,4vw,48px);block-size:56px;background:rgba(7,8,10,0.86);
-    backdrop-filter:saturate(150%) blur(14px);-webkit-backdrop-filter:saturate(150%) blur(14px);
-    border-block-end:1px solid rgba(255,255,255,0.08);font-family:'Inter',system-ui,sans-serif}
-  .usknav__brand{font-family:'Bricolage Grotesque','Inter',sans-serif;font-weight:700;font-size:17px;
-    color:#f6f7f9;text-decoration:none;letter-spacing:-0.01em;margin-inline-end:auto;padding:6px 2px}
-  .usknav__links{display:flex;align-items:center;gap:clamp(9px,1.1vw,17px)}
-  .usknav__link{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.08em;
-    text-transform:uppercase;color:#8a8f96;text-decoration:none;white-space:nowrap;
-    padding-block:8px;transition:color 140ms ease}
-  .usknav__link:hover,.usknav__link[aria-current="page"]{color:#f6f7f9}
-  .usknav__langs{position:relative}
-  .usknav__langs>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
-    color:#8a8f96;padding:8px 6px;transition:color 140ms ease;min-block-size:24px}
-  .usknav__langs>summary::-webkit-details-marker{display:none}
-  .usknav__langs>summary:hover{color:#f6f7f9}
-  .usknav__langs-menu{position:absolute;top:calc(100% + 8px);inset-inline-end:0;min-inline-size:184px;
-    max-block-size:60vh;overflow-y:auto;background:#0e1014;border:1px solid rgba(255,255,255,0.1);
-    border-radius:10px;padding:6px;display:grid;gap:1px;box-shadow:0 20px 40px -20px rgba(0,0,0,0.6);z-index:130}
-  .usknav__langs-menu a{font-family:'Inter',sans-serif;font-size:12.5px;color:#c0c3c9;text-decoration:none;padding:7px 10px;border-radius:6px}
-  .usknav__langs-menu a:hover{background:rgba(255,255,255,0.06);color:#f6f7f9}
-  .usknav__star{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
-    font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;
-    color:#f59e0b;text-decoration:none;border:1px solid #f59e0b;border-radius:999px;padding:7px 13px;transition:background-color 140ms ease}
-  .usknav__star:hover{background:rgba(245,158,11,0.12)}
-  .usknav__burger{display:none;align-items:center;background:none;border:0;cursor:pointer;padding:7px;color:#f6f7f9;min-block-size:24px;min-inline-size:24px}
-  .usknav__burger svg{display:block}
-  .usknav__drawer{position:fixed;inset:0;z-index:120;background:#050608;display:flex;flex-direction:column;
-    padding:20px clamp(16px,5vw,40px) 40px;transform:translateX(100%);
-    transition:transform 240ms cubic-bezier(0.16,1,0.3,1);overflow-y:auto;visibility:hidden}
-  .usknav__drawer.is-open{transform:translateX(0);visibility:visible}
-  .usknav__drawer-top{display:flex;justify-content:space-between;align-items:center;block-size:56px;
-    border-block-end:1px solid rgba(255,255,255,0.1);margin-block-end:18px}
-  .usknav__drawer-close{background:none;border:0;cursor:pointer;color:#f6f7f9;padding:7px;min-block-size:24px;min-inline-size:24px}
-  .usknav__drawer-links{display:flex;flex-direction:column}
-  .usknav__drawer-links a{font-family:'Bricolage Grotesque','Inter',sans-serif;font-size:clamp(22px,5.5vw,32px);
-    color:#f6f7f9;text-decoration:none;padding:8px 0;border-block-end:1px solid rgba(255,255,255,0.06)}
-  .usknav__drawer-links a:hover{color:#f59e0b}
-  .usknav__drawer-star{margin-block-start:20px;align-self:flex-start}
-  .usknav__drawer-langlabel{font-family:ui-monospace,'JetBrains Mono',monospace;font-size:11px;
-    letter-spacing:0.1em;text-transform:uppercase;color:#8a8f96;margin:24px 0 10px}
-  .usknav__drawer-langs{display:flex;flex-wrap:wrap;gap:10px 18px}
-  .usknav__drawer-langs a{font-family:'Inter',sans-serif;font-size:13px;color:#8a8f96;text-decoration:none;padding:4px 0}
-  .usknav__drawer-langs a:hover{color:#f6f7f9}
-  /* Focus-visible: amber ring on every control (WCAG 2.4.7, >=3:1 on dark). */
-  .usknav__brand:focus-visible,.usknav__link:focus-visible,.usknav__langs>summary:focus-visible,
-  .usknav__star:focus-visible,.usknav__burger:focus-visible,.usknav__drawer-close:focus-visible,
-  .usknav__langs-menu a:focus-visible,.usknav__drawer-links a:focus-visible,.usknav__drawer-langs a:focus-visible{
-    outline:2px solid #f59e0b;outline-offset:3px;border-radius:4px}
-  @media (max-width:1100px){.usknav__links,.usknav__langs,.usknav__star{display:none}.usknav__burger{display:inline-flex}}
-  @media (prefers-reduced-motion:reduce){.usknav__drawer{transition:none}}</style>
-<style>.docfig{margin:32px 0;border:1px solid rgba(255,255,255,0.10);border-radius:14px;overflow:hidden;background:#0b0d12}.docfig img{display:block;width:100%;height:auto}.docfig figcaption{margin:0;padding:12px 16px;font-size:13px;line-height:1.5;color:#8a8f96;border-top:1px solid rgba(255,255,255,0.08)}.docfig--narrow{max-width:720px}</style>
 </head>
 <body>
 
-
-
-
-
-
-<header class="usknav" aria-label="Site navigation">
-  <a class="usknav__brand" href="/">uxskill</a>
-  <nav class="usknav__links" aria-label="Primary">
-    <a class="usknav__link" href="/brands.html">Brands</a>
-    <a class="usknav__link" href="/anti-patterns.html">Anti-patterns</a>
-    <a class="usknav__link" href="/commands.html">Commands</a>
-    <a class="usknav__link" href="/mcp.html">MCP</a>
-    <a class="usknav__link" href="/compare.html">Compare</a>
-    <a class="usknav__link" href="/showcase.html">Showcase</a>
-    <a class="usknav__link" href="/blog/">Blog</a>
-    <a class="usknav__link" href="/about.html">About</a>
-    <a class="usknav__link" href="/faq.html">FAQ</a>
-    <a class="usknav__link" href="/roadmap.html">Roadmap</a>
-  </nav>
-  <details class="usknav__langs">
-    <summary aria-label="Choose language"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></summary>
-    <div class="usknav__langs-menu">
-      <a href="/" lang="en">English</a>
-      <a href="/zh-CN/" lang="zh-CN">简体中文</a>
-      <a href="/zh-TW/" lang="zh-TW">繁體中文</a>
-      <a href="/ja/" lang="ja">日本語</a>
-      <a href="/ko/" lang="ko">한국어</a>
-      <a href="/hi/" lang="hi">हिन्दी</a>
-      <a href="/id/" lang="id">Bahasa Indonesia</a>
-      <a href="/vi/" lang="vi">Tiếng Việt</a>
-      <a href="/th/" lang="th">ไทย</a>
-      <a href="/ar/" lang="ar" dir="rtl">العربية</a>
-      <a href="/es/" lang="es">Español</a>
-      <a href="/fr/" lang="fr">Français</a>
-      <a href="/de/" lang="de">Deutsch</a>
-      <a href="/pt-BR/" lang="pt-BR">Português</a>
-      <a href="/ru/" lang="ru">Русский</a>
-      <a href="/tr/" lang="tr">Türkçe</a>
-      <a href="/it/" lang="it">Italiano</a>
-    </div>
-  </details>
-  <a class="usknav__star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
-  <button class="usknav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="usknav-drawer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+<header class="nav">
+  <div class="container nav__row">
+    <a class="nav__brand" href="/">uxskill</a>
+    <a class="nav__link" href="/">Home</a>
+    <a class="nav__link" href="/commands.html">Commands</a>
+    <a class="nav__link" href="/mcp.html">MCP</a>
+    <a class="nav__link" href="/compare.html">Compare</a>
+    <a class="nav__link" href="/blog/">Blog</a>
+    <a class="nav__link" href="https://github.com/Laith0003/ux-skill" rel="noopener">GitHub</a>
+  </div>
 </header>
-<div class="usknav__drawer" id="usknav-drawer" role="dialog" aria-modal="true" aria-label="Site menu">
-  <div class="usknav__drawer-top">
-    <a class="usknav__brand" href="/">uxskill</a>
-    <button class="usknav__drawer-close" type="button" aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-  </div>
-  <nav class="usknav__drawer-links" aria-label="All pages">
-    <a href="/brands.html">Brands</a>
-      <a href="/anti-patterns.html">Anti-patterns</a>
-      <a href="/commands.html">Commands</a>
-      <a href="/mcp.html">MCP</a>
-      <a href="/compare.html">Compare</a>
-      <a href="/showcase.html">Showcase</a>
-      <a href="/blog/">Blog</a>
-      <a href="/about.html">About</a>
-      <a href="/faq.html">FAQ</a>
-      <a href="/roadmap.html">Roadmap</a>
-  </nav>
-  <a class="usknav__star usknav__drawer-star" href="https://github.com/Laith0003/ux-skill" rel="noopener">Star on GitHub</a>
-  <div class="usknav__drawer-langlabel">Language</div>
-  <div class="usknav__drawer-langs">
-      <a href="/" lang="en">English</a>
-      <a href="/zh-CN/" lang="zh-CN">简体中文</a>
-      <a href="/zh-TW/" lang="zh-TW">繁體中文</a>
-      <a href="/ja/" lang="ja">日本語</a>
-      <a href="/ko/" lang="ko">한국어</a>
-      <a href="/hi/" lang="hi">हिन्दी</a>
-      <a href="/id/" lang="id">Bahasa Indonesia</a>
-      <a href="/vi/" lang="vi">Tiếng Việt</a>
-      <a href="/th/" lang="th">ไทย</a>
-      <a href="/ar/" lang="ar" dir="rtl">العربية</a>
-      <a href="/es/" lang="es">Español</a>
-      <a href="/fr/" lang="fr">Français</a>
-      <a href="/de/" lang="de">Deutsch</a>
-      <a href="/pt-BR/" lang="pt-BR">Português</a>
-      <a href="/ru/" lang="ru">Русский</a>
-      <a href="/tr/" lang="tr">Türkçe</a>
-      <a href="/it/" lang="it">Italiano</a>
-  </div>
-</div>
+
 <section class="top">
   <div class="container">
     <p class="top__eyebrow">Linter catalogue · v3.2.1</p>
-    <h1 class="top__title">145 fingerprints of <em>AI design slop.</em></h1>
+    <h1 class="top__title">171 fingerprints of <em>AI design slop.</em></h1>
     <p class="top__lead">
       Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms: no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
     </p>
     <div class="top__stats">
-      <span class="top__stat"><b>145</b> rules total</span>
-      <span class="top__stat"><b>50</b> high severity</span>
-      <span class="top__stat"><b>63</b> medium</span>
-      <span class="top__stat"><b>26</b> low</span>
-      <span class="top__stat"><b>9</b> categories</span>
+      <span class="top__stat"><b>171</b> rules total</span>
+      <span class="top__stat"><b>56</b> high severity</span>
+      <span class="top__stat"><b>79</b> medium</span>
+      <span class="top__stat"><b>30</b> low</span>
+      <span class="top__stat"><b>11</b> categories</span>
     </div>
     <figure class="docfig docfig--narrow">
       <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
@@ -512,13 +146,14 @@
   <div class="container toolbar__row">
     <input type="search" class="ap-search" id="ap-search" placeholder="Search rules by name, category, or fix..." aria-label="Search rules">
     <button type="button" class="ap-chip is-active" data-cat="*">All</button>
-    <button type="button" class="ap-chip" data-cat="A11y">A11y</button><button type="button" class="ap-chip" data-cat="Color">Color</button><button type="button" class="ap-chip" data-cat="Content">Content</button><button type="button" class="ap-chip" data-cat="Layout">Layout</button><button type="button" class="ap-chip" data-cat="Motion">Motion</button><button type="button" class="ap-chip" data-cat="Performance">Performance</button><button type="button" class="ap-chip" data-cat="Quality">Quality</button><button type="button" class="ap-chip" data-cat="Typography">Typography</button><button type="button" class="ap-chip" data-cat="Visual">Visual</button>
+    <button type="button" class="ap-chip" data-cat="A11y">A11y</button><button type="button" class="ap-chip" data-cat="Accessibility">Accessibility</button><button type="button" class="ap-chip" data-cat="Color">Color</button><button type="button" class="ap-chip" data-cat="Content">Content</button><button type="button" class="ap-chip" data-cat="Depth">Depth</button><button type="button" class="ap-chip" data-cat="Layout">Layout</button><button type="button" class="ap-chip" data-cat="Motion">Motion</button><button type="button" class="ap-chip" data-cat="Performance">Performance</button><button type="button" class="ap-chip" data-cat="Quality">Quality</button><button type="button" class="ap-chip" data-cat="Typography">Typography</button><button type="button" class="ap-chip" data-cat="Visual">Visual</button>
   </div>
 </section>
 
 <section>
   <div class="container">
     <div class="grid" id="ap-grid">
+      
     <article class="ap-card" id="anchor-no-href-as-button">
       <header class="ap-head">
         <span class="ap-id">#anchor-no-href-as-button</span>
@@ -530,7 +165,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>An &lt;a class=&quot;btn&quot;&gt; without href is not focusable, not in the tab order, and not announced as a link - looks like a button but behaves like nothing.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use &lt;button&gt; for actions, &lt;a href=&quot;...&quot;&gt; for navigation. If the destination is unknown until runtime, render a button or set href=&quot;#&quot; with preventDefault.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;a[^&gt;]+class=[&#x27;&quot;][^&#x27;&quot;]*btn[^&#x27;&quot;]*[&#x27;&quot;](?![^&gt;]+href)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;a\b(?![^&gt;]*\bhref\s*=)[^&gt;]*\bclass\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]*\bbtn\b[^&#x27;\&quot;]*[&#x27;\&quot;]</code></pre>
       <div class="ap-examples">
         
         
@@ -570,7 +205,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>cursor: not-allowed in a rule that has no opacity reduction, no muted color, no border tweak, and no pointer-events: none signals the disabled state was set by an AI that knew the cursor convention but never designed the actual visual. The button still looks fully active, screen reader users hear no announcement, and touch users see no change at all - the not-allowed cursor never appears.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>A disabled control needs three signals: visual (opacity 0.5 + maybe muted color or removed border), behavioral (pointer-events: none, or aria-disabled=&#x27;true&#x27; + handle the click), and announcement (aria-disabled on non-button elements; the disabled attribute on actual buttons does both). The cursor is the smallest of these three - never the only one.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\{[^}]*cursor\s*:\s*not-allowed\s*;(?:(?!opacity|pointer-events|filter|background|color|border|disabled)[^}])*\}</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>\{(?![^}]*(?:opacity|pointer-events|filter|background|(?&lt;![\w-])color|border))[^}]*\bcursor\s*:\s*not-allowed</code></pre>
       <div class="ap-examples">
         
         
@@ -590,7 +225,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>alt=&#x27;image&#x27; or alt=&#x27;photo&#x27; tells the screen reader nothing the user did not already know from the tag name - it is technically present but functionally absent. WCAG 1.1.1 demands meaningful equivalents, not the word &#x27;image&#x27;.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Describe what the image conveys: &#x27;Stripe Dashboard with revenue chart&#x27;, &#x27;team standing in front of the office&#x27;. For purely decorative images, use alt=&#x27;&#x27; so the screen reader skips them.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;img[^&gt;]*\balt\s*=\s*[&#x27;\&quot;](?:image|photo|picture|icon|graphic|illustration|pic|img)[&#x27;\&quot;]</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;img\b[^&gt;]*\balt\s*=\s*[&#x27;\&quot;](?:image|photo|picture|icon|graphic|illustration|pic|img)[&#x27;\&quot;]</code></pre>
       <div class="ap-examples">
         
         
@@ -610,7 +245,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>alt=&#x27;untitled&#x27; / &#x27;screenshot&#x27; / &#x27;logo&#x27; / &#x27;banner&#x27; is the CMS/Webflow/SaaS default fingerprint - signals the alt field was never filled in and the default leaked through. Screen reader users hear the same word for every image on the page.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the subject: alt=&#x27;ux-skill logo&#x27;, alt=&#x27;Stripe pricing page screenshot from Mar 2026&#x27;, alt=&#x27;hero banner: model writes the code, designer sets the rules&#x27;. Specific enough that someone could find the image from the alt alone.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;img[^&gt;]*\balt\s*=\s*[&#x27;\&quot;](?:untitled|screenshot|logo|banner|hero|placeholder|asset|file|upload|attachment)[&#x27;\&quot;]</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;img\b[^&gt;]*\balt\s*=\s*[&#x27;\&quot;](?:untitled|screenshot|logo|banner|hero|placeholder|asset|file|upload|attachment)[&#x27;\&quot;]</code></pre>
       <div class="ap-examples">
         
         
@@ -628,9 +263,9 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Card actions hidden at opacity: 0 and revealed only on :hover are invisible to touch users, keyboard users, and anyone using assistive tech - the action does not exist for most of your audience. WCAG 2.1.1 and 1.4.13 failure.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Show card actions persistently at reduced visual weight (lower opacity, smaller scale, secondary color), or make them reachable via a visible focus-state. Hover is a progressive disclosure, never the only path.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\.(?:card|item|tile)[^{]*\{[^}]*\}[\s\S]{0,300}?\.(?:card|item|tile)[^:]*:hover\s+(?:\.[^{\s]+|[a-z]+)[^{]*\{[^}]*opacity\s*:\s*1|opacity\s*:\s*0[^}]*\}[\s\S]{0,300}?:hover[\s\S]{0,100}?opacity\s*:\s*1</code></pre>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Card actions hidden at opacity: 0 and revealed only on :hover do not exist for touch users, and a keyboard user who tabs onto one sees no control and no focus indicator (2.4.7). The reveal passes only when it also shows the control on focus inside the card, shows it where there is no hover, and keeps it while a menu it opens is open.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Reveal the control on :focus-within of its card as well as :hover; hide it only inside @media (hover: hover), or show it again under @media (hover: none); and when it opens a menu, keep it shown while aria-expanded is true (.card .actions:has([aria-expanded=&quot;true&quot;]) { opacity: 1 }). Or show the actions all the time at a lower weight.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>opacity\s*:\s*0(?![.\d])</code></pre>
       <div class="ap-examples">
         
         
@@ -670,7 +305,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Missing alt breaks screen readers, SEO image indexing, and the broken-image fallback all at once - WCAG 1.1.1 failure.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Every &lt;img&gt; gets alt. Decorative images get alt=&quot;&quot; (empty). Informative images get a description a screen reader user would need.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;img(?![^&gt;]*\balt=)[^&gt;]*/?&gt;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?-i:&lt;img)\b(?![^&gt;]*\balt\s*=)[^&gt;]*/?&gt;</code></pre>
       <div class="ap-examples">
         
         
@@ -730,7 +365,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>An &lt;a&gt; without href is not focusable by default and is invisible to assistive tech - it looks like a link but behaves like a button.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use &lt;button&gt; for actions. Use &lt;a href=&quot;...&quot;&gt; for navigation. Never an anchor without href as a click target.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;a(?![^&gt;]*\bhref=)[^&gt;]*\b(?:onClick|onclick)=</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;a\b(?![^&gt;]*\bhref\s*=)[^&gt;]*\b(?:onClick|onclick)\s*=</code></pre>
       <div class="ap-examples">
         
         
@@ -790,7 +425,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>overflow: hidden on the root &lt;html&gt; element breaks browser scroll restoration on back-navigation, disables &#x27;skip to content&#x27; anchor scrolling for screen-reader users, kills smooth-scroll APIs, and prevents the URL bar from collapsing on mobile. It is almost always a hack to suppress a horizontal-overflow bug that should be fixed at the source.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Find the actual overflowing child (often a 100vw image, fixed-position element, or oversized inline-block) and constrain it. If you genuinely need a scroll-lock for a modal, toggle the class on &lt;body&gt; via JS for the lifetime of the modal - never permanently on &lt;html&gt;.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s,}&gt;+~])html\s*\{[^}]*overflow(?:-[xy])?\s*:\s*hidden</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|(?&lt;=[\s,}&gt;+~]))html\s*\{[^}]*overflow(?:-[xy])?\s*:\s*hidden</code></pre>
       <div class="ap-examples">
         
         
@@ -809,8 +444,8 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Placeholders disappear on focus, sit at low contrast by default, and are not announced consistently by assistive tech - using one as the only label fails WCAG 3.3.2.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Always pair &lt;input&gt; with a &lt;label for=&quot;id&quot;&gt; or aria-label. Placeholder is for an optional hint, never the field name.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;input(?![^&gt;]*\baria-label=)(?![^&gt;]*\baria-labelledby=)[^&gt;]+placeholder=</code></pre>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the input: a &lt;label for=&quot;id&quot;&gt; whose for matches the input id, a &lt;label&gt; that wraps the input, aria-label, or aria-labelledby pointing to an existing id. An id alone names nothing. Placeholder is for an optional hint, never the field name.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;input\b[^&gt;]*\bplaceholder\s*=</code></pre>
       <div class="ap-examples">
         
         
@@ -830,7 +465,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>An &lt;a&gt; tag with pointer-events: none and no aria-disabled=&#x27;true&#x27; is announced to screen readers as a fully working link, takes a position in the tab order, and gives keyboard users an Enter-key path to nothing - the click is silently swallowed. This is the AI shortcut for &#x27;disabled link&#x27; that breaks every assistive technology user while looking fine to the designer.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>If the link is permanently inactive, render a &lt;span&gt; with the same visual treatment instead of an &lt;a&gt;. If it&#x27;s temporarily disabled (loading, gated state), add aria-disabled=&#x27;true&#x27; AND tabindex=&#x27;-1&#x27; AND a handler that returns early - or remove the href until the action becomes available.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;a(?![^&gt;]*\baria-disabled\s*=)[^&gt;]+(?:class\s*=\s*[&#x27;&quot;][^&#x27;&quot;]*\bpointer-events-none\b[^&#x27;&quot;]*[&#x27;&quot;]|style\s*=\s*[&#x27;&quot;][^&#x27;&quot;]*pointer-events\s*:\s*none[^&#x27;&quot;]*[&#x27;&quot;]</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;a\b(?![^&gt;]*\baria-disabled\s*=)[^&gt;]+(?:class\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]*\bpointer-events-none\b[^&#x27;\&quot;]*[&#x27;\&quot;]|style\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]*pointer-events\s*:\s*none[^&#x27;\&quot;]*[&#x2</code></pre>
       <div class="ap-examples">
         
         
@@ -850,7 +485,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>&lt;a role=&#x27;button&#x27;&gt; with no href is the worst of both worlds - the link semantics are overridden, the element is not focusable (no href = not in tab order), and the WAI-ARIA promise of &#x27;this behaves like a button&#x27; is silently broken. WCAG 4.1.2 fail.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Just use &lt;button type=&#x27;button&#x27;&gt;. If the design demands link-text styling, give the &lt;button&gt; the same classes as your text-link recipe. Never patch a semantically wrong anchor with role=&#x27;button&#x27; - replace it.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;a(?![^&gt;]*\bhref=)[^&gt;]*\brole\s*=\s*[&#x27;&quot;]button[&#x27;&quot;][^&gt;]*&gt;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;a\b(?![^&gt;]*\bhref\s*=)[^&gt;]*\brole\s*=\s*[&#x27;\&quot;]button[&#x27;\&quot;][^&gt;]*&gt;</code></pre>
       <div class="ap-examples">
         
         
@@ -870,7 +505,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>A &lt;select&gt; with no id (so &lt;label for=&gt; cannot reach it), no aria-label, and no aria-labelledby is announced to screen readers as just &#x27;combobox, 1 of 3&#x27; with no clue what it controls. WCAG 1.3.1 / 4.1.2 fail.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Either give the &lt;select&gt; an id and reference it from &lt;label for=&#x27;...&#x27;&gt;, or set aria-label=&#x27;Country&#x27; / aria-labelledby=&#x27;country-heading&#x27;. Don&#x27;t rely on a placeholder option (&#x27;Select a country...&#x27;) as the label - placeholder options are not labels.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;select(?![^&gt;]*\baria-label=)(?![^&gt;]*\baria-labelledby=)(?![^&gt;]*\bid=)[^&gt;]*&gt;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?-i:&lt;select)\b(?![^&gt;]*\baria-label\s*=)(?![^&gt;]*\baria-labelledby\s*=)(?![^&gt;]*\bid\s*=)[^&gt;]*&gt;</code></pre>
       <div class="ap-examples">
         
         
@@ -910,12 +545,32 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>target=&quot;_blank&quot; without rel=&quot;noopener&quot; lets the opened page access window.opener and rewrite the source URL - a tabnabbing vector. It also blocks the browser&#x27;s tab-recycle optimization. A11y-adjacent because hijacked navigation breaks the user&#x27;s mental model of where they are.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Always pair target=&quot;_blank&quot; with rel=&quot;noopener noreferrer&quot;. Better: ask whether the link actually needs a new tab - in-page navigation respects user choice and back-button history.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;a[^&gt;]+target\s*=\s*[&#x27;&quot;]_blank[&#x27;&quot;](?![^&gt;]+rel\s*=\s*[&#x27;&quot;][^&#x27;&quot;]*(?:noopener|noreferrer))</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;a\b(?![^&gt;]*\brel\s*=\s*[&#x27;\&quot;{][^&#x27;\&quot;}]*(?:noopener|noreferrer))[^&gt;]*\btarget\s*=\s*[&#x27;\&quot;{]*_blank</code></pre>
       <div class="ap-examples">
         
         
       </div>
       <a href="#target-blank-no-noopener" class="ap-anchor" aria-label="Link to rule #target-blank-no-noopener">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="text-ink-at-low-alpha">
+      <header class="ap-head">
+        <span class="ap-id">#text-ink-at-low-alpha</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Text in ink at low alpha</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Muted text written as the ink color at an alpha under 0.7 (rgba, an eight-digit hex, color-mix with transparent, text-black/50) lands wherever the ground is: on white it may pass, on an off-white card or a band it drops under 4.5:1 (1.4.3). It passes when its value over the page ground is a color in the page&#x27;s own token set.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use the system&#x27;s muted text role (an opaque color checked at 4.5:1 on every surface it sits on), or an opaque grey that meets 4.5:1 on the grounds the text lands on.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])color\s*:\s*(?:rgba?\([^)]*\)|#[0-9a-f]{8}\b|#[0-9a-f]{4}\b|color-mix\([^;{}]*transparent[^;{}]*\))|(?&lt;![\w-])text-(?:black|white|foreground|ink|(?:gray|slate|zinc|neutral|stone)-\d{2,3})/(?:\d{1,2}|\[0?\.\d+\])(?![\w-])</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#text-ink-at-low-alpha" class="ap-anchor" aria-label="Link to rule #text-ink-at-low-alpha">link</a>
     </article>
     
 
@@ -930,7 +585,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>A title attribute carrying 60+ characters of real content is hover-only - invisible on touch, inconsistently announced by screen readers, undiscoverable on keyboard. The information is effectively missing for most users.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Move the content into the visible flow or into an aria-describedby popover that is reachable by keyboard and touch. Reserve title for one-line, optional clarifications.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>title=\&quot;[A-Z][^\&quot;]{60,}\&quot;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?!(?:iframe|abbr|acronym|svg|link|style|frame|meta)\b)[a-z][\w-]*\b[^&gt;]*\stitle=\&quot;[A-Z][^\&quot;]{60,}\&quot;</code></pre>
       <div class="ap-examples">
         
         
@@ -970,7 +625,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Three-plus color stops in a linear-gradient is the v0 / Cursor / generic-AI default; reads as chrome-y template output rather than a deliberate brand decision.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use a two-stop gradient (or a single solid) with hue spread under 60 degrees. If depth is needed, layer a low-opacity overlay instead of stacking stops.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>linear-gradient\([^)]+,[^)]+,[^)]+,[^)]+,</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>linear-gradient\((?:[^(),]|\([^()]*\))*(?:,(?:[^(),]|\([^()]*\))*){4,}\)</code></pre>
       <div class="ap-examples">
         
         
@@ -990,7 +645,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Dark text token (zinc-500/600/700) on a dark surface fails WCAG AA 4.5:1 contrast and signals the dark mode pairing was never tested.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Test contrast on both themes. On dark surfaces use text-zinc-100 to text-zinc-300; reserve 500-700 for tertiary captions on light surfaces.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:bg-zinc-(?:[89]00|950)|bg-slate-(?:[89]00|950)|bg-gray-(?:[89]00|950)|bg-black|background:\s*#0[0-9a-f]{5})[^&quot;&#x27;;]*(?:text-zinc-(?:[5-7]00)|text-slate-(?:[5-7]00)|text-gray-(?:[5-7]00)|color:\s*#[4-6][0-9a-f]{5})</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w:/-])(?P&lt;v&gt;(?:dark:)?)(?:bg-zinc-(?:[89]00|950)|bg-slate-(?:[89]00|950)|bg-gray-(?:[89]00|950)|bg-black)(?![\w/-])[^\&quot;&#x27;;]*(?&lt;![\w:/-])(?P=v)(?:text-zinc-(?:[5-7]00)|text-slate-(?:[5-7]00)|text-gray-(?:[5-7]00))(</code></pre>
       <div class="ap-examples">
         
         
@@ -1029,8 +684,8 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Purple-to-blue gradient on white is the strongest visual fingerprint of unconstrained model output and reads as template-marketplace AI slop.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use a single restrained accent (Emerald, Electric Blue, Deep Rose, Amber) against neutrals; keep gradient hue spread under 60 degrees if used at all.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>bg-gradient-to-[a-z]+\s+from-(purple|violet|fuchsia|indigo)-(400|500|600)\s+(?:via-[a-z]+-[0-9]+\s+)?to-(blue|sky|cyan)-(400|500|600)|linear-gradient\([^)]*#(7c3aed|8b5cf6|a855f7|6366f1)[^)]*#(3b82f6|2563eb|0ea5e9)[^)]*\)</code></pre>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace the purple and blue gradient with a solid brand surface, or a gradient between two tints of one hue. Keep saturated color for the one action you want clicked.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>class=\&quot;(?=[^\&quot;]*(?&lt;![\w:/-])bg-(?:gradient|linear)-to-[a-z]{1,2}(?![\w-]))(?=[^\&quot;]*(?&lt;![\w:/-])from-(?:purple|violet|fuchsia|indigo)-[3-7]00(?![\w/-]))(?=[^\&quot;]*(?&lt;![\w:/-])to-(?:blue|sky|cyan)-[3-7]00(?![\w/-])</code></pre>
       <div class="ap-examples">
         
         
@@ -1049,8 +704,8 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Read more&#x27; / &#x27;View more&#x27; / &#x27;See more&#x27; tells the user nothing about the destination and fails screen-reader scan-by-link mode (where users hear only link text). Every card on the page reads the same.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Make link text describe the destination: &#x27;Read the launch post&#x27;, &#x27;See all 152 rules&#x27;, &#x27;View the changelog&#x27;. The link should make sense out of context.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:a|button)[^&gt;]*&gt;\s*(?:Read\s+more|View\s+more|See\s+more|Find\s+out\s+more|More\s+info|Discover\s+more)\s*&lt;/(?:a|button)&gt;</code></pre>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Make link text describe the destination: &#x27;Read the launch post&#x27;, &#x27;See all 145 rules&#x27;, &#x27;View the changelog&#x27;. The link should make sense out of context.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:a|button)\b(?![^&gt;]*\baria-label\s*=)[^&gt;]*&gt;\s*(?:Read\s+more|View\s+more|See\s+more|Find\s+out\s+more|More\s+info|Discover\s+more)\s*&lt;/(?:a|button)&gt;</code></pre>
       <div class="ap-examples">
         
         
@@ -1070,7 +725,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Emojis render inconsistently across platforms, ignore brand color, and signal informality where SVG icons signal craft.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Inline SVG from Lucide, Feather, Phosphor, or Heroicons at 1.5-2px stroke with currentColor. Whitelist U+2713 check and U+2318 command only.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|a|h[1-6]|span|div|p|li)[^&gt;]*&gt;[^&lt;]*(?:[\U0001F300-\U0001F9FF]|[\U0001F600-\U0001F64F]|[\U0001F680-\U0001F6FF]|[\u2600-\u26FF]|[\u2700-\u27BF])</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|a|h[1-6]|li|summary|label|dt|th)\b[^&gt;]*&gt;[^&lt;]*(?:[\U0001F300-\U0001FAFF\u2600-\u26FF\u2700-\u27BF]|&amp;#x0*(?:1F[3-9A-F][0-9A-F]{2}|2705|2728|274C|274E|2B50|26A1|2764|2714|2757|2753);|&amp;#0*(?:127[7-9]\d\d|128\d{3}|</code></pre>
       <div class="ap-examples">
         
         
@@ -1110,7 +765,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Click here / Learn more / Get started reveals nothing about the destination and fails screen-reader scan-by-link - users hear a list of identical labels with no context.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific action: Read pricing, Start free trial, View dashboard, Open API docs. The link text should make sense out of context.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:a|button)[^&gt;]*&gt;\s*(?:Click here|Learn more|Get started)\s*&lt;/(?:a|button)&gt;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:a|button)\b(?![^&gt;]*\baria-label\s*=)[^&gt;]*&gt;\s*(?:Click here|Learn more|Get started)\s*&lt;/(?:a|button)&gt;</code></pre>
       <div class="ap-examples">
         
         
@@ -1130,12 +785,32 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Emoji where an SVG icon belongs breaks brand color, scales poorly, and renders differently on every OS.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Inline SVG icon with currentColor and a consistent stroke width across the surface.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>class=&quot;[^&quot;]*(?:icon|stamp|badge|achievement|reward)[^&quot;]*&quot;[^&gt;]*&gt;\s*(?:[\U0001F300-\U0001F9FF]|[\u2600-\u27BF]|[\U0001F600-\U0001F6FF])</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>class(?:Name)?=\&quot;[^\&quot;]*(?:icon|stamp|badge|achievement|reward)[^\&quot;]*\&quot;[^&gt;]*&gt;\s*(?:\{\s*[\&quot;&#x27;`])?(?:[\U0001F300-\U0001FAFF\u2600-\u26FF\u2700-\u27BF]|&amp;#x0*(?:1F[3-9A-F][0-9A-F]{2}|2705|2728|274C|274E|2B</code></pre>
       <div class="ap-examples">
         
         
       </div>
       <a href="#icon-emoji-stamp" class="ap-anchor" aria-label="Link to rule #icon-emoji-stamp">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="imagery-mandatory-missing">
+      <header class="ap-head">
+        <span class="ap-id">#imagery-mandatory-missing</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">Content</span>
+        <h2 class="ap-name">Landing page with no photograph</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A landing page carries photographs: a raster image, a picture, a video or a raster background that is not the logo. An illustration, icons or the logo alone do not count; drawn art and product fragments add to photographs and never replace them. Only a brand whose rules forbid photography (a brand.md beside the page or above it that says so) passes with none. Component fragments without a &lt;body&gt; are exempt. Pages that are not landing pages are skipped: an app root with no text or role=application; a docs page or app shell with a sidebar or table of contents beside the content; or a page where one article, form, table, code listing, list or grid holds most of the main text. A hero (an h1 followed by a call to action) always marks a landing page, and a form that wraps several sections is the page itself.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Add photographs: the client&#x27;s own first, else sourced ones that follow the system&#x27;s photo direction (the imagery.photo.* tokens and the report&#x27;s Photography section) and none of the kinds the brand&#x27;s rules exclude. A ban on a kind of photo narrows the kinds; it never removes photography.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>\A(?=[\s\S]*&lt;body\b)[\s\S]{0,80}</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#imagery-mandatory-missing" class="ap-anchor" aria-label="Link to rule #imagery-mandatory-missing">link</a>
     </article>
     
 
@@ -1159,18 +834,38 @@
     </article>
     
 
+    <article class="ap-card" id="phone-field-requires-country-code">
+      <header class="ap-head">
+        <span class="ap-id">#phone-field-requires-country-code</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">Content</span>
+        <h2 class="ap-name">Phone field that refuses a local number</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A visitor who types their own number the way they always do (a leading zero, spaces, no country code) is told it is wrong. Everyone who reaches the field meant to finish; a pattern that refuses a correct number loses them at the last step.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Accept the number as people type it: drop the pattern or make the country code optional (\+? or a choice of the local prefix), and turn it into the full international number on the server. When the country matters, add a country picker beside the field. An error names the field and the fix: &quot;Phone: enter the number with its area code, such as 079 123 4567&quot;.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;input\b(?=[^&gt;]*\btype\s*=\s*\{?\s*[&quot;&#x27;`]tel[&quot;&#x27;`])(?=[^&gt;]*\bpattern\s*=)[^&gt;]*&gt;</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#phone-field-requires-country-code" class="ap-anchor" aria-label="Link to rule #phone-field-requires-country-code">link</a>
+    </article>
+    
+
     <article class="ap-card" id="picsum-photos-seed">
       <header class="ap-head">
         <span class="ap-id">#picsum-photos-seed</span>
         <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Content</span>
-        <h2 class="ap-name">picsum.photos lorem-picsum placeholder</h2>
+        <h2 class="ap-name">Random (unseeded) picsum.photos placeholder</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>picsum.photos serves random rotating Lorem Picsum stock images - the design never settles, and the same hero photo on a Stripe-like landing page is an instant tell that the visuals were never chosen.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Commission, license, or generate the real image. If you need a stable placeholder, generate one once and self-host it under /assets so it stops drifting between deploys.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\b(?:https?:)?//picsum\.photos/</code></pre>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A random/unseeded picsum.photos URL serves a different rotating image on every load - the design never settles, and the visual was clearly never chosen. (Imagery is mandatory and real: client assets first, then curated stock chosen on purpose. A seeded picsum.photos/seed/... URL is stable and not flagged here.)</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use the client&#x27;s own asset, or curated Unsplash/Pexels chosen to match the brand and temperature. An abstract SVG is not a substitute for a real product/site image. If you truly need a stand-in, use a stable seeded picsum (picsum.photos/seed/&lt;descriptive&gt;/W/H) and replace it before ship.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s&quot;&#x27;(=])(?:https?:)?//picsum\.photos/(?!seed/)</code></pre>
       <div class="ap-examples">
         
         
@@ -1210,12 +905,32 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>placeholder.com URLs ship the gray box with the dimensions printed inside - the universal &#x27;I forgot to swap in real art&#x27; tell. Generators emit these whenever they don&#x27;t know what image to use.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a real asset under /assets, /og, or your image CDN. For dev-only scaffolds, use a local 1x1 transparent PNG or an inline SVG empty state with a real label.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\b(?:https?:)?//(?:www\.)?placeholder\.com/</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s&quot;&#x27;(=])(?:https?:)?//(?:www\.)?placeholder\.com/</code></pre>
       <div class="ap-examples">
         
         
       </div>
       <a href="#placeholder-com-direct" class="ap-anchor" aria-label="Link to rule #placeholder-com-direct">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="placeholder-token-shipped">
+      <header class="ap-head">
+        <span class="ap-id">#placeholder-token-shipped</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">Content</span>
+        <h2 class="ap-name">Literal placeholder token left in shipped markup</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <!-- ux-lint-off lorem-ipsum-leak, placeholder-token-shipped --><div class="ap-why"><span class="ap-sub">Why bad</span><p>A literal {TODO_FILL...} token, a placeholder-shaped {{ ... }} mustache, or lorem ipsum rendered in the actual UI is a draft-state leak - the rawest sign that generated output shipped without being finished. (Legitimate template bindings like {{ user.name }} are NOT flagged; only placeholder-shaped tokens are.)</p></div><!-- ux-lint-on -->
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Fill the value where it is known (canonical/og:url from the source URL, og:image from a real CDN image). Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully - drop the meta tag or the affordance. Never print the token; keep any patch-this note outside the shipped markup.</p></div>
+      <!-- ux-lint-off placeholder-token-shipped --><pre class="ap-pre ap-pre--rx"><code>\{TODO_FILL|\{\{[^}]*(?-i:TODO|FILL|[A-Z]{3,}_)[^}]*\}\}|lorem\s+ipsum</code></pre><!-- ux-lint-on -->
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#placeholder-token-shipped" class="ap-anchor" aria-label="Link to rule #placeholder-token-shipped">link</a>
     </article>
     
 
@@ -1230,7 +945,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>via.placeholder.com is the default stock placeholder URL that AI generators reach for - signals the design got shipped with the scaffolding still in place. Immediate trust kill on a landing page.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use real artwork, real product screenshots, or a domain-specific empty-state SVG. If you genuinely need a placeholder for a demo, generate it locally and serve it from your own static path.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\b(?:https?:)?//via\.placeholder\.com/</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s&quot;&#x27;(=])(?:https?:)?//via\.placeholder\.com/</code></pre>
       <div class="ap-examples">
         
         
@@ -1250,7 +965,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>placekitten.com is the joke-placeholder service - shipping it to production says nobody reviewed the page before deploy. The kitten is funny in the design doc and devastating on the live landing page.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace every kitten URL with the real asset for that surface. If the page truly needs a stand-in, use a brand-aware blank state with copy explaining what should be there.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\b(?:https?:)?//(?:www\.)?placekitten\.com/</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s&quot;&#x27;(=])(?:https?:)?//(?:www\.)?placekitten\.com/</code></pre>
       <div class="ap-examples">
         
         
@@ -1270,7 +985,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Five hardcoded stars next to a fake quote is the lowest-trust pattern on the web; users have learned to discount it on sight.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Show real, named, attributable testimonials with company affiliation and a specific outcome. No star count unless aggregated from a real review system.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:\u2605{5}|★{5}|⭐{5}|\*{5})|&lt;(?:span|div|p)[^&gt;]*class=&quot;[^&quot;]*stars?[^&quot;]*&quot;[^&gt;]*&gt;\s*(?:\u2605|★){4,}</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:\u2605{5}|\u2b50{5}|(?&lt;![*/])\*{5}(?![*/])|(?:&amp;#9733;|&amp;#x2605;|&amp;starf;){5})|&lt;(?:span|div|p)[^&gt;]*class=\&quot;[^\&quot;]*stars?[^\&quot;]*\&quot;[^&gt;]*&gt;\s*(?:\u2605|&amp;#9733;|&amp;#x2605;|&amp;starf;){4,}</code></pre>
       <div class="ap-examples">
         
         
@@ -1290,7 +1005,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>An images.unsplash.com/photo-* URL with no alt (or alt=&quot;&quot;) is the stock-photo placeholder fingerprint - signals the generator pasted the first credible image without choosing it for the content. Screen-reader users hear nothing; the page reads as filler.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a real product or brand image and write an alt that describes the content (alt=&quot;Customer service team reviewing a dashboard&quot;). If the image stays as decoration only, set alt=&quot;&quot; deliberately AND justify why a stock photo earns a spot on the surface.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;img[^&gt;]+src\s*=\s*[&#x27;&quot;][^&#x27;&quot;]*images\.unsplash\.com/photo-[^&#x27;&quot;]+[&#x27;&quot;](?![^&gt;]+alt\s*=\s*[&#x27;&quot;][^&#x27;&quot;]+[&#x27;&quot;])</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;img\b[^&gt;]+src\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]*images\.unsplash\.com/photo-[^&#x27;\&quot;]+[&#x27;\&quot;](?![^&gt;]+alt\s*=\s*[&#x27;\&quot;][^&#x27;\&quot;]+[&#x27;\&quot;])</code></pre>
       <div class="ap-examples">
         
         
@@ -1310,7 +1025,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>100vh on mobile includes the browser chrome that retracts on scroll, so the layout jumps as the address bar collapses - dynamic viewport units (dvh) fix this.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use height: 100dvh or h-[100dvh] as the primary, with h-screen / 100vh as the legacy fallback for browsers that lack dvh.</p></div>
-      <!-- ux-lint-off h-screen-no-dvh-fallback --><pre class="ap-pre ap-pre--rx"><code>(?:height\s*:\s*100vh|class=[^&gt;]*h-screen)(?![^}]*100dvh)</code></pre><!-- ux-lint-on -->
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])(?:min-|max-)?height\s*:\s*100vh(?![^}]*100dvh)</code></pre>
       <div class="ap-examples">
         
         
@@ -1328,8 +1043,8 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Three equal cards with three icons and three short paragraphs is the safest default the generator reaches for and the strongest layout fingerprint in AI-generated marketing surfaces.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use asymmetric layouts: bento grids, 2-and-1 splits, 4 with one spanning width. Vary card size by content priority.</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Three equal cards that each hold just an icon, a title and a line are the strongest layout fingerprint of generated marketing pages: nothing in them differs but the words. Equal columns whose cards each carry their own image or richer content pass.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Give each card what only it can show (its own photograph, a product fragment, a real figure), or change the layout: a split, a list with one lead item, a bento whose cell sizes follow the content.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?:grid-cols-3|grid-template-columns:\s*repeat\(\s*3\s*,\s*(?:1fr|minmax))[^&gt;]*&gt;(?:\s*&lt;[^/][^&gt;]*class=&quot;[^&quot;]*(?:card|feature)[^&quot;]*&quot;[^&gt;]*&gt;[\s\S]*?&lt;/[^&gt;]+&gt;\s*){3}</code></pre>
       <div class="ap-examples">
         
@@ -1348,9 +1063,9 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Animating width, height, top, left, margin, padding triggers layout and paint on every frame - the dropped-frame jank pattern that makes the UI feel cheap.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Animate transform (translate, scale) and opacity only. Use scale instead of width, translate instead of top/left. The compositor thanks you.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>transition[^;]*:\s*[^;]*(?:width|height|top|left|margin|padding)[^;]*;</code></pre>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Animating width, height, top, left, margin or padding lays the page out again on every frame, and everything beside the element moves with it: the dropped-frame jank that makes a UI feel cheap. Two cases reflow nothing beside them and pass: the inline size of a moving indicator (a selector naming an indicator, or an element taken out of flow), and grid-template-rows on a single disclosure, which this rule does not read.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Animate transform and opacity: scale instead of width, translate instead of top or left. Open a disclosure with grid-template-rows from 0fr to 1fr, and slide an indicator on transform with its inline size on the system&#x27;s indicator role (--motion-indicator-duration).</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])transition(?:-property)?\s*:[^;{}]*(?&lt;![\w-])(?:(?:min|max)-(?:width|height|inline-size|block-size)|width|height|top|left|right|bottom|inline-size|block-size|inset(?:-[a-z]+)*|margin(?:-[a-z]+)*|padding(?:-[a-z]+)*)(?![\w-])</code></pre>
       <div class="ap-examples">
         
         
@@ -1376,6 +1091,26 @@
         
       </div>
       <a href="#autoplay-without-muted" class="ap-anchor" aria-label="Link to rule #autoplay-without-muted">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="infinite-animation-without-reduced-motion">
+      <header class="ap-head">
+        <span class="ap-id">#infinite-animation-without-reduced-motion</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">Motion</span>
+        <h2 class="ap-name">Infinite animation that keeps running under reduced motion</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A loop that never ends (a marquee, a glow, a floating shape) keeps moving for a person who asked their system for less motion. It passes when it runs only under prefers-reduced-motion: no-preference (or not reduce), when a reduced-motion query stops it on its selector or on every element, or when it is a progress indicator. A loop declared inside a reduce query runs only for people who asked for less motion and is reported.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Wrap the animation in @media (prefers-reduced-motion: no-preference), or stop it in @media (prefers-reduced-motion: reduce) with animation: none. Anything that moves on its own for more than five seconds beside other content also needs a pause control (2.2.2).</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])animation(?:-iteration-count)?\s*:[^;{}]*\binfinite\b</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#infinite-animation-without-reduced-motion" class="ap-anchor" aria-label="Link to rule #infinite-animation-without-reduced-motion">link</a>
     </article>
     
 
@@ -1410,7 +1145,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>An &lt;img&gt; without width and height attributes causes Cumulative Layout Shift as the image loads and the page reflows - the single biggest CLS regression on most sites.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Always set width and height (the intrinsic pixel dimensions) on every &lt;img&gt;, even when styled with CSS. The browser uses them to reserve space.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;img(?![^&gt;]+\bwidth=)[^&gt;]+&gt;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?-i:&lt;img)\b(?![^&gt;]*\bwidth\s*=)[^&gt;]*&gt;</code></pre>
       <div class="ap-examples">
         
         
@@ -1450,7 +1185,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Setting body or paragraph font-weight to 100 (Thin) makes long-form reading nearly impossible at any size below 24px - the strokes literally disappear on most displays. 900 (Black) is the opposite failure: every paragraph reads as shouting and tires the eye after one screen. Both extremes signal nobody actually read the text in situ.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Body weight should be 400 (Regular) or 450-500 for a slightly stronger feel. Reserve 100/200 (Thin/ExtraLight) for large hero display type only, and 800/900 (ExtraBold/Black) for short callouts or numerals - never paragraphs.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s,}&gt;+~])(?:body|p|li|main|article|\.(?:body|prose|text|content))[^{}]*\{[^}]*font-weight\s*:\s*(?:100|900)\s*[;}]</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|(?&lt;=[\s,}&gt;+~]))(?:body|p|li|main|article|\.(?:body|prose|text|content))(?:[.#:\[][^\s{,&gt;+~]*)?\s*\{[^}]*font-weight\s*:\s*(?:100|900)\s*[;}]</code></pre>
       <div class="ap-examples">
         
         
@@ -1479,6 +1214,26 @@
     </article>
     
 
+    <article class="ap-card" id="decorative-accent-ruler">
+      <header class="ap-head">
+        <span class="ap-id">#decorative-accent-ruler</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">Visual</span>
+        <h2 class="ap-name">Decorative accent ruler (hairline ornament, fade, dot, or a line or dash beside an eyebrow)</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A short line used as ornament: under a heading, fading out of transparent, capped with a small dot, or set as a line, dash or dot before or after an eyebrow label. It carries no structure and no meaning, and it is one of the most repeated marks in AI-generated pages. The eyebrow form comes in many builds: a ::before or ::after with a size or a border, an empty span or i, a border-inline-start on the label, a background-image line, an SVG line or dot, or a dash typed into the text. Real dividers are full-width, solid, and separate content.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Delete the mark and keep the eyebrow as text only: the label style (type.text.label) and its color carry it. Build hierarchy with type size, weight, letter-spacing and spacing. If content truly needs separating, use a full-width solid border (border-t with a neutral token) on the container, never a short ornamental line.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>class(?:Name)?=[&quot;&#x27;](?=[^&quot;&#x27;]*(?&lt;![\w-])(?:h-px|h-\[[12]px\]|h-0\.5)(?![\w.\[-]))(?=[^&quot;&#x27;]*\bbg-(?:gradient|linear)-to-[rl]\b)|class(?:Name)?=[&quot;&#x27;][^&quot;&#x27;]*(?&lt;![\w-])(?:h-px|h-\[[12]px\]|h-0\</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#decorative-accent-ruler" class="ap-anchor" aria-label="Link to rule #decorative-accent-ruler">link</a>
+    </article>
+    
+
     <article class="ap-card" id="emoji-bullet-marker">
       <header class="ap-head">
         <span class="ap-id">#emoji-bullet-marker</span>
@@ -1490,7 +1245,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>An emoji at the start of every list item is the AI signature - check marks, sparkles, rockets, party poppers used as bullet markers signal a generator that confused decoration with hierarchy.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use the native list disc, an SVG check icon, or a numeric counter. Reserve the U+2713 check and U+2318 command as allowed dingbats.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;li[^&gt;]*&gt;\s*[\U0001F300-\U0001F9FF\u2600-\u2712\u2714-\u27BF]</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;li\b[^&gt;]*&gt;\s*(?:\{\s*[\&quot;&#x27;`])?(?:[\U0001F300-\U0001FAFF\u2600-\u2712\u2714-\u27BF]|&amp;#x0*(?:1F[3-9A-F][0-9A-F]{2}|2705|2728|274C|274E|2B50|26A1|2764|2714|2757|2753);|&amp;#0*(?:127[7-9]\d\d|128\d{3}|129[0-7]\d\d|9989|1</code></pre>
       <div class="ap-examples">
         
         
@@ -1510,7 +1265,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>A bare emoji standing in for an icon renders inconsistently across platforms, ignores brand color, and is announced unpredictably by screen readers.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use inline SVG (Lucide, Feather, Phosphor, Heroicons) at 1.5-2px stroke with currentColor. Add aria-label when the icon carries meaning.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&gt;[\u2700-\u27BF\U0001F300-\U0001F9FF](?:&lt;/)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&gt;\s*(?:\{\s*[\&quot;&#x27;`])?(?:[\U0001F300-\U0001FAFF\u2600-\u26FF\u2700-\u27BF]|&amp;#x0*(?:1F[3-9A-F][0-9A-F]{2}|2705|2728|274C|274E|2B50|26A1|2764|2714|2757|2753);|&amp;#0*(?:127[7-9]\d\d|128\d{3}|129[0-7]\d\d|9989|10024|10060|11088</code></pre>
       <div class="ap-examples">
         
         
@@ -1550,7 +1305,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>A &lt;button&gt; inside a &lt;form&gt; without type=&quot;button&quot; defaults to type=&quot;submit&quot; and silently submits the form on every click.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Always set type=&quot;button&quot; or type=&quot;submit&quot; explicitly. The default is a footgun, not a feature.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;button(?![^&gt;]*\btype=)[^&gt;]*&gt;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?-i:&lt;button)\b(?![^&gt;]*\btype\s*=)[^&gt;]*&gt;</code></pre>
       <div class="ap-examples">
         
         
@@ -1570,7 +1325,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>A &lt;div&gt; or &lt;span&gt; with cursor: pointer promises clickable behavior to sighted mouse users while keyboard and screen-reader users get nothing - a hidden interaction.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>If it clicks, make it a &lt;button&gt; or &lt;a href&gt;. If you keep the &lt;div&gt;, add role and tabindex and a keydown handler - the cursor change is the smallest signal a real control owes.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:div|span)[^&gt;]+(?:class=[^&gt;]+cursor-pointer|style=[^&gt;]+cursor\s*:\s*pointer)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:div|span)\b(?![^&gt;]*\brole\s*=\s*[&#x27;\&quot;](?:button|link|tab|menuitem|option|checkbox|radio|switch)[&#x27;\&quot;])[^&gt;]+(?:class\s*=[^&gt;]+cursor-pointer|style\s*=[^&gt;]+cursor\s*:\s*pointer)</code></pre>
       <div class="ap-examples">
         
         
@@ -1590,7 +1345,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>&lt;fieldset&gt; without a &lt;legend&gt; gives the grouped controls a semantic container but no group name - screen readers announce each control without the shared context (e.g. &#x27;shipping address - street&#x27; becomes just &#x27;street&#x27;). The dev got halfway to the WCAG 1.3.1 grouping pattern then stopped.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>First child of every &lt;fieldset&gt; is &lt;legend&gt;Group label&lt;/legend&gt;. Visually hide the legend with .sr-only if the design doesn&#x27;t show a heading, but never omit it.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;fieldset[^&gt;]*&gt;\s*(?!&lt;legend\b)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;fieldset\b[^&gt;]*&gt;(?!\s*&lt;legend\b)</code></pre>
       <div class="ap-examples">
         
         
@@ -1610,7 +1365,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>alt=&#x27;decorative&#x27; announces the literal word &#x27;decorative&#x27; to a screen reader user - the opposite of what was intended. The correct way to mark a decorative image is alt=&#x27;&#x27; (empty string).</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use alt=&#x27;&#x27; (empty quotes) for purely presentational images so the screen reader skips them. If the image conveys any meaning at all, give it a real description instead.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;img[^&gt;]*\balt\s*=\s*[&#x27;\&quot;](?:decorative|decoration|spacer|divider|ornament)[&#x27;\&quot;]</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;img\b[^&gt;]*\balt\s*=\s*[&#x27;\&quot;](?:decorative|decoration|spacer|divider|ornament)[&#x27;\&quot;]</code></pre>
       <div class="ap-examples">
         
         
@@ -1630,12 +1385,52 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Heading hierarchy gaps (h1 then h3, or h3 with no h1/h2 preceding) break the screen-reader landmark tree and the SEO outline.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>h1 once per page; nest h2/h3/h4 in order. If you need a small visual heading without a logical level, use a styled &lt;p&gt; instead.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;h1[^&gt;]*&gt;[\s\S]*?&lt;/h1&gt;[\s\S]*?&lt;h3[^&gt;]*&gt;(?![\s\S]*?&lt;h2)|&lt;h2[^&gt;]*&gt;[\s\S]*?&lt;/h2&gt;[\s\S]*?&lt;h4[^&gt;]*&gt;(?![\s\S]*?&lt;h3)|&lt;h3[^&gt;]*&gt;(?:(?!&lt;h[12]).)*?&lt;/h3&gt;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;h1[^&gt;]*&gt;(?:(?!&lt;h2)[\s\S])*?&lt;h3\b|&lt;h2[^&gt;]*&gt;(?:(?!&lt;h3)[\s\S])*?&lt;h4\b</code></pre>
       <div class="ap-examples">
         
         
       </div>
       <a href="#heading-skip-h1-h3" class="ap-anchor" aria-label="Link to rule #heading-skip-h1-h3">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="href-empty-hash">
+      <header class="ap-head">
+        <span class="ap-id">#href-empty-hash</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Dead link: href=&quot;#&quot; placeholder</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>An anchor with href=&quot;#&quot; is a placeholder. It jumps the page to the top and announces a real destination to assistive tech that does not exist. It is a classic sign of unfinished, generated, or copy-pasted markup.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Point the link at a real URL, or use &lt;button type=&quot;button&quot;&gt; if it triggers an action. For an in-page target use href=&quot;#section-id&quot;, never a bare #.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>href\s*=\s*[&quot;\&#x27;]#[&quot;\&#x27;]</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#href-empty-hash" class="ap-anchor" aria-label="Link to rule #href-empty-hash">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="href-javascript-void">
+      <header class="ap-head">
+        <span class="ap-id">#href-javascript-void</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Dead link: javascript: URL as href</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>href=&quot;javascript:void(0)&quot; and similar javascript: URLs are dead links used as click targets. They break open-in-new-tab, middle-click, and keyboard behavior, and read as a placeholder tell.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use a real href for navigation, or a &lt;button type=&quot;button&quot;&gt; for actions. Never a javascript: URL as a link destination.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>href\s*=\s*[&quot;\&#x27;]javascript:</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#href-javascript-void" class="ap-anchor" aria-label="Link to rule #href-javascript-void">link</a>
     </article>
     
 
@@ -1688,7 +1483,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off safe-area-inset-only-bottom --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Reaching only for env(safe-area-inset-bottom) signals the dev copied the iPhone-X home-indicator fix without thinking about the notch (top), Dynamic Island, landscape mode, or rotated devices where left/right inset matters. The layout punches into hardware on three sides while pretending to be device-safe.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Reaching only for env(safe-area-inset-bottom) signals the dev copied the iPhone-X home-indicator fix without thinking about the notch (top), Dynamic Island, landscape mode, or rotated devices where left/right inset matters. The layout punches into hardware on three sides while pretending to be device-safe.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>If the surface goes edge-to-edge, set all four insets (or `padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)` and let CSS pick the active ones). For a bottom-fixed nav, that&#x27;s fine - but verify landscape with rotation doesn&#x27;t expose the issue.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>env\(\s*safe-area-inset-bottom\s*\)(?![\s\S]{0,400}env\(\s*safe-area-inset-(?:top|left|right)\s*\))</code></pre>
       <div class="ap-examples">
@@ -1709,13 +1504,73 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>A &#x27;Skip to content&#x27; link without an .sr-only / .visually-hidden / .skip-link class fallback is visually shown to all users as a stray link at the top-left of the page - signals the dev knew the accessibility convention by name but didn&#x27;t apply the actual technique. The link should be visually hidden until keyboard-focused, at which point it slides into view.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Wrap with the standard sr-only pattern: &lt;a href=&#x27;#main&#x27; class=&#x27;sr-only focus:not-sr-only focus:fixed focus:top-0 focus:left-0 focus:p-4 focus:bg-white focus:text-black focus:z-50&#x27;&gt;Skip to content&lt;/a&gt;. For Tailwind that&#x27;s the canonical recipe; for custom CSS apply `position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);` then reveal on :focus.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;a[^&gt;]+href\s*=\s*[&#x27;&quot;]#(?:main|content|main-content|skip)[&#x27;&quot;][^&gt;]*(?:class\s*=\s*[&#x27;&quot;](?![^&#x27;&quot;]*(?:sr-only|visually-hidden|skip-link|screen-reader))[^&#x27;&quot;]*[&#x27;&quot;])?[^&gt;]*&gt;\</code></pre>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Wrap with the standard sr-only pattern: &lt;a href=&#x27;#main&#x27; class=&#x27;sr-only focus:not-sr-only focus:fixed focus:top-0 focus:left-0 focus:p-4 focus:bg-white focus:text-black focus:z-50&#x27;&gt;Skip to content&lt;/a&gt;. For Tailwind that&#x27;s the canonical recipe; for custom CSS apply `position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);` then reveal on :focus. A class containing skip also counts, when your CSS hides it until focus.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;a\b(?=[^&gt;]*\bhref\s*=\s*[&#x27;\&quot;]#(?:main|content|main-content|maincontent|skip|skip-target)[&#x27;\&quot;])(?![^&gt;]*\bclass\s*=\s*[&#x27;\&quot;](?:[^&#x27;\&quot;]*\s)?(?:[\w:-]*(?:sr-only|visually-hidden|screen-reader)[\w-</code></pre>
       <div class="ap-examples">
         
         
       </div>
       <a href="#screen-reader-only-without-class" class="ap-anchor" aria-label="Link to rule #screen-reader-only-without-class">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="focusable-at-opacity-zero">
+      <header class="ap-head">
+        <span class="ap-id">#focusable-at-opacity-zero</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Accessibility</span>
+        <h2 class="ap-name">Focusable control left at opacity 0</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Opacity 0 hides a control from sight and nothing else: Tab still lands on it and a screen reader still reads it, so a closed menu&#x27;s links or a faded-out button take focus that no one can see (2.4.7 asks for a visible focus indicator).</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair opacity 0 with visibility: hidden (delayed by the exit duration, so the fade still runs), display: none once the exit ends, or the inert or hidden attribute on the closed panel. A control revealed on hover is judged by hover-only-card-actions.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>opacity\s*:\s*0(?![.\d])</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#focusable-at-opacity-zero" class="ap-anchor" aria-label="Link to rule #focusable-at-opacity-zero">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="menu-row-disabled-without-reason">
+      <header class="ap-head">
+        <span class="ap-id">#menu-row-disabled-without-reason</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Accessibility</span>
+        <h2 class="ap-name">Disabled menu row with no reason</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A menu row disabled with the disabled attribute drops out of the arrow keys&#x27; path, so a keyboard user never learns it exists; one marked aria-disabled with no reason leaves the person guessing why it cannot be used.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep the row in place with aria-disabled=&quot;true&quot; instead of disabled, and give its reason in words beside the label, tied to the row with aria-describedby.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;[a-z][\w-]*\b[^&gt;]*\brole\s*=\s*[&quot;&#x27;]menuitem(?:checkbox|radio)?[&quot;&#x27;][^&gt;]*&gt;</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#menu-row-disabled-without-reason" class="ap-anchor" aria-label="Link to rule #menu-row-disabled-without-reason">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="repeated-action-same-name">
+      <header class="ap-head">
+        <span class="ap-id">#repeated-action-same-name</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Accessibility</span>
+        <h2 class="ap-name">Actions in repeated items share one name</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Three buttons named Save in a list read as Save, Save, Save in a screen reader&#x27;s list of controls, and a voice user who says the name cannot pick one. The item the action belongs to has to be in its accessible name.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Put the item in the name: aria-label=&quot;Save Lamb flatbread&quot;, a visually hidden span after the visible word, or aria-labelledby naming the button and the item&#x27;s title.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|a)\b[^&gt;]*&gt;</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#repeated-action-same-name" class="ap-anchor" aria-label="Link to rule #repeated-action-same-name">link</a>
     </article>
     
 
@@ -1730,7 +1585,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Purple-tinted shadows on cards are the second-strongest &#x27;AI premium&#x27; fingerprint after the gradient itself.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use neutral diffusion shadow: shadow-[0_20px_40px_-15px_rgba(0,0,0,0.08)]. Color comes from the surface, not the shadow.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>box-shadow:[^;]*rgba?\(\s*(?:12[0-9]|13[0-9]|14[0-9])\s*,\s*(?:5[0-9]|6[0-9]|7[0-9])\s*,\s*(?:2[0-9]\d|2[3-5]\d)|shadow-(?:purple|violet|fuchsia|indigo)-(?:400|500|600)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>box-shadow:[^;{}]*rgba?\(\s*(?:1[2-4][0-9])\s*,\s*(?:[5-9][0-9])\s*,\s*(?:2[0-5]\d)|shadow-(?:purple|violet|fuchsia|indigo)-(?:400|500|600)</code></pre>
       <div class="ap-examples">
         
         
@@ -1744,13 +1599,13 @@
         <span class="ap-id">#glass-without-fallback</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Color</span>
-        <!-- ux-lint-off glass-morphism-default --><h2 class="ap-name">backdrop-filter blur without background fallback</h2><!-- ux-lint-on -->
+        <h2 class="ap-name">backdrop-filter blur without background fallback</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>backdrop-filter is unsupported on Firefox and older Safari - without a translucent background fallback, the surface renders fully transparent and content underneath bleeds through.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Always pair backdrop-filter: blur with a background-color (e.g. background: rgba(255,255,255,0.7)). The bg is the fallback; the blur is the upgrade.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>backdrop-filter\s*:\s*blur[^;]+;(?![^}]*background)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])backdrop-filter\s*:\s*blur</code></pre>
       <div class="ap-examples">
         
         
@@ -1799,6 +1654,26 @@
     </article>
     
 
+    <article class="ap-card" id="navy-to-purple-gradient">
+      <header class="ap-head">
+        <span class="ap-id">#navy-to-purple-gradient</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Color</span>
+        <h2 class="ap-name">Navy to purple gradient</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A dark navy surface fading into purple is the default night-sky hero of generated landing pages. It signals that no one chose the palette.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use one dark neutral for the surface and spend the accent on a single element. If the brand needs depth, shift lightness within one hue instead of crossing from navy into purple.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>class=\&quot;(?=[^\&quot;]*(?&lt;![\w:/-])bg-(?:gradient|linear)-to-[a-z]{1,2}(?![\w-]))(?=[^\&quot;]*(?&lt;![\w:/-])from-(?:slate|blue|indigo|gray|zinc|neutral|sky)-(?:800|900|950)(?![\w/-]))(?=[^\&quot;]*(?&lt;![\w:/-])to-(?:purple|violet</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#navy-to-purple-gradient" class="ap-anchor" aria-label="Link to rule #navy-to-purple-gradient">link</a>
+    </article>
+    
+
     <article class="ap-card" id="before-after-100-percent">
       <header class="ap-head">
         <span class="ap-id">#before-after-100-percent</span>
@@ -1810,7 +1685,7 @@
       <p class="ap-desc"></p>
       <!-- ux-lint-off before-after-100-percent, round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>0 to 100 / 100% guaranteed / 100% effective are the magnitude-by-default phrases AI reaches for - readers have learned to discount them.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Quote the real spread: &#x27;from 14 manual steps to 3 automated&#x27;. If you can&#x27;t measure it, don&#x27;t claim it.</p></div>
-      <!-- ux-lint-off before-after-100-percent --><pre class="ap-pre ap-pre--rx"><code>(?:0 to 100|100% (?:guaranteed|effective|accurate|certain))</code></pre><!-- ux-lint-on -->
+      <pre class="ap-pre ap-pre--rx"><code>(?:0 to 100|100% (?:guaranteed|effective|accurate|certain))</code></pre>
       <div class="ap-examples">
         
         
@@ -1830,7 +1705,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Tap here&#x27; / &#x27;Continue&#x27; / &#x27;Go&#x27; / &#x27;Next&#x27; name an action but not a target - the screen reader user has no idea where the link lands. &#x27;Submit now&#x27; / &#x27;Sign up now&#x27; add urgency without value. Generic CTA fingerprint.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with destination-aware copy: &#x27;Install the plugin&#x27;, &#x27;Open the changelog&#x27;, &#x27;See the comparison table&#x27;. The CTA should be a tiny one-line promise.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:a|button)[^&gt;]*&gt;\s*(?:Tap\s+here|Continue|Go|Next|Submit\s+now|Sign\s+up\s+now)\s*&lt;/(?:a|button)&gt;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:a|button)\b(?![^&gt;]*\b(?:aria-label\s*=|rel\s*=\s*[&#x27;\&quot;](?:next|prev)))[^&gt;]*&gt;\s*(?:Tap\s+here|Continue|Go|Next|Submit\s+now|Sign\s+up\s+now)\s*&lt;/(?:a|button)&gt;</code></pre>
       <div class="ap-examples">
         
         
@@ -1890,7 +1765,7 @@
       <p class="ap-desc"></p>
       <!-- ux-lint-off marketing-buzz-ai-powered-driven --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;AI-powered&#x27; has become the new &#x27;cloud-based&#x27; - every landing page claims it, nobody asks what model, what data, what task. Empty by saturation.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the model and the function: &#x27;uses Claude to generate brand-aware tokens&#x27;, &#x27;embeddings from text-embedding-3-small for palette match&#x27;. Or drop the qualifier and just describe the feature.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\bAI[\s-]?(?:powered|driven|enabled|enhanced|first)\b</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])AI[\s-]?(?:powered|driven|enabled|enhanced|first)(?![\w-])</code></pre>
       <div class="ap-examples">
         
         
@@ -1910,7 +1785,7 @@
       <p class="ap-desc"></p>
       <!-- ux-lint-off marketing-buzz-best-in-class --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Best-in-class&#x27; is a vendor pitch phrase with no defined benchmark - reads as marketing autopilot. If you really are best at something, name the comparison.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a measurable claim: &#x27;fastest CI lint at 90ms&#x27;, &#x27;most rules in the category at 145&#x27;. If no comparison exists, drop the phrase.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\bbest[\s-]in[\s-]class\b</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])best[\s-]in[\s-]class(?![\w-])</code></pre>
       <div class="ap-examples">
         
         
@@ -1930,7 +1805,7 @@
       <p class="ap-desc"></p>
       <!-- ux-lint-off marketing-buzz-cutting-edge --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Cutting-edge&#x27; is the laziest tech adjective in marketing copy - empty signal that means &#x27;we don&#x27;t want to commit to a specific claim&#x27;. Skipped by anyone reading critically.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a concrete capability: &#x27;ships in under 50ms&#x27;, &#x27;covers 152 anti-patterns&#x27;, &#x27;runs inside Cursor and Windsurf&#x27;. Specifics beat adjectives.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\bcutting[\s-]edge\b</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])cutting[\s-]edge(?![\w-])</code></pre>
       <div class="ap-examples">
         
         
@@ -1950,7 +1825,7 @@
       <p class="ap-desc"></p>
       <!-- ux-lint-off marketing-buzz-game-changing --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Game-changing&#x27; is the most overused tech-PR adjective in the last decade - means the writer wanted hype without committing to a specific shift. Reads instantly as filler.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Describe the shift in one sentence: &#x27;design intelligence in the model context, not just in Figma&#x27;. Concrete &gt; grandiose.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\bgame[\s-]chang(?:er|ing|e)\b</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])game[\s-]chang(?:er|ing|e)(?![\w-])</code></pre>
       <div class="ap-examples">
         
         
@@ -1970,7 +1845,7 @@
       <p class="ap-desc"></p>
       <!-- ux-lint-off marketing-buzz-industry-leading --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Industry-leading&#x27; is unverifiable by definition - every category leader and every follower uses it identically. Removes signal, adds slop.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Cite the specific lead: &#x27;first design linter in Claude Code marketplace&#x27;, &#x27;4x more rules than the next entrant&#x27;. No claim, no superlative.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\bindustry[\s-]leading\b</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])industry[\s-]leading(?![\w-])</code></pre>
       <div class="ap-examples">
         
         
@@ -1990,7 +1865,7 @@
       <p class="ap-desc"></p>
       <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Leverage AI&#x27;, &#x27;harness the power of&#x27;, &#x27;tap into the power of&#x27; are LinkedIn-thinkpiece formulas - immediately telegraphs generated marketing copy with no specifics.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use &#x27;use&#x27; or name the verb directly: &#x27;uses Claude for layout suggestions&#x27;. Plain verbs beat power-of-X scaffolding.</p></div>
-      <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><pre class="ap-pre ap-pre--rx"><code>\b(?:leverage(?:\s+the\s+power\s+of)?\s+AI|harness(?:\s+the\s+power\s+of)?|tap\s+into\s+the\s+power\s+of)\b</code></pre><!-- ux-lint-on -->
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])(?:leverage(?:\s+the\s+power\s+of)?\s+AI|harness(?:\s+the\s+power\s+of)?|tap\s+into\s+the\s+power\s+of)(?![\w-])</code></pre>
       <div class="ap-examples">
         
         
@@ -2009,8 +1884,8 @@
       </header>
       <p class="ap-desc"></p>
       <!-- ux-lint-off marketing-buzz-next-generation --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Next-generation&#x27; is a category-leader cliche that names nothing - every press release in the last 30 years has claimed it. The phrase signals unedited marketing copy and shows the writer skipped the work of saying what is actually new.</p></div><!-- ux-lint-on -->
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific capability that is new (e.g., &#x27;first MCP-native design engine&#x27;, &#x27;first regex linter with 152 rules&#x27;). If you can&#x27;t name a specific advance, drop the qualifier.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\bnext[\s-]generation\b</code></pre>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific capability that is new (e.g., &#x27;first MCP-native design engine&#x27;, &#x27;first regex linter with 145 rules&#x27;). If you can&#x27;t name a specific advance, drop the qualifier.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])next[\s-]generation(?![\w-])</code></pre>
       <div class="ap-examples">
         
         
@@ -2030,7 +1905,7 @@
       <p class="ap-desc"></p>
       <!-- ux-lint-off marketing-buzz-world-class --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;World-class&#x27; is consultancy filler - signals the writer either had nothing concrete to say or was scared to commit. Costs trust in a landing page.</p></div><!-- ux-lint-on -->
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific bar you cleared: &#x27;tested in 17 IDEs&#x27;, &#x27;WCAG AA on every component&#x27;. If there&#x27;s no bar, the word does not belong.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>\bworld[\s-]class\b</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])world[\s-]class(?![\w-])</code></pre>
       <div class="ap-examples">
         
         
@@ -2059,6 +1934,26 @@
     </article>
     
 
+    <article class="ap-card" id="one-action-several-labels">
+      <header class="ap-head">
+        <span class="ap-id">#one-action-several-labels</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Content</span>
+        <h2 class="ap-name">One action under several labels</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A page that names one action three ways (a header button, a hero button and a closing band that each say something different) makes the reader stop and compare them, and the one thing the page asks for stops reading as one thing.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Give every call to action that does the same thing (the same destination, the same form) the same words, the verb of the hero&#x27;s button. A different next step gets a different label and, when it is secondary, a text link.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:a|button)\b[^&gt;]*&gt;</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#one-action-several-labels" class="ap-anchor" aria-label="Link to rule #one-action-several-labels">link</a>
+    </article>
+    
+
     <article class="ap-card" id="round-number-stats">
       <header class="ap-head">
         <span class="ap-id">#round-number-stats</span>
@@ -2069,8 +1964,8 @@
       </header>
       <p class="ap-desc"></p>
       <!-- ux-lint-off before-after-100-percent, round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>99.99%, 10x faster, 100% guaranteed - the suspiciously round numbers AI invents to sound credible. Real measurements are messy and specific.</p></div><!-- ux-lint-on -->
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use the real number you measured: 99.93% uptime over Q1, 4.2x faster median build, refunded 218 of 244 reported issues. Specificity is the signal.</p></div>
-      <!-- ux-lint-off before-after-100-percent, round-number-stats --><pre class="ap-pre ap-pre--rx"><code>(?:99\.99%|99\.9%|10x faster|100% guaranteed|10x more)</code></pre><!-- ux-lint-on -->
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Never invent a number. Use the client&#x27;s own figure as the client states it, with what it counts and as of when (&quot;99.93% uptime over Q1&quot;, &quot;1,240 repairs since March 2025&quot;). A figure with no source ships only as a labeled draft placeholder the client fills, never as a claim.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?:99\.99%|99\.9%|10x faster|100% guaranteed|10x more)</code></pre>
       <div class="ap-examples">
         
         
@@ -2119,6 +2014,46 @@
     </article>
     
 
+    <article class="ap-card" id="glow-shadow-zero-offset">
+      <header class="ap-head">
+        <span class="ap-id">#glow-shadow-zero-offset</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Depth</span>
+        <h2 class="ap-name">Glow shadow with zero offset and large blur</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A shadow with no offset and a wide blur is not a shadow, it is a halo. Light has no source, so the element floats in neon instead of sitting on the page.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Give the shadow a light source: a small y offset and a blur about twice the offset, for example box-shadow: 0 4px 12px rgb(0 0 0 / 0.12). For focus, use a spread ring with no blur (0 0 0 3px).</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?:(?&lt;![\w-])(?:box-shadow|text-shadow)|--[\w-]*(?:shadow|glow)[\w-]*)\s*:(?:[^;{}]*?,)?\s*(?!inset)0(?:px)?\s+0(?:px)?\s+(?:(?:1[6-9]|[2-9]\d|\d{3,})px|[1-9]\d*(?:\.\d+)?r?em)|drop-shadow\(\s*0(?:px)?\s+0(?:px)?\s+(?:(?:1[6-9]|[2-9]\d|\</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#glow-shadow-zero-offset" class="ap-anchor" aria-label="Link to rule #glow-shadow-zero-offset">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="hairline-border-heavy-shadow">
+      <header class="ap-head">
+        <span class="ap-id">#hairline-border-heavy-shadow</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Depth</span>
+        <h2 class="ap-name">1px border combined with a heavy drop shadow</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A hairline border says the element sits flat on the surface; a heavy blurred shadow says it floats high above it. Both on one element is two depth models at once, a common tell of generated card styles.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pick one depth cue per element: keep the 1px border and drop the shadow (or use a shadow under 12px blur), or keep the elevated shadow and remove the border.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>\{(?=[^{}]*(?&lt;![\w-])border(?:-width)?\s*:\s*(?:0\.5px|1px)\b(?![^;{}]*transparent))(?=[^{}]*(?&lt;![\w-])box-shadow\s*:(?:[^;{}]*?,)?\s*(?!inset)-?\d+(?:\.\d+)?(?:px|r?em)?\s+-?\d+(?:\.\d+)?(?:px|r?em)?\s+(?:(?:2[4-9]|[3-9]\d|\d{3,})px|</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#hairline-border-heavy-shadow" class="ap-anchor" aria-label="Link to rule #hairline-border-heavy-shadow">link</a>
+    </article>
+    
+
     <article class="ap-card" id="aspect-ratio-1-1-default">
       <header class="ap-head">
         <span class="ap-id">#aspect-ratio-1-1-default</span>
@@ -2130,7 +2065,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Every image clipped to 1:1 is the Instagram-grid AI fingerprint - signals the generator picked the safest crop instead of letting content set the frame. Real editorial layouts use varied ratios (3:2, 4:5, 16:9, 21:9) to create rhythm.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Vary aspect ratio by content: 3:2 for product shots, 4:5 for portraits, 16:9 for hero or video. Reserve 1:1 for genuine grid contexts (avatars, social previews).</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;img[^&gt;]+(?:aspect-square|aspect-\[1/1\]|aspect-ratio\s*:\s*1(?:\s*/\s*1)?\b)|aspect-ratio\s*:\s*1\s*/\s*1\b</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;img\b[^&gt;]+(?:aspect-square|aspect-\[1/1\])</code></pre>
       <div class="ap-examples">
         
         
@@ -2219,6 +2154,26 @@
     </article>
     
 
+    <article class="ap-card" id="eyebrows-over-budget">
+      <header class="ap-head">
+        <span class="ap-id">#eyebrows-over-budget</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Layout</span>
+        <h2 class="ap-name">More eyebrows than the brand calls for</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A small label above every section heading turns each section into the same announcement, and the page reads as a template. How many sections carry one follows the brand&#x27;s formality: a sixth of them for a playful brand, up to half for a formal one (a third when the page&#x27;s system does not say). Eyebrows past that allowance are reported; a page with fewer than three sections is not counted.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep eyebrows where a section needs a label the heading cannot carry (a step number, a category) and let the other headings stand alone. Separate sections with space or a change of ground, never with a label.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;[a-z][\w-]*\b[^&gt;]*\bclass(?:Name)?\s*=</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#eyebrows-over-budget" class="ap-anchor" aria-label="Link to rule #eyebrows-over-budget">link</a>
+    </article>
+    
+
     <article class="ap-card" id="fixed-height-text-block">
       <header class="ap-head">
         <span class="ap-id">#fixed-height-text-block</span>
@@ -2230,12 +2185,52 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Fixing a pixel height on a container that also styles text breaks reflow at every other zoom level and font scale - the layout is one breakpoint away from clipping.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use min-height for floor protection, line-height + padding for vertical rhythm, and let content determine height. Never lock text height in px.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:p|div|span)[^{]*\{[^}]*height\s*:\s*\d+px[^}]*color</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s,&gt;+~}])(?:p|span|div)(?:[.#:\[][^\s{,&gt;+~]*)?\s*\{(?=[^}]*(?&lt;![\w-])height\s*:\s*\d+px)[^}]*(?&lt;![\w-])color\s*:</code></pre>
       <div class="ap-examples">
         
         
       </div>
       <a href="#fixed-height-text-block" class="ap-anchor" aria-label="Link to rule #fixed-height-text-block">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="full-viewport-width-overflow">
+      <header class="ap-head">
+        <span class="ap-id">#full-viewport-width-overflow</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Layout</span>
+        <h2 class="ap-name">Full viewport width causes horizontal scroll</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>width: 100vw (and min-width: 100vw / Tailwind w-screen) is the viewport width INCLUDING the scrollbar gutter, so a full-bleed element set this way overflows the document by the scrollbar width and produces horizontal scroll on the very platforms that have a visible scrollbar. (max-width: 100vw is a legitimate ceiling and is NOT flagged.)</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Size full-bleed surfaces to 100% of the container, or use the full-bleed margin trick (margin-inline: calc(50% - 50vw)) which accounts for the scrollbar. Never set the element&#x27;s own width or min-width to 100vw.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|[^-\w])(?:min-)?width\s*:\s*100vw|(?&lt;![\w-])w-screen(?![\w-])</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#full-viewport-width-overflow" class="ap-anchor" aria-label="Link to rule #full-viewport-width-overflow">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="layout-family-repeated">
+      <header class="ap-head">
+        <span class="ap-id">#layout-family-repeated</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Layout</span>
+        <h2 class="ap-name">One layout used for three sections</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Three sections built from the same tree of elements (a heading over three cards, again and again) read as one section repeated, and the page loses its rhythm. Repeated items inside a section count once; the words are ignored.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Give each section the layout its content needs: a split for one idea and its picture, a list for steps, a quote on its own, a grid only where items compare. Use one layout at most twice on a page.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;section\b</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#layout-family-repeated" class="ap-anchor" aria-label="Link to rule #layout-family-repeated">link</a>
     </article>
     
 
@@ -2279,18 +2274,38 @@
     </article>
     
 
+    <article class="ap-card" id="split-sections-in-a-row">
+      <header class="ap-head">
+        <span class="ap-id">#split-sections-in-a-row</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Layout</span>
+        <h2 class="ap-name">More than two media-and-text splits in a row</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A picture beside text, then text beside a picture, then again: the zigzag is the default a generator reaches for, and by the third the reader stops reading. The third split in a row and every one after it are reported.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Break the run after two: a full-width image, a grid of several items, a single quote or a band of figures between splits.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;section\b</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#split-sections-in-a-row" class="ap-anchor" aria-label="Link to rule #split-sections-in-a-row">link</a>
+    </article>
+    
+
     <article class="ap-card" id="animation-duration-too-long">
       <header class="ap-head">
         <span class="ap-id">#animation-duration-too-long</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Motion</span>
-        <h2 class="ap-name">Micro-interaction with animation-duration over 800ms</h2>
+        <h2 class="ap-name">Long animation that starts slowly</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A hover, focus, or state-change animation longer than 800ms feels sluggish - users perceive UI under 200ms as instant, under 500ms as snappy, over 800ms as broken or laggy. Long durations on micro-interactions signal no taste decision was made.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Cap micro-interactions at 150-400ms. Reserve longer durations (800ms+) for narrative scenes, page transitions, or deliberate orchestration - never for a button hover or icon flip.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>animation-duration\s*:\s*(?:[89]\d{2}|[1-9]\d{3,})ms\b|animation-duration\s*:\s*(?:[1-9]|[1-9]\.\d+)s\b|animation\s*:[^;]*\s(?:[89]\d{2}|[1-9]\d{3,})ms\b|animation\s*:[^;]*\s(?:[1-9]|[1-9]\.\d+)s\b</code></pre>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>An animation of 800ms or more on a slow-starting curve keeps the page waiting. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. An unwritten curve is the default one (ease, or Tailwind&#x27;s own) and is judged as written; a curve that cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page&#x27;s own system pass.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Bind the system&#x27;s entrance role (--motion-arrive-duration with --motion-arrive-curve). With no system, put the long move on a strong out curve so it is half done within 140ms, or shorten it.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>animation-duration\s*:\s*(?:[89]\d{2}|[1-9]\d{3,})ms\b|animation-duration\s*:\s*(?:[1-9]|[1-9]\.\d+)s\b|(?&lt;![\w-])animation\s*:(?![^;{}]*\binfinite\b)[^;{}]*\s(?:[89]\d{2}|[1-9]\d{3,})ms\b|(?&lt;![\w-])animation\s*:(?![^;{}]*\binfinite\b</code></pre>
       <div class="ap-examples">
         
         
@@ -2310,7 +2325,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Bouncing arrow on a CTA is the desperate-attention pattern that signals the copy itself isn&#x27;t doing the work.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Let the CTA copy carry the action (Start a 14-day trial, Read the deployment guide). If you need an arrow, use a static SVG that nudges 2-4px on hover.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|a)[^&gt;]*&gt;[^&lt;]*(?:→|-&gt;|&amp;rarr;|&amp;#8594;)[^&lt;]*&lt;/(?:button|a)&gt;|class=&quot;[^&quot;]*\banimate-bounce\b[^&quot;]*&quot;[^&gt;]*&gt;\s*(?:→|→|&amp;rarr;|&lt;svg)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|a)\b[^&gt;]*&gt;[^&lt;]*(?:\u2192|-&gt;|&amp;rarr;|&amp;#8594;)[^&lt;]*&lt;/(?:button|a)&gt;|class=\&quot;[^\&quot;]*\banimate-bounce\b[^\&quot;]*\&quot;[^&gt;]*&gt;\s*(?:\u2192|&amp;rarr;|&lt;svg)</code></pre>
       <div class="ap-examples">
         
         
@@ -2319,18 +2334,38 @@
     </article>
     
 
+    <article class="ap-card" id="marquee-more-than-one">
+      <header class="ap-head">
+        <span class="ap-id">#marquee-more-than-one</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Motion</span>
+        <h2 class="ap-name">More than one marquee</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>One scrolling strip can carry logos or a line of news; a second one competes with it and with the text around it, and every strip that moves on its own for more than five seconds needs a way to pause it.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep one marquee and turn the others into static rows. Give the one that stays a pause control and stop it under prefers-reduced-motion.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;marquee\b|&lt;[a-z][\w-]*\b[^&gt;]*(?:\bclass(?:Name)?\s*=\s*[&quot;&#x27;{][^&quot;&#x27;}]*(?:marquee|ticker)|\bdata-marquee\b)</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#marquee-more-than-one" class="ap-anchor" aria-label="Link to rule #marquee-more-than-one">link</a>
+    </article>
+    
+
     <article class="ap-card" id="transition-duration-500ms-or-longer">
       <header class="ap-head">
         <span class="ap-id">#transition-duration-500ms-or-longer</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Motion</span>
-        <h2 class="ap-name">Interactive transition-duration 500ms or longer</h2>
+        <h2 class="ap-name">Interactive transition that answers late</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A `transition-duration` of 500ms or more on hover, focus, or active states feels laggy - the human perception threshold for &#x27;instant&#x27; is 100ms and for &#x27;snappy&#x27; is 200ms. Users move the mouse 8-12 times per second; a 500ms transition means the hover state hasn&#x27;t finished settling before the cursor moves on. Stretched transitions are the AI default for &#x27;smooth.&#x27;</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Cap interactive transitions at 150-300ms. Use 200ms for color/background/border hovers, 250-300ms for transform/scale, and 100-150ms for fast snap states (focus rings, active depressions). Reserve 500ms+ for scene transitions, drawer slides, and page-level state changes - never single-element hovers.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>transition-duration\s*:\s*(?:[5-9]\d{2}|[1-9]\d{3,})ms\b|transition-duration\s*:\s*(?:0?\.[5-9]|[1-9](?:\.\d+)?)s\b|transition\s*:[^;]*\s(?:[5-9]\d{2}|[1-9]\d{3,})ms\b|transition\s*:[^;]*\s(?:0?\.[5-9]|[1-9](?:\.\d+)?)s\b</code></pre>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A transition of 400ms or more that starts slowly leaves the hover or press unanswered while the pointer has moved on. Length alone is not the problem: a long move on a strong out curve is half done in 70ms. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. An unwritten curve is the default one (ease, or Tailwind&#x27;s own) and is judged as written; a curve that cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page&#x27;s own system pass.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Bind the system&#x27;s motion roles (--motion-state-duration with --motion-state-curve for hover and state, --motion-reveal-* for entrances). With no system, use a strong out curve such as cubic-bezier(0.2, 0.8, 0.2, 1), or shorten the move until it is half done within 70ms.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>transition-duration\s*:\s*(?:[4-9]\d{2}|[1-9]\d{3,})ms\b|transition-duration\s*:\s*(?:0?\.[4-9]|[1-9](?:\.\d+)?)s\b|(?&lt;![\w-])transition\s*:[^;{}]*\s(?:[4-9]\d{2}|[1-9]\d{3,})ms\b|(?&lt;![\w-])transition\s*:[^;{}]*\s(?:0?\.[4-9]|[1-9](?:</code></pre>
       <div class="ap-examples">
         
         
@@ -2344,18 +2379,38 @@
         <span class="ap-id">#transition-property-all</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Motion</span>
-        <!-- ux-lint-off transition-property-all --><h2 class="ap-name">transition: all (lazy property list)</h2><!-- ux-lint-on -->
+        <h2 class="ap-name">transition: all (lazy property list)</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off transition-property-all --><div class="ap-why"><span class="ap-sub">Why bad</span><p>transition: all is the lazy default that animates every property change - including layout-triggering ones like width/height/margin - causing jank and unintended motion. It also fires on properties the author never meant to transition.</p></div><!-- ux-lint-on -->
-      <!-- ux-lint-off transition-property-all --><div class="ap-fix"><span class="ap-sub">Fix</span><p>List the exact properties: transition: transform 200ms ease, opacity 200ms ease. In Tailwind, prefer transition-colors, transition-opacity, transition-transform over transition-all.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>transition: all is the lazy default that animates every property change - including layout-triggering ones like width/height/margin - causing jank and unintended motion. It also fires on properties the author never meant to transition.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>List the exact properties: transition: transform 200ms ease, opacity 200ms ease. In Tailwind, prefer transition-colors, transition-opacity, transition-transform over transition-all.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>transition\s*:\s*all\b|transition-property\s*:\s*all\b|\btransition-all\b</code></pre>
       <div class="ap-examples">
         
         
       </div>
       <a href="#transition-property-all" class="ap-anchor" aria-label="Link to rule #transition-property-all">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="css-import-render-blocking">
+      <header class="ap-head">
+        <span class="ap-id">#css-import-render-blocking</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Performance</span>
+        <h2 class="ap-name">@import in CSS (render-blocking)</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>CSS @import serializes downloads: the browser must fetch and parse the parent stylesheet before it even discovers the import, delaying first paint, and it cannot be preloaded the way a &lt;link&gt; can.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace @import with &lt;link rel=&quot;stylesheet&quot;&gt; in the head (or bundle at build time); use &lt;link rel=&quot;preload&quot;&gt; for critical fonts and CSS. A local design-token file (tokens.css, or custom properties only) may stay an @import.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>@import\s+(?:url\(|[&#x27;&quot;])</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#css-import-render-blocking" class="ap-anchor" aria-label="Link to rule #css-import-render-blocking">link</a>
     </article>
     
 
@@ -2370,7 +2425,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>scroll, touchmove, touchstart, and wheel listeners default to passive: false, which means the browser must wait for the handler to finish before scrolling - any sync work blocks the scroll thread and creates the &#x27;janky scroll on a fancy page&#x27; feel. Chromium flags this in DevTools as a passive-listener warning for any non-passive scroll handler.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pass `{ passive: true }` as the third argument: `el.addEventListener(&#x27;scroll&#x27;, fn, { passive: true })`. Only opt out (passive: false) if you genuinely need preventDefault() to block scrolling - which is rare and usually wrong.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>addEventListener\s*\(\s*[&#x27;&quot;](?:scroll|touchmove|touchstart|wheel|mousewheel)[&#x27;&quot;]\s*,[^)]*\)(?![^;]*\{[^}]*passive\s*:\s*true)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>addEventListener\s*\(\s*[&#x27;&quot;](?:scroll|touchmove|touchstart|wheel|mousewheel)[&#x27;&quot;]\s*,(?:(?!passive\s*:\s*(?:true|false))[^)])*\)</code></pre>
       <div class="ap-examples">
         
         
@@ -2428,7 +2483,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off arbitrary-z-index-9999 --><div class="ap-why"><span class="ap-sub">Why bad</span><p>z-index: 9999 is the &#x27;I gave up on the stacking system&#x27; value - signals there&#x27;s no z-scale token map and stacking bugs are coming.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>z-index: 9999 is the &#x27;I gave up on the stacking system&#x27; value - signals there&#x27;s no z-scale token map and stacking bugs are coming.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>z-index:\s*(?:9999+|99999+|2147483647)\b|\bz-\[(?:9999+|99999+)\]</code></pre>
       <div class="ap-examples">
@@ -2450,7 +2505,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>cursor: pointer on body or html signals &#x27;everything is clickable&#x27; when most things are not - users learn to distrust the cursor cue, and accessibility regressions follow. AI shortcut for &#x27;I am not sure what is interactive so I will hint at everything&#x27;.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Remove cursor: pointer from body / html / main. Apply it only to elements that are genuinely interactive (buttons, links, custom controls with the right ARIA role).</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s,}&gt;+~])(?:body|html|main|\.(?:app|root|page))[^{}]*\{[^}]*\bcursor\s*:\s*pointer\s*[;}]</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|(?&lt;=[\s,}&gt;+~]))(?:body|html|main|\.(?:app|root|page))(?:[.#:\[][^\s{,&gt;+~]*)?\s*\{[^}]*\bcursor\s*:\s*pointer\s*[;}]</code></pre>
       <div class="ap-examples">
         
         
@@ -2470,7 +2525,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Inline style= attributes bypass the design system, defeat caching, and signal the styling decision was made ad hoc.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use Tailwind utilities, a CSS class, or a styled component. Reserve inline style for runtime-computed values (animated translate, dynamic CSS vars) only.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:div|span|p|section|article|h[1-6]|button|a|img)[^&gt;]*\sstyle=&quot;[^&quot;]+&quot;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:div|span|p|section|article|h[1-6]|button|a|img)\b[^&gt;]*\sstyle\s*=\s*\&quot;(?:\s*--[\w-]+\s*:[^;\&quot;]*;?)*\s*(?!--)[a-z][\w-]*\s*:</code></pre>
       <div class="ap-examples">
         
         
@@ -2488,9 +2543,9 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>ALL CAPS reading speed is 13-20% slower than mixed case because word shape is lost. At 14px or larger it actively impedes reading.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Reserve uppercase for eyebrows, labels, and badges under 14px. Use sentence case for anything readers need to read, not just scan.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>text-transform\s*:\s*uppercase[^}]*font-size\s*:\s*(?:[2-9]\d|\d{3,})</code></pre>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Capitals at reading size slow reading, because word shapes are lost. A loud brand can set its display in capitals: when the page&#x27;s system has a capitals display role and leans to capitals (--type-capitals at 0.5 or more, when the system emits it), a capitals style at one of the system&#x27;s two largest sizes, tracked at 0 or open, passes. A calm system&#x27;s display capitals, and body, subhead and tight-tracked capitals, are still reported.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Set body and subhead text in sentence case; keep capitals for short labels. For a capitals display, bind the system&#x27;s display-caps role (--type-text-display-caps-*), which tracks at 0 or open.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>text-transform\s*:\s*uppercase[^}]*font-size\s*:\s*(?:[2-9]\d|\d{3,}|\d*\.?\d+r?em\b|var\(|clamp\(|calc\()|font-size\s*:\s*(?:[2-9]\d|\d{3,}|\d*\.?\d+r?em\b|var\(|clamp\(|calc\()[^}]*text-transform\s*:\s*uppercase</code></pre>
       <div class="ap-examples">
         
         
@@ -2510,7 +2565,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Making the entire body or every paragraph bold defeats hierarchy - the page has no normal weight to bold against. Long-form reading at weight 700 is measurably slower than at 400. AI shortcut for &#x27;make it pop&#x27; that breaks the typographic system.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep body and paragraph weight at 400 (or 450 if the typeface needs a touch more presence). Use bold sparingly inside paragraphs (strong / b) or on headings - never as the default body weight.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s,}&gt;+~])(?:body|p|li|main|article|\.(?:body|prose|text|content|paragraph))[^{}]*\{[^}]*\bfont-weight\s*:\s*(?:bold|700|800)\s*[;}]</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|(?&lt;=[\s,}&gt;+~]))(?:body|p|li|main|article|\.(?:body|prose|text|content|paragraph))(?:[.#:\[][^\s{,&gt;+~]*)?\s*\{[^}]*\bfont-weight\s*:\s*(?:bold|700|800)\s*[;}]</code></pre>
       <div class="ap-examples">
         
         
@@ -2530,7 +2585,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Letter-spacing above ~0.25em or 5px on body text breaks reading flow and exceeds every typography guideline since the 1990s. Wide tracking belongs on display caps, never on paragraph text or list items.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep letter-spacing on body, p, li to ~0 to 0.02em max. Reserve wide tracking (0.2em to 0.4em) for short ALL-CAPS labels or eyebrow text only.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s,}&gt;+~])(?:body|p|li|main|article|\.(?:body|prose|text|content|paragraph))[^{}]*\{[^}]*\bletter-spacing\s*:\s*(?:0?\.[3-9]\d*em|[1-9]\d*(?:\.\d+)?em|0?\.[3-9]\d*rem|[1-9]\d*(?:\.\d+)?rem|[6-9]px|[1-9]\d+px)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|(?&lt;=[\s,}&gt;+~]))(?:body|p|li|main|article|\.(?:body|prose|text|content|paragraph))(?:[.#:\[][^\s{,&gt;+~]*)?\s*\{[^}]*\bletter-spacing\s*:\s*(?:0?\.[3-9]\d*em|[1-9]\d*(?:\.\d+)?em|0?\.[3-9]\d*rem|[1-9]\d*(?:\.\d+)?rem|[6-9]px|[1-9</code></pre>
       <div class="ap-examples">
         
         
@@ -2550,12 +2605,32 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>text-shadow on body text smears the glyph edges, drops contrast, and is the classic 2010s skeuomorphic tell. Long-form reading becomes measurably harder, and the shadow does not survive dark mode without a separate override.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Remove text-shadow from body, p, li, prose, and content classes. If you need depth on a hero title or display headline, scope text-shadow to that one element class and verify contrast in both light and dark themes.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?:^|[\s,}&gt;+~])(?:body|p|li|main|article|\.(?:body|prose|text|content|paragraph))[^{}]*\{[^}]*\btext-shadow\s*:</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?:^|(?&lt;=[\s,}&gt;+~]))(?:body|p|li|main|article|\.(?:body|prose|text|content|paragraph))(?:[.#:\[][^\s{,&gt;+~]*)?\s*\{[^}]*\btext-shadow\s*:</code></pre>
       <div class="ap-examples">
         
         
       </div>
       <a href="#body-text-shadow-on-prose" class="ap-anchor" aria-label="Link to rule #body-text-shadow-on-prose">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="default-font-only">
+      <header class="ap-head">
+        <span class="ap-id">#default-font-only</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Typography</span>
+        <h2 class="ap-name">Inter or Geist as the only font, no type decision</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Inter or Geist alone, with no display face, scale or pairing, is the framework default. The type says nothing about the product because no one decided anything.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Make one type decision on top of the default: pair the sans with a display or serif face for headings (declare it as a second font-family or --font-display token), or replace the default with a face chosen for the brand.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?:(?&lt;![\w-])font-family|--font[\w-]*)\s*:\s*[\&quot;&#x27;]?(?:Inter|Geist)(?:\s+(?:Variable|Sans|Display))?[\&quot;&#x27;]?\s*(?:[,;}]|$)</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#default-font-only" class="ap-anchor" aria-label="Link to rule #default-font-only">link</a>
     </article>
     
 
@@ -2568,8 +2643,8 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Display fonts at 700 weight read dense and visually muddy. Most display faces are drawn to sing at 500-600; 700+ is for body emphasis, not headlines.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use font-weight 500 or 600 on display headings. Reserve 700+ for body emphasis (bold inline text, table totals, primary CTA labels).</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A heavy weight on a display that nothing chose reads dense and muddy: measured award pages set their headlines near 400, and only a loud, informal brand earns 700 on a large display. When the page carries its own design system (custom properties it defines or links), the value passes if the system has it: the system decided it.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Take the display weight from the type tokens (--type-text-display-font-weight, or the system&#x27;s weight role). With no system, set display headings at 400 to 600 and keep 700 and up for short emphasis.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>font-weight\s*:\s*(?:700|bolder)[^}]*font-size\s*:\s*(?:[3-9]\d|\d{3,})</code></pre>
       <div class="ap-examples">
         
@@ -2588,8 +2663,8 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off hero-text-arbitrary-90px --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.</p></div><!-- ux-lint-on -->
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Extend the Tailwind theme scale or use clamp() for fluid hero typography. text-6xl/text-7xl/text-8xl exist for a reason.</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A display size picked by eye bypasses the type scale, so the hierarchy no longer holds at other widths. When the page carries its own design system (custom properties it defines or links), the value passes if the system has it: the system decided it.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Take the display size from the type tokens (--type-text-display-font-size, a fluid clamp the engine derives from the brand). With no system, add the size to the theme&#x27;s scale and write it as a clamp() between the phone and desktop sizes.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>text-\[(?:9[0-9]|1[0-9]{2})px\]|font-size:\s*(?:9[0-9]|1[0-9]{2})px\b</code></pre>
       <div class="ap-examples">
         
@@ -2608,8 +2683,8 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>tracking-tighter (-0.05em) on font-weight 800+ display is the unmistakable &#x27;AI hero&#x27; typographic recipe - copied from every Linear-clone landing page. The combination crushes the counters and reads as default, not deliberate.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use letter-spacing -0.01em to -0.02em on display headings, with font-weight 500-600. Reserve heavy-and-tight pairings for short brand wordmarks, not full headlines.</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Tight tracking on a heavy display that nothing chose crushes the counters and reads as a default recipe. When the page carries its own design system (custom properties it defines or links), the value passes if the system has it: the system decided it. Both the tracking and the weight must be the system&#x27;s.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Take the display&#x27;s letter spacing and weight from the type tokens (--type-text-display-letter-spacing, --type-text-display-font-weight). With no system, keep display tracking between -0.01em and -0.02em at a weight of 400 to 600.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>letter-spacing\s*:\s*-0\.0[3-9]e?m?[^;}]*[;}][^{]*font-weight\s*:\s*[7-9]00|font-weight\s*:\s*[7-9]00[^;}]*[;}][^{]*letter-spacing\s*:\s*-0\.0[3-9]|\btracking-tighter\b[^&quot;&#x27;]*\bfont-(?:bold|extrabold|black)\b|\bfont-(?:bold|extrabo</code></pre>
       <div class="ap-examples">
         
@@ -2628,7 +2703,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off text-3xl-4xl-5xl-stack --><div class="ap-why"><span class="ap-sub">Why bad</span><p>text-3xl md:text-4xl lg:text-5xl (and the 4xl/5xl/6xl shift) is the verbatim Tailwind tutorial cadence for every AI-generated hero - signals the responsive type was set by stepping through preset utilities, not by tuning the actual feel at each breakpoint.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>text-3xl md:text-4xl lg:text-5xl (and the 4xl/5xl/6xl shift) is the verbatim Tailwind tutorial cadence for every AI-generated hero - signals the responsive type was set by stepping through preset utilities, not by tuning the actual feel at each breakpoint.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use clamp() for fluid type: text-[clamp(2.5rem,5vw,4.5rem)] or define a custom step in tailwind.config that jumps by content priority, not utility index.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\btext-3xl\b[^&quot;]*\bmd:text-4xl\b[^&quot;]*\blg:text-5xl\b|\btext-4xl\b[^&quot;]*\bmd:text-5xl\b[^&quot;]*\blg:text-6xl\b|\btext-5xl\b[^&quot;]*\bmd:text-6xl\b[^&quot;]*\blg:text-7xl\b</code></pre>
       <div class="ap-examples">
@@ -2708,9 +2783,9 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Stacking five or more shadow layers is the AI&#x27;s idea of premium depth; reads as visual bloat and chews the GPU on paint.</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Stacking five or more shadow layers is the AI&#x27;s idea of premium depth; reads as visual bloat and chews the GPU on paint. The rule fires at five layers, not three: careful design systems build depth from up to four layers (an elevation scale&#x27;s umbra, penumbra and ambient layers, or a four-step smooth shadow), so a lower threshold would flag real work. A stacked glow of zero-offset layers is caught at any count by glow-shadow-zero-offset.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use one ambient diffusion shadow (e.g. 0 20px 40px -15px rgba(0,0,0,0.08)) and at most one tight contact shadow. Depth comes from contrast, not layer count.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>box-shadow:\s*([^,;]+,[^,;]+,[^,;]+,[^,;]+,[^,;]+,)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])box-shadow\s*:(?:[^(),;{}]|\([^()]*\))*(?:,(?:[^(),;{}]|\([^()]*\))*){4,}</code></pre>
       <div class="ap-examples">
         
         
@@ -2744,11 +2819,11 @@
         <span class="ap-id">#glass-morphism-default</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Visual</span>
-        <!-- ux-lint-off blur-bg-only-decoration, glass-morphism-default --><h2 class="ap-name">Backdrop-blur frosted-glass on four-plus surfaces</h2><!-- ux-lint-on -->
+        <h2 class="ap-name">Backdrop-blur frosted-glass on four-plus surfaces</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off blur-bg-only-decoration --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Frosted-glass everywhere is the iOS-aesthetic AI tell - signals the generator confused &#x27;depth&#x27; with &#x27;blur every surface&#x27;. Four-plus backdrop-blur layers on a single page is the visual equivalent of using bold on every word.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Frosted-glass everywhere is the iOS-aesthetic AI tell - signals the generator confused &#x27;depth&#x27; with &#x27;blur every surface&#x27;. Four-plus backdrop-blur layers on a single page is the visual equivalent of using bold on every word.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Reserve glass for one or two surfaces that have a clear reason to feel translucent (a floating nav, a notification toast). Solid surfaces with restraint read more premium than four blurred panels.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?:backdrop-(?:blur|filter)|backdrop-filter\s*:\s*blur)[\s\S]{0,1500}?(?:backdrop-(?:blur|filter)|backdrop-filter\s*:\s*blur)[\s\S]{0,1500}?(?:backdrop-(?:blur|filter)|backdrop-filter\s*:\s*blur)[\s\S]{0,1500}?(?:backdrop-(?:blur|filter)|ba</code></pre>
       <div class="ap-examples">
@@ -2808,7 +2883,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off tailwind-color-named-vague --><div class="ap-why"><span class="ap-sub">Why bad</span><p>Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Define semantic tokens in tailwind.config or CSS custom properties: bg-primary, text-success, ring-accent. Map them once.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:bg|text|border|ring|from|to|via)-(?:blue|red|green|yellow|purple|pink|indigo|orange)-(?:400|500|600)\b</code></pre>
       <div class="ap-examples">
@@ -2888,7 +2963,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>repeat(3, 1fr) with no minmax(), no auto-fit, and no asymmetric weighting is the laziest grid declaration - signals the layout was set by a generator that defaulted to &#x27;three equal columns&#x27; without thinking about content priority or responsive behavior.</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>repeat(3, 1fr) around cells that each hold just an icon, a title and a line is the three-equal-cards default. When the file, or a page that loads the stylesheet, shows that each cell carries its own media or richer content, the grid passes; a stylesheet with no markup to read is still reported.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use minmax for responsive floors: repeat(auto-fit, minmax(280px, 1fr)). For deliberate three-column layouts, weight by content: grid-template-columns: 2fr 1fr 1fr, or use named-area grids.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>grid-template-columns\s*:\s*repeat\(\s*3\s*,\s*1fr\s*\)|grid-template-columns\s*:\s*1fr\s+1fr\s+1fr\s*[;}]</code></pre>
       <div class="ap-examples">
@@ -2908,9 +2983,9 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Hamburger on a wide viewport hides nav from users for no reason; signals the responsive breakpoint was skipped.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Show inline nav on md: and up; hide the hamburger above that breakpoint with md:hidden.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|div)[^&gt;]*(?:aria-label=&quot;(?:menu|navigation|hamburger)&quot;|class=&quot;[^&quot;]*\b(?:hamburger|menu-toggle)\b[^&quot;]*&quot;)[^&gt;]*&gt;(?![\s\S]*?(?:md:hidden|lg:hidden|hidden\s+md:|hidden\s+lg:))</code></pre>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A menu button on a wide viewport hides the navigation behind a click for no reason; the links fit, so the responsive breakpoint was skipped.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Show the links inline at desktop widths and hide the menu button there: a media query at the width where the links fit (@media (min-width: 1024px) { .menu-button { display: none } }), or a breakpoint class such as lg:hidden. Keep the button, its aria-expanded and aria-controls, below that width.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|div|span|a)\b(?=[^&gt;]*(?:\baria-(?:controls|expanded|label)\b|\b(?:class|id|title|data-[\w-]+)\s*=\s*[&quot;&#x27;][^&quot;&#x27;]*(?:menu|burger|toggl|nav|drawer|canvas)))[^&gt;]*&gt;</code></pre>
       <div class="ap-examples">
         
         
@@ -2929,7 +3004,7 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>rounded-full on every button and input is the iOS-tutorial fingerprint - signals the radius decision was skipped entirely.</p></div>
-      <!-- ux-lint-off border-radius-2xl-default --><div class="ap-fix"><span class="ap-sub">Fix</span><p>rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards.</p></div><!-- ux-lint-on -->
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>&lt;button[^&gt;]*class=&quot;[^&quot;]*\brounded-full\b[^&quot;]*&quot;[^&gt;]*&gt;(?![^&lt;]*(?:×|close|menu|search))|&lt;(?:input|textarea)[^&gt;]*class=&quot;[^&quot;]*\brounded-full\b</code></pre>
       <div class="ap-examples">
         
@@ -2948,7 +3023,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off cubic-bezier-material-only --><div class="ap-why"><span class="ap-sub">Why bad</span><p>cubic-bezier(0.4, 0, 0.2, 1) is Material Design&#x27;s default standard ease - using it as the only curve signals no taste decision was made.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>cubic-bezier(0.4, 0, 0.2, 1) is Material Design&#x27;s default standard ease - using it as the only curve signals no taste decision was made.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use cubic-bezier(0.16, 1, 0.3, 1) for premium exits, cubic-bezier(0.34, 1.56, 0.64, 1) for playful overshoot, or spring physics.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>cubic-bezier\(\s*0?\.4\s*,\s*0\s*,\s*0?\.2\s*,\s*1\s*\)</code></pre>
       <div class="ap-examples">
@@ -2956,6 +3031,26 @@
         
       </div>
       <a href="#cubic-bezier-material-only" class="ap-anchor" aria-label="Link to rule #cubic-bezier-material-only">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="exit-cut-by-display-none">
+      <header class="ap-head">
+        <span class="ap-id">#exit-cut-by-display-none</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
+        <span class="ap-cat">Motion</span>
+        <h2 class="ap-name">Exit animation cut by display: none</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A popover or menu that fades on a transition but sets display: none in its closed state disappears at the first frame of its exit: the fade the system&#x27;s motion.dismiss role defines never shows.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep the exit running until it ends: transition display with allow-discrete (transition: opacity 200ms, display 200ms allow-discrete), or set hidden or inert from script when transitionend fires.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>display\s*:\s*none</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#exit-cut-by-display-none" class="ap-anchor" aria-label="Link to rule #exit-cut-by-display-none">link</a>
     </article>
     
 
@@ -2979,6 +3074,26 @@
     </article>
     
 
+    <article class="ap-card" id="theme-switch-animates-everything">
+      <header class="ap-head">
+        <span class="ap-id">#theme-switch-animates-everything</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
+        <span class="ap-cat">Motion</span>
+        <h2 class="ap-name">Theme switch animates every color on the page</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A transition on every element&#x27;s colors turns a theme switch into a slow wash across the whole page, with text passing through low contrast on its way, and it fights the transitions the components declare.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Suspend transitions for the frame the theme changes in: add a class such as theme-switching to the root, set .theme-switching * { transition: none !important }, switch the theme, and remove the class on the next animation frame.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])transition\s*:[^;{}]+</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#theme-switch-animates-everything" class="ap-anchor" aria-label="Link to rule #theme-switch-animates-everything">link</a>
+    </article>
+    
+
     <article class="ap-card" id="timing-300ms-default">
       <header class="ap-head">
         <span class="ap-id">#timing-300ms-default</span>
@@ -2988,9 +3103,9 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>300ms is the editor default - using it everywhere signals zero motion intent and reads as laziness to anyone who tunes animation curves.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Micro-interactions 150-220ms, complex transitions 250-400ms, exit 60-70% of entry. Pick durations that match the feel, not the default.</p></div>
-      <!-- ux-lint-off timing-300ms-default --><pre class="ap-pre ap-pre--rx"><code>(?:transition(?:-duration)?|animation-duration):\s*300ms\b|duration-300\b|\bduration:\s*0\.3s\b</code></pre><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>300ms on the default curve is the editor default: nothing about the motion was decided. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. An unwritten curve is the default one (ease, or Tailwind&#x27;s own) and is judged as written; a curve that cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page&#x27;s own system pass.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Bind the system&#x27;s motion roles (--motion-state-*, --motion-swap-*). With no system, declare a curve that answers in time (half done within 70ms for a hover or press) and a duration chosen for the move.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?:transition(?:-duration)?|animation-duration):\s*300ms\b|(?&lt;![\w-])(?:transition|animation)\s*:[^;{}]*\s(?:300ms|0?\.3s)\b|(?&lt;![\w$@-])duration-300\b|\bduration:\s*0\.3s\b</code></pre>
       <div class="ap-examples">
         
         
@@ -3159,6 +3274,26 @@
     </article>
     
 
+    <article class="ap-card" id="display-line-height-under-floor">
+      <header class="ap-head">
+        <span class="ap-id">#display-line-height-under-floor</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
+        <span class="ap-cat">Typography</span>
+        <h2 class="ap-name">Display line height under the engine&#x27;s floor</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A display set tighter than the engine ever builds for its size reads cramped, and the tightest settings bring descenders onto the ascenders of the next line; Arabic marks above and below the letters need more room still. The engine&#x27;s floor falls from 1.12 at 40px to 0.92 at 160px and above as size and contrast rise, and Arabic display stays at least 0.15 above Latin. With no system the lint holds a page to the floor at the boldest contrast; when the page carries its own system, a line height its tokens define passes: the system decided it.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Bind the display line height to the system&#x27;s leading token (--type-leading-latin-step-N, or the Arabic one under rtl). With no system, keep the line height at or above the floor for the size: 1.12 at 40px, about 1.02 at 80px, 0.92 at 160px and above, and 0.15 more for Arabic.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])line-height\s*:\s*[^;{}]+|(?&lt;![\w-])font\s*:\s*[^;{}]*\d(?:px|rem)\s*/\s*[\d.]+[^;{}]*|class=&quot;(?=[^&quot;\n]*(?&lt;![\w:/-])text-(?:[5-9]xl|\[\d+(?:\.\d+)?(?:px|rem)\])(?![\w-]))[^&quot;\n]*</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#display-line-height-under-floor" class="ap-anchor" aria-label="Link to rule #display-line-height-under-floor">link</a>
+    </article>
+    
+
     <article class="ap-card" id="font-family-monospace-fallback-default">
       <header class="ap-head">
         <span class="ap-id">#font-family-monospace-fallback-default</span>
@@ -3190,12 +3325,32 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Falling back to the system stack alone with no chosen typeface gives up the chance to have any typographic identity.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pick a real face: Geist, Inter, Satoshi, IBM Plex Sans, Cabinet Grotesk, or the brand&#x27;s variable. System stack is the absolute last fallback.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>font-family:\s*(?:-apple-system|BlinkMacSystemFont)(?:\s*,\s*(?:BlinkMacSystemFont|&#x27;?Segoe UI&#x27;?|Roboto|Oxygen|Ubuntu|Cantarell|&#x27;?Helvetica Neue&#x27;?|sans-serif|system-ui))*\s*;</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>font-family:\s*(?:-apple-system|BlinkMacSystemFont)(?:\s*,\s*(?:BlinkMacSystemFont|[\&quot;&#x27;]?Segoe UI[\&quot;&#x27;]?|Roboto|Oxygen|Ubuntu|Cantarell|[\&quot;&#x27;]?Helvetica Neue[\&quot;&#x27;]?|Arial|sans-serif|system-ui))*\s*[;}]</code></pre>
       <div class="ap-examples">
         
         
       </div>
       <a href="#font-system-only" class="ap-anchor" aria-label="Link to rule #font-system-only">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="text-align-justify-web">
+      <header class="ap-head">
+        <span class="ap-id">#text-align-justify-web</span>
+        <span class="ap-sev ap-sev--low">LOW</span>
+        <span class="ap-cat">Typography</span>
+        <h2 class="ap-name">Justified body text on the web</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Browsers justify by stretching word-spacing, opening uneven &#x27;rivers&#x27; of whitespace and hurting readability: CSS has none of the hyphenation or microtypography a print justifier relies on.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use text-align: left (or start) for body copy. If justification is a hard brand requirement, pair it with hyphens: auto and test at the real line length.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>text-align:\s*justify</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#text-align-justify-web" class="ap-anchor" aria-label="Link to rule #text-align-justify-web">link</a>
     </article>
     
 
@@ -3210,7 +3365,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Backdrop blur applied without a translucent surface behind it is GPU work for zero visual benefit - decoration, not design.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair backdrop-blur with a translucent fill: bg-white/70 or bg-zinc-950/60. Otherwise remove the blur entirely.</p></div>
-      <!-- ux-lint-off blur-bg-only-decoration --><pre class="ap-pre ap-pre--rx"><code>(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\s*blur\([^)]+\))(?![^&quot;&#x27;;]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba))</code></pre><!-- ux-lint-on -->
+      <pre class="ap-pre ap-pre--rx"><code>\{(?![^{}]*background(?:-color)?\s*:[^;{}]*(?:rgba|hsla|/\s*0?\.\d|transparent|color-mix))[^{}]*(?&lt;![\w-])backdrop-filter\s*:\s*blur\(</code></pre>
       <div class="ap-examples">
         
         
@@ -3224,7 +3379,7 @@
         <span class="ap-id">#body-background-color-inherit</span>
         <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Visual</span>
-        <!-- ux-lint-off body-background-color-inherit --><h2 class="ap-name">body { background-color: inherit }</h2><!-- ux-lint-on -->
+        <h2 class="ap-name">body { background-color: inherit }</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
@@ -3244,11 +3399,11 @@
         <span class="ap-id">#border-radius-2xl-default</span>
         <span class="ap-sev ap-sev--low">LOW</span>
         <span class="ap-cat">Visual</span>
-        <!-- ux-lint-off border-radius-2xl-default --><h2 class="ap-name">rounded-2xl or larger applied to everything</h2><!-- ux-lint-on -->
+        <h2 class="ap-name">rounded-2xl or larger applied to everything</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off border-radius-2xl-default --><div class="ap-why"><span class="ap-sub">Why bad</span><p>rounded-2xl/3xl (24-32px+) on every card, button, and input is the Tailwind AI signature - signals the radius was set once and copy-pasted instead of being calibrated per element size. Buttons end up looking like pills, inputs lose definition, dense surfaces feel cartoonish.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>rounded-2xl/3xl (24-32px+) on every card, button, and input is the Tailwind AI signature - signals the radius was set once and copy-pasted instead of being calibrated per element size. Buttons end up looking like pills, inputs lose definition, dense surfaces feel cartoonish.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Calibrate radius to element size: 4-8px for inputs, 8-12px for buttons, 12-16px for cards, 16-24px for marketing surfaces only. Define a 4-5 step radius scale and use the tokens.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\brounded-(?:2xl|3xl)\b|border-radius\s*:\s*(?:24|28|32|36|40)px\b|border-radius\s*:\s*1\.[5-9]rem\b|border-radius\s*:\s*[2-3]rem\b</code></pre>
       <div class="ap-examples">
@@ -3310,7 +3465,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>aria-hidden=&quot;true&quot; on a focusable element (button, link, input) removes it from the accessibility tree while leaving it in the tab order - keyboard users can land on a control that screen readers refuse to announce. WCAG 4.1.2 failure.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>If the control is decorative, remove it from the DOM or set tabindex=&quot;-1&quot; AND aria-hidden together. If it has a function, drop the aria-hidden and give it a proper accessible name via aria-label or visible text.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|a|input|select|textarea)[^&gt;]+aria-hidden\s*=\s*[&#x27;&quot;]true[&#x27;&quot;]</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|a|input|select|textarea)\b[^&gt;]+aria-hidden\s*=\s*[&#x27;\&quot;]true[&#x27;\&quot;]</code></pre>
       <div class="ap-examples">
         
         
@@ -3350,7 +3505,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>A &lt;div onClick&gt; is invisible to keyboard users and assistive tech - the action exists only for mouse users, a WCAG 2.1.1 and 4.1.2 failure.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use &lt;button onClick&gt; for actions. If you must keep the &lt;div&gt;, add role=&quot;button&quot; tabindex=&quot;0&quot; and an onKeyDown handler for Enter and Space.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;div[^&gt;]+onClick=(?![^&gt;]+role\s*=\s*[&#x27;&quot;]button)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?-i:&lt;div)\b(?![^&gt;]*\brole\s*=\s*\{?\s*[\&quot;&#x27;](?:button|link|tab|menuitem(?:checkbox|radio)?|option|checkbox|radio|switch)[\&quot;&#x27;])[^&gt;]*\bonClick\s*=</code></pre>
       <div class="ap-examples">
         
         
@@ -3388,9 +3543,9 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>outline: none removes the only keyboard focus indicator and leaves keyboard users with no signal of focus state - a WCAG 2.4.7 failure.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair outline: none with a :focus-visible rule that restores a visible ring: :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>outline\s*:\s*(?:none|0)\s*;(?![^}]*:focus-visible)</code></pre>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>outline: none removes the only keyboard focus indicator and leaves keyboard users with no signal of focus state - a WCAG 2.4.7 failure. The linter decides per rule block. A removal passes when it is limited to :not(:focus-visible), when a :focus-visible or :focus rule that covers the same element (a bare :focus-visible or * covers every element) draws a visible outline, box-shadow or border and wins on specificity, or when a :focus-within or :has(:focus-visible) rule on an ancestor of that element draws one. A ring inside a media query the removal is not in, or on some other element, does not count.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Give this selector its own focus ring, or ring an ancestor that holds it: .x:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }, or .field:focus-within { box-shadow: 0 0 0 3px var(--primary); }. A ring on another element does not count.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>outline\s*:\s*(?:none|0)\s*(?:!important\s*)?[;}](?![^}]*:focus-visible)</code></pre>
       <div class="ap-examples">
         
         
@@ -3417,6 +3572,7 @@
       </div>
       <a href="#viewport-no-zoom" class="ap-anchor" aria-label="Link to rule #viewport-no-zoom">link</a>
     </article>
+    
     </div>
   </div>
 </section>
@@ -3425,7 +3581,7 @@
   <div class="container">
     ux-skill &middot; deterministic anti-AI-slop linter &middot; MIT &middot; no telemetry &middot; <a href="/">home</a> &middot; <a href="https://github.com/Laith0003/ux-skill" rel="noopener">github</a>
   </div>
-<p class="made-by">Made by <a href="https://laithjunaidy.com">Laith Aljunaidy</a>.</p></footer>
+</footer>
 
 <script>
 (function() {
@@ -3456,43 +3612,5 @@
 })();
 </script>
 
-  <script id="unified-nav-js">
-  (function () {
-    var nav = document.getElementById('nav');
-    function onScroll() {
-      var y = window.scrollY;
-      if (!nav) return;
-      if (y > 24) nav.classList.add('is-scrolled');
-      else nav.classList.remove('is-scrolled');
-    }
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    var drawer = document.getElementById('nav-drawer');
-    var menuBtn = document.getElementById('nav-menu-btn');
-    var closeBtn = document.getElementById('nav-drawer-close');
-    function openDrawer() {
-      if (!drawer || !menuBtn) return;
-      drawer.classList.add('is-open');
-      drawer.setAttribute('aria-hidden', 'false');
-      menuBtn.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeDrawer() {
-      if (!drawer || !menuBtn) return;
-      drawer.classList.remove('is-open');
-      drawer.setAttribute('aria-hidden', 'true');
-      menuBtn.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    }
-    if (menuBtn) menuBtn.addEventListener('click', openDrawer);
-    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
-    if (drawer) drawer.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeDrawer); });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && drawer && drawer.classList.contains('is-open')) closeDrawer();
-    });
-  })();
-  </script>
-<script id="usknav-js">(function(){var d=document.getElementById('usknav-drawer');var b=document.querySelector('.usknav__burger');if(!d||!b)return;var c=d.querySelector('.usknav__drawer-close');function F(){return d.querySelectorAll('a[href],button:not([disabled])');}function set(v){d.classList.toggle('is-open',v);b.setAttribute('aria-expanded',v?'true':'false');document.body.style.overflow=v?'hidden':'';if(v){var f=c||F()[0];if(f)f.focus();}else{b.focus();}}b.addEventListener('click',function(){set(true);});if(c)c.addEventListener('click',function(){set(false);});d.addEventListener('click',function(e){if(e.target.tagName==='A')set(false);});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&d.classList.contains('is-open'))set(false);if(e.key==='Tab'&&d.classList.contains('is-open')){var f=F();if(!f.length)return;var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}});var L=document.querySelector('.usknav__langs');if(L){document.addEventListener('click',function(e){if(L.open&&!L.contains(e.target))L.open=false;});L.addEventListener('keydown',function(e){if(e.key==='Escape')L.open=false;});}})();</script>
 </body>
 </html>
