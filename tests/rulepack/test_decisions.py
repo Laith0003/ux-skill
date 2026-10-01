@@ -64,6 +64,7 @@ EXPECTED = {
     "bands-follow-energy", "lines-in-ink", "bottom-anchored-hero", "faces-cost-their-ubiquity",
     "photo-direction",
     "figma-modes-on-one-axis", "bare-sizes-read-as-px",
+    "gallery-from-spec-facts",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",

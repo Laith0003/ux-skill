@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.775,
+    "density": 0.25,
+    "formality": 0.362,
+    "geometry": 0.349,
+    "motion": 0.779,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/cloudflare.json: warmth from the hue and chroma of the primary #F48120 and the canvas #FFFFFF; contrast from the ink #0D1620 on that canvas, its depth and the chroma of #F48120; density from its 8px spacing base; geometry from its radii 4, 6, 8px; formality from the chroma of its primary and ink; motion from its stated durations 400ms, 12000ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#003682",
+  "brand_rule": "The primary #F48120 reaches only 2.62:1 on the canvas #FFFFFF, under the 3:1 a control needs, so the accent color_accent #003682 at 11.35:1 carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#003682",
+      "light": "#003682"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#0C0D0E",
+      "light": "#F6F7F7"
+    },
+    "radius_control": "6px",
+    "state_duration": "240ms",
+    "tokens": 616,
+    "tokens_sha256": "b48f8f1756699404"
+  },
+  "id": "cloudflare",
+  "name": "Cloudflare",
+  "spec": "data/brands/cloudflare.json"
+}

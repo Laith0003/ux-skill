@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.824,
+    "density": 0.5,
+    "formality": 0.649,
+    "geometry": 0.283,
+    "motion": 0.481,
+    "type_personality": 0.5,
+    "warmth": 0.15
+  },
+  "axes_source": "Read from data/brands/booking-com.json: warmth from the hue and chroma of the primary #003580 and the canvas #FFFFFF; contrast from the ink #1A1A1A on that canvas, its depth and the chroma of #FEBB02; density from its 4px spacing base; geometry from its radii 2, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 200ms, 1200ms, 150ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#003580",
+  "brand_rule": "The primary #003580 reaches 11.53:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#003580",
+      "light": "#003580"
+    },
+    "face": {
+      "display": "Space Grotesk",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0B0D10",
+      "light": "#F6F7F8"
+    },
+    "radius_control": "3px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "88dacfd424b22341"
+  },
+  "id": "booking-com",
+  "name": "Booking.com",
+  "spec": "data/brands/booking-com.json"
+}

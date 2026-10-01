@@ -29,6 +29,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [A set the engine did not generate passes the same gate, a role it lacks is skipped, and only strict fails it](imported-sets-pass.md)
 - [A Figma collection of three or more modes that name no engine axis is read whole on one axis named for it](figma-modes-on-one-axis.md)
 - [A bare number whose name says it is a size is read as px, with a note](bare-sizes-read-as-px.md)
+- [Each gallery system is built from its own spec's design facts and passes the gate in every mode](gallery-from-spec-facts.md)
 
 ## Roles per foundation
 

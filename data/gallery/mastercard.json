@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.805,
+    "density": 0.5,
+    "formality": 0.352,
+    "geometry": 0.5,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.879
+  },
+  "axes_source": "Read from data/brands/mastercard.json: warmth from the hue and chroma of the primary #EB001B and the canvas #F3F0EE; contrast from the ink #141413 on that canvas, its depth and the chroma of #EB001B; density at 0.5 since it states no spacing base; geometry at 0.5 since it states no radius; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#EB001B",
+  "brand_rule": "The primary #EB001B reaches 4.07:1 on the canvas #F3F0EE, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#EB001B",
+      "light": "#EB001B"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "8px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "b06f537c97ca0543"
+  },
+  "id": "mastercard",
+  "name": "Mastercard",
+  "spec": "data/brands/mastercard.json"
+}

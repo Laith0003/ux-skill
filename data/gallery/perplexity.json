@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.675,
+    "density": 0.5,
+    "formality": 0.504,
+    "geometry": 0.657,
+    "motion": 0.18,
+    "type_personality": 0.5,
+    "warmth": 0.109
+  },
+  "axes_source": "Read from data/brands/perplexity.json: warmth from the hue and chroma of the primary #20B8CD and the canvas #0F1416; contrast from the ink #0F1416 on that canvas, its depth and the chroma of #20B8CD; density from its 4px spacing base; geometry from its radii 8, 12, 16, 24px; formality from the chroma of its primary and ink; motion from its stated durations 200ms, 25ms, 300ms, 50ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#20B8CD",
+  "brand_rule": "The primary #20B8CD reaches 7.77:1 on the canvas #0F1416, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#5AC6D8",
+      "light": "#20B8CD"
+    },
+    "face": {
+      "display": "Sora",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0A0E0F",
+      "light": "#F5F7F8"
+    },
+    "radius_control": "9px",
+    "state_duration": "150ms",
+    "tokens": 614,
+    "tokens_sha256": "afd6fd989c713d48"
+  },
+  "id": "perplexity",
+  "name": "Perplexity",
+  "spec": "data/brands/perplexity.json"
+}

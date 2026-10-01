@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.727,
+    "density": 0.5,
+    "formality": 0.43,
+    "geometry": 0.367,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.815
+  },
+  "axes_source": "Read from data/brands/binance.json: warmth from the hue and chroma of the primary #FCD535 and the canvas #0B0E11; contrast from the ink #181A20 on that canvas, its depth and the chroma of #FCD535; density from its 4px spacing base; geometry from its radii 2, 4, 6, 8, 12px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FCD535",
+  "brand_rule": "The primary #FCD535 reaches 13.55:1 on the canvas #0B0E11, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#FCD535",
+      "light": "#FCD535"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0E0D0A",
+      "light": "#F7F7F5"
+    },
+    "radius_control": "6px",
+    "state_duration": "200ms",
+    "tokens": 614,
+    "tokens_sha256": "7ea8994c87db37a4"
+  },
+  "id": "binance",
+  "name": "Binance",
+  "spec": "data/brands/binance.json"
+}

@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.599,
+    "density": 0.5,
+    "formality": 0.71,
+    "geometry": 0.599,
+    "motion": 0.279,
+    "type_personality": 0.5,
+    "warmth": 0.327
+  },
+  "axes_source": "Read from data/brands/render.json: warmth from the hue and chroma of the primary #5A2D8C and the canvas #FDF4E7; contrast from the ink #231F29 on that canvas, its depth and the chroma of #5A2D8C; density from its 4px spacing base; geometry from its radii 4, 8, 12, 16, 24px; formality from the chroma of its primary and ink; motion from its stated durations 200ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#5A2D8C",
+  "brand_rule": "The primary #5A2D8C reaches 8.80:1 on the canvas #FDF4E7, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#5A2D8C",
+      "light": "#5A2D8C"
+    },
+    "face": {
+      "display": "Sora",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0E0D10",
+      "light": "#F7F6F8"
+    },
+    "radius_control": "7px",
+    "state_duration": "150ms",
+    "tokens": 616,
+    "tokens_sha256": "68b7cb35c63ea36e"
+  },
+  "id": "render",
+  "name": "Render",
+  "spec": "data/brands/render.json"
+}

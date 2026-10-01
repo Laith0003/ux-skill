@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.802,
+    "density": 0.5,
+    "formality": 0.223,
+    "geometry": 0.565,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.606
+  },
+  "axes_source": "Read from data/brands/mongodb.json: warmth from the hue and chroma of the primary #00ED64 and the canvas #FFFFFF; contrast from the ink #001E2B on that canvas, its depth and the chroma of #00ED64; density from its 4px spacing base; geometry from its radii 4, 6, 8, 12, 16, 24px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#00ED64",
+  "brand_rule": "The primary #00ED64 reaches only 1.58:1 on the canvas #FFFFFF and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#00ED64",
+      "light": "#00ED64"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#0C0E0C",
+      "light": "#F6F7F6"
+    },
+    "radius_control": "9px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "9e5a3f4f26e02887"
+  },
+  "id": "mongodb",
+  "name": "MongoDB",
+  "spec": "data/brands/mongodb.json"
+}

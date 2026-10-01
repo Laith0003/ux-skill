@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.795,
+    "density": 0.5,
+    "formality": 0.355,
+    "geometry": 0.544,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/mistral.ai.json: warmth from the hue and chroma of the primary #FA520F and the canvas #FFFFFF; contrast from the ink #1F1F1F on that canvas, its depth and the chroma of #FA520F; density from its 4px spacing base; geometry from its radii 4, 6, 8, 12, 16, 20px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FA520F",
+  "brand_rule": "The primary #FA520F reaches 3.34:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#D64200",
+      "light": "#FA520F"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0B",
+      "light": "#F9F6F5"
+    },
+    "radius_control": "8px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "e947a932c4c50115"
+  },
+  "id": "mistral.ai",
+  "name": "Mistral AI",
+  "spec": "data/brands/mistral.ai.json"
+}

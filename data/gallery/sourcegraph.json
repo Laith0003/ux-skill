@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.25,
+    "formality": 0.338,
+    "geometry": 0.51,
+    "motion": 0.236,
+    "type_personality": 0.5,
+    "warmth": 0.085
+  },
+  "axes_source": "Read from data/brands/sourcegraph.json: warmth from the hue and chroma of the primary #00CBEC and the canvas #0F111A; contrast from the ink #F5F6FA on that canvas, its depth and the chroma of #00CBEC; density from its 8px spacing base; geometry from its radii 4, 8, 12, 16px; formality from the chroma of its primary and ink; motion from its stated durations 180ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#00CBEC",
+  "brand_rule": "The primary #00CBEC reaches 9.64:1 on the canvas #0F111A, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#00CBEC",
+      "light": "#00CBEC"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0A0E10",
+      "light": "#F5F7F8"
+    },
+    "radius_control": "8px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "87cdb22a062398da"
+  },
+  "id": "sourcegraph",
+  "name": "Sourcegraph",
+  "spec": "data/brands/sourcegraph.json"
+}

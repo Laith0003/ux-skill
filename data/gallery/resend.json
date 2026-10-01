@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.802,
+    "density": 0.5,
+    "formality": 0.983,
+    "geometry": 0.422,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.49
+  },
+  "axes_source": "Read from data/brands/resend.json: warmth from the hue and chroma of the primary #FCFDFF and the canvas #000000; contrast from the ink #FCFDFF on that canvas, its depth and the chroma of #FCFDFF; density from its 4px spacing base; geometry from its radii 0, 4, 6, 8, 12, 16px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FCFDFF",
+  "brand_rule": "The primary #FCFDFF reaches 20.63:1 on the canvas #000000, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DADADB",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D0E",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "3px",
+    "state_duration": "200ms",
+    "tokens": 613,
+    "tokens_sha256": "a86811232cb6ced4"
+  },
+  "id": "resend",
+  "name": "Resend",
+  "spec": "data/brands/resend.json"
+}

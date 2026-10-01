@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.785,
+    "density": 0.5,
+    "formality": 0.369,
+    "geometry": 0.402,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.885
+  },
+  "axes_source": "Read from data/brands/replicate.json: warmth from the hue and chroma of the primary #EA2804 and the canvas #F9F7F3; contrast from the ink #202020 on that canvas, its depth and the chroma of #EA2804; density from its 4px spacing base; geometry from its radii 0, 4, 6, 10, 16px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#EA2804",
+  "brand_rule": "The primary #EA2804 reaches 4.09:1 on the canvas #F9F7F3, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#E72500",
+      "light": "#E72500"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "6px",
+    "state_duration": "200ms",
+    "tokens": 615,
+    "tokens_sha256": "6cf059cad970d54d"
+  },
+  "id": "replicate",
+  "name": "Replicate",
+  "spec": "data/brands/replicate.json"
+}

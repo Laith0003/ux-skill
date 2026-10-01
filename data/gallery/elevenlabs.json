@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.498,
+    "density": 0.5,
+    "formality": 0.978,
+    "geometry": 0.51,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.517
+  },
+  "axes_source": "Read from data/brands/elevenlabs.json: warmth from the hue and chroma of the primary #292524 and the canvas #F5F5F5; contrast from the ink #0C0A09 on that canvas, its depth and the chroma of #292524; density from its 4px spacing base; geometry from its radii 0, 4, 6, 8, 12, 16, 24px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#292524",
+  "brand_rule": "The primary #292524 reaches 13.91:1 on the canvas #F5F5F5, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DBDADA",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0E0D0D",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "4px",
+    "state_duration": "200ms",
+    "tokens": 614,
+    "tokens_sha256": "b3aedfe8574316ea"
+  },
+  "id": "elevenlabs",
+  "name": "ElevenLabs",
+  "spec": "data/brands/elevenlabs.json"
+}

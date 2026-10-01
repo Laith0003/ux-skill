@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.716,
+    "density": 0.5,
+    "formality": 0.525,
+    "geometry": 0.248,
+    "motion": 1.0,
+    "type_personality": 0.5,
+    "warmth": 0.84
+  },
+  "axes_source": "Read from data/brands/levis.json: warmth from the hue and chroma of the primary #CC1F3A and the canvas #FFFFFF; contrast from the ink #1A1A1A on that canvas, its depth and the chroma of #CC1F3A; density from its 4px spacing base; geometry from its radii 0, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 5000ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#CC1F3A",
+  "brand_rule": "The primary #CC1F3A reaches 5.49:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#CC1F3A",
+      "light": "#CC1F3A"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F8F6F6"
+    },
+    "radius_control": "3px",
+    "state_duration": "240ms",
+    "tokens": 615,
+    "tokens_sha256": "99de6839a379bcc6"
+  },
+  "id": "levis",
+  "name": "Levi's",
+  "spec": "data/brands/levis.json"
+}
