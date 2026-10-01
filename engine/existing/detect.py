@@ -1073,6 +1073,19 @@ def _surveyed(path: Path) -> bool:
         or path.suffix.lower() == ".json" or bool(survey.locale_of(path))
 
 
+def pages_read_rtl(place: Any) -> bool:
+    """Whether the pages under a folder, or one page, read right to left,
+    as detect_existing_system declares direction: dir="rtl" on <html> or
+    <body>, and the rest survey.languages counts. The folder is walked to
+    detect's caps whether or not it holds a design system."""
+    base = Path(place).expanduser()
+    if base.is_file():
+        return survey.languages([base])[1]
+    files: List[Path] = []
+    _walk(base, 0, set(), files, _surveyed)
+    return survey.languages(files)[1]
+
+
 _FONT_TOKEN_RE = re.compile(r"^--font-(?!size|weight|feature|variation|style|stretch|"
                             r"optical|kerning|smoothing|synthesis)[a-z]", re.I)
 
