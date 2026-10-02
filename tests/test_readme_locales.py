@@ -20,6 +20,18 @@ from engine import __version__
 from engine.data_loader import stats
 from engine.mcp import TOOLS
 
+
+def _badge(version: str) -> str:
+    """The version as the README badge writes it: semver (4.0.0b2 is
+    4.0.0-beta.2), with each hyphen doubled, since shields.io reads a single
+    hyphen as a separator."""
+    m = re.fullmatch(r"(\d+\.\d+\.\d+)(?:(a|b|rc)(\d+))?", version)
+    assert m, (f"version {version!r} is not a release or pre-release; set it in "
+               "pyproject.toml as 4.0.0, 4.0.0b2 or 4.1.0rc1")
+    base, tag, n = m.groups()
+    name = {"a": "alpha", "b": "beta", "rc": "rc"}.get(tag)
+    return (f"{base}-{name}.{n}" if tag else base).replace("-", "--")
+
 ROOT = Path(__file__).resolve().parents[1]
 LOCALES = ("ar", "de", "es", "fr", "hi", "id", "it", "ja", "ko", "pt-BR", "ru",
            "th", "tr", "vi", "zh", "zh-TW")
@@ -164,7 +176,7 @@ def test_english_names_every_mcp_tool_and_the_count():
 
 
 def test_english_states_the_current_version_and_counts():
-    assert f"badge/version-{__version__}-" in EN
+    assert f"badge/version-{_badge(__version__)}-" in EN
     assert f"**v{__version__}**" in EN
     assert "-stable" not in EN
     assert f"{len(CANONICAL)} slash commands" in EN
@@ -231,7 +243,7 @@ def test_same_figures_and_inline_code_section_by_section(loc):
 @pytest.mark.parametrize("loc", LOCALES)
 def test_states_version_4_and_the_engine_figures(loc):
     text = _locale(loc)
-    assert f"badge/version-{__version__}-" in text
+    assert f"badge/version-{_badge(__version__)}-" in text
     assert f"**v{__version__}**" in text
     assert f"badge/anti--patterns-{len(RULES)}-" in text
     head = _paired(loc)[0][1]
@@ -290,3 +302,11 @@ def test_no_figure_from_an_earlier_release(loc):
     assert not re.search(r"(?<![0-9.])(145|152)(?![0-9])", _prose(current)), loc
     assert re.findall(r"badge/tests-(\d+)_passing", text) == \
         re.findall(r"badge/tests-(\d+)_passing", EN)
+
+
+def test_the_badge_writes_a_prerelease_as_shields_reads_it():
+    assert _badge("4.0.0") == "4.0.0"
+    assert _badge("4.0.0b2") == "4.0.0--beta.2"
+    assert _badge("4.1.0rc1") == "4.1.0--rc.1"
+    with pytest.raises(AssertionError, match="set it in pyproject.toml"):
+        _badge("4.0.0.dev1")
