@@ -45,9 +45,10 @@ def _step(heading: str) -> str:
 
 
 README_40 = README[README.index("### New in 4.0: foundations"):README.index("### New in v3.1")]
-CHANGELOG_40 = CHANGELOG[CHANGELOG.index("## [4.0.0]"):CHANGELOG.index("## [3.2.0]")]
-# The 4.0.0 entry alone, without the beta notes below it.
-CHANGELOG_RELEASE = CHANGELOG_40[:CHANGELOG_40.index("## [4.0.0-beta.1]")]
+# The 4.0.0 notes sit under [Unreleased] until 4.0.0 ships.
+CHANGELOG_40 = CHANGELOG[CHANGELOG.index("## [Unreleased]"):CHANGELOG.index("## [3.2.0]")]
+# The 4.0.0 notes alone, without the beta entries below them.
+CHANGELOG_RELEASE = CHANGELOG_40[:CHANGELOG_40.index("## [4.0.0-beta.2]")]
 
 
 def _build_flags():

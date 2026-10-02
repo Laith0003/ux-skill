@@ -38,7 +38,8 @@ def test_enhance_is_described_as_the_report_it_is():
     help_text = CliRunner().invoke(cli, ["system", "enhance", "--help"]).output
     assert "A report only; nothing is rewritten." in " ".join(help_text.split())
     changelog = (GUIDE.parents[1] / "CHANGELOG.md").read_text(encoding="utf-8")
-    entry = changelog.split("## [4.0.0]", 1)[1].split("\n## [", 1)[0]
+    # The 4.0.0 notes sit under [Unreleased] until 4.0.0 ships.
+    entry = changelog.split("## [Unreleased]", 1)[1].split("\n## [", 1)[0]
     for name, text in (("docs/migrating-to-4.md", GUIDE.read_text(encoding="utf-8")),
                        ("CHANGELOG.md 4.0.0", entry)):
         flat = " ".join(text.split())
