@@ -20,7 +20,7 @@ pip install uxskill
 
 **만든 사람:** [Laith Aljunaidy](https://laithjunaidy.com), 암만의 디자이너이자 CTO · **사이트:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **모든 Claude UX 플러그인과 비교:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0--beta.2-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#17-ide-인스톨러)
@@ -179,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "4.0.0",
+#   "version": "4.0.0b2",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -1194,6 +1194,6 @@ MIT. 사용, 포크, 그 위에 빌드. AI 슬롭을 출시하는 것을 막아�
 
 ---
 
-**ux-skill** · **v4.0.0** · Claude Code, Cursor, Windsurf 그리고 다른 모든 AI 코딩 도구가 AI 생성으로 읽히지 않는 프런트엔드를 출력하도록 빌드.
+**ux-skill** · **v4.0.0b2** · Claude Code, Cursor, Windsurf 그리고 다른 모든 AI 코딩 도구가 AI 생성으로 읽히지 않는 프런트엔드를 출력하도록 빌드.
 
 > [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)에서 저장소에 스타 · `pip install uxskill` 또는 `npx uxskill init`으로 설치 · [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)에서 비교 둘러보기

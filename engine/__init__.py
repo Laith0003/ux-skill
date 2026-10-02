@@ -8,7 +8,7 @@ Public surface:
     from engine import compute_type_scale, evaluate, evolve, THRESHOLD
 """
 
-__version__ = "4.0.0"
+__version__ = "4.0.0b2"
 
 from engine.persist import save_master, save_page, load_master, list_pages
 

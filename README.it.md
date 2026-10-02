@@ -20,7 +20,7 @@ pip install uxskill
 
 **Autore:** [Laith Aljunaidy](https://laithjunaidy.com), designer e CTO ad Amman · **Sito:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **Confronto con ogni plugin UX per Claude:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0--beta.2-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#linstallatore-per-17-ide)
@@ -179,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "4.0.0",
+#   "version": "4.0.0b2",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -1194,6 +1194,6 @@ MIT. Usalo, forkalo, costruiscici sopra. Se ti salva dal rilasciare AI slop, met
 
 ---
 
-**ux-skill** · **v4.0.0** · Costruito perché Claude Code, Cursor, Windsurf e ogni altro strumento di coding con IA emettano frontend che non si legge come generato dall'IA.
+**ux-skill** · **v4.0.0b2** · Costruito perché Claude Code, Cursor, Windsurf e ogni altro strumento di coding con IA emettano frontend che non si legge come generato dall'IA.
 
 > Metti una stella al repo su [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · Installa via `pip install uxskill` o `npx uxskill init` · Sfoglia il confronto su [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)

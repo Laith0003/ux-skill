@@ -20,7 +20,7 @@ pip install uxskill
 
 **作者：** [Laith Aljunaidy](https://laithjunaidy.com)，常驻安曼的设计师兼 CTO · **网站：** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **与所有 Claude UX 插件对比：** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub：** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI：** [uxskill](https://pypi.org/project/uxskill/) · **npm：** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0--beta.2-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#面向-17-个-ide-的安装器)
@@ -179,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "4.0.0",
+#   "version": "4.0.0b2",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -1194,6 +1194,6 @@ MIT。用它、fork 它、在它之上构建。如果它帮你少出货了一份
 
 ---
 
-**ux-skill** · **v4.0.0** · 为让 Claude Code、Cursor、Windsurf 以及其他 AI 编程工具产出的前端不再被一眼识别为 AI 生成而打造。
+**ux-skill** · **v4.0.0b2** · 为让 Claude Code、Cursor、Windsurf 以及其他 AI 编程工具产出的前端不再被一眼识别为 AI 生成而打造。
 
 > 给仓库点星:[github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · 通过 `pip install uxskill` 或 `npx uxskill init` 安装 · 浏览对比:[uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html)

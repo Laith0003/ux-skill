@@ -9,6 +9,16 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.0-beta.2] - 2026-10-02 - **FOUNDATIONS, BETA 2**
+
+A testing build of the 4.0.0 release below, everything in it included.
+Install it from the GitHub pre-release v4.0.0-beta.2: download the wheel
+attached there and run `pip install uxskill-4.0.0b2-py3-none-any.whl`
+(Python 3.10 or newer), or install straight from the tag with
+`pip install "uxskill @ git+https://github.com/Laith0003/ux-skill@v4.0.0-beta.2"`.
+Report what breaks or reads wrong as a GitHub issue, with the command you
+ran and what it printed.
+
 ## [4.0.0] - 2026-10-01 - **FOUNDATIONS**
 
 ux-skill 4.0 builds a design system from one brand color and a brief, reads

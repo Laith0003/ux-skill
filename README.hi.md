@@ -20,7 +20,7 @@ pip install uxskill
 
 **लेखक:** [Laith Aljunaidy](https://laithjunaidy.com), अम्मान में डिज़ाइनर और CTO · **साइट:** [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com) · **हर Claude UX प्लगइन से तुलना:** [compare.html](https://uxskill.laithjunaidy.com/compare.html) · **GitHub:** [Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) · **PyPI:** [uxskill](https://pypi.org/project/uxskill/) · **npm:** [uxskill](https://www.npmjs.com/package/uxskill)
 
-[![Version](https://img.shields.io/badge/version-4.0.0-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
+[![Version](https://img.shields.io/badge/version-4.0.0--beta.2-cc785c.svg)](https://github.com/Laith0003/ux-skill/releases)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![IDEs](https://img.shields.io/badge/IDEs-17-181715)](#17-ide-इंस्टॉलर)
@@ -179,7 +179,7 @@ npx uxskill recommend --industry=fintech-neobank --tone=warm --stack=nextjs-15-a
 ```bash
 ux stats
 # {
-#   "version": "4.0.0",
+#   "version": "4.0.0b2",
 #   "counts": {
 #     "styles": 84,
 #     "palettes": 176,
@@ -1194,6 +1194,6 @@ MIT। इसे उपयोग करें, फ़ोर्क करें, 
 
 ---
 
-**ux-skill** · **v4.0.0** · इसलिए बनाया गया ताकि Claude Code, Cursor, Windsurf, और हर दूसरा AI कोडिंग टूल फ़्रंटएंड आउटपुट करे जो AI-जनरेटेड के रूप में न पढ़ा जाए।
+**ux-skill** · **v4.0.0b2** · इसलिए बनाया गया ताकि Claude Code, Cursor, Windsurf, और हर दूसरा AI कोडिंग टूल फ़्रंटएंड आउटपुट करे जो AI-जनरेटेड के रूप में न पढ़ा जाए।
 
 > [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill) पर रेपो को स्टार करें · `pip install uxskill` या `npx uxskill init` के ज़रिए इंस्टॉल करें · [uxskill.laithjunaidy.com/compare.html](https://uxskill.laithjunaidy.com/compare.html) पर तुलना देखें
