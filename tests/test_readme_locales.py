@@ -26,6 +26,8 @@ def _badge(version: str) -> str:
     4.0.0-beta.2), with each hyphen doubled, since shields.io reads a single
     hyphen as a separator."""
     m = re.fullmatch(r"(\d+\.\d+\.\d+)(?:(a|b|rc)(\d+))?", version)
+    assert m, (f"version {version!r} is not a release or pre-release; set it in "
+               "pyproject.toml as 4.0.0, 4.0.0b2 or 4.1.0rc1")
     base, tag, n = m.groups()
     name = {"a": "alpha", "b": "beta", "rc": "rc"}.get(tag)
     return (f"{base}-{name}.{n}" if tag else base).replace("-", "--")
@@ -306,3 +308,5 @@ def test_the_badge_writes_a_prerelease_as_shields_reads_it():
     assert _badge("4.0.0") == "4.0.0"
     assert _badge("4.0.0b2") == "4.0.0--beta.2"
     assert _badge("4.1.0rc1") == "4.1.0--rc.1"
+    with pytest.raises(AssertionError, match="set it in pyproject.toml"):
+        _badge("4.0.0.dev1")
