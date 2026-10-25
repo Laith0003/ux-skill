@@ -230,7 +230,7 @@ ux-skill (nombre del paquete: uxskill)
 │   ├── ux-frame.md                    bloque de framing de 4 campos
 │   ├── ux-research.md                 planificación + síntesis de investigación
 │   ├── ux-workshop.md                 taller de design thinking en 5 fases
-│   ├── ux-case-study.md               caso de estudio publicable estilo editorial Wfrah
+│   ├── ux-case-study.md               caso de estudio publicable estilo editorial monocromo
 │   ├── ux-next.md                     conductor de flujo de trabajo (solo lectura)
 │   └── ux-expert.md                   gancho de consultoría
 │
@@ -469,7 +469,7 @@ Los comandos se agrupan en cinco categorías: **arranque e inventario**, **disco
 - **Qué:** Captura para-quién, outcome, hipótesis y señal de éxito en un bloque de framing estructurado. No hay trabajo de diseño, solo el intake de cuatro campos que convierte una petición vaga en un brief de trabajo. Más ligero que `/ux-discover` (4 campos vs 10).
 - **Cuándo usar:** Inicio de cualquier proyecto, sprint o encargo puntual. A mitad de flujo cuando una conversación ha derivado. «Enmarca esto», «¿cuál es el brief?», «monta el proyecto», «framing».
 - **Cuándo saltar:** Ya enmarcado (comprueba `.ux/last-frame.json`). Construcción de un componente puntual sin implicaciones de framing. Backend o infraestructura.
-- **Invocación:** `/ux-frame "billetera de fidelización para el piloto MENA de Bashiti"`.
+- **Invocación:** `/ux-frame "billetera de fidelización para el piloto MENA de Northwind"`.
 - **Salida:** Escribe `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
 - **Encadena con:** `/ux-discover` → extiende el frame al brief de 10 campos. `/ux-design` → genera usando el frame como ancla.
 
@@ -491,12 +491,12 @@ Los comandos se agrupan en cinco categorías: **arranque e inventario**, **disco
 - **Salida:** Escribe `.ux/last-workshop.json`, plan de juego + artefactos por fase.
 - **Encadena con:** `/ux-design` → ejecuta el plan de juego. `/ux-research` → rellena las brechas que el taller sacó a la superficie. `/ux-case-study` → publica el recorrido.
 
-#### `/ux-case-study`: caso de estudio publicable (formato editorial Wfrah)
+#### `/ux-case-study`: caso de estudio publicable (formato editorial monocromo)
 
-- **Qué:** Genera un caso de estudio de proyecto en formato editorial monocromo puro, tipografía Wfrah, separadores de pelo, códigos de sección numerados (A)–(G), layout bilingüe seguro. Un documento, no un folleto de marketing. Lee de `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Qué:** Genera un caso de estudio de proyecto en formato editorial monocromo puro, tipografía editorial ancha, separadores de pelo, códigos de sección numerados (A)–(G), layout bilingüe seguro. Un documento, no un folleto de marketing. Lee de `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Cuándo usar:** Post-lanzamiento. Tras un hito discreto. «Escribe un caso de estudio», «caso de estudio de este proyecto», «haz el documento de cierre», «publica este trabajo», «pieza de portafolio».
 - **Cuándo saltar:** Al proyecto le faltan datos para poblar las secciones (A)–(G). El usuario quiere una landing de marketing, no un caso de estudio (usa `/ux-design`).
-- **Invocación:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Invocación:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Salida:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Encadena con:** Comando terminal, normalmente el final de un proyecto.
 
@@ -1091,10 +1091,10 @@ El plugin facilita las cinco fases (exploración → mapa de calor → mapa de a
 Enviaste la billetera de fidelización. Quieres una pieza de portafolio.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [lee .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [genera caso de estudio editorial Wfrah con secciones numeradas (A)-(G), separadores de pelo, layout bilingüe seguro]
-> [escribe case-studies/bashiti-loyalty.html]
+> [genera caso de estudio editorial monocromo con secciones numeradas (A)-(G), separadores de pelo, layout bilingüe seguro]
+> [escribe case-studies/northwind-loyalty.html]
 ```
 
 El caso de estudio es un artefacto acabado y publicable, no un borrador. Monocromo puro, tipografía editorial, listo para enviar a tu portafolio.

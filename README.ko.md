@@ -230,7 +230,7 @@ ux-skill (패키지명: uxskill)
 │   ├── ux-frame.md                    4 필드 프레이밍 블록
 │   ├── ux-research.md                 리서치 계획 + 통합
 │   ├── ux-workshop.md                 5단계 디자인 사고 워크숍
-│   ├── ux-case-study.md               발행 가능한 Wfrah 편집체 케이스 스터디
+│   ├── ux-case-study.md               발행 가능한 모노크롬 편집체 케이스 스터디
 │   ├── ux-next.md                     워크플로 컨덕터(읽기 전용)
 │   └── ux-expert.md                   컨설팅 훅
 │
@@ -469,7 +469,7 @@ ux-skill (패키지명: uxskill)
 - **무엇:** 누구를 위한 것인지, 결과, 가설, 성공 신호를 구조화된 프레이밍 블록에 포착합니다. 디자인 작업은 없습니다, 모호한 요청을 작동하는 브리프로 바꾸는 4 필드 인테이크. `/ux-discover`보다 가볍다(4 필드 vs 10).
 - **사용 시점:** 모든 프로젝트, 스프린트, 단발 약속의 시작. 대화가 표류한 중도에. "프레이밍", "브리프가 뭐냐", "프로젝트 셋업", "프레이밍".
 - **건너뛸 시점:** 이미 프레이밍됨(`.ux/last-frame.json` 확인). 프레이밍 영향이 없는 단발 컴포넌트 빌드. 백엔드/인프라.
-- **호출:** `/ux-frame "MENA Bashiti 파일럿용 로열티 월렛"`.
+- **호출:** `/ux-frame "MENA Northwind 파일럿용 로열티 월렛"`.
 - **출력:** `.ux/last-frame.json`을 씁니다, `{audience, outcome, hypothesis, success_signal}`.
 - **다음:** `/ux-discover` → 프레임을 10 필드 브리프로 확장. `/ux-design` → 프레임을 닻으로 생성.
 
@@ -491,12 +491,12 @@ ux-skill (패키지명: uxskill)
 - **출력:** `.ux/last-workshop.json`을 씁니다, 게임 플랜 + 단계별 산출물.
 - **다음:** `/ux-design` → 게임 플랜 실행. `/ux-research` → 워크숍이 드러낸 간극 채우기. `/ux-case-study` → 여정을 발행.
 
-#### `/ux-case-study`: 발행 가능한 케이스 스터디(Wfrah 편집체)
+#### `/ux-case-study`: 발행 가능한 케이스 스터디(모노크롬 편집체)
 
-- **무엇:** 프로젝트 케이스 스터디를 순수 모노크롬 편집체로 생성합니다, Wfrah 타이포, 헤어라인 구분선, (A)–(G) 번호 섹션 코드, 양언어 안전 레이아웃. 문서이지 마케팅 브로슈어가 아닙니다. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`에서 읽습니다.
+- **무엇:** 프로젝트 케이스 스터디를 순수 모노크롬 편집체로 생성합니다, 와이드 편집 타이포, 헤어라인 구분선, (A)–(G) 번호 섹션 코드, 양언어 안전 레이아웃. 문서이지 마케팅 브로슈어가 아닙니다. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`에서 읽습니다.
 - **사용 시점:** 출시 후. 별개 이정표 후. "케이스 스터디 작성", "이 프로젝트 케이스 스터디로", "마무리 문서", "이 작업 발행", "포트폴리오 작품".
 - **건너뛸 시점:** 프로젝트에 (A)–(G)를 채울 데이터가 없다. 사용자가 마케팅 랜딩을 원한다, 케이스 스터디가 아니다(`/ux-design`).
-- **호출:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **호출:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **출력:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **다음:** 종단 명령, 보통 프로젝트의 끝.
 
@@ -1091,10 +1091,10 @@ jobs:
 로열티 월렛을 출시했습니다. 포트폴리오 작품을 원합니다.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [.ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json 읽기]
-> [(A)-(G) 번호 섹션, 헤어라인 구분선, 양언어 안전 레이아웃의 Wfrah 편집체 케이스 스터디 생성]
-> [case-studies/bashiti-loyalty.html 작성]
+> [(A)-(G) 번호 섹션, 헤어라인 구분선, 양언어 안전 레이아웃의 모노크롬 편집체 케이스 스터디 생성]
+> [case-studies/northwind-loyalty.html 작성]
 ```
 
 케이스 스터디는 완성된 발행 가능한 아티팩트입니다, 초안이 아닙니다. 순수 모노크롬, 편집체 타이포, 포트폴리오에 바로 배포할 준비가 된.

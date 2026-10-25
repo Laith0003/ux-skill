@@ -230,7 +230,7 @@ ux-skill (Paketname: uxskill)
 │   ├── ux-frame.md                    4-Felder-Framing-Block
 │   ├── ux-research.md                 Forschungsplanung + -synthese
 │   ├── ux-workshop.md                 5-Phasen-Design-Thinking-Workshop
-│   ├── ux-case-study.md               veröffentlichbare Wfrah-Editorial-Case-Study
+│   ├── ux-case-study.md               veröffentlichbare monochrome Editorial-Case-Study
 │   ├── ux-next.md                     Workflow-Conductor (nur-lesend)
 │   └── ux-expert.md                   Consulting-Hook
 │
@@ -469,7 +469,7 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 - **Was:** Erfasst Für-wen, Outcome, Hypothese und Erfolgssignal in einem strukturierten Framing-Block. Es geschieht keine Designarbeit, nur der Vier-Felder-Intake, der eine vage Anfrage in ein Arbeits-Brief verwandelt. Leichter als `/ux-discover` (4 Felder vs. 10).
 - **Wann verwenden:** Beginn eines Projekts, Sprints oder Einzelauftrags. Mitten im Strom, wenn ein Gespräch abgedriftet ist. „Frame das", „was ist das Brief", „richte das Projekt ein", „Framing".
 - **Wann überspringen:** Bereits geframet (prüfen Sie `.ux/last-frame.json`). Einzelner Komponentenbau ohne Framing-Implikationen. Backend oder Infrastruktur.
-- **Aufruf:** `/ux-frame "Loyalty-Wallet für den MENA-Bashiti-Pilot"`.
+- **Aufruf:** `/ux-frame "Loyalty-Wallet für den MENA-Northwind-Pilot"`.
 - **Ausgabe:** Schreibt `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
 - **Verkettet mit:** `/ux-discover` → das Frame zum 10-Felder-Brief ausbauen. `/ux-design` → mit dem Frame als Anker generieren.
 
@@ -491,12 +491,12 @@ Die Befehle sind in fünf Eimer gruppiert: **Bootstrap & Inventar**, **Discovery
 - **Ausgabe:** Schreibt `.ux/last-workshop.json`, Game-Plan + Artefakte je Phase.
 - **Verkettet mit:** `/ux-design` → den Game-Plan ausführen. `/ux-research` → Lücken füllen, die der Workshop sichtbar gemacht hat. `/ux-case-study` → die Reise publizieren.
 
-#### `/ux-case-study`: veröffentlichbare Case-Study (Wfrah-Editorial-Format)
+#### `/ux-case-study`: veröffentlichbare Case-Study (monochromes Editorial-Format)
 
-- **Was:** Generiert eine Projekt-Case-Study im reinen monochromen Editorial-Format, Wfrah-Typographie, Haarlinien-Separatoren, nummerierte (A)–(G)-Sektionscodes, bilingual-sicheres Layout. Ein Dokument, keine Marketing-Broschüre. Liest aus `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Was:** Generiert eine Projekt-Case-Study im reinen monochromen Editorial-Format, breite Editorial-Typographie, Haarlinien-Separatoren, nummerierte (A)–(G)-Sektionscodes, bilingual-sicheres Layout. Ein Dokument, keine Marketing-Broschüre. Liest aus `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Wann verwenden:** Nach Launch. Nach einem diskreten Meilenstein. „Schreib eine Case-Study", „Case-Study dieses Projekt", „mach das Abschluss-Dokument", „publizier diese Arbeit", „Portfolio-Stück".
 - **Wann überspringen:** Dem Projekt fehlen Daten, um die (A)–(G)-Sektionen zu füllen. Der Nutzer will eine Marketing-Landing, keine Case-Study (verwenden Sie `/ux-design`).
-- **Aufruf:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Aufruf:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Ausgabe:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Verkettet mit:** Terminalbefehl, meist das Ende eines Projekts.
 
@@ -1091,10 +1091,10 @@ Das Plugin moderiert die fünf Phasen (Exploration → Heatmap → Stakeholder-M
 Sie haben die Loyalty-Wallet ausgeliefert. Sie wollen ein Portfolio-Stück.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [liest .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generiert Wfrah-Editorial-Case-Study mit nummerierten (A)-(G)-Sektionen, Haarlinien-Separatoren, bilingual-sicherem Layout]
-> [schreibt case-studies/bashiti-loyalty.html]
+> [generiert monochrome Editorial-Case-Study mit nummerierten (A)-(G)-Sektionen, Haarlinien-Separatoren, bilingual-sicherem Layout]
+> [schreibt case-studies/northwind-loyalty.html]
 ```
 
 Die Case-Study ist ein fertiges, veröffentlichbares Artefakt, kein Entwurf. Reines Monochrom, Editorial-Typographie, bereit für Ihr Portfolio.

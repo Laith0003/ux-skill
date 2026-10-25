@@ -1,6 +1,6 @@
 # Created by Laith Aljunaidy
 
-Solo founder of Dot (thedotwallet.com), a MENA-first loyalty platform launched in 2026. Builds the product end-to-end, leads design and engineering, runs partner conversations directly, and writes most of the code that ships. The platform is live in Amman with the Bashiti pilot, integrated into a real Odoo POS, with real customers transacting on it daily.
+Solo founder of Dot (thedotwallet.com), a MENA-first loyalty platform launched in 2026. Builds the product end-to-end, leads design and engineering, runs partner conversations directly, and writes most of the code that ships. The platform is live in Amman with its first retail pilot, integrated into a real Odoo POS, with real customers transacting on it daily.
 
 The `ux` plugin distills the playbook he applies inside Dot every working day. How to ship premium product UI/UX without an army. The anti-AI-slop discipline that keeps surfaces from looking generated — the dead giveaways in color, motion, microcopy, and layout, and the specific moves that defeat each one. The RTL-first thinking that treats Arabic as the default rather than a translation pass — because in the MENA market it is the default. The Apple-clean monochrome aesthetic where the brand mark is the only chromatic accent, semantic colors carry meaning rather than decoration, and white space carries the system. The hidden-profile architecture where phone is the only customer identity and the user's profile sits above the tenant boundary as the asset the product is actually building.
 

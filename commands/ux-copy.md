@@ -16,7 +16,7 @@ Use when the structure of the surface is roughly right but the words are weak. N
 
 ## Input
 
-One of: a URL, an absolute file path containing the strings (Blade view, JSX, JSON locale file, etc.), a screenshot, or pasted copy. Also required: the **target voice** — either named (e.g., "Dot voice: direct, warm, brief, unpretentious") or pasted as a short voice spec. If voice is not provided and the project has a voice file (`project_dot_voice.md` or similar), read it and use it.
+One of: a URL, an absolute file path containing the strings (Blade view, JSX, JSON locale file, etc.), a screenshot, or pasted copy. Also required: the **target voice** — either named (e.g., "brand voice: direct, warm, brief, unpretentious") or pasted as a short voice spec. If voice is not provided and the project has a voice file (`voice.md`, `brand-voice.md`, or similar), read it and use it.
 
 ## Process
 
@@ -32,7 +32,7 @@ Standard voice rubric (default if no voice provided):
 - **Specific** — name the thing, name the action.
 - **Unpretentious** — no "leverage," "empower," "seamless," "robust."
 
-Project-specific voice overrides the default — if Dot is the project, the rubric is whatever `project_dot_voice.md` says.
+Project-specific voice overrides the default: when the project ships its own voice file, the rubric is whatever that file says.
 
 ### 2. Extract every string
 

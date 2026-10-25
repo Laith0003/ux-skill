@@ -230,7 +230,7 @@ ux-skill (ชื่อแพ็กเกจ: uxskill)
 │   ├── ux-frame.md                    บล็อก framing 4 ฟิลด์
 │   ├── ux-research.md                 วางแผน + สังเคราะห์งานวิจัย
 │   ├── ux-workshop.md                 เวิร์กชอป design thinking 5 ระยะ
-│   ├── ux-case-study.md               case study ตีพิมพ์ได้สไตล์ Wfrah-editorial
+│   ├── ux-case-study.md               case study ตีพิมพ์ได้สไตล์ editorial โมโนโครม
 │   ├── ux-next.md                     วาทยกร workflow (อ่านอย่างเดียว)
 │   └── ux-expert.md                   ตะขอที่ปรึกษา
 │
@@ -469,7 +469,7 @@ ux-skill (ชื่อแพ็กเกจ: uxskill)
 - **คืออะไร:** จับ ใครเป็นเป้าหมาย ผลลัพธ์ สมมติฐาน และสัญญาณความสำเร็จ ในบล็อก framing ที่มีโครงสร้าง ไม่มีงานออกแบบเกิดขึ้น แค่การรับสี่ฟิลด์ที่เปลี่ยนคำขอที่คลุมเครือให้เป็น brief ทำงาน เบากว่า `/ux-discover` (4 ฟิลด์ vs 10)
 - **ใช้เมื่อไหร่:** ต้นโปรเจ็กต์ sprint หรือ engagement ครั้งเดียว กลางทางเมื่อการสนทนาเบี่ยงเบน "Frame this", "what's the brief", "set up the project", "framing"
 - **ข้ามเมื่อไหร่:** framed แล้ว (ตรวจ `.ux/last-frame.json`) สร้างคอมโพเนนต์ครั้งเดียวที่ไม่มี implication ของ framing แบ็คเอนด์หรือโครงสร้างพื้นฐาน
-- **การเรียก:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`
+- **การเรียก:** `/ux-frame "loyalty wallet for MENA Northwind pilot"`
 - **เอาต์พุต:** เขียน `.ux/last-frame.json` `{audience, outcome, hypothesis, success_signal}`
 - **ร้อยต่อ:** `/ux-discover` → ขยาย frame เป็น brief 10 ฟิลด์ `/ux-design` → สร้างโดยใช้ frame เป็นจุดยึด
 
@@ -491,12 +491,12 @@ ux-skill (ชื่อแพ็กเกจ: uxskill)
 - **เอาต์พุต:** เขียน `.ux/last-workshop.json` game plan + artifact ต่อระยะ
 - **ร้อยต่อ:** `/ux-design` → ลงมือ game plan `/ux-research` → เติมช่องว่างที่ workshop ทำให้เห็น `/ux-case-study` → เผยแพร่การเดินทาง
 
-#### `/ux-case-study`: case study ตีพิมพ์ได้ (รูปแบบ Wfrah-editorial)
+#### `/ux-case-study`: case study ตีพิมพ์ได้ (รูปแบบ editorial โมโนโครม)
 
-- **คืออะไร:** สร้าง case study ของโปรเจ็กต์ในรูปแบบ editorial โมโนโครมบริสุทธิ์ ตัวอักษร Wfrah เส้นแบ่ง hairline รหัส section ตามตัวเลข (A)–(G) เลย์เอาต์ที่ปลอดภัยสองภาษา เอกสาร ไม่ใช่โบรชัวร์การตลาด อ่านจาก `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`
+- **คืออะไร:** สร้าง case study ของโปรเจ็กต์ในรูปแบบ editorial โมโนโครมบริสุทธิ์ ตัวอักษร editorial แบบกว้าง เส้นแบ่ง hairline รหัส section ตามตัวเลข (A)–(G) เลย์เอาต์ที่ปลอดภัยสองภาษา เอกสาร ไม่ใช่โบรชัวร์การตลาด อ่านจาก `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`
 - **ใช้เมื่อไหร่:** หลัง launch หลัง milestone แยก "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece"
 - **ข้ามเมื่อไหร่:** โปรเจ็กต์ขาดข้อมูลเติม section (A)–(G) ผู้ใช้ต้องการ landing การตลาด ไม่ใช่ case study (ใช้ `/ux-design`)
-- **การเรียก:** `/ux-case-study --format=html --slug=bashiti-loyalty`
+- **การเรียก:** `/ux-case-study --format=html --slug=northwind-loyalty`
 - **เอาต์พุต:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`
 - **ร้อยต่อ:** คอมมานด์ปลายทาง มักเป็นจุดจบโปรเจ็กต์
 
@@ -1091,10 +1091,10 @@ PR ที่นำกราเดียนต์ม่วงไปฟ้า Inte
 คุณส่ง loyalty wallet คุณต้องการชิ้นงาน portfolio
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [อ่าน .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [สร้าง case study Wfrah-editorial พร้อม section ตามตัวเลข (A)-(G) เส้นแบ่ง hairline เลย์เอาต์ปลอดภัยสองภาษา]
-> [เขียน case-studies/bashiti-loyalty.html]
+> [สร้าง case study editorial โมโนโครม พร้อม section ตามตัวเลข (A)-(G) เส้นแบ่ง hairline เลย์เอาต์ปลอดภัยสองภาษา]
+> [เขียน case-studies/northwind-loyalty.html]
 ```
 
 case study เป็น artifact ที่เสร็จและตีพิมพ์ได้ ไม่ใช่ดราฟต์ โมโนโครมบริสุทธิ์ ตัวอักษร editorial พร้อมส่งไปยัง portfolio ของคุณ

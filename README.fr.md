@@ -230,7 +230,7 @@ ux-skill (nom du paquet : uxskill)
 │   ├── ux-frame.md                    bloc de framing à 4 champs
 │   ├── ux-research.md                 planification + synthèse de recherche
 │   ├── ux-workshop.md                 atelier de design thinking en 5 phases
-│   ├── ux-case-study.md               étude de cas publiable format éditorial Wfrah
+│   ├── ux-case-study.md               étude de cas publiable format éditorial monochrome
 │   ├── ux-next.md                     conducteur de workflow (lecture seule)
 │   └── ux-expert.md                   crochet de conseil
 │
@@ -469,7 +469,7 @@ Les commandes sont regroupées en cinq catégories : **amorçage et inventaire**
 - **Quoi :** Capture le pour-qui, l'outcome, l'hypothèse et le signal de succès dans un bloc de framing structuré. Aucun travail de design ne se produit, juste l'intake à quatre champs qui transforme une demande vague en brief de travail. Plus léger que `/ux-discover` (4 champs contre 10).
 - **Quand l'utiliser :** Démarrage de tout projet, sprint ou mission ponctuelle. En milieu de course quand une conversation a dérivé. « Cadre ça », « c'est quoi le brief », « monte le projet », « framing ».
 - **Quand passer :** Déjà cadré (vérifiez `.ux/last-frame.json`). Construction de composant ponctuel sans implication de cadrage. Backend ou infrastructure.
-- **Invocation :** `/ux-frame "wallet de fidélité pour le pilote MENA Bashiti"`.
+- **Invocation :** `/ux-frame "wallet de fidélité pour le pilote MENA Northwind"`.
 - **Sortie :** Écrit `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
 - **Enchaîne avec :** `/ux-discover` → étendre le cadre au brief à 10 champs. `/ux-design` → générer en utilisant le cadre comme ancre.
 
@@ -491,12 +491,12 @@ Les commandes sont regroupées en cinq catégories : **amorçage et inventaire**
 - **Sortie :** Écrit `.ux/last-workshop.json`, plan de jeu + artefacts par phase.
 - **Enchaîne avec :** `/ux-design` → exécuter le plan de jeu. `/ux-research` → combler les manques que l'atelier a fait remonter. `/ux-case-study` → publier le parcours.
 
-#### `/ux-case-study`: étude de cas publiable (format éditorial Wfrah)
+#### `/ux-case-study`: étude de cas publiable (format éditorial monochrome)
 
-- **Quoi :** Génère une étude de cas de projet en format éditorial monochrome pur, typographie Wfrah, séparateurs filaires, codes de section numérotés (A)–(G), layout bilingue-safe. Un document, pas une brochure marketing. Lit depuis `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Quoi :** Génère une étude de cas de projet en format éditorial monochrome pur, typographie éditoriale large, séparateurs filaires, codes de section numérotés (A)–(G), layout bilingue-safe. Un document, pas une brochure marketing. Lit depuis `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Quand l'utiliser :** Post-lancement. Après un jalon discret. « Écris une étude de cas », « étude de cas ce projet », « fais le doc de clôture », « publie ce travail », « pièce portfolio ».
 - **Quand passer :** Le projet manque de données pour peupler les sections (A)–(G). L'utilisateur veut une landing marketing, pas une étude de cas (utilisez `/ux-design`).
-- **Invocation :** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Invocation :** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Sortie :** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Enchaîne avec :** Commande terminale, généralement la fin d'un projet.
 
@@ -1091,10 +1091,10 @@ Le plugin facilite les cinq phases (exploration → carte de chaleur → carte d
 Vous avez expédié le wallet de fidélité. Vous voulez une pièce portfolio.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [lit .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [génère une étude de cas éditoriale Wfrah avec sections numérotées (A)-(G), séparateurs filaires, layout bilingue-safe]
-> [écrit case-studies/bashiti-loyalty.html]
+> [génère une étude de cas éditoriale monochrome avec sections numérotées (A)-(G), séparateurs filaires, layout bilingue-safe]
+> [écrit case-studies/northwind-loyalty.html]
 ```
 
 L'étude de cas est un artefact fini, publiable, pas un brouillon. Monochrome pur, typographie éditoriale, prêt à publier sur votre portfolio.

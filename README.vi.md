@@ -230,7 +230,7 @@ ux-skill (tên gói: uxskill)
 │   ├── ux-frame.md                    khối framing 4 trường
 │   ├── ux-research.md                 lên kế hoạch + tổng hợp nghiên cứu
 │   ├── ux-workshop.md                 workshop design thinking 5 giai đoạn
-│   ├── ux-case-study.md               case study có thể xuất bản phong cách Wfrah-editorial
+│   ├── ux-case-study.md               case study có thể xuất bản phong cách editorial đơn sắc
 │   ├── ux-next.md                     nhạc trưởng workflow (chỉ đọc)
 │   └── ux-expert.md                   móc nối tư vấn
 │
@@ -469,7 +469,7 @@ Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **
 - **Là gì:** Nắm bắt dành-cho-ai, outcome, giả thuyết, và tín hiệu thành công trong một khối framing có cấu trúc. Không có việc thiết kế nào diễn ra, chỉ là thu thập bốn trường biến một yêu cầu mơ hồ thành một brief làm việc. Nhẹ hơn `/ux-discover` (4 trường so với 10).
 - **Khi dùng:** Bắt đầu bất kỳ dự án, sprint, hay engagement một-lần nào. Giữa dòng khi một cuộc trò chuyện đã trôi dạt. "Frame this", "what's the brief", "set up the project", "framing".
 - **Khi bỏ qua:** Đã framed (kiểm tra `.ux/last-frame.json`). Build component một-lần không có ý nghĩa framing. Backend hay hạ tầng.
-- **Gọi:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`.
+- **Gọi:** `/ux-frame "loyalty wallet for MENA Northwind pilot"`.
 - **Đầu ra:** Ghi `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
 - **Nối vào:** `/ux-discover` → mở rộng frame thành brief 10 trường. `/ux-design` → sinh dùng frame làm neo.
 
@@ -491,12 +491,12 @@ Các command được nhóm thành năm xô: **khởi động & kiểm kê**, **
 - **Đầu ra:** Ghi `.ux/last-workshop.json`, kế hoạch chơi + artifact theo giai đoạn.
 - **Nối vào:** `/ux-design` → thực thi kế hoạch chơi. `/ux-research` → lấp các khoảng trống workshop làm nổi lên. `/ux-case-study` → xuất bản hành trình.
 
-#### `/ux-case-study`: case study có thể xuất bản (định dạng Wfrah-editorial)
+#### `/ux-case-study`: case study có thể xuất bản (định dạng editorial đơn sắc)
 
-- **Là gì:** Sinh ra một case study dự án ở định dạng editorial đơn sắc tinh khôi, typography Wfrah, đường ngăn nét tóc, mã section đánh số (A)–(G), layout an toàn song ngữ. Một tài liệu, không phải brochure marketing. Đọc từ `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Là gì:** Sinh ra một case study dự án ở định dạng editorial đơn sắc tinh khôi, typography editorial rộng, đường ngăn nét tóc, mã section đánh số (A)–(G), layout an toàn song ngữ. Một tài liệu, không phải brochure marketing. Đọc từ `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Khi dùng:** Sau khi launch. Sau một mốc rời rạc. "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece".
 - **Khi bỏ qua:** Dự án thiếu dữ liệu để điền các section (A)–(G). Người dùng muốn landing marketing, không phải case study (dùng `/ux-design`).
-- **Gọi:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Gọi:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Đầu ra:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Nối vào:** Command tận cùng, thường là kết thúc một dự án.
 
@@ -1091,10 +1091,10 @@ Plugin hỗ trợ năm giai đoạn (khám phá → bản đồ nhiệt → bả
 Bạn ship ví loyalty. Bạn muốn một tác phẩm portfolio.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [đọc .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [sinh case study Wfrah-editorial với các section đánh số (A)-(G), đường ngăn nét tóc, layout an toàn song ngữ]
-> [ghi case-studies/bashiti-loyalty.html]
+> [sinh case study editorial đơn sắc với các section đánh số (A)-(G), đường ngăn nét tóc, layout an toàn song ngữ]
+> [ghi case-studies/northwind-loyalty.html]
 ```
 
 Case study là một artifact hoàn thiện, có thể xuất bản, không phải bản nháp. Đơn sắc tinh khôi, typography editorial, sẵn sàng ship lên portfolio của bạn.
