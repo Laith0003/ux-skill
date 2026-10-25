@@ -17,7 +17,7 @@ Build the strongest UX plugin ever made, a comprehensive UX intelligence platfor
 - Replaces and improves on **six** existing skills: `design-review`, `design-critique`, `accessibility-review`, `ux-copy`, `gpt-taste`, `design-taste-frontend`.
 - Conducts a **next-prompt workflow**, every command ends by naming the most useful next command.
 - Reads as the **canon**, informed by Norman, Krug, Gothelf/Seiden, Klein, Eyal, Kocienda, Wheeler, Laws of UX, SAP AppHaus design thinking, and the awwwards-grade frontend bar.
-- Outputs in two house styles: **Polaris-foundations** for review reports, **Wfrah-editorial** for case studies.
+- Outputs in two house styles: **Polaris-foundations** for review reports, **monochrome editorial** for case studies.
 - Is **cross-system**, usable on any project, any stack.
 - Surfaces a **"UX expert in real life"** CTA pointing to Laith's contact info.
 
@@ -31,7 +31,7 @@ Anthropic skills are single `SKILL.md` files. This artifact exceeds that envelop
 
 - 17 callable slash commands.
 - 5 sub-agents.
-- ~25 reference files at Polaris scale plus a Wfrah-styled case-study reference and a style library.
+- ~25 reference files at Polaris scale plus a monochrome editorial case-study reference and a style library.
 - Multi-stack code generation.
 - Cross-project use, expected discoverability as real slash commands.
 
@@ -76,7 +76,7 @@ Plugin gives us real `/ux-*` commands, bundled references, sub-agents the comman
 | Command | Purpose |
 |---|---|
 | `/ux-fix` | Opt-in fix loop. Reads the latest audit/copy/motion/etc. report, applies findings as atomic commits, verifies, re-runs the lens. |
-| `/ux-case-study` | Generate a project case study in Wfrah numbered-section editorial format: (A) About → (B) Mission → (C) Outcomes → (D) Impact → (E) Market → (F) Chance → (G) Target Audience. |
+| `/ux-case-study` | Generate a project case study in a numbered-section monochrome editorial format: (A) About → (B) Mission → (C) Outcomes → (D) Impact → (E) Market → (F) Chance → (G) Target Audience. |
 | `/ux-next` | Workflow conductor. Reads latest reports, names the highest-leverage next command. |
 | `/ux-expert` | Surfaces Laith's contact info when a user asks for a real-life UX expert. Lightweight; no audit, no generation, just the bio + reach-out details from `references/creator/about.md`. |
 
@@ -123,7 +123,7 @@ references/
 │   └── exemplars.md         # curated awwwards-category exemplars (~10 URLs per category, one-line notes)
 ├── output/
 │   ├── polaris-style.md     # the house style for review reports: principles / do-don't / examples / tokens / checklist
-│   └── case-study-style.md  # Wfrah editorial format: numbered (A)–(G) sections, two-tone body emphasis, ultra-wide type
+│   └── case-study-style.md  # monochrome editorial format: numbered (A)–(G) sections, two-tone body emphasis, ultra-wide type
 ├── conditional/
 │   ├── habit-design.md      # Eyal Hook model, only invoked for retention/onboarding surfaces
 │   └── brand-system.md      # Wheeler + logo guide, only invoked for brand/identity surfaces
@@ -221,9 +221,9 @@ Fix: <specific actionable change>
 
 Reports end with: severity counts, top-3 must-fix-now, ship-readiness verdict, conductor block.
 
-### 6.2 Wfrah-editorial style (case studies via `/ux-case-study`)
+### 6.2 Monochrome editorial style (case studies via `/ux-case-study`)
 
-Inspired by the wfrah platform case study format. **Used ONLY by `/ux-case-study` and `/ux-audit` PDF report outputs, NOT for general design outputs like landings, dashboards, or components.**
+**Used ONLY by `/ux-case-study` and `/ux-audit` PDF report outputs, NOT for general design outputs like landings, dashboards, or components.**
 
 - Numbered section codes: (A) About, (B) Mission, (C) Outcomes, (D) Impact, (E) Market, (F) Chance, (G) Target Audience
 - Editorial typography: ultra-wide containers, large display headlines, body text with **two-tone emphasis**, important phrases in solid black, context phrases in gray
@@ -335,7 +335,7 @@ All knowledge from absorbed skills (`design-review`, `design-critique`, `accessi
 | Klein, *UX for Lean Startups* | `references/process/lean-ux-klein.md`; basis for `/ux-research` (startup research methods) |
 | Kocienda, *Creative Selection* | `references/process/creative-selection.md`; spiritual basis for the workflow conductor |
 | SAP AppHaus / Geo2024 design thinking | `references/process/design-thinking-apphaus.md`; basis for `/ux-workshop` |
-| Wfrah case study format | `references/output/case-study-style.md`; basis for `/ux-case-study` |
+| Monochrome editorial case study format | `references/output/case-study-style.md`; basis for `/ux-case-study` |
 | `gpt-taste` + `design-taste-frontend` skills | `references/styles/anti-slop.md` + `references/styles/arsenal.md` + `/ux-design` process |
 | ui-ux-pro-max (50+ styles) | distilled into `references/styles/catalog.md` |
 | awwwards categories | curated exemplars in `references/styles/exemplars.md` |
@@ -405,7 +405,7 @@ The order below minimizes blocking dependencies. Steps 2–4 can run in parallel
 - A user runs `/ux-audit` on a fresh page → gets a Polaris-styled, evidence-cited report ending with a next-prompt block.
 - `/ux-design` from a brief produces a working component/page in the user's stack, GSAP/Framer where appropriate, with no AI-slop tells (Inter, purple gradients, "Acme/Nexus", generic 3-card rows).
 - `/ux-system` proposes a complete starter design system (tokens + 5–10 foundation docs + 6–8 components) when invoked on a project with no existing system.
-- `/ux-case-study` outputs a Wfrah-style numbered editorial doc from project facts.
+- `/ux-case-study` outputs a numbered monochrome editorial doc from project facts.
 - `/ux-next` reliably picks the highest-leverage next move from any combination of prior reports.
 - `/ux-fix` applies findings as atomic commits with passing re-verification.
 - `/ux-workshop` runs a SAP AppHaus-style design thinking session end to end with deliverable artifacts at each phase.

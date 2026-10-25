@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dot — The internet of what people actually do</title>
-    <meta name="description" content="MENA-first loyalty. Show your phone. Earn. Spend. Used by Bashiti, Café Younes, Wild Jordan Center.">
+    <meta name="description" content="MENA-first loyalty. Show your phone. Earn. Spend. Used by Northwind Hardware, Harbor Café, Cedar Outdoors.">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -255,7 +255,7 @@
                 <div class="col-span-12 lg:col-span-7 lg:ps-2">
                     <div class="inline-flex items-center gap-2 rounded-full border border-zinc-200 bg-white/70 backdrop-blur px-3 py-1 text-[12px] text-zinc-600 mb-7 rise-in">
                         <span class="brand-dot" style="width: 6px; height: 6px;"></span>
-                        <span>Live in Amman. Bashiti, Café Younes, Wild Jordan Center.</span>
+                        <span>Live in Amman. Northwind, Harbor Café, Cedar Outdoors.</span>
                     </div>
 
                     <h1 class="display text-[44px] sm:text-[60px] lg:text-[76px] xl:text-[86px] text-zinc-950 rise-in" style="animation-delay: 60ms;">
@@ -330,7 +330,7 @@
                             </div>
 
                             <p class="mt-1 text-[14px] text-zinc-500">
-                                Bashiti Hardware, Mecca Street
+                                Northwind Hardware, Mecca Street
                             </p>
 
                             <div class="mt-7 h-px bg-zinc-100"></div>
@@ -366,7 +366,7 @@
                         {{-- Floating stamp card chip — secondary asset --}}
                         <div class="absolute -bottom-6 -start-4 sm:-start-8 lg:-start-12 receipt p-4 sm:p-5 w-[220px] sm:w-[240px] rotate-[-3deg]">
                             <p class="text-[11px] uppercase tracking-[0.14em] text-zinc-400">Stamp card</p>
-                            <p class="mt-1 text-[13px] text-zinc-700">Café Younes — 8 cups</p>
+                            <p class="mt-1 text-[13px] text-zinc-700">Harbor Café — 8 cups</p>
 
                             <div class="mt-3 grid grid-cols-8 gap-1.5" aria-hidden="true">
                                 @for ($i = 0; $i < 8; $i++)
@@ -458,7 +458,7 @@
                         <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-zinc-950 text-white text-[13px] font-medium">LT</span>
                         <div>
                             <p class="text-[14px] font-medium text-zinc-950">Lina Touma</p>
-                            <p class="text-[12px] text-zinc-500">Owner, Café Younes Jabal Amman</p>
+                            <p class="text-[12px] text-zinc-500">Owner, Harbor Café Jabal Amman</p>
                         </div>
                     </div>
                 </article>
@@ -479,7 +479,7 @@
                     </p>
                     <div class="mt-7 h-px bg-zinc-100"></div>
                     <p class="mt-5 text-[12px] text-zinc-500">
-                        Measured across 14 Bashiti branches, Q1 2026.
+                        Illustrative figures for a 14-branch retailer.
                     </p>
                 </article>
 
@@ -512,15 +512,15 @@
                             <div class="mt-8 grid grid-cols-12 gap-3 items-center">
                                 <div class="col-span-3 flex flex-col items-center gap-2">
                                     <span class="inline-flex w-12 h-12 rounded-2xl items-center justify-center bg-zinc-50 border border-zinc-200 text-[11px] font-medium text-zinc-700">BH</span>
-                                    <span class="text-[11px] text-zinc-500">Bashiti</span>
+                                    <span class="text-[11px] text-zinc-500">Northwind</span>
                                 </div>
                                 <div class="col-span-3 flex flex-col items-center gap-2">
                                     <span class="inline-flex w-12 h-12 rounded-2xl items-center justify-center bg-zinc-50 border border-zinc-200 text-[11px] font-medium text-zinc-700">CY</span>
-                                    <span class="text-[11px] text-zinc-500">Café Younes</span>
+                                    <span class="text-[11px] text-zinc-500">Harbor Café</span>
                                 </div>
                                 <div class="col-span-3 flex flex-col items-center gap-2">
                                     <span class="inline-flex w-12 h-12 rounded-2xl items-center justify-center bg-zinc-50 border border-zinc-200 text-[11px] font-medium text-zinc-700">ML</span>
-                                    <span class="text-[11px] text-zinc-500">Mlabbas</span>
+                                    <span class="text-[11px] text-zinc-500">Atlas Tailors</span>
                                 </div>
                                 <div class="col-span-3 flex flex-col items-center gap-2">
                                     <span class="inline-flex w-12 h-12 rounded-2xl items-center justify-center bg-zinc-950 text-white text-[11px] font-medium">
@@ -633,19 +633,19 @@
             {{-- Asymmetric brand strip — 5 items with deliberate uneven widths --}}
             <div class="grid grid-cols-12 gap-y-10 lg:gap-x-10 items-center">
                 <div class="col-span-6 sm:col-span-4 lg:col-span-3">
-                    <p class="brand-wordmark text-[22px] lg:text-[26px]">Bashiti<span class="text-zinc-400 font-normal"> Hardware</span></p>
+                    <p class="brand-wordmark text-[22px] lg:text-[26px]">Northwind<span class="text-zinc-400 font-normal"> Hardware</span></p>
                 </div>
                 <div class="col-span-6 sm:col-span-4 lg:col-span-2">
-                    <p class="brand-wordmark text-[20px] lg:text-[22px] italic">Café Younes</p>
+                    <p class="brand-wordmark text-[20px] lg:text-[22px] italic">Harbor Café</p>
                 </div>
                 <div class="col-span-12 sm:col-span-4 lg:col-span-3 lg:text-center">
-                    <p class="brand-wordmark text-[18px] lg:text-[20px] tracking-[0.04em] uppercase">Wild Jordan</p>
+                    <p class="brand-wordmark text-[18px] lg:text-[20px] tracking-[0.04em] uppercase">Cedar Outdoors</p>
                 </div>
                 <div class="col-span-6 sm:col-span-6 lg:col-span-2">
-                    <p class="brand-wordmark text-[22px] lg:text-[24px] font-semibold">Mlabbas.</p>
+                    <p class="brand-wordmark text-[22px] lg:text-[24px] font-semibold">Atlas Tailors.</p>
                 </div>
                 <div class="col-span-6 sm:col-span-6 lg:col-span-2 lg:text-end">
-                    <p class="brand-wordmark text-[18px] lg:text-[19px]">Casper &amp; Gambini's</p>
+                    <p class="brand-wordmark text-[18px] lg:text-[19px]">Olive &amp; Ember</p>
                 </div>
             </div>
 
@@ -675,7 +675,7 @@
                                         <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-zinc-950 text-white text-[12px] font-medium">BK</span>
                                         <div>
                                             <p class="text-[14px] text-zinc-950"><span class="font-medium">Bashar Kuzbari</span> earned 50 pts</p>
-                                            <p class="text-[12px] text-zinc-500">Bashiti Hardware — 14 sec ago</p>
+                                            <p class="text-[12px] text-zinc-500">Northwind Hardware — 14 sec ago</p>
                                         </div>
                                     </div>
                                     <span class="text-[13px] num-tabular text-emerald-700">+50</span>
@@ -700,7 +700,7 @@
                                         <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-zinc-950 text-white text-[12px] font-medium">MH</span>
                                         <div>
                                             <p class="text-[14px] text-zinc-950"><span class="font-medium">Mira Halawani</span> redeemed a flat white</p>
-                                            <p class="text-[12px] text-zinc-500">Café Younes — 1 min ago</p>
+                                            <p class="text-[12px] text-zinc-500">Harbor Café — 1 min ago</p>
                                         </div>
                                     </div>
                                     <span class="text-[13px] num-tabular text-zinc-500">-180</span>
@@ -725,7 +725,7 @@
                                         <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-zinc-950 text-white text-[12px] font-medium">AT</span>
                                         <div>
                                             <p class="text-[14px] text-zinc-950"><span class="font-medium">Adnan Tabbaa</span> reached Silver</p>
-                                            <p class="text-[12px] text-zinc-500">Wild Jordan Center — 3 min ago</p>
+                                            <p class="text-[12px] text-zinc-500">Cedar Outdoors — 3 min ago</p>
                                         </div>
                                     </div>
                                     <span class="inline-flex items-center gap-1 text-[12px] text-zinc-700">
@@ -810,7 +810,7 @@
                     </div>
                     <h3 class="text-[20px] font-semibold tracking-tight text-zinc-950">Spend anywhere on the network.</h3>
                     <p class="mt-3 text-[15px] leading-[1.6] text-zinc-600 max-w-[18rem]">
-                        Cup of coffee at Café Younes. Drill bits at Bashiti. Tier perks at Wild Jordan. One wallet, every shop.
+                        Cup of coffee at Harbor Café. Drill bits at Northwind. Tier perks at Cedar Outdoors. One wallet, every shop.
                     </p>
                 </li>
             </ol>

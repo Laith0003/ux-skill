@@ -230,7 +230,7 @@ ux-skill (имя пакета: uxskill)
 │   ├── ux-frame.md                    framing-блок на 4 поля
 │   ├── ux-research.md                 планирование исследования + синтез
 │   ├── ux-workshop.md                 5-фазный workshop design-thinking
-│   ├── ux-case-study.md               публикуемый case study в формате Wfrah-editorial
+│   ├── ux-case-study.md               публикуемый case study в монохромном editorial-формате
 │   ├── ux-next.md                     дирижёр workflow (read-only)
 │   └── ux-expert.md                   крючок для консалтинга
 │
@@ -469,7 +469,7 @@ ux-skill (имя пакета: uxskill)
 - **Что:** Захватывает кому-это-для, outcome, гипотезу и signal of success в структурный framing-блок. Никакой design-работы, только intake на четыре поля, который превращает размытый запрос в рабочий бриф. Легче, чем `/ux-discover` (4 поля против 10).
 - **Когда использовать:** Начало любого проекта, спринта или разового engagement'а. В середине потока, когда разговор сошёл с курса. «Frame this», «what's the brief», «set up the project», «framing».
 - **Когда пропустить:** Уже зафреймлено (проверь `.ux/last-frame.json`). One-off сборка компонента без framing-импликаций. Backend или инфраструктура.
-- **Вызов:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`.
+- **Вызов:** `/ux-frame "loyalty wallet for MENA Northwind pilot"`.
 - **Output:** Пишет `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
 - **Цепляется к:** `/ux-discover` → расширяет фрейм до 10-полевого брифа. `/ux-design` → генерирует, используя фрейм как якорь.
 
@@ -491,12 +491,12 @@ ux-skill (имя пакета: uxskill)
 - **Output:** Пишет `.ux/last-workshop.json`, game plan + артефакты по фазам.
 - **Цепляется к:** `/ux-design` → исполнить game plan. `/ux-research` → закрыть пробелы, которые всплыл воркшоп. `/ux-case-study` → опубликовать путь.
 
-#### `/ux-case-study`: публикуемый case study (формат Wfrah-editorial)
+#### `/ux-case-study`: публикуемый case study (монохромный editorial-формат)
 
-- **Что:** Генерирует case study проекта в чисто-монохромном editorial-формате, Wfrah-типографика, hairline-разделители, нумерованные секционные коды (A)–(G), bilingual-safe лейаут. Документ, а не маркетинговая брошюра. Читает из `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Что:** Генерирует case study проекта в чисто-монохромном editorial-формате, широкая editorial-типографика, hairline-разделители, нумерованные секционные коды (A)–(G), bilingual-safe лейаут. Документ, а не маркетинговая брошюра. Читает из `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Когда использовать:** Пост-лонч. После дискретной вехи. «Write a case study», «case study this project», «do the wrap-up doc», «publish this work», «portfolio piece».
 - **Когда пропустить:** В проекте не хватает данных, чтобы заполнить секции (A)–(G). Пользователь хочет маркетинговый лендинг, а не case study (используй `/ux-design`).
-- **Вызов:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Вызов:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Цепляется к:** Терминальная команда, обычно конец проекта.
 
@@ -1091,10 +1091,10 @@ PR'ы, вносящие фиолетово-синие градиенты, Inter 
 Ты задеплоил loyalty-кошелёк. Тебе нужен кусок для портфолио.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [читает .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [генерирует Wfrah-editorial case study с нумерованными (A)-(G) секциями, hairline-разделителями, bilingual-safe лейаутом]
-> [пишет case-studies/bashiti-loyalty.html]
+> [генерирует монохромный editorial case study с нумерованными (A)-(G) секциями, hairline-разделителями, bilingual-safe лейаутом]
+> [пишет case-studies/northwind-loyalty.html]
 ```
 
 Case study, это законченный, публикуемый артефакт, не черновик. Чистая монохромия, editorial-типографика, готов отгружать в портфолио.

@@ -230,7 +230,7 @@ ux-skill (パッケージ名: uxskill)
 │   ├── ux-frame.md                    4 フィールドのフレーミングブロック
 │   ├── ux-research.md                 リサーチの計画 + 統合
 │   ├── ux-workshop.md                 5 段階のデザインシンキングワークショップ
-│   ├── ux-case-study.md               公開可能な Wfrah エディトリアル形式のケーススタディ
+│   ├── ux-case-study.md               公開可能なモノクロエディトリアル形式のケーススタディ
 │   ├── ux-next.md                     ワークフローコンダクター(読み取り専用)
 │   └── ux-expert.md                   コンサルティングのフック
 │
@@ -469,7 +469,7 @@ ux-skill (パッケージ名: uxskill)
 - **何をするか:** 誰のためか、アウトカム、仮説、成功シグナルを構造化されたフレーミングブロックに収めます。デザインは行わない、漠然としたリクエストを動くブリーフに変える 4 フィールドのインテーク。`/ux-discover` より軽い(4 フィールド vs 10)。
 - **使うタイミング:** どのプロジェクト、スプリント、単発エンゲージメントの始点でも。会話が脱線した中盤で。「フレーミングして」「ブリーフは?」「プロジェクトをセットアップ」「フレーミング」。
 - **スキップするタイミング:** 既にフレーミング済み(`.ux/last-frame.json` を確認)。フレーミング影響のない単発コンポーネント構築。バックエンドやインフラ。
-- **呼び出し方:** `/ux-frame "MENA Bashiti パイロット向けロイヤルティウォレット"`。
+- **呼び出し方:** `/ux-frame "MENA Northwind パイロット向けロイヤルティウォレット"`。
 - **出力:** `.ux/last-frame.json` を書き出します、`{audience, outcome, hypothesis, success_signal}`。
 - **次に繋がる:** `/ux-discover` → フレームを 10 フィールドブリーフに拡張。`/ux-design` → フレームを錨に生成。
 
@@ -491,12 +491,12 @@ ux-skill (パッケージ名: uxskill)
 - **出力:** `.ux/last-workshop.json` を書き出します、ゲームプラン + 段階別アーティファクト。
 - **次に繋がる:** `/ux-design` → ゲームプランを実行。`/ux-research` → ワークショップが浮かび上がらせたギャップを埋める。`/ux-case-study` → 旅路を公開。
 
-#### `/ux-case-study`：公開可能なケーススタディ(Wfrah エディトリアル形式)
+#### `/ux-case-study`：公開可能なケーススタディ(モノクロエディトリアル形式)
 
-- **何をするか:** 純モノクロのエディトリアル形式でプロジェクトケーススタディを生成します、Wfrah タイポ、ヘアライン区切り、(A)–(G) 番号付きセクションコード、バイリンガル対応レイアウト。ドキュメントであり、マーケのパンフレットではありません。`.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json` から読み込みます。
+- **何をするか:** 純モノクロのエディトリアル形式でプロジェクトケーススタディを生成します、ワイドなエディトリアルタイポ、ヘアライン区切り、(A)–(G) 番号付きセクションコード、バイリンガル対応レイアウト。ドキュメントであり、マーケのパンフレットではありません。`.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json` から読み込みます。
 - **使うタイミング:** ローンチ後。個別マイルストーン後。「ケーススタディを書いて」「このプロジェクトをケーススタディに」「まとめドキュメントを作って」「この仕事を公開して」「ポートフォリオ作品」。
 - **スキップするタイミング:** プロジェクトに (A)–(G) を埋めるデータがない。マーケランディングが欲しい、ケーススタディではない(`/ux-design` を使う)。
-- **呼び出し方:** `/ux-case-study --format=html --slug=bashiti-loyalty`。
+- **呼び出し方:** `/ux-case-study --format=html --slug=northwind-loyalty`。
 - **出力:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`。
 - **次に繋がる:** ターミナルコマンド、通常はプロジェクトの終止符。
 
@@ -1091,10 +1091,10 @@ jobs:
 ロイヤルティウォレットを出荷しました。ポートフォリオピースが欲しい。
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [.ux/last-frame.json、last-workshop.json、last-research.json、last-design.json、last-a11y.json、last-polish.json、last-recommendation.json、last-discovery.json を読む]
-> [(A)-(G) 番号付きセクション、ヘアライン区切り、バイリンガル対応レイアウトの Wfrah エディトリアルケーススタディを生成]
-> [case-studies/bashiti-loyalty.html を書き出す]
+> [(A)-(G) 番号付きセクション、ヘアライン区切り、バイリンガル対応レイアウトのモノクロエディトリアルケーススタディを生成]
+> [case-studies/northwind-loyalty.html を書き出す]
 ```
 
 ケーススタディは完成された公開可能なアーティファクト、草稿ではありません。純モノクロ、エディトリアルタイポ、あなたのポートフォリオに即出荷可能。

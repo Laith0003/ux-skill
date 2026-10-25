@@ -252,7 +252,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-frame.md                    4-field framing block
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   └── ux-expert.md                   consulting hook
 │
@@ -493,7 +493,7 @@ Commands are grouped into five buckets: **bootstrap & inventory**, **discovery &
 - **What:** Captures who-it's-for, outcome, hypothesis, and success signal in a structured framing block. No design work happens, just the four-field intake that turns a vague request into a working brief. Lighter than `/ux-discover` (4 fields vs 10).
 - **When to use:** Start of any project, sprint, or one-off engagement. Mid-stream when a conversation has drifted. "Frame this", "what's the brief", "set up the project", "framing".
 - **When to skip:** Already framed (check `.ux/last-frame.json`). One-off component build with no framing implications. Backend or infrastructure.
-- **Invocation:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`.
+- **Invocation:** `/ux-frame "loyalty wallet for MENA Northwind pilot"`.
 - **Output:** Writes `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
 - **Chains to:** `/ux-discover` → extend the frame to the 10-field brief. `/ux-design` → generate using the frame as anchor.
 
@@ -515,12 +515,12 @@ Commands are grouped into five buckets: **bootstrap & inventory**, **discovery &
 - **Output:** Writes `.ux/last-workshop.json`, game plan + per-phase artifacts.
 - **Chains to:** `/ux-design` → execute the game plan. `/ux-research` → fill gaps the workshop surfaced. `/ux-case-study` → publish the journey.
 
-#### `/ux-case-study`: publishable case study (Wfrah-editorial format)
+#### `/ux-case-study`: publishable case study (monochrome editorial format)
 
-- **What:** Generates a project case study in pure-monochrome editorial format, Wfrah typography, hairline separators, numbered (A)–(G) section codes, bilingual-safe layout. A document, not a marketing brochure. Reads from `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **What:** Generates a project case study in pure-monochrome editorial format, ultra-wide editorial typography, hairline separators, numbered (A)–(G) section codes, bilingual-safe layout. A document, not a marketing brochure. Reads from `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **When to use:** Post-launch. After a discrete milestone. "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece".
 - **When to skip:** Project lacks data to populate (A)–(G) sections. User wants a marketing landing, not a case study (use `/ux-design`).
-- **Invocation:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Invocation:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Chains to:** Terminal command, usually the end of a project.
 
@@ -1115,10 +1115,10 @@ The plugin facilitates the five phases (exploration → heat map → stakeholder
 You shipped the loyalty wallet. You want a portfolio piece.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 The case study is a finished, publishable artifact, not a draft. Pure monochrome, editorial typography, ready to ship to your portfolio.

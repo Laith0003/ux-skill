@@ -230,7 +230,7 @@ ux-skill (पैकेज नाम: uxskill)
 │   ├── ux-frame.md                    4-फ़ील्ड फ़्रेमिंग ब्लॉक
 │   ├── ux-research.md                 अनुसंधान योजना + संश्लेषण
 │   ├── ux-workshop.md                 5-चरण डिज़ाइन थिंकिंग वर्कशॉप
-│   ├── ux-case-study.md               प्रकाशन योग्य Wfrah-संपादकीय केस स्टडी
+│   ├── ux-case-study.md               प्रकाशन योग्य मोनोक्रोम संपादकीय केस स्टडी
 │   ├── ux-next.md                     वर्कफ़्लो कंडक्टर (केवल-पठनीय)
 │   └── ux-expert.md                   परामर्श हुक
 │
@@ -469,7 +469,7 @@ ux-skill (पैकेज नाम: uxskill)
 - **क्या:** यह-किसके-लिए-है, परिणाम, परिकल्पना, और सफलता संकेत को एक संरचित फ़्रेमिंग ब्लॉक में कैप्चर करता है। कोई डिज़ाइन कार्य नहीं होता, बस चार-फ़ील्ड इनटेक जो एक अस्पष्ट अनुरोध को एक कार्यशील ब्रीफ़ में बदल देता है। `/ux-discover` से हल्का (4 फ़ील्ड बनाम 10)।
 - **कब उपयोग करें:** किसी भी प्रोजेक्ट, स्प्रिंट, या एक बार के एंगेजमेंट की शुरुआत। बीच में जब बातचीत भटक गई हो। "Frame this", "what's the brief", "set up the project", "framing"।
 - **कब छोड़ें:** पहले से फ़्रेम किया हुआ (`.ux/last-frame.json` जाँचें)। कोई फ़्रेमिंग प्रभाव वाला एक बार का कंपोनेंट निर्माण। बैकएंड या इंफ़्रास्ट्रक्चर।
-- **आह्वान:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`।
+- **आह्वान:** `/ux-frame "loyalty wallet for MENA Northwind pilot"`।
 - **आउटपुट:** `.ux/last-frame.json` लिखता है, `{audience, outcome, hypothesis, success_signal}`।
 - **जोड़ता है:** `/ux-discover` → फ़्रेम को 10-फ़ील्ड ब्रीफ़ तक विस्तारित करें। `/ux-design` → फ़्रेम को एंकर के रूप में उपयोग करके जेनरेट करें।
 
@@ -491,12 +491,12 @@ ux-skill (पैकेज नाम: uxskill)
 - **आउटपुट:** `.ux/last-workshop.json` लिखता है, गेम प्लान + प्रति-चरण आर्टिफ़ैक्ट।
 - **जोड़ता है:** `/ux-design` → गेम प्लान निष्पादित करें। `/ux-research` → वर्कशॉप द्वारा उठाए गए अंतरालों को भरें। `/ux-case-study` → यात्रा प्रकाशित करें।
 
-#### `/ux-case-study`: प्रकाशन योग्य केस स्टडी (Wfrah-संपादकीय प्रारूप)
+#### `/ux-case-study`: प्रकाशन योग्य केस स्टडी (मोनोक्रोम संपादकीय प्रारूप)
 
-- **क्या:** शुद्ध-मोनोक्रोम संपादकीय प्रारूप में एक प्रोजेक्ट केस स्टडी जेनरेट करता है, Wfrah टाइपोग्राफ़ी, हेयरलाइन सेपरेटर, क्रमांकित (A)–(G) सेक्शन कोड, द्विभाषी-सुरक्षित लेआउट। एक दस्तावेज़, मार्केटिंग ब्रोशर नहीं। `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json` से पढ़ता है।
+- **क्या:** शुद्ध-मोनोक्रोम संपादकीय प्रारूप में एक प्रोजेक्ट केस स्टडी जेनरेट करता है, चौड़ी संपादकीय टाइपोग्राफ़ी, हेयरलाइन सेपरेटर, क्रमांकित (A)–(G) सेक्शन कोड, द्विभाषी-सुरक्षित लेआउट। एक दस्तावेज़, मार्केटिंग ब्रोशर नहीं। `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json` से पढ़ता है।
 - **कब उपयोग करें:** लॉन्च के बाद। एक अलग मील के पत्थर के बाद। "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece"।
 - **कब छोड़ें:** प्रोजेक्ट में (A)–(G) सेक्शन को भरने के लिए डेटा की कमी है। उपयोगकर्ता एक मार्केटिंग लैंडिंग चाहता है, केस स्टडी नहीं (`/ux-design` का उपयोग करें)।
-- **आह्वान:** `/ux-case-study --format=html --slug=bashiti-loyalty`।
+- **आह्वान:** `/ux-case-study --format=html --slug=northwind-loyalty`।
 - **आउटपुट:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`।
 - **जोड़ता है:** टर्मिनल कमांड, आमतौर पर प्रोजेक्ट का अंत।
 
@@ -1091,10 +1091,10 @@ PR जो purple-to-blue ग्रेडिएंट, 96px पर Inter, "John D
 आपने लॉयल्टी वॉलेट शिप किया। आप एक पोर्टफ़ोलियो पीस चाहते हैं।
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [.ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json पढ़ता है]
-> [क्रमांकित (A)-(G) सेक्शन, हेयरलाइन सेपरेटर, द्विभाषी-सुरक्षित लेआउट के साथ Wfrah-संपादकीय केस स्टडी जेनरेट करता है]
-> [case-studies/bashiti-loyalty.html लिखता है]
+> [क्रमांकित (A)-(G) सेक्शन, हेयरलाइन सेपरेटर, द्विभाषी-सुरक्षित लेआउट के साथ मोनोक्रोम संपादकीय केस स्टडी जेनरेट करता है]
+> [case-studies/northwind-loyalty.html लिखता है]
 ```
 
 केस स्टडी एक तैयार, प्रकाशन योग्य आर्टिफ़ैक्ट है, ड्राफ़्ट नहीं। शुद्ध मोनोक्रोम, संपादकीय टाइपोग्राफ़ी, आपके पोर्टफ़ोलियो पर शिप करने के लिए तैयार।

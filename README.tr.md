@@ -230,7 +230,7 @@ ux-skill (paket adı: uxskill)
 │   ├── ux-frame.md                    4 alanlı framing bloğu
 │   ├── ux-research.md                 araştırma planlama + sentez
 │   ├── ux-workshop.md                 5 fazlı design thinking workshop'u
-│   ├── ux-case-study.md               yayınlanabilir Wfrah-editorial case study
+│   ├── ux-case-study.md               yayınlanabilir monokrom editorial case study
 │   ├── ux-next.md                     workflow yöneticisi (read-only)
 │   └── ux-expert.md                   danışmanlık bağlantısı
 │
@@ -469,7 +469,7 @@ Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & �
 - **Ne yapar:** Kim için olduğu, outcome, hipotez ve başarı sinyalini yapılandırılmış bir framing bloğunda yakalar. Design işi yok, sadece belirsiz bir isteği çalışan bir brief'e dönüştüren dört alanlı intake. `/ux-discover`'dan daha hafif (4 alan vs 10).
 - **Ne zaman kullan:** Herhangi bir proje, sprint veya tek-seferlik engagement'ın başlangıcı. Bir konuşma yoldan çıktığında orta akışta. «Bunu çerçevele», «brief ne», «projeyi kur», «framing».
 - **Ne zaman atla:** Zaten çerçevelendi (`.ux/last-frame.json`'a bak). Framing implikasyonu olmayan one-off component build'i. Backend veya altyapı.
-- **Çağırma:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`.
+- **Çağırma:** `/ux-frame "loyalty wallet for MENA Northwind pilot"`.
 - **Çıktı:** `.ux/last-frame.json` yazar, `{audience, outcome, hypothesis, success_signal}`.
 - **Bağlanır:** `/ux-discover` → frame'i 10 alanlı brief'e genişlet. `/ux-design` → frame'i çapa olarak kullanarak üret.
 
@@ -491,12 +491,12 @@ Komutlar beş kovaya gruplanmıştır: **bootstrap & envanter**, **discovery & �
 - **Çıktı:** `.ux/last-workshop.json` yazar, game plan + faz başına artefaktlar.
 - **Bağlanır:** `/ux-design` → game plan'i yürüt. `/ux-research` → workshop'un yüzeye çıkardığı boşlukları doldur. `/ux-case-study` → yolculuğu yayımla.
 
-#### `/ux-case-study`: yayınlanabilir case study (Wfrah-editorial formatı)
+#### `/ux-case-study`: yayınlanabilir case study (monokrom editorial formatı)
 
-- **Ne yapar:** Saf monokrom editorial formatında bir proje case study'si üretir, Wfrah tipografi, hairline ayırıcılar, numaralandırılmış (A)–(G) bölüm kodları, çift-dil-güvenli layout. Bir doküman, marketing broşürü değil. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`'dan okur.
+- **Ne yapar:** Saf monokrom editorial formatında bir proje case study'si üretir, geniş editorial tipografi, hairline ayırıcılar, numaralandırılmış (A)–(G) bölüm kodları, çift-dil-güvenli layout. Bir doküman, marketing broşürü değil. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`'dan okur.
 - **Ne zaman kullan:** Lansman sonrası. Ayrık bir milestone'dan sonra. «Bir case study yaz», «bu projeyi case study yap», «wrap-up belgesini yap», «bu işi yayımla», «portfolio parçası».
 - **Ne zaman atla:** Projede (A)–(G) bölümlerini doldurmak için veri eksik. Kullanıcı marketing landing'i istiyor, case study değil (`/ux-design` kullan).
-- **Çağırma:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Çağırma:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Çıktı:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Bağlanır:** Terminal komutu, genellikle bir projenin sonu.
 
@@ -1091,10 +1091,10 @@ Plugin beş fazı (keşif → heat map → stakeholder haritası → çözüm es
 Loyalty wallet'i ship ettin. Bir portfolio parçası istiyorsun.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [.ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json okur]
-> [numaralandırılmış (A)-(G) bölümler, hairline ayırıcılar, çift-dil-güvenli layout ile Wfrah-editorial case study üretir]
-> [case-studies/bashiti-loyalty.html yazar]
+> [numaralandırılmış (A)-(G) bölümler, hairline ayırıcılar, çift-dil-güvenli layout ile monokrom editorial case study üretir]
+> [case-studies/northwind-loyalty.html yazar]
 ```
 
 Case study tamamlanmış, yayınlanabilir bir artefakt, taslak değil. Saf monokrom, editorial tipografi, portfolio'na ship'lemeye hazır.

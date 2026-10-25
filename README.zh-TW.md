@@ -230,7 +230,7 @@ ux-skill (套件名: uxskill)
 │   ├── ux-frame.md                    4 欄位定調區塊
 │   ├── ux-research.md                 研究計畫 + 綜合
 │   ├── ux-workshop.md                 五階段設計思考工作坊
-│   ├── ux-case-study.md               可發布的 Wfrah 編輯風格案例研究
+│   ├── ux-case-study.md               可發布的黑白編輯風格案例研究
 │   ├── ux-next.md                     工作流指揮(唯讀)
 │   └── ux-expert.md                   諮詢入口
 │
@@ -469,7 +469,7 @@ ux-skill (套件名: uxskill)
 - **做什麼:** 把「為誰、目標、假設、成功訊號」打進一個結構化的定調區塊。不做設計，只是把一個含糊請求轉成可工作簡報的四欄位收件。比 `/ux-discover` 更輕(4 欄位 vs 10 欄位)。
 - **何時使用:** 任何專案、衝刺或一次性任務的開端;對話偏離主題時的中途收束。「框一下」、「簡報是什麼」、「立項」、「定調」。
 - **何時跳過:** 已經框過(檢查 `.ux/last-frame.json`);沒有定調影響的一次性元件建造;後端或基礎建設。
-- **呼叫方式:** `/ux-frame "為 Bashiti MENA 試點做的會員錢包"`。
+- **呼叫方式:** `/ux-frame "為 Northwind MENA 試點做的會員錢包"`。
 - **輸出:** 寫入 `.ux/last-frame.json`，`{audience, outcome, hypothesis, success_signal}`。
 - **下接:** `/ux-discover` → 把框擴成 10 欄位簡報;`/ux-design` → 用框作錨點生成。
 
@@ -491,12 +491,12 @@ ux-skill (套件名: uxskill)
 - **輸出:** 寫入 `.ux/last-workshop.json`，行動方案 + 各階段產出物。
 - **下接:** `/ux-design` → 執行行動方案;`/ux-research` → 補工作坊暴露的缺口;`/ux-case-study` → 把過程發表。
 
-#### `/ux-case-study`：可發布的案例研究(Wfrah 編輯格式)
+#### `/ux-case-study`：可發布的案例研究(黑白編輯格式)
 
-- **做什麼:** 以純黑白編輯格式生成專案案例研究，Wfrah 字型、髮絲分隔線、帶序號的 (A)–(G) 段落碼、雙語相容配置。是一份文件,不是行銷小冊子。從 `.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json` 讀取。
+- **做什麼:** 以純黑白編輯格式生成專案案例研究，寬幅編輯字型、髮絲分隔線、帶序號的 (A)–(G) 段落碼、雙語相容配置。是一份文件,不是行銷小冊子。從 `.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json` 讀取。
 - **何時使用:** 發布後;經歷一個明確里程碑後。「寫一份案例研究」、「把這個專案做成案例」、「做收尾文件」、「把這工作發出來」、「作品集篇」。
 - **何時跳過:** 專案資料不足以填滿 (A)–(G);使用者想要的是行銷著陸頁而非案例研究(用 `/ux-design`)。
-- **呼叫方式:** `/ux-case-study --format=html --slug=bashiti-loyalty`。
+- **呼叫方式:** `/ux-case-study --format=html --slug=northwind-loyalty`。
 - **輸出:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`。
 - **下接:** 終端命令，通常是專案的句點。
 
@@ -1091,10 +1091,10 @@ jobs:
 你發了會員錢包。你想要一篇作品集篇章。
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [讀取 .ux/last-frame.json、last-workshop.json、last-research.json、last-design.json、last-a11y.json、last-polish.json、last-recommendation.json、last-discovery.json]
-> [生成 Wfrah 編輯格式的案例研究,含 (A)-(G) 編號段落、髮絲分隔線、雙語相容配置]
-> [寫入 case-studies/bashiti-loyalty.html]
+> [生成黑白編輯格式的案例研究,含 (A)-(G) 編號段落、髮絲分隔線、雙語相容配置]
+> [寫入 case-studies/northwind-loyalty.html]
 ```
 
 這份案例研究是已完成、可發布的產出物，不是草稿。純黑白、editorial 字型、可直接上你的作品集。

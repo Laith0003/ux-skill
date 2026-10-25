@@ -230,7 +230,7 @@ ux-skill (nome do pacote: uxskill)
 │   ├── ux-frame.md                    bloco de framing de 4 campos
 │   ├── ux-research.md                 planejamento de pesquisa + síntese
 │   ├── ux-workshop.md                 workshop de design thinking em 5 fases
-│   ├── ux-case-study.md               case study publicável estilo editorial Wfrah
+│   ├── ux-case-study.md               case study publicável estilo editorial monocromático
 │   ├── ux-next.md                     condutor de workflow (read-only)
 │   └── ux-expert.md                   hook de consultoria
 │
@@ -469,7 +469,7 @@ Os comandos estão agrupados em cinco baldes: **bootstrap & inventário**, **dis
 - **O que faz:** Captura para-quem-é, outcome, hipótese e sinal de sucesso em um bloco de framing estruturado. Sem trabalho de design, apenas o intake de quatro campos que transforma um pedido vago em um brief funcional. Mais leve que `/ux-discover` (4 campos vs 10).
 - **Quando usar:** Início de qualquer projeto, sprint ou engajamento avulso. No meio do caminho quando uma conversa se desviou. «Enquadra isso», «qual é o brief», «configura o projeto», «framing».
 - **Quando pular:** Já enquadrado (confira `.ux/last-frame.json`). Build de componente avulso sem implicações de framing. Backend ou infraestrutura.
-- **Invocação:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`.
+- **Invocação:** `/ux-frame "loyalty wallet for MENA Northwind pilot"`.
 - **Output:** Escreve `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
 - **Encadeia para:** `/ux-discover` → estende o frame para o brief de 10 campos. `/ux-design` → gera usando o frame como âncora.
 
@@ -491,12 +491,12 @@ Os comandos estão agrupados em cinco baldes: **bootstrap & inventário**, **dis
 - **Output:** Escreve `.ux/last-workshop.json`, game plan + artefatos por fase.
 - **Encadeia para:** `/ux-design` → executa o game plan. `/ux-research` → preenche lacunas que o workshop surfou. `/ux-case-study` → publica a jornada.
 
-#### `/ux-case-study`: case study publicável (formato editorial Wfrah)
+#### `/ux-case-study`: case study publicável (formato editorial monocromático)
 
-- **O que faz:** Gera um case study de projeto em formato editorial monocromático puro, tipografia Wfrah, separadores hairline, códigos de seção numerados (A)–(G), layout bilíngue-safe. Um documento, não um folheto de marketing. Lê de `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **O que faz:** Gera um case study de projeto em formato editorial monocromático puro, tipografia editorial ampla, separadores hairline, códigos de seção numerados (A)–(G), layout bilíngue-safe. Um documento, não um folheto de marketing. Lê de `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Quando usar:** Pós-lançamento. Após um marco discreto. «Escreve um case study», «case study desse projeto», «faz o documento de fechamento», «publica esse trabalho», «peça de portfólio».
 - **Quando pular:** Projeto carece de dados para popular as seções (A)–(G). Usuário quer uma landing de marketing, não um case study (use `/ux-design`).
-- **Invocação:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Invocação:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Encadeia para:** Comando terminal, geralmente o fim de um projeto.
 
@@ -1091,10 +1091,10 @@ O plugin facilita as cinco fases (exploração → heat map → mapa de stakehol
 Você lançou a loyalty wallet. Você quer uma peça pra portfólio.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [lê .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [gera case study editorial Wfrah com seções numeradas (A)-(G), separadores hairline, layout bilíngue-safe]
-> [escreve case-studies/bashiti-loyalty.html]
+> [gera case study editorial monocromático com seções numeradas (A)-(G), separadores hairline, layout bilíngue-safe]
+> [escreve case-studies/northwind-loyalty.html]
 ```
 
 O case study é um artefato pronto e publicável, não um rascunho. Monocromia pura, tipografia editorial, pronto pra mandar pro seu portfólio.

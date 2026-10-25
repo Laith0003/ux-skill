@@ -230,7 +230,7 @@ ux-skill (nama paket: uxskill)
 │   ├── ux-frame.md                    blok framing 4-field
 │   ├── ux-research.md                 perencanaan riset + sintesis
 │   ├── ux-workshop.md                 workshop design thinking 5-fase
-│   ├── ux-case-study.md               case study editorial Wfrah yang bisa dipublikasi
+│   ├── ux-case-study.md               case study editorial monokrom yang bisa dipublikasi
 │   ├── ux-next.md                     conductor workflow (read-only)
 │   └── ux-expert.md                   hook konsultasi
 │
@@ -469,7 +469,7 @@ Command dikelompokkan ke dalam lima ember: **bootstrap & inventaris**, **discove
 - **Apa:** Menangkap untuk-siapa, outcome, hipotesis, dan sinyal sukses dalam blok framing terstruktur. Tidak ada pekerjaan design, hanya intake empat-field yang mengubah permintaan kabur jadi brief kerja. Lebih ringan dari `/ux-discover` (4 field vs 10).
 - **Kapan dipakai:** Awal proyek apa pun, sprint, atau engagement satu kali. Di tengah aliran saat percakapan menyimpang. "Frame ini", "brief-nya apa", "setup proyek", "framing".
 - **Kapan dilewati:** Sudah di-frame (cek `.ux/last-frame.json`). Build komponen satu-kali tanpa implikasi framing. Backend atau infrastruktur.
-- **Pemanggilan:** `/ux-frame "loyalty wallet for MENA Bashiti pilot"`.
+- **Pemanggilan:** `/ux-frame "loyalty wallet for MENA Northwind pilot"`.
 - **Output:** Menulis `.ux/last-frame.json`, `{audience, outcome, hypothesis, success_signal}`.
 - **Merantai ke:** `/ux-discover` → memperluas frame ke brief 10-field. `/ux-design` → hasilkan memakai frame sebagai jangkar.
 
@@ -491,12 +491,12 @@ Command dikelompokkan ke dalam lima ember: **bootstrap & inventaris**, **discove
 - **Output:** Menulis `.ux/last-workshop.json`, game plan + artifact per-fase.
 - **Merantai ke:** `/ux-design` → eksekusi game plan. `/ux-research` → isi gap yang dimunculkan workshop. `/ux-case-study` → publikasi perjalanannya.
 
-#### `/ux-case-study`: case study yang bisa dipublikasi (format editorial Wfrah)
+#### `/ux-case-study`: case study yang bisa dipublikasi (format editorial monokrom)
 
-- **Apa:** Menghasilkan case study proyek dalam format editorial monokromatik murni, tipografi Wfrah, pemisah hairline, kode bagian bernomor (A)–(G), layout aman-bilingual. Sebuah dokumen, bukan brosur marketing. Membaca dari `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Apa:** Menghasilkan case study proyek dalam format editorial monokromatik murni, tipografi editorial lebar, pemisah hairline, kode bagian bernomor (A)–(G), layout aman-bilingual. Sebuah dokumen, bukan brosur marketing. Membaca dari `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Kapan dipakai:** Pasca-launch. Setelah milestone diskrit. "Tulis case study", "case study proyek ini", "dokumen wrap-up", "publikasi karya ini", "bahan portfolio".
 - **Kapan dilewati:** Proyek kekurangan data untuk mengisi bagian (A)–(G). User mau landing marketing, bukan case study (pakai `/ux-design`).
-- **Pemanggilan:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Pemanggilan:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Merantai ke:** Command terminal, biasanya akhir proyek.
 
@@ -1091,10 +1091,10 @@ Plugin memfasilitasi lima fase (eksplorasi → heat map → peta stakeholder →
 Kamu nge-ship loyalty wallet. Kamu mau bahan portfolio.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [baca .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [hasilkan case study editorial Wfrah dengan bagian bernomor (A)-(G), pemisah hairline, layout aman-bilingual]
-> [tulis case-studies/bashiti-loyalty.html]
+> [hasilkan case study editorial monokrom dengan bagian bernomor (A)-(G), pemisah hairline, layout aman-bilingual]
+> [tulis case-studies/northwind-loyalty.html]
 ```
 
 Case study-nya artifact selesai dan bisa dipublikasi, bukan draft. Monokromatik murni, tipografi editorial, siap di-ship ke portfolio kamu.
