@@ -1223,7 +1223,7 @@ MIT. 사용, 포크, 그 위에 빌드. AI 슬롭을 출시하는 것을 막아�
 **Laith Aljunaidy**: MENA 우선 로열티 플랫폼 [Dot](https://thedotwallet.com)의 단독 창업자. AI 생성 프런트엔드가 모두 같아 보이지 않게 ux-skill을 만듭니다.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- 이메일: laith.aljunaidy.laith@gmail.com
+- 이메일: hello@laithjunaidy.com
 - 저장소: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - 사이트: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

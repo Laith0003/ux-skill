@@ -1223,7 +1223,7 @@ MIT. Kullan, fork'la, üstüne inşa et. Eğer seni AI slop ship etmekten kurtar
 **Laith Aljunaidy**: MENA-first bir loyalty platformu olan [Dot](https://thedotwallet.com)'un solo kurucusu. AI üretilmiş frontend'in hepsi aynı görünmesin diye ux-skill'i inşa ediyor.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Site: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

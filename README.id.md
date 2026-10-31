@@ -1223,7 +1223,7 @@ MIT. Pakai, fork, bangun di atasnya. Kalau menyelamatkan kamu dari nge-ship AI s
 **Laith Aljunaidy**: solo founder dari [Dot](https://thedotwallet.com), platform loyalty MENA-first. Membangun ux-skill supaya frontend yang dihasilkan AI nggak kelihatan semuanya sama.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Situs: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

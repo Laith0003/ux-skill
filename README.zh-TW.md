@@ -1223,7 +1223,7 @@ MIT。用它、fork 它、在它之上建構。如果它幫你少出貨了一份
 **Laith Aljunaidy**：，[Dot](https://thedotwallet.com) 的獨立創辦人,Dot 是一個 MENA 優先的會員平台。我打造 ux-skill,是為了讓 AI 生成的前端不再千篇一律。
 
 - LinkedIn:[linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- 電子郵件:laith.aljunaidy.laith@gmail.com
+- 電子郵件:hello@laithjunaidy.com
 - 儲存庫:[github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - 官網:[uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI:[pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

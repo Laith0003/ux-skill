@@ -1247,7 +1247,7 @@ MIT. Use it, fork it, build on it. If it saves you from shipping AI slop, star t
 **Laith Aljunaidy**: solo founder of [Dot](https://thedotwallet.com), a MENA-first loyalty platform. Building ux-skill so the AI-generated frontend doesn't all look the same.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Site: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

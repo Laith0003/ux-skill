@@ -1223,7 +1223,7 @@ MIT. Hãy dùng, fork, xây dựng dựa trên. Nếu nó cứu bạn khỏi vi�
 **Laith Aljunaidy**: nhà sáng lập đơn nhất của [Dot](https://thedotwallet.com), nền tảng loyalty MENA-first. Xây ux-skill để frontend AI-tạo không trông giống nhau hết.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Trang chủ: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

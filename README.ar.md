@@ -1225,7 +1225,7 @@ MIT. استخدمه، فرّعه، ابنِ فوقه. إن وفّر عليك ش�
 **ليث الجنيدي**: مؤسّس فردي لـ [Dot](https://thedotwallet.com)، منصّة ولاء تنطلق من الشرق الأوسط. أبني ux-skill حتى لا تبدو الواجهات الأماميّة المُولَّدة بالذكاء الاصطناعي كلّها متشابهة.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- البريد: laith.aljunaidy.laith@gmail.com
+- البريد: hello@laithjunaidy.com
 - المستودع: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - الموقع: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)
