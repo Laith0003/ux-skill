@@ -1223,7 +1223,7 @@ MIT ใช้ fork สร้างต่อจากมัน ถ้ามัน
 **Laith Aljunaidy**: ผู้ก่อตั้งคนเดียวของ [Dot](https://thedotwallet.com) แพลตฟอร์ม loyalty MENA-first สร้าง ux-skill เพื่อให้ฟรอนต์เอนด์ที่ AI สร้างไม่ดูเหมือนกันหมด
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- อีเมล: laith.aljunaidy.laith@gmail.com
+- อีเมล: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - เว็บไซต์: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

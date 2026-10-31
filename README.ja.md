@@ -1223,7 +1223,7 @@ MIT。使う、フォークする、その上に構築する。AI スロップ�
 **Laith Aljunaidy**：MENA 優先のロイヤルティプラットフォーム [Dot](https://thedotwallet.com) の独立創業者。AI 生成のフロントエンドが皆同じに見えないように ux-skill を作っています。
 
 - LinkedIn:[linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- メール:laith.aljunaidy.laith@gmail.com
+- メール:hello@laithjunaidy.com
 - リポジトリ:[github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - サイト:[uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI:[pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

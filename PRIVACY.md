@@ -12,7 +12,7 @@ The long version is below.
 
 ## Who maintains this
 
-`ux-skill` is a personal open-source project maintained by **Laith Aljunaidy**. Contact: [laith.aljunaidy.laith@gmail.com](mailto:laith.aljunaidy.laith@gmail.com).
+`ux-skill` is a personal open-source project maintained by **Laith Aljunaidy**. Contact: [hello@laithjunaidy.com](mailto:hello@laithjunaidy.com).
 
 ---
 
@@ -94,7 +94,7 @@ The plugin ships **72 brand DESIGN.md spec files** as design references — Appl
 - They do not include trademarks, logos, or proprietary assets owned by those brands.
 - They should be treated as design references and study aids, not as endorsements or partnerships.
 
-**If you are a rights-holder** and believe a brand reference misrepresents your brand or includes content that should be removed: email `laith.aljunaidy.laith@gmail.com` and it will be addressed within 5 business days.
+**If you are a rights-holder** and believe a brand reference misrepresents your brand or includes content that should be removed: email `hello@laithjunaidy.com` and it will be addressed within 5 business days.
 
 ---
 
@@ -117,7 +117,7 @@ If you are in a jurisdiction with data subject rights:
 - **The plugin:** there is no personal data on our side to access, correct, port, or delete. We don't have any.
 - **The landing page:** there is no account, no profile, no stored data on our side. The only data flowing related to you is the brief server-side access log GitHub keeps, which is out of our control. Direct any requests there to GitHub.
 
-If you have a specific request or question, contact: [laith.aljunaidy.laith@gmail.com](mailto:laith.aljunaidy.laith@gmail.com).
+If you have a specific request or question, contact: [hello@laithjunaidy.com](mailto:hello@laithjunaidy.com).
 
 ---
 
@@ -130,6 +130,6 @@ If this policy changes, the **Last updated** date at the top updates. Material c
 ## Contact
 
 **Laith Aljunaidy**
-Email: [laith.aljunaidy.laith@gmail.com](mailto:laith.aljunaidy.laith@gmail.com)
+Email: [hello@laithjunaidy.com](mailto:hello@laithjunaidy.com)
 LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
 Repository: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)

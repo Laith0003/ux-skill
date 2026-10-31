@@ -1223,7 +1223,7 @@ MIT. Utilisez-le, forkez-le, construisez dessus. S'il vous évite d'expédier du
 **Laith Aljunaidy**: fondateur solo de [Dot](https://thedotwallet.com), une plateforme de fidélité MENA-first. Construisant ux-skill pour que le frontend généré par IA ne se ressemble plus tout pareil.
 
 - LinkedIn : [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email : laith.aljunaidy.laith@gmail.com
+- Email : hello@laithjunaidy.com
 - Dépôt : [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Site : [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI : [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

@@ -1223,7 +1223,7 @@ MIT। इसे उपयोग करें, फ़ोर्क करें, 
 **Laith Aljunaidy**: [Dot](https://thedotwallet.com) के एकल संस्थापक, एक MENA-पहले लॉयल्टी प्लेटफ़ॉर्म। ux-skill बना रहे हैं ताकि AI-जनरेटेड फ़्रंटएंड सब एक जैसा न दिखे।
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- ईमेल: laith.aljunaidy.laith@gmail.com
+- ईमेल: hello@laithjunaidy.com
 - रेपो: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - साइट: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [
-  { name = "Laith Aljunaidy", email = "laith.aljunaidy.laith@gmail.com" }
+  { name = "Laith Aljunaidy", email = "hello@laithjunaidy.com" }
 ]
 keywords = [
   "ux", "ui", "design-system", "ai-coding", "claude-code", "cursor",
