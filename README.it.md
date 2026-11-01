@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable monocromatico-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -1051,7 +1051,7 @@ Hai rilasciato il loyalty wallet. Vuoi un pezzo da portfolio.
 ```
 /ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates monocromatico-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
 > [writes case-studies/northwind-loyalty.html]
 ```
 
