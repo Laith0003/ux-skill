@@ -2,7 +2,7 @@
 
 A product illustration is a picture of the product's interface made for a page: a window, a dashboard, a phone screen or a short cursor demo, sitting in a hero beside the copy, in a feature card, in a bento tile or at the top of a docs page. It is imagery, not the product: a believable screen, cut down to what the viewer needs, in which at most one thing happens.
 
-`/ux-design` loads this file whenever a page shows the product's interface: the interface-fragment heroes and collages in `references/surfaces/landing.md`, a feature card, a bento tile. It is not a surface playbook; it loads beside the one the mode picks, the way the component contracts do.
+`/ux-design` loads this file whenever a build shows the product's interface as imagery: the interface-fragment heroes and collages in `references/surfaces/landing.md`, a feature card, a bento tile, a cursor demo. It is not a surface playbook; it loads beside the one the mode picks, the way the component contracts do. In dashboard mode the interface is the page itself, not a picture of it, so this file does not apply there and the dashboard playbook's real content rule holds.
 
 The rules here are distilled from Stageshow (github.com/benjitaylor/skills, MIT; see NOTICE), whose kit builds these illustrations in React.
 
@@ -10,9 +10,9 @@ The rules here are distilled from Stageshow (github.com/benjitaylor/skills, MIT;
 
 - **Photographs stay.** A product illustration is extra imagery. It never stands in for the photographs the page carries (`references/surfaces/landing.md`, the photo rule); a hero can show the product, and the page around it still shows people, places and things.
 - **It wears the page's system.** The illustration's surfaces, text, accent, status colors, faces and radii are the system's, so the picture and the page read as one product. With the Stageshow kit, `uxskill system export --to stageshow` writes the look; built by hand, it uses the system's role variables like the rest of the page.
-- **It is designed at the size it is shown.** About 720 by 340 for a hero beside copy, 900 to 1100 wide for a full-width hero, about 400 by 300 for a card, shown at 1:1. An animated demo stays at least about 320 wide; only a small tile or a detail card goes below that.
-- **The phone gets its own design.** At the phone column's width (358 in a 390 viewport) the illustration is recomposed, cropped closer with the action and the result whole, never the desktop picture squeezed.
-- **It is not a heading or a second page.** A faux window's title is a `div`, never `h1` to `h6`, because the illustration sits inside a real page's outline. The page's own copy carries the meaning; mark the illustration `aria-hidden="true"`, or give it `role="img"` and a short label when it says something the copy does not.
+- **It is designed at the size it is shown.** About 720 by 340 for a hero beside copy, 900 to 1100 wide for a full-width hero, about 400 by 300 for a card, shown at 1:1 (the close-up excepted, below). An animated demo stays at least about 320 wide; only a small tile or a detail card goes below that.
+- **The phone gets its own design.** In the phone column the illustration is recomposed, cropped closer with the action and the result whole, never the desktop picture squeezed. It fits the column at every phone width the build is checked at: 358 wide in a 390 viewport, 328 in a 360 one, so it scales with the column rather than holding a fixed width.
+- **It is not a heading or a second page.** A faux window's title is a `div`, never `h1` to `h6`, because the illustration sits inside a real page's outline. The page's own copy carries the meaning; mark the illustration `aria-hidden="true"`, or give it `role="img"` and a short label when it says something the copy does not. Either way it holds nothing focusable: its buttons and fields are drawn with plain elements, or the whole illustration is `inert`, so a keyboard never lands on a control no one can see or use.
 
 ## The test it must pass
 
@@ -44,7 +44,7 @@ Write five lines first: where it sits and its size; the one focal object; the ac
 ## Framing
 
 - **One hero object,** with at most one or two satellites of different kinds (a phone, a receipt, a notification at its real size), each straddling the hero's edge about half outside, over chrome or margin and never over content.
-- **The main window spans two thirds of the stage or more, and part of it, between a tenth and two fifths, passes beyond one edge.** Only filler is cut: every real word, the action and the result stay whole. A control the crop would slice is moved or removed, never sliced.
+- **The main window spans two thirds of the stage or more and runs past at least one edge, with a tenth to two fifths of it out of frame; in satellite focus the window is only context and the satellite carries the story.** Only filler is cut: every real word, the action and the result stay whole. A control the crop would slice is moved or removed, never sliced.
 - **One gutter.** Measure how far the main window sits from the stage's edge and reuse that distance for every other margin in the frame. Each edge either keeps that full margin or clearly crosses it; a gap under 24px reads as a near miss.
 - **No plate behind it.** On a white or dark page the illustration sits straight on the page, with no tinted panel underneath; a complete window centered with space all round looks adrift.
 - **Proportions are kept.** A complete window is at least 1.25 times as wide as it is tall; a cut one still shows at least a square. When it does not fit, change the crop or the layout rather than distorting it.
@@ -57,7 +57,7 @@ Write five lines first: where it sits and its size; the one focal object; the ac
 | Satellite focus | The window mostly cropped away, with a big secondary card, 30 to 40% of the window's width, telling the story | A single small moment, such as an alert or a payment slip |
 | Wide hero | A 900 to 1100px window at 1:1, off the bottom and often both sides | A full-width homepage hero |
 | Device pair | A desktop window about 75 to 80% wide, a phone straddling its right edge | A story across devices |
-| Close-up | The whole window at 1.3 to 1.6 times, chrome included, off the bottom | A card about one control |
+| Close-up | The whole window, designed at 1:1 and enlarged 1.3 to 1.6 times with its chrome, off the bottom; the type and spacing rules apply before the enlargement | A card about one control |
 | Fade crop | A window fading out over its last third, over filler only, with a mask | When a hard edge would cut at an arbitrary line |
 
 ## When it moves
@@ -66,11 +66,12 @@ Write five lines first: where it sits and its size; the one focal object; the ac
 - **Every movement has a cause.** No cursor move without a reason; data never rewinds in view without one.
 - **Content moves rather than swaps.** An added row slides the ones beneath it down, and a panel that grows or shrinks keeps its type at its own size.
 - **A loop returns to its opening state,** or something on screen explains why it starts over.
+- **It can be stopped.** A demo that plays by itself for more than 5 seconds beside the page's copy gets a pause control, as `references/foundations/motion.md` sets for anything that moves that long (2.2.2); one that plays once in view and settles within 5 seconds, or plays only on hover, needs none.
 - **Choose the poster frame first.** Most people see one frame: a thumbnail, a screenshot, or the still that reduced motion shows. It is the beat that tells the story alone, with the result on screen, never a frame caught mid-change. Under `prefers-reduced-motion` the illustration shows that frame and does not play.
 
 ## Check it
 
-- **Look at it at the size it is shown and at 390 wide,** beside a strong reference shot at the same size. If yours is emptier, flatter or more boxed, fix the framing first, then the hierarchy, then the motion, then the polish.
+- **Look at it at the size it is shown and at 390 and 360 wide,** beside a strong reference shot at the same size. If yours is emptier, flatter or more boxed, fix the framing first, then the hierarchy, then the motion, then the polish.
 - **Notice where you look first.** That should be the outcome, and a single window, tile or device should plainly dominate.
 - **Screenshot every look the page uses.** Checking light tells you nothing about dark.
 

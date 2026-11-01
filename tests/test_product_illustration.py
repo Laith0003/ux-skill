@@ -33,8 +33,7 @@ def test_the_guide_is_not_a_surface_playbook():
 
 def test_photographs_stay_beside_an_illustration():
     text = _read(GUIDE)
-    assert "**Photographs stay.**" in text
-    assert "never stands in for the photographs" in text
+    assert "**Photographs stay.**" in text and "references/surfaces/landing.md" in text
 
 
 def test_the_export_it_names_exists():
@@ -52,9 +51,18 @@ STAGESHOW_PHRASES = (
     "a gray window with a cursor", "no dead corners")
 
 
+def _shipped_text():
+    """Every doc the project ships: the command, agent, reference and Figma
+    guides, the site and the root documents."""
+    for folder in ("commands", "agents", "references", "figma-skill", "docs"):
+        for p in (ROOT / folder).rglob("*"):
+            if p.suffix in (".md", ".html"):
+                yield p
+    yield from ROOT.glob("*.md")
+
+
 def test_the_guidance_is_in_our_own_words():
-    docs = [p for folder in ("commands", "agents", "references")
-            for p in (ROOT / folder).rglob("*.md")]
+    docs = list(_shipped_text())
     for phrase in STAGESHOW_PHRASES:
         hits = [str(p.relative_to(ROOT)) for p in docs
                 if phrase in p.read_text(encoding="utf-8").lower()]
@@ -63,5 +71,51 @@ def test_the_guidance_is_in_our_own_words():
 
 def test_the_dashboard_playbook_lets_one_thing_lead():
     text = _read("references/surfaces/dashboard.md")
-    assert "**One thing leads.**" in text
-    assert "without a starting point" in text
+    lead = text[text.index("**One thing leads.**"):]
+    lead = lead[:lead.index("\n")]
+    assert "without a starting point" in lead
+    # Principle 6 keeps the accent for the action, focus and current item,
+    # and every grid has a first panel, so neither can be what makes one lead.
+    assert "accent" not in lead and "reading order" not in lead
+
+
+def test_a_moving_illustration_can_be_paused():
+    text = _read(GUIDE)
+    assert "pause control" in text and "references/foundations/motion.md" in text
+    assert "(2.2.2)" in text
+
+
+def test_the_phone_design_is_checked_at_the_narrowest_gate():
+    text = _read(GUIDE)
+    assert "360" in text and "390" in text
+
+
+def test_a_hidden_illustration_holds_nothing_focusable():
+    text = _read(GUIDE)
+    assert 'aria-hidden="true"' in text and "nothing focusable" in text and "inert" in text
+
+
+def test_the_close_up_is_the_one_enlarged_layout():
+    text = _read(GUIDE)
+    row = next(line for line in text.splitlines() if line.startswith("| Close-up"))
+    assert "before the enlargement" in row
+    assert "the close-up excepted" in text
+
+
+def test_the_framing_rule_fits_every_layout_in_the_table():
+    text = _read(GUIDE)
+    rule = next(line for line in text.splitlines() if "two thirds of the stage" in line)
+    assert "at least one edge" in rule and "satellite focus" in rule.lower()
+
+
+def test_the_guide_stays_out_of_a_dashboard_build():
+    text = _read(GUIDE)
+    assert "as imagery" in text.split("## Where it sits")[0]
+    assert "dashboard mode" in text
+
+
+def test_the_large_product_mock_follows_the_guide():
+    mock = _read("references/surfaces/landing.md")
+    mock = mock[mock.index("**Large product mock.**"):]
+    mock = mock[:mock.index("\n")]
+    assert "extreme detail" not in mock and "floats above the page" not in mock

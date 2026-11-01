@@ -34,7 +34,7 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 
 12. **Real content.** A product, a listing or a property shows its own photo; a review shows the person's name; an order shows its real identifier. Placeholder text and generic stock scenes read as unfinished.
 
-13. **One thing leads.** Each view has one figure or panel the eye lands on first: larger, on the accent, or first in reading order, with the rest stepping down in size and weight. A grid of equal panels in matching borders leaves the reader without a starting point, however clean each panel is.
+13. **One thing leads.** Each view has one figure or panel the eye lands on first, set apart by size or weight, with the rest stepping down. Being first in the grid is not leading, and the brand color stays where principle 6 puts it. A grid of equal panels in matching borders leaves the reader without a starting point, however clean each panel is.
 
 ## Do / Don't
 

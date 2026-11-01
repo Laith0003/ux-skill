@@ -223,7 +223,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 ### Hero media
 
-**Large product mock.** The canonical hero image is the actual UI: a dashboard, a workflow, a chat interface. Cropped close, with extreme detail visible and real-looking data inside it. Soft drop shadow and subtle rounded corners (12-24px). Box-shadow at low opacity and high blur (for example `0 24px 64px rgba(0,0,0,0.08)`). The screenshot floats above the page without harsh edges.
+**Large product mock.** The canonical hero image is the actual UI: a dashboard, a workflow, a chat interface. Cropped close, with real words on what the story is about and quiet placeholders around it, running off an edge rather than floating whole. Soft drop shadow and subtle rounded corners (12-24px). Box-shadow at low opacity and high blur (for example `0 24px 64px rgba(0,0,0,0.08)`), on the page's own ground without harsh edges.
 
 **Cropped dashboard preview.** For a page whose product is a dashboard or an admin interface. Cropped, never full-page. The reader sees one card, one chart, a sliver of nav: enough to read "this is software," not enough to parse the dashboard. Real data shapes (sparklines, log lines, plausible numbers) instead of stock chart shapes. Cost: zero, design discipline.
 
