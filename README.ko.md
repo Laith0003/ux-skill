@@ -514,7 +514,7 @@ ux-skill (package name: uxskill)
 
 #### `/ux-case-study`: 발행 가능한 케이스 스터디(모노크롬 편집체)
 
-- **무엇:** 순수 흑백 에디토리얼 형식의 프로젝트 케이스 스터디를 생성합니다. 모노크롬 타이포그래피, 헤어라인 구분선, (A)부터 (G)까지 번호 붙은 섹션 코드, 이중 언어에 안전한 레이아웃. 마케팅 브로슈어가 아닌 문서입니다. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`에서 읽습니다.
+- **무엇:** 순수 흑백 에디토리얼 형식의 프로젝트 케이스 스터디를 생성합니다. 초광폭 에디토리얼 타이포그래피, 헤어라인 구분선, (A)부터 (G)까지 번호 붙은 섹션 코드, 이중 언어에 안전한 레이아웃. 마케팅 브로슈어가 아닌 문서입니다. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`에서 읽습니다.
 - **사용 시점:** 출시 후. 별개 이정표 후. "케이스 스터디 작성", "이 프로젝트 케이스 스터디로", "마무리 문서", "이 작업 발행", "포트폴리오 작품".
 - **건너뛸 시점:** 프로젝트에 (A)부터 (G)까지의 섹션을 채울 데이터가 없다. 사용자가 케이스 스터디가 아닌 마케팅 랜딩을 원한다(`/ux-design` 사용).
 - **호출:** `/ux-case-study --format=html --slug=northwind-loyalty`.

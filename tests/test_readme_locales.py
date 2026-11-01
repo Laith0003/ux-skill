@@ -310,3 +310,12 @@ def test_the_badge_writes_a_prerelease_as_shields_reads_it():
     assert _badge("4.1.0rc1") == "4.1.0--rc.1"
     with pytest.raises(AssertionError, match="set it in pyproject.toml"):
         _badge("4.0.0.dev1")
+
+
+def test_korean_names_the_case_study_type_as_the_others_do():
+    """Every locale calls the case study's type ultra-wide editorial, as the
+    style reference does; Korean once said monochrome twice instead."""
+    text = (ROOT / "README.ko.md").read_text(encoding="utf-8")
+    assert "모노크롬 타이포그래피" not in text, (
+        "README.ko.md calls the case study type monochrome; write it as "
+        "초광폭 에디토리얼 타이포그래피 (ultra-wide editorial typography)")
