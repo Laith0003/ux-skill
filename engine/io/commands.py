@@ -46,7 +46,7 @@ CLI: Dict[str, str] = {
     "add_role": "--add-role", "to": "--to", "brand": "--brand", "axes": "--axes",
     "brief": "--brief", "tokens": "--tokens", "latin_only": "--latin-only",
     "scheme": "--scheme", "figma_mode": "--figma-mode", "import": "system import",
-    "add_mode": "--add-mode", "scan": "--scan"}
+    "add_mode": "--add-mode", "scan": "--scan", "build": "uxskill system build"}
 MAPPING = "mapping.json"
 
 
@@ -387,6 +387,11 @@ def run_export(source: Any, *, to: str, fmt: str = "auto", out: Any = None,
         raise InputError(f"{labels['to']} is {to}; pass css, tailwind, figma, dtcg or stageshow")
     if scheme is not None and scheme not in SCHEME_DEFAULTS:
         raise InputError(f"{labels['scheme']} is {scheme}; pass light, dark or system")
+    if scheme is not None and to == "stageshow":
+        raise InputError(
+            f"{labels['scheme']} does not apply to {labels['to']} stageshow: the look holds light "
+            'and dark, and each stage picks one with its theme (theme="dark" on the Stage); '
+            f"leave {labels['scheme']} out")
     imported = _read(source, fmt, second_modes, labels)
     ts = imported.tokens
     opens = scheme or imported.scheme
@@ -407,7 +412,7 @@ def run_export(source: Any, *, to: str, fmt: str = "auto", out: Any = None,
         files = figma_files(ts)
     elif to == "stageshow":
         from engine.io.stageshow_out import FILE_NAME, to_stageshow
-        files = {FILE_NAME: to_stageshow(ts)}
+        files = {FILE_NAME: to_stageshow(ts, labels=labels, header=header)}
     else:
         files = {"tokens.json": dump_dtcg(ts)}
     result = _read_result("built", imported)

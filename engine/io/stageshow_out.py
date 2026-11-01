@@ -17,16 +17,23 @@ placeholder inks draw filler. Those stay the kit's (KIT_OWNED): a page's
 44px control would read as a chunky toy at illustration size.
 
 The kit puts its own tokens in `@layer stageshow`; the look is unlayered,
-so it wins over the kit's themes whatever the selector weights. It reads
-the engine's role names, so a system the engine did not build is refused
-with the roles it lacks.
+so it wins over the kit's themes whatever the selector weights. A Stage
+renders its className on the .ss-fit wrapper around .ss-stage, and its
+theme is always explicit (light unless set), so the look selects the stage
+inside the class and pins each theme's values rather than following the
+page.
+
+It reads the engine's roles, found by the CSS property each becomes, so a
+tokens.json and a tokens.css ux-skill wrote (whose roles import with flat
+names, color-surface-page) give the same look. A system without them is
+refused with the roles it lacks.
 """
 from __future__ import annotations
 
-from typing import List, Tuple
+from typing import Dict, List, Mapping, Sequence, Tuple
 
 from engine.foundations.errors import InputError
-from engine.foundations.tokens import TokenSet
+from engine.foundations.tokens import TokenSet, css_property
 from engine.foundations.values import css_entries
 
 # The class a stage's wrapper takes to wear the look: <Stage className="ux-look">.
@@ -78,28 +85,42 @@ KIT_OWNED: Tuple[str, ...] = (
 )
 
 
-def _value(ts: TokenSet, role: str, mode: str) -> str:
-    t = ts.get(role)
-    entries = css_entries(role, t.type, ts.resolve(role, mode))
-    return entries[0][1]
+# How the refusal names the caller's own fields; the MCP tools pass theirs.
+LABELS: Mapping[str, str] = {"to": "--to", "build": "uxskill system build"}
 
 
-def _block(ts: TokenSet, selector: str, mode: str) -> List[str]:
+def _paths(ts: TokenSet) -> Dict[str, str]:
+    """Each role's path in this system, found by the CSS property it becomes."""
+    by_property = {css_property(t.path): t.path for t in ts.tokens()}
+    return {role: by_property[css_property(role)] for _, role in LOOK
+            if css_property(role) in by_property}
+
+
+def _value(ts: TokenSet, path: str, mode: str) -> str:
+    t = ts.get(path)
+    return css_entries(path, t.type, ts.resolve(path, mode))[0][1]
+
+
+def _block(ts: TokenSet, paths: Mapping[str, str], selector: str, mode: str) -> List[str]:
     lines = [f"{selector} {{"]
-    lines += [f"  {prop}: {_value(ts, role, mode)};" for prop, role in LOOK]
+    lines += [f"  {prop}: {_value(ts, paths[role], mode)};" for prop, role in LOOK]
     return lines + ["}"]
 
 
-def to_stageshow(ts: TokenSet) -> str:
+def to_stageshow(ts: TokenSet, *, labels: Mapping[str, str] = LABELS,
+                 header: Sequence[str] = ()) -> str:
     """The look stylesheet: a light block on the stage and a dark block on a
-    stage whose theme is dark, each token resolved from its role."""
-    missing = sorted({role for _, role in LOOK if not ts.has(role)})
+    stage whose theme is dark, each token resolved from its role. `header`
+    lines (what an import of a foreign system left out) open the file."""
+    paths = _paths(ts)
+    missing = sorted({role for _, role in LOOK if role not in paths})
     if missing:
         raise InputError(
-            f"--to stageshow reads the engine's roles, and this system lacks {', '.join(missing)}; "
-            "build the system with `uxskill system build`, or export this one with --to css "
-            "and map it to the --ss-* tokens by hand")
-    head = [
+            f"{labels['to']} stageshow reads ux-skill's roles, and this system lacks "
+            f"{', '.join(missing)}; build the system with {labels['build']}, or map these "
+            "roles to the --ss-* tokens by hand")
+    lead = [f" * {line}".rstrip().replace("*/", "* /") for line in header]
+    head = (["/*", *lead, " */", ""] if lead else []) + [
         "/* A Stageshow look from this design system: its surfaces, text, accent,",
         " * status colors, faces and radii, in light and in dark.",
         " *",
@@ -110,6 +131,6 @@ def to_stageshow(ts: TokenSet) -> str:
         " * illustration's scale. Unlayered, so it wins over the kit's own themes. */",
         "",
     ]
-    body = _block(ts, f".{LOOK_CLASS} .ss-stage", "") + [""]
-    body += _block(ts, f'.{LOOK_CLASS} .ss-stage[data-theme="dark"]', DARK)
+    body = _block(ts, paths, f".{LOOK_CLASS} .ss-stage", "") + [""]
+    body += _block(ts, paths, f'.{LOOK_CLASS} .ss-stage[data-theme="dark"]', DARK)
     return "\n".join(head + body) + "\n"

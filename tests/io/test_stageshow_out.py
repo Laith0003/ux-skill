@@ -10,7 +10,7 @@ import pytest
 
 from engine.foundations.build import build_system
 from engine.foundations.errors import InputError
-from engine.foundations.export import dump_dtcg
+from engine.foundations.export import dump_dtcg, to_css
 from engine.foundations.tokens import Token, TokenSet
 from engine.io.commands import TARGETS, run_export
 from engine.io.stageshow_out import KIT_OWNED, LOOK, LOOK_CLASS, to_stageshow
@@ -91,3 +91,46 @@ def test_export_writes_the_look_file(tmp_path):
     result = run_export(src, to="stageshow", include_files=True)
     assert [f["name"] for f in result["files"]] == ["stageshow-look.css"]
     assert "--ss-accent:" in result["texts"]["stageshow-look.css"]
+
+
+def test_a_stylesheet_ux_skill_wrote_exports_the_same_look(tmp_path):
+    """Its roles come back with flat names (color-surface-page); the look
+    finds each role by the CSS property it becomes."""
+    ts = _ours()
+    css = tmp_path / "tokens.css"
+    css.write_text(to_css(ts), encoding="utf-8")
+    result = run_export(css, to="stageshow", include_files=True)
+    assert _blocks(result["texts"]["stageshow-look.css"]) == _blocks(to_stageshow(ts))
+
+
+def test_the_look_rides_on_the_wrapper_the_stage_takes_its_class_on():
+    """The kit puts a Stage's className on its .ss-fit wrapper, around the
+    .ss-stage element, so the look selects the stage inside the class."""
+    text = to_stageshow(_ours())
+    assert f".{LOOK_CLASS} .ss-stage {{" in text
+    assert f"class=\"{LOOK_CLASS}\"" not in text and f'className="{LOOK_CLASS}"' in text
+
+
+def test_the_refusal_names_the_callers_own_fields():
+    ts = TokenSet()
+    ts.add(Token("brand.blue", "color", "#3366FF"))
+    with pytest.raises(InputError) as err:
+        to_stageshow(ts, labels={"to": "to", "build": "ux_system_build"})
+    assert str(err.value).startswith("to stageshow reads") and "ux_system_build" in str(err.value)
+
+
+def test_entries_the_import_left_out_are_listed_at_the_top(tmp_path):
+    src = tmp_path / "theme.css"
+    src.write_text(to_css(_ours()) + "\n.card { --card-glow: 0 0 4px red; }\n", encoding="utf-8")
+    look = run_export(src, to="stageshow", include_files=True)["texts"]["stageshow-look.css"]
+    assert "1 entry was not read" in look and "--card-glow" in look
+    assert look.index("--card-glow") < look.index(".ux-look .ss-stage {")
+
+
+def test_a_scheme_is_refused_since_the_stage_picks_its_own(tmp_path):
+    src = tmp_path / "tokens.json"
+    src.write_text(dump_dtcg(_ours()), encoding="utf-8")
+    with pytest.raises(InputError) as err:
+        run_export(src, to="stageshow", scheme="dark")
+    assert str(err.value).startswith("--scheme does not apply to --to stageshow")
+    assert 'theme="dark"' in str(err.value)
