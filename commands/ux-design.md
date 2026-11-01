@@ -382,6 +382,7 @@ Before writing a single line of code, read:
 - `references/foundations/wow.md`: derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment; component and dashboard modes skip the hero moment) from the brand's own page style, the brief's structured fields and the goal, never from the industry. The page must do something a visitor remembers, not just be clean. Derived + varied to THIS brand, never a stamped recipe.
 - `references/foundations/responsive.md` and `references/foundations/component-behaviors.md`: mobile-first mechanics and the component contracts (card grid, form, data table, modal and drawer). The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
 - The surface playbook picked in step 1c, if any. Its rules are as binding as the ban list.
+- `references/styles/product-illustration.md`, when the build shows the product's interface as imagery (an interface-fragment hero, a feature card, a bento tile, a cursor demo). It loads beside the playbook, not instead of it, and it keeps the page's photographs.
 
 These are non-negotiable. The output's distinction from generic AI output IS the value of this command.
 
