@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ Các lệnh được chia thành bảy nhóm: **khởi tạo & kiểm kê**, **d
 - **Đầu ra:** Ghi `.ux/last-workshop.json`, kế hoạch chơi + artifact theo giai đoạn.
 - **Nối vào:** `/ux-design` → thực thi kế hoạch chơi. `/ux-research` → lấp các khoảng trống workshop làm nổi lên. `/ux-case-study` → xuất bản hành trình.
 
-#### `/ux-case-study`: case study có thể xuất bản (định dạng Wfrah-editorial)
+#### `/ux-case-study`: case study có thể xuất bản (định dạng editorial đơn sắc)
 
-- **Là gì:** Sinh case study dự án theo định dạng biên tập đơn sắc thuần, chữ Wfrah, đường phân cách mảnh, mã section đánh số từ (A) đến (G), layout an toàn cho song ngữ. Một tài liệu, không phải brochure marketing. Đọc từ `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Là gì:** Sinh case study dự án theo định dạng biên tập đơn sắc thuần, chữ editorial rộng, đường phân cách mảnh, mã section đánh số từ (A) đến (G), layout an toàn cho song ngữ. Một tài liệu, không phải brochure marketing. Đọc từ `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Khi dùng:** Sau khi launch. Sau một mốc rời rạc. "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece".
 - **Khi bỏ qua:** Dự án thiếu dữ liệu để điền các section từ (A) đến (G). Người dùng muốn landing marketing, không phải case study (dùng `/ux-design`).
-- **Gọi:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Gọi:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Đầu ra:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Nối vào:** Command tận cùng, thường là kết thúc một dự án.
 
@@ -1049,10 +1049,10 @@ Plugin hỗ trợ năm giai đoạn (khám phá → bản đồ nhiệt → bả
 Bạn ship ví loyalty. Bạn muốn một tác phẩm portfolio.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 Case study là một artifact hoàn thiện, có thể xuất bản, không phải bản nháp. Đơn sắc tinh khôi, typography editorial, sẵn sàng ship lên portfolio của bạn.
@@ -1178,7 +1178,7 @@ MIT. Hãy dùng, fork, xây dựng dựa trên. Nếu nó cứu bạn khỏi vi�
 **Laith Aljunaidy**: nhà sáng lập đơn nhất của [Dot](https://thedotwallet.com), nền tảng loyalty MENA-first. Xây ux-skill để frontend AI-tạo không trông giống nhau hết.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Trang chủ: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

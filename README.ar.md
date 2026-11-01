@@ -281,7 +281,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -514,12 +514,12 @@ ux-skill (package name: uxskill)
 - **الإخراج:** يكتب `.ux/last-workshop.json`، خطّة اللعب + مخرجات كلّ مرحلة.
 - **يربط بـ:** `/ux-design` → تنفيذ خطّة اللعب. `/ux-research` → سدّ الفجوات التي كشفتها الورشة. `/ux-case-study` → نشر الرحلة.
 
-#### `/ux-case-study`: دراسة حالة قابلة للنشر (شكل تحريري على طريقة Wfrah)
+#### `/ux-case-study`: دراسة حالة قابلة للنشر (شكل تحريري أحاديّ اللون)
 
-- **ماذا:** يُولّد دراسة حالة للمشروع بصيغة تحريرية أحادية اللون خالصة، بخطوط Wfrah، وفواصل رفيعة، ورموز أقسام مرقّمة من (A) إلى (G)، وتخطيط آمن للمحتوى ثنائي اللغة. مستند لا كتيّب تسويقي. يقرأ من `.ux/last-frame.json` و`.ux/last-workshop.json` و`.ux/last-research.json` و`.ux/last-design.json` و`.ux/last-a11y.json` و`.ux/last-polish.json` و`.ux/last-recommendation.json` و`.ux/last-discovery.json`.
+- **ماذا:** يُولّد دراسة حالة للمشروع بصيغة تحريرية أحادية اللون خالصة، بخطوط تحريرية عريضة، وفواصل رفيعة، ورموز أقسام مرقّمة من (A) إلى (G)، وتخطيط آمن للمحتوى ثنائي اللغة. مستند لا كتيّب تسويقي. يقرأ من `.ux/last-frame.json` و`.ux/last-workshop.json` و`.ux/last-research.json` و`.ux/last-design.json` و`.ux/last-a11y.json` و`.ux/last-polish.json` و`.ux/last-recommendation.json` و`.ux/last-discovery.json`.
 - **متى يُستخدم:** بعد الإطلاق. بعد محطّة مستقلّة. «اكتب دراسة حالة»، «اعمل دراسة حالة على هذا المشروع»، «أنجز وثيقة التغليف»، «انشر هذا العمل»، «قطعة بورتفوليو».
 - **متى يُتجاوز:** المشروع يفتقر إلى البيانات اللازمة لملء الأقسام من (A) إلى (G). المستخدم يريد صفحة هبوط تسويقية لا دراسة حالة (استخدم `/ux-design`).
-- **الاستدعاء:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **الاستدعاء:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **الإخراج:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **يربط بـ:** أمر طرفي، عادةً نهاية المشروع.
 
@@ -1051,10 +1051,10 @@ PRs التي تُدخل تدرّجات بنفسجيّة إلى زرقاء، أو
 شحنت محفظة الولاء. تريد قطعة بورتفوليو.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 دراسة الحالة ناتج مُنجَز قابل للنشر، لا مسوّدة. أحاديّ اللون نقي، طباعة تحريريّة، جاهز للشحن إلى بورتفوليوك.
@@ -1180,7 +1180,7 @@ MIT. استخدمه، فرّعه، ابنِ فوقه. إن وفّر عليك ش�
 **ليث الجنيدي**: مؤسّس فردي لـ [Dot](https://thedotwallet.com)، منصّة ولاء تنطلق من الشرق الأوسط. أبني ux-skill حتى لا تبدو الواجهات الأماميّة المُولَّدة بالذكاء الاصطناعي كلّها متشابهة.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- البريد: laith.aljunaidy.laith@gmail.com
+- البريد: hello@laithjunaidy.com
 - المستودع: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - الموقع: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

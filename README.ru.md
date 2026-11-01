@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ ux-skill (package name: uxskill)
 - **Output:** Пишет `.ux/last-workshop.json`, game plan + артефакты по фазам.
 - **Цепляется к:** `/ux-design` → исполнить game plan. `/ux-research` → закрыть пробелы, которые всплыл воркшоп. `/ux-case-study` → опубликовать путь.
 
-#### `/ux-case-study`: публикуемый case study (формат Wfrah-editorial)
+#### `/ux-case-study`: публикуемый case study (монохромный editorial-формат)
 
-- **Что:** Генерирует кейс проекта в чисто монохромном редакционном формате: типографика Wfrah, тонкие разделители, пронумерованные коды секций от (A) до (G), раскладка, безопасная для двуязычного текста. Документ, а не маркетинговая брошюра. Читает из `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Что:** Генерирует кейс проекта в чисто монохромном редакционном формате: сверхширокая редакционная типографика, тонкие разделители, пронумерованные коды секций от (A) до (G), раскладка, безопасная для двуязычного текста. Документ, а не маркетинговая брошюра. Читает из `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Когда использовать:** Пост-лонч. После дискретной вехи. «Write a case study», «case study this project», «do the wrap-up doc», «publish this work», «portfolio piece».
 - **Когда пропустить:** У проекта нет данных, чтобы заполнить секции от (A) до (G). Пользователю нужен маркетинговый лендинг, а не кейс (используй `/ux-design`).
-- **Вызов:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Вызов:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Цепляется к:** Терминальная команда, обычно конец проекта.
 
@@ -1049,10 +1049,10 @@ PR'ы, вносящие фиолетово-синие градиенты, Inter 
 Ты задеплоил loyalty-кошелёк. Тебе нужен кусок для портфолио.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 Case study, это законченный, публикуемый артефакт, не черновик. Чистая монохромия, editorial-типографика, готов отгружать в портфолио.
@@ -1178,7 +1178,7 @@ MIT. Используй, форкай, строй сверху. Если это 
 **Laith Aljunaidy**: solo founder [Dot](https://thedotwallet.com), MENA-first loyalty-платформы. Строит ux-skill, чтобы AI-сгенерированный frontend не выглядел весь одинаково.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Репо: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Сайт: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

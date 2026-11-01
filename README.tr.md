@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ Komutlar yedi grupta toplanır: **bootstrap ve envanter**, **discovery ve öneri
 - **Çıktı:** `.ux/last-workshop.json` yazar, game plan + faz başına artefaktlar.
 - **Bağlanır:** `/ux-design` → game plan'i yürüt. `/ux-research` → workshop'un yüzeye çıkardığı boşlukları doldur. `/ux-case-study` → yolculuğu yayımla.
 
-#### `/ux-case-study`: yayınlanabilir case study (Wfrah-editorial formatı)
+#### `/ux-case-study`: yayınlanabilir case study (monokrom editorial formatı)
 
-- **Ne yapar:** Saf monokrom editoryal formatta bir proje vaka çalışması üretir: Wfrah tipografisi, ince ayırıcılar, (A) ile (G) arasında numaralı bölüm kodları, iki dilli içeriğe güvenli yerleşim. Bir belge, pazarlama broşürü değil. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json` dosyalarından okur.
+- **Ne yapar:** Saf monokrom editoryal formatta bir proje vaka çalışması üretir: geniş editorial tipografisi, ince ayırıcılar, (A) ile (G) arasında numaralı bölüm kodları, iki dilli içeriğe güvenli yerleşim. Bir belge, pazarlama broşürü değil. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json` dosyalarından okur.
 - **Ne zaman kullan:** Lansman sonrası. Ayrık bir milestone'dan sonra. «Bir case study yaz», «bu projeyi case study yap», «wrap-up belgesini yap», «bu işi yayımla», «portfolio parçası».
 - **Ne zaman atla:** Projede (A) ile (G) arasındaki bölümleri dolduracak veri yok. Kullanıcı vaka çalışması değil, pazarlama landing'i istiyor (`/ux-design` kullan).
-- **Çağırma:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Çağırma:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Çıktı:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Bağlanır:** Terminal komutu, genellikle bir projenin sonu.
 
@@ -1049,10 +1049,10 @@ Plugin beş fazı (keşif → heat map → stakeholder haritası → çözüm es
 Loyalty wallet'i ship ettin. Bir portfolio parçası istiyorsun.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 Case study tamamlanmış, yayınlanabilir bir artefakt, taslak değil. Saf monokrom, editorial tipografi, portfolio'na ship'lemeye hazır.
@@ -1178,7 +1178,7 @@ MIT. Kullan, fork'la, üstüne inşa et. Eğer seni AI slop ship etmekten kurtar
 **Laith Aljunaidy**: MENA-first bir loyalty platformu olan [Dot](https://thedotwallet.com)'un solo kurucusu. AI üretilmiş frontend'in hepsi aynı görünmesin diye ux-skill'i inşa ediyor.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Site: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

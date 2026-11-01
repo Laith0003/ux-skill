@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ ux-skill (package name: uxskill)
 - **출력:** `.ux/last-workshop.json`을 씁니다, 게임 플랜 + 단계별 산출물.
 - **다음:** `/ux-design` → 게임 플랜 실행. `/ux-research` → 워크숍이 드러낸 간극 채우기. `/ux-case-study` → 여정을 발행.
 
-#### `/ux-case-study`: 발행 가능한 케이스 스터디(Wfrah 편집체)
+#### `/ux-case-study`: 발행 가능한 케이스 스터디(모노크롬 편집체)
 
-- **무엇:** 순수 흑백 에디토리얼 형식의 프로젝트 케이스 스터디를 생성합니다. Wfrah 타이포그래피, 헤어라인 구분선, (A)부터 (G)까지 번호 붙은 섹션 코드, 이중 언어에 안전한 레이아웃. 마케팅 브로슈어가 아닌 문서입니다. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`에서 읽습니다.
+- **무엇:** 순수 흑백 에디토리얼 형식의 프로젝트 케이스 스터디를 생성합니다. 초광폭 에디토리얼 타이포그래피, 헤어라인 구분선, (A)부터 (G)까지 번호 붙은 섹션 코드, 이중 언어에 안전한 레이아웃. 마케팅 브로슈어가 아닌 문서입니다. `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`에서 읽습니다.
 - **사용 시점:** 출시 후. 별개 이정표 후. "케이스 스터디 작성", "이 프로젝트 케이스 스터디로", "마무리 문서", "이 작업 발행", "포트폴리오 작품".
 - **건너뛸 시점:** 프로젝트에 (A)부터 (G)까지의 섹션을 채울 데이터가 없다. 사용자가 케이스 스터디가 아닌 마케팅 랜딩을 원한다(`/ux-design` 사용).
-- **호출:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **호출:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **출력:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **다음:** 종단 명령, 보통 프로젝트의 끝.
 
@@ -1049,10 +1049,10 @@ jobs:
 로열티 월렛을 출시했습니다. 포트폴리오 작품을 원합니다.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 케이스 스터디는 완성된 발행 가능한 아티팩트입니다, 초안이 아닙니다. 순수 모노크롬, 편집체 타이포, 포트폴리오에 바로 배포할 준비가 된.
@@ -1178,7 +1178,7 @@ MIT. 사용, 포크, 그 위에 빌드. AI 슬롭을 출시하는 것을 막아�
 **Laith Aljunaidy**: MENA 우선 로열티 플랫폼 [Dot](https://thedotwallet.com)의 단독 창업자. AI 생성 프런트엔드가 모두 같아 보이지 않게 ux-skill을 만듭니다.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- 이메일: laith.aljunaidy.laith@gmail.com
+- 이메일: hello@laithjunaidy.com
 - 저장소: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - 사이트: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

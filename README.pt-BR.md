@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ Os comandos são agrupados em sete blocos: **bootstrap e inventário**, **discov
 - **Output:** Escreve `.ux/last-workshop.json`, game plan + artefatos por fase.
 - **Encadeia para:** `/ux-design` → executa o game plan. `/ux-research` → preenche lacunas que o workshop surfou. `/ux-case-study` → publica a jornada.
 
-#### `/ux-case-study`: case study publicável (formato editorial Wfrah)
+#### `/ux-case-study`: case study publicável (formato editorial monocromático)
 
-- **O que faz:** Gera um case study do projeto em formato editorial monocromático puro, tipografia Wfrah, separadores finos, códigos de seção numerados de (A) a (G), layout seguro para conteúdo bilíngue. Um documento, não um folheto de marketing. Lê de `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **O que faz:** Gera um case study do projeto em formato editorial monocromático puro, tipografia editorial ampla, separadores finos, códigos de seção numerados de (A) a (G), layout seguro para conteúdo bilíngue. Um documento, não um folheto de marketing. Lê de `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Quando usar:** Pós-lançamento. Após um marco discreto. «Escreve um case study», «case study desse projeto», «faz o documento de fechamento», «publica esse trabalho», «peça de portfólio».
 - **Quando pular:** Faltam dados ao projeto para preencher as seções (A) a (G). O usuário quer uma landing de marketing, não um case study (use `/ux-design`).
-- **Invocação:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Invocação:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Encadeia para:** Comando terminal, geralmente o fim de um projeto.
 
@@ -1049,10 +1049,10 @@ O plugin facilita as cinco fases (exploração → heat map → mapa de stakehol
 Você lançou a loyalty wallet. Você quer uma peça pra portfólio.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 O case study é um artefato pronto e publicável, não um rascunho. Monocromia pura, tipografia editorial, pronto pra mandar pro seu portfólio.
@@ -1178,7 +1178,7 @@ MIT. Usa, faz fork, constrói em cima. Se te salva de mandar AI slop pra produç
 **Laith Aljunaidy**: fundador solo de [Dot](https://thedotwallet.com), uma plataforma de loyalty MENA-first. Construindo o ux-skill pra que o frontend gerado por IA não pareça todo igual.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Site: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

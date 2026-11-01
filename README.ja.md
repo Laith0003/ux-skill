@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ ux-skill (package name: uxskill)
 - **出力:** `.ux/last-workshop.json` を書き出します、ゲームプラン + 段階別アーティファクト。
 - **次に繋がる:** `/ux-design` → ゲームプランを実行。`/ux-research` → ワークショップが浮かび上がらせたギャップを埋める。`/ux-case-study` → 旅路を公開。
 
-#### `/ux-case-study`：公開可能なケーススタディ(Wfrah エディトリアル形式)
+#### `/ux-case-study`：公開可能なケーススタディ(モノクロエディトリアル形式)
 
-- **何をするか:** 純モノクロのエディトリアル形式でプロジェクトのケーススタディを生成します。Wfrah タイポ、ヘアラインの区切り、(A) から (G) までの番号付きセクションコード、バイリンガル対応のレイアウト。ドキュメントであり、マーケティングのパンフレットではありません。`.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json` から読み込みます。
+- **何をするか:** 純モノクロのエディトリアル形式でプロジェクトのケーススタディを生成します。超ワイドなエディトリアル書体、ヘアラインの区切り、(A) から (G) までの番号付きセクションコード、バイリンガル対応のレイアウト。ドキュメントであり、マーケティングのパンフレットではありません。`.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json` から読み込みます。
 - **使うタイミング:** ローンチ後。個別マイルストーン後。「ケーススタディを書いて」「このプロジェクトをケーススタディに」「まとめドキュメントを作って」「この仕事を公開して」「ポートフォリオ作品」。
 - **スキップするタイミング:** プロジェクトに (A) から (G) のセクションを埋めるデータがない。ケーススタディではなくマーケティングのランディングが欲しい(`/ux-design` を使う)。
-- **呼び出し方:** `/ux-case-study --format=html --slug=bashiti-loyalty`。
+- **呼び出し方:** `/ux-case-study --format=html --slug=northwind-loyalty`。
 - **出力:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`。
 - **次に繋がる:** ターミナルコマンド、通常はプロジェクトの終止符。
 
@@ -1049,10 +1049,10 @@ jobs:
 ロイヤルティウォレットを出荷しました。ポートフォリオピースが欲しい。
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 ケーススタディは完成された公開可能なアーティファクト、草稿ではありません。純モノクロ、エディトリアルタイポ、あなたのポートフォリオに即出荷可能。
@@ -1178,7 +1178,7 @@ MIT。使う、フォークする、その上に構築する。AI スロップ�
 **Laith Aljunaidy**：MENA 優先のロイヤルティプラットフォーム [Dot](https://thedotwallet.com) の独立創業者。AI 生成のフロントエンドが皆同じに見えないように ux-skill を作っています。
 
 - LinkedIn:[linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- メール:laith.aljunaidy.laith@gmail.com
+- メール:hello@laithjunaidy.com
 - リポジトリ:[github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - サイト:[uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI:[pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

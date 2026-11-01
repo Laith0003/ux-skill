@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ ux-skill (package name: uxskill)
 - **आउटपुट:** `.ux/last-workshop.json` लिखता है, गेम प्लान + प्रति-चरण आर्टिफ़ैक्ट।
 - **जोड़ता है:** `/ux-design` → गेम प्लान निष्पादित करें। `/ux-research` → वर्कशॉप द्वारा उठाए गए अंतरालों को भरें। `/ux-case-study` → यात्रा प्रकाशित करें।
 
-#### `/ux-case-study`: प्रकाशन योग्य केस स्टडी (Wfrah-संपादकीय प्रारूप)
+#### `/ux-case-study`: प्रकाशन योग्य केस स्टडी (मोनोक्रोम संपादकीय प्रारूप)
 
-- **क्या:** शुद्ध मोनोक्रोम एडिटोरियल फ़ॉर्मेट में प्रोजेक्ट केस स्टडी बनाता है: Wfrah टाइपोग्राफ़ी, बारीक रेखा वाले विभाजक, (A) से (G) तक क्रमांकित सेक्शन कोड, द्विभाषी के लिए सुरक्षित लेआउट। एक दस्तावेज़, मार्केटिंग ब्रोशर नहीं। `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json` से पढ़ता है।
+- **क्या:** शुद्ध मोनोक्रोम एडिटोरियल फ़ॉर्मेट में प्रोजेक्ट केस स्टडी बनाता है: चौड़ी संपादकीय टाइपोग्राफ़ी, बारीक रेखा वाले विभाजक, (A) से (G) तक क्रमांकित सेक्शन कोड, द्विभाषी के लिए सुरक्षित लेआउट। एक दस्तावेज़, मार्केटिंग ब्रोशर नहीं। `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json` से पढ़ता है।
 - **कब उपयोग करें:** लॉन्च के बाद। एक अलग मील के पत्थर के बाद। "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece"।
 - **कब छोड़ें:** प्रोजेक्ट के पास (A) से (G) तक के सेक्शन भरने लायक डेटा नहीं है। यूज़र केस स्टडी नहीं, मार्केटिंग लैंडिंग चाहता है (`/ux-design` का उपयोग करें)।
-- **आह्वान:** `/ux-case-study --format=html --slug=bashiti-loyalty`।
+- **आह्वान:** `/ux-case-study --format=html --slug=northwind-loyalty`।
 - **आउटपुट:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`।
 - **जोड़ता है:** टर्मिनल कमांड, आमतौर पर प्रोजेक्ट का अंत।
 
@@ -1049,10 +1049,10 @@ PR जो purple-to-blue ग्रेडिएंट, 96px पर Inter, "John D
 आपने लॉयल्टी वॉलेट शिप किया। आप एक पोर्टफ़ोलियो पीस चाहते हैं।
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 केस स्टडी एक तैयार, प्रकाशन योग्य आर्टिफ़ैक्ट है, ड्राफ़्ट नहीं। शुद्ध मोनोक्रोम, संपादकीय टाइपोग्राफ़ी, आपके पोर्टफ़ोलियो पर शिप करने के लिए तैयार।
@@ -1178,7 +1178,7 @@ MIT। इसे उपयोग करें, फ़ोर्क करें, 
 **Laith Aljunaidy**: [Dot](https://thedotwallet.com) के एकल संस्थापक, एक MENA-पहले लॉयल्टी प्लेटफ़ॉर्म। ux-skill बना रहे हैं ताकि AI-जनरेटेड फ़्रंटएंड सब एक जैसा न दिखे।
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- ईमेल: laith.aljunaidy.laith@gmail.com
+- ईमेल: hello@laithjunaidy.com
 - रेपो: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - साइट: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

@@ -1,5 +1,5 @@
 ---
-description: Generate a project case study in pure-monochrome editorial format. Triggers on "write a case study", "case study this project", "do the wrap-up doc". Use when writing a project case study, shipping a publishable Wfrah-editorial document, ending a project with a case-study artifact, producing the (A)–(G) section format in pure monochrome. Skip when the project lacks the data to populate (A)–(G) sections, the user wants a marketing landing not a case study (use ux-design).
+description: Generate a project case study in pure-monochrome editorial format. Triggers on "write a case study", "case study this project", "do the wrap-up doc". Use when writing a project case study, shipping a publishable monochrome editorial document, ending a project with a case-study artifact, producing the (A)–(G) section format in pure monochrome. Skip when the project lacks the data to populate (A)–(G) sections, the user wants a marketing landing not a case study (use ux-design).
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
 disable-model-invocation: false
 ---

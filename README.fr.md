@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ Les commandes sont regroupées en sept familles : **amorçage & inventaire**, **
 - **Sortie :** Écrit `.ux/last-workshop.json`, plan de jeu + artefacts par phase.
 - **Enchaîne avec :** `/ux-design` → exécuter le plan de jeu. `/ux-research` → combler les manques que l'atelier a fait remonter. `/ux-case-study` → publier le parcours.
 
-#### `/ux-case-study`: étude de cas publiable (format éditorial Wfrah)
+#### `/ux-case-study`: étude de cas publiable (format éditorial monochrome)
 
-- **Quoi :** Génère une étude de cas de projet en format éditorial monochrome pur, typographie Wfrah, séparateurs filaires, codes de section numérotés de (A) à (G), mise en page sûre en bilingue. Un document, pas une brochure marketing. Lit depuis `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Quoi :** Génère une étude de cas de projet en format éditorial monochrome pur, typographie éditoriale large, séparateurs filaires, codes de section numérotés de (A) à (G), mise en page sûre en bilingue. Un document, pas une brochure marketing. Lit depuis `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Quand l'utiliser :** Post-lancement. Après un jalon discret. « Écris une étude de cas », « étude de cas ce projet », « fais le doc de clôture », « publie ce travail », « pièce portfolio ».
 - **Quand passer :** Le projet manque de données pour remplir les sections (A) à (G). L'utilisateur veut une landing marketing, pas une étude de cas (utilisez `/ux-design`).
-- **Invocation :** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Invocation :** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Sortie :** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Enchaîne avec :** Commande terminale, généralement la fin d'un projet.
 
@@ -1049,10 +1049,10 @@ Le plugin facilite les cinq phases (exploration → carte de chaleur → carte d
 Vous avez expédié le wallet de fidélité. Vous voulez une pièce portfolio.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 L'étude de cas est un artefact fini, publiable, pas un brouillon. Monochrome pur, typographie éditoriale, prêt à publier sur votre portfolio.
@@ -1178,7 +1178,7 @@ MIT. Utilisez-le, forkez-le, construisez dessus. S'il vous évite d'expédier du
 **Laith Aljunaidy**: fondateur solo de [Dot](https://thedotwallet.com), une plateforme de fidélité MENA-first. Construisant ux-skill pour que le frontend généré par IA ne se ressemble plus tout pareil.
 
 - LinkedIn : [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email : laith.aljunaidy.laith@gmail.com
+- Email : hello@laithjunaidy.com
 - Dépôt : [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Site : [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI : [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)
