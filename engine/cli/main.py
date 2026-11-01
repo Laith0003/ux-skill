@@ -1122,9 +1122,10 @@ else:
     @_FORMAT
     @_FIGMA
     @click.option("--to", "to", required=True,
-                  type=click.Choice(("css", "tailwind", "figma", "dtcg")),
+                  type=click.Choice(("css", "tailwind", "figma", "dtcg", "stageshow")),
                   help="css (tokens.css), tailwind (a Tailwind 4 theme), figma (variables and "
-                       "the script that applies them) or dtcg (tokens.json).")
+                       "the script that applies them), dtcg (tokens.json) or stageshow (a look "
+                       "for the Stageshow kit, so product illustrations wear the system).")
     @click.option("--scheme", "scheme", default=None,
                   type=click.Choice(("system", "light", "dark")),
                   help="The scheme the CSS or Tailwind file opens in. A stylesheet keeps its "

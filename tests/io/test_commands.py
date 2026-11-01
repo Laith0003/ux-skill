@@ -614,7 +614,7 @@ def test_export_gives_sizes_without_out_and_writes_with_it(tmp_path):
     figma = run_export(f / "tokens.json", to="figma", out=out)
     assert figma["status"] == "written"
     assert (out / "figma-variables.js").is_file()
-    with pytest.raises(InputError, match="--to is scss; pass css, tailwind, figma or dtcg"):
+    with pytest.raises(InputError, match="--to is scss; pass css, tailwind, figma, dtcg or stageshow"):
         run_export(f / "tokens.json", to="scss")
 
 
