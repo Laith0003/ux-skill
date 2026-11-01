@@ -9,7 +9,6 @@ High-value because:
 
 Re-run after data/brands/_index.json changes.
 """
-import importlib.util
 from pathlib import Path
 import sys
 import json
@@ -27,6 +26,8 @@ def sanitize_dashes(s):
 
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from ga import tagged  # noqa: E402
 
 
 def site_version():
@@ -322,22 +323,14 @@ def build_html(brands, version):
 """
 
 
-def page() -> str:
+def page(brands, version) -> str:
     """The page as written to docs/, with the analytics tag every docs page
     carries."""
-    return _ensure_ga().tagged(build_html(*load_index()), "docs/brands.html")
-
-
-def _ensure_ga():
-    spec = importlib.util.spec_from_file_location("ensure_ga", ROOT / "scripts" / "ensure-ga.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
+    return tagged(build_html(brands, version), "docs/brands.html")
 
 def main():
     brands, version = load_index()
-    OUT.write_text(page(), encoding="utf-8")
+    OUT.write_text(page(brands, version), encoding="utf-8")
     print(f"ok  {len(brands)} brands  →  docs/brands.html")
 
 

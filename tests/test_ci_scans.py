@@ -1,8 +1,9 @@
 """The CI-only scans in .github/workflows/test.yml, run with the suite so a
 failure shows up before a pull request does.
 
-Every page in docs/ carries the analytics tag, and the plugin source carries
-no emoji: the same code point ranges and folders the workflow scans.
+Every top-level page in docs/ carries the analytics tag, the pages the
+workflow checks, and the plugin source carries no emoji, in the same folders
+and code point ranges the workflow scans.
 """
 import re
 import subprocess
@@ -28,7 +29,7 @@ def _scanned_files():
             yield ROOT / name
 
 
-def test_every_docs_page_carries_the_analytics_tag():
+def test_every_top_level_docs_page_carries_the_analytics_tag():
     out = subprocess.run([sys.executable, str(ROOT / "scripts" / "ensure-ga.py"), "--check"],
                          capture_output=True, text=True, cwd=ROOT)
     assert out.returncode == 0, out.stdout + out.stderr

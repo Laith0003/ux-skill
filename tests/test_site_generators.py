@@ -54,17 +54,21 @@ def test_wide_spacing_scale_gets_phone_padding():
     assert _preview_phone_padding({"spacing": {"scale": [6, 12, 18, 24, 36, 54]}}) == ""
 
 
+def _page(script):
+    """The page a catalog generator writes to docs/, from its own data."""
+    mod = _load_script(script)
+    if script == "build-brands-page.py":
+        return mod.page(*mod.load_index())
+    if script == "build-commands-page.py":
+        return mod.page(mod.collect())
+    return mod.page(*mod.load_rules())
+
+
 @pytest.mark.parametrize("script", ["build-brands-page.py", "build-anti-patterns-page.py",
                                     "build-commands-page.py"])
 def test_catalog_page_regenerates_lint_clean(tmp_path, script):
-    mod = _load_script(script)
-    if script == "build-brands-page.py":
-        page = mod.build_html(*mod.load_index())
-    elif script == "build-commands-page.py":
-        page = mod.build_html(mod.collect())
-    else:
-        rules, version = mod.load_rules()
-        page = mod.waive_quotes(mod.build_html(rules, version), rules)
+    page = _page(script)
+    if script == "build-anti-patterns-page.py":
         # regions name the rules they waive, and every one is closed
         assert "ux-lint-disable -->" not in page and page.count("ux-lint-off") == page.count("ux-lint-on")
     out = tmp_path / "page.html"
@@ -98,5 +102,4 @@ def test_catalog_waivers_never_hide_template_markup(tmp_path):
 def test_a_regenerated_catalog_page_keeps_the_analytics_tag(script):
     """A rebuild once dropped the tag from docs/anti-patterns.html, which the
     CI tag check then rejected; each generator now writes it."""
-    page = _load_script(script).page()
-    assert page.count("G-Z371T0DBW5") == 2, f"{script} writes a page without the analytics tag"
+    assert _load_script("ga.py").SNIPPET in _page(script), f"{script} writes a page without the analytics tag"
