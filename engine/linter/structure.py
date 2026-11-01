@@ -1914,7 +1914,7 @@ _CLOSE_WORD = re.compile(
 # word names a destination ("Products menu", "قائمة الطعام").
 _MENU_MODIFIERS = {"open", "show", "toggle", "main", "site", "the", "navigation", "nav",
                    "فتح", "الرئيسية", "عرض", "abrir", "ouvrir", "öffnen", "apri"}
-_BURGER_GLYPH = re.compile(r"☰|&#9776;|&#x2630;", re.I)
+_BURGER_GLYPH = re.compile(r"\u2630|&#9776;|&#x2630;", re.I)
 _SR_ONLY = re.compile(r"<(\w+)[^>]*class\s*=\s*[\"'][^\"']*(?:sr-only|visually-hidden|screen-reader)[^\"']*[\"'][^>]*>.*?</\1>",
                       re.I | re.S)
 _TW_BREAKPOINTS = {"sm": 640, "md": 768, "lg": 1024, "xl": 1280, "2xl": 1536}

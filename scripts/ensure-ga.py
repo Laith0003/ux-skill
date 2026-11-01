@@ -70,6 +70,12 @@ def inject(html: str, path: str) -> str:
     return html[:i] + "\n" + SNIPPET + html[i:]
 
 
+def tagged(html: str, path: str) -> str:
+    """The page with the tag: unchanged when it already carries it. Site
+    generators call this before writing, so a rebuild never drops the tag."""
+    return html if has_tag(html) else inject(html, path)
+
+
 def main(argv: list[str]) -> int:
     check = "--check" in argv
     targets = resolve_targets([a for a in argv if not a.startswith("--")])

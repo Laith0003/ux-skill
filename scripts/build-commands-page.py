@@ -11,6 +11,7 @@ sections out of each commands/*.md file and renders them into a single HTML page
   - emits proper JSON-LD ItemList + breadcrumb
   - includes anchor links per command for deep linking
 """
+import importlib.util
 from pathlib import Path
 import re
 import html
@@ -774,10 +775,23 @@ def build_html(cmds: list) -> str:
     )
 
 
+def page() -> str:
+    """The page as written to docs/, with the analytics tag every docs page
+    carries."""
+    return _ensure_ga().tagged(build_html(collect()), "docs/commands.html")
+
+
+def _ensure_ga():
+    spec = importlib.util.spec_from_file_location("ensure_ga", ROOT / "scripts" / "ensure-ga.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def main() -> None:
     cmds = collect()
     print(f"Found {len(cmds)} commands.")
-    out = build_html(cmds)
+    out = page()
     DOCS_OUT.write_text(out, encoding="utf-8")
     print(f"Wrote {DOCS_OUT}  ({len(out) // 1024} KB)")
 

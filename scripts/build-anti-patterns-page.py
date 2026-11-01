@@ -10,6 +10,7 @@ High-value because:
 
 Re-run after data/anti-patterns.json changes.
 """
+import importlib.util
 from pathlib import Path
 import json
 import sys
@@ -404,10 +405,23 @@ def waive_quotes(page, rules):
     return wrap_quoted(page, [(pattern, allow) for pattern in QUOTED_FIELDS])
 
 
+def page() -> str:
+    """The page as written to docs/, with the analytics tag every docs page
+    carries."""
+    rules, version = load_rules()
+    return _ensure_ga().tagged(waive_quotes(build_html(rules, version), rules), "docs/anti-patterns.html")
+
+
+def _ensure_ga():
+    spec = importlib.util.spec_from_file_location("ensure_ga", ROOT / "scripts" / "ensure-ga.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def main():
     rules, version = load_rules()
-    out_html = waive_quotes(build_html(rules, version), rules)
-    OUT.write_text(out_html, encoding="utf-8")
+    OUT.write_text(page(), encoding="utf-8")
     print(f"ok  {len(rules)} rules  →  docs/anti-patterns.html")
 
 

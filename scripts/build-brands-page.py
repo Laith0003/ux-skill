@@ -9,6 +9,7 @@ High-value because:
 
 Re-run after data/brands/_index.json changes.
 """
+import importlib.util
 from pathlib import Path
 import sys
 import json
@@ -321,10 +322,22 @@ def build_html(brands, version):
 """
 
 
+def page() -> str:
+    """The page as written to docs/, with the analytics tag every docs page
+    carries."""
+    return _ensure_ga().tagged(build_html(*load_index()), "docs/brands.html")
+
+
+def _ensure_ga():
+    spec = importlib.util.spec_from_file_location("ensure_ga", ROOT / "scripts" / "ensure-ga.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
 def main():
     brands, version = load_index()
-    out_html = build_html(brands, version)
-    OUT.write_text(out_html, encoding="utf-8")
+    OUT.write_text(page(), encoding="utf-8")
     print(f"ok  {len(brands)} brands  →  docs/brands.html")
 
 

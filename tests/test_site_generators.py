@@ -91,3 +91,12 @@ def test_catalog_waivers_never_hide_template_markup(tmp_path):
     # the chrome is never inside a region
     for f in styled:
         assert "ux-lint-off" not in lines[f.line - 1] or "inline-style-attribute" not in lines[f.line - 1]
+
+
+@pytest.mark.parametrize("script", ["build-brands-page.py", "build-anti-patterns-page.py",
+                                    "build-commands-page.py"])
+def test_a_regenerated_catalog_page_keeps_the_analytics_tag(script):
+    """A rebuild once dropped the tag from docs/anti-patterns.html, which the
+    CI tag check then rejected; each generator now writes it."""
+    page = _load_script(script).page()
+    assert page.count("G-Z371T0DBW5") == 2, f"{script} writes a page without the analytics tag"
