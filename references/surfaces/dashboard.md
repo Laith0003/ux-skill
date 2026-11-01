@@ -34,11 +34,14 @@ Load this playbook when the brief is an analytics dashboard, an admin panel, an 
 
 12. **Real content.** A product, a listing or a property shows its own photo; a review shows the person's name; an order shows its real identifier. Placeholder text and generic stock scenes read as unfinished.
 
+13. **One thing leads.** Each view has one figure or panel the eye lands on first: larger, on the accent, or first in reading order, with the rest stepping down in size and weight. A grid of equal panels in matching borders leaves the reader without a starting point, however clean each panel is.
+
 ## Do / Don't
 
 | Do | Don't |
 |---|---|
 | Use tabular numerals on every figure | Mix proportional and tabular figures |
+| Let one figure or panel lead each view | Set every panel at the same weight in the same border |
 | Give every key figure its comparison, date or count | Show a bare number |
 | Put an icon, the title and one control in a panel header | Leave a panel header with a title alone |
 | Show a product's own photo as its thumbnail | Put stock photos on a dashboard |

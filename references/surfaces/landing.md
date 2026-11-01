@@ -247,7 +247,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **Two-column hero with metaphor image.** The text does the heavy lifting; the image carries a metaphor. Works when the product is a feeling more than a screen. The image is atmospheric, not literal product UI: water, light, fabric or sky as a metaphor for the feeling the product evokes.
 
-**Synthetic screenshot composition.** When the product is too abstract to screenshot (a workflow, an agent conversation, a queue of work), the hero becomes a stylized composition of UI fragments: a card, a notification, a chat bubble, a status pill, floating against a soft background.
+**Synthetic screenshot composition.** When the product is too abstract to screenshot (a workflow, an agent conversation, a queue of work), the hero becomes a stylized composition of UI fragments: a card, a notification, a chat bubble, a status pill, composed on the section's own ground with one fragment leading and the others straddling its edge, never floating on a plate.
 
 **Narrative chat thread.** A multi-turn conversation between an agent and a person, shown inline. The reader absorbs the capability through the conversation instead of prose explaining it. Fits a product that works through conversation.
 
@@ -255,7 +255,9 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **Stacked-card collage.** Two to four UI fragments (a panel, an overlay, a tooltip, a popup) layered at varying depths. The overlap is choreographed so layers imply depth without hiding meaning. Use it when the product has several distinct surfaces to show at once. Cost: medium, z-stacking, crop and shadow management.
 
-**Tilted product frame.** Product shots tilted 6-12 degrees on the Y axis with a subtle perspective shadow, floating against the section background, so the screenshot reads as a design object. For high-end maximalist and creative-tool styles. Cost: low, a CSS transform plus a shadow.
+**Tilted product frame.** Product shots tilted 6-12 degrees on the Y axis with a subtle perspective shadow, so the screenshot reads as a design object. For high-end maximalist and creative-tool styles, and only when it reads better than the straight shot at its final size. Cost: low, a CSS transform plus a shadow.
+
+Build any of these interface visuals by `references/styles/product-illustration.md`: what is real and what is a placeholder, the crop, the satellites and the motion. The page keeps its photographs beside them.
 
 ### Hero bans
 

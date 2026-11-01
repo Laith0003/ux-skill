@@ -18,6 +18,22 @@ project adheres to [Semantic Versioning](https://semver.org/).
   dark. The kit's shadows, control and row heights and placeholder inks stay
   its own, since they are tuned to an illustration's scale. Over MCP,
   `ux_system_export` takes `to: stageshow`.
+- `references/styles/product-illustration.md`: the rules for a picture of
+  the product's interface on a page (a window, a dashboard, a phone screen,
+  a cursor demo): what is real and what is a placeholder, the crop and its
+  satellites, the motion and its poster frame, how to check it. `/ux-design`
+  loads it beside the surface playbook whenever a build shows the product's
+  interface, and the page keeps its photographs. Distilled from Stageshow and
+  credited in NOTICE.
+
+### Changed
+- The landing playbook's interface-fragment patterns point at the new guide.
+  A synthetic screenshot composition sits on the section's own ground, never
+  on a plate, and a tilted product frame keeps its tilt only when it reads
+  better than the straight shot.
+- The dashboard playbook adds a principle, one thing leads: each view has one
+  figure or panel the eye takes in first, and equal panels in matching
+  borders are a fault.
 
 ## [4.0.0] - 2026-11-01 - **FOUNDATIONS**
 
