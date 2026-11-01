@@ -26,6 +26,8 @@ def sanitize_dashes(s):
 
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from ga import tagged  # noqa: E402
 
 
 def site_version():
@@ -404,10 +406,14 @@ def waive_quotes(page, rules):
     return wrap_quoted(page, [(pattern, allow) for pattern in QUOTED_FIELDS])
 
 
+def page(rules, version) -> str:
+    """The page as written to docs/, with the analytics tag every docs page
+    carries."""
+    return tagged(waive_quotes(build_html(rules, version), rules), "docs/anti-patterns.html")
+
 def main():
     rules, version = load_rules()
-    out_html = waive_quotes(build_html(rules, version), rules)
-    OUT.write_text(out_html, encoding="utf-8")
+    OUT.write_text(page(rules, version), encoding="utf-8")
     print(f"ok  {len(rules)} rules  →  docs/anti-patterns.html")
 
 

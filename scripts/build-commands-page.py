@@ -12,6 +12,7 @@ sections out of each commands/*.md file and renders them into a single HTML page
   - includes anchor links per command for deep linking
 """
 from pathlib import Path
+import sys
 import re
 import html
 
@@ -25,6 +26,8 @@ def sanitize_dashes(s):
 
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from ga import tagged  # noqa: E402
 COMMANDS_DIR = ROOT / "commands"
 DOCS_OUT = ROOT / "docs" / "commands.html"
 
@@ -774,10 +777,15 @@ def build_html(cmds: list) -> str:
     )
 
 
+def page(cmds) -> str:
+    """The page as written to docs/, with the analytics tag every docs page
+    carries."""
+    return tagged(build_html(cmds), "docs/commands.html")
+
 def main() -> None:
     cmds = collect()
     print(f"Found {len(cmds)} commands.")
-    out = build_html(cmds)
+    out = page(cmds)
     DOCS_OUT.write_text(out, encoding="utf-8")
     print(f"Wrote {DOCS_OUT}  ({len(out) // 1024} KB)")
 
