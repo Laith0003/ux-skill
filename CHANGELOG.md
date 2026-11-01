@@ -9,6 +9,16 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- `uxskill system export --to stageshow` writes `stageshow-look.css`, a look
+  for the Stageshow kit (github.com/benjitaylor/skills, MIT), which builds
+  product illustrations: faux windows, dashboards and cursor demos. The
+  illustration on a page then wears the page's own system: its surfaces,
+  text, icons, line, accent, status colors, faces and radii, in light and in
+  dark. The kit's shadows, control and row heights and placeholder inks stay
+  its own, since they are tuned to an illustration's scale. Over MCP,
+  `ux_system_export` takes `to: stageshow`.
+
 ## [4.0.0] - 2026-11-01 - **FOUNDATIONS**
 
 ux-skill 4.0 builds a design system from one brand color and a brief, reads
