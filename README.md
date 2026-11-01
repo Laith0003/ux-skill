@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ Commands are grouped into seven buckets: **bootstrap & inventory**, **discovery 
 - **Output:** Writes `.ux/last-workshop.json`, game plan + per-phase artifacts.
 - **Chains to:** `/ux-design` → execute the game plan. `/ux-research` → fill gaps the workshop surfaced. `/ux-case-study` → publish the journey.
 
-#### `/ux-case-study`: publishable case study (Wfrah-editorial format)
+#### `/ux-case-study`: publishable case study (monochrome editorial format)
 
-- **What:** Generates a project case study in pure-monochrome editorial format, Wfrah typography, hairline separators, numbered (A) to (G) section codes, bilingual-safe layout. A document, not a marketing brochure. Reads from `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **What:** Generates a project case study in pure-monochrome editorial format, ultra-wide editorial typography, hairline separators, numbered (A) to (G) section codes, bilingual-safe layout. A document, not a marketing brochure. Reads from `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **When to use:** Post-launch. After a discrete milestone. "Write a case study", "case study this project", "do the wrap-up doc", "publish this work", "portfolio piece".
 - **When to skip:** Project lacks data to populate (A) to (G) sections. User wants a marketing landing, not a case study (use `/ux-design`).
-- **Invocation:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Invocation:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Chains to:** Terminal command, usually the end of a project.
 
@@ -1271,10 +1271,10 @@ The plugin facilitates the five phases (exploration → heat map → stakeholder
 You shipped the loyalty wallet. You want a portfolio piece.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 The case study is a finished, publishable artifact, not a draft. Pure monochrome, editorial typography, ready to ship to your portfolio.
@@ -1400,7 +1400,7 @@ MIT. Use it, fork it, build on it. If it saves you from shipping AI slop, star t
 **Laith Aljunaidy**: solo founder of [Dot](https://thedotwallet.com), a MENA-first loyalty platform. Building ux-skill so the AI-generated frontend doesn't all look the same.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Site: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

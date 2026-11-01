@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monochrome editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ ux-skill (package name: uxskill)
 - **输出:** 写入 `.ux/last-workshop.json`，行动方案 + 各阶段产出物。
 - **下接:** `/ux-design` → 执行行动方案;`/ux-research` → 补工作坊暴露的缺口;`/ux-case-study` → 把过程发表。
 
-#### `/ux-case-study`：可发布的案例研究(Wfrah 编辑格式)
+#### `/ux-case-study`：可发布的案例研究(黑白编辑格式)
 
-- **做什么：** 以纯黑白的编辑风格生成项目案例研究：Wfrah 字体、细线分隔、从 (A) 到 (G) 编号的章节代码、适配双语的版式。它是一份文档，而不是营销手册。读取 `.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json`。
+- **做什么：** 以纯黑白的编辑风格生成项目案例研究：超宽编辑字体、细线分隔、从 (A) 到 (G) 编号的章节代码、适配双语的版式。它是一份文档，而不是营销手册。读取 `.ux/last-frame.json`、`.ux/last-workshop.json`、`.ux/last-research.json`、`.ux/last-design.json`、`.ux/last-a11y.json`、`.ux/last-polish.json`、`.ux/last-recommendation.json`、`.ux/last-discovery.json`。
 - **何时使用:** 发布后;经历一个明确里程碑后。"写一份案例研究"、"把这个项目做成案例"、"做收尾文档"、"把这工作发出来"、"作品集篇"。
 - **何时跳过：** 项目缺少填充 (A) 到 (G) 各章节的数据；用户要的是营销落地页而不是案例研究（用 `/ux-design`）。
-- **调用方式:** `/ux-case-study --format=html --slug=bashiti-loyalty`。
+- **调用方式:** `/ux-case-study --format=html --slug=northwind-loyalty`。
 - **输出:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`。
 - **下接:** 终端命令，通常是项目的句号。
 
@@ -1049,10 +1049,10 @@ jobs:
 你发了会员钱包。你想要一篇作品集篇章。
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monochrome editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 这份案例研究是已完成、可发布的产物，不是草稿。纯黑白、editorial 字型、可直接上你的作品集。
@@ -1178,7 +1178,7 @@ MIT。用它、fork 它、在它之上构建。如果它帮你少出货了一份
 **Laith Aljunaidy**：[Dot](https://thedotwallet.com) 的独立创始人,Dot 是一个 MENA 优先的会员平台。我打造 ux-skill,是为了让 AI 生成的前端不再千篇一律。
 
 - LinkedIn:[linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- 邮箱:laith.aljunaidy.laith@gmail.com
+- 邮箱:hello@laithjunaidy.com
 - 仓库:[github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - 官网:[uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI:[pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

@@ -9,7 +9,7 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-## [4.0.0] - 2026-10-01 - **FOUNDATIONS**
+## [4.0.0] - 2026-11-01 - **FOUNDATIONS**
 
 ux-skill 4.0 builds a design system from one brand color and a brief, reads
 the system a team already has, checks every pairing for contrast in light,

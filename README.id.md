@@ -279,7 +279,7 @@ ux-skill (package name: uxskill)
 │   ├── ux-polish.md                   lint, fix, re-lint loop + taste pass
 │   ├── ux-research.md                 research planning + synthesis
 │   ├── ux-workshop.md                 5-phase design thinking workshop
-│   ├── ux-case-study.md               publishable Wfrah-editorial case study
+│   ├── ux-case-study.md               publishable monokrom-editorial case study
 │   ├── ux-next.md                     workflow conductor (read-only)
 │   ├── ux-expert.md                   consulting hook
 │   ├── ux-mcp.md                      MCP server
@@ -512,12 +512,12 @@ Command dikelompokkan ke tujuh kelompok: **bootstrap & inventaris**, **discovery
 - **Output:** Menulis `.ux/last-workshop.json`, game plan + artifact per-fase.
 - **Merantai ke:** `/ux-design` → eksekusi game plan. `/ux-research` → isi gap yang dimunculkan workshop. `/ux-case-study` → publikasi perjalanannya.
 
-#### `/ux-case-study`: case study yang bisa dipublikasi (format editorial Wfrah)
+#### `/ux-case-study`: case study yang bisa dipublikasi (format editorial monokrom)
 
-- **Apa:** Menghasilkan studi kasus proyek dalam format editorial monokrom murni, tipografi Wfrah, pemisah garis tipis, kode section bernomor dari (A) sampai (G), layout yang aman untuk dua bahasa. Sebuah dokumen, bukan brosur marketing. Membaca dari `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
+- **Apa:** Menghasilkan studi kasus proyek dalam format editorial monokrom murni, tipografi editorial lebar, pemisah garis tipis, kode section bernomor dari (A) sampai (G), layout yang aman untuk dua bahasa. Sebuah dokumen, bukan brosur marketing. Membaca dari `.ux/last-frame.json`, `.ux/last-workshop.json`, `.ux/last-research.json`, `.ux/last-design.json`, `.ux/last-a11y.json`, `.ux/last-polish.json`, `.ux/last-recommendation.json`, `.ux/last-discovery.json`.
 - **Kapan dipakai:** Pasca-launch. Setelah milestone diskrit. "Tulis case study", "case study proyek ini", "dokumen wrap-up", "publikasi karya ini", "bahan portfolio".
 - **Kapan dilewati:** Proyek tidak punya data untuk mengisi section (A) sampai (G). Pengguna ingin landing marketing, bukan studi kasus (pakai `/ux-design`).
-- **Pemanggilan:** `/ux-case-study --format=html --slug=bashiti-loyalty`.
+- **Pemanggilan:** `/ux-case-study --format=html --slug=northwind-loyalty`.
 - **Output:** `case-studies/<slug>.<ext>` + `.ux/last-case-study.json`.
 - **Merantai ke:** Command terminal, biasanya akhir proyek.
 
@@ -1049,10 +1049,10 @@ Plugin memfasilitasi lima fase (eksplorasi → heat map → peta stakeholder →
 Kamu nge-ship loyalty wallet. Kamu mau bahan portfolio.
 
 ```
-/ux-case-study --format=html --slug=bashiti-loyalty
+/ux-case-study --format=html --slug=northwind-loyalty
 > [reads .ux/last-frame.json, last-workshop.json, last-research.json, last-design.json, last-a11y.json, last-polish.json, last-recommendation.json, last-discovery.json]
-> [generates Wfrah-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
-> [writes case-studies/bashiti-loyalty.html]
+> [generates monokrom-editorial case study with numbered (A)-(G) sections, hairline separators, bilingual-safe layout]
+> [writes case-studies/northwind-loyalty.html]
 ```
 
 Case study-nya artifact selesai dan bisa dipublikasi, bukan draft. Monokromatik murni, tipografi editorial, siap di-ship ke portfolio kamu.
@@ -1178,7 +1178,7 @@ MIT. Pakai, fork, bangun di atasnya. Kalau menyelamatkan kamu dari nge-ship AI s
 **Laith Aljunaidy**: solo founder dari [Dot](https://thedotwallet.com), platform loyalty MENA-first. Membangun ux-skill supaya frontend yang dihasilkan AI nggak kelihatan semuanya sama.
 
 - LinkedIn: [linkedin.com/in/laithaljunaidy](https://www.linkedin.com/in/laithaljunaidy/)
-- Email: laith.aljunaidy.laith@gmail.com
+- Email: hello@laithjunaidy.com
 - Repo: [github.com/Laith0003/ux-skill](https://github.com/Laith0003/ux-skill)
 - Situs: [uxskill.laithjunaidy.com](https://uxskill.laithjunaidy.com)
 - PyPI: [pypi.org/project/uxskill](https://pypi.org/project/uxskill/)

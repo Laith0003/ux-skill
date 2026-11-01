@@ -27,7 +27,7 @@ This project is opinionated. We argue about UX, code, naming, and taste. We don'
 
 ### If something is off
 
-Email the maintainer directly: `laith.aljunaidy.laith@gmail.com`. Brief is fine — what happened, where, when. Action will be taken proportionate to the impact: a private note, a public correction, a temporary block, a permanent ban — in roughly that order, depending on severity and pattern.
+Email the maintainer directly: `hello@laithjunaidy.com`. Brief is fine — what happened, where, when. Action will be taken proportionate to the impact: a private note, a public correction, a temporary block, a permanent ban — in roughly that order, depending on severity and pattern.
 
 ## Scope
 

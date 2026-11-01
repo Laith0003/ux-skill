@@ -59,7 +59,7 @@ POINTER_FILES = {
 # Bare file names that name files in the user's project, not in this repo.
 PROJECT_FILES = {
     "brand.md", "DESIGN.md", "MASTER.md", "GEMINI.md", "AGENTS.md", "CLAUDE.md",
-    "system-report.md", "project_dot_voice.md",
+    "system-report.md",
     "import-report.md", "enhance-report.md", "extend-report.md",
 }
 _PROJECT_FILE_PATTERN = re.compile(r"^\d\d-[\w-]+\.md$")
