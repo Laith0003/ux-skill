@@ -1,0 +1,445 @@
+# Dashboard playbook
+
+The surface playbook for data UI. `/ux-design` loads this file, and no other surface playbook, in dashboard mode (`--dashboard`, or a brief for a dashboard, admin panel, metrics page or console).
+
+> Data UI lives by different rules than marketing surfaces. A dashboard is read many times a day, so every figure carries its context, color tells states and series apart, and density follows how the page is read: a shop owner glancing at the counter is not a dispatcher watching six feeds. Restraint is the signature; bareness is not restraint.
+
+## When it applies
+
+Load this playbook when the brief is an analytics dashboard, an admin panel, an ops or monitoring console, a trading or finance view, an internal tool, or any signed-in surface whose main content is metrics, tables and charts. A marketing page that shows a dashboard screenshot is a landing page (`references/surfaces/landing.md`), not a dashboard.
+
+## Principles
+
+1. **Density follows how the page is read.** The system's density axis and the brief's reading context set it: a daily-app dashboard (density 4 to 7) groups its figures in panels with room to scan; a cockpit (8 to 10) packs signal per unit of screen. Generous spacing that fits 3 metrics on a 1440px monitor wastes the screen; so does cockpit density on a page read at arm's length. Pick a density mode and commit.
+
+2. **Panels group at daily density; hairlines group in a cockpit.** At daily density a panel on the card surface groups one question (sales, stock, reviews) with its own header. At VISUAL_DENSITY > 7 generic card containers are banned: use `border-t`, `divide-y`, or pure negative space.
+
+3. **Tabular numerals are mandatory.** `font-variant-numeric: tabular-nums` on every numeric column, every stat callout, every ticker, in the system's own face; a monospace face only in a cockpit or for codes and IDs. Mixed proportional and tabular figures on the same page is undisciplined.
+
+4. **No serifs on dashboards.** Serifs belong to editorial and marketing. Dashboard typography uses neo-grotesque sans pairings (`Geist + Geist Mono`, `Satoshi + JetBrains Mono`, `Inter + IBM Plex Mono`).
+
+5. **Color is reserved for meaning.** Status colors (`color.status.*`) report outcomes: success, warning, danger, info. Category colors (`color.category.1` to `.6`) tell apart states and series that are neither good nor bad: shipped, preparing, scheduled, a second chart series. Never decorative, and never color alone: a state always shows its word.
+
+6. **Neutral chrome, accent on action.** Dashboard chrome stays neutral. The brand accent appears on the primary action, the focus ring and the current navigation item; icons sit in the muted text color.
+
+7. **Live indicators breathe sparingly.** Maximum 2 perpetual ambient pulses per viewport. Only on truly live elements. Anything more becomes screensaver noise that drains attention and battery.
+
+8. **Charts are UI, not decoration.** Charts follow the same rules as the rest of the system: accessibility, contrast, clarity, color-not-only. Tooltips work on hover AND tap AND keyboard focus. Empty / loading / error states are designed.
+
+9. **Restraint is the dashboard's signature.** The premium signal of a dashboard is composure under information density. The cluttered SaaS reflex (gradients, glows, decorative icons, multiple accent colors in the chrome) is what amateur dashboards do. The disciplined version uses scale, alignment, negative space and color that means something. A page of bare figures with no comparison, no icons and one gray is not restraint, it is unfinished.
+
+10. **Mobile collapse is a separate design.** Below 768px, cockpit-density rows collapse to scrollable card stacks, not 1px-divided rows. Mobile dashboards prioritize fewer metrics per viewport with deeper drill-down.
+
+11. **Every key figure carries its context.** A figure says what it compares against ("+18.6% vs yesterday"), when it applies ("Scheduled 24 Jul") or what it counts ("3.1 M (1,200 orders)"). A number with nothing beside it cannot be acted on.
+
+12. **Real content.** A product, a listing or a property shows its own photo; a review shows the person's name; an order shows its real identifier. Placeholder text and generic stock scenes read as unfinished.
+
+## Do / Don't
+
+| Do | Don't |
+|---|---|
+| Use tabular numerals on every figure | Mix proportional and tabular figures |
+| Give every key figure its comparison, date or count | Show a bare number |
+| Put an icon, the title and one control in a panel header | Leave a panel header with a title alone |
+| Show a product's own photo as its thumbnail | Put stock photos on a dashboard |
+| Group with panels at daily density, hairlines in a cockpit | Wrap every row of dense data in a `<Card>` |
+| Use neo-grotesque sans (Geist, Satoshi, Inter) | Use serifs in dashboard typography |
+| Use status colors for outcomes and category colors for states and series | Use either as brand decoration |
+| Right-align action columns | Place action buttons in the leftmost column |
+| Use sparklines inline for at-a-glance trends | Embed a full chart for every metric |
+| Use compact stat tiles with tabular numerals | Use 3D charts or rainbow gradients |
+| Provide tooltip on hover AND tap AND keyboard focus | Tooltip only on hover (skips mobile and keyboard) |
+| Show empty / loading / error states for every chart | Render an empty chart frame |
+| Use sticky filter bars at the top of long lists | Force users to scroll up to refilter |
+| Cap dashboard accent color at the primary action, focus and the current navigation item | Use accent for chrome decoration |
+| Use breathing pulse on max 2 live indicators per viewport | Pulse every status dot on every row |
+| Use diverging or qualitative colorblind-safe palettes | Use red-green as the only chart signals |
+| Collapse cockpit-density to card stacks below 768px | Force 1px hairlines and 4px paddings on mobile |
+| Use the 5 dashboard archetypes as bento card templates | Re-invent the same archetype for every card |
+| Y-axis on bar charts starts at zero | Truncate Y-axis to amplify visual variance (misleading) |
+| Group cockpit-density metrics (VISUAL_DENSITY > 7) with hairlines and negative space | Wrap cockpit-density UIs in card boxes |
+
+## Hardening rules (when VISUAL_DENSITY > 7)
+
+- Empty rows show empty states across the full width, never collapse silently.
+- 1px hairline borders for surface elevation in dark mode rather than drop shadows.
+- 4-5 step surface lightness ladder (page, card, raised, popover, overlay).
+
+### Tiered surface elevation (dark mode)
+
+**Use when**: A dark-scheme dashboard, where elevation reads as lightness.
+**What it is**: A 4-5 step lightness ladder for page, card, raised, popover and overlay. Each step is small in absolute lightness (about 3-5% L lift) but the cumulative effect creates real depth. No drop shadows; elevation lives in lightness.
+**Cost**: zero, token discipline.
+
+## Examples
+
+### Pattern: Daily-app dashboard (density 4 to 7)
+**Use when**: The default for a product's own dashboard: a store, a clinic, a team or a back office checks it many times a day (density mid, reading context glance or task).
+**Anti-pattern**: Bare figures with no comparison, panels with a title and nothing else in their header, one gray everywhere, no icons, stock photos, or the cockpit treatment (no boxes, mono numerals) on a page that is read at arm's length.
+**How**:
+- Canvas and panels: the page on `color.surface.page` (or `color.surface.tint` for a soft wash), every panel on `color.surface.card` at `radius.card` with `color.line.subtle` or `elevation.card`. Panels group; whitespace between them is `space.group.gap`.
+- Page header: the page name in the heading role, one plain sentence under it that says what the page is for, and the page's own actions (Export, Add) on the right, the primary action last.
+- Figures with context: every key figure is large (figure role, tabular numerals, the face's own figures, not a mono face) and carries its context on one small line: the change against a named period with an arrow and the sign ("+18.6% vs yesterday"), a date ("Scheduled 24 Jul"), or a count in parentheses ("3.1 M (1,200 orders)"). A figure with nothing to compare against says what it counts and as of when.
+- KPI row: four or five figures, as cards or as one panel divided by hairlines. Equal cards are right here when each carries a different figure and its own context; what is banned is identical tiles that say nothing beyond a number.
+- Panel anatomy: an icon, the panel title, and on the right one control that changes the panel (a period menu, a filter) or a "View all" link. Nothing else in the header.
+- Icons: one line icon set at one stroke width, on every navigation item and every panel title, in `color.text.muted`; never emoji, never filled and outlined icons mixed.
+- Status: an order, ticket or account state is a pill in its own category (`color.category.N.soft` with `color.category.N.text`), the same category for the same state everywhere on the product. Success, warning and danger keep `color.status.*` for outcomes (paid, low stock, failed); the categories carry the states that are neither good nor bad (shipped, preparing, scheduled).
+- Grouped counts: a breakdown by state can be one tile per state on its category soft fill, with the count large in the category's text color.
+- Tables: a tinted header row (`color.surface.header`), the identifier first in the label weight, figures right aligned in tabular numerals, status pills, the row action last and named for its row.
+- Catalog photos: a product, a listing or a property shows its own photo as a thumbnail; these are content, not decoration. Until the client's photos arrive, each thumbnail takes a stand-in sourced to the system's photo direction and listed for replacement; generic stock scenes (people at laptops, handshakes) stay off dashboard surfaces.
+- People: reviews and messages show the person's name; the signed-in user sits at the foot of the navigation with a name, a role and the notifications control.
+- Charts: series take the categories in order (`color.category.1.strong` first, which sits on the brand hue), bars start at zero, and every chart has its empty, loading and error states.
+
+### Pattern: Cockpit density (VISUAL_DENSITY 8 to 10)
+**Use when**: Information density is the value: many live figures read at a glance (density high, glance reading).
+**Anti-pattern**: Generous card padding (24 to 40px), white surfaces between every metric, soft drop shadows.
+**How**:
+- Tiny paddings (4 to 12px)
+- No card boxes; 1px lines (`border-t`, `divide-y`) separate data
+- `font-mono` for all numbers, in a cockpit only
+- Section grouping via spacing and typography, not container boxes
+- Headers tight, columns dense, row heights compressed
+- Tabular figures aligned to invisible decimal column
+
+### Pattern: Replace cards with hairlines
+**Use when**: Dashboard rows, settings panels, list views.
+**Anti-pattern**: Every row wrapped in a `<Card>` with its own border, padding, and shadow: visual noise per row.
+**How**:
+- `divide-y divide-gray-200` separates rows with hairlines
+- `border-t` to start a new section
+- Internal padding 8 to 16px per row
+- The structure carries from alignment and spacing, not container chrome
+
+### Pattern: Tabular numeral discipline
+**Use when**: Tables, stat callouts, prices, timers, dashboard metrics.
+**Anti-pattern**: Proportional figures that drift visually when values change (count-up jitter, misaligned decimals).
+**How**:
+```css
+font-feature-settings: "tnum";
+font-variant-numeric: tabular-nums;
+```
+or use `font-mono` (a true monospace family). Decimals align vertically. Count-ups don't shift layout.
+
+### Pattern: Inline sparkline
+**Use when**: At-a-glance trends inside a table cell, list row, or compact dashboard tile.
+**Anti-pattern**: Embedding a full chart for every metric, blowing up vertical real estate.
+**How**:
+- 60 to 120px wide
+- 16 to 24px tall
+- Single line color matching semantic state (green up / red down)
+- No axes, no labels, no tooltip
+- Click expands to full chart in detail view
+
+### Pattern: Compact stat tile
+**Use when**: KPI cards in dashboard hero, summary metrics, top-of-page row.
+**Anti-pattern**: Stat tile padding at 40px on each side, taking 4 rows of vertical space for one number.
+**How**:
+- Eyebrow label: 10 to 12px, tracked uppercase or sentence case
+- Stat number: 32 to 64px, weight 600 to 700, tabular figures (`font-mono` only in a cockpit)
+- Unit label: 50 to 60% of stat size, regular weight, baseline-aligned
+- Delta indicator: an arrow, the signed percentage and the period it compares against ("vs yesterday"), in status green or red
+- Optional sparkline below: 60 to 120px wide
+- Internal padding: 16 to 24px (or less in cockpit mode)
+
+### Pattern: 5 dashboard archetypes (bento cards)
+**Use when**: Composing a feature-rich dashboard with varied card content.
+**Anti-pattern**: 8 identical small cards with the same shape and metric type.
+**How**: Mix the five live-product archetypes from `references/styles/arsenal.md` (intelligent list, command input, live status, wide data stream, contextual focus) across the bento grid. A common arrangement: Row 1 with 3 columns, Row 2 with 2 columns split 70/30.
+
+### Pattern: Live status indicator
+**Use when**: Real-time element (online presence, live data, active operation).
+**Anti-pattern**: Pulsing dot on every status icon on every row: the screensaver effect.
+**How**:
+- Maximum 2 perpetual pulses per viewport
+- Only on truly live elements
+- Pulse loop: `scale: [1, 1.1, 1]` over 2 to 3 seconds, `opacity: [1, 0.6, 1]`
+- Isolated in memoized leaf client component so page does not re-render with each frame
+- Disabled under `prefers-reduced-motion: reduce`
+- Pair with `aria-live="polite"` for screen reader updates
+
+### Pattern: Chart with full state coverage
+**Use when**: Every chart in the dashboard.
+**Anti-pattern**: Chart renders blank or with "undefined" labels when data is loading or empty.
+**How**:
+- **Empty**: "No data yet" + guidance ("Connect your first source to see metrics")
+- **Loading**: skeleton or shimmer placeholder matching chart shape
+- **Error**: what failed, and a retry action
+- **Default**: chart renders with proper axes, legends, and tooltips
+
+### Pattern: Chart accessibility
+**Use when**: Every chart.
+**Anti-pattern**: Color-only signals; tooltips only on hover; no data table alternative for screen readers.
+**How**:
+- Color supplemented by patterns, textures, or shapes
+- Color contrast ≥3:1 for data lines/bars; ≥4.5:1 for text labels
+- Tooltip works on hover (mouse), tap (touch), AND keyboard focus
+- `aria-label` on chart summarizing key insight
+- Parallel data table provided as accessible alternative
+- The full chart contract (legend, tooltip, states, reflow) lives in `references/foundations/components.md` (Chart)
+
+### Pattern: Sortable table with sticky header
+**Use when**: Long tabular data with multiple columns.
+**Anti-pattern**: Forcing users to scroll back to remember column meaning, or making them tap small chevrons to sort.
+**How**:
+- Sticky header pinned to top of scroll container
+- `aria-sort="ascending"` / `aria-sort="descending"` on sorted column
+- Click anywhere on header sorts; arrow indicator shows direction
+- Active sort visually highlighted
+- Keyboard navigable (Tab to header, Enter or Space to sort)
+- Empty state across full width when no rows
+- Pagination, page size, or infinite scroll for >50 rows
+
+### Pattern: Filter bar
+**Use when**: List or table with multiple filter dimensions.
+**Anti-pattern**: Modal-only filtering that forces users out of the data view.
+**How**:
+- Sticky filter bar at top of list
+- Active filters shown as removable pill chips
+- "Clear all" link when ≥2 filters active
+- Filter dropdowns close on outside click
+- Filter state persists in URL (deep-linkable)
+- Multi-select filters use checkbox lists
+
+### Pattern: Drill-down with breadcrumb
+**Use when**: Hierarchical data (region, country, city, store).
+**Anti-pattern**: Silent navigation that drops user into a sub-view with no orientation.
+**How**:
+- Breadcrumb at top: `Region > Country > City`
+- Each crumb is a link to that level
+- Back button preserves scroll position and filter state
+- "Up one level" gesture (Esc on web, swipe-right on mobile)
+- Deep links to specific drill states
+
+### Pattern: Real-time data update
+**Use when**: Live metrics that update without user action.
+**Anti-pattern**: Page reloads or auto-refreshes that disrupt the user's scroll position.
+**How**:
+- Numbers animate to new values with subtle fade or count-up (300 to 600ms)
+- Lists insert new rows at top with `staggerChildren` (50 to 80ms) and slide-in
+- Status pills change color with 200ms transition
+- `aria-live="polite"` region announces critical updates to screen readers
+- User scroll position preserved across updates
+
+### Pattern: Brutalist data viz
+**Use when**: High contrast, low warmth and geometric type: the loud, technical end of the axes.
+**Anti-pattern**: Smooth animated splines, soft drop shadows, brand-color charts.
+**How**:
+- Single-color line charts in foreground ink against substrate
+- No fills, no smoothed splines
+- Axes as visible solid lines with tick marks
+- Gridlines as 1px hairlines at minimum opacity
+- Annotations use leader lines and monospace callouts (not floating tooltips)
+- Numeric counters tick through digits with `steps(N)` easing (slot-machine effect)
+
+### Pattern: Monochrome-leaning palette
+**Use when**: A dashboard whose color budget is small (energy low to mid).
+**Anti-pattern**: 5+ accent colors decorating chrome and data simultaneously.
+**How**:
+- Background: off-white or near-black (depending on mode)
+- Text: charcoal or off-white
+- Borders / dividers: hairlines (`#EAEAEA` light; white at 8 to 12% alpha dark)
+- One brand accent: CTAs, focus rings and the current navigation item only
+- Status and category colors: inside product data, pills and charts only
+- Chart colors: diverging or sequential, never decorative
+
+### Pattern pairing
+
+| Brief | Patterns |
+|---|---|
+| Dashboard (cockpit density) | Tiered surface elevation + intelligent list + wide data stream + compact stat tiles |
+
+### Combination to avoid
+
+| Don't combine | Why |
+|---|---|
+| Title Case + decorative serif + center alignment on a software dashboard | Three "premium feel" reflexes on a surface that doesn't want them |
+
+## Tokens / values
+
+### Density modes
+- **Art-gallery (1 to 3)**: huge section gaps, sparse text, expensive and quiet
+- **Daily-app (4 to 7)**: normal spacing, comfortable scanning
+- **Cockpit (8 to 10)**: tiny paddings, no card boxes, 1px lines separating data, mandatory `font-mono` on numbers
+
+### Cockpit-specific tokens
+- Internal padding: 4 to 12px
+- Row height: 28 to 36px
+- Header height: 24 to 32px
+- Numbers: `font-mono` + tabular numerals
+- Section separators: `border-t`, `divide-y`, 1px hairlines
+- No card boxes (replace with logic-grouping via hairlines)
+- Mobile collapse: cockpit becomes scrollable card stacks below 768px
+
+### Typography (dashboard-specific)
+- Display headlines: neo-grotesque sans only (Geist, Satoshi, Inter, Manrope)
+- Body: 14 to 16px on dashboard surfaces (smaller than marketing)
+- Stat numerals: 32 to 64px (compact tile), 48 to 144px (hero metric), tabular figures in the system's face
+- Stat numeral unit label: 40 to 60% of stat size
+- Eyebrow labels: 10 to 12px, weight 500, tracking +0.06em
+- Inline code / values: 13 to 14px in `font-mono`
+- Banned: serifs anywhere in dashboard chrome
+
+### Sparkline specs
+- Width: 60 to 120px
+- Height: 16 to 24px
+- Stroke: 1.5 to 2px
+- Color: matches semantic state (green up, red down, neutral mid)
+- No axes, no labels, no gridlines, no tooltips inline
+- Click expands to full chart
+
+### Compact stat tile specs
+- Padding: 16 to 24px (daily-app); 8 to 12px (cockpit)
+- The remaining tile specs are in the compact stat tile pattern above.
+
+### Bento 2.0 (premium dashboard)
+- Use when: a daily-app dashboard (density 4 to 6) that leads with a few large panels
+- Background: the page on `color.surface.page` or `color.surface.tint`
+- Cards: `color.surface.card` with a `color.line.subtle` hairline, at `radius.card` or the next radius step up for the largest panels
+- Shadows: `elevation.card`, never a second ambient layer
+- Typography: the system's display and text faces; the panel anatomy of the daily-app pattern (icon, title, one control in the header)
+- Padding inside cards: 24 to 32px (`space.card.padding` and one step up)
+- Animation engine: spring physics (`duration: 0.35, bounce: 0.2`, the role's duration and the brand's overshoot) on layout changes; a card moves when its data changes, never on a loop
+
+### Chart type selection
+- **Trend over time**: line chart, area chart, sparkline
+- **Comparison**: vertical bar (5-15 categories), horizontal bar (long labels or many items)
+- **Proportion**: pie or donut (≤5 categories; never more), treemap (hierarchical)
+- **Distribution**: histogram, box plot, violin plot
+- **Correlation**: scatter plot, bubble chart, heatmap
+- **Flow / process**: funnel, Sankey, waterfall
+- **Geographic**: choropleth map, pin/marker map
+- **Network**: force-directed graph, chord diagram
+- **Time-specific**: Gantt chart, calendar heatmap, radar chart
+
+### Chart color palettes (accessible)
+- **Diverging**: blue, gray, red (for negative-positive scales); avoid red-green
+- **Sequential**: single-hue gradient (light to dark) for ordered data
+- **Qualitative**: the system's categories in order, `color.category.1` (on the brand hue) first; six at most, then group the rest as Other
+- **Colorblind-safe**: perceptually uniform (Viridis, Cividis, Magma)
+
+### Chart specs
+- Axis labels: locale-aware number formatting, readable scale
+- Auto-skip ticks on small screens
+- Reduced-motion: skip entrance animations; data readable immediately
+- 1000+ data points: aggregate or sample; drill-down for detail
+- Direct labeling for small datasets (label values directly on chart)
+- Tooltip, legend, `aria-label`, data table alternative and state coverage follow the chart patterns above.
+
+### Status and category colors (dashboard data)
+- Outcomes take the status colors: success, up, healthy (`color.status.success.*`); error, down, failed (`color.status.danger.*`); warning, low stock, pending payment (`color.status.warning.*`); information (`color.status.info.*`)
+- States that are neither good nor bad take a category: shipped, preparing, scheduled, draft (`color.category.N.soft` behind `color.category.N.text`); the same state keeps the same category on every page
+- Chart series and breakdown segments take the categories in order (`color.category.N.strong`)
+- Disabled / muted: gray
+- None of them appear as chrome decoration, and none of them stand without the state's word
+
+### Table specs (dashboard)
+- Row height: 32 to 48px (default); 28 to 36px (cockpit); 48 to 56px (comfortable)
+- Header height: tighter than rows by 4 to 8px
+- Empty state: full-width row with composed message
+- Mobile: collapse to cards or enable horizontal scroll
+- Alignment, sticky headers, selection and the rest of the table contract live in `references/foundations/components.md` (Table)
+
+### Mobile collapse rules (dashboards)
+- Below 768px: cockpit density caps at "daily-app"
+- Below 768px: 1px-divided rows become card stacks
+- Below 768px: fewer metrics per viewport with deeper drill-down
+- Below 768px: tables collapse to cards or enable horizontal scroll
+- Below 768px: motion intensity reduces by 2 levels
+
+### Banned dashboard patterns
+- Identical KPI tiles that show a bare number with no comparison, date or count (equal cards are fine when each carries its own figure and context)
+- A widget without empty, loading and error states
+- Serif typography on dashboards
+- Mixed proportional and tabular figures on the same page
+- Generic 3D charts (distort perception)
+- Pie charts with >5 wedges
+- Red-green as the only color signals in charts
+- Color-only data signals (no pattern, no text)
+- Cards wrapping every metric in dense data UI (use hairlines instead)
+- Semantic state colors used as brand decoration
+- Multiple accent colors in dashboard chrome
+- Decorative gradients on dashboard surfaces
+- Glowing brain / neural-net / spark icons for AI features
+- Auto-refreshing pages that lose user scroll position
+- Modal-only filtering (use inline filter bar)
+- Pulsing live indicators on every row
+- Floating UI windows with drop shadows and tilted-perspective screenshots
+- Stock photography in dashboard surfaces (a product's own photo as its thumbnail is content, not stock)
+- Emoji as icons, or filled and outlined icons mixed
+- Status pills that differ by color alone
+
+### Restraint signals (premium dashboards)
+- Off-white or near-black background; never pure
+- Charcoal or off-white text; never pure black or pure white
+- One accent color, on CTA, focus and the current navigation item only
+- Hairline borders or near-absent shadows
+- Sentence-case headlines
+- Tabular numerals everywhere data appears
+- Mono-color logo and chrome
+- Mono-color customer logos in any visible band
+
+## Checklist (severity-tagged)
+
+- [ ] Density mode (art-gallery / daily-app / cockpit) chosen and consistent (severity: High)
+- [ ] Cockpit-density mode caps at "daily-app" below 768px (severity: High)
+- [ ] Tabular numerals (`tabular-nums`) on numeric columns and stat callouts (severity: Critical)
+- [ ] Every key figure carries its comparison, date or count (severity: High)
+- [ ] Every panel header has its icon, its title and at most one control (severity: Medium)
+- [ ] One line icon set on navigation and panel titles (severity: Medium)
+- [ ] No mixed proportional and tabular figures on the same page (severity: High)
+- [ ] No serifs in dashboard typography (severity: High)
+- [ ] Cards replaced with `border-t` / `divide-y` in cockpit-density UIs (severity: Medium)
+- [ ] Status colors for outcomes and category colors for states and series, never chrome, never without the word (severity: Critical)
+- [ ] One accent color in chrome, applied only on CTAs, focus rings and the current navigation item (severity: High)
+- [ ] Chrome stays monochrome; chromatic load carried by data (severity: Medium)
+- [ ] Numbers right-aligned in tables (severity: Medium)
+- [ ] Sortable columns include `aria-sort` attribute (severity: High)
+- [ ] Maximum 2 perpetual pulses per viewport (severity: Medium)
+- [ ] Live indicators only on truly live elements (severity: Medium)
+- [ ] Live indicators isolated in memoized leaf client components (severity: High)
+- [ ] All charts have empty / loading / error states designed (severity: High)
+- [ ] Chart legends visible and clickable to toggle series (severity: High)
+- [ ] Chart color contrast ≥3:1 for data lines, ≥4.5:1 for text labels (severity: Critical)
+- [ ] Chart palettes survive color-blindness (no red-green only) (severity: Critical)
+- [ ] Chart `aria-label` summary describes key insight (severity: Critical)
+- [ ] Data table alternative provided for every chart (severity: Critical)
+- [ ] Y-axis on bar charts starts at zero (severity: High)
+- [ ] No pie charts with >5 wedges (severity: High)
+- [ ] No 3D charts (severity: High)
+- [ ] Chart reflows or simplifies on mobile (severity: High)
+- [ ] Filter bar sticky at top of long lists (severity: Medium)
+- [ ] Active filters shown as removable pill chips (severity: Medium)
+- [ ] Filter state persists in URL (severity: Cosmetic)
+- [ ] Drill-down maintains breadcrumb and back-path (severity: Medium)
+- [ ] Real-time updates preserve user scroll position (severity: High)
+- [ ] Sparklines used for at-a-glance trends (no full chart for every metric) (severity: Cosmetic)
+- [ ] Mobile dashboards prioritize fewer metrics per viewport with drill-down (severity: Medium)
+- [ ] Number animations use tabular figures to prevent layout shift (severity: High)
+- [ ] No decorative gradients on dashboard surfaces (severity: Medium)
+- [ ] No glowing AI / neural icons (use restrained generic symbols) (severity: Medium)
+- [ ] Charts honor `prefers-reduced-motion: reduce` on entrance animations (severity: Critical)
+- [ ] 1000+ data points aggregated or sampled with drill-down (severity: High)
+- [ ] Sticky chatbot bubbles do not overlap primary CTAs (severity: Medium)
+- [ ] Cockpit-density rows collapse to card stacks below 768px (severity: High)
+
+## Worked example
+
+**Brief.** The dispatch screen of a courier company, read through a shift on a 1440px monitor and on a phone at handover. VISUAL_DENSITY 8. The owner asks for nine figure tiles in the top row.
+
+**What the playbook decides.** Cockpit density, groups divided by hairlines instead of cards, tabular figures in every numeric column. With 2 of the 12 columns as the narrowest a figure tile can be and still hold its label and its number (a house default, not a standard), nine tiles need `9 * 2 = 18` columns and the row would wrap. Six fit: `6 * 2 = 12`. Two of the six pulse (late parcels and couriers on the road), the most this playbook allows in a viewport, and the other `6 - 2 = 4` stay still. Below 768px the row becomes a stack of cards, the late-parcels figure first.
+
+**Verdict.** Six tiles in the top row, chosen by the decisions the dispatcher makes from them during a shift; the other three move to a second view one tap away.
+
+**Refused.** No tile turns red without a threshold the owner set: late means past the delivery window the company promises, not a number the build picks. Before the first delivery of the day a tile shows a dash and the time the day starts, never a zero it did not measure.
+
+## Related
+
+- `references/foundations/components.md` for canonical contracts on table, chart, modal, toast.
+- `references/foundations/color.md` for semantic state colors and dark-mode dashboard palettes.
+- `references/foundations/typography.md` for tabular numeral configuration and mono pairings.
+- `references/foundations/spacing.md` for cockpit-density padding and section grouping rules.
+- `references/foundations/motion.md` for live indicator pulse specs and chart entry animations.
+- `references/foundations/accessibility.md` for chart tooltip accessibility and data table alternatives.
+- `references/styles/arsenal.md` for the five live-product archetypes.
+- `references/foundations/layout.md` for bento layout rules.
+- `references/foundations/interaction.md` for sortable column behavior and filter bar interactions.

@@ -1,0 +1,61 @@
+# How it works: the steps from first contact to the result. Every value is a semantic role.
+name: how-it-works
+status: experimental
+category: section
+description: Three to five numbered steps from first contact to the result, each with what the reader does and what they get.
+job: Prove the path from first step to result is short and clear.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: item, rtlBehavior: logical}
+  - {name: item-title, rtlBehavior: logical}
+  - {name: number, rtlBehavior: logical}
+  - {name: media, rtlBehavior: logical}
+slots:
+  - {name: item, takes: [text], required: true}
+  - {name: media, takes: [photograph], required: false}
+variants:
+  - {name: density, values: [standard, compact], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: max-width, role: layout.container.max}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.section-title}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: heading, property: stack-gap, role: space.text.gap}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: max-width, role: layout.measure.landing}
+  - {part: item, property: gap, role: space.group.gap}
+  - {part: item-title, property: font, role: type.text.heading-3}
+  - {part: item-title, property: text, role: color.text.default}
+  - {part: number, property: font, role: type.text.figure}
+  - {part: number, property: text, role: color.text.accent}
+  - {part: media, property: radius, role: radius.media}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.accent, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.tint]
+proof: none
+phone: [fold-side-columns, pair-small-items]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - Each step starts with what the reader does, as a verb
+usage:
+  do:
+    - Number the steps in an ordered list
+    - On a phone, fold the photograph into the stack and pair short steps two to a row
+  dont:
+    - Do not use more than five steps
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

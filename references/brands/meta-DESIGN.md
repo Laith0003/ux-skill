@@ -3,7 +3,7 @@
 > Meta's design system spans hardware commerce (Quest VR, Ray-Ban Meta AI glasses) and brand surfaces with a confident product-merchandising voice.
 
 **Category:** Consumer / Lifestyle / Retail
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/meta.json`](../../data/brands/meta.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

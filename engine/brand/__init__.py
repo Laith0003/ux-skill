@@ -6,17 +6,22 @@ Public surface:
     parse_brand_md(text) -> BrandProfile   (the INPUT side: ingest a standard brand.md)
     hue_family(hex) -> str
     image_search_terms(profile, temperature=None) -> list[str]
+    photo_exclusions(profile) -> list[str]  (the kinds of photo that do not qualify)
+    photography_forbidden(profile) -> bool   (True only for a rule of no photography at all)
+    photography_rule(profile) -> str        (that rule, in the brand's words, or "")
     score_brand_fidelity(html_text, profile) -> dict
-    score_imagery(html_text) -> dict
+    score_imagery(html_text, logo_url="", brand_name="", photography_forbidden=False,
+                  photography_rule="") -> dict
 """
 from engine.brand.extract import (
     BrandProfile, build_profile, render_md, parse_brand_md, hue_family,
-    anchor_recommendation, image_search_terms,
+    anchor_recommendation, image_search_terms, photo_exclusions, photography_forbidden,
+    photography_rule,
 )
 from engine.brand.fidelity import score_brand_fidelity, score_imagery
 
 __all__ = [
     "BrandProfile", "build_profile", "render_md", "parse_brand_md", "hue_family",
     "anchor_recommendation", "image_search_terms", "score_brand_fidelity",
-    "score_imagery",
+    "photo_exclusions", "photography_forbidden", "photography_rule", "score_imagery",
 ]

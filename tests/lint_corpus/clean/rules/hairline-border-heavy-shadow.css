@@ -1,0 +1,19 @@
+/* One depth cue per element. */
+.card {
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 2px rgb(28 25 23 / 0.06);
+}
+
+.sheet {
+  border: 0;
+  box-shadow: 0 16px 40px rgb(28 25 23 / 0.18);
+}
+
+.popover {
+  border: 1px solid transparent;
+  box-shadow: 0 12px 32px rgb(28 25 23 / 0.16);
+}
+
+.table-row {
+  border-block-end: 1px solid var(--line);
+}

@@ -1,0 +1,6 @@
+.js .diagram.is-in .b3 { transition-delay: var(--motion-duration-300); }
+.js .diagram.is-in .b4 { transition-delay: calc(var(--motion-duration-150) + var(--motion-duration-300)); }
+.reveal li:nth-child(3) { transition-delay: 300ms; animation-delay: 300ms; }
+.reveal { --stagger-step: 300ms; transition: opacity 180ms ease var(--stagger-step); }
+.fade { transition: opacity 180ms ease-out 300ms; }
+.rise { animation: rise 220ms ease-out 300ms both; }

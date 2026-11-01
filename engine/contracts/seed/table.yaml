@@ -1,0 +1,122 @@
+# Table: rows of records with the same fields. Every value is a semantic
+# role.
+name: table
+status: experimental
+category: container
+description: Shows records with the same fields in rows and columns, with a header, optional stripes and a highlighted column, and a phone layout that keeps every value readable.
+parts:
+  - {name: table, rtlBehavior: logical}
+  - {name: region, rtlBehavior: logical}
+  - {name: header, rtlBehavior: logical}
+  - {name: row, rtlBehavior: logical}
+  - {name: select, rtlBehavior: logical}
+  - {name: cell, rtlBehavior: logical}
+  - {name: sticky, rtlBehavior: logical}
+  - {name: label, rtlBehavior: logical}
+  - {name: number, rtlBehavior: fixed}
+  - {name: column, rtlBehavior: logical}
+  - {name: caption, rtlBehavior: logical}
+variants:
+  - {name: rows, values: [plain, striped], default: plain}
+  - {name: layout, values: [grid, scroll, stacked], default: grid}
+states: [default, hover, focus, selected]
+tokens:
+  - {part: table, property: radius, role: radius.card}
+  # the header is a band off the card: the stripe's step in light, the raised
+  # surface's in dark, never below the page
+  - {part: header, property: fill, role: color.surface.header}
+  - {part: header, property: border-width, role: border.outline}
+  - {part: header, property: border-color, role: color.line.subtle}
+  - {part: header, property: text, role: color.text.default}
+  - {part: header, property: font, role: type.text.label}
+  # plain rows take scan lines; a striped row's fill can match the card, so
+  # its edge is a container edge
+  - {part: row, property: border-width, role: border.separator}
+  - {part: row, property: border-color, role: color.line.subtle}
+  - {part: row, property: fill, role: color.surface.stripe, when: {rows: striped}}
+  - {part: row, property: border-width, role: border.outline, when: {rows: striped}}
+  - {part: row, property: fill, role: color.surface.sunken, state: hover}
+  - {part: row, property: border-width, role: border.outline, state: hover}
+  - {part: row, property: border-color, role: color.line.input, state: hover}
+  - {part: row, property: fill, role: color.surface.selected, state: selected}
+  - {part: row, property: border-width, role: border.active, state: selected}
+  - {part: row, property: border-color, role: color.line.selected, state: selected}
+  - {part: row, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: row, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: row, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  - {part: cell, property: text, role: color.text.default}
+  - {part: cell, property: font, role: type.text.body-small}
+  - {part: cell, property: padding-inline, role: space.table.cell-padding-inline}
+  - {part: cell, property: padding-block, role: space.table.cell-padding-block}
+  - {part: number, property: text, role: color.text.default}
+  - {part: number, property: font, role: type.text.body-small}
+  - {part: column, property: fill, role: color.surface.tint}
+  - {part: column, property: border-width, role: border.outline}
+  - {part: column, property: border-color, role: color.line.accent}
+  - {part: caption, property: text, role: color.text.muted}
+  - {part: caption, property: font, role: type.text.body-small}
+  # layout scroll: the region scrolls sideways and takes focus; the first
+  # column sticks at the inline start and takes its row's fill
+  - {part: region, property: focus-ring, role: color.focus.ring, when: {layout: scroll}, state: focus}
+  - {part: region, property: focus-ring-width, role: border.focus-ring.width, when: {layout: scroll}, state: focus}
+  - {part: region, property: focus-ring-offset, role: border.focus-ring.offset, when: {layout: scroll}, state: focus}
+  - {part: sticky, property: fill, role: color.surface.card, when: {layout: scroll}}
+  - {part: sticky, property: fill, role: color.surface.stripe, when: {layout: scroll, rows: striped}}
+  - {part: sticky, property: fill, role: color.surface.sunken, when: {layout: scroll}, state: hover}
+  - {part: sticky, property: fill, role: color.surface.selected, when: {layout: scroll}, state: selected}
+  - {part: sticky, property: layer, role: elevation.order.sticky, when: {layout: scroll}}
+  - {part: sticky, property: divider-width, role: border.separator, when: {layout: scroll}}
+  - {part: sticky, property: divider-color, role: color.line.input, when: {layout: scroll}}
+  # layout stacked: each row is a card of label and value pairs
+  - {part: label, property: text, role: color.text.muted, when: {layout: stacked}}
+  - {part: label, property: font, role: type.text.label, when: {layout: stacked}}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: row, property: transition-duration, role: motion.state.duration}
+  - {part: row, property: transition-curve, role: motion.state.curve}
+  - {part: sticky, property: transition-duration, role: motion.state.duration}
+  - {part: sticky, property: transition-curve, role: motion.state.curve}
+contrast:
+  - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.header, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.stripe, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.selected, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.tint, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.stripe, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.selected, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.accent, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: color.surface.stripe, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: color.surface.stripe, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.card]
+a11y:
+  target: none
+  label: localized
+  cue: a selected row has a heavier edge and a checked box in its select part, and the highlighted column has its own edge and header, never the tint alone
+copy:
+  default:
+    - Column headers are short nouns with the unit, such as Amount (JOD)
+    - The caption says what the table holds and where the numbers come from
+usage:
+  do:
+    - When rows load after the table shows, put the loading line in an aria-live="polite" region next to the table and a failure to load in a role="alert" region with a way to try again
+    - Put a table in a card, the one surface it names; align numbers to the end of their column in tabular figures and text to the start
+    - Below the tablet breakpoint, a table of four columns or fewer keeps layout grid; with more, use layout scroll when people compare values down a column, and layout stacked when each row is read on its own
+    - In layout scroll, the region scrolls sideways, is named by the caption through aria-labelledby and takes tabindex 0, so a keyboard can scroll it and shows its ring; the first column sticks at the inline start, the right edge under right to left, and takes its row's fill in every state, so cells never show through; the first header cell sticks with it and keeps the header's fill and edge; build the table with separate borders and no spacing between cells, because a browser stops drawing a sticky cell's divider once the region scrolls when borders collapse
+    - In layout stacked, each row is a card of label and value pairs, and each label names its column
+    - Use stripes for wide tables with many columns; plain rows with separators otherwise
+    - Draw a row's edge at its block end and the highlighted column's edges at its inline sides; border-width here never boxes a cell
+    - A row a person can choose starts with a checkbox in the select part, which follows the checkbox contract, and the row takes focus and its ring
+    - Only the part that holds focus draws its ring; the focus bindings on the other parts apply when each holds focus in turn
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, selected wins over hover
+  dont:
+    - Do not use a table for layout
+    - Do not highlight more than one column
+    - Do not place a table straight on the raised surface; in dark high contrast the stripe is the raised color
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

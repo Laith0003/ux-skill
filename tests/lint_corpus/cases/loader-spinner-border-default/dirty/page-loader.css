@@ -1,0 +1,7 @@
+/* A page-level loader with the default recipe: no contract asks for it. */
+.loader {
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #334155;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}

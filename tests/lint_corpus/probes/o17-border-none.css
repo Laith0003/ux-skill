@@ -1,0 +1,2 @@
+.search input:focus { outline: none; border: none; }
+.search2 input:focus-visible { outline: 0; border-width: 0; }

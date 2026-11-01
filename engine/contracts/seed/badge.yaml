@@ -1,0 +1,66 @@
+# Badge: a short, read-only label for a status or a count. Every value is
+# a semantic role.
+name: badge
+status: experimental
+category: feedback
+description: A short read-only label that marks a status, a category or a count next to what it describes.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: label, rtlBehavior: logical}
+  - {name: icon, rtlBehavior: logical}
+variants:
+  - {name: tone, values: [neutral, brand, info, success, warning, danger], default: neutral}
+states: [default]
+tokens:
+  - {part: container, property: radius, role: radius.chip}
+  - {part: container, property: padding-inline, role: space.control.gap}
+  - {part: container, property: border-width, role: border.outline}
+  - {part: container, property: border-color, role: color.line.input}
+  - {part: label, property: font, role: type.text.label}
+  - {part: container, property: fill, role: color.surface.sunken, when: {tone: neutral}}
+  - {part: label, property: text, role: color.text.default, when: {tone: neutral}}
+  - {part: container, property: fill, role: color.surface.tint, when: {tone: brand}}
+  - {part: label, property: text, role: color.text.accent, when: {tone: brand}}
+  - {part: container, property: fill, role: color.status.info.soft, when: {tone: info}}
+  - {part: label, property: text, role: color.status.info.text, when: {tone: info}}
+  - {part: icon, property: icon, role: color.status.info.strong, when: {tone: info}}
+  - {part: container, property: fill, role: color.status.success.soft, when: {tone: success}}
+  - {part: label, property: text, role: color.status.success.text, when: {tone: success}}
+  - {part: icon, property: icon, role: color.status.success.strong, when: {tone: success}}
+  - {part: container, property: fill, role: color.status.warning.soft, when: {tone: warning}}
+  - {part: label, property: text, role: color.status.warning.text, when: {tone: warning}}
+  - {part: icon, property: icon, role: color.status.warning.strong, when: {tone: warning}}
+  - {part: container, property: fill, role: color.status.danger.soft, when: {tone: danger}}
+  - {part: label, property: text, role: color.status.danger.text, when: {tone: danger}}
+  - {part: icon, property: icon, role: color.status.danger.strong, when: {tone: danger}}
+contrast:
+  - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.accent, bg: color.surface.tint, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.info.text, bg: color.status.info.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.success.text, bg: color.status.success.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.warning.text, bg: color.status.warning.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.danger.text, bg: color.status.danger.soft, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.status.info.strong, bg: color.status.info.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.success.strong, bg: color.status.success.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.warning.strong, bg: color.status.warning.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.status.danger.strong, bg: color.status.danger.soft, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page, color.surface.card, color.surface.raised]
+a11y:
+  target: none
+  label: localized
+  cue: each status badge has its own icon and says the status in words
+copy:
+  default:
+    - One or two words that name the status or the category, or a number
+    - Say the same status in the same words everywhere, such as Paid, never Settled on one screen and Paid on another
+usage:
+  do:
+    - Put a badge beside the thing it describes, after its name in reading order
+    - Keep a count badge to four characters, such as 99+
+  dont:
+    - Do not make a badge clickable; use a chip or a link
+    - Do not tell statuses apart by color alone
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

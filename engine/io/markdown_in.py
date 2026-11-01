@@ -1,0 +1,1434 @@
+"""Import a system that lives only in markdown rule files.
+
+Read as tokens:
+- a table with a name column (headed Token, Name, Variable or Role) and a
+  value column (Value, Hex, Color, Size, Px, Rem, Ms or Duration). A further
+  column headed with the non-base value of a mode axis (Dark, High
+  contrast, Compact, Reduced motion, Rtl) is that mode, one column per
+  axis;
+- a table with a name column and mode columns only: the base column (Light,
+  Default, Standard, or the first) and one column per axis. Two columns
+  that name no known axis make an axis named after both headers, the first
+  the base (Brand and Partner give brand-partner). Each such table is
+  noted;
+- a column that names each token's alias (Alias, Alias of, References,
+  Maps to, or Token beside a name column) reads as the value where it
+  holds a reference, {a.b} or a backticked name; one named for a mode
+  (Dark alias) holds the reference in that mode, beside the mode's value
+  column or without one. An alias cell that names several tokens is
+  noted with the fix and not read;
+- a palette keyed by step (a Step column of 50, 100 ... 900 and a column per
+  family, or the steps across the top): each cell is a primitive named
+  family.step;
+- a list item whose name is in backticks: "- `space.2`: 8px" or "= 8px";
+- a type table: a name column and a Font, Size, Weight, Line height and
+  Letter spacing column (Family, Leading and Tracking too) reads each row
+  as one typography token. A line height written as a length (24px) is
+  read against the row's font size in the same unit (16px gives 1.5), with
+  a note; beside a size in another unit or a reference it is not read.
+
+A column that names a property of each row's token (Line height, Weight,
+Letter spacing, Curve, Easing) is never a mode. Beside the token's value
+in a table without all five typography fields, it is listed under Not
+read with the column to add or the token to write. The engine holds no
+transition token, so a Curve beside a Duration is listed with the fix to
+write each curve as its own token.
+
+A unit in a column header (Value (px), Size [rem]) or in the heading above
+(## Spacing (px), ## Motion, in ms) is the unit of a bare number there,
+and of a shadow's bare offsets. A bare number whose name says it is a size
+(space, radius, container, elevation, offset) with no unit anywhere is
+read as px, with a note; a bare duration, or a bare letter spacing (a
+name with letter or tracking in it), with no unit anywhere is not read.
+Do and Avoid tables (Do and Don't, Use and Avoid, Good and Bad), and an
+Avoid column beside prose (Definition and Avoid), are guidance: they make
+no axis and join the file's rule note. A Do or Avoid column beside a
+value column joins the rule note too, and the values beside it are read.
+
+A DESIGN.md frontmatter (between --- lines at the top) is read too: each
+value under a token group (colors, typography, rounded, spacing,
+elevation, motion and their plural or singular forms) is a token named by
+its keys, colors.primary or typography.body.fontSize; top-level keys such
+as name and version are the document's own. A group this does not read
+(components, or any other) that holds values is listed under Not read.
+
+Nothing that holds a value is dropped silently: a line of running text, a
+list item whose name is not in backticks, a table no column of which
+names the tokens, and a code block, each holding a color, a length, a
+duration or a shadow, is listed under Not read with how to write it so it
+can be read. A file that holds values and gives no token says so at the
+top of the report.
+
+A name may be written plain, in bold or in backticks, with dots, dashes or
+slashes (a slash reads as a dot, and the report lists it as renamed); a
+value may be a literal, `{other.token}` or var(--other). Prose, tables
+without a name column, list items without a backticked name and code
+blocks are not tokens; a css code block is noted with the fix. A row
+whose name is not a token name, a value with no single reading, a column
+or a table left out and a reference to a name no file defines are listed
+under "Not read" with their file and line. A name set twice keeps its
+first value, and a second, different value is reported. An oklch() or
+oklab() color outside sRGB is mapped into it and reported, never refused.
+"""
+from __future__ import annotations
+
+import hashlib
+import re
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Sequence, Tuple
+
+from engine.foundations.errors import InputError, _brief_text
+from engine.foundations.modes import AXES
+from engine.foundations.values import GENERIC_FAMILIES, STROKE_STYLES, TYPES, TYPOGRAPHY_FIELDS
+from engine.foundations.tokens import Token, TokenSet
+from engine.io.mode_words import axis_of, is_base, mode_of, words as name_words
+from engine.io.report import Imported, ImportReport, Item, Mapped, Source
+from engine.io.values_in import (COLOR_KEYWORDS, CSS_KEYWORDS, EASING_KEYWORDS, GamutMapped,
+                                 NotRead, TIME_WORDS, UNITLESS_WORDS, bare_size_note,
+                                 bare_tracking, css_alias, leading_ratio, length_text,
+                                 read_value, shadow_with_unit, size_word, split_top)
+
+NAME_HEADERS = ("token", "name", "variable", "role", "token name", "css variable")
+VALUE_HEADERS = ("value", "hex", "color", "size", "px", "rem", "ms", "duration")
+PROSE_HEADERS = ("notes", "note", "description", "definition", "definitions", "rationale",
+                 "usage", "use", "purpose", "meaning", "example", "when", "why", "do",
+                 "don't", "dont")
+# A column that names each token's alias, read as its value where it holds
+# a reference. Token is one too, beside another name column.
+ALIAS_HEADERS = ("alias", "aliases", "reference", "references", "maps to", "points to",
+                 "refers to")
+# Do and Avoid tables: guidance, never a mode axis. A table is guidance
+# when it has a header from each list and nothing but guidance and prose.
+GUIDANCE_DO = ("do", "use", "good", "correct", "right", "yes", "always", "prefer")
+GUIDANCE_AVOID = ("don't", "dont", "do not", "avoid", "bad", "incorrect", "wrong", "no",
+                  "never", "instead", "don't use")
+# The first column of a palette keyed by step.
+STEP_HEADERS = ("step", "steps", "shade", "shades", "scale", "tone", "tones", "level", "")
+
+# Column headers that name a property of each row's token, never a mode:
+# the typography fields (a row with all five reads as one typography
+# token) and the motion properties beside a duration.
+TYPE_FIELD_HEADERS = {
+    "fontFamily": ("font", "family", "font family", "typeface", "font-family"),
+    "fontSize": ("size", "font size", "font-size"),
+    "fontWeight": ("weight", "font weight", "font-weight"),
+    "lineHeight": ("line height", "line-height", "leading", "lineheight"),
+    "letterSpacing": ("letter spacing", "letter-spacing", "tracking", "letterspacing"),
+}
+MOTION_HEADERS = ("curve", "easing", "ease", "timing", "timing function", "delay")
+# Each typography field as a column is headed and as a person names it.
+_FIELD_COLUMN = {"fontFamily": "Font", "fontSize": "Size", "fontWeight": "Weight",
+                 "lineHeight": "Line height", "letterSpacing": "Letter spacing"}
+_FIELD_WORDS = {"fontFamily": "font", "fontSize": "font size", "fontWeight": "font weight",
+                "lineHeight": "line height", "letterSpacing": "letter spacing"}
+_NAME = re.compile(r"(?:--)?[A-Za-z0-9_-]+(?:[./][A-Za-z0-9_-]+)*")
+_LIST = re.compile(r"\s*(?:[-*+]|\d+[.)])\s+`([^`]+)`\s*[:=]\s*(.+?)\s*$")
+_DELIMITER = re.compile(r"\s*\|?\s*:?-+:?\s*(?:\|\s*:?-+:?\s*)*\|?\s*$")
+_FENCE = re.compile(r"\s{0,3}(`{3,}|~{3,})\s*([^`\s]*)")
+_BRACE = re.compile(r"\{\s*([^{}\s]+)\s*\}")
+_AXIS_WORD = re.compile(r"[a-z][a-z0-9-]*")
+# The name column, when a table has several name-like headers: the one
+# that holds the token's own name wins over a role or a label.
+_NAME_PREFERENCE = ("token", "token name", "variable", "css variable", "name", "role")
+# Words a mode column's header may carry around the mode's name.
+_MODE_WORDS = ("mode", "theme", "scheme", "value", "contrast", "density", "motion",
+               "direction", "hex", "color", "default")
+# Every value of an engine axis: a header holding exactly one of them
+# names that mode, whatever else it says ("Light (default)", "Dark hex").
+_MODE_VALUES = frozenset(v for values in AXES.values() for v in values)
+# Lowercase words that are values, not prose.
+_KEYWORDS = frozenset((*CSS_KEYWORDS, *COLOR_KEYWORDS, *EASING_KEYWORDS, *STROKE_STYLES,
+                       *GENERIC_FAMILIES, "none"))
+_PLAIN = re.compile(r"[a-z]+(?:'[a-z]+)?")
+_SENTENCE_END = re.compile(r"[.!?](?:\s|$)")
+_VALUEISH = re.compile(r"[0-9#({\"']")
+_BULLET = re.compile(r"\s*(?:[-*+]|\d+[.)])\s")
+# Lines that end a block, so a line four spaces in right after one opens
+# an indented code block: an ATX heading, a setext underline and a
+# thematic break.
+_BLOCK_END = re.compile(r" {0,3}(?:#{1,6}(?:\s|$)|=+\s*$|-{2,}\s*$"
+                        r"|(?:\*\s*){3,}$|(?:-\s*){3,}$|(?:_\s*){3,}$)")
+_LOOP = "references only itself through a loop of references; give one of them a value"
+# A unit at the end of a header, Value (px) or Size [rem], and in a heading.
+_HEADER_UNIT = re.compile(r"\s*[(\[]\s*(px|rem|ms|s)\s*[)\]]\s*$", re.I)
+_HEADING = re.compile(r" {0,3}#{1,6}\s+(.*?)\s*#*\s*$")
+_HEADING_UNIT = re.compile(r"[(\[]\s*(px|rem|ms|s)\s*[)\]]|\bin (px|rem|ms)\b", re.I)
+_BARE_NUMBER = re.compile(r"[+-]?(?:\d+\.?\d*|\.\d+)")
+_STEP = re.compile(r"\d+")
+# A value in running text, a cell or a code block: a hex color (three or
+# four digits only with a letter, so an issue number is not one), a color
+# function, a length in px, rem or em, and a duration.
+_HELD = re.compile(
+    r"(?<![\w&])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|(?=[0-9]*[a-fA-F])[0-9a-fA-F]{3,4})(?![\w-])"
+    r"|\b(?:rgba?|hsla?|oklch|oklab|lab|lch|hwb|color)\([^()]*\)"
+    r"|(?<![\w.#-])-?\d+(?:\.\d+)?(?:px|rem|em|ms)\b|(?<![\w.#-])(?:\d(?:\.\d+)?|\.\d+)s\b")
+# A list item whose name is not in backticks: "- Cards: 12px", "- **Primary**: #0F766E".
+_LOOSE_ITEM = re.compile(r"\s*(?:[-*+]|\d+[.)])\s+([^`:=]{1,60}?)\s*[:=]\s*(.+?)\s*$")
+# The frontmatter groups that hold tokens, as a DESIGN.md names them.
+FRONTMATTER_GROUPS = ("colors", "color", "typography", "type", "rounded", "radius", "radii",
+                      "spacing", "space", "elevation", "shadow", "shadows", "motion",
+                      "duration", "durations", "easing", "fonts", "font", "sizes", "size")
+_FRONT_KEY = re.compile(r"^(\s*)([A-Za-z0-9_.-]+|\"[^\"]+\"|'[^']+')\s*:\s*(.*?)\s*$")
+
+
+def _and(words: Sequence[str]) -> str:
+    return words[0] if len(words) == 1 else ", ".join(words[:-1]) + f" and {words[-1]}"
+
+
+def _split(line: str) -> List[str]:
+    """The cells of a table line, an escaped pipe kept as text."""
+    text = line.strip()
+    text = text.removeprefix("|")
+    if text.endswith("|") and not text.endswith("\\|"):
+        text = text[:-1]
+    return [c.strip().replace("\\|", "|") for c in re.split(r"(?<!\\)\|", text)]
+
+
+def _unquote(cell: str) -> str:
+    cell = cell.strip()
+    return cell[1:-1].strip() if len(cell) > 1 and cell[0] == cell[-1] == "`" else cell
+
+
+def _header(cell: str) -> str:
+    """A header as written, without emphasis or backticks."""
+    return re.sub(r"\s+", " ", cell.replace("*", "").replace("`", "")).strip()
+
+
+def _mode_word(header: str) -> str:
+    """The mode a column header names ("Dark mode" is dark), or "" when it
+    cannot name one."""
+    hits = {w for w in re.findall(r"[a-z0-9]+", header.lower()) if w in _MODE_VALUES}
+    if len(hits) == 1:
+        return hits.pop()
+    bare = re.sub(r"\([^)]*\)", " ", header.lower())
+    words = [w for w in bare.split() if w not in _MODE_WORDS]
+    slug = re.sub(r"[^a-z0-9]+", "-", " ".join(words)).strip("-")
+    return slug if _AXIS_WORD.fullmatch(slug) else ""
+
+
+def _prose_header(header: str) -> bool:
+    """True for a column of prose: Notes, Usage, When to use and the like."""
+    return header in PROSE_HEADERS or any(w in PROSE_HEADERS for w in header.split())
+
+
+def _prose(text: str) -> bool:
+    """True when a value is a rule written in words, not a value: it holds a
+    backtick or ends a sentence, or one of its comma parts has two or more
+    plain lowercase words that are not CSS keywords, or more than four
+    words and no number. A font list (Inter, system-ui, sans-serif) is not
+    prose: each part is a name of a few words."""
+    if "`" in text or _SENTENCE_END.search(text):
+        return True
+    for part in split_top(text):
+        if part[:1] in "\"'":
+            continue
+        words = part.split()
+        plain = [w for w in words if _PLAIN.fullmatch(w) and w not in _KEYWORDS]
+        if len(plain) >= 2 or (len(words) > 4 and not _VALUEISH.search(part)):
+            return True
+    return False
+
+
+_FONT_PART = re.compile(r"-?[A-Za-z][A-Za-z0-9 _-]*")
+_TYPE_CONTEXT = re.compile(r"font|family|typeface", re.I)
+
+
+def _font_shaped(text: str) -> bool:
+    """True for an unquoted or quoted comma list of names, the shape of a
+    font stack (Inter, system-ui, sans-serif)."""
+    parts = split_top(text)
+    return len(parts) > 1 and all(
+        p and (p[0] in "\"'" and p[-1:] == p[0] or _FONT_PART.fullmatch(p))
+        and len(p.split()) <= 5 for p in parts)
+
+
+def _font_evidence(text: str, context: str) -> bool:
+    """True when a comma list of names is a font stack for certain: a part
+    is quoted, it ends in a generic family, or its name or column header
+    says font, family or typeface. A bare "type" is no evidence: type.sizes
+    and a Type column of sizes are common."""
+    parts = split_top(text)
+    last = parts[-1].lower()
+    return (any(p[0] in "\"'" for p in parts) or last in GENERIC_FAMILIES
+            or last.startswith("ui-") or bool(_TYPE_CONTEXT.search(context)))
+
+
+def _valueish(cell: str) -> bool:
+    """True when a cell could hold a value: a digit, a hex, a function, a
+    reference, a quote or a CSS keyword."""
+    text = _unquote(cell)
+    return bool(_VALUEISH.search(text)) or any(p.lower() in _KEYWORDS
+                                                for p in split_top(text))
+
+
+def _path(name: str) -> str:
+    name = name.removeprefix("--")
+    return name.replace("/", ".")
+
+
+def _header_unit(header: str) -> Tuple[str, str]:
+    """(the header without its unit, the unit) for a header that carries
+    one (Value (px), Size [rem]) or is one (Px); the unit is "" otherwise."""
+    m = _HEADER_UNIT.search(header)
+    if m:
+        return header[:m.start()].strip(), m.group(1).lower()
+    return header, header.lower() if header.lower() in ("px", "rem", "ms") else ""
+
+
+def _heading_unit(text: str) -> str:
+    """The unit a heading names for the values below it, or ""."""
+    m = _HEADING_UNIT.search(text)
+    return (m.group(1) or m.group(2)).lower() if m else ""
+
+
+def _needs_unit(path: str) -> str:
+    """"duration" when a name says its number is a time, the word that
+    says it is a size (radius in radius.card), or "" when it may be a plain
+    number."""
+    found = name_words(path.replace(".", " "))
+    if found & UNITLESS_WORDS:
+        return ""
+    if found & TIME_WORDS:
+        return "duration"
+    return size_word(path)
+
+
+def _refish(cell: str) -> bool:
+    """True when a cell holds a reference: {a.b}, var(--a) or a backticked
+    token name."""
+    text = cell.strip()
+    inner = _unquote(text)
+    if _BRACE.fullmatch(inner) or css_alias(inner) is not None:
+        return True
+    return len(text) > 1 and text[0] == text[-1] == "`" and bool(_NAME.fullmatch(inner))
+
+
+def _as_reference(cell: str) -> str:
+    """A reference cell written as the value reader reads it: a backticked
+    name becomes {name}."""
+    inner = _unquote(cell)
+    if _BRACE.fullmatch(inner) or css_alias(inner) is not None:
+        return inner
+    return "{" + inner + "}"
+
+
+def _token_named(cell: str) -> bool:
+    """True when a cell is written as a token's name: in backticks, or with
+    a dot, a dash or a slash in it."""
+    text = re.sub(r"^(\*{1,2}|_{1,2})(.+)\1$", r"\2", cell.strip())
+    inner = _unquote(text)
+    return bool(_NAME.fullmatch(inner)) and (text != inner or any(c in inner for c in ".-/"))
+
+
+def _held(text: str) -> List[str]:
+    """The values a line of text holds, as written, in order."""
+    return list(dict.fromkeys(m.group(0) for m in _HELD.finditer(text)))
+
+
+# The heading words an example name may open with, by what the value is.
+_GROUP_WORDS = {
+    "color": frozenset(("color", "colors", "colour", "colours", "palette", "brand", "surface",
+                        "surfaces", "ink", "text")),
+    "size": frozenset(("space", "spacing", "size", "sizes", "radius", "radii", "rounded",
+                       "shape", "shapes", "layout", "elevation", "shadow", "shadows", "border",
+                       "borders", "type", "typography", "grid")),
+    "duration": frozenset(("motion", "duration", "durations", "animation", "transition",
+                           "transitions", "timing")),
+}
+
+
+def _kind_of(value: str) -> str:
+    """color, size or duration: what a value found in text is."""
+    if value.startswith("#") or "(" in value:
+        return "color"
+    return "duration" if value.endswith("s") and not value.endswith("px") else "size"
+
+
+def _group_for(value: str, heading: str) -> str:
+    """The group an example token name opens with: the heading's word when
+    it fits what the value is (radius under ## Radius), else what the value
+    is (a radius under ## Motion is size)."""
+    kind = _kind_of(value)
+    word = _slug(heading).split("-")[0]
+    return word if word in _GROUP_WORDS[kind] else kind
+
+
+def _frontmatter(lines: List[str]) -> Tuple[int, List[Tuple[int, List[str], str]]]:
+    """(the index of the first line after a frontmatter block, or 0 when the
+    file has none; each key that holds a value, as (line, its keys from the
+    top, the value with YAML quotes removed)). An item of a YAML list is
+    given as the keys above it plus "-"."""
+    if not lines or lines[0].strip() != "---":
+        return 0, []
+    end = next((k for k in range(1, len(lines)) if lines[k].strip() in ("---", "...")), None)
+    if end is None:
+        return 0, []
+    stack: List[Tuple[int, str]] = []
+    leaves: List[Tuple[int, List[str], str]] = []
+    for k in range(1, end):
+        item = re.match(r"^(\s*)-\s+(.*?)\s*$", lines[k])
+        if item and not _FRONT_KEY.match(lines[k][len(item.group(1)) + 2:]):
+            indent = len(item.group(1).expandtabs(2))
+            while stack and stack[-1][0] > indent:
+                stack.pop()
+            if stack:
+                value = item.group(2)
+                if len(value) > 1 and value[0] == value[-1] and value[0] in "\"'":
+                    value = value[1:-1]
+                leaves.append((k + 1, [s for _, s in stack] + ["-"], value))
+            continue
+        m = _FRONT_KEY.match(lines[k])
+        if not m or lines[k].lstrip().startswith("#"):
+            continue
+        indent, key, value = len(m.group(1).expandtabs(2)), m.group(2).strip("\"'"), m.group(3)
+        while stack and stack[-1][0] >= indent:
+            stack.pop()
+        if value in ("", "|", ">"):
+            stack.append((indent, key))
+            continue
+        if len(value) > 1 and value[0] == value[-1] and value[0] in "\"'":
+            value = value[1:-1]
+        leaves.append((k + 1, [s for _, s in stack] + [key], value))
+    return end + 1, leaves
+
+
+def _slug(text: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", _unquote(text).lower()).strip("-")
+    return slug if _AXIS_WORD.fullmatch(slug) else ""
+
+
+@dataclass
+class _Entry:
+    """A name as read: where, as written, its value text per context and
+    the column each context came from ("" for a list item)."""
+    where: str
+    written: str
+    values: Dict[str, str]
+    labels: Dict[str, str]
+    decoded: Dict[str, Tuple[str, Any]] = field(default_factory=dict)
+    notes: List[Item] = field(default_factory=list)
+    mapped: List[Mapped] = field(default_factory=list)
+    # context -> why its bare number was not read (it needs a unit)
+    bare: Dict[str, str] = field(default_factory=dict)
+    # the contexts read from an alias column
+    aliased: Tuple[str, ...] = ()
+    # A typography row: field -> (cell, its column, the unit its header or
+    # heading names)
+    fields: Dict[str, Tuple[str, str, str]] = field(default_factory=dict)
+    # References a typography row's fields hold: target -> (column, the
+    # types that fit there)
+    field_aliases: Dict[str, Tuple[str, Tuple[str, ...]]] = field(default_factory=dict)
+
+
+@dataclass
+class _Table:
+    """How a table is read: its name column, its base column, its alias
+    column, a column per mode axis (column, axis, values) and the unit each
+    column's header names; or a palette, or guidance. `dropped` lists each
+    column (or the whole table, when `whole`) left out, with the fix."""
+    name: int = -1
+    base: int = -1
+    alias: int = -1
+    modes: List[Tuple[int, str, Tuple[str, str]]] = field(default_factory=list)
+    units: Dict[int, str] = field(default_factory=dict)
+    dropped: List[Tuple[str, str]] = field(default_factory=list)
+    whole: bool = False
+    palette: str = ""
+    guidance: str = ""
+    # A typography table: each field's column, when the table has all five.
+    fields: Dict[str, int] = field(default_factory=dict)
+    # An alias column for a mode (Dark alias): (column, axis).
+    mode_aliases: List[Tuple[int, str]] = field(default_factory=list)
+    # Do and Avoid columns beside the values: guidance, kept as a rule.
+    guide: List[str] = field(default_factory=list)
+
+
+# The words of an alias column's header ("Alias of", "Maps to"); any other
+# word names the mode the column holds the reference in ("Dark alias").
+_ALIAS_WORDS = frozenset(("alias", "aliases", "aliased", "reference", "references", "ref",
+                          "refs"))
+# Words that name an alias only as a phrase: Size (points) is no alias.
+_ALIAS_PHRASES = (("maps", "to"), ("points", "to"), ("refers", "to"))
+_ALIAS_FILLER = frozenset(("to", "of", "for", "token", "mode"))
+
+
+def _alias_mode(header: str) -> Optional[str]:
+    """None when a header does not name an alias column, "" for one that
+    holds the base's reference (Alias, Alias of, Maps to, Light alias),
+    or the words that name its mode (Dark alias gives dark)."""
+    found = re.findall(r"[a-z0-9]+", header.lower())
+    phrased = {p[0] for p in _ALIAS_PHRASES if any(
+        tuple(found[k:k + 2]) == p for k in range(len(found) - 1))}
+    if not set(found) & _ALIAS_WORDS and not phrased:
+        return None
+    rest = " ".join(w for w in found
+                    if w not in _ALIAS_WORDS and w not in _ALIAS_FILLER and w not in phrased)
+    return "" if not rest or is_base(rest) else rest
+
+
+def _guidance(raw: List[str], low: List[str]) -> str:
+    """The label of a Do and Avoid table ("Do and Avoid"), or "" when the
+    table is not guidance. An Avoid column beside prose (Definition and
+    Avoid, Usage and Avoid) is guidance too: what each token is for and
+    what to keep it from, never two modes."""
+    body = [c for c, h in enumerate(low) if h not in NAME_HEADERS and h]
+    kinds = GUIDANCE_DO + GUIDANCE_AVOID
+    do = any(low[c] in GUIDANCE_DO for c in body)
+    prose = [c for c in body if low[c] not in kinds and _prose_header(low[c])]
+    if any(low[c] in GUIDANCE_AVOID for c in body) and (do or prose) \
+            and all(low[c] in kinds or _prose_header(low[c]) for c in body):
+        return _and([raw[c] for c in body if low[c] in kinds or (not do and c in prose)])
+    return ""
+
+
+def _palette(raw: List[str], low: List[str], rows: List[List[str]]) -> Optional[_Table]:
+    """A palette keyed by step: steps down the first column and a column
+    per family ("down"), or steps across the top and a row per family
+    ("across"). None when the table is not one."""
+    if len(raw) < 2:
+        return None
+    if all(_STEP.fullmatch(h) for h in raw[1:]):
+        if any(_valueish(r[c]) for r in rows for c in range(1, min(len(r), len(raw)))):
+            return _Table(name=0, palette="across")
+        return None
+    if low[0] in NAME_HEADERS or low[0] in VALUE_HEADERS:
+        return None
+    steps = [_unquote(r[0]) for r in rows if r and r[0].strip()]
+    if not steps or not all(_STEP.fullmatch(x) for x in steps):
+        return None
+    families = [c for c in range(1, len(raw)) if not _prose_header(low[c])]
+    if any(low[c] in VALUE_HEADERS or is_base(raw[c]) or mode_of(raw[c]) for c in families):
+        return None
+    if low[0] not in STEP_HEADERS and not any(
+            _valueish(r[c]) for r in rows for c in families if c < len(r) and r[c].strip()):
+        return None
+    return _Table(name=0, palette="down")
+
+
+def _type_field(header: str) -> str:
+    """The typography field a column header names (Line height is
+    lineHeight), or ""."""
+    return next((f for f, heads in TYPE_FIELD_HEADERS.items() if header in heads), "")
+
+
+def _property(header: str) -> bool:
+    """True when a column header names a property of each row's token: a
+    typography field or a motion property such as Curve."""
+    return bool(_type_field(header)) or header in MOTION_HEADERS
+
+
+def _row_name(cell: str) -> str:
+    return _path(_unquote(re.sub(r"^(\*{1,2}|_{1,2})(.+)\1$", r"\2", cell.strip())))
+
+
+def _property_fix(raw: List[str], low: List[str], rows: List[List[str]], name: int, c: int,
+                  typed: Dict[str, int]) -> str:
+    """Why a property column beside the token's value was not read, and
+    the fix: the missing typography columns, or its own token, with an
+    example from the first row that fills it."""
+    what = low[c]
+    slug = _slug(what) or "value"
+    example = next(((_row_name(r[name]), _unquote(r[c])) for r in rows
+                    if len(r) > max(name, c) and r[name].strip() and r[c].strip()), None)
+    own = (f"write each {what} as its own token, such as `{example[0]}.{slug}` | {example[1]}"
+           if example else f"write each {what} as its own token, named for its row plus .{slug}")
+    if _type_field(what):
+        missing = [_FIELD_COLUMN[f] for f in TYPOGRAPHY_FIELDS if f not in typed]
+        add = (f"add a {missing[0]} column" if len(missing) == 1 else
+               f"add {_and(missing)} columns")
+        return (f"is the {what} of each token, so its column was not read; {add} to read each "
+                f"row as one typography token, or {own}")
+    return (f"is the {what} of each token, and the engine holds no transition token, so its "
+            f"column was not read; {own}")
+
+
+def _table(raw: List[str], rows: List[List[str]]) -> Optional[_Table]:
+    """How a table with these headers and rows is read; None when it holds
+    no tokens (no name column, or only prose beside it)."""
+    split = [_header_unit(h) for h in raw]
+    low = [b.lower() for b, _ in split]
+    guidance = _guidance(raw, low)
+    if guidance:
+        return _Table(guidance=guidance)
+    palette = _palette(raw, low, rows)
+    if palette is not None:
+        palette.units = {c: u for c, (_, u) in enumerate(split) if u}
+        return palette
+    name = next((low.index(h) for h in _NAME_PREFERENCE if h in low), None)
+    if name is None:
+        return None
+    alias = next((c for c, h in enumerate(low)
+                  if c != name and (h in ALIAS_HEADERS or _alias_mode(h) == "")), -1)
+    # Alias columns for a mode (Dark alias): never a value or a mode column.
+    by_mode = [c for c, h in enumerate(low) if c not in (name, alias) and _alias_mode(h)]
+    value = [c for c, h in enumerate(low)
+             if c not in (name, alias, *by_mode) and h in VALUE_HEADERS]
+    other = [c for c, h in enumerate(low)
+             if c not in (name, alias, *by_mode) and h and h not in VALUE_HEADERS
+             and h not in NAME_HEADERS and not _prose_header(h)
+             and h not in GUIDANCE_DO + GUIDANCE_AVOID]
+    if alias < 0 and not value and not other and low[name] == "token":
+        # A Token column of references beside a column of names: the names
+        # are the tokens, and the Token column holds what each aliases.
+        named = next((c for c, h in enumerate(low) if c != name and h in NAME_HEADERS), None)
+        cells = [(r[named], r[name]) for r in rows if named is not None and len(r) > max(named,
+                                                                                         name)]
+        if named is not None and cells and all(_token_named(n) for n, _ in cells if n.strip()) \
+                and any(_refish(t) for _, t in cells):
+            name, alias = named, name
+    table = _Table(name, alias=alias, units={c: u for c, (_, u) in enumerate(split) if u})
+    table.guide = [raw[c] for c, h in enumerate(low)
+                   if c not in (name, alias, *by_mode) and h in GUIDANCE_DO + GUIDANCE_AVOID]
+    # Property columns are fields of each row's token, never modes: all five
+    # typography fields make a typography table; any other property column
+    # beside the token's value is left out with its fix.
+    typed: Dict[str, int] = {}
+    for c in value + other:
+        found_field = _type_field(low[c])
+        if found_field and found_field not in typed:
+            typed[found_field] = c
+    if len(typed) == len(TYPOGRAPHY_FIELDS):
+        table.fields = {f: typed[f] for f in TYPOGRAPHY_FIELDS}
+        heads = _and([raw[c] for c in table.fields.values()])
+        for c in [c for c in value + other + ([alias] if alias >= 0 else []) + by_mode
+                  if c not in table.fields.values()]:
+            table.dropped.append((raw[c], (
+                f"is not a typography field, so its column was not read; this table reads "
+                f"each row as one typography token from its {heads} columns, so put "
+                f"{raw[c]} in a table of its own")))
+        table.alias = -1
+        return table
+    for c in by_mode:
+        words = str(_alias_mode(low[c]))
+        axis = mode_of(words, [raw[c]])
+        held = next((raw[k] for k, a in table.mode_aliases if a == axis), None)
+        if axis is None:
+            table.dropped.append((raw[c], (
+                f"is an alias column for {words}, which names no mode, so it was not read; head "
+                "it with a mode name and alias, such as Dark alias, or put it in a table of its "
+                "own")))
+        elif held is not None:
+            table.dropped.append((raw[c], (
+                f"is a second alias column for the {axis} axis, which {held} holds, so it was "
+                "not read; keep one alias column per mode")))
+        else:
+            table.mode_aliases.append((c, axis))
+    props = [c for c in other if _property(low[c])]
+    if props:
+        other = [c for c in other if c not in props]
+        if not value and not other:
+            other, props = props[:1], props[1:]
+        for c in props:
+            table.dropped.append((raw[c], _property_fix(raw, low, rows, name, c, typed)))
+
+    def place(columns: List[int], base: str) -> None:
+        held: Dict[str, str] = {}
+        for c in columns:
+            axis = mode_of(split[c][0], [raw[c]])
+            if axis is None:
+                table.dropped.append((raw[c], (
+                    "names no mode, so its column was not read; head it with a mode name such "
+                    "as Dark or High contrast, or put it in a table of its own with a base "
+                    "column")))
+            elif axis in held:
+                table.dropped.append((raw[c], (
+                    f"is a second column for the {axis} axis, which {held[axis]} holds, so it "
+                    "was not read; keep one column per axis, or put it in a table of its own")))
+            else:
+                held[axis] = raw[c]
+                table.modes.append((c, axis, AXES[axis][:2]))
+
+    if value:
+        table.base = value[0]
+        for c in value[1:]:
+            table.dropped.append((raw[c], (
+                f"is a second value column beside {raw[value[0]]}, so it was not read; keep one "
+                "value column, or head the columns with mode names such as Light and Dark if "
+                "they differ by mode")))
+        place(other, raw[value[0]])
+        return table
+    if not other:
+        return table if alias >= 0 else None
+    if len(other) == 1:
+        table.base = other[0]
+        return table
+    if len(other) > 2:
+        base = next((c for c in other if is_base(raw[c])), other[0])
+        table.base = base
+        place([c for c in other if c != base], raw[base])
+        return table
+    known = axis_of([raw[c] for c in other], [raw[c] for c in other])
+    if known is not None and known[1] != -1:
+        axis = known[0]
+        table.base, mode = other if known[1] == 0 else other[::-1]
+        table.modes.append((mode, axis, AXES[axis][:2]))
+        return table
+    found = [_mode_word(raw[c]) for c in other]
+    columns = _and([raw[c] for c in other])
+    if all(found) and found[0] == found[1]:
+        table.whole = True
+        table.dropped.append(("", (f"a table with the columns {columns} was not read, since "
+                                   f"both name the mode {found[0]}; head them with two mode "
+                                   "names such as Light and Dark")))
+        return table
+    if not all(found):
+        bad = [raw[c] for c, word in zip(other, found) if not word]
+        which = "that column" if len(bad) == 1 else "those columns"
+        table.whole = True
+        table.dropped.append(("", (f"a table with the columns {columns} was not read, since "
+                                   f"{_and(bad)} cannot name a mode, whose name starts with a "
+                                   f"letter; head {which} with a mode name such as Dark or High "
+                                   "contrast")))
+        return table
+    table.base, mode = other
+    table.modes.append((mode, f"{found[0]}-{found[1]}", (found[0], found[1])))
+    return table
+
+
+def _decode(text: str, entry: _Entry) -> Tuple[str, Any]:
+    """(type, literal) or ("alias", target path) for one value; a mapped
+    color or a dropped var() fallback is kept on the entry for the report."""
+    brace = _BRACE.fullmatch(text)
+    if brace:
+        return "alias", _path(brace.group(1))
+    alias = css_alias(text)
+    if alias is not None:
+        if alias[1]:
+            entry.notes.append(Item(entry.where, entry.written, (
+                f"its fallback {alias[1]} was left out; the reference holds the value")))
+        return "alias", _path(alias[0])
+    gamut: List[GamutMapped] = []
+    read = read_value(text, gamut)
+    entry.mapped += [Mapped.of(entry.where, entry.written, g) for g in gamut]
+    return read
+
+
+# How to write each typography field, for a cell that holds another value.
+_FIELD_FIX = {
+    "fontFamily": "write a font name, or a list of them ending in a generic family such as "
+                  "sans-serif",
+    "fontSize": "write a length in px or rem, such as 16px",
+    "fontWeight": "write it as a number from 1 to 1000, such as 700",
+    "lineHeight": "write it as a number, such as 1.5",
+    "letterSpacing": "write a length in px or rem, such as 0.2px",
+}
+# The token types a reference in each typography field may point at.
+_FIELD_FITS = {"fontFamily": ("fontFamily",), "fontSize": ("dimension",),
+               "fontWeight": ("fontWeight", "number"), "lineHeight": ("number",),
+               "letterSpacing": ("dimension",)}
+
+
+def _field(f: str, text: str, column: str, unit: str, entry: _Entry) -> Any:
+    """One typography field of a row, read from its cell. Raises NotRead
+    with what is wrong and the fix."""
+    what = _FIELD_WORDS[f]
+    if f in ("fontSize", "letterSpacing") and _BARE_NUMBER.fullmatch(text):
+        if unit in ("px", "rem"):
+            text += unit
+        elif float(text) == 0:
+            text += "px"
+        else:
+            raise NotRead(f"{text} has no unit, and a {what} is a size; write the unit in the "
+                          f"cell, such as {text}px, or in the column header, such as "
+                          f"{column} (px)")
+    if f == "fontFamily" and _FONT_PART.fullmatch(text):
+        text = f'"{text}"'
+    try:
+        kind, value = _decode(text, entry)
+    except NotRead:
+        if f == "fontWeight":
+            raise NotRead(f"{text} is not a font weight; {_FIELD_FIX[f]}") from None
+        raise
+    if kind == "alias":
+        entry.field_aliases[value] = (column, _FIELD_FITS[f])
+        return "{" + value + "}"
+    if f == "lineHeight" and kind == "dimension":
+        # A length, read against the row's font size once that is read.
+        return value
+    want = TYPOGRAPHY_FIELDS[f][0]
+    if f == "fontWeight" and kind == "number" and TYPES[want].check(value):
+        return value
+    if kind != want:
+        raise NotRead(f"{text} is not a {what}; {_FIELD_FIX[f]}")
+    return value
+
+
+def _typography(entry: _Entry) -> Dict[str, Any]:
+    """A typography row's value, field by field. Raises NotRead naming the
+    column and the fix."""
+    out: Dict[str, Any] = {}
+    for f in TYPOGRAPHY_FIELDS:
+        text, column, unit = entry.fields[f]
+        text = _unquote(text)
+        if not text:
+            raise NotRead(f"has no value in the {column} column; write one there")
+        try:
+            out[f] = _field(f, text, column, unit, entry)
+        except NotRead as exc:
+            raise NotRead(f"in the {column} column, {exc}") from None
+    if isinstance(out["lineHeight"], dict):
+        # A line height written as a length is read against the row's font
+        # size, the multiple the engine keeps.
+        column = entry.fields["lineHeight"][1]
+        shown, size = length_text(out["lineHeight"]), out["fontSize"]
+        ratio, why = leading_ratio(out["lineHeight"], size)
+        fix = "write it as a number, such as 1.5"
+        if why == "unit":
+            raise NotRead(f"in the {column} column, {shown} is a length in "
+                          f"{out['lineHeight']['unit']} and the font size {length_text(size)} "
+                          f"is in {size['unit']}, so it cannot be read as a multiple of the "
+                          f"font size; {fix}, or write both in one unit")
+        if why:
+            what = f"the reference {size}" if why == "reference" else length_text(size)
+            raise NotRead(f"in the {column} column, {shown} is a length and the font size is "
+                          f"{what}, so it cannot be read as a multiple of the font size here; "
+                          f"{fix}")
+        entry.notes.append(Item(entry.where, entry.written, (
+            f"in the {column} column, {shown} is a length; it was read against the font size "
+            f"{length_text(size)} as {ratio}, the multiple of the font size the engine keeps; "
+            f"write {ratio} to say so")))
+        out["lineHeight"] = ratio
+    return out
+
+
+def import_markdown(files: Sequence[Tuple[str, str]], source: Source) -> Imported:
+    """The tokens a list of (file name, text) rule files hold, in order."""
+    found: Dict[str, _Entry] = {}
+    axes: Dict[str, Tuple[str, str]] = {}
+    notes: List[Item] = []
+    not_read: List[Item] = []
+    entries = 0
+    # file -> [(line, name)] of lines whose value is a rule, not a value
+    rules: Dict[str, List[Tuple[int, str]]] = {}
+    # file -> [(line, label)] of Do and Avoid tables
+    guidance: Dict[str, List[Tuple[int, str]]] = {}
+    # file -> [(line, labels)] of Do and Avoid columns beside a table's values
+    guide_columns: Dict[str, List[Tuple[int, List[str]]]] = {}
+    # files where a rule has the shape of a font list, so the note says how
+    # a font list reads
+    font_rules: set = set()
+    # (path, where, name, what the second says, where the first was, what it set)
+    again: List[Tuple[str, str, str, str, str, str]] = []
+    # The unit the heading above names for the bare numbers below it, and
+    # the heading's text, for the example name in a fix.
+    section = {"unit": "", "heading": ""}
+
+    def add(name: str, where: str, values: Dict[str, str], labels: Dict[str, str],
+            units: Optional[Dict[str, str]] = None, aliased: Tuple[str, ...] = (),
+            fields: Optional[Dict[str, Tuple[str, str, str]]] = None) -> None:
+        nonlocal entries
+        written = _unquote(re.sub(r"^(\*{1,2}|_{1,2})(.+)\1$", r"\2", name.strip()))
+        if written and _NAME.fullmatch(written) and not fields:
+            # A comma list of names is a font only with evidence; without it,
+            # and for any value written in words, the line is a rule.
+            ruled = fonty = False
+            for ctx, v in values.items():
+                text = _unquote(v)
+                shaped = _font_shaped(text)
+                if shaped and _font_evidence(text, f"{written} {labels.get(ctx, '')}"):
+                    continue
+                if shaped or _prose(text):
+                    ruled = True
+                    bare = text.rstrip(".")
+                    fonty = fonty or (_font_shaped(bare) and not _prose(bare))
+            if ruled:
+                file_name, _, line = where.rpartition(":")
+                rules.setdefault(file_name, []).append((int(line), written))
+                if fonty:
+                    font_rules.add(file_name)
+                return
+        entries += 1
+        if not written:
+            not_read.append(Item(where, "", f"has no name; write the token's name in the "
+                                 f"{labels.get('name', 'first')} column"))
+            return
+        if not _NAME.fullmatch(written):
+            not_read.append(Item(where, written, "is not a token name; write the name in "
+                                 "backticks, for example `color.accent`"))
+            return
+        values = {ctx: _unquote(v) for ctx, v in values.items() if _unquote(v)}
+        path = _path(written)
+        # A bare number takes the unit its column or its heading names; a
+        # size with no unit anywhere is read as px with a note, and a
+        # duration with no unit anywhere is not read.
+        bare: Dict[str, str] = {}
+        sized: List[Item] = []
+        for ctx, v in list(values.items()):
+            unit = (units or {}).get(ctx) or section["unit"]
+            if not fields and unit in ("px", "rem") and not _BARE_NUMBER.fullmatch(v):
+                # A shadow with bare offsets takes the unit too: 0 2 8 #0000001A
+                # under Value (px) is 0 2px 8px #0000001A.
+                values[ctx] = shadow_with_unit(v, unit) or v
+            if fields or not _BARE_NUMBER.fullmatch(v):
+                continue
+            need = _needs_unit(path)
+            tracking = bare_tracking(path, v)
+            if unit:
+                values[ctx] = v + unit
+            elif tracking:
+                bare[ctx] = tracking
+            elif need and float(v) == 0:
+                values[ctx] = v + ("ms" if need == "duration" else "px")
+            elif need and need != "duration":
+                values[ctx] = v + "px"
+                if not sized:
+                    sized.append(Item(where, written, bare_size_note(v, need)))
+            elif need:
+                example = v + "ms"
+                column = labels.get(ctx, "")
+                if column:
+                    fix = (f"write the unit in the cell, such as {example}, or in the column "
+                           f"header, such as {column} (ms)")
+                else:
+                    fix = (f"write the unit, such as {example}, or name it in the heading above, "
+                           "such as ## Motion (ms)")
+                bare[ctx] = f"{v} has no unit, and {path} is a {need}; {fix}"
+        first = found.get(path)
+        if first is not None:
+            for ctx in dict.fromkeys(["", *first.values, *values]):
+                was, now = first.values.get(ctx, ""), values.get(ctx, "")
+                if was == now:
+                    continue
+                label = f" {labels.get(ctx) or first.labels.get(ctx)}" if ctx else ""
+                said = f"another{label} value ({now})" if now else f"no{label} value"
+                kept = f"to {was}" if was else f"with no{label} value"
+                again.append((path, where, written, said, first.where, kept))
+                return
+            return
+        if "" not in values:
+            column = labels.get("")
+            not_read.append(Item(where, written, f"has no value in the {column} column; write "
+                                 "one there" if column else "has no value; write one or remove "
+                                 "the entry"))
+            return
+        found[path] = _Entry(where, written, values, labels, bare=bare, aliased=aliased,
+                             notes=sized,
+                             fields={f: (text, column, unit or section["unit"])
+                                     for f, (text, column, unit) in (fields or {}).items()})
+
+    def read_table(table: _Table, raw: List[str], rows: List[Tuple[int, List[str]]],
+                   file_name: str, where: str) -> None:
+        """Read the rows of one table, as `table` says."""
+        nonlocal entries
+        not_read.extend(Item(where, column, why) for column, why in table.dropped)
+        if table.whole:
+            entries += sum(1 for _, cells in rows if table.name < len(cells)
+                           and cells[table.name].strip())
+            return
+        if table.palette == "down":
+            families = [c for c in range(1, len(raw)) if not _prose_header(raw[c].lower())]
+            for c in families:
+                if not _slug(_header_unit(raw[c])[0]):
+                    not_read.append(Item(where, raw[c], (
+                        f"a palette column (column {c + 1}) has no family name, so it was not "
+                        "read; head it with the family, such as Blue")))
+            for r, cells in rows:
+                step = _unquote(cells[0]) if cells else ""
+                for c in families:
+                    family = _slug(_header_unit(raw[c])[0])
+                    if family and c < len(cells) and cells[c].strip():
+                        add(f"{family}.{step}", f"{file_name}:{r}", {"": cells[c]},
+                            {"": raw[c], "name": raw[0]}, {"": table.units.get(c, "")})
+            return
+        if table.fields:
+            need = max(table.name, *table.fields.values())
+            for r, cells in rows:
+                at = f"{file_name}:{r}"
+                if len(cells) <= need:
+                    entries += 1
+                    name = _unquote(cells[table.name]) if table.name < len(cells) else ""
+                    count = f"{len(cells)} cell{'s' if len(cells) != 1 else ''}"
+                    not_read.append(Item(at, name, f"has {count} where the header has "
+                                         f"{len(raw)}; give the row one cell per column"))
+                    continue
+                fields = {f: (cells[c], raw[c], table.units.get(c, ""))
+                          for f, c in table.fields.items()}
+                add(cells[table.name], at, {"": " | ".join(t for t, _, _ in fields.values())},
+                    {"": "", "name": raw[table.name]}, fields=fields)
+            return
+        if table.palette == "across":
+            for r, cells in rows:
+                family = _slug(cells[0]) if cells else ""
+                if not family:
+                    entries += 1
+                    not_read.append(Item(f"{file_name}:{r}", "", (
+                        f"a palette row with no family name; write the family in the "
+                        f"{raw[0] or 'first'} column, such as Blue")))
+                    continue
+                for c in range(1, min(len(raw), len(cells))):
+                    if cells[c].strip():
+                        add(f"{family}.{raw[c]}", f"{file_name}:{r}", {"": cells[c]},
+                            {"": raw[c], "name": raw[0]})
+            return
+        contexts = [(c, f"{axis}:{values[1]}") for c, axis, values in table.modes]
+        for _, axis, values in table.modes:
+            axes.setdefault(axis, values)
+        # Alias columns for a mode hold the reference in that mode.
+        by_alias = [(c, f"{axis}:{AXES[axis][1]}") for c, axis in table.mode_aliases]
+        for _, axis in table.mode_aliases:
+            axes.setdefault(axis, AXES[axis][:2])
+        head = raw[table.base] if table.base >= 0 else raw[table.alias]
+        if contexts or by_alias:
+            if len(contexts) == 1:
+                read = f"{head} was read as the base and {raw[contexts[0][0]]} as {contexts[0][1]}"
+            elif contexts:
+                read = f"{head} was read as the base, " + _and(
+                    [f"{raw[c]} as {ctx}" for c, ctx in contexts])
+            else:
+                read = f"{head} was read as the base"
+            read += "".join(f"; {raw[c]} was read as the reference in {ctx} where it holds one"
+                            for c, ctx in by_alias)
+            listed = [head] + [raw[c] for c, _ in contexts + by_alias]
+            notes.append(Item(where, "", f"a table with {_and(listed)} columns; {read}"))
+        columns = [table.name] + [c for c in (table.base, table.alias) if c >= 0] \
+            + [c for c, _ in contexts + by_alias]
+
+        def several(cell: str, column: int, name: str, at: str) -> bool:
+            """True, with a note, for an alias cell that names more than one
+            token: a token references one, so the cell is not read."""
+            parts = split_top(cell.strip())
+            if len(parts) < 2 or not all(_refish(p) for p in parts):
+                return False
+            own = _row_name(name)
+            notes.append(Item(at, own, (
+                f"in the {raw[column]} column, {cell.strip()} holds more than one name, and a "
+                "token references one, so the cell was not read; if they are other names for "
+                f"{own}, write each as a row of its own with `{own}` in the {raw[column]} "
+                "column")))
+            return True
+
+        for r, cells in rows:
+            at = f"{file_name}:{r}"
+            if len(cells) <= max(columns):
+                entries += 1
+                name = _unquote(cells[table.name]) if table.name < len(cells) else ""
+                count = f"{len(cells)} cell{'s' if len(cells) != 1 else ''}"
+                not_read.append(Item(at, name, f"has {count} where the header has "
+                                     f"{len(raw)}; give the row one cell per column"))
+                continue
+            base = cells[table.base] if table.base >= 0 else ""
+            alias = cells[table.alias] if table.alias >= 0 else ""
+            if alias.strip() and several(alias, table.alias, cells[table.name], at):
+                alias = ""
+            if alias.strip() and (_refish(alias) or not base.strip()):
+                values = {"": _as_reference(alias) if _refish(alias) else alias}
+                labels = {"": raw[table.alias], "name": raw[table.name]}
+                units = {"": table.units.get(table.alias, "")}
+                aliased: Tuple[str, ...] = ("",)
+            else:
+                values = {"": base}
+                labels = {"": raw[table.base] if table.base >= 0 else raw[table.alias],
+                          "name": raw[table.name]}
+                units = {"": table.units.get(table.base, "")}
+                aliased = ()
+            for c, ctx in contexts:
+                values[ctx], labels[ctx] = cells[c], raw[c]
+                units[ctx] = table.units.get(c, "")
+            for c, ctx in by_alias:
+                cell = cells[c]
+                if not cell.strip() or several(cell, c, cells[table.name], at):
+                    continue
+                if _refish(cell) or not values.get(ctx, "").strip():
+                    values[ctx] = _as_reference(cell) if _refish(cell) else cell
+                    labels[ctx], units[ctx] = raw[c], table.units.get(c, "")
+                    aliased += (ctx,)
+            add(cells[table.name], at, values, labels, units, aliased)
+
+    def unread_line(file_name: str, at: int, line: str) -> None:
+        """A line that holds values and is no token: listed with the fix."""
+        held = _held(line)
+        if not held:
+            return
+        group = _group_for(held[0], section["heading"])
+        loose = _LOOSE_ITEM.match(line)
+        where = f"{file_name}:{at}"
+        if loose:
+            label = re.sub(r"[*_]", "", loose.group(1)).strip()
+            example = f"{group}.{_slug(label) or 'name'}"
+            value = _unquote(loose.group(2)).strip()
+            not_read.append(Item(where, label, (
+                f"holds {_and(held)} under a name not in backticks, so it was not read; write "
+                f"it as - `{example}`: {value}")))
+            return
+        not_read.append(Item(where, "", (
+            f"holds {_and(held)} in running text, which is not read as a token; write it as a "
+            f"list item such as - `{group}.<name>`: {held[0]}, or as a row of a table with Token "
+            "and Value columns")))
+
+    def unread_block(file_name: str, at: int, kind: str, held: List[str]) -> None:
+        """A code block that holds values: listed with the fix."""
+        if not held:
+            return
+        lang = kind.lower()
+        fix = ("if they come from a token file, import that file with --from and its .json "
+               "path; otherwise list them in a table with Token and Value columns"
+               if lang == "json"
+               else "write them as custom properties on :root in a .css file and import it with "
+                    "--from, or list them in a table with Token and Value columns"
+               if lang in ("scss", "sass", "less", "styl", "stylus") else
+               "list them in a table with Token and Value columns, or as list items such as - "
+               f"`{_group_for(held[0], section['heading'])}.<name>`: {held[0]}")
+        what = f"a {kind} code block" if kind else "a code block"
+        not_read.append(Item(f"{file_name}:{at}", "", (
+            f"{what} holds {_and(held[:6])}{' and more' if len(held) > 6 else ''}, which "
+            f"{'is' if len(held) == 1 else 'are'} not read as tokens; {fix}")))
+
+    def read_frontmatter(file_name: str, leaves: List[Tuple[int, List[str], str]]) -> None:
+        """Each value under a token group, as a token named by its keys."""
+        skipped: Dict[str, int] = {}
+        listed: Dict[str, int] = {}
+        for at, keys, value in leaves:
+            held = _held(value)
+            if len(keys) < 2:  # the document's own keys: name, version
+                if held:
+                    group = {"color": "colors", "size": "spacing",
+                             "duration": "motion"}[_kind_of(held[0])]
+                    not_read.append(Item(f"{file_name}:{at}", keys[0], (
+                        f"holds {_and(held)} in the document's own key {keys[0]}, which is not "
+                        f"read as a token; write it under {group}, such as {group}: <name>: "
+                        f"\"{held[0]}\"")))
+                continue
+            if keys[-1] == "-":
+                path = ".".join(keys[:-1])
+                if held and path not in listed:
+                    listed[path] = at
+                    not_read.append(Item(f"{file_name}:{at}", path, (
+                        f"is a list, and an item of a list has no name, so it was not read; "
+                        f"give each value a key of its own, such as {keys[-2]}: 100: "
+                        f"\"{held[0]}\"")))
+                continue
+            if keys[0].lower() not in FRONTMATTER_GROUPS:
+                if _held(value) or _BRACE.fullmatch(value.strip()):
+                    skipped.setdefault(keys[0], at)
+                continue
+            if keys[-1].lower() in ("fontfamily", "font-family", "family") \
+                    and "," not in value and value[:1] not in "\"'":
+                value = f'"{value}"'
+            add("`" + ".".join(keys) + "`", f"{file_name}:{at}", {"": value},
+                {"": "", "name": "frontmatter"})
+        for group, at in skipped.items():
+            why = ("holds component properties, which are not system tokens, so the group was "
+                   "not read; keep them in each component's contract, and move a value the "
+                   "system shares into colors, rounded or spacing"
+                   if group.lower() == "components" else
+                   "is a frontmatter group this does not read as tokens, so its values were not "
+                   "read; move each one into colors, typography, rounded, spacing, elevation or "
+                   "motion")
+            not_read.append(Item(f"{file_name}:{at}", group, why))
+
+    for file_name, text in files:
+        lines = text.splitlines()
+        i, fence, in_list, in_code, closed = 0, "", False, False, -1
+        section["unit"] = section["heading"] = ""
+        i, leaves = _frontmatter(lines)
+        read_frontmatter(file_name, leaves)
+        # The open code block: (its first line, its language, the values it holds).
+        block: List[Any] = []
+        while i < len(lines):
+            line = lines[i]
+            where = f"{file_name}:{i + 1}"
+            opened = _FENCE.match(line)
+            if block and not fence and not in_code:
+                unread_block(file_name, *block)
+                block = []
+            if not fence and line.strip():
+                # An indented code block: four spaces in, after a blank line,
+                # a heading, a thematic break or a closing fence (each ends
+                # its block there), outside a list.
+                indent = len(line.expandtabs(4)) - len(line.expandtabs(4).lstrip())
+                if indent >= 4 and not in_list and (in_code or i == 0
+                                                    or not lines[i - 1].strip()
+                                                    or _BLOCK_END.match(lines[i - 1])
+                                                    or closed == i - 1):
+                    if not in_code:
+                        block = [i + 1, "", []]
+                    block[2] += [v for v in _held(line) if v not in block[2]]
+                    in_code = True
+                    i += 1
+                    continue
+                in_code = False
+                if block:
+                    unread_block(file_name, *block)
+                    block = []
+                if _BULLET.match(line):
+                    in_list = True
+                elif indent == 0:
+                    in_list = False
+            if fence:
+                if opened and opened.group(1)[0] == fence[0] and len(opened.group(1)) >= \
+                        len(fence) and not opened.group(2):
+                    fence, closed = "", i
+                    if block:
+                        unread_block(file_name, *block)
+                        block = []
+                elif block:
+                    block[2] += [v for v in _held(line) if v not in block[2]]
+                i += 1
+                continue
+            if opened:
+                fence = opened.group(1)
+                if opened.group(2).lower() == "css":
+                    notes.append(Item(where, "", "a css code block was not read; import the "
+                                      "stylesheet itself with --from and a .css file"))
+                else:
+                    block = [i + 1, opened.group(2), []]
+                i += 1
+                continue
+            heading = _HEADING.fullmatch(line)
+            if heading:
+                held = _held(heading.group(1))
+                if held:
+                    not_read.append(Item(where, "", (
+                        f"holds {_and(held)} in a heading, which is not read as a token; write "
+                        f"it on a line of its own as a list item such as - "
+                        f"`{_group_for(held[0], heading.group(1))}.<name>`: {held[0]}")))
+                section["unit"] = _heading_unit(heading.group(1))
+                # A title (#) names the document, not a group of tokens.
+                section["heading"] = heading.group(1) if not line.lstrip().startswith("# ") \
+                    else ""
+                i += 1
+                continue
+            listed = _LIST.match(line)
+            if listed:
+                add(listed.group(1), where, {"": listed.group(2)}, {"": ""})
+                i += 1
+                continue
+            if "|" in line and i + 1 < len(lines) and _DELIMITER.fullmatch(lines[i + 1]) \
+                    and len(_split(line)) == len(_split(lines[i + 1])):
+                raw = [_header(c) for c in _split(line)]
+                end = i + 2
+                while end < len(lines) and "|" in lines[end] and lines[end].strip() \
+                        and not _FENCE.match(lines[end]):
+                    end += 1
+                rows = [(r + 1, _split(lines[r])) for r in range(i + 2, end)]
+                rows = [(r, cells) for r, cells in rows if any(cells)]
+                table = _table(raw, [cells for _, cells in rows])
+                guided = table is not None
+                if table is not None and table.guidance:
+                    guidance.setdefault(file_name, []).append((i + 1, table.guidance))
+                    table = None
+                if table is not None and table.base >= 0 and not table.modes \
+                        and table.alias < 0 and not table.palette and not table.whole \
+                        and _header_unit(raw[table.base])[0].lower() not in VALUE_HEADERS \
+                        and not _TYPE_CONTEXT.search(raw[table.base]) \
+                        and not any(_valueish(c[table.base]) for _, c in rows
+                                    if len(c) > table.base):
+                    notes.append(Item(where, "", (
+                        f"a table whose {raw[table.base]} column holds no values was not read as "
+                        "tokens; head the value column Value, Hex or Size to read it")))
+                    table = None
+                if table is not None:
+                    if table.guide:
+                        guide_columns.setdefault(file_name, []).append((i + 1, table.guide))
+                    read_table(table, raw, rows, file_name, where)
+                elif not guided:
+                    held = [v for _, cells in rows for c in cells for v in _held(c)]
+                    if held:
+                        not_read.append(Item(where, "", (
+                            f"a table with the columns {_and([h for h in raw if h] or ['none'])} "
+                            f"holds {_and(list(dict.fromkeys(held))[:4])}"
+                            f"{' and more' if len(set(held)) > 4 else ''}, but no column names "
+                            "the tokens, so it was not read; head the column that names each "
+                            "one Token, Name or Role, and the column of values Value")))
+                i, in_list = end, False
+                continue
+            unread_line(file_name, i + 1, line)
+            i += 1
+        if block:
+            unread_block(file_name, *block)
+
+    for file_name in dict.fromkeys([*rules, *guidance, *guide_columns]):
+        found_rules = rules.get(file_name, [])
+        tables = guidance.get(file_name, [])
+        columns = guide_columns.get(file_name, [])
+        parts = []
+        if found_rules:
+            listed = ", ".join(f"`{name}` (line {line})" for line, name in found_rules)
+            count = len(found_rules)
+            head = (f"{count} lines hold rules, not values, and were kept as rules"
+                    if count > 1 else "1 line holds a rule, not a value, and was kept as a rule")
+            parts.append(
+                f"{head}: {listed}; to make {'one' if count > 1 else 'it'} a token, write only "
+                "its value after the colon or in the cell, and put the rule on its own line"
+                + ("; a font list reads when its font names are quoted or it ends in a generic "
+                   "family such as sans-serif" if file_name in font_rules else ""))
+        if tables or columns:
+            held = sorted([(line, f"the {label} table (line {line})") for line, label in tables]
+                          + [(line, f"the {_and(labels)} column{'s' if len(labels) > 1 else ''} "
+                                    f"of the table on line {line}") for line, labels in columns])
+            one = len(held) == 1 and not (columns and len(columns[0][1]) > 1)
+            parts.append(_and([text for _, text in held])
+                         + (" holds guidance, not values, and was kept as a rule" if one else
+                            " hold guidance, not values, and were kept as rules"))
+        first = min(line for line, _ in found_rules + tables + columns)
+        notes.append(Item(f"{file_name}:{first}", "", "; ".join(parts)))
+
+    # Decode each value; a reference is kept as an alias to its target.
+    defined = set(found)
+    # path -> why its first value was not read
+    failed: Dict[str, str] = {}
+    for path in list(found):
+        entry = found[path]
+        try:
+            for ctx, text in entry.values.items():
+                try:
+                    if ctx in entry.bare:
+                        raise NotRead(entry.bare[ctx])
+                    if entry.fields and not ctx:
+                        entry.decoded[ctx] = ("typography", _typography(entry))
+                        continue
+                    entry.decoded[ctx] = _decode(text, entry)
+                except NotRead as exc:
+                    column = entry.labels.get(ctx, "")
+                    if ctx in entry.aliased and _NAME.fullmatch(text):
+                        raise NotRead(f"in the {column} column, {text} is not written as a "
+                                      f"reference; write it in braces, {{{text}}}, or in "
+                                      "backticks") from None
+                    raise NotRead(f"in the {column} column, {exc}" if ctx else str(exc)) \
+                        from None
+        except NotRead as exc:
+            not_read.append(Item(entry.where, entry.written, str(exc)))
+            failed[path] = str(exc)
+            del found[path]
+
+    def drop(path: str, why: str) -> None:
+        entry = found.pop(path)
+        not_read.append(Item(entry.where, entry.written, why))
+        failed[path] = why
+
+    def targets(path: str) -> List[str]:
+        return [v for k, v in found[path].decoded.values() if k == "alias"] \
+            + list(found[path].field_aliases)
+
+    def kind_of(path: str, seen: Tuple[str, ...] = ()) -> str:
+        """Literals decide a type; an alias takes its target's."""
+        literal = next((k for k, _ in found[path].decoded.values() if k != "alias"), "")
+        if literal or path in seen:
+            return literal
+        return next((got for v in targets(path) if v in found
+                     for got in [kind_of(v, seen + (path,))] if got), "")
+
+    def loops(path: str) -> bool:
+        """True when a chain of references from `path` comes back to it."""
+        stack, seen = list(targets(path)), set()
+        while stack:
+            node = stack.pop()
+            if node == path:
+                return True
+            if node in found and node not in seen:
+                seen.add(node)
+                stack += targets(node)
+        return False
+
+    while True:
+        # A reference to a name that was not read, or that no file defines.
+        changed = True
+        while changed:
+            changed = False
+            for path in list(found):
+                gone = next((v for v in targets(path) if v not in found), None)
+                if gone is not None:
+                    drop(path, f"references {gone}, which was not read; fix {gone} and import "
+                               "again" if gone in defined else
+                         f"references {gone}, which no file defines; define it or write the "
+                         "value")
+                    changed = True
+        typeless = [p for p in found if not kind_of(p) and loops(p)]
+        for path in typeless:
+            drop(path, _LOOP)
+        # A name whose columns hold values of two types.
+        mixed = {}
+        for path, entry in found.items():
+            kind = kind_of(path)
+            literals = [(ctx, k) for ctx, (k, _) in entry.decoded.items() if k != "alias"]
+            odd = next(((ctx, k) for ctx, k in literals if k != kind), None)
+            if odd:
+                first = next(ctx for ctx, k in literals if k == kind)
+                mixed[path] = (f"holds a {kind} in the {entry.labels[first]} column and a "
+                               f"{odd[1]} in the {entry.labels[odd[0]]} column; give it one type")
+        for path, entry in found.items():
+            for target, (column, fits) in entry.field_aliases.items():
+                got = kind_of(target) if target in found else ""
+                if got and got not in fits and path not in mixed:
+                    mixed[path] = (f"in the {column} column, references {target}, a {got}, where "
+                                   f"a {fits[0]} belongs; point it at a {fits[0]}")
+        for path, why in mixed.items():
+            drop(path, why)
+        if not typeless and not mixed:
+            break
+
+    # A name set again: the first value wins; when it was not read, neither is used.
+    for path, where, written, said, first_where, kept in again:
+        fate = (f"which was not read ({failed[path]}); the first value wins, so no value is "
+                f"used for {written}; fix that line or remove it, and keep one" if path in failed
+                else "which was kept, so keep one")
+        not_read.append(Item(where, written, f"is set again with {said}; {first_where} set it "
+                             f"first {kept}, {fate}"))
+
+    ts = TokenSet(axes)
+    kept_notes: List[Item] = list(notes)
+    renamed: List[Item] = []
+    mapped: List[Mapped] = []
+    for path, entry in found.items():
+        kind = kind_of(path)
+        written = {ctx: ("{" + v + "}" if k == "alias" else v)
+                   for ctx, (k, v) in entry.decoded.items()}
+        modes = {ctx: v for ctx, v in written.items() if ctx}
+        aliased = any(k == "alias" for k, _ in entry.decoded.values()) \
+            or bool(entry.field_aliases)
+        ts.add(Token(path, kind, written[""], modes=modes,
+                     layer="semantic" if aliased or modes else "primitive"))
+        kept_notes += entry.notes
+        if "/" in entry.written:
+            renamed.append(Item(entry.where, entry.written, f"read as {path}, since a slash in a "
+                                "name reads as a dot"))
+        mapped += entry.mapped
+
+    order = {f: n for n, (f, _) in enumerate(files)}
+
+    def key(item: Any) -> Tuple[int, int]:
+        file_name, _, line = item.where.rpartition(":")
+        return order.get(file_name, 0), int(line)
+
+    report = ImportReport.of(source, ts, entries=entries)
+    gave = {found[path].where.rpartition(":")[0] for path in found}
+    report.headline = [
+        f"No token was read from {file_name}, though it holds values; every line that holds one "
+        "is listed below, under Not read or as a rule, with how to write it so it can be read."
+        for file_name, text in files if file_name not in gave and _held(text)]
+    report.notes = sorted(kept_notes, key=key)
+    report.not_read = sorted(not_read, key=key)
+    report.mapped = sorted(mapped, key=key)
+    report.renamed = sorted(renamed, key=key)
+    return Imported(ts, report)
+
+
+def read_markdown(path: Any, label: str = "--from") -> Imported:
+    """Read one rule file, or every .md file in a folder, sorted by name.
+    The source digest covers every file read, in that order."""
+    p = Path(path).expanduser()
+    paths = sorted(f for f in p.glob("*.md") if f.is_file()) if p.is_dir() else [p]
+    if not paths:
+        raise InputError(f"{label} {p} holds no .md file; pass a markdown rule file or the "
+                         "folder that holds them")
+    digest = hashlib.sha256()
+    files: List[Tuple[str, str]] = []
+    size = 0
+    for f in paths:
+        try:
+            data = f.read_bytes()
+        except OSError as exc:
+            raise InputError(f"{label} {f} cannot be read ({exc.strerror or exc}); pass a "
+                             "markdown rule file or the folder that holds them") from None
+        try:
+            text = _brief_text(data)
+        except UnicodeDecodeError:
+            raise InputError(f"{label} {f} is not UTF-8 text; save it as UTF-8 and pass it "
+                             "again") from None
+        # A folder's digest takes each file's name and bytes in name order;
+        # one file's, its bytes alone, as the intake step takes it again.
+        digest.update(f.name.encode("utf-8") + b"\0" + data if p.is_dir() else data)
+        size += len(data)
+        files.append((f.name, text))
+    return import_markdown(files, Source(str(p), "markdown", digest.hexdigest(), size))

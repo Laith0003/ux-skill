@@ -3,7 +3,7 @@
 > An institutional-grade crypto exchange whose marketing surfaces read like a quietly-confident financial-services brand.
 
 **Category:** Fintech / Crypto
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/coinbase.json`](../../data/brands/coinbase.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

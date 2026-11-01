@@ -1,0 +1,53 @@
+# Named quote: one customer's words with their name. Every value is a semantic role.
+name: named-quote
+status: experimental
+category: section
+description: One quote from a named customer with their role, organisation and photograph.
+job: Prove with a named person's words that the product did what it says.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: quote, rtlBehavior: logical}
+  - {name: name, rtlBehavior: logical}
+  - {name: role, rtlBehavior: logical}
+  - {name: media, rtlBehavior: logical}
+slots:
+  - {name: quote, takes: [text], required: true}
+  - {name: media, takes: [photograph], required: true}
+variants:
+  - {name: alignment, values: [start, split], default: start}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: quote, property: font, role: type.text.heading-2}
+  - {part: quote, property: text, role: color.text.default}
+  - {part: quote, property: max-width, role: layout.measure.landing}
+  - {part: name, property: font, role: type.text.ui}
+  - {part: name, property: text, role: color.text.default}
+  - {part: role, property: font, role: type.text.fine}
+  - {part: role, property: text, role: color.text.muted}
+  - {part: media, property: radius, role: radius.media}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.tint]
+proof: {kinds: [testimonials, reviews, case-studies], drop: "with no named customer quote the section would invent one, so it drops"}
+phone: [fold-side-columns]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - Quote the customer's own words, shortened only with an ellipsis
+usage:
+  do:
+    - Mark it up as a blockquote with the person's name, role and organisation in a figcaption
+    - On a phone, fold the photograph above the quote
+  dont:
+    - Do not use a stock photograph for a named person
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

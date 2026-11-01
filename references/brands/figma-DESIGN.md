@@ -3,7 +3,7 @@
 > A confident black-and-white editorial frame interrupted by oversized, hand-cut pastel color blocks.
 
 **Category:** Productivity / Collaboration
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/figma.json`](../../data/brands/figma.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

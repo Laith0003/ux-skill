@@ -1,9 +1,9 @@
 # Lamborghini
 
-> Lamborghini's website is a cathedral of darkness — a digital stage where jet-black surfaces stretch infinitely and every element emerges from the void like a machine under a spotlight.
+> Lamborghini's website is a cathedral of darkness: a digital stage where jet-black surfaces stretch infinitely and every element emerges from the void like a machine under a spotlight.
 
 **Category:** Automotive
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/lamborghini.json`](../../data/brands/lamborghini.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-Lamborghini's website is a cathedral of darkness — a digital stage where jet-black surfaces stretch infinitely and every element emerges from the void like a machine under a spotlight.
+Lamborghini's website is a cathedral of darkness: a digital stage where jet-black surfaces stretch infinitely and every element emerges from the void like a machine under a spotlight.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

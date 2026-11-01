@@ -1,6 +1,6 @@
 ---
-description: Generate a beautiful, anti-AI-slop design or component from a brief. Dispatches the frontend-engineer sub-agent with creative direction drawn from anti-slop and arsenal references. Use when generating a new design or component from a brief, the user says "build me X" or "design a Y", after running discovery + intaking brand identity, producing premium frontend code with anti-AI-slop discipline. Skip when the user wants a review not a build (use ux-audit / ux-critique), the user wants only one component (use ux-component), backend or infrastructure work.
-allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
+description: Build a page, a component (--component), a dashboard (--dashboard), or a design from a reference image (--from-image) from a brief, with anti-AI-slop discipline. The brief picks the mode when no flag is given.
+allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Bash(python3:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
 
@@ -10,7 +10,272 @@ You are running the `/ux-design` command from the `ux` plugin. The job is to gen
 
 ## When to use
 
-Triggers: "design a", "build me a", "generate a landing page", "create a dashboard", "make a component", "I need a hero section", "design a modal", any free-form request for a visual/UI deliverable.
+Triggers: "design a", "build me a", "generate a landing page", "create a dashboard", "make a component", "I need a hero section", "design a modal", "build a button", "design the admin panel", "build it like this screenshot", any free-form request for a visual/UI deliverable.
+
+## Modes
+
+`/ux-design` builds four kinds of output. It absorbs what used to be `/ux-component`, `/ux-dashboard` and `/ux-image-to-code`; those names still work as aliases until 4.1.
+
+| Mode | Flag | Picked from the brief when | State file |
+|---|---|---|---|
+| page (default) | none | A page, a landing, a multi-section surface, a marketing page with stats | `.ux/last-design.json` |
+| component | `--component [name]` | The brief names ONE element: button, modal, navbar, sidebar, card, table, form, chart. Not a full page | `.ux/last-component.json` |
+| dashboard | `--dashboard` | Dashboard, admin panel, metrics page, operator console, analytics view, KPI board, monitoring screen | `.ux/last-dashboard.json` |
+| image | `--from-image <path>` | The brief attaches a design image (PNG, JPG, WebP) or names one | `.ux/last-image-extract.json`, then the state file of the build mode |
+
+A flag always wins over the words. Image mode stacks with the others: `--from-image ref.png --dashboard` reads the image, then builds a dashboard. Say which mode you picked in the first line of the output so the user can stop you.
+
+Every mode runs the same Process below (discovery, references, dials, build, output, state) and the engine steps (brief, brand, suggestions, section sequence, tokens, generation, lint, responsive gate, brand floor). Some shared steps are page steps only. This table says which apply per mode; the mode sections list only what else changes.
+
+| Shared step | page | component | dashboard |
+|---|---|---|---|
+| engine step 2.5 page-level section sequence, and the section sequence in step 4 | yes | no | no |
+| WOW layer, hero moment (step 2) | yes | no | no |
+| WOW layer, motion signature and section moment (step 2) | yes | yes | yes |
+| SEO section | yes | no | no |
+| Responsive gate (a) no horizontal scroll and (e) sticky chrome height | yes | yes | yes |
+| Responsive gate (b) nav one row, (c) wordmark and CTA labels one line, (d) nav children do not collide, (f) the primary action on the first phone screen | yes | no | no |
+| Lint and brand-fidelity floor | yes | yes | yes |
+
+Image mode follows the column of the build mode it stacks with. A component or dashboard run that skips gate checks (b) to (d) and (f) is not DEGRADED for their absence; the gate is (a) and (e) for those modes.
+
+| Flag | Meaning |
+|---|---|
+| `--component [name]` | Component mode |
+| `--dashboard` | Dashboard mode |
+| `--from-image <path>` | Image mode: read the image first. The path is the first argument that is not a flag, wherever it sits, so `--from-image --no-recommendation ref.png` reads `ref.png` |
+| `--extract-only` | Image mode: stop after the extraction and print its JSON. No build |
+| `--no-recommendation` | Image mode: hints only, no recommender run. Implies `--extract-only` |
+| `--save <path>` | Image mode: where to write the extraction (default `.ux/last-image-extract.json`; empty string skips the write) |
+| `--skip-discovery` | Skip the discovery intake (see step 1) |
+
+### Component mode (`--component`)
+
+The job is a single, production-grade component that avoids generic AI aesthetics. One component, fully realized: all four interaction states, accessible, on-brand. If the brief asks for a full page or multi-section surface, switch to page mode.
+
+Triggers: "build a button", "create a pricing card", "make a modal", "add a navbar", "design a sidebar", "I need a data table", "build a form", "make a chart component", or any single-element request.
+
+**Discovery (step 1).** Focus on: brand identity, 2-3 references for the component type, audience, style direction, voice, stack, imagery (if applicable), must-have patterns, avoid list, and the wow moment for THIS component specifically. Group into one or two messages. Skip only on `--skip-discovery` or if the spec already covers every field. Without the wow moment, push back.
+
+**Capture the spec.** Required:
+- **Component type**: button / modal / navbar / sidebar / card / table / form / chart / other
+- **Stack**: React + Tailwind / Vue / Svelte / Blade + Alpine / vanilla HTML / etc.
+- **Brand voice**: pull from `.ux/last-frame.json` if it exists, otherwise ask one line: *"What's the voice: minimal / brutalist / editorial / playful / dark? Or 'your call'?"*
+
+Optional but useful: specific behavior (auto-sort, multi-step, infinite scroll, drag-reorder), data shape, density target. Do not ask three questions. One question that surfaces everything missing.
+
+**Arsenal picks (step 2).** Pick 1-2 patterns that fit. For a button: live status with overshoot, optimistic update. For a modal: contextual focus mode. For a navbar: command input, intelligent list. For a card: hairline-separated metric blocks. For a table: intelligent list, monospace tabular. For a form: inline validation with field-level @error, multi-step wizard. For a chart: monochrome + semantic state colors only.
+
+**Dials (step 3).** DESIGN_VARIANCE 5 (4 for system components, 6 for marketing components). MOTION_INTENSITY 4 (3 for utility components, 5 for marketing components). VISUAL_DENSITY 5 (7 for tables/charts, 4 for buttons/modals).
+
+**Build (step 4).** The build (or the optional `frontend-engineer` subagent) gets the spec verbatim, the dials, the 1-2 patterns, the full `references/styles/anti-slop.md`, the full `references/surfaces/component.md` (the playbook step 1c picks for this mode), the target stack, and an instruction to return code + self-review on bans avoided + patterns used. A `motion-engineer` subagent may run in parallel if the spec involves motion (loading states, optimistic UI, micro-interactions, transitions). A `copy-writer` subagent may run in parallel if the component has non-trivial copy (form labels, empty states, error messages, CTAs).
+
+**Generation (engine step 4).** Look up the requested component name in `.ux/last-recommendation.json`'s `components` list. If present, generate using its `anatomy`, `states`, `tokens_used`, and `motion` fields as the spec. If not present, search `data/components.json` directly via `cat data/components.json | jq '.entries[] | select(.name | test("<name>"; "i"))'`. The page-sequence step (engine step 2.5) does not apply. The brand anchor applies as in page mode: the component must use the brand primary color, the logo where one belongs, and logo-style type, and ship real imagery when it carries visuals, or it fails the brand-fidelity floor. A house-style component for a client brand is wrong no matter how clean.
+
+**Output (step 5).**
+
+```
+─── component spec ───
+Type:       <component type>
+Stack:      <stack>
+Voice:      <brand voice>
+Dials:      DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
+Patterns:   <1-2 arsenal patterns>
+
+─── generated ───
+<code, verbatim>
+
+─── interaction states ───
+Default:    <description>
+Hover:      <description>
+Active:     <description>
+Disabled:   <description>
+Loading:    <description>  (if applicable)
+Error:      <description>  (if applicable)
+Empty:      <description>  (if applicable)
+
+─── self-review ───
+Bans avoided:    <list>
+Patterns used:   <list>
+
+─── next ───
+Recommended: /ux-design --component   (build the next one)
+Other moves: /ux-polish      (cosmetic pass)
+             /ux-a11y        (WCAG check)
+             /ux-design      (assemble into a fuller surface)
+             /ux-next        (let me decide)
+```
+
+**State (step 6).** Write `.ux/last-component.json`:
+
+```json
+{
+  "command": "ux-component",
+  "timestamp": "<ISO8601>",
+  "type": "<component type>",
+  "stack": "<stack>",
+  "surface": "component",
+  "voice": "<voice>",
+  "dials": { "variance": <n>, "motion": <n>, "density": <n> },
+  "patterns": ["<arsenal patterns>"],
+  "output_file": "<path if saved>"
+}
+```
+
+The `command` value stays `ux-component` so `/ux-next` keeps reading it.
+
+**Component hard rules** live in `references/surfaces/component.md` (Component build rules). They apply in addition to the shared hard rules.
+
+**Component failure modes and errors:**
+
+| Failure or error | Recovery |
+|---|---|
+| Stack unclear | Ask one combined question covering stack + voice + behavior |
+| Component type ambiguous ("thing to filter stuff") | List the candidate types (table with command input / sidebar with filter chips / autocomplete combobox) and ask which one |
+| Sub-agent returns the default state only | Reject and redo; all four interaction states are non-negotiable |
+| Sub-agent returns the wrong stack | Catch in review, redo |
+| Sub-agent says "I avoided X" but the code uses X | Grep the output. Reject and redo |
+| Over-scope: a full page for a single button, or a spec that implies a full page | Trim to the requested component; offer page mode as the follow-up |
+| No motion when motion was specified | Redo the build with an explicit motion brief |
+| `.ux/last-frame.json` absent and voice not provided | Ask the one-line voice question above |
+
+### Dashboard mode (`--dashboard`)
+
+The job is a dashboard that respects data density and operator attention, not a marketing site with charts pasted on. Anti-card-overuse, monospace tabular numbers, semantic state colors, sparing motion. A marketing landing page with stats stays in page mode.
+
+Triggers: "build a dashboard", "design the admin panel", "make a metrics page", "operator console", "analytics view", "KPI board", "monitoring screen".
+
+**Discovery (step 1).** Highest-leverage fields: brand identity, references (admired dashboards), audience (operator / analyst / exec: different density needs), key metrics + data shape, style direction, voice for state messages, stack, must-have widgets (intelligent-list / command-input / live-status / wide-stream / contextual-focus), avoid list, and the wow moment. Group into 2-3 messages. Push back on "anything's fine".
+
+**Capture the brief.** Required:
+- **Data shape**: what entities, what metrics, what relationships. Time-series? Categorical? Hierarchical?
+- **Key metrics**: the 3-7 numbers that dominate the page
+- **Audience**: operator (always-on, scan-and-act) / analyst (deep dive, filter and segment) / exec (status at a glance)
+- **Stack**: React + Tailwind / Next.js / Vue / Blade + Alpine / etc.
+
+If anything's missing, ask once: *"One line: data shape, key metrics, audience (operator/analyst/exec), stack?"*
+
+**Arsenal picks (step 2).** Pick 3-5 dashboard patterns. The five live-product archetypes (intelligent list, command input, live status, wide data stream, contextual focus) live in `references/styles/arsenal.md` (Live-product archetypes). The dashboard patterns (the archetype bento, replace cards with hairlines, compact stat tile, cockpit density) live in `references/surfaces/dashboard.md`.
+
+**Dials (step 3).** DESIGN_VARIANCE 4 (dashboards are calmer than landings). MOTION_INTENSITY 3 (data should feel still until it changes). VISUAL_DENSITY 8 (dashboards are cockpits, not galleries).
+
+**Build (step 4).** The build (or the optional `frontend-engineer` subagent) gets the brief verbatim, data shape + key metrics + audience, stack, dials, the 3-5 patterns, the full `references/styles/anti-slop.md`, the full `references/surfaces/dashboard.md` (the playbook step 1c picks for this mode), and an explicit instruction to follow the playbook's rules on tabular numbers, live indicators and semantic state colors. A `motion-engineer` subagent may run in parallel for live indicators and state transitions. A `copy-writer` subagent may run in parallel for empty states, error messages, and metric labels.
+
+**Generation (engine step 4).** The page-sequence step (engine step 2.5) does not apply: no section sequence, no conversion mechanisms, no hero. Filter `components` from the recommendation for dashboard patterns (`category: Data Display`, `Charts & Viz`). Build a dashboard grid on the system's tokens in dark mode. The build gets the `chart-types.json` picks scoped to the data the user described. With a client brand, dark mode still holds, but the brand primary (not the house pick) is the accent on every state color, the logo sits in the chrome, and type matches the logo style; the dashboard must clear the brand-fidelity floor.
+
+**Output (step 5).**
+
+```
+─── dashboard brief ───
+Data shape:  <summary>
+Metrics:     <3-7 key metrics>
+Audience:    <operator | analyst | exec>
+Stack:       <stack>
+Dials:       DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
+Patterns:    <3-5 arsenal patterns>
+
+─── generated ───
+<code, verbatim>
+
+─── layout logic ───
+Grouping:    <how widgets are grouped: border-t / divide-y / negative space>
+KPI row:     <pattern used: hairline-separated / asymmetric bento / focus widget>
+Live count:  <number of breathing/live indicators in initial viewport, must be ≤2>
+
+─── self-review ───
+Bans avoided:    <list>
+Patterns used:   <list>
+Accessibility:   <color-not-only confirmed for all chart series>
+
+─── next ───
+Recommended: /ux-design --component   (build a missing widget)
+Other moves: /ux-polish      (cosmetic pass)
+             /ux-a11y        (color-not-only audit for charts, contrast for tabular data)
+             /ux-motion      (verify live indicators don't fight attention)
+             /ux-next        (let me decide)
+```
+
+**State (step 6).** Write `.ux/last-dashboard.json`:
+
+```json
+{
+  "command": "ux-dashboard",
+  "timestamp": "<ISO8601>",
+  "data_shape": "<summary>",
+  "metrics": ["<key metrics>"],
+  "audience": "<operator|analyst|exec>",
+  "stack": "<stack>",
+  "surface": "dashboard",
+  "dials": { "variance": <n>, "motion": <n>, "density": <n> },
+  "patterns": ["<arsenal patterns>"],
+  "live_indicator_count": <n>,
+  "output_file": "<path if saved>"
+}
+```
+
+**Dashboard hard rules** live in `references/surfaces/dashboard.md` (Principles, Banned dashboard patterns and the Checklist). They apply in addition to the shared hard rules.
+
+**Dashboard failure modes and errors:**
+
+| Failure or error | Recovery |
+|---|---|
+| Card overuse: every widget in `rounded-lg shadow border` | Reject. Use hairlines and grouping |
+| 3-equal-card KPI row | Reject, replace with asymmetric bento or hairline-separated blocks |
+| 3 or more live indicators in the initial viewport | Reject, reduce to 2 or fewer |
+| Proportional digits in metrics (numbers jitter on update) | Reject, force `tabular-nums` |
+| Color-only chart series | Reject, add patterns/shapes/labels |
+| Marketing gradient on the analytics page | Reject, swap to neutral + semantic accent |
+| No empty/loading/error states | Reject and redo |
+| Data shape missing | Ask for entities + relationships + metrics in one combined question |
+| Audience unclear, or "all of them" | Ask once; density and motion defaults depend on a single primary audience, so push back until one is picked |
+| More than 7 key metrics | Force a triage to the 3-7 that dominate; surface the rest as secondary |
+
+### Image mode (`--from-image <path>`)
+
+**Pure CV. No multimodal LLM.** Hand the engine a screenshot or a design reference; it returns a Brief, a closest-match palette, a closest-match style, and a full Recommendation. No vision model is called. Every signal is computed deterministically from pixels via Pillow.
+
+Use it when you have a reference design (a competitor screenshot, a gallery shot, a Figma export) and want the build to go in that direction, when you want the recommendation anchored on a real image instead of a typed brief, or when you want to check the engine's read on a design before generating code. Skip it when the reference is text (a written brief, a PRD: use `/ux-discover`), or when you want pixel-perfect cloning: this is a HINT generator, not a copy-paste tool.
+
+**1. Extract.**
+
+```bash
+python3 -m engine.cli.main image-extract path/to/reference.png [--no-recommendation] [--save .ux/last-image-extract.json]
+```
+
+What happens, step by step:
+
+1. **Decode + downsample**: Pillow opens the image and resizes the long edge to 512px to keep quantization fast.
+2. **Quantize to 5 colors**: `Image.quantize(colors=5, method=MAXCOVERAGE)` finds the dominant tones (a deterministic palette reduction, equivalent in shape to a small k-means but without sklearn).
+3. **Canvas polarity**: average luminance under the sRGB curve. Above 0.5 is light; below is dark.
+4. **Type polarity**: ratio of `EDGE_ENHANCE_MORE` variance to `EMBOSS` variance. High ratio leans serif, low leans sans, between is `unknown`.
+5. **Aspect + density**: `FIND_EDGES` followed by binarization gives a coarse "edge fraction." Lots of edges means a dense layout (dashboard, dense editorial); few edges means an airy hero.
+6. **Match against manifests**: for each palette in `data/palettes.json`, sum the nearest-neighbour distances between the extracted 5 colors and the palette's canvas/surface/ink/primary anchors. Lowest sum wins.
+7. **Style fit**: bias styles whose id/category contains "dark"/"cinema"/"luxe" for dark canvas, "swiss"/"editorial"/"minimal" for light canvas. Boost styles that appear in the matched palette's `compatible_styles`.
+8. **Synthetic Brief, then recommend**: pack the hints into a `Brief` and run the recommender to produce a complete system.
+
+The result is JSON with `image`, `brief`, `hints` (`dominant_colors`, `canvas_polarity`, `type_polarity`, `aspect`, `matched_palette_id`, `matched_palette_name`, `matched_style_id`, `matched_style_name`), `recommendation`, and `saved_to`. The same pipeline is the MCP tool `ux_image_extract` (`{"path": "/abs/path/to/reference.png", "with_recommendation": true}`), and in Python:
+
+```python
+from engine.image_extract import image_to_brief
+from engine.recommender import Brief, recommend
+
+result = image_to_brief("reference.png")
+rec = recommend(Brief(**result["brief"]))
+```
+
+**2. Report the read.** Tell the user in one short block what the engine sees: canvas polarity, type polarity, dominant colors, matched palette and matched style. With `--extract-only` or `--no-recommendation`, print the JSON and stop.
+
+**3. Build.** Otherwise continue into the build mode (page by default, or `--component` / `--dashboard`). Use the extraction's `recommendation` in place of the engine step 2 `recommend` call, and its `brief` to fill discovery fields the user has not answered. For more control, edit the saved file and rerun the recommender on it: `python3 -m engine.cli.main recommend --brief-file .ux/last-image-extract.json`.
+
+**Brand anchor.** The uploaded image IS the brand source. When the build should match the source's identity rather than the house style, extract the brand from it first (engine step 1.5: capture the logo color/type from the image into `.ux/brand-signals.json`, then `uxskill brand --signals-file .ux/brand-signals.json --out .ux`) so the build inherits the source's primary color, logo, and logo-style type. The CV `hints` are color and polarity only; the travelling brand carries the logo and type intent the recommender enforces.
+
+**Default forbidden list.** The synthetic brief auto-populates `forbidden` with the project-wide taste guardrails: `yellow`, `amber`, `gold`, `cream`, `coral`, `cormorant`. The extraction is for COLOR and POLARITY hints; the forbidden vocabulary is a separate policy decision the engine respects regardless of what the image suggests. To override it, edit `.ux/last-image-extract.json`, remove items from `brief.forbidden`, and rerun the recommender on that file.
+
+**Limitations (say these when they matter):**
+- **Type polarity is a guess.** It samples edge-filter variance ratios; that correlates with serif vs sans-serif but is not OCR.
+- **The matched palette is the closest in our manifest, not the closest globally.** If the reference uses colors no palette covers, the match picks the least-bad neighbour.
+- **No layout reconstruction.** The engine reads color, light and edge density. It does NOT read grid structure, component boundaries, or copy. Layout comes from the brief and the page sequence, not the image.
+- **No multimodal LLM is consulted.** That is the point: it stays cheap, deterministic, and offline.
 
 ## Process
 
@@ -40,72 +305,136 @@ The 10 required fields are:
 **Skip conditions** (the only ones):
 - User passes `--skip-discovery` flag.
 - User's first message already covers ALL 10 fields. Verify it does; if anything's missing, ask only for the missing fields.
-- User is iterating on a prior design (read `.ux/last-frame.json`; ask only what's changed).
+- User is iterating on a prior design (read `.ux/last-discovery.json`; ask only what's changed).
+- The project answers a field already. A brand book, a voice or facts sheet, the brand's own pages and templates, or an existing design system: each field they answer is taken from them and not asked. Ask only what they leave open. The wow moment counts too: a signature move the brand's pages already make is the answer.
 
-**After collecting answers**: write `.ux/last-frame.json` with the full discovery payload. Echo a 2-sentence summary back to the user before generating — let them stop you if their intent didn't land.
+**After collecting answers**: write `.ux/last-discovery.json` with the full discovery payload (the file /ux-discover writes), with a `sources` map naming, per field, the file its answer came from (or `user`). Echo a 2-sentence summary back to the user before generating, so they can stop you if their intent did not land, and say there where each answer came from.
 
-NEVER proceed to step 2 without the wow moment field populated. If the user says "anything's fine", push back: "Give me one concrete moment, even tiny — something a visitor would remember."
+A page is not built without a wow moment: the user's, the one the brand's pages already make, or one derived per `references/foundations/wow.md`. When the user says "anything's fine", derive it and say which you chose.
 
-### 1b. DESIGN.md is the visual contract
+### Page mode, in order
 
-If a `DESIGN.md` exists in the project root, read it FIRST and treat it as the source of truth for the visual system (colors, typography, spacing, rounded, components). Match it exactly. If none exists, after discovery emit one for this project with `ux design-md` (the Google Stitch / awesome-design-md standard) and treat it as the contract the generated UI must satisfy.
+Page mode runs these steps in this order; the sections below give the detail of each.
+
+1. **Discovery** (Process step 1) writes `.ux/last-discovery.json`.
+2. **The system brief.** Write `.ux/system-brief.json`: the discovery answers plus the structured fields /ux-system reads (`industry`, `brand_role`, `product_type` and the others it lists, filled from what the user said) and the page fields engine step 2.5 reads (`proof`, `contact`, `stage`, `page`, `platforms`, `sign_in`, `primary_side`, `primary_action`, `commitment`, `arrival`, `objections`). Every later step reads this file.
+3. **Brand** (engine step 1.5): extract it from the client's material, or, with no brand material, ask for one hex, as /ux-system create mode does.
+4. **System**: `system detect` (step 1a); when it finds none, `system build` from that hex and that brief (step 1b).
+4a. **Page style** (step 1a.1): the brand's own pages and content register, read before any look is chosen.
+5. **Suggestions** (engine step 2), only when no system existed before step 4.
+6. **Sequence**: `select_for_brief` (engine step 2.5).
+7. **Build** (Process steps 2 to 4, engine steps 3 and 4), then the gates (engine step 5), the output and the state (Process steps 5 and 6).
+
+### 1a. An existing design system is fixed input
+
+Before any engine pick, run `python3 -m engine.cli.main --no-pretty system detect --root .`. It looks for a DTCG or `tokens.json` file, a token build script, CSS custom-property foundation files, a hand-written `MASTER.md` or `DESIGN.md`, a `design-system/` folder or a `packages/tokens` folder. When `found` is true:
+
+1. The page's tokens come from that system. Link its built CSS; if the build output is missing, run its build script. Use its custom properties by their own names.
+2. Skip the engine's palette, type pair and every `recommend` pick for color and type (Step 3 reads them as suggestions only). Skip `ux design-md`; with `--from-system` it only mirrors the system.
+3. Never edit, overwrite or re-derive the system's files. `ux persist save` writes beside a hand-written MASTER.md.
+4. A gap the page needs (a token the system lacks) goes in a separate extension file beside the system, never in its files. `/ux-system extend --from <the system's file> --add <foundation>` writes it for you (a stylesheet `theme.css` gets `theme-ext.css`, loaded after it) in the system's own naming, and `/ux-system enhance --from` first measures what the code already uses. By hand, name the file after the system, such as `<system>-ext.css`, name each new token in the system's own naming, and log one comment per token: what it is and why the system lacked it.
+5. Pass `detect`'s `declared` block into the brand step: the declared primary beats logo pixels.
+
+### 1a.1. The brand's own pages set the page style
+
+Page mode, right after step 1a and before any composition, dial or sequence alternative is chosen. A system holds the tokens; the brand's pages show how it builds a page with them.
+
+1. **Find the pages.** Look in the project for a marketing site or app views: a site app, templates (Blade, Twig, Jinja, Liquid, JSX, Vue, Astro), built HTML, screenshots kept in the repo. Open the live site when the brief names one.
+2. **Record the page style as facts** in `.ux/page-style.json`, each fact with the file it came from. A fact no file shows is left out, never guessed; with no brand pages the file says so and records no facts:
+
+| Fact | What it records |
+|---|---|
+| `scheme` | The scheme the pages open in. A dark default counts: the new page opens dark too |
+| `rhythm` | The gap between sections as the pages set it, and how sections meet: overlapping, a radius at the join, full-bleed bands |
+| `panels` | The colors of panels and bands, by the system's own variable names |
+| `headlines` | The headline sizes the pages really use, which can run above the token scale |
+| `density` | How much one screen holds, such as one idea per screen |
+| `imagery` | Photographs, the product's own screens, or none |
+| `color_use` | Reserved (the brand color on a few actions) or flooded (bands filled with it) |
+
+3. **The page follows these facts.** The engine's defaults (composition, landing gap, display size, dials) apply only where the brand has no page to read; name each default used and why.
+4. **Find the content register.** Look for a voice sheet, a facts file, a list of banned words, a register or dialect rule, currency rules: in the brand book, a content or copy folder, the translation files. When one exists, every public string follows it (headlines, buttons, errors, alt text, meta tags), `.ux/page-style.json` names it as `register`, and the self-review says which file the copy followed. A string it does not cover is written in its manner and listed for the owner.
+5. **Read the dials from the brand.** With an existing system, DESIGN_VARIANCE, MOTION_INTENSITY and VISUAL_DENSITY come from these facts and the brand book, never from the defaults in step 3: a quiet brand gets quiet dials. Record each dial with the fact that set it.
+
+### 1b. The design system is the contract
+
+When step 1a found a system (a hand-written `DESIGN.md` counts), that system is the contract. When it found none, build one before any page code, the /ux-system way: `uxskill --no-pretty system build --brand '<hex>' --brief .ux/system-brief.json --out design-system --rule-pack`. Take the hex from the client's own material (engine step 1.5), or the one hex the user gave when there is no brand material; fill the brief's structured fields as /ux-system describes, including `brand_role` from how the client's own material uses the brand. Link `design-system/tokens.css` and `fonts.css`, and load the rule-pack files `design-system/rule-pack/README.md` names for a landing page. The built tokens are the only tokens (engine step 3).
+
+### 1c. Pick exactly one surface playbook
+
+Surface-specific rules live in playbooks under `references/surfaces/`. The mode (see Modes) decides the playbook, so pick exactly one:
+
+| Mode | Playbook |
+|---|---|
+| page, when the page explains, sells or converts: landing page, homepage, launch, waitlist, pricing, service or lead-gen page | `references/surfaces/landing.md` |
+| page, any other page: signed-in app screen, docs, portfolio, email | none |
+| component | `references/surfaces/component.md` |
+| dashboard | `references/surfaces/dashboard.md` |
+| image | the playbook of the build mode it stacks with; none with `--extract-only` |
+
+Load only the playbook you picked. Never load two surface playbooks. The one-playbook rule applies to surface playbooks only: component contracts (`references/foundations/component-behaviors.md`, `references/components/library.md`, `references/foundations/components.md`) and the shared foundations still load when a build needs them, so a landing page with a quote form or a comparison table reads the form and data table contracts. A brief that straddles two surfaces gets its mode from the Modes rules, and the mode decides the playbook; there is no second pick. Record it as `surface` in the state file of the build mode: `.ux/last-design.json`, `.ux/last-component.json` or `.ux/last-dashboard.json`.
 
 ### 2. Read the references
 
 Before writing a single line of code, read:
-- `references/styles/anti-slop.md` — the ban list. Internalize every forbidden pattern.
+- `references/styles/anti-slop.md`: the ban list. Its bans guard against model defaults; the client's own system and identity win over them (principles 9 to 11).
 - `references/styles/arsenal.md` — the high-end pattern library. Pick 2-4 patterns that fit the brief.
-- `references/foundations/wow.md` — derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment) from the brand temperature + industry + goal. The page must do something a visitor remembers, not just be clean — derived + varied to THIS brand, never a stamped recipe.
-- `references/foundations/responsive.md` + `references/foundations/component-behaviors.md` — mobile-first mechanics + per-component responsive contracts. The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
+- `references/foundations/wow.md`: derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment; component and dashboard modes skip the hero moment) from the brand's own page style, the brief's structured fields and the goal, never from the industry. The page must do something a visitor remembers, not just be clean. Derived + varied to THIS brand, never a stamped recipe.
+- `references/foundations/responsive.md` and `references/foundations/component-behaviors.md`: mobile-first mechanics and the component contracts (card grid, form, data table, modal and drawer). The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
+- The surface playbook picked in step 1c, if any. Its rules are as binding as the ban list.
 
 These are non-negotiable. The output's distinction from generic AI output IS the value of this command.
 
 ### 3. Set the dials
 
-Pick values for three dials based on the brief (these are inherited from `design-taste-frontend`):
+Pick three dials. They summarize for the build what the system's axes already say (contrast and motion, density), each on a scale of 1 to 10; with an existing system or brand pages, step 1a.1 has set them from the brand, and the defaults below apply only where the brand has no page:
 
-- **DESIGN_VARIANCE** (1 perfect symmetry → 10 artsy chaos) — default 7 for landing pages, 4 for dashboards, 5 for components
-- **MOTION_INTENSITY** (1 static → 10 cinematic) — default 6 for landing pages, 3 for dashboards, 4 for components
-- **VISUAL_DENSITY** (1 art gallery → 10 cockpit) — default 4 for landing pages, 8 for dashboards, 5 for components
+- **DESIGN_VARIANCE**: how far the layout leaves a strict, aligned grid, from every block on the grid (1) to a freely composed page (10). Default 7 for landing pages, 4 for dashboards, 5 for components.
+- **MOTION_INTENSITY**: how much the page moves on its own, from still (1) to scenes led by the scroll (10). Default 6 for landing pages, 3 for dashboards, 4 for components.
+- **VISUAL_DENSITY**: how much one screen holds, from a few items with wide space (1) to many read at a glance (10). Default 4 for landing pages, 8 for dashboards, 5 for components.
 
-Override with whatever the user explicitly asked for. Surface your dial values in the output so the user sees what you picked.
+Override with whatever the user explicitly asked for. Surface your dial values in the output, each with where it came from (a page-style fact, the brand book, the user, or the default), so the user sees what you picked.
 
-### 4. Dispatch the frontend-engineer sub-agent
+### 4. Build the page (a subagent is optional)
 
-Call the Task tool with `subagent_type: "frontend-engineer"`. Pass the agent:
+Build it yourself, or hand it to the `frontend-engineer` subagent when the host has one; the subagent is recommended for a long page, never required. Either way the build gets the same inputs:
 
 - The brief (verbatim from the user)
 - Your dial values
 - The 2-4 arsenal patterns you picked
-- **The page-level section sequence** selected for the brief's goal (see the v2 Python integration step below). Instruct the sub-agent to expand the ENTIRE ordered sequence, map all source content into it (every sector -> a pill, every size -> a card, every benefit -> a checklist item — do not trim), give every card/pill/stat a relevant inline SVG icon, and ship the goal's conversion mechanisms.
-- The full content of `references/styles/anti-slop.md` (paste into the prompt — do not assume the sub-agent has read it)
+- **The page-level section sequence** (page mode only) from engine step 2.5, with its `dropped` list
+- **The page style and the register** (page mode, when step 1a.1 found them): `.ux/page-style.json` and the register file it names, in full
+- The system's `tokens.css`, `fonts.css` and the rule-pack files its README names for a landing page
+- `references/styles/anti-slop.md`, the surface playbook picked in step 1c, and `references/foundations/component-behaviors.md` when the build contains a card grid, form, data table, modal, sheet or drawer (a subagent gets their full text in its prompt)
 - The target stack
-- An instruction to return:
-  1. The generated code
-  2. A self-review noting which anti-slop bans they had to consciously avoid
-  3. Which arsenal patterns they used
 
-Do not write the design yourself. The sub-agent's job is implementation; your job is orchestration.
+The build returns the code, a self-review naming the anti-slop bans it avoided and any it waived for the client's identity (with the evidence), which register file the copy followed, and the arsenal patterns it used.
 
 ### 5. Format the output
 
 Use this exact template:
 
 ```
-─── design brief ───
+=== design brief ===
 Product:   <one-line summary>
+Surface:   <landing | none>
 Stack:     <stack>
-Dials:     DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n>
+Dials:     DESIGN_VARIANCE=<n>, MOTION_INTENSITY=<n>, VISUAL_DENSITY=<n> (each with its source)
 Patterns:  <2-4 arsenal patterns chosen>
+Page style: <.ux/page-style.json facts and their files, or: no brand pages, engine defaults>
+Register:  <the file every public string followed, or: none found>
 
-─── generated ───
-<code blocks from the sub-agent — preserve verbatim>
+=== generated ===
+<code blocks, verbatim>
 
-─── self-review (sub-agent) ───
-<sub-agent's notes on which anti-slop bans they avoided>
+=== self-review ===
+<anti-slop bans avoided, and any waived for the client's identity with the evidence>
+<sections dropped from the sequence, each with its reason>
+<one line per section naming its job (ask, proof, objection, explanation, navigation); any section with none, cut>
+<where the FAQ's questions came from: the brief's objections, or the client's operational answers>
 <which arsenal patterns they used and why>
 
-─── next ───
+=== next ===
 Recommended: /ux-polish      (cosmetic pass on the generated design)
 Other moves: /ux-motion      (verify the motion holds up)
              /ux-a11y        (WCAG check on the generated design)
@@ -123,8 +452,11 @@ Write to `.ux/last-design.json` in the project root:
   "timestamp": "<ISO8601>",
   "brief": "<verbatim brief>",
   "stack": "<stack>",
+  "surface": "<landing|none>",
   "dials": { "variance": <n>, "motion": <n>, "density": <n> },
   "patterns": ["<arsenal pattern names>"],
+  "page_style": "<.ux/page-style.json, or none>",
+  "register": "<the register file followed, or none>",
   "output_file": "<path if saved to disk>"
 }
 ```
@@ -133,63 +465,67 @@ This lets `/ux-next` and downstream commands pick up where you left off.
 
 ## SEO is mandatory for public-web outputs
 
-For any landing page or public-facing surface, read `references/foundations/seo.md` and require the frontend-engineer to ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). Surface this requirement in your dispatch prompt. The output is incomplete without it. Derive sensible real values from the brief + source when the brief doesn't supply them (canonical/og:url from the source URL, og:image from a real CDN image the page references). **Never let the frontend-engineer ship a literal `{TODO_FILL...}` token inside the rendered markup** — the linter flags it HIGH and it is a draft-state leak. Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully (drop the `<meta>` / the affordance); surface any "you should patch this" note to the user OUTSIDE the code, never as a placeholder in the HTML.
+Page mode only; component and dashboard modes skip this section. For any landing page or public-facing surface, read `references/foundations/seo.md` and ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). When a subagent builds, say so in its prompt. The output is incomplete without it. Derive sensible real values from the brief + source when the brief doesn't supply them (canonical/og:url from the source URL, og:image from a real CDN image the page references). **Never ship a literal `{TODO_FILL...}` token inside the rendered markup**: the linter flags it HIGH and it is a draft-state leak. Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully (drop the `<meta>` / the affordance); surface any "you should patch this" note to the user OUTSIDE the code, never as a placeholder in the HTML.
 
 ## Hard rules (non-negotiable)
 
-- NEVER use purple/blue AI gradients. Single high-contrast accent, saturation < 80%.
+These guard against model defaults. Where the client's own system or identity (its tokens, logo, site, app or brand book) does what a rule bans, the client wins: the build notes name the material and its exact value, and the page uses that value (decisions/client-identity-wins.md).
+
+- NEVER reach for the default purple-to-blue gradient or an oversaturated accent. A client's own brand gradient, saturated brand, blue or pure white stays as the client uses it.
 - NEVER use generic names ("John Doe", "Acme", "Nexus") in placeholder content.
-- NEVER use pure black (`#000`). Use Zinc-950, Charcoal, or Off-Black.
+- NEVER use pure black (`#000`) unless the client's identity does. Use the system's ink.
 - Imagery is mandatory and REAL: client assets first, then curated Unsplash/Pexels chosen to match the brand + 7-axis temperature (`engine.brand.image_search_terms` suggests on-brand search terms). Pick the best per slot; treat them so they read as deliberate. An abstract SVG is NOT a substitute for a real product/site image. Ban only random/generic stock and auto-rotating placeholder services.
+- The page MUST carry photographs. With none from the client, source them (stock included), picked by the photo direction. A brand's ban on a kind of photo narrows which photos qualify and never removes photography: `engine.brand.photo_exclusions` lists the kinds that do not qualify, in the brand's words ("posed lifestyle stock", "airbrushed people"), and every photo on the page avoids them; name them in the self-review. Only a client system that forbids photography outright (`engine.brand.photography_forbidden` is true) ships a page without photographs, and the self-review reports that rule. An illustration, an icon or the logo is never the page's photograph; the brand gate counts none of them.
 - NEVER ship a text-only wall — always include intentional, real imagery.
-- NEVER use emoji as icons. Prioritize **Google Material Symbols** (load via Google Fonts: `Material+Symbols+Outlined` / `Rounded` / `Sharp`, styled with `font-variation-settings`). Phosphor / Radix / Lucide are acceptable secondary choices when an icon doesn't exist in Material Symbols.
-- NEVER ship 3-equal-cards layouts. Use 2-col zig-zag, asymmetric, or horizontal scroll.
+- **Icons.** One set per page: the client's own icon set when it has one, else inline SVG line icons on a 24 unit grid in `currentColor`, stroked at `type.icon.stroke` and sized by the `type.icon.size` roles. No icon font, no emoji. An item gets an icon only when a distinct one says something about that item; otherwise no icon, and type carries the difference. Never one icon repeated across items that differ.
+- NEVER ship three equal cards that each hold just an icon, a title and a line. Give each card its own photograph or product fragment, or use a split, a list with one lead item, or a bento sized by content.
 - NEVER ship horizontal scroll on mobile. Every layout works at 360–390px with `scrollWidth <= innerWidth`; every multi-column block collapses to one column at ≤640px. This is verified in Step 5, not assumed.
 - NEVER ship a literal placeholder token (`{TODO_FILL...}`, `{{ var }}`, "lorem ipsum") in the rendered markup. Fill known values; OMIT genuinely-absent elements; never print the token.
-- NEVER repeat one icon across differentiated items (every skip size with the same box icon). Distinct icon per item, or none + typographic differentiation.
 - NEVER animate `width`/`height`/`top`/`left`. Use `transform` and `opacity` only.
 - NEVER skip empty/loading/error states.
-- NEVER use serif fonts on dashboards.
-- NEVER produce centered hero sections when `DESIGN_VARIANCE > 4` — force asymmetry.
 - NEVER use scroll progress paths / scroll-tied SVG line drawing on the side of the page.
+
+Surface-specific hard rules (hero, dashboard typography) live in the playbook picked in step 1c. Component contracts live in `references/foundations/component-behaviors.md`.
 
 If you find yourself reaching for any of these, stop. Re-read `anti-slop.md`. Pick the alternative.
 
 ## Failure modes to watch
 
-- **Stack drift**: user said React, sub-agent returns Vue. Catch this in your review of the sub-agent's output, ask for a redo.
-- **Slop creep**: sub-agent claims it avoided Inter but actually used it. Grep the output for `Inter` and `font-family: Inter`. Reject and redo if found.
-- **Missing states**: sub-agent shows a happy-path component with no loading/error/empty. Reject and redo.
-- **Bare-bones output**: sub-agent returns 30 lines for a "landing page" request. Push back — landing pages have multiple sections.
+- **Stack drift**: the user said React and the build is Vue. Catch it in review and redo.
+- **Off-system values**: a color, face, size or space that is not a system token. Grep the CSS for raw hex and px outside the extension file. Replace each with its token.
+- **Missing states**: a happy-path component with no loading, error or empty state. Redo.
+- **Bare-bones output**: 30 lines for a landing page. A landing page renders its whole sequence, less the sections dropped with a reason.
+- **Invented proof**: a number, quote or logo the client did not give. Remove it and drop the section with its reason.
 
 ## Error Handling
 
 | Error condition | Recovery |
 |---|---|
-| Discovery incomplete (any of the 10 fields missing) | Return to discovery — never proceed without all 10 fields populated |
-| User refuses to name a wow moment | Push back: "Give me one concrete moment, even tiny — something a visitor would remember." Block generation until provided |
+| Discovery incomplete (any of the 10 fields missing) | Return to discovery for the missing fields only; a field the brand book or pages answer is populated, with its source |
+| User names no wow moment | Take the one the brand's pages make, or derive one per `references/foundations/wow.md`, and say which |
 | Stack auto-detection fails or conflicts | Ask the user explicitly which stack to target |
-| Sub-agent returns slop tells (Inter on a brand surface, purple gradient, "Acme") | Reject and redo with explicit anti-slop reminder |
-| Sub-agent ships code in the wrong stack | Catch in review, redo |
+| The build shows slop tells (a model-default gradient, "Acme", a face the system does not name) | Redo against anti-slop.md; keep whatever the client's own identity shows |
+| The build ships code in the wrong stack | Catch in review, redo |
+| `select_for_brief` raises on a field (`proof`, `contact`, `stage`, `page`, `platforms`, `sign_in`, `primary_side`, `primary_action`, `commitment`, `arrival`, `objections`, `page_sequence`) | The message names the field and its choices; fix that field in the brief and run it again |
 | SEO foundation missing on a public-web output | Reject; the output is incomplete without head surface, OG/Twitter, JSON-LD, semantic HTML, image discipline, CWV targets |
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.
 
 ---
 
-## v2 Python integration — required preamble
+## Engine steps
 
-Before generating any output, the LLM running this command MUST shell to the v2 Python engine to ground the work in structured data. This is not optional — running without the preamble means generating from training-data defaults (the slop signal).
+Run these before any page code. Without them the page comes from a model's defaults.
 
-### Step 1 — Load the saved discovery brief
+### Step 1: Load the brief
 
 ```bash
-test -f .ux/last-discovery.json && cat .ux/last-discovery.json
+cat .ux/system-brief.json 2>/dev/null || cat .ux/last-discovery.json
 ```
 
-If the file doesn't exist, run `/ux-discover` first. Do NOT proceed without a complete 10-field brief.
+`.ux/system-brief.json` is the 4.0 brief /ux-system builds from (the discovery answers plus the structured fields); `.ux/last-discovery.json` is the discovery file. With neither, run `/ux-discover` first.
 
-### Step 1.5 — Brand: ingest an existing brand.md FIRST, else extract
+### Step 1.5: Brand, from an existing brand.md first, else extracted
 
 **Input-first.** Before anything else, check if the project already has a `brand.md` (repo root, or walk up the directory tree) — the common `brand.md` convention. If so, **consume it** instead of extracting; it is the authoritative anchor:
 
@@ -201,88 +537,105 @@ This parses the standard brand.md into `.ux/brand.json` (travels through the eng
 
 If the brief names a reference site/URL or provides a screenshot, the output MUST look like THEM, not the house style. Extract the brand FIRST — canonical rules in `references/process/brand-extraction.md`. The engine is offline, so YOU capture the signals; the engine normalizes + enforces.
 
-1. **Capture the signals.** Open the URL / read the screenshot and **sample the logo pixels** for the dominant non-neutral color (the brand primary comes from the LOGO, not the most-painted CSS), read the logo's letterform style, and collect 2–3 secondary colors, the fonts, any real imagery URLs, and the voice. Write `.ux/brand-signals.json`:
-   `{"name":"…","logo":{"src":"…","alt":"…"},"logo_colors":[{"hex":"#…"}],"brand_colors":[{"hex":"#…"}],"logo_type_style":"…","fonts":{"h1":"…","body":"…"},"imagery":["…"],"voice":"…"}`
+1. **Capture the signals.** Open the URL / read the screenshot and **sample the logo pixels** for the dominant non-neutral color (the brand primary comes from the LOGO, not the most-painted CSS, unless `ux system detect` declares a primary; then the declared token wins and the logo sample is only reported), read the logo's letterform style, and collect 2 to 3 secondary colors, the fonts, any real imagery URLs, and the voice. Write `.ux/brand-signals.json`:
+   `{"name":"...","language":"...","logo":{"src":"...","alt":"..."},"logo_colors":[{"hex":"#..."}],"brand_colors":[{"hex":"#..."}],"logo_type_style":"...","fonts":{"h1":"...","body":"..."},"imagery":["..."],"voice":"...","strategy":{"positioning":"...","personality":"...","promise":"...","guardrails":"..."},"photography":{"mood":["..."],"subjects":["..."],"avoid":["..."]}}`
+   - `language`: read it from the project's content, its templates and pages (the `lang` they set, the language their text is in). `ux brand` never assumes one: with none stated, it leaves the language empty and its notes say how to set it.
+   - `strategy` and `photography`: when the project has a brand book, copy its positioning, personality, promise and guardrails, and its picture rules, in its own words: `photography.avoid` lists the kinds of photo it excludes, and `"forbidden": true` goes in only when the book says no photography at all. A photography mood is never made of voice words; with no picture rules, leave `photography` out.
 2. **Build the anchor:**
    ```bash
    python3 -m engine.cli.main brand --signals-file .ux/brand-signals.json --out .ux
    ```
-   Writes `.ux/brand.json` (travels through the engine) and `.ux/brand.md` (the human-readable anchor).
+   Writes `.ux/brand.json` (travels through the engine) and `.ux/brand.md` (the human-readable anchor). `ux brand` also reads the project (`--project-root`, default here): a primary declared in its token files beats the logo pixels (both are reported, as `primary` and `logo_primary`), the text color is kept out of the secondaries, and the language comes from the project's HTML.
 3. **CONFIRM before locking (do not skip).** Show the user the extracted `brand.md` — primary color, type direction, logo — in one short message and get a yes. A wrong auto-read (clay instead of amber) poisons the entire build; the 5-second check is the guardrail. If they correct it, edit `.ux/brand-signals.json` and re-run step 2.
 
-If there is NO reference brand, skip this step (pure synthesis from the brief).
+If there is NO reference brand, skip the extraction and ask the user for one hex, as /ux-system create mode does; the system is built from it.
 
-### Step 2 — Get the merged recommendation from the engine
+### Step 2: Suggestions, only when no design system exists
+
+`recommend` and `synthesize` never set a token. When the project had no design system before this run, their picks (style, patterns, motion presets, components, exemplars) are suggestions for the brief and the build; `system build` sets the tokens. When `system detect` found a system, run neither.
 
 ```bash
-# If a brand was extracted (Step 1.5), pass it so the palette + type anchor to THEM.
-BRAND=""; [ -f .ux/brand.json ] && BRAND="--brand-file=.ux/brand.json"
-python3 -m engine.cli.main --no-pretty recommend \
-  --brief-file=.ux/last-discovery.json $BRAND > .ux/last-recommendation.json 2>/dev/null \
-  || echo "engine not installed — falling back to v1 prose-only mode"
+if python3 -m engine.cli.main --no-pretty system detect --root . | grep -q '"found": false'; then
+  BRAND=""; [ -f .ux/brand.json ] && BRAND="--brand-file=.ux/brand.json"
+  python3 -m engine.cli.main --no-pretty recommend \
+    --brief-file=.ux/system-brief.json $BRAND > .ux/last-recommendation.json
+fi
 ```
 
-When `--brand-file` is passed, the recommendation's `palette.colors.primary` is the brand color (from the logo), and it carries `brand` + `type_directive` blocks — the build uses THOSE, not the engine's default pick.
+Run it before step 1b writes `design-system/`, since detect then finds the new system.
 
-Inspect the recommendation:
-```bash
-cat .ux/last-recommendation.json | python3 -c "
-import json, sys
-r = json.load(sys.stdin)
-print('STYLE:    ', (r.get('style') or {}).get('name'))
-print('PALETTE:  ', (r.get('palette') or {}).get('name'))
-print('TYPE:     ', (r.get('type_pair') or {}).get('name'))
-print('MOTION:   ', [m['id'] for m in r.get('motion', [])[:5]])
-print('COMPS:    ', [c['id'] for c in r.get('components', [])[:6]])
-print('BRANDS:   ', [b['id'] for b in r.get('brand_exemplars', [])[:5]])
-print('GUARDRAILS:', len(r.get('guardrails', [])), 'anti-pattern rules active')
-"
-```
+### Step 2.5: Pick the page-level section sequence
 
-### Step 2.5 — Select the page-level section sequence (richness)
+Page mode only. Component and dashboard modes skip this step.
 
-A recommendation gives you the *vocabulary* (style/palette/type). The page
-*skeleton* — what sections appear and in what order — comes from the page-sequence
-selector. Pick one by the brief's goal so the output is RICH and COMPLETE, not a
-hero + three cards.
+The sequence is the page skeleton. `select_for_brief` always returns a sequence, never empty. Only the brief's structured fields decide; the industry and the brief's prose (goal, audience, description) never pick a sequence, and a call-to-action verb such as "book" never counts. It decides in this order, and `why` in its result says which rule decided:
+
+1. `page_sequence`, when the user names the kind of page: that sequence.
+2. `stage: pre-launch`: the `pre-launch` sequence (early access, the team, no proof section).
+3. `page: feature`: the `feature-page` sequence, for a page about one feature of a product people already use. It has no founding team and no early-access form.
+4. `product_type`, refined by the fields below it: `marketplace` gives `b2b-marketplace`, or `marketplace-supply` with `primary_side: supply`; `commerce` gives `ecommerce-product`; `editorial` gives `content-publication`; `local-service` gives `lead-gen-service`; `software` gives `saas-marketing`, `trust-led` with `primary_action: demo`, `web-app` with `primary_action: sign-in` on the web; `app` follows `platforms`: a store platform gives `app-mobile-landing`, the web without one gives `web-app` (no store badges, no download band).
+5. Without `product_type`: `primary_side` alone gives `b2b-marketplace` or `marketplace-supply`; `primary_action` alone (`quote`, `book` or `contact` give `lead-gen-service`, `buy` gives `ecommerce-product`, `subscribe` gives `content-publication`, `demo` gives `trust-led`, `sign-up` gives `saas-marketing`), then `platforms` alone, then `project_type: mobile-app` (a store app). No action alone gives a two-sided marketplace: `open-account` asks for `product_type`, since a bank, a wallet and a broker open accounts too.
+6. With none of these, or with a field the pick needs missing (an `app` without `platforms`), `general-landing`: hero, what it does, how it works, feature rows, one named quote, FAQ, closing band. `why` names the missing field and how to set it; ask the user for it, or tell the user which sequence you are building and offer the others by id.
+
+`sign_in` with `phone` works on every sequence: the hero's sign-in, the header sign-in and the closing band become a phone number field, and `why` says so. The industry still informs the copy and which proof to ask for, in prose, never the sequence.
+
+Three more fields shape the page around its ask without changing the pick, and `why` or `dropped` reports each change:
+
+- `commitment`, what the visitor gives at the ask. A light ask (`email`, `phone`, `account`, `trial`) stays in the hero. A heavy ask (`card`, `call`, `purchase`, `contract`) is repeated only below a section that answers an objection or shows proof: an ask placed before that section moves below it, a mid-page ask follows the first such section, and a page with none gets a FAQ before the closing band. `at_the_ask` lists what the page answers next to the form or payment field, more for a heavier ask.
+- `arrival`, what the visitor knows on landing. `branded` drops the section that argues for the category; `cold` with a heavy ask adds a lighter step the client really offers, as a text link beside the primary action, never a second button.
+- `objections`, the customer's own words: a list of `{quote, type, source}`. `objection_map` places each one in the section that answers it (function in how it works, price in the pricing section, payback beside the first proof, the rest in the FAQ).
+
+`page: campaign` is for a page whose only job is one ask: the header keeps the logo and the one action, the footer keeps the legal links and the contact routes.
+
+Fill the fields from what the user said, and leave out any the user did not say:
+
+| Field | Values | Fill it when |
+|---|---|---|
+| `product_type` | `app`, `software`, `marketing-site`, `editorial`, `commerce`, `marketplace`, `local-service`: the one list /ux-system and the picker share. Aliases are mapped and reported in `why` (`saas` and `web-app` to `software`, `mobile-app` to `app`, `shop` and `store` to `commerce`, `b2b-marketplace` and `b2c-marketplace` to `marketplace`, `service` to `local-service`); any other value is refused | what the product is. A B2B marketplace is `marketplace`; an app people use needs `platforms` too; `marketing-site` (a company with no product) has no sequence of its own, so name one with `page_sequence` |
+| `primary_action` | `sign-up`, `sign-in`, `buy`, `quote`, `book`, `contact`, `demo`, `download`, `subscribe`, `open-account` | the one action the page exists for |
+| `proof` | any of `stats`, `testimonials`, `logos`, `reviews`, `case-studies`, `certifications`, `press`; `[]` for none | the client gives real numbers, named quotes, client logos and so on. `[]` when it has none |
+| `contact` | any of `phone`, `whatsapp`, `email`, `form`, `chat`, `address` | the routes the client really offers |
+| `stage` | `live`, `pre-launch` | `pre-launch` when there are no customers yet; `live` when it has users |
+| `page` | `home`, `feature`, `campaign`, `pricing`, `about`, `contact`, `customers`, `customer-story`, `legal` | `feature` when the page is about one feature of the product, not its main page; `campaign` when the page exists for one ask (a paid campaign, a launch, a waitlist); an inner page's own name for that page of the site, which opens on a secondary hero and shares the site's header, closing band and footer |
+| `platforms` | any of `web`, `ios`, `android`, `desktop` | where the product really runs; store badges appear only with `ios` or `android` |
+| `sign_in` | any of `phone`, `email`, `password`, `sso`, `social` | how the product's users really sign in |
+| `commitment` | `email`, `phone`, `account`, `trial`, `card`, `call`, `purchase`, `contract` | what the visitor gives at the ask; leave it out when the user did not say |
+| `arrival` | `cold`, `warm`, `branded`, `returning` | what most visitors know on landing: `cold` from an ad or a search for the problem, `branded` from a search for the brand's name; leave it out when the user did not say |
+| `objections` | a list of `{"quote", "type", "source"}`; `type` is one of `function`, `risk`, `price`, `payback`, `timing`, `approval` (the reader is not the one who approves) | the user pasted what stops people saying yes: reviews, call notes, support tickets, comments. The quote stays in the customer's words; never invent one |
+| `primary_side` | `demand`, `supply` | a two-sided marketplace only: `supply` when the page speaks to the side that lists, sells, delivers or hosts, `demand` when it speaks to buyers |
+| `page_sequence` | `lead-gen-service`, `saas-marketing`, `ecommerce-product`, `portfolio-agency`, `content-publication`, `app-mobile-landing`, `b2b-marketplace`, `trust-led`, `pre-launch`, `general-landing`, `feature-page`, `web-app`, `marketplace-supply` | the user names the kind of page outright |
 
 ```bash
 python3 -c "
 import json
-from engine.page_sequence import select_sequence
-brief = json.load(open('.ux/last-discovery.json'))
-goal = brief.get('goal') or brief.get('primary_goal') or brief.get('product_type') or ''
-query = goal or (str(brief.get('product_type','')) + ' ' + str(brief.get('audience','')))
-seq = select_sequence(query) or select_sequence(json.dumps(brief))
-print(json.dumps(seq, indent=2) if seq else 'no sequence matched')
-" 2>/dev/null
+from engine.page_sequence import select_for_brief
+print(json.dumps(select_for_brief(json.load(open('.ux/system-brief.json'))), indent=2))
+"
 ```
 
-Then EXPAND the whole sequence in the build (this is non-negotiable for richness):
+A field outside its values stops the script with an error that names the field and the values; fix the field in `.ux/system-brief.json` and run it again.
 
-- Render EVERY section in `section_sequence`, in order — do not trim to the few you find easiest.
-- Map ALL source content into it: every sector -> a Category pill, every size/package -> an Item card, every benefit -> a Value card or checklist item. Completeness over neatness — one source item, one element.
-- Give EVERY card, pill, and stat a relevant inline SVG icon (Lucide-style, `currentColor`, 1.5–2px stroke). Never emoji, and never a numbered-placeholder generic glyph.
-- Include the `conversion_mechanisms` the goal needs even if the source page lacked them. For `lead-gen-service` that means an inline hero form, a proof/stats bar, trust signals, and a visible phone affordance.
+Build it this way:
 
-Pass the selected sequence to the frontend-engineer sub-agent as the page skeleton.
+- Render the sections of `section_sequence` in order, and map all the client's content into them: every sector, size, package and benefit gets its element.
+- A section with a `contract` field is built from that section contract in `engine/contracts/seed/sections/`: its parts and slots, the component contracts the slots take, the variant the composition names, and its phone recomposition in order. `engine.contracts.sections.render_section` draws its skeleton from the bindings. A section marked `prose_only` follows its purpose line.
+- A section that carries a `proof` kind renders only with the client's real proof of that kind. The picker has already dropped the ones the brief's `proof` list lacks; each entry in `dropped` gives its reason, and the self-review repeats it. When `proof_unknown` is true, ask for the proof, or drop the section and say why. Never invent a number, a quote or a logo to fill one.
+- Ship the `conversion_mechanisms` it returns; one the client cannot back is already in `dropped`, and a section's text no longer mentions a phone the client does not have.
+- Every section carries a `job`: `ask`, `proof`, `objection`, `explanation` or `navigation`. The self-review gives one line per section naming what it does for the reader; a section that does nothing is listed and cut.
+- Build each FAQ from `objection_map`, each question in the customer's words, not rewritten into the brand's voice. With no objections in the brief, the FAQ answers only the operational questions the client's own material answers, and the self-review says the FAQ was not built from customer words.
+- Answer every item of `at_the_ask` next to the form or payment field from the client's own material. One the client cannot answer is listed for the owner, never invented.
 
-### Step 3 — Use the recommendation as hard constraints
+### Step 3: The system's tokens are the only tokens
 
-The engine's picks are not suggestions — they're constraints:
-- The picked `style.tokens` are the design vocabulary you generate from
-- The picked `palette.colors` are the only color tokens used
-- The picked `type_pair` is the only typography (display + body + mono)
-- The 35+ `guardrails` are checked-against during generation — do NOT emit code that matches any anti-pattern regex
-- The 5 `brand_exemplars` are the visual reference for taste
+The page uses the design system's tokens and nothing else: an existing design system (step 1a), or the one `uxskill system build` wrote (step 1b). Colors, faces, sizes, spacing, radius, shadows and motion all come from its `tokens.css` by role. `recommend` and `synthesize` picks are a suggestion at most, never a token. A value the system lacks goes in the extension file, named in the system's style, with a one-line comment on why. The `guardrails` from step 2 are checked against the output; the client's identity wins over any of them (decisions/client-identity-wins.md).
 
-### Step 4 — Generate output
+### Step 4: Generate output
 
-Dispatch the `frontend-engineer` sub-agent (Task tool) with the recommendation passed in as creative-direction context. Generate the page/component as requested by the brief, using ONLY the picked style + palette + type + motion presets + components.
+Build the page from the sequence, the system's tokens, the rule pack and the playbook; a subagent is optional (Process step 4).
 
-**If a brand was extracted (Step 1.5):** paste the full `.ux/brand.md` into the sub-agent prompt and state that the brand is a HARD ANCHOR — use the client's logo, the brand primary color (the recommendation's palette is already anchored to it), and type matching the logo style; never fall back to the house style or a rejected default font. **Preserve the client's existing human copy verbatim** unless the brief explicitly asks for a rewrite.
+**If a brand was extracted (Step 1.5):** the brand is a hard anchor: the client's logo, the brand primary, which the system was built from, and type matching the logo style; never fall back to the house style or a rejected default font. **Preserve the client's existing human copy verbatim** unless the brief explicitly asks for a rewrite.
 
-### Step 5 — Lint + brand-fidelity gate before reporting
+### Step 5: Lint and the brand-fidelity gate before reporting
 
 ```bash
 python3 -m engine.cli.main --no-pretty lint <output-paths> --threshold high
@@ -290,21 +643,23 @@ python3 -m engine.cli.main --no-pretty lint <output-paths> --threshold high
 
 Exit code non-zero means a high+ finding landed in your output. Fix before declaring done.
 
-**Responsive gate — HARD, as hard as the brand gate. This is WRAP-AWARE and HEIGHT-AWARE, not scroll-only.** Run at **390px AND 360px** in a headless DOM and assert ALL of (a)–(e):
+**Responsive gate: HARD, as hard as the brand gate. This is WRAP-AWARE and HEIGHT-AWARE, not scroll-only.** Run at **390px AND 360px** in a headless DOM and assert ALL of (a) to (f) in page mode. Component and dashboard modes assert (a) and (e) only; see the table under Modes.
 
 > **Run the packaged verifier first** — it is the real gate, not a guess:
 > ```bash
 > node scripts/verify-responsive.mjs <output.html> 360,390 <out-dir>
 > ```
-> Real headless Chrome at a TRUE device viewport (self-calibrated so a lying viewport is caught), it measures **(a) horizontal overflow** and **(e) sticky-chrome height** reliably and **writes a screenshot per width so you can SEE the page.** Honesty contract: exit `0` = verified clean · `1` = FAIL (it names the cause — usually a fixed min-width wider than the device, or a tall pinned bar) · `2` = DEGRADED/UNVERIFIED (no Chrome, or the viewport was not honored) — **you have NOT verified; eyeball on a real device and never claim passed.** It does NOT catch **(b)/(c)/(d)** nav wrap/collision or the *feel* — open the screenshots it writes and check those by eye. A green from a DEGRADED run is not a green. See `references/foundations/responsive.md`.
+> Real headless Chrome at a TRUE device viewport (self-calibrated so a lying viewport is caught), it measures **(a) horizontal overflow** and **(e) sticky-chrome height** reliably and **writes a screenshot per page and width (`verify-<page>-<width>.png`) so you can SEE the page.** Honesty contract: exit `0` = verified clean; `1` = FAIL (it names the cause, usually a fixed min-width wider than the device, or a tall pinned bar); `2` = DEGRADED/UNVERIFIED (no Chrome, or the viewport was not honored): **you have NOT verified; eyeball on a real device and never claim passed.** It does NOT catch **(b)/(c)/(d)** nav wrap/collision, **(f)** the primary action on the first screen, or the *feel*: open the screenshots it writes and check those by eye. A green from a DEGRADED run is not a green. See `references/foundations/responsive.md`.
 
 - **(a) No horizontal scroll** — `document.documentElement.scrollWidth <= window.innerWidth`. The page never scrolls sideways on a phone.
-- **(b) The header/nav stayed one row** — the sticky header/primary nav bar stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: the bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar** — but its intended mobile state is now ONE compact centered line (middot-separated claims), or fewer claims, and it is **non-sticky** (see component-behaviors.md). Check it for "not ragged AND not tall": its `|` dividers are hidden on mobile, it does not wrap mid-phrase with dangling dividers, and it does not balloon into a tall stacked block. (A topbar collapsed to one line passes the strict one-row check too; the stacked-lines escape hatch is reserved for 1–2 short items and must never make the header tall — its height is policed by (e).)
+- **(b) The header/nav stayed one row**: the sticky header/primary nav bar stays a single row. `scrollWidth` alone MISSES this: a nav that wrapped to two rows still reports `scrollWidth == innerWidth`, so it sails through a scroll-only gate. Detect the wrap directly: the bar's `offsetHeight` exceeds ~1.6x its single-row content height, OR its flex children span more than one distinct row (compare child vertical centers, not raw `offsetTop`, since `align-items:center` shifts each child). The **utility/announcement topbar is NOT a strict one-row bar**. Its intended mobile state is ONE compact centered line (middot-separated claims), or fewer claims, and it is **non-sticky** (see Header and navigation in `references/surfaces/landing.md`). Check it for "not ragged AND not tall": its `|` dividers are hidden on mobile, it does not wrap mid-phrase with dangling dividers, and it does not balloon into a tall stacked block. (A topbar collapsed to one line passes the strict one-row check too. The stacked-lines escape hatch is reserved for 1 or 2 short items and must never make the header tall; (e) polices its height.)
 - **(c) No short inline label wrapped** — for the brand wordmark and every button/CTA label, assert it is on ONE line: `el.scrollHeight <= 1.4 * lineHeight`. (Measure the label element itself, not its button wrapper — a chip/icon inside the button inflates the button's `scrollHeight` and gives a false positive. Wrap a bare label text node in its own `<span>` so it is measurable. Resolve `line-height:normal` to `fontSize * 1.2`.)
 - **(d) Header-bar children do not collide/overlap** — `nowrap` (the fix for (c)) does not always cause horizontal scroll; inside a flex bar it can instead make the wordmark **overlap the CTA** while `scrollWidth == innerWidth` AND each label still measures one line — so (a), (b), and (c) ALL pass on a visibly-broken bar (observed). Catch it directly: no two of the header bar's one-row children's rects may intersect, i.e. each child's `right` must stay within the next child's `left` (and within the bar's content box). When the wordmark cannot fit beside the logo + CTA without colliding, the fix is to shrink it or **collapse to the logomark** (hide the words) — never overlap, never two lines.
 - **(e) The sticky/fixed top chrome is not too tall** — sum the `offsetHeight` of every **top-anchored** `position:sticky` / `position:fixed` element, **de-duped for nesting** (drop any element contained by another in the set; count the OUTERMOST only, so a sticky child inside a sticky parent is not double-counted). "Top-anchored" means it pins at the top: computed `position` is sticky/fixed AND computed `top` ≈ 0. **Do NOT also require resting `getBoundingClientRect().top` ≈ 0** — when a non-sticky utility bar sits ABOVE a `sticky; top:0` header, that header's rest `rect.top` equals the bar's height (e.g. ~26px), so a rest-rect check would wrongly EXCLUDE the very header this gate exists to measure. A bottom-fixed bar (`bottom:0`, so `top:auto`) yields `NaN` for `top` and is excluded; a `top:80px` side rail is excluded by `|top| > 1`. **FAIL if the sum exceeds ~96px (hard ceiling) OR > ~20% of `window.innerHeight`.** This is the bug observed on a real phone: a tall sticky header (~168px — a utility bar stacked to four centered lines, pinned together with the nav) crushes the viewport and reads as broken. The page TARGET is ≤72px (one nav row); the 96px is the absolute gate ceiling. An over-tall sticky header is a failure — report it and fix it (drop decorative bars out of the sticky container so only the nav stays pinned, trim padding) before declaring done. Note: a sticky element is bounded by its containing block, so the correct fix is to keep the sticky wrapper around the nav ALONE — a utility bar left inside the sticky `<header>` both inflates this number AND lets the nav unstick once the header box scrolls past.
 
-**Point the three selectors at the page under test — they are named-per-page, NOT auto-detected.** The snippet has three constants at the top — `NAV_ROW`, `WORDMARK`, `LABELS` — defaulted to this page's (skiphire) real values as a worked example. Set them to the page you are checking: the *innermost* nav row (NOT the whole `<header>` — the utility/announcement topbar is a separate bar, so policing the whole header false-flags it as "wrapped"), the brand wordmark element, and the *isolated* label spans (a label that has been wrapped in its own `<span>` away from any icon/chip). The sticky-height check (e) needs NO selector — it auto-discovers every top-anchored sticky/fixed element. Do NOT replace these with generic `header [class*=nav]` / "first link in header" structural guesses — that was tried and it mis-resolves the whole header instead of the nav row and the topbar mailto link instead of the wordmark, producing a false-positive storm. The operator running this gate just built the page and can read its markup; aiming three selectors is the contract. **Non-resolution is LOUD, not silent:** if any target resolves nothing, the snippet prints a `WARNING` and the gate is DEGRADED to horizontal-scroll-only — which is exactly the blind spot this gate exists to close, so treat a degraded run as unverified until the selectors are fixed. Any button without an isolated label span is reported "unmeasured" (never false-flagged by measuring button+chip) — wrap its label in a span or eyeball it.
+- **(f) The primary action is on the first phone screen, uncovered.** Load the page with every fixed or sticky element it ships present at load, including a consent banner, a promo bar and a chat launcher. The chrome pinned to the top and to the bottom together leaves a band of the first viewport; the primary action's box must intersect that band, and `document.elementFromPoint` at its center must return the action or something inside it, so nothing covers it. **FAIL if the action sits below the band or under an overlay, or if two overlays other than the nav's own bar are on the first screen together** (a consent banner and a chat launcher, a promo bar at the top and a sticky bar at the bottom). Only what is on the first screen at load counts: a sticky table header further down the page is not an overlay. Responsive means the layout reflows; this checks that the ask survived the reflow.
+
+**Point the selectors at the page under test: they are named per page, NOT auto-detected.** The snippet has three constants at the top (`NAV_ROW`, `WORDMARK`, `LABELS`), defaulted to this page's (skiphire) real values as a worked example. Set them to the page you are checking: the *innermost* nav row (NOT the whole `<header>`: the utility/announcement topbar is a separate bar, so policing the whole header false-flags it as "wrapped"), the brand wordmark element, and the *isolated* label spans (a label that has been wrapped in its own `<span>` away from any icon/chip). A fourth constant, `PRIMARY`, names the page's primary action as it renders at load, for check (f). The sticky-height check (e) needs NO selector: it auto-discovers every top-anchored sticky/fixed element. Do NOT replace these with generic `header [class*=nav]` / "first link in header" structural guesses: that was tried and it mis-resolves the whole header instead of the nav row and the topbar mailto link instead of the wordmark, producing a false-positive storm. The operator running this gate just built the page and can read its markup; aiming three selectors is the contract. **Non-resolution is LOUD, not silent:** if any target resolves nothing, the snippet prints a `WARNING` and the gate is DEGRADED to horizontal-scroll-only: which is exactly the blind spot this gate exists to close, so treat a degraded run as unverified until the selectors are fixed. Any button without an isolated label span is reported "unmeasured" (never false-flagged by measuring button+chip): wrap its label in a span or eyeball it.
 
 **A wrapping nav, a wordmark that splits mid-name or overlaps the CTA, a button/CTA label on two lines, OR an over-tall sticky header (sticky/fixed top chrome > ~96px) is a CRITICAL fail — always report it and fix it before declaring done.** This is the user's standing instruction: a nav/label that wraps on mobile, or a tall sticky header that crushes the viewport, must ALWAYS be reported and fixed. Horizontal scroll is also CRITICAL. None of these is a nice-to-have.
 
@@ -319,7 +674,8 @@ fail = False
 with sync_playwright() as p:
     b = p.chromium.launch()
     for w in (390, 360):
-        pg = b.new_page(viewport={"width": w, "height": 900}, device_scale_factor=2)
+        # a phone's first screen: 390x844 and 360x780, so check (f) reads a real first viewport
+        pg = b.new_page(viewport={"width": w, "height": 844 if w == 390 else 780}, device_scale_factor=2)
         pg.goto(url); pg.wait_for_timeout(400)
         m = pg.evaluate("""() => {
           // ===== SET THESE THREE TO THE PAGE UNDER TEST (do NOT auto-detect — see note) =====
@@ -327,10 +683,14 @@ with sync_playwright() as p:
           const NAV_ROW = '.navrow';                         // the innermost nav row (NOT the whole header — the topbar may intentionally stack)
           const WORDMARK = '.brand .wm b';                   // the brand wordmark text element
           const LABELS = '.btn .btn-label';                  // ISOLATED label spans only (a label wrapped away from its icon/chip)
+          const PRIMARY = '.hero .btn-primary';              // the page's primary action, as it renders at load (check f)
           // ================================================================================
           const lh = el => { const c = getComputedStyle(el); let l = parseFloat(c.lineHeight);
             return isFinite(l) ? l : parseFloat(c.fontSize) * 1.2; };
           const vis = el => el && el.offsetParent !== null && el.getBoundingClientRect().width > 0;
+          // offsetParent is null for position:fixed, so pinned elements are judged by their box
+          const shown = el => { const r = el.getBoundingClientRect(), c = getComputedStyle(el);
+            return r.width > 0 && r.height > 0 && c.visibility !== 'hidden' && c.display !== 'none'; };
           const navBar = document.querySelector(NAV_ROW);
           // (a) horizontal scroll + the offending nodes
           const overflow = [...document.querySelectorAll('*')]
@@ -376,7 +736,7 @@ with sync_playwright() as p:
           const sticky = [...document.querySelectorAll('*')].filter(el => {
             const c = getComputedStyle(el);
             if (c.position !== 'sticky' && c.position !== 'fixed') return false;
-            if (!vis(el)) return false;
+            if (!shown(el)) return false;
             // Top-anchored = pins at the top: computed `top` ~ 0. Do NOT also require
             // rect.top ~ 0 at rest — a `sticky; top:0` header sitting below a scroll-away
             // utility bar has rest rect.top ~ (bar height), and that check would wrongly
@@ -390,9 +750,40 @@ with sync_playwright() as p:
             tag: el.tagName.toLowerCase() + (el.className ? '.' + String(el.className).trim().split(/\\s+/)[0] : ''),
             h: el.offsetHeight }));
           const stickyTotal = stickyEls.reduce((s, e) => s + e.h, 0);
+          // (f) the primary action on the first phone screen, under every pinned element that is
+          //     ON the first screen at load: promo bars and the nav at the top, consent banners,
+          //     chat launchers and sticky bars at the bottom. A pinned element whose box is not in
+          //     the first viewport (a sticky table header far down the page) is not counted.
+          //     Overlays = those on-screen pinned elements, less the one that holds the nav row.
+          const onScreen = el => { const r = el.getBoundingClientRect();
+            return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth; };
+          const pinnedAll = [...document.querySelectorAll('*')].filter(el => {
+            const c = getComputedStyle(el);
+            return (c.position === 'sticky' || c.position === 'fixed') && shown(el); });
+          const pinned = pinnedAll.filter(el => !pinnedAll.some(o => o !== el && o.contains(el)))
+            .filter(onScreen);
+          const navHost = navBar ? pinned.find(el => el.contains(navBar)) : null;
+          const overlays = pinned.filter(el => el !== navHost);
+          const edge = (el, side) => Math.abs(parseFloat(getComputedStyle(el)[side])) <= 1;
+          const topChrome = pinned.filter(el => edge(el, 'top'))
+            .reduce((s, el) => Math.max(s, el.getBoundingClientRect().bottom), 0);
+          const bottomChrome = pinned.filter(el => !edge(el, 'top') && edge(el, 'bottom'))
+            .reduce((s, el) => Math.max(s, window.innerHeight - el.getBoundingClientRect().top), 0);
+          const primaryEl = document.querySelector(PRIMARY);
+          let primary = null;
+          if (primaryEl && shown(primaryEl)) {
+            const r = primaryEl.getBoundingClientRect();
+            const inBand = r.bottom > topChrome && r.top < window.innerHeight - bottomChrome;
+            const hit = inBand ? document.elementFromPoint(r.left + r.width / 2,
+              Math.min(Math.max(r.top + r.height / 2, topChrome + 1), window.innerHeight - bottomChrome - 1)) : null;
+            primary = { top: Math.round(r.top), bottom: Math.round(r.bottom), inBand,
+                        covered: inBand && !(hit && (hit === primaryEl || primaryEl.contains(hit))) };
+          }
           return { iw: window.innerWidth, ih: window.innerHeight, sw: document.documentElement.scrollWidth, overflow,
                    navFound: !!navBar, nav: barWrapped(navBar), wmFound: !!wmEl, labelCount: labelEls.length,
-                   labels, collide, stickyEls, stickyTotal };
+                   labels, collide, stickyEls, stickyTotal, primaryFound: !!primaryEl, primary,
+                   topChrome: Math.round(topChrome), bottomChrome: Math.round(bottomChrome),
+                   overlayCount: overlays.length };
         }""")
         hscroll = m["sw"] > m["iw"]
         navwrap = m["nav"] and m["nav"]["wrapped"]
@@ -401,16 +792,20 @@ with sync_playwright() as p:
         # (e) sticky-header height: hard ceiling 96px OR > 20% of innerHeight
         sticky_total = m["stickyTotal"]
         sticky_tall = sticky_total > 96 or sticky_total > 0.20 * m["ih"]
-        degraded = (not m["navFound"]) or (not m["wmFound"]) or (m["labelCount"] == 0)
+        degraded = (not m["navFound"]) or (not m["wmFound"]) or (m["labelCount"] == 0) or (not m["primaryFound"])
+        # (f) the ask survives the reflow: on the first screen, uncovered, at most one overlay
+        pr = m["primary"]
+        ask_lost = (pr is not None and (not pr["inBand"] or pr["covered"])) or m["overlayCount"] >= 2
         print(f"[{w}px] iw={m['iw']} sw={m['sw']} h-scroll={hscroll} navFound={m['navFound']} nav={m['nav']}")
         print(f"        wmFound={m['wmFound']} labelSpans={m['labelCount']} labelWraps={labelwrap or 'none'} collide={m['collide'] or 'none'}")
         print(f"        sticky-chrome={sticky_total}px (ceiling 96, target <=72) too-tall={sticky_tall} parts={m['stickyEls']}")
+        print(f"        primary={pr} top-chrome={m['topChrome']}px bottom-chrome={m['bottomChrome']}px overlays={m['overlayCount']} ask-lost={ask_lost}")
         if m["overflow"]: print(f"        overflowing: {m['overflow']}")
         if degraded:
-            print("        WARNING: a target (NAV_ROW / WORDMARK / LABELS) resolved nothing — point it at THIS page's elements. "
+            print("        WARNING: a target (NAV_ROW / WORDMARK / LABELS / PRIMARY) resolved nothing; point it at THIS page's elements. "
                   "The gate is DEGRADED (h-scroll-only for a/b/c/d; the sticky-height check (e) still runs) until it does; "
                   "any button without an isolated label span is unmeasured — eyeball it.")
-        if hscroll or navwrap or labelwrap or collide or sticky_tall: fail = True
+        if hscroll or navwrap or labelwrap or collide or sticky_tall or ask_lost: fail = True
     b.close()
 sys.exit(1 if fail else 0)
 PY
@@ -422,12 +817,16 @@ If Playwright is not installed, read the SAME signals through any headless-DOM t
 
 ```bash
 python3 -c "
-import json, sys
+import json, sys, os
 from engine.evaluator import evaluate
 from engine.brand.extract import BrandProfile
 b = json.load(open('.ux/brand.json'))
 prof = BrandProfile(**{k: v for k, v in b.items() if k in BrandProfile.__dataclass_fields__})
-ev = evaluate(html=open('<output.html>').read(), brand_profile=prof)
+page = '<output.html>'
+# base_dir: the page's folder, so linked stylesheets and custom properties are read too;
+# root: the project, so a page in en/ can link ../css/.
+ev = evaluate(html=open(page).read(), brand_profile=prof,
+              base_dir=os.path.dirname(os.path.abspath(page)), root=os.getcwd())
 print('brand_fidelity', ev.brand_fidelity, '| imagery', ev.imagery, '| passed', ev.brand_passed)
 [print(' -', n) for n in ev.notes if 'BRAND FLOOR' in n]
 sys.exit(0 if ev.brand_passed else 1)
@@ -438,4 +837,4 @@ Exit `1` = the output dropped the brand primary/logo or shipped no real imagery.
 
 ### Fallback
 
-If `python3 -m engine.cli.main` is not on PATH (user hasn't installed v2 yet), fall back to v1 prose-only behavior using references/foundations/*.md as the source of taste. The output quality will be lower but the command still works.
+If `python3 -m engine.cli.main` is not on PATH (the user has not installed the engine), fall back to prose-only behavior using `references/foundations/*.md` and the surface playbook picked in step 1c as the source of taste. The output quality will be lower but the command still works.

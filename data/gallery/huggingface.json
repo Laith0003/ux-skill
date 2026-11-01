@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.84,
+    "density": 0.5,
+    "formality": 0.45,
+    "geometry": 0.632,
+    "motion": 0.163,
+    "type_personality": 0.65,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/huggingface.json: warmth from the hue and chroma of the primary #FF9D00 and the canvas #FFFFFF; contrast from the ink #0F0F0F on that canvas, its depth and the chroma of #FF9D00; density from its 4px spacing base; geometry from its radii 4, 8, 12, 999px; formality from the chroma of its primary and ink and the measured place of Source Sans 3; motion from its stated durations 150ms; type personality from the measured place of Source Sans 3.",
+  "brand": "#FF9D00",
+  "brand_rule": "The primary #FF9D00 reaches only 2.08:1 on the canvas #FFFFFF and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#FF9D00",
+      "light": "#FF9D00"
+    },
+    "face": {
+      "display": "Fraunces",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#0F0D0A",
+      "light": "#F8F6F5"
+    },
+    "radius_control": "9px",
+    "state_duration": "150ms",
+    "tokens": 729,
+    "tokens_sha256": "adde9b883c454c1e"
+  },
+  "id": "huggingface",
+  "name": "Hugging Face",
+  "spec": "data/brands/huggingface.json"
+}

@@ -1,0 +1,2 @@
+.eyebrow { display: inline-flex; gap: 12px; }
+.eyebrow::before { content: ""; display: inline-block; width: 24px; height: 2px; background: currentColor; }

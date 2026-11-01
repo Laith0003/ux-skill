@@ -1,0 +1,8 @@
+.field:focus-within {
+  box-shadow: 0 0 0 3px var(--focus);
+}
+
+.field input {
+  border: 0;
+  outline: none;
+}

@@ -3,7 +3,7 @@
 > A clean, calendar-software-first interface anchored on white canvas with black primary CTAs and custom Cal Sans display typography.
 
 **Category:** Productivity / Collaboration
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/cal.json`](../../data/brands/cal.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

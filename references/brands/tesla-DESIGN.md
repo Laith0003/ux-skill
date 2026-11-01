@@ -1,9 +1,9 @@
 # Tesla
 
-> Tesla's website is an exercise in radical subtraction — a digital showroom where the product is everything and the interface is almost nothing.
+> Tesla's website is an exercise in radical subtraction: a digital showroom where the product is everything and the interface is almost nothing.
 
 **Category:** Automotive
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/tesla.json`](../../data/brands/tesla.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-Tesla's website is an exercise in radical subtraction — a digital showroom where the product is everything and the interface is almost nothing.
+Tesla's website is an exercise in radical subtraction: a digital showroom where the product is everything and the interface is almost nothing.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

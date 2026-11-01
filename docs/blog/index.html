@@ -898,7 +898,7 @@
       <li class="post"><a href="/blog/vibe-coding-design-system.html">
         <div class="post-meta"><span class="tag">practice</span> &middot; ~1650 words &middot; ~7 min</div>
         <h2>Vibe coding is real: but your AI still ships the same defaults</h2>
-        <p>The honest take on vibe coding in 2026: the velocity is real, the fingerprint is recognizable. <code>ux discover</code> is the brief, <code>ux recommend</code> narrows the model's choices, <code>ux lint</code> sets the deterministic floor with 145 regex rules over a 1,243-entry catalog.</p>
+        <p>The honest take on vibe coding in 2026: the velocity is real, the fingerprint is recognizable. <code>ux discover</code> is the brief, <code>ux recommend</code> narrows the model's choices, <code>ux lint</code> sets the deterministic floor with 171 lint rules over a 1,262-entry catalog.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-built-website-no-slop.html">
@@ -909,7 +909,7 @@
 
       <li class="post"><a href="/blog/anti-slop-cli-vibe-coders.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1900 words &middot; ~9 min</div>
-        <h2>The anti-slop CLI for vibe coders: 145 rules, no LLM, runs in CI</h2>
+        <h2>The anti-slop CLI for vibe coders: deterministic rules, no LLM, runs in CI</h2>
         <p>A deterministic command-line design linter built for the vibe-coding workflow. JSON output, exit-code contract, pre-commit + GitHub Actions + GitLab CI + Husky + Lefthook recipes. Measured numbers: 18ms staged-diff, 96ms warm full repo, 412ms cold.</p>
       </a></li>
 
@@ -958,7 +958,7 @@
       <li class="post"><a href="/blog/claude-desktop-mcp-design.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1550 words &middot; ~8 min</div>
         <h2>Claude Desktop + MCP design intelligence: ux-skill as a stdio server</h2>
-        <p>None of the top eight Claude design skills ship an MCP server. ux-skill v2 does: 18 tools registered, a dedicated <code>ux-mcp</code> entry point, one JSON block in <code>claude_desktop_config.json</code>. Same engine reaches Cursor, Windsurf, Cline, Continue.</p>
+        <p>None of the top eight Claude design skills ship an MCP server. ux-skill does: 25 tools registered today, a dedicated <code>ux-mcp</code> entry point, one JSON block in <code>claude_desktop_config.json</code>. Same engine reaches Cursor, Windsurf, Cline, Continue.</p>
       </a></li>
 
       <li class="post"><a href="/blog/dogfooding-design-engine.html">
@@ -975,8 +975,8 @@
 
       <li class="post"><a href="/blog/mcp-server-design-intelligence.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1300 words &middot; ~9 min</div>
-        <h2>MCP server for design intelligence: ux-skill's 18 tools any agent can call</h2>
-        <p>The Python engine, the 51-rule linter, the 1,243-entry catalog, all exposed as 14 Model Context Protocol tools. Real Pydantic schemas, real Claude Desktop / Cursor / Windsurf configs, real JSON-RPC payloads. The asymmetric move against single-host skills.</p>
+        <h2>MCP server for design intelligence: ux-skill's 25 tools any agent can call</h2>
+        <p>The Python engine, the 171-rule linter, the 1,262-entry catalog, all exposed as Model Context Protocol tools. Real Pydantic schemas, real Claude Desktop / Cursor / Windsurf configs, real JSON-RPC payloads. The asymmetric move against single-host skills.</p>
       </a></li>
 
       <li class="post"><a href="/blog/motion-presets-framer-gsap-css.html">
@@ -987,8 +987,8 @@
 
       <li class="post"><a href="/blog/regex-linter-for-ai-coding.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1400 words &middot; ~8 min</div>
-        <h2>Regex linter for AI coding: how 51 rules catch design slop in CI</h2>
-        <p>Deterministic, sub-second, zero LLM calls. The 51 ux-skill anti-pattern rules grouped by category, a real rule walkthrough, GitHub Actions workflow, pre-commit hook config, and a before/after on a Next.js hero that fails three rules.</p>
+        <h2>Regex linter for AI coding: how deterministic rules catch design slop in CI</h2>
+        <p>Deterministic, sub-second, zero LLM calls. The ux-skill anti-pattern rules grouped by category, a real rule walkthrough, GitHub Actions workflow, pre-commit hook config, and a before/after on a Next.js hero that fails three rules.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ai-design-fingerprints-list.html">
@@ -1024,13 +1024,13 @@
       <li class="post"><a href="/blog/vs-ui-ux-pro-max.html">
         <div class="post-meta"><span class="tag">comparison</span> &middot; ~1200 words &middot; ~5 min</div>
         <h2>ui-ux-pro-max alternative: ux-skill v2: every dimension, side by side</h2>
-        <p>The most-starred Claude UX skill on GitHub is ui-ux-pro-max-skill at 84k. ux-skill v2 borrows their recommender pattern and goes further. Honest table: 1,243 entries vs ~600, 145-rule linter vs none, 160 brand specs vs none.</p>
+        <p>The most-starred Claude UX skill on GitHub is ui-ux-pro-max-skill at 84k. ux-skill v2 borrows their recommender pattern and goes further. Honest table: 1,262 entries vs ~600, 171-rule linter vs none, 160 brand specs vs none.</p>
       </a></li>
 
       <li class="post"><a href="/blog/anti-ai-slop-claude-skills.html">
         <div class="post-meta"><span class="tag">ranking</span> &middot; ~1500 words &middot; ~7 min</div>
         <h2>Anti-AI-slop tools for Claude Code in 2026: the honest ranking</h2>
-        <p>Every AI coding tool produces the same fingerprints: Inter as display, purple gradients, three identical cards. Ranked: Leonxlnx/taste-skill (25k stars), Nutlope/hallmark (2.1k), ux-skill v2 (145 deterministic regex rules, only one with CI-friendly enforcement).</p>
+        <p>Every AI coding tool produces the same fingerprints: Inter as display, purple gradients, three identical cards. Ranked: Leonxlnx/taste-skill (25k stars), Nutlope/hallmark (2.1k), ux-skill (171 deterministic lint rules, the only one with CI-friendly enforcement).</p>
       </a></li>
 
       <li class="post"><a href="/blog/best-claude-code-design-skills-2026.html">
@@ -1048,7 +1048,7 @@
       <li class="post"><a href="/blog/python-design-system-generator.html">
         <div class="post-meta"><span class="tag">technical</span> &middot; ~1100 words &middot; ~5 min</div>
         <h2>Python design system generator: ux-skill v2's 5-parallel-search engine</h2>
-        <p>How the engine merges five lanes (industry &rarr; style &rarr; palette &rarr; type &rarr; motion) into one recommendation, deterministically, in seconds. Brief in, complete design system out. 1,243 structured entries under the hood.</p>
+        <p>How the engine merges five lanes (industry &rarr; style &rarr; palette &rarr; type &rarr; motion) into one recommendation, deterministically, in seconds. Brief in, complete design system out. 1,262 structured entries under the hood.</p>
       </a></li>
 
       <!-- evergreen reference posts -->
@@ -1061,7 +1061,7 @@
       <li class="post"><a href="/blog/ai-design-system-figma-to-code.html">
         <div class="post-meta"><span class="tag">guide</span> &middot; ~3700 words &middot; ~16 min</div>
         <h2>From Figma to code without losing the design system</h2>
-        <p>The handoff problem in 2026: why Figma MCP and AI coding tools drop tokens, and how ux-skill&rsquo;s catalog plus its 145-rule linter keeps the system intact from Figma file to Cursor and Claude Code.</p>
+        <p>The handoff problem in 2026: why Figma MCP and AI coding tools drop tokens, and how ux-skill&rsquo;s catalog plus its 171-rule linter keeps the system intact from Figma file to Cursor and Claude Code.</p>
       </a></li>
 
       <li class="post post--quiet"><div class="post-inner">
@@ -1087,49 +1087,49 @@
       <li class="post"><a href="/blog/ja/ai-coding-design-japanese.html">
         <div class="post-meta"><span class="tag">日本語</span> &middot; ~2000 words &middot; ~9 min</div>
         <h2>AI コーディング デザイン: Claude Code デザインシステムの作り方</h2>
-        <p>Claude Code、Cursor、Windsurf、GitHub Copilot、Cline が踏む 8 つの視覚的デフォルト。Inter を 90px の見出しに、紫から青のグラデーション、3 つの同じカード。ux-skill は 145 の決定論的正規表現ルールで CI 上でこれを止めます。</p>
+        <p>Claude Code、Cursor、Windsurf、GitHub Copilot、Cline が踏む 8 つの視覚的デフォルト。Inter を 90px の見出しに、紫から青のグラデーション、3 つの同じカード。ux-skill は 171 の決定論的ルールで CI 上でこれを止めます。</p>
       </a></li>
 
       <li class="post"><a href="/blog/de/ki-coding-design-deutsch.html">
         <div class="post-meta"><span class="tag">Deutsch</span> &middot; ~2000 words &middot; ~9 min</div>
         <h2>KI-Coding Design: wie man ein Cursor-AI-Designsystem baut</h2>
-        <p>Jedes KI-Coding-Werkzeug liefert dieselben acht visuellen Defaults. Inter als Display-Schrift, Verlauf von Lila nach Blau, drei identische Karten. ux-skill blockiert sie in der CI mit 145 deterministischen Regex-Regeln.</p>
+        <p>Jedes KI-Coding-Werkzeug liefert dieselben acht visuellen Defaults. Inter als Display-Schrift, Verlauf von Lila nach Blau, drei identische Karten. ux-skill blockiert sie in der CI mit 171 deterministischen Regeln.</p>
       </a></li>
 
       <li class="post"><a href="/blog/fr/ia-coding-design-francais.html">
         <div class="post-meta"><span class="tag">Français</span> &middot; ~2000 words &middot; ~9 min</div>
         <h2>IA coding design: construire un système de design pour Claude Code</h2>
-        <p>Chaque outil d'IA de programmation produit les mêmes huit défauts visuels. Inter en typographie display, dégradé violet vers bleu, trois cartes identiques. ux-skill bloque ces motifs dans la CI avec 145 règles regex déterministes.</p>
+        <p>Chaque outil d'IA de programmation produit les mêmes huit défauts visuels. Inter en typographie display, dégradé violet vers bleu, trois cartes identiques. ux-skill bloque ces motifs dans la CI avec 171 règles déterministes.</p>
       </a></li>
 
       <li class="post"><a href="/blog/zh-CN/ai-coding-design-chinese.html">
         <div class="post-meta"><span class="tag">简体中文</span> &middot; ~2000 words &middot; ~9 min</div>
         <h2>AI 编程设计: 用 ux-skill 给 Cursor 设计系统兜底</h2>
-        <p>任何 AI 编程工具都会输出同样八个视觉默认值:Inter 当显示字、紫到蓝渐变、三张一模一样的卡。ux-skill 用 145 条确定性正则规则,在 CI 上拦住这些模式。</p>
+        <p>任何 AI 编程工具都会输出同样八个视觉默认值:Inter 当显示字、紫到蓝渐变、三张一模一样的卡。ux-skill 用 171 条确定性规则,在 CI 上拦住这些模式。</p>
       </a></li>
 
       <li class="post"><a href="/blog/ko/ai-coding-design-korean.html">
         <div class="post-meta"><span class="tag">한국어</span> &middot; ~2000 words &middot; ~9 min</div>
         <h2>AI 코딩 디자인: Claude Code 디자인 시스템을 만드는 법</h2>
-        <p>모든 AI 코딩 도구가 같은 8가지 시각적 디폴트를 뱉습니다. 본문용 Inter를 90px 헤드라인으로, 보라-파랑 그라데이션, 동일한 카드 3개. ux-skill은 145개의 결정론적 정규식 규칙으로 CI에서 이를 막습니다.</p>
+        <p>모든 AI 코딩 도구가 같은 8가지 시각적 디폴트를 뱉습니다. 본문용 Inter를 90px 헤드라인으로, 보라-파랑 그라데이션, 동일한 카드 3개. ux-skill은 171개의 결정론적 규칙으로 CI에서 이를 막습니다.</p>
       </a></li>
 
       <li class="post"><a href="/blog/ar/ai-coding-design-arabic.html">
         <div class="post-meta"><span class="tag">العربية</span> &middot; ~2000 words &middot; ~9 min</div>
         <h2 dir="rtl" class="text-right">تصميم برمجة الذكاء الاصطناعي: كيف تبني نظام تصميم لـ Claude Code</h2>
-        <p dir="rtl" class="text-right">كل أداة برمجة بالذكاء الاصطناعي تنتج نفس الافتراضات الثمانية البصرية: خط Inter في حجم العنوان، تدرّج من البنفسجي إلى الأزرق، ثلاث بطاقات متطابقة. يوقف ux-skill هذه الأنماط في الـ CI عبر 145 قاعدة Regex حتمية.</p>
+        <p dir="rtl" class="text-right">كل أداة برمجة بالذكاء الاصطناعي تنتج نفس الافتراضات الثمانية البصرية: خط Inter في حجم العنوان، تدرّج من البنفسجي إلى الأزرق، ثلاث بطاقات متطابقة. يوقف ux-skill هذه الأنماط في الـ CI عبر 171 قاعدة حتمية.</p>
       </a></li>
 
       <li class="post"><a href="/blog/pt-BR/ai-coding-design-portuguese.html">
         <div class="post-meta"><span class="tag">Português (BR)</span> &middot; ~2000 words &middot; ~9 min</div>
         <h2>Design para programação com IA: como montar um sistema no Claude Code</h2>
-        <p>Toda ferramenta de programação com IA cai nos mesmos oito defeitos visuais: Inter em tamanho de display, gradiente roxo para azul, três cartões idênticos. O ux-skill bloqueia esses padrões no CI com 145 regras regex determinísticas.</p>
+        <p>Toda ferramenta de programação com IA cai nos mesmos oito defeitos visuais: Inter em tamanho de display, gradiente roxo para azul, três cartões idênticos. O ux-skill bloqueia esses padrões no CI com 171 regras determinísticas.</p>
       </a></li>
 
       <li class="post"><a href="/blog/it/ai-coding-design-italian.html">
         <div class="post-meta"><span class="tag">Italiano</span> &middot; ~2000 words &middot; ~9 min</div>
         <h2>Design AI coding: come costruire un design system con Claude Code</h2>
-        <p>Ogni strumento di AI coding cade negli stessi otto difetti visivi: Inter usato come display, gradiente da viola a blu, tre card identiche. ux-skill blocca questi pattern nella CI con 145 regole regex deterministiche.</p>
+        <p>Ogni strumento di AI coding cade negli stessi otto difetti visivi: Inter usato come display, gradiente da viola a blu, tre card identiche. ux-skill blocca questi pattern nella CI con 171 regole deterministiche.</p>
       </a></li>
     </ul>
     <figure class="docfig">

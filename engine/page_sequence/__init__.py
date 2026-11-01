@@ -1,17 +1,14 @@
-"""Page-level section sequences — pick a whole-page skeleton by goal.
+"""Page-level section sequences: pick a whole-page skeleton from a 4.0 brief.
 
-The build flow selects a sequence by goal/keywords, then expands the full
-ordered section list and maps all source content into it (every sector -> a
-pill, every size -> a card, every benefit -> a checklist item) with a relevant
-inline SVG icon per item and the goal's conversion mechanisms.
+``select_for_brief`` reads the brief's structured fields only, never its
+industry or its prose, and drops a proof section the client cannot fill with
+a stated reason instead of inventing proof.
 
 Public surface:
-    select_sequence(goal_or_keywords) -> Optional[dict]
-    score_sequence(entry, query_tokens, raw_query) -> float
+    select_for_brief(brief) -> dict
+    select_sequence(sequence_id) -> Optional[dict]
     load_sequences() -> list
 """
-from engine.page_sequence.core import (
-    select_sequence, score_sequence, load_sequences,
-)
+from engine.page_sequence.core import load_sequences, select_for_brief, select_sequence
 
-__all__ = ["select_sequence", "score_sequence", "load_sequences"]
+__all__ = ["load_sequences", "select_for_brief", "select_sequence"]

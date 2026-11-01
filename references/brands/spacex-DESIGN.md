@@ -1,9 +1,9 @@
 # SpaceX
 
-> An inspired interpretation of Spasex's design language — a mission-oriented aerospace brand built on pure black canvas, full-bleed photographic and video heroes of rockets and Mars landscapes, and uppercase D-DIN display type set in tight vertical leading.
+> An inspired interpretation of Spasex's design language: a mission-oriented aerospace brand built on pure black canvas, full-bleed photographic and video heroes of rockets and Mars landscapes, and uppercase D-DIN display type set in tight vertical leading.
 
 **Category:** Automotive
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/spacex.json`](../../data/brands/spacex.json)
 
 ## Palette
@@ -17,7 +17,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-An inspired interpretation of Spasex's design language — a mission-oriented aerospace brand built on pure black canvas, full-bleed photographic and video heroes of rockets and Mars landscapes, and uppercase D-DIN display type set in tight vertical leading.
+An inspired interpretation of Spasex's design language: a mission-oriented aerospace brand built on pure black canvas, full-bleed photographic and video heroes of rockets and Mars landscapes, and uppercase D-DIN display type set in tight vertical leading.
 
 ## Voice cues
 
@@ -42,4 +42,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

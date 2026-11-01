@@ -57,6 +57,23 @@ INDUSTRY_SEEDS: Dict[str, Dict[str, float]] = {
     "gaming":               {"warmth": 0.5,  "contrast": 0.85, "density": 0.7,  "geometry": 0.35, "formality": 0.3,  "motion": 0.85, "type_personality": 0.45},
     "crypto":               {"warmth": 0.25, "contrast": 0.85, "density": 0.7,  "geometry": 0.3,  "formality": 0.55, "motion": 0.7,  "type_personality": 0.3},
     "education":            {"warmth": 0.6,  "contrast": 0.5,  "density": 0.5,  "geometry": 0.6,  "formality": 0.5,  "motion": 0.45, "type_personality": 0.65},
+    # Sturdy and square: plain type, firm contrast, little motion.
+    "construction":         {"warmth": 0.45, "contrast": 0.6,  "density": 0.55, "geometry": 0.3,  "formality": 0.65, "motion": 0.35, "type_personality": 0.35},
+    # A trade catalog: dense, practical, plain type.
+    "b2b-marketplace":      {"warmth": 0.45, "contrast": 0.5,  "density": 0.65, "geometry": 0.45, "formality": 0.6,  "motion": 0.4,  "type_personality": 0.4},
+    # Cool, formal and exact.
+    "security":             {"warmth": 0.25, "contrast": 0.65, "density": 0.55, "geometry": 0.3,  "formality": 0.8,  "motion": 0.35, "type_personality": 0.25},
+    # Clinical supply: calmer and denser than care, less warm.
+    "pharmacy":             {"warmth": 0.5,  "contrast": 0.45, "density": 0.6,  "geometry": 0.55, "formality": 0.65, "motion": 0.35, "type_personality": 0.45},
+}
+
+# Other names for a seeded industry. Each points at a key of INDUSTRY_SEEDS,
+# so the name reaches the same axis seed; it never names a look.
+INDUSTRY_ALIASES: Dict[str, str] = {
+    "building-materials": "construction",
+    "wholesale": "b2b-marketplace",
+    "cybersecurity": "security",
+    "medical-supply": "pharmacy",
 }
 
 
@@ -117,7 +134,70 @@ TONE_NUDGES: Dict[str, Dict[str, float]] = {
     "humanist":     {"type_personality": +0.25, "warmth": +0.10},
     "technical":    {"type_personality": -0.20, "formality": +0.10},
     "precise":      {"type_personality": -0.15, "geometry": -0.10},
+
+    # Common brief words, each weighted by what it says about the axes.
+    # Short and snappy: quick transitions, not kinetic ones.
+    "fast":         {"motion": -0.10, "density": +0.05},
+    "quick":        {"motion": -0.10, "density": +0.05},
+    "dynamic":      {"motion": +0.25, "contrast": +0.05},
+    "lively":       {"motion": +0.20, "warmth": +0.10},
+    "fresh":        {"motion": +0.10, "warmth": +0.05, "contrast": +0.05},
+    "stable":       {"motion": -0.15, "formality": +0.10},
+    "clear":        {"density": -0.15, "contrast": +0.10},
+    "simple":       {"density": -0.20, "contrast": -0.05, "type_personality": -0.05},
+    "clean":        {"density": -0.15, "contrast": -0.05},
+    "efficient":    {"density": +0.15, "type_personality": -0.10},
+    "functional":   {"density": +0.10, "formality": +0.05, "type_personality": -0.10},
+    "premium":      {"density": -0.15, "contrast": +0.10, "formality": +0.15},
+    "elegant":      {"type_personality": +0.20, "density": -0.15, "formality": +0.10},
+    "practical":    {"formality": +0.05, "type_personality": -0.15, "density": +0.05,
+                     "motion": -0.05},
+    "solid":        {"contrast": +0.10, "geometry": -0.10, "formality": +0.05, "motion": -0.05},
+    "robust":       {"contrast": +0.10, "geometry": -0.15},
+    "crisp":        {"contrast": +0.10, "geometry": -0.15},
+    "direct":       {"contrast": +0.10, "formality": +0.05, "motion": -0.05},
+    "vibrant":      {"contrast": +0.20, "warmth": +0.10},
+    "gentle":       {"contrast": -0.15, "geometry": +0.15, "motion": -0.10},
+    "smooth":       {"geometry": +0.15, "motion": +0.05},
+    "modern":       {"type_personality": -0.15, "warmth": -0.05, "density": -0.05},
+    "innovative":   {"type_personality": -0.10, "motion": +0.10},
+    "reliable":     {"formality": +0.10, "motion": -0.05},
+    "trusted":      {"formality": +0.15, "contrast": -0.05},
+    "secure":       {"formality": +0.20, "warmth": -0.10, "motion": -0.10},
+    "expert":       {"formality": +0.15, "type_personality": -0.05},
+    "approachable": {"warmth": +0.15, "formality": -0.10},
+    "welcoming":    {"warmth": +0.20},
+    "caring":       {"warmth": +0.20, "geometry": +0.10},
 }
+
+# The most a brief's character object moves one axis, either way. The host
+# AI passes what a word the engine does not read means as these nudges.
+NUDGE_LIMIT = 0.3
+
+
+# A word's formality weight also reaches geometry and type personality,
+# in proportion to it: a playful word (formality down) rounds the corners
+# and humanizes the type, a formal word (formality up) sharpens the
+# corners. Type personality moves on the playful side only, since formal
+# type can be a serif or a grotesque. Continuous in the weight, so two
+# words with close formality weights move the shape by close amounts.
+GEOMETRY_PER_FORMALITY = -0.6
+TYPE_PER_PLAYFULNESS = 0.5
+
+
+def word_weights(nudge: Dict[str, float]) -> Dict[str, float]:
+    """A tone word's axis weights with its formality weight carried to
+    geometry and type personality (GEOMETRY_PER_FORMALITY,
+    TYPE_PER_PLAYFULNESS)."""
+    out = dict(nudge)
+    formality = nudge.get("formality", 0.0)
+    if formality:
+        out["geometry"] = out.get("geometry", 0.0) + GEOMETRY_PER_FORMALITY * formality
+        playful = max(0.0, -formality)
+        if playful:
+            out["type_personality"] = out.get("type_personality", 0.0) \
+                + TYPE_PER_PLAYFULNESS * playful
+    return out
 
 
 # Forbidden tag → forced clamps. Used to clip axes hard.
@@ -161,7 +241,7 @@ def _normalize_tag(tag: str) -> str:
 
 
 # Common short forms of an industry word, matched as whole words only.
-INDUSTRY_ALIASES: Dict[str, str] = {
+INDUSTRY_SHORT_FORMS: Dict[str, str] = {
     "health": "healthcare",
     "bank": "fintech-banking",
     "payment": "fintech-payments",
@@ -179,9 +259,11 @@ def match_industry(industry: Optional[str]) -> Optional[str]:
 
     Whole words only, so an unknown word never lands on an unrelated
     industry: the text is an id (in any case, with spaces, hyphens or
-    underscores), or it contains an id as consecutive whole words (the first
-    in table order wins), or it is a single word that is one part of an id
-    (again the first in table order) or a listed short form.
+    underscores) or another name in INDUSTRY_ALIASES, or it contains an id
+    or another name as consecutive whole words (the first in table order
+    wins, ids before other names), or it is a single word that is one part of
+    an id or another name (again the first in table order) or a listed short
+    form.
     """
     words = _industry_words(industry or "")
     if not words:
@@ -189,17 +271,21 @@ def match_industry(industry: Optional[str]) -> Optional[str]:
     joined = "-".join(words)
     if joined in INDUSTRY_SEEDS:
         return joined
-    for key in INDUSTRY_SEEDS:
-        parts = key.split("-")
+    if joined in INDUSTRY_ALIASES:
+        return INDUSTRY_ALIASES[joined]
+    names = [(key, key) for key in INDUSTRY_SEEDS]
+    names += [(alias, key) for alias, key in INDUSTRY_ALIASES.items()]
+    for name, key in names:
+        parts = name.split("-")
         n = len(parts)
         if any(words[i:i + n] == parts for i in range(len(words) - n + 1)):
             return key
     if len(words) == 1:
         word = words[0]
-        for key in INDUSTRY_SEEDS:
-            if word in key.split("-"):
+        for name, key in names:
+            if word in name.split("-"):
                 return key
-        return INDUSTRY_ALIASES.get(word)
+        return INDUSTRY_SHORT_FORMS.get(word)
     return None
 
 
@@ -224,8 +310,46 @@ def _apply_tone_nudges(axes: Dict[str, float], tags: Iterable[str]) -> Dict[str,
             nudge = TONE_NUDGES.get(tag2)
         if not nudge:
             continue
-        for axis, delta in nudge.items():
+        for axis, delta in word_weights(nudge).items():
             axes[axis] = _clamp(axes[axis] + delta)
+    return axes
+
+
+_NUDGE_EXAMPLE = '"character": {"contrast": 0.1, "geometry": -0.1}'
+
+
+def check_character(value: Any, label: str = "brief") -> Dict[str, float]:
+    """A brief's character object as {axis: nudge}, in AXIS_NAMES order,
+    zero nudges left out. Anything but an object of axis names and numbers
+    from -NUDGE_LIMIT to NUDGE_LIMIT raises ValueError naming the entry and
+    the fix; every caller of compute_axes goes through it."""
+    if value in (None, {}):
+        return {}
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} field character is {value!r}; give an object of axis "
+                         f"nudges, for example {_NUDGE_EXAMPLE}")
+    for key in value:
+        if key not in AXIS_NAMES:
+            raise ValueError(f'{label} field character names "{key}", which is not an axis; '
+                             f"use {', '.join(AXIS_NAMES)}, for example {_NUDGE_EXAMPLE}")
+    out: Dict[str, float] = {}
+    for axis in AXIS_NAMES:
+        v = value.get(axis, 0.0)
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or v != v \
+                or abs(v) > NUDGE_LIMIT:
+            raise ValueError(f"{label} field character.{axis} is {v!r}; set a nudge from "
+                             f"-{NUDGE_LIMIT:g} to {NUDGE_LIMIT:g}, for example "
+                             f'"character": {{"{axis}": 0.1}}')
+        if v:
+            out[axis] = float(v)
+    return out
+
+
+def _apply_character(axes: Dict[str, float], nudges: Any) -> Dict[str, float]:
+    """A brief's character object (check_character): each named axis moves
+    by its nudge after the words, held inside 0 to 1."""
+    for axis, value in check_character(nudges).items():
+        axes[axis] = _clamp(axes[axis] + value)
     return axes
 
 
@@ -271,10 +395,13 @@ def compute_axes(brief: Any) -> AxisValues:
     # 3. Must-have tags can nudge too — "data-heavy" must imply density up
     axes = _apply_tone_nudges(axes, must_have)
 
-    # 4. Forbidden tags clamp axes hard
+    # 4. The character object's nudges, after the words
+    axes = _apply_character(axes, g("character", None))
+
+    # 5. Forbidden tags clamp axes hard
     axes = _apply_forbidden_clamps(axes, forbidden)
 
-    # 5. Build the frozen value object
+    # 6. Build the frozen value object
     return AxisValues(
         warmth=axes["warmth"],
         contrast=axes["contrast"],

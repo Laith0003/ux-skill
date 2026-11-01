@@ -1,0 +1,10 @@
+.a { transition: transform .62s cubic-bezier(.2, 1, .25, 1); }
+.a:hover { transform: translateY(-2px); }
+.b { transition: background-color .4s ease-in-out; }
+.b:hover { background-color: #eee; }
+.c { transition: opacity 300ms cubic-bezier(.2, 1, .25, 1), transform 450ms ease; }
+.c:focus-visible { opacity: 1; }
+.d { animation: rise 1.2s cubic-bezier(.16, 1, .3, 1) both; }
+.e { animation: rise 1.2s ease-in-out both; }
+.f { transition-duration: 600ms; transition-timing-function: cubic-bezier(.2, 1, .25, 1); }
+.g { transition-duration: 600ms; }

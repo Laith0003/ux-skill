@@ -3,7 +3,7 @@
 > A voice-AI brand whose marketing surfaces read like a quietly editorial print magazine.
 
 **Category:** AI / ML Platform
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/elevenlabs.json`](../../data/brands/elevenlabs.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

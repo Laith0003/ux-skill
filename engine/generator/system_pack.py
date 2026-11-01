@@ -1046,7 +1046,7 @@ _PREVIEW_BODY = """
       <h1>{{NAME}}</h1>
       <p class="sh-hero-sub">{{DESC}}</p>
       <div class="sh-hero-actions">
-        <a class="btn btn-primary btn-lg" href="#start">Primary action</a>
+        <a class="btn btn-primary btn-lg" href="#start">Start with the tokens</a>
         <a class="btn btn-secondary btn-lg" href="#components">Documentation</a>
       </div>
     </div>

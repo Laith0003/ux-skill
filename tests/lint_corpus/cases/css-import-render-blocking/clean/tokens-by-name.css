@@ -1,0 +1,4 @@
+@import url("../system/tokens.css");
+@import "./design-tokens.css";
+
+.card { padding: var(--space-4); }

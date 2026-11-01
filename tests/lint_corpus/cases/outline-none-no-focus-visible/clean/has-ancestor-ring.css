@@ -1,0 +1,14 @@
+.choice {
+  display: flex;
+  gap: 0.5rem;
+  border: 1px solid var(--line);
+}
+
+.choice:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.choice input:focus-visible {
+  outline: none;
+}

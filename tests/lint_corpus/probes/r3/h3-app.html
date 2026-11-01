@@ -1,0 +1,15 @@
+<!doctype html><html><head><style>
+.icon-btn { outline: none; }
+:where(.btn, .icon-btn):focus-visible { outline: 2px solid #06c; }
+.menu button:focus:not(:focus-visible) { outline: none; }
+.nav-item:focus-visible { outline: 2px solid #06c; }
+.sidebar .nav-item { outline: none; }
+.settings input { outline: none; }
+.settings:focus-within { box-shadow: 0 0 0 2px #06c; }
+</style></head><body><div class="shell">
+<aside class="sidebar"><a class="nav-item" href="/">Home</a></aside>
+<main><button class="icon-btn">x</button><div class="menu"><button>Open</button></div>
+<form class="settings"><label>Name <input></label><label>Email <input></label><label>Phone <input></label><label>City <input></label></form>
+<button class="focus-visible:outline-2 focus-visible:outline-blue-600" style="outline: none;">Inline outline class</button>
+<button class="focus-visible:ring-2" style="outline: none;">Inline ring class</button>
+</main></div></body></html>

@@ -1,0 +1,2 @@
+*, *::before, *::after { transition: all 250ms ease; }
+.dark { --page: #111; }

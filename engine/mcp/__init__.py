@@ -11,13 +11,17 @@ pure handler functions in :mod:`engine.mcp.server` work whether or not the
 tests and other callers can exercise them directly.
 
 v2.1 added 3 new tools for the intelligence loop: ``ux_synthesize``,
-``ux_decisions_query``, ``ux_decisions_stats``. Total = 18 tools.
+``ux_decisions_query``, ``ux_decisions_stats``. 4.0 beta added
+``ux_system_build`` (the foundations engine) and ``ux_system_detect``. Five
+tools work on a system a project already has: ``ux_system_import``,
+``ux_system_enhance``, ``ux_system_extend``, ``ux_system_export`` and
+``ux_contracts_check``. Total = 25 tools.
 
 Public surface
 --------------
-``run_server()``  -- launch the stdio MCP server (requires ``pip install mcp``)
-``TOOLS``         -- dict mapping tool name to (handler, input_model, description)
-``handle_*``      -- the 18 pure handler functions
+``run_server()``: launch the stdio MCP server (requires ``pip install mcp``)
+``TOOLS``: dict mapping tool name to (handler, input_model, description)
+``handle_*``: the 25 pure handler functions
 """
 from engine.mcp.server import (
     run_server,
@@ -42,6 +46,15 @@ from engine.mcp.server import (
     handle_ux_synthesize,
     handle_ux_decisions_query,
     handle_ux_decisions_stats,
+    # 4.0 beta: foundations engine
+    handle_ux_system_build,
+    handle_ux_system_detect,
+    # a system a project already has
+    handle_ux_system_import,
+    handle_ux_system_enhance,
+    handle_ux_system_extend,
+    handle_ux_system_export,
+    handle_ux_contracts_check,
 )
 
 __all__ = [
@@ -66,4 +79,11 @@ __all__ = [
     "handle_ux_synthesize",
     "handle_ux_decisions_query",
     "handle_ux_decisions_stats",
+    "handle_ux_system_build",
+    "handle_ux_system_detect",
+    "handle_ux_system_import",
+    "handle_ux_system_enhance",
+    "handle_ux_system_extend",
+    "handle_ux_system_export",
+    "handle_ux_contracts_check",
 ]

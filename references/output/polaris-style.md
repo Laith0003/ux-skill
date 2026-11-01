@@ -1,4 +1,4 @@
-# Polaris Style — Review-Report Output
+# Polaris Style: Review-Report Output
 
 This is the house style for every review-report output the plugin produces. It governs `/ux-audit`, `/ux-critique`, `/ux-a11y`, `/ux-copy`, `/ux-motion`, and `/ux-polish`. A report that ignores this style is rejected and rewritten.
 
@@ -10,9 +10,9 @@ The style is foundation-first: principles, then do/don't, then examples, then to
 
 Every report opens with three lines, in this order:
 
-1. **Verdict** — one sentence. "Ship-blocking." / "Ships with fixes." / "Ready to ship."
-2. **Scope** — what was reviewed and what was excluded.
-3. **Surface** — the route, screen, or component reviewed, with a single locator (file path, URL, or screen name).
+1. **Verdict**: one sentence. "Ship-blocking." / "Ships with fixes." / "Ready to ship."
+2. **Scope**: what was reviewed and what was excluded.
+3. **Surface**: the route, screen, or component reviewed, with a single locator (file path, URL, or screen name).
 
 Example:
 
@@ -141,8 +141,8 @@ When a finding rests on a principle, name the principle. Be specific.
 Acceptable:
 - "Hick's Law" (decision time grows with options)
 - "Fitts's Law" (target size and distance govern selection time)
-- "WCAG 1.4.3 — contrast minimum 4.5:1 for body text"
-- "WCAG 2.5.5 — target size minimum 44px"
+- "WCAG 1.4.3: contrast minimum 4.5:1 for body text"
+- "WCAG 2.5.5: target size minimum 44px"
 - "Omit needless words" (microcopy and label compression)
 - "Missing feedback after user action" (the system silently succeeded or failed)
 - "Recognition over recall" (the user should not have to remember what was on the previous screen)
@@ -308,12 +308,12 @@ The report reads like a checklist a senior engineer would write to a peer. No se
 
 Every report follows this structure. The reader can skim it in one pass.
 
-1. **Opening** — Verdict, scope, surface. (Three lines.)
-2. **Findings** — Grouped by severity, then by lens within each severity. Critical first.
-3. **Patterns** — If three or more findings share a root cause, name the pattern in one paragraph. ("Spacing rhythm is inconsistent across the member section because no spacing token is enforced at the layout layer.")
-4. **Tokens** — When findings cite design tokens, list the affected tokens once at the end. ("Tokens referenced: text-secondary, surface-2, motion-fast, border-hairline.")
-5. **Checklist** — A copy-pasteable checklist of every Fix line, in priority order, with checkboxes.
-6. **Ending** — Severity counts, top-3, verdict, conductor block.
+1. **Opening**: Verdict, scope, surface. (Three lines.)
+2. **Findings**: Grouped by severity, then by lens within each severity. Critical first.
+3. **Patterns**: If three or more findings share a root cause, name the pattern in one paragraph. ("Spacing rhythm is inconsistent across the member section because no spacing token is enforced at the layout layer.")
+4. **Tokens**: When findings cite design tokens, list the affected tokens once at the end. ("Tokens referenced: text-secondary, surface-2, motion-fast, border-hairline.")
+5. **Checklist**: A copy-pasteable checklist of every Fix line, in priority order, with checkboxes.
+6. **Ending**: Severity counts, top-3, verdict, conductor block.
 
 No "introduction." No "conclusion." No sources, no further reading.
 
@@ -364,7 +364,7 @@ Before the report is returned, verify every item.
 - [ ] Opening is exactly three lines (Verdict, Scope, Surface).
 - [ ] Every finding uses the `[SEVERITY] [LENS] Principle\nEvidence: ...\nFix: ...` template.
 - [ ] Every Fix line is prescriptive and copy-pasteable.
-- [ ] Every principle is named (Hick's Law, Fitts's Law, WCAG section, named UX principle — be specific).
+- [ ] Every principle is named (Hick's Law, Fitts's Law, WCAG section, named UX principle: be specific).
 - [ ] No "consider," "perhaps," "might want to."
 - [ ] No marketing words (elevate, unleash, seamless, robust).
 - [ ] No emoji.

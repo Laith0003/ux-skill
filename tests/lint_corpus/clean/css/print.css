@@ -1,0 +1,40 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 16mm;
+  }
+
+  body {
+    color: #000;
+    background: #fff;
+    font-size: 11pt;
+  }
+
+  .site-header,
+  .site-footer,
+  .no-print {
+    display: none;
+  }
+
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+  }
+
+  .invoice__lines {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .invoice__lines th,
+  .invoice__lines td {
+    padding: 4pt 6pt;
+    border-block-end: 0.5pt solid #999;
+  }
+
+  tr,
+  img,
+  figure {
+    break-inside: avoid;
+  }
+}

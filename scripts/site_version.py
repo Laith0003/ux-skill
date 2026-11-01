@@ -1,5 +1,9 @@
 """The version the public site states, read from pyproject.toml.
 
+A prerelease is never stated on the public site: while pyproject.toml holds
+one (4.0.0b1, for example), the site states the newest release named in
+CHANGELOG.md instead.
+
 Generators import this instead of writing a version by hand, and
 tests/test_site_version.py checks every page against it. `claims(html)` lists
 each place a page states the current version: the structured data, the hero
@@ -17,10 +21,20 @@ from typing import Iterator, List, Tuple
 ROOT = Path(__file__).resolve().parent.parent
 
 
-def version() -> str:
-    """Full version, for example 3.2.1."""
+def package_version() -> str:
+    """The version in pyproject.toml, prereleases included."""
     text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     return re.search(r'^version\s*=\s*"([^"]+)"', text, re.M).group(1)
+
+
+def version() -> str:
+    """Full version the site states, for example 3.2.1: the pyproject.toml
+    version when it is a release, else the newest release in CHANGELOG.md."""
+    pkg = package_version()
+    if re.fullmatch(r"\d+\.\d+\.\d+", pkg):
+        return pkg
+    log = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    return re.search(r"^## \[(\d+\.\d+\.\d+)\]", log, re.M).group(1)
 
 
 def line() -> str:

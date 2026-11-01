@@ -1,15 +1,15 @@
-# Honeycomb — DESIGN.md
+# Honeycomb: DESIGN.md
 
 ## Overview
-Honeycomb (observability for distributed systems) leans into the literal honey-and-bee metaphor with a saturated honey-amber (`#ffc53d`) over a deep midnight teal (`#0d2330`). The brand voice is technical-but-warm — type pairs a geometric sans display with a humanist body, and the hexagon motif appears as both a literal logo and as a section-divider shape. It feels closer to a smart magazine than a typical observability tool.
+Honeycomb (observability for distributed systems) leans into the literal honey-and-bee metaphor with a saturated honey-amber (`#ffc53d`) over a deep midnight teal (`#0d2330`). The brand voice is technical-but-warm: type pairs a geometric sans display with a humanist body, and the hexagon motif appears as both a literal logo and as a section-divider shape. It feels closer to a smart magazine than a typical observability tool.
 
 ## Color
-- **Primary:** `#ffc53d` — Honey Amber
-- **Primary deep:** `#e0a920` — Amber Pressed
-- **Canvas:** `#0d2330` — Midnight Teal
-- **Surface card:** `#163140` — Teal Card
-- **Canvas alt (light bands):** `#fff8e8` — Honey Cream
-- **Ink (on dark):** `#fbf6e9` — Cream Ink
+- **Primary:** `#ffc53d` (Honey Amber)
+- **Primary deep:** `#e0a920` (Amber Pressed)
+- **Canvas:** `#0d2330` (Midnight Teal)
+- **Surface card:** `#163140` (Teal Card)
+- **Canvas alt (light bands):** `#fff8e8` (Honey Cream)
+- **Ink (on dark):** `#fbf6e9` (Cream Ink)
 - **Ink (on light):** `#0d2330`
 - **Hairlines:** `rgba(255,255,255,0.10)` on dark, `rgba(13,35,48,0.08)` on light
 
@@ -33,16 +33,16 @@ Honeycomb (observability for distributed systems) leans into the literal honey-a
 - `customer-quote-card-honey`
 
 ## Trademark signals
-- Honey-amber on midnight-teal — the dominant "wasp colors" pairing
+- Honey-amber on midnight-teal: the dominant "wasp colors" pairing
 - Literal hexagon shape used as section dividers and icon containers
 - BubbleUp / Canvas product-feature visuals get full-bleed treatment
-- Customer quotes set in larger type than body copy — testimonials get editorial weight
+- Customer quotes set in larger type than body copy: testimonials get editorial weight
 - Mono inline in body callouts for span names, attributes, query syntax
 
 ## What they DON'T do
 - No purple/violet (the dominant dev-observability cliche)
 - No mascot characters or illustrated creatures (the brand is the hexagon)
-- No light-mode hero — the midnight teal is the entry point
+- No light-mode hero: the midnight teal is the entry point
 - No flat-color rainbow data viz
 - No emoji in product UI or marketing chrome
 

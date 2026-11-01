@@ -19,23 +19,10 @@ CI runs it with --check so a PR that adds an untagged page fails.
 from __future__ import annotations
 import glob
 import os
-import re
 import sys
 
-GA_ID = "G-Z371T0DBW5"
-
-SNIPPET = (
-    "<!-- Google tag (gtag.js) -->\n"
-    f'<script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>\n'
-    "<script>\n"
-    "  window.dataLayer = window.dataLayer || [];\n"
-    "  function gtag(){dataLayer.push(arguments);}\n"
-    "  gtag('js', new Date());\n"
-    f"  gtag('config', '{GA_ID}');\n"
-    "</script>\n"
-)
-
-HEAD_RE = re.compile(r"<head\b[^>]*>", re.IGNORECASE)
+# Python puts scripts/ on sys.path when this file runs, so ga imports.
+from ga import GA_ID, has_tag, inject
 
 
 def repo_root() -> str:
@@ -56,18 +43,6 @@ def resolve_targets(args: list[str]) -> list[str]:
             seen.add(f)
             out.append(f)
     return out
-
-
-def has_tag(html: str) -> bool:
-    return GA_ID in html
-
-
-def inject(html: str, path: str) -> str:
-    m = HEAD_RE.search(html)
-    if not m:
-        raise ValueError(f"{path}: no <head> tag found, cannot inject GA")
-    i = m.end()
-    return html[:i] + "\n" + SNIPPET + html[i:]
 
 
 def main(argv: list[str]) -> int:

@@ -12,6 +12,10 @@ Re-run safely any time data/brands/ grows.
 from pathlib import Path
 import json
 import re
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from prose_punctuation import fix_text  # noqa: E402
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -20,11 +24,12 @@ MD_DIR = ROOT / "references" / "brands"
 
 
 def safe(v, fallback=""):
+    """A field as prose: lists joined, HTML dash entities decoded, no dash punctuation."""
     if v is None or v == "":
         return fallback
     if isinstance(v, list):
-        return ", ".join(str(x) for x in v)
-    return str(v)
+        return ", ".join(safe(x) for x in v)
+    return fix_text(html_unescape_lite(str(v)))
 
 
 def colors_block(dl: dict) -> str:
@@ -59,7 +64,7 @@ def type_block(dl: dict) -> str:
     ]:
         v = dl.get(k)
         if v:
-            out.append(f"- **{label}**: {v}")
+            out.append(f"- **{label}**: {safe(v)}")
     seen = set()
     deduped = []
     for line in out:
@@ -72,11 +77,13 @@ def type_block(dl: dict) -> str:
 def list_or_empty(items, prefix="- "):
     if not items:
         return "_(none documented)_"
-    return "\n".join(f"{prefix}{html_unescape_lite(safe(x))}" for x in items if x)
+    return "\n".join(f"{prefix}{safe(x)}" for x in items if x)
 
 
 def html_unescape_lite(s: str) -> str:
-    return s.replace("&mdash;", "—").replace("&middot;", "·")
+    """Decode the two entities the specs use; a dash entity becomes a comma."""
+    s = re.sub(r"\s*&mdash;\s*", ", ", s)
+    return s.replace("&middot;", "\u00b7")
 
 
 TEMPLATE = """# {name}
@@ -117,7 +124,7 @@ TEMPLATE = """# {name}
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely. It stays in sync as long as the heading layout is preserved._
 """
 
 
@@ -130,7 +137,7 @@ def render(bid: str, spec: dict) -> str:
         name=safe(spec.get("name") or bid),
         essence=essence,
         category=safe(spec.get("category"), "Uncategorized"),
-        industry=safe(spec.get("industry"), "—"),
+        industry=safe(spec.get("industry"), "n/a"),
         palette=colors_block(dl),
         typography=type_block(dl),
         philosophy=safe(spec.get("philosophy")) or "_(see essence above)_",

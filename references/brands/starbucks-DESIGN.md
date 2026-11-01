@@ -3,7 +3,7 @@
 > Starbucks' design system is a warm, confident retail flagship wearing the green of their storefront apron across every surface.
 
 **Category:** Consumer / Lifestyle / Retail
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/starbucks.json`](../../data/brands/starbucks.json)
 
 ## Palette
@@ -42,4 +42,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

@@ -1,0 +1,29 @@
+{
+  "$description": "Semantic roles, light theme. References primitives.tokens.json.",
+  "bg": {
+    "$type": "color",
+    "canvas": {"$value": "{color.neutral.0}"},
+    "subtle": {"$value": "{color.neutral.50}"},
+    "overlay": {"$value": "{color.overlay}"}
+  },
+  "fg": {
+    "$type": "color",
+    "default": {"$value": "{color.neutral.950}"},
+    "muted": {"$value": "{color.neutral.500}"},
+    "on-accent": {"$value": "{color.neutral.0}"}
+  },
+  "accent": {
+    "$type": "color",
+    "$root": {"$value": "{color.brand.500}"},
+    "hover": {"$value": "{color.brand.700}"}
+  },
+  "border": {
+    "$type": "color",
+    "default": {"$value": "{color.neutral.200}"}
+  },
+  "status": {
+    "$type": "color",
+    "danger": {"$value": "{color.danger.700}"},
+    "success": {"$value": "{color.success.600}"}
+  }
+}

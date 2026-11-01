@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.84,
+    "density": 0.25,
+    "formality": 0.3,
+    "geometry": 0.576,
+    "motion": 0.338,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/youtube.json: warmth from the hue and chroma of the primary #FF0000 and the canvas #FFFFFF; contrast from the ink #0F0F0F on that canvas, its depth and the chroma of #FF0000; density from its 8px spacing base; geometry from its radii 4, 8, 12, 24px; formality from the chroma of its primary and ink; motion from its stated durations 6000ms, 120ms, 100ms, 200ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FF0000",
+  "brand_rule": "The primary #FF0000 reaches 4.00:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#EE0000",
+      "light": "#EE0000"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "9px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "dbf67833b1c6137c"
+  },
+  "id": "youtube",
+  "name": "YouTube",
+  "spec": "data/brands/youtube.json"
+}

@@ -29,7 +29,9 @@ def test_server_imports():
     assert callable(run_server)
     assert isinstance(TOOLS, dict)
     assert isinstance(MCP_AVAILABLE, bool)
-    # All 18 tools are registered (15 v2.0 + 3 v2.1 intelligence-loop tools).
+    # All 25 tools are registered (15 v2.0 + 3 v2.1 intelligence-loop tools
+    # + the foundations engine and system detect + the five tools for a
+    # system a project already has).
     expected_tools = {
         "ux_recommend",
         "ux_lint",
@@ -50,7 +52,17 @@ def test_server_imports():
         "ux_synthesize",
         "ux_decisions_query",
         "ux_decisions_stats",
+        # 4.0 beta foundations engine
+        "ux_system_build",
+        "ux_system_detect",
+        # a system a project already has
+        "ux_system_import",
+        "ux_system_enhance",
+        "ux_system_extend",
+        "ux_system_export",
+        "ux_contracts_check",
     }
+    assert len(TOOLS) == 25
     assert set(TOOLS.keys()) == expected_tools, (
         f"missing: {expected_tools - set(TOOLS.keys())}; "
         f"extra: {set(TOOLS.keys()) - expected_tools}"
@@ -137,7 +149,7 @@ def test_ux_stats_returns_dict():
     assert "version" in result
     assert "counts" in result
     assert isinstance(result["counts"], dict)
-    assert result["version"].startswith("3.")
+    assert result["version"].startswith("4.")
     # Canonical manifests are present in the counts dict.
     for manifest in ("styles", "palettes", "type-pairs", "components", "brands"):
         assert manifest in result["counts"], f"missing manifest count: {manifest}"
@@ -153,3 +165,16 @@ def test_server_builds_with_the_installed_mcp():
         pytest.skip("mcp is not installed")
     from engine.mcp.server import _build_server
     assert _build_server() is not None
+
+
+def test_the_ux_mcp_doc_states_the_real_count_and_lists_every_tool():
+    import re
+    from engine.mcp import TOOLS
+    doc = (Path(__file__).resolve().parents[1] / "commands" / "ux-mcp.md").read_text(
+        encoding="utf-8")
+    n = len(TOOLS)
+    assert f"Exposes {n} tools" in doc and f"## Exposed tools ({n})" in doc
+    assert f"one of the {n} in `TOOLS`" in doc
+    assert not re.search(r"\b(14|18|Fourteen|Eighteen) tools\b", doc)
+    table = doc[doc.index("## Exposed tools"):doc.index("## Client configuration")]
+    assert set(re.findall(r"^\| `(ux_[a-z_]+)` \|", table, re.M)) == set(TOOLS)

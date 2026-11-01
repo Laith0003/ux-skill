@@ -1,8 +1,8 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 154,
-    "last_updated": "2026-09-23",
+    "entries": 171,
+    "last_updated": "2026-09-30",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
   },
@@ -23,7 +23,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Inter is a body font tuned for screen legibility at small sizes; deployed as display it reads as the default startup-landing fingerprint.",
       "fix": "Pair Inter (body) with a distinctive display face: Geist, Satoshi, Cabinet Grotesk, General Sans, Outfit, or a brand-specific variable sans."
@@ -35,7 +36,7 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "bg-gradient-to-[a-z]+\\s+from-(purple|violet|fuchsia|indigo)-(400|500|600)\\s+(?:via-[a-z]+-[0-9]+\\s+)?to-(blue|sky|cyan)-(400|500|600)|linear-gradient\\([^)]*#(7c3aed|8b5cf6|a855f7|6366f1)[^)]*#(3b82f6|2563eb|0ea5e9)[^)]*\\)",
+        "pattern": "class=\\\"(?=[^\\\"]*(?<![\\w:/-])bg-(?:gradient|linear)-to-[a-z]{1,2}(?![\\w-]))(?=[^\\\"]*(?<![\\w:/-])from-(?:purple|violet|fuchsia|indigo)-[3-7]00(?![\\w/-]))(?=[^\\\"]*(?<![\\w:/-])to-(?:blue|sky|cyan)-[3-7]00(?![\\w/-]))|class=\\\"(?=[^\\\"]*(?<![\\w:/-])bg-(?:gradient|linear)-to-[a-z]{1,2}(?![\\w-]))(?=[^\\\"]*(?<![\\w:/-])from-(?:blue|sky|cyan)-[3-7]00(?![\\w/-]))(?=[^\\\"]*(?<![\\w:/-])to-(?:purple|violet|fuchsia|indigo)-[3-7]00(?![\\w/-]))|(?:linear|radial|conic)-gradient\\((?:[^()]|\\([^()]*\\))*?(?:#(?:7c3aed|8b5cf6|a855f7|6366f1|9333ea|7e22ce|6d28d9|4f46e5|a78bfa|c084fc|818cf8)\\b|(?<![\\w-])(?:purple|violet|rebeccapurple|blueviolet|mediumpurple)(?![\\w-]))(?:[^()]|\\([^()]*\\))*?(?:#(?:3b82f6|2563eb|0ea5e9|1d4ed8|60a5fa|06b6d4|38bdf8|22d3ee)\\b|(?<![\\w-])(?:blue|dodgerblue|royalblue|deepskyblue|cornflowerblue)(?![\\w-]))|(?:linear|radial|conic)-gradient\\((?:[^()]|\\([^()]*\\))*?(?:#(?:3b82f6|2563eb|0ea5e9|1d4ed8|60a5fa|06b6d4|38bdf8|22d3ee)\\b|(?<![\\w-])(?:blue|dodgerblue|royalblue|deepskyblue|cornflowerblue)(?![\\w-]))(?:[^()]|\\([^()]*\\))*?(?:#(?:7c3aed|8b5cf6|a855f7|6366f1|9333ea|7e22ce|6d28d9|4f46e5|a78bfa|c084fc|818cf8)\\b|(?<![\\w-])(?:purple|violet|rebeccapurple|blueviolet|mediumpurple)(?![\\w-]))",
         "flags": "i",
         "scope": [
           "css",
@@ -46,10 +47,14 @@
           "html",
           "blade",
           "astro"
+        ],
+        "target": [
+          "css",
+          "classes"
         ]
       },
       "why": "Purple-to-blue gradient on white is the strongest visual fingerprint of unconstrained model output and reads as template-marketplace AI slop.",
-      "fix": "Use a single restrained accent (Emerald, Electric Blue, Deep Rose, Amber) against neutrals; keep gradient hue spread under 60 degrees if used at all."
+      "fix": "Replace the purple and blue gradient with a solid brand surface, or a gradient between two tints of one hue. Keep saturated color for the one action you want clicked."
     },
     {
       "id": "three-equal-card-grid",
@@ -67,10 +72,12 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup",
+        "post": "cards-hold-only-icon-title-line"
       },
-      "why": "Three equal cards with three icons and three short paragraphs is the safest default the generator reaches for and the strongest layout fingerprint in AI-generated marketing surfaces.",
-      "fix": "Use asymmetric layouts: bento grids, 2-and-1 splits, 4 with one spanning width. Vary card size by content priority."
+      "why": "Three equal cards that each hold just an icon, a title and a line are the strongest layout fingerprint of generated marketing pages: nothing in them differs but the words. Equal columns whose cards each carry their own image or richer content pass.",
+      "fix": "Give each card what only it can show (its own photograph, a product fragment, a real figure), or change the layout: a split, a list with one lead item, a bento whose cell sizes follow the content."
     },
     {
       "id": "fake-name-john-doe",
@@ -91,7 +98,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "John/Jane Doe and their cousins signal that nobody thought about who would actually use the product - immediate AI-generated-tutorial vibe.",
       "fix": "Use plausible names that fit the target market: Maya Iqbal, Adam Levin, Wen Zhang, Layla Haddad. Match region for regional products."
@@ -117,7 +125,8 @@
           "md",
           "css",
           "scss"
-        ]
+        ],
+        "target": "text"
       },
       "why": "Lorem ipsum in production source code is unshipped placeholder content - the most obvious draft-state leak.",
       "fix": "Write real copy that makes a specific claim about the product. If you can't write it yet, mark the block with TODO and a content owner."
@@ -129,7 +138,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:button|a|h[1-6]|span|div|p|li)[^>]*>[^<]*(?:[\\U0001F300-\\U0001F9FF]|[\\U0001F600-\\U0001F64F]|[\\U0001F680-\\U0001F6FF]|[\\u2600-\\u26FF]|[\\u2700-\\u27BF])",
+        "pattern": "<(?:button|a|h[1-6]|li|summary|label|dt|th)\\b[^>]*>[^<]*(?:[\\U0001F300-\\U0001FAFF\\u2600-\\u26FF\\u2700-\\u27BF]|&#x0*(?:1F[3-9A-F][0-9A-F]{2}|2705|2728|274C|274E|2B50|26A1|2764|2714|2757|2753);|&#0*(?:127[7-9]\\d\\d|128\\d{3}|129[0-7]\\d\\d|9989|10024|10060|11088|9889|10084|10004);|\\\\u\\{1F[3-9A-F][0-9A-F]{2}\\}|\\\\uD83[C-E]\\\\uD[C-F][0-9A-F]{2})|<(?:span|div)\\b[^>]*>\\s*(?:[\\U0001F300-\\U0001FAFF\\u2600-\\u26FF\\u2700-\\u27BF]|&#x0*(?:1F[3-9A-F][0-9A-F]{2}|2705|2728|274C|274E|2B50|26A1|2764|2714|2757|2753);|&#0*(?:127[7-9]\\d\\d|128\\d{3}|129[0-7]\\d\\d|9989|10024|10060|11088|9889|10084|10004);|\\\\u\\{1F[3-9A-F][0-9A-F]{2}\\}|\\\\uD83[C-E]\\\\uD[C-F][0-9A-F]{2})[^<]{0,40}</",
         "flags": "u",
         "scope": [
           "tsx",
@@ -138,7 +147,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Emojis render inconsistently across platforms, ignore brand color, and signal informality where SVG icons signal craft.",
       "fix": "Inline SVG from Lucide, Feather, Phosphor, or Heroicons at 1.5-2px stroke with currentColor. Whitelist U+2713 check and U+2318 command only."
@@ -159,7 +169,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Centered headline + centered subtitle + centered button stack is the laziest hero composition and signals the generator picked it when it couldn't find a better layout.",
       "fix": "Use left-aligned hero with editorial 7-5 or 8-4 grid split; let the imagery earn its own column."
@@ -182,6 +193,10 @@
           "html",
           "blade",
           "astro"
+        ],
+        "target": [
+          "css",
+          "classes"
         ]
       },
       "why": "Three-stop rainbow text on a hero word is the strongest 'AI hero' tell after the purple-to-blue gradient.",
@@ -194,7 +209,7 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "box-shadow:[^;]*rgba?\\(\\s*(?:12[0-9]|13[0-9]|14[0-9])\\s*,\\s*(?:5[0-9]|6[0-9]|7[0-9])\\s*,\\s*(?:2[0-9]\\d|2[3-5]\\d)|shadow-(?:purple|violet|fuchsia|indigo)-(?:400|500|600)",
+        "pattern": "box-shadow:[^;{}]*rgba?\\(\\s*(?:1[2-4][0-9])\\s*,\\s*(?:[5-9][0-9])\\s*,\\s*(?:2[0-5]\\d)|shadow-(?:purple|violet|fuchsia|indigo)-(?:400|500|600)",
         "flags": "i",
         "scope": [
           "css",
@@ -203,6 +218,10 @@
           "jsx",
           "vue",
           "html"
+        ],
+        "target": [
+          "css",
+          "classes"
         ]
       },
       "why": "Purple-tinted shadows on cards are the second-strongest 'AI premium' fingerprint after the gradient itself.",
@@ -215,7 +234,7 @@
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "(?:transition(?:-duration)?|animation-duration):\\s*300ms\\b|duration-300\\b|\\bduration:\\s*0\\.3s\\b",
+        "pattern": "(?:transition(?:-duration)?|animation-duration):\\s*300ms\\b|(?<![\\w-])(?:transition|animation)\\s*:[^;{}]*\\s(?:300ms|0?\\.3s)\\b|(?<![\\w$@-])duration-300\\b|\\bduration:\\s*0\\.3s\\b",
         "flags": "i",
         "scope": [
           "css",
@@ -224,10 +243,15 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": [
+          "css",
+          "classes"
+        ],
+        "post": "default-300-answers-late"
       },
-      "why": "300ms is the editor default - using it everywhere signals zero motion intent and reads as laziness to anyone who tunes animation curves.",
-      "fix": "Micro-interactions 150-220ms, complex transitions 250-400ms, exit 60-70% of entry. Pick durations that match the feel, not the default."
+      "why": "300ms on the default curve is the editor default: nothing about the motion was decided. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. An unwritten curve is the default one (ease, or Tailwind's own) and is judged as written; a curve that cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
+      "fix": "Bind the system's motion roles (--motion-state-*, --motion-swap-*). With no system, declare a curve that answers in time (half done within 70ms for a hover or press) and a duration chosen for the move."
     },
     {
       "id": "cubic-bezier-material-only",
@@ -245,7 +269,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "cubic-bezier(0.4, 0, 0.2, 1) is Material Design's default standard ease - using it as the only curve signals no taste decision was made.",
       "fix": "Use cubic-bezier(0.16, 1, 0.3, 1) for premium exits, cubic-bezier(0.34, 1.56, 0.64, 1) for playful overshoot, or spring physics."
@@ -257,7 +282,7 @@
       "category": "Typography",
       "detection": {
         "type": "regex",
-        "pattern": "font-family:\\s*(?:-apple-system|BlinkMacSystemFont)(?:\\s*,\\s*(?:BlinkMacSystemFont|'?Segoe UI'?|Roboto|Oxygen|Ubuntu|Cantarell|'?Helvetica Neue'?|sans-serif|system-ui))*\\s*;",
+        "pattern": "font-family:\\s*(?:-apple-system|BlinkMacSystemFont)(?:\\s*,\\s*(?:BlinkMacSystemFont|[\\\"']?Segoe UI[\\\"']?|Roboto|Oxygen|Ubuntu|Cantarell|[\\\"']?Helvetica Neue[\\\"']?|Arial|sans-serif|system-ui))*\\s*[;}]",
         "flags": "i",
         "scope": [
           "css",
@@ -266,7 +291,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Falling back to the system stack alone with no chosen typeface gives up the chance to have any typographic identity.",
       "fix": "Pick a real face: Geist, Inter, Satoshi, IBM Plex Sans, Cabinet Grotesk, or the brand's variable. System stack is the absolute last fallback."
@@ -278,7 +304,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "class=\"[^\"]*(?:icon|stamp|badge|achievement|reward)[^\"]*\"[^>]*>\\s*(?:[\\U0001F300-\\U0001F9FF]|[\\u2600-\\u27BF]|[\\U0001F600-\\U0001F6FF])",
+        "pattern": "class(?:Name)?=\\\"[^\\\"]*(?:icon|stamp|badge|achievement|reward)[^\\\"]*\\\"[^>]*>\\s*(?:\\{\\s*[\\\"'`])?(?:[\\U0001F300-\\U0001FAFF\\u2600-\\u26FF\\u2700-\\u27BF]|&#x0*(?:1F[3-9A-F][0-9A-F]{2}|2705|2728|274C|274E|2B50|26A1|2764|2714|2757|2753);|&#0*(?:127[7-9]\\d\\d|128\\d{3}|129[0-7]\\d\\d|9989|10024|10060|11088|9889|10084|10004);|\\\\u\\{1F[3-9A-F][0-9A-F]{2}\\}|\\\\uD83[C-E]\\\\uD[C-F][0-9A-F]{2})",
         "flags": "u",
         "scope": [
           "tsx",
@@ -287,7 +313,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Emoji where an SVG icon belongs breaks brand color, scales poorly, and renders differently on every OS.",
       "fix": "Inline SVG icon with currentColor and a consistent stroke width across the surface."
@@ -308,7 +335,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "rounded-full on every button and input is the iOS-tutorial fingerprint - signals the radius decision was skipped entirely.",
       "fix": "rounded-full for pills, avatars, icon buttons only. Use rounded-md or rounded-lg for primary buttons; rounded-xl or rounded-2xl for cards."
@@ -329,10 +357,15 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": [
+          "css",
+          "classes"
+        ],
+        "post": "size-outside-system"
       },
-      "why": "Arbitrary px values like text-[90px] or text-[112px] bypass the type scale and signal the size was picked by eye, not by system.",
-      "fix": "Extend the Tailwind theme scale or use clamp() for fluid hero typography. text-6xl/text-7xl/text-8xl exist for a reason."
+      "why": "A display size picked by eye bypasses the type scale, so the hierarchy no longer holds at other widths. When the page carries its own design system (custom properties it defines or links), the value passes if the system has it: the system decided it.",
+      "fix": "Take the display size from the type tokens (--type-text-display-font-size, a fluid clamp the engine derives from the brand). With no system, add the size to the theme's scale and write it as a clamp() between the phone and desktop sizes."
     },
     {
       "id": "blur-bg-only-decoration",
@@ -341,7 +374,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "(?:backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?|backdrop-filter:\\s*blur\\([^)]+\\))(?![^\"}]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]|background:[^;]*rgba|background-color:[^;]*rgba))",
+        "pattern": "\\{(?![^{}]*background(?:-color)?\\s*:[^;{}]*(?:rgba|hsla|/\\s*0?\\.\\d|transparent|color-mix))[^{}]*(?<![\\w-])backdrop-filter\\s*:\\s*blur\\(",
         "flags": "i",
         "scope": [
           "css",
@@ -350,6 +383,13 @@
           "jsx",
           "vue",
           "html"
+        ],
+        "target": "css",
+        "also": [
+          {
+            "pattern": "(?<![\\w:-])backdrop-blur(?:-(?:sm|md|lg|xl|2xl|3xl))?(?![\\w-])(?![^\\\"]*(?:bg-white/[0-9]|bg-black/[0-9]|bg-[a-z]+-[0-9]+/[0-9]))",
+            "target": "classes"
+          }
         ]
       },
       "why": "Backdrop blur applied without a translucent surface behind it is GPU work for zero visual benefit - decoration, not design.",
@@ -371,7 +411,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Three overlapping circular avatars in the nav as 'our team' or 'join 10k users' is a content-marketing template tell.",
       "fix": "Use real customer logos, named testimonials with quotes, or specific signal (Used by 312 engineering teams at Series-A companies)."
@@ -383,7 +424,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "(?:\\u2605{5}|★{5}|⭐{5}|\\*{5})|<(?:span|div|p)[^>]*class=\"[^\"]*stars?[^\"]*\"[^>]*>\\s*(?:\\u2605|★){4,}",
+        "pattern": "(?:\\u2605{5}|\\u2b50{5}|(?<![*/])\\*{5}(?![*/])|(?:&#9733;|&#x2605;|&starf;){5})|<(?:span|div|p)[^>]*class=\\\"[^\\\"]*stars?[^\\\"]*\\\"[^>]*>\\s*(?:\\u2605|&#9733;|&#x2605;|&starf;){4,}",
         "flags": "i",
         "scope": [
           "tsx",
@@ -393,7 +434,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Five hardcoded stars next to a fake quote is the lowest-trust pattern on the web; users have learned to discount it on sight.",
       "fix": "Show real, named, attributable testimonials with company affiliation and a specific outcome. No star count unless aggregated from a real review system."
@@ -405,7 +447,7 @@
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:button|a)[^>]*>[^<]*(?:→|->|&rarr;|&#8594;)[^<]*</(?:button|a)>|class=\"[^\"]*\\banimate-bounce\\b[^\"]*\"[^>]*>\\s*(?:→|→|&rarr;|<svg)",
+        "pattern": "<(?:button|a)\\b[^>]*>[^<]*(?:\\u2192|->|&rarr;|&#8594;)[^<]*</(?:button|a)>|class=\\\"[^\\\"]*\\banimate-bounce\\b[^\\\"]*\\\"[^>]*>\\s*(?:\\u2192|&rarr;|<svg)",
         "flags": "i",
         "scope": [
           "tsx",
@@ -414,7 +456,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Bouncing arrow on a CTA is the desperate-attention pattern that signals the copy itself isn't doing the work.",
       "fix": "Let the CTA copy carry the action (Start a 14-day trial, Read the deployment guide). If you need an arrow, use a static SVG that nudges 2-4px on hover."
@@ -426,7 +469,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:button|div)[^>]*(?:aria-label=\"(?:menu|navigation|hamburger)\"|class=\"[^\"]*\\b(?:hamburger|menu-toggle)\\b[^\"]*\")[^>]*>(?![\\s\\S]*?(?:md:hidden|lg:hidden|hidden\\s+md:|hidden\\s+lg:))",
+        "pattern": "<(?:button|div|span|a)\\b(?=[^>]*(?:\\baria-(?:controls|expanded|label)\\b|\\b(?:class|id|title|data-[\\w-]+)\\s*=\\s*[\"'][^\"']*(?:menu|burger|toggl|nav|drawer|canvas)))[^>]*>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -435,10 +478,12 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup",
+        "post": "hamburger-on-desktop"
       },
-      "why": "Hamburger on a wide viewport hides nav from users for no reason; signals the responsive breakpoint was skipped.",
-      "fix": "Show inline nav on md: and up; hide the hamburger above that breakpoint with md:hidden."
+      "why": "A menu button on a wide viewport hides the navigation behind a click for no reason; the links fit, so the responsive breakpoint was skipped.",
+      "fix": "Show the links inline at desktop widths and hide the menu button there: a media query at the width where the links fit (@media (min-width: 1024px) { .menu-button { display: none } }), or a breakpoint class such as lg:hidden. Keep the button, its aria-expanded and aria-controls, below that width."
     },
     {
       "id": "tailwind-color-named-vague",
@@ -457,7 +502,8 @@
           "blade",
           "astro",
           "css"
-        ]
+        ],
+        "target": "classes"
       },
       "why": "Raw bg-blue-500 / bg-purple-500 with no semantic token (primary, success, danger) signals the color system was never designed.",
       "fix": "Define semantic tokens in tailwind.config or CSS custom properties: bg-primary, text-success, ring-accent. Map them once."
@@ -469,7 +515,7 @@
       "category": "Quality",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:div|span|p|section|article|h[1-6]|button|a|img)\\b[^>]*\\sstyle=\"(?!\\s*--[\\w-]+\\s*:[^;\"]*(?:;\\s*--[\\w-]+\\s*:[^;\"]*)*;?\\s*\")[^\"]+\"",
+        "pattern": "<(?:div|span|p|section|article|h[1-6]|button|a|img)\\b[^>]*\\sstyle\\s*=\\s*\\\"(?:\\s*--[\\w-]+\\s*:[^;\\\"]*;?)*\\s*(?!--)[a-z][\\w-]*\\s*:",
         "flags": "i",
         "scope": [
           "tsx",
@@ -478,7 +524,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Inline style= attributes bypass the design system, defeat caching, and signal the styling decision was made ad hoc.",
       "fix": "Use Tailwind utilities, a CSS class, or a styled component. Reserve inline style for runtime-computed values (animated translate, dynamic CSS vars) only."
@@ -499,7 +546,8 @@
           "js",
           "vue",
           "astro"
-        ]
+        ],
+        "target": "code"
       },
       "why": "console.log shipped to production leaks state to anyone with DevTools open and signals the build didn't go through a real review.",
       "fix": "Remove debug logs before shipping. If you need structured logging, use a logger module that's tree-shaken out of production builds."
@@ -524,7 +572,8 @@
           "astro",
           "css",
           "scss"
-        ]
+        ],
+        "target": "raw"
       },
       "why": "TODO/FIXME in shipping code is an unresolved promise to the reader and a draft-state leak.",
       "fix": "Resolve the TODO before merge, or move it to the issue tracker with a specific owner and date."
@@ -541,7 +590,8 @@
         "scope": [
           "ts",
           "tsx"
-        ]
+        ],
+        "target": "code"
       },
       "why": "any defeats the type system and signals the type was never figured out - the code is JavaScript pretending to be TypeScript.",
       "fix": "Use unknown for genuinely unknown shapes and narrow with type guards. Use a specific interface or generic for everything else."
@@ -562,7 +612,9 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup",
+        "post": "svg-not-hidden"
       },
       "why": "SVG with no aria-label and no aria-hidden is announced by screen readers as 'graphic' with no context - failure of WCAG 1.1.1.",
       "fix": "Decorative SVG gets aria-hidden=\"true\". Informative SVG gets aria-label=\"description\" or aria-labelledby pointing to a title element."
@@ -574,7 +626,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<button(?![^>]*\\btype=)[^>]*>",
+        "pattern": "(?-i:<button)\\b(?![^>]*\\btype\\s*=)[^>]*>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -583,7 +635,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "A <button> inside a <form> without type=\"button\" defaults to type=\"submit\" and silently submits the form on every click.",
       "fix": "Always set type=\"button\" or type=\"submit\" explicitly. The default is a footgun, not a feature."
@@ -595,7 +648,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<img(?![^>]*\\balt=)[^>]*/?>",
+        "pattern": "(?-i:<img)\\b(?![^>]*\\balt\\s*=)[^>]*/?>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -604,7 +657,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Missing alt breaks screen readers, SEO image indexing, and the broken-image fallback all at once - WCAG 1.1.1 failure.",
       "fix": "Every <img> gets alt. Decorative images get alt=\"\" (empty). Informative images get a description a screen reader user would need."
@@ -616,7 +670,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<a(?![^>]*\\bhref=)[^>]*\\b(?:onClick|onclick)=",
+        "pattern": "<a\\b(?![^>]*\\bhref\\s*=)[^>]*\\b(?:onClick|onclick)\\s*=",
         "flags": "i",
         "scope": [
           "tsx",
@@ -625,7 +679,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An <a> without href is not focusable by default and is invisible to assistive tech - it looks like a link but behaves like a button.",
       "fix": "Use <button> for actions. Use <a href=\"...\"> for navigation. Never an anchor without href as a click target."
@@ -646,7 +701,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Heading hierarchy gaps (h1 then h3, or h3 with no h1/h2 preceding) break the screen-reader landmark tree and the SEO outline.",
       "fix": "h1 once per page; nest h2/h3/h4 in order. If you need a small visual heading without a logical level, use a styled <p> instead."
@@ -663,7 +719,9 @@
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css",
+        "token_definitions": true
       },
       "why": "The default shadcn HSL token block with --radius 0.5rem is recognizable in two seconds by anyone who has shipped one shadcn app.",
       "fix": "Customize tokens at init: swap slate for zinc/stone, shift primary to a brand hue, set --radius to 0.625rem or 0.75rem."
@@ -684,6 +742,10 @@
           "jsx",
           "vue",
           "html"
+        ],
+        "target": [
+          "css",
+          "classes"
         ]
       },
       "why": "Purple-to-pink mesh gradient is the second-most fingerprinted AI-hero pattern after blue-to-purple - 'I generated a landing page' aesthetic.",
@@ -696,7 +758,7 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "(?:bg-zinc-(?:[89]00|950)|bg-slate-(?:[89]00|950)|bg-gray-(?:[89]00|950)|bg-black|background:\\s*#0[0-9a-f]{5})[^\"';]*(?:text-zinc-(?:[5-7]00)|text-slate-(?:[5-7]00)|text-gray-(?:[5-7]00)|color:\\s*#[4-6][0-9a-f]{5})",
+        "pattern": "(?<![\\w:/-])(?P<v>(?:dark:)?)(?:bg-zinc-(?:[89]00|950)|bg-slate-(?:[89]00|950)|bg-gray-(?:[89]00|950)|bg-black)(?![\\w/-])[^\\\"';]*(?<![\\w:/-])(?P=v)(?:text-zinc-(?:[5-7]00)|text-slate-(?:[5-7]00)|text-gray-(?:[5-7]00))(?![\\w/-])|background:\\s*#0[0-9a-f]{5}[^\\\"';]*color:\\s*#[4-6][0-9a-f]{5}",
         "flags": "i",
         "scope": [
           "css",
@@ -705,6 +767,10 @@
           "jsx",
           "vue",
           "html"
+        ],
+        "target": [
+          "classes",
+          "css"
         ]
       },
       "why": "Dark text token (zinc-500/600/700) on a dark surface fails WCAG AA 4.5:1 contrast and signals the dark mode pairing was never tested.",
@@ -726,6 +792,10 @@
           "jsx",
           "vue",
           "html"
+        ],
+        "target": [
+          "css",
+          "classes"
         ]
       },
       "why": "z-index: 9999 is the 'I gave up on the stacking system' value - signals there's no z-scale token map and stacking bugs are coming.",
@@ -746,7 +816,8 @@
           "ts",
           "js",
           "vue"
-        ]
+        ],
+        "target": "code"
       },
       "why": "Pure infinite scroll with no Load more button locks out keyboard users and breaks back-button history - WCAG 2.4 failure plus a usability one.",
       "fix": "Ship infinite scroll AND a visible Load more button. The button is the keyboard path; the observer is the convenience layer."
@@ -767,7 +838,8 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "user-scalable=no blocks pinch-zoom for low-vision users on touch devices - a WCAG 1.4.4 failure that locks out anyone who needs to enlarge text.",
       "fix": "Remove user-scalable=no entirely, or set it to yes. Default viewport: <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">."
@@ -779,7 +851,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "outline\\s*:\\s*(?:none|0)\\s*;(?![^}]*:focus-visible)",
+        "pattern": "outline\\s*:\\s*(?:none|0)\\s*(?:!important\\s*)?[;}](?![^}]*:focus-visible)",
         "flags": "i",
         "scope": [
           "css",
@@ -788,10 +860,12 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css",
+        "post": "outline-without-ring"
       },
-      "why": "outline: none removes the only keyboard focus indicator and leaves keyboard users with no signal of focus state - a WCAG 2.4.7 failure.",
-      "fix": "Pair outline: none with a :focus-visible rule that restores a visible ring: :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }."
+      "why": "outline: none removes the only keyboard focus indicator and leaves keyboard users with no signal of focus state - a WCAG 2.4.7 failure. The linter decides per rule block. A removal passes when it is limited to :not(:focus-visible), when a :focus-visible or :focus rule that covers the same element (a bare :focus-visible or * covers every element) draws a visible outline, box-shadow or border and wins on specificity, or when a :focus-within or :has(:focus-visible) rule on an ancestor of that element draws one. A ring inside a media query the removal is not in, or on some other element, does not count.",
+      "fix": "Give this selector its own focus ring, or ring an ancestor that holds it: .x:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }, or .field:focus-within { box-shadow: 0 0 0 3px var(--primary); }. A ring on another element does not count."
     },
     {
       "id": "placeholder-as-label",
@@ -800,7 +874,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<input\\b[^>]*?(?<![\\w-])placeholder\\s*=",
+        "pattern": "<input\\b[^>]*\\bplaceholder\\s*=",
         "flags": "i",
         "scope": [
           "tsx",
@@ -809,10 +883,12 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup",
+        "post": "input-has-no-name"
       },
       "why": "Placeholders disappear on focus, sit at low contrast by default, and are not announced consistently by assistive tech - using one as the only label fails WCAG 3.3.2.",
-      "fix": "Always pair <input> with a <label for=\"id\"> or aria-label. Placeholder is for an optional hint, never the field name."
+      "fix": "Name the input: a <label for=\"id\"> whose for matches the input id, a <label> that wraps the input, aria-label, or aria-labelledby pointing to an existing id. An id alone names nothing. Placeholder is for an optional hint, never the field name."
     },
     {
       "id": "div-onclick-no-role",
@@ -821,7 +897,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<div[^>]+onClick=(?![^>]+role\\s*=\\s*['\"]button)",
+        "pattern": "(?-i:<div)\\b(?![^>]*\\brole\\s*=\\s*\\{?\\s*[\\\"'](?:button|link|tab|menuitem(?:checkbox|radio)?|option|checkbox|radio|switch)[\\\"'])[^>]*\\bonClick\\s*=",
         "flags": "i",
         "scope": [
           "tsx",
@@ -830,7 +906,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "A <div onClick> is invisible to keyboard users and assistive tech - the action exists only for mouse users, a WCAG 2.1.1 and 4.1.2 failure.",
       "fix": "Use <button onClick> for actions. If you must keep the <div>, add role=\"button\" tabindex=\"0\" and an onKeyDown handler for Enter and Space."
@@ -842,7 +919,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<a[^>]+class=['\"][^'\"]*btn[^'\"]*['\"](?![^>]+href)",
+        "pattern": "<a\\b(?![^>]*\\bhref\\s*=)[^>]*\\bclass\\s*=\\s*['\\\"][^'\\\"]*\\bbtn\\b[^'\\\"]*['\\\"]",
         "flags": "i",
         "scope": [
           "tsx",
@@ -851,7 +928,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An <a class=\"btn\"> without href is not focusable, not in the tab order, and not announced as a link - looks like a button but behaves like nothing.",
       "fix": "Use <button> for actions, <a href=\"...\"> for navigation. If the destination is unknown until runtime, render a button or set href=\"#\" with preventDefault."
@@ -863,7 +941,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "(?:height\\s*:\\s*100vh|class=[\"']?[^\"'>]*(?<![\\w-])h-screen(?![\\w-]))(?![^}]*100dvh)",
+        "pattern": "(?<![\\w-])(?:min-|max-)?height\\s*:\\s*100vh(?![^}]*100dvh)",
         "flags": "i",
         "scope": [
           "css",
@@ -874,6 +952,13 @@
           "html",
           "blade",
           "astro"
+        ],
+        "target": "css",
+        "also": [
+          {
+            "pattern": "(?<![\\w:/-])(?:min-|max-)?h-screen(?![\\w-])(?![^\\\"]*(?<![\\w-])(?:min-|max-)?h-(?:dvh|svh|\\[100dvh\\])(?![\\w-]))",
+            "target": "classes"
+          }
         ]
       },
       "why": "100vh on mobile includes the browser chrome that retracts on scroll, so the layout jumps as the address bar collapses - dynamic viewport units (dvh) fix this.",
@@ -895,7 +980,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Marketing-style Title Case on every headline dates the design to a 2014 SaaS template and slows reading. Sentence case scales better and reads faster.",
       "fix": "Default to sentence case for headlines. Reserve title case for proper nouns and brand names, or for an explicit editorial decision."
@@ -917,7 +1003,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Elevate, Seamless, Unleash, Revolutionize, Empower, Supercharge, Transform - the unmistakable fingerprint of unedited marketing copy generated without a real product in mind.",
       "fix": "Name the specific action and the specific outcome. Cut the verb if it isn't carrying weight. The reader knows what the product does only if you say what the product does."
@@ -929,7 +1016,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:a|button)[^>]*>\\s*(?:Click here|Learn more|Get started)\\s*</(?:a|button)>",
+        "pattern": "<(?:a|button)\\b(?![^>]*\\baria-label\\s*=)[^>]*>\\s*(?:Click here|Learn more|Get started)\\s*</(?:a|button)>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -938,7 +1025,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Click here / Learn more / Get started reveals nothing about the destination and fails screen-reader scan-by-link - users hear a list of identical labels with no context.",
       "fix": "Name the specific action: Read pricing, Start free trial, View dashboard, Open API docs. The link text should make sense out of context."
@@ -960,10 +1048,11 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "99.99%, 10x faster, 100% guaranteed - the suspiciously round numbers AI invents to sound credible. Real measurements are messy and specific.",
-      "fix": "Use the real number you measured: 99.93% uptime over Q1, 4.2x faster median build, refunded 218 of 244 reported issues. Specificity is the signal."
+      "fix": "Never invent a number. Use the client's own figure as the client states it, with what it counts and as of when (\"99.93% uptime over Q1\", \"1,240 repairs since March 2025\"). A figure with no source ships only as a labeled draft placeholder the client fills, never as a claim."
     },
     {
       "id": "display-bold-700",
@@ -981,10 +1070,12 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css",
+        "post": "weight-outside-system"
       },
-      "why": "Display fonts at 700 weight read dense and visually muddy. Most display faces are drawn to sing at 500-600; 700+ is for body emphasis, not headlines.",
-      "fix": "Use font-weight 500 or 600 on display headings. Reserve 700+ for body emphasis (bold inline text, table totals, primary CTA labels)."
+      "why": "A heavy weight on a display that nothing chose reads dense and muddy: measured award pages set their headlines near 400, and only a loud, informal brand earns 700 on a large display. When the page carries its own design system (custom properties it defines or links), the value passes if the system has it: the system decided it.",
+      "fix": "Take the display weight from the type tokens (--type-text-display-font-weight, or the system's weight role). With no system, set display headings at 400 to 600 and keep 700 and up for short emphasis."
     },
     {
       "id": "all-caps-large",
@@ -993,7 +1084,7 @@
       "category": "Typography",
       "detection": {
         "type": "regex",
-        "pattern": "text-transform\\s*:\\s*uppercase[^}]*font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,})",
+        "pattern": "text-transform\\s*:\\s*uppercase[^}]*font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,}|\\d*\\.?\\d+r?em\\b|var\\(|clamp\\(|calc\\()|font-size\\s*:\\s*(?:[2-9]\\d|\\d{3,}|\\d*\\.?\\d+r?em\\b|var\\(|clamp\\(|calc\\()[^}]*text-transform\\s*:\\s*uppercase",
         "flags": "i",
         "scope": [
           "css",
@@ -1002,10 +1093,38 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css",
+        "post": "capitals-outside-system"
       },
-      "why": "ALL CAPS reading speed is 13-20% slower than mixed case because word shape is lost. At 14px or larger it actively impedes reading.",
-      "fix": "Reserve uppercase for eyebrows, labels, and badges under 14px. Use sentence case for anything readers need to read, not just scan."
+      "why": "Capitals at reading size slow reading, because word shapes are lost. A loud brand can set its display in capitals: when the page's system has a capitals display role and leans to capitals (--type-capitals at 0.5 or more, when the system emits it), a capitals style at one of the system's two largest sizes, tracked at 0 or open, passes. A calm system's display capitals, and body, subhead and tight-tracked capitals, are still reported.",
+      "fix": "Set body and subhead text in sentence case; keep capitals for short labels. For a capitals display, bind the system's display-caps role (--type-text-display-caps-*), which tracks at 0 or open."
+    },
+    {
+      "id": "display-line-height-under-floor",
+      "name": "Display line height under the engine's floor",
+      "severity": "low",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?<![\\w-])line-height\\s*:\\s*[^;{}]+|(?<![\\w-])font\\s*:\\s*[^;{}]*\\d(?:px|rem)\\s*/\\s*[\\d.]+[^;{}]*|class=\"(?=[^\"\\n]*(?<![\\w:/-])text-(?:[5-9]xl|\\[\\d+(?:\\.\\d+)?(?:px|rem)\\])(?![\\w-]))[^\"\\n]*",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": [
+          "css",
+          "classes"
+        ],
+        "post": "display-leading-outside-floor"
+      },
+      "why": "A display set tighter than the engine ever builds for its size reads cramped, and the tightest settings bring descenders onto the ascenders of the next line; Arabic marks above and below the letters need more room still. The engine's floor falls from 1.12 at 40px to 0.92 at 160px and above as size and contrast rise, and Arabic display stays at least 0.15 above Latin. With no system the lint holds a page to the floor at the boldest contrast; when the page carries its own system, a line height its tokens define passes: the system decided it.",
+      "fix": "Bind the display line height to the system's leading token (--type-leading-latin-step-N, or the Arabic one under rtl). With no system, keep the line height at or above the floor for the size: 1.12 at 40px, about 1.02 at 80px, 0.92 at 160px and above, and 0.15 more for Arabic."
     },
     {
       "id": "cursor-pointer-non-interactive",
@@ -1014,7 +1133,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:div|span)[^>]+(?:class=[^>]+cursor-pointer|style=[^>]+cursor\\s*:\\s*pointer)",
+        "pattern": "<(?:div|span)\\b(?![^>]*\\brole\\s*=\\s*['\\\"](?:button|link|tab|menuitem|option|checkbox|radio|switch)['\\\"])[^>]+(?:class\\s*=[^>]+cursor-pointer|style\\s*=[^>]+cursor\\s*:\\s*pointer)",
         "flags": "i",
         "scope": [
           "tsx",
@@ -1023,7 +1142,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "A <div> or <span> with cursor: pointer promises clickable behavior to sighted mouse users while keyboard and screen-reader users get nothing - a hidden interaction.",
       "fix": "If it clicks, make it a <button> or <a href>. If you keep the <div>, add role and tabindex and a keydown handler - the cursor change is the smallest signal a real control owes."
@@ -1035,7 +1155,7 @@
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "transition[^;{}<>]*:\\s*[^;{}<>]*(?:width|height|top|left|margin|padding)[^;{}<>]*[;}\"]",
+        "pattern": "(?<![\\w-])transition(?:-property)?\\s*:[^;{}]*(?<![\\w-])(?:(?:min|max)-(?:width|height|inline-size|block-size)|width|height|top|left|right|bottom|inline-size|block-size|inset(?:-[a-z]+)*|margin(?:-[a-z]+)*|padding(?:-[a-z]+)*)(?![\\w-])[^;{}]*",
         "flags": "i",
         "scope": [
           "css",
@@ -1044,10 +1164,12 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css",
+        "post": "layout-transition-reflows"
       },
-      "why": "Animating width, height, top, left, margin, padding triggers layout and paint on every frame - the dropped-frame jank pattern that makes the UI feel cheap.",
-      "fix": "Animate transform (translate, scale) and opacity only. Use scale instead of width, translate instead of top/left. The compositor thanks you."
+      "why": "Animating width, height, top, left, margin or padding lays the page out again on every frame, and everything beside the element moves with it: the dropped-frame jank that makes a UI feel cheap. Two cases reflow nothing beside them and pass: the inline size of a moving indicator (a selector naming an indicator, or an element taken out of flow), and grid-template-rows on a single disclosure, which this rule does not read.",
+      "fix": "Animate transform and opacity: scale instead of width, translate instead of top or left. Open a disclosure with grid-template-rows from 0fr to 1fr, and slide an indicator on transform with its inline size on the system's indicator role (--motion-indicator-duration)."
     },
     {
       "id": "img-no-dimensions",
@@ -1056,7 +1178,7 @@
       "category": "Performance",
       "detection": {
         "type": "regex",
-        "pattern": "<img(?![^>]+\\bwidth=)[^>]+>",
+        "pattern": "(?-i:<img)\\b(?![^>]*\\bwidth\\s*=)[^>]*>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -1065,7 +1187,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An <img> without width and height attributes causes Cumulative Layout Shift as the image loads and the page reflows - the single biggest CLS regression on most sites.",
       "fix": "Always set width and height (the intrinsic pixel dimensions) on every <img>, even when styled with CSS. The browser uses them to reserve space."
@@ -1077,7 +1200,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": ">[\\u2700-\\u27BF\\U0001F300-\\U0001F9FF](?:</)",
+        "pattern": ">\\s*(?:\\{\\s*[\\\"'`])?(?:[\\U0001F300-\\U0001FAFF\\u2600-\\u26FF\\u2700-\\u27BF]|&#x0*(?:1F[3-9A-F][0-9A-F]{2}|2705|2728|274C|274E|2B50|26A1|2764|2714|2757|2753);|&#0*(?:127[7-9]\\d\\d|128\\d{3}|129[0-7]\\d\\d|9989|10024|10060|11088|9889|10084|10004);|\\\\u\\{1F[3-9A-F][0-9A-F]{2}\\}|\\\\uD83[C-E]\\\\uD[C-F][0-9A-F]{2})(?:[\\\"'`]\\s*\\})?\\s*</",
         "flags": "u",
         "scope": [
           "tsx",
@@ -1086,7 +1209,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "A bare emoji standing in for an icon renders inconsistently across platforms, ignores brand color, and is announced unpredictably by screen readers.",
       "fix": "Use inline SVG (Lucide, Feather, Phosphor, Heroicons) at 1.5-2px stroke with currentColor. Add aria-label when the icon carries meaning."
@@ -1098,7 +1222,7 @@
       "category": "Color",
       "detection": {
         "type": "regex",
-        "pattern": "linear-gradient\\((?:(?:[^(),;]|\\((?:[^()]|\\([^()]*\\))*\\))+,){4}",
+        "pattern": "linear-gradient\\((?:[^(),]|\\([^()]*\\))*(?:,(?:[^(),]|\\([^()]*\\))*){4,}\\)",
         "flags": "im",
         "scope": [
           "css",
@@ -1109,7 +1233,9 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "css",
+        "post": "multi-hue-gradient"
       },
       "why": "Three-plus color stops in a linear-gradient is the v0 / Cursor / generic-AI default; reads as chrome-y template output rather than a deliberate brand decision.",
       "fix": "Use a two-stop gradient (or a single solid) with hue spread under 60 degrees. If depth is needed, layer a low-opacity overlay instead of stacking stops."
@@ -1121,7 +1247,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "(?<![\\w-])box-shadow\\s*:(?:[^(),;{}]|\\([^()]*\\))*(?:,(?:[^(),;{}]|\\([^()]*\\))*){4,}",
+        "pattern": "(?<![\\w-])box-shadow\\s*:(?:[^(),;{}]|\\([^()]*\\))*(?:,(?:[^(),;{}]|\\([^()]*\\))*){4,}|(?<![\\w-])box-shadow\\s*:[^;{}]*\\bvar\\(",
         "flags": "im",
         "scope": [
           "css",
@@ -1130,34 +1256,12 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css",
+        "post": "shadow-drawn-layers"
       },
       "why": "Stacking five or more shadow layers is the AI's idea of premium depth; reads as visual bloat and chews the GPU on paint. The rule fires at five layers, not three: careful design systems build depth from up to four layers (an elevation scale's umbra, penumbra and ambient layers, or a four-step smooth shadow), so a lower threshold would flag real work. A stacked glow of zero-offset layers is caught at any count by glow-shadow-zero-offset.",
       "fix": "Use one ambient diffusion shadow (e.g. 0 20px 40px -15px rgba(0,0,0,0.08)) and at most one tight contact shadow. Depth comes from contrast, not layer count."
-    },
-    {
-      "id": "glow-shadow-zero-offset",
-      "name": "Glow shadow with zero offset and large blur",
-      "severity": "medium",
-      "category": "Depth",
-      "detection": {
-        "type": "regex",
-        "pattern": "(?:(?<![\\w-])(?:box-shadow|text-shadow)|--[\\w-]*(?:shadow|glow)[\\w-]*)\\s*:(?:[^;{}]*?,)?\\s*(?!inset)0(?:px)?\\s+0(?:px)?\\s+(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?r?em)|drop-shadow\\(\\s*0(?:px)?\\s+0(?:px)?\\s+(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?r?em)|(?<![\\w-])(?:shadow|drop-shadow)-\\[0(?:px)?_0(?:px)?_(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?rem)",
-        "flags": "i",
-        "scope": [
-          "css",
-          "scss",
-          "tsx",
-          "jsx",
-          "vue",
-          "html",
-          "blade",
-          "astro",
-          "svelte"
-        ]
-      },
-      "why": "A shadow with no offset and a wide blur is not a shadow, it is a halo. Light has no source, so the element floats in neon instead of sitting on the page.",
-      "fix": "Give the shadow a light source: a small y offset and a blur about twice the offset, for example box-shadow: 0 4px 12px rgb(0 0 0 / 0.12). For focus, use a spread ring with no blur (0 0 0 3px)."
     },
     {
       "id": "fixed-height-text-block",
@@ -1166,12 +1270,13 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "(?<![\\w-])(?:p|div|span)\\b[^{};]*\\{[^}]*height\\s*:\\s*\\d+px[^}]*color",
+        "pattern": "(?:^|[\\s,>+~}])(?:p|span|div)(?:[.#:\\[][^\\s{,>+~]*)?\\s*\\{(?=[^}]*(?<![\\w-])height\\s*:\\s*\\d+px)[^}]*(?<![\\w-])color\\s*:",
         "flags": "im",
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Fixing a pixel height on a container that also styles text breaks reflow at every other zoom level and font scale - the layout is one breakpoint away from clipping.",
       "fix": "Use min-height for floor protection, line-height + padding for vertical rhythm, and let content determine height. Never lock text height in px."
@@ -1188,7 +1293,8 @@
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "scale(1.1) or higher on hover reads as amateur - it shouts when a border or background shift would be more confident.",
       "fix": "Drop the scale from the card :hover rule and shift its border or background instead. Hover never changes a card's elevation; only a drag lifts. Restraint reads premium."
@@ -1209,7 +1315,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "iOS Dynamic Island's inner-glow + blur recipe is being copied as the default on every card and pill - reads as the 2024 AI-marketing-template tell.",
       "fix": "If you want depth, use a single outer diffusion shadow tuned to the surface. Reserve inset glows for a deliberate metallic or pill-style accent, not every surface."
@@ -1223,6 +1330,7 @@
         "type": "regex",
         "pattern": "(?<![\\w-])backdrop-filter\\s*:\\s*blur",
         "flags": "im",
+        "post": "blur-without-background",
         "scope": [
           "css",
           "scss",
@@ -1230,7 +1338,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "backdrop-filter is unsupported on Firefox and older Safari - without a translucent background fallback, the surface renders fully transparent and content underneath bleeds through.",
       "fix": "Always pair backdrop-filter: blur with a background-color (e.g. background: rgba(255,255,255,0.7)). The bg is the fallback; the blur is the upgrade."
@@ -1252,7 +1361,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "$9 / $19 / $29 / $49 / $99 / $199 are the prices AI reaches for when no real pricing exists - unconvincing placeholders that signal nobody priced the product.",
       "fix": "Use the real price you charge, with the real currency and the real billing cadence. If pricing isn't set yet, mark the tier as TBD with an owner, not a placeholder."
@@ -1274,7 +1384,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "Trusted by 1000+ teams / Used by Fortune 500 / Loved by 50k developers - unsourced trust claims that signal the generator invented the number to fill space.",
       "fix": "Name the actual companies, link to the actual case studies, or show the actual review aggregate. Specificity beats magnitude every time."
@@ -1295,7 +1406,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Just now / moments ago in static HTML is a fake activity signal - it stays Just now forever and signals nobody wired the real time-ago helper.",
       "fix": "Render real timestamps via a time-ago helper bound to a real source (Date.now, server time, last_event_at). If the surface is static, use a real date string instead."
@@ -1316,7 +1428,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "background-clip: text on a multi-stop linear-gradient is the AI hero's chrome-y rainbow word - the loudest signal that no taste decision was made on color.",
       "fix": "Use one solid color on display text. If gradient text is essential, two stops in analogous hues at modest saturation, never three-plus rainbow stops."
@@ -1328,7 +1441,7 @@
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "<li[^>]*>\\s*[\\U0001F300-\\U0001F9FF\\u2600-\\u2712\\u2714-\\u27BF]",
+        "pattern": "<li\\b[^>]*>\\s*(?:\\{\\s*[\\\"'`])?(?:[\\U0001F300-\\U0001FAFF\\u2600-\\u2712\\u2714-\\u27BF]|&#x0*(?:1F[3-9A-F][0-9A-F]{2}|2705|2728|274C|274E|2B50|26A1|2764|2714|2757|2753);|&#0*(?:127[7-9]\\d\\d|128\\d{3}|129[0-7]\\d\\d|9989|10024|10060|11088|9889|10084|10004);|\\\\u\\{1F[3-9A-F][0-9A-F]{2}\\}|\\\\uD83[C-E]\\\\uD[C-F][0-9A-F]{2})",
         "flags": "u",
         "scope": [
           "tsx",
@@ -1337,8 +1450,17 @@
           "html",
           "blade",
           "astro",
-          "md"
-        ]
+          "md",
+          "css",
+          "scss"
+        ],
+        "also": [
+          {
+            "pattern": "(?:::?(?:before|marker)\\s*\\{[^}]*content|list-style(?:-type)?)\\s*:\\s*[\\\"'](?:[\\U0001F300-\\U0001FAFF\\u2600-\\u26FF\\u2700-\\u27BF]|\\\\0*1F[3-9A-F][0-9A-F]{2}|\\\\0*2714)",
+            "target": "css"
+          }
+        ],
+        "target": "markup"
       },
       "why": "An emoji at the start of every list item is the AI signature - check marks, sparkles, rockets, party poppers used as bullet markers signal a generator that confused decoration with hierarchy.",
       "fix": "Use the native list disc, an SVG check icon, or a numeric counter. Reserve the U+2713 check and U+2318 command as allowed dingbats."
@@ -1355,7 +1477,8 @@
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Animated grain or noise without a will-change or transform hint forces a CPU repaint every frame and causes paint thrashing on low-end devices.",
       "fix": "Add will-change: transform or compose the noise via an SVG <feTurbulence> overlay on a transformed layer. Or drop the animation - static grain reads the same and costs nothing."
@@ -1377,7 +1500,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "We saved 10,000 hours / Generated 1,000,000 lines of code / Reduced 50,000 tickets - large round numbers with no citation that signal the magnitude was invented to sound impressive.",
       "fix": "Use the real measured number with the real source: 'In Q1 2026, customers saved 4,217 support hours (mean across 38 teams)'. Real numbers are messy and specific."
@@ -1399,7 +1523,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "0 to 100 / 100% guaranteed / 100% effective are the magnitude-by-default phrases AI reaches for - readers have learned to discount them.",
       "fix": "Quote the real spread: 'from 14 manual steps to 3 automated'. If you can't measure it, don't claim it."
@@ -1420,7 +1545,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An <img> inside a Trusted by / logo-cloud section with alt=\"\" is an unsourced trust claim with no machine-readable company name - the logo is decorative even when the surface is selling credibility.",
       "fix": "Set alt to the real company name (alt=\"Stripe\"), and only use the logo if you have permission. If you don't have permission, you don't have the trust signal."
@@ -1432,7 +1558,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "title=\\\"[A-Z][^\\\"]{60,}\\\"",
+        "pattern": "<(?!(?:iframe|abbr|acronym|svg|link|style|frame|meta)\\b)[a-z][\\w-]*\\b[^>]*\\stitle=\\\"[A-Z][^\\\"]{60,}\\\"",
         "flags": "",
         "scope": [
           "tsx",
@@ -1441,7 +1567,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "A title attribute carrying 60+ characters of real content is hover-only - invisible on touch, inconsistently announced by screen readers, undiscoverable on keyboard. The information is effectively missing for most users.",
       "fix": "Move the content into the visible flow or into an aria-describedby popover that is reachable by keyboard and touch. Reserve title for one-line, optional clarifications."
@@ -1462,7 +1589,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "A floating back-to-top button on a page under four viewports adds permanent visual noise for a vanishingly rare interaction - signals the generator included the pattern as decoration, not need.",
       "fix": "Drop the button. If pages can grow past four viewports, gate the button on scroll position and hide it below threshold. Keyboard users have Home; mouse users have the wheel."
@@ -1474,7 +1602,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "<img[^>]+(?:aspect-square|aspect-\\[1/1\\]|aspect-ratio\\s*:\\s*1(?:\\s*/\\s*1)?\\b)|aspect-ratio\\s*:\\s*1\\s*/\\s*1\\b",
+        "pattern": "<img\\b[^>]+(?:aspect-square|aspect-\\[1/1\\])",
         "flags": "i",
         "scope": [
           "css",
@@ -1485,6 +1613,13 @@
           "html",
           "blade",
           "astro"
+        ],
+        "target": "markup",
+        "also": [
+          {
+            "pattern": "aspect-ratio\\s*:\\s*1(?:\\s*/\\s*1)?\\s*[;}]",
+            "target": "css"
+          }
         ]
       },
       "why": "Every image clipped to 1:1 is the Instagram-grid AI fingerprint - signals the generator picked the safest crop instead of letting content set the frame. Real editorial layouts use varied ratios (3:2, 4:5, 16:9, 21:9) to create rhythm.",
@@ -1506,7 +1641,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "A noise.png or grain.svg tiled across a hero is the 2024 generative-UI fingerprint - signals 'I added texture' without a coherent material story. Most viewers register it as visual static, not depth.",
       "fix": "If grain is a deliberate brand choice, generate it via SVG <feTurbulence> with low baseFrequency and 4-6% opacity. Otherwise drop the texture; flatness reads more confident than fake film grain."
@@ -1529,6 +1665,10 @@
           "html",
           "blade",
           "astro"
+        ],
+        "target": [
+          "css",
+          "classes"
         ]
       },
       "why": "rounded-2xl/3xl (24-32px+) on every card, button, and input is the Tailwind AI signature - signals the radius was set once and copy-pasted instead of being calibrated per element size. Buttons end up looking like pills, inputs lose definition, dense surfaces feel cartoonish.",
@@ -1552,6 +1692,10 @@
           "html",
           "blade",
           "astro"
+        ],
+        "target": [
+          "css",
+          "classes"
         ]
       },
       "why": "transition: all is the lazy default that animates every property change - including layout-triggering ones like width/height/margin - causing jank and unintended motion. It also fires on properties the author never meant to transition.",
@@ -1575,6 +1719,10 @@
           "html",
           "blade",
           "astro"
+        ],
+        "target": [
+          "css",
+          "classes"
         ]
       },
       "why": "Frosted-glass everywhere is the iOS-aesthetic AI tell - signals the generator confused 'depth' with 'blur every surface'. Four-plus backdrop-blur layers on a single page is the visual equivalent of using bold on every word.",
@@ -1596,10 +1744,15 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": [
+          "css",
+          "classes"
+        ],
+        "post": "tracking-outside-system"
       },
-      "why": "tracking-tighter (-0.05em) on font-weight 800+ display is the unmistakable 'AI hero' typographic recipe - copied from every Linear-clone landing page. The combination crushes the counters and reads as default, not deliberate.",
-      "fix": "Use letter-spacing -0.01em to -0.02em on display headings, with font-weight 500-600. Reserve heavy-and-tight pairings for short brand wordmarks, not full headlines."
+      "why": "Tight tracking on a heavy display that nothing chose crushes the counters and reads as a default recipe. When the page carries its own design system (custom properties it defines or links), the value passes if the system has it: the system decided it. Both the tracking and the weight must be the system's.",
+      "fix": "Take the display's letter spacing and weight from the type tokens (--type-text-display-letter-spacing, --type-text-display-font-weight). With no system, keep display tracking between -0.01em and -0.02em at a weight of 400 to 600."
     },
     {
       "id": "hover-only-card-actions",
@@ -1608,15 +1761,19 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "\\.(?:card|item|tile)[^{]*\\{[^}]*\\}[\\s\\S]{0,300}?\\.(?:card|item|tile)[^:]*:hover\\s+(?:\\.[^{\\s]+|[a-z]+)[^{]*\\{[^}]*opacity\\s*:\\s*1|opacity\\s*:\\s*0[^}]*\\}[\\s\\S]{0,300}?:hover[\\s\\S]{0,100}?opacity\\s*:\\s*1",
+        "pattern": "opacity\\s*:\\s*0(?![.\\d])",
         "flags": "im",
         "scope": [
           "css",
-          "scss"
-        ]
+          "scss",
+          "html",
+          "vue"
+        ],
+        "target": "css",
+        "post": "hover-only-reveal"
       },
-      "why": "Card actions hidden at opacity: 0 and revealed only on :hover are invisible to touch users, keyboard users, and anyone using assistive tech - the action does not exist for most of your audience. WCAG 2.1.1 and 1.4.13 failure.",
-      "fix": "Show card actions persistently at reduced visual weight (lower opacity, smaller scale, secondary color), or make them reachable via a visible focus-state. Hover is a progressive disclosure, never the only path."
+      "why": "Card actions hidden at opacity: 0 and revealed only on :hover do not exist for touch users, and a keyboard user who tabs onto one sees no control and no focus indicator (2.4.7). The reveal passes only when it also shows the control on focus inside the card, shows it where there is no hover, and keeps it while a menu it opens is open.",
+      "fix": "Reveal the control on :focus-within of its card as well as :hover; hide it only inside @media (hover: hover), or show it again under @media (hover: none); and when it opens a menu, keep it shown while aria-expanded is true (.card .actions:has([aria-expanded=\"true\"]) { opacity: 1 }). Or show the actions all the time at a lower weight."
     },
     {
       "id": "aria-hidden-on-interactive",
@@ -1625,7 +1782,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:button|a|input|select|textarea)[^>]+aria-hidden\\s*=\\s*['\"]true['\"]",
+        "pattern": "<(?:button|a|input|select|textarea)\\b[^>]+aria-hidden\\s*=\\s*['\\\"]true['\\\"]",
         "flags": "i",
         "scope": [
           "tsx",
@@ -1634,19 +1791,20 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "aria-hidden=\"true\" on a focusable element (button, link, input) removes it from the accessibility tree while leaving it in the tab order - keyboard users can land on a control that screen readers refuse to announce. WCAG 4.1.2 failure.",
       "fix": "If the control is decorative, remove it from the DOM or set tabindex=\"-1\" AND aria-hidden together. If it has a function, drop the aria-hidden and give it a proper accessible name via aria-label or visible text."
     },
     {
       "id": "animation-duration-too-long",
-      "name": "Micro-interaction with animation-duration over 800ms",
+      "name": "Long animation that starts slowly",
       "severity": "medium",
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "animation-duration\\s*:\\s*(?:[89]\\d{2}|[1-9]\\d{3,})ms\\b|animation-duration\\s*:\\s*(?:[1-9]|[1-9]\\.\\d+)s\\b|animation\\s*:[^;]*\\s(?:[89]\\d{2}|[1-9]\\d{3,})ms\\b|animation\\s*:[^;]*\\s(?:[1-9]|[1-9]\\.\\d+)s\\b",
+        "pattern": "animation-duration\\s*:\\s*(?:[89]\\d{2}|[1-9]\\d{3,})ms\\b|animation-duration\\s*:\\s*(?:[1-9]|[1-9]\\.\\d+)s\\b|(?<![\\w-])animation\\s*:(?![^;{}]*\\binfinite\\b)[^;{}]*\\s(?:[89]\\d{2}|[1-9]\\d{3,})ms\\b|(?<![\\w-])animation\\s*:(?![^;{}]*\\binfinite\\b)[^;{}]*\\s(?:[1-9]|[1-9]\\.\\d+)s\\b",
         "flags": "i",
         "scope": [
           "css",
@@ -1655,10 +1813,12 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css",
+        "post": "animation-answers-late"
       },
-      "why": "A hover, focus, or state-change animation longer than 800ms feels sluggish - users perceive UI under 200ms as instant, under 500ms as snappy, over 800ms as broken or laggy. Long durations on micro-interactions signal no taste decision was made.",
-      "fix": "Cap micro-interactions at 150-400ms. Reserve longer durations (800ms+) for narrative scenes, page transitions, or deliberate orchestration - never for a button hover or icon flip."
+      "why": "An animation of 800ms or more on a slow-starting curve keeps the page waiting. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. An unwritten curve is the default one (ease, or Tailwind's own) and is judged as written; a curve that cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
+      "fix": "Bind the system's entrance role (--motion-arrive-duration with --motion-arrive-curve). With no system, put the long move on a strong out curve so it is half done within 140ms, or shorten it."
     },
     {
       "id": "text-3xl-4xl-5xl-stack",
@@ -1676,7 +1836,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "classes"
       },
       "why": "text-3xl md:text-4xl lg:text-5xl (and the 4xl/5xl/6xl shift) is the verbatim Tailwind tutorial cadence for every AI-generated hero - signals the responsive type was set by stepping through preset utilities, not by tuning the actual feel at each breakpoint.",
       "fix": "Use clamp() for fluid type: text-[clamp(2.5rem,5vw,4.5rem)] or define a custom step in tailwind.config that jumps by content priority, not utility index."
@@ -1697,9 +1858,11 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css",
+        "post": "grid-holds-plain-cards"
       },
-      "why": "repeat(3, 1fr) with no minmax(), no auto-fit, and no asymmetric weighting is the laziest grid declaration - signals the layout was set by a generator that defaulted to 'three equal columns' without thinking about content priority or responsive behavior.",
+      "why": "repeat(3, 1fr) around cells that each hold just an icon, a title and a line is the three-equal-cards default. When the file, or a page that loads the stylesheet, shows that each cell carries its own media or richer content, the grid passes; a stylesheet with no markup to read is still reported.",
       "fix": "Use minmax for responsive floors: repeat(auto-fit, minmax(280px, 1fr)). For deliberate three-column layouts, weight by content: grid-template-columns: 2fr 1fr 1fr, or use named-area grids."
     },
     {
@@ -1709,7 +1872,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "<img[^>]+src\\s*=\\s*['\"][^'\"]*images\\.unsplash\\.com/photo-[^'\"]+['\"](?![^>]+alt\\s*=\\s*['\"][^'\"]+['\"])",
+        "pattern": "<img\\b[^>]+src\\s*=\\s*['\\\"][^'\\\"]*images\\.unsplash\\.com/photo-[^'\\\"]+['\\\"](?![^>]+alt\\s*=\\s*['\\\"][^'\\\"]+['\\\"])",
         "flags": "i",
         "scope": [
           "tsx",
@@ -1718,7 +1881,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An images.unsplash.com/photo-* URL with no alt (or alt=\"\") is the stock-photo placeholder fingerprint - signals the generator pasted the first credible image without choosing it for the content. Screen-reader users hear nothing; the page reads as filler.",
       "fix": "Replace with a real product or brand image and write an alt that describes the content (alt=\"Customer service team reviewing a dashboard\"). If the image stays as decoration only, set alt=\"\" deliberately AND justify why a stock photo earns a spot on the surface."
@@ -1739,7 +1903,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "A static 'v1.0.0' in the nav or footer never updates with the real build - signals the generator added a version chip as decoration without wiring it to package.json or the deploy SHA. Worse, the badge stays at 1.0.0 forever and reads as stagnant.",
       "fix": "Either pull the version from package.json at build time (Vite/Webpack define), bind it to the deploy SHA, or remove the chip entirely. A wrong version is worse than no version."
@@ -1760,7 +1925,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Three or more CTA-styled buttons within a single hero is decision paralysis - the AI's compromise when it can't choose the primary action. Conversion research is unanimous: one primary + one secondary outperforms three competing primaries.",
       "fix": "Pick one primary CTA. Demote the rest to text links or move them to a secondary surface. If you genuinely need three actions, restructure the hero into a comparison or a stepped layout so the primary is unambiguous."
@@ -1783,7 +1949,8 @@
           "astro",
           "css",
           "scss"
-        ]
+        ],
+        "target": "classes"
       },
       "why": "card-1, feature-2, step-3 are the throwaway class names a generator emits when it has no semantic for what each block actually contains - signals nobody named the content. They also defeat CSS reuse because every variant gets a unique class.",
       "fix": "Name classes by purpose: .pricing-card, .feature-comparison, .onboarding-step. If the cards really are interchangeable, use a single .card class with modifiers (.card--featured) or data attributes (data-tier=\"pro\")."
@@ -1795,7 +1962,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<a[^>]+target\\s*=\\s*['\"]_blank['\"](?![^>]+rel\\s*=\\s*['\"][^'\"]*(?:noopener|noreferrer))",
+        "pattern": "<a\\b(?![^>]*\\brel\\s*=\\s*['\\\"{][^'\\\"}]*(?:noopener|noreferrer))[^>]*\\btarget\\s*=\\s*['\\\"{]*_blank",
         "flags": "i",
         "scope": [
           "tsx",
@@ -1804,7 +1971,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "target=\"_blank\" without rel=\"noopener\" lets the opened page access window.opener and rewrite the source URL - a tabnabbing vector. It also blocks the browser's tab-recycle optimization. A11y-adjacent because hijacked navigation breaks the user's mental model of where they are.",
       "fix": "Always pair target=\"_blank\" with rel=\"noopener noreferrer\". Better: ask whether the link actually needs a new tab - in-page navigation respects user choice and back-button history."
@@ -1821,7 +1989,9 @@
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css",
+        "post": "spinner-outside-contract"
       },
       "why": "The 4-border-color, border-top-different, animation: spin recipe is the textbook 1998 spinner that every AI generator emits for any loading state - signals the loading affordance was set by default, not designed. Modern systems use skeleton screens, progress bars, or branded indicators.",
       "fix": "Replace with a skeleton screen for content loading, a progress indicator for known-duration tasks, or a branded SVG mark animated via transform: rotate. The bordered spinner is the loading equivalent of Lorem ipsum."
@@ -1844,7 +2014,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Reaching only for env(safe-area-inset-bottom) signals the dev copied the iPhone-X home-indicator fix without thinking about the notch (top), Dynamic Island, landscape mode, or rotated devices where left/right inset matters. The layout punches into hardware on three sides while pretending to be device-safe.",
       "fix": "If the surface goes edge-to-edge, set all four insets (or `padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)` and let CSS pick the active ones). For a bottom-fixed nav, that's fine - but verify landscape with rotation doesn't expose the issue."
@@ -1856,12 +2027,13 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "(?:^|[\\s,}>+~])html\\s*\\{[^}]*overflow(?:-[xy])?\\s*:\\s*hidden",
+        "pattern": "(?:^|(?<=[\\s,}>+~]))html\\s*\\{[^}]*overflow(?:-[xy])?\\s*:\\s*hidden",
         "flags": "im",
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "overflow: hidden on the root <html> element breaks browser scroll restoration on back-navigation, disables 'skip to content' anchor scrolling for screen-reader users, kills smooth-scroll APIs, and prevents the URL bar from collapsing on mobile. It is almost always a hack to suppress a horizontal-overflow bug that should be fixed at the source.",
       "fix": "Find the actual overflowing child (often a 100vw image, fixed-position element, or oversized inline-block) and constrain it. If you genuinely need a scroll-lock for a modal, toggle the class on <body> via JS for the lifetime of the modal - never permanently on <html>."
@@ -1880,7 +2052,8 @@
           "blade",
           "astro",
           "vue"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "<html> without a lang attribute leaves screen readers guessing which pronunciation engine to use - Arabic content gets read in English phonemes, English headings get read with Spanish stress patterns, and automatic translation breaks. WCAG 3.1.1 Level A failure.",
       "fix": "Add lang=\"en\" (or your primary locale) to <html>. For multilingual pages, override per-section with lang=\"ar\" on RTL blocks. Pair with dir=\"rtl\" for Arabic/Hebrew layouts."
@@ -1901,7 +2074,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Bare `font-family: monospace` (no specific stack before the generic) hands rendering to Courier New on Windows and Monaco on old Macs - ugly defaults that signal nobody picked a code face. Modern stacks lead with JetBrains Mono, Fira Code, IBM Plex Mono, or `ui-monospace` for system-matched output.",
       "fix": "Specify the stack: `font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;`. Use `ui-monospace` first if you want the OS default code face on every platform."
@@ -1918,7 +2092,8 @@
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "`display: table` on a non-<table> element is a 2008-era IE6 hack for vertical centering before flexbox existed. It defeats wrapping, ignores gap, breaks responsive collapse, and confuses screen-reader table-navigation modes when applied to non-tabular content.",
       "fix": "Use flexbox or grid: `display: grid; place-items: center;` for the centering case, or `display: flex; align-items: center` for one-axis. Reserve `display: table` for actual <table> elements that need CSS-controlled rendering."
@@ -1939,7 +2114,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Writing `padding: 0 16px 16px 16px` when `padding: 0 16px 16px` collapses to the same result is the AI tell of a generator that copied a 4-value shorthand without simplifying. It also indicates the dev didn't run `prettier` or any formatter pass.",
       "fix": "Use the shortest equivalent shorthand: 1 value (all sides), 2 values (vertical | horizontal), 3 values (top | horizontal | bottom). If you need different values per side, the 4-value form is fine - just don't restate the same value twice."
@@ -1960,7 +2136,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "classes"
       },
       "why": "Stacking `text-sm text-gray-500 font-medium leading-5 tracking-tight` on a single element signals every type decision was made inline by a generator that never reached for a token. The same text style appears across 30 components with subtle drift instead of being defined once as `.text-body-meta` or in a typography preset.",
       "fix": "Extract recurring stacks to a named token: `@apply text-sm text-gray-500 font-medium leading-5 tracking-tight` on a `.text-body-meta` class, or define semantic font-utilities in tailwind.config.ts (`text: { 'body-meta': [...] }`). Inline 5-plus utility chains is a refactor target."
@@ -1982,7 +2159,8 @@
           "vue",
           "html",
           "astro"
-        ]
+        ],
+        "target": "code"
       },
       "why": "scroll, touchmove, touchstart, and wheel listeners default to passive: false, which means the browser must wait for the handler to finish before scrolling - any sync work blocks the scroll thread and creates the 'janky scroll on a fancy page' feel. Chromium flags this in DevTools as a passive-listener warning for any non-passive scroll handler.",
       "fix": "Pass `{ passive: true }` as the third argument: `el.addEventListener('scroll', fn, { passive: true })`. Only opt out (passive: false) if you genuinely need preventDefault() to block scrolling - which is rare and usually wrong."
@@ -2003,7 +2181,11 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "skip_inside": [
+          "picture"
+        ],
+        "target": "markup"
       },
       "why": "A raw <img> with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. The fact that <picture>+<source type=\"image/avif\"> has been universal since 2023 means this is now a generator-default tell.",
       "fix": "Wrap in <picture> with AVIF first, WebP next, JPG fallback: <picture><source srcset=\"hero.avif\" type=\"image/avif\"><source srcset=\"hero.webp\" type=\"image/webp\"><img src=\"hero.jpg\" alt=\"...\" width=\"...\" height=\"...\"></picture>. For framework images (next/image, astro:assets), the conversion is automatic - use them."
@@ -2015,12 +2197,13 @@
       "category": "Typography",
       "detection": {
         "type": "regex",
-        "pattern": "(?:^|[\\s,}>+~])(?:body|p|li|main|article|\\.(?:body|prose|text|content))[^{}]*\\{[^}]*font-weight\\s*:\\s*(?:100|900)\\s*[;}]",
+        "pattern": "(?:^|(?<=[\\s,}>+~]))(?:body|p|li|main|article|\\.(?:body|prose|text|content))(?:[.#:\\[][^\\s{,>+~]*)?\\s*\\{[^}]*font-weight\\s*:\\s*(?:100|900)\\s*[;}]",
         "flags": "im",
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Setting body or paragraph font-weight to 100 (Thin) makes long-form reading nearly impossible at any size below 24px - the strokes literally disappear on most displays. 900 (Black) is the opposite failure: every paragraph reads as shouting and tires the eye after one screen. Both extremes signal nobody actually read the text in situ.",
       "fix": "Body weight should be 400 (Regular) or 450-500 for a slightly stronger feel. Reserve 100/200 (Thin/ExtraLight) for large hero display type only, and 800/900 (ExtraBold/Black) for short callouts or numerals - never paragraphs."
@@ -2037,19 +2220,20 @@
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "display: flex + justify-content: center + align-items: center wrapped around content is the AI's default-centering recipe - signals the layout was reached for in three lines without thinking about asymmetric balance, content priority, or whether the content actually wants to be centered. Real layouts earn their alignment.",
       "fix": "Use `display: grid; place-items: center` if you genuinely want full centering (one line, clearer intent). Better: ask whether centering is the right move - asymmetric or top-aligned layouts almost always read more deliberate. Reserve dead-center for hero CTAs and modals."
     },
     {
       "id": "transition-duration-500ms-or-longer",
-      "name": "Interactive transition-duration 500ms or longer",
+      "name": "Interactive transition that answers late",
       "severity": "medium",
       "category": "Motion",
       "detection": {
         "type": "regex",
-        "pattern": "transition-duration\\s*:\\s*(?:[5-9]\\d{2}|[1-9]\\d{3,})ms\\b|transition-duration\\s*:\\s*(?:0?\\.[5-9]|[1-9](?:\\.\\d+)?)s\\b|transition\\s*:[^;]*\\s(?:[5-9]\\d{2}|[1-9]\\d{3,})ms\\b|transition\\s*:[^;]*\\s(?:0?\\.[5-9]|[1-9](?:\\.\\d+)?)s\\b",
+        "pattern": "transition-duration\\s*:\\s*(?:[4-9]\\d{2}|[1-9]\\d{3,})ms\\b|transition-duration\\s*:\\s*(?:0?\\.[4-9]|[1-9](?:\\.\\d+)?)s\\b|(?<![\\w-])transition\\s*:[^;{}]*\\s(?:[4-9]\\d{2}|[1-9]\\d{3,})ms\\b|(?<![\\w-])transition\\s*:[^;{}]*\\s(?:0?\\.[4-9]|[1-9](?:\\.\\d+)?)s\\b",
         "flags": "i",
         "scope": [
           "css",
@@ -2058,10 +2242,12 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css",
+        "post": "transition-answers-late"
       },
-      "why": "A `transition-duration` of 500ms or more on hover, focus, or active states feels laggy - the human perception threshold for 'instant' is 100ms and for 'snappy' is 200ms. Users move the mouse 8-12 times per second; a 500ms transition means the hover state hasn't finished settling before the cursor moves on. Stretched transitions are the AI default for 'smooth.'",
-      "fix": "Cap interactive transitions at 150-300ms. Use 200ms for color/background/border hovers, 250-300ms for transform/scale, and 100-150ms for fast snap states (focus rings, active depressions). Reserve 500ms+ for scene transitions, drawer slides, and page-level state changes - never single-element hovers."
+      "why": "A transition of 400ms or more that starts slowly leaves the hover or press unanswered while the pointer has moved on. Length alone is not the problem: a long move on a strong out curve is half done in 70ms. Judged by when the move answers, from its declared curve: a response to a hover, focus, press or state reaches half its travel within 70ms and nine tenths within 220ms, an entrance half within 140ms. An unwritten curve is the default one (ease, or Tailwind's own) and is judged as written; a curve that cannot be read falls back to the nominal cap; an ease-in exit is held to the cap only. A duration and curve from the page's own system pass.",
+      "fix": "Bind the system's motion roles (--motion-state-duration with --motion-state-curve for hover and state, --motion-reveal-* for entrances). With no system, use a strong out curve such as cubic-bezier(0.2, 0.8, 0.2, 1), or shorten the move until it is half done within 70ms."
     },
     {
       "id": "cursor-not-allowed-no-visual",
@@ -2070,12 +2256,13 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "\\{[^}]*cursor\\s*:\\s*not-allowed\\s*;(?:(?!opacity|pointer-events|filter|background|color|border|disabled)[^}])*\\}",
+        "pattern": "\\{(?![^}]*(?:opacity|pointer-events|filter|background|(?<![\\w-])color|border))[^}]*\\bcursor\\s*:\\s*not-allowed",
         "flags": "im",
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "cursor: not-allowed in a rule that has no opacity reduction, no muted color, no border tweak, and no pointer-events: none signals the disabled state was set by an AI that knew the cursor convention but never designed the actual visual. The button still looks fully active, screen reader users hear no announcement, and touch users see no change at all - the not-allowed cursor never appears.",
       "fix": "A disabled control needs three signals: visual (opacity 0.5 + maybe muted color or removed border), behavioral (pointer-events: none, or aria-disabled='true' + handle the click), and announcement (aria-disabled on non-button elements; the disabled attribute on actual buttons does both). The cursor is the smallest of these three - never the only one."
@@ -2087,7 +2274,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<a\\b(?=[^>]*href\\s*=\\s*['\"]#(?:main|content|main-content|skip)['\"])(?![^>]*\\bclass\\s*=\\s*['\"][^'\"]*(?:sr-only|visually-hidden|skip-link|screen-reader))[^>]*>\\s*(?:Skip\\s+(?:to|navigation)|Jump\\s+to)",
+        "pattern": "<a\\b(?=[^>]*\\bhref\\s*=\\s*['\\\"]#(?:main|content|main-content|maincontent|skip|skip-target)['\\\"])(?![^>]*\\bclass\\s*=\\s*['\\\"](?:[^'\\\"]*\\s)?(?:[\\w:-]*(?:sr-only|visually-hidden|screen-reader)[\\w-]*|skip(?:-?link|-to[\\w-]*|-nav[\\w-]*)?)(?=[\\s'\\\"]))[^>]*>",
         "flags": "i",
         "scope": [
           "html",
@@ -2096,10 +2283,12 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "target": "markup",
+        "post": "skip-link"
       },
       "why": "A 'Skip to content' link without an .sr-only / .visually-hidden / .skip-link class fallback is visually shown to all users as a stray link at the top-left of the page - signals the dev knew the accessibility convention by name but didn't apply the actual technique. The link should be visually hidden until keyboard-focused, at which point it slides into view.",
-      "fix": "Wrap with the standard sr-only pattern: <a href='#main' class='sr-only focus:not-sr-only focus:fixed focus:top-0 focus:left-0 focus:p-4 focus:bg-white focus:text-black focus:z-50'>Skip to content</a>. For Tailwind that's the canonical recipe; for custom CSS apply `position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);` then reveal on :focus."
+      "fix": "Wrap with the standard sr-only pattern: <a href='#main' class='sr-only focus:not-sr-only focus:fixed focus:top-0 focus:left-0 focus:p-4 focus:bg-white focus:text-black focus:z-50'>Skip to content</a>. For Tailwind that's the canonical recipe; for custom CSS apply `position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0);` then reveal on :focus. A class containing skip also counts, when your CSS hides it until focus."
     },
     {
       "id": "pointer-events-none-on-link",
@@ -2108,7 +2297,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<a(?![^>]*\\baria-disabled\\s*=)[^>]+(?:class\\s*=\\s*['\"][^'\"]*\\bpointer-events-none\\b[^'\"]*['\"]|style\\s*=\\s*['\"][^'\"]*pointer-events\\s*:\\s*none[^'\"]*['\"])[^>]*>",
+        "pattern": "<a\\b(?![^>]*\\baria-disabled\\s*=)[^>]+(?:class\\s*=\\s*['\\\"][^'\\\"]*\\bpointer-events-none\\b[^'\\\"]*['\\\"]|style\\s*=\\s*['\\\"][^'\\\"]*pointer-events\\s*:\\s*none[^'\\\"]*['\\\"])[^>]*>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2117,7 +2306,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An <a> tag with pointer-events: none and no aria-disabled='true' is announced to screen readers as a fully working link, takes a position in the tab order, and gives keyboard users an Enter-key path to nothing - the click is silently swallowed. This is the AI shortcut for 'disabled link' that breaks every assistive technology user while looking fine to the designer.",
       "fix": "If the link is permanently inactive, render a <span> with the same visual treatment instead of an <a>. If it's temporarily disabled (loading, gated state), add aria-disabled='true' AND tabindex='-1' AND a handler that returns early - or remove the href until the action becomes available."
@@ -2138,7 +2328,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "aria-live='polite' on an error region tells screen readers to wait until the user is idle before announcing - the user submits a broken form, walks away to next field, and the failure announcement may be delayed or skipped entirely. Critical errors that block the flow need to interrupt.",
       "fix": "Use aria-live='assertive' (or role='alert', which implies assertive) for blocking validation errors and destructive-action failures. Reserve aria-live='polite' for non-critical status text (saved, syncing, last updated)."
@@ -2159,7 +2350,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "aria-busy='true' tells assistive tech to suspend updates inside a region, but without an aria-live region around it the eventual content swap is never announced - the user is left in silence after the spinner disappears.",
       "fix": "Pair aria-busy='true' with aria-live='polite' (or role='status') on the same node or a parent region, so the post-load content is announced once aria-busy flips back to false."
@@ -2180,7 +2372,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An anchor with no href is not focusable, not in the tab order, and not announced as a link by assistive tech - it's a styled <span> that the dev mistook for a button. Common AI shortcut for 'I want a clickable thing but the route isn't ready yet.'",
       "fix": "If the element triggers an action, use <button>. If it navigates, set href='...' (even href='#' with preventDefault during loading is better than no href at all). Pure anchor targets (legacy bookmarks) use name= or id= and are exempt."
@@ -2192,7 +2385,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<fieldset[^>]*>\\s*(?!<legend\\b)",
+        "pattern": "<fieldset\\b[^>]*>(?!\\s*<legend\\b)",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2201,7 +2394,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "<fieldset> without a <legend> gives the grouped controls a semantic container but no group name - screen readers announce each control without the shared context (e.g. 'shipping address - street' becomes just 'street'). The dev got halfway to the WCAG 1.3.1 grouping pattern then stopped.",
       "fix": "First child of every <fieldset> is <legend>Group label</legend>. Visually hide the legend with .sr-only if the design doesn't show a heading, but never omit it."
@@ -2213,7 +2407,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<select(?![^>]*\\baria-label=)(?![^>]*\\baria-labelledby=)(?![^>]*\\bid=)[^>]*>",
+        "pattern": "(?-i:<select)\\b(?![^>]*\\baria-label\\s*=)(?![^>]*\\baria-labelledby\\s*=)(?![^>]*\\bid\\s*=)[^>]*>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2222,7 +2416,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "A <select> with no id (so <label for=> cannot reach it), no aria-label, and no aria-labelledby is announced to screen readers as just 'combobox, 1 of 3' with no clue what it controls. WCAG 1.3.1 / 4.1.2 fail.",
       "fix": "Either give the <select> an id and reference it from <label for='...'>, or set aria-label='Country' / aria-labelledby='country-heading'. Don't rely on a placeholder option ('Select a country...') as the label - placeholder options are not labels."
@@ -2243,7 +2438,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An <iframe> with no title is announced to screen readers as 'frame' with no description of what it contains - blank, unactionable. WCAG 2.4.1 (Bypass Blocks) and 4.1.2 (Name, Role, Value) fail. Every embedded video, payment widget, map, or ad triggers this.",
       "fix": "Always set title='Stripe payment form' / 'YouTube video: product tour' / 'Google Maps: office location'. The title should describe the frame's purpose, not just say 'iframe' or 'embed'."
@@ -2264,7 +2460,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "A <video> with no captions <track> is inaccessible to Deaf and hard-of-hearing users, fails WCAG 1.2.2 (Captions, Prerecorded) at AA, and is unusable in any sound-off context (open-plan office, public transport, autoplay-muted social feeds).",
       "fix": "Provide at least one <track kind='captions' src='cap.vtt' srclang='en' label='English' default> child for every <video>. Subtitles (kind='subtitles') translate dialog but skip sound effects; captions include both - WCAG asks for captions, not subtitles."
@@ -2285,7 +2482,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "Browsers (Chrome, Safari, Firefox, Edge) block autoplay on any <video> that isn't muted - the video silently fails to play and the layout shifts when the user manually starts it. Also a sound-blast hazard if it ever does autoplay in an older client.",
       "fix": "If you want hero video to autoplay, add muted (and usually playsinline, loop, preload='auto'). If you genuinely need audio, drop autoplay and require an explicit user gesture."
@@ -2306,7 +2504,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An interactive element with style='display:none' is removed from the visual flow but its DOM node and event handlers remain. Without aria-hidden='true' some screen readers still expose it to virtual cursors, and JS event delegation can still fire clicks on it - inconsistent state across users.",
       "fix": "Toggle visibility with a class (.is-hidden { display:none }) and conditionally render via the framework (v-if / x-if / @if) for true removal. If you must use inline display:none on an interactive element, also set aria-hidden='true' AND tabindex='-1'."
@@ -2327,7 +2526,8 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "<marquee> is deprecated, has no prefers-reduced-motion support, scrolls continuously regardless of user motion preferences, and causes nausea/dizziness for users with vestibular disorders. WCAG 2.2.2 (Pause, Stop, Hide) fail and a strong AI-shortcut signal.",
       "fix": "Use CSS animation with prefers-reduced-motion: reduce { animation: none } as a respect-the-user fallback. For ticker/news content prefer a paginated carousel with explicit prev/next controls."
@@ -2348,7 +2548,8 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "<blink> is deprecated, removed from every modern browser, AND a documented seizure trigger for photosensitive epilepsy users. WCAG 2.3.1 (Three Flashes or Below Threshold) fail at AA. There is no legitimate use.",
       "fix": "Remove the tag. If you need to draw attention to a status change, use a one-time toast with role='status', or a brief CSS pulse animation that respects prefers-reduced-motion and limits to 3 flashes per second."
@@ -2369,7 +2570,8 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "bgcolor= is an HTML 3.2 presentational attribute deprecated since HTML 4.01 - it bypasses the design system, ignores tokens, breaks dark mode, and signals the file was either copy-pasted from a 1998 tutorial or a model that didn't know any better.",
       "fix": "Use CSS background-color via a design token (--bg-surface-1, .bg-surface-1, bg-zinc-50). If the surface is tenant-themed, drive it from a CSS variable bound to the tenant palette."
@@ -2390,7 +2592,8 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "align='left|right|center' on block elements is deprecated since HTML 4.01 - it bypasses logical properties (text-align: start/end) so it never flips correctly under dir='rtl', and the model only reaches for it when it doesn't know the modern equivalent. Critical regression for any RTL-first product.",
       "fix": "Use CSS text-align with logical values: text-align: start for left in LTR / right in RTL; text-align: end for the opposite; text-align: center stays center. For tables use <td class='text-end'> with a logical-property utility, not align='right'."
@@ -2411,7 +2614,8 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "<meta http-equiv='refresh'> auto-redirects without user consent, breaks back-button navigation, disorients screen reader users, and is a documented WCAG 2.2.1 (Timing Adjustable) and 3.2.5 (Change on Request) fail. Google also down-ranks pages that use it for redirects.",
       "fix": "For a true redirect, do it server-side (301 / 302). For client-side route changes, use the router's navigate() method tied to a user action. Never use meta-refresh for the 'you'll be redirected in 5 seconds' pattern - use an inline link the user clicks."
@@ -2432,7 +2636,8 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "tabindex='1' (or any positive value) pulls the element out of source order and into a synthetic tab sequence, so the keyboard tab order no longer matches the visual or DOM order. Any new element added to the page disrupts the explicit numbering - WCAG 2.4.3 (Focus Order) fail and an ongoing maintenance trap.",
       "fix": "Use tabindex='0' to make a non-interactive element focusable, tabindex='-1' to remove a focusable element from the tab order (still programmatically focusable). Source order should match tab order; fix layout with CSS, not synthetic tabindex."
@@ -2453,7 +2658,8 @@
           "vue",
           "tsx",
           "jsx"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "onclick (lowercase, HTML attribute form) on a <div>, <span>, <p>, <li>, <td>, or <h*> is invisible to keyboard users and assistive tech - WCAG 2.1.1 and 4.1.2 fail. Unlike the JSX onClick rule we already catch, this fires in plain HTML and Blade where the lowercased attribute is the only form available.",
       "fix": "Use <button onclick='...'> for actions. If you genuinely cannot change the tag, add role='button' tabindex='0' AND an onkeydown handler that fires the same action on Enter or Space keypress."
@@ -2465,7 +2671,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<a(?![^>]*\\bhref=)[^>]*\\brole\\s*=\\s*['\"]button['\"][^>]*>",
+        "pattern": "<a\\b(?![^>]*\\bhref\\s*=)[^>]*\\brole\\s*=\\s*['\\\"]button['\\\"][^>]*>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2474,7 +2680,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "<a role='button'> with no href is the worst of both worlds - the link semantics are overridden, the element is not focusable (no href = not in tab order), and the WAI-ARIA promise of 'this behaves like a button' is silently broken. WCAG 4.1.2 fail.",
       "fix": "Just use <button type='button'>. If the design demands link-text styling, give the <button> the same classes as your text-link recipe. Never patch a semantically wrong anchor with role='button' - replace it."
@@ -2497,7 +2704,9 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "css",
+        "post": "pointer-on-disabled"
       },
       "why": "A :disabled element with cursor: pointer signals to the user that the element is clickable - the visual affordance says 'I respond' while the actual element says 'I don't.' Confused state, immediate friction. Common when a global utility class wins over the :disabled override.",
       "fix": "Override to cursor: not-allowed (or cursor: default) inside the :disabled selector. Pair with opacity: 0.5 and pointer-events: none on the visual layer if the disabled state must be unreachable to mouse users."
@@ -2520,7 +2729,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "css"
       },
       "why": "A negative margin of -10px or more on margin-left/right (or the logical equivalent) is almost always pulling content outside its container, which causes horizontal scroll on narrow viewports and silent overflow under RTL. Classic AI shortcut for 'align this to the edge' that should be solved by negative space, not negative margins.",
       "fix": "Use grid/flex with gap and align-items / justify-self for edge alignment. If you genuinely need to escape the gutter, use a calc() with the gutter token (margin-inline: calc(var(--gutter) * -1)) so the escape stays in sync with the grid."
@@ -2540,7 +2750,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "css"
       },
       "why": "background-color: inherit on body chains to <html>, which by default has no background and resolves to canvas/white - so the inherit chain breaks the moment <html> is themed differently from body, and the page shows a flash of system canvas before paint. AI shortcut for 'just inherit it' when the dev didn't bother to choose a real surface token.",
       "fix": "Set body { background-color: var(--bg-surface-0, white) } with an explicit token. If dark mode is in play, the token should respond to color-scheme or .dark, not chain through inherit."
@@ -2562,7 +2773,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'Next-generation' is a category-leader cliche that names nothing - every press release in the last 30 years has claimed it. The phrase signals unedited marketing copy and shows the writer skipped the work of saying what is actually new.",
       "fix": "Name the specific capability that is new (e.g., 'first MCP-native design engine', 'first regex linter with 145 rules'). If you can't name a specific advance, drop the qualifier."
@@ -2584,7 +2796,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'Cutting-edge' is the laziest tech adjective in marketing copy - empty signal that means 'we don't want to commit to a specific claim'. Skipped by anyone reading critically.",
       "fix": "Replace with a concrete capability: 'ships in under 50ms', 'covers 152 anti-patterns', 'runs inside Cursor and Windsurf'. Specifics beat adjectives."
@@ -2606,7 +2819,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'Best-in-class' is a vendor pitch phrase with no defined benchmark - reads as marketing autopilot. If you really are best at something, name the comparison.",
       "fix": "Replace with a measurable claim: 'fastest CI lint at 90ms', 'most rules in the category at 145'. If no comparison exists, drop the phrase."
@@ -2628,7 +2842,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'World-class' is consultancy filler - signals the writer either had nothing concrete to say or was scared to commit. Costs trust in a landing page.",
       "fix": "Name the specific bar you cleared: 'tested in 17 IDEs', 'WCAG AA on every component'. If there's no bar, the word does not belong."
@@ -2650,7 +2865,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'Industry-leading' is unverifiable by definition - every category leader and every follower uses it identically. Removes signal, adds slop.",
       "fix": "Cite the specific lead: 'first design linter in Claude Code marketplace', '4x more rules than the next entrant'. No claim, no superlative."
@@ -2672,7 +2888,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'Game-changing' is the most overused tech-PR adjective in the last decade - means the writer wanted hype without committing to a specific shift. Reads instantly as filler.",
       "fix": "Describe the shift in one sentence: 'design intelligence in the model context, not just in Figma'. Concrete > grandiose."
@@ -2694,7 +2911,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'AI-powered' has become the new 'cloud-based' - every landing page claims it, nobody asks what model, what data, what task. Empty by saturation.",
       "fix": "Name the model and the function: 'uses Claude to generate brand-aware tokens', 'embeddings from text-embedding-3-small for palette match'. Or drop the qualifier and just describe the feature."
@@ -2716,7 +2934,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'Leverage AI', 'harness the power of', 'tap into the power of' are LinkedIn-thinkpiece formulas - immediately telegraphs generated marketing copy with no specifics.",
       "fix": "Use 'use' or name the verb directly: 'uses Claude for layout suggestions'. Plain verbs beat power-of-X scaffolding."
@@ -2742,7 +2961,8 @@
           "css",
           "scss",
           "md"
-        ]
+        ],
+        "target": "code"
       },
       "why": "via.placeholder.com is the default stock placeholder URL that AI generators reach for - signals the design got shipped with the scaffolding still in place. Immediate trust kill on a landing page.",
       "fix": "Use real artwork, real product screenshots, or a domain-specific empty-state SVG. If you genuinely need a placeholder for a demo, generate it locally and serve it from your own static path."
@@ -2768,7 +2988,8 @@
           "css",
           "scss",
           "md"
-        ]
+        ],
+        "target": "code"
       },
       "why": "placeholder.com URLs ship the gray box with the dimensions printed inside - the universal 'I forgot to swap in real art' tell. Generators emit these whenever they don't know what image to use.",
       "fix": "Replace with a real asset under /assets, /og, or your image CDN. For dev-only scaffolds, use a local 1x1 transparent PNG or an inline SVG empty state with a real label."
@@ -2794,7 +3015,8 @@
           "css",
           "scss",
           "md"
-        ]
+        ],
+        "target": "code"
       },
       "why": "placekitten.com is the joke-placeholder service - shipping it to production says nobody reviewed the page before deploy. The kitten is funny in the design doc and devastating on the live landing page.",
       "fix": "Replace every kitten URL with the real asset for that surface. If the page truly needs a stand-in, use a brand-aware blank state with copy explaining what should be there."
@@ -2820,28 +3042,31 @@
           "css",
           "scss",
           "md"
-        ]
+        ],
+        "target": "code"
       },
       "why": "A random/unseeded picsum.photos URL serves a different rotating image on every load - the design never settles, and the visual was clearly never chosen. (Imagery is mandatory and real: client assets first, then curated stock chosen on purpose. A seeded picsum.photos/seed/... URL is stable and not flagged here.)",
       "fix": "Use the client's own asset, or curated Unsplash/Pexels chosen to match the brand and temperature. An abstract SVG is not a substitute for a real product/site image. If you truly need a stand-in, use a stable seeded picsum (picsum.photos/seed/<descriptive>/W/H) and replace it before ship."
     },
     {
       "id": "imagery-mandatory-missing",
-      "name": "Page with no real imagery (icon-only text-wall)",
+      "name": "Landing page with no photograph",
       "severity": "high",
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\A(?=[\\s\\S]*<body\\b)(?![\\s\\S]*(?:<img\\b|<picture\\b|<video\\b|<iframe\\b|<svg\\b[^>]*(?:\\s(?:width|height)\\s*=\\s*[\"']?\\s*[1-9]\\d{2,}|viewBox\\s*=\\s*[\"']\\s*[-\\d.]+\\s+[-\\d.]+\\s+[1-9]\\d{2,})|url\\([^)]*\\.(?:png|jpe?g|webp|avif|gif)))[\\s\\S]{0,80}",
+        "pattern": "\\A(?=[\\s\\S]*<body\\b)[\\s\\S]{0,80}",
         "flags": "i",
         "scope": [
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "code",
+        "post": "page-needs-photograph"
       },
-      "why": "Imagery is mandatory and real. A full rendered page (has a <body>) whose only visuals are icon-sized SVGs (sub-100px, a tiny viewBox) - or that ships no imagery at all - is a text-wall of cards that reads as a memo, not a product. Icons are not imagery; a meaningful illustration (>=100px or a large viewBox), a real <img>/<picture>/<video>, or a real background photo is. The single biggest richness failure. (Scoped to full documents; component fragments without a <body> are exempt.)",
-      "fix": "Add real imagery: the client's own product UI/screenshots first, then curated Unsplash/Pexels chosen to match the brand and temperature. An abstract SVG illustration can support a section but is not a substitute for a real product/site image. Anchor major sections with imagery; never ship a text-only wall."
+      "why": "A landing page carries photographs: a raster image, a picture, a video or a raster background that is not the logo. An illustration, icons or the logo alone do not count; drawn art and product fragments add to photographs and never replace them. Only a brand whose rules forbid photography (a brand.md beside the page or above it that says so) passes with none. Component fragments without a <body> are exempt. Pages that are not landing pages are skipped: an app root with no text or role=application; a docs page or app shell with a sidebar or table of contents beside the content; or a page where one article, form, table, code listing, list or grid holds most of the main text. A hero (an h1 followed by a call to action) always marks a landing page, and a form that wraps several sections is the page itself.",
+      "fix": "Add photographs: the client's own first, else sourced ones that follow the system's photo direction (the imagery.photo.* tokens and the report's Photography section) and none of the kinds the brand's rules exclude. A ban on a kind of photo narrows the kinds; it never removes photography."
     },
     {
       "id": "generic-alt-image-photo-icon",
@@ -2850,7 +3075,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<img[^>]*\\balt\\s*=\\s*['\\\"](?:image|photo|picture|icon|graphic|illustration|pic|img)['\\\"]",
+        "pattern": "<img\\b[^>]*\\balt\\s*=\\s*['\\\"](?:image|photo|picture|icon|graphic|illustration|pic|img)['\\\"]",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2859,7 +3084,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "alt='image' or alt='photo' tells the screen reader nothing the user did not already know from the tag name - it is technically present but functionally absent. WCAG 1.1.1 demands meaningful equivalents, not the word 'image'.",
       "fix": "Describe what the image conveys: 'Stripe Dashboard with revenue chart', 'team standing in front of the office'. For purely decorative images, use alt='' so the screen reader skips them."
@@ -2871,7 +3097,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<img[^>]*\\balt\\s*=\\s*['\\\"](?:untitled|screenshot|logo|banner|hero|placeholder|asset|file|upload|attachment)['\\\"]",
+        "pattern": "<img\\b[^>]*\\balt\\s*=\\s*['\\\"](?:untitled|screenshot|logo|banner|hero|placeholder|asset|file|upload|attachment)['\\\"]",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2880,7 +3106,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "alt='untitled' / 'screenshot' / 'logo' / 'banner' is the CMS/Webflow/SaaS default fingerprint - signals the alt field was never filled in and the default leaked through. Screen reader users hear the same word for every image on the page.",
       "fix": "Name the subject: alt='ux-skill logo', alt='Stripe pricing page screenshot from Mar 2026', alt='hero banner: model writes the code, designer sets the rules'. Specific enough that someone could find the image from the alt alone."
@@ -2892,7 +3119,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<img[^>]*\\balt\\s*=\\s*['\\\"](?:decorative|decoration|spacer|divider|ornament)['\\\"]",
+        "pattern": "<img\\b[^>]*\\balt\\s*=\\s*['\\\"](?:decorative|decoration|spacer|divider|ornament)['\\\"]",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2901,7 +3128,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "alt='decorative' announces the literal word 'decorative' to a screen reader user - the opposite of what was intended. The correct way to mark a decorative image is alt='' (empty string).",
       "fix": "Use alt='' (empty quotes) for purely presentational images so the screen reader skips them. If the image conveys any meaning at all, give it a real description instead."
@@ -2913,7 +3141,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:a|button)[^>]*>\\s*(?:Read\\s+more|View\\s+more|See\\s+more|Find\\s+out\\s+more|More\\s+info|Discover\\s+more)\\s*</(?:a|button)>",
+        "pattern": "<(?:a|button)\\b(?![^>]*\\baria-label\\s*=)[^>]*>\\s*(?:Read\\s+more|View\\s+more|See\\s+more|Find\\s+out\\s+more|More\\s+info|Discover\\s+more)\\s*</(?:a|button)>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2922,7 +3150,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "'Read more' / 'View more' / 'See more' tells the user nothing about the destination and fails screen-reader scan-by-link mode (where users hear only link text). Every card on the page reads the same.",
       "fix": "Make link text describe the destination: 'Read the launch post', 'See all 145 rules', 'View the changelog'. The link should make sense out of context."
@@ -2934,7 +3163,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "<(?:a|button)[^>]*>\\s*(?:Tap\\s+here|Continue|Go|Next|Submit\\s+now|Sign\\s+up\\s+now)\\s*</(?:a|button)>",
+        "pattern": "<(?:a|button)\\b(?![^>]*\\b(?:aria-label\\s*=|rel\\s*=\\s*['\\\"](?:next|prev)))[^>]*>\\s*(?:Tap\\s+here|Continue|Go|Next|Submit\\s+now|Sign\\s+up\\s+now)\\s*</(?:a|button)>",
         "flags": "i",
         "scope": [
           "tsx",
@@ -2943,7 +3172,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "'Tap here' / 'Continue' / 'Go' / 'Next' name an action but not a target - the screen reader user has no idea where the link lands. 'Submit now' / 'Sign up now' add urgency without value. Generic CTA fingerprint.",
       "fix": "Replace with destination-aware copy: 'Install the plugin', 'Open the changelog', 'See the comparison table'. The CTA should be a tiny one-line promise."
@@ -2955,12 +3185,13 @@
       "category": "Typography",
       "detection": {
         "type": "regex",
-        "pattern": "(?:^|[\\s,}>+~])(?:body|p|li|main|article|\\.(?:body|prose|text|content|paragraph))[^{}]*\\{[^}]*\\btext-shadow\\s*:",
+        "pattern": "(?:^|(?<=[\\s,}>+~]))(?:body|p|li|main|article|\\.(?:body|prose|text|content|paragraph))(?:[.#:\\[][^\\s{,>+~]*)?\\s*\\{[^}]*\\btext-shadow\\s*:",
         "flags": "im",
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "text-shadow on body text smears the glyph edges, drops contrast, and is the classic 2010s skeuomorphic tell. Long-form reading becomes measurably harder, and the shadow does not survive dark mode without a separate override.",
       "fix": "Remove text-shadow from body, p, li, prose, and content classes. If you need depth on a hero title or display headline, scope text-shadow to that one element class and verify contrast in both light and dark themes."
@@ -2972,12 +3203,13 @@
       "category": "Typography",
       "detection": {
         "type": "regex",
-        "pattern": "(?:^|[\\s,}>+~])(?:body|p|li|main|article|\\.(?:body|prose|text|content|paragraph))[^{}]*\\{[^}]*\\bletter-spacing\\s*:\\s*(?:0?\\.[3-9]\\d*em|[1-9]\\d*(?:\\.\\d+)?em|0?\\.[3-9]\\d*rem|[1-9]\\d*(?:\\.\\d+)?rem|[6-9]px|[1-9]\\d+px)",
+        "pattern": "(?:^|(?<=[\\s,}>+~]))(?:body|p|li|main|article|\\.(?:body|prose|text|content|paragraph))(?:[.#:\\[][^\\s{,>+~]*)?\\s*\\{[^}]*\\bletter-spacing\\s*:\\s*(?:0?\\.[3-9]\\d*em|[1-9]\\d*(?:\\.\\d+)?em|0?\\.[3-9]\\d*rem|[1-9]\\d*(?:\\.\\d+)?rem|[6-9]px|[1-9]\\d+px)",
         "flags": "im",
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Letter-spacing above ~0.25em or 5px on body text breaks reading flow and exceeds every typography guideline since the 1990s. Wide tracking belongs on display caps, never on paragraph text or list items.",
       "fix": "Keep letter-spacing on body, p, li to ~0 to 0.02em max. Reserve wide tracking (0.2em to 0.4em) for short ALL-CAPS labels or eyebrow text only."
@@ -2989,12 +3221,13 @@
       "category": "Typography",
       "detection": {
         "type": "regex",
-        "pattern": "(?:^|[\\s,}>+~])(?:body|p|li|main|article|\\.(?:body|prose|text|content|paragraph))[^{}]*\\{[^}]*\\bfont-weight\\s*:\\s*(?:bold|700|800)\\s*[;}]",
+        "pattern": "(?:^|(?<=[\\s,}>+~]))(?:body|p|li|main|article|\\.(?:body|prose|text|content|paragraph))(?:[.#:\\[][^\\s{,>+~]*)?\\s*\\{[^}]*\\bfont-weight\\s*:\\s*(?:bold|700|800)\\s*[;}]",
         "flags": "im",
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Making the entire body or every paragraph bold defeats hierarchy - the page has no normal weight to bold against. Long-form reading at weight 700 is measurably slower than at 400. AI shortcut for 'make it pop' that breaks the typographic system.",
       "fix": "Keep body and paragraph weight at 400 (or 450 if the typeface needs a touch more presence). Use bold sparingly inside paragraphs (strong / b) or on headings - never as the default body weight."
@@ -3006,12 +3239,13 @@
       "category": "Quality",
       "detection": {
         "type": "regex",
-        "pattern": "(?:^|[\\s,}>+~])(?:body|html|main|\\.(?:app|root|page))[^{}]*\\{[^}]*\\bcursor\\s*:\\s*pointer\\s*[;}]",
+        "pattern": "(?:^|(?<=[\\s,}>+~]))(?:body|html|main|\\.(?:app|root|page))(?:[.#:\\[][^\\s{,>+~]*)?\\s*\\{[^}]*\\bcursor\\s*:\\s*pointer\\s*[;}]",
         "flags": "im",
         "scope": [
           "css",
           "scss"
-        ]
+        ],
+        "target": "css"
       },
       "why": "cursor: pointer on body or html signals 'everything is clickable' when most things are not - users learn to distrust the cursor cue, and accessibility regressions follow. AI shortcut for 'I am not sure what is interactive so I will hint at everything'.",
       "fix": "Remove cursor: pointer from body / html / main. Apply it only to elements that are genuinely interactive (buttons, links, custom controls with the right ARIA role)."
@@ -3032,7 +3266,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "A bare class='wrapper' / 'box' / 'inner' with nothing else gives the design system no information about what the div is for - the throwaway naming a generator falls back to when it has no concept of role or semantic. Tailwind's '.container' utility is intentionally excluded - it carries layout intent.",
       "fix": "Name the role: class='hero__inner', class='pricing-grid', class='footer-cta-block'. Even if it carries the layout utility, the prefix should say what kind of block it is."
@@ -3053,7 +3288,8 @@
           "html",
           "blade",
           "astro"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "data-testid attributes are test-runner hooks that have no business in the production payload - they bloat the DOM, leak internal test names to anyone who Views Source, and signal the build pipeline strips nothing. AI-pasted-from-example-code fingerprint.",
       "fix": "Strip data-testid at build time (Vite / Webpack / esbuild plugin) or move identifiers to data-test-* / aria-label that the test harness reads. Keep production HTML free of test-only attributes."
@@ -3075,7 +3311,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'Built with love' / 'Made with coffee' / 'Crafted with care' is the universal indie-hacker footer template - signals the writer reached for a meme line because they did not want to commit to a real footer voice. Reads as the most generated of all generated lines.",
       "fix": "Use a real footer line - your domain, the year, a one-line manifesto, a credit. If you want to be warm, be specific: 'Shipped from Amman' / 'Open source since 2026' beats 'made with love' every time."
@@ -3097,7 +3334,8 @@
           "blade",
           "astro",
           "md"
-        ]
+        ],
+        "target": "text"
       },
       "why": "'Unlock the potential' / 'unleash your creativity' / 'reach new heights' / 'take it to the next level' / 'the future is here' is the strongest cluster of LinkedIn-thinkpiece phrases in any landing page - immediate AI-generated marketing copy tell.",
       "fix": "Describe what the user can do that they could not do before: 'lint AI-generated code in 50ms', 'install in three IDEs from one command'. Specifics beat 'unlock' every time."
@@ -3118,7 +3356,8 @@
           "jsx",
           "vue",
           "html"
-        ]
+        ],
+        "target": "css"
       },
       "why": "Browsers justify by stretching word-spacing, opening uneven 'rivers' of whitespace and hurting readability — CSS has none of the hyphenation or microtypography a print justifier relies on.",
       "fix": "Use text-align: left (or start) for body copy. If justification is a hard brand requirement, pair it with hyphens: auto and test at the real line length."
@@ -3135,10 +3374,12 @@
         "scope": [
           "css",
           "html"
-        ]
+        ],
+        "target": "css",
+        "post": "import-blocks-render"
       },
       "why": "CSS @import serializes downloads: the browser must fetch and parse the parent stylesheet before it even discovers the import, delaying first paint, and it cannot be preloaded the way a <link> can.",
-      "fix": "Replace @import with <link rel=\"stylesheet\"> in the head (or bundle at build time); use <link rel=\"preload\"> for critical fonts and CSS."
+      "fix": "Replace @import with <link rel=\"stylesheet\"> in the head (or bundle at build time); use <link rel=\"preload\"> for critical fonts and CSS. A local design-token file (tokens.css, or custom properties only) may stay an @import."
     },
     {
       "id": "href-empty-hash",
@@ -3154,7 +3395,8 @@
           "jsx",
           "tsx",
           "vue"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "An anchor with href=\"#\" is a placeholder. It jumps the page to the top and announces a real destination to assistive tech that does not exist. It is a classic sign of unfinished, generated, or copy-pasted markup.",
       "fix": "Point the link at a real URL, or use <button type=\"button\"> if it triggers an action. For an in-page target use href=\"#section-id\", never a bare #."
@@ -3173,7 +3415,8 @@
           "jsx",
           "tsx",
           "vue"
-        ]
+        ],
+        "target": "markup"
       },
       "why": "href=\"javascript:void(0)\" and similar javascript: URLs are dead links used as click targets. They break open-in-new-tab, middle-click, and keyboard behavior, and read as a placeholder tell.",
       "fix": "Use a real href for navigation, or a <button type=\"button\"> for actions. Never a javascript: URL as a link destination."
@@ -3194,19 +3437,20 @@
           "jsx",
           "tsx",
           "vue"
-        ]
+        ],
+        "target": "code"
       },
       "why": "A literal {TODO_FILL...} token, a placeholder-shaped {{ ... }} mustache, or lorem ipsum rendered in the actual UI is a draft-state leak - the rawest sign that generated output shipped without being finished. (Legitimate template bindings like {{ user.name }} are NOT flagged; only placeholder-shaped tokens are.)",
       "fix": "Fill the value where it is known (canonical/og:url from the source URL, og:image from a real CDN image). Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully - drop the meta tag or the affordance. Never print the token; keep any patch-this note outside the shipped markup."
     },
     {
       "id": "decorative-accent-ruler",
-      "name": "Decorative accent ruler (hairline ornament, fade, dot, or eyebrow dash)",
+      "name": "Decorative accent ruler (hairline ornament, fade, dot, or a line or dash beside an eyebrow)",
       "severity": "high",
       "category": "Visual",
       "detection": {
         "type": "regex",
-        "pattern": "class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*\\bbg-(?:gradient|linear)-to-[rl]\\b)|class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))|class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])|\\{(?![^{}]*\\banimation(?:-name)?\\s*:)(?=[^{}]*(?<![\\w-])height\\s*:\\s*[12]px)(?=[^{}]*linear-gradient\\([^)]*\\btransparent\\b)[^{}]*\\}|class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*(?<![\\w-])w-(?:[1-9]|1[0-6]|\\[(?:[89]|[1-5]\\d|6[0-4])px\\])(?![\\w.\\[-]))|:{1,2}(?:before|after)\\s*\\{(?![^{}]*\\banimation(?:-name)?\\s*:)(?=[^{}]*(?<![\\w-])height\\s*:\\s*[12]px)(?=[^{}]*(?<![\\w-])width\\s*:\\s*(?:[89]|[1-5]\\d|6[0-4])px)[^{}]*\\}",
+        "pattern": "class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*\\bbg-(?:gradient|linear)-to-[rl]\\b)|class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))|class(?:Name)?=[\"'](?=[^\"']*\\brounded-full\\b)(?=[^\"']*(?<![\\w-])(?:h|size)-(?:1|1\\.5|2)(?![\\w.-]))[^\"']*[\"'][^<]*(?:</\\w+>)?\\s*<\\w+[^>]*class(?:Name)?=[\"'][^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-])|\\{(?![^{}]*\\banimation(?:-name)?\\s*:)(?=[^{}]*(?<![\\w-])height\\s*:\\s*[12]px)(?=[^{}]*linear-gradient\\([^)]*\\btransparent\\b)[^{}]*\\}|class(?:Name)?=[\"'](?=[^\"']*(?<![\\w-])(?:h-px|h-\\[[12]px\\]|h-0\\.5)(?![\\w.\\[-]))(?=[^\"']*(?<![\\w-])w-(?:[1-9]|1[0-6]|\\[(?:[89]|[1-5]\\d|6[0-4])px\\])(?![\\w.\\[-]))",
         "scope": [
           "html",
           "blade",
@@ -3216,10 +3460,32 @@
           "vue",
           "css",
           "scss"
+        ],
+        "target": [
+          "markup",
+          "css"
+        ],
+        "post": "accent-ruler",
+        "also": [
+          {
+            "pattern": "(?P<pseudo>:{1,2}(?:before|after)\\b)(?=[^{};]*\\{)",
+            "flags": "i",
+            "target": "css"
+          },
+          {
+            "pattern": "(?P<edge>(?<![\\w-])(?:border-(?:left|right|inline-start|inline-end|inline)(?:-width|-style|-color)?|background(?:-image)?|box-shadow)\\s*:)",
+            "flags": "i",
+            "target": "css"
+          },
+          {
+            "pattern": "(?P<eyebrow><[A-Za-z][\\w.-]*\\s[^>]*?\\bclass\\s*=\\s*(?:\"[^\"]*|'[^']*)(?:eyebrow|kicker|overline|pre-?title|pre-?heading|super-?head|section-label|section-tag|uppercase))",
+            "flags": "i",
+            "target": "markup"
+          }
         ]
       },
-      "why": "A short 1-2px line used as ornament: under a heading, fading out of transparent, capped with a small dot, or set as a dash before an eyebrow label. It carries no structure and no meaning, and it is one of the most repeated marks in AI-generated pages. Real dividers are full-width, solid, and separate content.",
-      "fix": "Delete it. Build hierarchy with type size, weight, letter-spacing, and spacing instead. If content truly needs separating, use a full-width solid border (border-t with a neutral token) on the container, never a free-floating ornamental line."
+      "why": "A short line used as ornament: under a heading, fading out of transparent, capped with a small dot, or set as a line, dash or dot before or after an eyebrow label. It carries no structure and no meaning, and it is one of the most repeated marks in AI-generated pages. The eyebrow form comes in many builds: a ::before or ::after with a size or a border, an empty span or i, a border-inline-start on the label, a background-image line, an SVG line or dot, or a dash typed into the text. Real dividers are full-width, solid, and separate content.",
+      "fix": "Delete the mark and keep the eyebrow as text only: the label style (type.text.label) and its color carry it. Build hierarchy with type size, weight, letter-spacing and spacing. If content truly needs separating, use a full-width solid border (border-t with a neutral token) on the container, never a short ornamental line."
     },
     {
       "id": "full-viewport-width-overflow",
@@ -3228,7 +3494,7 @@
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "(?:^|[^-\\w])(?:min-)?width\\s*:\\s*100vw|\\bw-screen\\b",
+        "pattern": "(?:^|[^-\\w])(?:min-)?width\\s*:\\s*100vw|(?<![\\w-])w-screen(?![\\w-])",
         "flags": "im",
         "scope": [
           "css",
@@ -3239,10 +3505,444 @@
           "jsx",
           "tsx",
           "vue"
+        ],
+        "target": [
+          "css",
+          "classes"
         ]
       },
       "why": "width: 100vw (and min-width: 100vw / Tailwind w-screen) is the viewport width INCLUDING the scrollbar gutter, so a full-bleed element set this way overflows the document by the scrollbar width and produces horizontal scroll on the very platforms that have a visible scrollbar. (max-width: 100vw is a legitimate ceiling and is NOT flagged.)",
       "fix": "Size full-bleed surfaces to 100% of the container, or use the full-bleed margin trick (margin-inline: calc(50% - 50vw)) which accounts for the scrollbar. Never set the element's own width or min-width to 100vw."
+    },
+    {
+      "id": "navy-to-purple-gradient",
+      "name": "Navy to purple gradient",
+      "severity": "medium",
+      "category": "Color",
+      "detection": {
+        "type": "regex",
+        "pattern": "class=\\\"(?=[^\\\"]*(?<![\\w:/-])bg-(?:gradient|linear)-to-[a-z]{1,2}(?![\\w-]))(?=[^\\\"]*(?<![\\w:/-])from-(?:slate|blue|indigo|gray|zinc|neutral|sky)-(?:800|900|950)(?![\\w/-]))(?=[^\\\"]*(?<![\\w:/-])to-(?:purple|violet|fuchsia)-[4-9]00(?![\\w/-]))|class=\\\"(?=[^\\\"]*(?<![\\w:/-])bg-(?:gradient|linear)-to-[a-z]{1,2}(?![\\w-]))(?=[^\\\"]*(?<![\\w:/-])from-(?:purple|violet|fuchsia)-[4-9]00(?![\\w/-]))(?=[^\\\"]*(?<![\\w:/-])to-(?:slate|blue|indigo|gray|zinc|neutral|sky)-(?:800|900|950)(?![\\w/-]))|(?:linear|radial|conic)-gradient\\((?:[^()]|\\([^()]*\\))*?(?:#(?:0f172a|1e293b|1e1b4b|172554|1e3a8a|0b1020|020617|111827|0a0f2c|0c1445|000080|191970|1a1a2e|16213e|0f0c29|24243e)\\b|(?<![\\w-])(?:navy|midnightblue)(?![\\w-]))(?:[^()]|\\([^()]*\\))*?(?:#(?:7c3aed|8b5cf6|a855f7|6366f1|9333ea|7e22ce|6d28d9|4f46e5|a78bfa|c084fc|818cf8)\\b|#(?:581c87|6b21a8|4c1d95|5b21b6|3b0764|2e1065|302b63)\\b|(?<![\\w-])(?:purple|violet|rebeccapurple|blueviolet|mediumpurple)(?![\\w-]))|(?:linear|radial|conic)-gradient\\((?:[^()]|\\([^()]*\\))*?(?:#(?:7c3aed|8b5cf6|a855f7|6366f1|9333ea|7e22ce|6d28d9|4f46e5|a78bfa|c084fc|818cf8)\\b|#(?:581c87|6b21a8|4c1d95|5b21b6|3b0764|2e1065|302b63)\\b|(?<![\\w-])(?:purple|violet|rebeccapurple|blueviolet|mediumpurple)(?![\\w-]))(?:[^()]|\\([^()]*\\))*?(?:#(?:0f172a|1e293b|1e1b4b|172554|1e3a8a|0b1020|020617|111827|0a0f2c|0c1445|000080|191970|1a1a2e|16213e|0f0c29|24243e)\\b|(?<![\\w-])(?:navy|midnightblue)(?![\\w-]))",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": [
+          "css",
+          "classes"
+        ]
+      },
+      "why": "A dark navy surface fading into purple is the default night-sky hero of generated landing pages. It signals that no one chose the palette.",
+      "fix": "Use one dark neutral for the surface and spend the accent on a single element. If the brand needs depth, shift lightness within one hue instead of crossing from navy into purple."
+    },
+    {
+      "id": "glow-shadow-zero-offset",
+      "name": "Glow shadow with zero offset and large blur",
+      "severity": "medium",
+      "category": "Depth",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:(?<![\\w-])(?:box-shadow|text-shadow)|--[\\w-]*(?:shadow|glow)[\\w-]*)\\s*:(?:[^;{}]*?,)?\\s*(?!inset)0(?:px)?\\s+0(?:px)?\\s+(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?r?em)|drop-shadow\\(\\s*0(?:px)?\\s+0(?:px)?\\s+(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?r?em)",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "css",
+        "also": [
+          {
+            "pattern": "(?<![\\w-])(?:shadow|drop-shadow)-\\[0(?:px)?_0(?:px)?_(?:(?:1[6-9]|[2-9]\\d|\\d{3,})px|[1-9]\\d*(?:\\.\\d+)?rem)",
+            "target": "classes"
+          }
+        ],
+        "token_definitions": true
+      },
+      "why": "A shadow with no offset and a wide blur is not a shadow, it is a halo. Light has no source, so the element floats in neon instead of sitting on the page.",
+      "fix": "Give the shadow a light source: a small y offset and a blur about twice the offset, for example box-shadow: 0 4px 12px rgb(0 0 0 / 0.12). For focus, use a spread ring with no blur (0 0 0 3px)."
+    },
+    {
+      "id": "hairline-border-heavy-shadow",
+      "name": "1px border combined with a heavy drop shadow",
+      "severity": "medium",
+      "category": "Depth",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\{(?=[^{}]*(?<![\\w-])border(?:-width)?\\s*:\\s*(?:0\\.5px|1px)\\b(?![^;{}]*transparent))(?=[^{}]*(?<![\\w-])box-shadow\\s*:(?:[^;{}]*?,)?\\s*(?!inset)-?\\d+(?:\\.\\d+)?(?:px|r?em)?\\s+-?\\d+(?:\\.\\d+)?(?:px|r?em)?\\s+(?:(?:2[4-9]|[3-9]\\d|\\d{3,})px|(?:1\\.[5-9]|[2-9]|\\d{2,})(?:\\.\\d+)?r?em))",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "css",
+        "also": [
+          {
+            "pattern": "class=\\\"(?=[^\\\"]*(?<![\\w:/-])border(?:-\\[1px\\])?(?![\\w/-]))(?=[^\\\"]*(?<![\\w:/-])shadow-(?:xl|2xl)(?![\\w/-]))",
+            "target": "classes"
+          }
+        ]
+      },
+      "why": "A hairline border says the element sits flat on the surface; a heavy blurred shadow says it floats high above it. Both on one element is two depth models at once, a common tell of generated card styles.",
+      "fix": "Pick one depth cue per element: keep the 1px border and drop the shadow (or use a shadow under 12px blur), or keep the elevated shadow and remove the border."
+    },
+    {
+      "id": "default-font-only",
+      "name": "Inter or Geist as the only font, no type decision",
+      "severity": "medium",
+      "category": "Typography",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?:(?<![\\w-])font-family|--font[\\w-]*)\\s*:\\s*[\\\"']?(?:Inter|Geist)(?:\\s+(?:Variable|Sans|Display))?[\\\"']?\\s*(?:[,;}]|$)",
+        "flags": "im",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "ts",
+          "js",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "css",
+        "unless": "@font-face|(?:(?<![\\w-])font-family|--font[\\w-]*|\\$[\\w-]*(?:font|stack|family)[\\w-]*)\\s*:\\s*(?![\\\"']?(?:Inter|Geist)(?:\\s+(?:Variable|Sans|Mono|Display))?[\\\"']?\\s*[,;}])(?!var\\(|inherit|initial|unset|system-ui|-apple-system|BlinkMacSystemFont|ui-|sans-serif|serif|monospace|cursive|fantasy|\\$)[\\\"']?[A-Za-z]",
+        "also": [
+          {
+            "pattern": "import\\s*\\{\\s*(?:Inter|Geist|Geist_Mono)(?:\\s*,\\s*(?:Inter|Geist|Geist_Mono))*\\s*,?\\s*\\}\\s*from\\s*[\\\"']next/font/google[\\\"']|fontFamily\\s*:\\s*\\{\\s*sans\\s*:\\s*\\[\\s*[\\\"'](?:Inter|Geist)(?:\\s+Variable)?[\\\"'][^\\]]*\\]\\s*,?\\s*\\}",
+            "target": "code",
+            "flags": "",
+            "unless": "next/font/local|(?<![\\w.])(?!(?:Inter|Geist|Geist_Mono)\\b)[A-Z][A-Za-z_]*\\(\\s*\\{\\s*(?:subsets|weight|variable|display)"
+          }
+        ],
+        "token_definitions": true
+      },
+      "why": "Inter or Geist alone, with no display face, scale or pairing, is the framework default. The type says nothing about the product because no one decided anything.",
+      "fix": "Make one type decision on top of the default: pair the sans with a display or serif face for headings (declare it as a second font-family or --font-display token), or replace the default with a face chosen for the brand."
+    },
+    {
+      "id": "phone-field-requires-country-code",
+      "name": "Phone field that refuses a local number",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<input\\b(?=[^>]*\\btype\\s*=\\s*\\{?\\s*[\"'`]tel[\"'`])(?=[^>]*\\bpattern\\s*=)[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "phone-rejects-local"
+      },
+      "why": "A visitor who types their own number the way they always do (a leading zero, spaces, no country code) is told it is wrong. Everyone who reaches the field meant to finish; a pattern that refuses a correct number loses them at the last step.",
+      "fix": "Accept the number as people type it: drop the pattern or make the country code optional (\\+? or a choice of the local prefix), and turn it into the full international number on the server. When the country matters, add a country picker beside the field. An error names the field and the fix: \"Phone: enter the number with its area code, such as 079 123 4567\"."
+    },
+    {
+      "id": "one-action-several-labels",
+      "name": "One action under several labels",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:a|button)\\b[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "one-action-several-labels"
+      },
+      "why": "A page that names one action three ways (a header button, a hero button and a closing band that each say something different) makes the reader stop and compare them, and the one thing the page asks for stops reading as one thing.",
+      "fix": "Give every call to action that does the same thing (the same destination, the same form) the same words, the verb of the hero's button. A different next step gets a different label and, when it is secondary, a text link."
+    },
+    {
+      "id": "eyebrows-over-budget",
+      "name": "More eyebrows than the brand calls for",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<[a-z][\\w-]*\\b[^>]*\\bclass(?:Name)?\\s*=",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "eyebrows-over-budget"
+      },
+      "why": "A small label above every section heading turns each section into the same announcement, and the page reads as a template. How many sections carry one follows the brand's formality: a sixth of them for a playful brand, up to half for a formal one (a third when the page's system does not say). Eyebrows past that allowance are reported; a page with fewer than three sections is not counted.",
+      "fix": "Keep eyebrows where a section needs a label the heading cannot carry (a step number, a category) and let the other headings stand alone. Separate sections with space or a change of ground, never with a label."
+    },
+    {
+      "id": "layout-family-repeated",
+      "name": "One layout used for three sections",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<section\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "layout-family-repeated"
+      },
+      "why": "Three sections built from the same tree of elements (a heading over three cards, again and again) read as one section repeated, and the page loses its rhythm. Repeated items inside a section count once; the words are ignored.",
+      "fix": "Give each section the layout its content needs: a split for one idea and its picture, a list for steps, a quote on its own, a grid only where items compare. Use one layout at most twice on a page."
+    },
+    {
+      "id": "split-sections-in-a-row",
+      "name": "More than two media-and-text splits in a row",
+      "severity": "medium",
+      "category": "Layout",
+      "detection": {
+        "type": "regex",
+        "pattern": "<section\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "split-sections-in-a-row"
+      },
+      "why": "A picture beside text, then text beside a picture, then again: the zigzag is the default a generator reaches for, and by the third the reader stops reading. The third split in a row and every one after it are reported.",
+      "fix": "Break the run after two: a full-width image, a grid of several items, a single quote or a band of figures between splits."
+    },
+    {
+      "id": "marquee-more-than-one",
+      "name": "More than one marquee",
+      "severity": "medium",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "<marquee\\b|<[a-z][\\w-]*\\b[^>]*(?:\\bclass(?:Name)?\\s*=\\s*[\"'{][^\"'}]*(?:marquee|ticker)|\\bdata-marquee\\b)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "marquee-more-than-one"
+      },
+      "why": "One scrolling strip can carry logos or a line of news; a second one competes with it and with the text around it, and every strip that moves on its own for more than five seconds needs a way to pause it.",
+      "fix": "Keep one marquee and turn the others into static rows. Give the one that stays a pause control and stop it under prefers-reduced-motion."
+    },
+    {
+      "id": "text-ink-at-low-alpha",
+      "name": "Text in ink at low alpha",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?<![\\w-])color\\s*:\\s*(?:rgba?\\([^)]*\\)|#[0-9a-f]{8}\\b|#[0-9a-f]{4}\\b|color-mix\\([^;{}]*transparent[^;{}]*\\))|(?<![\\w-])text-(?:black|white|foreground|ink|(?:gray|slate|zinc|neutral|stone)-\\d{2,3})/(?:\\d{1,2}|\\[0?\\.\\d+\\])(?![\\w-])",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": [
+          "css",
+          "classes"
+        ],
+        "post": "text-ink-at-low-alpha"
+      },
+      "why": "Muted text written as the ink color at an alpha under 0.7 (rgba, an eight-digit hex, color-mix with transparent, text-black/50) lands wherever the ground is: on white it may pass, on an off-white card or a band it drops under 4.5:1 (1.4.3). It passes when its value over the page ground is a color in the page's own token set.",
+      "fix": "Use the system's muted text role (an opaque color checked at 4.5:1 on every surface it sits on), or an opaque grey that meets 4.5:1 on the grounds the text lands on."
+    },
+    {
+      "id": "infinite-animation-without-reduced-motion",
+      "name": "Infinite animation that keeps running under reduced motion",
+      "severity": "high",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?<![\\w-])animation(?:-iteration-count)?\\s*:[^;{}]*\\binfinite\\b",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": "css",
+        "post": "infinite-animation-unguarded"
+      },
+      "why": "A loop that never ends (a marquee, a glow, a floating shape) keeps moving for a person who asked their system for less motion. It passes when it runs only under prefers-reduced-motion: no-preference (or not reduce), when a reduced-motion query stops it on its selector or on every element, or when it is a progress indicator. A loop declared inside a reduce query runs only for people who asked for less motion and is reported.",
+      "fix": "Wrap the animation in @media (prefers-reduced-motion: no-preference), or stop it in @media (prefers-reduced-motion: reduce) with animation: none. Anything that moves on its own for more than five seconds beside other content also needs a pause control (2.2.2)."
+    },
+    {
+      "id": "focusable-at-opacity-zero",
+      "name": "Focusable control left at opacity 0",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "opacity\\s*:\\s*0(?![.\\d])",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": "css",
+        "post": "focusable-hidden-by-opacity"
+      },
+      "why": "Opacity 0 hides a control from sight and nothing else: Tab still lands on it and a screen reader still reads it, so a closed menu's links or a faded-out button take focus that no one can see (2.4.7 asks for a visible focus indicator).",
+      "fix": "Pair opacity 0 with visibility: hidden (delayed by the exit duration, so the fade still runs), display: none once the exit ends, or the inert or hidden attribute on the closed panel. A control revealed on hover is judged by hover-only-card-actions."
+    },
+    {
+      "id": "exit-cut-by-display-none",
+      "name": "Exit animation cut by display: none",
+      "severity": "low",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "display\\s*:\\s*none",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": "css",
+        "post": "exit-cut-short"
+      },
+      "why": "A popover or menu that fades on a transition but sets display: none in its closed state disappears at the first frame of its exit: the fade the system's motion.dismiss role defines never shows.",
+      "fix": "Keep the exit running until it ends: transition display with allow-discrete (transition: opacity 200ms, display 200ms allow-discrete), or set hidden or inert from script when transitionend fires."
+    },
+    {
+      "id": "theme-switch-animates-everything",
+      "name": "Theme switch animates every color on the page",
+      "severity": "low",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "(?<![\\w-])transition\\s*:[^;{}]+",
+        "flags": "i",
+        "scope": [
+          "css",
+          "scss",
+          "tsx",
+          "jsx",
+          "vue",
+          "html"
+        ],
+        "target": "css",
+        "post": "theme-transition-unsuspended"
+      },
+      "why": "A transition on every element's colors turns a theme switch into a slow wash across the whole page, with text passing through low contrast on its way, and it fights the transitions the components declare.",
+      "fix": "Suspend transitions for the frame the theme changes in: add a class such as theme-switching to the root, set .theme-switching * { transition: none !important }, switch the theme, and remove the class on the next animation frame."
+    },
+    {
+      "id": "repeated-action-same-name",
+      "name": "Actions in repeated items share one name",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<(?:button|a)\\b[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "repeated-action-same-name"
+      },
+      "why": "Three buttons named Save in a list read as Save, Save, Save in a screen reader's list of controls, and a voice user who says the name cannot pick one. The item the action belongs to has to be in its accessible name.",
+      "fix": "Put the item in the name: aria-label=\"Save Lamb flatbread\", a visually hidden span after the visible word, or aria-labelledby naming the button and the item's title."
+    },
+    {
+      "id": "menu-row-disabled-without-reason",
+      "name": "Disabled menu row with no reason",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<[a-z][\\w-]*\\b[^>]*\\brole\\s*=\\s*[\"']menuitem(?:checkbox|radio)?[\"'][^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "menu-row-disabled-silent"
+      },
+      "why": "A menu row disabled with the disabled attribute drops out of the arrow keys' path, so a keyboard user never learns it exists; one marked aria-disabled with no reason leaves the person guessing why it cannot be used.",
+      "fix": "Keep the row in place with aria-disabled=\"true\" instead of disabled, and give its reason in words beside the label, tied to the row with aria-describedby."
     }
   ]
 }

@@ -1,0 +1,2 @@
+.popover { opacity: 1; transition: opacity 200ms ease-in; }
+.popover[data-state="closed"] { opacity: 0; display: none; }

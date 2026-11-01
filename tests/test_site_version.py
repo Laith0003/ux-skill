@@ -21,6 +21,14 @@ def test_version_is_read_from_pyproject():
     assert sv.version().count(".") == 2 and sv.line() == ".".join(sv.version().split(".")[:2])
 
 
+def test_a_prerelease_is_never_stated_on_the_site():
+    import re
+    assert re.fullmatch(r"\d+\.\d+\.\d+", sv.version())
+    if sv.package_version() != sv.version():
+        log = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+        assert f"## [{sv.version()}]" in log
+
+
 def test_the_homepages_state_the_current_version():
     """The check itself must find the claims it guards."""
     home = (ROOT / "docs" / "index.html").read_text(encoding="utf-8")
@@ -42,4 +50,5 @@ def test_page_states_only_the_pyproject_version(page):
     wrong = [f"{label}: {v}" for label, v in sv.claims(html, is_release_post=release_post)
              if not sv.agrees(v)]
     assert wrong == [], (f"{page.relative_to(ROOT)} states a version other than "
-                         f"{sv.version()} (pyproject.toml): {wrong}")
+                         f"{sv.version()} (pyproject.toml, or the newest release in CHANGELOG.md "
+                         f"while it holds a prerelease): {wrong}")

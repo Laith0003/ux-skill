@@ -58,7 +58,7 @@ def test_an_id_written_with_spaces_or_capitals_matches(phrase, industry):
     assert industry_of(phrase) == industry
 
 
-@pytest.mark.parametrize("phrase", ["fintech-neobank", "construction-pm", "fintech app", "b2b"])
+@pytest.mark.parametrize("phrase", ["fintech-neobank", "hospitality app", "fintech app", "media app"])
 def test_a_description_without_a_whole_industry_id_stays_neutral(phrase):
     # One recognized part inside a longer description is not enough: the
     # other words may say a different industry.
@@ -68,3 +68,12 @@ def test_a_description_without_a_whole_industry_id_stays_neutral(phrase):
 def test_matching_is_case_and_whitespace_insensitive():
     assert industry_of("  HealthCare  ") == "healthcare"
     assert industry_of("") is None and industry_of(None) is None
+
+
+@pytest.mark.parametrize("phrase,industry", [
+    ("construction-pm", "construction"), ("b2b", "b2b-marketplace"),
+    ("building materials", "construction"), ("wholesale", "b2b-marketplace"),
+    ("medical supply", "pharmacy"), ("cybersecurity firm", "security"),
+])
+def test_later_seeds_and_their_other_names_match_as_whole_words(phrase, industry):
+    assert industry_of(phrase) == industry

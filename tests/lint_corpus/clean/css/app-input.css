@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    color-scheme: light dark;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-amber-700;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex min-h-11 items-center gap-2 rounded-md px-4 text-sm font-medium transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-teal-700 text-white hover:bg-teal-800;
+  }
+
+  .field-error {
+    @apply mt-1 text-sm text-red-700;
+  }
+
+  .surface {
+    @apply rounded-lg border border-stone-200 bg-white shadow-sm;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

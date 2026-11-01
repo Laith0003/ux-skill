@@ -1,0 +1,52 @@
+# Comparison: the product beside the alternative. Every value is a semantic role.
+name: comparison
+status: experimental
+category: section
+description: The product beside the way the reader works today or the alternative they weigh, row by row on what differs.
+job: Prove where the product is better and say honestly where it is not.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: table, rtlBehavior: logical}
+slots:
+  - {name: table, takes: [table], required: true}
+  - {name: media, takes: [photograph], required: false}
+variants:
+  - {name: density, values: [standard, compact], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: max-width, role: layout.container.max}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.section-title}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: heading, property: stack-gap, role: space.text.gap}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: max-width, role: layout.measure.landing}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.tint]
+proof: none
+phone: [fold-side-columns]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - Each row names one thing a reader compares, in their words
+usage:
+  do:
+    - Use the table contract, with the product's column first after the row labels
+    - Name the alternative fairly and show the rows where it wins
+    - On a phone, keep the row labels and show two columns at a time
+  dont:
+    - Do not mark a difference with color alone
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -1,0 +1,2 @@
+.card .actions { opacity: 0; }
+.card:hover .actions { opacity: 1; }

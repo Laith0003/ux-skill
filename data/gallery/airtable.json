@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.494,
+    "density": 0.5,
+    "formality": 0.92,
+    "geometry": 0.415,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.452
+  },
+  "axes_source": "Read from data/brands/airtable.json: warmth from the hue and chroma of the primary #181D26 and the canvas #FFFFFF; contrast from the ink #181D26 on that canvas, its depth and the chroma of #181D26; density from its 4px spacing base; geometry from its radii 2, 6, 10, 12px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#181D26",
+  "brand_rule": "The primary #181D26 reaches 16.90:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DADBDC",
+      "light": "#1E1F20"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0C0D0E",
+      "light": "#F6F7F7"
+    },
+    "radius_control": "3px",
+    "state_duration": "200ms",
+    "tokens": 728,
+    "tokens_sha256": "7ee5b69cf37e2a70"
+  },
+  "id": "airtable",
+  "name": "Airtable",
+  "spec": "data/brands/airtable.json"
+}

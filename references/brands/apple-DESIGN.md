@@ -3,7 +3,7 @@
 > A photography-first interface that turns marketing into a museum gallery.
 
 **Category:** Consumer / Lifestyle / Retail
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/apple.json`](../../data/brands/apple.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

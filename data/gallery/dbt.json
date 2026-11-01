@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.734,
+    "density": 0.25,
+    "formality": 0.43,
+    "geometry": 0.51,
+    "motion": 0.721,
+    "type_personality": 0.5,
+    "warmth": 0.891
+  },
+  "axes_source": "Read from data/brands/dbt.json: warmth from the hue and chroma of the primary #FF694A and the canvas #FEFCF7; contrast from the ink #0D1226 on that canvas, its depth and the chroma of #FF694A; density from its 8px spacing base; geometry from its radii 4, 8, 12, 16px; formality from the chroma of its primary and ink; motion from its stated durations 300ms, 4000ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#7A5AF8",
+  "brand_rule": "The primary #FF694A reaches only 2.78:1 on the canvas #FEFCF7, under the 3:1 a control needs, so the accent color_accent_pixel_violet #7A5AF8 at 4.41:1 carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#7A5AF8",
+      "light": "#7A5AF8"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#0D0D0E",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "8px",
+    "state_duration": "200ms",
+    "tokens": 730,
+    "tokens_sha256": "85435830199a9774"
+  },
+  "id": "dbt",
+  "name": "dbt Labs",
+  "spec": "data/brands/dbt.json"
+}

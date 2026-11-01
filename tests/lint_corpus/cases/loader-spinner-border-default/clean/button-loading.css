@@ -1,0 +1,15 @@
+/* The button contract's loading state: the label keeps its verb and a spinner
+   part runs beside it. The contract lists the spinner, so it stays. */
+.btn[aria-busy="true"] .btn__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+
+button.is-loading .spinner {
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}

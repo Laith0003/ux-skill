@@ -1,0 +1,1 @@
+.hero-tag::after { content: ''; display: block; width: 2.5rem; height: 0.125rem; background-color: var(--brand); }

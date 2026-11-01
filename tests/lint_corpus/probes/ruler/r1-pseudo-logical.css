@@ -1,0 +1,3 @@
+.hero__eyebrow { display: flex; gap: 1rem; }
+.hero__eyebrow::after { content: ""; inline-size: var(--space-10); block-size: var(--border-active); background: var(--color-ink-muted); }
+.promo .hero__eyebrow::after { background: var(--color-ink); }

@@ -14,6 +14,13 @@ Subcommands
 ``ux persist list``     -- list page names persisted under pages/
 ``ux image-extract``    -- read a design image, return brief + hints + recommendation
 ``ux stats``            -- show data manifest counts
+``ux system build``     build a WCAG-gated design system (4.0 beta)
+``ux system detect``    find an existing design system and what it declares
+``ux system import``    read an existing system and report what was read
+``ux system enhance``   measure an existing system and the code that uses it
+``ux system extend``    add to an existing system without changing what it has
+``ux system export``    write a system as CSS, Tailwind, Figma variables or DTCG
+``ux contracts check``  check component contracts against a system
 ``ux version``          -- print version
 """
 from __future__ import annotations
@@ -40,6 +47,7 @@ from engine.data_loader import stats as data_stats, load
 from engine.recommender import recommend as run_recommend, Brief
 from engine.linter import lint as run_lint, compute_score
 from engine.discovery import FIELDS, DiscoveryState, next_question, record, is_complete, serialize
+from engine.foundations.audience import FIELDS_HELP as BRIEF_FIELDS_HELP
 from engine.generator import generate as run_generate, design_md as run_design_md
 from engine.installer import install as run_install, detect_ides, SUPPORTED
 from engine.persist import save_master, save_page, load_master, list_pages
@@ -178,14 +186,31 @@ else:
             return payload["brand"]
         return payload if isinstance(payload, dict) else None
 
+    def _page_root(html_path):
+        """The project folder a page's links may reach: the working folder
+        when the page is inside it, else the page's own folder."""
+        page = Path(html_path).resolve()
+        here = Path.cwd().resolve()
+        return str(here if here in page.parents else page.parent)
+
+    def _existing_system(root):
+        """The `ux system detect` result for ``root`` when it found a system, else None."""
+        from engine.existing import detect_existing_system
+        found = detect_existing_system(root or ".")
+        return found if found.get("found") else None
+
     @cli.command("brand")
     @click.option("--signals-file", type=click.Path(exists=True), required=False,
                   help="JSON of captured brand signals (logo_colors, logo, fonts, voice, imagery).")
     @click.option("--from-brand-md", "from_brand_md", type=click.Path(exists=True), required=False,
                   help="An EXISTING open-standard brand.md to ingest (instead of extracting).")
     @click.option("--out", default=".ux", help="Output dir for brand.md + brand.json (default .ux).")
+    @click.option("--project-root", default=".",
+                  help="Project whose files are read with the signals (default: here): a "
+                       "declared primary in its tokens beats logo pixels, and its HTML sets "
+                       "the language.")
     @click.pass_context
-    def brand_cmd(ctx, signals_file, from_brand_md, out) -> None:
+    def brand_cmd(ctx, signals_file, from_brand_md, out, project_root) -> None:
         """Build brand.md + brand.json from captured signals OR an existing brand.md.
 
         Two mutually-exclusive inputs:
@@ -208,6 +233,11 @@ else:
             profile = parse_brand_md(Path(from_brand_md).read_text(encoding="utf-8"))
         elif signals_file:
             signals = json.loads(Path(signals_file).read_text(encoding="utf-8"))
+            if not isinstance(signals.get("declared"), dict):
+                from engine.existing import detect_existing_system
+                declared = detect_existing_system(project_root).get("declared") or {}
+                if declared:
+                    signals["declared"] = declared
             profile = build_profile(signals)
         else:
             raise click.UsageError(
@@ -225,6 +255,9 @@ else:
             "name": profile.name,
             "primary": profile.primary,
             "primary_source": profile.primary_source,
+            "logo_primary": profile.logo_primary,
+            "text_color": profile.text_color,
+            "language": profile.language,
             "display_source": profile.fonts.get("display_source"),
         }, ctx.obj["pretty"])
 
@@ -244,9 +277,12 @@ else:
                   help="Existing site/brand URL. Arms the capture gate: if set but no brand is "
                        "captured (--brand-file), recommend warns loudly instead of silently "
                        "shipping the house palette as brand:None.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here). When "
+                       "one is found its tokens win and palette and type_pair are suggestions.")
     @click.pass_context
     def recommend_cmd(ctx, project_type, industry, audience, tone, must_have, forbidden,
-                      stack, region, brief_file, brand_file, brand_url) -> None:
+                      stack, region, brief_file, brand_file, brand_url, project_root) -> None:
         """Run the 5-parallel-search recommender."""
         if brief_file:
             payload = json.loads(Path(brief_file).read_text(encoding="utf-8"))
@@ -281,6 +317,7 @@ else:
             brief.brand = _load_brand_dict(brand_file)
         if brand_url:
             brief.brand_url = brand_url
+        brief.existing_system = _existing_system(project_root)
         rec = run_recommend(brief)
         _emit(rec.to_dict(), ctx.obj["pretty"])
 
@@ -372,14 +409,22 @@ else:
     @cli.command("generate")
     @click.option("--brief-file", type=click.Path(exists=True), required=False)
     @click.option("--out-dir", default="./.ux/generated")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here). When "
+                       "one is found the emitted tokens are suggestions its tokens override.")
     @click.pass_context
-    def generate_cmd(ctx, brief_file, out_dir) -> None:
+    def generate_cmd(ctx, brief_file, out_dir, project_root) -> None:
         """Emit tokens + manifest from a recommendation."""
         if brief_file:
+            from engine.recommender import BriefError, brief_from_dict
             brief_payload = json.loads(Path(brief_file).read_text(encoding="utf-8"))
-            brief = Brief(**brief_payload)
+            try:
+                brief = brief_from_dict(brief_payload, "--brief-file")
+            except BriefError as exc:
+                raise click.UsageError(str(exc)) from None
         else:
             brief = Brief()
+        brief.existing_system = _existing_system(project_root)
         rec = run_recommend(brief)
         bundle = run_generate(rec, brief, out_dir)
         _emit(bundle.to_dict(), ctx.obj["pretty"])
@@ -391,21 +436,64 @@ else:
     @click.option("--brand-file", type=click.Path(exists=True), required=False,
                   help="A brand.json from `ux brand` to anchor the palette and type on your brand.")
     @click.option("--out", default="./DESIGN.md", help="Where to write the DESIGN.md.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here).")
+    @click.option("--from-system", is_flag=True,
+                  help="Write the DESIGN.md from the project's existing design system, in its "
+                       "own naming, instead of from the engine's picks.")
     @click.pass_context
-    def design_md_cmd(ctx, brief_file, brand_file, out) -> None:
+    def design_md_cmd(ctx, brief_file, brand_file, out, project_root, from_system) -> None:
         """Emit a DESIGN.md (Google Stitch / awesome-design-md standard) from a recommendation.
 
         Pipeline: `ux brand` -> brand.json -> `ux design-md --brand-file brand.json`
         emits a DESIGN.md anchored on that brand (same brand flow as recommend/synthesize).
+
+        An existing design system is fixed input. When `ux system detect` finds
+        one under --project-root, design-md writes nothing (exit 1) unless
+        --from-system is given, which mirrors that system. It never overwrites
+        a DESIGN.md it did not write. Exit 2 for a bad brief.
         """
+        from engine.generator import DesignMdRefused, design_md_from_system
+        from engine.recommender import BriefError, brief_from_dict
+        brief = Brief()
         if brief_file:
-            brief = Brief(**json.loads(Path(brief_file).read_text(encoding="utf-8")))
-        else:
-            brief = Brief()
-        if brand_file:
-            brief.brand = _load_brand_dict(brand_file)
-        rec = run_recommend(brief)
-        result = run_design_md(rec, brief, out)
+            try:
+                payload = json.loads(Path(brief_file).read_text(encoding="utf-8"))
+            except ValueError as exc:
+                raise click.UsageError(
+                    f"--brief-file {brief_file} is not valid JSON ({exc}); fix the file or pass "
+                    'a JSON object such as {"industry": "saas"}') from None
+            try:
+                brief = brief_from_dict(payload, "--brief-file")
+            except BriefError as exc:
+                raise click.UsageError(str(exc)) from None
+        existing = _existing_system(project_root)
+        try:
+            if from_system:
+                if not existing:
+                    raise click.UsageError(
+                        f"--from-system was given but no existing design system was found under "
+                        f"{project_root}; pass --project-root with the folder that holds it, or "
+                        "drop --from-system")
+                result = design_md_from_system(existing, out)
+            else:
+                if existing:
+                    paths = ", ".join(s["path"] for s in existing["sources"][:6])
+                    click.echo(
+                        f"Error: {project_root} has an existing design system ({paths}). "
+                        "design-md did not write a DESIGN.md, because the engine's picks could "
+                        "contradict it. Pass --from-system to write one from that system, or use "
+                        "the system's own files as the contract.", err=True)
+                    sys.exit(1)
+                if brand_file:
+                    brief.brand = _load_brand_dict(brand_file)
+                rec = run_recommend(brief)
+                result = run_design_md(rec, brief, out)
+        except DesignMdRefused as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(1)
+        if result.get("note"):
+            click.echo(result["note"], err=True)
         _emit(result, ctx.obj["pretty"])
 
     # -------- ux persist -------------------------------------------------
@@ -460,8 +548,15 @@ else:
         brief_dict = _load_brief_dict(from_brief)
         brief_obj = _brief_dict_to_dataclass(brief_dict)
         rec_dict = _load_recommendation_dict(from_recommendation, brief_obj)
-        path = save_master(project_root, rec_dict, brief_dict)
-        _emit({"path": path}, ctx.obj["pretty"])
+        from engine.persist import save_master_result
+        try:
+            result = save_master_result(project_root, rec_dict, brief_dict)
+        except ValueError as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(1)
+        if result["wrote_beside"]:
+            click.echo(result["note"], err=True)
+        _emit(result, ctx.obj["pretty"])
 
     @persist_grp.command("save-page")
     @click.argument("name")
@@ -478,8 +573,15 @@ else:
             payload = json.loads(Path(from_output).read_text(encoding="utf-8"))
             if isinstance(payload, dict):
                 output = payload
-        path = save_page(project_root, name, brief_dict, output)
-        _emit({"path": path}, ctx.obj["pretty"])
+        from engine.persist import save_page_result
+        try:
+            result = save_page_result(project_root, name, brief_dict, output)
+        except ValueError as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(1)
+        if result["wrote_beside"]:
+            click.echo(result["note"], err=True)
+        _emit(result, ctx.obj["pretty"])
 
     @persist_grp.command("load")
     @click.option("--project-root", default=".")
@@ -509,8 +611,10 @@ else:
     @click.option("--save", type=click.Path(),
                   default=".ux/last-image-extract.json",
                   help="Path to write the JSON result; pass empty string to skip.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here).")
     @click.pass_context
-    def image_extract_cmd(ctx, path, with_recommendation, save) -> None:
+    def image_extract_cmd(ctx, path, with_recommendation, save, project_root) -> None:
         """Read a design image, return brief + hints + (optional) recommendation.
 
         Pure CV pipeline — Pillow only. Extracts the dominant 5 colors via
@@ -540,7 +644,9 @@ else:
                 if k in {"project_type", "industry", "audience", "tone",
                          "must_have", "forbidden", "stack", "region"}
             }
-            rec = run_recommend(Brief(**brief_kwargs))
+            image_brief = Brief(**brief_kwargs)
+            image_brief.existing_system = _existing_system(project_root)
+            rec = run_recommend(image_brief)
             result["recommendation"] = rec.to_dict()
 
         # Strip the embedded matched_palette / matched_style dicts from the
@@ -601,9 +707,12 @@ else:
                   help="Extracted client brand.json -- stamps the client's primary/type over the synthesis.")
     @click.option("--strict", is_flag=True, help="With --brand: 100% brand tokens, no synthesis.")
     @click.option("--no-log", is_flag=True, help="Don't write to .ux/decisions.jsonl.")
+    @click.option("--project-root", default=".",
+                  help="Project to check for an existing design system (default: here). When "
+                       "one is found the synthesis is a suggestion its tokens override.")
     @click.pass_context
     def synthesize_cmd(ctx, industry, tone, audience, must_have, forbidden,
-                       brand, brand_file, strict, no_log) -> None:
+                       brand, brand_file, strict, no_log, project_root) -> None:
         """Synthesize a fresh design language from a brief (v2.1).
 
         Modes (auto-dispatched):
@@ -642,11 +751,14 @@ else:
             })
         except Exception:
             pass
-        _emit(sys_out.to_dict(), ctx.obj["pretty"])
+        from engine.existing import mark_suggestions
+        _emit(mark_suggestions(sys_out.to_dict(), _existing_system(project_root)),
+              ctx.obj["pretty"])
 
     # -------- ux system-pack (v3.1) ---------------------------------------
 
-    @cli.command("system-pack")
+    @cli.command("system-pack",
+                 short_help="3.x system folder. For the 4.0 engine: system build.")
     @click.option("--industry", default="", help="Industry id (e.g. fintech-payments).")
     @click.option("--tone", multiple=True, help="Tone tags (repeatable).")
     @click.option("--audience", multiple=True, help="Audience tags (repeatable).")
@@ -725,6 +837,8 @@ else:
             force=force,
             max_rounds=max_rounds,
             brand_profile=_load_brand_dict(brand_file),
+            base_dir=str(Path(html_path).resolve().parent),
+            root=_page_root(html_path),
         )
 
         # Persist outputs only if above gate or forced
@@ -757,6 +871,294 @@ else:
         _emit(result.to_dict(), ctx.obj["pretty"])
         # Exit code: 0 = above gate or forced; 1 = gate failed
         sys.exit(0 if (result.above_gate or result.forced) else 1)
+
+    # -------- ux system build (4.0 beta) ---------------------------------
+
+    @cli.group("system")
+    def system_grp() -> None:
+        """Build a WCAG-gated design system (4.0 foundations engine), or find, read,
+        measure, extend and export an existing one."""
+
+    @system_grp.command("build")
+    @click.option("--brand", required=True,
+                  help="Brand color as hex. Quote it in a shell ('#3366FF') or drop the #.")
+    @click.option("--brief", "brief_path", type=click.Path(dir_okay=False), default=None,
+                  help="JSON brief (or .ux/last-discovery.json); the synthesizer places the axes "
+                       "from industry, tone, audience, must_have and forbidden, then applies "
+                       "the character nudges. "
+                       + BRIEF_FIELDS_HELP)
+    @click.option("--axes", "axes_text", default=None,
+                  help="Seven numbers from 0 to 1: warmth,contrast,density,geometry,"
+                       "formality,motion,type_personality.")
+    @click.option("--latin-only", is_flag=True,
+                  help="Leave out the Arabic face and scale.")
+    @click.option("--out", "out_dir", required=True,
+                  help="Folder for tokens.json, tokens.css, fonts.css, fonts-self-host.css, "
+                       "system-report.md and art/.")
+    @click.option("--rule-pack", "rule_pack", is_flag=True,
+                  help="Also write the AI rule pack into --out/rule-pack/: per foundation "
+                       "architecture, reference, audit and handoff files, plus the contracts "
+                       "and decision records.")
+    @click.option("--force", is_flag=True,
+                  help="Replace files in --out that differ. Without it nothing is overwritten.")
+    @click.option("--replace-client-files", "replace_client", is_flag=True,
+                  help="Also replace files in --out that ux-skill did not build, such as a "
+                       "client's own tokens.json. --force alone never does.")
+    @click.pass_context
+    def system_build_cmd(ctx, brand, brief_path, axes_text, latin_only, out_dir, rule_pack,
+                         force, replace_client) -> None:
+        """Build tokens.json, tokens.css, fonts.css, fonts-self-host.css,
+        system-report.md and art/ into --out, and with --rule-pack the rule
+        pack into --out/rule-pack/.
+
+        Axes come from --brief, else --axes, else 0.5 on every axis; the
+        report says which. Exit 0 when the files are written or already
+        identical, 1 when nothing was written (a gate, validation or rule
+        pack finding, a file in --out that differs, or the folder could not
+        be written), 2 for a bad input.
+        """
+        from engine.foundations.emit import (
+            STATUS_EXIT, InputError, brief_audience, brief_words, check_out_dir, choose_axes,
+            failure_text,
+            make_system, note_rule_pack, nudge_lines, parse_brand, read_brief, resolve_arabic,
+            unread_lines, write_outcome)
+        try:
+            brand_hex = parse_brand(brand, "--brand")
+            brief = read_brief(brief_path, "--brief") if brief_path else None
+            axes, source = choose_axes(brief, axes_text, brief_label="--brief",
+                                       axes_label="--axes")
+            audience = brief_audience(brief, "--brief")
+            words = brief_words(brief, "--brief")
+            arabic = resolve_arabic(latin_only, audience, "--latin-only")
+            out = check_out_dir(out_dir, "--out")
+        except InputError as exc:
+            raise click.UsageError(str(exc)) from None
+        system = make_system(brand_hex, axes, source, arabic=arabic, rule_pack=rule_pack,
+                             audience=audience, unread=unread_lines(brief, "--brief"),
+                             nudges=nudge_lines(brief, "--brief"), words=words)
+        system = note_rule_pack(system, out, force=force)
+        from engine.existing import client_files_in
+        theirs = client_files_in(out, system.files) if (force and not replace_client) else []
+        if theirs:
+            outcome = {
+                "status": "refused", "written": [], "unchanged": [], "conflicts": theirs,
+                "stale_rule_pack": None,
+                "message": (f"Nothing was written: {out} holds a design system ux-skill did not "
+                            f"build, and {', '.join(theirs)} would be replaced. An existing "
+                            "design system is fixed input. Build into a new folder, or pass "
+                            "--replace-client-files as well as --force to replace them."),
+            }
+        else:
+            outcome = write_outcome(system, out, force=force)
+            from engine.existing.record import RECORD, record_unchanged
+            # A folder built before the record existed gains it on a build
+            # that finds every file unchanged, so --force can later tell the
+            # engine's files from the owner's edits.
+            if outcome["status"] == "unchanged" and record_unchanged(out, system.files):
+                outcome["message"] += (f" Recorded the files in {out / RECORD}, so --force can "
+                                       "tell them from files you edit.")
+        status = outcome["status"]
+        _emit({**system.to_dict(), "out": str(out), **outcome}, ctx.obj["pretty"])
+        if status == "failed":
+            click.echo(failure_text(system), err=True, nl=False)
+        elif status == "error":
+            click.echo(f"Error: {outcome['message']}\n", err=True, nl=False)
+        if STATUS_EXIT[status]:
+            sys.exit(STATUS_EXIT[status])
+
+    @system_grp.command("detect")
+    @click.option("--root", default=".", help="Project root to look in (default: here).")
+    @click.pass_context
+    def system_detect_cmd(ctx, root) -> None:
+        """Find an existing design system and print what it declares.
+
+        Looks for a DTCG or tokens.json file, a token build script, CSS
+        custom-property foundation files, MASTER.md, DESIGN.md, a
+        design-system/ folder or a packages/tokens folder. Reads files only.
+        An existing system is fixed input: every command reads it first and
+        none overrides it. Exit 0 either way; "found" says which.
+        """
+        from engine.existing import detect_existing_system
+        if not Path(root).expanduser().is_dir():
+            click.echo(f"Error: --root {root} does not exist or is not a folder; pass the "
+                       "project folder, for example --root .", err=True)
+            sys.exit(2)
+        _emit(detect_existing_system(root), ctx.obj["pretty"])
+
+    # -------- ux system import|enhance|extend|export, contracts check -----
+
+    from engine.io.read import CHOICES as _FORMATS
+
+    def _io(ctx, fn, *args, figma_modes=(), **kwargs) -> None:
+        """Run a command from engine.io.commands: JSON on stdout, the exit
+        code by status, a bad input as a usage error naming the flag."""
+        from engine.foundations.emit import InputError
+        from engine.io.commands import EXIT, parse_modes
+        try:
+            if figma_modes:
+                kwargs["second_modes"] = parse_modes(figma_modes)
+            result = fn(*args, **kwargs)
+        except InputError as exc:
+            raise click.UsageError(str(exc)) from None
+        _emit(result, ctx.obj["pretty"])
+        if result["status"] in ("error", "refused"):
+            click.echo(f"Error: {result['message']}\n", err=True, nl=False)
+        if EXIT[result["status"]]:
+            sys.exit(EXIT[result["status"]])
+
+    _FROM = click.option(
+        "--from", "source", required=True, multiple=True,
+        help="The system: tokens.json, a stylesheet, a Tailwind theme, a markdown file or "
+             "folder, a Figma variables export, or a project folder (read as the set system "
+             "detect finds). Repeat it to read a stylesheet with the system, such as the app's "
+             "globals holding the dark values: the system first, each stylesheet after it.")
+    _FORMAT = click.option("--format", "fmt", type=click.Choice(_FORMATS), default="auto",
+                           help="Read the first --from as this format; auto tells it from the "
+                                "file.")
+    _FIGMA = click.option("--figma-mode", "figma_modes", multiple=True,
+                          help="For a Figma collection with more than two modes, the second "
+                               "mode to read: collection=mode.")
+    _OUT = click.option("--out", "out", default=None,
+                        help="Folder to write into, after every source is checked and backed "
+                             "up.")
+    _FORCE = click.option("--force", is_flag=True,
+                          help="Replace files in --out that ux-skill wrote and that differ; each "
+                               "is backed up first.")
+    _MAPPING = click.option("--mapping", "mapping", default=None,
+                            help="mapping.json saying which tokens play the engine's roles; it is "
+                                 "merged with a proposal from names, and its entries win.")
+
+    @system_grp.command("import")
+    @_FROM
+    @_FORMAT
+    @_FIGMA
+    @_OUT
+    @_FORCE
+    @click.pass_context
+    def system_import_cmd(ctx, source, fmt, figma_modes, out, force) -> None:
+        """Read an existing system in its own names and report what was read,
+        what was not, who owns it, and a proposed mapping to the engine's
+        roles. With --out, write import-report.md and mapping.json; a
+        mapping.json already there is kept, and the result names what the
+        proposal would add to it."""
+        from engine.io.commands import run_import
+        _io(ctx, run_import, list(source), fmt=fmt, out=out, force=force,
+            figma_modes=figma_modes)
+
+    @system_grp.command("enhance")
+    @_FROM
+    @_FORMAT
+    @_FIGMA
+    @_MAPPING
+    @click.option("--scan", "scan", multiple=True, type=click.Path(exists=True),
+                  help="A folder or file of product code to measure; repeat for more.")
+    @_OUT
+    @_FORCE
+    @click.pass_context
+    def system_enhance_cmd(ctx, source, fmt, figma_modes, mapping, scan, out, force) -> None:
+        """Measure an existing system and the code that uses it: unused tokens,
+        raw values, values written many ways, names that lie, classes no
+        token explains, and the gate through the mapping. A report only;
+        nothing is rewritten."""
+        from engine.io.commands import run_enhance
+        _io(ctx, run_enhance, list(source), fmt=fmt, mapping=mapping, scan=scan, out=out,
+            force=force, figma_modes=figma_modes)
+
+    @system_grp.command("extend")
+    @_FROM
+    @_FORMAT
+    @_FIGMA
+    @_MAPPING
+    @click.option("--add", "add", multiple=True,
+                  help="A foundation to add: color, type, space, layout, radius, border, "
+                       "elevation, motion or imagery; repeat for more.")
+    @click.option("--add-role", "add_role", multiple=True,
+                  help="role=token: point one of the engine's roles at one of your tokens.")
+    @click.option("--add-mode", "add_mode", multiple=True,
+                  help="A mode axis the system does not have to add with the foundations: "
+                       "contrast, motion or density; repeat for more. Without it none is "
+                       "added.")
+    @click.option("--contract", "contracts", multiple=True, type=click.Path(exists=True),
+                  help="A contract .yaml to check and add; repeat for more.")
+    @click.option("--brand", default=None,
+                  help="Brand color for added color; without it the system's own primary "
+                       "fill is used.")
+    @click.option("--axes", "axes_text", default=None,
+                  help="Seven numbers from 0 to 1 that shape an added foundation.")
+    @click.option("--brief", "brief_path", type=click.Path(dir_okay=False), default=None,
+                  help="JSON brief that places the axes for an added foundation, as system "
+                       "build reads it. " + BRIEF_FIELDS_HELP)
+    @click.option("--latin-only", is_flag=True, help="Add type without the Arabic face.")
+    @click.option("--out", "out", required=True,
+                  help="Folder for mapping.json, extend-report.md and the contracts. The "
+                       "additions go beside the system, where they load from.")
+    @_FORCE
+    @click.option("--replace-client-files", "replace_client", is_flag=True,
+                  help="Also replace a file of yours in the way, such as your own fonts.css "
+                       "beside the system, after a backup. --force alone never does.")
+    @click.pass_context
+    def system_extend_cmd(ctx, source, fmt, figma_modes, mapping, add, add_role, add_mode,
+                          contracts, brand, axes_text, brief_path, latin_only, out, force,
+                          replace_client) -> None:
+        """Add foundations, roles or contracts to an existing system without
+        changing a token it has. A system ux-skill wrote is written again in
+        place; any other gets an extension file in its own format beside it,
+        which the report says how to load. When the result does not pass,
+        only extend-report.md is written and the exit code is 1."""
+        from engine.foundations.emit import InputError, read_brief
+        from engine.io.commands import run_extend
+        try:
+            brief = read_brief(brief_path, "--brief") if brief_path else None
+        except InputError as exc:
+            raise click.UsageError(str(exc)) from None
+        _io(ctx, run_extend, list(source), fmt=fmt, mapping=mapping, add=add,
+            add_role=add_role, add_mode=add_mode, contracts=contracts, brand=brand,
+            axes=axes_text, brief=brief,
+            latin_only=latin_only, out=out, force=force, replace_client=replace_client,
+            figma_modes=figma_modes)
+
+    @system_grp.command("export")
+    @_FROM
+    @_FORMAT
+    @_FIGMA
+    @click.option("--to", "to", required=True,
+                  type=click.Choice(("css", "tailwind", "figma", "dtcg")),
+                  help="css (tokens.css), tailwind (a Tailwind 4 theme), figma (variables and "
+                       "the script that applies them) or dtcg (tokens.json).")
+    @click.option("--scheme", "scheme", default=None,
+                  type=click.Choice(("system", "light", "dark")),
+                  help="The scheme the CSS or Tailwind file opens in. A stylesheet keeps its "
+                       "own; tokens.json holds none, so it opens in system when left out.")
+    @_OUT
+    @_FORCE
+    @click.pass_context
+    def system_export_cmd(ctx, source, fmt, figma_modes, to, scheme, out, force) -> None:
+        """Write a system in another format into --out, never over its source.
+        Without --out it reports the files and their sizes and writes
+        nothing."""
+        from engine.io.commands import run_export
+        _io(ctx, run_export, list(source), fmt=fmt, to=to, scheme=scheme, out=out, force=force,
+            figma_modes=figma_modes)
+
+    @cli.group("contracts")
+    def contracts_grp() -> None:
+        """Component contracts: check the ones you write."""
+
+    @contracts_grp.command("check")
+    @click.argument("folder", type=click.Path(exists=True, file_okay=False))
+    @click.option("--tokens", "tokens", required=True, multiple=True,
+                  type=click.Path(exists=True),
+                  help="The system: tokens.json or any source system import reads; repeat it "
+                       "to read a stylesheet with it.")
+    @_FORMAT
+    @_MAPPING
+    @click.pass_context
+    def contracts_check_cmd(ctx, folder, tokens, fmt, mapping) -> None:
+        """Check every contract in FOLDER against a system: the schema, every
+        role it binds, and every pairing it declares, measured in every
+        mode. Exit 1 when a contract has a problem."""
+        from engine.io.commands import run_contracts_check
+        _io(ctx, run_contracts_check, folder, list(tokens), fmt=fmt, mapping=mapping)
 
     # -------- ux version -------------------------------------------------
 

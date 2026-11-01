@@ -1,0 +1,6 @@
+.back-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  scroll-behavior: smooth;
+}

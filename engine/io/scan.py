@@ -1,0 +1,1674 @@
+"""Measure what a codebase uses: the values written in CSS (plain, SCSS or
+Less, nested rules and at-rules included, and <style> blocks), in style
+attributes (HTML, Blade, Vue, Svelte, Astro), in JSX style props, emotion's
+css={{...}} and MUI's sx={{...}} objects (nested selectors such as
+'&:hover' included), in CSS-in-JS template literals (styled, css,
+keyframes) and in Tailwind classes. Each use records its file, line, property, the family it belongs
+to (color, space, radius, border, type-size, leading, tracking, weight,
+font, shadow, duration, motion, z), whether it names a token or writes a
+raw value, and the state it applies in.
+
+A raw value is kept in one canonical form (a color as #RRGGBB, a length in
+px, a duration in ms) beside the text as written, so the drift report can
+tell a value written many ways. Values are read by the importers' value
+reader (values_in), so an out-of-gamut oklch() is mapped into sRGB, never
+refused; the CSS named colors (red, navy, rebeccapurple) are read too,
+wherever a property takes a color. The font shorthand is read by its
+parts: weight, size, line height and family. A var() reference is a use
+of the token it names, or "missing" when the system has no such token. A
+custom property, SCSS or Less variable set in the app's own CSS is a
+definition, not a raw use, and so is an @font-face or @property block;
+Scan.declared lists the custom properties the code declares, so a report
+can tell a var() to one of them from a token the system lacks.
+Scan.dark lists each custom property a stylesheet sets in the dark scheme,
+and Scan.reduced_motion each rule a stylesheet sets under
+prefers-reduced-motion: reduce, so a report can say the code turns motion
+down even where the system has no mode for it.
+
+What the scanner sees and cannot measure is listed in Scan.not_read, each
+entry with why and the fix, so a report can say what it did not count: a
+value with no single reading in a property that carries a family (calc(),
+em, %, a template or preprocessor value), an interpolation inside a
+CSS-in-JS template, a style, css or sx prop bound to an expression, a
+spread or a computed entry in a style object, a value MUI looks up in its
+theme (p: 2, borderRadius: 2, color: 'primary.main') or sets per
+breakpoint (p: { xs: 1, md: 2 }, with each breakpoint named), an arbitrary class
+whose value does not read, and a <style> block or template that does not
+parse. Values in
+properties that carry no family (display, width) and CSS keywords (auto,
+inherit, currentColor) are neither uses nor listed.
+
+A Tailwind class names a token when the system has one in the class's theme
+namespace, in the names the Tailwind importer gives them (bg-ink reads
+color-ink from a v4 @theme, or colors.ink from a v3 theme exported as
+JSON); a numeric spacing class reads the v4 --spacing step. An arbitrary
+class (p-[13px]) is a raw value, and a bare value Tailwind writes as it is
+(z-10, duration-150, border-2) is raw too, and so is a step of Tailwind's
+own spacing scale (px-6 is 24px, inset-0 is 0px) when the project's theme
+keeps that scale: a config read in full, presets included, that extends
+spacing rather than replacing it, or an @theme block with no spacing
+reset. Each step is that many of the @theme block's --spacing base (4px
+when it sets none); a base that is not a length is listed as not
+measured. A value class that names no
+token is listed apart in unknown_classes, with the namespaces it was
+looked up in and a token of its name outside them (bg-primary against a
+bare --primary); a class that sets a keyword
+(text-center, border-solid) is not a value. Raw class values and unknown
+classes are kept only when the code shows it uses Tailwind: a variant
+(hover:, dark:, md:), an arbitrary class, a Tailwind at-rule (@import
+"tailwindcss", @tailwind, @theme, @apply), a tailwind.config file or a
+postcss config that loads Tailwind; a class that names one of the system's
+tokens is always kept. Variants are states: hover, focus, active and
+disabled (group- and peer- forms included), pressed, selected and current
+(aria-pressed:, aria-selected:, aria-current:), and dark: records the
+scheme as the importers name it, scheme:dark. CSS records the same from
+its selectors and queries, and reads active, pressed, selected and current
+from a class (.active, .is-selected) or an ARIA attribute
+([aria-pressed=true], [aria-selected=true], [aria-current]) too, a
+pseudo-class winning in the same selector. A selector list whose members
+are in different states records each use once per state (.btn:hover,
+.btn:focus-visible is a hover use and a focus use). A state joins the
+scheme first: "scheme:dark,hover".
+
+The scanner only reads files and never runs code. It walks folders sorted,
+skips SKIP_DIRS and hidden folders, the paths in `exclude` (files or
+folders, such as the system's own source), and reports in Scan.skipped each
+file it does not read: one that is not a regular file, one larger than
+MAX_BYTES, a binary file, text that is not UTF-8, a minified build file and
+a stylesheet whose blocks do not close. With several roots, each file is
+named by its path from the folder the roots share, and read once.
+"""
+from __future__ import annotations
+
+import os
+import re
+import stat
+from bisect import bisect_right
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import (Any, Callable, Dict, Iterable, Iterator, List, NamedTuple, Optional,
+                    Sequence, Set, Tuple)
+
+from engine.foundations.errors import InputError, _brief_text
+from engine.foundations.tokens import AliasError, TokenSet
+from engine.foundations.values import STROKE_STYLES, TYPES, dimension_px, duration_ms
+from engine.io.css_in import THEME_ATTR, _blank_comments, _without_not, parse_css
+from engine.io.tailwind_config import ThemeMap, read_theme
+from engine.io.values_in import CSS_KEYWORDS, NotRead, read_value, split_top
+
+SKIP_DIRS = ("node_modules", ".git", "dist", "build", "vendor", ".next", "out", "coverage",
+             ".venv", "venv", "__pycache__", ".nuxt", ".svelte-kit", ".turbo", ".cache",
+             "bower_components", "target", ".output", "storage")
+CSS_EXT = (".css", ".scss", ".less")
+MARKUP_EXT = (".html", ".htm", ".php", ".vue", ".svelte", ".astro")
+SCRIPT_EXT = (".jsx", ".tsx", ".js", ".ts", ".mjs", ".cjs")
+# A file larger than this is build output or data, not code a person writes.
+MAX_BYTES = 1_000_000
+
+# The 148 CSS Color 4 named colors (transparent is read by values_in).
+_NAMED = (
+    "aliceblue F0F8FF antiquewhite FAEBD7 aqua 00FFFF aquamarine 7FFFD4 azure F0FFFF "
+    "beige F5F5DC bisque FFE4C4 black 000000 blanchedalmond FFEBCD blue 0000FF "
+    "blueviolet 8A2BE2 brown A52A2A burlywood DEB887 cadetblue 5F9EA0 chartreuse 7FFF00 "
+    "chocolate D2691E coral FF7F50 cornflowerblue 6495ED cornsilk FFF8DC crimson DC143C "
+    "cyan 00FFFF darkblue 00008B darkcyan 008B8B darkgoldenrod B8860B darkgray A9A9A9 "
+    "darkgreen 006400 darkgrey A9A9A9 darkkhaki BDB76B darkmagenta 8B008B "
+    "darkolivegreen 556B2F darkorange FF8C00 darkorchid 9932CC darkred 8B0000 "
+    "darksalmon E9967A darkseagreen 8FBC8F darkslateblue 483D8B darkslategray 2F4F4F "
+    "darkslategrey 2F4F4F darkturquoise 00CED1 darkviolet 9400D3 deeppink FF1493 "
+    "deepskyblue 00BFFF dimgray 696969 dimgrey 696969 dodgerblue 1E90FF firebrick B22222 "
+    "floralwhite FFFAF0 forestgreen 228B22 fuchsia FF00FF gainsboro DCDCDC "
+    "ghostwhite F8F8FF gold FFD700 goldenrod DAA520 gray 808080 green 008000 "
+    "greenyellow ADFF2F grey 808080 honeydew F0FFF0 hotpink FF69B4 indianred CD5C5C "
+    "indigo 4B0082 ivory FFFFF0 khaki F0E68C lavender E6E6FA lavenderblush FFF0F5 "
+    "lawngreen 7CFC00 lemonchiffon FFFACD lightblue ADD8E6 lightcoral F08080 "
+    "lightcyan E0FFFF lightgoldenrodyellow FAFAD2 lightgray D3D3D3 lightgreen 90EE90 "
+    "lightgrey D3D3D3 lightpink FFB6C1 lightsalmon FFA07A lightseagreen 20B2AA "
+    "lightskyblue 87CEFA lightslategray 778899 lightslategrey 778899 "
+    "lightsteelblue B0C4DE lightyellow FFFFE0 lime 00FF00 limegreen 32CD32 linen FAF0E6 "
+    "magenta FF00FF maroon 800000 mediumaquamarine 66CDAA mediumblue 0000CD "
+    "mediumorchid BA55D3 mediumpurple 9370DB mediumseagreen 3CB371 "
+    "mediumslateblue 7B68EE mediumspringgreen 00FA9A mediumturquoise 48D1CC "
+    "mediumvioletred C71585 midnightblue 191970 mintcream F5FFFA mistyrose FFE4E1 "
+    "moccasin FFE4B5 navajowhite FFDEAD navy 000080 oldlace FDF5E6 olive 808000 "
+    "olivedrab 6B8E23 orange FFA500 orangered FF4500 orchid DA70D6 palegoldenrod EEE8AA "
+    "palegreen 98FB98 paleturquoise AFEEEE palevioletred DB7093 papayawhip FFEFD5 "
+    "peachpuff FFDAB9 peru CD853F pink FFC0CB plum DDA0DD powderblue B0E0E6 "
+    "purple 800080 rebeccapurple 663399 red FF0000 rosybrown BC8F8F royalblue 4169E1 "
+    "saddlebrown 8B4513 salmon FA8072 sandybrown F4A460 seagreen 2E8B57 seashell FFF5EE "
+    "sienna A0522D silver C0C0C0 skyblue 87CEEB slateblue 6A5ACD slategray 708090 "
+    "slategrey 708090 snow FFFAFA springgreen 00FF7F steelblue 4682B4 tan D2B48C "
+    "teal 008080 thistle D8BFD8 tomato FF6347 turquoise 40E0D0 violet EE82EE "
+    "wheat F5DEB3 white FFFFFF whitesmoke F5F5F5 yellow FFFF00 yellowgreen 9ACD32")
+_WORDS = _NAMED.split()
+NAMED_COLORS: Dict[str, str] = {_WORDS[i]: "#" + _WORDS[i + 1] for i in range(0, len(_WORDS), 2)}
+
+# CSS property -> the family a length in it belongs to.
+_LENGTH_FAMILY = [
+    (re.compile(r"(margin|padding|gap|row-gap|column-gap|inset)(-.*)?$"), "space"),
+    (re.compile(r"border(-.*)?-radius$"), "radius"),
+    (re.compile(r"(border|outline)(-(block|inline|top|right|bottom|left)(-(start|end))?)?"
+                r"(-width)?$"), "border"),
+    (re.compile(r"font-size$"), "type-size"),
+    (re.compile(r"letter-spacing$"), "tracking"),
+    (re.compile(r"line-height$"), "leading"),
+]
+# Properties a color is written in.
+_COLOR_PROPS = re.compile(r"(color|background(-color|-image)?|border(-.*)?(-color)?|"
+                          r"outline(-color)?|fill|stroke|text-decoration(-color)?|"
+                          r"box-shadow|text-shadow|filter|backdrop-filter|mask(-image)?|"
+                          r"border-image(-source)?|column-rule(-color)?|.*-color)$")
+# Properties that hold only a color: a value in them that does not read is
+# listed as not read.
+_COLOR_ONLY = re.compile(r"((.*-)?color|fill|stroke)$")
+_NUMBER_FAMILY = {"z-index": "z", "line-height": "leading", "font-weight": "weight"}
+# A property a var() to a token the system lacks is placed by.
+_PROP_FAMILY = {"box-shadow": "shadow", "font-family": "font", "font-weight": "weight",
+                "z-index": "z", "transition-duration": "duration",
+                "animation-duration": "duration", "transition-delay": "duration",
+                "animation-delay": "duration", "transition-timing-function": "motion",
+                "animation-timing-function": "motion"}
+_WEIGHT_WORDS = {"normal": 400, "bold": 700}
+# Words that take a value from elsewhere or switch a feature off: neither a
+# use nor a value left unread.
+_KEYWORDS = frozenset(CSS_KEYWORDS + STROKE_STYLES + (
+    "normal", "none", "unset", "revert", "hidden", "thin", "medium", "thick", "larger",
+    "smaller", "bolder", "lighter", "min-content", "max-content", "fit-content"))
+_SYSTEM_FONTS = ("caption", "icon", "menu", "message-box", "small-caption", "status-bar")
+# React's style props that take a plain number (any other number is px).
+_UNITLESS = frozenset((
+    "animationIterationCount", "aspectRatio", "borderImageOutset", "borderImageSlice",
+    "borderImageWidth", "boxFlex", "boxFlexGroup", "boxOrdinalGroup", "columnCount", "columns",
+    "flex", "flexGrow", "flexPositive", "flexShrink", "flexNegative", "flexOrder", "gridArea",
+    "gridRow", "gridRowEnd", "gridRowSpan", "gridRowStart", "gridColumn", "gridColumnEnd",
+    "gridColumnSpan", "gridColumnStart", "fontWeight", "lineClamp", "lineHeight", "opacity",
+    "order", "orphans", "scale", "tabSize", "widows", "zIndex", "zoom", "fillOpacity",
+    "floodOpacity", "stopOpacity", "strokeDasharray", "strokeDashoffset", "strokeMiterlimit",
+    "strokeOpacity", "strokeWidth"))
+
+# States: CSS pseudo-classes and attributes, and Tailwind variants.
+_CSS_STATE = re.compile(r":(hover|active|focus-visible|focus-within|focus|disabled)(?![\w-])"
+                        r"|\[(disabled|aria-disabled)[\]=]")
+# A state a class or an ARIA attribute sets: .active, .is-selected,
+# [aria-pressed=true], [aria-current] (any value but false). A pseudo-class
+# in the same selector wins, so .tab.is-active:hover is hover.
+_CLASS_STATE = re.compile(
+    r"\.(?:is-)?(active|pressed|selected|current)(?![\w-])"
+    r"""|\[(aria-pressed|aria-selected)\s*=\s*["']?true["']?\s*\]"""
+    r"""|\[(aria-current)(?:\s*=\s*["']?(?!false\b)[\w-]+["']?)?\s*\]""")
+_STATES = {"hover": "hover", "active": "active", "focus": "focus", "focus-visible": "focus",
+           "focus-within": "focus", "disabled": "disabled", "aria-disabled": "disabled",
+           "pressed": "pressed", "selected": "selected", "current": "current",
+           "aria-pressed": "pressed", "aria-selected": "selected", "aria-current": "current"}
+DARK = "scheme:dark"
+_DARK_SELECTOR = re.compile(r"""\.dark(?![\w-])|\[class~=["']?dark["']?\]|"""
+                            r"""\[""" + THEME_ATTR.pattern + r"""\s*=\s*["']?dark["']?\s*\]""")
+_DARK_MEDIA = re.compile(r"prefers-color-scheme\s*:\s*dark")
+# The query as reduce, or in its boolean form, which means reduce.
+_REDUCED_MEDIA = re.compile(r"prefers-reduced-motion\s*(:\s*reduce\b|\))")
+
+# Words that name a family in a token's name. A raw value is offered only a
+# token named for its own family (a z-index of 400 is not a weight token
+# that holds 400, nor a 16px padding a radius or text size), and a class
+# is sent to a token outside its namespaces only when the token names no
+# other family (rounded-lg is never a text size).
+LINE_WORDS = ("border", "line", "stroke", "outline", "divider", "ring", "separator")
+SPACE_WORDS = ("space", "spacing", "gap", "padding", "margin", "gutter", "inset")
+RADIUS_WORDS = ("radius", "rounded", "corner")
+TYPE_WORDS = ("text", "font", "size", "leading", "tracking")
+FAMILY_WORDS: Dict[str, Tuple[str, ...]] = {
+    "space": SPACE_WORDS, "radius": RADIUS_WORDS, "border": LINE_WORDS, "type-size": TYPE_WORDS,
+    "weight": ("weight", "bold"), "z": ("z", "layer", "zindex")}
+# Tailwind's default spacing step: p-6 is 6 of them, 24px.
+TAILWIND_STEP_PX = 4
+# The steps of Tailwind's default spacing scale (px is 1px); each is a raw
+# value when the project's theme keeps the scale (ThemeMap.keeps).
+TAILWIND_SPACING = frozenset((
+    "px", "0", "0.5", "1", "1.5", "2", "2.5", "3", "3.5", "4", "5", "6", "7", "8", "9", "10",
+    "11", "12", "14", "16", "20", "24", "28", "32", "36", "40", "44", "48", "52", "56", "60",
+    "64", "72", "80", "96"))
+
+# Tailwind: utility prefix -> the theme namespaces its value may name, with
+# the family of a token found in each (v4 @theme names first, then v3 theme
+# keys), and the family a value read from an arbitrary class gets by type.
+_C = (("color", "color"), ("colors", "color"))
+_Namespaces = Tuple[Tuple[str, str], ...]
+_UTILITIES: List[Tuple[re.Pattern, _Namespaces, Dict[str, str]]] = [
+    (re.compile(r"bg"), _C + (("backgroundColor", "color"),), {"color": "color"}),
+    (re.compile(r"text"), _C + (("textColor", "color"), ("text", "type-size"),
+                                ("fontSize", "type-size")),
+     {"color": "color", "dimension": "type-size"}),
+    (re.compile(r"border(-[xytrblse])?"), _C + (("borderColor", "color"),
+                                                ("borderWidth", "border")),
+     {"color": "color", "dimension": "border"}),
+    (re.compile(r"ring|outline"), _C + (("ringColor", "color"), ("outlineColor", "color"),
+                                        ("ringWidth", "border"), ("outlineWidth", "border")),
+     {"color": "color", "dimension": "border"}),
+    (re.compile(r"fill|stroke|decoration|accent|caret|divide(-[xy])?|from|via|to|placeholder"),
+     _C, {"color": "color"}),
+    (re.compile(r"(p|m)[xytrblse]?|gap(-[xy])?|space-[xy]|inset(-[xy])?"),
+     (("spacing", "space"),), {"dimension": "space"}),
+    (re.compile(r"rounded(-([trblse]|tl|tr|br|bl|ss|se|es|ee))?"),
+     (("radius", "radius"), ("borderRadius", "radius")), {"dimension": "radius"}),
+    (re.compile(r"shadow"), (("shadow", "shadow"), ("boxShadow", "shadow")) + _C,
+     {"shadow": "shadow", "color": "color"}),
+    (re.compile(r"font"), (("font", "font"), ("fontFamily", "font"), ("font-weight", "weight"),
+                           ("fontWeight", "weight")), {"fontFamily": "font", "number": "weight"}),
+    (re.compile(r"leading"), (("leading", "leading"), ("lineHeight", "leading")),
+     {"dimension": "leading", "number": "leading"}),
+    (re.compile(r"tracking"), (("tracking", "tracking"), ("letterSpacing", "tracking")),
+     {"dimension": "tracking"}),
+    (re.compile(r"ease"), (("ease", "motion"), ("transitionTimingFunction", "motion")),
+     {"cubicBezier": "motion"}),
+    # Tailwind 4 has no duration namespace; a Tailwind 3 theme has transitionDuration.
+    (re.compile(r"duration"), (("transitionDuration", "duration"),),
+     {"duration": "duration"}),
+    (re.compile(r"z"), (("z", "z"), ("zIndex", "z")), {"number": "z"}),
+]
+# Classes that set a keyword, not a value: never listed as unknown.
+_KEYWORD_CLASS = re.compile(
+    r"text-(left|center|right|justify|start|end|wrap|nowrap|balance|pretty|ellipsis|clip)"
+    r"|(border|outline|decoration|divide)(-[xytrblse])?-(solid|dashed|dotted|double|hidden|none"
+    r"|wavy|collapse|separate)|border-spacing(-.*)?"
+    r"|bg-(fixed|local|scroll|cover|contain|auto|center|top|bottom|left|right|none|repeat.*"
+    r"|no-repeat|clip-.*|origin-.*|blend-.*|gradient-.*|linear-.*|radial.*|conic.*|[a-z]+-top"
+    r"|[a-z]+-bottom)"
+    r"|[a-z-]+-(transparent|current|inherit|none|auto|initial)|rounded(-[a-z]+)?-(none|full)"
+    r"|ring-(inset|offset(-.*)?)|outline-offset(-.*)?|decoration-(from-font|clone|slice)"
+    r"|(space|divide)-[xy]-reverse|ring|outline|shadow-inner")
+_NUMERIC = re.compile(r"\d+(\.\d+)?")
+# Utilities Tailwind writes with no value (border, rounded, shadow).
+_BARE = re.compile(r"border(-[xytrblse])?|rounded(-[a-z]+)?|shadow|ring|outline|divide-[xy]")
+# Tailwind's type hints in an arbitrary value, and the type each one reads.
+_HINT_KINDS = {"color": "color", "length": "dimension", "size": "dimension",
+               "number": "number", "family-name": "fontFamily", "shadow": "shadow",
+               "line-width": "dimension"}
+_REST = re.compile(r"[A-Za-z0-9._-]*")
+_TYPE_HINT = re.compile(r"([a-z][a-z-]*):(?!//)")
+# A Tailwind variant as written before a class (hover, md, group-hover/item,
+# data-[state=open], @lg, min-[400px]); the class after it must start like one.
+_KNOWN_VARIANTS = (
+    "hover|focus|focus-within|focus-visible|active|visited|target|first|last|only|odd|even"
+    "|first-of-type|last-of-type|only-of-type|empty|disabled|enabled|checked|indeterminate"
+    "|default|required|valid|invalid|user-valid|user-invalid|in-range|out-of-range"
+    "|placeholder-shown|autofill|read-only|open|inert|before|after|first-letter|first-line"
+    "|marker|selection|file|backdrop|placeholder|details-content|starting|sm|md|lg|xl|2xl"
+    "|dark|portrait|landscape|motion-safe|motion-reduce|contrast-more|contrast-less|print"
+    "|rtl|ltr|forced-colors|noscript|\\*|\\*\\*")
+_VARIANT = re.compile(r"(?:(?:group|peer)-)?(?:" + _KNOWN_VARIANTS + r")(?:/[\w-]+)?"
+                      r"|(?:group|peer|has|not|in|aria|data|supports|min|max|nth|nth-last"
+                      r"|nth-of-type|nth-last-of-type)-\S+|@\S+|\[.+\]")
+# A class with an arbitrary value (w-[13px], grid-cols-[1fr_2fr], bg-(--x)).
+_ARBITRARY_CLASS = re.compile(r"-?[a-z][a-z0-9-]*-(\[[^\]]+\]|\([^)]+\))(/\S+)?")
+_UTILITY_START = re.compile(r"[!-]?[a-z\[(]")
+# A rule on one class alone (.bg-navy-deep): the project's own class.
+_OWN_CLASS = re.compile(r"\.((?:[A-Za-z_-]|\\.)(?:[\w-]|\\.)*)")
+# At-rules only Tailwind stylesheets write.
+_TAILWIND_CSS = re.compile(r"""@tailwind\b|@import\s+["']tailwindcss|@theme\b|@apply\b"""
+                           r"""|@config\b|@custom-variant\b|@utility\b""")
+
+# Markup and scripts.
+_ATTR_START = re.compile(r"(?<![\w$-])(:|v-bind:|x-bind:)?"
+                         r"(className|class:list|class|style|css|sx)\s*=\s*")
+# MUI's sx shorthands and the CSS property each one sets.
+_SX_ALIASES = {"m": "margin", "mt": "margin-top", "mr": "margin-right", "mb": "margin-bottom",
+               "ml": "margin-left", "mx": "margin-inline", "my": "margin-block",
+               "p": "padding", "pt": "padding-top", "pr": "padding-right",
+               "pb": "padding-bottom", "pl": "padding-left", "px": "padding-inline",
+               "py": "padding-block", "bgcolor": "background-color"}
+# sx keys whose number is a theme step, not px.
+_SX_THEME_NUMBERS = re.compile(r"(margin|padding|gap|row-gap|column-gap|border-radius"
+                               r"|box-shadow)(-.*)?$")
+# An sx string that names a theme entry: a palette path or a typography variant.
+_SX_THEME_PATH = re.compile(r"[a-z][A-Za-z0-9]*(\.[A-Za-z0-9]+)+")
+_STYLE_DIRECTIVE = re.compile(r"""(?<![\w-])style:([a-z-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')""")
+_OBJ_MEMBER = re.compile(r"""(?:([A-Za-z_$][\w$]*)|'([^'\n]*)'|"([^"\n]*)")\s*:\s*(.*)$""",
+                         re.S)
+_JS_LITERAL = re.compile(r"""'([^'\\\n]*)'|"([^"\\\n]*)"|`([^`\\$]*)`|(-?(?:\d+\.?\d*|\.\d+))$""")
+_JS_STRING = re.compile(r""""((?:[^"\\\n]|\\.)*)"|'((?:[^'\\\n]|\\.)*)'|`((?:[^`\\]|\\.)*)`""",
+                        re.S)
+_STYLE_BLOCK = re.compile(r"<style\b([^>]*)>(.*?)</style\s*>", re.S | re.I)
+_PREPROCESSED = re.compile(r"""lang\s*=\s*["']?(scss|sass|less)""", re.I)
+_MARKUP_COMMENT = re.compile(r"<!--.*?-->|\{\{--.*?--\}\}", re.S)
+# SCSS and Less comments: strings, urls and block comments are matched
+# first, so a // inside them is not a comment.
+_SCSS_TOKENS = re.compile(r""""(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'|url\([^)]*\)"""
+                          r"""|/\*(?:.*?\*/|.*)|//[^\n]*""", re.S | re.I)
+_IMPORTANT = re.compile(r"\s*!important\s*$", re.I)
+# A value a template or a preprocessor fills in.
+_TEMPLATE = re.compile(r"\{\{|\{!!|<\?|\$\{|#\{|@\{|^[$@][\w-]+$")
+# CSS-in-JS: a tagged template that holds CSS.
+_CSS_IN_JS = re.compile(r"(?<![\w$.])(styled|css|keyframes|createGlobalStyle|injectGlobal)\b")
+_PLACEHOLDER = re.compile(r"__uxi\d+__")
+_LOOK_AHEAD = 500
+_LINE_IN_ERROR = re.compile(r"line (\d+)")
+
+_WHY_COMPUTED = ("is computed in JavaScript, so its value is not measured; write it as a literal "
+                 "in the style object, or move it to a class or a stylesheet")
+_WHY_STYLE = ("binds the style to an expression, so its values are not measured; write them "
+              "as an object literal, a class or a stylesheet")
+_WHY_SPREAD = ("spreads another object into the style, so those values are not measured; write "
+               "them in this object, a class or a stylesheet")
+_WHY_INTERPOLATION = ("is computed in JavaScript inside the CSS template, so its value is not "
+                      "measured; write a literal or a var() to a token there")
+_WHY_THEME = ("is looked up in the MUI theme (a spacing step, a palette path or a theme "
+              "index), so its value is not measured; write a CSS value such as '8px' or "
+              "'#1F2937', or import the theme as the system")
+_WHY_RESPONSIVE = ("so its values are not measured; set each breakpoint's value in a "
+                   "stylesheet media query or a class, with a CSS value or a var() to a token")
+_WHY_TEMPLATE = ("is filled in by a template or a preprocessor when the page is built, so it is "
+                 "not measured; write the value, or a var() to a token, in a stylesheet")
+
+
+@dataclass(frozen=True)
+class Usage:
+    file: str
+    line: int
+    prop: str      # the CSS property, or the utility class without its variants
+    family: str    # "" when the property puts a token in no family (a width)
+    kind: str      # "token", "raw" or "missing" (a var() to a token the system lacks)
+    value: str     # the token path, the raw value in its canonical form, or --name
+    text: str      # as written
+    state: str     # "", "hover", "active", "focus", "disabled", "pressed", "selected",
+    #                "current", "scheme:dark", or the scheme and one state joined
+
+    def where(self) -> str:
+        return f"{self.file}:{self.line}"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {"file": self.file, "line": self.line, "prop": self.prop,
+                "family": self.family, "kind": self.kind, "value": self.value,
+                "text": self.text, "state": self.state}
+
+
+class _Seen(NamedTuple):
+    file: str
+    line: int
+    kind: str
+    text: str
+
+
+class NotMeasured(_Seen):
+    """Something the scanner saw and could not measure: a (file, line,
+    kind, text) tuple, where kind is value, interpolation, style
+    expression, spread, style value, class or stylesheet and text is as
+    written, with `why` (the reason and the fix, one line) beside it."""
+
+    def __new__(cls, file: str, line: int, kind: str, text: str,
+                why: str = "") -> "NotMeasured":
+        self = super().__new__(cls, file, line, kind, text)
+        self.why = why
+        return self
+
+    def where(self) -> str:
+        return f"{self.file}:{self.line}"
+
+    def _asdict(self) -> Dict[str, Any]:
+        return {**super()._asdict(), "why": self.why}
+
+    def to_dict(self) -> Dict[str, Any]:
+        """The entry with its reason, as JSON takes it."""
+        return dict(self._asdict())
+
+
+class _Class(NamedTuple):
+    file: str
+    line: int
+    cls: str
+
+
+class UnknownClass(_Class):
+    """A value class that names no token: a (file, line, class) tuple,
+    with, beside it, `name` (the value part of the class, gutter in
+    m-gutter), the theme namespaces it was looked up in (`looked_in`, v4
+    @theme names first, then v3 theme keys) and `near`, a token of the
+    system with that name outside those namespaces ("" for none)."""
+
+    def __new__(cls, file: str, line: int, class_: str, looked_in: Tuple[str, ...] = (),
+                near: str = "", name: str = "") -> "UnknownClass":
+        self = super().__new__(cls, file, line, class_)
+        self.looked_in = tuple(looked_in)
+        self.near = near
+        self.name = name
+        return self
+
+    def where(self) -> str:
+        return f"{self.file}:{self.line}"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {"file": self.file, "line": self.line, "class": self.cls, "name": self.name,
+                "looked_in": list(self.looked_in), "near": self.near}
+
+
+@dataclass
+class Scan:
+    usages: List[Usage] = field(default_factory=list)
+    files: int = 0
+    # (file, line, class) for value classes that name no token; each entry
+    # is an UnknownClass, which carries the namespaces looked in beside it
+    unknown_classes: List[UnknownClass] = field(default_factory=list)
+    # (file, why it was not read, with the fix)
+    skipped: List[Tuple[str, str]] = field(default_factory=list)
+    # (file, line, kind, text) for what was seen and could not be measured;
+    # each entry is a NotMeasured, which carries why beside the tuple
+    not_read: List[NotMeasured] = field(default_factory=list)
+    # The custom properties the code declares itself (--name), each once in
+    # the order first seen: a var() to one is the code's own, not a token.
+    declared: List[str] = field(default_factory=list)
+    # (file, line, selector) for each rule a stylesheet sets under
+    # prefers-reduced-motion: reduce, so a report can say the code has
+    # reduced motion even when the system has no mode for it.
+    reduced_motion: List[Tuple[str, int, str]] = field(default_factory=list)
+    # (--name, file, line) for each custom property a stylesheet sets in
+    # the dark scheme, so a report can tell a system whose dark mode lives
+    # in a second file.
+    dark: List[Tuple[str, str, int]] = field(default_factory=list)
+    # (file, why) for each error page or email template read (see
+    # standalone): shown where the app's stylesheet may not load.
+    standalone: List[Tuple[str, str]] = field(default_factory=list)
+    # The Tailwind config, presets and @theme stylesheets the classes were
+    # read through.
+    theme_files: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Everything the scan found, as JSON takes it: each entry not
+        measured with its reason and fix, each unknown class with the
+        namespaces it was looked up in."""
+        def entry(x: Any, keys: Tuple[str, ...]) -> Dict[str, Any]:
+            if hasattr(x, "to_dict"):
+                return x.to_dict()
+            return {**dict(zip(keys, x)), **({"why": ""} if "kind" in keys else {})}
+        return {"files": self.files,
+                "usages": [u.to_dict() for u in self.usages],
+                "unknown_classes": [entry(u, ("file", "line", "class"))
+                                    for u in self.unknown_classes],
+                "not_read": [entry(n, ("file", "line", "kind", "text"))
+                             for n in self.not_read],
+                "skipped": [{"file": f, "why": w} for f, w in self.skipped],
+                "declared": list(self.declared),
+                "reduced_motion": [{"file": f, "line": n, "selector": sel}
+                                   for f, n, sel in self.reduced_motion],
+                "dark": [{"name": p, "file": f, "line": n} for p, f, n in self.dark],
+                "standalone": [{"file": f, "why": w} for f, w in self.standalone],
+                "theme_files": list(self.theme_files)}
+
+
+def _norm(name: str) -> str:
+    return ".".join(p for p in re.split(r"[.\-/_ ]+", name.lower()) if p)
+
+
+def canonical(kind: str, value: Any) -> str:
+    """One text per value, whatever way it was written."""
+    if kind == "dimension":
+        return f"{round(dimension_px(value), 4):g}px"
+    if kind == "duration":
+        return f"{round(duration_ms(value), 4):g}ms"
+    if kind == "number":
+        return f"{value:g}"
+    if kind == "fontFamily":
+        return ", ".join(value)
+    return TYPES[kind].css(value)
+
+
+def _with_alpha(value: str, alpha: str) -> str:
+    """A #RRGGBB color with a Tailwind opacity modifier (/80, /[0.35],
+    /[35%]) as #RRGGBBAA: a translucent white is not white."""
+    if not re.fullmatch(r"#[0-9A-Fa-f]{6}", value):
+        return value
+    try:
+        if alpha.startswith("["):
+            inner = alpha[1:-1].strip()
+            share = float(inner[:-1]) / 100 if inner.endswith("%") else float(inner)
+        else:
+            share = float(alpha) / 100
+    except ValueError:
+        return value
+    share = min(max(share, 0.0), 1.0)
+    return value.upper() + ("" if share >= 1 else f"{round(share * 255):02X}")
+
+
+def _signed(value: str, negative: bool) -> str:
+    """A value a negative class sets (-z-10, -mt-4): its sign kept."""
+    if not negative or value.startswith("-") or not re.match(r"\d|\.\d", value):
+        return value
+    return "-" + value
+
+
+def _read(text: str) -> Tuple[str, Any]:
+    """read_value, plus the CSS named colors."""
+    try:
+        return read_value(text)
+    except NotRead:
+        named = NAMED_COLORS.get(text.strip().lower())
+        if named is None:
+            raise
+        return "color", named
+
+
+def _join_state(scheme: str, state: str) -> str:
+    return ",".join(s for s in (scheme, state) if s)
+
+
+def _selector_states(selector: str, media: Tuple[str, ...]) -> List[str]:
+    """The states a rule applies in, one per distinct interaction state of
+    the selectors in its list, in the order first written, each joined to
+    the scheme; the scheme is dark only when every selector (or a media
+    query) says so. What a :not() names is where the rule is not.
+    `.btn:hover, .btn:focus-visible` applies on hover and on focus."""
+    members = [_without_not(m) for m in split_top(selector, ",")] or [""]
+    dark = any(_DARK_MEDIA.search(m) or m == "@variant dark" for m in media) \
+        or all(_DARK_SELECTOR.search(m) for m in members)
+    states: List[str] = []
+    for m in members:
+        found = _CSS_STATE.search(m) or _CLASS_STATE.search(m)
+        state = _STATES[next(g for g in found.groups() if g)] if found else ""
+        if state not in states:
+            states.append(state)
+    return [_join_state(DARK if dark else "", s) for s in states]
+
+
+def _selector_state(selector: str, media: Tuple[str, ...]) -> str:
+    """The one state a rule applies in: its scheme, and its interaction
+    state when every selector in the list has the same one."""
+    states = _selector_states(selector, media)
+    return states[0] if len(states) == 1 else _join_state(
+        DARK if all(DARK in s.split(",") for s in states) else "", "")
+
+
+def _variants(cls: str) -> Tuple[List[str], str]:
+    """A class's variants and its utility, split on ':' outside brackets."""
+    parts, depth, start = [], 0, 0
+    for i, ch in enumerate(cls):
+        if ch in "[(":
+            depth += 1
+        elif ch in "])":
+            depth -= 1
+        elif ch == ":" and depth == 0:
+            parts.append(cls[start:i])
+            start = i + 1
+    return parts, cls[start:]
+
+
+def _merge_state(outer: str, inner: str) -> str:
+    """A class's state inside a rule's (an @apply): dark when either is,
+    and the class's own interaction state before the rule's."""
+    outer_parts, inner_parts = outer.split(","), inner.split(",")
+    scheme = DARK if DARK in outer_parts + inner_parts else ""
+    states = [s for s in inner_parts + outer_parts if s and s != DARK]
+    return _join_state(scheme, states[0] if states else "")
+
+
+def _variant_state(variants: List[str]) -> str:
+    scheme, state = "", ""
+    for v in variants:
+        v = re.sub(r"^(group|peer)-", "", v.split("/", 1)[0])
+        if v == "dark":
+            scheme = DARK
+        elif v in _STATES and not state:
+            state = _STATES[v]
+    return _join_state(scheme, state)
+
+
+def _top_vars(value: str) -> List[Tuple[str, int, int]]:
+    """(name, start, end) of each var() at the top of `value`; a var() in
+    another's fallback belongs to it."""
+    out, i = [], 0
+    while True:
+        at = value.find("var(", i)
+        if at == -1:
+            return out
+        depth, end = 0, len(value)
+        for j in range(at + 3, len(value)):
+            depth += {"(": 1, ")": -1}.get(value[j], 0)
+            if depth == 0:
+                end = j + 1
+                break
+        m = re.match(r"var\(\s*--([A-Za-z0-9_-]+)", value[at:])
+        if m and (at == 0 or not (value[at - 1].isalnum() or value[at - 1] in "-_")):
+            out.append((m.group(1), at, end))
+        i = end
+
+
+def _prefix_splits(utility: str) -> Iterator[Tuple[str, str]]:
+    """(prefix, rest) for the whole utility and each '-' it could split at,
+    longest prefix first (rounded-t-lg tries rounded-t, then rounded)."""
+    parts = utility.split("-")
+    for n in range(len(parts), 0, -1):
+        yield "-".join(parts[:n]), "-".join(parts[n:])
+
+
+def _strip_line_comments(text: str) -> str:
+    """SCSS and Less text with each // comment blanked, newlines kept. A //
+    inside a string, a url() or a block comment is not a comment."""
+    def blank(m: re.Match) -> str:
+        word = m.group(0)
+        return " " * len(word) if word.startswith("//") else word
+    return _SCSS_TOKENS.sub(blank, text)
+
+
+def _js_members(body: str) -> Iterator[Tuple[int, str]]:
+    """(offset, text) of each comma-separated member of an object literal's
+    body, split outside brackets, strings and template literals."""
+    depth, quote, start, i = 0, "", 0, 0
+    while i < len(body):
+        ch = body[i]
+        if quote:
+            if ch == "\\":
+                i += 2
+                continue
+            quote = "" if ch == quote else quote
+        elif ch in "\"'`":
+            quote = ch
+        elif ch in "([{":
+            depth += 1
+        elif ch in ")]}":
+            depth -= 1
+        elif ch == "," and depth == 0:
+            yield start, body[start:i]
+            start = i + 1
+        i += 1
+    yield start, body[start:]
+
+
+def _closing(text: str, start: int, limit: int = 0) -> int:
+    """The offset of the bracket closing the one at `start` ((, [, { or <),
+    skipping strings and template literals, or -1 when it never closes (or
+    not within `limit` characters, when a limit is given)."""
+    pairs = {"(": ")", "[": "]", "{": "}", "<": ">"}
+    opener, closer = text[start], pairs[text[start]]
+    depth, quote, i = 0, "", start
+    end = min(len(text), start + limit) if limit else len(text)
+    while i < end:
+        ch = text[i]
+        if quote:
+            if ch == "\\":
+                i += 2
+                continue
+            quote = "" if ch == quote else quote
+        elif ch in "\"'`" and opener != "<":
+            quote = ch
+        elif ch == opener:
+            depth += 1
+        elif ch == closer:
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    return -1
+
+
+def _matching_brace(text: str, start: int) -> int:
+    """The offset of the } closing the { at `start`, skipping strings, or
+    -1 when it never closes."""
+    return _closing(text, start)
+
+
+def _template_start(text: str, i: int) -> int:
+    """After a CSS-in-JS tag at `i` (styled.button, styled(X).attrs(...),
+    css, keyframes), the offset of the template's opening backtick, or -1
+    when no template follows."""
+    while i < len(text):
+        ch = text[i]
+        if ch.isspace():
+            i += 1
+        elif ch == "`":
+            return i
+        elif ch in "(<":
+            # A tag's arguments or type close soon; a comparison (css < 5)
+            # never does, so the look-ahead is bounded to stay linear.
+            close = _closing(text, i, _LOOK_AHEAD)
+            if close == -1:
+                return -1
+            i = close + 1
+        elif ch == ".":
+            m = re.compile(r"\.\s*[A-Za-z_$][\w$]*").match(text, i)
+            if not m:
+                return -1
+            i = m.end()
+        else:
+            return -1
+    return -1
+
+
+def _template_end(text: str, start: int) -> Tuple[int, List[Tuple[int, int]]]:
+    """The offset of the backtick closing the template opened at `start`,
+    and the (start, end) of each ${...} in it; -1 when it never closes."""
+    spans, i = [], start + 1
+    while i < len(text):
+        ch = text[i]
+        if ch == "\\":
+            i += 2
+            continue
+        if ch == "`":
+            return i, spans
+        if ch == "$" and text.startswith("${", i):
+            close = _closing(text, i + 1)
+            if close == -1:
+                return -1, spans
+            spans.append((i, close + 1))
+            i = close + 1
+            continue
+        i += 1
+    return -1, spans
+
+
+class _Lines:
+    """Offsets to line numbers in one text."""
+
+    def __init__(self, text: str) -> None:
+        self.starts = [0] + [m.end() for m in re.finditer("\n", text)]
+
+    def __call__(self, pos: int) -> int:
+        return bisect_right(self.starts, pos)
+
+
+class _Scanner:
+    def __init__(self, ts: TokenSet, theme: Optional[ThemeMap] = None) -> None:
+        self.ts = ts
+        # The project's Tailwind theme: names its config and presets map.
+        self.theme = theme or ThemeMap()
+        # Classes the project's own stylesheets define (.bg-navy-deep).
+        self.defined: Set[str] = set()
+        self.index: Dict[str, Tuple[str, str]] = {}
+        for t in ts.tokens():
+            self.index.setdefault(_norm(t.path), (t.path, t.type))
+        self.result = Scan()
+        self._found: List[Tuple[int, int, int, Usage]] = []
+        self._unknown: List[Tuple[int, int, int, UnknownClass]] = []
+        self._missed: List[Tuple[int, int, int, NotMeasured]] = []
+        self._declared: List[str] = []
+        self._near: Dict[Tuple[str, _Namespaces], str] = {}
+        # Set while a rule is read again for a second state of its selector
+        # list, so what was not measured is listed once.
+        self._quiet = False
+        self._seq = 0
+        self.file = ""
+        # Tailwind: whether the code shows it, and the class uses kept only if so.
+        self.tailwind = False
+        self.class_raw: Set[int] = set()
+
+    def token(self, name: str) -> Optional[Tuple[str, str]]:
+        return self.index.get(_norm(name))
+
+    # Collecting ----------------------------------------------------------
+
+    def begin(self, file: str) -> None:
+        self.file, self._found, self._unknown, self._missed = file, [], [], []
+        self._declared = []
+
+    def end(self) -> None:
+        for bucket, out in ((self._found, self.result.usages),
+                            (self._unknown, self.result.unknown_classes),
+                            (self._missed, self.result.not_read)):
+            bucket.sort(key=lambda f: f[:3])
+            out.extend(f[3] for f in bucket)
+        for name in self._declared:
+            if name not in self.result.declared:
+                self.result.declared.append(name)
+
+    def finish(self) -> Scan:
+        """Drop what only a Tailwind project writes when the code shows no
+        Tailwind: utility-looking classes are then the project's own."""
+        if not self.tailwind:
+            self.result.usages = [u for u in self.result.usages if id(u) not in self.class_raw]
+            self.result.unknown_classes = []
+        # A class the project's own CSS defines is a component class, not a
+        # token the system lacks.
+        self.result.unknown_classes = [u for u in self.result.unknown_classes
+                                       if u.cls not in self.defined]
+        return self.result
+
+    def add(self, at: Tuple[int, int], prop: str, family: str, kind: str, value: str,
+            text: str, state: str, from_class: bool = False) -> None:
+        self._seq += 1
+        usage = Usage(self.file, at[0], prop, family, kind, value, text, state)
+        if from_class and kind != "token":
+            self.class_raw.add(id(usage))
+        self._found.append((at[0], at[1], self._seq, usage))
+
+    def unknown(self, at: Tuple[int, int], cls: str, looked_in: Tuple[str, ...] = (),
+                near: str = "", name: str = "") -> None:
+        if self._quiet:
+            return
+        self._seq += 1
+        self._unknown.append((at[0], at[1], self._seq,
+                              UnknownClass(self.file, at[0], cls, looked_in, near, name)))
+
+    def near(self, name: str, spaces: _Namespaces, kinds: Dict[str, str]) -> str:
+        """A token of a type the class takes whose name is `name`, or ends
+        with it, outside the class's namespaces ("" for none). A token whose
+        name also says the class's family comes first, and one whose name
+        says another family is never near (rounded-lg is not text-body-lg).
+        A step number (p-6) is near only a token named for the family that
+        holds the step's own value in Tailwind's scale (24px), since a
+        bare 6 names nothing and the system's step 6 may be another size."""
+        want = _norm(name)
+        key = (want, spaces)
+        if key not in self._near:
+            self._near[key] = self._find_near(want, spaces, kinds)
+        return self._near[key]
+
+    def _find_near(self, want: str, spaces: _Namespaces, kinds: Dict[str, str]) -> str:
+        if not want:
+            return ""
+        families = {family for _, family in spaces}
+        words = {w for space, family in spaces for w in (_norm(space), family)}
+        words |= {w for f in families for w in FAMILY_WORDS.get(f, ())}
+        other = {w for f, ws in FAMILY_WORDS.items() if f not in families for w in ws} - words
+        numeric = _NUMERIC.fullmatch(want)
+        exact = self.index.get(want)
+        if exact is not None and exact[1] in kinds and not numeric:
+            return exact[0]
+        loose = ""
+        for key, (path, kind) in self.index.items():
+            if key.endswith("." + want) and kind in kinds:
+                named = set(key.split(".")[:-1])
+                if named & other:
+                    continue
+                if named & words and (not numeric or self._step_holds(path, want, families)):
+                    return path
+                loose = loose or path
+        return "" if numeric else loose
+
+    def _step_holds(self, path: str, step: str, families: Set[str]) -> bool:
+        """Whether a token holds a Tailwind spacing step's own value."""
+        if "space" not in families:
+            return False
+        want = canonical("dimension", {"value": float(step) * TAILWIND_STEP_PX, "unit": "px"})
+        try:
+            return canonical("dimension", self.ts.resolve(path)) == want
+        except (AliasError, KeyError, TypeError, ValueError):
+            return False
+
+    def note(self, at: Tuple[int, int], kind: str, text: str, why: str) -> None:
+        if self._quiet:
+            return
+        self._seq += 1
+        self._missed.append((at[0], at[1], self._seq,
+                             NotMeasured(self.file, at[0], kind, " ".join(text.split()), why)))
+
+    # Values --------------------------------------------------------------
+
+    @staticmethod
+    def family_of(prop: str, kind: Optional[str]) -> str:
+        """The family a value of `kind` in `prop` belongs to ("" for none);
+        kind None is a var() to a token the system lacks."""
+        if kind == "color":
+            return "color" if _COLOR_PROPS.match(prop) else ""
+        if kind in ("dimension", None):
+            for pattern, family in _LENGTH_FAMILY:
+                if pattern.match(prop):
+                    return family
+            if kind is None:
+                if prop in _PROP_FAMILY or prop in _NUMBER_FAMILY:
+                    return _PROP_FAMILY.get(prop, _NUMBER_FAMILY.get(prop, ""))
+                if _COLOR_PROPS.match(prop) and not prop.endswith("-style"):
+                    return "color"
+            return ""
+        if kind == "number":
+            return _NUMBER_FAMILY.get(prop, "")
+        if kind == "duration":
+            return "duration"
+        if kind == "cubicBezier":
+            return "motion"
+        if kind == "fontFamily":
+            return "font" if prop == "font-family" else ""
+        if kind == "shadow":
+            return "shadow" if prop == "box-shadow" else ""
+        return ""
+
+    @staticmethod
+    def measured(prop: str) -> bool:
+        """True for a property whose every value is a value of a family, so
+        a value in it that does not read is listed as not read."""
+        return (any(p.match(prop) for p, _ in _LENGTH_FAMILY) and prop not in ("border",
+                                                                                "outline")) \
+            or prop in _NUMBER_FAMILY or prop in _PROP_FAMILY or bool(_COLOR_ONLY.match(prop))
+
+    def token_family(self, prop: str, kind: str) -> str:
+        """The family of a token of type `kind` used in `prop`."""
+        return {"color": "color", "fontFamily": "font", "fontWeight": "weight",
+                "shadow": "shadow", "duration": "duration",
+                "cubicBezier": "motion"}.get(kind) or self.family_of(prop, kind)
+
+    def var(self, at: Tuple[int, int], prop: str, name: str, text: str, state: str,
+            family: str = "") -> None:
+        found = self.token(name)
+        if found is None:
+            self.add(at, prop, family or self.family_of(prop, None), "missing", f"--{name}",
+                     text, state)
+        else:
+            self.add(at, prop, family or self.token_family(prop, found[1]), "token", found[0],
+                     text, state)
+
+    def declaration(self, at: Tuple[int, int], prop: str, value: str, state: str) -> None:
+        prop = prop.strip()
+        if prop == "@apply":
+            self.classes(at, value, state, lines=None)
+            return
+        if not prop.startswith("--"):
+            prop = prop.lower()
+        value = _IMPORTANT.sub("", value.strip())
+        if prop.startswith("--") and len(prop) > 2:
+            self._declared.append(prop)
+            if DARK in state.split(",") and (prop, self.file, at[0]) not in self.result.dark:
+                self.result.dark.append((prop, self.file, at[0]))
+        refs = _top_vars(value)
+        for name, a, b in refs:
+            self.var(at, prop, name, value[a:b], state)
+        if prop.startswith(("--", "$", "@")) or not value:
+            return
+        if _PLACEHOLDER.search(value):
+            # A CSS-in-JS interpolation (listed where it was found): the parts
+            # around it are read, the part it sits in (${x}px) is not.
+            for chunk in split_top(value):
+                for part in split_top(chunk, " "):
+                    if not _PLACEHOLDER.search(part) and not part.startswith("var("):
+                        self.raw(at, prop, part, state)
+            return
+        if _TEMPLATE.search(value):
+            if self.measured(prop) or prop == "font":
+                self.note(at, "value", value, f"{value} {_WHY_TEMPLATE}")
+            return
+        plain = value
+        for _, a, b in reversed(refs):
+            plain = plain[:a] + " " + plain[b:]
+        plain = plain.strip()
+        if not plain:
+            return
+        if prop == "font":
+            self.font(at, plain, state)
+            return
+        if prop == "font-family":
+            self.families(at, prop, plain, state, note=not refs)
+            return
+        if prop == "box-shadow":
+            error = f"{plain} is not a shadow; write x, y, blur, spread and a color"
+            try:
+                kind, literal = read_value(plain)
+            except NotRead as exc:
+                kind, error = "", str(exc)
+            family = self.family_of(prop, kind)
+            if family:
+                self.add(at, prop, family, "raw", canonical(kind, literal), plain, state)
+                return
+            if not refs and plain.lower() not in _KEYWORDS:
+                self.note(at, "value", plain, error)
+            for chunk in split_top(plain):
+                for part in split_top(chunk, " "):
+                    self.raw(at, prop, part, state, colors_only=True)
+            return
+        if prop == "font-weight" and plain.lower() in _WEIGHT_WORDS:
+            self.add(at, prop, "weight", "raw", str(_WEIGHT_WORDS[plain.lower()]), plain, state)
+            return
+        note = self.measured(prop)
+        for chunk in split_top(value):
+            for part in split_top(chunk, " "):
+                if not re.fullmatch(r"var\(.*\)", part, re.S):
+                    self.raw(at, prop, part, state, note=note)
+
+    def raw(self, at: Tuple[int, int], prop: str, text: str, state: str,
+            colors_only: bool = False, note: bool = False) -> None:
+        try:
+            kind, literal = _read(text)
+        except NotRead as exc:
+            # A color inside a function the reader does not read (a gradient,
+            # drop-shadow()) is still a color written there.
+            f = re.match(r"[a-z-]+\((.*)\)$", text, re.I | re.S)
+            if f and _COLOR_PROPS.match(prop) and not note:
+                for chunk in split_top(f.group(1)):
+                    for part in split_top(chunk, " "):
+                        self.raw(at, prop, part, state, colors_only=True)
+            elif note and text.lower() not in _KEYWORDS and not _top_vars(text):
+                # A value built from a var() (hsl(var(--x))) is a use of
+                # that token, recorded already.
+                self.note(at, "value", text, str(exc))
+            return
+        if colors_only and kind != "color":
+            return
+        family = self.family_of(prop, kind)
+        if family:
+            self.add(at, prop, family, "raw", canonical(kind, literal), text, state)
+
+    def font(self, at: Tuple[int, int], value: str, state: str) -> None:
+        """The font shorthand: [style] [weight] size[/line-height] family."""
+        if value.lower() in _KEYWORDS or value.lower() in _SYSTEM_FONTS:
+            return
+        words = split_top(re.sub(r"\s*/\s*", "/", value), " ")
+        size_at = next((i for i, w in enumerate(words)
+                        if re.match(r"[+-]?(\d|\.\d)", w) and not re.fullmatch(r"\d+", w)
+                        or w.lower() in ("xx-small", "x-small", "small", "medium", "large",
+                                         "x-large", "xx-large", "xxx-large")), -1)
+        if size_at == -1:
+            self.note(at, "value", value, f"{value} is a font shorthand with no size; write "
+                      "font-size, line-height and font-family as their own properties")
+            return
+        for word in words[:size_at]:
+            if re.fullmatch(r"\d+", word):
+                self.add(at, "font", "weight", "raw", str(int(word)), word, state)
+            elif word.lower() in _WEIGHT_WORDS:
+                self.add(at, "font", "weight", "raw", str(_WEIGHT_WORDS[word.lower()]), word,
+                         state)
+        size, _, leading = words[size_at].partition("/")
+        mark = len(self._found)
+        self.raw(at, "font-size", size, state, note=True)
+        if leading:
+            self.raw(at, "line-height", leading, state, note=True)
+        # The size and line height were read as their longhands; they are
+        # uses of the shorthand.
+        self._found[mark:] = [(line, pos, seq, Usage(u.file, u.line, "font", u.family, u.kind,
+                                                     u.value, u.text, u.state))
+                              for line, pos, seq, u in self._found[mark:]]
+        family = " ".join(words[size_at + 1:])
+        if family:
+            self.families(at, "font", family, state, note=True)
+
+    def families(self, at: Tuple[int, int], prop: str, text: str, state: str,
+                 note: bool) -> None:
+        """A font list where the property says it is one, so a bare name
+        (Inter) is a name here."""
+        names = [p.strip().strip("\"'") for p in split_top(text)]
+        if all(re.fullmatch(r"-?[A-Za-z0-9][A-Za-z0-9 _-]*", n) for n in names):
+            self.add(at, prop, "font", "raw", ", ".join(names), text, state)
+        elif note and text.lower() not in _KEYWORDS:
+            self.note(at, "value", text, f"{text} is not a list of font names; quote each "
+                      "name and separate them with commas")
+
+    # Stylesheets ---------------------------------------------------------
+
+    def css(self, text: str, first_line: int = 0, pos: int = 0,
+            line_comments: bool = False) -> None:
+        """A stylesheet; with `line_comments` (SCSS, Less) // starts a comment."""
+        if line_comments:
+            text = _strip_line_comments(text)
+        if _TAILWIND_CSS.search(_blank_comments(text)):
+            self.tailwind = True
+        for rule in parse_css(text, self.file, every=True):
+            for member in split_top(rule.selector, ","):
+                own = _OWN_CLASS.fullmatch(member.strip())
+                if own and rule.declarations:
+                    self.defined.add(own.group(1).replace("\\", ""))
+            if any(_REDUCED_MEDIA.search(m) for m in rule.media) and rule.declarations:
+                self.result.reduced_motion.append((self.file, rule.line + first_line,
+                                                   " ".join(rule.selector.split())))
+            # A selector list in several states records each use once per
+            # state; what was not measured is listed once.
+            for i, state in enumerate(_selector_states(rule.selector, rule.media)):
+                self._quiet = i > 0
+                for d in rule.declarations:
+                    self.declaration((d.line + first_line, pos), d.name, d.value, state)
+            self._quiet = False
+
+    def css_part(self, text: str, first_line: int, pos: int, line_comments: bool,
+                 what: str) -> None:
+        """A stylesheet inside a file (a <style> block, a CSS-in-JS
+        template): one that does not parse is listed, and the file's other
+        uses are kept."""
+        try:
+            self.css(text, first_line, pos, line_comments)
+        except InputError as exc:
+            m = _LINE_IN_ERROR.search(str(exc))
+            line = int(m.group(1)) + first_line if m else first_line + 1
+            self.note((line, pos), "stylesheet", what,
+                      f"{self.file} line {line}: {what} has a block opened here that never "
+                      "closes; add the missing } and scan again")
+
+    # Tailwind ------------------------------------------------------------
+
+    def classes(self, at: Tuple[int, int], text: str, state: str = "",
+                lines: Optional[Callable[[int], int]] = None, offset: int = 0) -> None:
+        """Each class in `text`. With `lines`, each class takes the line of
+        its own offset (offset + its place in text); else all take `at`."""
+        for m in re.finditer(r"\S+", text):
+            where = (lines(offset + m.start()), offset + m.start()) if lines else at
+            self.utility(where, m.group(0), state)
+
+    def utility(self, at: Tuple[int, int], cls: str, outer: str) -> None:
+        variants, utility = _variants(cls)
+        if variants and all(_VARIANT.fullmatch(v) for v in variants) \
+                and _UTILITY_START.match(utility) \
+                or _ARBITRARY_CLASS.fullmatch(utility.strip("!")):
+            self.tailwind = True
+        state = _merge_state(outer, _variant_state(variants))
+        utility = utility.strip("!")
+        if utility.startswith("[") and utility.endswith("]") and ":" in utility:
+            prop, _, value = utility[1:-1].partition(":")
+            if re.fullmatch(r"-?-?[a-z][a-z-]*", prop):
+                self.tailwind = True
+                self.declaration(at, prop, value.replace("_", " "), state)
+            return
+        bare = utility.removeprefix("-")
+        for prefix, rest in _prefix_splits(bare):
+            for pattern, spaces, kinds in _UTILITIES:
+                if pattern.fullmatch(prefix):
+                    self.value_class(at, cls, utility, prefix, rest, spaces, kinds, state)
+                    return
+
+    def value_class(self, at: Tuple[int, int], cls: str, utility: str, prefix: str,
+                    rest: str, spaces: _Namespaces, kinds: Dict[str, str],
+                    state: str) -> None:
+        # The class as written, without its variants: md:px-6 and px-6 are
+        # one spelling in two contexts, the state carries the context.
+        # Its sign and its opacity stay: -z-10 is not z-10, bg-white/80 is
+        # not white.
+        text = utility
+        alpha = ""
+        cut = re.fullmatch(r"(.+?)/(\d+(?:\.\d+)?|\[[^\]]*\])", rest)
+        if cut and not rest.startswith("("):
+            rest, alpha = cut.group(1), cut.group(2)
+        negative = utility.startswith("-")
+        named = utility[:len(utility) - len(alpha) - 1] if alpha else utility
+        if rest.startswith("(") and rest.endswith(")"):
+            ref = re.fullmatch(r"\(\s*(?:([a-z-]+):)?--([A-Za-z0-9_-]+)\s*\)", rest)
+            if ref:
+                self.tailwind = True
+                self.var(at, utility, ref.group(2), text, state,
+                         family=self._family_for(kinds, ref.group(2), ref.group(1) or ""))
+            return
+        if rest.startswith("[") and rest.endswith("]"):
+            self.tailwind = True
+            self.arbitrary(at, text, utility, rest[1:-1].replace("_", " "), kinds, state,
+                           alpha, negative)
+            return
+        name = rest
+        if not _REST.fullmatch(name) or not name and not _BARE.fullmatch(prefix):
+            return
+        for space, family in spaces:
+            if not name and family == "color":
+                continue
+            for candidate in ((f"{space}.{name}", f"{space}.{name}.DEFAULT") if name
+                              else (space, f"{space}.DEFAULT")):
+                found = self.token(candidate)
+                if found is not None:
+                    self.add(at, utility, family, "token", found[0], text, state)
+                    return
+        # A utility's own namespace first (textColor for text-, fontSize
+        # after it), then colors, as Tailwind merges them.
+        ordered = [sp for sp in spaces if sp not in _C] + [sp for sp in spaces if sp in _C]
+        entry = next((e for e in (self.theme.get(space, name) for space, _ in ordered) if e),
+                     None) if name else None
+        if entry is not None:
+            # A name the project's Tailwind config maps: var(--x) reaches
+            # the token x; a plain value is a raw value of the class's family.
+            self.tailwind = True
+            if entry.var:
+                self.var(at, utility, entry.var, text, state,
+                         family=self._family_for(kinds, entry.var))
+                return
+            try:
+                kind, literal = _read(entry.value)
+            except NotRead:
+                return
+            family = kinds.get(kind, "")
+            if family:
+                value = canonical(kind, literal)
+                if family == "color" and alpha:
+                    value = _with_alpha(value, alpha)
+                self.add(at, utility, family, "raw", _signed(value, negative), text, state,
+                         from_class=True)
+            return
+        if ("spacing", "space") in spaces and _NUMERIC.fullmatch(name) \
+                and self.token("spacing"):
+            self.add(at, utility, "space", "token", self.token("spacing")[0], text, state)
+            return
+        if ("spacing", "space") in spaces and name in TAILWIND_SPACING \
+                and self.theme.keeps("spacing"):
+            # Tailwind's own spacing step, kept by a theme that extends the
+            # scale rather than replacing it: a raw value, never a missing
+            # token, at the base --spacing the theme sets (0.25rem when it
+            # sets none).
+            self.tailwind = True
+            step = self._spacing_step()
+            if step is None and name != "px":
+                base = self.theme.spacing
+                self.note(at, "class", named, (
+                    f"is a step of Tailwind's spacing scale, whose base --spacing is "
+                    f"{base.value} at {base.file}:{base.line}, which this reader cannot read "
+                    "as a length; write --spacing as a length such as 0.25rem to have it "
+                    "measured"))
+                return
+            px = 1 if name == "px" else float(name) * step
+            self.add(at, utility, "space", "raw", _signed(f"{px:g}px", negative), text, state,
+                     from_class=True)
+            return
+        literal = self._bare(prefix, name, spaces)
+        if literal is not None:
+            kind, value = literal
+            if kind == "color" and alpha:
+                value = _with_alpha(value, alpha)
+            self.add(at, utility, kinds.get(kind, ""), "raw", _signed(value, negative), text,
+                     state, from_class=True)
+            return
+        if _KEYWORD_CLASS.fullmatch(utility.lstrip("-")) or (
+                _NUMERIC.fullmatch(name) and spaces == _C):
+            return
+        looked = tuple(space for space, family in spaces if name or family != "color")
+        self.unknown(at, named, looked, self.near(name, spaces, kinds), name)
+
+    def _spacing_step(self) -> Optional[float]:
+        """The px of one spacing step: the base --spacing the theme sets,
+        else Tailwind's own 4px; None when the base does not read as a
+        length."""
+        base = self.theme.spacing
+        if base is None:
+            return float(TAILWIND_STEP_PX)
+        try:
+            kind, literal = _read(base.value)
+        except NotRead:
+            return None
+        if kind != "dimension":
+            return None
+        try:
+            return dimension_px(literal)
+        except (KeyError, TypeError, ValueError):
+            return None
+
+    @staticmethod
+    def _bare(prefix: str, name: str, spaces: _Namespaces) -> Optional[Tuple[str, str]]:
+        """A value Tailwind writes as it is, when no token names it: white
+        and black, z-10, duration-150, border-2, and a bare border (1px)."""
+        if name in ("white", "black") and ("color", "color") in spaces:
+            return "color", "#FFFFFF" if name == "white" else "#000000"
+        numeric = _NUMERIC.fullmatch(name)
+        if prefix == "z" and numeric:
+            return "number", f"{float(name):g}"
+        if prefix == "duration" and numeric:
+            return "duration", f"{float(name):g}ms"
+        if prefix.startswith("border") or prefix in ("ring", "outline"):
+            if numeric and name.isdigit():
+                return "dimension", f"{name}px"
+            if not name and prefix.startswith("border"):
+                return "dimension", "1px"
+        return None
+
+    def _family_for(self, kinds: Dict[str, str], name: str, hint: str = "") -> str:
+        """The family of a class that references --name: by its type hint
+        (text-[length:var(--x)]), by the token's type when the system has
+        it, else the class's one family; Tailwind reads an unhinted var()
+        in a class that takes a color as a color."""
+        if hint:
+            return kinds.get(_HINT_KINDS.get(hint, ""), "")
+        found = self.token(name)
+        if found is not None and found[1] in kinds:
+            return kinds[found[1]]
+        families = set(kinds.values())
+        if "color" in families:
+            return "color"
+        return families.pop() if len(families) == 1 else ""
+
+    def arbitrary(self, at: Tuple[int, int], cls: str, utility: str, text: str,
+                  kinds: Dict[str, str], state: str, alpha: str = "",
+                  negative: bool = False) -> None:
+        hint = _TYPE_HINT.match(text)
+        if hint and not text.startswith("var("):
+            text = text[hint.end():]
+        refs = _top_vars(text)
+        if len(refs) == 1 and refs[0][1] == 0 and refs[0][2] == len(text):
+            self.var(at, utility, refs[0][0], text, state,
+                     family=self._family_for(kinds, refs[0][0], hint.group(1) if hint else ""))
+            return
+        try:
+            kind, literal = _read(text)
+        except NotRead as exc:
+            self.note(at, "class", cls, str(exc))
+            return
+        family = kinds.get(kind, "")
+        if family:
+            value = canonical(kind, literal)
+            if family == "color" and alpha:
+                value = _with_alpha(value, alpha)
+            self.add(at, utility, family, "raw", _signed(value, negative), cls, state,
+                     from_class=True)
+
+    # Markup and scripts --------------------------------------------------
+
+    def style_attr(self, lines: _Lines, start: int, text: str) -> None:
+        pos = 0
+        for decl in split_top(text, ";"):
+            at = text.find(decl, pos) if decl else pos
+            pos = at + len(decl)
+            if ":" in decl:
+                prop, _, value = decl.partition(":")
+                self.declaration((lines(start + at), start + at), prop, value, "")
+
+    def style_object(self, lines: _Lines, start: int, body: str, state: str = "",
+                     mui: bool = False) -> None:
+        """A style object literal's members (style, emotion's css, MUI's
+        sx): literal values are read, a nested selector ('&:hover', a media
+        query) is read in its state, and spreads, computed keys and
+        computed values are listed as not read. With `mui`, the sx
+        shorthands are read (p, mt, bgcolor), and a value the theme looks
+        up (p: 2, color: 'primary.main') is listed as not read."""
+        for offset, member in _js_members(body):
+            text = member.strip()
+            if not text:
+                continue
+            at = start + offset + len(member) - len(member.lstrip())
+            where = (lines(at), at)
+            if text.startswith("..."):
+                self.note(where, "spread", text, f"{text} {_WHY_SPREAD}")
+                continue
+            m = _OBJ_MEMBER.fullmatch(text)
+            raw_value = m.group(4).strip() if m else ""
+            key = next((g for g in m.groups()[:3] if g is not None), "") if m else ""
+            if m and raw_value.startswith("{") and raw_value.endswith("}") \
+                    and re.match(r"[&:@\[]", key):
+                inner = _merge_state(state, _selector_state(key.replace("&", ".x"),
+                                                            (key,) if key.startswith("@")
+                                                            else ()))
+                lead = at + text.index(raw_value) + 1
+                self.style_object(lines, lead, raw_value[1:-1], inner, mui)
+                continue
+            if mui and m and raw_value.startswith("{") and raw_value.endswith("}"):
+                points = [_OBJ_MEMBER.fullmatch(p.strip()) for _, p in
+                          _js_members(raw_value[1:-1]) if p.strip()]
+                if points and all(p and p.group(1) for p in points):
+                    names = [p.group(1) for p in points]
+                    shown = names[0] if len(names) == 1 else \
+                        ", ".join(names[:-1]) + " and " + names[-1]
+                    self.note(where, "responsive value", text,
+                              f"{' '.join(text.split())} sets a value per breakpoint ({shown}), "
+                              f"{_WHY_RESPONSIVE}")
+                    continue
+            literal = _JS_LITERAL.fullmatch(raw_value) if m else None
+            if literal is None:
+                self.note(where, "style value", text, f"{text} {_WHY_COMPUTED}")
+                continue
+            if key.startswith("--"):
+                prop = key
+            elif mui and key in _SX_ALIASES:
+                prop = _SX_ALIASES[key]
+            else:
+                prop = re.sub(r"([A-Z])", lambda c: "-" + c.group(1).lower(), key)
+            number = literal.group(4)
+            string = next((g for g in literal.groups()[:3] if g is not None), None)
+            if mui and (number is not None and _SX_THEME_NUMBERS.match(prop)
+                        or string is not None and _SX_THEME_PATH.fullmatch(string)
+                        or key == "typography"):
+                self.note(where, "theme value", text, f"{text} {_WHY_THEME}")
+                continue
+            if number is not None:
+                value = number if key in _UNITLESS or float(number) == 0 else f"{number}px"
+            else:
+                value = string
+            self.declaration(where, prop, value, state)
+
+    def class_expression(self, lines: _Lines, start: int, body: str) -> None:
+        for m in _JS_STRING.finditer(body):
+            g = next(i for i in (1, 2, 3) if m.group(i) is not None)
+            text = re.sub(r"\$\{[^}]*\}", lambda x: " " * len(x.group(0)), m.group(g))
+            self.classes((0, 0), text, lines=lines, offset=start + m.start(g))
+
+    def css_in_js(self, text: str, lines: _Lines) -> None:
+        """Tagged CSS templates (styled.x`...`, css`...`): read as a nested
+        stylesheet, each ${...} listed as not read."""
+        for m in _CSS_IN_JS.finditer(text):
+            open_at = _template_start(text, m.end())
+            if open_at == -1 or (m.group(1) != "styled" and open_at != m.end()
+                                 and text[m.end():open_at].strip()):
+                continue
+            close, spans = _template_end(text, open_at)
+            if close == -1:
+                continue
+            body, cursor = [], open_at + 1
+            for n, (a, b) in enumerate(spans):
+                body.append(text[cursor:a])
+                body.append(f"__uxi{n}__" + "\n" * text.count("\n", a, b))
+                self.note((lines(a), a), "interpolation", text[a:b],
+                          f"{' '.join(text[a:b].split())} {_WHY_INTERPOLATION}")
+                cursor = b
+            body.append(text[cursor:close])
+            self.css_part("&{" + "".join(body) + "}", lines(open_at + 1) - 1, open_at + 1,
+                          True, "the CSS template")
+
+    def markup(self, text: str, markup: bool) -> None:
+        text = _MARKUP_COMMENT.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+        lines = _Lines(text)
+        if markup:
+            for m in _STYLE_BLOCK.finditer(text):
+                self.css_part(m.group(2), lines(m.start(2)) - 1, m.start(2),
+                              bool(_PREPROCESSED.search(m.group(1))), "the <style> block")
+            text = _STYLE_BLOCK.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+        if "`" in text:
+            self.css_in_js(text, lines)
+        for m in _ATTR_START.finditer(text):
+            bound, name, i = bool(m.group(1)), m.group(2), m.end()
+            if i >= len(text):
+                continue
+            opener = text[i]
+            if opener in "\"'":
+                close = text.find(opener, i + 1)
+                if close == -1:
+                    continue
+                body, start = text[i + 1:close], i + 1
+                expression = bound or name == "class:list"
+            elif opener == "{":
+                close = _matching_brace(text, i)
+                if close == -1:
+                    continue
+                body, start, expression = text[i + 1:close], i + 1, True
+            else:
+                continue
+            if name in ("css", "sx") and opener != "{":
+                continue  # a quoted css= (Vue's transition prop) is not a style
+            if name in ("style", "css", "sx"):
+                inner = body.strip()
+                written = " ".join(text[m.start():close + 1].split())
+                if len(written) > 80:
+                    written = written[:77] + "..."
+                if expression and inner.startswith("{") and inner.endswith("}"):
+                    lead = body.index("{")
+                    self.style_object(lines, start + lead + 1, inner[1:-1], mui=name == "sx")
+                elif expression and inner and not re.match(r"css\s*`", inner):
+                    self.note((lines(start), start), "style expression", inner,
+                              f"{written} {_WHY_STYLE}")
+                elif not expression:
+                    self.style_attr(lines, start, body)
+            elif expression:
+                self.class_expression(lines, start, body)
+            else:
+                self.classes((0, 0), body, lines=lines, offset=start)
+        for m in _STYLE_DIRECTIVE.finditer(text):
+            g = 2 if m.group(2) is not None else 3
+            at = m.start()
+            self.declaration((lines(at), at), m.group(1), m.group(g), "")
+
+
+def _files(roots: Sequence[Path], skip: Set[Path]) -> Iterator[Tuple[Path, str]]:
+    """(path, name to report) for each code file under `roots`, each file
+    once. With several roots, a name is the file's path from the folder the
+    roots share, so two roots named alike (a/src, b/src) stay apart."""
+    seen: Set[Path] = set()
+    several = len(roots) > 1
+    base: Optional[str] = None
+    if several:
+        try:
+            base = os.path.commonpath([os.path.abspath(r if r.is_dir() else r.parent)
+                                       for r in roots])
+        except ValueError:  # roots on different drives share no folder
+            base = None
+
+    def label(p: Path, root: Path) -> str:
+        if not several:
+            return p.relative_to(root).as_posix() if root.is_dir() else p.name
+        if base is not None:
+            return Path(os.path.relpath(os.path.abspath(p), base)).as_posix()
+        prefix = Path(os.path.abspath(root)).as_posix().strip("/").replace(":", "")
+        return f"{prefix}/{p.relative_to(root).as_posix() if root.is_dir() else p.name}"
+
+    for root in roots:
+        if root.is_file():
+            resolved = root.resolve()
+            if resolved not in skip and resolved not in seen:
+                seen.add(resolved)
+                yield root, label(root, root)
+            continue
+        for folder, dirs, names in os.walk(root):
+            dirs[:] = sorted(d for d in dirs if d not in SKIP_DIRS and not d.startswith(".")
+                             and (not skip or (Path(folder) / d).resolve() not in skip))
+            for name in sorted(names):
+                if name.lower().endswith(CSS_EXT + MARKUP_EXT + SCRIPT_EXT):
+                    p = Path(folder) / name
+                    resolved = p.resolve() if (skip or several) else p
+                    if resolved in skip or resolved in seen:
+                        continue
+                    if several:
+                        seen.add(resolved)
+                    yield p, label(p, root)
+
+
+def scan(roots: Sequence[Any], ts: TokenSet, exclude: Iterable[Any] = (),
+         theme: Optional[ThemeMap] = None, also: Iterable[Any] = ()) -> Scan:
+    """Every use of a value under `roots` (files or folders) that the
+    scanner can measure, matched against the tokens of `ts`, with what it
+    saw and could not measure in Scan.not_read. Folders in SKIP_DIRS and
+    hidden folders are not read; nor is any file or folder in `exclude`
+    (the system's own source). A class is also read through the project's
+    Tailwind theme (`theme`, else read_theme finds the config and presets
+    for the roots and reads each @theme block among the files): a name it
+    maps to var(--x) reaches the token x, and what the config computes is
+    listed as not measured. `also` names stylesheets read for what they use
+    wherever they are (a system's own stylesheet passed as a source: its
+    rules' var() uses count, its definitions do not), each named by its
+    path from the folder the roots share. Raises InputError for a root
+    that does not exist."""
+    paths: List[Path] = []
+    for r in roots:
+        p = Path(r).expanduser()
+        if not p.exists():
+            raise InputError(f"{p} does not exist; pass the folder that holds the product's "
+                             "code, or one of its files")
+        if all(p.resolve() != q.resolve() for q in paths):
+            paths.append(p)
+    skip = {Path(e).expanduser().resolve() for e in exclude}
+    files = list(_files(paths, skip))
+    have = {p.resolve() for p, _ in files}
+    dirs = [p if p.is_dir() else p.parent for p in paths]
+    try:
+        shared = os.path.commonpath([os.path.abspath(d) for d in dirs])
+    except ValueError:
+        shared = ""
+    for extra in also:
+        p = Path(extra).expanduser()
+        if p.is_file() and p.resolve() not in have:
+            have.add(p.resolve())
+            try:
+                shown = Path(os.path.relpath(os.path.abspath(p), shared)).as_posix() \
+                    if shared else p.name
+            except ValueError:
+                shown = p.name
+            files.append((p, shown))
+    if theme is None:
+        theme = read_theme(paths, [p for p, _ in files if p.name.lower().endswith(".css")])
+    scanner = _Scanner(ts, theme)
+    result = scanner.result
+    result.theme_files = list(theme.files)
+    for file, line, text, why in theme.not_read:
+        result.not_read.append(NotMeasured(file, line, "tailwind theme", text,
+                                           f"{text} {why}"))
+    for path, rel in files:
+        name = path.name.lower()
+        if name.startswith("tailwind.config."):
+            scanner.tailwind = True
+        why = _unread(path, name)
+        if why:
+            result.skipped.append((rel, why))
+            continue
+        try:
+            data = path.read_bytes()
+        except OSError as exc:
+            why = f"cannot be read ({exc.strerror or exc}); check its permissions and scan again"
+            result.skipped.append((rel, why))
+            continue
+        if b"\x00" in data[:8192]:
+            result.skipped.append((rel, "is a binary file, not code; nothing to read"))
+            continue
+        try:
+            text = _brief_text(data)
+        except UnicodeDecodeError:
+            result.skipped.append((rel, "is not UTF-8 text; save it as UTF-8 and scan again"))
+            continue
+        if name.startswith("postcss.config.") and "tailwind" in text:
+            scanner.tailwind = True
+        why = standalone(rel, text)
+        if why:
+            result.standalone.append((rel, why))
+        scanner.begin(rel)
+        try:
+            if name.endswith(CSS_EXT):
+                scanner.css(text, line_comments=not name.endswith(".css"))
+            else:
+                scanner.markup(text, markup=not name.endswith(SCRIPT_EXT))
+        except InputError as exc:
+            result.skipped.append((rel, str(exc).replace("import it again", "scan again")))
+            continue
+        scanner.end()
+        result.files += 1
+    return scanner.finish()
+
+
+# What a file is when it is shown where the app's stylesheet may not load.
+_TEMPLATE_EXT = (".html", ".htm", ".php", ".twig", ".hbs", ".handlebars", ".njk", ".liquid",
+                 ".erb", ".ejs", ".mustache", ".mjml")
+_ROUTE_DIRS = ("pages", "routes", "app", "views", "errors", "public", "static")
+_MAIL_DIRS = ("emails", "email", "mail", "mails", "newsletters")
+_ERROR_STEM = re.compile(r"(40[0-9]|50[0-9]|50x)$", re.I)
+_FULL_DOCUMENT = re.compile(r"<(html|Html)\b|<!doctype\s+html", re.I)
+ERROR_PAGE = ("an error page served on its own, where the app's stylesheet and custom properties "
+              "may not load")
+ERROR_ROUTE = ("the framework's error route, which replaces the root layout and loads none of "
+               "the app's stylesheets")
+MAIL_FOLDER = ("in a mail folder, which an email client styles without the app's custom "
+               "properties")
+MAIL_SUFFIX = ("by its mail template suffix, which an email client styles without the app's "
+               "custom properties")
+
+
+def standalone(rel: str, text: str) -> str:
+    """Why a file is an error page or an email template, shown where the
+    app's stylesheet and custom properties may not load, or "" for any other
+    file. Known by what the file is: a template or route file named for an
+    error status (404.html, errors/500.blade.php, pages/404.tsx), a
+    template in an errors folder, the framework's error route that replaces
+    the root layout (global-error.tsx), a template in a mail folder or a
+    component there that renders a full document, or a mail template suffix
+    (reset.email.tsx, welcome.mail.html). A file under components/ is never
+    one: an error banner or a verify-email screen is part of the app."""
+    parts = [p for p in re.split(r"[\\/]", rel) if p]
+    folders = [p.lower() for p in parts[:-1]]
+    name = parts[-1].lower()
+    stem, _, rest = name.partition(".")
+    if "components" in folders:
+        return ""
+    template = name.endswith(_TEMPLATE_EXT)
+    if _ERROR_STEM.fullmatch(stem) and (template or set(folders) & set(_ROUTE_DIRS)):
+        return ERROR_PAGE
+    if template and "errors" in folders:
+        return ERROR_PAGE
+    if stem == "global-error" and name.endswith(SCRIPT_EXT):
+        return ERROR_ROUTE
+    if rest.split(".", 1)[0] in ("email", "mail") and "." in rest:
+        return MAIL_SUFFIX
+    if set(folders) & set(_MAIL_DIRS) and (template or _FULL_DOCUMENT.search(text)):
+        return MAIL_FOLDER
+    return ""
+
+
+def _unread(path: Path, name: str) -> str:
+    """Why a file is not read, or ""."""
+    if not name.endswith(CSS_EXT + MARKUP_EXT + SCRIPT_EXT):
+        return ("is not a stylesheet, markup or script file; pass a folder, or a file ending in "
+                + ", ".join(CSS_EXT + MARKUP_EXT + SCRIPT_EXT))
+    if re.search(r"[.-]min\.(css|js|mjs|cjs)$", name):
+        return "is a minified build file; scan its source instead"
+    try:
+        info = path.stat()
+    except OSError as exc:
+        return f"cannot be read ({exc.strerror or exc}); check its permissions and scan again"
+    if not stat.S_ISREG(info.st_mode):
+        return ("is not a regular file (a pipe, socket or device), so it is not read; point the "
+                "scan at the source files")
+    if info.st_size > MAX_BYTES:
+        return (f"is {info.st_size:,} bytes, larger than {MAX_BYTES:,}, so it is build output or "
+                "data; scan the source it was built from")
+    return ""

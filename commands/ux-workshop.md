@@ -1,5 +1,5 @@
 ---
-description: Run a design thinking workshop / discovery session. Five sequential phases ending in a concrete Game Plan. Triggers on "run a workshop", "facilitate a discovery", "let's do a design thinking session". Use when running a discovery workshop, facilitating a design thinking session, exploring a problem space, running an exploration → heat map → stakeholder map → game plan flow, scoping a new product opportunity. Skip when the brief is already clear and scoped, the user just wants to design a single component, the team is mid-execution rather than in discovery.
+description: Run a design thinking workshop / discovery session. Five sequential phases ending in a concrete Game Plan. Triggers on "run a workshop", "facilitate a discovery", "let's do a design thinking session". Use when running a discovery workshop, facilitating a design thinking session, exploring a problem space, running an exploration to heat map to stakeholder map to game plan flow, scoping a new product opportunity. Skip when the brief is already clear and scoped (use ux-design), the user just wants to design a single component, the team is mid-execution rather than in discovery.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(find:*), Bash(mkdir:*), Glob, Grep, Task
 disable-model-invocation: false
 ---
@@ -10,7 +10,7 @@ You are running the `/ux-workshop` command from the `ux` plugin. The job is to f
 
 ## When to use
 
-Triggers: "run a workshop", "facilitate a discovery", "let's do a design thinking session", "I have stakeholders for an hour, what do we do", "we need to align on this opportunity", "kick off the project". Use when there's a real question and real participants — not as a solo brainstorm (use `/ux-design` or `/ux-frame` for that).
+Triggers: "run a workshop", "facilitate a discovery", "let's do a design thinking session", "I have stakeholders for an hour, what do we do", "we need to align on this opportunity", "kick off the project". Use when there's a real question and real participants, not as a solo brainstorm (use `/ux-design` or `/ux-discover --frame` for that).
 
 ## Input
 
@@ -32,17 +32,17 @@ Read before starting:
 ### 2. Compute the time-box
 
 Default split (adapt to total budget):
-- Phase 1 — Exploration Exercise: 25%
-- Phase 2 — Heat Map: 15%
-- Phase 3 — Stakeholder Mapping: 15%
-- Phase 4 — Remember the Future: 20%
-- Phase 5 — Game Plan: 25%
+- Phase 1: Exploration Exercise (25%)
+- Phase 2: Heat Map (15%)
+- Phase 3: Stakeholder Mapping (15%)
+- Phase 4: Remember the Future (20%)
+- Phase 5: Game Plan (25%)
 
 State the schedule upfront so participants know the pace.
 
 ### 3. Run the phases sequentially
 
-#### Phase 1 — Exploration Exercise
+#### Phase 1: Exploration Exercise
 
 Goal: collect insights, identify barriers, find opportunities.
 
@@ -54,7 +54,7 @@ Facilitate:
 
 Artifact: clustered theme map with tags.
 
-#### Phase 2 — Heat Map
+#### Phase 2: Heat Map
 
 Goal: prioritize opportunities by impact × feasibility × strategic fit.
 
@@ -68,7 +68,7 @@ Artifact: heat-mapped grid with the 3-5 hot opportunities ranked.
 
 If `research-synthesizer` is needed between phases (raw notes piling up, themes need digestion), dispatch it before continuing.
 
-#### Phase 3 — Stakeholder Mapping
+#### Phase 3: Stakeholder Mapping
 
 Goal: who's affected by this; map influence × interest.
 
@@ -80,7 +80,7 @@ Facilitate:
 
 Artifact: stakeholder grid with named parties + champion/blocker calls.
 
-#### Phase 4 — Remember the Future
+#### Phase 4: Remember the Future
 
 Goal: imagine successful future state in detail.
 
@@ -92,7 +92,7 @@ Facilitate:
 
 Artifact: future-state narrative + 5 concrete success markers.
 
-#### Phase 5 — Game Plan
+#### Phase 5: Game Plan
 
 Goal: concrete action plan with owners + dates + first MVP.
 
@@ -138,7 +138,7 @@ Kill criteria:  <what would end the initiative>
 ─── next ───
 Recommended: /ux-design     (start designing the MVP)
 Other moves: /ux-research   (if Game Plan reveals research gaps)
-             /ux-frame      (lock the brief from the Game Plan)
+             /ux-discover --frame  (lock the brief from the Game Plan)
              /ux-next       (let me decide)
 ```
 
@@ -206,7 +206,7 @@ For path issues: see references/process/discovery-protocol.md for state file loc
 After `/ux-workshop`:
 - `/ux-design` — start designing the MVP
 - `/ux-research` — if Game Plan reveals research gaps
-- `/ux-frame` — lock the brief from the Game Plan
+- `/ux-discover --frame`: lock the brief from the Game Plan
 - `/ux-next` — let the conductor pick
 
 ---

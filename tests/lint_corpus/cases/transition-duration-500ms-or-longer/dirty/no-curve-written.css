@@ -1,0 +1,2 @@
+.tab:hover { color: red; }
+.tab { transition: color 450ms; }

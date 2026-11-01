@@ -10,7 +10,7 @@ Thanks for your interest. This plugin is opinionated by design — its value com
 - **README translations** into a new language. Existing: en, ar, es, zh, fr, de. Add yours, then update the 6-language picker at the top of every other README.
 - **Fixes** to typos, broken examples, link rot, or factual errors in the canonical references.
 - **Regression tests.** Especially against bugs you found in the recommender, linter, persist, or MCP server.
-- **New commands** ONLY when they fill a clear, demonstrable gap in the 23 we ship. Most of what people want is already there under a different name.
+- **New commands** ONLY when they fill a clear, demonstrable gap in the 18 we ship. Most of what people want is already there under a different name.
 
 ## What we don't accept
 
@@ -38,7 +38,7 @@ Thanks for your interest. This plugin is opinionated by design — its value com
 
 ## Development
 
-The plugin is a Python engine (`engine/`), 12 queryable JSON manifests (`data/`), 25 slash command markdown files (`commands/`), 5 sub-agent definitions (`agents/`), 92 brand DESIGN.md specs (`references/brands/`), an MCP server (`engine/mcp/`), and the static docs site (`docs/` + `landing/`).
+The plugin is a Python engine (`engine/`), 12 queryable JSON manifests (`data/`), 18 slash command markdown files plus 7 aliases (`commands/`), 5 sub-agent definitions (`agents/`), 92 brand DESIGN.md specs (`references/brands/`), an MCP server (`engine/mcp/`), and the static docs site (`docs/` + `landing/`).
 
 Local dev:
 
@@ -46,7 +46,7 @@ Local dev:
 git clone https://github.com/Laith0003/ux-skill.git
 cd ux-skill
 
-# Python ≥3.9 baseline; ≥3.10 unlocks the MCP transport.
+# Python 3.10 or newer.
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
@@ -67,7 +67,7 @@ python3 scripts/build-commands-page.py
 ln -s "$(pwd)" ~/.claude/plugins/ux
 ```
 
-CI runs the pytest suite across Python 3.9 / 3.10 / 3.11 / 3.12 / 3.13 (matrix in `.github/workflows/test.yml`). Your PR must pass CI. The advisor reviewer will run your changes through `python3 -m engine.cli.main lint` — PRs must lint clean against ux-skill itself. We dogfood our own product.
+CI runs the pytest suite across Python 3.10 / 3.11 / 3.12 / 3.13 (matrix in `.github/workflows/test.yml`). Your PR must pass CI. The advisor reviewer will run your changes through `python3 -m engine.cli.main lint` — PRs must lint clean against ux-skill itself. We dogfood our own product.
 
 ## Releases
 

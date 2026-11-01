@@ -1,0 +1,4 @@
+.spinner { animation: spin 1s linear infinite; }
+.glow { animation: glow 4s ease-in-out infinite; }
+.beam { animation: beam 5s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .beam { animation: none; } }

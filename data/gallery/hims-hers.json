@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.518,
+    "density": 0.25,
+    "formality": 0.912,
+    "geometry": 0.632,
+    "motion": 0.277,
+    "type_personality": 0.5,
+    "warmth": 0.566
+  },
+  "axes_source": "Read from data/brands/hims-hers.json: warmth from the hue and chroma of the primary #3B5B4C and the canvas #F5F0E8; contrast from the ink #1C1C1C on that canvas, its depth and the chroma of #3B5B4C; density from its 8px spacing base; geometry from its radii 4, 8, 12, 9999px; formality from the chroma of its primary and ink; motion from its stated durations 180ms, 220ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#3B5B4C",
+  "brand_rule": "The primary #3B5B4C reaches 6.64:1 on the canvas #F5F0E8, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#D9DBDA",
+      "light": "#1D201E"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0C0E0C",
+      "light": "#F6F7F6"
+    },
+    "radius_control": "7px",
+    "state_duration": "150ms",
+    "tokens": 728,
+    "tokens_sha256": "0080d68a22fcbf72"
+  },
+  "id": "hims-hers",
+  "name": "Hims & Hers",
+  "spec": "data/brands/hims-hers.json"
+}

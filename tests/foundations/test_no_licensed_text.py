@@ -1,0 +1,281 @@
+"""Guard: nothing in the public engine repeats licensed foundation docs, names the
+client engagement, or leaks a confidential term.
+
+The guards:
+1. Shingle test against the private Ds/ corpus. Runs only on a machine that has
+   the private source (CI skips). A shingle only counts when it is
+   mostly prose (see MIN_ALPHA_WORDS below) so public numeric vocabulary
+   (cubic-bezier curves, rgba offsets, WCAG criterion titles) does not trip
+   the guard.
+2. A CI-safe unit test proving that prose filter: a prose sentence still yields
+   counted shingles, a numeric/token run does not. Needs no private source.
+3. Name guard for the client company name and the vendor domain (plus its common
+   misspelling). Runs everywhere, including CI, over every file `git ls-files`
+   tracks. The forbidden names are assembled at runtime so this file never
+   carries them as literals.
+4. Private-term guard against private-terms.txt in the private source folder
+   (PRIVATE_SOURCE below).
+   Skips cleanly when that file is absent (CI, or any machine without the
+   private source).
+5. Licensed token-name guard: no dotted name the private docs put in
+   backticks appears in any tracked file. Skips without the private source;
+   a CI-safe unit test pins the name pattern.
+"""
+import os
+import re
+import subprocess
+from pathlib import Path
+
+import pytest
+
+REPO = Path(__file__).resolve().parents[2]
+
+
+def _main_checkout(repo: Path):
+    """The main checkout that owns `repo`: the parent of git's common dir. For
+    a linked or detached worktree it is a different folder, often far away.
+    None when `repo` is not in git or git is not on the path."""
+    try:
+        out = subprocess.run(
+            ["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
+            cwd=repo, capture_output=True, text=True, check=True,
+        ).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return Path(out).resolve().parent if out else None
+
+
+def _find_private_source(repo: Path, env):
+    """Where the private source is, and the folders searched for it.
+
+    $UXSKILL_PRIVATE_SOURCE comes first and is taken as given. Otherwise the
+    first folder that holds private-terms.txt beside `repo`, then beside the
+    main checkout `repo` belongs to. Returns (folder or None, folders searched).
+    """
+    named = env.get("UXSKILL_PRIVATE_SOURCE")
+    if named:
+        return Path(named).expanduser(), []
+    repo = Path(repo).resolve()
+    looked = []
+    for checkout in (repo, _main_checkout(repo)):
+        if checkout is None or checkout.parent in looked:
+            continue
+        looked.append(checkout.parent)
+        siblings = sorted(checkout.parent.iterdir()) if checkout.parent.is_dir() else []
+        for d in siblings:
+            if (d / "private-terms.txt").is_file():
+                return d, looked
+    return None, looked
+
+
+def _skip_reason(looked):
+    """Why a private guard skipped: every folder searched, and how to point it."""
+    where = " and ".join(str(d) for d in looked) or "nowhere"
+    return (f"no private source: no folder holding private-terms.txt in {where}; "
+            "set UXSKILL_PRIVATE_SOURCE to the private source folder to run this guard")
+
+
+_FOUND, _LOOKED = _find_private_source(REPO, os.environ)
+PRIVATE_SOURCE = _FOUND or REPO.parent / "no-private-source"
+PRIVATE = PRIVATE_SOURCE / "Ds"
+PRIVATE_TERMS = PRIVATE_SOURCE / "private-terms.txt"
+
+
+def _missing(part: Path) -> str:
+    """The skip reason for a guard that needs `part` of the private source."""
+    if _FOUND is None:
+        return _skip_reason(_LOOKED)
+    return (f"no {part.name} in {PRIVATE_SOURCE}; set UXSKILL_PRIVATE_SOURCE to the "
+            f"private source folder that holds {part.name} to run this guard")
+
+
+THIS_FILE = Path(__file__).resolve()
+SCAN = (
+    "engine", "commands", "references", "agents", "docs", "README.md",
+    "tests", "CHANGELOG.md", "skills", "data",
+)
+SCAN_SUFFIXES = (".py", ".md", ".html", ".json", ".css", ".yaml", ".js")
+
+# Extensions that are never text, skipped without an open/decode attempt.
+BINARY_SUFFIXES = {
+    ".png", ".jpg", ".jpeg", ".gif", ".ico", ".pdf", ".fig", ".zip",
+    ".ttf", ".otf", ".woff", ".woff2", ".mp4", ".mov", ".webp",
+}
+
+
+# A shingle only counts when most of it is prose. Cubic-bezier numbers,
+# rgba shadow offsets, and WCAG criterion titles ("2.3.1 ...") are public
+# vocabulary, not licensed phrasing, so require the majority of an 8-gram's
+# words to be real alphabetic terms before treating it as a match.
+MIN_ALPHA_WORDS = 5
+_ALPHA_WORD = re.compile(r"[a-z']{3,}")
+
+
+def shingles(text, n=8):
+    w = re.findall(r"[a-z0-9']+", text.lower())
+    result = set()
+    for i in range(len(w) - n + 1):
+        gram = w[i:i + n]
+        alpha = sum(1 for word in gram if _ALPHA_WORD.fullmatch(word))
+        if alpha >= MIN_ALPHA_WORDS:
+            result.add(" ".join(gram))
+    return result
+
+
+@pytest.mark.skipif(not PRIVATE.exists(), reason=_missing(PRIVATE))
+def test_no_eight_word_run_from_licensed_docs():
+    licensed = set()
+    for md in PRIVATE.glob("*/*.md"):
+        licensed |= shingles(md.read_text(encoding="utf-8", errors="ignore"))
+    hits = []
+    for root in SCAN:
+        base = REPO / root
+        if not base.exists():
+            continue
+        if base.is_file():
+            files = [base]
+        else:
+            files = [p for p in base.rglob("*") if p.suffix in SCAN_SUFFIXES]
+        for f in files:
+            if f.resolve() == THIS_FILE:
+                continue
+            shared = shingles(f.read_text(encoding="utf-8", errors="ignore")) & licensed
+            if shared:
+                hits.append(f"{f.relative_to(REPO)}: {sorted(shared)[0]}")
+    assert not hits, "licensed phrasing found:\n" + "\n".join(hits[:20])
+
+
+def test_shingle_filter_counts_prose_not_numbers():
+    prose = (
+        "the palette must always keep every semantic role pointing at a "
+        "primitive step"
+    )
+    numeric = "cubic bezier 0 4 0 0 2 1 standard"
+    assert shingles(prose), "prose sentence should still yield counted shingles"
+    assert not shingles(numeric), "numeric/token run should yield no counted shingles"
+    # An exactly eight-word text is one shingle, not zero.
+    assert shingles("every semantic role must alias one primitive step") == {
+        "every semantic role must alias one primitive step"}
+
+
+def _tracked_files():
+    out = subprocess.run(
+        ["git", "ls-files"], cwd=REPO, capture_output=True, text=True, check=True,
+    ).stdout
+    for rel in out.splitlines():
+        if not rel:
+            continue
+        p = REPO / rel
+        if p.suffix.lower() in BINARY_SUFFIXES:
+            continue
+        if not p.is_file():
+            continue
+        yield rel, p
+
+
+def _read_text(p):
+    try:
+        return p.read_text(encoding="utf-8")
+    except (UnicodeDecodeError, OSError):
+        return None
+
+
+# Built at runtime, piece by piece, so the literal names never appear in this
+# file's source (or anywhere else in the public repo).
+_CLIENT_NAME = "".join(["m", "e", "r", "c", "a", "t", "o"])
+_VENDOR_TLD = "".join(["s", "u", "r", "f"])
+_VENDOR_DOMAIN = "".join(["d", "e", "s", "i", "g", "n", "s", "y", "s", "t", "e", "m", "s"]) + "." + _VENDOR_TLD
+_VENDOR_DOMAIN_MISSPELLED = "".join(["d", "e", "s", "i", "g", "n", "s", "y", "s", "t", "e", "m"]) + "." + _VENDOR_TLD
+FORBIDDEN_NAMES = (_CLIENT_NAME, _VENDOR_DOMAIN, _VENDOR_DOMAIN_MISSPELLED)
+
+
+def test_no_confidential_names_anywhere():
+    hits = []
+    for rel, p in _tracked_files():
+        if p.resolve() == THIS_FILE:
+            continue
+        text = _read_text(p)
+        if text is None:
+            continue
+        for lineno, line in enumerate(text.splitlines(), 1):
+            lower = line.lower()
+            for name in FORBIDDEN_NAMES:
+                if name in lower:
+                    hits.append(f"{rel}:{lineno}")
+                    break
+    assert not hits, (
+        "confidential name found. Remove the name; the method stays, "
+        "the source is never named:\n" + "\n".join(hits[:50])
+    )
+
+
+@pytest.mark.skipif(not PRIVATE_TERMS.exists(), reason=_missing(PRIVATE_TERMS))
+def test_no_private_terms_anywhere():
+    terms = []
+    for line in PRIVATE_TERMS.read_text(encoding="utf-8", errors="ignore").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        terms.append(line.lower())
+    hits = []
+    for rel, p in _tracked_files():
+        if p.resolve() == THIS_FILE:
+            continue
+        text = _read_text(p)
+        if text is None:
+            continue
+        for lineno, line in enumerate(text.splitlines(), 1):
+            lower = line.lower()
+            for term in terms:
+                if term in lower:
+                    hits.append(f"{rel}:{lineno}: {term}")
+                    break
+    assert not hits, "private term found:\n" + "\n".join(hits[:50])
+
+
+# Licensed token names: every dotted name the private docs put in backticks
+# (for example a role path or a style name). Our taxonomy must not reuse
+# them. Ramp names such as color.<family>.<step> are the common convention
+# the engine chose on purpose and are allowed; names that start with a capital are
+# platform APIs, not token names.
+_TOKEN_NAME = re.compile(r"`([a-z][A-Za-z0-9-]*(?:[./][A-Za-z0-9-]+)+)`")
+_RAMP = re.compile(r"color\.[a-z]+\.\d+$")
+_FILE_NAME = re.compile(r"\.(md|json|css|js|ts|tsx|html|fig|png|svg|py)$")
+
+
+def _licensed_token_names():
+    names = set()
+    for md in PRIVATE.glob("*/*.md"):
+        for m in _TOKEN_NAME.findall(md.read_text(encoding="utf-8", errors="ignore")):
+            name = m.replace("/", ".")
+            if not _RAMP.match(name) and not _FILE_NAME.search(name):
+                names.add(name)
+    return names
+
+
+@pytest.mark.skipif(not PRIVATE.exists(), reason=_missing(PRIVATE))
+def test_no_licensed_token_names_anywhere():
+    names = _licensed_token_names()
+    assert len(names) > 100, "the private docs should yield hundreds of names; check the pattern"
+    pattern = re.compile(r"(?<![A-Za-z0-9_.-])(" + "|".join(
+        re.escape(n) for n in sorted(names, key=len, reverse=True)) + r")(?![A-Za-z0-9_-])")
+    hits = []
+    for rel, p in _tracked_files():
+        if p.resolve() == THIS_FILE:
+            continue
+        text = _read_text(p)
+        if text is None:
+            continue
+        for lineno, line in enumerate(text.splitlines(), 1):
+            m = pattern.search(line)
+            if m:
+                hits.append(f"{rel}:{lineno}: {m.group(1)}")
+    assert not hits, "licensed token name found; use our own taxonomy:\n" + "\n".join(hits[:50])
+
+
+def test_token_name_pattern_skips_ramps_and_files():
+    assert _TOKEN_NAME.findall("use `spacing.stack.md` and `color.brand.500` in `tokens.json`") == [
+        "spacing.stack.md", "color.brand.500", "tokens.json"]
+    assert _RAMP.match("color.brand.500") and not _RAMP.match("space.control.gap")
+    assert _FILE_NAME.search("tokens.json") and not _FILE_NAME.search("radius.card")
+

@@ -1,0 +1,13 @@
+<!doctype html><html><head><style>
+button { outline: none; }
+:focus-visible { outline: 2px solid #06c; }
+.tabs [role=tab] { outline: none; }
+.tabs:has(:focus-visible) { box-shadow: 0 0 0 2px #06c; }
+.toc a { outline: none; }
+.toc > a:focus-visible { outline: 2px solid #06c; }
+.doc a { outline: none !important; }
+.doc a:focus-visible { outline: 2px solid #06c; }
+</style></head><body>
+<nav class="toc"><ul><li><a href="#a">A</a></li></ul></nav>
+<main class="doc"><div class="tabs"><button role="tab">npm</button><button role="tab">pnpm</button></div><pre>npm i acme</pre><button>Copy</button><a href="/x">Next</a></main>
+</body></html>

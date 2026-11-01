@@ -1,0 +1,69 @@
+# Hero: the first band of a landing page. Every value is a semantic role.
+name: hero
+status: experimental
+category: section
+description: The first band of a landing page, the headline, one line, the one action and a photograph, set by the brand's composition.
+job: Prove in one screen what the product is, who it is for and what to do next.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: action, rtlBehavior: logical}
+  - {name: media, rtlBehavior: logical}
+  - {name: scrim, rtlBehavior: fixed}
+  - {name: fragment, rtlBehavior: logical}
+slots:
+  - {name: action, takes: [button], required: true}
+  - {name: media, takes: [photograph], required: true}
+  - {name: fragment, takes: [interface-fragment], required: false}
+variants:
+  - {name: media, values: [photograph, photograph-and-fragment], default: photograph}
+  - {name: alignment, values: [bottom-start, center, split], default: bottom-start}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.display}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: heading, property: stack-gap, role: space.text.gap}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: max-width, role: layout.measure.landing}
+  - {part: media, property: radius, role: radius.media, when: {alignment: split}}
+  - {part: scrim, property: fill, role: imagery.scrim, when: {alignment: bottom-start}}
+  - {part: scrim, property: fill, role: imagery.scrim, when: {alignment: center}}
+  - {part: heading, property: text, role: imagery.on-scrim, when: {alignment: bottom-start}}
+  - {part: heading, property: text, role: imagery.on-scrim, when: {alignment: center}}
+  - {part: body, property: text, role: imagery.on-scrim, when: {alignment: bottom-start}}
+  - {part: body, property: text, role: imagery.on-scrim, when: {alignment: center}}
+  - {part: fragment, property: radius, role: radius.card, when: {media: photograph-and-fragment}}
+  - {part: fragment, property: shadow, role: elevation.lifted, when: {media: photograph-and-fragment}}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.tint]
+proof: none
+phone: [drop-decorative-layers, fold-side-columns, recrop-fragments]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - The headline says what the product does for the reader in their words
+    - The line under it names who it is for or what changes for them
+usage:
+  do:
+    - Set the headline in the system's display role at the size the brand's expressiveness gives it, anchored at the bottom start over a full-bleed photograph unless the brand leans to capitals, which centres it
+    - Use a photograph sourced by the system's photo direction; an interface fragment is extra imagery beside it, never a replacement
+    - Put text over a photograph only under imagery.scrim, in imagery.on-scrim
+    - On a phone, drop decorative layers, fold the side column into the text stack and recrop an interface fragment to the part that matters instead of shrinking it
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+  dont:
+    - Do not put two actions of equal weight in the hero
+    - Do not set the headline over a photograph with no scrim
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

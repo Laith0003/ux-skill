@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.85,
+    "density": 0.5,
+    "formality": 0.3,
+    "geometry": 0.133,
+    "motion": 0.639,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/uniqlo.json: warmth from the hue and chroma of the primary #FF0000 and the canvas #FFFFFF; contrast from the ink #000000 on that canvas, its depth and the chroma of #FF0000; density from its 4px spacing base; geometry from its radii 0, 4px; formality from the chroma of its primary and ink; motion from its stated durations 1200ms, 200ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FF0000",
+  "brand_rule": "The primary #FF0000 reaches 4.00:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#EE0000",
+      "light": "#EE0000"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "3px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "35406fc9dfa376f2"
+  },
+  "id": "uniqlo",
+  "name": "UNIQLO",
+  "spec": "data/brands/uniqlo.json"
+}

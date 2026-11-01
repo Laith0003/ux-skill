@@ -1,0 +1,2 @@
+.field:focus-within { outline: 2px solid #0a58ca; outline-offset: 2px; }
+.field-input:focus { outline: none; }

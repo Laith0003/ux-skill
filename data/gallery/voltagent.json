@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.5,
+    "formality": 0.404,
+    "geometry": 0.275,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.493
+  },
+  "axes_source": "Read from data/brands/voltagent.json: warmth from the hue and chroma of the primary #00D992 and the canvas #101010; contrast from the ink #F2F2F2 on that canvas, its depth and the chroma of #00D992; density from its 4px spacing base; geometry from its radii 0, 4, 6, 8px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#00D992",
+  "brand_rule": "The primary #00D992 reaches 10.28:1 on the canvas #101010, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#00D992",
+      "light": "#00D992"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0C0E0C",
+      "light": "#F6F7F6"
+    },
+    "radius_control": "4px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "828ab03a4e587a18"
+  },
+  "id": "voltagent",
+  "name": "VoltAgent",
+  "spec": "data/brands/voltagent.json"
+}

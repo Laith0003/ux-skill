@@ -1,0 +1,60 @@
+# Pricing: the plans and what each costs. Every value is a semantic role.
+name: pricing
+status: experimental
+category: section
+description: The plans with their prices, what each holds and one action each, with the recommended plan marked in words.
+job: Prove what the reader pays and gets, so they can choose a plan.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: plan, rtlBehavior: logical}
+  - {name: price, rtlBehavior: logical}
+  - {name: action, rtlBehavior: logical}
+  - {name: switcher, rtlBehavior: logical}
+slots:
+  - {name: plan, takes: [card], required: true}
+  - {name: action, takes: [button], required: true}
+  - {name: switcher, takes: [segmented-control], required: false}
+variants:
+  - {name: density, values: [standard, compact], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.landing-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: max-width, role: layout.container.max}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.section-title}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: heading, property: stack-gap, role: space.text.gap}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+  - {part: body, property: max-width, role: layout.measure.landing}
+  - {part: plan, property: gap, role: space.group.gap}
+  - {part: price, property: font, role: type.text.figure}
+  - {part: price, property: text, role: color.text.default}
+contrast:
+  - {fg: color.text.default, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.page, color.surface.tint]
+proof: none
+phone: [fold-side-columns, plan-switcher]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - Name each plan by who it is for
+    - Say the price with its period and what it includes
+usage:
+  do:
+    - Mark the recommended plan in words and with an edge, never color alone
+    - On a phone, turn three or more plans into a plan switcher (the segmented control) with the recommended plan preselected; two plans keep both columns
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+  dont:
+    - Do not hide the price behind a contact form when the client publishes one
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

@@ -24,7 +24,7 @@ If `.ux/last-frame.json` exists, read it first — audience and outcome anchor e
 
 ### 1. Anchor to the framing
 
-Read `.ux/last-frame.json` if present. If absent and the surface clearly needs framing context, suggest running `/ux-frame` first — but proceed if the user insists.
+Read `.ux/last-frame.json` if present. If absent and the surface clearly needs framing context, suggest running `/ux-discover --frame` first, but proceed if the user insists.
 
 ### 2. Read the surface
 
@@ -45,6 +45,8 @@ Reference: `references/process/lean-ux-gothelf.md` and `references/process/lean-
 Check: does the surface match the audience and outcome from the framing? Is the hypothesis observable in the surface? Is the success signal supported by what the user can do here?
 
 If the framing is missing, this lens checks: does the surface have a clear "who is this for and what changes for them?" signal — or is it generic?
+
+Every page gets two named checks. The **stranger test**: show someone new only the first screen and ask them to name the product and its reader; a page that needs the scroll to answer fails. The **swap test**: put a rival's name into the headline; a headline that stays true says nothing about this product. Write findings as counts, never adjectives: "four filled buttons above the fold", not "cluttered".
 
 #### Lens 2 — DISCOVER
 
@@ -87,6 +89,8 @@ For each finding, assign severity:
 
 Group findings by lens. Within each lens, sort Critical → Cosmetic.
 
+**What each finding rests on.** Tag every finding with its `evidence_kind`: `measured` (a tool read it), `counted` (the arithmetic is shown), `quoted` (a user's or the client's words, with where they come from), `observed` (seen on the surface), `heuristic` (a named, published principle), `assumed`, `hypothesis`, `unknown`, or `out-of-scope`. An assumption sits in the finding it weakens, not in a closing disclaimer. A threshold is either cited to its source for what the source says, or labelled a house default; never present one as the other. `unknown` is a valid answer. Never predict a lift in conversion or in any other number.
+
 **Brand fidelity (when a client brand is on file).** If `.ux/brand.json` exists, also judge BRAND FIDELITY: run `evaluate(html, brand_profile=...)` (or read it from a prior `uxskill evolve --brand-file` run) for `brand_fidelity` + `imagery` + `brand_passed`. Treat off-brand drift — wrong or absent brand primary, missing logo, house-style colors (clay `#cc785c` / blurple `#5e6ad2`), or a text-wall with no real imagery — as a **Critical** finding under DISCOVER: a surface that ignores the client's brand fails no matter how polished. See `references/process/brand-extraction.md`.
 
 ### 5. Format the output
@@ -105,6 +109,7 @@ FRAME
   [<severity>] <finding title>
     Principle: <which principle>
     Evidence:  <what you saw>
+    Rests on:  <evidence_kind, with its source or its arithmetic>
     Fix:       <what to do>
 
 DISCOVER
@@ -128,7 +133,7 @@ RECOVER
 3. <third move>
 ```
 
-Keep each finding to three lines. No prose paragraphs in the findings section.
+Keep each finding to four lines. No prose paragraphs in the findings section.
 
 ### 6. Persist state
 
@@ -145,6 +150,7 @@ Write `.ux/last-audit.json`:
       "severity": "Critical | High | Medium | Cosmetic",
       "title": "<short>",
       "principle": "<which principle>",
+      "evidence_kind": "measured | counted | quoted | observed | heuristic | assumed | hypothesis | unknown | out-of-scope",
       "evidence": "<what you saw>",
       "fix": "<what to do>"
     }
@@ -176,13 +182,13 @@ The audit report from step 5, followed by either fix-loop results (if `--fix`) o
 
 ## State persisted
 
-- `.ux/last-audit.json` — keys: `command`, `timestamp`, `surface`, `findings` (array of `{lens, severity, title, principle, evidence, fix}`), `severity_counts`, `dominant_lens`, `strategic_moves`.
+- `.ux/last-audit.json` keys: `command`, `timestamp`, `surface`, `findings` (array of `{lens, severity, title, principle, evidence_kind, evidence, fix}`), `severity_counts`, `dominant_lens`, `strategic_moves`.
 
 ## Next prompt
 
 Based on `dominant_lens` (the lens with the highest-severity cluster), recommend the narrower follow-up:
 
-- FRAME → `/ux-frame` (the brief is the problem)
+- FRAME → `/ux-discover --frame` (the brief is the problem)
 - DISCOVER → `/ux-audit --fix` (structural fixes)
 - SCAN → `/ux-polish` (hierarchy and rhythm)
 - ACT → `/ux-audit --fix` (interaction-level fixes)
@@ -202,7 +208,7 @@ Other moves: /ux-audit --fix    (apply all findings)
 ## Hard rules
 
 - Never produce a finding without a citation to the relevant reference principle.
-- Never write a finding longer than three lines (Principle, Evidence, Fix). Push detail into the fix loop or a follow-up command.
+- Never write a finding longer than four lines (Principle, Evidence, Rests on, Fix). Push detail into the fix loop or a follow-up command.
 - Never skip a lens because the surface "doesn't need it." Run all six — "no findings" is itself a finding.
 - Never use vague severity ("kinda bad"). Critical / High / Medium / Cosmetic only.
 - Never start a fix loop without a clean working tree confirmation.
@@ -223,7 +229,7 @@ Other moves: /ux-audit --fix    (apply all findings)
 | Surface URL returns 4xx / 5xx / timeout | Fall back to a file path, screenshot, or pasted code; surface the fetch error to the user |
 | File path does not exist | List nearby paths with `ls` of the parent directory; ask which one matches |
 | Screenshot too low-resolution or scope too broad to inspect | Ask for higher resolution or scope narrowed to one section |
-| `.ux/last-frame.json` absent and surface clearly needs framing | Suggest running `/ux-frame` first; proceed if the user insists, with "no framing on file" stamped on the report |
+| `.ux/last-frame.json` absent and surface clearly needs framing | Suggest running `/ux-discover --frame` first; proceed if the user insists, with "no framing on file" stamped on the report |
 | Description-only input with no inspectable artifact | Ask one clarifying question to either obtain an artifact or narrow scope; then proceed |
 | `--fix` requested on a dirty working tree | Stop; prompt for commit / stash / abort before any dispatch |
 

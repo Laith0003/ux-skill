@@ -1,0 +1,46 @@
+# Logo row: proof by the marks of named organisations. Every value is a semantic role.
+name: logo-row
+status: experimental
+category: section
+description: A row of the client's real customer, partner or certification marks, in the logo role, at one height.
+job: Prove that named organisations already use or certify the product.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: logo, rtlBehavior: logical}
+slots:
+  - {name: logo, takes: [logo], required: true}
+variants:
+  - {name: density, values: [standard, compact], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.page}
+  - {part: container, property: padding-block, role: layout.region-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.label}
+  - {part: heading, property: text, role: color.text.muted}
+  - {part: logo, property: icon, role: color.logo}
+  - {part: logo, property: gap, role: space.group.gap}
+contrast:
+  - {fg: color.text.muted, bg: surfaces, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.logo, bg: color.surface.page, minimum: 3, criterion: "system", high: 3}
+surfaces: [color.surface.page, color.surface.tint]
+proof: {kinds: [logos, certifications], drop: "with no real customer or certification marks the row would invent them, so it drops"}
+phone: [pair-small-items]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - The label names whose marks they are, in a few words
+usage:
+  do:
+    - Show only marks the client may use, each with its organisation's name as alternative text
+    - On a phone, pair the marks two to a row
+  dont:
+    - Do not animate the row into a marquee when it fits
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

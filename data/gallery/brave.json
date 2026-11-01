@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.5,
+    "formality": 0.429,
+    "geometry": 0.632,
+    "motion": 0.279,
+    "type_personality": 0.5,
+    "warmth": 0.803
+  },
+  "axes_source": "Read from data/brands/brave.json: warmth from the hue and chroma of the primary #FB542B and the canvas #13141B; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #FB542B; density from its 4px spacing base; geometry from its radii 4, 8, 12, 999px; formality from the chroma of its primary and ink; motion from its stated durations 200ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FB542B",
+  "brand_rule": "The primary #FB542B reaches 5.60:1 on the canvas #13141B, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DE3700",
+      "light": "#FB542B"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0B",
+      "light": "#F8F6F5"
+    },
+    "radius_control": "9px",
+    "state_duration": "200ms",
+    "tokens": 730,
+    "tokens_sha256": "4c5ce447dbb5efcd"
+  },
+  "id": "brave",
+  "name": "Brave",
+  "spec": "data/brands/brave.json"
+}

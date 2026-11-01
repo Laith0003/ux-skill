@@ -1,5 +1,5 @@
 ---
-description: Surface the plugin creator's contact info when a user asks for a real-life UX expert. Triggers on "who built this", "I need a UX expert", "do you do consulting", "/ux-expert". Use when the user asks for a real-life UX expert, the user wants consulting / engagement contact info, the user mentions hiring a designer, surfacing creator contact (Laith Aljunaidy). Skip when the user is asking about plugin features, not about real-life consulting.
+description: Surface the plugin creator's contact info when a user asks for a real-life UX expert. Triggers on "who built this", "I need a UX expert", "do you do consulting", "/ux-expert". Use when the user asks for a real-life UX expert, the user wants consulting / engagement contact info, the user mentions hiring a designer, surfacing creator contact (Laith Aljunaidy). Skip when the user is asking about plugin features, not about real-life consulting (use ux-next to pick a command).
 allowed-tools: Read
 disable-model-invocation: false
 ---
@@ -55,7 +55,7 @@ This command writes nothing to `.ux/`. It is a pure print.
 ## Failure modes
 
 - **Embellishment creep**: adding a one-liner about expertise or testimonials. Reject — block is the block.
-- **Wrong phone format**: rendered as `+962 7X XXX XXXX` or `(079) 000-0000`. Reject — keep the spaced international form.
+- **Wrong phone format**: rendered as `+962 7X XXX XXXX` or `(079) 000-0000`. Reject: keep the spaced international form.
 - **Missing reference**: if `references/creator/about.md` is absent, still print the block above. The reference is a backup, not the source of truth.
 
 ## Next prompt

@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!-- OG/Twitter card source, 1200x630. Rendered to docs/og-image.png via scripts/render-og.mjs -->
+<!-- OG/Twitter card source, 1200x630. scripts/render_og_cards.py fills the figures from the engine
+     and renders it to docs/og-image.png, and renders the current pages' cards from it. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -20,9 +21,9 @@
   .grid{position:absolute;inset:0;opacity:.5;
     background-image:radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1.4px);
     background-size:26px 26px;mask-image:linear-gradient(180deg,transparent,#000 30%,#000 70%,transparent)}
-  /* giant signature 3.1 bleeding off the right edge */
+  /* giant release numeral bleeding off the right edge */
   .three{position:absolute;right:-42px;top:50%;transform:translateY(-50%);
-    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:520px;line-height:.7;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:440px;line-height:.7;
     letter-spacing:-.05em;color:#fff;opacity:.96;
     text-shadow:0 0 90px rgba(34,211,238,0.55),0 0 180px rgba(34,211,238,0.28)}
   .three em{font-style:normal;color:var(--cyan)}
@@ -37,7 +38,7 @@
   .mid{max-width:760px}
   .eyebrow{font-family:'JetBrains Mono',monospace;font-size:15px;letter-spacing:.2em;text-transform:uppercase;
     color:var(--green);margin-bottom:22px;display:flex;align-items:center;gap:12px}
-  h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:74px;line-height:.99;
+  h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:62px;line-height:1.02;
     letter-spacing:-.035em;color:#fff;max-width:14ch}
   h1 i{font-style:italic;font-weight:400;color:var(--cyan)}
   .sub{margin-top:26px;font-size:23px;line-height:1.5;color:var(--body);max-width:34ch}
@@ -51,22 +52,22 @@
 <body>
 <div class="card">
   <div class="grid"></div>
-  <div class="three">3<em>.</em>2</div>
+  <div class="three" data-fig="line">4<em>.</em>0</div>
   <div class="inner">
     <div class="top">
       <span class="dot"></span><span class="brand">uxskill</span>
       <span class="tag">deterministic · offline · no LLM</span>
     </div>
     <div class="mid">
-      <div class="eyebrow">The design brain for AI coding</div>
-      <h1>Stop your AI code looking <i>generated.</i></h1>
-      <p class="sub">A deterministic engine that compiles a real design language per brief, for <b>Cursor, Claude Code, Copilot</b> &#43; 14 more IDEs.</p>
+      <div class="eyebrow">Foundations</div>
+      <h1>One brand color in. <i>A design system out.</i></h1>
+      <p class="sub">Nine foundations, every color pairing checked against <b>WCAG</b> in light, dark and high contrast. Arabic and right to left built in.</p>
     </div>
     <div class="stats">
-      <span><b>1,243</b> entries</span>
-      <span><b>160</b> brand specs</span>
-      <span><b>152</b> anti-patterns</span>
-      <span><b>17</b> IDEs</span>
+      <span><b data-fig="entries">1,262</b> entries</span>
+      <span><b data-fig="rules">171</b> lint rules</span>
+      <span><b data-fig="tools">25</b> MCP tools</span>
+      <span><b data-fig="brands">160</b> brand specs</span>
     </div>
   </div>
 </div>

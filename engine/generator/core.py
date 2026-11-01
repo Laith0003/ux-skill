@@ -24,7 +24,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from engine.recommender.core import Brief, Recommendation
 
@@ -115,15 +115,21 @@ def generate(
     manifest_path = target / "manifest.json"
     manifest_path.write_text(_emit_manifest(recommendation, brief), encoding="utf-8")
 
+    summary: Dict[str, Any] = {
+        "style": (recommendation.style or {}).get("id"),
+        "palette": (recommendation.palette or {}).get("id"),
+        "type_pair": (recommendation.type_pair or {}).get("id"),
+        "guardrails": len(recommendation.guardrails),
+    }
+    existing = getattr(recommendation, "existing_system", None)
+    if existing:
+        # The project's own system wins; these tokens only fill its gaps.
+        summary["status"] = "suggestion"
+        summary["existing_system"] = [s.get("path") for s in existing.get("sources") or []]
     return GeneratedBundle(
         out_dir=str(target),
         files_written=[str(tokens_path), str(manifest_path)],
-        summary={
-            "style": (recommendation.style or {}).get("id"),
-            "palette": (recommendation.palette or {}).get("id"),
-            "type_pair": (recommendation.type_pair or {}).get("id"),
-            "guardrails": len(recommendation.guardrails),
-        },
+        summary=summary,
     )
 
 
@@ -244,17 +250,109 @@ def _emit_design_md(rec: Recommendation, brief: Optional[Brief] = None) -> str:
     return "\n".join(out) + "\n"
 
 
-def design_md(rec: Recommendation, brief: Optional[Brief] = None,
-              out_path: str = "./DESIGN.md") -> Dict[str, Any]:
-    """Write a DESIGN.md from a Recommendation. Returns a small summary dict."""
-    target = Path(out_path)
+class DesignMdRefused(ValueError):
+    """design-md did not write. The message names the file and the fix."""
+
+
+def _resolve_target(target: Path, flag: str = "--out") -> Tuple[Path, str]:
+    """Where to write: ``target`` when it is new or ux-skill's own unchanged
+    file, else a sibling ``<stem>.ux-skill.md``, with a note saying so. A
+    DESIGN.md a person wrote or edited is never overwritten, whatever its name."""
+    from engine.existing import ownership
+    state = ownership(target)
+    if state in ("missing", "owned"):
+        return target, ""
+    beside = target.with_name(target.stem + ".ux-skill.md")
+    how = {"edited": "was changed by hand after ux-skill wrote it",
+           "legacy": "has no ux-skill digest, so it may hold hand edits"}.get(state,
+                                                                          "is hand-written")
+    if ownership(beside) not in ("missing", "owned"):
+        raise DesignMdRefused(
+            f"{target} {how}, and so is {beside}, so design-md did not write. Keep them as "
+            f"the contract, or pass {flag} with a new path")
+    return beside, (f"{target} {how}, so design-md did not write it; it wrote {beside} beside "
+                    "it. The existing file stays the contract.")
+
+
+def _write_design_md(target: Path, content: str) -> Tuple[Path, str]:
+    target, note = _resolve_target(target)
     if str(target.parent) not in ("", "."):
         target.parent.mkdir(parents=True, exist_ok=True)
+    from engine.existing import stamp_digest
+    target.write_text(stamp_digest(content, comment=True), encoding="utf-8")
+    return target, note
+
+
+def _yaml_str(value: str) -> str:
+    return '"%s"' % _strip_dashes(str(value)).replace("\\", "\\\\").replace('"', "'")
+
+
+def _emit_design_md_from_system(existing: Dict[str, Any]) -> str:
+    """A DESIGN.md that mirrors an existing system: only what it declares, in
+    its own naming. No engine pick is added, so nothing can contradict it."""
+    declared = existing.get("declared") or {}
+    root = Path(existing.get("root") or ".")
+    name = (_strip_dashes(root.name).strip() or "project").replace(" ", "-").lower()
+    paths = [s.get("path", "") for s in existing.get("sources") or [] if s.get("path")]
+    description = ("Mirrors the existing design system in %s. %s: the system's own files win "
+                   "over this one." % (", ".join(paths[:4]) or name,
+                                       _DESIGN_MD_SYSTEM_MARKER))
+    out: List[str] = ["---", "version: alpha", f"name: {name}-design-system",
+                      f"description: {_yaml_str(description)}"]
+    colors = dict(declared.get("colors") or {})
+    primary = declared.get("primary")
+    if primary and "primary" not in colors:
+        colors = {"primary": primary, **colors}
+    text = declared.get("text")
+    if text and "text" not in colors and text not in colors.values():
+        colors["text"] = text
+    if colors:
+        out.append("colors:")
+        out += [f"  {k}: {_yaml_str(v)}" for k, v in colors.items()]
+    fonts = declared.get("fonts") or {}
+    if fonts:
+        out.append("typography:")
+        for role in ("display", "body"):
+            if fonts.get(role):
+                out += [f"  {role}:", f"    fontFamily: {_yaml_str(fonts[role])}"]
+    out.append("---")
+    out.append("")
+    out.append("Tokens not listed here are in the system's own files: " +
+               (", ".join(paths) or "see the project") + ".")
+    return "\n".join(out) + "\n"
+
+
+_DESIGN_MD_SYSTEM_MARKER = "Generated by ux-skill from the system's own tokens"
+
+
+def design_md_from_system(existing: Dict[str, Any], out_path: str = "./DESIGN.md") -> Dict[str, Any]:
+    """Write a DESIGN.md from an existing system (a `detect_existing_system`
+    result). Refuses to overwrite a DESIGN.md ux-skill did not write."""
+    content = _emit_design_md_from_system(existing)
+    target, note = _write_design_md(Path(out_path), content)
+    return {
+        "file_written": str(target),
+        "wrote_beside": bool(note),
+        "note": note,
+        "format": "DESIGN.md (Google Stitch / awesome-design-md standard)",
+        "bytes": len(content),
+        "source": "existing design system",
+        "system_files": [s.get("path") for s in existing.get("sources") or []],
+    }
+
+
+def design_md(rec: Recommendation, brief: Optional[Brief] = None,
+              out_path: str = "./DESIGN.md") -> Dict[str, Any]:
+    """Write a DESIGN.md from a Recommendation. Returns a small summary dict.
+    Never overwrites a DESIGN.md a person wrote or edited: it writes beside
+    it and says so in ``note``."""
     content = _emit_design_md(rec, brief)
-    target.write_text(content, encoding="utf-8")
+    target, note = _write_design_md(Path(out_path), content)
     palette = rec.palette or {}
     return {
         "file_written": str(target),
+        "wrote_beside": bool(note),
+        "note": note,
         "format": "DESIGN.md (Google Stitch / awesome-design-md standard)",
         "bytes": len(content),
         "picks": {

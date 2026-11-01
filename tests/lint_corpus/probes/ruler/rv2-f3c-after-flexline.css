@@ -1,0 +1,2 @@
+.eyebrow { display: flex; align-items: center; gap: 1rem; }
+.eyebrow::after { content: ""; flex: 1; height: 1px; background: var(--color-line-subtle); }

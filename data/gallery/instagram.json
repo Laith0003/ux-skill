@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.749,
+    "density": 0.5,
+    "formality": 0.426,
+    "geometry": 0.632,
+    "motion": 0.721,
+    "type_personality": 0.5,
+    "warmth": 0.669
+  },
+  "axes_source": "Read from data/brands/instagram.json: warmth from the hue and chroma of the primary #ED1C84 and the canvas #FFFFFF; contrast from the ink #262626 on that canvas, its depth and the chroma of #ED1C84; density from its 4px spacing base; geometry from its radii 4, 8, 12, 999px; formality from the chroma of its primary and ink; motion from its stated durations 2000ms, 300ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#ED1C84",
+  "brand_rule": "The primary #ED1C84 reaches 4.12:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#E5077E",
+      "light": "#E5077E"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#0F0C0D",
+      "light": "#F8F6F6"
+    },
+    "radius_control": "9px",
+    "state_duration": "200ms",
+    "tokens": 730,
+    "tokens_sha256": "6b867f1c56c53f5a"
+  },
+  "id": "instagram",
+  "name": "Instagram",
+  "spec": "data/brands/instagram.json"
+}

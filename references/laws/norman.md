@@ -14,7 +14,7 @@ The cost is always paid by the user. The question is whether the designer makes 
 
 ### Definition
 
-An **affordance** is a relationship between an object and a person — what the object permits that person to do. A door has the affordance of pushing or pulling because it has a hinge and a person has hands. A scrollable list has the affordance of being scrolled because pixels can move and a pointer can drag.
+An **affordance** is a relationship between an object and a person: what the object permits that person to do. A door has the affordance of pushing or pulling because it has a hinge and a person has hands. A scrollable list has the affordance of being scrolled because pixels can move and a pointer can drag.
 
 Affordances exist whether or not anyone perceives them. A flat sheet of glass affords smashing, but a user does not know that until they pick up a brick.
 
@@ -70,7 +70,7 @@ Mapping is the relationship between a control and the thing it controls. Good ma
 
 **Natural mapping** uses spatial or physical analogy. Up means up. Right means right. A volume slider going up makes the sound louder.
 
-**Cultural mapping** uses learned convention. Red means stop or danger. Green means proceed. A floppy-disk icon means save. These are not natural — they are taught, but once taught they are universal within a culture.
+**Cultural mapping** uses learned convention. Red means stop or danger. Green means proceed. A floppy-disk icon means save. These are not natural. They are taught, but once taught they are universal within a culture.
 
 **Arbitrary mapping** is the failure mode. The control bears no perceivable relation to the thing it controls. Users have to memorize the relationship.
 
@@ -93,7 +93,7 @@ Mapping is the relationship between a control and the thing it controls. Good ma
 
 A stove with four burners arranged in a square should have four knobs arranged in the same square, each below its burner. The user looks at the burner, looks at the knob below it, turns the knob. No labels needed.
 
-A volume slider should have low at the bottom and high at the top. Or low on the left and high on the right (in an LTR layout). Or — if you must — flip the whole thing in RTL.
+A volume slider should have low at the bottom and high at the top. Or low on the left and high on the right (in an LTR layout). Or (if you must) flip the whole thing in RTL.
 
 A carousel in an RTL layout should advance in the natural reading direction (right to left). The "next" button is on the left. The "previous" button is on the right.
 
@@ -124,7 +124,7 @@ Feedback has types:
 
 ### When it applies
 
-- Every user action — every tap, click, drag, swipe, keystroke, voice command.
+- Every user action: every tap, click, drag, swipe, keystroke, voice command.
 - Especially long-running actions where the user cannot tell whether anything is happening.
 - Especially destructive or financial actions where the user needs to know the system accepted or refused the command.
 
@@ -170,7 +170,7 @@ Feedback should be loud enough to perceive, brief enough not to interrupt, and p
 - Trigger every async path. Is there a loading state? Is it visible long enough?
 - Trigger every error path. Does the user know what failed and what to do?
 - Trigger the success path. Does the user know it succeeded?
-- Check destructive actions specifically — delete, send, charge, submit. Feedback here must be unambiguous.
+- Check destructive actions specifically: delete, send, charge, submit. Feedback here must be unambiguous.
 
 ---
 
@@ -180,7 +180,7 @@ Feedback should be loud enough to perceive, brief enough not to interrupt, and p
 
 A **conceptual model** is the user's compressed, working theory of how a system works. It does not have to be accurate. It has to be useful enough that the user can predict the next thing the system will do.
 
-The designer also has a conceptual model — usually closer to the actual implementation. The **system image** is what the user sees and interacts with: the interface, the docs, the error messages, the marketing pages, the icon.
+The designer also has a conceptual model, usually closer to the actual implementation. The **system image** is what the user sees and interacts with: the interface, the docs, the error messages, the marketing pages, the icon.
 
 The user constructs their conceptual model entirely from the system image. They cannot read your code. They cannot read your mind. If the system image is incoherent, the user's model will be incoherent.
 
@@ -198,11 +198,11 @@ The communication gap between the designer's model and the user's model is the s
 - Three different abstractions that look the same in the interface but behave differently (e.g., "folder," "collection," "library" all rendered as folders).
 - Hidden state that the user cannot perceive (a sync that has not completed but is not visible).
 - Inconsistent vocabulary in different parts of the product. The dashboard says "Members," the settings says "Users," the API says "Accounts."
-- Magic — features that work without the user understanding why. Magic looks great until it breaks; then the user has no model with which to recover.
+- Magic: features that work without the user understanding why. Magic looks great until it breaks; then the user has no model with which to recover.
 
 ### Fix example
 
-Pick a single conceptual model and enforce it everywhere — code, UI, docs, marketing, error messages. If your product is "a workspace with channels and members," then every screen, error message, and email uses those three words. Not "team," not "user," not "group."
+Pick a single conceptual model and enforce it everywhere: code, UI, docs, marketing, error messages. If your product is "a workspace with channels and members," then every screen, error message, and email uses those three words. Not "team," not "user," not "group."
 
 Make the model visible. If a sync is happening, show a sync indicator. If an item is shared, show a shared icon. If a feature is in beta, label it beta. Externalize the model into the system image so the user can construct it from what they see.
 
@@ -225,10 +225,10 @@ Constraints are the limits that guide the user toward correct actions and away f
 
 Constraints come in four flavors:
 
-- **Physical constraints** — the action is physically impossible. A jigsaw piece only fits one way. A USB-C plug fits either orientation. A USB-A plug fits one orientation in practice and three in user expectation.
-- **Logical constraints** — the user reasons that the action does not make sense. If three of four pieces fit, the fourth must go in the empty slot.
-- **Semantic constraints** — meaning rules out the action. A windshield faces forward; you would not install it on the back of the car because windshields are for seeing the road.
-- **Cultural constraints** — convention rules out the action. Red is stop. Files go in folders. The X in the top-right closes the window (depending on platform).
+- **Physical constraints**: the action is physically impossible. A jigsaw piece only fits one way. A USB-C plug fits either orientation. A USB-A plug fits one orientation in practice and three in user expectation.
+- **Logical constraints**: the user reasons that the action does not make sense. If three of four pieces fit, the fourth must go in the empty slot.
+- **Semantic constraints**: meaning rules out the action. A windshield faces forward; you would not install it on the back of the car because windshields are for seeing the road.
+- **Cultural constraints**: convention rules out the action. Red is stop. Files go in folders. The X in the top-right closes the window (depending on platform).
 
 ### When it applies
 
@@ -280,7 +280,7 @@ Every interaction with a system passes through seven stages. The user moves from
 6. **Interpret**: What does the response mean? ("My team can now access this.")
 7. **Compare**: Did the outcome match the goal? ("Yes. Done.")
 
-Stages 1–3 are the user's planning. Stage 4 is the user's input. Stages 5–7 are the user's understanding of the result.
+Stages 1 to 3 are the user's planning. Stage 4 is the user's input. Stages 5 to 7 are the user's understanding of the result.
 
 ### When it applies
 
@@ -289,7 +289,7 @@ Stages 1–3 are the user's planning. Stage 4 is the user's input. Stages 5–7 
 
 ### Violation pattern
 
-- Goal-formation failure: the user does not know what is possible. They cannot form a goal because they do not know the system can help. (Solve by surfacing capabilities — empty states, onboarding, examples.)
+- Goal-formation failure: the user does not know what is possible. They cannot form a goal because they do not know the system can help. (Solve by surfacing capabilities: empty states, onboarding, examples.)
 - Planning failure: the user cannot construct a plan. The product is too abstract or too novel. (Solve by progressive disclosure, templates, and guided flows.)
 - Specification failure: the user knows the plan but cannot map it to actions. They do not know which button does which thing. (Solve by labels, signifiers, mappings.)
 - Performance failure: the user knows the action but cannot execute it (target too small, too far, blocked). (Solve by Fitts's Law, layout, accessibility.)
@@ -340,7 +340,7 @@ A good design closes both gulfs.
 
 ### Violation pattern
 
-- User has to think through internal mechanisms to do anything. "To share, I need to first configure permissions, then generate a token, then..." — the system has made the user do its work.
+- User has to think through internal mechanisms to do anything. "To share, I need to first configure permissions, then generate a token, then..." The system has made the user do its work.
 - User completes the action but cannot tell whether it worked. The screen shows a JSON payload, a status code, or no visible change. Translation work falls on the user.
 
 ### Fix example
@@ -457,9 +457,9 @@ For high-consequence actions, replace immediate destruction with delayed destruc
 
 ### Definition
 
-**Knowledge in the world** is information available in the environment — labels, signs, controls, displays. The user does not have to remember; they look.
+**Knowledge in the world** is information available in the environment: labels, signs, controls, displays. The user does not have to remember; they look.
 
-**Knowledge in the head** is information the user must remember — keyboard shortcuts, command syntax, the meaning of icons, the order of steps in a wizard.
+**Knowledge in the head** is information the user must remember: keyboard shortcuts, command syntax, the meaning of icons, the order of steps in a wizard.
 
 Knowledge in the world is slower per interaction but requires no learning. Knowledge in the head is faster per interaction (after learning) but requires effort to acquire and is fragile to disuse.
 
@@ -576,7 +576,7 @@ Each diamond has divergence (open up the space) followed by convergence (commit 
 
 ### Violation pattern
 
-- Accepting the first problem statement. The stakeholder says, "Users do not click the upgrade button." You add an arrow pointing to the button. The actual problem was that users do not see value in the upgrade — the button works fine.
+- Accepting the first problem statement. The stakeholder says, "Users do not click the upgrade button." You add an arrow pointing to the button. The actual problem was that users do not see value in the upgrade: the button works fine.
 - Skipping divergence in the first diamond. You see the symptom and reach for the obvious fix.
 - Skipping divergence in the second diamond. You pick the first solution that comes to mind and ship it.
 - Converging too early in either diamond. You commit before you understand.
@@ -592,7 +592,7 @@ A team is asked: "Add an export-to-PDF feature; users keep asking for it." Apply
 
 ### How to spot it in review
 
-- Ask: "What problem are we solving?" If the answer is the same as the proposed solution, you are not solving a problem — you are building a feature.
+- Ask: "What problem are we solving?" If the answer is the same as the proposed solution, you are not solving a problem. You are building a feature.
 - Ask: "What were the other framings? What did we rule out?"
 - Ask: "What were the other solutions? Why did we pick this one?"
 

@@ -22,7 +22,7 @@ The action trigger. Every interactive surface uses buttons; getting them right i
 
 ### Primary button
 
-**When to use.** The single most important action in the current context. Submit a form. Confirm a decision. Move to the next step. One per context — if two actions feel equally primary, the design is wrong.
+**When to use.** The single most important action in the current context. Submit a form. Confirm a decision. Move to the next step. One per context: if two actions feel equally primary, the design is wrong.
 
 **Required states.**
 - Default: high-contrast fill, brand or accent color background, clear label.
@@ -49,7 +49,7 @@ The action trigger. Every interactive surface uses buttons; getting them right i
 **When to use.** Important but not the primary action. Cancel inside a confirm flow. Edit inside a view flow. Add another. Save draft.
 
 **Required states.**
-- Default: lower contrast than primary — outlined, ghosted, or muted fill.
+- Default: lower contrast than primary (outlined, ghosted, or muted fill).
 - Hover: slight darkening or fill increase.
 - Active: deeper change, never matching primary's visual weight.
 - Focus: same ring discipline as primary.
@@ -88,7 +88,7 @@ The action trigger. Every interactive surface uses buttons; getting them right i
 **When to use.** Delete. Remove. Cancel-with-loss. Actions that have negative consequences and cannot be easily undone.
 
 **Required states.**
-- Default: red or danger fill, white text. Never use a tinted red — the saturation signals danger.
+- Default: red or danger fill, white text. Never use a tinted red: the saturation signals danger.
 - Hover: slight darkening.
 - Active: deeper darkening.
 - Focus: ring visible, in the danger color (not the brand color).
@@ -101,7 +101,7 @@ The action trigger. Every interactive surface uses buttons; getting them right i
 
 **Code-level guidance.**
 - Position consistently: the destructive button is typically on the left of the modal footer (where users do not casually click), with the safe action (Cancel) on the right.
-- When destruction is irreversible, require explicit confirmation — type the resource name, or check a box, before the button is enabled.
+- When destruction is irreversible, require explicit confirmation: type the resource name, or check a box, before the button is enabled.
 
 ### Icon-only button
 
@@ -115,7 +115,7 @@ The action trigger. Every interactive surface uses buttons; getting them right i
 - Disabled: icon opacity reduced.
 
 **Anti-patterns.**
-- Icon-only buttons for non-universal actions. If the icon needs a label to be understood, it is not icon-only — it is "icon plus invisible label," which means inaccessible.
+- Icon-only buttons for non-universal actions. If the icon needs a label to be understood, it is not icon-only. It is "icon plus invisible label," which means inaccessible.
 - Icon hit areas smaller than 40x40px on desktop, 44x44px on touch. Tiny icons frustrate everyone.
 - Multiple icon-only buttons in a row with no labels. Looks like chrome but functions as a guessing game.
 
@@ -257,7 +257,7 @@ The text-entry primitives. Every form is built from these.
 
 **Anti-patterns.**
 - 24-hour-only pickers in locales that use 12-hour, or vice versa, without configuration.
-- Time pickers without typing — forcing wheel scrolling for what could be three keypresses.
+- Time pickers without typing: forcing wheel scrolling for what could be three keypresses.
 
 **Code-level guidance.**
 - Allow direct text input (`14:30` or `2:30 PM`).
@@ -332,23 +332,7 @@ The overlay patterns. Each blocks or interrupts the user differently; choosing t
 
 ### Sheet (bottom drawer on mobile)
 
-**When to use.** Mobile-first overlay for actions or content. Action sheets, picker UIs, share menus.
-
-**Required behaviors.**
-- Slides up from the bottom edge.
-- Backdrop scrim above the sheet.
-- Drag-to-dismiss handle (a small horizontal bar at the top of the sheet).
-- Tap outside to dismiss.
-- Max-height typically 80-90% of viewport; user can drag taller or shorter within bounds.
-
-**Anti-patterns.**
-- Sheets used on desktop. Desktop wants modals or drawers, not bottom sheets.
-- Sheets that cover the entire viewport without a way back. The user feels trapped.
-
-**Code-level guidance.**
-- Use a portal as with modals.
-- Animation: 250-300ms slide-in, cubic-bezier easing (e.g., `cubic-bezier(0.32, 0.72, 0, 1)`).
-- Drag handling: track touch events on the handle; below a threshold (e.g., 100px drag), snap back; above threshold, dismiss.
+The sheet pattern lives in `references/surfaces/component.md` (Sheet). The mobile contract for modals, sheets and drawers lives in `references/foundations/component-behaviors.md`.
 
 ### Drawer (side-anchored panel)
 
@@ -363,7 +347,7 @@ The overlay patterns. Each blocks or interrupts the user differently; choosing t
 
 **Anti-patterns.**
 - Drawers that take more than 50% of the viewport. At that point, use a modal or a full page.
-- Drawers without backdrop scrim that nevertheless block the underlying content. Either block or do not — be honest.
+- Drawers without backdrop scrim that nevertheless block the underlying content. Either block or do not: be honest.
 
 **Code-level guidance.**
 - Same portal pattern.
@@ -376,7 +360,7 @@ A consistent dismiss vocabulary across modals, sheets, and drawers:
 
 - **Escape (Esc key).** Always available for non-destructive overlays. Never for destructive ones (user might press by accident).
 - **Backdrop click.** Available for non-destructive overlays. Disabled for forms with unsaved changes (prompt for confirmation).
-- **Explicit close button (X).** Always present. Even when Esc and backdrop click are available — touch users cannot press Esc, and backdrop click is not always obvious.
+- **Explicit close button (X).** Always present. Even when Esc and backdrop click are available: touch users cannot press Esc, and backdrop click is not always obvious.
 - **Drag-to-dismiss.** Mobile sheets and drawers. The drag handle (visible bar) is the affordance.
 
 ### Focus trap
@@ -454,17 +438,15 @@ How users move through the product. The right pattern depends on hierarchy depth
 - Active state: clearly indicates which page the user is on (underline, fill, color change).
 - Hover on items: subtle color or underline change.
 - Focus: ring visible.
-- Mobile: collapses to a hamburger menu that opens a drawer or full-screen overlay.
 
 **Anti-patterns.**
 - Stuffing every link into the top nav. Prioritize 3-7 items.
 - Active state that is barely visible. Users need to know where they are.
-- No mobile pattern — letting the desktop nav crash into the mobile viewport.
 
 **Code-level guidance.**
 - Use `<nav>` semantic element with appropriate `aria-label`.
 - Active state via `aria-current="page"`.
-- Mobile breakpoint typically 768-1024px; below, switch to the collapsed pattern.
+- The mobile nav contract (collapse breakpoint, drawer, one-row bar) lives in `references/surfaces/landing.md` (Header and navigation).
 
 ### Bottom navigation (mobile tab bar)
 
@@ -518,7 +500,7 @@ How users move through the product. The right pattern depends on hierarchy depth
 - Mobile: often collapsed (show first and last, hide middle behind a "...").
 
 **Anti-patterns.**
-- Breadcrumbs that show only the parent (e.g., "Back to Settings"). That is a back link, not a breadcrumb — say so.
+- Breadcrumbs that show only the parent (e.g., "Back to Settings"). That is a back link, not a breadcrumb: say so.
 - Breadcrumbs that wrap to two lines. Either prune the hierarchy or collapse middle segments.
 
 **Code-level guidance.**
@@ -593,7 +575,7 @@ The data grid pattern. Tables are inherently dense; the design choice is how den
 - Clear-all-filters affordance.
 
 **Anti-patterns.**
-- Filter inputs that are hidden by default behind a "Filters" button on dense tables — adds friction. Make common filters always visible.
+- Filter inputs that are hidden by default behind a "Filters" button on dense tables: adds friction. Make common filters always visible.
 - Filters that fire on every keystroke without debouncing. Server hammered.
 
 ### Paginated tables
@@ -614,20 +596,12 @@ The data grid pattern. Tables are inherently dense; the design choice is how den
 - Sticky columns optional (left or right) for orientation.
 
 **Anti-patterns.**
-- Virtualization that breaks selection across pages (selecting a row, scrolling away, scrolling back — selection lost).
+- Virtualization that breaks selection across pages (selecting a row, scrolling away, scrolling back: selection lost).
 - Virtualization without a fallback for screen readers.
 
 ### Responsive collapse
 
-**Required behaviors.**
-- Below a breakpoint (typically 768px or 1024px), the table either:
-  - Collapses to cards (each row becomes a card with the columns as labeled fields).
-  - Allows horizontal scroll with sticky first column.
-  - Hides non-essential columns.
-
-**Anti-patterns.**
-- Tables that overflow horizontally on mobile without any handling. Users have to scroll a tiny window.
-- Hiding the most important column on collapse. Choose what to hide carefully.
+The table's responsive collapse lives in `references/foundations/component-behaviors.md` (Data table).
 
 ### General table guidance
 
@@ -643,33 +617,9 @@ The data grid pattern. Tables are inherently dense; the design choice is how den
 
 How users provide structured input. The form pattern shapes the entire flow.
 
-### Single-column form
+### Single-column and two-column forms
 
-**When to use.** Linear flows. Sign-up, sign-in, simple settings. The user works top-to-bottom.
-
-**Required structure.**
-- Fields stacked vertically, full-width or comfortably wide (max-width 480-640px).
-- Labels above inputs.
-- Helper text below inputs (when needed).
-- Error text below the helper text or replacing it.
-- Submit button at the bottom, left-aligned (or full-width on mobile).
-
-**Anti-patterns.**
-- Two-column forms when the form has only 4-6 fields. The columns add no value.
-- Centered single-column forms with narrow widths that force every label to break into multiple lines.
-
-### Two-column form
-
-**When to use.** Dense settings panels. Forms with many related field pairs (first name + last name, city + zip).
-
-**Required structure.**
-- Two-column grid with appropriate gap.
-- Related fields side by side; unrelated fields full-width.
-- Collapses to single column on mobile.
-
-**Anti-patterns.**
-- Two-column for fields that are not related. The user's eye does not know where to go.
-- Two-column that does not collapse on mobile.
+Single-column and two-column form layouts live in `references/surfaces/component.md` (Form layouts). The form's mobile contract lives in `references/foundations/component-behaviors.md` (Form).
 
 ### Multi-step wizard
 
@@ -721,7 +671,7 @@ How users provide structured input. The form pattern shapes the entire flow.
 
 - Validate on blur for most fields (after the user moves on from the field).
 - Validate on submit for the whole form.
-- Inline error messages — per-field, specific, with the fix.
+- Inline error messages, per-field, specific, with the fix.
 - Never just "Form contains errors." Always name the field and the action.
 - Scroll the first error into view on submit if errors exist.
 
@@ -871,7 +821,7 @@ The pattern for "we are getting your data." Every interface has loading states; 
 
 ### Shimmer
 
-The animated highlight that sweeps across a skeleton. Subtle, slow, monochromatic. Avoid colored or fast shimmers — they distract.
+The animated highlight that sweeps across a skeleton. Subtle, slow, monochromatic. Avoid colored or fast shimmers. They distract.
 
 ### Progress (linear or radial)
 
@@ -884,7 +834,7 @@ The animated highlight that sweeps across a skeleton. Subtle, slow, monochromati
 
 **Anti-patterns.**
 - Progress bars that jump or go backwards. Users lose trust.
-- Progress bars that hit 99% and sit for the rest of the time. Designers know — avoid this by using a non-linear approach (slower at the end is fine; backward is not).
+- Progress bars that hit 99% and sit for the rest of the time. Designers know: avoid this by using a non-linear approach (slower at the end is fine; backward is not).
 - Progress for unknown-duration tasks. Use a spinner instead.
 
 **Code-level guidance.**
@@ -940,7 +890,7 @@ The pattern for "something went wrong." Errors are inevitable; design them so th
 **Required structure.**
 - Red text below the field (or to the side, depending on the form pattern).
 - Specific message: "Email must include an @ symbol" beats "Invalid input."
-- The action to take: "Email must include an @ symbol — for example, name@example.com."
+- The action to take: "Email must include an @ symbol, for example, name@example.com."
 - The input itself gets a red border.
 
 **Anti-patterns.**

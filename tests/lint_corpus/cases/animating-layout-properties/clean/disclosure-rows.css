@@ -1,0 +1,2 @@
+.answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 300ms cubic-bezier(.2, .8, .2, 1); }
+.item[open] .answer { grid-template-rows: 1fr; }

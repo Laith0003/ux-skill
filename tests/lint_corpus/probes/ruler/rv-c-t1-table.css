@@ -1,0 +1,2 @@
+.table th, .table td { border-bottom: 1px solid var(--color-line-subtle); }
+.table td + td { border-inline-start: 1px solid var(--color-line-subtle); }

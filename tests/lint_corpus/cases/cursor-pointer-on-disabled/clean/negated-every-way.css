@@ -1,0 +1,2 @@
+button:not(*:disabled) { cursor: pointer; }
+button:not(.busy, :disabled) { cursor: pointer; }

@@ -8,7 +8,7 @@ This document covers what the system provides, how to install and configure it, 
 
 ## What the system provides
 
-The library exposes accessible React primitives for the common product UI surfaces. The primitives handle behavior — focus management, keyboard navigation, screen reader announcements, ARIA roles, state management — so the build can focus on visual customization and composition.
+The library exposes accessible React primitives for the common product UI surfaces. The primitives handle behavior (focus management, keyboard navigation, screen reader announcements, ARIA roles, state management), so the build can focus on visual customization and composition.
 
 Surface coverage at a glance:
 
@@ -18,7 +18,7 @@ Surface coverage at a glance:
 - **Overlay primitives.** Tooltip, Popover, Toast, Notification, Dialog.
 - **Data primitives.** Table, Listbox, Menu.
 
-Each primitive is built on React Aria, so the accessibility behaviors are not bolted on after — they are foundational.
+Each primitive is built on React Aria, so the accessibility behaviors are not bolted on after. They are foundational.
 
 ---
 
@@ -32,7 +32,7 @@ The provider, styling, and component API all changed between v2 and v3. Do not a
 - **Styling.** v2 used Tailwind v3 plus `@heroui/theme`. v3 requires Tailwind v4 plus `@heroui/styles`.
 - **Packages.** v2 pulled `@heroui/system` and `@heroui/theme`. v3 pulls `@heroui/react` and `@heroui/styles`.
 
-If your context includes a `HeroUIProvider` or a `framer-motion` import for the library, you are on v2. Migrate or use a different stack. Tailwind v3 will not work with v3 — v4 is mandatory.
+If your context includes a `HeroUIProvider` or a `framer-motion` import for the library, you are on v2. Migrate or use a different stack. Tailwind v3 will not work with v3: v4 is mandatory.
 
 ---
 
@@ -83,7 +83,7 @@ export default {
 };
 ```
 
-For a Vite or other React setup, the import order is the same and the PostCSS plugin is the same — adapt to the framework's stylesheet entry point.
+For a Vite or other React setup, the import order is the same and the PostCSS plugin is the same: adapt to the framework's stylesheet entry point.
 
 ---
 
@@ -152,25 +152,25 @@ Override the variable scale to introduce a brand palette:
 }
 ```
 
-The `oklch` color space lets you tune lightness, chroma, and hue independently — useful for keeping a palette consistent across modes (same hue, different lightness for light/dark).
+The `oklch` color space lets you tune lightness, chroma, and hue independently: useful for keeping a palette consistent across modes (same hue, different lightness for light/dark).
 
 ---
 
 ## Customization (do not ship the default look)
 
-The default library palette and shapes are deliberately neutral. Shipping them unmodified produces a generic look — the user will recognize it as the library's defaults, and the product will not feel like itself.
+The default library palette and shapes are deliberately neutral. Shipping them unmodified produces a generic look: the user will recognize it as the library's defaults, and the product will not feel like itself.
 
 Customize the following before launch:
 
 ### 1. Accent color
 
-Override `--accent` with a hue that fits the brand. Keep saturation below 80%. `oklch` lets you tune lightness and chroma independently — use that to keep the accent vibrant without becoming garish.
+Override `--accent` with a hue that fits the brand. Keep saturation below 80%. `oklch` lets you tune lightness and chroma independently: use that to keep the accent vibrant without becoming garish.
 
 If the brand has a primary color in a different color space (hex, RGB, HSL), convert to `oklch` for the variable. The conversion is lossy at extreme values but generally clean for mid-range brand colors.
 
 ### 2. Radii
 
-The default radius scale is generic. Decide whether the product is sharp (radius 4-6px), soft (8-12px), or pillowed (16-24px). Pick a scale and apply it consistently. The radius scale is one of the strongest carriers of aesthetic — sharp radii read as serious or industrial; soft radii read as friendly; pillowed radii read as playful or contemporary.
+The default radius scale is generic. Decide whether the product is sharp (radius 4-6px), soft (8-12px), or pillowed (16-24px). Pick a scale and apply it consistently. The radius scale is one of the strongest carriers of aesthetic: sharp radii read as serious or industrial; soft radii read as friendly; pillowed radii read as playful or contemporary.
 
 ### 3. Shadows
 
@@ -186,7 +186,7 @@ Default shadows are neutral. Tint them to the background hue. A faintly blue bac
 
 ### 4. Typography
 
-The library does not impose a typeface. You must. Wire `@font-face` for a real type family. Avoid Inter and Roboto unless the product specifically needs them — they are the convergence trap.
+The library does not impose a typeface. You must. Wire `@font-face` for a real type family. Avoid Inter and Roboto unless the product specifically needs them. They are the convergence trap.
 
 Pair display and body if the brand benefits from the contrast. A grotesk display with a humanist sans body reads as designed; a single grotesk throughout reads as default.
 
@@ -196,7 +196,7 @@ Tailwind's defaults are sensible but not signature. Set a base unit (4px or 8px)
 
 ### 6. Surface colors
 
-Off-white instead of pure white. Off-black instead of pure black. Pure values feel sterile; tinted neutrals feel designed. The library's defaults are already off-white and off-black, but check the values — if they are too close to pure, the product reads as generic.
+Off-white instead of pure white. Off-black instead of pure black. Pure values feel sterile; tinted neutrals feel designed. The library's defaults are already off-white and off-black, but check the values: if they are too close to pure, the product reads as generic.
 
 ### The convergence trap
 
@@ -206,7 +206,7 @@ If you ship the library with default tokens, the user will recognize it. That re
 
 ## Component primitives reference
 
-Each primitive is listed with its one-line purpose. For full anatomy and prop signatures, fetch the component's documentation directly — the documentation is the contract.
+Each primitive is listed with its one-line purpose. For full anatomy and prop signatures, fetch the component's documentation directly: the documentation is the contract.
 
 | Component | Purpose |
 |---|---|
@@ -252,7 +252,7 @@ The component-level patterns and anti-patterns that come up in real builds.
 
 **Patterns:**
 - Use semantic variants: `primary`, `secondary`, `tertiary`, `danger`, `ghost`, `outline`. These adapt to themes and accessibility constraints.
-- One primary action per context. If you find yourself wanting two primary buttons in the same view, the design is wrong — promote one to primary and demote the others.
+- One primary action per context. If you find yourself wanting two primary buttons in the same view, the design is wrong: promote one to primary and demote the others.
 - `tertiary` is for dismissive actions: Cancel, Skip, Dismiss. Not for "another nice button."
 - Use `onPress`, not `onClick`. `onPress` is the Aria-friendly handler that works for mouse, touch, keyboard, and assistive tech.
 
@@ -265,7 +265,7 @@ The component-level patterns and anti-patterns that come up in real builds.
 
 **Patterns:**
 - Compound: `<Card><Card.Header><Card.Title /><Card.Description /></Card.Header><Card.Content /><Card.Footer /></Card>`.
-- Cards exist when elevation communicates hierarchy. If the card is just a wrapper around content that already groups, omit it — alignment and spacing carry the structure.
+- Cards exist when elevation communicates hierarchy. If the card is just a wrapper around content that already groups, omit it: alignment and spacing carry the structure.
 - Hover affordance on cards only when the card is interactive (links to detail page, opens modal). Static cards should not animate on hover.
 
 **Anti-patterns:**
@@ -279,7 +279,7 @@ The component-level patterns and anti-patterns that come up in real builds.
 - One primary action in the footer. Cancel is `tertiary`; confirm is `primary` or `danger` depending on consequence.
 - Title in the header, description below the title, content in the body.
 - Dismiss with: backdrop click (when non-destructive), `Esc` key, explicit close button. All three together for non-destructive modals; only the explicit close for destructive modals.
-- Trap focus inside the modal. The library handles this — do not override.
+- Trap focus inside the modal. The library handles this: do not override.
 
 **Anti-patterns:**
 - Stacking modals more than two deep. The UX falls apart; users lose track of which modal is which.
@@ -291,7 +291,7 @@ The component-level patterns and anti-patterns that come up in real builds.
 **Patterns:**
 - Anchor side (left, right, top, bottom) based on chrome direction. Filters typically anchor right; navigation typically anchors left on mobile.
 - Dismiss with backdrop click and Esc. The drawer is less blocking than a modal; users should be able to leave it easily.
-- For complex content, a drawer beats a modal — the side-anchored layout preserves orientation.
+- For complex content, a drawer beats a modal: the side-anchored layout preserves orientation.
 
 **Anti-patterns:**
 - Drawers that take more than 50% of the viewport width. At that point, the chrome behind is invisible and the drawer should have been a modal or a page.
@@ -315,7 +315,7 @@ The component-level patterns and anti-patterns that come up in real builds.
 **Patterns:**
 - Use `Select` when the list is short (under ~12 items) and the user knows the values.
 - Use `Combobox` when the list is long or the user benefits from searching.
-- For very long lists (hundreds of items), virtualize the rendering. The library may or may not virtualize by default — check the documentation.
+- For very long lists (hundreds of items), virtualize the rendering. The library may or may not virtualize by default: check the documentation.
 
 **Anti-patterns:**
 - Using `Select` for lists over ~20 items. The dropdown becomes unwieldy.
@@ -325,7 +325,7 @@ The component-level patterns and anti-patterns that come up in real builds.
 
 **Patterns:**
 - Compound: `<Table><Table.Header><Table.Column /></Table.Header><Table.Body><Table.Row><Table.Cell /></Table.Row></Table.Body></Table>`.
-- Tabular figures in the body cells for numeric data. The library does not enforce this — set it in your typography layer.
+- Tabular figures in the body cells for numeric data. The library does not enforce this: set it in your typography layer.
 - Sortable headers via the library's prop; multi-select via Aria's selection behavior.
 - For dense data, use tight row padding (8-12px). For comfortable data, use generous row padding (16-20px).
 
@@ -387,7 +387,7 @@ The component-level patterns and anti-patterns that come up in real builds.
 **Patterns:**
 - Avatar with image; fallback to initials with consistent background color (computed from name hash).
 - Badge for status indicators (online, away, count). Overlay positioning via the library.
-- Chip for inline tags with dismiss. Use sparingly — too many chips on a page is noise.
+- Chip for inline tags with dismiss. Use sparingly: too many chips on a page is noise.
 - Divider for visual separation between unrelated groups. Within a related group, use spacing instead.
 
 **Anti-patterns:**
@@ -457,7 +457,7 @@ The library is a tool; the brief decides. Pick the library that matches the surf
 
 - The library's input components are controlled. Pass `value` and `onChange`/`onValueChange` consistently.
 - Validation runs via the `<Form>` wrapper; standalone inputs handle their own validation.
-- File inputs use `<FileTrigger>` — render a custom drop zone, wire `<FileTrigger>` to open the native picker. Do not invent your own file input.
+- File inputs use `<FileTrigger>`: render a custom drop zone, wire `<FileTrigger>` to open the native picker. Do not invent your own file input.
 
 ### Drawer animation
 
@@ -489,7 +489,7 @@ The library is a tool; the brief decides. Pick the library that matches the surf
 
 ### Modal stacking
 
-- The library handles focus trap correctly. Do not stack modals more than two deep — the UX falls apart, and even with correct focus trap, users lose track of which modal is which.
+- The library handles focus trap correctly. Do not stack modals more than two deep: the UX falls apart, and even with correct focus trap, users lose track of which modal is which.
 
 ### Toast queue
 
@@ -524,11 +524,11 @@ The library is a tool; the brief decides. Pick the library that matches the surf
 
 ## The library's role
 
-The library is the component layer. It is not the design system. The design system is yours — your tokens, your type stack, your spacing rhythm, your motion philosophy. The library implements the primitives that the design system styles.
+The library is the component layer. It is not the design system. The design system is yours: your tokens, your type stack, your spacing rhythm, your motion philosophy. The library implements the primitives that the design system styles.
 
 The discipline:
 
-1. **Install once, configure deliberately.** The import order, the token overrides, the typography wiring — set these up early and do not revisit unless something breaks.
+1. **Install once, configure deliberately.** The import order, the token overrides, the typography wiring: set these up early and do not revisit unless something breaks.
 2. **Customize before launch.** The defaults are neutral; the product is not.
 3. **Use the compound API.** Do not flatten.
 4. **Use semantic variants.** Do not hardcode colors.

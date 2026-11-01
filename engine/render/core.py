@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Iterable, List, Sequence
 
 from engine.linter.core import Finding, LintReport, SEVERITY_RANK, compute_score
+from engine.render import interact, taste
 
 # Phone, large phone, tablet, desktop. Some drift only exists between
 # breakpoints (a max-width that is wider than a phone column but narrower
@@ -66,10 +67,10 @@ _MEASURE_JS = r"""(tol) => {
   }
 
   const root = document.scrollingElement;
+  const clipped = e => { for (let a = e.parentElement; a; a = a.parentElement) {
+    const o = getComputedStyle(a).overflowX; if (o === 'hidden' || o === 'clip' || o === 'auto' || o === 'scroll') return a !== document.body && a !== document.documentElement; } return false; };
+  const culprits = [];
   if (root.scrollWidth > root.clientWidth + 1) {
-    const clipped = e => { for (let a = e.parentElement; a; a = a.parentElement) {
-      const o = getComputedStyle(a).overflowX; if (o === 'hidden' || o === 'clip' || o === 'auto' || o === 'scroll') return a !== document.body && a !== document.documentElement; } return false; };
-    const culprits = [];
     for (const e of document.body.querySelectorAll('*')) {
       const r = e.getBoundingClientRect();
       if ((r.right > vw + 1 || r.left < -1) && !clipped(e)
@@ -94,6 +95,54 @@ _MEASURE_JS = r"""(tol) => {
       rule: 'horizontal-overflow', sel: sel(e), cls: e.className || '', text: text(e).slice(0, 60),
       drift: Math.round(root.scrollWidth - root.clientWidth), dir});
   }
+
+  // Text that runs past its own box lies over whatever sits beside it, even
+  // when the page does not scroll: an unbreakable word in a narrow column,
+  // a display size wider than its column. The deepest such text is named,
+  // once, and not again when it already made the page scroll.
+  const TEXTY = 'h1,h2,h3,h4,h5,h6,p,li,dt,dd,blockquote,figcaption,label,th,td';
+  // How far the element's own text runs past its padding box: each text
+  // node's line boxes, leaving out text in a descendant that is hidden,
+  // taken out of flow (absolute, fixed) or that clips or scrolls itself.
+  const spill = e => {
+    const cs = getComputedStyle(e);
+    if (cs.display === 'inline' || cs.display === 'contents' || cs.display === 'none'
+        || cs.visibility !== 'visible' || cs.overflowX !== 'visible' || !e.clientWidth
+        || clipped(e)) return 0;
+    const r = e.getBoundingClientRect();
+    const left = r.left + parseFloat(cs.borderLeftWidth);
+    const right = r.right - parseFloat(cs.borderRightWidth);
+    let over = 0;
+    const walk = document.createTreeWalker(e, NodeFilter.SHOW_TEXT);
+    for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+      if (!n.textContent.trim()) continue;
+      let out = false;
+      for (let a = n.parentElement; a && a !== e; a = a.parentElement) {
+        const s = getComputedStyle(a);
+        if (s.visibility !== 'visible' || s.display === 'none' || s.position === 'absolute'
+            || s.position === 'fixed' || s.overflowX !== 'visible') { out = true; break; }
+      }
+      if (out) continue;
+      const range = document.createRange();
+      range.selectNodeContents(n);
+      for (const q of range.getClientRects()) over = Math.max(over, q.right - right, left - q.left);
+    }
+    return over > 2 ? over : 0;
+  };
+  const spilling = [];
+  for (const e of document.body.querySelectorAll(TEXTY)) {
+    const over = spill(e);
+    if (over) spilling.push([e, over]);
+  }
+  let named = 0;
+  for (const [e, over] of spilling) {
+    if (named >= 3) break;
+    if (spilling.some(([o]) => o !== e && e.contains(o))
+        || culprits.some(c => c === e || c.contains(e))) continue;
+    named++;
+    out.push({rule: 'text-overflows-its-box', sel: sel(e), cls: e.className || '',
+              text: text(e).slice(0, 60), drift: Math.round(over), dir});
+  }
   return {vw, findings: out};
 }"""
 
@@ -111,12 +160,21 @@ _RULES = {
              "min-width: 0 on flex children, overflow-wrap: anywhere on long strings) "
              "instead of hiding overflow on the body."),
         what="page is {drift}px wider than the viewport ({dir}, {vw}px viewport)"),
+    "text-overflows-its-box": dict(
+        name="Text runs past its own box", severity="high", category="Layout",
+        fix=("A word or line is wider than the box it sits in and lies over what is beside "
+             "it. Give the text the column it needs (a smaller type role at this width, a "
+             "wider column, min-width: 0 on a grid or flex child) or let long strings break "
+             "(overflow-wrap: anywhere)."),
+        what="text is {drift}px wider than its box ({dir}, {vw}px viewport)"),
     "render-failed": dict(
         name="Page could not be rendered", severity="medium", category="Layout",
         fix=("The render check could not load or measure this page, so its layout is "
              "unchecked. Run it again; if it repeats, look for a script or resource that "
              "never finishes loading, or a page error, in the message."),
         what="not measured: {error} ({vw}px viewport)"),
+    **taste.RULES,
+    **interact.RULES,
 }
 
 
@@ -161,19 +219,52 @@ def _html_files(paths: Iterable[str]) -> List[Path]:
     return out
 
 
-async def _measure(browser, sem, f: Path, w: int, h: int):
+async def _measure(browser, sem, f: Path, w: int, h: int, desktop: bool = False):
     async with sem:
         page = await browser.new_page(viewport={"width": w, "height": h})
         try:
             await page.goto(f.resolve().as_uri(), wait_until="load")
             await page.add_style_tag(content=_FREEZE_CSS)
-            return await page.evaluate(_MEASURE_JS, TOLERANCE_PX)
+            result = await page.evaluate(_MEASURE_JS, TOLERANCE_PX)
+            if desktop:  # the page's color, accents and photos, measured once
+                try:
+                    result["findings"].extend(await taste.page_checks(page))
+                except Exception as exc:  # the layout result above still stands
+                    error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
+                    result["findings"].append({
+                        "rule": "render-failed", "sel": "page", "cls": "", "text": "",
+                        "error": "color and photo checks: " + error})
+            return result
         except Exception as exc:  # one page that hangs or errors must not stop the run
             error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
             return {"vw": w, "findings": [
                 {"rule": "render-failed", "sel": "page", "cls": "", "text": "", "error": error}]}
         finally:
             await page.close()
+
+
+async def _motion(browser, sem, f: Path, w: int, h: int):
+    """Motion that runs on its own, on pages that are not frozen."""
+    async with sem:
+        try:
+            return {"vw": w, "findings": await taste.motion_checks(browser, f, w, h)}
+        except Exception as exc:  # one page that hangs or errors must not stop the run
+            error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
+            return {"vw": w, "findings": [
+                {"rule": "render-failed", "sel": "page", "cls": "", "text": "", "error": error}]}
+
+
+async def _interact(browser, sem, f: Path):
+    """Focus, timing and Escape on pages whose motion runs."""
+    async with sem:
+        try:
+            return {"vw": interact.WIDTHS[0][0],
+                    "findings": await interact.interaction_checks(browser, f)}
+        except Exception as exc:  # one page that hangs or errors must not stop the run
+            error = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
+            return {"vw": interact.WIDTHS[0][0], "findings": [
+                {"rule": "render-failed", "sel": "page", "cls": "", "text": "",
+                 "error": "interaction pass: " + error}]}
 
 
 async def _run(files: List[Path], viewports: Sequence[tuple]):
@@ -186,11 +277,17 @@ async def _run(files: List[Path], viewports: Sequence[tuple]):
     async with async_playwright() as pw:
         browser = await _launch(pw)
         try:
-            jobs = [_measure(browser, sem, f, w, h) for f in files for w, h in viewports]
+            wide = max(viewports, key=lambda v: v[0])
+            jobs = []
+            for f in files:
+                jobs.extend(_measure(browser, sem, f, w, h, desktop=(w, h) == wide)
+                            for w, h in viewports)
+                jobs.append(_motion(browser, sem, f, *wide))
+                jobs.append(_interact(browser, sem, f))
             results = await asyncio.gather(*jobs)
         finally:
             await browser.close()
-    n = len(viewports)
+    n = len(viewports) + 2
     return [results[i * n:(i + 1) * n] for i in range(len(files))]
 
 
@@ -215,7 +312,7 @@ def render_check(paths: Iterable[str], severity_threshold: str = "high",
                     severity=rule["severity"], category=rule["category"],
                     file=str(f), line=_locate(source, hit["cls"], hit["text"]),
                     column=0,
-                    excerpt=f'{hit["sel"]}: ' + rule["what"].format(vw=result["vw"], **hit),
+                    excerpt=f'{hit["sel"]}: ' + rule["what"].format(**{"vw": result["vw"], **hit}),
                     fix=rule["fix"]))
 
     threshold = SEVERITY_RANK.get(severity_threshold, 2)

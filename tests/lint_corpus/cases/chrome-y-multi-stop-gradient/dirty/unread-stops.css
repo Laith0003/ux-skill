@@ -1,0 +1,4 @@
+/* Stops the linter cannot read keep the finding. */
+.hero-glow {
+  background: linear-gradient(120deg, var(--glow-a), var(--glow-b), var(--glow-c), var(--glow-d));
+}

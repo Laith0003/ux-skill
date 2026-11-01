@@ -1,0 +1,8 @@
+.a { font-size: 160px; line-height: 0.92; }
+.b { font-size: 160px; line-height: 0.9; }
+.c { font-size: 3rem; line-height: 1; }
+.d { font-size: 3rem; line-height: 1.1; }
+[dir="rtl"] .e { font-size: 160px; line-height: 1; }
+[dir="rtl"] .f { font-size: 160px; line-height: 1.07; }
+.g { font-size: 80px; line-height: 72px; }
+.h { font-size: clamp(3rem, 8vw, 10rem); line-height: 0.92; }

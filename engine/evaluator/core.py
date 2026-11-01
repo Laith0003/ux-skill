@@ -10,7 +10,7 @@ import re
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional, Tuple  # Tuple used by _TAG_EXPECTATIONS
 
-from engine.brand import score_brand_fidelity, score_imagery
+from engine.brand import photography_rule, score_brand_fidelity, score_imagery
 from engine.brand.extract import BrandProfile
 
 
@@ -305,8 +305,15 @@ def evaluate(html: str = "", css: str = "",
              spacing_scale: Optional[List[int]] = None,
              prior_decisions: Optional[List[Dict[str, Any]]] = None,
              brand_profile: Optional[Any] = None,
+             base_dir: Optional[str] = None,
+             root: Optional[str] = None,
              ) -> Evaluation:
     """Run all 7 axis scorers, return an Evaluation.
+
+    ``base_dir`` is the page's folder: the brand-fidelity check then reads
+    the stylesheets the page links, so a token-driven page is judged with
+    its CSS, not by its HTML text alone. ``root`` is the project folder
+    those links may reach, so a page in en/ can link ../css/.
 
     ``brief_tags`` is the v3.0 independence path — pass raw brief tone /
     must-have / forbidden tags here so tone_match has an independent ground
@@ -361,8 +368,10 @@ def evaluate(html: str = "", css: str = "",
     brand_passed = True
     prof = _as_profile(brand_profile)
     if prof is not None and (prof.primary or prof.name or prof.logo):
-        fid = score_brand_fidelity(html, prof)
-        img = score_imagery(html)
+        fid = score_brand_fidelity(html, prof, css_text=css, base_dir=base_dir, root=root)
+        rule = photography_rule(prof)
+        img = score_imagery(html, logo_url=(prof.logo or {}).get("url") or "",
+                            brand_name=prof.name or "", photography_rule=rule)
         brand_fidelity = fid["score"]
         imagery = img["score"]
         if not fid["passed"]:
@@ -372,6 +381,9 @@ def evaluate(html: str = "", css: str = "",
         if not img["ok"]:
             brand_passed = False
             notes.append("BRAND FLOOR — imagery: %s" % img["detail"])
+        elif img["kind"] == "no-photography":
+            # The rule is honored, and the output says which rule it honored.
+            notes.append("IMAGERY: %s" % img["detail"])
 
     return Evaluation(
         composite=composite,

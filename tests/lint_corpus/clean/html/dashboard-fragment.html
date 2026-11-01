@@ -1,0 +1,40 @@
+<section class="kpis" aria-labelledby="kpi-title">
+  <h2 id="kpi-title" class="kpis__title">Today at the Amman depot</h2>
+  <dl class="kpis__grid">
+    <div class="kpi kpi--primary">
+      <dt>Deliveries completed</dt>
+      <dd><data value="184">184</data> <span class="kpi__of">of 212</span></dd>
+    </div>
+    <div class="kpi">
+      <dt>On-time rate</dt>
+      <dd><data value="0.93">93.4%</data></dd>
+    </div>
+    <div class="kpi">
+      <dt>Exceptions</dt>
+      <dd><a href="/exceptions?depot=amman">7 open</a></dd>
+    </div>
+  </dl>
+</section>
+
+<section class="exceptions" aria-labelledby="exceptions-title">
+  <h2 id="exceptions-title">Open exceptions</h2>
+  <table class="table">
+    <thead>
+      <tr><th scope="col">Stop</th><th scope="col">Driver</th><th scope="col">Reason</th><th scope="col"><span class="sr-only">Actions</span></th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Sweifieh 12</td>
+        <td>Omar K.</td>
+        <td>Recipient not home</td>
+        <td><button type="button" class="btn btn-small" data-stop="swf-12">Reschedule stop</button></td>
+      </tr>
+      <tr>
+        <td>Abdoun 4</td>
+        <td>Lina M.</td>
+        <td>Address unclear</td>
+        <td><button type="button" class="btn btn-small" data-stop="abd-4">Call recipient</button></td>
+      </tr>
+    </tbody>
+  </table>
+</section>

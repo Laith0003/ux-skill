@@ -4,32 +4,32 @@
 
 ## Principles
 
-1. **Pick a base unit and commit** — 4px or 8px. Build every gap, padding, and margin on multiples of that unit. The system is the look. Random spacing increments with no rhythm read as undisciplined.
+1. **Pick a base unit and commit**: 4px or 8px. Build every gap, padding, and margin on multiples of that unit. The system is the look. Random spacing increments with no rhythm read as undisciplined.
 
-2. **Section breathing room signals confidence** — Marketing sections at 96 to 160px vertical padding (often 120 to 200px on developer-tooling). Cramped sections (`py-12` on marketing) read as discount; breathing sections read as premium. Mobile halves the rhythm but keeps the principle.
+2. **Section spacing follows the brand.** Landing sections sit `layout.landing-gap.<tier>` apart: 64 to 240px at desktop, wider for a calm or formal brand and tighter for a loud one, and 0.6 to 0.9 of that on a phone. Cramped sections (`py-12` on marketing) read as discount; the system's gap reads as composed.
 
-3. **Density mode is a deliberate choice** — Art-gallery (low density), daily-app (comfortable), cockpit (packed). Pick one per surface based on product type. Mobile caps density at "daily-app" regardless of desktop choice.
+3. **Density mode is a deliberate choice**: Art-gallery (low density), daily-app (comfortable), cockpit (packed). Pick one per surface based on product type. Mobile caps density at "daily-app" regardless of desktop choice.
 
-4. **Adaptive gutters by breakpoint** — Increase horizontal insets on larger widths and in landscape. The same narrow gutter on phone and tablet reads as unconsidered.
+4. **Adaptive gutters by breakpoint**: Increase horizontal insets on larger widths and in landscape. The same narrow gutter on phone and tablet reads as unconsidered.
 
-5. **Vertical rhythm cascades by hierarchy** — Define tiers: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128 / 160. Inside a component, gaps land on the smaller end (4 to 16). Between sections, gaps land on the larger end (64 to 160). Each tier signals a different level of separation.
+5. **Vertical rhythm cascades by hierarchy**. Define tiers: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128 / 160. Inside a component, gaps land on the smaller end (4 to 16). Between sections, gaps land on the larger end (64 to 160). Each tier signals a different level of separation.
 
-6. **Safe areas are non-negotiable** — Fixed navbars, tab bars, and CTA bars must reserve space for notch, Dynamic Island, home indicator, and scroll content insets so lists do not hide behind sticky bars.
+6. **Safe areas are non-negotiable**: Fixed navbars, tab bars, and CTA bars must reserve space for notch, Dynamic Island, home indicator, and scroll content insets so lists do not hide behind sticky bars.
 
-7. **Container max-widths cap reading distance** — 1200 to 1400px outer container, 640 to 1080px inner content depending on type of content (prose narrower, visuals wider). Beyond 1400px the eye loses anchor.
+7. **Container max-widths cap reading distance**: 1200 to 1400px outer container, 640 to 1080px inner content depending on type of content (prose narrower, visuals wider). Beyond 1400px the eye loses anchor.
 
-8. **Asymmetric whitespace is composition, not accident** — Generous one-sided whitespace (e.g., `padding-left: 20vw`) pushes content off-center deliberately. Symmetrical padding on every section produces the corporate-template look.
+8. **Asymmetric whitespace is composition, not accident**: Generous one-sided whitespace (e.g., `padding-left: 20vw`) pushes content off-center deliberately. Symmetrical padding on every section produces the corporate-template look.
 
-9. **Z-index is structural, not decorative** — Reserve high z-indexes for systemic layers: sticky nav, modals, overlays, tooltips. Document the scale. No arbitrary `z-50` spam.
+9. **Z-index is structural, not decorative**. Reserve high z-indexes for systemic layers: sticky nav, modals, overlays, tooltips. Document the scale. No arbitrary `z-50` spam.
 
-10. **Inside cards, padding earns its keep** — Generous internal padding (24 to 40px) inside premium cards; tighter (8 to 16px) inside brutalist or cockpit-dense layouts. Mixed-padding cards on the same page break the rhythm.
+10. **Inside cards, padding earns its keep**: Generous internal padding (24 to 40px) inside premium cards; tighter (8 to 16px) inside brutalist or cockpit-dense layouts. Mixed-padding cards on the same page break the rhythm.
 
 ## Do / Don't
 
 | Do | Don't |
 |---|---|
 | Use a 4px or 8px base spacing unit | Use random px values like 7px, 13px, 19px |
-| Apply 96 to 160px vertical padding to marketing sections | Cram marketing sections at 24 to 48px vertical padding |
+| Space marketing sections with `var(--layout-landing-gap)` (64 to 240px at desktop by the brand) | Cram marketing sections at 24 to 48px vertical padding |
 | Halve section padding on mobile, keep the rhythm | Eliminate section padding on mobile |
 | Use 24 to 40px internal padding inside premium cards | Use 8px tight padding inside premium cards |
 | Increase horizontal gutters at wider breakpoints | Keep the same narrow gutter from phone to desktop |
@@ -37,28 +37,28 @@
 | Constrain prose columns to 640 to 720px | Run paragraphs at 100+ characters per line |
 | Reserve z-indexes for nav, modal, overlay, tooltip | Spam `z-50` arbitrarily on every component |
 | Respect safe areas for status bar, notch, home indicator | Place tappable controls under notch or gesture area |
-| Use `min-h-[100dvh]` for full-height sections | Use `h-screen` (breaks on iOS Safari address bar collapse) |
+| Use `min-h-dvh` for full-height sections | Use `h-screen` (breaks on iOS Safari address bar collapse) |
 | Document the spacing scale as design tokens | Re-invent gap values per component |
-| Use CSS Grid for responsive structures | Use flexbox percentage math like `w-[calc(33%-1rem)]` |
-| Use `grid-flow-dense` on bento layouts | Leave empty cells in bento grids |
+| Use CSS Grid for responsive structures | Use flexbox percentage math like `flex-basis: calc(33.3% - 24px)` |
+| Use `grid-auto-flow: dense` on bento layouts | Leave empty cells in bento grids |
 | Use generous whitespace as the structural device | Reach for borders, rules, and dividers as separators |
 
 ## Examples
 
 ### Pattern: Marketing section padding
 **Use when**: Any marketing landing section that needs to feel like a distinct cinematic chapter.
-**Anti-pattern**: `py-12` (48px) — sections feel cramped, slabs of content with no breathing room.
-**How**: Apply `py-32 md:py-48` minimum (128px mobile, 192px desktop). For premium and developer-tooling surfaces, push to `py-40` or `py-48` (160 to 192px). Sections breathe; the page reads as composed.
+**Anti-pattern**: `py-12` (48px), sections feel cramped, slabs of content with no breathing room.
+**How**: With a 4.0 design system, space sections with `var(--layout-landing-gap)`: it follows the viewport's tier and the brand, 64 to 240px at desktop (calm and formal wider, loud tighter) and 0.6 to 0.9 of that on a phone. Without one, use at least `py-16 md:py-48` (64px phone, 192px desktop). Sections breathe; the page reads as composed.
 
 ### Pattern: AIDA section vertical rhythm
 **Use when**: Landing pages structured around Attention → Interest → Desire → Action.
 **Anti-pattern**: Identical padding on every section regardless of role.
-**How**: Hero gets the deepest top padding (often `min-h-[100dvh]` with content centered or split). Interest sections (bento, features) get `py-32 md:py-48`. Desire sections (motion, media) get `py-40 md:py-56` to let scroll moments breathe. Action sections (final CTA) get `py-32 md:py-48` plus a tinted background band that visually separates from the footer.
+**How**: Hero gets the deepest top padding (often `min-h-dvh` with content centered or split). Interest sections (bento, features) get `var(--layout-landing-gap)`. Desire sections (motion, media) may take up to one and a half times it to let scroll moments breathe. Action sections (final CTA) get `var(--layout-landing-gap)` plus a tinted background band that visually separates from the footer.
 
 ### Pattern: Adaptive gutter scaling
 **Use when**: Pages that span 375px mobile to 1440px+ desktop.
-**Anti-pattern**: `px-4` everywhere from phone to desktop — wide screens look cramped against the chrome.
-**How**: Mobile: `px-4` (16px). Tablet: `px-8` (32px). Desktop: `px-12` (48px) or use `max-w-7xl mx-auto` and let outer padding scale. Landscape phones get treated as tablets for gutter purposes — the wider canvas earns wider insets.
+**Anti-pattern**: `px-4` everywhere from phone to desktop (wide screens look cramped against the chrome).
+**How**: Mobile: `px-4` (16px). Tablet: `px-8` (32px). Desktop: `px-12` (48px) or use `max-w-7xl mx-auto` and let outer padding scale. Landscape phones get treated as tablets for gutter purposes: the wider canvas earns wider insets.
 
 ### Pattern: Component internal padding by density
 **Use when**: Building cards, panels, and containers for a specific density mode.
@@ -72,7 +72,7 @@
 ### Pattern: Bento grid with no empty cells
 **Use when**: Asymmetric tile grids for "what's in the box" sections, dashboards, feature showcases.
 **Anti-pattern**: A bento grid with 3 cards in row 1 and 2 cards in row 2 leaving a visible empty cell at the bottom-right.
-**How**: Use `grid-flow-dense` to fill gaps. Aim for 3 to 5 cards (not 8) with varied sizes — one tall, one wide, one or two square. `gap-4` to `gap-6` between cards. Mobile collapses to a single column with `gap-4`.
+**How**: Use `grid-auto-flow: dense` to fill gaps. Aim for 3 to 5 cards (not 8) with varied sizes: one tall, one wide, one or two square. `gap-4` to `gap-6` between cards. Mobile collapses to a single column with `gap-4`.
 
 ### Pattern: Z-index scale
 **Use when**: Layering sticky nav, modals, drawers, tooltips, toasts.
@@ -87,7 +87,7 @@
 - 1000: critical overlays (loading, fatal errors)
 
 ### Pattern: Asymmetric whitespace push
-**Use when**: Layouts at DESIGN_VARIANCE 8 or above — asymmetric editorial, premium hero, brutalist.
+**Use when**: The brand is expressive (0.7 and up): wide asymmetric sections in a full-width frame.
 **Anti-pattern**: Symmetrical padding on every section produces the corporate-template look.
 **How**: Push content off-center with `padding-left: 20vw` or generous one-sided whitespace. Use fractional grid columns (`grid-template-columns: 2fr 1fr 1fr`) instead of equal `grid-cols-3`. Apply `margin-top: -2rem` for overlapping cards or images. Mobile aggressively falls back to single-column `w-full px-4`.
 
@@ -98,7 +98,7 @@
 
 ### Pattern: Container width caps
 **Use when**: Marketing landing pages, product surfaces, documentation.
-**Anti-pattern**: Content stretching full-width on 2560px ultrawide monitors — line lengths become punishing.
+**Anti-pattern**: Content stretching full-width on 2560px ultrawide monitors (line lengths become punishing).
 **How**:
 - Outer container: `max-w-7xl mx-auto` (1280px) or `max-w-[1400px] mx-auto`
 - Inside the container: prose columns at `max-w-prose` or `max-w-[65ch]` (roughly 640 to 720px)
@@ -106,19 +106,19 @@
 - Full-bleed sections (backgrounds, hero imagery) extend to `w-screen`; constrained content inside still respects the container
 
 ### Pattern: Vertical rhythm cascade
-**Use when**: Stacking components with clear hierarchy — eyebrow → headline → body → CTA.
+**Use when**: Stacking components with clear hierarchy (eyebrow → headline → body → CTA).
 **Anti-pattern**: Identical 16px gap between every adjacent element.
 **How**:
 - 4 to 8px: between tightly related elements (icon + label, eyebrow + headline)
 - 12 to 16px: between paragraph and next paragraph
 - 24 to 32px: between component groups (headline block to CTA)
 - 48 to 64px: between distinct content blocks within a section
-- 96 to 160px: between major sections
+- `var(--layout-landing-gap)`: between major sections, 64 to 240px at desktop by the brand
 
 ### Pattern: Brutalist grid lines via gap
-**Use when**: Industrial, technical, or engineered-document aesthetic.
+**Use when**: High contrast, geometric type and a formal grid: the technical end of the axes.
 **Anti-pattern**: Heavy `border` declarations on every cell.
-**How**: Use `display: grid; gap: 1px;` with contrasting parent/child background colors to generate razor-thin dividing lines. The grid is allowed to be visible — faint baseline grids, registration marks, and ruler tick marks reinforce the engineered feel.
+**How**: Use `display: grid; gap: 1px;` with contrasting parent/child background colors to generate razor-thin dividing lines. The grid is allowed to be visible: faint baseline grids, registration marks, and ruler tick marks reinforce the engineered feel.
 
 ### Pattern: Safe area implementation
 **Use when**: Mobile apps and PWAs with fixed headers, tab bars, or floating CTA bars.
@@ -128,14 +128,14 @@
 - Bottom: `padding-bottom: max(16px, env(safe-area-inset-bottom))` on tab bars and floating CTAs
 - Scroll containers: `padding-bottom` equal to fixed-element height + safe-area inset
 - Test on devices with notches, Dynamic Island, and gesture indicators
-- Test landscape orientation — safe areas shift to left and right edges
+- Test landscape orientation: safe areas shift to left and right edges
 - Avoid hardcoding pixel values; respect the system's variable insets
 
 ### Pattern: Premium card padding scale
 **Use when**: High-end aesthetic with major bento containers.
 **Anti-pattern**: `p-4` on every card regardless of role.
 **How**:
-- Major bento containers: `p-10` to `p-16` (40 to 64px) — generous, gallery-presentation
+- Major bento containers: `p-10` to `p-16` (40 to 64px), generous, gallery-presentation
 - Standard premium cards: `p-8` (32px)
 - Feature cards: `p-6` (24px)
 - Compact tiles: `p-4` (16px)
@@ -146,14 +146,14 @@
 **Use when**: Landing pages structured around Attention → Interest → Desire → Action.
 **Anti-pattern**: Same `py-32` on every section.
 **How**:
-- Hero (Attention): `min-h-[100dvh]` with centered or split content; section padding minimal because the hero is its own block
-- Interest (bento, features): `py-32 md:py-48` standard
-- Desire (motion / proof / scrolly): `py-40 md:py-56` to let scroll moments breathe
-- Action (final CTA): `py-32 md:py-48` plus tinted background band
+- Hero (Attention): `min-h-dvh` with centered or split content; section padding minimal because the hero is its own block
+- Interest (bento, features): `var(--layout-landing-gap)` standard
+- Desire (motion / proof / scrolly): up to one and a half times `var(--layout-landing-gap)` to let scroll moments breathe
+- Action (final CTA): `var(--layout-landing-gap)` plus tinted background band
 - Footer: handled separately; minimum `py-16 md:py-24`
 
 ### Pattern: Magazine effect (wide canvas, narrow column)
-**Use when**: Editorial, premium SaaS, long-form content surfaces.
+**Use when**: The page is read at length (the long reading context).
 **Anti-pattern**: Body text running 100+ characters per line across a wide viewport.
 **How**: Outer canvas full-width (`max-w-7xl` or `max-w-[1400px]`). Body text columns inside clamp to 55 to 75 characters via `max-w-prose` or `max-w-[65ch]`. Inside premium card containers, internal padding stays at 24 to 40px. The eye reads short lines on a wide canvas; the magazine effect is the cumulative result.
 
@@ -165,7 +165,7 @@
 ## Tokens / values
 
 ### Base unit
-- 4px or 8px — pick one and commit
+- 4px or 8px: pick one and commit
 - All gaps, paddings, margins are multiples of the base unit
 
 ### Spacing scale (8px-rhythm aligned)
@@ -173,9 +173,8 @@
 - In px: 0 / 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 / 128 / 192 / 256 / 384 / 512 / 640
 
 ### Section padding by surface type
-- Marketing landing: `py-32 md:py-48` (128 to 192px desktop)
-- Marketing premium / developer-tooling: `py-40 md:py-56` (160 to 224px desktop)
-- Marketing brutalist / editorial: `py-32 md:py-48`, often paired with full-width macro-typography
+- Marketing landing: `var(--layout-landing-gap)` (64 to 240px at desktop by the brand, 0.6 to 0.9 of it on a phone)
+- Marketing brutalist / editorial: `var(--layout-landing-gap)`, often paired with full-width macro-typography
 - Product / dashboard: `py-12 md:py-16` (48 to 64px)
 - Modal / sheet: `p-6` (24px) to `p-8` (32px)
 - Mobile: halve the desktop values; floor at `py-16` (64px) for marketing
@@ -227,17 +226,17 @@
 
 ### Mobile collapse rules (VARIANCE 4-10)
 - Below 768px (`md:`): any asymmetric layout falls back to `w-full px-4 py-8` single-column
-- Below 768px: cap density at "daily-app" — cockpit mode becomes scrollable card stacks, not 1px-divided rows
+- Below 768px: cap density at "daily-app" (cockpit mode becomes scrollable card stacks, not 1px-divided rows)
 - Below 768px: motion intensity drops by 2 levels
 - Below 768px: bento grids collapse to single column with `gap-4` and standard vertical spacing; no `col-span` overrides survive
 - Below 768px: remove rotations and negative-margin overlaps from z-axis cascades
 
 ### Banned spacing patterns
-- `h-screen` for full-height sections (use `min-h-[100dvh]`)
-- Flex percentage math like `w-[calc(33%-1rem)]` (use CSS Grid)
+- `h-screen` for full-height sections (use `min-h-dvh`)
+- Flex percentage math like `flex-basis: calc(33.3% - 24px)` (use CSS Grid)
 - Same narrow gutter from phone to desktop (adapt by breakpoint)
-- Section padding under `py-32` on marketing surfaces
-- Empty cells in bento grids (use `grid-flow-dense`)
+- Section spacing under `var(--layout-landing-gap)` on marketing surfaces
+- Empty cells in bento grids (use `grid-auto-flow: dense`)
 - Symmetrical padding on every section as a fallback
 - Arbitrary `z-50` or `z-[9999]` without documented purpose
 - Horizontal scroll on mobile body content (wrap page in `overflow-x-hidden w-full max-w-full`)
@@ -255,8 +254,8 @@
 
 - [ ] Base spacing unit (4 or 8) chosen and documented (severity: High)
 - [ ] All gaps, paddings, margins land on multiples of the base unit (severity: High)
-- [ ] Marketing sections use `py-32 md:py-48` minimum (severity: High)
-- [ ] Hero uses `min-h-[100dvh]`, not `h-screen` (severity: Critical)
+- [ ] Marketing sections use `var(--layout-landing-gap)`, or at least 64px phone and 128px desktop without a design system (severity: High)
+- [ ] Hero uses `min-h-dvh`, not `h-screen` (severity: Critical)
 - [ ] Page wrapped in `overflow-x-hidden w-full max-w-full` when motion is used (severity: High)
 - [ ] Outer container caps at `max-w-7xl` (1280px) or `max-w-[1400px]` (severity: Medium)
 - [ ] Prose columns clamp to `max-w-prose` (~65ch / 640 to 720px) (severity: Medium)
@@ -265,10 +264,10 @@
 - [ ] Safe areas respected for status bar, notch, home indicator (severity: Critical for mobile)
 - [ ] Scroll containers have content insets so lists are not hidden behind fixed bars (severity: High)
 - [ ] Mobile aggressive collapse: any asymmetric layout above `md:` falls back to single-column below 768px (severity: Critical)
-- [ ] No `h-screen` anywhere — `min-h-[100dvh]` used consistently (severity: Critical)
+- [ ] No `h-screen` anywhere: `min-h-dvh` used consistently (severity: Critical)
 - [ ] CSS Grid used for responsive structures; no flex percentage math (severity: High)
-- [ ] Bento grids use `grid-flow-dense`; no empty cells (severity: High)
-- [ ] Bento card count is 3 to 5, not 8 (severity: Medium)
+- [ ] Bento grids use `grid-auto-flow: dense`; no empty cells (severity: High)
+- [ ] Bento card count follows `references/surfaces/landing.md` (When to include a section) (severity: Medium)
 - [ ] Z-index scale documented; no `z-50` or `z-[9999]` spam (severity: Medium)
 - [ ] No horizontal scroll on mobile body content (severity: Critical)
 - [ ] Verified on 375px, 414px, 768px, 1024px, 1440px (severity: Critical)
@@ -296,5 +295,5 @@
 - See **interaction.md** for touch target sizes and spacing between tappable elements.
 - See **accessibility.md** for safe-area compliance and zoom behavior.
 - See **components.md** for card-specific padding contracts.
-- See **dashboards.md** for cockpit-density spacing rules.
+- See `references/surfaces/dashboard.md` for cockpit-density spacing rules.
 - See **motion.md** for layout shift avoidance during animations.

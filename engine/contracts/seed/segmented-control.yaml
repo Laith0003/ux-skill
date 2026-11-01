@@ -1,0 +1,74 @@
+# Segmented control: picks one of two to five options in place. Every value
+# is a semantic role.
+name: segmented-control
+status: experimental
+category: selection
+description: Two to five joined options of which exactly one is selected, for a view or a setting that changes at once.
+parts:
+  - {name: track, rtlBehavior: logical}
+  - {name: segment, rtlBehavior: logical}
+  - {name: indicator, rtlBehavior: logical}
+variants:
+  - {name: size, values: [medium, large], default: medium}
+states: [default, hover, focus, selected, disabled]
+tokens:
+  - {part: track, property: fill, role: color.surface.sunken}
+  - {part: track, property: border-width, role: border.outline}
+  - {part: track, property: border-color, role: color.line.input}
+  - {part: track, property: radius, role: radius.control}
+  - {part: segment, property: text, role: color.text.muted}
+  - {part: segment, property: font, role: type.text.ui}
+  - {part: segment, property: min-size, role: layout.target.min}
+  - {part: segment, property: min-size, role: layout.target.large, when: {size: large}}
+  - {part: segment, property: padding-inline, role: space.control.padding-inline}
+  - {part: segment, property: text, role: color.text.default, state: hover}
+  - {part: segment, property: text, role: color.text.default, state: selected}
+  - {part: segment, property: font-weight, role: type.strong, state: selected}
+  - {part: segment, property: text, role: color.text.disabled, state: disabled}
+  - {part: segment, property: focus-ring, role: color.focus.ring, state: focus}
+  - {part: segment, property: focus-ring-width, role: border.focus-ring.width, state: focus}
+  - {part: segment, property: focus-ring-offset, role: border.focus-ring.offset, state: focus}
+  # one indicator under the selected segment: a raised fill with the
+  # selected edge that fades in the first time, slides after that and snaps
+  # under reduced motion
+  - {part: indicator, property: fill, role: color.surface.raised}
+  - {part: indicator, property: border-width, role: border.active}
+  - {part: indicator, property: border-color, role: color.line.selected}
+  - {part: indicator, property: radius, role: radius.control}
+  - {part: indicator, property: transition-duration, role: motion.indicator.duration}
+  - {part: indicator, property: transition-curve, role: motion.indicator.curve}
+  - {part: indicator, property: enter-duration, role: motion.indicator.duration}
+  - {part: indicator, property: enter-curve, role: motion.indicator.curve}
+  # every part that changes under hover, selected or pressed answers on motion.state
+  - {part: segment, property: transition-duration, role: motion.state.duration}
+  - {part: segment, property: transition-curve, role: motion.state.curve}
+contrast:
+  - {fg: color.text.muted, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.sunken, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.default, bg: color.surface.raised, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.line.selected, bg: color.surface.sunken, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.line.input, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+  - {fg: color.focus.ring, bg: surfaces, minimum: 3, criterion: "1.4.11"}
+surfaces: [color.surface.page, color.surface.card]
+a11y:
+  target: layout.target.min
+  label: localized
+  cue: the selected segment carries aria-selected (aria-checked when the segments are radios), the heavier weight and the indicator's selected edge, never color alone
+copy:
+  default:
+    - Name each option with one or two words; the options read as one set, so keep them parallel
+usage:
+  do:
+    - Use a tablist with aria-selected when the segments switch views of one subject, or a radiogroup with aria-checked when they set a value
+    - Draw one indicator behind the selected segment. It fades in the first time it appears, slides to the newly selected segment after that on motion.indicator, and snaps under reduced motion, where motion.indicator resolves to 0ms
+    - Keep two to five segments of near equal width
+    - Keep a disabled segment visible with aria-disabled, and say near the control why it cannot be chosen
+    - A disabled component takes no hover or pressed binding; a disabled component that can take focus keeps its focus ring; selected and error still apply, and where disabled and another state bind the same part and property, disabled wins. Apply this first, then the specificity rule
+    - Apply the binding for a state over the one without a state, then, among those, the one with more variant conditions over the one with fewer
+    - When two states apply at once, selected keeps its weight and text, and hover changes nothing more
+  dont:
+    - Do not use a segmented control for more than five options; use a select
+    - Do not show the selected segment by color alone
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

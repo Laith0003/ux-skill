@@ -1,0 +1,686 @@
+"""A strict reader for the small YAML subset component contracts use.
+
+Contracts are YAML so people and agents can read and write them, but the
+engine stays standard library only, so it reads a documented subset and
+refuses everything else by line number, with the fix:
+
+- block mappings (``key: value``) and block sequences (``- item``),
+  nested by indentation with spaces; a sequence may sit at its key's
+  indentation;
+- a sequence item may open a mapping on its own line (``- name: label``);
+- one-line flow collections: ``[a, b]`` and ``{key: value}``, nested;
+- scalars: ``null`` and ``~``, ``true`` and ``false``, integers, decimals
+  such as 0.5, single or double quoted text, and plain text;
+- block text: ``|`` keeps each line break and ``>`` folds a break between
+  two lines of text into a space, each with its chomping (``-`` drops the
+  final line break, ``+`` keeps every trailing one) and an indentation
+  digit, as the value of a key, of a list item, or of the document;
+- comments after ``#`` at the start of a line or after a space. A quote
+  opens a quoted value only where a value starts; inside plain text it is a
+  character, so ``Say "Item #3"`` is the text ``Say "Item`` and a comment,
+  as every YAML reader reads it. Only the space character is trimmed at
+  the edges of a plain value; a no-break or ideographic space is kept.
+
+Refused, each with a message: tabs outside quotes, anchors, aliases,
+tags, multi-line plain or quoted scalars, document markers, duplicate
+keys, a plain value holding ``": "``, plain keys that are not simple names,
+control characters, and every plain value or key another YAML reader
+would read differently: the YAML 1.1 words yes, no, on, off, y and n,
+which other readers turn into booleans; numbers written with a leading
+zero, a base prefix (0x, 0o, 0b), underscores, an exponent or a leading
+point; base-60 numbers such as 1:23; .inf and .nan; dates with a time;
+a list opened on the line of another (``- - a``, ``a: - b``); a plain value
+starting with '?' or ':'; and inside [...] or {...}, a plain value holding
+'?' or a bracket. Quoting any of them makes it text. Lists and maps nest at
+most MAX_DEPTH deep and a number has at most MAX_DIGITS digits, so no
+input reaches the caller as anything but a YamlError.
+
+yamlite may refuse what a full reader accepts, but it never reads a
+document differently, with one deliberate exception: a date such as
+2026-09-25 is read as text, where a YAML 1.1 reader returns a date.
+tests/contracts/test_yamlite_parity.py holds it to that against PyYAML.
+"""
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
+
+_KEY = re.compile(r"[A-Za-z_][A-Za-z0-9_.-]*")
+_INT = re.compile(r"[-+]?(0|[1-9][0-9]*)")
+_FLOAT = re.compile(r"[-+]?[0-9]+\.[0-9]*")
+_NULLS = ("null", "Null", "NULL", "~")
+_TRUE = ("true", "True", "TRUE")
+_FALSE = ("false", "False", "FALSE")
+_AMBIGUOUS = ("yes", "no", "on", "off", "y", "n")
+_RESERVED = ("&", "*", "!", "|", ">", "%", "@", "`")
+# Plain values that a YAML 1.1 reader (as PyYAML reads it) or a YAML 1.2
+# reader (core schema) turns into a number, a date and time or a special
+# value, where this reader would keep text or read another number. Each is
+# refused, so a contract never reads one way here and another way elsewhere.
+# Integers without a leading zero and decimals with a point read alike
+# everywhere, so _INT and _FLOAT accept them first.
+_NUMBER_FIX = "quote it, or write a plain decimal such as 1500 or 0.5 if it is a number"
+_OTHER_READINGS: Tuple[Tuple[re.Pattern[str], str, str], ...] = (
+    (re.compile(r"[-+]?[0-9][0-9_]*(:[0-9_]+)+(\.[0-9_]*)?"),
+     "a base-60 number (1:23 reads as 83)", "quote it"),
+    (re.compile(r"[-+]?0[0-9_]+"), "an octal number (012 reads as 10)", _NUMBER_FIX),
+    (re.compile(r"[-+]?0[xob][0-9a-fA-F_]*"), "a number in another base", _NUMBER_FIX),
+    (re.compile(r"[-+]?[0-9][0-9_]*(\.[0-9_]*)?([eE][-+]?[0-9_]+)?|[-+]?\.[0-9_]+"
+                r"([eE][-+]?[0-9_]+)?|[-+][0-9_]+"), "a number", _NUMBER_FIX),
+    (re.compile(r"[-+]?\.(inf|nan)", re.IGNORECASE), "infinity or not-a-number", "quote it"),
+    (re.compile(r"[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}([Tt]|[ ]+)[0-9]{1,2}:.*"), "a date and time",
+     "quote it"),
+    (re.compile(r"=|<<"), "a special value", "quote it"),
+)
+# Characters YAML keeps for flow collections, and the ones that end a plain
+# value inside them.
+_FLOW_STARTS = (",", "[", "]", "{", "}")
+_FLOW_BREAKS = "?[]{}"
+# Anything below a space but the tab, DEL and the C1 controls, the Unicode
+# line and paragraph separators, a byte order mark past the start, and the
+# code points no text holds.
+_CONTROL = re.compile(r"[\x00-\x08\x0a-\x1f\x7f-\x9f\u2028\u2029\ufeff\ufffe\uffff"
+                      r"\ud800-\udfff]")
+# How many lists and maps may nest inside each other. Contracts need a
+# handful; the cap turns runaway nesting into an error with the line.
+MAX_DEPTH = 64
+# How many digits a number may have. Longer numbers are refused rather than
+# handed to int() and float(), which fail or lose them.
+MAX_DIGITS = 100
+
+
+class YamlError(ValueError):
+    """Text outside the supported subset, or malformed. The message names
+    the source and the line, and says the fix."""
+
+
+@dataclass(frozen=True)
+class _Line:
+    number: int
+    indent: int
+    text: str
+
+
+def _fail(source: str, number: int, message: str) -> YamlError:
+    return YamlError(f"{source} line {number}: {message}")
+
+
+def _quote_end(text: str, i: int, source: str, number: int) -> int:
+    """The index after the quoted scalar that opens at text[i]."""
+    quote = text[i]
+    i += 1
+    while i < len(text):
+        ch = text[i]
+        if quote == '"' and ch == "\\":
+            i += 2
+            continue
+        if ch == quote:
+            if quote == "'" and text[i + 1:i + 2] == "'":
+                i += 2
+                continue
+            return i + 1
+        i += 1
+    raise _fail(source, number, f"a {quote} quote is never closed; close it on the same line")
+
+
+def _strip_comment(text: str, source: str, number: int) -> str:
+    """The line without its comment, as YAML reads it. A quote opens a
+    quoted scalar only where a value starts: at the start of the line, after
+    '- ' or ': ', and inside [...] or {...} after '[', '{' or ','. Anywhere
+    else it is a character of plain text, so a '#' after a space still
+    starts a comment. A tab outside quotes is refused: other readers take
+    it as a space."""
+    start = True  # a value may start here
+    flow = 0  # how many [...] and {...} are open
+    closed_quote = False  # the character before was a closing quote
+    i = 0
+    while i < len(text):
+        ch = text[i]
+        after_quote, closed_quote = closed_quote, False
+        nxt = text[i + 1:i + 2]
+        if ch == " ":
+            i += 1
+            continue
+        if ch == "\t":
+            raise _fail(source, number, "a tab sits outside quotes; use spaces, or put the text "
+                                        "in quotes")
+        if ch == "#" and (i == 0 or text[i - 1] == " "):
+            return text[:i].rstrip(" ")
+        if start and ch in "\"'":
+            i = _quote_end(text, i, source, number)
+            start, closed_quote = False, True
+            continue
+        if start and flow == 0 and ch == "-" and nxt in ("", " "):
+            i += 1
+            continue
+        if ch == ":" and (nxt in ("", " ") or (flow and after_quote)):
+            start = True
+        elif start and ch in "[{":
+            flow += 1
+        elif flow and ch == ",":
+            start = True
+        elif flow and ch in "]}":
+            flow -= 1
+            start = False
+        else:
+            start = False
+        i += 1
+    return text.rstrip(" ")
+
+
+# A block scalar's header, the whole value of a line: | or >, then its
+# chomping (- strips the final line break, + keeps every trailing one) and
+# an indentation digit, in either order, after "key: ", "- " or "- key: ".
+_BLOCK = re.compile(r"(?P<head>(?:- )?(?:[^:\"'\[{#]*?: )?)(?P<style>[|>])"
+                    r"(?:(?P<chomp1>[-+])(?P<digit1>[1-9])?|(?P<digit2>[1-9])(?P<chomp2>[-+])?)?")
+
+
+def _block_scalar(raws: List[str], at: int, indent: int, head: str, m: "re.Match[str]",
+                  source: str) -> Tuple[str, int]:
+    """(the text of the block scalar whose header is on raws[at], the index
+    of the first line after it), read as the YAML spec reads block text.
+
+    Its indentation is the digit's, counted from the node it is the value
+    of (the key, the list item, or nothing at the document's root), or else
+    the first line of text's. Each line at that indentation is a line of
+    text from there on, so spaces past it are text, a line of spaces
+    included; a shorter line of spaces is an empty line. | keeps each line
+    break and > folds a break between two lines of text that start with no
+    space into a space. Chomping then keeps the final line break (none),
+    drops it (-) or keeps every trailing one (+), and the last line of a
+    document without a final line break has no break to keep."""
+    style = m.group("style")
+    chomp = m.group("chomp1") or m.group("chomp2") or ""
+    digit = m.group("digit1") or m.group("digit2")
+    if not head:
+        parent = -1
+    elif head.startswith("- ") and len(head) > 2:
+        parent = indent + 2    # the key of a map that opens on a list item's line
+    else:
+        parent = indent
+    least = max(1, parent + 1)
+    # A cursor over the lines after the header: each line but the last ends
+    # with a line break, and the last ends the document. It moves line by
+    # line, so a block reads only to its own end.
+    col, line = 0, at + 1
+    last = len(raws) - 1
+
+    def peek() -> str:
+        if line > last:
+            return "\0"
+        raw = raws[line]
+        if col < len(raw):
+            return raw[col]
+        return "\n" if line < last else "\0"
+
+    def next_line() -> None:
+        nonlocal col, line
+        col, line = 0, line + 1
+
+    def breaks_to(width: int) -> List[str]:
+        """The line breaks of the empty lines ahead, each line's spaces up
+        to `width` skipped."""
+        nonlocal col
+        found: List[str] = []
+        while True:
+            while col < width and peek() == " ":
+                col += 1
+            if peek() != "\n":
+                return found
+            found.append("\n")
+            next_line()
+
+    deepest = (0, 0)   # (the most spaces on a line before the text, its line)
+    if digit:
+        width = least + int(digit) - 1
+        breaks = breaks_to(width)
+    else:
+        breaks = []
+        while peek() in " \n":
+            if peek() == "\n":
+                breaks.append("\n")
+                next_line()
+            else:
+                col += 1
+                deepest = max(deepest, (col, line))
+        width = max(least, deepest[0])
+    chunks: List[str] = []
+    line_break = ""
+    while col == width and peek() != "\0":
+        chunks.extend(breaks)
+        plain = peek() not in " \t"
+        content = raws[line][col:]
+        if _CONTROL.search(content):
+            raise _fail(source, line + 1, "the block text holds a control character; remove it")
+        chunks.append(content)
+        col = len(raws[line])
+        line_break = ""
+        if peek() == "\n":
+            line_break = "\n"
+            next_line()
+        breaks = breaks_to(width)
+        if col != width or peek() == "\0":
+            break
+        if style == ">" and line_break and plain and peek() not in " \t":
+            if not breaks:
+                chunks.append(" ")
+        else:
+            chunks.append(line_break)
+    if parent < col < width and peek() not in "\0\n":
+        if digit:
+            raise _fail(source, line + 1, f"this line of the block text is indented less than "
+                                          f"the {digit} in its header asks; indent it "
+                                          f"{width} spaces, or drop the digit")
+        if not chunks and deepest[0] == width:
+            raise _fail(source, deepest[1] + 1, "this line of spaces before the block text "
+                                                "holds more spaces than its first line; remove "
+                                                "its spaces or line them up with that line")
+        raise _fail(source, line + 1, "this line of the block text is indented less than "
+                                      "its first line; line it up with the first")
+    if chomp != "-":
+        chunks.append(line_break)
+    if chomp == "+":
+        chunks.extend(breaks)
+    # At the end of the document every line was read, the last included.
+    return "".join(chunks), (len(raws) if peek() == "\0" else line)
+
+
+def _as_quoted(text: str) -> str:
+    """Text as one double-quoted scalar this reader reads back as it is."""
+    return '"' + (text.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n")
+                  .replace("\t", "\\t")) + '"'
+
+
+def _lines(text: str, source: str) -> List[_Line]:
+    out: List[_Line] = []
+    text = text.removeprefix("\ufeff").replace("\r\n", "\n").replace("\r", "\n")
+    raws = text.split("\n")
+    number = 0
+    while number < len(raws):
+        raw = raws[number]
+        number += 1
+        control = _CONTROL.search(raw)
+        if control:
+            raise _fail(source, number, f"character U+{ord(control.group()):04X} is a control "
+                                        "character or a line separator; remove it")
+        body = raw.lstrip(" \t")
+        if "\t" in raw[:len(raw) - len(body)]:
+            raise _fail(source, number, "a tab indents this line; indent with spaces")
+        content = _strip_comment(body, source, number)
+        if not content:
+            continue
+        if content in ("---", "...") or content.startswith("%"):
+            raise _fail(source, number, f"{content!r} is a document marker or directive; "
+                                        "a contract is one document, so remove the line")
+        indent = len(raw) - len(body)
+        block = _BLOCK.fullmatch(content)
+        if block and (block.group("head") or indent == 0):
+            head = block.group("head")
+            value, after = _block_scalar(raws, number - 1, indent, head, block, source)
+            out.append(_Line(number, indent, head + _as_quoted(value)))
+            number = after
+            continue
+        out.append(_Line(number, indent, content))
+    return out
+
+
+def _show(text: str) -> str:
+    """The text for a message, cut to a readable length."""
+    return repr(text if len(text) <= 40 else text[:37] + "...")
+
+
+def _deeper(depth: int, source: str, number: int) -> int:
+    """The depth of a list or map that opens inside `depth` others."""
+    if depth + 1 > MAX_DEPTH:
+        raise _fail(source, number, f"this value nests more than {MAX_DEPTH} lists and maps "
+                                    "deep; flatten it")
+    return depth + 1
+
+
+def _plain(text: str, source: str, number: int, in_flow: bool = False) -> Any:
+    """A plain (unquoted) scalar, resolved to None, a bool, a number or text."""
+    if text in _NULLS:
+        return None
+    if text in _TRUE:
+        return True
+    if text in _FALSE:
+        return False
+    if text.lower() in _AMBIGUOUS:
+        raise _fail(source, number, f"the plain word {text!r} reads as a yes or no in other YAML "
+                                    f"readers; write true or false, or quote it as '{text}'")
+    if text.startswith(_RESERVED):
+        raise _fail(source, number, f"{text!r} starts with {text[0]!r}, which marks an anchor, "
+                                    "alias, tag or multi-line text this reader does not "
+                                    "support; quote the value or keep it on one line")
+    if text == "-" or text.startswith("- "):
+        raise _fail(source, number, f"{_show(text)} starts with '- ', which other YAML readers "
+                                    "read as a list inside this one; put the list on its own "
+                                    "lines, one '- item' each, or quote the value")
+    if text.startswith("#"):
+        raise _fail(source, number, f"{_show(text)} starts with '#', which starts a comment in "
+                                    "other YAML readers; quote the value")
+    if text.startswith(("?", ":")):
+        raise _fail(source, number, f"{_show(text)} starts with {text[0]!r}, which marks a key "
+                                    "in other YAML readers; quote the value")
+    if text.startswith(_FLOW_STARTS):
+        raise _fail(source, number, f"{_show(text)} starts with {text[0]!r}, which YAML keeps "
+                                    "for [...] and {...}; quote the value")
+    if ": " in text or text.endswith(":"):
+        raise _fail(source, number, f"{_show(text)} holds ': ' inside a plain value; quote the "
+                                    "value")
+    if in_flow:
+        for ch in _FLOW_BREAKS:
+            if ch in text:
+                raise _fail(source, number, f"{_show(text)} holds {ch!r}, which ends a plain "
+                                            "value inside [...] or {...} in other YAML readers; "
+                                            "quote the value")
+    is_int, is_float = _INT.fullmatch(text), _FLOAT.fullmatch(text)
+    if (is_int or is_float) and sum(ch.isdigit() for ch in text) > MAX_DIGITS:
+        raise _fail(source, number, f"the number {_show(text)} has more than {MAX_DIGITS} "
+                                    "digits; quote it if it is text, or shorten it")
+    if is_int:
+        return int(text)
+    if is_float:
+        return float(text)
+    for pattern, what, fix in _OTHER_READINGS:
+        if pattern.fullmatch(text):
+            raise _fail(source, number, f"the plain value {_show(text)} reads as {what} in "
+                                        f"other YAML readers; {fix}")
+    return text
+
+
+def _check_key(key: str, source: str, number: int) -> None:
+    """Refuse a plain key another reader turns into null or a boolean."""
+    what = ("null" if key in _NULLS else "true or false" if key in _TRUE + _FALSE
+            else "a yes or no" if key.lower() in _AMBIGUOUS else "")
+    if what:
+        raise _fail(source, number, f"the key {key!r} reads as {what} in other YAML readers; "
+                                    f"quote it as '{key}'")
+
+
+_ESCAPES = {"n": "\n", "t": "\t", '"': '"', "\\": "\\", "/": "/", "0": "\0"}
+
+
+def _quoted(text: str, start: int, source: str, number: int) -> Tuple[str, int]:
+    """The quoted scalar starting at text[start]; returns (value, index after
+    the closing quote)."""
+    quote = text[start]
+    out: List[str] = []
+    i = start + 1
+    while i < len(text):
+        ch = text[i]
+        if quote == "'":
+            if ch == "'":
+                if text[i + 1:i + 2] == "'":
+                    out.append("'")
+                    i += 2
+                    continue
+                return "".join(out), i + 1
+            out.append(ch)
+        else:
+            if ch == "\\":
+                nxt = text[i + 1:i + 2]
+                if nxt not in _ESCAPES:
+                    raise _fail(source, number, f"'\\{nxt}' is not an escape this reader "
+                                                "knows; use \\n, \\t, \\\" or \\\\")
+                out.append(_ESCAPES[nxt])
+                i += 2
+                continue
+            if ch == '"':
+                return "".join(out), i + 1
+            out.append(ch)
+        i += 1
+    raise _fail(source, number, f"a {quote} quote is never closed; close it on the same line")
+
+
+class _Flow:
+    """Recursive reader for one-line flow collections and scalars."""
+
+    def __init__(self, text: str, source: str, number: int, depth: int = 0):
+        self.text, self.source, self.number, self.i = text, source, number, 0
+        self.depth = depth
+
+    def fail(self, message: str) -> YamlError:
+        return _fail(self.source, self.number, message)
+
+    def skip(self) -> None:
+        while self.i < len(self.text) and self.text[self.i] == " ":
+            self.i += 1
+
+    def value(self, stops: str, depth: int) -> Any:
+        self.skip()
+        if self.i >= len(self.text):
+            raise self.fail("a value is missing in a [...] or {...} list; write one or remove "
+                            "the extra comma")
+        ch = self.text[self.i]
+        if ch == "[":
+            return self.sequence(_deeper(depth, self.source, self.number))
+        if ch == "{":
+            return self.mapping(_deeper(depth, self.source, self.number))
+        if ch in "\"'":
+            value, self.i = _quoted(self.text, self.i, self.source, self.number)
+            return value
+        start = self.i
+        while self.i < len(self.text) and self.text[self.i] not in stops:
+            self.i += 1
+        word = self.text[start:self.i].strip(" ")
+        if not word:
+            raise self.fail("a value is missing in a [...] or {...} list; write one or remove "
+                            "the extra comma")
+        return _plain(word, self.source, self.number, in_flow=True)
+
+    def sequence(self, depth: int) -> List[Any]:
+        self.i += 1
+        items: List[Any] = []
+        self.skip()
+        if self.text[self.i:self.i + 1] == "]":
+            self.i += 1
+            return items
+        while True:
+            items.append(self.value(",]", depth))
+            self.skip()
+            ch = self.text[self.i:self.i + 1]
+            self.i += 1
+            if ch == "]":
+                return items
+            if ch != ",":
+                raise self.fail("a [...] list is not closed with ']'; close it on the same line")
+
+    def mapping(self, depth: int) -> Dict[str, Any]:
+        self.i += 1
+        items: Dict[str, Any] = {}
+        self.skip()
+        if self.text[self.i:self.i + 1] == "}":
+            self.i += 1
+            return items
+        while True:
+            self.skip()
+            if self.text[self.i:self.i + 1] in ("\"", "'"):
+                key, self.i = _quoted(self.text, self.i, self.source, self.number)
+            else:
+                start = self.i
+                while self.i < len(self.text) and self.text[self.i] not in ":,}":
+                    self.i += 1
+                key = self.text[start:self.i].strip(" ")
+                if not _KEY.fullmatch(key):
+                    raise self.fail(f"{_show(key)} is not a simple key; use letters, digits, "
+                                    "'_', '.' and '-', or quote it")
+                _check_key(key, self.source, self.number)
+                if self.text[self.i + 1:self.i + 2] not in ("", " ", ",", "}"):
+                    raise self.fail(f"key {key!r} in a {{...}} map needs a space after its ':'; "
+                                    f"write {key}: value")
+            self.skip()
+            if self.text[self.i:self.i + 1] != ":":
+                raise self.fail(f"key {key!r} in a {{...}} map has no ':'; write key: value")
+            self.i += 1
+            if key in items:
+                raise self.fail(f"key {key!r} appears twice in one {{...}} map; keep one")
+            items[key] = self.value(",}", depth)
+            self.skip()
+            ch = self.text[self.i:self.i + 1]
+            self.i += 1
+            if ch == "}":
+                return items
+            if ch != ",":
+                raise self.fail("a {...} map is not closed with '}'; close it on the same line")
+
+    def whole(self) -> Any:
+        value = self.value("", self.depth)
+        self.skip()
+        if self.i != len(self.text):
+            raise self.fail(f"{self.text[self.i:]!r} follows a complete value; remove it or "
+                            "quote the whole value")
+        return value
+
+
+def _inline(text: str, source: str, number: int, depth: int = 0) -> Any:
+    if text[0] in "[{\"'":
+        return _Flow(text, source, number, depth).whole()
+    return _plain(text, source, number)
+
+
+def _is_item(text: str) -> bool:
+    return text == "-" or text.startswith("- ")
+
+
+def _opens_with_key(text: str, source: str, number: int) -> bool:
+    """Whether the text starts with a key and its ':' (a quoted key
+    included), so it opens a map rather than holding one value."""
+    if text[0] in "\"'":
+        _, end = _quoted(text, 0, source, number)
+        rest = text[end:].lstrip(" ")
+        return rest[:1] == ":" and rest[1:2] in ("", " ")
+    if text[0] in "[{":
+        return False
+    return re.match(r"[^:]*?:(?: |$)", text) is not None
+
+
+def _split_key(line: _Line, source: str) -> Tuple[str, str]:
+    """(key, rest) of a mapping line; rest is "" when the value is a block."""
+    text = line.text
+    if text[0] in "\"'":
+        key, end = _quoted(text, 0, source, line.number)
+        rest = text[end:]
+        if rest[:1] == " " and rest.lstrip(" ")[:1] == ":":
+            raise _fail(source, line.number, f"key {key!r} has a space before its ':'; remove "
+                                             "the space")
+        if not rest.startswith(":"):
+            raise _fail(source, line.number, f"key {key!r} has no ':' after it; write key: value")
+        rest = rest[1:]
+    else:
+        m = re.match(r"([^:]*?):(?: |$)", text)
+        if not m:
+            raise _fail(source, line.number, f"{text!r} is not a 'key: value' line or a '- item' "
+                                             "line; fix its indentation or add the ':'")
+        key = m.group(1)
+        if key != key.rstrip(" ") and _KEY.fullmatch(key.rstrip(" ")):
+            raise _fail(source, line.number, f"key {key.rstrip(' ')!r} has a space before its "
+                                             "':'; remove the space")
+        if not _KEY.fullmatch(key):
+            raise _fail(source, line.number, f"{_show(key)} is not a simple key; use letters, "
+                                             "digits, '_', '.' and '-', or quote it")
+        _check_key(key, source, line.number)
+        rest = text[m.end(1) + 1:]
+    if rest and not rest.startswith(" "):
+        raise _fail(source, line.number, f"key {key!r} needs a space after its ':'")
+    return key, rest.strip(" ")
+
+
+class _Block:
+    def __init__(self, lines: List[_Line], source: str):
+        self.lines, self.source = lines, source
+
+    def fail(self, line: _Line, message: str) -> YamlError:
+        return _fail(self.source, line.number, message)
+
+    def block(self, i: int, indent: int, depth: int) -> Tuple[Any, int]:
+        line = self.lines[i]
+        depth = _deeper(depth, self.source, line.number)
+        if line.text == "-" or line.text.startswith("- "):
+            return self.sequence(i, indent, depth)
+        return self.mapping(i, indent, depth)
+
+    def child(self, i: int, indent: int, allow_same: bool, depth: int) -> Tuple[Any, int]:
+        """The block that follows line i-1 as its value, or None when none does."""
+        if i < len(self.lines):
+            nxt = self.lines[i]
+            if nxt.indent > indent or (allow_same and nxt.indent == indent
+                                       and (nxt.text == "-" or nxt.text.startswith("- "))):
+                return self.block(i, nxt.indent, depth)
+        return None, i
+
+    def mapping(self, i: int, indent: int, depth: int,
+                first: Optional[_Line] = None) -> Tuple[Dict[str, Any], int]:
+        out: Dict[str, Any] = {}
+        while i < len(self.lines) or first is not None:
+            line = first if first is not None else self.lines[i]
+            if first is None:
+                if line.indent < indent:
+                    break
+                if line.indent > indent:
+                    raise self.fail(line, "this line is indented deeper than the key before it "
+                                          "allows; line it up with its siblings")
+                if line.text == "-" or line.text.startswith("- "):
+                    raise self.fail(line, "a '- item' sits among 'key: value' lines; put the "
+                                          "list under a key")
+            key, rest = _split_key(line, self.source)
+            if key in out:
+                raise self.fail(line, f"key {key!r} appears twice in one map; keep one")
+            i = i + 1 if first is None else i
+            first = None
+            if rest:
+                out[key] = _inline(rest, self.source, line.number, depth)
+            else:
+                out[key], i = self.child(i, indent, True, depth)
+        return out, i
+
+    def sequence(self, i: int, indent: int, depth: int) -> Tuple[List[Any], int]:
+        out: List[Any] = []
+        while i < len(self.lines):
+            line = self.lines[i]
+            if line.indent < indent:
+                break
+            if line.indent > indent:
+                raise self.fail(line, "this line is indented deeper than the list before it "
+                                      "allows; line it up with its siblings")
+            if not (line.text == "-" or line.text.startswith("- ")):
+                break
+            item = line.text[1:].lstrip(" ")
+            i += 1
+            if not item:
+                value, i = self.child(i, indent, False, depth)
+                out.append(value)
+            elif _opens_with_key(item, self.source, line.number):
+                inner = _Line(line.number, indent + len(line.text) - len(item), item)
+                value, i = self.mapping(i, inner.indent,
+                                        _deeper(depth, self.source, line.number), first=inner)
+                out.append(value)
+            else:
+                out.append(_inline(item, self.source, line.number, depth))
+        return out, i
+
+
+def loads(text: str, source: str = "<text>") -> Any:
+    """Read one YAML document in the supported subset. Raises YamlError
+    naming the source, the line and the fix. An empty document is None."""
+    if not isinstance(text, str):
+        raise TypeError(f"{source} is {type(text).__name__}; pass the YAML as text")
+    lines = _lines(text, source)
+    if not lines:
+        return None
+    first = lines[0]
+    if first.indent != 0:
+        raise _fail(source, first.number, "the first line is indented; start the document at "
+                                          "the left edge")
+    if not _is_item(first.text) and not _opens_with_key(first.text, source, first.number):
+        value = _inline(first.text, source, first.number)
+        if len(lines) > 1:
+            raise _fail(source, lines[1].number, "text follows a complete value; a document "
+                                                 "holds one map, list or value")
+        return value
+    value, i = _Block(lines, source).block(0, 0, 0)
+    if i != len(lines):
+        raise _fail(source, lines[i].number, "this line is indented less than the document "
+                                             "allows; line it up with its siblings")
+    return value

@@ -1,0 +1,485 @@
+"""Safe by default: a file that exists and differs is never replaced
+without force, one conflict stops every write, and an identical file is
+left untouched."""
+import os
+
+import pytest
+
+from engine.foundations.emit import (
+    InputError, WritePlan, check_out_dir, conflict_message, plan_writes, write_files,
+)
+
+FILES = {"tokens.json": "{}\n", "tokens.css": ":root {}\n", "system-report.md": "# r\n"}
+
+
+def test_writes_every_file_into_a_new_folder(tmp_path):
+    out = tmp_path / "ds" / "nested"
+    plan = write_files(out, FILES)
+    assert plan == WritePlan(("tokens.json", "tokens.css", "system-report.md"), (), ())
+    for name, text in FILES.items():
+        assert (out / name).read_text(encoding="utf-8") == text
+
+
+def test_identical_files_are_left_untouched(tmp_path):
+    write_files(tmp_path, FILES)
+    old = 1_000_000_000
+    for name in FILES:
+        os.utime(tmp_path / name, (old, old))
+    plan = write_files(tmp_path, FILES)
+    assert plan == WritePlan((), ("tokens.json", "tokens.css", "system-report.md"), ())
+    for name in FILES:
+        assert (tmp_path / name).stat().st_mtime == old
+
+
+def test_one_conflict_stops_every_write(tmp_path):
+    (tmp_path / "tokens.css").write_text("/* mine */\n", encoding="utf-8")
+    plan = write_files(tmp_path, FILES)
+    assert plan.conflicts == ("tokens.css",)
+    assert plan.write == ("tokens.json", "system-report.md")
+    assert (tmp_path / "tokens.css").read_text(encoding="utf-8") == "/* mine */\n"
+    assert not (tmp_path / "tokens.json").exists()
+    assert not (tmp_path / "system-report.md").exists()
+
+
+def test_force_replaces_only_what_differs(tmp_path):
+    (tmp_path / "tokens.css").write_text("/* mine */\n", encoding="utf-8")
+    (tmp_path / "tokens.json").write_text("{}\n", encoding="utf-8")
+    plan = write_files(tmp_path, FILES, force=True)
+    assert plan == WritePlan(("system-report.md", "tokens.css"), ("tokens.json",), ())
+    assert (tmp_path / "tokens.css").read_text(encoding="utf-8") == ":root {}\n"
+
+
+def test_plan_writes_does_not_write(tmp_path):
+    plan = plan_writes(tmp_path / "missing", FILES)
+    assert plan.write == tuple(FILES) and not (tmp_path / "missing").exists()
+
+
+def test_a_folder_in_the_way_is_named(tmp_path):
+    (tmp_path / "tokens.css").mkdir()
+    with pytest.raises(InputError) as exc:
+        plan_writes(tmp_path, FILES)
+    assert str(exc.value).startswith(f"{tmp_path / 'tokens.css'} is a folder")
+
+
+def test_conflict_message_names_each_file_and_both_fixes(tmp_path):
+    one = conflict_message(tmp_path, WritePlan((), (), ("tokens.css",)))
+    assert one == (f"Nothing was written: {tmp_path / 'tokens.css'} already exists with "
+                   "different content. Pass --force to replace it, or pass a different --out "
+                   "folder.")
+    two = conflict_message(tmp_path, WritePlan((), (), ("tokens.json", "tokens.css")),
+                           force_flag="force=true", out_flag="out")
+    assert "tokens.json" in two and "already exist with" in two
+    assert "Pass force=true to replace them" in two and "a different out folder" in two
+
+
+def test_check_out_dir(tmp_path):
+    assert check_out_dir(tmp_path / "new") == tmp_path / "new"
+    f = tmp_path / "file.txt"
+    f.write_text("x", encoding="utf-8")
+    with pytest.raises(InputError, match=r"^--out .*file\.txt is a file, not a folder"):
+        check_out_dir(f, label="--out")
+    with pytest.raises(InputError, match="^--out is missing"):
+        check_out_dir("", label="--out")
+
+
+# Every filesystem error names the path and the fix; none escapes as a
+# traceback.
+POSIX_USER = os.name == "posix" and hasattr(os, "geteuid") and os.geteuid() != 0
+needs_permissions = pytest.mark.skipif(
+    not POSIX_USER, reason="file permissions are not enforced here (Windows, or root)")
+
+
+def _can_symlink(tmp_path):
+    try:
+        (tmp_path / ".probe").symlink_to(tmp_path)
+    except (OSError, NotImplementedError):
+        return False
+    (tmp_path / ".probe").unlink()
+    return True
+
+
+def test_out_folder_inside_a_file_is_named(tmp_path):
+    f = tmp_path / "afile"
+    f.write_text("x", encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        check_out_dir(f / "sub" / "ds", label="--out")
+    assert str(exc.value) == (
+        f"--out {f / 'sub' / 'ds'} is inside {f}, which is a file, so the folder cannot be "
+        f"made; pass a folder path that is not inside a file, for example "
+        f"{tmp_path / 'design-system'}")
+
+
+def test_out_folder_expands_a_home_folder(tmp_path, monkeypatch):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
+    assert check_out_dir("~/ds") == tmp_path / "ds"
+
+
+def test_out_folder_that_is_a_broken_link_is_named(tmp_path):
+    if not _can_symlink(tmp_path):
+        pytest.skip("symbolic links are not available here")
+    link = tmp_path / "ds"
+    link.symlink_to(tmp_path / "gone")
+    with pytest.raises(InputError) as exc:
+        check_out_dir(link, label="--out")
+    assert str(exc.value).startswith(
+        f"--out {link} is a link to {tmp_path / 'gone'}, which does not exist; ")
+    assert "remove the link" in str(exc.value)
+
+
+def test_a_broken_link_in_place_of_a_file_is_named(tmp_path):
+    if not _can_symlink(tmp_path):
+        pytest.skip("symbolic links are not available here")
+    (tmp_path / "tokens.css").symlink_to(tmp_path / "gone.css")
+    with pytest.raises(InputError) as exc:
+        write_files(tmp_path, FILES)
+    assert str(exc.value).startswith(
+        f"{tmp_path / 'tokens.css'} is a link to {tmp_path / 'gone.css'}, which does not exist; "
+        "remove the link")
+    assert not (tmp_path / "tokens.json").exists()
+
+
+def test_a_link_is_never_written_through(tmp_path):
+    if not _can_symlink(tmp_path):
+        pytest.skip("symbolic links are not available here")
+    shared = tmp_path / "shared.css"
+    shared.write_text(FILES["tokens.css"], encoding="utf-8")
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "tokens.css").symlink_to(shared)
+    plan = write_files(out, FILES)
+    assert plan.unchanged == ("tokens.css",)
+    shared.write_text("/* edited */\n", encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        write_files(out, FILES, force=True)
+    assert str(exc.value).startswith(f"{out / 'tokens.css'} is a link to {shared}; ")
+    assert shared.read_text(encoding="utf-8") == "/* edited */\n"
+
+
+@needs_permissions
+def test_an_unreadable_file_is_named(tmp_path):
+    target = tmp_path / "tokens.css"
+    target.write_text("/* mine */\n", encoding="utf-8")
+    target.chmod(0)
+    try:
+        with pytest.raises(InputError) as exc:
+            write_files(tmp_path, FILES)
+    finally:
+        target.chmod(0o644)
+    assert str(exc.value).startswith(f"{target} exists but cannot be read (Permission denied)")
+    assert "or write the system into a different folder" in str(exc.value)
+    assert not (tmp_path / "tokens.json").exists()
+
+
+@needs_permissions
+def test_a_read_only_folder_is_named(tmp_path):
+    out = tmp_path / "ro"
+    out.mkdir()
+    out.chmod(0o555)
+    try:
+        with pytest.raises(InputError) as exc:
+            write_files(out, FILES)
+        assert list(out.iterdir()) == []
+    finally:
+        out.chmod(0o755)
+    assert str(exc.value).startswith(f"{out} cannot be written (Permission denied)")
+    assert "pass a folder you can write to" in str(exc.value)
+
+
+@needs_permissions
+def test_a_folder_that_cannot_be_made_is_named(tmp_path):
+    parent = tmp_path / "ro"
+    parent.mkdir()
+    parent.chmod(0o555)
+    try:
+        with pytest.raises(InputError) as exc:
+            write_files(parent / "ds", FILES)
+    finally:
+        parent.chmod(0o755)
+    assert str(exc.value).startswith(f"{parent / 'ds'} cannot be made (Permission denied)")
+    assert not (parent / "ds").exists()
+
+
+def test_writing_nothing_makes_no_folder(tmp_path):
+    assert write_files(tmp_path / "new", {}) == WritePlan((), (), ())
+    assert not (tmp_path / "new").exists()
+
+
+# All or nothing: every file is staged in a folder inside the out folder,
+# then moved into place. A failure at any step leaves the folder exactly as
+# it was, never a mix of two systems.
+import errno  # noqa: E402
+
+import engine.foundations.emit as emit  # noqa: E402
+
+OLD = {"tokens.json": '{"old": 1}\n', "tokens.css": "/* old */\n",
+       "system-report.md": "# old\n"}
+
+
+def _snapshot(root):
+    return {str(p.relative_to(root)): (p.read_bytes() if p.is_file() else "folder")
+            for p in sorted(root.rglob("*"))}
+
+
+def _fail_on_call(real, n):
+    calls = []
+
+    def wrapper(*args):
+        calls.append(args)
+        if len(calls) == n:
+            raise OSError(errno.ENOSPC, "No space left on device")
+        return real(*args)
+    return wrapper
+
+
+def _write_old(folder):
+    folder.mkdir(parents=True, exist_ok=True)
+    for name, text in OLD.items():
+        (folder / name).write_text(text, encoding="utf-8")
+
+
+def test_a_failure_while_staging_leaves_the_folder_as_it_was(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_stage", _fail_on_call(emit._stage, 2))
+    with pytest.raises(InputError) as exc:
+        write_files(tmp_path, FILES, force=True)
+    assert str(exc.value) == (
+        f"{tmp_path / 'tokens.css'} could not be written (No space left on device), so nothing "
+        f"in {tmp_path} was changed; free some space or pass a folder you can write to")
+    assert _snapshot(tmp_path) == before
+
+
+def test_a_failure_while_moving_into_place_restores_every_file(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_place", _fail_on_call(emit._place, 2))
+    with pytest.raises(InputError, match="so nothing in .* was changed"):
+        write_files(tmp_path, FILES, force=True)
+    assert _snapshot(tmp_path) == before
+
+
+def test_a_failure_keeps_identical_files_untouched(tmp_path, monkeypatch):
+    (tmp_path / "tokens.json").write_text(FILES["tokens.json"], encoding="utf-8")
+    old = 1_000_000_000
+    os.utime(tmp_path / "tokens.json", (old, old))
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_place", _fail_on_call(emit._place, 2))
+    with pytest.raises(InputError):
+        write_files(tmp_path, FILES)
+    assert _snapshot(tmp_path) == before
+    assert (tmp_path / "tokens.json").stat().st_mtime == old
+
+
+def test_a_failure_in_a_new_folder_leaves_no_folder(tmp_path, monkeypatch):
+    monkeypatch.setattr(emit, "_stage", _fail_on_call(emit._stage, 2))
+    with pytest.raises(InputError):
+        write_files(tmp_path / "new" / "ds", FILES)
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_a_forced_write_leaves_only_the_three_files(tmp_path):
+    _write_old(tmp_path)
+    plan = write_files(tmp_path, FILES, force=True)
+    assert set(plan.write) == set(FILES)
+    assert _snapshot(tmp_path) == {name: text.encode("utf-8") for name, text in FILES.items()}
+
+
+# An interrupt (Ctrl-C) or any other exception mid-write puts the folder
+# back too, then goes on as it would have.
+def _interrupt_on_call(real, n):
+    calls = []
+
+    def wrapper(*args):
+        calls.append(args)
+        if len(calls) == n:
+            raise KeyboardInterrupt
+        return real(*args)
+    return wrapper
+
+
+def test_an_interrupt_between_moves_restores_every_file(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_place", _interrupt_on_call(emit._place, 2))
+    with pytest.raises(KeyboardInterrupt):
+        write_files(tmp_path, FILES, force=True)
+    assert _snapshot(tmp_path) == before
+
+
+def test_an_interrupt_while_setting_a_file_aside_restores_every_file(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+    real = os.replace
+    asides = []
+
+    def replace(src, dst):
+        if str(dst).endswith(".previous"):
+            asides.append(src)
+            if len(asides) == 2:
+                raise KeyboardInterrupt
+        return real(src, dst)
+    monkeypatch.setattr(os, "replace", replace)
+    with pytest.raises(KeyboardInterrupt):
+        write_files(tmp_path, FILES, force=True)
+    monkeypatch.setattr(os, "replace", real)
+    assert _snapshot(tmp_path) == before
+
+
+def test_an_interrupt_while_staging_leaves_no_new_folder(tmp_path, monkeypatch):
+    monkeypatch.setattr(emit, "_stage", _interrupt_on_call(emit._stage, 2))
+    with pytest.raises(KeyboardInterrupt):
+        write_files(tmp_path / "new" / "ds", FILES)
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_any_other_exception_restores_and_is_raised_as_it_was(tmp_path, monkeypatch):
+    _write_old(tmp_path)
+    before = _snapshot(tmp_path)
+
+    def boom(*args):
+        raise RuntimeError("boom")
+    monkeypatch.setattr(emit, "_place", boom)
+    with pytest.raises(RuntimeError, match="boom"):
+        write_files(tmp_path, FILES, force=True)
+    assert _snapshot(tmp_path) == before
+
+
+def _cannot_put_back(monkeypatch):
+    """Every move of an old copy back into place fails."""
+    real = os.replace
+
+    def replace(src, dst):
+        if str(src).endswith(".previous"):
+            raise OSError(errno.EACCES, "Permission denied")
+        return real(src, dst)
+    monkeypatch.setattr(os, "replace", replace)
+
+
+@pytest.mark.parametrize("failure", [OSError(errno.ENOSPC, "No space left on device"),
+                                     KeyboardInterrupt()])
+def test_files_that_cannot_be_put_back_are_each_named_with_their_old_copy(
+        tmp_path, monkeypatch, failure):
+    _write_old(tmp_path)
+    calls = []
+
+    def place(staged, target):
+        calls.append(target)
+        if len(calls) == 3:
+            raise failure
+        return os.replace(str(staged), str(target))
+    monkeypatch.setattr(emit, "_place", place)
+    _cannot_put_back(monkeypatch)
+    with pytest.raises(InputError) as exc:
+        write_files(tmp_path, FILES, force=True)
+    monkeypatch.undo()
+    message = str(exc.value)
+    stages = [p for p in tmp_path.iterdir() if p.name.startswith(".uxskill-")]
+    assert len(stages) == 1, "the staging folder is kept while it holds old copies"
+    stage = stages[0]
+    reason = "interrupted" if isinstance(failure, KeyboardInterrupt) else "No space left on device"
+    assert message.startswith(f"{tmp_path / 'system-report.md'} could not be written ({reason})")
+    for name in FILES:
+        old_copy = stage / f"{name}.previous"
+        assert old_copy.read_text(encoding="utf-8") == OLD[name]
+        assert f"the old {name} is at {old_copy}" in message
+    assert f"To undo the write, move each old copy back into {tmp_path}, then" in message
+    assert "then pass a folder you can write to" in message
+
+
+def test_an_interrupt_while_making_the_staging_folder_leaves_no_new_folder(tmp_path, monkeypatch):
+    def interrupted(*args, **kwargs):
+        raise KeyboardInterrupt
+    monkeypatch.setattr(emit.tempfile, "mkdtemp", interrupted)
+    with pytest.raises(KeyboardInterrupt):
+        write_files(tmp_path / "new" / "ds", FILES)
+    assert list(tmp_path.iterdir()) == []
+
+
+# Names inside subfolders (the rule pack) are written, compared and rolled
+# back the same way, and a file in place of a subfolder is named.
+NESTED = {"tokens.json": "{}\n", "rule-pack/README.md": "# r\n",
+          "rule-pack/color/audit.md": "# a\n"}
+
+
+def test_names_inside_subfolders_are_written_and_compared(tmp_path):
+    plan = write_files(tmp_path, NESTED)
+    assert plan.write == tuple(NESTED)
+    assert (tmp_path / "rule-pack" / "color" / "audit.md").read_text(encoding="utf-8") == "# a\n"
+    assert write_files(tmp_path, NESTED) == WritePlan((), tuple(NESTED), ())
+    (tmp_path / "rule-pack" / "color" / "audit.md").write_text("# mine\n", encoding="utf-8")
+    assert write_files(tmp_path, NESTED).conflicts == ("rule-pack/color/audit.md",)
+
+
+def test_a_failure_removes_the_subfolders_it_made(tmp_path, monkeypatch):
+    (tmp_path / "keep.txt").write_text("x", encoding="utf-8")
+    before = _snapshot(tmp_path)
+    monkeypatch.setattr(emit, "_place", _fail_on_call(emit._place, 3))
+    with pytest.raises(InputError, match="so nothing in .* was changed"):
+        write_files(tmp_path, NESTED)
+    assert _snapshot(tmp_path) == before
+
+
+def test_a_file_where_a_subfolder_goes_is_named(tmp_path):
+    (tmp_path / "rule-pack").write_text("not a folder", encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        write_files(tmp_path, NESTED)
+    assert str(exc.value) == (
+        f"{tmp_path / 'rule-pack'} is a file or a link where a folder should be, so "
+        "rule-pack/README.md cannot be written; move it away or write the system into a "
+        "different folder")
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["rule-pack"]
+
+
+def test_a_link_where_a_subfolder_goes_is_named_and_never_written_through(tmp_path):
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    out = tmp_path / "out"
+    out.mkdir()
+    (out / "rule-pack").symlink_to(elsewhere, target_is_directory=True)
+    with pytest.raises(InputError) as exc:
+        write_files(out, NESTED)
+    assert str(exc.value).startswith(f"{out / 'rule-pack'} is a file or a link where a folder "
+                                     "should be")
+    assert list(elsewhere.iterdir()) == [] and sorted(p.name for p in out.iterdir()) == [
+        "rule-pack"]
+
+
+def test_bytes_are_written_and_compared_as_they_are(tmp_path):
+    """A backup keeps a file's own bytes, whatever its encoding."""
+    data = "caf\u00e9\n".encode("utf-16")
+    assert write_files(tmp_path, {"old.css": data}).write == ("old.css",)
+    assert (tmp_path / "old.css").read_bytes() == data
+    assert plan_writes(tmp_path, {"old.css": data}).unchanged == ("old.css",)
+    assert plan_writes(tmp_path, {"old.css": b"other"}).conflicts == ("old.css",)
+
+
+@pytest.mark.parametrize("name, fix", [
+    ("../x.css", "which is outside {out}, so nothing was written; name it by its path below "
+                 "that folder, for example x.css"),
+    ("/abs/x.css", "an absolute path, so nothing was written; name it by its path below {out}, "
+                   "for example x.css"),
+    ("a//b.css", "which is not a plain path below {out}, so nothing was written; write it as "
+                 "a/b.css"),
+    ("a\\b.css", "which is not a plain path below {out}, so nothing was written; write it as "
+                 "a/b.css"),
+])
+def test_every_writer_refuses_a_name_that_is_not_a_plain_path_below_the_folder(
+        tmp_path, name, fix):
+    out = tmp_path / "out"
+    with pytest.raises(InputError) as exc:
+        write_files(out, {"tokens.css": ":root {}\n", name: "x\n"}, force=True)
+    assert str(exc.value) == f"files names {name}, " + fix.format(out=out)
+    assert sorted(p.name for p in tmp_path.iterdir()) == []
+
+
+def test_with_a_replace_set_only_those_files_are_replaced(tmp_path):
+    (tmp_path / "a.css").write_text("old a\n", encoding="utf-8")
+    (tmp_path / "b.css").write_text("old b\n", encoding="utf-8")
+    plan = write_files(tmp_path, {"a.css": "a\n", "b.css": "b\n", "c.css": "c\n"}, force=True,
+                       replace={"a.css"})
+    assert plan.conflicts == ("b.css",)
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["a.css", "b.css"]
+    assert (tmp_path / "a.css").read_text(encoding="utf-8") == "old a\n"
+    assert write_files(tmp_path, {"a.css": "a\n", "c.css": "c\n"}, force=True,
+                       replace={"a.css"}).write == ("c.css", "a.css")

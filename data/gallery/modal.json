@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.784,
+    "density": 0.5,
+    "formality": 0.5,
+    "geometry": 0.248,
+    "motion": 0.163,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/modal.json: warmth from the hue and chroma of the primary #FFB949 and the canvas #FFFFFF; contrast from the ink #000000 on that canvas, its depth and the chroma of #FF7A30; density from its 4px spacing base; geometry from its radii 0, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 150ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FFB949",
+  "brand_rule": "The primary #FFB949 reaches only 1.71:1 on the canvas #FFFFFF and no accent reaches 3:1, so the primary stays and the engine derives the action color from it.",
+  "digest": {
+    "action": {
+      "dark": "#FFB949",
+      "light": "#FFB949"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0F0D09",
+      "light": "#F8F6F4"
+    },
+    "radius_control": "3px",
+    "state_duration": "150ms",
+    "tokens": 728,
+    "tokens_sha256": "9b1f4e3470be8926"
+  },
+  "id": "modal",
+  "name": "Modal",
+  "spec": "data/brands/modal.json"
+}

@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.539,
+    "density": 0.25,
+    "formality": 0.693,
+    "geometry": 0.51,
+    "motion": 0.236,
+    "type_personality": 0.5,
+    "warmth": 0.315
+  },
+  "axes_source": "Read from data/brands/plaid.json: warmth from the hue and chroma of the primary #0A2540 and the canvas #FFFFFF; contrast from the ink #0A2540 on that canvas, its depth and the chroma of #0A2540; density from its 8px spacing base; geometry from its radii 4, 8, 12, 16px; formality from the chroma of its primary and ink; motion from its stated durations 180ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#0A2540",
+  "brand_rule": "The primary #0A2540 reaches 15.54:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#D9DBDD",
+      "light": "#1C1F22"
+    },
+    "face": {
+      "display": "Sora",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0B0E10",
+      "light": "#F5F7F8"
+    },
+    "radius_control": "6px",
+    "state_duration": "150ms",
+    "tokens": 730,
+    "tokens_sha256": "399818aba2b3a5e0"
+  },
+  "id": "plaid",
+  "name": "Plaid",
+  "spec": "data/brands/plaid.json"
+}

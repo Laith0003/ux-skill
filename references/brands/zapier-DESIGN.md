@@ -1,9 +1,9 @@
 # Zapier
 
-> An inspired interpretation of Zapier's design language — a workflow-automation platform whose surface combines warm-cream neutrals (#fffefb canvas, #f8f4f0 soft cream) with deep coffee ink (#201515) and a single saturated orange CTA accent (#ff4f00); typography pairs the proprietary Degular Display family at hero scale with Inter for sub-displays and body, giving the brand a confident-warm rather than cool-tech voice.
+> An inspired interpretation of Zapier's design language: a workflow-automation platform whose surface combines warm-cream neutrals (#fffefb canvas, #f8f4f0 soft cream) with deep coffee ink (#201515) and a single saturated orange CTA accent (#ff4f00); typography pairs the proprietary Degular Display family at hero scale with Inter for sub-displays and body, giving the brand a confident-warm rather than cool-tech voice.
 
 **Category:** Productivity / Collaboration
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/zapier.json`](../../data/brands/zapier.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-An inspired interpretation of Zapier's design language — a workflow-automation platform whose surface combines warm-cream neutrals (#fffefb canvas, #f8f4f0 soft cream) with deep coffee ink (#201515) and a single saturated orange CTA accent (#ff4f00); typography pairs the proprietary Degular Display family at hero scale with Inter for sub-displays and body, giving the brand a confident-warm rather than cool-tech voice.
+An inspired interpretation of Zapier's design language: a workflow-automation platform whose surface combines warm-cream neutrals (#fffefb canvas, #f8f4f0 soft cream) with deep coffee ink (#201515) and a single saturated orange CTA accent (#ff4f00); typography pairs the proprietary Degular Display family at hero scale with Inter for sub-displays and body, giving the brand a confident-warm rather than cool-tech voice.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

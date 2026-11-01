@@ -7,6 +7,373 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [Unreleased]
+
+## [4.0.0] - 2026-11-01 - **FOUNDATIONS**
+
+ux-skill 4.0 builds a design system from one brand color and a brief, reads
+the system a team already has, checks every pairing for contrast in light,
+dark and high contrast, and writes only what passes. 3.x users: start with
+[docs/migrating-to-4.md](docs/migrating-to-4.md).
+
+### Upgrade
+- pip: `pip install --upgrade uxskill` (Python 3.10 or newer). For the MCP
+  server: `pip install --upgrade 'uxskill[mcp]'`. To stay on 3.x on
+  purpose: `pip install 'uxskill<4'`.
+- npm: `npx uxskill@latest`.
+- Then build a system:
+  `uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out design-system`.
+
+### Migrating from 3.x
+- The 3.x `tokens.css` from `ux generate` and the system pack's
+  `DESIGN.md` and `tokens.css` are replaced by `tokens.css`, `tokens.json`
+  (DTCG), `fonts.css`, `art/` and `system-report.md`.
+- Build a new system and move the page onto its roles: every 3.x custom
+  property has a 4.0 role (`--color-canvas` is `--color-surface-page`,
+  `--color-primary` is `--color-action-primary`, `--space-md` is
+  `--space-4`, `--motion-base` is `--motion-state-duration`); the full table
+  is in the guide.
+- Or keep the 3.x system: `uxskill system import --from DESIGN.md` reads it
+  as it is, `system enhance` reports what it lacks and how to add it, and
+  `system extend` adds the missing foundations, roles or contracts in an
+  extension file beside it. Nothing is rewritten.
+
+### Added
+- Nine foundations (color, type, space, layout, radius, border, elevation,
+  motion, imagery), each from primitives to semantic roles across five mode
+  axes, emitted as DTCG and CSS and checked by the WCAG gate. Every look is a
+  continuous function of the axes, the brand and the brief; no industry or
+  keyword picks one.
+- Importers for DTCG, CSS, Tailwind 4 and a resolved Tailwind 3 config,
+  Markdown rule files and Figma variables, with a naming adapter, `scan`,
+  `system enhance --from` and `system extend`. An importer never guesses: it
+  reads a value or lists the entry under Not read with how to write it.
+- Exporters to CSS, DTCG, Tailwind 4 and Figma variables, with the scripts
+  that apply and read them in a Figma file. Every write goes through an
+  intake step that backs up the client's files byte for byte.
+- 23 component contracts and 14 section contracts. A part that changes under
+  hover, selected or pressed binds a transition on `motion.state`; pressable
+  controls scale on `motion.press.scale` (1 under reduced motion); nav,
+  tabs, segmented controls and menus move one indicator on
+  `motion.indicator`. A section names its job, the components its slots
+  take, its variants, the proof it needs and its phone recomposition; every
+  page sequence names its section contracts.
+- 171 lint rules. The lint reads the page's own system, times motion from
+  its curve, holds a display line height to the engine's floor, reads the
+  system's lean to capitals, and checks how components show their states:
+  a hidden control leaves the tab order, an exit runs to its end, a theme
+  switch does not animate the page, and an action in a repeated item names
+  its item.
+- `lint --render` measures the color budget, the photo grade lock, accent
+  text on every ground, loops under reduced motion and pause controls, and
+  drives the page with its motion running: focus rings that do not show or
+  are clipped, hover and press that answer late, focus lost after Escape,
+  and a press that still moves under reduced motion.
+- Inner pages (pricing, about, contact, customers, customer story, legal)
+  with their own sequences, built in one run as one page family.
+- Six category colors for nominal data: `color.category.1` to
+  `color.category.6`, each with a soft fill (a pill or a tile), a strong
+  tone (a chart mark), text, and text on the strong tone, in light, dark
+  and high contrast. The first sits on the brand's hue and the rest step
+  round the wheel; neighbors also differ in lightness. Every system gains
+  24 roles and the gate measures them on every surface. Import a shadcn
+  theme and `chart-1` to `chart-5` map to the category marks.
+- 25 MCP tools on one shared command layer.
+- `figma-skill/`: ux-skill as a skill for Figma's agent.
+- Release checks (`scripts/release_checks.py`): 600 sampled briefs build,
+  every gallery and fixture system round-trips through every format with no
+  mismatch, the build digest is stable across hash seeds, and the wheel
+  ships nothing private.
+
+### Changed
+- The dashboard playbook teaches the product dashboard people check many
+  times a day: every figure carries its comparison, date or count; states
+  take the category colors and outcomes the status colors, never color
+  alone; panels share one anatomy (icon, title, one control); one icon set;
+  a product's own photo is content. The cockpit rules stay for dense briefs.
+- The photo direction asks for the client's own photos first, describes
+  each missing shot by what it shows, lets stock stand-ins that pass the
+  direction fill the gap until then, and names the stock cliches to avoid
+  (handshakes, laptops showing charts, glowing locks, posed teams).
+- Lint reads what a page uses. On a page with its own markup, a rule on a
+  utility class no element carries (the rest of a compiled stylesheet) is
+  not reported, nor a library rule whose selector matches nothing there;
+  a dashboard with a sidebar is an app shell even when its header has a
+  button. Over a hundred pages from AI builders this removed a quarter of
+  the findings, none on an element the page has.
+- The quality score tells heavy pages apart: past 50 points of penalty it
+  decays toward 0 instead of stopping there. Scores of 50 and up are
+  unchanged.
+- `lint --render` reports text that runs past its own box
+  (`text-overflows-its-box`), such as a display word wider than its column.
+- The render color budget reads the status and category colors of a linked
+  `tokens.css` on a page opened from disk, where the sheet's rules cannot
+  be read, so they count as meaning there too.
+- 25 slash commands become 18. Each merged command keeps every step and
+  flag of the ones it absorbed:
+  - `/ux-discover` takes `--frame` (the four-field framing block) and
+    `--recommend` (the recommender alone). With no flag it runs the
+    10-field intake and then the recommender.
+  - `/ux-design` takes `--component`, `--dashboard` and `--from-image`.
+    With no flag the brief picks the mode.
+  - `/ux-polish` loops lint, fix, re-lint by default until the score
+    reaches 90 or three rounds pass, then runs the taste pass.
+    `--loop-only` runs just the loop, `--no-loop` just the taste pass.
+  - `/ux-init` takes `--stats` for the inventory snapshot alone.
+- `/ux-recommend` is no longer a command of its own. The `ux_recommend`
+  MCP tool is unchanged.
+- 4.0 needs Python 3.10 or newer. Python 3.9 is past end of life, so its
+  support ends here. On 3.9, pip keeps installing 3.2.x, which still works;
+  to get 4.0, upgrade Python to 3.10 or newer, or pin
+  `pip install 'uxskill<4'` to stay on 3.2.x on purpose.
+- Surface rules live in three playbooks under `references/surfaces/`:
+  `landing.md`, `dashboard.md` and `component.md`. `/ux-design` loads
+  exactly one, picked by its mode: page mode loads `landing.md` for a page
+  that explains, sells or converts and none otherwise, component mode loads
+  `component.md`, dashboard mode loads `dashboard.md`, and image mode
+  follows the build mode it stacks with. The mode's state file records the
+  pick as `surface`.
+- Landing rules move out of `styles/anti-slop.md`, `styles/arsenal.md`,
+  `styles/exemplars.md` and `foundations/layout.md` into `landing.md`;
+  `foundations/dashboards.md` becomes a pointer to `dashboard.md`. The
+  component contracts (card grid, form, data table, modal and drawer) stay
+  in `foundations/component-behaviors.md` and load on every build that
+  uses those components. The five live-product archetypes move to
+  `styles/arsenal.md`, since dashboards, components and AI landing heroes
+  all use them.
+- Every page carries photographs, sourced (stock included) when the
+  client has none, and the brand gate fails a page whose only images are
+  illustrations, icons or the logo. The avoid list in `brand.md` names the
+  kinds of photo that do not qualify (`engine.brand.photo_exclusions`),
+  however an entry is worded ("no stock", "stock photos are not allowed",
+  "never allow stock photos"); only a clause that allows a kind outright,
+  with no negation ("curated stock allowed"), is not an exclusion. A ban
+  narrows the choice and never removes photography. Only a rule against
+  photographs as a whole ("no photography", "illustration only, never
+  photos"; `engine.brand.photography_rule`, or `photography.forbidden` in
+  the brand signals) lets a page ship without photographs: the evaluator
+  then passes the page with a note naming that rule, and fails a page that
+  carries a photograph anyway, naming the image and the rule. The line earlier versions wrote
+  when a brand stated no rules, "random/generic stock, AI-slop clutter",
+  is the engine's old default and excludes nothing; a new `brand.md`
+  writes "random placeholder images, AI-slop clutter" instead.
+- A test fails when a rule sentence, exact or near (0.9 similarity), sits
+  in a playbook and in a file it moved out of, in `commands/ux-design.md`,
+  or in two playbooks, and when a file pointer does not resolve.
+
+- The lint reads the page's own system. A weight, size, tracking or
+  duration the page's tokens define passes; with no system the fixed
+  thresholds hold. Duration rules judge when a move answers, from its
+  declared curve: a response half done within 70ms and nine tenths within
+  220ms, an entrance half within 140ms. `imagery-mandatory-missing` needs
+  a photograph; an SVG illustration alone fails unless the brand forbids
+  photography. Three equal cards fail only when each holds just an icon, a
+  title and a line.
+- New lint rules: `eyebrows-over-budget`, `layout-family-repeated`,
+  `split-sections-in-a-row`, `marquee-more-than-one`,
+  `text-ink-at-low-alpha` and `infinite-animation-without-reduced-motion`.
+- `lint --render` adds the color budget, the photo grade lock, accent text
+  on every ground it lands on, loops under reduced motion and a pause
+  control for anything that moves on its own for more than five seconds.
+
+### Fixed
+- The landing display fits the headline word the face really sets. The
+  fit measured words with an advance that counted the space, so every
+  proportional face came out 9 to 19 percent narrow and a short headline
+  could run sideways at tablet width. Each Latin face now carries its
+  letter advance without the space, and a headline the brief gives counts
+  its longest word by its letters: an m or a W for more, an i or an l for
+  less. Faces are measured at a display size and the heaviest display
+  weight, a brand that sets its display in capitals has its word measured
+  in capitals, and an Arabic word takes the same care. Where the default
+  word binds, the display comes down; give the brief's headline and a
+  short one stands at full size.
+- Lint reads dashboards as admin templates build them. A Tailwind 4
+  utility no element uses is not reported inside @layer either, a shadow
+  composed only of custom properties is not counted as layers, a pointer
+  set only while a control is not disabled passes, a focus rule that fills
+  the control in place of its outline counts as an indicator, and a
+  pseudo-element at opacity 0 is never a hidden control. Over fourteen
+  public admin dashboards this removed 166 findings, none of them a real
+  problem. A shadow kept in a custom property is now counted where it is
+  used.
+- The quality score counts a repeated rule lightly past 50 points of
+  penalty: the n-th finding of a rule weighs 1/n there, so 149 links to
+  "#" read as one pattern, not 149 problems. Every score of 50 and up, and
+  every page of distinct problems, scores as before. Over 114 real pages,
+  scores of 1 or 2 fell from 35 to 11.
+
+### Deprecated
+These seven commands are now aliases. Each one says where it moved and
+runs the new command with the same arguments. They are removed in 4.1.
+- `/ux-frame`: use `/ux-discover --frame`.
+- `/ux-recommend`: use `/ux-discover --recommend`.
+- `/ux-stats`: use `/ux-init --stats`.
+- `/ux-evolve`: use `/ux-polish --loop-only`. The alias passes
+  `--rounds 5` to keep its old five-round cap.
+- `/ux-component`: use `/ux-design --component`.
+- `/ux-dashboard`: use `/ux-design --dashboard`.
+- `/ux-image-to-code`: use `/ux-design --from-image`. The alias passes
+  `--extract-only` to keep its old behavior of stopping after the
+  extraction.
+
+---
+
+## [4.0.0-beta.1] - 2026-09-24 - **FOUNDATIONS**
+
+A preview of 4.0. ux-skill can now build a new design system from one brand
+color and check its contrast before it hands the files over. This beta builds
+new systems only: it does not yet read or improve a system you already have.
+Every 3.x command still works as it did.
+
+### Install the beta
+pip and pipx skip pre-releases unless asked, so `pip install uxskill` still
+gives 3.2. Ask for the beta:
+- pip: `pip install --upgrade --pre uxskill`, or pin it with
+  `pip install uxskill==4.0.0b1`. For the MCP server:
+  `pip install --upgrade --pre 'uxskill[mcp]'`.
+- pipx: `pipx install --pip-args=--pre uxskill`, or over an installed 3.x,
+  `pipx upgrade --pip-args=--pre uxskill`.
+- npm: `npx uxskill@beta`.
+
+### If you are building a product or a landing page
+- One command writes the system into a folder:
+  `uxskill system build --brand '#3366FF' --out design-system`.
+  `tokens.css` holds CSS custom properties to link from your page,
+  `fonts.css` holds matched fallbacks for the faces, `fonts-self-host.css`
+  loads them from your own files, `tokens.json` holds the same tokens for tools,
+  `art/` holds decorative brand art, and `system-report.md` says in plain
+  words what was built, from what, and what the engine adjusted.
+- Style with the roles, not raw colors: `var(--color-action-primary)` for a
+  button, `var(--color-text-default)` for body text,
+  `var(--color-surface-page)` for the page.
+- Give it your discovery brief (`--brief .ux/last-discovery.json`) and the
+  look follows your industry and tone when the brief names them. Discovery
+  does not ask for an industry, so `/ux-system create` asks for one (you may
+  skip it). Or set the seven axes by hand with `--axes`, or leave both out
+  for a neutral system. The report says which, and names any brief word it
+  did not recognize.
+- Dark mode, high contrast, compact spacing, right to left and reduced motion
+  are in the same CSS file. Set `data-theme="dark"`, `data-contrast="high"`,
+  `data-density="compact"`, `dir="rtl"` or `data-motion="reduced"` on the
+  html element. With no attribute, dark mode, high contrast and reduced motion
+  follow the operating system.
+- Fonts: load the faces with the Google Fonts link the report gives, or with
+  `fonts-self-host.css` and the files it names in `fonts/`, and link
+  `fonts.css` with either one, before `tokens.css`. Edit neither file. Until
+  a face loads, its matched fallback in `fonts.css` keeps text the same size.
+  The report names the faces chosen.
+- In Claude Code, `/ux-system create` checks that the installed uxskill is
+  the beta, asks for the brand color, runs the build, and explains the
+  report.
+- It never overwrites a file that differs from what it would write, and one
+  such file stops every write. A second identical run changes nothing.
+  `--force` replaces files only when you ask.
+- When the contrast check fails, nothing is written and the message says what
+  to change: a darker or more saturated brand color, or different axes or
+  brief.
+
+### If you design design systems
+- Nine foundations: color, type, space, layout, radius, border, elevation,
+  motion, imagery. Each has primitives (the raw scale) and semantic roles (what
+  components use), and roles only point at primitives.
+- `tokens.json` follows the W3C design tokens format (DTCG 2025.10). Each
+  token carries its value for every mode it changes in: light and dark,
+  standard and high contrast, comfortable and compact density, left to right
+  and right to left, full and reduced motion.
+- The report lists the colors the engine moved to meet contrast, with the
+  ratio each now measures (and the one before, for text colors), and the main
+  choices it made from the brand color and the axes.
+- The same inputs always give the same bytes.
+- MCP: `ux_system_build` takes `brand`, `brief` or `axes`, and `latin_only`.
+  It returns pass or fail, the gate line, every finding, the report and each
+  file's size, small enough for an agent to read. Pass `out` (a folder) and
+  it writes the files as the command does, with the same statuses, and
+  refuses a file that differs unless `force` is true. Pass `include_files`
+  to get the CSS and tokens text back instead. A bad input returns an
+  `error` that names the field and the fix.
+
+### Character
+
+The 4.0 beta builds systems with character: every foundation now varies
+continuously with the seven axes, so two briefs of different character build
+systems a person can tell apart. No industry or keyword table picks a look.
+
+- A build writes `fonts.css` (metric-matched fallbacks for the chosen faces),
+  `fonts-self-host.css` (the faces from self-hosted files, a static face's
+  installed weights first) and decorative brand art in `art/` beside
+  `tokens.json`, `tokens.css` and `system-report.md`.
+- Three type roles: a display face, a text face and a mono face, chosen from
+  a small catalog of open-license faces by the axes, each with an Arabic
+  partner. Weight and letter spacing change along the scale; new styles for
+  a section title, a large figure, a label and a large control label.
+- The brand keeps its exact color on the main button whenever white or black
+  text reads on it; the button's edge carries its contrast against the page.
+  The axes choose whether the brand fills the action, marks words and links,
+  or draws edges, and add a supporting accent, brand tints, a brand band,
+  decorative, illustration, logo, code and table colors.
+- Corners, shadows, edges, neutrals, status colors and motion curves follow
+  the axes: roundness from geometry and formality, a surface treatment from
+  flat to deep, a warm or cool neutral tint, status colors harmonized to the
+  brand, and an expressive motion role that reduced motion removes.
+- High contrast never weakens the focus ring, makes edges, the ring and text
+  one step heavier, keeps every surface level apart and keeps the error edge
+  red.
+- An imagery foundation: media ratios, a scrim measured over the worst of a
+  white and a black image, a duotone pair and a brand tint. The report names the page composition a
+  landing page starts from: split, stacked, bento, editorial column or
+  full-bleed media.
+- Structured brief fields: age, languages and primary script, default
+  scheme, reading context and brand role. The report says what each changed
+  and why, and names every brief word the engine did not read with how to
+  pass it. An Arabic variety such as `arz` or any `-Arab` tag ships Arabic.
+- On a phone the hero, heading-1 and section title step down in size, and
+  neighbouring heading levels stay at least 1.08 times apart. Text on
+  generated art sits on a veil of the page color, with on-media color roles.
+  Arabic type applies on any `dir="rtl"` or `lang="ar"` subtree. Status soft
+  fills stay quiet, a band in dark stays a quiet tint, and tone words also
+  move the corners and the type.
+- Twenty component contracts, the form controls, chip, badge, link,
+  navigation, progress, table, FAQ accordion and site footer among them, and
+  fixes to the text field, card and status banner. A field's heavier hover
+  and error edge is drawn inside its border, so the layout never moves.
+
+### The WCAG gate
+- Every text, control and focus color pairing is measured in light and dark,
+  at standard and high contrast. Standard contrast meets WCAG 1.4.3 (text
+  4.5:1) and 1.4.11 (non-text 3:1). High contrast raises text to WCAG 1.4.6
+  (7:1) and most non-text parts to a 4.5:1 floor of our own, since WCAG sets
+  no enhanced non-text level.
+- Rule checks cover the rest (type sizes and leading, spacing, target sizes,
+  borders, elevation, motion) in every mode they vary in.
+- A system that fails is not written. The command exits 1 and names each
+  pairing, the mode and the ratio it reached.
+
+### Arabic
+- Under `dir="rtl"` text switches to an Arabic face, 1 to 2px larger than
+  Latin at the same step, with taller line height and no letter spacing.
+  Spacing and layout use logical properties, and motion mirrors.
+  `--latin-only` leaves Arabic out.
+
+### Not in this beta
+- No importers: it cannot read an existing system from Figma, CSS, Tailwind
+  or a tokens file, so `/ux-system enhance` and `extend` are not here yet.
+- It does not load fonts (see above) or write components.
+- The 3.x token format and the system-pack output are still here, so nothing
+  you use today breaks. 4.0 final replaces them, with a migration guide.
+
+### Coming next
+- 4.1: importers for Figma variables, CSS variables, Tailwind config and DTCG
+  tokens that keep your token names; `/ux-system enhance --from` and
+  `extend --from`; Figma both ways.
+- 4.2: fewer commands (merged, with the old names kept as aliases for one
+  release), surface playbooks for landing pages, dashboards and components
+  that `/ux-design` loads from the brief, a trust layer (lint on every write,
+  fewer false positives, a fresh-eyes finish reviewer), the brand gallery
+  rebuilt in the eight-foundation format, and the public launch.
+
+---
+
 ## [3.2.1] - 2026-09-24 - **MCP STARTS AGAIN**
 
 ### Fixed

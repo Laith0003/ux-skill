@@ -10,15 +10,18 @@ signals captured from the live page into a structured BrandProfile that:
      drifts off-brand cannot pass.
 
 Two hard-won rules (see references/process/brand-extraction.md):
-  * COLOR comes from the LOGO, not the most-painted CSS. The logo's dominant
-    non-neutral color is the primary; CSS chrome colors are secondary.
+  * COLOR comes from the project's DECLARED TOKENS when it has a design system
+    (the `declared` block of `ux system detect`), else from the LOGO, never the
+    most-painted CSS. The logo's dominant non-neutral color is the primary when
+    nothing is declared; CSS chrome colors are secondary; a dark, low-chroma
+    color is the text color, never a secondary.
   * TYPE comes from the LOGO's letterform style, and known DEFAULT fonts
     (Roboto/Inter/system-ui/...) are rejected rather than preserved -- a default
     is the absence of a brand choice.
 
 Signal capture (reading the live DOM, sampling logo pixels, reading the logo's
 type style) is I/O + vision done by the caller. This module is the deterministic
-normalize + render half: signals dict -> BrandProfile -> markdown. Python 3.9+.
+normalize + render half: signals dict -> BrandProfile -> markdown. Python 3.10+.
 """
 from __future__ import annotations
 
@@ -26,6 +29,8 @@ import colorsys
 import re
 from dataclasses import dataclass, field, asdict
 from typing import Any, Dict, List, Optional
+
+from engine.existing import normalize_hex
 
 
 # Known default / theme fonts: their presence signals the ABSENCE of a type
@@ -92,6 +97,30 @@ def _is_default_font(name: str) -> bool:
     return bool(name) and name.lower() in _DEFAULT_FONTS
 
 
+def _same_hex(a: str, b: str) -> bool:
+    return normalize_hex(a) == normalize_hex(b) != ""
+
+
+def _is_text_like(hexstr: str) -> bool:
+    """Dark and low in chroma: reads as a text color, not a brand hue."""
+    hsv = _hex_to_hsv(hexstr)
+    return bool(hsv) and hsv[2] < 0.2 and hsv[1] < 0.35
+
+
+_LANGUAGE_NAMES = {
+    "arabic": "ar", "english": "en", "french": "fr", "german": "de", "spanish": "es",
+    "hebrew": "he", "persian": "fa", "farsi": "fa", "urdu": "ur", "turkish": "tr",
+    "chinese": "zh", "japanese": "ja", "korean": "ko", "hindi": "hi", "portuguese": "pt",
+    "italian": "it", "russian": "ru",
+}
+
+
+def _language_from_voice(voice: str) -> str:
+    """"Arabic-first" (or "Arabic first") in the voice line names the language."""
+    m = re.search(r"\b([a-z]+)[\s-]+first\b", (voice or "").lower())
+    return _LANGUAGE_NAMES.get(m.group(1), "") if m else ""
+
+
 def _hexes(raw) -> List[str]:
     out: List[str] = []
     for c in (raw or []):
@@ -106,16 +135,19 @@ class BrandProfile:
     source: str = ""
     name: str = ""
     tagline: str = ""                                          # standard frontmatter (req in the open spec)
-    language: str = "en"                                       # standard frontmatter
+    language: str = ""                                         # frontmatter; "" until stated
     logo: Dict[str, Any] = field(default_factory=dict)         # {url, alt}
     logo_style: str = ""                                       # vision read of the wordmark
-    primary: str = ""                                          # from LOGO pixels (rule 3)
+    primary: str = ""                                          # declared token, else LOGO pixels (rule 3)
     primary_family: str = ""
-    primary_source: str = ""                                   # "logo" | "css" | "brand-md"
+    primary_source: str = ""                                   # "tokens" | "logo" | "css" | "brand-md"
+    logo_primary: str = ""                                     # the logo pixel sample, reported beside a declared primary
+    text_color: str = ""                                       # the text role; never a secondary
     secondary: List[str] = field(default_factory=list)
     colors_to_avoid: List[str] = field(default_factory=list)   # house colors + signals; spec "colors to avoid"
     fonts: Dict[str, str] = field(default_factory=dict)        # display/body/type_personality/display_source
     photography: Dict[str, Any] = field(default_factory=dict)  # {mood[list], subjects[list], avoid[list]}
+    strategy: Dict[str, str] = field(default_factory=dict)     # STRATEGY_FIELDS, from a brand book
     style_keywords: List[str] = field(default_factory=list)    # spec Visual>Style design keywords
     tonal: Dict[str, Any] = field(default_factory=dict)        # {rules[list], we_say[list], we_never_say[list]}
     imagery: List[str] = field(default_factory=list)
@@ -126,13 +158,136 @@ class BrandProfile:
         return asdict(self)
 
 
+# The strategy sections of the standard brand.md the engine fills from a brand book.
+STRATEGY_FIELDS = ("positioning", "personality", "promise", "guardrails")
+# Words that name stock or lifestyle photography.
+_STOCK_BAN_RE = re.compile(r"\b(?:stock|lifestyle)\b", re.IGNORECASE)
+# Words that grant permission, and the words that negate it.
+_STOCK_ALLOW_RE = re.compile(r"\b(?:allowed|allow|allows|permitted|fine|welcome|ok|okay|may use|"
+                             r"can use)\b", re.IGNORECASE)
+_NEGATION_RE = re.compile(r"\b(?:not|never|no|none|nor|without|don't|dont|do not|doesn't|"
+                          r"isn't|aren't|cannot|can't|mustn't|avoid|ban|bans|banned)\b|n't\b",
+                          re.IGNORECASE)
+_CLAUSE_RE = re.compile(r"[;,.:]|\bbut\b|\bexcept\b|\bunless\b", re.IGNORECASE)
+# An entry that forbids photography itself: a negation and a word for
+# photographs, and nothing that narrows them to a kind.
+_PHOTO_WORD_RE = re.compile(r"\b(?:photography|photographs?|photos?|pictures?|imagery|images?)\b",
+                            re.IGNORECASE)
+_FILLER_RE = re.compile(r"\b(?:at|all|of|any|kind|kinds|ever|use|used|using|is|are|be|we|our|on|"
+                        r"this|the|a|in|pages?|site|allowed|permitted|whatsoever|anywhere|"
+                        r"real|either|drawn|hand-drawn)\b", re.IGNORECASE)
+# The avoid line the engine itself wrote into brand.md before 4.0, when a
+# brand stated no photography rules. It is the engine's default, not the
+# brand's rule, so it excludes nothing.
+LEGACY_DEFAULT_AVOID = ("random/generic stock", "ai-slop clutter")
+# What the engine writes when the brand forbids photography outright.
+NO_PHOTOGRAPHY = "no photography at all"
+
+
+def _allowance(clause: str) -> bool:
+    """True when a clause names stock and grants it with no negation in it
+    ("curated stock allowed"). "Never allow stock photos", "stock photos are
+    not allowed" and "no stock" are not allowances."""
+    return bool(_STOCK_BAN_RE.search(clause) and _STOCK_ALLOW_RE.search(clause)
+                and not _NEGATION_RE.search(clause))
+
+
+# A statement that pictures are drawn instead of photographed.
+_DRAWN_ONLY_RE = re.compile(
+    r"\b(?:illustrations?|illustrated|drawings?|drawn|vector (?:art|graphics)|graphics|icons?)\s+"
+    r"(?:only|instead of (?:photos?|photographs?|photography|pictures?))\b"
+    r"|\bonly\s+(?:illustrations?|drawings?|vector (?:art|graphics))\b", re.IGNORECASE)
+# Words that carve an exception out of a rule: "no photography except
+# product shots" narrows, it does not forbid.
+_EXCEPTION_RE = re.compile(r"\b(?:except|unless|but|other than|apart from|besides|outside)\b",
+                           re.IGNORECASE)
+_PARTS_RE = re.compile(r"[;,.:!]|\band\b", re.IGNORECASE)
+
+
+def _empty(text: str) -> bool:
+    return not re.sub(r"[\W_]+", "", _FILLER_RE.sub(" ", text))
+
+
+def _forbids_photography(entry: str) -> bool:
+    """True when the entry excludes photographs as a whole: every part of it
+    either negates photos with no kind named ("no photography", "we never
+    use photos", "no real photos") or says pictures are drawn instead
+    ("illustration only", "illustrations instead of photos"), and at least
+    one part says so. A kind ("no stock", "no photography of people") or an
+    exception ("no photography except product shots") only narrows."""
+    if _EXCEPTION_RE.search(entry):
+        return False
+    said = False
+    for part in _PARTS_RE.split(entry):
+        if _empty(part):
+            continue
+        drawn = _DRAWN_ONLY_RE.search(part)
+        if drawn and _empty(_PHOTO_WORD_RE.sub(" ", part[:drawn.start()] + part[drawn.end():])):
+            said = True
+            continue
+        if _NEGATION_RE.search(part) and _PHOTO_WORD_RE.search(part) and \
+                _empty(_PHOTO_WORD_RE.sub(" ", _NEGATION_RE.sub(" ", part))):
+            said = True
+            continue
+        return False
+    return said
+
+
+def _avoid_entries(profile: "BrandProfile") -> List[str]:
+    avoid = [str(a).strip() for a in
+             ((getattr(profile, "photography", None) or {}).get("avoid") or []) if str(a).strip()]
+    lowered = [" ".join(a.lower().split()) for a in avoid]
+    if all(d in lowered for d in LEGACY_DEFAULT_AVOID):
+        avoid = [a for a, low in zip(avoid, lowered) if low not in LEGACY_DEFAULT_AVOID]
+    return avoid
+
+
+def photography_rule(profile: "BrandProfile") -> str:
+    """The brand's own words that forbid photography as a whole, or "":
+    "no photography", "we never use photos", "illustration only, never
+    photos". A ban on a kind of photo is never this."""
+    return next((a for a in _avoid_entries(profile) if _forbids_photography(a)), "")
+
+
+def photography_forbidden(profile: "BrandProfile") -> bool:
+    """True only when the brand's rules forbid photography as a whole
+    (photography_rule): the page then carries none, and the gate reports
+    the rule."""
+    return bool(photography_rule(profile))
+
+
+def photo_exclusions(profile: "BrandProfile") -> List[str]:
+    """The kinds of photo that do not qualify for this brand, in the brand's
+    own words: every avoid entry, a negated one included ("Never allow stock
+    photos" excludes stock), less any clause that allows a kind outright
+    ("curated stock allowed"). A page still carries photographs, from the
+    kinds that qualify; the engine's own pre-4.0 default line excludes
+    nothing, and a rule that forbids photography outright is
+    photography_forbidden, not an exclusion."""
+    out: List[str] = []
+    for entry in _avoid_entries(profile):
+        if _forbids_photography(entry):
+            continue
+        kept = [c.strip() for c in _CLAUSE_RE.split(entry) if c.strip() and not _allowance(c)]
+        kind = entry if len(kept) == len(_CLAUSE_RE.split(entry)) else "; ".join(kept)
+        if kept and kind not in out:
+            out.append(kind)
+    return out
+
+
 def build_profile(signals: Dict[str, Any]) -> BrandProfile:
     """Normalize captured signals into a BrandProfile. Deterministic.
 
     Signal keys (all optional): source/url, name, logo{url/src,alt},
     logo_colors[{hex,score}] (sampled from the logo image), brand_colors/colors
     (from CSS), logo_type_style/logo_style (vision read of the wordmark),
-    fonts{display,h1,h2,body}, imagery[url], voice.
+    fonts{display,h1,h2,body}, imagery[url], voice, language, photography
+    {mood, subjects, avoid} and strategy {positioning, personality, promise,
+    guardrails} (both as the brand book words them), and declared (the
+    `declared` block of `ux system detect`: primary, primary_token, text,
+    languages). A declared primary beats the logo pixels; both are reported.
+    The language is never assumed: with no signal and no page that states
+    one, it stays empty and a note says how to set it.
     """
     p = BrandProfile()
     p.source = signals.get("source", "") or signals.get("url", "")
@@ -149,18 +304,48 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
         name = name.replace("logo", "").replace("Logo", "").strip(" -_|")
         p.name = " ".join(w.capitalize() if w.islower() else w for w in name.split())
 
-    # --- Color: the LOGO wins; CSS is supporting (rule 3) ---
+    # --- Color: DECLARED TOKENS win; then the LOGO; CSS is supporting (rule 3) ---
+    # A project's own token file (the `declared` block of `ux system detect`)
+    # states the primary outright; logo pixels are only a sample of it.
+    declared = signals.get("declared") or {}
+    declared_primary = normalize_hex(declared.get("primary"))
+    declared_text = normalize_hex(declared.get("text"))
     logo_hexes = _hexes(signals.get("logo_colors"))
     css_hexes = _hexes(signals.get("brand_colors") or signals.get("colors"))
-    primary = (next((h for h in logo_hexes if hue_family(h) != "neutral"), None)
-               or next((h for h in css_hexes if hue_family(h) != "neutral"), None)
-               or (logo_hexes[0] if logo_hexes else (css_hexes[0] if css_hexes else "")))
+    logo_pick = next((h for h in logo_hexes if hue_family(h) != "neutral"), "")
+    p.logo_primary = logo_pick
+    if declared_primary:
+        primary = declared_primary
+        p.primary_source = "tokens"
+        token = declared.get("primary_token") or "the primary token"
+        if logo_pick and _same_hex(logo_pick, primary):
+            p.notes.append("Primary %s comes from the declared token %s; the logo pixels agree."
+                           % (primary, token))
+        elif logo_pick:
+            p.notes.append("Primary %s comes from the declared token %s. The logo pixels sample "
+                           "as %s; the declared token wins and both are reported."
+                           % (primary, token, logo_pick))
+    else:
+        primary = (logo_pick
+                   or next((h for h in css_hexes if hue_family(h) != "neutral"), None)
+                   or (logo_hexes[0] if logo_hexes else (css_hexes[0] if css_hexes else "")))
+        p.primary_source = "logo" if primary in logo_hexes else ("css" if primary else "")
     p.primary = primary
     p.primary_family = hue_family(primary) if primary else ""
-    p.primary_source = "logo" if primary in logo_hexes else ("css" if primary else "")
+    # The text color is a role, not a secondary brand color: the declared one,
+    # else the first dark, low-chroma color among the signals.
+    p.text_color = declared_text or next(
+        (h for h in (css_hexes + logo_hexes) if _is_text_like(h) and not _same_hex(h, primary)),
+        "")
+    skip = {primary.upper(), p.text_color.upper()}
+    if declared_primary and logo_pick:
+        skip.add(logo_pick.upper())   # a sample of the primary, reported as logo_primary
     seen = set()
+    # Dark neutrals are text or ink, never a secondary brand color, even when
+    # a declared text color already fills the text role.
     p.secondary = [h for h in (logo_hexes + css_hexes)
-                   if h != primary and not (h in seen or seen.add(h))][:4]
+                   if h.upper() not in skip and not _is_text_like(h)
+                   and not (h.upper() in seen or seen.add(h.upper()))][:4]
     if css_hexes and logo_hexes and p.primary_source == "logo":
         p.notes.append("Primary taken from the logo, not the most-painted CSS color.")
 
@@ -189,7 +374,18 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
 
     # --- Standard-spec fields the engine can honestly fill (rest stay empty) ---
     p.tagline = signals.get("tagline", "") or ""
-    p.language = signals.get("language") or "en"
+    # Language: stated in the signals (read from the project's templates and
+    # pages), else the project's own HTML, else a "<language>-first" phrase in
+    # the voice. Never a default: a wrong language poisons every string.
+    languages = declared.get("languages") or []
+    p.language = (signals.get("language")
+                  or (languages[0] if languages else "")
+                  or _language_from_voice(p.voice)
+                  or "")
+    if not p.language:
+        p.notes.append("Language: no signal names it and no page in the project states one "
+                       "(an html lang attribute); read it from the project's templates and "
+                       "pages and set language in the signals as a tag, such as ar or en.")
 
     # colors_to_avoid: ALWAYS list the engine's house colors that are not this
     # brand's primary (so the engine's own style can never leak in), then append
@@ -207,15 +403,31 @@ def build_profile(signals: Dict[str, Any]) -> BrandProfile:
         _avoid(hx)
     p.colors_to_avoid = avoid
 
-    # photography.mood: derived from the same voice + logo-style descriptor words
-    # image_search_terms mines (deterministic token/stopword pass). subjects/avoid
-    # are author-only -- fill from signals when present, else leave empty.
+    # photography: the brand book's own words for its pictures, or nothing. A
+    # mood is never made of voice words: how a brand speaks is not how its
+    # pictures look.
     photo_signals = signals.get("photography") or {}
     p.photography = {
-        "mood": _descriptor_words(p.voice, p.logo_style),
+        "mood": list(photo_signals.get("mood") or signals.get("photography_mood") or []),
         "subjects": list(photo_signals.get("subjects") or signals.get("photography_subjects") or []),
         "avoid": list(photo_signals.get("avoid") or signals.get("photography_avoid") or []),
     }
+    # A brand book that says no photography at all: written as an avoid
+    # entry, so brand.md carries it and reads it back.
+    if photo_signals.get("forbidden") is True and NO_PHOTOGRAPHY not in p.photography["avoid"]:
+        p.photography["avoid"].append(NO_PHOTOGRAPHY)
+
+    # strategy: positioning, personality, promise and guardrails as a brand
+    # book states them; none is guessed from the voice line.
+    strat_signals = signals.get("strategy") or {}
+    p.strategy = {}
+    for key in STRATEGY_FIELDS:
+        value = strat_signals.get(key) or signals.get(key) or ""
+        if isinstance(value, (list, tuple)):
+            value = "; ".join(str(v).strip() for v in value if str(v).strip())
+        value = str(value).strip()
+        if value:
+            p.strategy[key] = value
 
     # style_keywords: logo-style words (filtered, dedup) + any caller-supplied.
     style_kw: List[str] = list(_descriptor_words("", p.logo_style))
@@ -263,7 +475,7 @@ def render_md(p: BrandProfile) -> str:
         "name: %s" % name,
         "tagline: %s" % (p.tagline or ""),
         "version: 1",
-        "language: %s" % (p.language or "en"),
+        "language: %s" % (p.language or "und"),
         "type: master",
         "---",
         "",
@@ -288,16 +500,16 @@ def render_md(p: BrandProfile) -> str:
         overview.strip(),
         "",
         "### Positioning",
-        _NOT_EXTRACTED,
+        (p.strategy or {}).get("positioning") or _NOT_EXTRACTED,
         "",
         "### Personality",
-        _NOT_EXTRACTED,
+        (p.strategy or {}).get("personality") or _NOT_EXTRACTED,
         "",
         "### Promise",
-        _NOT_EXTRACTED,
+        (p.strategy or {}).get("promise") or _NOT_EXTRACTED,
         "",
         "### Guardrails",
-        _NOT_EXTRACTED,
+        (p.strategy or {}).get("guardrails") or _NOT_EXTRACTED,
         "",
     ]
 
@@ -370,6 +582,16 @@ def render_md(p: BrandProfile) -> str:
     else:
         lines += ["- **Colors to avoid:** (none)"]
     lines += [""]
+    # Color roles: the text color and the logo pixel sample. Their own section,
+    # so the Colors round-trip never reads them as secondary or avoid colors.
+    roles: List[str] = []
+    if p.text_color:
+        roles += ["- **Text:** `%s`. The text color, not a brand color." % p.text_color]
+    if p.logo_primary and not _same_hex(p.logo_primary, p.primary):
+        roles += ["- **Logo pixels:** `%s`. A sample of the logo; the declared primary "
+                  "above wins." % p.logo_primary]
+    if roles:
+        lines += ["### Color roles", ""] + roles + [""]
 
     # Typography. A deferred display/body font uses the _NOT_EXTRACTED sentinel in
     # the value slot (with the logo-style guidance as trailing context) so the
@@ -399,7 +621,7 @@ def render_md(p: BrandProfile) -> str:
     lines += ["- **Mood:** %s" % (", ".join(mood) if mood else _NOT_EXTRACTED)]
     lines += ["- **Subjects:** %s" % (", ".join(subjects) if subjects else _NOT_EXTRACTED)]
     lines += ["- **Avoid:** %s" % (", ".join(p_avoid) if p_avoid
-                                   else "random/generic stock, AI-slop clutter")]
+                                   else "random placeholder images, AI-slop clutter")]
     lines += [""]
 
     # Style.
@@ -501,7 +723,8 @@ def parse_brand_md(text: str) -> BrandProfile:
     fm = _parse_frontmatter(text)
     p.name = fm.get("name", "") or ""
     p.tagline = fm.get("tagline", "") or ""
-    p.language = fm.get("language") or "en"
+    language = (fm.get("language") or "").strip()
+    p.language = "" if language.lower() == "und" else language
     p.source = "brand-md"
 
     h2 = _split_sections(text, _H2_SPLIT_RE)
@@ -533,6 +756,16 @@ def parse_brand_md(text: str) -> BrandProfile:
         p.primary_family = hue_family(primary) if primary else ""
         p.secondary = secondary
         p.colors_to_avoid = avoid
+
+    # Color roles: the text color and the logo pixel sample.
+    for line in vis_h3.get("color roles", "").splitlines():
+        found = _hexes_in(line)
+        if not found:
+            continue
+        if "**text:**" in line.lower():
+            p.text_color = found[0]
+        elif "**logo pixels:**" in line.lower():
+            p.logo_primary = found[0]
 
     # Typography: display font (rejected if a known default), body font.
     typ_text = vis_h3.get("typography", "")
@@ -582,6 +815,15 @@ def parse_brand_md(text: str) -> BrandProfile:
             kws = _csv_after_label(style_text, "keywords")
         if kws:
             p.style_keywords = kws
+
+    # --- Strategy layer -> positioning, personality, promise, guardrails ---
+    strategy = h2.get("strategy", "")
+    if strategy:
+        strat_h3 = _split_sections(strategy, _H3_SPLIT_RE)
+        for key in STRATEGY_FIELDS:
+            value = (strat_h3.get(key, "") or "").strip()
+            if value and value != _NOT_EXTRACTED:
+                p.strategy[key] = value
 
     # --- Voice layer -> tonal rules + We Say / We Never Say table ---
     voice = h2.get("voice", "")
@@ -746,6 +988,9 @@ def image_search_terms(profile: "BrandProfile",
     an ``.axes`` attribute (e.g. a synthesized system). Unknown shapes are ignored.
     """
     terms: List[str] = []
+    if photography_forbidden(profile):
+        # The brand says no photography at all: nothing to source.
+        return terms
 
     def _add(t: str) -> None:
         t = (t or "").strip()

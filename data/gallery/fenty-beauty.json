@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.25,
+    "formality": 0.569,
+    "geometry": 0.248,
+    "motion": 0.14,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/fenty-beauty.json: warmth from the hue and chroma of the primary #D4AF37 and the canvas #0A0A0A; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #C41E3A; density from its 8px spacing base; geometry from its radii 0, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 80ms, 200ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#D4AF37",
+  "brand_rule": "The primary #D4AF37 reaches 9.42:1 on the canvas #0A0A0A, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#D4AF37",
+      "light": "#D4AF37"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0F0D0A",
+      "light": "#F7F7F5"
+    },
+    "radius_control": "3px",
+    "state_duration": "150ms",
+    "tokens": 729,
+    "tokens_sha256": "39e6bec903c8f0a4"
+  },
+  "id": "fenty-beauty",
+  "name": "Fenty Beauty",
+  "spec": "data/brands/fenty-beauty.json"
+}

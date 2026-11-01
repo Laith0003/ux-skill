@@ -1,0 +1,2 @@
+.ticker { animation: scroll 20s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .ticker { animation-duration: 0.01ms; } }

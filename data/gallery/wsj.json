@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.708,
+    "density": 0.5,
+    "formality": 1.0,
+    "geometry": 0.069,
+    "motion": 0.163,
+    "type_personality": 0.5,
+    "warmth": 0.5
+  },
+  "axes_source": "Read from data/brands/wsj.json: warmth from the hue and chroma of the primary #000000 and the canvas #FFFFFF; contrast from the ink #0D0D0D on that canvas, its depth and the chroma of #C4262E; density from its 4px spacing base; geometry from its radii 0, 2px; formality from the chroma of its primary and ink; motion from its stated durations 150ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#000000",
+  "brand_rule": "The primary #000000 reaches 21.00:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DADADA",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D0D",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "2px",
+    "state_duration": "150ms",
+    "tokens": 726,
+    "tokens_sha256": "968cde049dd9a9eb"
+  },
+  "id": "wsj",
+  "name": "The Wall Street Journal",
+  "spec": "data/brands/wsj.json"
+}

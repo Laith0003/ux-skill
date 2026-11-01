@@ -1,5 +1,5 @@
 ---
-description: Microcopy review and rewrite against the voice rubric. Produces a before/after table with severity per string and a clean rewrite block. Triggers on "review the copy", "fix the microcopy", "the error messages are bad", or "rewrite this". Use when reviewing or rewriting microcopy, fixing error messages that sound like AI, tightening empty/loading/success state copy, checking CTAs against the voice rubric, auditing forms for label / helper / error patterns. Skip when the surface has no user-facing strings, the copy is auto-generated from data with no editorial layer, backend or infrastructure.
+description: Microcopy review and rewrite against the voice rubric. Produces a before/after table with severity per string and a clean rewrite block. Triggers on "review the copy", "fix the microcopy", "the error messages are bad", or "rewrite this". Use when reviewing or rewriting microcopy, fixing error messages that sound like AI, tightening empty/loading/success state copy, checking CTAs against the voice rubric, auditing forms for label / helper / error patterns. Skip when the surface has no user-facing strings (use ux-audit for the whole surface), the copy is auto-generated from data with no editorial layer, backend or infrastructure.
 allowed-tools: Read, Write, Edit, Bash(ls:*), Bash(cat:*), Bash(grep:*), Bash(find:*), Bash(mkdir:*), Bash(date:*), Glob, Grep, Task, WebFetch
 disable-model-invocation: false
 ---
@@ -106,6 +106,7 @@ Write `.ux/last-copy.json`:
       "severity": "Critical | High | Medium | Cosmetic",
       "before": "<verbatim>",
       "after": "<rewrite>",
+      "evidence_kind": "<what the finding rests on, from commands/ux-audit.md step 4>",
       "notes": "<optional>"
     }
   ],
@@ -130,7 +131,7 @@ The voice rubric, the before/after table, the clean rewrite block, and (if `--fi
 
 ## State persisted
 
-- `.ux/last-copy.json` — keys: `command`, `timestamp`, `surface`, `voice_rubric` (array), `strings` (array of `{location, severity, before, after, notes}`), `severity_counts`, `locales_needing_translation`.
+- `.ux/last-copy.json` keys: `command`, `timestamp`, `surface`, `voice_rubric` (array), `strings` (array of `{location, severity, before, after, evidence_kind, notes}`), `severity_counts`, `locales_needing_translation`.
 
 ## Next prompt
 

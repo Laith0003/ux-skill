@@ -26,6 +26,8 @@ def sanitize_dashes(s):
 
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from ga import tagged  # noqa: E402
 
 
 def site_version():
@@ -321,10 +323,14 @@ def build_html(brands, version):
 """
 
 
+def page(brands, version) -> str:
+    """The page as written to docs/, with the analytics tag every docs page
+    carries."""
+    return tagged(build_html(brands, version), "docs/brands.html")
+
 def main():
     brands, version = load_index()
-    out_html = build_html(brands, version)
-    OUT.write_text(out_html, encoding="utf-8")
+    OUT.write_text(page(brands, version), encoding="utf-8")
     print(f"ok  {len(brands)} brands  →  docs/brands.html")
 
 

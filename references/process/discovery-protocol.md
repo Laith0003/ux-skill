@@ -1,6 +1,6 @@
-# Discovery protocol — ask first, never improvise
+# Discovery protocol: ask first, never improvise
 
-Every generation command (`/ux-design`, `/ux-component`, `/ux-dashboard`, `/ux-system`, `/ux-case-study`) **MUST** run the discovery protocol below before dispatching any sub-agent or writing any code. Improvisation is forbidden. The plugin's value is the discipline of the intake; the work is downstream of it.
+Every generation command (`/ux-design` in every mode, `/ux-system`, `/ux-case-study`) **MUST** run the discovery protocol below before dispatching any sub-agent or writing any code. Improvisation is forbidden. The plugin's value is the discipline of the intake; the work is downstream of it.
 
 A generation command that skips discovery is a bug.
 
@@ -11,6 +11,7 @@ A generation command that skips discovery is a bug.
 - The user explicitly passes `--skip-discovery` (they're an expert who knows what they want and accepts default-driven output).
 - The user passes a fully-populated brief in a single message that already answers every required field. In that case, **verify the brief covers all required fields, then proceed.** If anything is missing, ask for the missing fields only.
 - The user is iterating on an existing artifact (e.g., `/ux-fix --auto` on a prior audit). The earlier discovery is reused from `.ux/last-frame.json` or the relevant report.
+- The project already answers a field: a brand book, a voice or facts sheet, the brand's own pages and templates, or an existing design system. Take each answer from that material instead of asking it, ask only what the material leaves open, and record where each answer came from (a `sources` map from field to file). The wow moment counts: when the brand's pages already show a signature move, that is the answer.
 
 In every other case, discovery is mandatory.
 
@@ -18,10 +19,10 @@ In every other case, discovery is mandatory.
 
 ## The 10 required fields
 
-Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a wall. Conversational delivery.
+Group these into 2 to 3 messages of 3 to 4 questions each. Don't dump all ten in a wall. Conversational delivery.
 
 ### 1. Brand identity
-**Ask**: "Do you have a brand identity file, brand guidelines, design tokens, or a logo we should pull from? If yes, paste the path / URL / file. If no, name a brand whose aesthetic you want to match (Apple, Stripe, Linear, Notion, etc. — we have full design specs for 72 brands ready to use). Otherwise say 'no brand' and I'll propose something restrained."
+**Ask**: "Do you have a brand identity file, brand guidelines, design tokens, or a logo we should pull from? If yes, paste the path / URL / file. If no, name a brand whose aesthetic you want to match (Apple, Stripe, Linear, Notion, etc.: we have full design specs for 72 brands ready to use). Otherwise say 'no brand' and I'll propose something restrained."
 
 **Why**: Without brand identity, every design is a default. Worth one tight question.
 
@@ -30,7 +31,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 **Existing-site capture gate (mandatory)**: If the user gives a URL to their OWN existing site or brand, that URL is authoritative and arms a hard gate, you MUST capture the real brand from the **rendered** page before any recommendation. See `references/process/brand-extraction.md`. Do NOT rely on a raw `WebFetch` of the HTML: modern sites are JS-rendered, so a raw fetch returns an empty shell with no colors, fonts, or logo, which is exactly how a build ships the wrong accent and a placeholder logo while believing it read the brand. Capture computed-style colors, the actual logo asset (and pixel-sample it), and the loaded font families; run `ux brand --signals-file <signals.json>`; then pass the resulting `brand.json` via `--brand-file` to `ux recommend`, and pass the URL itself via `--brand-url`. If you skip capture, the recommender returns a loud `warnings[]` entry instead of silently shipping the house palette.
 
 ### 2. Reference inspirations
-**Ask**: "Drop 3–5 URLs or screenshots of designs you LIKE. Not for features — for the aesthetic feel. The bar for taste."
+**Ask**: "Drop 3 to 5 URLs or screenshots of designs you LIKE. Not for features, for the aesthetic feel. The bar for taste."
 
 **Why**: References are the fastest way to align on intent. A picture is worth 100 paragraphs of style description.
 
@@ -40,6 +41,11 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 **Ask**: "In one sentence: what is the product, and who is it for?"
 
 **Why**: A SaaS landing for solo founders is not the same as a SaaS landing for enterprise procurement. The audience disambiguates dozens of downstream decisions (density, copy register, motion intensity).
+
+### 3a. What stops people saying yes (optional)
+**Ask**: "What stops people saying yes? Paste reviews, sales call notes, support tickets or the questions people keep asking, if you have them."
+
+**Why**: Questions the team writes for itself are its own guesses in an accordion. The customer's own words, typed (function, risk, price, payback, timing, approval), go into the brief as `objections` and decide what the FAQ asks and where proof sits. Skip it when the user has nothing; never block on it, and never write objections for them. When they have nothing, name the quickest places to look, fastest first: their own sent replies (a question answered more than twice), notes from the last five sales calls, kept verbatim, comments on their posts, reviews of competitors, and a one-question email to people who said no.
 
 ### 4. Style direction
 **Ask**: "Pick a style direction: **minimalist** (premium SaaS, fintech, editorial), **industrial / brutalist** (raw, hacker, indie), **high-end visual** (creator tools, design-heavy, premium consumer), **editorial** (case-study, content-led), **dev-tool dark** (developer tools, technical density), **playful** (consumer, creator, friendly), or **your call** if you want me to pick."
@@ -57,7 +63,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 **Why**: Stack determines syntax, RSC boundaries, dependency verification rules, motion library defaults.
 
 ### 7. Imagery sources
-**Ask**: "Imagery — real product screenshots, hero images, brand photos? If you don't have assets, we'll source curated, on-brand stock (Unsplash/Pexels) matched to the brand — not random/generic stock, and not an abstract SVG standing in for a real image. Or describe specific images you want generated (e.g., 'a moody close-up of someone's hands on a laptop in a cafe')?"
+**Ask**: "Imagery: your own photographs, product screenshots, brand photos? Photographs are required; with none from you, we source them (stock included) by the system's photo direction, the grade and subject it derives from your brand. Tell us any kind of photo your brand rules out: a ban narrows the kinds and never removes photography, unless your brand forbids photography outright."
 
 **Why**: Imagery is mandatory and real (text-only walls are banned). Where the imagery comes from determines whether to call for client assets, source curated stock by temperature, or describe an image-as-content plan.
 
@@ -67,35 +73,35 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 **Why**: Reading the brief tells you what the surface IS. Reading must-haves tells you what the user has already imagined.
 
 ### 9. Avoid list
-**Ask**: "What do you specifically NOT want? Beyond the standard anti-slop bans — anything in YOUR taste that's a hard rule? (Example: 'no gradients anywhere', 'no dark mode', 'no hero video', 'no centered text', 'no testimonial sections')."
+**Ask**: "What do you specifically NOT want? Beyond the standard anti-slop bans: anything in YOUR taste that's a hard rule? (Example: 'no gradients anywhere', 'no dark mode', 'no hero video', 'no centered text', 'no testimonial sections')."
 
 **Why**: Personal taste overrides the standard ban list. A user who hates gradients should not get the one "approved gradient" the arsenal allows.
 
-### 10. The wow moment (optional — the model derives one if you don't give it)
-**Ask**: "Anything specific this design must do that a visitor remembers 24h later — a feature, motion, interaction, or visual moment? If not, I'll derive one."
+### 10. The wow moment (optional: the model derives one if you don't give it)
+**Ask**: "Anything specific this design must do that a visitor remembers 24h later (a feature, motion, interaction, or visual moment)? If not, I'll derive one."
 
-**Why**: A merely-clean page is the floor — competent and forgettable. The fix is NOT to demand a wow moment from the user (older guidance said "wow can only come from the user" — that is overturned). The model **derives a wow layer** — 2-3 coordinated signature moments — from `brand temperature + industry + goal`, per `references/foundations/wow.md`. A user-supplied moment refines or overrides that layer; absent one, the model composes its own and never falls back to forgettable.
+**Why**: A merely-clean page is the floor: competent and forgettable. The wow moment is not demanded from the user. The model **derives a wow layer** (2-3 coordinated signature moments) from the brand's own page style, the brief's structured fields and the goal, per `references/foundations/wow.md`, never from the industry. A user-supplied moment refines or overrides that layer; absent one, the model composes its own and never falls back to forgettable.
 
 ---
 
 ## Optional follow-ups (ask if not covered)
 
-- **Color preferences / accent color** — "Specific accent color or one we should pick from the brand?"
-- **Dark/light/both** — "Light only, dark only, or both? If both, which is the primary?"
-- **Mobile-first or desktop-first** — Default is mobile-first; ask if the audience is desktop-dominant (B2B admin, professional tools).
-- **Sections / IA hint** — "Sections you know you want, in order? Or trust the AIDA default?"
-- **Existing copy** — "Have copy already, or should I draft it?"
-- **Animation appetite** — "Heavy motion, restrained, or static?"
+- **Color preferences / accent color**: "Specific accent color or one we should pick from the brand?"
+- **Dark/light/both**: "Light only, dark only, or both? If both, which is the primary?"
+- **Mobile-first or desktop-first**: Default is mobile-first; ask if the audience is desktop-dominant (B2B admin, professional tools).
+- **Existing copy**: "Have copy already, or should I draft it?"
+- **Animation appetite**: "Heavy motion, restrained, or static?"
+- **Sections / IA hint** (landing briefs only): "Sections you know you want, in order? Or trust the AIDA default?" The default order and the section rules live in `references/surfaces/landing.md`.
 
 ---
 
 ## How to ask (delivery)
 
 1. **Open with one tight framing sentence**: "Before I generate, I need to know a few things. The output is downstream of the inputs."
-2. **Group into 2–3 messages.** First message: brand + references + audience (the highest-leverage trio). Second message: style + voice + stack. Third message: imagery + must-haves + avoid-list + wow.
+2. **Group into 2 to 3 messages.** First message: brand + references + audience (the highest-leverage trio). Second message: style + voice + stack. Third message: imagery + must-haves + avoid-list + wow.
 3. **Never dump all 10 at once.** That's a form, not a conversation.
 4. **Use multiple choice where natural** (style direction, stack), and free-form where it matters (wow moment, audience, avoid-list).
-5. **Accept "your call" / "you decide" on any field, including the wow moment** — if it isn't given, the model derives the wow layer (`references/foundations/wow.md`); never ship a forgettable default.
+5. **Accept "your call" / "you decide" on any field, including the wow moment**: if it isn't given, the model derives the wow layer (`references/foundations/wow.md`); never ship a forgettable default.
 
 ---
 
@@ -118,16 +124,17 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
        "avoid_list": [...],
        "wow_moment": "<verbatim>",
        "extras": {...}
-     }
+     },
+     "sources": {"voice": "<file the answer came from, or user>", "...": "..."}
    }
    ```
 2. **Capture the brand, do not just read it.** If a brand identity *file* was provided, read it. If a URL to the user's OWN site/brand was provided, run the capture gate in `references/process/brand-extraction.md` (rendered-DOM colors + logo pixels + loaded fonts -> `ux brand --signals-file` -> `--brand-file`) and pass the URL via `--brand-url`. For *reference-inspiration* URLs (field 2), study the rendered page for aesthetic intent. A raw `WebFetch` of a JS-rendered site is an empty shell, never treat it as the brand source of truth.
 3. **Set the three dials** based on the style direction + audience + density signals from the references:
-   - `DESIGN_VARIANCE` (1 perfect symmetry → 10 artsy chaos)
-   - `MOTION_INTENSITY` (1 static → 10 cinematic)
-   - `VISUAL_DENSITY` (1 art-gallery → 10 cockpit)
-4. **Pick 2–4 arsenal patterns** that fit the brief + the wow moment.
-5. **Dispatch the sub-agent** with the full discovery payload + the dials + the picked patterns + `references/styles/anti-slop.md` + the relevant arsenal entries embedded inline.
+   - `DESIGN_VARIANCE` (1, every block on a strict grid, to 10, a freely composed page)
+   - `MOTION_INTENSITY` (1, still, to 10, scenes led by the scroll)
+   - `VISUAL_DENSITY` (1, a few items with wide space, to 10, many read at a glance)
+4. **Pick 2 to 4 arsenal patterns** that fit the brief + the wow moment.
+5. **Dispatch the sub-agent** with the full discovery payload + the dials + the picked patterns + `references/styles/anti-slop.md` + the relevant arsenal entries + the surface playbook the command selected (`references/surfaces/`), embedded inline.
 6. **Echo the discovery summary** in the output so the user can verify their intent landed.
 
 ---
@@ -135,7 +142,7 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 ## Hard rules for the discovery phase
 
 - **Never assume.** If a field is ambiguous, ask. The cost of one clarification message is far lower than the cost of regenerating a misaligned design.
-- **Never ship a forgettable surface, but you do not need the user to supply the wow.** If they give a concrete moment, use it. If they say "anything's fine," DERIVE the wow layer (2-3 coordinated signature moments from brand temperature + industry + goal, per `references/foundations/wow.md`); never fall back to a default.
+- **Never ship a forgettable surface, but you do not need the user to supply the wow.** If they give a concrete moment, use it. If they say "anything's fine," DERIVE the wow layer (2-3 coordinated signature moments from the brand's page style, the brief's fields and the goal, per `references/foundations/wow.md`); never fall back to a default.
 - **Never substitute defaults for missing answers.** If the user skips a field, ask again or surface that you'll proceed with a default and what that default is, so they can intervene.
 - **Always echo back the brief** before generating. Two sentences max: "Here's what I'm building. Stop me if any of this is wrong."
 - **If the user gave their own site/brand URL, capturing it is mandatory, not optional.** The extracted brand overrides the engine's palette/type pick. Skipping capture is the single biggest avoidable failure (shipping the house accent + a placeholder logo). The recommender's `--brand-url` gate surfaces the miss after the fact; the fix is to capture first.
@@ -144,6 +151,6 @@ Group these into 2–3 messages of 3–4 questions each. Don't dump all ten in a
 
 ## Why this exists
 
-The plugin's premise is that default model output has measurable, predictable failure modes. The biggest failure mode is **generating without enough constraint to make the output specific to the user's intent**. Asking 5–10 questions takes 2 minutes; it saves a generation that would have been 80% right and 100% rejected.
+The plugin's premise is that default model output has measurable, predictable failure modes. The biggest failure mode is **generating without enough constraint to make the output specific to the user's intent**. Asking 5 to 10 questions takes 2 minutes; it saves a generation that would have been 80% right and 100% rejected.
 
 Apple-clean is not enough. Apple-clean is the floor, not the ceiling. The wow moment is what lifts a clean design into a memorable one, and when the user does not supply one, the model derives it (per `references/foundations/wow.md`), never settling for a forgettable default.

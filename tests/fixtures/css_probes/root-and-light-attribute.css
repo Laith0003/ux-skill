@@ -1,0 +1,24 @@
+/* A component framework's base block: the root and its light attribute in
+   one list, unquoted, and the dark attribute beside it. */
+:root,
+[data-ui-theme=light] {
+  --ui-blue: #0d6efd;
+  --ui-white: #fff;
+  --ui-gray-900: #212529;
+  --ui-primary: #0d6efd;
+  --ui-primary-rgb: 13, 110, 253;
+  --ui-body-color: #212529;
+  --ui-body-bg: #fff;
+  --ui-font-sans-serif: system-ui, "Grotesk Text", sans-serif;
+  --ui-body-font-size: 1rem;
+  --ui-body-line-height: 1.5;
+  --ui-border-radius: 0.375rem;
+  --ui-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
+  --ui-link-color-rgb: var(--ui-primary-rgb);
+  --ui-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+[data-ui-theme=dark] {
+  color-scheme: dark;
+  --ui-body-color: #dee2e6;
+  --ui-body-bg: #212529;
+}

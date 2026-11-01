@@ -1,0 +1,930 @@
+"""The Figma importer: a variables export (the REST shape, with or without
+its meta wrapper, which the plugin reader writes too) read in the file's own
+names. Scopes decide a number's unit; a collection with two modes is one
+axis, and modes named for a known axis (Light and Dark) read into it;
+anything else is reported, never guessed. No network call."""
+import ast
+import copy
+import json
+from pathlib import Path
+
+import pytest
+
+from engine.foundations.errors import InputError
+from engine.io.figma_in import REST_ENDPOINT, SIZE_SCOPES, import_figma, read_figma
+from engine.io.report import Source
+
+
+def _var(vid, name, collection, kind, values, scopes=("ALL_SCOPES",), description=""):
+    return {"id": vid, "name": name, "variableCollectionId": collection, "resolvedType": kind,
+            "valuesByMode": values, "scopes": list(scopes), "description": description,
+            "hiddenFromPublishing": False, "remote": False}
+
+
+def _alias(vid):
+    return {"type": "VARIABLE_ALIAS", "id": vid}
+
+
+def _collection(cid, name, modes, variable_ids, default=None):
+    modes = [{"modeId": f"{cid}:{n}", "name": n} for n in modes]
+    return {"id": cid, "name": name, "defaultModeId": default or modes[0]["modeId"],
+            "modes": modes, "variableIds": list(variable_ids)}
+
+
+EXPORT = {
+    "status": 200, "error": False,
+    "meta": {
+        "variableCollections": {
+            "c:color": {"id": "c:color", "name": "Color", "defaultModeId": "m:light",
+                        "modes": [{"modeId": "m:light", "name": "Light"},
+                                  {"modeId": "m:dark", "name": "Dark"}],
+                        "variableIds": ["v:1", "v:2", "v:3", "v:4", "v:5"]},
+            "c:size": {"id": "c:size", "name": "Size", "defaultModeId": "m:one",
+                       "modes": [{"modeId": "m:one", "name": "Value"}],
+                       "variableIds": ["v:6", "v:7", "v:8", "v:9", "v:10", "v:11"]},
+            "c:type": {"id": "c:type", "name": "Type", "defaultModeId": "m:lg",
+                       "modes": [{"modeId": "m:sm", "name": "Tight"},
+                                 {"modeId": "m:lg", "name": "Normal"},
+                                 {"modeId": "m:xl", "name": "Loose"}],
+                       "variableIds": ["v:12", "v:13"]},
+        },
+        "variables": {
+            "v:1": _var("v:1", "ink/900", "c:color", "COLOR",
+                        {"m:light": {"r": 0.09, "g": 0.1, "b": 0.12, "a": 1},
+                         "m:dark": {"r": 0.09, "g": 0.1, "b": 0.12, "a": 1}}),
+            "v:2": _var("v:2", "paper", "c:color", "COLOR",
+                        {"m:light": {"r": 1, "g": 1, "b": 1, "a": 1},
+                         "m:dark": {"r": 1, "g": 1, "b": 1, "a": 1}}),
+            "v:3": _var("v:3", "text/Body Copy", "c:color", "COLOR",
+                        {"m:light": _alias("v:1"), "m:dark": _alias("v:2")},
+                        description="Running text."),
+            "v:4": _var("v:4", "veil", "c:color", "COLOR",
+                        {"m:light": {"r": 0, "g": 0, "b": 0, "a": 0.4},
+                         "m:dark": {"r": 0, "g": 0, "b": 0, "a": 0.6}}),
+            "v:5": _var("v:5", "brand/shared", "c:color", "COLOR",
+                        {"m:light": _alias("v:remote"), "m:dark": _alias("v:remote")}),
+            "v:6": _var("v:6", "space/4", "c:size", "FLOAT", {"m:one": 16},
+                        ["GAP", "WIDTH_HEIGHT"]),
+            "v:7": _var("v:7", "radius/card", "c:size", "FLOAT", {"m:one": 12},
+                        ["CORNER_RADIUS"]),
+            "v:8": _var("v:8", "weight/strong", "c:size", "FLOAT", {"m:one": 600},
+                        ["FONT_WEIGHT"]),
+            "v:9": _var("v:9", "z/dialog", "c:size", "FLOAT", {"m:one": 2100}),
+            "v:10": _var("v:10", "flag/beta", "c:size", "BOOLEAN", {"m:one": True}),
+            "v:11": _var("v:11", "font/body", "c:size", "STRING", {"m:one": "Body Sans"},
+                         ["FONT_FAMILY"]),
+            "v:12": _var("v:12", "size/body", "c:type", "FLOAT",
+                         {"m:sm": 15, "m:lg": 16, "m:xl": 16}, ["FONT_SIZE"]),
+            "v:13": _var("v:13", "label/copy", "c:type", "STRING",
+                         {"m:sm": "Hi", "m:lg": "Hi", "m:xl": "Hi"}, ["TEXT_CONTENT"]),
+        },
+    },
+}
+
+
+def _import(doc, **kw):
+    text = json.dumps(doc)
+    return import_figma(text, Source("variables.json", "figma", "0" * 64, len(text)), **kw)
+
+
+def _one(collection, variables):
+    """An export of one collection and its variables."""
+    return {"variableCollections": {collection["id"]: collection},
+            "variables": {v["id"]: v for v in variables}}
+
+
+def _rows(items):
+    return [(i.name, i.message) for i in items]
+
+
+def test_variables_keep_the_files_names_and_modes():
+    imported = _import(EXPORT)
+    ts = imported.tokens
+    assert [(t.path, t.type) for t in ts.tokens()] == [
+        ("ink.900", "color"), ("paper", "color"), ("text.Body-Copy", "color"),
+        ("veil", "color"), ("space.4", "dimension"), ("radius.card", "dimension"),
+        ("weight.strong", "fontWeight"), ("z.dialog", "number"), ("font.body", "fontFamily"),
+        ("size.body", "dimension")]
+    assert dict(ts.axes) == {"scheme": ("light", "dark"), "type": ("base", "tight", "loose")}
+    assert (ts.get("ink.900").value, ts.get("ink.900").modes) == ("#171A1F", {})
+    assert ts.get("ink.900").layer == "primitive"
+    text = ts.get("text.Body-Copy")
+    assert (text.value, text.modes, text.layer, text.description) == (
+        "{ink.900}", {"scheme:dark": "{paper}"}, "semantic", "Running text.")
+    assert (ts.get("veil").value, ts.get("veil").modes) == (
+        "#00000066", {"scheme:dark": "#00000099"})
+    assert ts.get("space.4").value == {"value": 16, "unit": "px"}
+    assert ts.get("weight.strong").value == 600
+    assert ts.get("z.dialog").value == 2100
+    assert ts.get("size.body").value == {"value": 16, "unit": "px"}
+    assert ts.get("size.body").modes == {"type:tight": {"value": 15, "unit": "px"}}
+    assert ts.get("font.body").value == ["Body Sans"]
+
+
+def test_the_report_names_what_it_renamed_noted_and_did_not_read():
+    report = _import(EXPORT).report
+    assert report.source.format == "figma" and report.entries == 13 and report.tokens == 10
+    assert [(i.where, i.name, i.message) for i in report.renamed] == [
+        ("variables.json Color", "text/Body Copy",
+         "read as text.Body-Copy; a slash reads as a dot, and a path segment holds only "
+         "letters, digits, '_' and '-'")]
+    assert [(i.where, i.name, i.message) for i in report.notes] == [
+        ("variables.json", "Color",
+         "has the modes Light and Dark, read as the scheme axis: Light is the base and Dark "
+         "is scheme:dark"),
+        ("variables.json Size", "z/dialog",
+         "has no scope that fixes its unit, so it was read as the plain number 2100; give it "
+         "a scope in Figma (Gap, Corner radius, Font size and so on) to read it as a size"),
+        ("variables.json", "Type",
+         "has the modes Tight, Normal and Loose, which name no axis of the engine's, so every "
+         "mode was read on one axis named for the collection, type: Normal, its default mode, "
+         "is the base, Tight is type:tight and Loose is type:loose; to read one mode beside "
+         "the default instead, pass it with second_modes, for example {\"Type\": \"Tight\"}")]
+    assert _rows(report.not_read) == [
+        ("brand/shared", "references v:remote in the mode Light of Color, a variable from "
+                         "another file that this export does not hold; detach the variable in "
+                         "Figma to keep its value here, or export that library and import it "
+                         "on its own"),
+        ("flag/beta", "a boolean, and the engine holds no boolean tokens; keep it in Figma, "
+                      "where it switches components"),
+        ("label/copy", "a text variable scoped to TEXT_CONTENT; the engine reads text only as "
+                       "a font family, so if it names a font, give it only the Font family "
+                       "scope in Figma")]
+    assert "## Not read" in report.markdown() and "scheme (light is the base, dark)" \
+        in report.markdown()
+
+
+def test_a_second_mode_can_be_chosen_for_a_collection_with_more():
+    ts = _import(EXPORT, second_modes={"Type": "Tight"}).tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark"), "normal-tight": ("normal", "tight")}
+    assert ts.get("size.body").modes == {"normal-tight:tight": {"value": 15, "unit": "px"}}
+
+
+def test_an_unknown_second_mode_is_named():
+    with pytest.raises(InputError) as exc:
+        _import(EXPORT, second_modes={"Type": "Tablet"})
+    assert str(exc.value) == ("second_modes names the mode Tablet of Type, which has the modes "
+                              "Tight, Normal and Loose; pass Tight or Loose, a mode other than "
+                              "its default Normal")
+
+
+def test_second_modes_naming_the_default_or_a_small_collection_is_named():
+    with pytest.raises(InputError) as exc:
+        _import(EXPORT, second_modes={"Type": "Normal"})
+    assert str(exc.value) == ("second_modes names Normal, the default mode of Type, which is "
+                              "read as the base already; pass Tight or Loose")
+    with pytest.raises(InputError) as exc:
+        _import(EXPORT, second_modes={"Color": "Dark"})
+    assert str(exc.value) == ("second_modes names Color, which has 2 modes, so every mode it "
+                              "has is read already; leave Color out of second_modes")
+    with pytest.raises(InputError) as exc:
+        _import(EXPORT, second_modes={"Sizes": "Tight"})
+    assert str(exc.value) == ("second_modes names the collection Sizes, which this export does "
+                              "not hold; pass a collection with more than two modes: Type")
+
+
+def test_the_bare_shape_without_meta_reads_the_same():
+    bare = dict(EXPORT["meta"])
+    assert [t.path for t in _import(bare).tokens.tokens()] == [
+        t.path for t in _import(EXPORT).tokens.tokens()]
+
+
+def test_a_file_that_is_not_a_variables_export_is_named(tmp_path):
+    f = tmp_path / "file.json"
+    f.write_text(json.dumps({"document": {}}), encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        read_figma(f)
+    assert str(exc.value) == (
+        f"--from {f} is not a Figma variables export: it has no variables and "
+        "variableCollections; export them with the Figma REST endpoint "
+        "GET /v1/files/<file key>/variables/local")
+    assert REST_ENDPOINT == "GET /v1/files/<file key>/variables/local"
+
+
+def test_invalid_json_and_an_error_response_are_named(tmp_path):
+    f = tmp_path / "variables.json"
+    f.write_text("{", encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        read_figma(f, "--figma")
+    assert str(exc.value).startswith(f"--figma {f} is not valid JSON (")
+    assert str(exc.value).endswith(f"); export the variables again with {REST_ENDPOINT}")
+    f.write_text(json.dumps({"status": 403, "error": True, "message": "Invalid token"}),
+                 encoding="utf-8")
+    with pytest.raises(InputError) as exc:
+        read_figma(f)
+    assert str(exc.value) == (
+        f"--from {f} is an error Figma sent back (403: Invalid token), not a variables export; "
+        f"export again with a token that can read the file, from {REST_ENDPOINT}")
+
+
+def test_a_dark_default_still_reads_light_as_the_base():
+    col = _collection("c:1", "Theme", ["Dark mode", "Light mode"], ["v:1"])
+    doc = _one(col, [_var("v:1", "surface", "c:1", "COLOR",
+                          {"c:1:Dark mode": {"r": 0, "g": 0, "b": 0, "a": 1},
+                           "c:1:Light mode": {"r": 1, "g": 1, "b": 1, "a": 1}})])
+    imported = _import(doc)
+    assert dict(imported.tokens.axes) == {"scheme": ("light", "dark")}
+    surface = imported.tokens.get("surface")
+    assert (surface.value, surface.modes) == ("#FFFFFF", {"scheme:dark": "#000000"})
+    assert _rows(imported.report.notes) == [
+        ("Theme", "has the modes Dark mode and Light mode, read as the scheme axis: Light mode "
+                  "is the base and Dark mode is scheme:dark; the default mode in Figma is "
+                  "Dark mode, and the engine's base is the light one")]
+
+
+def test_other_two_mode_collections_are_one_axis_in_the_files_names():
+    col = _collection("c:1", "Brand", ["Main", "Partner"], ["v:1"])
+    doc = _one(col, [_var("v:1", "accent", "c:1", "COLOR",
+                          {"c:1:Main": {"r": 1, "g": 0, "b": 0, "a": 1},
+                           "c:1:Partner": {"r": 0, "g": 0, "b": 1, "a": 1}})])
+    imported = _import(doc)
+    assert dict(imported.tokens.axes) == {"main-partner": ("main", "partner")}
+    assert imported.tokens.get("accent").modes == {"main-partner:partner": "#0000FF"}
+    assert _rows(imported.report.notes) == [
+        ("Brand", "has the modes Main and Partner, read as the axis main-partner: Main, its "
+                  "default mode, is the base and Partner is main-partner:partner")]
+
+
+def test_modes_that_cannot_name_an_axis_read_the_default_only():
+    col = _collection("c:1", "Density", ["1x", "2x"], ["v:1"])
+    doc = _one(col, [_var("v:1", "gap", "c:1", "FLOAT", {"c:1:1x": 8, "c:1:2x": 16}, ["GAP"])])
+    imported = _import(doc)
+    assert dict(imported.tokens.axes) == {}
+    assert imported.tokens.get("gap").value == {"value": 8, "unit": "px"}
+    assert _rows(imported.report.notes) == [
+        ("Density", "has the modes 1x and 2x, which cannot name a mode axis; its default mode "
+                    "1x was read and 2x was not; rename the modes in Figma so each starts with "
+                    "a letter and the two differ")]
+
+
+def test_more_modes_that_name_no_axis_read_every_mode_on_one_axis_named_for_the_collection():
+    imported = _import(EXPORT)
+    assert imported.figma["collections"]["Type"] == [
+        ["Tight", "type:tight"], ["Normal", ""], ["Loose", "type:loose"]]
+    assert "Type" not in imported.figma["unread"]
+    col = _collection("c:1", "Brand Theme", ["Harbor", "Meadow", "Ember"], ["v:1"])
+    doc = _one(col, [_var("v:1", "accent", "c:1", "COLOR", {
+        "c:1:Harbor": {"r": 0, "g": 0, "b": 1, "a": 1},
+        "c:1:Meadow": {"r": 0, "g": 1, "b": 0, "a": 1},
+        "c:1:Ember": {"r": 1, "g": 0, "b": 0, "a": 1}})])
+    imported = _import(doc)
+    assert dict(imported.tokens.axes) == {"brand-theme": ("base", "meadow", "ember")}
+    accent = imported.tokens.get("accent")
+    assert (accent.value, accent.modes) == (
+        "#0000FF", {"brand-theme:meadow": "#00FF00", "brand-theme:ember": "#FF0000"})
+    assert imported.report.not_read == []
+    assert "brand-theme (the values set with no mode are the base; modes meadow, ember)" \
+        in imported.report.markdown()
+
+
+@pytest.mark.parametrize("collection, modes, why", [
+    ("Motion", ["Calm", "Brisk", "Lively"],
+     "since its name gives the axis motion, one of the engine's own axes; rename the "
+     "collection in Figma"),
+    ("Scale", ["1x", "2x", "3x"],
+     "since an axis value starts with a letter and the values differ, which 2x and 3x do "
+     "not give; rename the modes in Figma"),
+    ("Scale", ["Small", "Base", "Large"],
+     "since the mode Base would take the value base, which the engine gives the default "
+     "mode; rename it in Figma"),
+], ids=["engine-axis", "digits", "base"])
+def test_more_modes_that_cannot_make_an_axis_read_the_default_and_name_the_fix(collection,
+                                                                             modes, why):
+    col = _collection("c:1", collection, modes, ["v:1"])
+    doc = _one(col, [_var("v:1", "gap", "c:1", "FLOAT",
+                          {f"c:1:{m}": 8 + 4 * n for n, m in enumerate(modes)}, ["GAP"])])
+    imported = _import(doc)
+    assert dict(imported.tokens.axes) == {}
+    assert imported.tokens.get("gap").value == {"value": 8, "unit": "px"}
+    rest = f"{modes[1]} and {modes[2]}"
+    assert _rows(imported.report.notes) == [
+        (collection, f"has the modes {modes[0]}, {rest}; its default mode {modes[0]} was read, "
+                     f"and {rest} were not, {why}, or pass the second mode to read with "
+                     f"second_modes, for example {{\"{collection}\": \"{modes[1]}\"}}")]
+
+
+def test_two_collections_that_would_name_one_axis_with_other_modes_read_the_first():
+    first = _collection("c:1", "Brand", ["Harbor", "Meadow", "Ember"], ["v:1"])
+    second = _collection("c:2", "Brand", ["North", "South", "East"], ["v:2"])
+    doc = {"variableCollections": {"c:1": first, "c:2": second}, "variables": {
+        "v:1": _var("v:1", "accent", "c:1", "FLOAT", {"c:1:Harbor": 1, "c:1:Meadow": 2,
+                                                      "c:1:Ember": 3}, ["GAP"]),
+        "v:2": _var("v:2", "edge", "c:2", "FLOAT", {"c:2:North": 1, "c:2:South": 2,
+                                                    "c:2:East": 3}, ["GAP"])}}
+    imported = _import(doc)
+    assert dict(imported.tokens.axes) == {"brand": ("base", "meadow", "ember")}
+    assert imported.tokens.get("edge").modes == {}
+    assert ("Brand", "has the modes North, South and East; its default mode North was read, "
+                     "and South and East were not, since another collection names the axis "
+                     "brand with other modes; rename one of the two collections in Figma, or "
+                     "pass the second mode to read with second_modes, for example "
+                     "{\"Brand\": \"South\"}") in _rows(imported.report.notes)
+
+
+def test_a_color_keeps_its_alpha_and_one_outside_srgb_is_mapped():
+    col = _collection("c:1", "Color", ["Value"], ["v:1", "v:2"])
+    doc = _one(col, [
+        _var("v:1", "scrim", "c:1", "COLOR", {"c:1:Value": {"r": 0, "g": 0, "b": 0, "a": 0.5}}),
+        _var("v:2", "vivid", "c:1", "COLOR",
+             {"c:1:Value": {"r": 1.2, "g": 0.1, "b": -0.05, "a": 1}})])
+    imported = _import(doc)
+    assert imported.tokens.get("scrim").value == "#00000080"
+    vivid = imported.tokens.get("vivid").value
+    assert vivid.startswith("#") and len(vivid) == 7
+    [mapped] = imported.report.mapped
+    assert (mapped.where, mapped.name, mapped.original, mapped.hex) == (
+        "variables.json Color", "vivid", '{"r": 1.2, "g": 0.1, "b": -0.05}', vivid)
+    assert mapped.distance > 0
+    assert imported.report.not_read == []
+
+
+def test_values_it_cannot_read_are_named_with_the_mode_and_the_fix():
+    col = _collection("c:1", "Color", ["Light", "Dark"], ["v:1", "v:2", "v:3", "v:4"])
+    doc = _one(col, [
+        _var("v:1", "bg", "c:1", "COLOR", {"c:1:Light": {"r": 1, "g": 1, "b": 1, "a": 1}}),
+        _var("v:2", "fg", "c:1", "COLOR",
+             {"c:1:Light": "#000000", "c:1:Dark": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+        _var("v:3", "line", "c:1", "COLOR",
+             {"c:1:Light": {"r": 0, "g": 0, "b": 0, "a": 1.5},
+              "c:1:Dark": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+        _var("v:4", "gap", "c:1", "FLOAT", {"c:1:Light": "8px", "c:1:Dark": 8}, ["GAP"])])
+    assert _rows(_import(doc).report.not_read) == [
+        ("bg", "has no value for the mode Dark of Color; set one in Figma and export again"),
+        ("fg", "holds \"#000000\" in the mode Light of Color, not a color; Figma writes a "
+               "color as r, g, b and a from 0 to 1, so export the variables again"),
+        ("line", "has the alpha 1.5 in the mode Light of Color; Figma writes alpha from 0 to "
+                 "1, so set it again in Figma"),
+        ("gap", "holds \"8px\" in the mode Light of Color, not a number; export the variables "
+                "again")]
+
+
+def test_figmas_float_noise_is_read_to_four_decimals():
+    col = _collection("c:1", "Type", ["Value"], ["v:1", "v:2"])
+    doc = _one(col, [
+        _var("v:1", "tracking/tight", "c:1", "FLOAT", {"c:1:Value": -0.20000000298023224},
+             ["LETTER_SPACING"]),
+        _var("v:2", "opacity/muted", "c:1", "FLOAT", {"c:1:Value": 40.0}, ["OPACITY"])])
+    imported = _import(doc)
+    assert imported.tokens.get("tracking.tight").value == {"value": -0.2, "unit": "px"}
+    assert imported.tokens.get("opacity.muted").value == 40
+    assert _rows(imported.report.notes) == [
+        ("opacity/muted", "is scoped to OPACITY, which Figma writes from 0 to 100, so it was "
+                          "read as the plain number 40 and keeps that unit; CSS and Tailwind "
+                          "write it from 0 to 1")]
+    assert imported.tokens.get("opacity.muted").extensions == {"unit": "percent"}
+
+
+def test_mixed_scopes_read_a_plain_number_with_a_note():
+    col = _collection("c:1", "Size", ["Value"], ["v:1"])
+    doc = _one(col, [_var("v:1", "odd", "c:1", "FLOAT", {"c:1:Value": 4}, ["GAP", "OPACITY"])])
+    imported = _import(doc)
+    assert imported.tokens.get("odd").type == "number"
+    assert _rows(imported.report.notes) == [
+        ("odd", "has the scopes GAP and OPACITY, which do not share one unit, so it was read "
+                "as the plain number 4; keep only size scopes in Figma to read it as a size")]
+
+
+def test_references_to_what_was_not_read_and_loops_are_named():
+    col = _collection("c:1", "Color", ["Value"], ["v:1", "v:2", "v:3", "v:4", "v:5"])
+    doc = _one(col, [
+        _var("v:1", "flag", "c:1", "BOOLEAN", {"c:1:Value": False}),
+        _var("v:2", "uses-flag", "c:1", "COLOR", {"c:1:Value": _alias("v:1")}),
+        _var("v:3", "a", "c:1", "COLOR", {"c:1:Value": _alias("v:4")}),
+        _var("v:4", "b", "c:1", "COLOR", {"c:1:Value": _alias("v:3")}),
+        _var("v:5", "on-a", "c:1", "COLOR", {"c:1:Value": _alias("v:3")})])
+    imported = _import(doc)
+    assert imported.tokens.tokens() == []
+    assert _rows(imported.report.not_read) == [
+        ("flag", "a boolean, and the engine holds no boolean tokens; keep it in Figma, where it "
+                 "switches components"),
+        ("uses-flag", "references flag in the mode Value of Color, which was not read; fix flag "
+                      "and import again"),
+        ("a", "references b in the mode Value of Color, which leads back to it (a -> b -> a); "
+              "point one of them at a value in Figma"),
+        ("b", "references a in the mode Value of Color, which leads back to it (b -> a -> b); "
+              "point one of them at a value in Figma"),
+        ("on-a", "references a in the mode Value of Color, which was not read; fix a and "
+                 "import again")]
+
+
+def test_two_variables_on_one_path_keep_the_first():
+    one = _collection("c:1", "Base", ["Value"], ["v:1"])
+    two = _collection("c:2", "Brand", ["Value"], ["v:2"])
+    doc = {"variableCollections": {"c:1": one, "c:2": two},
+           "variables": {"v:1": _var("v:1", "color/bg", "c:1", "COLOR",
+                                     {"c:1:Value": {"r": 1, "g": 1, "b": 1, "a": 1}}),
+                         "v:2": _var("v:2", "color/bg", "c:2", "COLOR",
+                                     {"c:2:Value": {"r": 0, "g": 0, "b": 0, "a": 1}})}}
+    imported = _import(doc)
+    assert imported.tokens.get("color.bg").value == "#FFFFFF"
+    assert [(i.where, i.name, i.message) for i in imported.report.not_read] == [
+        ("variables.json Brand", "color/bg",
+         "is read as color.bg, the path of Base/color/bg read earlier; rename one of the two in "
+         "Figma")]
+
+
+def test_a_deleted_variable_is_not_read():
+    col = _collection("c:1", "Color", ["Value"], ["v:1"])
+    gone = _var("v:1", "old", "c:1", "COLOR", {"c:1:Value": {"r": 1, "g": 1, "b": 1, "a": 1}})
+    gone["deletedButReferenced"] = True
+    assert _rows(_import(_one(col, [gone])).report.not_read) == [
+        ("old", "was deleted in Figma and is kept only because something still references it; "
+                "restore it, or point those references at another variable")]
+
+
+def test_the_import_is_deterministic_and_does_not_change_its_input():
+    doc = copy.deepcopy(EXPORT)
+    first = _import(doc)
+    assert doc == EXPORT
+    second = _import(EXPORT)
+    assert first.report.to_dict() == second.report.to_dict()
+    assert [(t.path, t.value, t.modes) for t in first.tokens.tokens()] == [
+        (t.path, t.value, t.modes) for t in second.tokens.tokens()]
+    assert "FONT_SIZE" in SIZE_SCOPES and "OPACITY" not in SIZE_SCOPES
+
+
+def test_the_reader_does_not_import_the_writer():
+    import engine.io.figma_in
+
+    tree = ast.parse(Path(engine.io.figma_in.__file__).read_text(encoding="utf-8"))
+    names = [n.module for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
+    assert "engine.foundations.emit" not in names
+
+
+def test_the_package_exports_the_importer():
+    import engine.io
+
+    assert engine.io.read_figma is read_figma and engine.io.import_figma is import_figma
+    assert {"import_figma", "read_figma", "import_markdown", "Mapped", "GamutMapped",
+            "CSS_KEYWORDS"} <= set(engine.io.__all__)
+
+
+# The REST export also holds the library variables the file uses, marked
+# remote, with their collections. They belong to another file.
+LIBRARY = {
+    "variableCollections": {
+        "c:lib": {"id": "c:lib", "name": "Shared Palette", "remote": True,
+                  "defaultModeId": "m:a", "modes": [{"modeId": "m:a", "name": "Default"},
+                                                    {"modeId": "m:b", "name": "Partner"}],
+                  "variableIds": ["v:lib1"]},
+        "c:own": _collection("c:own", "Color", ["Light", "Dark"], ["v:1", "v:2", "v:3"]),
+    },
+    "variables": {
+        "v:lib1": dict(_var("v:lib1", "white", "c:lib", "COLOR",
+                            {"m:a": {"r": 1, "g": 1, "b": 1, "a": 1},
+                             "m:b": {"r": 1, "g": 1, "b": 1, "a": 1}}), remote=True),
+        "v:1": _var("v:1", "surface/base", "c:own", "COLOR",
+                    {"c:own:Light": _alias("v:lib1"),
+                     "c:own:Dark": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+        "v:2": _var("v:2", "surface/raised", "c:own", "COLOR",
+                    {"c:own:Light": _alias("v:gone"),
+                     "c:own:Dark": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+        "v:3": _var("v:3", "ink", "c:own", "COLOR",
+                    {"c:own:Light": {"r": 0, "g": 0, "b": 0, "a": 1},
+                     "c:own:Dark": {"r": 1, "g": 1, "b": 1, "a": 1}}),
+    },
+}
+
+
+SNAPSHOT = ("aliases white in the mode Light of Color, a variable of the library collection "
+            "Shared Palette in another file; the export holds its value in its mode Default, so "
+            "it was read as #FFFFFF, a snapshot that does not follow later changes to the "
+            "library; to keep the link, export the library and import it on its own")
+RAISED = ("references v:gone in the mode Light of Color, a variable from another file that this "
+          "export does not hold; detach the variable in Figma to keep its value here, or export "
+          "that library and import it on its own")
+
+
+def test_library_variables_in_the_export_are_not_read_as_the_files_own():
+    imported = _import(LIBRARY)
+    assert [t.path for t in imported.tokens.tokens()] == ["surface.base", "ink"]
+    assert dict(imported.tokens.axes) == {"scheme": ("light", "dark")}
+    # The export holds the library variable's value: read, with a note.
+    base = imported.tokens.get("surface.base")
+    assert (base.value, base.modes) == ("#FFFFFF", {"scheme:dark": "#000000"})
+    report = imported.report
+    assert report.entries == 3 and report.tokens == 2
+    assert [(i.where, i.name, i.message) for i in report.notes] == [
+        ("variables.json", "Shared Palette",
+         "is a library collection from another file (remote in the export); the 1 variable "
+         "of it this file uses was not read as this file's tokens; import that library's own "
+         "export to read them"),
+        ("variables.json", "Color",
+         "has the modes Light and Dark, read as the scheme axis: Light is the base and Dark "
+         "is scheme:dark"),
+        ("variables.json Color", "surface/base", SNAPSHOT)]
+    assert _rows(report.not_read) == [("surface/raised", RAISED)]
+
+
+def test_a_library_alias_with_no_value_in_the_export_names_what_the_owner_can_do():
+    doc = copy.deepcopy(LIBRARY)
+    doc["variables"]["v:lib1"]["valuesByMode"] = {"m:a": _alias("v:elsewhere")}
+    assert _rows(_import(doc).report.not_read)[0] == (
+        "surface/base", "references white in the mode Light of Color, a variable of the library "
+                        "collection Shared Palette in another file, and the export holds no "
+                        "value for it; detach the variable in Figma to keep its value here, "
+                        "publish the library so the export carries its values, or export the "
+                        "library and import it on its own")
+    assert not any("too" in i.message for i in _import(doc).report.not_read)
+
+
+def test_a_resolved_value_on_the_alias_is_the_snapshot():
+    doc = copy.deepcopy(LIBRARY)
+    del doc["variables"]["v:lib1"]
+    doc["variables"]["v:2"]["valuesByMode"]["c:own:Light"] = dict(
+        _alias("v:gone"), resolvedValue={"r": 0.5, "g": 0.5, "b": 0.5, "a": 1})
+    imported = _import(doc)
+    assert imported.tokens.get("surface.raised").value == "#808080"
+    assert any(i.name == "surface/raised" and "a snapshot" in i.message
+               for i in imported.report.notes)
+
+
+def test_a_remote_variable_is_library_even_in_a_collection_not_marked_remote():
+    doc = copy.deepcopy(LIBRARY)
+    del doc["variableCollections"]["c:lib"]["remote"]
+    imported = _import(doc)
+    assert [t.path for t in imported.tokens.tokens()] == ["surface.base", "ink"]
+    assert "main-partner" not in imported.tokens.axes
+    assert ("surface/base", SNAPSHOT) in _rows(imported.report.notes)
+
+
+def test_second_modes_naming_a_library_collection_is_named():
+    with pytest.raises(InputError) as exc:
+        _import(LIBRARY, second_modes={"Shared Palette": "Partner"})
+    assert str(exc.value) == ("second_modes names Shared Palette, a library collection from "
+                              "another file, whose variables are not read as this file's "
+                              "tokens; leave Shared Palette out of second_modes")
+
+
+def test_a_size_that_aliases_an_unscoped_number_names_the_fix():
+    col = _collection("c:1", "Size", ["Value"], ["v:1", "v:2", "v:3"])
+    doc = _one(col, [_var("v:1", "num/8", "c:1", "FLOAT", {"c:1:Value": 8}),
+                     _var("v:2", "space/md", "c:1", "FLOAT", {"c:1:Value": _alias("v:1")},
+                          ["GAP"]),
+                     _var("v:3", "weight/body", "c:1", "FLOAT", {"c:1:Value": _alias("v:1")},
+                          ["FONT_WEIGHT"])])
+    notes = _rows(_import(doc).report.notes)
+    assert notes[1:] == [
+        ("space/md", "aliases num/8 in the mode Value of Size, which was read as a number, "
+                     "where a dimension is wanted; give num/8 a size scope in Figma (Gap, "
+                     "Corner radius, Font size and so on) and import again"),
+        ("weight/body", "aliases num/8 in the mode Value of Size, which was read as a number, "
+                        "where a fontWeight is wanted; give num/8 only the Font weight scope in "
+                        "Figma and import again")]
+
+
+def test_standard_and_high_are_contrast_only_where_contrast_is_named():
+    def axes(collection, modes):
+        col = _collection("c:1", collection, modes, ["v:1"])
+        doc = _one(col, [_var("v:1", "gap", "c:1", "FLOAT",
+                              {f"c:1:{m}": 8 for m in modes}, ["GAP"])])
+        return dict(_import(doc).tokens.axes)
+    assert axes("Density", ["Standard", "High"]) == {"standard-high": ("standard", "high")}
+    assert axes("Contrast", ["Standard", "High"]) == {"contrast": ("standard", "high")}
+    assert axes("Theme", ["Standard", "High contrast"]) == {"contrast": ("standard", "high")}
+
+
+def _theme(modes, values):
+    col = _collection("c:1", "Theme", modes, ["v:1"])
+    return _one(col, [_var("v:1", "bg", "c:1", "COLOR", {
+        f"c:1:{m}": {"r": v, "g": v, "b": v, "a": 1} for m, v in zip(modes, values)})])
+
+
+def test_light_dark_and_high_contrast_in_one_collection_read_one_mode_per_axis():
+    doc = _theme(["Light", "Dark", "High contrast"], [1, 0, 0.2])
+    imported = _import(doc)
+    ts, report = imported.tokens, imported.report
+    assert dict(ts.axes) == {"scheme": ("light", "dark"), "contrast": ("standard", "high")}
+    assert ts.get("bg").value == "#FFFFFF"
+    assert ts.get("bg").modes == {"scheme:dark": "#000000", "contrast:high": "#333333"}
+    assert _rows(report.notes) == [
+        ("Theme", "has the modes Light, Dark and High contrast, read one mode per axis: Light "
+                  "is the base, Dark is scheme:dark and High contrast is contrast:high")]
+    assert report.not_read == []
+
+
+def test_second_modes_never_makes_a_combined_axis_from_a_mode_the_matcher_places():
+    doc = _theme(["Light", "Dark", "High contrast"], [1, 0, 0.2])
+    for want in ("High contrast", "Dark"):
+        ts = _import(doc, second_modes={"Theme": want}).tokens
+        assert dict(ts.axes) == {"scheme": ("light", "dark"),
+                                 "contrast": ("standard", "high")}
+        assert "light-high-contrast" not in dict(ts.axes)
+
+
+def test_a_mode_left_over_beside_the_axes_is_not_read_and_says_why():
+    doc = _theme(["Light", "Dark", "Dim", "High contrast dark"], [1, 0, 0.2, 0.1])
+    imported = _import(doc)
+    assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+    assert _rows(imported.report.not_read) == [
+        ("Theme", "has the mode Dim, whose name places into no mode axis beside Light, so its "
+                  "values were not read; name it for a mode in Figma, such as Dark or High "
+                  "contrast, or move it to a collection of its own"),
+        ("Theme", "has the mode High contrast dark, which names the scheme and contrast axes "
+                  "at once, so its values were not read; the engine reads one mode per axis, "
+                  "so keep dark and high contrast as two modes")]
+    assert "Nothing was left unread" not in imported.report.markdown()
+
+
+def test_two_modes_where_one_names_an_axis_on_its_own_read_into_that_axis():
+    ts = _import(_theme(["Light", "High contrast"], [1, 0.2])).tokens
+    assert dict(ts.axes) == {"contrast": ("standard", "high")}
+    assert ts.get("bg").modes == {"contrast:high": "#333333"}
+    ts = _import(_theme(["Brand", "Dark"], [1, 0])).tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert ts.get("bg").modes == {"scheme:dark": "#000000"}
+
+
+def test_light_and_dark_among_more_modes_read_the_scheme_and_list_the_rest():
+    doc = _theme(["Light", "Dark", "Dim"], [1, 0, 0.2])
+    for kw in ({}, {"second_modes": {"Theme": "Dark"}}):
+        imported = _import(doc, **kw)
+        assert dict(imported.tokens.axes) == {"scheme": ("light", "dark")}
+        assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+        assert _rows(imported.report.notes) == [
+            ("Theme", "has the modes Light, Dark and Dim, read one mode per axis: Light is the "
+                      "base and Dark is scheme:dark")]
+        assert [n for n, _ in _rows(imported.report.not_read)] == ["Theme"]
+
+
+def test_a_mapped_color_names_its_mode_and_keeps_its_alpha():
+    col = _collection("c:1", "Color", ["Light", "Dark"], ["v:1"])
+    doc = _one(col, [_var("v:1", "vivid", "c:1", "COLOR", {
+        "c:1:Light": {"r": 0, "g": 0, "b": 0, "a": 1},
+        "c:1:Dark": {"r": 1.2, "g": 0.1, "b": -0.05, "a": 0.5}})])
+    imported = _import(doc)
+    [mapped] = imported.report.mapped
+    assert mapped.where == "variables.json Color in the mode Dark"
+    assert mapped.hex.endswith("80") and len(mapped.hex) == 9
+    assert imported.tokens.get("vivid").modes == {"scheme:dark": mapped.hex}
+
+
+def test_a_path_is_free_again_when_its_first_holder_is_not_read():
+    col = _collection("c:1", "Color", ["Value"], ["v:1", "v:2", "v:3"])
+    doc = _one(col, [_var("v:1", "flag", "c:1", "BOOLEAN", {"c:1:Value": True}),
+                     _var("v:2", "color/bg", "c:1", "COLOR", {"c:1:Value": _alias("v:1")}),
+                     _var("v:3", "color/bg", "c:1", "COLOR",
+                          {"c:1:Value": {"r": 1, "g": 1, "b": 1, "a": 1}})])
+    imported = _import(doc)
+    assert imported.tokens.get("color.bg").value == "#FFFFFF"
+    assert [n for n, _ in _rows(imported.report.not_read)] == ["flag", "color/bg"]
+
+
+def test_reduced_is_motion_only_where_motion_is_named_and_words_are_whole():
+    def axes(collection, modes):
+        col = _collection("c:1", collection, modes, ["v:1"])
+        doc = _one(col, [_var("v:1", "gap", "c:1", "FLOAT",
+                              {f"c:1:{m}": 8 for m in modes}, ["GAP"])])
+        return dict(_import(doc).tokens.axes)
+    assert axes("Size", ["Standard", "Reduced"]) == {"standard-reduced": ("standard", "reduced")}
+    assert axes("Motion", ["Standard", "Reduced"]) == {"motion": ("standard", "reduced")}
+    assert "scheme" not in axes("Theme", ["Light", "Darkness"])
+
+
+def test_a_library_variable_whose_collection_is_missing_is_named_by_its_own_name():
+    doc = copy.deepcopy(LIBRARY)
+    doc["variables"]["v:lib1"]["variableCollectionId"] = "VariableCollectionId:gone/0:9"
+    doc["variables"]["v:lib2"] = dict(_var("v:lib2", "black", None, "COLOR",
+                                           {"m:a": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+                                      remote=True)
+    report = _import(doc).report
+    text = " ".join(f"{i.where} {i.name} {i.message}" for i in report.notes + report.not_read)
+    assert "VariableCollectionId" not in text and "None" not in text
+    assert [(i.where, i.name, i.message) for i in report.notes
+            if i.name in ("white", "black")] == [
+        ("variables.json", "white",
+         "is a variable of an unknown library collection (remote in the export, and its "
+         "collection is not in it); it was not read as this file's token; import that "
+         "library's own export to read it"),
+        ("variables.json", "black",
+         "is a variable of an unknown library collection (remote in the export, and its "
+         "collection is not in it); it was not read as this file's token; import that "
+         "library's own export to read it")]
+    # Every mode of the variable holds one value, so it is the snapshot.
+    assert ("surface/base", "aliases white in the mode Light of Color, a variable of an unknown "
+                            "library collection in another file; the export holds its value, "
+                            "so it was read as #FFFFFF, a snapshot that does not follow later "
+                            "changes to the library; to keep the link, export the library and "
+                            "import it on its own") in _rows(report.notes)
+
+
+def test_two_library_collections_with_one_name_are_counted_apart():
+    doc = copy.deepcopy(LIBRARY)
+    doc["variableCollections"]["c:lib2"] = dict(doc["variableCollections"]["c:lib"],
+                                                id="c:lib2", variableIds=["v:lib2", "v:lib3"])
+    for vid in ("v:lib2", "v:lib3"):
+        doc["variables"][vid] = dict(_var(vid, f"gray/{vid[-1]}", "c:lib2", "COLOR",
+                                          {"m:a": {"r": 0, "g": 0, "b": 0, "a": 1}}),
+                                     remote=True)
+    notes = [i.message for i in _import(doc).report.notes if i.name == "Shared Palette"]
+    assert ["1 variable of it" in notes[0], "2 variables of it" in notes[1]] == [True, True]
+
+
+# A collection whose modes are viewport tiers is not a mode axis: the
+# default tier is the value, and the other tiers are named in one note.
+def _tiers(collection, modes, values, default=None):
+    col = _collection("c:1", collection, modes, ["v:1", "v:2", "v:3"],
+                      default=f"c:1:{default}" if default else None)
+    return _one(col, [
+        _var("v:1", "space/page", "c:1", "FLOAT",
+             {f"c:1:{m}": v for m, v in zip(modes, values)}, ["GAP"]),
+        _var("v:2", "radius/card", "c:1", "FLOAT", {f"c:1:{m}": 12 for m in modes},
+             ["CORNER_RADIUS"]),
+        _var("v:3", "space/inset", "c:1", "FLOAT",
+             {f"c:1:{m}": _alias("v:1") if m == modes[-1] else 8 for m in modes}, ["GAP"])])
+
+
+def test_a_viewport_collection_reads_its_default_tier_and_names_the_rest():
+    imported = _import(_tiers("Layout", ["Mobile", "Tablet", "Desktop"], [16, 24, 32]))
+    ts = imported.tokens
+    assert dict(ts.axes) == {}
+    assert ts.get("space.page").value == {"value": 16, "unit": "px"}
+    assert ts.get("space.page").modes == {}
+    assert _rows(imported.report.notes) == [
+        ("Layout", "has the modes Mobile, Tablet and Desktop, which are viewport tiers, not a "
+                   "mode axis: its default tier Mobile was read as each variable's value, and "
+                   "Tablet and Desktop were not read (space/page is 24px at Tablet and 32px at "
+                   "Desktop; space/inset is space/page at Desktop); the engine sets per-tier "
+                   "values itself, so there is nothing to pass for them")]
+    assert "second_modes" not in imported.report.markdown()
+
+
+@pytest.mark.parametrize("collection, modes", [
+    ("Spacing", ["SM", "MD", "LG", "XL"]), ("Breakpoints", ["Compact", "Regular"]),
+    ("Layout", ["Phone", "Laptop"]), ("Grid", ["Mobile 375", "Desktop 1440"])])
+def test_viewport_tiers_are_known_by_their_names_or_the_collections(collection, modes):
+    imported = _import(_tiers(collection, modes, [16] * len(modes)))
+    assert dict(imported.tokens.axes) == {}
+    [note] = [i for i in imported.report.notes if i.name == collection]
+    assert "which are viewport tiers, not a mode axis" in note.message
+    assert "space/page is" not in note.message and "second_modes" not in note.message
+
+
+def test_viewport_tiers_that_hold_the_same_values_say_so():
+    col = _collection("c:1", "Layout", ["Mobile", "Desktop"], ["v:1"])
+    doc = _one(col, [_var("v:1", "gap", "c:1", "FLOAT", {"c:1:Mobile": 8, "c:1:Desktop": 8},
+                          ["GAP"])])
+    [note] = _import(doc).report.notes
+    assert "Desktop was not read (they hold the same values)" in note.message
+
+
+def test_second_modes_naming_a_viewport_collection_is_named():
+    with pytest.raises(InputError) as exc:
+        _import(_tiers("Layout", ["Mobile", "Tablet", "Desktop"], [16, 24, 32]),
+                second_modes={"Layout": "Tablet"})
+    assert str(exc.value) == ("second_modes names Layout, whose modes Mobile, Tablet and "
+                              "Desktop are viewport tiers, not a mode axis; its default tier "
+                              "is read and the engine sets per-tier values itself, so leave "
+                              "Layout out of second_modes")
+
+
+def test_a_default_mode_opposite_dark_is_the_scheme():
+    col = _collection("c:1", "Theme", ["Default", "Dark"], ["v:1"])
+    doc = _one(col, [_var("v:1", "surface", "c:1", "COLOR",
+                          {"c:1:Default": {"r": 1, "g": 1, "b": 1, "a": 1},
+                           "c:1:Dark": {"r": 0, "g": 0, "b": 0, "a": 1}})])
+    ts = _import(doc).tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert ts.get("surface").modes == {"scheme:dark": "#000000"}
+
+
+def test_where_is_the_file_and_the_collection_and_the_name_is_the_variables():
+    report = _import(EXPORT).report
+    [item] = [i for i in report.not_read if i.name == "flag/beta"]
+    assert item.line().startswith("- variables.json Size `flag/beta`: ")
+
+
+# ------------------------------------------- the engine's own mode names
+
+
+def _engine_theme(modes, values, name="color"):
+    col = _collection("c:1", name, modes, ["v:1"])
+    return _one(col, [_var("v:1", "bg", "c:1", "COLOR", {
+        f"c:1:{m}": {"r": v, "g": v, "b": v, "a": 1} for m, v in zip(modes, values)})])
+
+
+def test_the_engines_own_mode_names_read_every_mode_on_their_axes():
+    doc = _engine_theme(["light standard", "light high", "dark standard", "dark high"],
+                        [1, 0.9, 0, 0])
+    imported = _import(doc)
+    ts = imported.tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark"), "contrast": ("standard", "high")}
+    # dark high is written: the high and the dark values would tie there.
+    assert ts.get("bg").value == "#FFFFFF"
+    assert ts.get("bg").modes == {"contrast:high": "#E6E6E6", "scheme:dark": "#000000",
+                                  "scheme:dark,contrast:high": "#000000"}
+    assert ts.resolve("bg", "scheme:dark,contrast:high") == "#000000"
+    assert _rows(imported.report.notes) == [
+        ("color", "has the modes light standard, light high, dark standard and dark high, one "
+                  "axis value per word, read on the scheme and contrast axes")]
+    assert imported.report.not_read == []
+
+
+def test_a_combined_mode_equal_to_the_base_is_kept():
+    doc = _engine_theme(["light standard", "light high", "dark standard", "dark high"],
+                        [1, 0.5, 0, 1])
+    ts = _import(doc).tokens
+    for ctx, want in (("", "#FFFFFF"), ("contrast:high", "#808080"), ("scheme:dark", "#000000"),
+                      ("scheme:dark,contrast:high", "#FFFFFF")):
+        assert ts.resolve("bg", ctx) == want, ctx
+
+
+def test_engine_mode_names_need_every_combination_and_the_base_as_default():
+    # Three of the four combinations: read one mode per axis, the rest named.
+    doc = _engine_theme(["light standard", "light high", "dark standard"], [1, 0.9, 0])
+    assert _import(doc).tokens.axes != {} and not any(
+        "per word" in i.message for i in _import(doc).report.notes)
+    # The default mode is not the base combination.
+    doc = _engine_theme(["dark", "light"], [0, 1])
+    assert "per word" not in json.dumps([i.message for i in _import(doc).report.notes])
+
+
+def test_standard_and_high_alone_are_contrast_only_in_a_foundation_that_varies_on_it():
+    def axes(name, modes):
+        col = _collection("c:1", name, modes, ["v:1"])
+        doc = _one(col, [_var("v:1", "w", "c:1", "FLOAT", {f"c:1:{m}": 1 for m in modes},
+                              ["STROKE_FLOAT"])])
+        return dict(_import(doc).tokens.axes)
+    assert axes("border", ["standard", "high"]) == {"contrast": ("standard", "high")}
+    assert axes("imagery", ["standard", "high"]) == {"contrast": ("standard", "high")}
+    assert axes("Density", ["standard", "high"]) == {"standard-high": ("standard", "high")}
+    assert axes("motion", ["standard", "reduced"]) == {"motion": ("standard", "reduced")}
+    assert axes("space", ["comfortable", "compact"]) == {
+        "density": ("comfortable", "compact")}
+
+
+def test_second_modes_naming_a_collection_in_the_engines_mode_names_is_named():
+    doc = _engine_theme(["light standard", "light high", "dark standard", "dark high"],
+                        [1, 0.9, 0, 0], name="Color")
+    with pytest.raises(InputError) as exc:
+        _import(doc, second_modes={"Color": "dark high"})
+    assert str(exc.value) == (
+        "second_modes names Color, whose modes light standard, light high, dark standard and "
+        "dark high name one axis value per word, so every one of them is read on the scheme "
+        "and contrast axes; leave Color out of second_modes")
+
+
+# ------------------------------------------------ unscoped primitives
+
+
+def test_an_unscoped_number_only_sizes_point_at_is_a_size():
+    col = _collection("c:1", "Size", ["Value"], ["v:1", "v:2", "v:3", "v:4"])
+    doc = _one(col, [_var("v:1", "num/8", "c:1", "FLOAT", {"c:1:Value": 8}, []),
+                     _var("v:2", "space/md", "c:1", "FLOAT", {"c:1:Value": _alias("v:1")},
+                          ["GAP"]),
+                     _var("v:3", "num/600", "c:1", "FLOAT", {"c:1:Value": 600}, []),
+                     _var("v:4", "weight/strong", "c:1", "FLOAT", {"c:1:Value": _alias("v:3")},
+                          ["FONT_WEIGHT"])])
+    imported = _import(doc)
+    ts = imported.tokens
+    assert (ts.get("num.8").type, ts.get("num.8").value) == (
+        "dimension", {"value": 8, "unit": "px"})
+    assert (ts.get("num.600").type, ts.get("num.600").value) == ("fontWeight", 600)
+    assert _rows(imported.report.notes) == [
+        ("num/8", "has no scope, but space/md (a size in px) points at it, so it was read as "
+                  "a size in px"),
+        ("num/600", "has no scope, but weight/strong (a font weight) points at it, so it was "
+                    "read as a font weight")]
+
+
+def test_an_unscoped_text_only_font_families_point_at_is_a_font_family():
+    col = _collection("c:1", "Type", ["Value"], ["v:1", "v:2", "v:3"])
+    doc = _one(col, [_var("v:1", "face/body", "c:1", "STRING", {"c:1:Value": "Body Sans"}, []),
+                     _var("v:2", "font/body", "c:1", "STRING", {"c:1:Value": _alias("v:1")},
+                          ["FONT_FAMILY"]),
+                     _var("v:3", "label/hello", "c:1", "STRING", {"c:1:Value": "Hello"}, [])])
+    imported = _import(doc)
+    ts = imported.tokens
+    assert (ts.get("face.body").type, ts.get("face.body").value) == ("fontFamily", ["Body Sans"])
+    assert ts.get("font.body").value == "{face.body}"
+    assert not ts.has("label.hello")
+    assert _rows(imported.report.not_read) == [
+        ("label/hello", "a text variable scoped to nothing; the engine reads text only as a "
+                        "font family, so if it names a font, give it only the Font family scope "
+                        "in Figma")]
+    assert ("face/body", "has no scope, but font/body (a font family) points at it, so it was "
+                         "read as a font family") in _rows(imported.report.notes)
+
+
+def test_an_unscoped_number_opacities_point_at_keeps_their_unit():
+    col = _collection("c:1", "Opacity", ["Value"], ["v:1", "v:2"])
+    doc = _one(col, [_var("v:1", "num/40", "c:1", "FLOAT", {"c:1:Value": 40}, []),
+                     _var("v:2", "opacity/muted", "c:1", "FLOAT", {"c:1:Value": _alias("v:1")},
+                          ["OPACITY"])])
+    ts = _import(doc).tokens
+    assert ts.get("num.40").extensions == {"unit": "percent"}
+    assert ts.get("opacity.muted").extensions == {"unit": "percent"}
+
+
+def test_an_opacity_keeps_its_unit_through_a_tokens_file(tmp_path):
+    from engine.foundations.export import dump_dtcg, from_dtcg
+    from engine.io.dtcg_in import import_dtcg
+    col = _collection("c:1", "Opacity", ["Value"], ["v:1"])
+    doc = _one(col, [_var("v:1", "opacity/muted", "c:1", "FLOAT", {"c:1:Value": 40},
+                          ["OPACITY"])])
+    ts = _import(doc).tokens
+    text = dump_dtcg(ts)
+    assert from_dtcg(json.loads(text)).get("opacity.muted").extensions == {"unit": "percent"}
+    back = import_dtcg(text, Source("tokens.json", "dtcg", "0" * 64, len(text))).tokens
+    assert back.get("opacity.muted").extensions == {"unit": "percent"}
+    assert back.get("opacity.muted").value == 40

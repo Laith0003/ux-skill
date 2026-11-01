@@ -1,0 +1,2 @@
+.btn { transition: background-color 300ms ease; }
+.btn:hover { background-color: #222; }

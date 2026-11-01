@@ -1,0 +1,1 @@
+.section-divider::before { content: ""; display: block; width: var(--container-max); height: var(--border-separator); margin-inline: auto; background: var(--color-line-subtle); }

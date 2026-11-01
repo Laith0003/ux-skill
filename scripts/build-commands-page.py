@@ -1,4 +1,7 @@
-"""Build docs/commands.html: a reference page for all 25 slash commands.
+"""Build docs/commands.html: a reference page for all 18 slash commands.
+
+Alias files (a description that starts "Moved to /") are listed in their own
+section, not as commands.
 
 Pulls the frontmatter (`name`, `description`) and the first "When to use" / "When to skip"
 sections out of each commands/*.md file and renders them into a single HTML page that:
@@ -9,6 +12,7 @@ sections out of each commands/*.md file and renders them into a single HTML page
   - includes anchor links per command for deep linking
 """
 from pathlib import Path
+import sys
 import re
 import html
 
@@ -22,6 +26,8 @@ def sanitize_dashes(s):
 
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "scripts"))
+from ga import tagged  # noqa: E402
 COMMANDS_DIR = ROOT / "commands"
 DOCS_OUT = ROOT / "docs" / "commands.html"
 
@@ -59,11 +65,43 @@ def parse_command(path: Path) -> dict:
     }
 
 
+ALIAS = re.compile(r"^Moved to (/ux-[a-z-]+[^.]*)\.")
+
+
 def collect() -> list:
     out = []
     for p in sorted(COMMANDS_DIR.glob("ux-*.md")):
-        out.append({"slug": p.stem, **parse_command(p)})
+        cmd = {"slug": p.stem, **parse_command(p)}
+        if not ALIAS.match(cmd["description"]):
+            out.append(cmd)
     return out
+
+
+def collect_aliases() -> list:
+    out = []
+    for p in sorted(COMMANDS_DIR.glob("ux-*.md")):
+        cmd = parse_command(p)
+        m = ALIAS.match(cmd["description"])
+        if m:
+            out.append({"slug": p.stem, "target": m.group(1)})
+    return out
+
+
+def render_aliases(aliases: list) -> str:
+    rows = "".join(
+        f'        <li><code>/{html.escape(a["slug"])}</code> runs '
+        f'<a href="#{html.escape(a["target"].split()[0][1:])}"><code>{html.escape(a["target"])}</code></a></li>\n'
+        for a in aliases
+    )
+    return f"""    <article class="cmd" id="aliases">
+      <header class="cmd-h">
+        <code class="cmd-name">Aliases, removed in 4.1</code>
+      </header>
+      <p class="cmd-desc">Seven 3.x commands merged into the ones above. Each old name still works for one release: it says where it moved, then runs the new command with the same arguments.</p>
+      <ul class="cmd-intro">
+{rows}      </ul>
+    </article>
+"""
 
 
 def render_command_card(cmd: dict) -> str:
@@ -88,8 +126,8 @@ HEAD = """<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ux-skill commands · 25 slash commands referenced</title>
-  <meta name="description" content="Complete reference for the 23 ux-skill slash commands available in Claude Code, Cursor, Windsurf, and 14 more IDEs. Each command's purpose, triggers, and source link.">
+  <title>ux-skill commands · 18 slash commands referenced</title>
+  <meta name="description" content="Complete reference for the 18 ux-skill slash commands available in Claude Code, Cursor, Windsurf, and 14 more IDEs. Each command's purpose, triggers, and source link.">
   <link rel="canonical" href="https://uxskill.laithjunaidy.com/commands.html">
   <meta name="theme-color" content="#07080a">
   <meta name="color-scheme" content="dark">
@@ -97,8 +135,8 @@ HEAD = """<!DOCTYPE html>
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://uxskill.laithjunaidy.com/commands.html">
-  <meta property="og:title" content="ux-skill commands · 25 slash commands referenced">
-  <meta property="og:description" content="One reference page for every ux-skill command. /ux-recommend, /ux-lint, /ux-design, /ux-component, +19 more.">
+  <meta property="og:title" content="ux-skill commands · 18 slash commands referenced">
+  <meta property="og:description" content="One reference page for every ux-skill command. /ux-discover, /ux-design, /ux-lint, /ux-polish, +14 more.">
   <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -572,10 +610,10 @@ __JSONLD__
       <a href="/commands.html" class="is-current">commands</a>
     </nav>
 
-    <span class="eyebrow">Reference &middot; 25 commands</span>
+    <span class="eyebrow">Reference &middot; 18 commands</span>
     <h1>Every slash command, <span class="accent">documented</span>.</h1>
     <p class="lede">
-      ux-skill ships 25 slash commands across discovery, recommendation, generation,
+      ux-skill ships 18 slash commands across discovery, recommendation, generation,
       quality, and workflow. Each one runs the Python engine under the hood and chains
       into the next via <code>.ux/last-*.json</code> state files. Click any name to jump
       to its summary or follow the source link for the full markdown.
@@ -727,7 +765,9 @@ def build_html(cmds: list) -> str:
         f'        <li><a href="#{c["slug"]}">/{c["name"]}</a></li>'
         for c in cmds
     )
-    body = "".join(render_command_card(c) for c in cmds)
+    aliases = collect_aliases()
+    toc += '\n        <li><a href="#aliases">Aliases</a></li>'
+    body = "".join(render_command_card(c) for c in cmds) + render_aliases(aliases)
     jsonld = build_jsonld(cmds)
     return (
         HEAD
@@ -737,10 +777,15 @@ def build_html(cmds: list) -> str:
     )
 
 
+def page(cmds) -> str:
+    """The page as written to docs/, with the analytics tag every docs page
+    carries."""
+    return tagged(build_html(cmds), "docs/commands.html")
+
 def main() -> None:
     cmds = collect()
     print(f"Found {len(cmds)} commands.")
-    out = build_html(cmds)
+    out = page(cmds)
     DOCS_OUT.write_text(out, encoding="utf-8")
     print(f"Wrote {DOCS_OUT}  ({len(out) // 1024} KB)")
 

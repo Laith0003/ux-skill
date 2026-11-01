@@ -1,0 +1,2 @@
+:root { color-scheme: light; --color-page: #ffffff; }
+body { background: var(--color-page); }

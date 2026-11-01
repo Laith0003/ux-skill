@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root:root[data-theme="dark"] {
+  --brand-canvas: #0E1113;
+  --brand-surface: #171B1F;
+  --brand-text-primary: #EEF0F2;
+  --brand-hairline: #2A2F35;
+}
+
+html:root {
+  --brand-primary: #0A6B53;
+}
+
+.bg-navy-deep {
+  background-color: #0A1A2F;
+}

@@ -1,0 +1,7 @@
+/* Built from design-system/tokens/tokens.json. Do not edit. */
+:root {
+  --color-harbor-500: #1C64D9;
+  --color-slate-900: #1E2329;
+  --brand-primary: var(--color-harbor-500);
+  --text-primary: var(--color-slate-900);
+}

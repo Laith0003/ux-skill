@@ -1,15 +1,15 @@
-# Hims & Hers — DESIGN.md
+# Hims & Hers: DESIGN.md
 
 ## Overview
-Hims & Hers run a modern wellness aesthetic — soft monochrome canvas with a single gentle accent (forest sage for Hers, warm tan for Hims). The brand strips out medical-website clinical-blue tropes in favor of a magazine-like surface: serif display, considered body, real product photography on textured surfaces. The two sub-brands share architecture but flip one accent token.
+Hims & Hers run a modern wellness aesthetic: soft monochrome canvas with a single gentle accent (forest sage for Hers, warm tan for Hims). The brand strips out medical-website clinical-blue tropes in favor of a magazine-like surface: serif display, considered body, real product photography on textured surfaces. The two sub-brands share architecture but flip one accent token.
 
 ## Color
-- **Primary (Hers):** `#3b5b4c` — Forest Sage
-- **Primary (Hims):** `#9c6f3e` — Warm Tan
-- **Canvas:** `#f5f0e8` — Warm Bone
-- **Surface card:** `#ffffff` — White
-- **Surface alt:** `#e8e1d3` — Bone Deep
-- **Ink:** `#1c1c1c` — Soft Black
+- **Primary (Hers):** `#3b5b4c` (Forest Sage)
+- **Primary (Hims):** `#9c6f3e` (Warm Tan)
+- **Canvas:** `#f5f0e8` (Warm Bone)
+- **Surface card:** `#ffffff` (White)
+- **Surface alt:** `#e8e1d3` (Bone Deep)
+- **Ink:** `#1c1c1c` (Soft Black)
 - **Body:** `#404040`
 - **Hairlines:** `rgba(28,28,28,0.10)`
 - **Semantic success:** `#5a8b6f`
@@ -35,17 +35,17 @@ Hims & Hers run a modern wellness aesthetic — soft monochrome canvas with a si
 - `provider-bio-card` (real doctor photo, credential text, no stock imagery)
 
 ## Trademark signals
-- Two sub-brand accent system — sage and tan flip on a single token, share everything else
-- Quiz/intake flows treated as the marketing moment — the funnel IS the brand
-- Real provider photography with credentials — refuses stock medical-website chrome
-- Monthly price chip on every product — subscription cadence is foregrounded
-- Pill-shape CTAs (full radius) — soft, friendly, never square
+- Two sub-brand accent system: sage and tan flip on a single token, share everything else
+- Quiz/intake flows treated as the marketing moment: the funnel IS the brand
+- Real provider photography with credentials: refuses stock medical-website chrome
+- Monthly price chip on every product: subscription cadence is foregrounded
+- Pill-shape CTAs (full radius): soft, friendly, never square
 
 ## What they DON'T do
 - No clinical/medical blue palette
 - No emoji in care plan copy or microcopy
 - No urgency banners ("limited time", "selling fast")
-- No anonymized doctor avatars — real names and faces or none at all
+- No anonymized doctor avatars: real names and faces or none at all
 - No saturated rainbow gradients
 
 ## Exemplar pages

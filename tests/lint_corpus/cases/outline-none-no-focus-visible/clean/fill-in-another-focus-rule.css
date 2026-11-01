@@ -1,0 +1,3 @@
+/* The fill sits in a second focus rule for the same control. */
+.menu-button:focus-visible { outline: none; }
+.menu-button:focus-visible { background-color: #dbe4ff; }

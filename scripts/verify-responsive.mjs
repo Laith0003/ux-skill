@@ -14,6 +14,10 @@
  *             -> you have NOT verified. Eyeball on a real device. Do NOT claim passed.
  *
  * Usage: node scripts/verify-responsive.mjs <file-or-url> [widths=360,390] [outdir=.]
+ * Screenshots are named by page and width (verify-<page>-<width>.png, see
+ * shot-names.mjs), so checking several pages into one folder never
+ * overwrites one with another. The script always runs when started, through
+ * any symlink, and every way it cannot verify exits 2 with the cause.
  * Chrome path override: CHROME_BIN=/path/to/chrome
  * Needs only Node 21+ (built-in fetch + WebSocket) and a Chrome/Chromium binary.
  */
@@ -21,15 +25,27 @@ import { spawn } from 'node:child_process';
 import { mkdtempSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { shotName } from './shot-names.mjs';
 
 const STICKY_CEILING = 96;        // px; a taller pinned header is a fail
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function degrade(msg) {
+  verdict = true;
   console.log('DEGRADED (UNVERIFIED): ' + msg);
   console.log('  A gate that cannot render has NOT verified. Eyeball on a real device; never claim passed.');
   process.exit(2);
 }
+
+// A verdict is always printed: a run that ends without one (an early exit,
+// a promise that never settled) reports DEGRADED and exits 2, never a quiet 0.
+let verdict = false;
+process.on('exit', (code) => {
+  if (!verdict && code === 0) {
+    console.log('DEGRADED (UNVERIFIED): the verifier stopped before it measured any page.');
+    process.exitCode = 2;
+  }
+});
 
 const target = process.argv[2];
 if (!target) degrade('no target given (usage: verify-responsive.mjs <file-or-url> [widths] [outdir])');
@@ -57,7 +73,7 @@ const MEASURE = `(()=>{
   const st=all.concat([d]).filter(e=>{const c=getComputedStyle(e);if(c.position!=='sticky'&&c.position!=='fixed')return false;
       const t=parseFloat(c.top);return isFinite(t)&&Math.abs(t)<=1&&e.getClientRects().length;});
   const outer=st.filter(e=>!st.some(o=>o!==e&&o.contains(e)));
-  return {innerWidth:vw,scrollWidth:d.scrollWidth,clientWidth:d.clientWidth,
+  return {innerWidth:vw,scrollWidth:d.scrollWidth,clientWidth:d.clientWidth,over,
     stickyH:outer.reduce((s,e)=>s+e.offsetHeight,0),
     vp:(document.querySelector('meta[name=viewport]')||{}).content||'(none)'};
 })()`;
@@ -125,7 +141,7 @@ function makeCdp(wsUrl) {
     const { result } = await cdp.send('Runtime.evaluate', { expression: MEASURE, returnByValue: true }, sessionId);
     const v = result && result.value;
     if (!v) degrade('could not measure the page at ' + w + 'px');
-    const shot = join(outDir, 'verify-' + w + '.png');
+    const shot = join(outDir, shotName(target, w));
     const { data } = await cdp.send('Page.captureScreenshot', { format: 'png' }, sessionId);
     writeFileSync(shot, Buffer.from(data, 'base64')); shots.push(shot);
     if (v.innerWidth > w) {
@@ -145,6 +161,7 @@ function makeCdp(wsUrl) {
     if (hscroll && v.over.length) for (const o of v.over) lines.push('      overflow: <' + o.tag + ' .' + o.cls + '> right=' + o.right + '  "' + o.text + '"');
   }
   chrome.kill();
+  verdict = true;
   console.log((failed ? 'FAIL' : 'VERIFIED clean') + ' - responsive @ ' + widths.join('/') + 'px (real headless Chrome)');
   console.log(lines.join('\n'));
   console.log('  screenshots: ' + shots.join(', '));

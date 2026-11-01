@@ -1,9 +1,9 @@
 # Sanity
 
-> An inspired interpretation of Saniti's design language — a dark-first, content-platform marketing system that pairs an oversized editorial display sans (waldenburgNormal) with IBM Plex Mono for technical eyebrows.
+> An inspired interpretation of Saniti's design language: a dark-first, content-platform marketing system that pairs an oversized editorial display sans (waldenburgNormal) with IBM Plex Mono for technical eyebrows.
 
 **Category:** Developer Tools
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/sanity.json`](../../data/brands/sanity.json)
 
 ## Palette
@@ -18,7 +18,7 @@ _Type pair not yet documented._
 
 ## Philosophy
 
-An inspired interpretation of Saniti's design language — a dark-first, content-platform marketing system that pairs an oversized editorial display sans (waldenburgNormal) with IBM Plex Mono for technical eyebrows.
+An inspired interpretation of Saniti's design language: a dark-first, content-platform marketing system that pairs an oversized editorial display sans (waldenburgNormal) with IBM Plex Mono for technical eyebrows.
 
 ## Voice cues
 
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

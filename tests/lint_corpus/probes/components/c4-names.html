@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Page</title></head><body>
+<ul>
+<li><span>Rice</span><button type="button" aria-label="Remove">x</button></li>
+<li><span>Beans</span><button type="button" aria-label="Remove">x</button></li>
+</ul>
+<ul>
+<li><span>Rice</span><button type="button" aria-labelledby="r1 t1" id="r1">Remove</button><span id="t1">Rice</span></li>
+<li><span>Beans</span><button type="button" aria-labelledby="r2 t2" id="r2">Remove</button><span id="t2">Beans</span></li>
+</ul>
+<div role="menu">
+<div role="menuitem" aria-disabled="true">Archive</div>
+<div role="menuitem" aria-disabled="true" aria-describedby="why">Delete</div><p id="why">Only an owner can delete</p>
+</div>
+</body></html>

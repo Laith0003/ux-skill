@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.993,
+    "density": 0.5,
+    "formality": 0.588,
+    "geometry": 0.415,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/clickhouse.json: warmth from the hue and chroma of the primary #FAFF69 and the canvas #0A0A0A; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #FAFF69; density from its 4px spacing base; geometry from its radii 4, 6, 8, 12px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FAFF69",
+  "brand_rule": "The primary #FAFF69 reaches 18.45:1 on the canvas #0A0A0A, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#FAFF69",
+      "light": "#FAFF69"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0E0D0A",
+      "light": "#F7F7F5"
+    },
+    "radius_control": "5px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "812d56e3f26d7f5e"
+  },
+  "id": "clickhouse",
+  "name": "ClickHouse",
+  "spec": "data/brands/clickhouse.json"
+}

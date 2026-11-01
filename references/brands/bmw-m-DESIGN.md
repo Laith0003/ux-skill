@@ -3,7 +3,7 @@
 > A motorsport-engineering interface anchored on a near-black canvas with white BMW Type Next Latin display headlines in confident UPPERCASE.
 
 **Category:** Automotive
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/bmw-m.json`](../../data/brands/bmw-m.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

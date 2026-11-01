@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.5,
+    "formality": 0.495,
+    "geometry": 0.248,
+    "motion": 0.163,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/ea.json: warmth from the hue and chroma of the primary #FF4747 and the canvas #0D0D0D; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #FF4747; density from its 4px spacing base; geometry from its radii 0, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 150ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FF4747",
+  "brand_rule": "The primary #FF4747 reaches 5.78:1 on the canvas #0D0D0D, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#E42831",
+      "light": "#FF4747"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "4px",
+    "state_duration": "150ms",
+    "tokens": 729,
+    "tokens_sha256": "c057fcf2622f7954"
+  },
+  "id": "ea",
+  "name": "EA",
+  "spec": "data/brands/ea.json"
+}

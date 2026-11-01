@@ -1,0 +1,158 @@
+# Type
+
+## Summary
+
+{arabic} Type sets the faces, sizes, weights, line heights and letter spacing of all text, as sixteen text styles, one emphasis weight, two run faces and the icon sizes and stroke. Three faces do separate jobs: a display face for the largest statements, a text face for reading and controls, and a mono face for code (and labels in a technical system). The axes choose each face from a small catalog of open-license faces by where it sits on formality, warmth, roundness, type personality and contrast, and the brief's product_type adds how bookish a face is against a target that grows with type personality and formality, so a product people use (an app, software, a shop, a marketplace or a local service) leans to sans faces and an interface Arabic face while an editorial product may take a serif (decisions/faces-by-product-type.md); a playful tone word moves type personality toward humanist, so a playful brief gets a friendlier face (decisions/tone-words-reach-shape.md), and each has an Arabic face drawn to sit beside it. Sizes are in rem. Weight and letter spacing change along the scale (decisions/type-along-the-scale.md), and the display styles' line height follows their size, down to about 0.92 at the largest sizes, never under the face's ink clearance (decisions/display-follows-expressiveness.md). Under high contrast text styles are one weight heavier. Under right to left every style but code switches to its Arabic face at a size larger by the ratio the two faces' metrics give (decisions/arabic-proportional.md), with no letter spacing. Type does not govern text color or contrast; color does.
+{latin} Type sets the faces, sizes, weights, line heights and letter spacing of all text, as sixteen text styles, one emphasis weight, one run face and the icon sizes and stroke. Three faces do separate jobs: a display face for the largest statements, a text face for reading and controls, and a mono face for code (and labels in a technical system). The axes choose each face from a small catalog of open-license faces by where it sits on formality, warmth, roundness, type personality and contrast, and the brief's product_type adds how bookish a face is against a target that grows with type personality and formality, so a product people use leans to sans faces while an editorial product may take a serif (decisions/faces-by-product-type.md); a playful tone word moves type personality toward humanist, so a playful brief gets a friendlier face (decisions/tone-words-reach-shape.md). Sizes are in rem. Weight and letter spacing change along the scale (decisions/type-along-the-scale.md), and the display styles' line height follows their size, down to about 0.92 at the largest sizes, never under the face's ink clearance (decisions/display-follows-expressiveness.md). Under high contrast text styles are one weight heavier. Type does not govern text color or contrast; color does.
+
+## Principles
+
+- **Role before size.** A style is chosen for what the text is (a page title, a label, a caption), never for how big it should look.
+- **Hierarchy by size, character by weight.** The landing display, hero, headings and body fall in size, so size sets the rank. The display face's weight eases toward the heading weight as sizes fall, so a light, formal display or a heavy, playful one still meets the text face cleanly; inside a style, weight marks emphasis.
+- **Reading comes first.** Body styles keep a line height of 1.5 or more and no negative letter spacing.
+{arabic} - **Faces per job and script.** Display, text and mono each have their face, and each Latin face has an Arabic partner; a style never sets Arabic in a Latin face.
+{latin} - **Faces per job.** Display, text and mono each have their face; a style never sets code in the text face.
+- **One anchor per view.** The landing display or the hero, when used, appears once, never both; one heading level opens each section.
+- **Sizes follow the reader.** Rem sizes grow with the reader's own default text size.
+- **Styles are whole.** Size, line height, weight, letter spacing and face travel together in one composite.
+
+## Roles
+
+- `type.text.display`: the headline of a landing page, in the display face; about 60px at 1440 wide for a calm brand to about 240px for a loud one, rising with expressiveness (energy and playfulness), so a landing page reads as one in a quiet system too; it follows the width in vw up to 1440 (decisions/display-follows-expressiveness.md). Once per view, in place of the hero.
+- `type.text.display-caps`: the landing headline set in capitals, with text-transform: uppercase: the display's size, weight and leading with letter spacing at 0 or open, never tight. Use it when the report calls for capitals (a loud, informal brand); never for running text or a subhead.
+- `type.text.display-emphasis`: the emphasised words of a two-voice headline, in the same face as the display and at its size, lighter by the emphasis gap; set it in the display face's italic when type.emphasis.italic is 1 and tint it by type.emphasis.tone (decisions/two-voice-headline.md).
+- `type.text.hero`: the single largest statement on a view that is not a landing page, such as the title of a product's home or an empty state, in the display face; once per view.
+- `type.text.heading-1`: the title of a page, in the display face.
+- `type.text.section-title`: the title of a section of a long page, between the page title and heading-2, in the display face.
+- `type.phone.display`: the factor type.text.display's size and letter spacing take on a phone, every width below layout.breakpoint.tablet; it stays above the hero's phone size.
+- `type.phone.hero`: the factor type.text.hero's size and letter spacing take on a phone, every width below layout.breakpoint.tablet; tokens.css applies it, so a page reads the style as usual.
+- `type.phone.heading-1`: the factor type.text.heading-1 takes on a phone, a little gentler than the hero's.
+- `type.phone.section-title`: the factor type.text.section-title takes on a phone, so it stays under heading-1 there.
+- `type.phone.figure`: the factor type.text.figure takes on a phone: heading-1's, since the two share a step, so a figure never outranks the headline there.
+- `type.phone.display-caps`: the factor type.text.display-caps takes on a phone: the display's, since the two are one headline.
+- `type.phone.display-emphasis`: the factor type.text.display-emphasis takes on a phone: the display's, so the two voices keep one size.
+- `type.fluid.display.<tier>`: the display's size at the <tier> tier as a share of the viewport width, in vw: the largest at which the page's longest headline word fits the headline's column there, and from the laptop up no more than the display's size at 1440 wide; tokens.css sets the display to it, never above its size times its factor and never below 1px over the hero (decisions/display-follows-expressiveness.md).
+- `type.emphasis.tone`: how far the emphasised words move from color.text.default toward color.text.muted, 0 to 1; mix the two in that share, which keeps the words at the text minimum wherever the two already meet it.
+{arabic} - `type.emphasis.italic`: 1 when the emphasised words take the display face's italic, else 0; always 0 under right to left, since Arabic has no italic.
+{latin} - `type.emphasis.italic`: 1 when the emphasised words take the display face's italic, else 0.
+- `type.capitals`: how far the brand leans to a display in capitals, 0 to 1, from energy held back by formality; set the display on type.text.display-caps only at 0.5 and above, and keep sentence case under it (decisions/capitals-follow-the-signal.md).
+{arabic} - `type.fit.<style>.<tier>`: the most type.text.<style>'s size and letter spacing take from the <tier> breakpoint up, in its own script under each direction: at most 1, and small enough that the page's longest headline word (a 13 letter Latin word and a 10 letter Arabic word when the brief does not give it) fits the headline's column (the content width inside the landing margins and container; all of it on a tablet, the columns of twelve its composition sets the headline in from the laptop up), measured with the face's own letter advance and, for a Latin headline the brief gives, each letter's width (an m or a W counts for more than an i), in capitals when the brand sets its display in them, with room for the face's own spread (decisions/display-measures-each-letter.md), while the four largest styles keep falling in size; for the display it is the ceiling at the tier's widest column, and its fluid size takes it lower between; tokens.css applies it (decisions/display-follows-expressiveness.md). The figure takes heading-1's.
+{latin} - `type.fit.<style>.<tier>`: the most type.text.<style>'s size and letter spacing take from the <tier> breakpoint up: at most 1, and small enough that the page's longest headline word (13 letters when the brief does not give it) fits the headline's column (the content width inside the landing margins and container; all of it on a tablet, the columns of twelve its composition sets the headline in from the laptop up), measured with the face's own letter advance and, for a Latin headline the brief gives, each letter's width (an m or a W counts for more than an i), in capitals when the brand sets its display in them, with room for the face's own spread (decisions/display-measures-each-letter.md), while the four largest styles keep falling in size; for the display it is the ceiling at the tier's widest column, and its fluid size takes it lower between; tokens.css applies it (decisions/display-follows-expressiveness.md). The figure takes heading-1's.
+- `type.text.figure`: a price, an amount or a key number shown large, such as the numbers of a proof band on a landing page, in the display face at the page title's size, so three or four figures across a band hold it (decisions/figure-holds-a-number-band.md); set it with tabular figures.
+- `type.text.heading-2`: the title of a major block, or of a dialog, in the text face.
+- `type.text.heading-3`: the title of a card, a panel or a group.
+- `type.text.body`: paragraphs and any text people read in full.
+- `type.text.body-small`: secondary paragraphs and dense reading, such as table cells.
+- `type.text.ui`: labels on buttons, tabs and menus; short, one line. A field's label takes type.text.ui-large.
+- `type.text.ui-large`: the label of a field and of a large button; body size at the ui weight, so a label is never smaller than the value it names.
+- `type.text.label`: an eyebrow above a heading, a tag or a line of metadata, spaced open; set in the mono face in a technical system. An eyebrow is text only: never a line, dash or dot before or after it (decisions/eyebrow-is-text.md). When the project has an existing design system, its own label style wins: a system that sets its labels at zero tracking or in sentence case keeps them that way (decisions/existing-system-wins.md).
+- `type.text.fine`: captions, timestamps and small print nobody must read to act.
+- `type.text.code`: code, token names and values that need fixed-width characters.
+- `type.strong`: the weight of emphasis inside any style; the heading weight, and under high contrast at least 200 above body text, since body text gets heavier there (decisions/strong-under-high-contrast.md).
+{arabic} - `type.run.latin`: the face for a Latin run, such as a brand name or a code, inside a right-to-left paragraph.
+{latin} - `type.run.latin`: the text face, for a run that must keep it inside a style set in another face.
+{arabic} - `type.run.arabic`: the face for an Arabic run inside a left-to-right paragraph.
+- `type.icon.size.inline`: an icon inside a line of body text; the body size.
+- `type.icon.size.control`: an icon inside a button, a field or a menu item.
+- `type.icon.size.feature`: a large icon that heads a feature or an empty state.
+- `type.icon.stroke`: the stroke width of line icons drawn on a 24 unit grid, following the display weight.
+
+## Choosing
+
+| Text | Style |
+|---|---|
+| The headline of a landing page | type.text.display |
+| The one main statement of another view | type.text.hero |
+| A page title | type.text.heading-1 |
+| The title of a section of a long page | type.text.section-title |
+| A price, a key amount or a proof number shown large | type.text.figure |
+| A block title, a dialog title | type.text.heading-2 |
+| A card or panel title | type.text.heading-3 |
+| A paragraph, a banner body | type.text.body |
+| A field's helper text or error message | type.text.body-small |
+| A dense paragraph, a table cell | type.text.body-small |
+| A button, a tab, a menu item | type.text.ui |
+| A field's label, a large call to action | type.text.ui-large |
+| An eyebrow, a tag, metadata | type.text.label |
+| A timestamp, a caption | type.text.fine |
+| Code or an identifier | type.text.code |
+
+Styles that work together: a label above a section title, a hero or the landing display; the landing display with body text or a ui-large action directly below it; a band of figures, each with a label or body-small text below it; a heading above body text; a hero with body text or a ui action directly below it; a heading-3 with fine metadata below it, or with ui actions beside it kept at the ui weight; a ui-large label with body-small helper text; code with a fine caption. A heading never sits inside a card at the page title level, body text never labels a button, and fine print never carries text people must read to act, such as a field's error or helper text.
+
+## Modes
+
+{arabic} Type varies on direction, contrast and scheme. In dark mode at standard contrast every style set in a variable face is lighter, by about 40 at body size and 10 at display size, never under 300 or the face's lightest weight, since light text on a dark page reads heavier; a static face keeps its weights and high contrast keeps its own (decisions/dark-text-sets-lighter.md). Under dir="rtl" every style but code uses its Arabic face, the display styles the Arabic display face, at a size larger than the Latin size at the same step by the ratio the two faces' metrics give (at least 1px, at most a fifth), with taller line heights and letter spacing at 0, since spacing breaks the joins between Arabic letters. Code keeps its face, size and leading in both directions, with no letter spacing under right to left; a label set in the mono face switches to the Arabic face like any other text. Under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). Under right to left every weight, type.strong's too, is one the Arabic face ships, so a static face never gets a weight it lacks (decisions/font-files.md). The landing display, hero, heading-1 and section-title step down on a phone, and the figure with heading-1: below layout.breakpoint.tablet tokens.css multiplies their size and letter spacing by their type.phone factor (the display's about 0.4 to 0.65 of its desktop size, the others from a phone scale with a gentler ratio), and they keep falling in size above heading-2, 1px apart in both scripts, to within rounding (decisions/landing-display-step.md, decisions/phone-order-in-both-scripts.md). At every width the display takes its fluid size (type.fluid.display.<tier>) within its factor, so a long word still fits a small phone. No other style changes by breakpoint, and none with the density mode; sizes are rem. The brief's density axis sets the reading line heights and the ui size once, at build time.
+{latin} Type varies on contrast and scheme. In dark mode at standard contrast every style set in a variable face is lighter, by about 40 at body size and 10 at display size, never under 300 or the face's lightest weight, since light text on a dark page reads heavier; a static face keeps its weights and high contrast keeps its own (decisions/dark-text-sets-lighter.md). Under high contrast every style in the text or mono face is one weight heavier, within what the face ships (decisions/high-contrast-weights.md). The landing display, hero, heading-1 and section-title step down on a phone, and the figure with heading-1: below layout.breakpoint.tablet tokens.css multiplies their size and letter spacing by their type.phone factor (the display's about 0.4 to 0.65 of its desktop size, the others from a phone scale with a gentler ratio), and they keep falling in size above heading-2 (decisions/landing-display-step.md). At every width the display takes its fluid size (type.fluid.display.<tier>) within its factor, so a long word still fits a small phone. No other style changes by breakpoint, and none with the density mode; sizes are rem. The brief's density axis sets the reading line heights and the ui size once, at build time.
+
+## Changing the system
+
+{arabic} 1. Type moves with every axis: the type personality, formality, warmth, geometry and contrast axes choose the faces with the brief's product_type, the contrast, motion and formality axes set the display weight and the landing display size through expressiveness, the contrast and formality axes the letter spacing, the contrast axis the scale ratio, and the density axis the reading line heights, the ui size and a tighter ratio. Without --latin-only the build keeps an Arabic face beside each Latin one. Change them in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+{latin} 1. Type moves with every axis: the type personality, formality, warmth, geometry and contrast axes choose the faces with the brief's product_type, the contrast, motion and formality axes set the display weight and the landing display size through expressiveness, the contrast and formality axes the letter spacing, the contrast axis the scale ratio, and the density axis the reading line heights, the ui size and a tighter ratio. Change them in --axes or the brief and build again with `uxskill system build`, adding --force to replace the files in the same folder and --rule-pack to refresh this pack, then read the system report it writes beside tokens.json.
+2. The build keeps body at 16px or more, fine at 12px or more, reading line heights at 1.5 or more, the order display, hero, heading-1, section-title, heading-2, heading-3, body falling in size, no style lighter under high contrast and the icon sizes rising; a failed check names the style and the mode.
+3. Never edit a generated value in tokens.json or tokens.css: the build has not checked it, and the next build replaces it.
+4. Repointing one role, exempting a role from a check or adding a role comes with the 4.1 importers and the extend mode. Until then, record the need for the system owner.
+
+## Audit scope
+
+{arabic} Audits the text styles in both directions and both contrast modes: minimum sizes, line height and letter spacing for reading, the Arabic rules, rem units, the size order, high contrast weights and the icon sizes. Every text style is held to the same contrast minimum by color, whatever its size (decisions/no-large-text-relaxation.md), so no large-text classification is needed. Whether headings and labels describe their content (WCAG 2.4.6) is a content check (content.md). It does not audit text color.
+{latin} Audits the text styles in both contrast modes: minimum sizes, line height and letter spacing for reading, rem units, the size order, high contrast weights and the icon sizes. Every text style is held to the same contrast minimum by color, whatever its size (decisions/no-large-text-relaxation.md), so no large-text classification is needed. Whether headings and labels describe their content (WCAG 2.4.6) is a content check (content.md). It does not audit text color.
+
+## Checks
+
+{arabic} - `type-sizes`: body is at least 16px and every other style at least 12px, in both directions.
+{latin} - `type-sizes`: body is at least 16px and every other style at least 12px.
+- `reading-leading`: body, body-small, fine and code have a line height of 1.5 or more (WCAG 1.4.8, AAA).
+- `reading-tracking`: reading styles and the ui label style never tighten letter spacing.
+{arabic} - `arabic-text`: under right to left every style but code uses its Arabic face at a size at least 1px and at most a fifth above its Latin size, with taller leading, and no style spaces letters.
+{latin} - `arabic-text`: this build has one script, so the check has nothing to hold.
+{arabic} - `rem-sizes`: every style's size is in rem, in both directions.
+{latin} - `rem-sizes`: every style's size is in rem.
+{arabic} - `phone-hierarchy`: on a phone display, hero, heading-1 and section-title keep falling in size above heading-2, in both directions, each factor sits above 0 and at most 1, and the figure never sits above heading-1.
+{latin} - `phone-hierarchy`: on a phone display, hero, heading-1 and section-title keep falling in size above heading-2, each factor sits above 0 and at most 1, and the figure never sits above heading-1.
+{arabic} - `display-fits`: at every tier the page's longest headline word, Latin and Arabic, fits the headline's column at the display's size at the tier's narrowest and widest widths (the fluid size where the set has one), and from the tablet up the display, hero, heading-1 and section-title keep falling, 1.08 times apart, above heading-2, in each script.
+{latin} - `display-fits`: at every tier the page's longest headline word fits the headline's column at the display's size at the tier's narrowest and widest widths (the fluid size where the set has one), and from the tablet up the display, hero, heading-1 and section-title keep falling, 1.08 times apart, above heading-2.
+{arabic} - `type-hierarchy`: display, hero, heading-1, section-title, heading-2, heading-3 and body fall in size, each at least 1.08 times the next, our floor, in both directions.
+{latin} - `type-hierarchy`: display, hero, heading-1, section-title, heading-2, heading-3 and body fall in size, each at least 1.08 times the next, our floor.
+- `high-contrast-weights`: under high contrast no style is lighter than at standard contrast, in either scheme.
+- `dark-weights`: in dark mode at standard contrast no style is heavier than in light mode.
+- `strong-weight`: under high contrast type.strong is at least 200 above body text.
+- `icon-sizes`: inline, control and feature icons rise in size, and the stroke stays between 1 and 3 units.
+- `type-tracking-order`: down from display to body, no style tracks tighter than the larger style above it.
+- `line-height-floor`: a display style whose leading follows its size keeps a line height of 0.88 or more, our floor; every other style a line height above 1.
+- `display-clearance`: a display style set under a line height of 1 leaves a descender and the ascender of the next line at least 0.02em apart, from the face's measured ink.
+- `code-face`: the mono face list ends in ui-monospace or monospace.
+
+## Beyond the gate
+
+- The landing display or the hero appears at most once per view, and one heading level opens each section.
+- Text set at 200 percent zoom still fits its container without cutting words (WCAG 1.4.4).
+- Line length for running text stays within layout.measure.text.
+{arabic} - An Arabic block inside a Latin page takes the Arabic styles from dir="rtl" or lang="ar" (or any "ar-" tag) on its element; a block in another Arabic-script language, such as lang="arz" or lang="fa", also needs dir="rtl"; a Latin run inside Arabic text takes type.run.latin.
+{arabic} - A page that ships Arabic loads the Arabic face; a missing face falls back to its matched fallback in fonts.css; without fonts.css the sizes break.
+- Headings and labels say what follows them; a vague heading is a content finding.
+
+## Handoff notes
+
+- Each style is five custom properties: font-family, font-size, font-weight, line-height and letter-spacing, named after the style, such as --type-text-body-font-size.
+- Apply a style as a whole, all five properties together; never size text with a raw value.
+- fonts.css, written beside tokens.css, holds a metric-matched fallback for each face, named "<face> Fallback", so text keeps its size and line breaks while the face loads; it does not load the faces. Load them with the Google Fonts link the system report gives, or with fonts-self-host.css and the files it names in a fonts/ folder, and link fonts.css with either one, before tokens.css. Edit neither file (decisions/font-files.md).
+- Set type.text.figure with font-variant-numeric: tabular-nums, so amounts line up.
+- Draw line icons with stroke-width from type.icon.stroke and size them with the type.icon.size roles.
+{arabic} - Direction switches with dir on the html element, and an element inside the page with dir="rtl" or an Arabic lang takes every style's Arabic values on its own, faces, sizes and line heights included (decisions/direction-on-any-subtree.md).
+- The landing display, hero, heading-1 and section-title step down on a phone on their own; read their properties as usual and never copy a breakpoint to resize them.
+- A landing page's headline takes type.text.display. Never enlarge the hero with a size of your own to make a landing page read as one: the display step is the larger size, built and checked.
+- Emphasis inside text uses font-weight from type.strong.
+
+## Common mistakes
+
+- Using the hero or heading-1 more than once on a view: the anchor disappears.
+- Setting a landing page's headline in the hero with a larger font-size of your own: the size is unchecked and breaks the order with the display step; use type.text.display.
+- Setting proof numbers in heading-2 or body at a bold weight: a number band needs type.text.figure with tabular figures.
+- Using body for button labels: controls need the compact ui style.
+- Shrinking the hero or the landing display with a media query of your own: tokens.css already steps them down on a phone, and a second rule breaks the order with heading-1.
+- Using a heading level inside a card that belongs to the page: the hierarchy inverts.
+- Using fine print for text people must read: it is too small to sustain.
+{arabic} - Tightening letter spacing on Arabic text: the letters disconnect.
+- Using fine print for a field's helper or error text: people must read it to act; use body-small.
+- Setting body text in the display face: the display face is drawn for large sizes.
+- Drawing a line, dash or dot before or after an eyebrow, with a pseudo-element, an empty span, an edge, a background or an SVG: it adds no structure and reads as generated; the label style carries the eyebrow alone.

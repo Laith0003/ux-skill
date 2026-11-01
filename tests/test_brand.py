@@ -357,13 +357,14 @@ def test_imagery_real_image_passes():
     assert r["ok"] is True and r["kind"] == "image"
 
 
-def test_imagery_substantial_svg_passes():
-    """A real inline SVG illustration (large viewBox) counts as imagery."""
+def test_imagery_an_illustration_alone_fails():
+    """A page must carry a photograph: an inline SVG illustration, however
+    large, is not one."""
     html = ('<!doctype html><html><body><main>'
             '<svg viewBox="0 0 480 320"><path d="M0 0h480v320H0z"/></svg>'
             '</main></body></html>')
     r = score_imagery(html)
-    assert r["ok"] is True and r["kind"] == "illustration-svg"
+    assert r["ok"] is False and r["kind"] == "illustration-only"
 
 
 def test_imagery_icon_only_page_fails():

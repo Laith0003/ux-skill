@@ -1,0 +1,52 @@
+# Stats band: numbers the client can stand behind. Every value is a semantic role.
+name: stats-band
+status: experimental
+category: section
+description: Two to four numbers the client can date and source, each with what it counts, on a band when the brand's energy gives bands.
+job: Prove an outcome with numbers the client can stand behind.
+parts:
+  - {name: container, rtlBehavior: logical}
+  - {name: heading, rtlBehavior: logical}
+  - {name: body, rtlBehavior: logical}
+  - {name: stat, rtlBehavior: logical}
+  - {name: label, rtlBehavior: logical}
+slots:
+  - {name: stat, takes: [text], required: true}
+variants:
+  - {name: density, values: [standard, compact], default: standard}
+states: [default]
+tokens:
+  - {part: container, property: fill, role: color.surface.band}
+  - {part: container, property: padding-block, role: layout.region-gap.desktop}
+  - {part: container, property: padding-inline, role: layout.margin-inline.desktop}
+  - {part: container, property: gap, role: layout.gutter.desktop}
+  - {part: heading, property: font, role: type.text.section-title}
+  - {part: heading, property: text, role: color.text.default}
+  - {part: stat, property: font, role: type.text.figure}
+  - {part: stat, property: text, role: color.text.default}
+  - {part: label, property: font, role: type.text.body}
+  - {part: label, property: text, role: color.text.muted}
+  - {part: body, property: font, role: type.text.body}
+  - {part: body, property: text, role: color.text.muted}
+contrast:
+  - {fg: color.text.default, bg: color.surface.band, minimum: 4.5, criterion: "1.4.3"}
+  - {fg: color.text.muted, bg: color.surface.band, minimum: 4.5, criterion: "1.4.3"}
+surfaces: [color.surface.band]
+proof: {kinds: [stats, case-studies], drop: "with no number the client can date and source the band would invent one, so it drops"}
+phone: [pair-small-items]
+a11y:
+  target: none
+  label: localized
+  cue: none
+copy:
+  default:
+    - Each label says what the number counts and when
+usage:
+  do:
+    - Show the date or source with each number
+    - On a phone, pair the numbers two to a row
+  dont:
+    - Do not round a number up to make it read bigger
+provenance:
+  figma: {node: null, variantCount: null, lastVerified: null}
+  drift: []

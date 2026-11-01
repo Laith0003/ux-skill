@@ -1,0 +1,1147 @@
+"""The markdown importer: a system that lives only in rule files. Token
+tables (a name column and a value column, or two mode columns) and lists of
+backticked names with values are read; prose, other tables and code blocks
+are not tokens, and anything unreadable is reported with its file and line."""
+import ast
+from pathlib import Path
+
+import pytest
+
+from engine.foundations.errors import InputError
+from engine.io.markdown_in import (
+    NAME_HEADERS, PROSE_HEADERS, VALUE_HEADERS, import_markdown, read_markdown)
+from engine.io.report import Source
+
+COLOR = """# Color rules
+
+Our brand leans warm. Never put text on the accent fill.
+
+| Token | Light | Dark | Notes |
+|---|---|---|---|
+| `ink.900` | #17181c | #f4f4f2 | Body text |
+| `paper` | #fbfaf7 | #121316 | Page |
+| `accent` | `#c2410c` | | Links and focus |
+| `text.body` | `{ink.900}` | | Alias |
+| `veil` | rgba(0, 0, 0, 0.4) | rgba(0, 0, 0, 0.6) | Behind dialogs |
+| Accent hover | darker accent | | prose, not a token |
+
+| Do | Don't |
+|---|---|
+| Use `accent` for links | Use `accent` for body text |
+"""
+
+SPACE = """# Spacing
+
+- `space.1`: 4px
+- `space.2` = 8px
+- `space.gutter`: {space.2}
+- `space.huge`: 3em
+- Keep gaps on the 4px grid.
+
+```css
+:root { --space-9: 36px; }
+```
+
+| Name | Value |
+|---|---|
+| `radius.card` | 12px |
+| `space.1` | 6px |
+"""
+
+PAIRED = ("a table with Light and Dark columns; Light was read as the base and Dark as "
+          "scheme:dark")
+
+
+def _write(tmp_path):
+    folder = tmp_path / "rules"
+    folder.mkdir()
+    (folder / "color.md").write_text(COLOR, encoding="utf-8")
+    (folder / "space.md").write_text(SPACE, encoding="utf-8")
+    return folder
+
+
+def _import(text, name="rules.md"):
+    return import_markdown([(name, text)], Source(name, "markdown", "0" * 64, len(text)))
+
+
+def _rows(items):
+    return [(i.where, i.name, i.message) for i in items]
+
+
+def test_the_header_names_are_published():
+    assert "token" in NAME_HEADERS and "value" in VALUE_HEADERS and "notes" in PROSE_HEADERS
+
+
+def test_a_folder_of_rule_files_reads_tables_and_lists(tmp_path):
+    imported = read_markdown(_write(tmp_path))
+    ts = imported.tokens
+    assert [t.path for t in ts.tokens()] == [
+        "ink.900", "paper", "accent", "text.body", "veil", "space.1", "space.2", "space.gutter",
+        "radius.card"]
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert (ts.get("ink.900").value, ts.get("ink.900").modes) == (
+        "#17181C", {"scheme:dark": "#F4F4F2"})
+    assert ts.get("ink.900").layer == "semantic"
+    assert (ts.get("accent").value, ts.get("accent").modes, ts.get("accent").layer) == (
+        "#C2410C", {}, "primitive")
+    assert (ts.get("text.body").value, ts.get("text.body").layer) == ("{ink.900}", "semantic")
+    assert ts.resolve("text.body", "scheme:dark") == "#F4F4F2"
+    assert ts.get("veil").value == "#00000066"
+    assert ts.get("space.gutter").value == "{space.2}"
+    assert ts.get("space.1").value == {"value": 4, "unit": "px"}
+
+
+def test_the_report_names_each_file_and_line(tmp_path):
+    folder = _write(tmp_path)
+    report = read_markdown(folder).report
+    assert report.source.format == "markdown" and report.source.path == str(folder)
+    assert report.entries == 12 and report.tokens == 9
+    assert _rows(report.notes) == [
+        ("color.md:5", "", PAIRED),
+        ("color.md:14", "", "the Do and Don't table (line 14) holds guidance, not values, and "
+                            "was kept as a rule"),
+        ("space.md:9", "", "a css code block was not read; import the stylesheet itself with "
+                           "--from and a .css file")]
+    assert _rows(report.not_read) == [
+        ("color.md:12", "Accent hover", "is not a token name; write the name in backticks, for "
+                                        "example `color.accent`"),
+        ("space.md:6", "space.huge", "3em is relative to the parent's font size, so it has no "
+                                     "fixed value; write it in px or rem"),
+        ("space.md:7", "", "holds 4px in running text, which is not read as a token; write it "
+                           "as a list item such as - `size.<name>`: 4px, or as a row of a "
+                           "table with Token and Value columns"),
+        ("space.md:16", "space.1", "is set again with another value (6px); space.md:3 set it "
+                                   "first to 4px, which was kept, so keep one")]
+
+
+def test_the_digest_covers_every_file_in_name_order(tmp_path):
+    folder = _write(tmp_path)
+    first = read_markdown(folder).report.source
+    assert first.size == len(COLOR.encode()) + len(SPACE.encode())
+    (folder / "space.md").write_text(SPACE + "\n", encoding="utf-8")
+    assert read_markdown(folder).report.source.sha256 != first.sha256
+
+
+def test_a_single_file_reads_too(tmp_path):
+    f = tmp_path / "color.md"
+    f.write_text(COLOR, encoding="utf-8")
+    imported = read_markdown(f)
+    assert [t.path for t in imported.tokens.tokens()] == [
+        "ink.900", "paper", "accent", "text.body", "veil"]
+
+
+def test_an_alias_to_a_name_no_file_defines_is_named():
+    report = _import("- `a`: {b.c}\n").report
+    assert [(i.name, i.message) for i in report.not_read] == [
+        ("a", "references b.c, which no file defines; define it or write the value")]
+
+
+def test_an_alias_to_a_value_that_was_not_read_says_which():
+    report = _import("- `a`: 3em\n- `b`: {a}\n- `c`: var(--b)\n").report
+    assert _rows(report.not_read) == [
+        ("rules.md:1", "a", "3em is relative to the parent's font size, so it has no fixed "
+                            "value; write it in px or rem"),
+        ("rules.md:2", "b", "references a, which was not read; fix a and import again"),
+        ("rules.md:3", "c", "references b, which was not read; fix b and import again")]
+
+
+def test_a_loop_of_references_is_named():
+    report = _import("- `a`: {b}\n- `b`: {a}\n").report
+    assert report.tokens == 0
+    assert [i.message for i in report.not_read] == [
+        "references only itself through a loop of references; give one of them a value"] * 2
+
+
+def test_a_folder_with_no_markdown_is_named(tmp_path):
+    with pytest.raises(InputError) as exc:
+        read_markdown(tmp_path)
+    assert str(exc.value) == (f"--from {tmp_path} holds no .md file; pass a markdown rule file or "
+                              "the folder that holds them")
+
+
+def test_a_file_that_is_not_utf8_is_named(tmp_path):
+    f = tmp_path / "rules.md"
+    f.write_bytes(b"- `a`: #fff \xff\n")
+    with pytest.raises(InputError) as exc:
+        read_markdown(f, "--rules")
+    assert str(exc.value) == (f"--rules {f} is not UTF-8 text; save it as UTF-8 and pass it "
+                              "again")
+
+
+def test_a_missing_file_is_named(tmp_path):
+    f = tmp_path / "gone.md"
+    with pytest.raises(InputError, match=r"^--from .*gone\.md cannot be read \(.*\); pass a "):
+        read_markdown(f)
+
+
+def test_an_out_of_gamut_oklch_is_mapped_and_reported():
+    imported = _import("| Token | Value |\n|---|---|\n| `vivid` | oklch(0.7 0.35 145) |\n")
+    assert imported.tokens.get("vivid").type == "color"
+    [m] = imported.report.mapped
+    assert (m.where, m.name, m.original) == ("rules.md:3", "vivid", "oklch(0.7 0.35 145)")
+    assert m.hex == imported.tokens.get("vivid").value and m.distance > 0
+
+
+def test_a_dark_first_table_still_reads_light_as_the_base():
+    text = "| Role | Dark mode | Light mode |\n|---|---|---|\n| `bg` | #000000 | #ffffff |\n"
+    ts = _import(text).tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert (ts.get("bg").value, ts.get("bg").modes) == ("#FFFFFF", {"scheme:dark": "#000000"})
+
+
+def test_a_value_column_and_a_dark_column_read_as_base_and_dark():
+    text = "| Name | Value | Dark |\n|---|---|---|\n| `bg` | #ffffff | #000000 |\n"
+    ts = _import(text).tokens
+    assert (ts.get("bg").value, ts.get("bg").modes) == ("#FFFFFF", {"scheme:dark": "#000000"})
+
+
+def test_two_columns_named_for_another_axis_read_on_that_axis():
+    text = "| Token | Comfortable | Compact |\n|---|---|---|\n| `gap` | 16px | 8px |\n"
+    ts = _import(text).tokens
+    assert dict(ts.axes) == {"density": ("comfortable", "compact")}
+    assert ts.get("gap").modes == {"density:compact": {"value": 8, "unit": "px"}}
+
+
+def test_two_columns_named_for_no_known_axis_make_their_own():
+    text = "| Token | Brand | Partner |\n|---|---|---|\n| `accent` | #ff0000 | #0000ff |\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {"brand-partner": ("brand", "partner")}
+    assert imported.tokens.get("accent").modes == {"brand-partner:partner": "#0000FF"}
+
+
+def test_a_value_the_mode_column_cannot_read_names_the_column():
+    text = "| Token | Light | Dark |\n|---|---|---|\n| `bg` | #ffffff | calc(1px) |\n"
+    report = _import(text).report
+    assert _rows(report.not_read) == [
+        ("rules.md:3", "bg", "in the Dark column, calc(1px) is computed by the browser; write "
+                             "the value it computes to")]
+
+
+def test_an_empty_base_cell_names_the_column():
+    text = "| Token | Light | Dark |\n|---|---|---|\n| `bg` | | #000000 |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:3", "bg", "has no value in the Light column; write one there")]
+
+
+def test_a_row_short_of_cells_is_named():
+    text = "| Token | Value |\n|---|---|\n| `bg` |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:3", "bg", "has 1 cell where the header has 2; give the row one cell per "
+                             "column")]
+
+
+def test_tables_without_outer_pipes_are_read():
+    text = "Token | Value\n--- | ---\n`corner.tight` | 4px\n"
+    assert _import(text).tokens.get("corner.tight").value == {"value": 4, "unit": "px"}
+
+
+def test_a_second_value_column_is_not_read():
+    text = "| Token | Px | Rem |\n|---|---|---|\n| `space.4` | 16px | 1rem |\n"
+    imported = _import(text)
+    assert imported.tokens.get("space.4").value == {"value": 16, "unit": "px"}
+    assert imported.report.notes == []
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:1", "Rem", "is a second value column beside Px, so it was not read; keep one "
+                              "value column, or head the columns with mode names such as Light "
+                              "and Dark if they differ by mode")]
+
+
+def test_a_table_with_more_mode_columns_than_its_axes_reads_the_rest():
+    text = ("| Token | Light | Dark | Dim |\n|---|---|---|---|\n| `bg` | #fff | #000 | #111 |\n")
+    imported = _import(text)
+    assert imported.report.tokens == 1 and imported.report.entries == 1
+    assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+    assert [(i.name, i.message.split(",")[0]) for i in imported.report.not_read] == [
+        ("Dim", "names no mode")]
+
+
+def test_mode_columns_that_cannot_name_an_axis_are_not_read():
+    text = "| Token | 100% | 200% |\n|---|---|---|\n| `z` | 1 | 2 |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:1", "", "a table with the columns 100% and 200% was not read, since 100% "
+                           "and 200% cannot name a mode, whose name starts with a letter; head "
+                           "those columns with a mode name such as Dark or High contrast")]
+
+
+def test_prose_tables_and_code_blocks_are_not_tokens():
+    text = ("| Role | Description |\n|---|---|\n| `accent` | links |\n\n"
+            "~~~\n- `x`: 4px\n~~~\n\n```json\n- `y`: 4px\n```\n"
+            "- plain item: 4px\n- `z` is used for gaps\n")
+    imported = _import(text)
+    assert imported.report.entries == 0 and imported.report.notes == []
+    # Not tokens, and never dropped silently: each place that holds a value
+    # is listed with its fix.
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:5", "", "a code block holds 4px, which is not read as tokens; list them in a "
+                           "table with Token and Value columns, or as list items such as - "
+                           "`size.<name>`: 4px"),
+        ("rules.md:9", "", "a json code block holds 4px, which is not read as tokens; if they "
+                           "come from a token file, import that file with --from and its .json "
+                           "path; otherwise list them in a table with Token and Value columns"),
+        ("rules.md:12", "plain item", "holds 4px under a name not in backticks, so it was not "
+                                      "read; write it as - `size.plain-item`: 4px")]
+
+
+def test_a_name_set_twice_with_the_same_value_is_not_reported():
+    report = _import("- `a`: 4px\n- `a`: `4px`\n").report
+    assert report.tokens == 1 and report.entries == 2 and report.not_read == []
+
+
+def test_a_name_set_again_with_another_mode_value_is_reported():
+    text = ("| Token | Light | Dark |\n|---|---|---|\n| `bg` | #fff | #000 |\n"
+            "| `bg` | #fff | #111 |\n")
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:4", "bg", "is set again with another Dark value (#111); rules.md:3 set it "
+                             "first to #000, which was kept, so keep one")]
+
+
+def test_a_slash_in_a_name_reads_as_a_dot_and_is_reported():
+    imported = _import("- `color/accent`: #c2410c\n")
+    assert imported.tokens.has("color.accent")
+    assert _rows(imported.report.renamed) == [
+        ("rules.md:1", "color/accent", "read as color.accent, since a slash in a name reads as "
+                                       "a dot")]
+
+
+def test_a_name_in_bold_is_read():
+    text = "| Token | Value |\n|---|---|\n| **brand** | #3b82f6 |\n| __ink__ | #111 |\n"
+    assert [t.path for t in _import(text).tokens.tokens()] == ["brand", "ink"]
+
+
+def test_a_value_that_changes_type_between_modes_is_named():
+    text = "| Token | Light | Dark |\n|---|---|---|\n| `bg` | #fff | 4px |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:3", "bg", "holds a color in the Light column and a dimension in the Dark "
+                             "column; give it one type")]
+
+
+def test_the_reader_does_not_import_the_writer():
+    import engine.io.markdown_in
+
+    tree = ast.parse(Path(engine.io.markdown_in.__file__).read_text(encoding="utf-8"))
+    names = [n.module for n in ast.walk(tree) if isinstance(n, ast.ImportFrom)]
+    assert "engine.foundations.emit" not in names
+
+
+def test_the_package_exports_the_importer():
+    import engine.io
+
+    assert engine.io.read_markdown is read_markdown
+    assert {"import_markdown", "read_markdown", "Mapped", "GamutMapped"} <= set(engine.io.__all__)
+
+
+def test_a_row_with_an_empty_name_cell_names_the_column():
+    text = "| Token | Value |\n|---|---|\n| | #ffffff |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:3", "", "has no name; write the token's name in the Token column")]
+
+
+def test_two_columns_naming_the_same_mode_are_not_read():
+    text = "| Token | Dark | Dark mode |\n|---|---|---|\n| `bg` | #000 | #111 |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:1", "", "a table with the columns Dark and Dark mode was not read, since both "
+                           "name the mode dark; head them with two mode names such as Light and "
+                           "Dark")]
+
+
+def test_a_high_contrast_column_reads_on_the_contrast_axis():
+    text = "| Token | Standard | High contrast |\n|---|---|---|\n| `ink` | #333 | #000 |\n"
+    ts = _import(text).tokens
+    assert dict(ts.axes) == {"contrast": ("standard", "high")}
+    assert ts.get("ink").modes == {"contrast:high": "#000000"}
+
+
+def test_a_var_reference_is_an_alias_and_its_fallback_is_noted():
+    imported = _import("- `ink`: #111\n- `text`: var(--ink, #000)\n")
+    assert imported.tokens.get("text").value == "{ink}"
+    assert _rows(imported.report.notes) == [
+        ("rules.md:2", "text", "its fallback #000 was left out; the reference holds the value")]
+
+
+def test_a_reference_the_mode_column_cannot_read_names_the_column():
+    text = "| Token | Light | Dark |\n|---|---|---|\n| `bg` | #fff | var(--a) var(--b) |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:3", "bg", "in the Dark column, var(--a) var(--b) joins several values with "
+                             "var(); split it into one token per value")]
+
+
+def test_a_reference_to_a_name_of_two_types_is_not_read_either():
+    text = ("| Token | Light | Dark |\n|---|---|---|\n| `bg` | #fff | 4px |\n"
+            "| `surface` | {bg} | |\n")
+    imported = _import(text)
+    assert imported.report.tokens == 0
+    assert [i.name for i in imported.report.not_read] == ["bg", "surface"]
+    assert imported.report.not_read[1].message == (
+        "references bg, which was not read; fix bg and import again")
+
+
+# A rule written like a token is a rule: it is listed once per file, never
+# read as a value, and a real font list still reads as a font.
+RULES = """| Token | Value |
+|---|---|
+| `color.text` | #1b1d22 |
+
+- `accent`: use for links and focus, never for body text
+- `radius.card`: 12px, use for cards only
+- `color.text`: always meets 4.5:1 on `color.bg`
+- `font.body`: Inter, system-ui, sans-serif
+- `font.mono`: "Mono Face", ui-monospace, monospace
+- `font.head`: Display Serif, Georgia, serif
+"""
+
+
+def test_a_value_written_as_prose_is_kept_as_a_rule():
+    imported = _import(RULES)
+    ts = imported.tokens
+    assert [t.path for t in ts.tokens()] == ["color.text", "font.body", "font.mono", "font.head"]
+    assert imported.report.entries == 4 and imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:5", "", "3 lines hold rules, not values, and were kept as rules: `accent` "
+                           "(line 5), `radius.card` (line 6), `color.text` (line 7); to make "
+                           "one a token, write only its value after the colon or in the cell, "
+                           "and put the rule on its own line")]
+
+
+def test_a_font_list_is_still_a_font():
+    ts = _import(RULES).tokens
+    assert (ts.get("font.body").type, ts.get("font.body").value) == (
+        "fontFamily", ["Inter", "system-ui", "sans-serif"])
+    assert ts.get("font.mono").value == ["Mono Face", "ui-monospace", "monospace"]
+    assert ts.get("font.head").value == ["Display Serif", "Georgia", "serif"]
+
+
+def test_one_rule_in_a_file_is_named_in_the_singular():
+    report = _import("- `accent`: for links\n").report
+    assert _rows(report.notes) == [
+        ("rules.md:1", "", "1 line holds a rule, not a value, and was kept as a rule: `accent` "
+                           "(line 1); to make it a token, write only its value after the colon "
+                           "or in the cell, and put the rule on its own line")]
+
+
+def test_rules_are_grouped_per_file(tmp_path):
+    folder = tmp_path / "rules"
+    folder.mkdir()
+    (folder / "a.md").write_text("- `x`: for links\n", encoding="utf-8")
+    (folder / "b.md").write_text("- `y`: 4px\n- `z`: never on dark fills\n", encoding="utf-8")
+    notes = read_markdown(folder).report.notes
+    assert [(i.where, i.message.split(":")[0]) for i in notes] == [
+        ("a.md:1", "1 line holds a rule, not a value, and was kept as a rule"),
+        ("b.md:2", "1 line holds a rule, not a value, and was kept as a rule")]
+
+
+@pytest.mark.parametrize("light, dark", [
+    ("Light (default)", "Dark"), ("Light hex", "Dark hex"), ("Light", "Dark mode"),
+    ("Light value", "Dark value")])
+def test_a_header_holding_a_mode_word_reads_as_that_mode(light, dark):
+    text = f"| Token | {light} | {dark} | Notes |\n|---|---|---|---|\n| `bg` | #fff | #000 | x |\n"
+    ts = _import(text).tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert ts.get("bg").modes == {"scheme:dark": "#000000"}
+
+
+def test_the_token_column_wins_over_a_role_column():
+    text = "| Role | Token | Value |\n|---|---|---|\n| Body text | `color.text` | #111 |\n"
+    imported = _import(text)
+    assert [t.path for t in imported.tokens.tokens()] == ["color.text"]
+    assert imported.report.not_read == [] and imported.report.notes == []
+
+
+def test_a_usage_map_is_noted_once_not_per_row():
+    text = ("| Component | Token |\n|---|---|\n| Primary button | `color.accent` |\n"
+            "| Card | `radius.card` |\n")
+    imported = _import(text)
+    assert imported.report.entries == 0 and imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "a table whose Component column holds no values was not read as "
+                           "tokens; head the value column Value, Hex or Size to read it")]
+
+
+def test_a_column_beside_the_value_that_names_no_mode_is_not_read():
+    text = "| Token | Value | Hover |\n|---|---|---|\n| `accent` | #c2410c | #9a3412 |\n"
+    imported = _import(text)
+    assert imported.tokens.get("accent").modes == {}
+    assert imported.report.notes == []
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:1", "Hover", "names no mode, so its column was not read; head it with a mode "
+                                "name such as Dark or High contrast, or put it in a table of its "
+                                "own with a base column")]
+
+
+def test_a_name_set_again_after_an_unreadable_first_value_says_so():
+    report = _import("- `a`: 3em\n- `a`: 4px\n").report
+    assert _rows(report.not_read) == [
+        ("rules.md:1", "a", "3em is relative to the parent's font size, so it has no fixed "
+                            "value; write it in px or rem"),
+        ("rules.md:2", "a", "is set again with another value (4px); rules.md:1 set it first to "
+                            "3em, which was not read (3em is relative to the parent's font size, "
+                            "so it has no fixed value; write it in px or rem); the first value "
+                            "wins, so no value is used for a; fix that line or remove it, and "
+                            "keep one")]
+
+
+def test_an_indented_code_block_is_not_read():
+    text = "Example:\n\n    | Token | Value |\n    |---|---|\n    | `a` | 4px |\n\n- `b`: 8px\n"
+    imported = _import(text)
+    assert [t.path for t in imported.tokens.tokens()] == ["b"]
+
+
+def test_an_indented_list_item_inside_a_list_is_read():
+    text = "- `a`: 4px\n\n    - `b`: 8px\n"
+    assert [t.path for t in _import(text).tokens.tokens()] == ["a", "b"]
+
+
+def test_a_table_inside_a_fence_is_not_read():
+    text = "```\n| Token | Value |\n|---|---|\n| `a` | 4px |\n```\n"
+    imported = _import(text)
+    assert imported.report.entries == 0 and imported.report.notes == []
+
+
+def test_a_folder_is_read_in_name_order(tmp_path):
+    folder = tmp_path / "rules"
+    folder.mkdir()
+    (folder / "b.md").write_text("- `second`: 8px\n", encoding="utf-8")
+    (folder / "a.md").write_text("- `first`: 4px\n", encoding="utf-8")
+    assert [t.path for t in read_markdown(folder).tokens.tokens()] == ["first", "second"]
+
+
+def test_a_name_set_again_after_a_first_value_dropped_for_a_reference_says_so():
+    report = _import("- `a`: {missing}\n- `a`: 4px\n").report
+    assert _rows(report.not_read) == [
+        ("rules.md:1", "a", "references missing, which no file defines; define it or write the "
+                            "value"),
+        ("rules.md:2", "a", "is set again with another value (4px); rules.md:1 set it first to "
+                            "{missing}, which was not read (references missing, which no file "
+                            "defines; define it or write the value); the first value wins, so no "
+                            "value is used for a; fix that line or remove it, and keep one")]
+    assert report.tokens == 0
+
+
+@pytest.mark.parametrize("value", ["Links, Buttons", "Gray, Slate", "Small, Medium, Large"])
+def test_a_comma_list_of_names_without_font_evidence_is_a_rule(value):
+    for text in (f"- `link`: {value}\n", f"| Token | Value |\n|---|---|\n| `link` | {value} |\n"):
+        imported = _import(text)
+        assert imported.report.tokens == 0 and imported.report.not_read == []
+        [note] = imported.report.notes
+        assert note.message.startswith("1 line holds a rule, not a value")
+        assert note.message.endswith("; a font list reads when its font names are quoted or it "
+                                     "ends in a generic family such as sans-serif")
+
+
+@pytest.mark.parametrize("line", [
+    "- `font.body`: Inter, Arial",
+    "- `brand.family`: Inter, Arial",
+    "- `body`: Inter, Arial, sans-serif",
+    "- `body`: Inter, Arial, ui-sans-serif",
+    "- `body`: Inter, Arial, emoji",
+    "- `body`: \"Brand Sans\", Arial",
+    "- `body`: helvetica neue, arial, sans-serif",
+])
+def test_a_comma_list_of_names_with_evidence_is_a_font(line):
+    imported = _import(line + "\n")
+    [token] = imported.tokens.tokens()
+    assert token.type == "fontFamily" and imported.report.notes == []
+
+
+def test_a_type_column_header_is_font_evidence():
+    text = "| Name | Typeface |\n|---|---|\n| `body` | Inter, Arial |\n"
+    assert _import(text).tokens.get("body").value == ["Inter", "Arial"]
+
+
+def test_a_font_column_of_unquoted_stacks_reads():
+    text = ("| Token | Font |\n|---|---|\n| `body` | Inter, system-ui, sans-serif |\n"
+            "| `mono` | Mono Face, Courier |\n")
+    imported = _import(text)
+    assert imported.tokens.get("body").value == ["Inter", "system-ui", "sans-serif"]
+    assert imported.tokens.get("mono").value == ["Mono Face", "Courier"]
+    assert imported.report.notes == []
+
+
+def test_a_prose_rule_does_not_get_the_font_hint():
+    [note] = _import("- `accent`: use for links, never for text\n").report.notes
+    assert "font list" not in note.message
+
+
+def test_a_bare_type_in_a_name_is_not_font_evidence():
+    imported = _import("- `type.sizes`: Small, Large\n")
+    assert imported.report.tokens == 0
+    [note] = imported.report.notes
+    assert note.message.startswith("1 line holds a rule, not a value")
+
+
+def test_a_type_column_of_size_names_is_not_read_as_fonts():
+    imported = _import("| Token | Type |\n|---|---|\n| `size` | Small, Large |\n")
+    assert imported.report.tokens == 0
+    assert [i.message for i in imported.report.notes] == [
+        "a table whose Type column holds no values was not read as tokens; head the value "
+        "column Value, Hex or Size to read it"]
+
+
+@pytest.mark.parametrize("text", [
+    "- `type.family.body`: Inter, Arial\n",
+    "- `fontFamily`: Inter, Arial\n",
+    "| Token | Font family |\n|---|---|\n| `body` | Inter, Arial |\n",
+])
+def test_font_family_or_typeface_in_the_context_is_evidence(text):
+    [token] = _import(text).tokens.tokens()
+    assert (token.type, token.value) == ("fontFamily", ["Inter", "Arial"])
+
+
+@pytest.mark.parametrize("head, axes", [
+    ("| Token | Standard | High |", {"standard-high": ("standard", "high")}),
+    ("| Token | Standard | Reduced |", {"standard-reduced": ("standard", "reduced")}),
+    ("| Token | Standard | High contrast |", {"contrast": ("standard", "high")}),
+    ("| Token | Standard motion | Reduced motion |", {"motion": ("standard", "reduced")}),
+])
+def test_standard_high_and_reduced_name_an_axis_only_beside_its_name(head, axes):
+    text = f"{head}\n|---|---|---|\n| `gap` | 8px | 4px |\n"
+    assert dict(_import(text).tokens.axes) == axes
+
+
+def test_a_lone_high_or_reduced_column_needs_the_axis_name():
+    text = "| Token | Value | High |\n|---|---|---|\n| `gap` | 8px | 4px |\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {}
+    assert [(i.name, i.message.split(",")[0]) for i in imported.report.not_read] == [
+        ("High", "names no mode")]
+    text = "| Token | Value | Reduced motion |\n|---|---|---|\n| `t` | 200ms | 0ms |\n"
+    assert dict(_import(text).tokens.axes) == {"motion": ("standard", "reduced")}
+
+
+def test_an_indented_line_right_after_a_heading_is_code_as_in_commonmark():
+    text = "# Tokens\n    - `a`: 4px\n\n- `b`: 8px\n"
+    assert [t.path for t in _import(text).tokens.tokens()] == ["b"]
+    # A paragraph line is not a heading: an indented line after it continues it.
+    text = "Spacing\n    - `a`: 4px\n"
+    assert [t.path for t in _import(text).tokens.tokens()] == ["a"]
+
+
+@pytest.mark.parametrize("before", ["Tokens\n======\n", "Tokens\n------\n", "```\nx\n```\n",
+                                    "***\n"])
+def test_an_indented_line_after_a_setext_heading_a_fence_or_a_break_is_code(before):
+    text = f"{before}    - `a`: 4px\n\n- `b`: 8px\n"
+    assert [t.path for t in _import(text).tokens.tokens()] == ["b"]
+
+
+# One column per axis: a base column and a column for each axis a header
+# names. Whatever is left out is listed under Not read, never only noted,
+# so the report cannot say nothing was left unread after dropping a value.
+def test_a_value_column_reads_one_mode_column_per_axis():
+    text = ("| Token | Value | Dark | High contrast |\n|---|---|---|---|\n"
+            "| `ink` | #333333 | #eeeeee | #000000 |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark"), "contrast": ("standard", "high")}
+    assert (ts.get("ink").value, ts.get("ink").modes) == (
+        "#333333", {"scheme:dark": "#EEEEEE", "contrast:high": "#000000"})
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "a table with Value, Dark and High contrast columns; Value was read "
+                           "as the base, Dark as scheme:dark and High contrast as contrast:high")]
+    assert imported.report.not_read == []
+
+
+def test_three_mode_columns_on_two_axes_read_all_three():
+    text = ("| Token | Light | Dark | High contrast |\n|---|---|---|---|\n"
+            "| `ink` | #333333 | #eeeeee | #000000 |\n")
+    ts = _import(text).tokens
+    assert (ts.get("ink").value, ts.get("ink").modes) == (
+        "#333333", {"scheme:dark": "#EEEEEE", "contrast:high": "#000000"})
+
+
+def test_a_second_column_for_one_axis_is_not_read_and_says_why():
+    text = ("| Token | Light | Dark | Dim |\n|---|---|---|---|\n| `bg` | #fff | #000 | #111 |\n\n"
+            "| Token | Value | Dark | Dark hex |\n|---|---|---|---|\n"
+            "| `fg` | #111 | #eee | #ddd |\n")
+    imported = _import(text)
+    assert imported.tokens.get("bg").modes == {"scheme:dark": "#000000"}
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:1", "Dim", "names no mode, so its column was not read; head it with a mode "
+                              "name such as Dark or High contrast, or put it in a table of its "
+                              "own with a base column"),
+        ("rules.md:5", "Dark hex", "is a second column for the scheme axis, which Dark holds, so "
+                                   "it was not read; keep one column per axis, or put it in a "
+                                   "table of its own")]
+    assert "Nothing was left unread." not in imported.report.markdown()
+
+
+def test_many_columns_the_matcher_cannot_place_read_the_base():
+    text = ("| Token | Brand | Partner | Retail |\n|---|---|---|---|\n"
+            "| `accent` | #ff0000 | #00ff00 | #0000ff |\n")
+    imported = _import(text)
+    assert (imported.tokens.get("accent").value, imported.tokens.get("accent").modes) == (
+        "#FF0000", {})
+    assert [(i.name, i.message.split(",")[0]) for i in imported.report.not_read] == [
+        ("Partner", "names no mode"), ("Retail", "names no mode")]
+
+
+def test_a_default_column_is_the_base_opposite_a_mode():
+    text = "| Token | Default | Dark |\n|---|---|---|\n| `bg` | #ffffff | #000000 |\n"
+    ts = _import(text).tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    assert ts.get("bg").modes == {"scheme:dark": "#000000"}
+
+
+# A unit in the header, or in the heading above, is the unit of a bare
+# number; a size with no unit anywhere is never read as a plain number.
+@pytest.mark.parametrize("header, want", [
+    ("Value (px)", {"value": 16, "unit": "px"}), ("Size [rem]", {"value": 16, "unit": "rem"}),
+    ("Px", {"value": 16, "unit": "px"}), ("Duration (ms)", {"value": 16, "unit": "ms"}),
+])
+def test_a_unit_in_the_header_is_the_unit_of_a_bare_number(header, want):
+    text = f"| Token | {header} |\n|---|---|\n| `step` | 16 |\n| `half` | 8.5px |\n"
+    imported = _import(text)
+    assert imported.tokens.get("step").value == want
+    assert imported.tokens.get("half").value == {"value": 8.5, "unit": "px"}
+    assert imported.report.not_read == []
+
+
+def test_a_unit_in_the_heading_is_the_unit_of_a_bare_number():
+    text = ("## Spacing (px)\n\n| Token | Value |\n|---|---|\n| `space.4` | 16 |\n\n"
+            "- `space.2`: 8\n\n## Motion, in ms\n\n- `motion.fast`: 120\n")
+    ts = _import(text).tokens
+    assert ts.get("space.4").value == {"value": 16, "unit": "px"}
+    assert ts.get("space.2").value == {"value": 8, "unit": "px"}
+    assert ts.get("motion.fast").value == {"value": 120, "unit": "ms"}
+
+
+def test_a_bare_letter_spacing_is_not_read_and_names_the_unit_to_write():
+    text = "- `letter-spacing.tight`: -0.02\n- `tracking.wide`: 0.04\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:1", "letter-spacing.tight",
+         "-0.02 has no unit, and its name says it is a letter spacing, which is often written "
+         "in em, so it was not read; write -0.02em, or the unit it has"),
+        ("rules.md:2", "tracking.wide",
+         "0.04 has no unit, and its name says it is a letter spacing, which is often written "
+         "in em, so it was not read; write 0.04em, or the unit it has")]
+
+
+def test_a_size_with_no_unit_anywhere_is_read_as_px_and_a_duration_is_not_read():
+    text = ("| Token | Value |\n|---|---|\n| `space.4` | 16 |\n| `radius.card` | 12 |\n"
+            "| `line-height.body` | 1.5 |\n| `weight.bold` | 700 |\n| `space.0` | 0 |\n"
+            "| `container.max` | 1200 |\n| `elevation.raised` | 2 |\n\n"
+            "- `shadow.offset`: 2\n- `motion.delay.quick`: 120\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert [t.path for t in ts.tokens()] == [
+        "space.4", "radius.card", "line-height.body", "weight.bold", "space.0", "container.max",
+        "elevation.raised", "shadow.offset"]
+    assert ts.get("line-height.body").value == 1.5 and ts.get("weight.bold").value == 700
+    assert ts.get("space.0").value == {"value": 0, "unit": "px"}
+    assert {p: ts.get(p).value["value"] for p in (
+        "space.4", "radius.card", "container.max", "elevation.raised", "shadow.offset")} == {
+        "space.4": 16, "radius.card": 12, "container.max": 1200, "elevation.raised": 2,
+        "shadow.offset": 2}
+    assert ts.get("container.max").value["unit"] == "px"
+    tail = "so it was read as {v}px; write {v}px to say so, or the unit it has if it is not px"
+    assert [r for r in _rows(imported.report.notes) if "has no unit" in r[2]] == [
+        ("rules.md:3", "space.4", "16 has no unit, and its name says it is a size (space), "
+                                  + tail.format(v=16)),
+        ("rules.md:4", "radius.card", "12 has no unit, and its name says it is a size "
+                                      "(radius), " + tail.format(v=12)),
+        ("rules.md:8", "container.max", "1200 has no unit, and its name says it is a size "
+                                        "(container), " + tail.format(v=1200)),
+        ("rules.md:9", "elevation.raised", "2 has no unit, and its name says it is a size "
+                                           "(elevation), " + tail.format(v=2)),
+        ("rules.md:11", "shadow.offset", "2 has no unit, and its name says it is a size "
+                                         "(offset), " + tail.format(v=2))]
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:12", "motion.delay.quick", "120 has no unit, and motion.delay.quick is a "
+                                              "duration; write the unit, such as 120ms, or name "
+                                              "it in the heading above, such as ## Motion (ms)")]
+
+
+# A palette keyed by step reads as family.step primitives.
+def test_a_palette_table_keyed_by_step_reads_family_dot_step():
+    text = ("| Step | Blue | Warm gray | Notes |\n|---|---|---|---|\n"
+            "| 50 | #eff6ff | #fafaf9 | lightest |\n| 100 | #dbeafe | | |\n"
+            "| 900 | #1e3a8a | #1c1917 | text |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert [t.path for t in ts.tokens()] == [
+        "blue.50", "warm-gray.50", "blue.100", "blue.900", "warm-gray.900"]
+    assert ts.get("blue.50").value == "#EFF6FF" and ts.get("blue.50").layer == "primitive"
+    assert imported.report.entries == 5 and imported.report.not_read == []
+
+
+def test_a_palette_table_with_steps_across_the_top_reads_too():
+    text = ("| Family | 50 | 500 |\n|---|---|---|\n| Blue | #eff6ff | #3b82f6 |\n"
+            "| Red | #fef2f2 | #ef4444 |\n| | #000 | #111 |\n")
+    imported = _import(text)
+    assert [t.path for t in imported.tokens.tokens()] == ["blue.50", "blue.500", "red.50",
+                                                          "red.500"]
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:5", "", "a palette row with no family name; write the family in the Family "
+                           "column, such as Blue")]
+
+
+def test_a_palette_column_with_no_family_name_is_not_read():
+    text = "| Step | Blue | |\n|---|---|---|\n| 50 | #eff6ff | #fafaf9 |\n"
+    imported = _import(text)
+    assert [t.path for t in imported.tokens.tokens()] == ["blue.50"]
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:1", "", "a palette column (column 3) has no family name, so it was not "
+                           "read; head it with the family, such as Blue")]
+
+
+# Do and Avoid tables are guidance: no axis, and the rule note holds them.
+@pytest.mark.parametrize("head", ["| Do | Avoid |", "| Do | Don't |", "| Use | Avoid |",
+                                  "| Good | Bad |", "| Token | Do | Avoid |"])
+def test_a_do_and_avoid_table_is_guidance_not_a_mode(head):
+    cells = "|".join([" `accent` "] + [" #c2410c "] * (head.count("|") - 2))
+    text = f"{head}\n|{'---|' * (head.count('|') - 1)}\n|{cells}|\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {} and imported.report.tokens == 0
+    assert imported.report.not_read == []
+    [note] = imported.report.notes
+    columns = " and ".join(c.strip() for c in head.strip("|").split("|")
+                           if c.strip() != "Token")
+    assert note.message == (f"the {columns} table (line 1) holds guidance, not values, and was "
+                            "kept as a rule")
+
+
+@pytest.mark.parametrize("head, label", [
+    ("| Token | Definition | Avoid |", "Definition and Avoid"),
+    ("| Name | Meaning | Avoid |", "Meaning and Avoid"),
+    ("| Role | Definition | Usage | Avoid |", "Definition, Usage and Avoid"),
+], ids=["definition", "meaning", "usage"])
+def test_a_definition_and_avoid_table_is_guidance_not_a_mode(head, label):
+    width = head.count("|") - 1
+    rows = ["| `color.ink` | Body text on light grounds. | Text over photographs. |",
+            "| `color.edge` | Hairlines between rows. | Borders on buttons. |"]
+    if width == 4:
+        rows = [r.replace(" | Text", " | Long reads. | Text").replace(" | Borders",
+                                                                       " | Tables. | Borders")
+                for r in rows]
+    text = "\n".join([head, "|" + "---|" * width, *rows]) + "\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {} and imported.report.tokens == 0
+    assert imported.report.not_read == []
+    [note] = imported.report.notes
+    assert note.message == (f"the {label} table (line 1) holds guidance, not values, and was "
+                            "kept as a rule")
+
+
+def test_guidance_joins_the_rules_of_its_file():
+    text = "- `accent`: for links\n\n| Do | Avoid |\n|---|---|\n| a | b |\n"
+    [note] = _import(text).report.notes
+    assert note.message == (
+        "1 line holds a rule, not a value, and was kept as a rule: `accent` (line 1); to make it "
+        "a token, write only its value after the colon or in the cell, and put the rule on its "
+        "own line; the Do and Avoid table (line 3) holds guidance, not values, and was kept as "
+        "a rule")
+
+
+# A column that names each token's alias reads as its value.
+@pytest.mark.parametrize("head", ["Alias", "References", "Maps to"])
+def test_an_alias_column_reads_a_reference_or_a_backticked_name(head):
+    text = (f"| Token | {head} |\n|---|---|\n| `gray.900` | #111111 |\n"
+            "| `text.body` | `gray.900` |\n| `text.muted` | {gray.900} |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert ts.get("text.body").value == "{gray.900}" and ts.get("text.muted").value == \
+        "{gray.900}"
+    assert ts.get("text.body").layer == "semantic" and imported.report.not_read == []
+
+
+@pytest.mark.parametrize("head", ["Alias of", "Aliased to", "Alias for", "Reference to",
+                                  "Points to", "Refers to", "Maps to"])
+def test_an_alias_header_with_a_preposition_is_the_alias_column(head):
+    text = (f"| Token | Value | {head} |\n|---|---|---|\n| `gray.900` | #111111 | |\n"
+            "| `text.body` | | `gray.900` |\n")
+    imported = _import(text)
+    assert imported.tokens.get("text.body").value == "{gray.900}"
+    assert imported.report.not_read == []
+
+
+def test_an_alias_column_for_a_mode_holds_the_reference_in_that_mode():
+    text = ("| Token | Light | Dark | Dark alias |\n|---|---|---|---|\n"
+            "| `gray.100` | #EEEEEE | #EEEEEE | |\n| `gray.900` | #111111 | #111111 | |\n"
+            "| `text.body` | {gray.900} | | `gray.100` |\n"
+            "| `text.muted` | {gray.900} | #777777 | |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert dict(ts.axes) == {"scheme": ("light", "dark")}
+    body = ts.get("text.body")
+    assert (body.value, body.modes) == ("{gray.900}", {"scheme:dark": "{gray.100}"})
+    assert ts.get("text.muted").modes == {"scheme:dark": "#777777"}
+    assert imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "a table with Light, Dark and Dark alias columns; Light was read as "
+                           "the base and Dark as scheme:dark; Dark alias was read as the "
+                           "reference in scheme:dark where it holds one")]
+
+
+def test_alias_columns_named_for_each_mode_read_without_value_columns():
+    text = ("| Token | Light alias | Dark alias |\n|---|---|---|\n"
+            "| `gray.100` | #EEEEEE | #EEEEEE |\n| `gray.900` | #111111 | #111111 |\n"
+            "| `text.body` | `gray.900` | `gray.100` |\n")
+    imported = _import(text)
+    body = imported.tokens.get("text.body")
+    assert (body.value, body.modes) == ("{gray.900}", {"scheme:dark": "{gray.100}"})
+    assert imported.report.not_read == []
+
+
+def test_an_alias_column_for_no_mode_or_a_second_one_names_the_fix():
+    text = ("| Token | Value | Brand alias | Dark alias | Dark mode alias |\n"
+            "|---|---|---|---|---|\n| `gray.900` | #111111 | | | |\n")
+    rows = _rows(_import(text).report.not_read)
+    assert rows == [
+        ("rules.md:1", "Brand alias", "is an alias column for brand, which names no mode, so it "
+                                      "was not read; head it with a mode name and alias, such "
+                                      "as Dark alias, or put it in a table of its own"),
+        ("rules.md:1", "Dark mode alias", "is a second alias column for the scheme axis, which "
+                                          "Dark alias holds, so it was not read; keep one alias "
+                                          "column per mode")]
+
+
+def test_an_alias_cell_with_several_names_is_noted_with_the_fix():
+    text = ("| Token | Value | Aliases |\n|---|---|---|\n"
+            "| `gray.900` | #111111 | `text.body`, `text.title` |\n")
+    imported = _import(text)
+    assert imported.tokens.get("gray.900").value == "#111111"
+    assert ("rules.md:3", "gray.900",
+            "in the Aliases column, `text.body`, `text.title` holds more than one name, and a "
+            "token references one, so the cell was not read; if they are other names for "
+            "gray.900, write each as a row of its own with `gray.900` in the Aliases column") \
+        in _rows(imported.report.notes)
+
+
+def test_a_guidance_column_beside_a_value_column_is_not_a_mode():
+    text = "| Token | Value | Avoid |\n|---|---|---|\n| `gray.900` | #111111 | On photos. |\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {} and imported.report.not_read == []
+
+
+def test_a_guidance_column_beside_a_value_column_joins_the_rule_note():
+    text = ("| Token | Value | Avoid |\n|---|---|---|\n| `color.brand` | #112233 | text on dark |\n"
+            "\n| Token | Value | Do | Don't |\n|---|---|---|---|\n"
+            "| `color.ink` | #111111 | body text | captions |\n")
+    imported = _import(text)
+    assert imported.tokens.get("color.brand").value == "#112233"
+    assert imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:1", "", "the Avoid column of the table on line 1 and the Do and Don't columns "
+                           "of the table on line 5 hold guidance, not values, and were kept as "
+                           "rules")]
+    assert "the Avoid column of the table on line 1" in imported.report.markdown()
+
+
+@pytest.mark.parametrize("text", [
+    "| Token | Size (points) |\n|---|---|\n| `space.2` | 8px |\n",
+    "| Token | Font | Size (points) | Weight | Line height | Letter spacing |\n"
+    "|---|---|---|---|---|---|\n| `type.body` | Inter | 16px | 400 | 1.5 | 0 |\n",
+], ids=["value", "type"])
+def test_a_header_that_holds_a_word_like_points_is_not_an_alias_column(text):
+    imported = _import(text)
+    said = " ".join(i.message for i in imported.report.notes + imported.report.not_read)
+    assert "alias" not in said and "no column names the tokens" not in said
+    if "space.2" in text:
+        assert imported.tokens.get("space.2").value == {"value": 8, "unit": "px"}
+
+
+def test_a_column_that_cannot_name_a_mode_names_itself_and_the_fix():
+    text = "| Token | Light | 2x |\n|---|---|---|\n| `gray.900` | #111111 | #222222 |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:1", "", "a table with the columns Light and 2x was not read, since 2x cannot "
+                           "name a mode, whose name starts with a letter; head that column with "
+                           "a mode name such as Dark or High contrast")]
+
+
+def test_a_token_column_beside_a_name_column_is_the_alias():
+    text = ("| Name | Token |\n|---|---|\n| `gray.900` | #111111 |\n"
+            "| `text.body` | `gray.900` |\n")
+    ts = _import(text).tokens
+    assert ts.get("text.body").value == "{gray.900}"
+
+
+def test_an_alias_column_beside_a_value_column_wins_where_it_holds_a_reference():
+    text = ("| Token | Value | Alias |\n|---|---|---|\n| `gray.900` | #111111 | |\n"
+            "| `text.body` | #111111 | `gray.900` |\n| `text.link` | #2255cc | n/a |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert ts.get("text.body").value == "{gray.900}" and ts.get("text.link").value == "#2255CC"
+    assert imported.report.not_read == []
+
+
+def test_an_alias_cell_that_is_not_a_reference_gives_the_accurate_fix():
+    text = "| Token | Alias |\n|---|---|\n| `gray.900` | #111111 |\n| `text.body` | gray.900 |\n"
+    assert _rows(_import(text).report.not_read) == [
+        ("rules.md:4", "text.body", "in the Alias column, gray.900 is not written as a "
+                                    "reference; write it in braces, {gray.900}, or in "
+                                    "backticks")]
+
+
+def test_entries_count_the_names_of_a_table_that_was_not_read():
+    text = "| Token | 100% | 200% |\n|---|---|---|\n| `z` | 1 | 2 |\n| `y` | 3 | 4 |\n"
+    report = _import(text).report
+    assert report.entries == 2 and report.tokens == 0
+    assert [i.where for i in report.not_read] == ["rules.md:1"]
+
+
+# Columns that name a typography or motion property are fields of the row's
+# token, never modes.
+TYPE_TABLE = """| Token | Font | Size (px) | Weight | Line height | Letter spacing |
+|---|---|---|---|---|---|
+| `type.body` | Inter | 16 | 400 | 1.5 | 0 |
+| `type.title` | "Display Sans", sans-serif | 24 | 600 | 1.25 | -0.2px |
+"""
+
+
+def test_a_type_table_with_every_field_reads_each_row_as_one_typography_token():
+    imported = _import(TYPE_TABLE)
+    ts = imported.tokens
+    assert [(t.path, t.type) for t in ts.tokens()] == [("type.body", "typography"),
+                                                       ("type.title", "typography")]
+    assert ts.get("type.body").value == {
+        "fontFamily": ["Inter"], "fontSize": {"value": 16, "unit": "px"}, "fontWeight": 400,
+        "lineHeight": 1.5, "letterSpacing": {"value": 0, "unit": "px"}}
+    assert ts.get("type.title").value["fontFamily"] == ["Display Sans", "sans-serif"]
+    assert ts.get("type.title").value["letterSpacing"] == {"value": -0.2, "unit": "px"}
+    assert imported.report.not_read == [] and imported.report.entries == 2
+
+
+def test_leading_and_tracking_are_line_height_and_letter_spacing():
+    text = ("| Name | Family | Size | Weight | Leading | Tracking |\n|---|---|---|---|---|---|\n"
+            "| `type.caption` | Inter | 12px | 500 | 1.4 | 0.01rem |\n")
+    ts = _import(text).tokens
+    assert ts.get("type.caption").value["lineHeight"] == 1.4
+    assert ts.get("type.caption").value["letterSpacing"] == {"value": 0.01, "unit": "rem"}
+
+
+def test_a_type_field_that_cannot_be_read_names_its_column_and_the_fix():
+    text = ("| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | 16 | bold | 24px | 0 |\n")
+    imported = _import(text)
+    assert list(imported.tokens.tokens()) == []
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:3", "type.body", "in the Size column, 16 has no unit, and a font size is a "
+                                    "size; write the unit in the cell, such as 16px, or in the "
+                                    "column header, such as Size (px)")]
+    fixed = text.replace("| 16 |", "| 16px |")
+    assert _rows(_import(fixed).report.not_read) == [
+        ("rules.md:3", "type.body", "in the Weight column, bold is not a font weight; write it "
+                                    "as a number from 1 to 1000, such as 700")]
+    fixed = fixed.replace("bold", "700").replace("| 0 |", "| 0.2em |")
+    assert _rows(_import(fixed).report.not_read)[0][2].startswith(
+        "in the Letter spacing column, 0.2em")
+
+
+def test_a_line_height_in_px_is_read_against_the_size_of_its_style():
+    text = ("| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | 16px | 400 | 24px | 0 |\n"
+            "| `type.small` | Inter | 0.875rem | 400 | 1.25rem | 0 |\n"
+            "| `type.note` | Inter | 14px | 400 | 20px | 0 |\n")
+    imported = _import(text)
+    ts = imported.tokens
+    assert ts.get("type.body").value["lineHeight"] == 1.5
+    assert ts.get("type.small").value["lineHeight"] == 1.4286
+    assert ts.get("type.note").value["lineHeight"] == 1.4286
+    assert imported.report.not_read == []
+    assert _rows(imported.report.notes) == [
+        ("rules.md:3", "type.body", "in the Line height column, 24px is a length; it was read "
+                                    "against the font size 16px as 1.5, the multiple of the "
+                                    "font size the engine keeps; write 1.5 to say so"),
+        ("rules.md:4", "type.small", "in the Line height column, 1.25rem is a length; it was "
+                                     "read against the font size 0.875rem as 1.4286, the "
+                                     "multiple of the font size the engine keeps; write 1.4286 "
+                                     "to say so"),
+        ("rules.md:5", "type.note", "in the Line height column, 20px is a length; it was read "
+                                    "against the font size 14px as 1.4286, the multiple of the "
+                                    "font size the engine keeps; write 1.4286 to say so")]
+
+
+def test_a_line_height_in_another_unit_than_its_size_or_beside_a_reference_is_not_read():
+    text = ("| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | 1rem | 400 | 24px | 0 |\n"
+            "| `size.md` | | | | | |\n"
+            "| `type.lead` | Inter | {size.md} | 400 | 28px | 0 |\n")
+    rows = [r for r in _rows(_import(text).report.not_read) if r[1] != "size.md"]
+    assert rows == [
+        ("rules.md:3", "type.body", "in the Line height column, 24px is a length in px and the "
+                                    "font size 1rem is in rem, so it cannot be read as a "
+                                    "multiple of the font size; write it as a number, such as "
+                                    "1.5, or write both in one unit"),
+        ("rules.md:5", "type.lead", "in the Line height column, 28px is a length and the font "
+                                    "size is the reference {size.md}, so it cannot be read as a "
+                                    "multiple of the font size here; write it as a number, such "
+                                    "as 1.5")]
+
+
+def test_type_properties_beside_a_size_with_no_font_column_say_how_to_read_them():
+    text = ("| Token | Size | Line height | Weight | Letter spacing |\n|---|---|---|---|---|\n"
+            "| `type.body` | 16px | 1.5 | 400 | 0 |\n")
+    imported = _import(text)
+    assert imported.tokens.get("type.body").value == {"value": 16, "unit": "px"}
+    rows = _rows(imported.report.not_read)
+    assert rows == [
+        ("rules.md:1", "Line height", "is the line height of each token, so its column was not "
+                                      "read; add a Font column to read each row as one "
+                                      "typography token, or write each line height as its own "
+                                      "token, such as `type.body.line-height` | 1.5"),
+        ("rules.md:1", "Weight", "is the weight of each token, so its column was not read; add "
+                                 "a Font column to read each row as one typography token, or "
+                                 "write each weight as its own token, such as "
+                                 "`type.body.weight` | 400"),
+        ("rules.md:1", "Letter spacing", "is the letter spacing of each token, so its column "
+                                         "was not read; add a Font column to read each row as "
+                                         "one typography token, or write each letter spacing as "
+                                         "its own token, such as `type.body.letter-spacing` | 0")]
+    assert not any("mode" in m for _, _, m in rows)
+
+
+def test_a_curve_beside_a_duration_is_its_own_token_not_a_mode():
+    for header in ("Curve", "Easing"):
+        text = (f"| Token | Duration | {header} |\n|---|---|---|\n"
+                "| `motion.fast` | 120ms | cubic-bezier(0.2, 0, 0, 1) |\n")
+        imported = _import(text)
+        assert imported.tokens.get("motion.fast").value == {"value": 120, "unit": "ms"}
+        slug = header.lower()
+        assert _rows(imported.report.not_read) == [
+            ("rules.md:1", header, f"is the {slug} of each token, and the engine holds no "
+                                   "transition token, so its column was not read; write each "
+                                   f"{slug} as its own token, such as `motion.fast.{slug}` | "
+                                   "cubic-bezier(0.2, 0, 0, 1)")]
+
+
+def test_a_font_and_a_weight_never_make_a_mode_axis():
+    text = "| Token | Font | Weight |\n|---|---|---|\n| `type.body` | Inter, sans-serif | 400 |\n"
+    imported = _import(text)
+    assert dict(imported.tokens.axes) == {}
+    assert imported.tokens.get("type.body").value == ["Inter", "sans-serif"]
+    assert [(n, m.split(",")[0]) for _, n, m in _rows(imported.report.not_read)] == [
+        ("Weight", "is the weight of each token")]
+
+
+def test_a_type_field_may_reference_a_token_of_its_own_type():
+    text = ("- `size.md`: 16px\n- `weight.regular`: 400\n- `color.ink`: #111111\n\n"
+            "| Token | Font | Size | Weight | Line height | Letter spacing |\n"
+            "|---|---|---|---|---|---|\n"
+            "| `type.body` | Inter | {size.md} | {weight.regular} | 1.5 | 0 |\n"
+            "| `type.bad` | Inter | {color.ink} | 400 | 1.5 | 0 |\n")
+    imported = _import(text)
+    body = imported.tokens.get("type.body")
+    assert (body.value["fontSize"], body.value["fontWeight"], body.layer) == (
+        "{size.md}", "{weight.regular}", "semantic")
+    assert _rows(imported.report.not_read) == [
+        ("rules.md:8", "type.bad", "in the Size column, references color.ink, a color, where a "
+                                   "dimension belongs; point it at a dimension")]
+
+
+def test_a_shadow_with_bare_offsets_reads_with_the_unit_its_header_or_heading_names():
+    for text in ("| Token | Value (px) |\n|---|---|\n| `shadow.card` | 0 2 8 #0000001A |\n",
+                 "## Elevation (px)\n\n- `shadow.card`: 0 2 8 #0000001A\n"):
+        imported = _import(text)
+        assert imported.tokens.get("shadow.card").value == [{
+            "color": "#0000001A", "offsetX": {"value": 0, "unit": "px"},
+            "offsetY": {"value": 2, "unit": "px"}, "blur": {"value": 8, "unit": "px"},
+            "spread": {"value": 0, "unit": "px"}}]
+        assert imported.report.not_read == []
+
+
+def test_a_shadow_with_bare_offsets_and_no_unit_anywhere_names_the_shadow_fix():
+    report = _import("| Token | Value |\n|---|---|\n| `shadow.card` | 0 2 8 #0000001A |\n").report
+    assert _rows(report.not_read) == [
+        ("rules.md:3", "shadow.card", "0 2 8 #0000001A is a shadow whose offsets have no unit; "
+                                      "add px to each offset, such as 0 2px 8px #0000001A")]

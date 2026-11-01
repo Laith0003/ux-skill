@@ -3,7 +3,7 @@
 > The Verge's 2024 redesign feels like somebody wired a Condé Nast magazine to a chiptune soundboard.
 
 **Category:** Editorial / Media
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/theverge.json`](../../data/brands/theverge.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

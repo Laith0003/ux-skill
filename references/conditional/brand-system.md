@@ -1,6 +1,6 @@
 # Brand System (conditional reference, v3)
 
-This reference is invoked only when the surface being reviewed or designed is a brand identity surface — a logo, brand guidelines document, visual system tokens, brand book, or any artifact whose job is to define the brand rather than to express it inside a product.
+This reference is invoked only when the surface being reviewed or designed is a brand identity surface: a logo, brand guidelines document, visual system tokens, brand book, or any artifact whose job is to define the brand rather than to express it inside a product.
 
 Full content lands in v3. This stub captures the framework so commands that route through it have something concrete to apply now.
 
@@ -10,10 +10,10 @@ Full content lands in v3. This stub captures the framework so commands that rout
 
 A brand identity is four things working as one system: a name, a mark, a voice, and a visual system. Each can exist without the others, but only the system delivers identity.
 
-- Name — what the brand is called. Includes the wordmark, the verbal trademark, and the conventions for using both.
-- Mark — the visual signature. Symbol, monogram, or wordmark, with rules for size, clear space, and reproduction.
-- Voice — how the brand speaks. Vocabulary, tone, sentence rhythm, the words it uses and the words it does not.
-- Visual system — the tokens that carry the brand into every other surface: color, type, space, motion, photography style, illustration approach.
+- Name: what the brand is called. Includes the wordmark, the verbal trademark, and the conventions for using both.
+- Mark: the visual signature. Symbol, monogram, or wordmark, with rules for size, clear space, and reproduction.
+- Voice: how the brand speaks. Vocabulary, tone, sentence rhythm, the words it uses and the words it does not.
+- Visual system, the tokens that carry the brand into every other surface: color, type, space, motion, photography style, illustration approach.
 
 A brand book that delivers only the mark and the wordmark is incomplete. A brand book that delivers tokens without naming the principle is decoration without identity.
 
@@ -45,7 +45,7 @@ The logo fits the brand's category, audience, and price point without doing so l
 
 ### Timelessness
 
-The logo will not read as dated within ten years. Trend-bound choices — gradient orthodoxies, treatments that signal a single decade — are avoided. Restraint travels.
+The logo will not read as dated within ten years. Trend-bound choices (gradient orthodoxies, treatments that signal a single decade) are avoided. Restraint travels.
 
 A logo that ranks high on five of six properties may still ship; a logo that fails three or more is rejected at the brand-system audit.
 
@@ -55,11 +55,11 @@ A logo that ranks high on five of six properties may still ship; a logo that fai
 
 Identity work is judged against five ideals. The audit measures the identity against each one.
 
-- Vision — the identity expresses what the brand is becoming, not only what it is today. A logo built for a startup's first year is a logo to be replaced; a logo built for the brand's mature self runs longer.
-- Meaning — the identity carries content. The mark, the name, and the voice each say something specific about the brand. A meaningless identity may be aesthetically correct and strategically empty.
-- Authenticity — the identity is true to the brand's actual posture. It does not pose as bigger, friendlier, more serious, or more global than the brand earns. Posing fails on contact with the customer.
-- Coherence — the parts of the identity speak in one register. The voice does not contradict the visual system; the visual system does not contradict the name. Coherence is the property that lets an identity be recognized across surfaces.
-- Flexibility — the identity has range. It bends to product, marketing, packaging, environment, motion, and bilingual settings without breaking. A brittle identity that only works in one application is incomplete.
+- Vision: the identity expresses what the brand is becoming, not only what it is today. A logo built for a startup's first year is a logo to be replaced; a logo built for the brand's mature self runs longer.
+- Meaning: the identity carries content. The mark, the name, and the voice each say something specific about the brand. A meaningless identity may be aesthetically correct and strategically empty.
+- Authenticity: the identity is true to the brand's actual posture. It does not pose as bigger, friendlier, more serious, or more global than the brand earns. Posing fails on contact with the customer.
+- Coherence: the parts of the identity speak in one register. The voice does not contradict the visual system; the visual system does not contradict the name. Coherence is the property that lets an identity be recognized across surfaces.
+- Flexibility: the identity has range. It bends to product, marketing, packaging, environment, motion, and bilingual settings without breaking. A brittle identity that only works in one application is incomplete.
 
 A brand-system audit grades each ideal on a four-level scale matching the polaris severity scheme: Critical (fails the ideal), High (passes but with material weakness), Medium (passes), Cosmetic (excels). The audit's overall verdict is governed by the worst score, not the average.
 
@@ -69,13 +69,13 @@ A brand-system audit grades each ideal on a four-level scale matching the polari
 
 The brand's visual system is delivered as tokens. Tokens are named, ordered, and tested together.
 
-- Color — the palette, including primary, neutrals, semantic colors, and tint scales. Tokens carry meaning, not decoration. Monochrome systems are tokens too; the absence of chromatic accent is a deliberate brand choice that must be named and documented.
-- Type — the typefaces, their weights, the type scale, the line-height rules, and the rules for bilingual settings. A brand operating in MENA names its Arabic face explicitly; system-fallback Arabic is a brand failure.
-- Space — the spacing scale, the grid, the breakpoints, the rhythm. Space is the token that does the most work and gets the least credit.
-- Motion — the easing curves, the duration scale, the rules for what animates and what does not. Motion is a brand token, not a development detail.
-- Voice — the vocabulary list (preferred and forbidden), the sentence rhythm guidance, the tone rules per context (transactional, marketing, support, error, success).
+- Color: the palette, including primary, neutrals, semantic colors, and tint scales. Tokens carry meaning, not decoration. Monochrome systems are tokens too; the absence of chromatic accent is a deliberate brand choice that must be named and documented.
+- Type: the typefaces, their weights, the type scale, the line-height rules, and the rules for bilingual settings. A brand operating in MENA names its Arabic face explicitly; system-fallback Arabic is a brand failure.
+- Space: the spacing scale, the grid, the breakpoints, the rhythm. Space is the token that does the most work and gets the least credit.
+- Motion: the easing curves, the duration scale, the rules for what animates and what does not. Motion is a brand token, not a development detail.
+- Voice: the vocabulary list (preferred and forbidden), the sentence rhythm guidance, the tone rules per context (transactional, marketing, support, error, success).
 
-A token system is designed together. A brand that adds tokens piecemeal — color now, motion later — produces a system that does not cohere. The brand-system audit checks for parallel completeness across all five token categories.
+A token system is designed together. A brand that adds tokens piecemeal (color now, motion later) produces a system that does not cohere. The brand-system audit checks for parallel completeness across all five token categories.
 
 ---
 
@@ -101,9 +101,9 @@ The full v3 reference will add:
 
 - A library of concrete logo critique patterns, drawn from common failure modes in MENA-market and global identity work.
 - A brand-system audit checklist structured to match the polaris severity scale, scoring color, type, space, motion, and voice tokens against the five ideals.
-- Naming heuristics — what makes a name memorable, pronounceable across the relevant markets, defensible legally, and clean of unintended meanings in the brand's operating languages.
+- Naming heuristics: what makes a name memorable, pronounceable across the relevant markets, defensible legally, and clean of unintended meanings in the brand's operating languages.
 - A wordmark vs symbol decision tree, with rules for when a brand earns a standalone symbol and when the wordmark must carry the identity alone.
 - A bilingual identity reference for brands operating in both Latin and Arabic scripts: parallel typefaces, parallel weights, the rules for when the wordmark switches script and when it stays Latin-only.
-- A brand maturity scorecard that grades a brand against the stage of the company — early-stage, expansion, established — and identifies the next investment.
+- A brand maturity scorecard that grades a brand against the stage of the company (early-stage, expansion, established) and identifies the next investment.
 
 Until v3 lands, this stub is the operating reference for any command that routes through the brand-system.

@@ -1,0 +1,14 @@
+/* A blur with nothing behind it: where backdrop-filter is not drawn, the
+   panel is fully transparent and the text under it shows through. */
+.panel {
+  border: 1px solid rgb(0 0 0 / 0.1);
+  backdrop-filter: blur(16px);
+}
+
+.overlay {
+  backdrop-filter: blur(8px) saturate(140%);
+}
+
+.card:hover {
+  background: white;
+}

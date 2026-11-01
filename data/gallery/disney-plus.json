@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 1.0,
+    "density": 0.25,
+    "formality": 0.833,
+    "geometry": 0.51,
+    "motion": 0.369,
+    "type_personality": 0.5,
+    "warmth": 0.141
+  },
+  "axes_source": "Read from data/brands/disney-plus.json: warmth from the hue and chroma of the primary #01153E and the canvas #01153E; contrast from the ink #FFFFFF on that canvas, its depth and the chroma of #0072D2; density from its 8px spacing base; geometry from its radii 4, 8, 12, 16px; formality from the chroma of its primary and ink; motion from its stated durations 250ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#0072D2",
+  "brand_rule": "The primary #01153E reaches only 1.00:1 on the canvas #01153E, under the 3:1 a control needs, so the accent color_accent #0072D2 at 3.68:1 carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#0072D2",
+      "light": "#0072D2"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0B0D10",
+      "light": "#F5F7F9"
+    },
+    "radius_control": "5px",
+    "state_duration": "200ms",
+    "tokens": 728,
+    "tokens_sha256": "8c742b73b55384c5"
+  },
+  "id": "disney-plus",
+  "name": "Disney+",
+  "spec": "data/brands/disney-plus.json"
+}

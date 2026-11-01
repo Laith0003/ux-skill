@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.753,
+    "density": 0.5,
+    "formality": 0.377,
+    "geometry": 0.632,
+    "motion": 0.163,
+    "type_personality": 0.5,
+    "warmth": 0.848
+  },
+  "axes_source": "Read from data/brands/twilio.json: warmth from the hue and chroma of the primary #F22F46 and the canvas #FFFFFF; contrast from the ink #0D122B on that canvas, its depth and the chroma of #F22F46; density from its 4px spacing base; geometry from its radii 4, 8, 12, 999px; formality from the chroma of its primary and ink; motion from its stated durations 150ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#F22F46",
+  "brand_rule": "The primary #F22F46 reaches 3.98:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#E71F3D",
+      "light": "#E71F3D"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "10px",
+    "state_duration": "150ms",
+    "tokens": 730,
+    "tokens_sha256": "d1042db4f5669b47"
+  },
+  "id": "twilio",
+  "name": "Twilio",
+  "spec": "data/brands/twilio.json"
+}

@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.772,
+    "density": 0.5,
+    "formality": 0.412,
+    "geometry": 0.325,
+    "motion": 0.5,
+    "type_personality": 0.5,
+    "warmth": 0.15
+  },
+  "axes_source": "Read from data/brands/hp.json: warmth from the hue and chroma of the primary #024AD8 and the canvas #FFFFFF; contrast from the ink #1A1A1A on that canvas, its depth and the chroma of #024AD8; density from its 4px spacing base; geometry from its radii 0, 2, 3, 4, 8, 16px; formality from the chroma of its primary and ink; motion at 0.5 since its motion signature states no duration; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#024AD8",
+  "brand_rule": "The primary #024AD8 reaches 7.06:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#024AD8",
+      "light": "#024AD8"
+    },
+    "face": {
+      "display": "Space Grotesk",
+      "text": "Noto Sans"
+    },
+    "page": {
+      "dark": "#0B0D10",
+      "light": "#F6F7F8"
+    },
+    "radius_control": "5px",
+    "state_duration": "200ms",
+    "tokens": 728,
+    "tokens_sha256": "e9fe322c96a23f85"
+  },
+  "id": "hp",
+  "name": "HP",
+  "spec": "data/brands/hp.json"
+}

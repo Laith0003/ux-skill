@@ -1,0 +1,6 @@
+{"name": "Fixture Client",
+ "logo": {"src": "site/img/logo.svg", "alt": "Fixture Client"},
+ "logo_colors": [{"hex": "#3D8BF0"}],
+ "brand_colors": [{"hex": "#1C64D9"}, {"hex": "#D6263B"}, {"hex": "#1E2329"}],
+ "fonts": {"h1": "Fixture Sans", "body": "Fixture Sans"},
+ "voice": "direct, brief"}

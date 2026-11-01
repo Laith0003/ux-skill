@@ -1,0 +1,8 @@
+.eyebrow {
+  padding-inline-start: 40px;
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 28px 1px;
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+.kicker { background: var(--color-surface-sunken); padding: 2px 8px; }

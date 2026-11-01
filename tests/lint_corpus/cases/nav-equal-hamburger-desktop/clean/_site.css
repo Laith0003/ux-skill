@@ -1,0 +1,5 @@
+@import url("./_tokens.css");
+.menu-button { display: inline-flex; min-inline-size: 44px; min-block-size: 44px; }
+@media (min-width: 1024px) {
+  .menu-button { display: none; }
+}

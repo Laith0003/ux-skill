@@ -3,7 +3,7 @@
 > Mastercard's experience reads like a warm, editorial magazine built from soft stone and signal orange.
 
 **Category:** Fintech / Crypto
-**Industry:** —
+**Industry:** n/a
 **Source:** [`data/brands/mastercard.json`](../../data/brands/mastercard.json)
 
 ## Palette
@@ -43,4 +43,4 @@ _(none documented)_
 
 ---
 
-_This reference was backfilled from the structured spec. Edit freely — it stays in sync as long as the heading layout is preserved._
+_This reference was backfilled from the structured spec. Edit freely: it stays in sync as long as the heading layout is preserved._

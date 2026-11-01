@@ -1,0 +1,41 @@
+{
+  "status": 200,
+  "error": false,
+  "meta": {
+    "variableCollections": {
+      "c:prim": {"id": "c:prim", "name": "Primitives", "defaultModeId": "m:value",
+                 "modes": [{"modeId": "m:value", "name": "Value"}],
+                 "variableIds": ["v:paper", "v:coal", "v:fern"]},
+      "c:theme": {"id": "c:theme", "name": "Theme", "defaultModeId": "m:default",
+                  "modes": [{"modeId": "m:default", "name": "Default"},
+                            {"modeId": "m:dark", "name": "Dark"}],
+                  "variableIds": ["v:page", "v:text"]},
+      "c:layout": {"id": "c:layout", "name": "Layout", "defaultModeId": "m:mobile",
+                   "modes": [{"modeId": "m:mobile", "name": "Mobile"},
+                             {"modeId": "m:desktop", "name": "Desktop"}],
+                   "variableIds": ["v:gap"]}
+    },
+    "variables": {
+      "v:paper": {"id": "v:paper", "name": "paper", "variableCollectionId": "c:prim",
+                  "resolvedType": "COLOR", "scopes": ["ALL_SCOPES"], "description": "",
+                  "valuesByMode": {"m:value": {"r": 0.98, "g": 0.98, "b": 0.97, "a": 1}}},
+      "v:coal": {"id": "v:coal", "name": "coal", "variableCollectionId": "c:prim",
+                 "resolvedType": "COLOR", "scopes": ["ALL_SCOPES"], "description": "",
+                 "valuesByMode": {"m:value": {"r": 0.08, "g": 0.09, "b": 0.11, "a": 1}}},
+      "v:fern": {"id": "v:fern", "name": "fern", "variableCollectionId": "c:prim",
+                 "resolvedType": "COLOR", "scopes": ["ALL_SCOPES"], "description": "",
+                 "valuesByMode": {"m:value": {"r": 0.18, "g": 0.62, "b": 0.33, "a": 1}}},
+      "v:page": {"id": "v:page", "name": "surface/page", "variableCollectionId": "c:theme",
+                 "resolvedType": "COLOR", "scopes": ["FRAME_FILL"], "description": "",
+                 "valuesByMode": {"m:default": {"type": "VARIABLE_ALIAS", "id": "v:paper"},
+                                  "m:dark": {"type": "VARIABLE_ALIAS", "id": "v:coal"}}},
+      "v:text": {"id": "v:text", "name": "text/body", "variableCollectionId": "c:theme",
+                 "resolvedType": "COLOR", "scopes": ["TEXT_FILL"], "description": "",
+                 "valuesByMode": {"m:default": {"type": "VARIABLE_ALIAS", "id": "v:coal"},
+                                  "m:dark": {"type": "VARIABLE_ALIAS", "id": "v:paper"}}},
+      "v:gap": {"id": "v:gap", "name": "gap/control", "variableCollectionId": "c:layout",
+                "resolvedType": "FLOAT", "scopes": ["GAP"], "description": "",
+                "valuesByMode": {"m:mobile": 8, "m:desktop": 12}}
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.476,
+    "density": 0.5,
+    "formality": 1.0,
+    "geometry": 0.248,
+    "motion": 1.0,
+    "type_personality": 0.5,
+    "warmth": 0.5
+  },
+  "axes_source": "Read from data/brands/bose.json: warmth from the hue and chroma of the primary #1F1F1F and the canvas #FFFFFF; contrast from the ink #1C1C1C on that canvas, its depth and the chroma of #1F1F1F; density from its 4px spacing base; geometry from its radii 0, 4, 8px; formality from the chroma of its primary and ink; motion from its stated durations 1200ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#1F1F1F",
+  "brand_rule": "The primary #1F1F1F reaches 16.48:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#DADADA",
+      "light": "#1F1F1F"
+    },
+    "face": {
+      "display": "Playfair Display",
+      "text": "IBM Plex Sans"
+    },
+    "page": {
+      "dark": "#0D0D0D",
+      "light": "#F7F7F7"
+    },
+    "radius_control": "2px",
+    "state_duration": "200ms",
+    "tokens": 727,
+    "tokens_sha256": "7aa8eee7db3f44f9"
+  },
+  "id": "bose",
+  "name": "Bose",
+  "spec": "data/brands/bose.json"
+}

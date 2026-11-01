@@ -1,0 +1,36 @@
+{
+  "arabic": true,
+  "axes": {
+    "contrast": 0.77,
+    "density": 0.5,
+    "formality": 0.404,
+    "geometry": 0.681,
+    "motion": 0.418,
+    "type_personality": 0.5,
+    "warmth": 0.85
+  },
+  "axes_source": "Read from data/brands/apple-music.json: warmth from the hue and chroma of the primary #FA233B and the canvas #FFFFFF; contrast from the ink #1D1D1F on that canvas, its depth and the chroma of #FA233B; density from its 4px spacing base; geometry from its radii 8, 12, 16, 20, 24px; formality from the chroma of its primary and ink; motion from its stated durations 200ms, 400ms; type personality at 0.5 since neither face is in the engine's catalog.",
+  "brand": "#FA233B",
+  "brand_rule": "The primary #FA233B reaches 3.91:1 on the canvas #FFFFFF, at least the 3:1 a control needs, so it carries the action.",
+  "digest": {
+    "action": {
+      "dark": "#ED0430",
+      "light": "#ED0430"
+    },
+    "face": {
+      "display": "Bricolage Grotesque",
+      "text": "Nunito Sans"
+    },
+    "page": {
+      "dark": "#100C0C",
+      "light": "#F9F6F6"
+    },
+    "radius_control": "10px",
+    "state_duration": "200ms",
+    "tokens": 729,
+    "tokens_sha256": "12ad0d5a57737d85"
+  },
+  "id": "apple-music",
+  "name": "Apple Music",
+  "spec": "data/brands/apple-music.json"
+}
