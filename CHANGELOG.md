@@ -40,11 +40,14 @@ project adheres to [Semantic Versioning](https://semver.org/).
   outline) and `illustration-loop-without-pause` (a scripted Stage left on
   its default loop in a file with no pause control).
 - The render check's `first-screen-covered`: a fixed panel over the first
-  screen at rest, at every width. It fires when the panel covers the page's
-  heading or a form's first control, covers 30% or more of the viewport, or
-  is a wide panel floating clear of both edges over text or an image (a
-  cookie card left over the content). A thin bar docked to an edge, a
-  narrow widget and an overlay that paints nothing pass.
+  screen at rest, at every width. It fires when the panel lies on top of
+  the page's h1 or a form's first control, covers 30% or more of the
+  viewport over text or images, or is a wide panel floating clear of both
+  edges over them (a cookie card left over the content). A transparent
+  fixed wrapper is measured by the painted card inside it. A thin bar
+  docked to an edge, a narrow widget, a sidebar beside the content, a
+  layer painted under the page, a drawer parked off screen by a transform
+  and an overlay that paints nothing pass.
 - `uxskill complaints check --page <file or URL> [--before <file>]`:
   what the person said is wrong with a page, kept in
   `.ux/complaints.json` as probes from a closed list (`rule-clear`,

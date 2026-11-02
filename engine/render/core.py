@@ -35,6 +35,23 @@ _FREEZE_CSS = (
     "transition:none!important;transform:none!important}"
 )
 
+# Before the freeze: a fixed element that its own transform parks mostly
+# off screen, with nothing running to bring it in, is a closed drawer or
+# menu. The freeze would set its transform to none and measure it open.
+_PARK_JS = r"""() => {
+  const vw = document.documentElement.clientWidth, vh = window.innerHeight;
+  for (const e of document.body.querySelectorAll('*')) {
+    const cs = getComputedStyle(e);
+    if (cs.position !== 'fixed' || cs.transform === 'none') continue;
+    if (e.getAnimations({subtree: true}).length) continue;
+    const r = e.getBoundingClientRect(), a = r.width * r.height;
+    if (a <= 0) continue;
+    const w = Math.max(0, Math.min(vw, r.right) - Math.max(0, r.left));
+    const h = Math.max(0, Math.min(vh, r.bottom) - Math.max(0, r.top));
+    if (w * h < a / 2) e.setAttribute('data-ux-parked', '');
+  }
+}"""
+
 _MEASURE_JS = r"""(tol) => {
   const vw = document.documentElement.clientWidth;
   const dir = getComputedStyle(document.documentElement).direction;
@@ -145,29 +162,53 @@ _MEASURE_JS = r"""(tol) => {
   }
 
   // A fixed panel over the first screen at rest: a cookie card, a consent
-  // wall, a bar over the form. It is reported when it covers the page's
-  // heading or a form's first control, covers 30% or more of the screen, or
-  // is a wide panel floating clear of both edges over text or an image. A
-  // thin bar docked to an edge over nothing key, a narrow widget, and an
-  // overlay that paints nothing or takes no pointer pass.
+  // wall, a bar over the form. It is reported when it lies on top of the
+  // page's heading or a form's first control, covers 30% or more of the
+  // screen over text or an image, or is a wide panel floating clear of both
+  // edges over them. A thin bar docked to an edge over nothing key, a
+  // narrow widget, a sidebar beside the content, a layer painted under the
+  // page, a drawer parked off screen, and an overlay that paints nothing or
+  // takes no pointer pass. A transparent fixed wrapper is measured by the
+  // painted boxes inside it.
   const vh = window.innerHeight, area = vw * vh;
-  const alpha = c => { const m = c.match(/rgba?\(([^)]*)\)/); if (!m) return 0;
-    const p = m[1].split(/[\s,\/]+/).filter(Boolean); return p.length > 3 ? parseFloat(p[3]) : 1; };
+  const alpha = c => {
+    if (!c || c === 'transparent') return 0;
+    const m = c.match(/\(([^)]*)\)/); if (!m) return 1;
+    const slash = m[1].split('/');
+    let a = slash.length > 1 ? slash[1].trim()
+      : (/^rgba/.test(c) ? (m[1].split(',')[3] || '1').trim() : '1');
+    return a.endsWith('%') ? parseFloat(a) / 100 : parseFloat(a); };
   const painted = cs => alpha(cs.backgroundColor) >= 0.5 || cs.backgroundImage !== 'none';
   const fixedIn = e => { for (let a = e.parentElement; a; a = a.parentElement)
     if (getComputedStyle(a).position === 'fixed') return true; return false; };
+  const faded = e => { for (let a = e.parentElement; a; a = a.parentElement)
+    if (parseFloat(getComputedStyle(a).opacity) === 0) return true; return false; };
   const keys = [document.querySelector('h1'),
     document.querySelector('form input:not([type=hidden]), form select, form textarea, form button')]
     .filter(k => k && !fixedIn(k) && k.getClientRects().length);
   const media = new Set(['IMG', 'PICTURE', 'VIDEO', 'CANVAS', 'SVG', 'svg']);
   const ownText = el => [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
-  const beneath = (e, x, y) => document.elementsFromPoint(x, y).some(el =>
+  const onTop = (e, x, y) => { const t = document.elementFromPoint(x, y); return !!t && e.contains(t); };
+  const beneath = (e, x, y) => onTop(e, x, y) && document.elementsFromPoint(x, y).some(el =>
     !e.contains(el) && !el.contains(e) && (media.has(el.tagName) || ownText(el)));
+  const box = e => { // the panel's painted area: itself, else the painted boxes inside it
+    if (painted(getComputedStyle(e))) return e.getBoundingClientRect();
+    let u = null;
+    for (const d of e.querySelectorAll('*')) {
+      const ds = getComputedStyle(d);
+      if (!painted(ds) || !visible(d, ds)) continue;
+      const q = d.getBoundingClientRect(); if (q.width <= 0 || q.height <= 0) continue;
+      u = u ? {left: Math.min(u.left, q.left), top: Math.min(u.top, q.top),
+               right: Math.max(u.right, q.right), bottom: Math.max(u.bottom, q.bottom)} : q;
+    }
+    return u; };
+  const SPOTS = [[0.5, 0.5], [0.2, 0.3], [0.8, 0.7], [0.5, 0.15], [0.5, 0.85]];
   for (const e of document.body.querySelectorAll('*')) {
     const cs = getComputedStyle(e);
     if (cs.position !== 'fixed' || !visible(e, cs) || cs.pointerEvents === 'none'
-        || parseFloat(cs.opacity) === 0 || !painted(cs) || fixedIn(e)) continue;
-    const b = e.getBoundingClientRect();
+        || parseFloat(cs.opacity) === 0 || fixedIn(e) || faded(e)
+        || e.hasAttribute('data-ux-parked')) continue;
+    const b = box(e); if (!b) continue;
     const r = {left: Math.max(0, b.left), top: Math.max(0, b.top),
                right: Math.min(vw, b.right), bottom: Math.min(vh, b.bottom)};
     const w = r.right - r.left, h = r.bottom - r.top;
@@ -175,14 +216,13 @@ _MEASURE_JS = r"""(tol) => {
     const share = Math.round(100 * w * h / area);
     const key = keys.find(k => { if (e.contains(k)) return false;
       const q = k.getBoundingClientRect(), cx = (q.left + q.right) / 2, cy = (q.top + q.bottom) / 2;
-      return cx >= r.left && cx <= r.right && cy >= r.top && cy <= r.bottom; });
+      return cx >= r.left && cx <= r.right && cy >= r.top && cy <= r.bottom && onTop(e, cx, cy); });
     const docked = r.top <= 1 || r.bottom >= vh - 1;
-    const floating = !docked && w >= vw / 2 && [[0.5, 0.5], [0.2, 0.3], [0.8, 0.7], [0.5, 0.15], [0.5, 0.85]]
-      .some(([fx, fy]) => beneath(e, r.left + fx * w, r.top + fy * h));
+    const over = SPOTS.some(([fx, fy]) => beneath(e, r.left + fx * w, r.top + fy * h));
     let why = '';
     if (key) why = 'covers the page\'s ' + (key.tagName === 'H1' ? 'heading' : 'form');
-    else if (share >= 30) why = 'covers ' + share + '% of the first screen';
-    else if (floating) why = 'floats over the content, clear of both edges';
+    else if (share >= 30 && over) why = 'covers ' + share + '% of the first screen';
+    else if (!docked && w >= vw / 2 && over) why = 'floats over the content, clear of both edges';
     if (!why) continue;
     out.push({rule: 'first-screen-covered', sel: sel(e), cls: e.className || '',
               text: text(e).slice(0, 60), drift: share, why, dir});
@@ -275,6 +315,7 @@ async def _measure(browser, sem, f: Path, w: int, h: int, desktop: bool = False)
         page = await browser.new_page(viewport={"width": w, "height": h})
         try:
             await page.goto(f.resolve().as_uri(), wait_until="load")
+            await page.evaluate(_PARK_JS)
             await page.add_style_tag(content=_FREEZE_CSS)
             result = await page.evaluate(_MEASURE_JS, TOLERANCE_PX)
             if desktop:  # the page's color, accents and photos, measured once

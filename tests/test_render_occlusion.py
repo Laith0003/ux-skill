@@ -46,6 +46,19 @@ def _hits(tmp_path: Path, name: str, extra: str):
     ("consent-wall.html",
      '<div style="position:fixed;inset:10% 5%;background:#fff;padding:24px">'
      'We value your privacy. <button>Accept all</button></div>'),
+    # A card in a modern color syntax still paints.
+    ("oklch-cookie-card.html",
+     '<div style="position:fixed;left:20%;right:20%;bottom:22%;padding:16px;'
+     'background:oklch(98% 0 0);border:1px solid #ccc">We use cookies. '
+     '<button>Reject</button><button>Accept</button></div>'),
+    # A transparent fixed wrapper that places a painted card.
+    ("wrapped-cookie-card.html",
+     '<div style="position:fixed;left:0;right:0;bottom:22%;display:flex;justify-content:center">'
+     '<div style="width:60%;background:#fff;padding:16px">We use cookies. '
+     '<button>Accept</button></div></div>'),
+    ("wrapped-modal.html",
+     '<div style="position:fixed;inset:0;display:grid;place-items:center">'
+     '<div style="width:90%;height:70vh;background:#fff">Before you go</div></div>'),
     # A bar docked to the top, but over the form the visitor came for.
     ("bar-over-the-form.html",
      '<div style="position:fixed;top:0;left:0;right:0;height:230px;background:#222;color:#fff">'
@@ -78,6 +91,25 @@ def test_a_cover_over_the_first_screen_is_found(tmp_path, name, extra):
     # A closed dialog.
     ("closed-dialog.html",
      '<div style="position:fixed;inset:10%;background:#fff;display:none">Cookies</div>'),
+    # A drawer and a full-screen menu parked off screen by a transform.
+    ("closed-drawer.html",
+     '<nav style="position:fixed;top:0;left:0;bottom:0;width:80%;max-width:320px;'
+     'background:#fff;transform:translateX(-100%)"><a href="/">Home</a></nav>'),
+    ("closed-menu.html",
+     '<div style="position:fixed;inset:0;background:#111;color:#fff;'
+     'transform:translateY(-100%)"><a href="/">Home</a></div>'),
+    # A decorative layer painted under the page.
+    ("background-layer.html",
+     '<div aria-hidden="true" style="position:fixed;inset:0;z-index:-1;'
+     'background:linear-gradient(#eef,#fff)"></div>'),
+    # A docs sidebar beside the content, not over it.
+    ("docs-sidebar.html",
+     '<style>aside{display:none}@media (min-width:700px){main{margin-left:260px}'
+     'aside{display:block}}</style><aside style="position:fixed;top:0;bottom:0;left:0;'
+     'width:260px;background:#f4f4f4"><a href="/">Guide</a></aside>'),
+    # A menu inside a faded-out parent.
+    ("faded-parent.html",
+     '<div style="opacity:0"><div style="position:fixed;inset:0;background:#fff">Menu</div></div>'),
 ])
 def test_a_bar_that_leaves_the_page_readable_passes(tmp_path, name, extra):
     assert _hits(tmp_path, name, extra) == []
