@@ -7,7 +7,7 @@ The launch post gives estimates, because time and spend were not tracked as the 
 - **What git shows.** Grouping every commit on every branch into sessions (a gap over 45 minutes starts a new one, and each session gets 20 minutes added for the work before its first commit) gives 39 sessions and about 77 hours, on 24 days between 3 June and 2 November 2026. That is a floor, not the total:
   - the history before 3 June was squashed, so the May work is missing from it;
   - long sessions run for hours between commits.
-- **What the release log shows.** CHANGELOG.md lists 46 versions from 1.0.0 on 22 May to 4.0.0 on 1 November, about a hundred of them builds in the last week of May.
+- **What the release log shows.** CHANGELOG.md has 44 version entries from 1.0.0 on 22 May to 4.0.0 on 1 November; the alpha entries cover about a hundred builds in the last week of May.
 - **The estimate:**
   - The May sprint, ten days of daily releases at roughly ten hours a day, is about 100 hours.
   - June to November, about 22 weeks at 20 to 25 hours a week of paired work, is about 450 to 550 hours.
@@ -32,5 +32,5 @@ The six months are May to October 2026, plus the start of November. The costs ar
 - **Installs, measured on 2 November 2026:**
   - npm reports 537 downloads of `uxskill` between 27 May and 29 October (api.npmjs.org, downloads/range).
   - PyPI reports 230 downloads in the last month (pypistats.org). It shows no all-time total.
-- **The product:** 46 releases, 13,101 passing tests, 171 lint rules, 25 MCP tools and 160 brand specs, MIT licensed. Every count is one the code gives today.
+- **The product:** 17 tagged releases (v1.0.0 to v4.0.0), 13,101 passing tests, 171 lint rules, 25 MCP tools and 160 brand specs, MIT licensed. Every count is one the code gives today.
 - **Not counted:** stars, client work and anything that cannot be measured from the repository or a public registry.
