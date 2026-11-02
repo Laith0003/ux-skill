@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 174,
+    "entries": 180,
     "last_updated": "2026-09-30",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -2149,7 +2149,7 @@
       "category": "Performance",
       "detection": {
         "type": "regex",
-        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*(?:true|false))[^)])*\\)",
+        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*(?:true|false))(?:\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*\\)|[^()]))*\\)",
         "flags": "i",
         "scope": [
           "ts",
@@ -4008,6 +4008,148 @@
       },
       "why": "Stageshow's Stage plays a scripted demo on a loop for as long as it is on screen, and it draws no pause control of its own. Beside the page's copy, motion that starts by itself and lasts more than 5 seconds needs a way to pause, stop or hide it (2.2.2). It passes when play is once or hover, when play is bound to state the page controls, or when the file holds a pause control.",
       "fix": "Set play=\"once\" (it plays when first seen and holds its last frame) or play=\"hover\", or put a pause control beside the stage that stops it."
+    },
+    {
+      "id": "title-is-a-framework-default",
+      "name": "Page title left at the framework's default",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<title\\b[^>]*>\\s*(?:Vite\\s*\\+\\s*(?:React|Vue|Svelte|Preact|Lit|TS)(?:\\s*\\+\\s*TS)?|React App|Vite App|Svelte App|Vue App|Create Next App|Create T3 App|Nuxt App|Astro|Document|Untitled(?: Document)?|My App|Home Page)\\s*</title>|\\btitle\\s*:\\s*[\"'](?:Create Next App|Create T3 App|React App|Vite App|Nuxt App)[\"']",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte",
+          "ts",
+          "js"
+        ],
+        "target": "code"
+      },
+      "why": "The title names the tab, the bookmark, the search result and what a screen reader announces first. A starter's default (Vite + React, Create Next App, Document) describes nothing, which WCAG 2.4.2 (Page Titled) asks a title to do, and it is one of the surest signs a page was generated and never finished.",
+      "fix": "Write a title that names the page and the product, most specific part first: 'Pricing, Acme' rather than 'Acme'. In Next.js set it in metadata.title; in a Vite app, in index.html."
+    },
+    {
+      "id": "consent-prechecked",
+      "name": "Marketing consent box ticked in advance",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<input\\b(?=[^>]*\\btype\\s*=\\s*[\"']?checkbox)(?=[^>]*\\b(?:checked|defaultChecked)(?:\\s*=\\s*(?:[\"']?(?:checked|true)[\"']?|\\{\\s*true\\s*\\}))?(?=[\\s/>]))[^>]*>(?:(?!<input\\b|</label>|</p>|</div>|</li>)[\\s\\S]){0,200}?\\b(?:newsletter|marketing|promotional|promotions|special offers|offers and updates|partners|third[- ]part(?:y|ies))\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "markup"
+      },
+      "why": "A box already ticked to sign the visitor up for marketing is consent they did not give. European data law does not count a pre-ticked box as consent, and visitors read it as a trick played on them at the moment they trusted the form.",
+      "fix": "Leave the box unticked and let the visitor tick it. Say plainly what they get and how often, and keep it apart from the terms they must accept."
+    },
+    {
+      "id": "fake-urgency",
+      "name": "Urgency written into the page as fixed copy",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:only\\s+\\d{1,3}\\s+(?:left|remaining)\\b|\\d{1,4}\\s+(?:people|others|shoppers|visitors)\\s+(?:are\\s+)?(?:viewing|looking at|watching)\\b|hurry,?\\s+(?:only|offer|sale|ends)\\b|offer\\s+ends\\s+in\\s+\\d)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "text"
+      },
+      "why": "A stock count, a crowd of viewers or a countdown typed into the copy is the same on every visit, so it is not true on most of them. Visitors who notice stop trusting every other claim on the page, and generated pages reach for it by default.",
+      "fix": "Show urgency only from live data (render the real stock or the real end date from your data), or cut it and let the offer stand on its own."
+    },
+    {
+      "id": "confirmshaming",
+      "name": "Decline option worded to shame",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:no,?\\s+thanks,?\\s+)?i\\s+(?:don(?:'|’|&rsquo;|&#39;|&#x27;)?t|do\\s+not)\\s+(?:want|like|need|care\\s+about)\\s+(?:to\\s+)?(?:save|saving|savings|money|deals|discounts|free\\s+\\w+|better\\s+\\w+)\\b|\\b(?:no,?\\s+thanks,?\\s+)?i(?:\\s+(?:prefer|would\\s+rather)|(?:'|’|&rsquo;|&#39;|&#x27;)d\\s+rather)\\s+(?:to\\s+)?(?:pay(?:ing)?\\s+(?:more|full\\s+price)|miss(?:ing)?\\s+out|lose\\s+\\w+|losing\\s+\\w+)\\b|\\bi(?:'|’|&rsquo;|&#39;|&#x27;)ll\\s+pay\\s+full\\s+price\\b|\\bno,?\\s+thanks,?\\s+i\\s+(?:hate|enjoy|love)\\s+(?:saving|money|deals|discounts|paying\\s+more|missing\\s+out)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "text"
+      },
+      "why": "A way out written as an insult ('No thanks, I don't like saving money') pressures by guilt instead of value. It is a named dark pattern, and the visitor who closes the popup remembers the brand that mocked them.",
+      "fix": "Word the decline as a plain choice of equal weight: 'No thanks' or 'Not now'. If the offer needs guilt to work, change the offer."
+    },
+    {
+      "id": "input-purpose-missing",
+      "name": "Personal-data field without autocomplete",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<input\\b(?=[^>]*\\b(?:name|id)\\s*=\\s*[\"'](?:e-?mail|email[-_]?address|phone|tel|telephone|mobile|first[-_]?name|last[-_]?name|full[-_]?name|given[-_]?name|family[-_]?name|postal[-_]?code|post[-_]?code|zip(?:[-_]?code)?|street[-_]?address|address[-_]?line[-_]?1|cc[-_]?number|card[-_]?number|cc[-_]?name|cardholder|bday|birthday|username|new[-_]?password|current[-_]?password)[\"'])(?![^>]*\\bautoComplete\\s*=)(?![^>]*\\bautocomplete\\s*=)(?![^>]*\\btype\\s*=\\s*[\"']?hidden)[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "markup"
+      },
+      "why": "A field for the person's own email, phone, name, address, card or password with no autocomplete token makes them type it again on every form, and leaves its purpose unknown to browsers and assistive technology. WCAG 1.3.5 (Identify Input Purpose) asks that such a field's purpose can be determined in code, which the autocomplete attribute does.",
+      "fix": "Add the matching token: autocomplete=\"email\", \"tel\", \"given-name\", \"family-name\", \"postal-code\", \"street-address\", \"cc-number\", \"username\", \"current-password\" or \"new-password\", with the matching type (email, tel) and inputmode."
+    },
+    {
+      "id": "paste-blocked",
+      "name": "Paste blocked in a field",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bon[Pp]aste\\s*=\\s*(?:[\"']\\s*(?:return\\s+false|(?:event|e)\\.preventDefault\\(\\))|\\{\\s*(?:\\(?\\s*(?:e|ev|event)\\s*\\)?\\s*=>\\s*\\{?\\s*(?:e|ev|event)\\.preventDefault\\(\\)|\\(\\)\\s*=>\\s*false))|addEventListener\\s*\\(\\s*[\"']paste[\"']\\s*,\\s*(?:function\\s*\\(\\s*(\\w+)\\s*\\)|\\(?\\s*(\\w+)\\s*\\)?\\s*=>)\\s*\\{?\\s*\\w+\\.preventDefault\\(\\)",
+        "flags": "",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte",
+          "ts",
+          "js"
+        ],
+        "target": "code"
+      },
+      "why": "Blocking paste stops password managers from filling a password and forces people to retype long codes, emails and account numbers, which is slow, error prone and hardest for people who rely on assistive tools. It adds no security.",
+      "fix": "Remove the paste handler. To confirm an email or a password, let the person see what they typed (a show control) instead of making them type it twice."
     }
   ]
 }

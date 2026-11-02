@@ -38,6 +38,8 @@ Read `.ux/last-frame.json` if present. If absent and the surface clearly needs f
 
 For each lens, identify findings, cite which principle each finding violates, write evidence (what you saw) and a fix (what to do).
 
+Walk Nielsen's ten heuristics across the lenses below: `references/laws/nielsen-heuristics.md` names, for each, what to look for on an AI-built page and the check that measures it.
+
 #### Lens 1 — FRAME
 
 Reference: `references/process/lean-ux-gothelf.md` and `references/process/lean-ux-klein.md`.

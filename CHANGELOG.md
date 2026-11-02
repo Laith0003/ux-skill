@@ -39,8 +39,70 @@ project adheres to [Semantic Versioning](https://semver.org/).
   (a real h1 to h6 inside a Stageshow stage, which joins the host page's
   outline) and `illustration-loop-without-pause` (a scripted Stage left on
   its default loop in a file with no pause control).
+- The render check's `first-screen-covered`: a fixed panel over the first
+  screen at rest, at every width. It fires when the panel lies on top of
+  the page's h1 or a form's first control, covers 30% or more of the
+  viewport over text or images, or is a wide panel floating clear of both
+  edges over them (a cookie card left over the content). A transparent
+  fixed wrapper is measured by the painted card inside it. A thin bar
+  docked to an edge, a narrow widget, a sidebar beside the content, a
+  layer painted under the page, a drawer parked off screen by a transform
+  and an overlay that paints nothing pass.
+- The render check's `target-too-small`: a control under 24 by 24 CSS
+  pixels whose 24px circle meets another control, at every width (WCAG
+  2.5.8 and its spacing exception). A link inside a sentence and an
+  unstyled checkbox or radio pass. The accessibility guide now gives 24px
+  as the floor and 44px as the touch default, rather than calling 44px
+  the minimum.
+- Four more render checks. `text-low-contrast`: neutral text under what
+  WCAG 1.4.3 asks on the ground the visitor sees, read with the page
+  scrolled into view and confirmed at a second position, so a ground a
+  script swaps in on scroll is measured, not the one at rest; accent
+  text is read the same way now. `input-text-zooms`: a field under 16px
+  at phone widths. `image-broken` and `image-distorted`: an image that
+  failed to load, and one stretched more than 3% off its own shape.
+- Four lint rules: `title-is-a-framework-default` (a starter's title such
+  as Vite + React or Create Next App, which describes nothing, as WCAG
+  2.4.2 asks a title to), `consent-prechecked` (a
+  marketing box ticked in advance), `fake-urgency` (a stock count,
+  viewer count or countdown typed into the copy) and `confirmshaming` (a
+  decline worded as an insult).
+- Two form rules: `input-purpose-missing` (a field for the person's own
+  email, phone, name, address, card or password with no autocomplete
+  token, which WCAG 1.3.5 asks be identifiable in code) and
+  `paste-blocked` (a paste handler that cancels the paste). 180 rules in
+  all.
+- A phrase inside a longer quotation on its line now counts as a mention
+  for the text rules, as a phrase wrapped in quotation marks already did,
+  and the numeric HTML apostrophe is read as a quotation mark.
+- Two guides from the research: `references/laws/nielsen-heuristics.md`
+  turns the ten heuristics into checks on a built page and names the
+  ux-skill check behind each, walked by `/ux-audit`; and
+  `references/foundations/ai-interfaces.md` sets what an AI feature's
+  interface must do (say what it is, stream with a stop control, cite
+  sources, keep a person in charge of actions), loaded by `/ux-design`
+  beside the playbook.
+- The keyboard pass's `focus-obscured`: a control that takes focus
+  entirely hidden under fixed or sticky content (WCAG 2.4.11). It found
+  the catalog and brands pages' sticky toolbar hiding focused links; the
+  pages now leave it scroll room on wide screens and let it scroll away
+  on phones, where it covered half the screen.
+- `uxskill complaints check --page <file or URL> [--before <file>]`:
+  what the person said is wrong with a page, kept in
+  `.ux/complaints.json` as probes from a closed list (`rule-clear`,
+  `present`, `absent`, `text-present`, `text-absent`) measured at four
+  widths. It exits 3 while a complaint is open, and a probe the old page
+  already passed is reported weak, since it proves nothing. A running
+  app is measured by its URL, as a standalone snapshot with its styles
+  inline. A stop hook in the plugin reads the last check and holds the
+  session once while it is missing or open, or older than the page or any
+  page source in the project.
+  `uxskill complaints snapshot` keeps the page before it changes.
 
 ### Changed
+- `event-listener-no-passive-on-scroll` reads past a handler written
+  inline, whose body holds its own parentheses, to the options that
+  follow it, so an inline handler marked passive is not a finding.
 - The landing playbook's interface-fragment patterns point at the new guide.
   A synthetic screenshot composition sits on the section's own ground, never
   on a plate, and a tilted product frame keeps its tilt only when it reads

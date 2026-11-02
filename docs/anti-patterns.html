@@ -12,21 +12,21 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>174 anti-pattern rules · the ux-skill linter catalogue</title>
-<meta name="description" content="The complete catalogue of 174 AI design-slop fingerprints caught by the ux-skill linter. 58 high, 80 medium, 30 low severity. Each rule includes regex, why it's bad, and the fix.">
+<title>180 anti-pattern rules · the ux-skill linter catalogue</title>
+<meta name="description" content="The complete catalogue of 180 AI design-slop fingerprints caught by the ux-skill linter. 61 high, 83 medium, 30 low severity. Each rule includes regex, why it's bad, and the fix.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
-<meta property="og:title" content="174 anti-pattern rules · the ux-skill linter catalogue">
-<meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse 174 rules from the deterministic linter that runs in &lt;50ms.">
+<meta property="og:title" content="180 anti-pattern rules · the ux-skill linter catalogue">
+<meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse 180 rules from the deterministic linter that runs in &lt;50ms.">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="174 anti-pattern rules · the ux-skill linter">
-<meta name="twitter:description" content="The complete linter catalogue. 58 high · 80 medium · 30 low severity.">
+<meta name="twitter:title" content="180 anti-pattern rules · the ux-skill linter">
+<meta name="twitter:description" content="The complete linter catalogue. 61 high · 83 medium · 30 low severity.">
 <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","name":"174 anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
+{"@context":"https://schema.org","@type":"WebPage","name":"180 anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Anti-pattern rules","item":"https://uxskill.laithjunaidy.com/anti-patterns.html"}]}
@@ -65,6 +65,9 @@
   .top__stat b { color: var(--ink); font-weight: 700; }
 
   .toolbar { padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); position: sticky; top: 0; background: rgba(7,8,10,0.92); backdrop-filter: blur(8px); z-index: 10; }
+  /* The toolbar pins on wide screens, so the page leaves it room when focus or an anchor scrolls; on phones it would cover the screen, so it scrolls with the page. */
+  @media (min-width: 721px) { html { scroll-padding-top: 160px; } }
+  @media (max-width: 720px) { .toolbar { position: static; } }
   .toolbar__row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .ap-search { flex: 1; min-width: 260px; padding: 10px 14px; background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 8px; color: var(--ink); font-family: var(--sans); font-size: 14px; }
   .ap-search:focus { outline: 2px solid transparent; border-color: var(--accent); }
@@ -133,14 +136,14 @@
 <section class="top">
   <div class="container">
     <p class="top__eyebrow">Linter catalogue · v4.0.0</p>
-    <h1 class="top__title">174 fingerprints of <em>AI design slop.</em></h1>
+    <h1 class="top__title">180 fingerprints of <em>AI design slop.</em></h1>
     <p class="top__lead">
       Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms: no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
     </p>
     <div class="top__stats">
-      <span class="top__stat"><b>174</b> rules total</span>
-      <span class="top__stat"><b>58</b> high severity</span>
-      <span class="top__stat"><b>80</b> medium</span>
+      <span class="top__stat"><b>180</b> rules total</span>
+      <span class="top__stat"><b>61</b> high severity</span>
+      <span class="top__stat"><b>83</b> medium</span>
       <span class="top__stat"><b>30</b> low</span>
       <span class="top__stat"><b>10</b> categories</span>
     </div>
@@ -463,6 +466,26 @@
     </article>
     
 
+    <article class="ap-card" id="paste-blocked">
+      <header class="ap-head">
+        <span class="ap-id">#paste-blocked</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Paste blocked in a field</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Blocking paste stops password managers from filling a password and forces people to retype long codes, emails and account numbers, which is slow, error prone and hardest for people who rely on assistive tools. It adds no security.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Remove the paste handler. To confirm an email or a password, let the person see what they typed (a show control) instead of making them type it twice.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>\bon[Pp]aste\s*=\s*(?:[&quot;&#x27;]\s*(?:return\s+false|(?:event|e)\.preventDefault\(\))|\{\s*(?:\(?\s*(?:e|ev|event)\s*\)?\s*=&gt;\s*\{?\s*(?:e|ev|event)\.preventDefault\(\)|\(\)\s*=&gt;\s*false))|addEventListener\s*\(\s*[&quot;&#x27;]pas</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#paste-blocked" class="ap-anchor" aria-label="Link to rule #paste-blocked">link</a>
+    </article>
+    
+
     <article class="ap-card" id="placeholder-as-label">
       <header class="ap-head">
         <span class="ap-id">#placeholder-as-label</span>
@@ -603,6 +626,26 @@
     </article>
     
 
+    <article class="ap-card" id="title-is-a-framework-default">
+      <header class="ap-head">
+        <span class="ap-id">#title-is-a-framework-default</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Page title left at the framework&#x27;s default</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>The title names the tab, the bookmark, the search result and what a screen reader announces first. A starter&#x27;s default (Vite + React, Create Next App, Document) describes nothing, which WCAG 2.4.2 (Page Titled) asks a title to do, and it is one of the surest signs a page was generated and never finished.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Write a title that names the page and the product, most specific part first: &#x27;Pricing, Acme&#x27; rather than &#x27;Acme&#x27;. In Next.js set it in metadata.title; in a Vite app, in index.html.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;title\b[^&gt;]*&gt;\s*(?:Vite\s*\+\s*(?:React|Vue|Svelte|Preact|Lit|TS)(?:\s*\+\s*TS)?|React App|Vite App|Svelte App|Vue App|Create Next App|Create T3 App|Nuxt App|Astro|Document|Untitled(?: Document)?|My App|Home Page)\s*&lt;/title&gt;</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#title-is-a-framework-default" class="ap-anchor" aria-label="Link to rule #title-is-a-framework-default">link</a>
+    </article>
+    
+
     <article class="ap-card" id="tooltip-on-required-info">
       <header class="ap-head">
         <span class="ap-id">#tooltip-on-required-info</span>
@@ -720,6 +763,26 @@
         
       </div>
       <a href="#purple-to-blue-gradient" class="ap-anchor" aria-label="Link to rule #purple-to-blue-gradient">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="consent-prechecked">
+      <header class="ap-head">
+        <span class="ap-id">#consent-prechecked</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">Content</span>
+        <h2 class="ap-name">Marketing consent box ticked in advance</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A box already ticked to sign the visitor up for marketing is consent they did not give. European data law does not count a pre-ticked box as consent, and visitors read it as a trick played on them at the moment they trusted the form.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Leave the box unticked and let the visitor tick it. Say plainly what they get and how often, and keep it apart from the terms they must accept.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;input\b(?=[^&gt;]*\btype\s*=\s*[&quot;&#x27;]?checkbox)(?=[^&gt;]*\b(?:checked|defaultChecked)(?:\s*=\s*(?:[&quot;&#x27;]?(?:checked|true)[&quot;&#x27;]?|\{\s*true\s*\}))?(?=[\s/&gt;]))[^&gt;]*&gt;(?:(?!&lt;input\b|&lt;/label&gt;|&lt;/p</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#consent-prechecked" class="ap-anchor" aria-label="Link to rule #consent-prechecked">link</a>
     </article>
     
 
@@ -1563,6 +1626,26 @@
     </article>
     
 
+    <article class="ap-card" id="input-purpose-missing">
+      <header class="ap-head">
+        <span class="ap-id">#input-purpose-missing</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Personal-data field without autocomplete</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A field for the person&#x27;s own email, phone, name, address, card or password with no autocomplete token makes them type it again on every form, and leaves its purpose unknown to browsers and assistive technology. WCAG 1.3.5 (Identify Input Purpose) asks that such a field&#x27;s purpose can be determined in code, which the autocomplete attribute does.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Add the matching token: autocomplete=&quot;email&quot;, &quot;tel&quot;, &quot;given-name&quot;, &quot;family-name&quot;, &quot;postal-code&quot;, &quot;street-address&quot;, &quot;cc-number&quot;, &quot;username&quot;, &quot;current-password&quot; or &quot;new-password&quot;, with the matching type (email, tel) and inputmode.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;input\b(?=[^&gt;]*\b(?:name|id)\s*=\s*[&quot;&#x27;](?:e-?mail|email[-_]?address|phone|tel|telephone|mobile|first[-_]?name|last[-_]?name|full[-_]?name|given[-_]?name|family[-_]?name|postal[-_]?code|post[-_]?code|zip(?:[-_]?code)?|street</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#input-purpose-missing" class="ap-anchor" aria-label="Link to rule #input-purpose-missing">link</a>
+    </article>
+    
+
     <article class="ap-card" id="menu-row-disabled-without-reason">
       <header class="ap-head">
         <span class="ap-id">#menu-row-disabled-without-reason</span>
@@ -1763,6 +1846,26 @@
     </article>
     
 
+    <article class="ap-card" id="confirmshaming">
+      <header class="ap-head">
+        <span class="ap-id">#confirmshaming</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Content</span>
+        <h2 class="ap-name">Decline option worded to shame</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A way out written as an insult (&#x27;No thanks, I don&#x27;t like saving money&#x27;) pressures by guilt instead of value. It is a named dark pattern, and the visitor who closes the popup remembers the brand that mocked them.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Word the decline as a plain choice of equal weight: &#x27;No thanks&#x27; or &#x27;Not now&#x27;. If the offer needs guilt to work, change the offer.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>\b(?:no,?\s+thanks,?\s+)?i\s+(?:don(?:&#x27;|’|&amp;rsquo;|&amp;#39;|&amp;#x27;)?t|do\s+not)\s+(?:want|like|need|care\s+about)\s+(?:to\s+)?(?:save|saving|savings|money|deals|discounts|free\s+\w+|better\s+\w+)\b|\b(?:no,?\s+thanks,?\s+)?i(?:</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#confirmshaming" class="ap-anchor" aria-label="Link to rule #confirmshaming">link</a>
+    </article>
+    
+
     <article class="ap-card" id="cta-text-tap-continue-go">
       <header class="ap-head">
         <span class="ap-id">#cta-text-tap-continue-go</span>
@@ -1823,6 +1926,26 @@
     </article>
     
 
+    <article class="ap-card" id="fake-urgency">
+      <header class="ap-head">
+        <span class="ap-id">#fake-urgency</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">Content</span>
+        <h2 class="ap-name">Urgency written into the page as fixed copy</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A stock count, a crowd of viewers or a countdown typed into the copy is the same on every visit, so it is not true on most of them. Visitors who notice stop trusting every other claim on the page, and generated pages reach for it by default.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Show urgency only from live data (render the real stock or the real end date from your data), or cut it and let the offer stand on its own.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>\b(?:only\s+\d{1,3}\s+(?:left|remaining)\b|\d{1,4}\s+(?:people|others|shoppers|visitors)\s+(?:are\s+)?(?:viewing|looking at|watching)\b|hurry,?\s+(?:only|offer|sale|ends)\b|offer\s+ends\s+in\s+\d)</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#fake-urgency" class="ap-anchor" aria-label="Link to rule #fake-urgency">link</a>
+    </article>
+    
+
     <article class="ap-card" id="marketing-buzz-ai-powered-driven">
       <header class="ap-head">
         <span class="ap-id">#marketing-buzz-ai-powered-driven</span>
@@ -1832,7 +1955,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off marketing-buzz-ai-powered-driven --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;AI-powered&#x27; has become the new &#x27;cloud-based&#x27; - every landing page claims it, nobody asks what model, what data, what task. Empty by saturation.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;AI-powered&#x27; has become the new &#x27;cloud-based&#x27; - every landing page claims it, nobody asks what model, what data, what task. Empty by saturation.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the model and the function: &#x27;uses Claude to generate brand-aware tokens&#x27;, &#x27;embeddings from text-embedding-3-small for palette match&#x27;. Or drop the qualifier and just describe the feature.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])AI[\s-]?(?:powered|driven|enabled|enhanced|first)(?![\w-])</code></pre>
       <div class="ap-examples">
@@ -1852,7 +1975,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off marketing-buzz-best-in-class --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Best-in-class&#x27; is a vendor pitch phrase with no defined benchmark - reads as marketing autopilot. If you really are best at something, name the comparison.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Best-in-class&#x27; is a vendor pitch phrase with no defined benchmark - reads as marketing autopilot. If you really are best at something, name the comparison.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a measurable claim: &#x27;fastest CI lint at 90ms&#x27;, &#x27;most rules in the category at 145&#x27;. If no comparison exists, drop the phrase.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])best[\s-]in[\s-]class(?![\w-])</code></pre>
       <div class="ap-examples">
@@ -1872,7 +1995,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off marketing-buzz-cutting-edge --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Cutting-edge&#x27; is the laziest tech adjective in marketing copy - empty signal that means &#x27;we don&#x27;t want to commit to a specific claim&#x27;. Skipped by anyone reading critically.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Cutting-edge&#x27; is the laziest tech adjective in marketing copy - empty signal that means &#x27;we don&#x27;t want to commit to a specific claim&#x27;. Skipped by anyone reading critically.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Replace with a concrete capability: &#x27;ships in under 50ms&#x27;, &#x27;covers 152 anti-patterns&#x27;, &#x27;runs inside Cursor and Windsurf&#x27;. Specifics beat adjectives.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])cutting[\s-]edge(?![\w-])</code></pre>
       <div class="ap-examples">
@@ -1892,7 +2015,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off marketing-buzz-game-changing --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Game-changing&#x27; is the most overused tech-PR adjective in the last decade - means the writer wanted hype without committing to a specific shift. Reads instantly as filler.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Game-changing&#x27; is the most overused tech-PR adjective in the last decade - means the writer wanted hype without committing to a specific shift. Reads instantly as filler.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Describe the shift in one sentence: &#x27;design intelligence in the model context, not just in Figma&#x27;. Concrete &gt; grandiose.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])game[\s-]chang(?:er|ing|e)(?![\w-])</code></pre>
       <div class="ap-examples">
@@ -1912,7 +2035,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off marketing-buzz-industry-leading --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Industry-leading&#x27; is unverifiable by definition - every category leader and every follower uses it identically. Removes signal, adds slop.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Industry-leading&#x27; is unverifiable by definition - every category leader and every follower uses it identically. Removes signal, adds slop.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Cite the specific lead: &#x27;first design linter in Claude Code marketplace&#x27;, &#x27;4x more rules than the next entrant&#x27;. No claim, no superlative.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])industry[\s-]leading(?![\w-])</code></pre>
       <div class="ap-examples">
@@ -1932,7 +2055,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off marketing-buzz-leverage-ai-harness --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Leverage AI&#x27;, &#x27;harness the power of&#x27;, &#x27;tap into the power of&#x27; are LinkedIn-thinkpiece formulas - immediately telegraphs generated marketing copy with no specifics.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Leverage AI&#x27;, &#x27;harness the power of&#x27;, &#x27;tap into the power of&#x27; are LinkedIn-thinkpiece formulas - immediately telegraphs generated marketing copy with no specifics.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use &#x27;use&#x27; or name the verb directly: &#x27;uses Claude for layout suggestions&#x27;. Plain verbs beat power-of-X scaffolding.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])(?:leverage(?:\s+the\s+power\s+of)?\s+AI|harness(?:\s+the\s+power\s+of)?|tap\s+into\s+the\s+power\s+of)(?![\w-])</code></pre>
       <div class="ap-examples">
@@ -1952,7 +2075,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off marketing-buzz-next-generation --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Next-generation&#x27; is a category-leader cliche that names nothing - every press release in the last 30 years has claimed it. The phrase signals unedited marketing copy and shows the writer skipped the work of saying what is actually new.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Next-generation&#x27; is a category-leader cliche that names nothing - every press release in the last 30 years has claimed it. The phrase signals unedited marketing copy and shows the writer skipped the work of saying what is actually new.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific capability that is new (e.g., &#x27;first MCP-native design engine&#x27;, &#x27;first regex linter with 145 rules&#x27;). If you can&#x27;t name a specific advance, drop the qualifier.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])next[\s-]generation(?![\w-])</code></pre>
       <div class="ap-examples">
@@ -1972,7 +2095,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off marketing-buzz-world-class --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;World-class&#x27; is consultancy filler - signals the writer either had nothing concrete to say or was scared to commit. Costs trust in a landing page.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;World-class&#x27; is consultancy filler - signals the writer either had nothing concrete to say or was scared to commit. Costs trust in a landing page.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Name the specific bar you cleared: &#x27;tested in 17 IDEs&#x27;, &#x27;WCAG AA on every component&#x27;. If there&#x27;s no bar, the word does not belong.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w#-])world[\s-]class(?![\w-])</code></pre>
       <div class="ap-examples">
@@ -1992,7 +2115,7 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off marketing-unlock-unleash-potential --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Unlock the potential&#x27; / &#x27;unleash your creativity&#x27; / &#x27;reach new heights&#x27; / &#x27;take it to the next level&#x27; / &#x27;the future is here&#x27; is the strongest cluster of LinkedIn-thinkpiece phrases in any landing page - immediate AI-generated marketing copy tell.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Unlock the potential&#x27; / &#x27;unleash your creativity&#x27; / &#x27;reach new heights&#x27; / &#x27;take it to the next level&#x27; / &#x27;the future is here&#x27; is the strongest cluster of LinkedIn-thinkpiece phrases in any landing page - immediate AI-generated marketing copy tell.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Describe what the user can do that they could not do before: &#x27;lint AI-generated code in 50ms&#x27;, &#x27;install in three IDEs from one command&#x27;. Specifics beat &#x27;unlock&#x27; every time.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:unlock(?:\s+the)?\s+(?:potential|power|magic|future)|unleash\s+(?:your|the)\s+(?:potential|creativity|power)|reach\s+new\s+heights|take\s+(?:it|things)\s+to\s+the\s+next\s+level|the\s+future\s+is\s+here)\b</code></pre>
       <div class="ap-examples">
@@ -2494,7 +2617,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>scroll, touchmove, touchstart, and wheel listeners default to passive: false, which means the browser must wait for the handler to finish before scrolling - any sync work blocks the scroll thread and creates the &#x27;janky scroll on a fancy page&#x27; feel. Chromium flags this in DevTools as a passive-listener warning for any non-passive scroll handler.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pass `{ passive: true }` as the third argument: `el.addEventListener(&#x27;scroll&#x27;, fn, { passive: true })`. Only opt out (passive: false) if you genuinely need preventDefault() to block scrolling - which is rare and usually wrong.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>addEventListener\s*\(\s*[&#x27;&quot;](?:scroll|touchmove|touchstart|wheel|mousewheel)[&#x27;&quot;]\s*,(?:(?!passive\s*:\s*(?:true|false))[^)])*\)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>addEventListener\s*\(\s*[&#x27;&quot;](?:scroll|touchmove|touchstart|wheel|mousewheel)[&#x27;&quot;]\s*,(?:(?!passive\s*:\s*(?:true|false))(?:\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)|[^()]))*\)</code></pre>
       <div class="ap-examples">
         
         
@@ -2972,8 +3095,8 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off footer-built-with-love-coffee --><div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Built with love&#x27; / &#x27;Made with coffee&#x27; / &#x27;Crafted with care&#x27; is the universal indie-hacker footer template - signals the writer reached for a meme line because they did not want to commit to a real footer voice. Reads as the most generated of all generated lines.</p></div><!-- ux-lint-on -->
-      <!-- ux-lint-off footer-built-with-love-coffee --><div class="ap-fix"><span class="ap-sub">Fix</span><p>Use a real footer line - your domain, the year, a one-line manifesto, a credit. If you want to be warm, be specific: &#x27;Shipped from Amman&#x27; / &#x27;Open source since 2026&#x27; beats &#x27;made with love&#x27; every time.</p></div><!-- ux-lint-on -->
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>&#x27;Built with love&#x27; / &#x27;Made with coffee&#x27; / &#x27;Crafted with care&#x27; is the universal indie-hacker footer template - signals the writer reached for a meme line because they did not want to commit to a real footer voice. Reads as the most generated of all generated lines.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use a real footer line - your domain, the year, a one-line manifesto, a credit. If you want to be warm, be specific: &#x27;Shipped from Amman&#x27; / &#x27;Open source since 2026&#x27; beats &#x27;made with love&#x27; every time.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>\b(?:(?:Built|Made|Crafted|Designed|Forged|Brewed)\s+with\s+(?:love|care|coffee|caffeine|passion|heart|joy|pride)|with\s+love\s+from)\b</code></pre>
       <div class="ap-examples">
         
