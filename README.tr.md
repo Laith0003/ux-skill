@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 veya daha yenisi. MCP sunucusu için `pip install --upgrade 'uxskill
 
 **Yüzey playbook'ları.** Landing, dashboard ve component kuralları `references/surfaces/` altında, her biri için bir playbook olarak durur. `/ux-design` moduna göre seçilen tam olarak birini yükler; böylece bir dashboard build'i hero kurallarını hiç okumaz.
 
-Testler: **9764 geçiyor**. Çevrimdışı. Deterministik. Hiçbir zaman LLM çağrılmaz.
+Testler: **13101 geçiyor**. Çevrimdışı. Deterministik. Hiçbir zaman LLM çağrılmaz.
 
 ### v3.1'de yeni: markaya sadık, duyarlı, canlı
 
@@ -112,7 +112,7 @@ Bu README kanonik referans. Her komut, her sub-agent, her data manifest, her ins
 4. [Mimari, parçalar nasıl birleşiyor](#mimari-parçalar-nasıl-birleşiyor)
 5. [18 slash komutu, ayrıntılı başvuru](#18-slash-komutu-ayrıntılı-başvuru)
 6. [5 sub-agent](#5-sub-agent)
-7. [11 data manifest'i](#11-data-manifesti)
+7. [12 data manifest'i](#12-data-manifesti)
 8. [171 anti-AI-slop kuralı, linter](#171-anti-ai-slop-kuralı-linter)
 9. [160 brand DESIGN.md spec'i, kategoriye göre](#160-brand-designmd-speci-kategoriye-göre)
 10. [MCP sunucusu, asimetrik hamle](#mcp-sunucusu-asimetrik-hamle)
@@ -228,7 +228,7 @@ Yıldız sayıları en son **2026-05-28**'de `gh api` ile doğrulandı. ux-skill
 - **Component kütüphanesi:** Anatomi, durumlar, kullanılan token'lar ve motion özellikleri ile 148 belgelenmiş component. Diğer 8'in hiçbiri component manifest'i dağıtmıyor.
 - **Motion preset'leri:** Reduced-motion fallback'leriyle stack-ready 57 giriş (Framer Motion, GSAP, CSS). Diğerlerinin hiçbiri motion manifest'i dağıtmıyor.
 - **Anti-pattern linter:** 171 deterministik kural, CI'da çalışır, Critical/High'ta non-zero ile çıkar. Diğerlerinin hiçbiri deterministik linter dağıtmıyor.
-- **Brand spec'leri:** 160 gerçek DESIGN.md spec (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude ve 96 daha). Diğerlerinin hiçbiri brand kütüphanesi dağıtmıyor.
+- **Brand spec'leri:** 160 gerçek DESIGN.md spec (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude ve 146 daha). Diğerlerinin hiçbiri brand kütüphanesi dağıtmıyor.
 - **17 desteklenen IDE:** aynı motor, IDE başına farklı yapıştırıcı.
 - **18 slash komutu:** discovery, üretim (sayfalar, component'ler, dashboard'lar, bir görselden), audit, lint, polish döngüsü, fix döngüsü, case-study, workshop, copy, motion, a11y, conductor, tamamen entegre.
 
@@ -668,7 +668,7 @@ Sub-agent'lar şunu döndürür:
 
 ---
 
-## 11 data manifest'i
+## 12 data manifest'i
 
 Data katmanı beyindir. Her komut ondan okur; motor onun üzerinden merge eder; linter ona karşı tarar. Tüm dosyalar `data/` altında yaşar ve schema sürümlemesi için girişlerini `{_meta, entries}`'e sarar.
 
@@ -779,6 +779,15 @@ Her preset'in bir reduced-motion varyantı var. Framer Motion, GSAP ve saf CSS i
 | `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 Kuralların tam listesi [171 anti-AI-slop kuralı](#171-anti-ai-slop-kuralı-linter) bölümünde.
+
+### `landing-patterns.json`: 40 landing page kalıbı
+
+| Alan | Açıklama |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160 brand specs'i
 

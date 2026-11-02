@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out des
 
 **按界面分的规则手册。** 落地页、仪表盘和组件的规则放在 `references/surfaces/`，各有一份手册。`/ux-design` 按模式只加载其中一份，所以构建仪表盘时永远不会读到 hero 的规则。
 
-测试 **9764 项通过**。离线。确定性。从不调用 LLM。
+测试 **13101 项通过**。离线。确定性。从不调用 LLM。
 
 ### v3.1 新增：忠于品牌、响应式、有生命力
 
@@ -112,7 +112,7 @@ ux-skill 是一个面向 AI 编程工具的**设计智能引擎**。它以 Pytho
 4. [架构，各部件如何咬合](#架构各部件如何咬合)
 5. [18 个斜杠命令，详细参考](#18-个斜杠命令详细参考)
 6. [5 个子代理](#5-个子代理)
-7. [11 份数据清单](#11-份数据清单)
+7. [12 份数据清单](#12-份数据清单)
 8. [171 条反 AI slop 规则，检查器](#171-条反-ai-slop-规则检查器)
 9. [160 份 DESIGN.md 品牌规范，按类别](#160-份-designmd-品牌规范按类别)
 10. [MCP 服务器，非对称的一着](#mcp-服务器非对称的一着)
@@ -228,7 +228,7 @@ Star 数最后一次通过 `gh api` 核对的时间是 **2026-05-28**。ux-skill
 - **组件库:** 148 个带解剖结构、状态、所用 token 与动效规范的文档化组件。其他 8 个里没有任何一个发布过组件清单。
 - **动效预设:** 57 个开箱即用的栈级条目(Framer Motion、GSAP、CSS),全部带 reduced-motion 兜底。其他几家都不发布动效清单。
 - **反模式静态检查器：** 171 条确定性规则，能在 CI 中运行，遇 Critical/High 退出非零码。其他几家没有任何确定性检查器。
-- **品牌规范:** 160 份真实 DESIGN.md 规范(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其余 96 个)。其他几家没有品牌库。
+- **品牌规范:** 160 份真实 DESIGN.md 规范(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其余 146 个)。其他几家没有品牌库。
 - **支持 17 个 IDE:** 同一个引擎,IDE 之间用不同的"胶水"对接。
 - **18 个斜杠命令：** discovery、生成（页面、组件、仪表盘、从图片生成）、审查、lint、polish 循环、修复循环、案例研究、工作坊、文案、动效、a11y、conductor，彼此完全打通。
 
@@ -668,7 +668,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## 11 份数据清单
+## 12 份数据清单
 
 数据层就是大脑。每个命令都从中读取;引擎在其间合并;静态检查器对其扫描。所有文件都在 `data/` 下,条目用 `{_meta, entries}` 包装以做 schema 版本管理。
 
@@ -779,6 +779,15 @@ ux-skill (package name: uxskill)
 | `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 完整规则列表见 [171 条反 AI slop 规则](#171-条反-ai-slop-规则检查器)。
+
+### `landing-patterns.json`：40 种落地页模式
+
+| 字段 | 描述 |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`：160 份品牌规范
 

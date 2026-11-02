@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 или новее. Для MCP-сервера: `pip install --upgrade
 
 **Плейбуки поверхностей.** Правила для лендингов, дашбордов и компонентов лежат в `references/surfaces/`, по одному плейбуку на каждый вид. `/ux-design` загружает ровно один, выбранный по режиму, так что сборка дашборда никогда не читает правила hero.
 
-Тесты: **9764 проходят**. Офлайн. Детерминированно. LLM не вызывается никогда.
+Тесты: **13101 проходят**. Офлайн. Детерминированно. LLM не вызывается никогда.
 
 ### Новое в v3.1: верность бренду, адаптивность, живость
 
@@ -112,7 +112,7 @@ ux-skill, это **движок design intelligence** для AI-инструме
 4. [Архитектура, как складываются части](#архитектура-как-складываются-части)
 5. [18 slash-команд, подробный справочник](#18-slash-команд-подробный-справочник)
 6. [5 саб-агентов](#5-саб-агентов)
-7. [11 data-манифестов](#11-data-манифестов)
+7. [12 data-манифестов](#12-data-манифестов)
 8. [171 правило против AI-slop, linter](#171-правило-против-ai-slop-linter)
 9. [160 brand-спеков DESIGN.md, по категориям](#160-brand-спеков-designmd-по-категориям)
 10. [MCP-сервер, асимметричный ход](#mcp-сервер-асимметричный-ход)
@@ -228,7 +228,7 @@ ux stats
 - **Библиотека компонентов:** 148 задокументированных компонентов с анатомией, состояниями, использованными токенами и motion-спецификациями. Никто из остальных 8 не поставляет манифест компонентов.
 - **Motion-пресеты:** 57 stack-ready записей (Framer Motion, GSAP, CSS) с reduced-motion-фолбэками. Никто из остальных не поставляет motion-манифест.
 - **Anti-pattern linter:** 171 детерминированное правило, работает в CI, выходит с non-zero на Critical/High. Никто из остальных не поставляет детерминированный linter.
-- **Brand-спеки:** 160 реальных DESIGN.md-спеков (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude и ещё 96). Никто из остальных не поставляет brand-библиотеку.
+- **Brand-спеки:** 160 реальных DESIGN.md-спеков (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude и ещё 146). Никто из остальных не поставляет brand-библиотеку.
 - **17 поддерживаемых IDE:** один и тот же движок, разный клей для каждой IDE.
 - **18 slash-команд:** discovery, генерация (страницы, компоненты, дашборды, по изображению), audit, lint, цикл polish, fix loop, case-study, workshop, copy, motion, a11y, conductor, полностью интегрированы.
 
@@ -668,7 +668,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## 11 data-манифестов
+## 12 data-манифестов
 
 Слой данных, это мозг. Каждая команда читает из него; движок мёрджит через него; linter сканирует против него. Все файлы живут в `data/` и оборачивают записи в `{_meta, entries}` для версионирования схемы.
 
@@ -779,6 +779,15 @@ ux-skill (package name: uxskill)
 | `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 Полный список правил в разделе [171 правило против AI-slop](#171-правило-против-ai-slop-linter).
+
+### `landing-patterns.json`: 40 паттернов лендингов
+
+| Поле | Описание |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160 brand-спеков
 

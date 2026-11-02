@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 이상. MCP 서버는 `pip install --upgrade 'uxskill[mcp]'`. pipx�
 
 **화면별 플레이북.** 랜딩, 대시보드, 컴포넌트 규칙은 `references/surfaces/`에 각각 플레이북 하나씩 있습니다. `/ux-design`은 모드에 맞춰 정확히 하나만 불러오므로, 대시보드 빌드가 히어로 규칙을 읽을 일은 없습니다.
 
-테스트 **9764개 통과**. 오프라인. 결정론적. LLM은 절대 호출하지 않습니다.
+테스트 **13101개 통과**. 오프라인. 결정론적. LLM은 절대 호출하지 않습니다.
 
 ### v3.1의 새 기능: 브랜드에 충실, 반응형, 생동감
 
@@ -112,7 +112,7 @@ ux-skill은 AI 코딩 도구를 위한 **디자인 인텔리전스 엔진**입�
 4. [아키텍처, 부품들이 어떻게 맞물리는가](#아키텍처-부품들이-어떻게-맞물리는가)
 5. [18개 슬래시 명령, 상세 참조](#18개-슬래시-명령-상세-참조)
 6. [5개의 서브에이전트](#5개의-서브에이전트)
-7. [11개의 데이터 매니페스트](#11개의-데이터-매니페스트)
+7. [12개의 데이터 매니페스트](#12개의-데이터-매니페스트)
 8. [171개 반-AI 슬롭 규칙, 린터](#171개-반-ai-슬롭-규칙-린터)
 9. [160개의 브랜드 DESIGN.md 사양, 카테고리별](#160개의-브랜드-designmd-사양-카테고리별)
 10. [MCP 서버, 비대칭 한 수](#mcp-서버-비대칭-한-수)
@@ -228,7 +228,7 @@ ux stats
 - **컴포넌트 라이브러리:** 해부, 상태, 사용한 토큰, 모션 사양을 포함한 148개의 문서화된 컴포넌트. 다른 8개 중 어느 것도 컴포넌트 매니페스트를 출시하지 않습니다.
 - **모션 프리셋:** 스택 준비된 57개 항목(Framer Motion, GSAP, CSS), reduced-motion 폴백 포함. 다른 어떤 곳도 모션 매니페스트를 출시하지 않습니다.
 - **안티패턴 린터:** 결정론적 규칙 171개, CI에서 실행되며 Critical/High에서 0이 아닌 코드로 종료. 다른 어떤 곳도 결정론적 린터를 내놓지 않습니다.
-- **브랜드 사양:** 160개의 실제 DESIGN.md 사양(Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude 외 96개). 다른 어떤 곳도 브랜드 라이브러리를 출시하지 않습니다.
+- **브랜드 사양:** 160개의 실제 DESIGN.md 사양(Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude 외 146개). 다른 어떤 곳도 브랜드 라이브러리를 출시하지 않습니다.
 - **17 IDE 지원:** 같은 엔진, IDE마다 다른 접착제.
 - **슬래시 명령 18개:** discovery, 생성(페이지, 컴포넌트, 대시보드, 이미지에서), 감사, lint, 폴리시 루프, 수정 루프, 케이스 스터디, 워크숍, 카피, 모션, a11y, 컨덕터, 완전히 통합.
 
@@ -668,7 +668,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## 11개의 데이터 매니페스트
+## 12개의 데이터 매니페스트
 
 데이터 층이 두뇌입니다. 모든 명령이 거기서 읽고, 엔진이 그 사이를 머지하며, 린터가 그것에 대해 스캔합니다. 모든 파일은 `data/` 아래 있고, 항목을 `{_meta, entries}`로 감싸 스키마 버저닝을 합니다.
 
@@ -779,6 +779,15 @@ ux-skill (package name: uxskill)
 | `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 전체 규칙 목록은 [171개 반-AI 슬롭 규칙](#171개-반-ai-슬롭-규칙-린터)에 있습니다.
+
+### `landing-patterns.json`: 40개의 랜딩 패턴
+
+| 필드 | 설명 |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160개 브랜드 사양
 

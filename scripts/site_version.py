@@ -72,6 +72,17 @@ def _jsonld(html: str) -> Iterator[dict]:
                 yield obj
 
 
+def _numeral_layers(html: str) -> List[str]:
+    """The text of each layer of a hero numeral set one glyph per span (the
+    glow, the digits and the light sweep), so a stale glyph in any of them
+    is caught."""
+    m = re.search(r'<div class="three" aria-hidden="true">\s*<span class="three__(.*?)</div>', html, re.S)
+    if not m:
+        return []
+    layers = re.split(r'<span class="three__(?:glow|base|copy)">', m.group(0))[1:]
+    return [re.sub(r"<[^>]+>|\s", "", layer) for layer in layers]
+
+
 def claims(html: str, is_release_post: bool = False) -> List[Tuple[str, str]]:
     """(label, version) for every current-version claim in a page."""
     out: List[Tuple[str, str]] = []
@@ -92,6 +103,7 @@ def claims(html: str, is_release_post: bool = False) -> List[Tuple[str, str]]:
                 out.append(("TechArticle.description", v))
     for label, rx in _VISIBLE:
         out += [(label, v) for v in re.findall(rx, html)]
+    out += [("hero numeral", v) for v in _numeral_layers(html)]
     if not is_release_post:
         head = html.split("</head>", 1)[0]
         for label, rx in _HEAD:
