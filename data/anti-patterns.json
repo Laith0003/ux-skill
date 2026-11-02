@@ -4016,7 +4016,7 @@
       "category": "A11y",
       "detection": {
         "type": "regex",
-        "pattern": "<title\\b[^>]*>\\s*(?:Vite\\s*\\+\\s*(?:React|Vue|Svelte|Preact|Lit|TS)(?:\\s*\\+\\s*TS)?|React App|Vite App|Svelte App|Vue App|Create Next App|Create T3 App|Nuxt App|Astro|Document|Untitled(?: Document)?|My App|Home Page)?\\s*</title>|\\btitle\\s*:\\s*[\"'](?:Create Next App|Create T3 App|React App|Vite App|Nuxt App)[\"']",
+        "pattern": "<title\\b[^>]*>\\s*(?:Vite\\s*\\+\\s*(?:React|Vue|Svelte|Preact|Lit|TS)(?:\\s*\\+\\s*TS)?|React App|Vite App|Svelte App|Vue App|Create Next App|Create T3 App|Nuxt App|Astro|Document|Untitled(?: Document)?|My App|Home Page)\\s*</title>|\\btitle\\s*:\\s*[\"'](?:Create Next App|Create T3 App|React App|Vite App|Nuxt App)[\"']",
         "flags": "i",
         "scope": [
           "tsx",
@@ -4031,7 +4031,7 @@
         ],
         "target": "code"
       },
-      "why": "The title names the tab, the bookmark, the search result and what a screen reader announces first. A starter's default (Vite + React, Create Next App, Document) or an empty title describes nothing, which WCAG 2.4.2 (Page Titled) asks a title to do, and it is one of the surest signs a page was generated and never finished.",
+      "why": "The title names the tab, the bookmark, the search result and what a screen reader announces first. A starter's default (Vite + React, Create Next App, Document) describes nothing, which WCAG 2.4.2 (Page Titled) asks a title to do, and it is one of the surest signs a page was generated and never finished.",
       "fix": "Write a title that names the page and the product, most specific part first: 'Pricing, Acme' rather than 'Acme'. In Next.js set it in metadata.title; in a Vite app, in index.html."
     },
     {
@@ -4087,7 +4087,7 @@
       "category": "Content",
       "detection": {
         "type": "regex",
-        "pattern": "\\bno,?\\s+thanks,?\\s+i\\s+(?:don'?t|do\\s+not|prefer|would\\s+rather|like|enjoy|hate|am\\s+not)\\b|\\bi\\s+(?:don'?t|do\\s+not)\\s+(?:want|like|need|care\\s+about)\\s+(?:to\\s+)?(?:save|saving|savings|money|deals|discounts|free|better)\\b|\\bi'?ll\\s+pay\\s+full\\s+price\\b|\\bi\\s+prefer\\s+(?:to\\s+)?(?:pay(?:ing)?\\s+more|missing\\s+out)\\b",
+        "pattern": "\\b(?:no,?\\s+thanks,?\\s+)?i\\s+(?:don(?:'|’|&rsquo;|&#39;|&#x27;)?t|do\\s+not)\\s+(?:want|like|need|care\\s+about)\\s+(?:to\\s+)?(?:save|saving|savings|money|deals|discounts|free\\s+\\w+|better\\s+\\w+)\\b|\\b(?:no,?\\s+thanks,?\\s+)?i(?:\\s+(?:prefer|would\\s+rather)|(?:'|’|&rsquo;|&#39;|&#x27;)d\\s+rather)\\s+(?:to\\s+)?(?:pay(?:ing)?\\s+(?:more|full\\s+price)|miss(?:ing)?\\s+out|lose\\s+\\w+|losing\\s+\\w+)\\b|\\bi(?:'|’|&rsquo;|&#39;|&#x27;)ll\\s+pay\\s+full\\s+price\\b|\\bno,?\\s+thanks,?\\s+i\\s+(?:hate|enjoy|love)\\s+(?:saving|money|deals|discounts|paying\\s+more|missing\\s+out)\\b",
         "flags": "i",
         "scope": [
           "tsx",

@@ -266,10 +266,14 @@ _MEASURE_JS = r"""(tol) => {
     }
     if (!im.naturalWidth || /\.svgz?(\?|#|$)/i.test(src) || src.startsWith('data:image/svg')) continue;
     if (q.width < 32 || q.height < 32 || getComputedStyle(im).objectFit !== 'fill') continue;
-    const want = im.naturalWidth / im.naturalHeight, got = q.width / q.height;
+    const is = getComputedStyle(im), px = v => parseFloat(v) || 0;
+    const cw = q.width - px(is.paddingLeft) - px(is.paddingRight) - px(is.borderLeftWidth) - px(is.borderRightWidth);
+    const ch = q.height - px(is.paddingTop) - px(is.paddingBottom) - px(is.borderTopWidth) - px(is.borderBottomWidth);
+    if (cw < 32 || ch < 32) continue;
+    const want = im.naturalWidth / im.naturalHeight, got = cw / ch;
     const off = Math.abs(got / want - 1);
     if (off > 0.03) out.push({...base, rule: 'image-distorted', pct: Math.round(off * 100),
-      nat: im.naturalWidth + 'x' + im.naturalHeight, box: Math.round(q.width) + 'x' + Math.round(q.height)});
+      nat: im.naturalWidth + 'x' + im.naturalHeight, box: Math.round(cw) + 'x' + Math.round(ch)});
   }
 
   // A target smaller than 24 by 24 CSS pixels whose 24px circle, centred on
@@ -280,7 +284,10 @@ _MEASURE_JS = r"""(tol) => {
     + '[role=button],[role=link],[role=tab],[role=menuitem],[role=checkbox],[role=radio],'
     + '[role=switch],[role=option],[tabindex]:not([tabindex="-1"])';
   const seenBox = el => { const q = el.getBoundingClientRect();
-    if (q.width < 1 || q.height < 1) return false;
+    // A visually hidden element (a 1px box, or one clipped away) is not seen.
+    if (q.width <= 1 || q.height <= 1) return false;
+    const vs = getComputedStyle(el);
+    if ((vs.clip && vs.clip !== 'auto') || /inset\(50%|circle\(0/.test(vs.clipPath)) return false;
     return el.checkVisibility ? el.checkVisibility({opacityProperty: true, visibilityProperty: true}) : true; };
   const tg = [];
   for (const el of document.body.querySelectorAll(TARGETS)) {

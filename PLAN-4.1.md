@@ -20,7 +20,9 @@ This file is the handoff for finishing 4.1 on `feat/4.1-stageshow`. A session th
   - `input-text-zooms`
   - `image-broken`
   - `image-distorted`
-- **Lint rules.** `title-is-a-framework-default`, `consent-prechecked`, `fake-urgency` and `confirmshaming`. Quoted mentions are read as mentions. An inline passive listener is no longer flagged. 178 rules in all.
+  - `focus-obscured`, a focused control entirely hidden under fixed or sticky content (2.4.11), in the keyboard pass
+- **Lint rules.** `title-is-a-framework-default`, `consent-prechecked`, `fake-urgency`, `confirmshaming`, `input-purpose-missing` and `paste-blocked`. Quoted mentions are read as mentions, apostrophes and inch marks are not quotation marks, and an inline passive listener is not flagged. 180 rules in all.
+- **Guides.** `references/laws/nielsen-heuristics.md`, walked by /ux-audit, and `references/foundations/ai-interfaces.md`, loaded by /ux-design beside the playbook.
 
 ## Waiting on the owner
 
@@ -35,24 +37,20 @@ This file is the handoff for finishing 4.1 on `feat/4.1-stageshow`. A session th
 Each item names where it lands. Build each with tests, one review, the full suite and a run over the site's own pages to prove zero false positives first.
 
 1. **Render the running app.** `uxskill lint --render --url` reuses the complaints snapshot (styles inline, scripts removed after they ran), so frameworks are measured as served.
-2. **Focus not obscured** (2.4.11). In engine/render/interact.py's tab pass, check that the focused box is not covered by fixed or sticky author content.
-3. **Reflow and text spacing** (1.4.10, 1.4.12). Add a 320 by 640 viewport, and a pass with the WCAG text-spacing values forced that re-runs the overflow and clip checks.
-4. **Control edges** (1.4.11). Input, checkbox and radio borders at 3:1 against the ground beside them; render, in taste.py beside the text contrast.
-5. **Reading measure and leading.** Characters per rendered line of body text (house range from references/foundations/typography.md) and line height under 1.5 on body text. Render.
-6. **Type-size drift.** Computed font sizes under 6% apart on one page, monospace and decorative text left out, measured against the system's type roles. Render, in taste.py.
-7. **Near-miss alignment and off-scale spacing.** Left edges 1 to 6px apart within a section, and gaps off the page's base step. Render, in core.py.
-8. **Hierarchy.** The largest text on the first screen is the h1, and one button group holds at most one filled button. Render.
-9. **Dashboard numbers.** Tabular figures and right alignment in numeric table cells. Render, beside references/surfaces/dashboard.md.
-10. **Input semantics.** Name, email, phone and card fields carry autocomplete tokens and the right type (1.3.5), and paste is never blocked. Lint.
-11. **Complaint probes `task` and `reach`.** Steps to click, then a selector that must show; Tab presses to reach a selector. In engine/complaints.py, with the weak test against `--before`.
-12. **Guidance the research found missing**, each as a reference file:
-    - Nielsen's ten heuristics (references/laws/nielsen-heuristics.md, cited from commands/ux-audit.md);
-    - AI interfaces: streaming, stop and regenerate, editable output, citations, uncertainty, disclosure, reversible agent actions (references/surfaces/ai-interface.md);
+2. **Reflow and text spacing** (1.4.10, 1.4.12). Add a 320 by 640 viewport, and a pass with the WCAG text-spacing values forced that re-runs the overflow and clip checks.
+3. **Control edges** (1.4.11). Input, checkbox and radio borders at 3:1 against the ground beside them; render, in taste.py beside the text contrast.
+4. **Reading measure and leading.** Characters per rendered line of body text (house range from references/foundations/typography.md) and line height under 1.5 on body text. Render.
+5. **Type-size drift.** Computed font sizes under 6% apart on one page, monospace and decorative text left out, measured against the system's type roles. Render, in taste.py.
+6. **Near-miss alignment and off-scale spacing.** Left edges 1 to 6px apart within a section, and gaps off the page's base step. Render, in core.py.
+7. **Hierarchy.** The largest text on the first screen is the h1, and one button group holds at most one filled button. Render.
+8. **Dashboard numbers.** Tabular figures and right alignment in numeric table cells. Render, beside references/surfaces/dashboard.md.
+9. **Complaint probes `task` and `reach`.** Steps to click, then a selector that must show; Tab presses to reach a selector. In engine/complaints.py, with the weak test against `--before`.
+10. **Guidance the research found missing**, each as a reference file:
     - checkout (references/surfaces/checkout.md);
     - chart rules for dashboards: data ink, direct labels, no dual axes, sorted bars, small multiples (references/surfaces/dashboard.md);
     - toasts that hold an action wait for the person (references/foundations/components.md).
-13. **Optional component tier in tokens.css** from the contracts (`--button-primary-bg: var(--color-action-primary)`), so one component can be restyled without touching a role.
-14. **Router SKILL.md, manifest sync and a smaller MCP surface**; rule tiers and a hook that reports only new findings.
+11. **Optional component tier in tokens.css** from the contracts (`--button-primary-bg: var(--color-action-primary)`), so one component can be restyled without touching a role.
+12. **Router SKILL.md, manifest sync and a smaller MCP surface**; rule tiers and a hook that reports only new findings.
 
 ## What this round taught
 
@@ -64,5 +62,5 @@ Each item names where it lands. Build each with tests, one review, the full suit
 - **Measure what the visitor sees, not the page at rest.** Scroll-led pages change their ground as they move. A check that reads the page unscrolled measures colors no one sees.
 - **A probe must fail on the original.** A check written after a fix tends to pass on the old page too. The `--before` run marks those weak.
 - **A snapshot must stand alone.** Inline the styles, including rules added by script, and make the base absolute. Otherwise a later edit to a stylesheet reaches the old page.
-- **A real fault on our own site is a result.** The new checks found contrast failures, 14px search fields and an inline listener bug on the project's own pages, and each was fixed.
-- **One review per change, then fix with a test.** Every review in this round found real defects that tests had not covered: five in the occlusion check, seven in the complaints.
+- **A real fault on our own site is a result.** The new checks found contrast failures, 14px search fields, a sticky toolbar that hid focused links and covered half a phone screen, and an inline listener bug on the project's own pages, and each was fixed.
+- **One review per change, then fix with a test.** Every review in this round found real defects that tests had not covered: five in the occlusion check, seven in the complaints, nine in the batch of checks that followed.

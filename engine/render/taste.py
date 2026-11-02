@@ -174,13 +174,28 @@ _PAGE_JS = r"""async (limits) => {
   // Contrast is measured on the screen the visitor sees: the page is
   // scrolled a screen at a time and each text block is read once it is in
   // view, so a background a script swaps in on scroll is the one measured.
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;width:0;height:0;background-color:Canvas';
+  document.documentElement.appendChild(probe);
+  const canvasC = rgba(getComputedStyle(probe).backgroundColor).slice(0, 3).concat([1]);
+  probe.remove();
   const measure = (p, {t, accent}) => {
     const c = rgba(getComputedStyle(p).color);
-    if (c[3] === 0) return;
-    // The ground: the backgrounds under the text, composited on white. A
-    // photograph or gradient under it, or an overlay beside media, is left
-    // to the scrim check.
-    let ground = [255, 255, 255, 1], layers = [], unknown = false;
+    if (c[3] === 0) return null;
+    // The ground: the backgrounds under the text, composited on the page's
+    // canvas (dark under color-scheme: dark). A photograph or gradient
+    // under it, or any media beneath the text where it sits on screen, is
+    // left to the scrim check.
+    let ground = canvasC.slice(), layers = [], unknown = false;
+    const q = p.getBoundingClientRect(), cx = (q.left + q.right) / 2, cy = (q.top + q.bottom) / 2;
+    if (cx >= 0 && cy >= 0 && cx < innerWidth && cy < innerHeight) {
+      const stack = document.elementsFromPoint(cx, cy);
+      const at = stack.indexOf(p);
+      for (const u of stack.slice(at < 0 ? 0 : at + 1)) {
+        if (u.matches('img,picture,video,canvas,svg image')
+            || /url\(/.test(getComputedStyle(u).backgroundImage)) return null;
+      }
+    }
     for (let a = p; a; a = a.parentElement) {
       const cs = getComputedStyle(a);
       if (cs.backgroundImage !== 'none') { unknown = true; break; }
@@ -189,7 +204,7 @@ _PAGE_JS = r"""async (limits) => {
       const b = rgba(cs.backgroundColor);
       if (b[3] > 0) { layers.push(b); if (b[3] >= 1) break; }
     }
-    if (unknown) return;
+    if (unknown) return null;
     for (const b of layers.reverse()) ground = over(b, ground);
     const ink = over(c, ground);
     const r = ratio(ink, ground);
@@ -227,24 +242,31 @@ _PAGE_JS = r"""async (limits) => {
   const go = y => scrollTo({top: y, left: 0, behavior: 'instant'});
   const vh = innerHeight, step = Math.max(160, Math.floor(vh * 0.4));
   const startY = scrollY, H = document.documentElement.scrollHeight;
-  for (let y = 0, i = 0; cands.size && i < 160; y += step, i++) {
+  // Candidates in page order, so each step reads only the screen in view.
+  const order = [...cands].map(([p, item]) => [p, item, p.getBoundingClientRect().top + scrollY])
+    .sort((x, y) => x[2] - y[2]);
+  let next = 0;
+  for (let y = 0, i = 0; (next < order.length || pend.size) && i < 160; y += step, i++) {
     go(y); await frame();
     const last = y + vh >= H;
     for (const [p, item] of pend) {
       pend.delete(p);
-      const q = p.getBoundingClientRect();
-      if (q.bottom > 0 && q.top < vh) report(measure(p, item));
+      report(measure(p, item));
     }
-    for (const [p, item] of cands) {
-      const q = p.getBoundingClientRect();
-      if (q.bottom < 0 || q.top > (last ? vh : vh / 2)) continue;
+    const reach = scrollY + (last ? vh : vh / 2);
+    while (next < order.length && order[next][2] <= reach) {
+      const [p, item] = order[next++];
       cands.delete(p);
       const m = measure(p, item);
       if (m) { if (last) report(m); else pend.set(p, item); }
     }
     if (last) break;
   }
+  // What the scroll never reached (a page that scrolls inside a container,
+  // or past the step cap) is read where it rests.
   go(startY); await frame();
+  for (const [p, item] of pend) report(measure(p, item));
+  for (const [p, item] of cands) report(measure(p, item));
   return out;
 }"""
 

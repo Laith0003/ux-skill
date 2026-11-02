@@ -1220,6 +1220,20 @@ def is_mention(text: str, s: int, e: int) -> bool:
             return True
     line_head = text[text.rfind("\n", 0, s) + 1:s]
     for q in _QUOTE_SAME:
-        if line_head.count(q) % 2 == 1 and q in head and q in tail:
+        if _marks(line_head, q) % 2 == 1 and _marks(head, q) and _marks(tail, q):
             return True
     return False
+
+
+def _marks(text: str, q: str) -> int:
+    """How many times q stands as a quotation mark in text: never between
+    two letters (an apostrophe, Don&#39;t) and never after a digit (an inch
+    mark, 12&quot;)."""
+    n, i = 0, text.find(q)
+    while i >= 0:
+        before = text[i - 1] if i else " "
+        after = text[i + len(q)] if i + len(q) < len(text) else " "
+        if not (before.isdigit() or (before.isalpha() and after.isalpha())):
+            n += 1
+        i = text.find(q, i + len(q))
+    return n

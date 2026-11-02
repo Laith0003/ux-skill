@@ -62,8 +62,8 @@ project adheres to [Semantic Versioning](https://semver.org/).
   at phone widths. `image-broken` and `image-distorted`: an image that
   failed to load, and one stretched more than 3% off its own shape.
 - Four lint rules: `title-is-a-framework-default` (a starter's title such
-  as Vite + React or Create Next App, or an empty one, which describes
-  nothing, as WCAG 2.4.2 asks a title to), `consent-prechecked` (a
+  as Vite + React or Create Next App, which describes nothing, as WCAG
+  2.4.2 asks a title to), `consent-prechecked` (a
   marketing box ticked in advance), `fake-urgency` (a stock count,
   viewer count or countdown typed into the copy) and `confirmshaming` (a
   decline worded as an insult).
@@ -82,6 +82,11 @@ project adheres to [Semantic Versioning](https://semver.org/).
   interface must do (say what it is, stream with a stop control, cite
   sources, keep a person in charge of actions), loaded by `/ux-design`
   beside the playbook.
+- The keyboard pass's `focus-obscured`: a control that takes focus
+  entirely hidden under fixed or sticky content (WCAG 2.4.11). It found
+  the catalog and brands pages' sticky toolbar hiding focused links; the
+  pages now leave it scroll room on wide screens and let it scroll away
+  on phones, where it covered half the screen.
 - `uxskill complaints check --page <file or URL> [--before <file>]`:
   what the person said is wrong with a page, kept in
   `.ux/complaints.json` as probes from a closed list (`rule-clear`,
