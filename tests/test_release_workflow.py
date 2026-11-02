@@ -2,7 +2,6 @@
 docs/launch/release-<version>.md and no tag yet is tagged and published by
 GitHub Actions, so a release never waits on a tag pushed by hand."""
 import re
-import tomllib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,7 +20,9 @@ def test_it_skips_a_tag_that_exists_and_a_version_without_notes():
 
 
 def test_the_current_version_has_its_notes():
-    version = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]["version"]
+    # A regex, not tomllib: tomllib is 3.11 and later, and CI runs 3.10.
+    pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    version = re.search(r'^version\s*=\s*"([^"]+)"', pyproject, re.M).group(1)
     notes = ROOT / "docs" / "launch" / f"release-{version}.md"
     assert notes.is_file(), f"write the release notes for {version} at {notes.relative_to(ROOT)}"
     assert notes.read_text(encoding="utf-8").startswith(f"# ux-skill {version}")
