@@ -66,7 +66,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
   nothing, as WCAG 2.4.2 asks a title to), `consent-prechecked` (a
   marketing box ticked in advance), `fake-urgency` (a stock count,
   viewer count or countdown typed into the copy) and `confirmshaming` (a
-  decline worded as an insult). 178 rules in all.
+  decline worded as an insult).
+- Two form rules: `input-purpose-missing` (a field for the person's own
+  email, phone, name, address, card or password with no autocomplete
+  token, which WCAG 1.3.5 asks be identifiable in code) and
+  `paste-blocked` (a paste handler that cancels the paste). 180 rules in
+  all.
 - A phrase inside a longer quotation on its line now counts as a mention
   for the text rules, as a phrase wrapped in quotation marks already did,
   and the numeric HTML apostrophe is read as a quotation mark.

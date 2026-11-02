@@ -12,21 +12,21 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>178 anti-pattern rules · the ux-skill linter catalogue</title>
-<meta name="description" content="The complete catalogue of 178 AI design-slop fingerprints caught by the ux-skill linter. 60 high, 82 medium, 30 low severity. Each rule includes regex, why it's bad, and the fix.">
+<title>180 anti-pattern rules · the ux-skill linter catalogue</title>
+<meta name="description" content="The complete catalogue of 180 AI design-slop fingerprints caught by the ux-skill linter. 61 high, 83 medium, 30 low severity. Each rule includes regex, why it's bad, and the fix.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
-<meta property="og:title" content="178 anti-pattern rules · the ux-skill linter catalogue">
-<meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse 178 rules from the deterministic linter that runs in &lt;50ms.">
+<meta property="og:title" content="180 anti-pattern rules · the ux-skill linter catalogue">
+<meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse 180 rules from the deterministic linter that runs in &lt;50ms.">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="178 anti-pattern rules · the ux-skill linter">
-<meta name="twitter:description" content="The complete linter catalogue. 60 high · 82 medium · 30 low severity.">
+<meta name="twitter:title" content="180 anti-pattern rules · the ux-skill linter">
+<meta name="twitter:description" content="The complete linter catalogue. 61 high · 83 medium · 30 low severity.">
 <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","name":"178 anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
+{"@context":"https://schema.org","@type":"WebPage","name":"180 anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Anti-pattern rules","item":"https://uxskill.laithjunaidy.com/anti-patterns.html"}]}
@@ -133,14 +133,14 @@
 <section class="top">
   <div class="container">
     <p class="top__eyebrow">Linter catalogue · v4.0.0</p>
-    <h1 class="top__title">178 fingerprints of <em>AI design slop.</em></h1>
+    <h1 class="top__title">180 fingerprints of <em>AI design slop.</em></h1>
     <p class="top__lead">
       Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms: no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
     </p>
     <div class="top__stats">
-      <span class="top__stat"><b>178</b> rules total</span>
-      <span class="top__stat"><b>60</b> high severity</span>
-      <span class="top__stat"><b>82</b> medium</span>
+      <span class="top__stat"><b>180</b> rules total</span>
+      <span class="top__stat"><b>61</b> high severity</span>
+      <span class="top__stat"><b>83</b> medium</span>
       <span class="top__stat"><b>30</b> low</span>
       <span class="top__stat"><b>10</b> categories</span>
     </div>
@@ -460,6 +460,26 @@
         
       </div>
       <a href="#overflow-hidden-on-html" class="ap-anchor" aria-label="Link to rule #overflow-hidden-on-html">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="paste-blocked">
+      <header class="ap-head">
+        <span class="ap-id">#paste-blocked</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Paste blocked in a field</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Blocking paste stops password managers from filling a password and forces people to retype long codes, emails and account numbers, which is slow, error prone and hardest for people who rely on assistive tools. It adds no security.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Remove the paste handler. To confirm an email or a password, let the person see what they typed (a show control) instead of making them type it twice.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>\bon[Pp]aste\s*=\s*(?:[&quot;&#x27;]\s*(?:return\s+false|(?:event|e)\.preventDefault\(\))|\{\s*(?:\(?\s*(?:e|ev|event)\s*\)?\s*=&gt;\s*\{?\s*(?:e|ev|event)\.preventDefault\(\)|\(\)\s*=&gt;\s*false))|addEventListener\s*\(\s*[&quot;&#x27;]pas</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#paste-blocked" class="ap-anchor" aria-label="Link to rule #paste-blocked">link</a>
     </article>
     
 
@@ -1603,6 +1623,26 @@
     </article>
     
 
+    <article class="ap-card" id="input-purpose-missing">
+      <header class="ap-head">
+        <span class="ap-id">#input-purpose-missing</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Personal-data field without autocomplete</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A field for the person&#x27;s own email, phone, name, address, card or password with no autocomplete token makes them type it again on every form, and leaves its purpose unknown to browsers and assistive technology. WCAG 1.3.5 (Identify Input Purpose) asks that such a field&#x27;s purpose can be determined in code, which the autocomplete attribute does.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Add the matching token: autocomplete=&quot;email&quot;, &quot;tel&quot;, &quot;given-name&quot;, &quot;family-name&quot;, &quot;postal-code&quot;, &quot;street-address&quot;, &quot;cc-number&quot;, &quot;username&quot;, &quot;current-password&quot; or &quot;new-password&quot;, with the matching type (email, tel) and inputmode.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;input\b(?=[^&gt;]*\b(?:name|id)\s*=\s*[&quot;&#x27;](?:e-?mail|email[-_]?address|phone|tel|telephone|mobile|first[-_]?name|last[-_]?name|full[-_]?name|given[-_]?name|family[-_]?name|postal[-_]?code|post[-_]?code|zip(?:[-_]?code)?|street</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#input-purpose-missing" class="ap-anchor" aria-label="Link to rule #input-purpose-missing">link</a>
+    </article>
+    
+
     <article class="ap-card" id="menu-row-disabled-without-reason">
       <header class="ap-head">
         <span class="ap-id">#menu-row-disabled-without-reason</span>
@@ -2574,7 +2614,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>scroll, touchmove, touchstart, and wheel listeners default to passive: false, which means the browser must wait for the handler to finish before scrolling - any sync work blocks the scroll thread and creates the &#x27;janky scroll on a fancy page&#x27; feel. Chromium flags this in DevTools as a passive-listener warning for any non-passive scroll handler.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pass `{ passive: true }` as the third argument: `el.addEventListener(&#x27;scroll&#x27;, fn, { passive: true })`. Only opt out (passive: false) if you genuinely need preventDefault() to block scrolling - which is rare and usually wrong.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>addEventListener\s*\(\s*[&#x27;&quot;](?:scroll|touchmove|touchstart|wheel|mousewheel)[&#x27;&quot;]\s*,(?:(?!passive\s*:\s*(?:true|false))[^)])*\)</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>addEventListener\s*\(\s*[&#x27;&quot;](?:scroll|touchmove|touchstart|wheel|mousewheel)[&#x27;&quot;]\s*,(?:(?!passive\s*:\s*(?:true|false))(?:\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)|[^()]))*\)</code></pre>
       <div class="ap-examples">
         
         
