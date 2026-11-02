@@ -30,8 +30,9 @@ project adheres to [Semantic Versioning](https://semver.org/).
   it. ux-skill carries the kit (MIT, credited in NOTICE) at the commit
   `engine/kits/stageshow/UPSTREAM.md` names, without Stageshow's brand marks.
   A file that differs from the kit's is never replaced without `--force`,
-  and a forced write backs each one up first. The kit needs react,
-  react-dom and lucide-react in the project.
+  and a forced write backs each one up first. `--look-only` rewrites just
+  the look when the system changes, leaving kit files the project edited.
+  The kit needs react, react-dom and lucide-react in the project.
 
 ### Changed
 - The landing playbook's interface-fragment patterns point at the new guide.

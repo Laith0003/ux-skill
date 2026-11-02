@@ -21,7 +21,8 @@ in the project. Import it from `index.ts`; each part brings its own CSS.
 `uxskill kit stageshow --out <folder> --from design-system/tokens.json`
 writes this kit into a project with `stageshow-look.css`, the system's
 look, beside it. Load that file after `stageshow.css` and give each stage
-the class: `<Stage className="ux-look">`.
+the class: `<Stage className="ux-look">`. When the system changes, add
+`--look-only` to rewrite just the look, leaving every kit file as it is.
 
 To update the kit, copy `kit/` from a newer commit, make the two changes
 again, and put the new commit above. `tests/test_stageshow_kit.py` checks

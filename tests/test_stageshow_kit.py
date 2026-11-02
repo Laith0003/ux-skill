@@ -112,7 +112,7 @@ def test_force_replaces_a_changed_file_after_backing_it_up(tmp_path):
 
 def test_the_wheel_carries_the_kit():
     text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-    assert '"kits/stageshow/**/*"' in text
+    assert '"kits/stageshow/**/*.tsx"' in text and '"kits/stageshow/LICENSE"' in text
 
 
 def test_the_command_is_on_the_cli(tmp_path):
@@ -130,3 +130,113 @@ def test_out_is_required_and_named_in_the_error():
     with pytest.raises(InputError) as err:
         run_kit(None)
     assert str(err.value).startswith("--out is missing")
+
+
+def test_two_forced_writes_keep_both_backups(tmp_path):
+    out = tmp_path / "kit"
+    run_kit(out)
+    (out / "index.ts").write_text("// first edit\n", encoding="utf-8")
+    first = run_kit(out, force=True)
+    (out / "index.ts").write_text("// second edit\n", encoding="utf-8")
+    second = run_kit(out, force=True)
+    assert first["backup"] != second["backup"]
+    assert (out / first["backup"] / "index.ts").read_text(encoding="utf-8") == "// first edit\n"
+    assert (out / second["backup"] / "index.ts").read_text(encoding="utf-8") == "// second edit\n"
+
+
+def test_a_folder_that_cannot_hold_the_backup_is_an_input_error(tmp_path):
+    out = tmp_path / "kit"
+    run_kit(out)
+    (out / "index.ts").write_text("// my edit\n", encoding="utf-8")
+    (out / ".uxskill").write_text("a file where the backup folder goes\n", encoding="utf-8")
+    with pytest.raises(InputError):
+        run_kit(out, force=True)
+    assert (out / "index.ts").read_text(encoding="utf-8") == "// my edit\n"
+
+
+def test_a_format_without_a_system_is_refused(tmp_path):
+    with pytest.raises(InputError) as err:
+        run_kit(tmp_path / "kit", fmt="figma")
+    assert str(err.value).startswith("--format reads the --from system")
+    with pytest.raises(InputError) as err:
+        run_kit(tmp_path / "kit", second_modes={"Colors": "Dark"})
+    assert str(err.value).startswith("--figma-mode reads the --from system")
+
+
+def test_only_the_kits_own_file_types_are_carried(tmp_path, monkeypatch):
+    import engine.io.stageshow_kit as kit
+    fake = tmp_path / "kit-src"
+    (fake / "parts").mkdir(parents=True)
+    (fake / "index.ts").write_text("export {}\n", encoding="utf-8")
+    (fake / "parts" / "Row.css").write_text(".a{}\n", encoding="utf-8")
+    (fake / ".DS_Store").write_bytes(b"\x00\x01\xff")
+    (fake / "notes.swp").write_bytes(b"\xff\xfe")
+    monkeypatch.setattr(kit, "KIT", fake)
+    assert sorted(kit.kit_files()) == ["index.ts", "parts/Row.css"]
+    text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert "kits/stageshow/**/*\"" not in text
+
+
+def test_the_look_lists_what_the_import_left_out(tmp_path):
+    from engine.foundations.export import to_css
+    src = tmp_path / "theme.css"
+    src.write_text(to_css(build_system(NEUTRAL, "#3366FF").tokens)
+                   + "\n.card { --card-glow: 0 0 4px red; }\n", encoding="utf-8")
+    out = tmp_path / "kit"
+    result = run_kit(out, source=src)
+    assert result["not_read"] == 1
+    assert "--card-glow" in (out / "stageshow-look.css").read_text(encoding="utf-8")
+
+
+def test_a_system_without_the_roles_names_this_command():
+    from engine.foundations.tokens import Token, TokenSet
+    import engine.io.stageshow_kit as kit
+    ts = TokenSet()
+    ts.add(Token("brand.blue", "color", "#3366FF"))
+    from engine.io.stageshow_out import to_stageshow
+    with pytest.raises(InputError) as err:
+        to_stageshow(ts, labels=kit.LABELS)
+    assert str(err.value).startswith("kit stageshow reads")
+
+
+def test_force_says_it_replaces_your_own_files_too():
+    from click.testing import CliRunner
+
+    from engine.cli.main import cli
+    help_text = " ".join(CliRunner().invoke(cli, ["kit", "stageshow", "--help"]).output.split())
+    assert "your own included" in help_text and ".uxskill/backup" in help_text
+
+
+def test_files_an_older_kit_left_are_reported(tmp_path):
+    out = tmp_path / "kit"
+    run_kit(out)
+    (out / "parts" / "Gone.tsx").write_text("export const Gone = 1\n", encoding="utf-8")
+    result = run_kit(out)
+    assert result["not_in_kit"] == ["parts/Gone.tsx"]
+    assert "remove" in result["note"] and (out / "parts" / "Gone.tsx").exists()
+
+
+def test_a_fresh_folder_reports_nothing_left_over(tmp_path):
+    result = run_kit(tmp_path / "kit")
+    assert "not_in_kit" not in result
+
+
+def test_look_only_refreshes_the_look_and_keeps_your_kit_edits(tmp_path):
+    out = tmp_path / "kit"
+    run_kit(out, source=_tokens(tmp_path))
+    (out / "index.ts").write_text("// my own edit\n", encoding="utf-8")
+    old_look = (out / "stageshow-look.css").read_text(encoding="utf-8")
+    other = tmp_path / "other.json"
+    other.write_text(dump_dtcg(build_system(NEUTRAL, "#C0643A").tokens), encoding="utf-8")
+    result = run_kit(out, source=other, look_only=True)
+    assert result["status"] == "written" and result["written"] == ["stageshow-look.css"]
+    assert (out / "stageshow-look.css").read_text(encoding="utf-8") != old_look
+    assert (out / result["backup"] / "stageshow-look.css").read_text(encoding="utf-8") == old_look
+    assert (out / "index.ts").read_text(encoding="utf-8") == "// my own edit\n"
+    assert "not_in_kit" not in result
+
+
+def test_look_only_needs_a_system(tmp_path):
+    with pytest.raises(InputError) as err:
+        run_kit(tmp_path / "kit", look_only=True)
+    assert str(err.value).startswith("--look-only writes the look of the --from system")

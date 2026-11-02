@@ -83,6 +83,6 @@ Stageshow's kit draws the windows, phones, cursors and motion these rules descri
 uxskill --no-pretty kit stageshow --out src/stageshow --from design-system/tokens.json
 ```
 
-The kit needs `react`, `react-dom` and `lucide-react` in the project; import it from the folder's `index.ts`. For a look alone, `uxskill system export --to stageshow` writes it. Stageshow's own skill (`npx skills add benjitaylor/skills --skill stageshow`) adds its worked examples, which set the bar for these pictures.
+The kit needs `react`, `react-dom` and `lucide-react` in the project; import it from the folder's `index.ts`. When the system changes, run it again with `--look-only` to rewrite just the look. For a look alone, `uxskill system export --to stageshow` writes it. Stageshow's own skill (`npx skills add benjitaylor/skills --skill stageshow`) adds its worked examples, which set the bar for these pictures.
 
 Load `stageshow-look.css` after the kit's stylesheet, with the system's `fonts.css`, and give each stage the class: `<Stage className="ux-look">`; `theme="dark"` on a stage takes the system's dark values. The kit keeps its own shadows, control heights and placeholder inks, which are tuned to an illustration's scale. The copy leaves out Stageshow's brand marks, which stay under their owners' terms; show the product's own artwork instead.

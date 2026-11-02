@@ -1154,16 +1154,21 @@ else:
                        "tokens.json or any source system import reads.")
     @_FORMAT
     @_FIGMA
-    @_FORCE
+    @click.option("--force", is_flag=True,
+                  help="Replace files in --out that differ from the kit's, your own included; "
+                       "each is copied into --out/.uxskill/backup first.")
+    @click.option("--look-only", "look_only", is_flag=True,
+                  help="Write only the --from system's look, replacing the one in --out after "
+                       "a backup and leaving every kit file as it is.")
     @click.pass_context
-    def kit_stageshow_cmd(ctx, out, source, fmt, figma_modes, force) -> None:
+    def kit_stageshow_cmd(ctx, out, source, fmt, figma_modes, force, look_only) -> None:
         """Write the Stageshow kit (MIT; product illustrations in React) into
         --out, with the system's look beside it when --from names one. A file
         that differs from the kit's is never replaced without --force, and a
         forced write backs each one up first."""
         from engine.io.stageshow_kit import run_kit
         _io(ctx, run_kit, out, source=list(source) or None, fmt=fmt, force=force,
-            figma_modes=figma_modes)
+            look_only=look_only, figma_modes=figma_modes)
 
     @cli.group("contracts")
     def contracts_grp() -> None:
