@@ -12,21 +12,21 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>171 anti-pattern rules · the ux-skill linter catalogue</title>
-<meta name="description" content="The complete catalogue of 171 AI design-slop fingerprints caught by the ux-skill linter. 56 high, 79 medium, 30 low severity. Each rule includes regex, why it's bad, and the fix.">
+<title>174 anti-pattern rules · the ux-skill linter catalogue</title>
+<meta name="description" content="The complete catalogue of 174 AI design-slop fingerprints caught by the ux-skill linter. 58 high, 80 medium, 30 low severity. Each rule includes regex, why it's bad, and the fix.">
 <link rel="canonical" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <link rel="alternate" hreflang="en" href="https://uxskill.laithjunaidy.com/anti-patterns.html">
-<meta property="og:title" content="171 anti-pattern rules · the ux-skill linter catalogue">
-<meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse 171 rules from the deterministic linter that runs in &lt;50ms.">
+<meta property="og:title" content="174 anti-pattern rules · the ux-skill linter catalogue">
+<meta property="og:description" content="Every fingerprint of AI-generated design slop, named and indexed. Browse 174 rules from the deterministic linter that runs in &lt;50ms.">
 <meta property="og:url" content="https://uxskill.laithjunaidy.com/anti-patterns.html">
 <meta property="og:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="171 anti-pattern rules · the ux-skill linter">
-<meta name="twitter:description" content="The complete linter catalogue. 56 high · 79 medium · 30 low severity.">
+<meta name="twitter:title" content="174 anti-pattern rules · the ux-skill linter">
+<meta name="twitter:description" content="The complete linter catalogue. 58 high · 80 medium · 30 low severity.">
 <meta name="twitter:image" content="https://uxskill.laithjunaidy.com/og/home.png">
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","name":"171 anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
+{"@context":"https://schema.org","@type":"WebPage","name":"174 anti-pattern rules · ux-skill linter","url":"https://uxskill.laithjunaidy.com/anti-patterns.html","description":"Browseable index of every AI-design-slop fingerprint caught by the ux-skill deterministic linter.","isPartOf":{"@type":"WebSite","name":"ux-skill","url":"https://uxskill.laithjunaidy.com/"}}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://uxskill.laithjunaidy.com/"},{"@type":"ListItem","position":2,"name":"Anti-pattern rules","item":"https://uxskill.laithjunaidy.com/anti-patterns.html"}]}
@@ -133,16 +133,16 @@
 <section class="top">
   <div class="container">
     <p class="top__eyebrow">Linter catalogue · v4.0.0</p>
-    <h1 class="top__title">171 fingerprints of <em>AI design slop.</em></h1>
+    <h1 class="top__title">174 fingerprints of <em>AI design slop.</em></h1>
     <p class="top__lead">
       Every rule in <code>data/anti-patterns.json</code>, browseable. Run the linter (<code>uxskill lint</code>) and it scans your HTML/CSS/JS for these regex patterns in &lt;50&#x20;ms: no LLM, no API call, no telemetry. Each rule names the fingerprint, explains why it's slop, and tells the AI session what to ship instead.
     </p>
     <div class="top__stats">
-      <span class="top__stat"><b>171</b> rules total</span>
-      <span class="top__stat"><b>56</b> high severity</span>
-      <span class="top__stat"><b>79</b> medium</span>
+      <span class="top__stat"><b>174</b> rules total</span>
+      <span class="top__stat"><b>58</b> high severity</span>
+      <span class="top__stat"><b>80</b> medium</span>
       <span class="top__stat"><b>30</b> low</span>
-      <span class="top__stat"><b>11</b> categories</span>
+      <span class="top__stat"><b>10</b> categories</span>
     </div>
     <figure class="docfig docfig--narrow">
       <img src="/screenshots/terminal-ux-lint.webp" width="1600" height="1000" alt="A terminal running ux lint on a docs folder: two high-severity findings, a purple-to-blue gradient and leftover placeholder text, each shown with its file, line and fix, then exit code 1." loading="lazy" decoding="async">
@@ -155,7 +155,7 @@
   <div class="container toolbar__row">
     <input type="search" class="ap-search" id="ap-search" placeholder="Search rules by name, category, or fix..." aria-label="Search rules">
     <button type="button" class="ap-chip is-active" data-cat="*">All</button>
-    <button type="button" class="ap-chip" data-cat="A11y">A11y</button><button type="button" class="ap-chip" data-cat="Accessibility">Accessibility</button><button type="button" class="ap-chip" data-cat="Color">Color</button><button type="button" class="ap-chip" data-cat="Content">Content</button><button type="button" class="ap-chip" data-cat="Depth">Depth</button><button type="button" class="ap-chip" data-cat="Layout">Layout</button><button type="button" class="ap-chip" data-cat="Motion">Motion</button><button type="button" class="ap-chip" data-cat="Performance">Performance</button><button type="button" class="ap-chip" data-cat="Quality">Quality</button><button type="button" class="ap-chip" data-cat="Typography">Typography</button><button type="button" class="ap-chip" data-cat="Visual">Visual</button>
+    <button type="button" class="ap-chip" data-cat="A11y">A11y</button><button type="button" class="ap-chip" data-cat="Color">Color</button><button type="button" class="ap-chip" data-cat="Content">Content</button><button type="button" class="ap-chip" data-cat="Depth">Depth</button><button type="button" class="ap-chip" data-cat="Layout">Layout</button><button type="button" class="ap-chip" data-cat="Motion">Motion</button><button type="button" class="ap-chip" data-cat="Performance">Performance</button><button type="button" class="ap-chip" data-cat="Quality">Quality</button><button type="button" class="ap-chip" data-cat="Typography">Typography</button><button type="button" class="ap-chip" data-cat="Visual">Visual</button>
   </div>
 </section>
 
@@ -220,6 +220,26 @@
         
       </div>
       <a href="#cursor-not-allowed-no-visual" class="ap-anchor" aria-label="Link to rule #cursor-not-allowed-no-visual">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="focusable-inside-aria-hidden">
+      <header class="ap-head">
+        <span class="ap-id">#focusable-inside-aria-hidden</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">A focusable control inside an aria-hidden subtree</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>aria-hidden=&quot;true&quot; takes an element and everything inside it out of the accessibility tree, yet a button, a link with an href, a field or anything with a tabindex inside it still takes keyboard focus: a keyboard user lands on a control a screen reader does not announce (4.1.2). A product illustration drawn with real controls and hidden as decoration is the common case. It passes when the subtree, or an element around it, is inert, or when each control inside is disabled or has tabindex=&quot;-1&quot;. aria-hidden on the control itself is aria-hidden-on-interactive.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Draw a decorative illustration&#x27;s buttons and fields with plain elements (a div styled as a button), or put inert on the hidden subtree. If the controls really work, drop aria-hidden instead.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>\baria-hidden\s*=\s*(?:[&quot;&#x27;]true[&quot;&#x27;]|\{\s*true\s*\})</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#focusable-inside-aria-hidden" class="ap-anchor" aria-label="Link to rule #focusable-inside-aria-hidden">link</a>
     </article>
     
 
@@ -1103,6 +1123,26 @@
     </article>
     
 
+    <article class="ap-card" id="illustration-loop-without-pause">
+      <header class="ap-head">
+        <span class="ap-id">#illustration-loop-without-pause</span>
+        <span class="ap-sev ap-sev--high">HIGH</span>
+        <span class="ap-cat">Motion</span>
+        <h2 class="ap-name">A looping product demo with no pause control</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Stageshow&#x27;s Stage plays a scripted demo on a loop for as long as it is on screen, and it draws no pause control of its own. Beside the page&#x27;s copy, motion that starts by itself and lasts more than 5 seconds needs a way to pause, stop or hide it (2.2.2). It passes when play is once or hover, when play is bound to state the page controls, or when the file holds a pause control.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Set play=&quot;once&quot; (it plays when first seen and holds its last frame) or play=&quot;hover&quot;, or put a pause control beside the stage that stops it.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;Stage\b</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#illustration-loop-without-pause" class="ap-anchor" aria-label="Link to rule #illustration-loop-without-pause">link</a>
+    </article>
+    
+
     <article class="ap-card" id="infinite-animation-without-reduced-motion">
       <header class="ap-head">
         <span class="ap-id">#infinite-animation-without-reduced-motion</span>
@@ -1363,6 +1403,26 @@
     </article>
     
 
+    <article class="ap-card" id="focusable-at-opacity-zero">
+      <header class="ap-head">
+        <span class="ap-id">#focusable-at-opacity-zero</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Focusable control left at opacity 0</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Opacity 0 hides a control from sight and nothing else: Tab still lands on it and a screen reader still reads it, so a closed menu&#x27;s links or a faded-out button take focus that no one can see (2.4.7 asks for a visible focus indicator).</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair opacity 0 with visibility: hidden (delayed by the exit duration, so the fade still runs), display: none once the exit ends, or the inert or hidden attribute on the closed panel. A control revealed on hover is judged by hover-only-card-actions.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>opacity\s*:\s*0(?![.\d])</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#focusable-at-opacity-zero" class="ap-anchor" aria-label="Link to rule #focusable-at-opacity-zero">link</a>
+    </article>
+    
+
     <article class="ap-card" id="generic-alt-decorative-not-empty">
       <header class="ap-head">
         <span class="ap-id">#generic-alt-decorative-not-empty</span>
@@ -1380,6 +1440,26 @@
         
       </div>
       <a href="#generic-alt-decorative-not-empty" class="ap-anchor" aria-label="Link to rule #generic-alt-decorative-not-empty">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="heading-in-illustration-stage">
+      <header class="ap-head">
+        <span class="ap-id">#heading-in-illustration-stage</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">A real heading inside a product illustration</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A faux window&#x27;s title written as h1 to h6 inside a Stageshow stage joins the host page&#x27;s outline: a heading list and the document outline show an app screen&#x27;s labels as if they were the page&#x27;s own sections. The illustration is imagery inside someone else&#x27;s page (references/styles/product-illustration.md).</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Write the faux title as a div or span styled like a heading, and keep the page&#x27;s real headings outside the stage.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;h[1-6]\b</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#heading-in-illustration-stage" class="ap-anchor" aria-label="Link to rule #heading-in-illustration-stage">link</a>
     </article>
     
 
@@ -1483,6 +1563,46 @@
     </article>
     
 
+    <article class="ap-card" id="menu-row-disabled-without-reason">
+      <header class="ap-head">
+        <span class="ap-id">#menu-row-disabled-without-reason</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Disabled menu row with no reason</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A menu row disabled with the disabled attribute drops out of the arrow keys&#x27; path, so a keyboard user never learns it exists; one marked aria-disabled with no reason leaves the person guessing why it cannot be used.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep the row in place with aria-disabled=&quot;true&quot; instead of disabled, and give its reason in words beside the label, tied to the row with aria-describedby.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;[a-z][\w-]*\b[^&gt;]*\brole\s*=\s*[&quot;&#x27;]menuitem(?:checkbox|radio)?[&quot;&#x27;][^&gt;]*&gt;</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#menu-row-disabled-without-reason" class="ap-anchor" aria-label="Link to rule #menu-row-disabled-without-reason">link</a>
+    </article>
+    
+
+    <article class="ap-card" id="repeated-action-same-name">
+      <header class="ap-head">
+        <span class="ap-id">#repeated-action-same-name</span>
+        <span class="ap-sev ap-sev--medium">MED</span>
+        <span class="ap-cat">A11y</span>
+        <h2 class="ap-name">Actions in repeated items share one name</h2>
+        <div class="ap-applies"></div>
+      </header>
+      <p class="ap-desc"></p>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Three buttons named Save in a list read as Save, Save, Save in a screen reader&#x27;s list of controls, and a voice user who says the name cannot pick one. The item the action belongs to has to be in its accessible name.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Put the item in the name: aria-label=&quot;Save Lamb flatbread&quot;, a visually hidden span after the visible word, or aria-labelledby naming the button and the item&#x27;s title.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|a)\b[^&gt;]*&gt;</code></pre>
+      <div class="ap-examples">
+        
+        
+      </div>
+      <a href="#repeated-action-same-name" class="ap-anchor" aria-label="Link to rule #repeated-action-same-name">link</a>
+    </article>
+    
+
     <article class="ap-card" id="safe-area-inset-only-bottom">
       <header class="ap-head">
         <span class="ap-id">#safe-area-inset-only-bottom</span>
@@ -1520,66 +1640,6 @@
         
       </div>
       <a href="#screen-reader-only-without-class" class="ap-anchor" aria-label="Link to rule #screen-reader-only-without-class">link</a>
-    </article>
-    
-
-    <article class="ap-card" id="focusable-at-opacity-zero">
-      <header class="ap-head">
-        <span class="ap-id">#focusable-at-opacity-zero</span>
-        <span class="ap-sev ap-sev--medium">MED</span>
-        <span class="ap-cat">Accessibility</span>
-        <h2 class="ap-name">Focusable control left at opacity 0</h2>
-        <div class="ap-applies"></div>
-      </header>
-      <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Opacity 0 hides a control from sight and nothing else: Tab still lands on it and a screen reader still reads it, so a closed menu&#x27;s links or a faded-out button take focus that no one can see (2.4.7 asks for a visible focus indicator).</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair opacity 0 with visibility: hidden (delayed by the exit duration, so the fade still runs), display: none once the exit ends, or the inert or hidden attribute on the closed panel. A control revealed on hover is judged by hover-only-card-actions.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>opacity\s*:\s*0(?![.\d])</code></pre>
-      <div class="ap-examples">
-        
-        
-      </div>
-      <a href="#focusable-at-opacity-zero" class="ap-anchor" aria-label="Link to rule #focusable-at-opacity-zero">link</a>
-    </article>
-    
-
-    <article class="ap-card" id="menu-row-disabled-without-reason">
-      <header class="ap-head">
-        <span class="ap-id">#menu-row-disabled-without-reason</span>
-        <span class="ap-sev ap-sev--medium">MED</span>
-        <span class="ap-cat">Accessibility</span>
-        <h2 class="ap-name">Disabled menu row with no reason</h2>
-        <div class="ap-applies"></div>
-      </header>
-      <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>A menu row disabled with the disabled attribute drops out of the arrow keys&#x27; path, so a keyboard user never learns it exists; one marked aria-disabled with no reason leaves the person guessing why it cannot be used.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep the row in place with aria-disabled=&quot;true&quot; instead of disabled, and give its reason in words beside the label, tied to the row with aria-describedby.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;[a-z][\w-]*\b[^&gt;]*\brole\s*=\s*[&quot;&#x27;]menuitem(?:checkbox|radio)?[&quot;&#x27;][^&gt;]*&gt;</code></pre>
-      <div class="ap-examples">
-        
-        
-      </div>
-      <a href="#menu-row-disabled-without-reason" class="ap-anchor" aria-label="Link to rule #menu-row-disabled-without-reason">link</a>
-    </article>
-    
-
-    <article class="ap-card" id="repeated-action-same-name">
-      <header class="ap-head">
-        <span class="ap-id">#repeated-action-same-name</span>
-        <span class="ap-sev ap-sev--medium">MED</span>
-        <span class="ap-cat">Accessibility</span>
-        <h2 class="ap-name">Actions in repeated items share one name</h2>
-        <div class="ap-applies"></div>
-      </header>
-      <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Three buttons named Save in a list read as Save, Save, Save in a screen reader&#x27;s list of controls, and a voice user who says the name cannot pick one. The item the action belongs to has to be in its accessible name.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Put the item in the name: aria-label=&quot;Save Lamb flatbread&quot;, a visually hidden span after the visible word, or aria-labelledby naming the button and the item&#x27;s title.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>&lt;(?:button|a)\b[^&gt;]*&gt;</code></pre>
-      <div class="ap-examples">
-        
-        
-      </div>
-      <a href="#repeated-action-same-name" class="ap-anchor" aria-label="Link to rule #repeated-action-same-name">link</a>
     </article>
     
 
@@ -2794,7 +2854,7 @@
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>Stacking five or more shadow layers is the AI&#x27;s idea of premium depth; reads as visual bloat and chews the GPU on paint. The rule fires at five layers, not three: careful design systems build depth from up to four layers (an elevation scale&#x27;s umbra, penumbra and ambient layers, or a four-step smooth shadow), so a lower threshold would flag real work. A stacked glow of zero-offset layers is caught at any count by glow-shadow-zero-offset.</p></div>
       <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use one ambient diffusion shadow (e.g. 0 20px 40px -15px rgba(0,0,0,0.08)) and at most one tight contact shadow. Depth comes from contrast, not layer count.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])box-shadow\s*:(?:[^(),;{}]|\([^()]*\))*(?:,(?:[^(),;{}]|\([^()]*\))*){4,}</code></pre>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])box-shadow\s*:(?:[^(),;{}]|\([^()]*\))*(?:,(?:[^(),;{}]|\([^()]*\))*){4,}|(?&lt;![\w-])box-shadow\s*:[^;{}]*\bvar\(</code></pre>
       <div class="ap-examples">
         
         

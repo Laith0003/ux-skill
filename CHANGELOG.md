@@ -33,6 +33,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
   and a forced write backs each one up first. `--look-only` rewrites just
   the look when the system changes, leaving kit files the project edited.
   The kit needs react, react-dom and lucide-react in the project.
+- Three lint rules for product illustrations, 174 in all:
+  `focusable-inside-aria-hidden` (a control a keyboard can reach inside an
+  aria-hidden subtree that is not inert), `heading-in-illustration-stage`
+  (a real h1 to h6 inside a Stageshow stage, which joins the host page's
+  outline) and `illustration-loop-without-pause` (a scripted Stage left on
+  its default loop in a file with no pause control).
 
 ### Changed
 - The landing playbook's interface-fragment patterns point at the new guide.
@@ -42,6 +48,14 @@ project adheres to [Semantic Versioning](https://semver.org/).
 - The dashboard playbook adds a principle, one thing leads: each view has one
   figure or panel the eye takes in first, and equal panels in matching
   borders are a fault.
+
+### Fixed
+- The linter's lowercase copy of a file keeps the file's length. Python
+  turns the Turkish capital dotted I into two characters when it lowers it,
+  so every element's end after one was found in the wrong place, and rules
+  that read an element's contents misjudged Turkish pages.
+- The commands page generator's site menu is inert while closed, so a
+  keyboard can no longer land on its links when it is hidden.
 
 ## [4.0.0] - 2026-11-01 - **FOUNDATIONS**
 

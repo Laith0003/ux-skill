@@ -69,8 +69,14 @@ class FileContext:
 
     @property
     def low(self) -> str:
+        """The text in lowercase, the same length as the text, so an offset
+        found in it holds in the text. str.lower() turns a few characters
+        into two (the Turkish capital dotted I); those stay as they are."""
         if self._low is None:
-            self._low = self.text.lower()
+            low = self.text.lower()
+            if len(low) != len(self.text):
+                low = "".join(c if len(c.lower()) != 1 else c.lower() for c in self.text)
+            self._low = low
         return self._low
 
     def cached(self, key: str, build: Callable[[], object]) -> object:
@@ -165,6 +171,74 @@ def attr_values(text: str, tag: Tag) -> Dict[str, Tuple[str, str]]:
     for a in tag.attrs:
         out.setdefault(a.name.lower(), (a.kind, text[a.vstart:a.vend].strip()))
     return out
+
+
+# Elements a keyboard reaches without a tabindex, and the form controls a
+# disabled attribute (or a disabled fieldset around them) takes out of reach.
+FOCUSABLE_TAGS = {"a", "button", "input", "select", "textarea", "summary", "iframe"}
+FORM_CONTROLS = {"button", "input", "select", "textarea"}
+
+
+def bound_attr(a: Dict[str, Tuple[str, str]], name: str) -> Optional[str]:
+    """An attribute's value as written or bound (name, :name, v-bind:name),
+    without JSX braces or quotes; None when the element does not carry it."""
+    for key in (name, ":" + name, "v-bind:" + name):
+        if key in a:
+            v = a[key][1].strip()
+            if v.startswith("{") and v.endswith("}"):
+                v = v[1:-1].strip()
+            return v.strip("'\"`").strip()
+    return None
+
+
+def _off(value: Optional[str]) -> bool:
+    """A boolean attribute that is present and not written false."""
+    return value is not None and value.lower() not in ("false", "undefined", "null")
+
+
+def shut(ctx: "FileContext", i: int) -> bool:
+    """The element or an ancestor is hidden or inert in the markup, so
+    nothing inside it takes focus."""
+    tags, _ends, parents = ctx.tree()
+    k = i
+    while k >= 0:
+        a = attr_values(ctx.text, tags[k])
+        if "inert" in a or "hidden" in a:
+            return True
+        k = parents[k]
+    return False
+
+
+def takes_focus(ctx: "FileContext", i: int) -> bool:
+    """A keyboard reaches the element itself (its ancestors aside: see shut).
+    A disabled form control, or one inside a disabled fieldset, never does,
+    whatever its tabindex; a link ignores disabled. A tabindex of -1 takes
+    an element out of the tab order; one bound to an expression is not
+    counted, since it may be."""
+    tags, _ends, parents = ctx.tree()
+    t = tags[i]
+    name = t.name.lower()
+    a = attr_values(ctx.text, t)
+    if name in FORM_CONTROLS:
+        if _off(bound_attr(a, "disabled")):
+            return False
+        k = parents[i]
+        while k >= 0:
+            if tags[k].name.lower() == "fieldset" and _off(
+                    bound_attr(attr_values(ctx.text, tags[k]), "disabled")):
+                return False
+            k = parents[k]
+    tabindex = bound_attr(a, "tabindex")
+    if tabindex is not None:
+        return bool(re.fullmatch(r"\d+", tabindex))
+    if name in ("a", "area"):
+        return "href" in a or ":href" in a or "v-bind:href" in a
+    if name == "input":
+        return (bound_attr(a, "type") or "").lower() != "hidden"
+    if name in FOCUSABLE_TAGS:
+        return True
+    editable = bound_attr(a, "contenteditable")
+    return editable is not None and editable.lower() != "false"
 
 
 def _dynamic(name: str, kind: str) -> bool:
@@ -2656,3 +2730,8 @@ POST_CHECKS.update(TASTE_CHECKS)
 from engine.linter.components import COMPONENT_CHECKS  # noqa: E402
 
 POST_CHECKS.update(COMPONENT_CHECKS)
+
+# The checks for product illustrations live in engine/linter/illustration.py.
+from engine.linter.illustration import ILLUSTRATION_CHECKS  # noqa: E402
+
+POST_CHECKS.update(ILLUSTRATION_CHECKS)

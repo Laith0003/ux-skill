@@ -74,6 +74,7 @@ Write five lines first: where it sits and its size; the one focal object; the ac
 - **Look at it at the size it is shown and at 390 and 360 wide,** beside a strong reference shot at the same size. If yours is emptier, flatter or more boxed, fix the framing first, then the hierarchy, then the motion, then the polish.
 - **Notice where you look first.** That should be the outcome, and a single window, tile or device should plainly dominate.
 - **Screenshot every look the page uses.** Checking light tells you nothing about dark.
+- **Run the linter.** `uxskill lint` flags a control a keyboard can reach inside a hidden illustration (`focusable-inside-aria-hidden`), a real heading inside a Stageshow stage (`heading-in-illustration-stage`) and a scripted stage left looping with no pause control (`illustration-loop-without-pause`).
 
 ## With Stageshow
 
