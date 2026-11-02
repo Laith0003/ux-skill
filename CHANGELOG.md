@@ -25,6 +25,14 @@ project adheres to [Semantic Versioning](https://semver.org/).
   loads it beside the surface playbook whenever a build shows the product's
   interface, and the page keeps its photographs. Distilled from Stageshow and
   credited in NOTICE.
+- `uxskill kit stageshow --out <folder> --from design-system/tokens.json`
+  writes Stageshow's React kit into a project with the system's look beside
+  it. ux-skill carries the kit (MIT, credited in NOTICE) at the commit
+  `engine/kits/stageshow/UPSTREAM.md` names, without Stageshow's brand marks.
+  A file that differs from the kit's is never replaced without `--force`,
+  and a forced write backs each one up first. `--look-only` rewrites just
+  the look when the system changes, leaving kit files the project edited.
+  The kit needs react, react-dom and lucide-react in the project.
 
 ### Changed
 - The landing playbook's interface-fragment patterns point at the new guide.

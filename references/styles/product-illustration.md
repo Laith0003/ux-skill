@@ -77,10 +77,12 @@ Write five lines first: where it sits and its size; the one focal object; the ac
 
 ## With Stageshow
 
-Stageshow's kit draws the windows, phones, cursors and motion these rules describe, with examples that set the bar. Install it with `npx skills add benjitaylor/skills --skill stageshow`, then give it the system's look:
+Stageshow's kit draws the windows, phones, cursors and motion these rules describe. ux-skill carries a copy of it; write it into the project with the system's look beside it:
 
 ```bash
-uxskill --no-pretty system export --from design-system/tokens.json --to stageshow --out design-system/export
+uxskill --no-pretty kit stageshow --out src/stageshow --from design-system/tokens.json
 ```
 
-Load `stageshow-look.css` after the kit's stylesheet, with the system's `fonts.css`, and give each stage the class: `<Stage className="ux-look">`; `theme="dark"` on a stage takes the system's dark values. The kit keeps its own shadows, control heights and placeholder inks, which are tuned to an illustration's scale. Its app icons and other companies' logos stay under their owners' terms: fine in a mockup of how something works, never shipped as the product's own assets.
+The kit needs `react`, `react-dom` and `lucide-react` in the project; import it from the folder's `index.ts`. When the system changes, run it again with `--look-only` to rewrite just the look. For a look alone, `uxskill system export --to stageshow` writes it. Stageshow's own skill (`npx skills add benjitaylor/skills --skill stageshow`) adds its worked examples, which set the bar for these pictures.
+
+Load `stageshow-look.css` after the kit's stylesheet, with the system's `fonts.css`, and give each stage the class: `<Stage className="ux-look">`; `theme="dark"` on a stage takes the system's dark values. The kit keeps its own shadows, control heights and placeholder inks, which are tuned to an illustration's scale. The copy leaves out Stageshow's brand marks, which stay under their owners' terms; show the product's own artwork instead.
