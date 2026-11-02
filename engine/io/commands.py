@@ -34,9 +34,11 @@ from engine.io.report import Folded, Imported, fold, owned_by
 # Every status a system command reports, with the exit code the CLI gives:
 # the build's statuses (written and unchanged 0; refused, failed and error
 # 1), plus read, reported, built and passed (0) and blocked (1, an
-# extension that did not pass; only its report was written).
+# extension that did not pass; only its report was written) and open (3, a
+# complaint the page does not yet answer).
 EXIT: Dict[str, int] = {"read": 0, "reported": 0, "built": 0, "passed": 0, "written": 0,
-                        "unchanged": 0, "blocked": 1, "failed": 1, "refused": 1, "error": 1}
+                        "unchanged": 0, "blocked": 1, "failed": 1, "refused": 1, "error": 1,
+                        "open": 3}
 TARGETS: Tuple[str, ...] = ("css", "tailwind", "figma", "dtcg", "stageshow")
 # How each input is named in messages: the CLI's flags. The MCP tools pass
 # their own argument names.

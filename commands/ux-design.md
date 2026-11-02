@@ -464,6 +464,35 @@ Write to `.ux/last-design.json` in the project root:
 
 This lets `/ux-next` and downstream commands pick up where you left off.
 
+### 7. What the person says is wrong is a complaint, closed only by measurement
+
+When the person names something wrong with a page ("the cookie banner covers everything", "there is no photo on mobile", "the filler text is still there"), write it into `.ux/complaints.json` before changing anything: an `id`, their words in `said`, and a `probe` of one of five kinds.
+
+| kind | reads | passes when |
+|---|---|---|
+| `rule-clear` | `rule` | the lint or render check reports no finding of that rule, such as `first-screen-covered` or `text-overflows-its-box` |
+| `present` | `selector` | a visible element matches at 390, 430, 768 and 1280 px |
+| `absent` | `selector` | no visible element matches at any of those widths |
+| `text-present` | `text` | the visible text holds the words at every width |
+| `text-absent` | `text` | the visible text holds them at no width |
+
+```json
+{"complaints": [
+  {"id": "cookie-banner", "said": "the cookie banner covers the page",
+   "probe": {"kind": "rule-clear", "rule": "first-screen-covered"}}
+]}
+```
+
+Keep the page as it is before you change it, then, after the change, run the check against the page and that copy:
+
+```bash
+uxskill complaints snapshot --page http://localhost:3000/ --out .ux/before.html
+uxskill complaints check --page dist/index.html --before .ux/before.html
+uxskill complaints check --page http://localhost:3000/   # the running app
+```
+
+Exit 0 means every complaint measures fixed. Exit 3 means one is open, or weak: its probe already passed on the old page, so it proves nothing; tighten the probe until the old page fails it. Never report a complaint fixed on a 3. A URL is loaded once and measured as that snapshot, its scripts removed after they ran. The plugin's stop hook reads the last check and holds the session once while it is missing, older than the page, or open; `UXSKILL_COMPLAINTS_GATE=0` or an empty `.ux/complaints-gate.off` turns it off.
+
 ## SEO is mandatory for public-web outputs
 
 Page mode only; component and dashboard modes skip this section. For any landing page or public-facing surface, read `references/foundations/seo.md` and ship the full SEO foundation (head surface, OG + Twitter, JSON-LD, semantic HTML, image discipline, CWV targets). When a subagent builds, say so in its prompt. The output is incomplete without it. Derive sensible real values from the brief + source when the brief doesn't supply them (canonical/og:url from the source URL, og:image from a real CDN image the page references). **Never ship a literal `{TODO_FILL...}` token inside the rendered markup**: the linter flags it HIGH and it is a draft-state leak. Where a value is genuinely absent (no phone, no OG image), OMIT that element gracefully (drop the `<meta>` / the affordance); surface any "you should patch this" note to the user OUTSIDE the code, never as a placeholder in the HTML.

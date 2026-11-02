@@ -1003,6 +1003,8 @@ else:
         _emit(result, ctx.obj["pretty"])
         if result["status"] in ("error", "refused"):
             click.echo(f"Error: {result['message']}\n", err=True, nl=False)
+        elif result["status"] == "open":
+            click.echo(f"{result['message']}\n", err=True, nl=False)
         if EXIT[result["status"]]:
             sys.exit(EXIT[result["status"]])
 
@@ -1189,6 +1191,50 @@ else:
         mode. Exit 1 when a contract has a problem."""
         from engine.io.commands import run_contracts_check
         _io(ctx, run_contracts_check, folder, list(tokens), fmt=fmt, mapping=mapping)
+
+    @cli.group("complaints")
+    def complaints_grp() -> None:
+        """What the person said is wrong with the page, each kept as a probe."""
+
+    @complaints_grp.command("check")
+    @click.option("--page", "page", required=True,
+                  help="The page to measure: an HTML file, or the running app's http(s) URL.")
+    @click.option("--file", "file", default=".ux/complaints.json", show_default=True,
+                  help="The complaints, each an id, the words said and a probe.")
+    @click.option("--before", "before", default=None,
+                  help="The page as it was when the person complained: a probe that passes "
+                       "there too proves nothing, and its complaint stays open as weak.")
+    @click.pass_context
+    def complaints_check_cmd(ctx, page, file, before) -> None:
+        """Measure --page against every complaint at four widths. Exit 0 when
+        every complaint is fixed, 3 while any is open or weak, 2 when the
+        page cannot be measured."""
+        from engine.complaints import check_complaints
+        from engine.render import RenderUnavailable
+        try:
+            _io(ctx, check_complaints, page, file=file, before=before)
+        except RenderUnavailable as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(2)
+
+    @complaints_grp.command("snapshot")
+    @click.option("--page", "page", required=True,
+                  help="The page to keep: an HTML file, or the running app's http(s) URL.")
+    @click.option("--out", "out", default=".ux/before.html", show_default=True,
+                  help="Where to keep it.")
+    @click.option("--force", is_flag=True, help="Replace another page already at --out.")
+    @click.pass_context
+    def complaints_snapshot_cmd(ctx, page, out, force) -> None:
+        """Keep the page as it is before it changes, to pass to complaints
+        check as --before. A URL is loaded once and kept with its scripts
+        removed after they ran."""
+        from engine.complaints import snapshot_page
+        from engine.render import RenderUnavailable
+        try:
+            _io(ctx, snapshot_page, page, out, force=force)
+        except RenderUnavailable as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(2)
 
     # -------- ux version -------------------------------------------------
 

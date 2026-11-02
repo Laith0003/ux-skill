@@ -45,6 +45,15 @@ project adheres to [Semantic Versioning](https://semver.org/).
   is a wide panel floating clear of both edges over text or an image (a
   cookie card left over the content). A thin bar docked to an edge, a
   narrow widget and an overlay that paints nothing pass.
+- `uxskill complaints check --page <file or URL> [--before <file>]`:
+  what the person said is wrong with a page, kept in
+  `.ux/complaints.json` as probes from a closed list (`rule-clear`,
+  `present`, `absent`, `text-present`, `text-absent`) measured at four
+  widths. It exits 3 while a complaint is open, and a probe the old page
+  already passed is reported weak, since it proves nothing. A running
+  app is measured by its URL. A stop hook in the plugin reads the last
+  check and holds the session once while it is missing, stale or open.
+  `uxskill complaints snapshot` keeps the page before it changes.
 
 ### Changed
 - The landing playbook's interface-fragment patterns point at the new guide.
