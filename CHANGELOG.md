@@ -48,6 +48,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
   docked to an edge, a narrow widget, a sidebar beside the content, a
   layer painted under the page, a drawer parked off screen by a transform
   and an overlay that paints nothing pass.
+- The render check's `target-too-small`: a control under 24 by 24 CSS
+  pixels whose 24px circle meets another control, at every width (WCAG
+  2.5.8 and its spacing exception). A link inside a sentence and an
+  unstyled checkbox or radio pass. The accessibility guide now gives 24px
+  as the floor and 44px as the touch default, rather than calling 44px
+  the minimum.
 - `uxskill complaints check --page <file or URL> [--before <file>]`:
   what the person said is wrong with a page, kept in
   `.ux/complaints.json` as probes from a closed list (`rule-clear`,

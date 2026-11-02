@@ -227,6 +227,44 @@ _MEASURE_JS = r"""(tol) => {
     out.push({rule: 'first-screen-covered', sel: sel(e), cls: e.className || '',
               text: text(e).slice(0, 60), drift: share, why, dir});
   }
+  // A target smaller than 24 by 24 CSS pixels whose 24px circle, centred on
+  // it, meets another target or another small target's circle (WCAG 2.5.8,
+  // with its spacing exception). A link inside a sentence and a checkbox or
+  // radio the browser draws unstyled are the criterion's own exceptions.
+  const TARGETS = 'a[href],button,input:not([type=hidden]),select,textarea,summary,'
+    + '[role=button],[role=link],[role=tab],[role=menuitem],[role=checkbox],[role=radio],'
+    + '[role=switch],[role=option],[tabindex]:not([tabindex="-1"])';
+  const seenBox = el => { const q = el.getBoundingClientRect();
+    if (q.width < 1 || q.height < 1) return false;
+    return el.checkVisibility ? el.checkVisibility({opacityProperty: true, visibilityProperty: true}) : true; };
+  const tg = [];
+  for (const el of document.body.querySelectorAll(TARGETS)) {
+    if (el.disabled || el.closest('[inert],[aria-hidden="true"]') || !seenBox(el)) continue;
+    if (tg.some(o => o.el.contains(el))) continue;  // the outer control is the target
+    const q = el.getBoundingClientRect(), cs = getComputedStyle(el);
+    const p = el.parentElement;
+    const inSentence = cs.display === 'inline' && p
+      && [...p.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
+    const uaDrawn = el.tagName === 'INPUT' && /^(checkbox|radio)$/.test(el.type)
+      && cs.appearance !== 'none';
+    tg.push({el, q, cx: (q.left + q.right) / 2, cy: (q.top + q.bottom) / 2,
+             small: (q.width < 24 || q.height < 24) && !inSentence && !uaDrawn});
+  }
+  const circleMeetsBox = (t, q) => {
+    const dx = Math.max(q.left - t.cx, 0, t.cx - q.right);
+    const dy = Math.max(q.top - t.cy, 0, t.cy - q.bottom);
+    return dx * dx + dy * dy < 144; };
+  let small = 0;
+  for (const t of tg) {
+    if (!t.small) continue;
+    const near = tg.find(o => o !== t && !o.el.contains(t.el) && !t.el.contains(o.el)
+      && (circleMeetsBox(t, o.q) || (o.small && Math.hypot(o.cx - t.cx, o.cy - t.cy) < 24)));
+    if (!near || ++small > 12) continue;
+    const name = (t.el.getAttribute('aria-label') || text(t.el)).slice(0, 24);
+    out.push({rule: 'target-too-small', sel: sel(t.el) + (name ? ' "' + name + '"' : ''),
+              cls: typeof t.el.className === 'string' ? t.el.className : '',
+              text: text(t.el).slice(0, 60), drift: 0, w: Math.round(t.q.width), h: Math.round(t.q.height), near: sel(near.el), dir});
+  }
   return {vw, findings: out};
 }"""
 
@@ -251,6 +289,12 @@ _RULES = {
              "wider column, min-width: 0 on a grid or flex child) or let long strings break "
              "(overflow-wrap: anywhere)."),
         what="text is {drift}px wider than its box ({dir}, {vw}px viewport)"),
+    "target-too-small": dict(
+        name="A small target crowded by another", severity="high", category="A11y",
+        fix=("The control is under 24 by 24 CSS pixels and a 24px circle centred on it meets "
+             "another control (WCAG 2.5.8). Give it a 24px hit area, with min-width and "
+             "min-height or padding, or space it from its neighbours until the circles clear."),
+        what="target is {w}x{h}px and its 24px circle meets {near} ({vw}px viewport)"),
     "first-screen-covered": dict(
         name="A fixed panel covers the first screen", severity="high", category="Layout",
         fix=("A cookie notice, banner or popup sits over the page at rest. Dock it to the top "

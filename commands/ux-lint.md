@@ -306,7 +306,7 @@ Other detection fields: `also` adds more passes with their own pattern and targe
 
 ### The render check
 
-`uxskill lint --render` loads each HTML file in headless Chromium at 390, 430, 768 and 1280px and adds what only the rendered page shows. Four rules measure layout at every width; the rest measure once, at 1280px, or on pages that are not frozen:
+`uxskill lint --render` loads each HTML file in headless Chromium at 390, 430, 768 and 1280px and adds what only the rendered page shows. Five rules measure layout and targets at every width; the rest measure once, at 1280px, or on pages that are not frozen:
 
 | Rule | What it measures |
 |---|---|
@@ -314,6 +314,7 @@ Other detection fields: `also` adds more passes with their own pattern and targe
 | `horizontal-overflow` | The page scrolls sideways; names up to three elements that reach past the viewport. |
 | `text-overflows-its-box` | A word or line wider than its own box, lying over what sits beside it. |
 | `first-screen-covered` | A fixed panel over the first screen at rest (a cookie card, a consent wall, a promo bar): it lies on top of the page's `h1` or a form's first control, covers 30% or more of the viewport over text or images, or is a panel at least half the viewport wide floating clear of both edges over them. A transparent fixed wrapper is measured by the painted card inside it. A thin bar docked to the top or bottom edge, a narrow widget, a sidebar beside the content, a layer under the page, a drawer parked off screen and an overlay that paints nothing or takes no pointer pass. |
+| `target-too-small` | A control under 24 by 24 CSS pixels whose 24px circle, centred on it, meets another control or another small control's circle (WCAG 2.5.8 and its spacing exception). A link inside a sentence, a checkbox or radio the browser draws unstyled, and a disabled or hidden control pass. |
 | `color-over-budget` | Only on a page that carries `--color-budget-chromatic`. The share of text characters in a chromatic color (OKLCH chroma 0.08 and up), and the share of the interface area (the page less images, video, canvas, SVG and background pictures) filled in one, painted on a 16px grid in document order. Text over `color.budget.chromatic`, or fill over it plus `color.budget.bands`, fires, with two points of slack. Colors of custom properties named for a status are left out. |
 | `photo-grade-off` | Only on a page that carries the `--imagery-photo-*` tokens. Every raster image and background at least 120px on each side that is not a logo is measured for its mean L*, b* and C*; each must sit within the grade lock's spread of the page's mean, and the page's mean within the direction's ranges (`imagery.grade_problems`). |
 | `accent-text-low-contrast` | Text in a color (OKLCH chroma 0.04 and up) against the ground under it, the backgrounds composited on white: under 4.5:1 fires, once per color and ground. Normal text cites 1.4.3; large text (24px, or 18.66px bold) at 3:1 or more meets 1.4.3 and is reported against the system's own 4.5:1 floor. Text over a picture, a gradient or an overlay beside media is left to the scrim check. |
