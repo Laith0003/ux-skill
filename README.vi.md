@@ -14,7 +14,7 @@ pip install uxskill
 
 *Trước: SEO slop rập khuôn với ảnh stock. Sau: hero ảnh công trường thật dưới lớp phủ tối, tiêu đề kiểu biên tập với điểm nhấn màu hổ phách, form báo giá ngay trong hero. Cùng công cụ lập trình AI, cùng prompt, kết quả khác khi ux-skill cung cấp các ràng buộc.*
 
-> **v4.0, FOUNDATIONS: một lệnh dựng nên hệ thống thiết kế hoàn chỉnh, được kiểm tra theo WCAG, tích hợp sẵn tiếng Ả Rập và chiều viết phải sang trái.** Plugin UX mạnh nhất cho lập trình bằng AI. Một lõi suy luận Python với bộ tổng hợp 7 trục xác định, 12 manifest JSON truy vấn được (84 phong cách, 176 bảng màu, 70 cặp chữ, 148 component, 184 ngành, 35 loại biểu đồ, 57 preset chuyển động, 112 định luật UX, 174 quy tắc anti-pattern, 25 tech stack, 160 đặc tả thương hiệu), 18 slash command, 5 sub-agent, 25 tool MCP và một linter chống AI-slop xác định. Đa IDE: cài vào Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer và Roo Cline.
+> **v4.0, FOUNDATIONS: một lệnh dựng nên hệ thống thiết kế hoàn chỉnh, được kiểm tra theo WCAG, tích hợp sẵn tiếng Ả Rập và chiều viết phải sang trái.** Plugin UX mạnh nhất cho lập trình bằng AI. Một lõi suy luận Python với bộ tổng hợp 7 trục xác định, 12 manifest JSON truy vấn được (84 phong cách, 176 bảng màu, 70 cặp chữ, 148 component, 184 ngành, 35 loại biểu đồ, 57 preset chuyển động, 112 định luật UX, 178 quy tắc anti-pattern, 25 tech stack, 160 đặc tả thương hiệu), 18 slash command, 5 sub-agent, 25 tool MCP và một linter chống AI-slop xác định. Đa IDE: cài vào Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer và Roo Cline.
 
 > **Tên thương hiệu là `ux-skill`.** Tên gói trên PyPI / npm vẫn là `uxskill`. Repo GitHub nằm tại [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -27,7 +27,7 @@ pip install uxskill
 [![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-174-181715.svg)](data/anti-patterns.json)
+[![Linter](https://img.shields.io/badge/anti--patterns-178-181715.svg)](data/anti-patterns.json)
 [![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
@@ -57,7 +57,7 @@ Python 3.10 trở lên. Với máy chủ MCP, `pip install --upgrade 'uxskill[mc
 
 **Component và section.** 23 hợp đồng component nêu rõ mỗi phần của một điều khiển gắn với token nào ở từng trạng thái và mỗi trạng thái chuyển động ra sao: đổi trạng thái thì chuyển tiếp theo `motion.state`, nhấn thì co giãn theo `motion.press.scale` (và đứng yên khi giảm chuyển động), còn tab, menu và segmented control trượt một chỉ báo duy nhất. 14 hợp đồng section (hero, bảng giá, FAQ, footer và các phần còn lại) nêu nhiệm vụ của từng section, các component mà slot của nó nhận, bằng chứng nó cần và cách nó xếp chồng trên điện thoại. Các trang dựng từ chúng dùng ảnh chụp; mảnh giao diện chỉ là hình ảnh bổ sung, không bao giờ thay thế.
 
-**Một linter đọc cả trang.** 174 quy tắc, nhiều quy tắc có thêm bước kiểm tra trên CSS và markup đã phân tích, đọc chính hệ thống của trang: chuyển động được canh thời gian theo đường cong của nó, chiều cao dòng của tiêu đề display được giữ ở ngưỡng sàn của bộ máy, và một điều khiển bị ẩn phải rời khỏi thứ tự tab. `uxskill lint --render` mở từng trang trong Chromium headless ở bề rộng desktop và điện thoại rồi thao tác thật: vòng focus không hiện hoặc bị cắt, hover và nhấn phản hồi chậm, focus bị mất sau Escape, và cú nhấn vẫn chuyển động khi đã giảm chuyển động.
+**Một linter đọc cả trang.** 178 quy tắc, nhiều quy tắc có thêm bước kiểm tra trên CSS và markup đã phân tích, đọc chính hệ thống của trang: chuyển động được canh thời gian theo đường cong của nó, chiều cao dòng của tiêu đề display được giữ ở ngưỡng sàn của bộ máy, và một điều khiển bị ẩn phải rời khỏi thứ tự tab. `uxskill lint --render` mở từng trang trong Chromium headless ở bề rộng desktop và điện thoại rồi thao tác thật: vòng focus không hiện hoặc bị cắt, hover và nhấn phản hồi chậm, focus bị mất sau Escape, và cú nhấn vẫn chuyển động khi đã giảm chuyển động.
 
 **Ít lệnh hơn.** 25 slash command còn 18. `/ux-discover` nhận `--frame` và `--recommend`, `/ux-design` nhận `--component`, `--dashboard` và `--from-image`, `/ux-polish` lặp lint, fix, re-lint cho đến khi điểm đạt 90 hoặc qua ba vòng, và `/ux-init` nhận `--stats`. Bảy tên cũ vẫn chạy như alias và sẽ bị bỏ ở 4.1; xem [các alias](#alias-bị-bỏ-ở-41).
 
@@ -98,7 +98,7 @@ Chi tiết đầy đủ trong [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-b
 
 ux-skill là một **bộ máy trí tuệ thiết kế** dành cho các công cụ lập trình AI. Nó chạy như một gói Python (`pip install uxskill`), như một plugin của Claude Code, và như một trình cài đặt đa-IDE cho 17 môi trường. Bộ máy nhận vào một brief dự án (ngành nghề, đối tượng, tone, yêu-cầu-bắt-buộc, điều-cấm-kỵ, stack, khu vực) và trả về một hệ thống thiết kế được khuyến nghị đầy đủ: phong cách, bảng màu, cặp typography, preset chuyển động, component, các thương hiệu hình mẫu để nghiên cứu và những rào chắn anti-pattern phải tuân thủ. Khuyến nghị mang tính xác định, cùng một đầu vào luôn tạo ra cùng một đầu ra.
 
-Plugin nằm giữa bạn và công cụ lập trình AI. Khi bạn yêu cầu Claude Code, Cursor hay bất kỳ trợ lý AI nào "xây một landing page fintech", trợ lý thường ứng tác, và kết quả lộ ra là do AI tạo ra trong vòng năm giây (gradient từ tím sang xanh, ba thẻ bằng nhau, Inter ở kích thước display, "John Doe" trong testimonial, transition mặc định 300ms, hero căn giữa, mũi tên CTA nảy lên xuống). ux-skill thay thế việc ứng tác bằng **những ràng buộc có cấu trúc**: bạn chạy `/ux-discover` để nắm bắt brief và chọn hệ thống, `/ux-design` để sinh mã, và `/ux-lint` để xác minh code vượt qua 174 quy tắc chống AI-slop xác định trước khi commit.
+Plugin nằm giữa bạn và công cụ lập trình AI. Khi bạn yêu cầu Claude Code, Cursor hay bất kỳ trợ lý AI nào "xây một landing page fintech", trợ lý thường ứng tác, và kết quả lộ ra là do AI tạo ra trong vòng năm giây (gradient từ tím sang xanh, ba thẻ bằng nhau, Inter ở kích thước display, "John Doe" trong testimonial, transition mặc định 300ms, hero căn giữa, mũi tên CTA nảy lên xuống). ux-skill thay thế việc ứng tác bằng **những ràng buộc có cấu trúc**: bạn chạy `/ux-discover` để nắm bắt brief và chọn hệ thống, `/ux-design` để sinh mã, và `/ux-lint` để xác minh code vượt qua 178 quy tắc chống AI-slop xác định trước khi commit.
 
 README này là tài liệu tham chiếu chính thức. Mọi command, mọi sub-agent, mọi data manifest, mọi đường cài đặt, mọi spec thương hiệu, mọi danh mục anti-pattern, tất cả đều được tài liệu hóa ở đây. Nếu bạn đang tìm một plugin thiết kế cho Claude Code hoặc so sánh các công cụ thiết kế AI cho Cursor, Windsurf hay Codex, hãy đọc tài liệu này từ đầu đến cuối song song với [compare.html](https://uxskill.laithjunaidy.com/compare.html).
 
@@ -113,7 +113,7 @@ README này là tài liệu tham chiếu chính thức. Mọi command, mọi sub
 5. [18 slash command, tham chiếu chi tiết](#18-slash-command-tham-chiếu-chi-tiết)
 6. [5 sub-agent](#5-sub-agent)
 7. [11 data manifest](#11-data-manifest)
-8. [174 quy tắc chống AI-slop, bộ linter](#174-quy-tắc-chống-ai-slop-bộ-linter)
+8. [178 quy tắc chống AI-slop, bộ linter](#178-quy-tắc-chống-ai-slop-bộ-linter)
 9. [160 spec DESIGN.md thương hiệu, theo danh mục](#160-spec-designmd-thương-hiệu-theo-danh-mục)
 10. [Máy chủ MCP, nước cờ bất đối xứng](#máy-chủ-mcp-nước-cờ-bất-đối-xứng)
 11. [Trình cài đặt 17 IDE](#trình-cài-đặt-17-ide)
@@ -190,14 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 174,
+#     "anti-patterns": 178,
 #     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-Mười hai số đếm cộng lại thành 1.265 mục. Nếu bất kỳ số đếm nào trả về 0, file JSON đang thiếu: mở một issue tại [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
+Mười hai số đếm cộng lại thành 1.269 mục. Nếu bất kỳ số đếm nào trả về 0, file JSON đang thiếu: mở một issue tại [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
 
 ---
 
@@ -215,7 +215,7 @@ Số sao được xác minh lần cuối qua `gh api` vào **2026-05-28**. ux-sk
 | dominikmartn/nothing-design-skill | **2.391** | Skill thẩm mỹ đơn nhất | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2.164** | Skill thiết kế anti-slop | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | Component MD3 + audit | 1 | - | (chỉ MD3) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Bộ máy Python + 12 manifest + 18 command + 5 sub-agent + linter CI** | **18** | **174 quy tắc xác định** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Bộ máy Python + 12 manifest + 18 command + 5 sub-agent + linter CI** | **18** | **178 quy tắc xác định** | **160** | **148** | **57** | **17** |
 
 ### Chỗ chúng tôi thua
 
@@ -227,7 +227,7 @@ Số sao được xác minh lần cuối qua `gh api` vào **2026-05-28**. ux-sk
 
 - **Thư viện component:** 148 component được tài liệu hóa với anatomy, state, token sử dụng, và spec chuyển động. Không có cái nào trong 8 plugin kia ship được manifest component.
 - **Preset chuyển động:** 57 entry sẵn sàng theo stack (Framer Motion, GSAP, CSS) với fallback reduced-motion. Không có ai trong số còn lại ship manifest chuyển động.
-- **Linter anti-pattern:** 174 quy tắc xác định, chạy trong CI, exit khác 0 ở mức Critical/High. Không có ai trong số còn lại ship một linter xác định.
+- **Linter anti-pattern:** 178 quy tắc xác định, chạy trong CI, exit khác 0 ở mức Critical/High. Không có ai trong số còn lại ship một linter xác định.
 - **Spec thương hiệu:** 160 spec DESIGN.md thật (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, và 96 thương hiệu khác). Không có ai trong số còn lại ship một thư viện thương hiệu.
 - **17 IDE được hỗ trợ:** cùng một bộ máy, keo dán khác nhau cho mỗi IDE.
 - **18 slash command:** discovery, generation (trang, component, dashboard, từ một hình ảnh), audit, lint, vòng lặp polish, vòng lặp fix, case study, workshop, copy, motion, a11y, conductor, tích hợp đầy đủ.
@@ -251,7 +251,7 @@ ux-skill (package name: uxskill)
 │   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
 │   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
-│   ├── anti-patterns.json             174 rules (CI-safe linter source)
+│   ├── anti-patterns.json             178 rules (CI-safe linter source)
 │   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
 ├── engine/                            Python, the reasoning
@@ -327,9 +327,9 @@ ux-skill (package name: uxskill)
    - **Stack → tương thích component + preset chuyển động** (tech-stacks.json, motion-presets.json)
    - **Cấm + khu vực → rào chắn + danh sách rút gọn thương hiệu hình mẫu** (anti-patterns.json, brands/)
 3. **Hợp nhất.** Một bộ hợp nhất xác định xếp hạng ứng viên, giải quyết xung đột (ví dụ chế độ tối bắt buộc quyết định chế độ bảng màu) và xuất ra một hệ thống khuyến nghị duy nhất.
-4. **Đầu ra.** Một tài liệu JSON gồm phong cách đã chọn, bảng màu, cặp chữ, 5 preset chuyển động hàng đầu, 12 component hàng đầu, 5 thương hiệu hình mẫu hàng đầu, và toàn bộ 174 rào chắn anti-pattern đang bật. Kèm một khối lý giải cho từng lựa chọn.
+4. **Đầu ra.** Một tài liệu JSON gồm phong cách đã chọn, bảng màu, cặp chữ, 5 preset chuyển động hàng đầu, 12 component hàng đầu, 5 thương hiệu hình mẫu hàng đầu, và toàn bộ 178 rào chắn anti-pattern đang bật. Kèm một khối lý giải cho từng lựa chọn.
 5. **Sinh mã.** Các lệnh phía sau (`/ux-design` ở các chế độ trang, component, dashboard và hình ảnh, cùng `/ux-system`) dùng khuyến nghị để sinh code thật qua các sub-agent.
-6. **Xác minh.** `/ux-lint` quét lại code đã sinh theo 174 quy tắc. Exit khác 0 ở Critical/High trong CI.
+6. **Xác minh.** `/ux-lint` quét lại code đã sinh theo 178 quy tắc. Exit khác 0 ở Critical/High trong CI.
 
 **Bổ sung của v3.** Recommender giờ xếp hạng lại ứng viên từ `engine/decisions/` dựa trên `.ux/decisions.jsonl` (chỉ đếm quyết định có `lint_score >= 80` VÀ `user_accepted = true`; an toàn khi khởi động nguội dưới 3 quyết định trước đó). Luồng sinh mã có thể chuyển sang `engine/synthesizer/`, một trình biên dịch 7 trục xác định tạo token bảng màu + chữ + khoảng cách + bo góc + chuyển động mới cho từng brief thay vì chọn template từ danh mục. Chi tiết tại [Bộ não, v3.0 là gì](#bộ-não-v30-là-gì).
 
@@ -383,7 +383,7 @@ Các lệnh được chia thành bảy nhóm: **khởi tạo & kiểm kê**, **d
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **Đầu ra:** `.ux/last-discovery.json` (brief 10 trường), `.ux/last-recommendation.json` (phong cách đã chọn, bảng màu, cặp chữ, 5 preset chuyển động hàng đầu, 12 component hàng đầu, 5 thương hiệu hình mẫu hàng đầu, toàn bộ 174 rào chắn anti-pattern đang bật, kèm lý giải), và với `--frame`, `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
+- **Đầu ra:** `.ux/last-discovery.json` (brief 10 trường), `.ux/last-recommendation.json` (phong cách đã chọn, bảng màu, cặp chữ, 5 preset chuyển động hàng đầu, 12 component hàng đầu, 5 thương hiệu hình mẫu hàng đầu, toàn bộ 178 rào chắn anti-pattern đang bật, kèm lý giải), và với `--frame`, `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
 - **Nối vào:** `/ux-design [extra brief]` → code frontend bám sát khuyến nghị. `/ux-design --component <name>` → một component khớp với các ràng buộc đã tìm ra. `/ux-system` → hệ thống thiết kế đầy đủ từ khuyến nghị. `/ux-lint` → xác minh code đã sinh.
 
 ### Sinh code
@@ -423,7 +423,7 @@ Các lệnh được chia thành bảy nhóm: **khởi tạo & kiểm kê**, **d
 
 #### `/ux-lint`: linter dựa trên regex xác định (không LLM, CI-safe)
 
-- **Là gì:** Chạy 174 quy tắc trên code của bạn. Không gọi LLM. Exit khác 0 ở Critical / High trong CI. Nguồn: `data/anti-patterns.json`. Quy tắc bao trùm A11y (47), Nội dung (35), Layout (18), Typography (16), Motion (15), Visual (14), Chất lượng (12), Màu (10), Hiệu năng (5), Chiều sâu (2).
+- **Là gì:** Chạy 178 quy tắc trên code của bạn. Không gọi LLM. Exit khác 0 ở Critical / High trong CI. Nguồn: `data/anti-patterns.json`. Quy tắc bao trùm A11y (48), Nội dung (38), Layout (18), Typography (16), Motion (15), Visual (14), Chất lượng (12), Màu (10), Hiệu năng (5), Chiều sâu (2).
 - **Khi dùng:** Pre-commit hook. Cổng CI. Pass đầu nhanh trên codebase lớn trước khi trả giá `/ux-audit`. Sau `/ux-design` ở bất kỳ chế độ nào để xác minh việc sinh.
 - **Khi bỏ qua:** Bạn muốn vòng lặp fix (linter báo cáo, không sửa, nối vào `/ux-polish --fix` hoặc `/ux-fix`). Bạn muốn phán xét gu thẩm mỹ (dùng `/ux-critique`).
 - **Gọi (slash):** `/ux-lint src/`.
@@ -655,7 +655,7 @@ Khi một command điều phối một sub-agent, nó truyền:
 
 1. Brief / khuyến nghị (được load từ `.ux/`).
 2. Lát manifest liên quan (ví dụ, `frontend-engineer` nhận phong cách + bảng màu + component đã chọn; `motion-engineer` nhận preset chuyển động đã chọn).
-3. 174 rào chắn anti-pattern (luôn được kích hoạt).
+3. 178 rào chắn anti-pattern (luôn được kích hoạt).
 4. Một tiêu chí thành công (artifact phải làm gì).
 
 Sub-agent trả về:
@@ -770,15 +770,15 @@ Các stack khác gồm Astro, SvelteKit, Remix, Nuxt 3, Solid Start, Qwik, Blade
 
 Mọi preset đều có biến thể reduced-motion. Code sẵn sàng theo stack cho Framer Motion, GSAP, và CSS thuần.
 
-### `anti-patterns.json`: 174 quy tắc
+### `anti-patterns.json`: 178 quy tắc
 
 | Trường | Mô tả |
 |---|---|
-| `entries` | 174 |
+| `entries` | 178 |
 | `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (loại, mẫu, flag, phạm vi, và với nhiều quy tắc là một bước kiểm tra `post` trên tệp đã phân tích), `why`, `fix` |
-| `categories` | A11y (47), Content (35), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
+| `categories` | A11y (48), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-Danh sách quy tắc đầy đủ nằm ở [174 quy tắc chống AI-slop](#174-quy-tắc-chống-ai-slop-bộ-linter).
+Danh sách quy tắc đầy đủ nằm ở [178 quy tắc chống AI-slop](#178-quy-tắc-chống-ai-slop-bộ-linter).
 
 ### `brands/*.json`: 160 spec thương hiệu
 
@@ -792,7 +792,7 @@ Danh sách đầy đủ ở [160 spec DESIGN.md thương hiệu](#160-spec-desig
 
 ---
 
-## 174 quy tắc chống AI-slop: bộ linter
+## 178 quy tắc chống AI-slop: bộ linter
 
 ux-skill ship một linter xác định: mỗi quy tắc là một mẫu, và nhiều quy tắc thêm bước kiểm tra trên CSS và markup đã phân tích, nên một kết quả khớp chỉ được tính trong ngữ cảnh mà quy tắc nêu ra. **Không LLM.** **Không API.** **Không mạng.** Chạy trong CI mất ~200ms với một ứng dụng Next.js điển hình. Exit khác 0 với phát hiện Critical / High khi đặt `--fail-on high`.
 
@@ -800,7 +800,7 @@ Quy tắc lấy từ `data/anti-patterns.json` (v2, ưu tiên) với dự phòng
 
 ### Quy tắc theo danh mục
 
-Danh mục đầy đủ của 174 quy tắc, theo nhóm rồi theo mức độ, được sinh từ `data/anti-patterns.json` vào [README tiếng Anh](README.md#rules-by-category); ở đó ID và tên quy tắc giữ nguyên như linter in ra. Quy tắc bao trùm A11y (47), Content (35), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
+Danh mục đầy đủ của 178 quy tắc, theo nhóm rồi theo mức độ, được sinh từ `data/anti-patterns.json` vào [README tiếng Anh](README.md#rules-by-category); ở đó ID và tên quy tắc giữ nguyên như linter in ra. Quy tắc bao trùm A11y (48), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
 
 ### Cách dùng linter
 
@@ -1097,7 +1097,7 @@ Bảng tóm tắt ngắn. So sánh đầy đủ từng-bảng tại [uxskill.lai
 | Component | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Preset chuyển động | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Spec thương hiệu | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Quy tắc anti-pattern | **174** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Quy tắc anti-pattern | **178** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Linter xác định CI-safe | **có** | không | không | không | không | không | không | không | không |
 | IDE hỗ trợ | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Cổng discovery | **10 trường** | ngầm | ngầm | ngầm | ngầm | ngầm | ngầm | ngầm | ngầm |

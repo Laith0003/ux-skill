@@ -61,6 +61,15 @@ project adheres to [Semantic Versioning](https://semver.org/).
   text is read the same way now. `input-text-zooms`: a field under 16px
   at phone widths. `image-broken` and `image-distorted`: an image that
   failed to load, and one stretched more than 3% off its own shape.
+- Four lint rules: `title-is-a-framework-default` (a starter's title such
+  as Vite + React or Create Next App, or an empty one, which describes
+  nothing, as WCAG 2.4.2 asks a title to), `consent-prechecked` (a
+  marketing box ticked in advance), `fake-urgency` (a stock count,
+  viewer count or countdown typed into the copy) and `confirmshaming` (a
+  decline worded as an insult). 178 rules in all.
+- A phrase inside a longer quotation on its line now counts as a mention
+  for the text rules, as a phrase wrapped in quotation marks already did,
+  and the numeric HTML apostrophe is read as a quotation mark.
 - `uxskill complaints check --page <file or URL> [--before <file>]`:
   what the person said is wrong with a page, kept in
   `.ux/complaints.json` as probes from a closed list (`rule-clear`,

@@ -14,7 +14,7 @@ pip install uxskill
 
 *전: 흔한 스톡 사진 SEO 슬롭. 후: 어두운 스크림 아래 실제 공사 현장 사진을 쓴 히어로, 호박색 포인트의 에디토리얼 헤드라인, 히어로 안의 견적 폼. 같은 AI 코딩 도구, 같은 프롬프트라도 ux-skill이 제약을 주면 결과가 달라집니다.*
 
-> **v4.0, FOUNDATIONS: 명령 하나로 WCAG 검사를 통과한 완전한 디자인 시스템을 만들고, 아랍어와 오른쪽에서 왼쪽 쓰기를 기본 지원합니다.** AI 코딩을 위한 가장 강력한 UX 플러그인. 결정론적 7축 신시사이저를 갖춘 Python 추론 코어, 쿼리 가능한 JSON 매니페스트 12개(스타일 84개, 팔레트 176개, 타입 페어링 70개, 컴포넌트 148개, 산업 184개, 차트 유형 35개, 모션 프리셋 57개, UX 법칙 112개, 안티패턴 규칙 174개, 기술 스택 25개, 브랜드 스펙 160개), 슬래시 명령 18개, 서브에이전트 5개, MCP 도구 25개, 그리고 결정론적 반-AI 슬롭 린터. 크로스 IDE: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline에 설치됩니다.
+> **v4.0, FOUNDATIONS: 명령 하나로 WCAG 검사를 통과한 완전한 디자인 시스템을 만들고, 아랍어와 오른쪽에서 왼쪽 쓰기를 기본 지원합니다.** AI 코딩을 위한 가장 강력한 UX 플러그인. 결정론적 7축 신시사이저를 갖춘 Python 추론 코어, 쿼리 가능한 JSON 매니페스트 12개(스타일 84개, 팔레트 176개, 타입 페어링 70개, 컴포넌트 148개, 산업 184개, 차트 유형 35개, 모션 프리셋 57개, UX 법칙 112개, 안티패턴 규칙 178개, 기술 스택 25개, 브랜드 스펙 160개), 슬래시 명령 18개, 서브에이전트 5개, MCP 도구 25개, 그리고 결정론적 반-AI 슬롭 린터. 크로스 IDE: Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer, Roo Cline에 설치됩니다.
 
 > **브랜드 이름은 `ux-skill`입니다.** PyPI / npm 패키지 이름은 `uxskill` 그대로입니다. GitHub 저장소는 [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill)에 있습니다.
 
@@ -27,7 +27,7 @@ pip install uxskill
 [![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-174-181715.svg)](data/anti-patterns.json)
+[![Linter](https://img.shields.io/badge/anti--patterns-178-181715.svg)](data/anti-patterns.json)
 [![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
@@ -57,7 +57,7 @@ Python 3.10 이상. MCP 서버는 `pip install --upgrade 'uxskill[mcp]'`. pipx�
 
 **컴포넌트와 섹션.** 23개의 컴포넌트 계약은 컨트롤의 각 부분이 상태마다 어떤 토큰에 묶이는지, 각 상태가 어떻게 움직이는지를 정합니다. 상태 변화는 `motion.state`로 전환되고, 누르기는 `motion.press.scale`로 크기가 바뀌며(동작 줄이기에서는 멈춰 있음), 탭, 메뉴, 세그먼트 컨트롤은 인디케이터 하나를 밀어 움직입니다. 14개의 섹션 계약(히어로, 가격, FAQ, 푸터 등)은 각 섹션의 역할, 슬롯에 들어가는 컴포넌트, 필요한 근거, 휴대폰에서 쌓이는 방식을 정합니다. 이것으로 만든 페이지는 사진을 씁니다. 인터페이스 조각은 추가 이미지일 뿐, 사진을 대신하지 않습니다.
 
-**페이지를 읽는 린터.** 174개 규칙 중 다수가 파싱된 CSS와 마크업을 추가로 검사하며 페이지 자체의 시스템을 읽습니다. 모션은 그 곡선에서 타이밍을 재고, 디스플레이 제목의 줄 높이는 엔진의 하한을 지키게 하며, 숨겨진 컨트롤은 탭 순서에서 빠져야 합니다. `uxskill lint --render`는 각 페이지를 헤드리스 Chromium에서 데스크톱 폭과 휴대폰 폭으로 열고 직접 조작해, 보이지 않거나 잘린 포커스 링, 늦게 반응하는 호버와 누르기, Escape 후 사라지는 포커스, 동작 줄이기에서도 여전히 움직이는 누르기를 잡아냅니다.
+**페이지를 읽는 린터.** 178개 규칙 중 다수가 파싱된 CSS와 마크업을 추가로 검사하며 페이지 자체의 시스템을 읽습니다. 모션은 그 곡선에서 타이밍을 재고, 디스플레이 제목의 줄 높이는 엔진의 하한을 지키게 하며, 숨겨진 컨트롤은 탭 순서에서 빠져야 합니다. `uxskill lint --render`는 각 페이지를 헤드리스 Chromium에서 데스크톱 폭과 휴대폰 폭으로 열고 직접 조작해, 보이지 않거나 잘린 포커스 링, 늦게 반응하는 호버와 누르기, Escape 후 사라지는 포커스, 동작 줄이기에서도 여전히 움직이는 누르기를 잡아냅니다.
 
 **명령은 더 적게.** 슬래시 명령 25개가 18개로 줄었습니다. `/ux-discover`는 `--frame`과 `--recommend`를, `/ux-design`은 `--component`, `--dashboard`, `--from-image`를 받고, `/ux-polish`는 점수가 90에 이르거나 세 라운드가 지날 때까지 lint, 수정, 재 lint를 반복하며, `/ux-init`은 `--stats`를 받습니다. 이전 이름 일곱 개는 별칭으로 계속 쓸 수 있고 4.1에서 사라집니다. [별칭](#별칭-41에서-제거)을 참고하세요.
 
@@ -98,7 +98,7 @@ Python 3.10 이상. MCP 서버는 `pip install --upgrade 'uxskill[mcp]'`. pipx�
 
 ux-skill은 AI 코딩 도구를 위한 **디자인 인텔리전스 엔진**입니다. Python 패키지로(`pip install uxskill`), Claude Code 플러그인으로, 그리고 17 IDE용 멀티 인스톨러로 동작합니다. 엔진은 프로젝트 브리프(산업, 청중, 톤, 필수 항목, 금지 항목, 스택, 지역)를 받아 추천 디자인 시스템 한 벌을 반환합니다: 스타일, 팔레트, 타입 페어, 모션 프리셋, 컴포넌트, 연구할 브랜드 본보기, 그리고 지켜야 할 안티패턴 가드레일. 추천은 결정론적입니다, 같은 입력은 항상 같은 출력을 만들어냅니다.
 
-플러그인은 당신과 AI 코딩 도구 사이에 자리합니다. Claude Code, Cursor 또는 다른 AI 어시스턴트에게 "핀테크 랜딩 페이지 만들어줘"라고 요청하면, 어시스턴트는 보통 즉흥적으로 만들고, 그 결과는 5초 안에 AI 생성으로 식별됩니다(보라색에서 파란색 그라데이션, 같은 크기의 카드 세 개, 디스플레이 크기의 Inter, 추천사의 "John Doe", 기본 300ms 트랜지션, 가운데 정렬 히어로, 튀는 화살표 CTA). ux-skill은 즉흥을 **구조화된 제약**으로 바꿉니다. `/ux-discover`로 브리프를 담고 시스템을 고르고, `/ux-design`으로 코드를 생성하고, `/ux-lint`로 커밋 전에 174개의 결정론적 반-AI 슬롭 규칙을 통과하는지 확인합니다.
+플러그인은 당신과 AI 코딩 도구 사이에 자리합니다. Claude Code, Cursor 또는 다른 AI 어시스턴트에게 "핀테크 랜딩 페이지 만들어줘"라고 요청하면, 어시스턴트는 보통 즉흥적으로 만들고, 그 결과는 5초 안에 AI 생성으로 식별됩니다(보라색에서 파란색 그라데이션, 같은 크기의 카드 세 개, 디스플레이 크기의 Inter, 추천사의 "John Doe", 기본 300ms 트랜지션, 가운데 정렬 히어로, 튀는 화살표 CTA). ux-skill은 즉흥을 **구조화된 제약**으로 바꿉니다. `/ux-discover`로 브리프를 담고 시스템을 고르고, `/ux-design`으로 코드를 생성하고, `/ux-lint`로 커밋 전에 178개의 결정론적 반-AI 슬롭 규칙을 통과하는지 확인합니다.
 
 이 README가 정전(正典) 참조입니다. 모든 명령, 모든 서브에이전트, 모든 데이터 매니페스트, 모든 설치 경로, 모든 브랜드 사양, 모든 안티패턴 카테고리, 전부 여기에 문서화되어 있습니다. Claude Code 디자인 플러그인을 찾고 있거나 Cursor, Windsurf, Codex용 AI 디자인 도구를 비교하고 있다면, 이걸 처음부터 끝까지 읽고 [compare.html](https://uxskill.laithjunaidy.com/compare.html)을 나란히 두고 보세요.
 
@@ -113,7 +113,7 @@ ux-skill은 AI 코딩 도구를 위한 **디자인 인텔리전스 엔진**입�
 5. [18개 슬래시 명령, 상세 참조](#18개-슬래시-명령-상세-참조)
 6. [5개의 서브에이전트](#5개의-서브에이전트)
 7. [11개의 데이터 매니페스트](#11개의-데이터-매니페스트)
-8. [174개 반-AI 슬롭 규칙, 린터](#174개-반-ai-슬롭-규칙-린터)
+8. [178개 반-AI 슬롭 규칙, 린터](#178개-반-ai-슬롭-규칙-린터)
 9. [160개의 브랜드 DESIGN.md 사양, 카테고리별](#160개의-브랜드-designmd-사양-카테고리별)
 10. [MCP 서버, 비대칭 한 수](#mcp-서버-비대칭-한-수)
 11. [17 IDE 인스톨러](#17-ide-인스톨러)
@@ -190,14 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 174,
+#     "anti-patterns": 178,
 #     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-이 개수들을 모두 더하면 1,265개 항목입니다. 개수가 0으로 반환되면 JSON 파일이 누락된 것이니 [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues)에 이슈를 열어주세요.
+이 개수들을 모두 더하면 1,269개 항목입니다. 개수가 0으로 반환되면 JSON 파일이 누락된 것이니 [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues)에 이슈를 열어주세요.
 
 ---
 
@@ -215,7 +215,7 @@ ux stats
 | dominikmartn/nothing-design-skill | **2,391** | 단일 미학 스킬 | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | 반 슬롭 디자인 스킬 | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 컴포넌트 + 감사 | 1 | - | (MD3 전용) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 엔진 + 매니페스트 12개 + 명령 18개 + 서브에이전트 5개 + CI 린터** | **18** | **결정론적 규칙 174개** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python 엔진 + 매니페스트 12개 + 명령 18개 + 서브에이전트 5개 + CI 린터** | **18** | **결정론적 규칙 178개** | **160** | **148** | **57** | **17** |
 
 ### 지는 곳
 
@@ -227,7 +227,7 @@ ux stats
 
 - **컴포넌트 라이브러리:** 해부, 상태, 사용한 토큰, 모션 사양을 포함한 148개의 문서화된 컴포넌트. 다른 8개 중 어느 것도 컴포넌트 매니페스트를 출시하지 않습니다.
 - **모션 프리셋:** 스택 준비된 57개 항목(Framer Motion, GSAP, CSS), reduced-motion 폴백 포함. 다른 어떤 곳도 모션 매니페스트를 출시하지 않습니다.
-- **안티패턴 린터:** 결정론적 규칙 174개, CI에서 실행되며 Critical/High에서 0이 아닌 코드로 종료. 다른 어떤 곳도 결정론적 린터를 내놓지 않습니다.
+- **안티패턴 린터:** 결정론적 규칙 178개, CI에서 실행되며 Critical/High에서 0이 아닌 코드로 종료. 다른 어떤 곳도 결정론적 린터를 내놓지 않습니다.
 - **브랜드 사양:** 160개의 실제 DESIGN.md 사양(Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude 외 96개). 다른 어떤 곳도 브랜드 라이브러리를 출시하지 않습니다.
 - **17 IDE 지원:** 같은 엔진, IDE마다 다른 접착제.
 - **슬래시 명령 18개:** discovery, 생성(페이지, 컴포넌트, 대시보드, 이미지에서), 감사, lint, 폴리시 루프, 수정 루프, 케이스 스터디, 워크숍, 카피, 모션, a11y, 컨덕터, 완전히 통합.
@@ -251,7 +251,7 @@ ux-skill (package name: uxskill)
 │   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
 │   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
-│   ├── anti-patterns.json             174 rules (CI-safe linter source)
+│   ├── anti-patterns.json             178 rules (CI-safe linter source)
 │   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
 ├── engine/                            Python, the reasoning
@@ -327,9 +327,9 @@ ux-skill (package name: uxskill)
    - **스택 → 컴포넌트 호환성 + 모션 프리셋** (tech-stacks.json, motion-presets.json)
    - **금지 사항 + 지역 → 가드레일 + 브랜드 본보기 후보** (anti-patterns.json, brands/)
 3. **병합.** 결정론적 병합기가 후보의 순위를 매기고, 충돌을 해결하고(예를 들어 필수 다크 모드가 팔레트 모드를 정함), 추천 시스템 하나를 내놓습니다.
-4. **출력.** 선택된 스타일, 팔레트, 타입 페어, 상위 5개 모션 프리셋, 상위 12개 컴포넌트, 상위 5개 브랜드 본보기, 그리고 활성화된 174개 안티패턴 가드레일 전부를 담은 JSON 문서. 여기에 각 선택을 설명하는 근거 블록이 붙습니다.
+4. **출력.** 선택된 스타일, 팔레트, 타입 페어, 상위 5개 모션 프리셋, 상위 12개 컴포넌트, 상위 5개 브랜드 본보기, 그리고 활성화된 178개 안티패턴 가드레일 전부를 담은 JSON 문서. 여기에 각 선택을 설명하는 근거 블록이 붙습니다.
 5. **생성.** 이후 명령(페이지, 컴포넌트, 대시보드, 이미지 모드의 `/ux-design`과 `/ux-system`)이 추천을 받아 서브에이전트를 통해 실제 코드를 생성합니다.
-6. **검증.** `/ux-lint`가 생성된 코드를 174개 규칙으로 다시 스캔합니다. CI에서 Critical/High가 있으면 0이 아닌 코드로 종료.
+6. **검증.** `/ux-lint`가 생성된 코드를 178개 규칙으로 다시 스캔합니다. CI에서 Critical/High가 있으면 0이 아닌 코드로 종료.
 
 **v3에서 추가된 것.** 추천기는 이제 `.ux/decisions.jsonl`을 사용해 `engine/decisions/`에서 후보를 재정렬합니다(`lint_score >= 80` AND `user_accepted = true`인 결정만 세고, 이전 결정이 3건 미만이면 콜드 스타트로 안전하게 처리). 생성 경로는 `engine/synthesizer/`로 넘길 수도 있습니다. 이것은 결정론적 7축 컴파일러로, 카탈로그에서 템플릿을 고르는 대신 브리프마다 새로운 팔레트 + 타입 + 간격 + 모서리 + 모션 토큰을 만듭니다. 자세한 내용은 [브레인, v3.0이란 무엇인가](#브레인-v30이란-무엇인가)를 보세요.
 
@@ -383,7 +383,7 @@ ux-skill (package name: uxskill)
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **출력:** `.ux/last-discovery.json`(10개 필드 브리프), `.ux/last-recommendation.json`(선택된 스타일, 팔레트, 타입 페어, 상위 5개 모션 프리셋, 상위 12개 컴포넌트, 상위 5개 브랜드 본보기, 활성화된 174개 안티패턴 가드레일 전부, 그리고 근거), `--frame`을 쓰면 `.ux/last-frame.json`(`{audience, outcome, hypothesis, success_signal}`).
+- **출력:** `.ux/last-discovery.json`(10개 필드 브리프), `.ux/last-recommendation.json`(선택된 스타일, 팔레트, 타입 페어, 상위 5개 모션 프리셋, 상위 12개 컴포넌트, 상위 5개 브랜드 본보기, 활성화된 178개 안티패턴 가드레일 전부, 그리고 근거), `--frame`을 쓰면 `.ux/last-frame.json`(`{audience, outcome, hypothesis, success_signal}`).
 - **다음:** `/ux-design [extra brief]` → 추천에 기반한 프런트엔드 코드. `/ux-design --component <name>` → 파악된 제약에 맞춘 컴포넌트 하나. `/ux-system` → 추천에서 나온 완전한 디자인 시스템. `/ux-lint` → 생성된 코드 검증.
 
 ### 생성
@@ -423,7 +423,7 @@ ux-skill (package name: uxskill)
 
 #### `/ux-lint`: 결정론적 regex 기반 린터(LLM 없음, CI 안전)
 
-- **무엇:** 코드에 대해 174개 규칙을 실행합니다. LLM 호출 없음. CI에서 Critical/High에 부딪히면 0이 아닌 코드로 종료. 소스: `data/anti-patterns.json`. 규칙은 A11y(47), 콘텐츠(35), 레이아웃(18), 타이포그래피(16), 모션(15), 시각(14), 품질(12), 색(10), 성능(5), 깊이(2)를 커버합니다.
+- **무엇:** 코드에 대해 178개 규칙을 실행합니다. LLM 호출 없음. CI에서 Critical/High에 부딪히면 0이 아닌 코드로 종료. 소스: `data/anti-patterns.json`. 규칙은 A11y(48), 콘텐츠(38), 레이아웃(18), 타이포그래피(16), 모션(15), 시각(14), 품질(12), 색(10), 성능(5), 깊이(2)를 커버합니다.
 - **사용 시점:** 사전 커밋 훅. CI 게이트. `/ux-audit` 비용을 치르기 전에 대형 코드베이스에 대한 빠른 첫 패스. 어떤 모드든 `/ux-design` 후 생성 검증.
 - **건너뛸 시점:** 수정 루프가 필요하다(린터는 보고만 합니다, 편집하지 않음, `/ux-polish --fix`나 `/ux-fix`로 연결). 안목 판단이 필요하다(`/ux-critique`).
 - **호출(슬래시):** `/ux-lint src/`.
@@ -655,7 +655,7 @@ ux-skill (package name: uxskill)
 
 1. 브리프 / 추천(`.ux/`에서 로드).
 2. 관련 매니페스트 슬라이스(예: `frontend-engineer`는 선택된 스타일 + 팔레트 + 컴포넌트를 받음; `motion-engineer`는 선택된 모션 프리셋을 받음).
-3. 174개 안티패턴 가드레일(항상 활성).
+3. 178개 안티패턴 가드레일(항상 활성).
 4. 성공 기준(아티팩트가 무엇을 해야 하나).
 
 서브에이전트가 반환합니다:
@@ -770,15 +770,15 @@ ux-skill (package name: uxskill)
 
 모든 프리셋에 reduced-motion 변형이 있습니다. Framer Motion, GSAP, 순수 CSS에 대한 스택 준비 코드.
 
-### `anti-patterns.json`: 174개 규칙
+### `anti-patterns.json`: 178개 규칙
 
 | 필드 | 설명 |
 |---|---|
-| `entries` | 174 |
+| `entries` | 178 |
 | `keys per entry` | `id`, `name`, `severity`(critical/high/medium/low), `category`, `detection`(유형, 패턴, 플래그, 범위, 그리고 많은 규칙에서 파싱된 파일에 대한 `post` 검사), `why`, `fix` |
-| `categories` | A11y (47), Content (35), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
+| `categories` | A11y (48), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-전체 규칙 목록은 [174개 반-AI 슬롭 규칙](#174개-반-ai-슬롭-규칙-린터)에 있습니다.
+전체 규칙 목록은 [178개 반-AI 슬롭 규칙](#178개-반-ai-슬롭-규칙-린터)에 있습니다.
 
 ### `brands/*.json`: 160개 브랜드 사양
 
@@ -792,7 +792,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## 174개 반-AI 슬롭 규칙: 린터
+## 178개 반-AI 슬롭 규칙: 린터
 
 ux-skill은 결정론적 린터를 제공합니다. 각 규칙은 패턴이고, 많은 규칙이 파싱된 CSS와 마크업에 대한 검사를 더하므로, 일치는 규칙이 지정한 맥락에서만 셉니다. **LLM 없음.** **API 없음.** **네트워크 없음.** 일반적인 Next.js 앱에서 CI로 ~200ms에 실행됩니다. `--fail-on high`를 설정하면 Critical / High 지적에서 0이 아닌 코드로 종료합니다.
 
@@ -800,7 +800,7 @@ ux-skill은 결정론적 린터를 제공합니다. 각 규칙은 패턴이고, 
 
 ### 카테고리별 규칙
 
-174개 규칙 전체를 카테고리별, 이어서 심각도순으로 정리한 카탈로그는 `data/anti-patterns.json`에서 [영어 README](README.md#rules-by-category)로 생성됩니다. 규칙 ID와 이름은 린터가 출력하는 그대로 실려 있습니다. 규칙 범위: A11y (47), Content (35), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
+178개 규칙 전체를 카테고리별, 이어서 심각도순으로 정리한 카탈로그는 `data/anti-patterns.json`에서 [영어 README](README.md#rules-by-category)로 생성됩니다. 규칙 ID와 이름은 린터가 출력하는 그대로 실려 있습니다. 규칙 범위: A11y (48), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
 
 ### 린터 사용법
 
@@ -1097,7 +1097,7 @@ python3 -m engine.cli.main persist save --project-root .
 | 컴포넌트 | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | 모션 프리셋 | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | 브랜드 사양 | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 안티패턴 규칙 | **174** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 안티패턴 규칙 | **178** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI 안전 결정론적 린터 | **예** | 아니오 | 아니오 | 아니오 | 아니오 | 아니오 | 아니오 | 아니오 | 아니오 |
 | 지원 IDE | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery 게이트 | **10 필드** | 암묵 | 암묵 | 암묵 | 암묵 | 암묵 | 암묵 | 암묵 | 암묵 |
