@@ -1141,6 +1141,30 @@ else:
         _io(ctx, run_export, list(source), fmt=fmt, to=to, scheme=scheme, out=out, force=force,
             figma_modes=figma_modes)
 
+    @cli.group("kit")
+    def kit_grp() -> None:
+        """Kits ux-skill carries, written into a project."""
+
+    @kit_grp.command("stageshow")
+    @click.option("--out", "out", required=True,
+                  help="Folder in the project to write the kit into, for example "
+                       "src/stageshow.")
+    @click.option("--from", "source", multiple=True,
+                  help="The system, to write its look (stageshow-look.css) beside the kit: "
+                       "tokens.json or any source system import reads.")
+    @_FORMAT
+    @_FIGMA
+    @_FORCE
+    @click.pass_context
+    def kit_stageshow_cmd(ctx, out, source, fmt, figma_modes, force) -> None:
+        """Write the Stageshow kit (MIT; product illustrations in React) into
+        --out, with the system's look beside it when --from names one. A file
+        that differs from the kit's is never replaced without --force, and a
+        forced write backs each one up first."""
+        from engine.io.stageshow_kit import run_kit
+        _io(ctx, run_kit, out, source=list(source) or None, fmt=fmt, force=force,
+            figma_modes=figma_modes)
+
     @cli.group("contracts")
     def contracts_grp() -> None:
         """Component contracts: check the ones you write."""

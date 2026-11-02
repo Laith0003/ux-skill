@@ -76,7 +76,7 @@ where = ["."]
 include = ["engine*"]
 
 [tool.setuptools.package-data]
-"engine" = ["../data/**/*.json"]
+"engine" = ["../data/**/*.json", "kits/stageshow/**/*"]
 "engine.contracts" = ["seed/*.yaml", "seed/sections/*.yaml"]
 "engine.rulepack" = ["decisions/*.md", "guidance/*.md"]
 "engine.io" = ["figma/*.js"]

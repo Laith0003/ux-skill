@@ -32,8 +32,9 @@ SOFTWARE.
 
 The product illustration guidance (references/styles/product-illustration.md)
 and the Stageshow look that `system export --to stageshow` writes were derived
-from Stageshow (https://github.com/benjitaylor/skills), used under the MIT
-License reproduced below. Stageshow's app icons and brand marks are not
+from Stageshow (https://github.com/benjitaylor/skills), and engine/kits/stageshow
+is a copy of its kit, all used under the MIT License reproduced below (also in
+engine/kits/stageshow/LICENSE). Stageshow's app icons and brand marks are not
 covered by that license and are not included here.
 
 MIT License
