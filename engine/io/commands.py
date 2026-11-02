@@ -37,7 +37,7 @@ from engine.io.report import Folded, Imported, fold, owned_by
 # extension that did not pass; only its report was written).
 EXIT: Dict[str, int] = {"read": 0, "reported": 0, "built": 0, "passed": 0, "written": 0,
                         "unchanged": 0, "blocked": 1, "failed": 1, "refused": 1, "error": 1}
-TARGETS: Tuple[str, ...] = ("css", "tailwind", "figma", "dtcg")
+TARGETS: Tuple[str, ...] = ("css", "tailwind", "figma", "dtcg", "stageshow")
 # How each input is named in messages: the CLI's flags. The MCP tools pass
 # their own argument names.
 CLI: Dict[str, str] = {
@@ -46,7 +46,7 @@ CLI: Dict[str, str] = {
     "add_role": "--add-role", "to": "--to", "brand": "--brand", "axes": "--axes",
     "brief": "--brief", "tokens": "--tokens", "latin_only": "--latin-only",
     "scheme": "--scheme", "figma_mode": "--figma-mode", "import": "system import",
-    "add_mode": "--add-mode", "scan": "--scan"}
+    "add_mode": "--add-mode", "scan": "--scan", "build": "uxskill system build"}
 MAPPING = "mapping.json"
 
 
@@ -372,20 +372,26 @@ def run_export(source: Any, *, to: str, fmt: str = "auto", out: Any = None,
                second_modes: Optional[Mapping[str, str]] = None,
                labels: Mapping[str, str] = CLI) -> Dict[str, Any]:
     """A system in another format, written into out only (never over its
-    source): tokens.css, tailwind-theme.css, the Figma variables files or
-    tokens.json. A stylesheet keeps the scheme it opens; tokens.json holds
-    none, so `scheme` sets it (system when left out). An export of a system
-    the engine did not write opens with a comment listing every entry the
-    import did not read (stylesheets), or says how many in the result
-    (JSON, which holds no comment)."""
+    source): tokens.css, tailwind-theme.css, the Figma variables files,
+    tokens.json or a Stageshow look (stageshow-look.css). A stylesheet
+    keeps the scheme it opens; tokens.json holds none, so `scheme` sets it
+    (system when left out). An export of a system the engine did not write
+    opens with a comment listing every entry the import did not read
+    (stylesheets), or says how many in the result (JSON, which holds no
+    comment)."""
     from engine.foundations.export import SCHEME_DEFAULTS, dump_dtcg, to_css
     from engine.io.figma_out import figma_files
     from engine.foundations.tokens import css_property
     from engine.io.tailwind_out import in_roles, namespaced, to_tailwind
     if to not in TARGETS:
-        raise InputError(f"{labels['to']} is {to}; pass css, tailwind, figma or dtcg")
+        raise InputError(f"{labels['to']} is {to}; pass css, tailwind, figma, dtcg or stageshow")
     if scheme is not None and scheme not in SCHEME_DEFAULTS:
         raise InputError(f"{labels['scheme']} is {scheme}; pass light, dark or system")
+    if scheme is not None and to == "stageshow":
+        raise InputError(
+            f"{labels['scheme']} does not apply to {labels['to']} stageshow: the look holds light "
+            'and dark, and each stage picks one with its theme (theme="dark" on the Stage); '
+            f"leave {labels['scheme']} out")
     imported = _read(source, fmt, second_modes, labels)
     ts = imported.tokens
     opens = scheme or imported.scheme
@@ -404,6 +410,9 @@ def run_export(source: Any, *, to: str, fmt: str = "auto", out: Any = None,
         files = {"tailwind-theme.css": f"/*\n{head} */\n{text}" if header else text}
     elif to == "figma":
         files = figma_files(ts)
+    elif to == "stageshow":
+        from engine.io.stageshow_out import FILE_NAME, to_stageshow
+        files = {FILE_NAME: to_stageshow(ts, labels=labels, header=header)}
     else:
         files = {"tokens.json": dump_dtcg(ts)}
     result = _read_result("built", imported)

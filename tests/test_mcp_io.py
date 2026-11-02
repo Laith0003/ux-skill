@@ -132,6 +132,15 @@ def test_export_returns_texts_only_on_request(tmp_path):
     assert bad == {"status": "invalid", "error": "scheme is dim; pass light, dark or system"}
 
 
+def test_export_writes_a_stageshow_look_and_names_every_target(tmp_path):
+    look = handle_ux_system_export({"source": _tokens(tmp_path), "to": "stageshow",
+                                    "include_files": True})
+    assert look["status"] == "built"
+    assert ".ux-look .ss-stage {" in look["texts"]["stageshow-look.css"]
+    missing = handle_ux_system_export({"source": _tokens(tmp_path)})
+    assert missing["error"] == "to is missing; pass css, tailwind, figma, dtcg or stageshow"
+
+
 def test_export_with_out_writes_and_never_touches_the_source(tmp_path):
     tokens = _tokens(tmp_path)
     before = Path(tokens).read_bytes()

@@ -52,7 +52,7 @@ _COLOR_JS = r"""
   const token = n => parseFloat(root.getPropertyValue(n));
 """
 
-_PAGE_JS = r"""(limits) => {
+_PAGE_JS = r"""async (limits) => {
 """ + _COLOR_JS + r"""
   const out = {findings: [], photos: [], grade: null};
   const CHROMATIC = limits.chromatic, ACCENT = limits.accent;
@@ -83,7 +83,7 @@ _PAGE_JS = r"""(limits) => {
   // Text: characters in a chromatic color, and accent text on its ground.
   const skip = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE']);
   let chars = 0, colored = 0;
-  const seenPairs = new Set();
+  const seenPairs = new Set(), cands = new Map();
   const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   for (let n = tw.nextNode(); n; n = tw.nextNode()) {
     const t = n.nodeValue.replace(/\s+/g, '');
@@ -94,38 +94,13 @@ _PAGE_JS = r"""(limits) => {
     const isStatus = status.has(hex(c));
     chars += t.length;
     if (!isStatus && chroma(c) >= CHROMATIC) colored += t.length;
-    if (isStatus || chroma(c) < ACCENT) continue;
-    // The ground: the backgrounds under the text, composited on white. A
-    // photograph or gradient under it, or an overlay beside media, is left
-    // to the scrim check.
-    let ground = [255, 255, 255, 1], layers = [], unknown = false;
-    for (let a = p; a; a = a.parentElement) {
-      const cs = getComputedStyle(a);
-      if (cs.backgroundImage !== 'none') { unknown = true; break; }
-      if ((cs.position === 'absolute' || cs.position === 'fixed') && a.parentElement
-          && a.parentElement.querySelector('img,picture,video,canvas')) { unknown = true; break; }
-      const b = rgba(cs.backgroundColor);
-      if (b[3] > 0) { layers.push(b); if (b[3] >= 1) break; }
-    }
-    if (unknown) continue;
-    for (const b of layers.reverse()) ground = over(b, ground);
-    const ink = over(c, ground);
-    const r = ratio(ink, ground);
-    const key = hex(c) + hex(ground);
-    if (r < 4.5 && !seenPairs.has(key)) {
-      seenPairs.add(key);
-      // 1.4.3 asks 3:1 of large text (24px, or 18.66px bold); the system
-      // holds every text role to 4.5:1 as its own floor.
-      const ps = getComputedStyle(p), px = parseFloat(ps.fontSize), w = parseInt(ps.fontWeight, 10);
-      const large = px >= 24 || (px >= 18.66 && w >= 700);
-      const under = (large && r >= 3)
-        ? 'under 4.5:1, the system\'s own floor for all text (1.4.3 asks 3:1 of large text)'
-        : (large ? 'under 3:1 (1.4.3, large text)' : 'under 4.5:1 (1.4.3)');
-      out.findings.push({rule: 'accent-text-low-contrast', sel: sel(p), cls: p.className || '',
-        text: t.slice(0, 60),
-        detail: 'accent text ' + hex(c) + ' on ' + hex(ground) + ' measures '
-          + (Math.floor(r * 100) / 100).toFixed(2) + ':1, ' + under});
-    }
+    if (isStatus) continue;
+    // Accent text is held to 4.5:1 everywhere; neutral text to what 1.4.3
+    // asks, leaving out what it exempts: inactive controls and text no one
+    // is meant to read (hidden from assistive technology as decoration).
+    const accent = chroma(c) >= ACCENT;
+    if (!accent && p.closest('[aria-hidden="true"],[inert],:disabled,[aria-disabled="true"]')) continue;
+    if (!cands.has(p)) cands.set(p, {t, c, accent});
   }
 
   // Fill: a 16px grid over the page, painted in document order. Images,
@@ -196,6 +171,102 @@ _PAGE_JS = r"""(limits) => {
       if (href) out.photos.push({src: href, sel: sel(e), cls: e.className || ''});
     }
   }
+  // Contrast is measured on the screen the visitor sees: the page is
+  // scrolled a screen at a time and each text block is read once it is in
+  // view, so a background a script swaps in on scroll is the one measured.
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;width:0;height:0;background-color:Canvas';
+  document.documentElement.appendChild(probe);
+  const canvasC = rgba(getComputedStyle(probe).backgroundColor).slice(0, 3).concat([1]);
+  probe.remove();
+  const measure = (p, {t, accent}) => {
+    const c = rgba(getComputedStyle(p).color);
+    if (c[3] === 0) return null;
+    // The ground: the backgrounds under the text, composited on the page's
+    // canvas (dark under color-scheme: dark). A photograph or gradient
+    // under it, or any media beneath the text where it sits on screen, is
+    // left to the scrim check.
+    let ground = canvasC.slice(), layers = [], unknown = false;
+    const q = p.getBoundingClientRect(), cx = (q.left + q.right) / 2, cy = (q.top + q.bottom) / 2;
+    if (cx >= 0 && cy >= 0 && cx < innerWidth && cy < innerHeight) {
+      const stack = document.elementsFromPoint(cx, cy);
+      const at = stack.indexOf(p);
+      for (const u of stack.slice(at < 0 ? 0 : at + 1)) {
+        if (u.matches('img,picture,video,canvas,svg image')
+            || /url\(/.test(getComputedStyle(u).backgroundImage)) return null;
+      }
+    }
+    for (let a = p; a; a = a.parentElement) {
+      const cs = getComputedStyle(a);
+      if (cs.backgroundImage !== 'none') { unknown = true; break; }
+      if ((cs.position === 'absolute' || cs.position === 'fixed') && a.parentElement
+          && a.parentElement.querySelector('img,picture,video,canvas')) { unknown = true; break; }
+      const b = rgba(cs.backgroundColor);
+      if (b[3] > 0) { layers.push(b); if (b[3] >= 1) break; }
+    }
+    if (unknown) return null;
+    for (const b of layers.reverse()) ground = over(b, ground);
+    const ink = over(c, ground);
+    const r = ratio(ink, ground);
+    const key = hex(c) + hex(ground);
+    const ps = getComputedStyle(p), px = parseFloat(ps.fontSize), w = parseInt(ps.fontWeight, 10);
+    const large = px >= 24 || (px >= 18.66 && w >= 700);
+    if (!accent && r < (large ? 3 : 4.5)) {
+      return {key, hit: {rule: 'text-low-contrast', sel: sel(p),
+        cls: typeof p.className === 'string' ? p.className : '', text: t.slice(0, 60),
+        detail: 'text ' + hex(c) + ' on ' + hex(ground) + ' measures '
+          + (Math.floor(r * 100) / 100).toFixed(2) + ':1, under '
+          + (large ? '3:1 (1.4.3, large text)' : '4.5:1 (1.4.3)')}};
+    }
+    if (accent && r < 4.5) {
+      // 1.4.3 asks 3:1 of large text (24px, or 18.66px bold); the system
+      // holds every text role to 4.5:1 as its own floor.
+      const under = (large && r >= 3)
+        ? 'under 4.5:1, the system\'s own floor for all text (1.4.3 asks 3:1 of large text)'
+        : (large ? 'under 3:1 (1.4.3, large text)' : 'under 4.5:1 (1.4.3)');
+      return {key, hit: {rule: 'accent-text-low-contrast', sel: sel(p), cls: typeof p.className === 'string' ? p.className : '',
+        text: t.slice(0, 60),
+        detail: 'accent text ' + hex(c) + ' on ' + hex(ground) + ' measures '
+          + (Math.floor(r * 100) / 100).toFixed(2) + ':1, ' + under}};
+    }
+    return null;
+  };
+  const frame = () => new Promise(res => requestAnimationFrame(() => requestAnimationFrame(res)));
+  // A block is read once it has risen into the upper half of the screen,
+  // where it is read, and again one step later while still in view: it is
+  // reported only when it fails both, so a ground caught mid-fade by a
+  // scroll-linked transition is not. What the last screen holds is read
+  // there once.
+  const pend = new Map();
+  const report = m => { if (m && !seenPairs.has(m.key)) { seenPairs.add(m.key); out.findings.push(m.hit); } };
+  const go = y => scrollTo({top: y, left: 0, behavior: 'instant'});
+  const vh = innerHeight, step = Math.max(160, Math.floor(vh * 0.4));
+  const startY = scrollY, H = document.documentElement.scrollHeight;
+  // Candidates in page order, so each step reads only the screen in view.
+  const order = [...cands].map(([p, item]) => [p, item, p.getBoundingClientRect().top + scrollY])
+    .sort((x, y) => x[2] - y[2]);
+  let next = 0;
+  for (let y = 0, i = 0; (next < order.length || pend.size) && i < 160; y += step, i++) {
+    go(y); await frame();
+    const last = y + vh >= H;
+    for (const [p, item] of pend) {
+      pend.delete(p);
+      report(measure(p, item));
+    }
+    const reach = scrollY + (last ? vh : vh / 2);
+    while (next < order.length && order[next][2] <= reach) {
+      const [p, item] = order[next++];
+      cands.delete(p);
+      const m = measure(p, item);
+      if (m) { if (last) report(m); else pend.set(p, item); }
+    }
+    if (last) break;
+  }
+  // What the scroll never reached (a page that scrolls inside a container,
+  // or past the step cap) is read where it rests.
+  go(startY); await frame();
+  for (const [p, item] of pend) report(measure(p, item));
+  for (const [p, item] of cands) report(measure(p, item));
   return out;
 }"""
 
@@ -369,6 +440,12 @@ RULES = {
         fix=("Use the system's link or accent role for this surface (it is checked at 4.5:1 on "
              "every ground it sits on), or darken the accent on this ground until it reaches "
              "4.5:1."),
+        what="{detail} ({vw}px viewport)"),
+    "text-low-contrast": dict(
+        name="Text under the contrast WCAG 1.4.3 asks", severity="high", category="A11y",
+        fix=("Set the text in the system's text roles for this surface (each is checked on the "
+             "grounds it sits on), or darken it, or lighten the ground, until it reaches 4.5:1, "
+             "or 3:1 for text at 24px or 18.66px bold."),
         what="{detail} ({vw}px viewport)"),
     "infinite-animation-under-reduced-motion": dict(
         name="Loop keeps running under reduced motion", severity="high", category="Motion",

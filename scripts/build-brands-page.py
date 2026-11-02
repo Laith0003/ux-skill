@@ -193,6 +193,9 @@ def build_html(brands, version):
   .top__stat b {{ color: var(--ink); font-weight: 700; }}
 
   .toolbar {{ padding: 24px 0; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); position: sticky; top: 0; background: rgba(7,8,10,0.92); backdrop-filter: blur(8px); z-index: 10; }}
+  /* The toolbar pins on wide screens, so the page leaves it room when focus or an anchor scrolls; on phones it would cover the screen, so it scrolls with the page. */
+  @media (min-width: 721px) {{ html {{ scroll-padding-top: 240px; }} }}
+  @media (max-width: 720px) {{ .toolbar {{ position: static; }} }}
   .toolbar__row {{ display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }}
   .br-search {{ flex: 1; min-width: 260px; padding: 10px 14px; background: var(--surface-1); border: 1px solid var(--hairline); border-radius: 8px; color: var(--ink); font-family: var(--sans); font-size: 14px; }}
   .br-search:focus {{ outline: 2px solid transparent; border-color: var(--accent); }}

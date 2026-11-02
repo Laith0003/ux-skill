@@ -1190,13 +1190,50 @@ class FileViews:
         return b.build()
 
 
-_QUOTE_OPEN = ("\"", "'", "“", "‘", "«", "&ldquo;", "&lsquo;", "&quot;", "&laquo;", "&#8220;")
-_QUOTE_CLOSE = ("\"", "'", "”", "’", "»", "&rdquo;", "&rsquo;", "&quot;", "&raquo;", "&#8221;")
+_QUOTE_OPEN = ("\"", "'", "“", "‘", "«", "&ldquo;", "&lsquo;", "&quot;", "&laquo;", "&#8220;",
+               "&#x27;", "&#39;")
+_QUOTE_CLOSE = ("\"", "'", "”", "’", "»", "&rdquo;", "&rsquo;", "&quot;", "&raquo;", "&#8221;",
+                "&#x27;", "&#39;")
+# Marks that open and close differently, and same-mark quotes an apostrophe
+# never stands in for, for telling a phrase inside a longer quotation.
+_QUOTE_PAIRS = (("“", "”"), ("‘", "’"), ("«", "»"),
+                ("&ldquo;", "&rdquo;"), ("&lsquo;", "&rsquo;"), ("&laquo;", "&raquo;"),
+                ("&#8220;", "&#8221;"))
+_QUOTE_SAME = ("\"", "&quot;", "&#x27;", "&#39;")
+_QUOTE_REACH = 80
 
 
 def is_mention(text: str, s: int, e: int) -> bool:
-    """True when ``text[s:e]`` is wrapped in quotation marks: a mention of the
-    phrase, not a use of it."""
+    """True when ``text[s:e]`` is quoted: wrapped in quotation marks, or
+    inside a short quotation on its line ('5 people are looking at this
+    property'), a mention of the phrase, not a use of it."""
     before = text[max(0, s - 8):s]
     after = text[e:e + 8]
-    return before.endswith(_QUOTE_OPEN) and after.startswith(_QUOTE_CLOSE)
+    if before.endswith(_QUOTE_OPEN) and after.startswith(_QUOTE_CLOSE):
+        return True
+    start = max(text.rfind("\n", 0, s) + 1, s - _QUOTE_REACH)
+    stop = text.find("\n", e)
+    stop = min(e + _QUOTE_REACH, len(text) if stop < 0 else stop)
+    head, tail = text[start:s], text[e:stop]
+    for o, c in _QUOTE_PAIRS:
+        if head.rfind(o) > head.rfind(c) and o in head and c in tail:
+            return True
+    line_head = text[text.rfind("\n", 0, s) + 1:s]
+    for q in _QUOTE_SAME:
+        if _marks(line_head, q) % 2 == 1 and _marks(head, q) and _marks(tail, q):
+            return True
+    return False
+
+
+def _marks(text: str, q: str) -> int:
+    """How many times q stands as a quotation mark in text: never between
+    two letters (an apostrophe, Don&#39;t) and never after a digit (an inch
+    mark, 12&quot;)."""
+    n, i = 0, text.find(q)
+    while i >= 0:
+        before = text[i - 1] if i else " "
+        after = text[i + len(q)] if i + len(q) < len(text) else " "
+        if not (before.isdigit() or (before.isalpha() and after.isalpha())):
+            n += 1
+        i = text.find(q, i + len(q))
+    return n

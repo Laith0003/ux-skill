@@ -89,7 +89,7 @@ version plus one count per manifest:
     "tech-stacks": 25,
     "ux-guidelines": 112,
     "motion-presets": 57,
-    "anti-patterns": 171,
+    "anti-patterns": 174,
     "landing-patterns": 40,
     "brands": 160
   }

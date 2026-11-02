@@ -99,7 +99,7 @@ Validation on `blur`, not on every keystroke. The user finishes typing, then see
 ### Pattern: Touch target with hitSlop
 **Use when**: Small icons or thin edges that need to be tappable.
 **Anti-pattern**: 16px icon with no padding (impossible to tap accurately).
-**How**: Minimum 44x44pt (iOS), 48x48dp (Android), 44x44px (web). For small visual elements, extend the hit area beyond visual bounds via `hitSlop` (React Native) or padding (web). 8px minimum gap between adjacent touch targets.
+**How**: On the web, WCAG 2.5.8 (Target Size, Minimum, AA) asks for 24 by 24 CSS pixels, or enough room that a 24px circle centred on the target meets no other target; a link inside a sentence and a control the browser draws unstyled are exempt. That is the floor, and `uxskill lint --render` measures it as `target-too-small`. The house default for touch is larger: 44x44px on the web, the size WCAG 2.5.5 (Target Size, Enhanced, AAA) names, 44x44pt on iOS and 48x48dp on Android. For small visual elements, extend the hit area beyond visual bounds via `hitSlop` (React Native) or padding (web). 8px minimum gap between adjacent touch targets.
 
 ### Pattern: Aria-label on icon-only buttons
 **Use when**: Icon buttons with no visible text label.
@@ -375,7 +375,8 @@ Honor at every level. Never assume the user "will be fine."
 - [ ] Icon-only buttons have `aria-label` (severity: Critical)
 - [ ] Every meaningful image has descriptive alt text (severity: Critical)
 - [ ] Decorative images marked `alt=""` (severity: Medium)
-- [ ] Touch targets ≥44x44pt iOS, ≥48x48dp Android, ≥44x44px web (severity: Critical)
+- [ ] Targets at least 24x24 CSS px or spaced so a 24px circle on each meets no other (WCAG 2.5.8; `target-too-small`) (severity: Critical)
+- [ ] Touch targets 44x44px web, 44x44pt iOS, 48x48dp Android, the house default (severity: High)
 - [ ] 8px minimum gap between adjacent touch targets (severity: Critical)
 - [ ] Dynamic Type tested at largest accessibility setting (severity: High)
 - [ ] Mobile body text ≥16px (severity: Critical)

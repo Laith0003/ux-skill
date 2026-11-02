@@ -71,6 +71,8 @@ EXPECTED = {
     "tailwind-spacing-steps",
     "figma-modes-on-one-axis", "bare-sizes-read-as-px",
     "gallery-from-spec-facts",
+    "all-text-measured-as-seen", "first-screen-stays-clear", "targets-meet-the-floor",
+    "complaints-close-by-measurement",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -116,7 +118,8 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "landing-gap": "landing-rhythm-follows-the-brand",
               "layout-bounds": "measures-count-characters",
               "motion-roles": "motion-roles-by-pace",
-              "score-tells-heavy-pages-apart": "score-weighs-repeats-past-the-knee"}
+              "score-tells-heavy-pages-apart": "score-weighs-repeats-past-the-knee",
+              "accent-text-on-every-ground": "all-text-measured-as-seen"}
 
 
 def test_every_shipped_record_is_valid_and_routed():
