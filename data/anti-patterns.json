@@ -2149,7 +2149,7 @@
       "category": "Performance",
       "detection": {
         "type": "regex",
-        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*(?:true|false))[^)])*\\)",
+        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*(?:true|false))(?:\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*\\)|[^()]))*\\)",
         "flags": "i",
         "scope": [
           "ts",

@@ -1,10 +1,10 @@
 ---
 id: accent-text-on-every-ground
 title: Accent text is measured against every ground it lands on
-status: active
+status: superseded
 areas: [color]
 supersedes: null
-superseded_by: null
+superseded_by: all-text-measured-as-seen
 ---
 
 # Accent text is measured against every ground it lands on

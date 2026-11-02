@@ -83,6 +83,9 @@ project adheres to [Semantic Versioning](https://semver.org/).
   `uxskill complaints snapshot` keeps the page before it changes.
 
 ### Changed
+- `event-listener-no-passive-on-scroll` reads past a handler written
+  inline, whose body holds its own parentheses, to the options that
+  follow it, so an inline handler marked passive is not a finding.
 - The landing playbook's interface-fragment patterns point at the new guide.
   A synthetic screenshot composition sits on the section's own ground, never
   on a plate, and a tilted product frame keeps its tilt only when it reads
