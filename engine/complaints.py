@@ -15,8 +15,8 @@ Text is matched without regard to case or runs of white space. Widths are
 the render check's: 390, 430, 768 and 1280 pixels.
 
 check_complaints() measures a page (an HTML file, or an http or https URL,
-which is loaded once, its scripts removed after they ran, and measured as
-that snapshot) and gives each complaint a status: fixed, open, or weak. With
+which is loaded once and measured as a standalone snapshot: its style
+sheets written inline and its scripts removed after they ran) and gives each complaint a status: fixed, open, or weak. With
 `before`, the page as it was when the person complained, every probe is run
 there too, and a probe that already passes on it proves nothing: the
 complaint stays open as weak until its probe is one the old page fails. The
@@ -26,16 +26,20 @@ snapshot_page() keeps the page as it is before it changes, for --before:
 the running app's state is gone once the code changes.
 
 Every run leaves .ux/complaints-last.json beside the complaints: the page,
-a digest of it and of the complaints, and the ids still open, so a stop hook
-can tell a stale or failing check without rendering anything.
+a digest of it and of the complaints, when it ran, and the ids still open,
+so a stop hook can tell a stale or failing check without rendering
+anything: stale when the page, the complaints, or any page source in the
+project changed after it ran.
 """
 from __future__ import annotations
 
 import asyncio
 import hashlib
 import json
+import os
 import re
 import tempfile
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
@@ -47,13 +51,20 @@ KINDS: Mapping[str, str] = {"rule-clear": "rule", "present": "selector", "absent
                             "text-present": "text", "text-absent": "text"}
 LABELS: Mapping[str, str] = {"file": "--file", "page": "--page", "before": "--before"}
 SNAPSHOT_LABELS: Mapping[str, str] = {"page": "--page", "out": "--out", "force": "--force"}
+_SOURCE_SUFFIXES = (".html", ".htm", ".css", ".scss", ".sass", ".less", ".js", ".mjs", ".jsx",
+                    ".ts", ".tsx", ".vue", ".svelte", ".astro", ".php", ".png", ".jpg",
+                    ".jpeg", ".webp", ".avif", ".svg", ".gif")
+_SKIP_DIRS = {"node_modules", "coverage", "vendor", "__pycache__", "venv", "site-packages"}
+_SCAN_LIMIT = 20000
 _ID = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}$")
 _URL = re.compile(r"^https?://", re.I)
 
 _PROBE_JS = r"""(sels) => {
+  // Seen: a box larger than one pixel each way (a visually hidden label is
+  // not seen), not hidden, and not faded to nothing by itself or a parent.
   const seen = el => {
     const r = el.getBoundingClientRect();
-    if (r.width <= 0 || r.height <= 0) return false;
+    if (r.width <= 1 || r.height <= 1) return false;
     return el.checkVisibility ? el.checkVisibility({opacityProperty: true, visibilityProperty: true})
                               : getComputedStyle(el).visibility !== 'hidden';
   };
@@ -62,15 +73,49 @@ _PROBE_JS = r"""(sels) => {
     try { counts[s] = Array.from(document.querySelectorAll(s)).filter(seen).length; }
     catch (e) { counts[s] = null; }
   }
-  return {text: document.body ? document.body.innerText : '', counts};
+  const parts = [], memo = new Map();
+  if (document.body) {
+    const walk = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+      const el = n.parentElement;
+      if (!el || !n.textContent.trim() || /^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(el.tagName)) continue;
+      if (!memo.has(el)) memo.set(el, seen(el));
+      if (memo.get(el)) parts.push(n.textContent);
+    }
+  }
+  return {text: parts.join(' '), counts};
 }"""
 
-_SNAPSHOT_JS = r"""(url) => {
-  document.querySelectorAll('script').forEach(s => s.remove());
-  if (!document.querySelector('base')) {
-    const b = document.createElement('base'); b.href = url;
-    (document.head || document.documentElement).prepend(b);
+# The page as the visitor sees it, made standalone: every readable style
+# sheet written inline in place (rules added by script included, its url()
+# references made absolute), the base made absolute at the page's final
+# address, and the scripts removed after they ran.
+_SNAPSHOT_JS = r"""() => {
+  const abs = (css, href) => css.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/g, (m, q, u) => {
+    if (/^(data:|#)/.test(u)) return m;
+    try { return 'url("' + new URL(u, href).href + '")'; } catch (e) { return m; } });
+  const inline = (sheet, before) => {
+    let rules;
+    try { rules = sheet.cssRules; } catch (e) { return false; }  // another origin: keep its link
+    const href = sheet.href || document.baseURI;
+    let css = Array.from(rules, r => abs(r.cssText, href)).join('\n');
+    const media = sheet.media && sheet.media.mediaText;
+    if (media && media !== 'all') css = '@media ' + media + '{' + css + '}';
+    const st = document.createElement('style'); st.textContent = css;
+    if (before) before.parentNode.insertBefore(st, before);
+    else (document.head || document.documentElement).appendChild(st);
+    return true;
+  };
+  for (const sheet of Array.from(document.styleSheets)) {
+    const owner = sheet.ownerNode;
+    if (owner && owner.parentNode && inline(sheet, owner)) owner.remove();
   }
+  for (const sheet of (document.adoptedStyleSheets || [])) inline(sheet, null);
+  const base = document.baseURI;
+  document.querySelectorAll('base').forEach(b => b.remove());
+  const b = document.createElement('base'); b.href = base;
+  (document.head || document.documentElement).prepend(b);
+  document.querySelectorAll('script').forEach(s => s.remove());
   return '<!doctype html>\n' + document.documentElement.outerHTML;
 }"""
 
@@ -147,17 +192,21 @@ async def _snapshot(url: str, dest: Path) -> Path:
     from playwright.async_api import async_playwright
     from engine.render.core import _launch
     async with async_playwright() as pw:
-        browser = await _launch(pw)
+        # A file page's own style sheets are readable only with file access.
+        browser = await _launch(pw, ("--allow-file-access-from-files",))
         try:
             page = await browser.new_page(viewport={"width": 1280, "height": 800})
             try:
-                await page.goto(url, wait_until="load", timeout=30000)
+                resp = await page.goto(url, wait_until="load", timeout=30000)
             except Exception as exc:
                 first = (str(exc).strip().splitlines() or [type(exc).__name__])[0][:160]
                 raise InputError(f"{url} did not load ({first}); start the app or fix the "
                                  "URL") from None
+            if _URL.match(url) and resp is not None and not resp.ok:
+                raise InputError(f"{url} answered HTTP {resp.status}, so there is no page to "
+                                 "measure; fix the URL or the route")
             await page.wait_for_timeout(400)
-            html = await page.evaluate(_SNAPSHOT_JS, url)
+            html = await page.evaluate(_SNAPSHOT_JS)
         finally:
             await browser.close()
     dest.write_text(html, encoding="utf-8")
@@ -241,14 +290,18 @@ def _verdict(c: Mapping[str, Any], m: Mapping[str, Any]) -> Tuple[bool, str]:
             else f"{value!r} shown at {', '.join(f'{w}px' for w in where)}")
 
 
+def _run_snapshot(url: str, dest: Path) -> Path:
+    try:
+        return asyncio.run(_snapshot(url, dest))
+    except ImportError:
+        from engine.render import RenderUnavailable
+        raise RenderUnavailable("A page is kept in a browser and needs Playwright: "
+                                "pip install 'uxskill[render]'") from None
+
+
 def _page_file(page: str, label: str, tmp: Path, name: str) -> Path:
     if _URL.match(page):
-        try:
-            return asyncio.run(_snapshot(page, tmp / f"{name}.html"))
-        except ImportError:
-            from engine.render import RenderUnavailable
-            raise RenderUnavailable("A URL is loaded in a browser and needs Playwright: "
-                                    "pip install 'uxskill[render]'") from None
+        return _run_snapshot(page, tmp / f"{name}.html")
     p = Path(page)
     if not p.is_file() or p.suffix.lower() not in (".html", ".htm"):
         raise InputError(f"{label} {page} is not an HTML file or an http(s) URL; pass the page "
@@ -270,6 +323,7 @@ def check_complaints(page: Optional[str], *, file: Any = DEFAULT_FILE,
         raise InputError(f"{labels['page']} is missing; pass the page to measure, an HTML file "
                          "or the running app's URL")
     complaints = load_complaints(file, labels["file"])
+    started = time.time()
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
         target = _page_file(page, labels["page"], tmp, "page")
@@ -302,7 +356,7 @@ def check_complaints(page: Optional[str], *, file: Any = DEFAULT_FILE,
               "message": (f"{len(still)} of {len(rows)} complaint(s) still open: "
                           f"{', '.join(still)}; fix the page, then run the check again"
                           if still else f"all {len(rows)} complaint(s) fixed on {page}")}
-    _record(Path(file), page, page_path, page_digest, still)
+    _record(Path(file), page, page_path, page_digest, still, started)
     return result
 
 
@@ -319,7 +373,10 @@ def snapshot_page(page: Optional[str], out: Any, *, force: bool = False,
                          ".ux/before.html")
     dest = Path(out)
     with tempfile.TemporaryDirectory() as td:
-        data = _page_file(page, labels["page"], Path(td), "snapshot").read_bytes()
+        src = _page_file(page, labels["page"], Path(td), "snapshot")
+        if not _URL.match(page):  # standalone, so later edits to its styles do not reach it
+            src = _run_snapshot(src.resolve().as_uri(), Path(td) / "file.html")
+        data = src.read_bytes()
     if dest.is_dir():
         raise InputError(f"{labels['out']} {dest} is a folder; name a file, such as "
                          f"{dest / 'before.html'}")
@@ -335,15 +392,39 @@ def snapshot_page(page: Optional[str], out: Any, *, force: bool = False,
 
 
 def _record(file: Path, page: str, page_path: str, page_digest: str,
-            still: List[str]) -> None:
+            still: List[str], started: float) -> None:
     """Leave the last result beside the complaints for the stop hook."""
     try:
         (file.parent / LAST_FILE).write_text(json.dumps({
             "page": page, "page_path": page_path, "page_digest": page_digest,
-            "complaints_digest": _digest(file.read_bytes()), "open": still}, indent=2) + "\n",
+            "complaints_digest": _digest(file.read_bytes()), "checked_at": started,
+            "open": still}, indent=2) + "\n",
             encoding="utf-8")
     except OSError:
         pass  # a read-only folder keeps the check's own result; only the hook loses it
+
+
+def _newer_source(root: Path, since: float) -> Optional[str]:
+    """A page source in the project changed after `since`: markup, styles,
+    scripts, templates or images, outside dependency and hidden folders. A
+    check on a URL has no file to digest, so this is how it goes stale; for
+    a file it also catches an edited stylesheet the page links."""
+    seen = 0
+    for folder, dirs, names in os.walk(root):
+        dirs[:] = [d for d in dirs if d not in _SKIP_DIRS and not d.startswith(".")]
+        for name in names:
+            if not name.lower().endswith(_SOURCE_SUFFIXES):
+                continue
+            seen += 1
+            if seen > _SCAN_LIMIT:
+                return None
+            p = Path(folder) / name
+            try:
+                if p.stat().st_mtime > since:
+                    return str(p.relative_to(root))
+            except OSError:
+                continue
+    return None
 
 
 def gate(root: Any = ".") -> Optional[str]:
@@ -376,4 +457,7 @@ def gate(root: Any = ".") -> Optional[str]:
     if last.get("open"):
         return (f"complaint(s) still open on {page}: {', '.join(last['open'])}; fix them and "
                 f"run uxskill complaints check --page {page}")
+    newer = _newer_source(Path(root), float(last.get("checked_at") or 0))
+    if newer:
+        return f"{newer} changed since the last check; run uxskill complaints check --page {page}"
     return None

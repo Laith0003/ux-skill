@@ -245,7 +245,7 @@ def test_a_snapshot_keeps_the_page_for_before(tmp_path):
     page = _page(tmp_path, "index.html", CARD)
     out = tmp_path / ".ux" / "before.html"
     assert snapshot_page(str(page), str(out))["status"] == "written"
-    assert out.read_bytes() == page.read_bytes()
+    assert "We use cookies" in out.read_text(encoding="utf-8")
     assert snapshot_page(str(page), str(out))["status"] == "unchanged"
     page.write_text(PAGE.format(extra=BAR, css=""), encoding="utf-8")
     refused = snapshot_page(str(page), str(out))
@@ -276,3 +276,111 @@ def test_a_snapshot_of_a_url_keeps_what_its_scripts_drew(tmp_path):
         server.shutdown()
     kept = out.read_text(encoding="utf-8")
     assert "<p>drawn</p>" in kept and "<script" not in kept and f'<base href="{url}"' in kept
+
+
+# What the review found: the snapshot, the gate and the visible text.
+
+def _serve(folder: Path):
+    server = ThreadingHTTPServer(("127.0.0.1", 0), partial(SimpleHTTPRequestHandler,
+                                                           directory=str(folder)))
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    return server, f"http://127.0.0.1:{server.server_address[1]}"
+
+
+def test_a_url_that_answers_an_error_is_not_measured(tmp_path):
+    f = _complaints(tmp_path, {"id": "promo", "said": "drop the promo",
+                               "probe": {"kind": "absent", "selector": ".promo"}})
+    server, root = _serve(tmp_path)
+    try:
+        with pytest.raises(InputError, match="answered HTTP 404"):
+            _check(f"{root}/nope/index.html", file=f)
+    finally:
+        server.shutdown()
+
+
+def test_a_kept_file_carries_its_styles_so_a_weak_probe_is_caught(tmp_path):
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    (dist / "style.css").write_text(".promo{display:none}", encoding="utf-8")
+    page = dist / "index.html"
+    page.write_text('<!doctype html><html><head><link rel="stylesheet" href="style.css">'
+                    '</head><body><h1>Hi</h1><div class="promo">Sale</div></body></html>',
+                    encoding="utf-8")
+    from engine.complaints import snapshot_page
+    before = tmp_path / ".ux" / "before.html"
+    snapshot_page(str(page), str(before))
+    (dist / "style.css").write_text(".promo{display:block}", encoding="utf-8")
+    kept = before.read_text(encoding="utf-8")
+    assert "display: none" in kept and "<link" not in kept
+    (dist / "style.css").write_text(".promo{display:none}", encoding="utf-8")
+    f = _complaints(tmp_path, {"id": "promo", "said": "drop the promo",
+                               "probe": {"kind": "absent", "selector": ".promo"}})
+    row = _check(str(page), file=f, before=str(before))["complaints"][0]
+    assert row["status"] == "weak"
+
+
+def test_a_url_keeps_a_relative_base_and_styles_added_by_script(tmp_path):
+    app = tmp_path / "app"
+    app.mkdir()
+    (app / "style.css").write_text(".promo{display:none}", encoding="utf-8")
+    (app / "index.html").write_text(
+        '<!doctype html><html><head><base href="/app/"><link rel="stylesheet" href="style.css">'
+        '<style id="s"></style></head><body><h1>Hi</h1><div class="promo">Sale</div>'
+        '<div class="cssom">Late</div><script>document.getElementById("s").sheet'
+        '.insertRule(".cssom{display:none}")</script></body></html>', encoding="utf-8")
+    f = _complaints(tmp_path, {"id": "promo", "said": "x",
+                               "probe": {"kind": "absent", "selector": ".promo"}},
+                    {"id": "late", "said": "y", "probe": {"kind": "absent", "selector": ".cssom"}})
+    server, root = _serve(tmp_path)
+    try:
+        result = _check(f"{root}/app/index.html", file=f)
+    finally:
+        server.shutdown()
+    assert result["status"] == "passed", result["complaints"]
+
+
+def test_text_faded_to_nothing_is_not_shown(tmp_path):
+    f = _complaints(tmp_path, {"id": "ship", "said": "say shipping is free",
+                               "probe": {"kind": "text-present", "text": "free shipping"}})
+    faded = '<p style="opacity:0">Free shipping</p>'
+    sr_only = ('<span style="position:absolute;width:1px;height:1px;overflow:hidden;'
+               'clip:rect(0 0 0 0)">Free shipping</span>')
+    assert _check(str(_page(tmp_path, "a.html", faded)), file=f)["status"] == "open"
+    assert _check(str(_page(tmp_path, "b.html", sr_only)), file=f)["status"] == "open"
+    assert _check(str(_page(tmp_path, "c.html", "<p>Free shipping</p>")),
+                  file=f)["status"] == "passed"
+
+
+def test_the_gate_sees_a_source_edited_after_the_check(tmp_path):
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    (dist / "style.css").write_text("h1{color:#111}", encoding="utf-8")
+    page = dist / "index.html"
+    page.write_text(PAGE.format(extra='<link rel="stylesheet" href="style.css">' + BAR, css=""),
+                    encoding="utf-8")
+    f = _complaints(tmp_path, COVER)
+    _check(str(page), file=f)
+    assert gate(tmp_path) is None
+    import os
+    import time
+    later = time.time() + 5
+    os.utime(dist / "style.css", (later, later))
+    assert "dist/style.css changed since the last check" in gate(tmp_path)
+
+
+def test_a_url_check_goes_stale_when_the_app_source_changes(tmp_path):
+    site = tmp_path / "site"
+    site.mkdir()
+    (site / "index.html").write_text(PAGE.format(extra=BAR, css=""), encoding="utf-8")
+    f = _complaints(tmp_path, COVER)
+    server, root = _serve(site)
+    try:
+        assert _check(f"{root}/index.html", file=f)["status"] == "passed"
+    finally:
+        server.shutdown()
+    assert gate(tmp_path) is None
+    import os
+    import time
+    later = time.time() + 5
+    os.utime(site / "index.html", (later, later))
+    assert "site/index.html changed since the last check" in gate(tmp_path)

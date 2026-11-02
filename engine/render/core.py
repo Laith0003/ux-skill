@@ -273,11 +273,11 @@ class RenderUnavailable(RuntimeError):
     """Playwright or a Chromium browser is missing."""
 
 
-async def _launch(pw):
+async def _launch(pw, args=()):
     errors = []
     for kwargs in ({"channel": "chrome"}, {}):
         try:
-            return await pw.chromium.launch(**kwargs)
+            return await pw.chromium.launch(args=list(args), **kwargs)
         except Exception as exc:  # browser not installed on this channel
             errors.append(str(exc).splitlines()[0])
     raise RenderUnavailable(

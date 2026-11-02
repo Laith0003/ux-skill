@@ -7,6 +7,7 @@ off switches."""
 import json
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 from engine.complaints import LAST_FILE, _digest
@@ -37,7 +38,8 @@ def _project(tmp_path: Path, last=None, page_text="<h1>x</h1>") -> Path:
     if last is not None:
         record = {"page": "index.html", "page_path": str(page.resolve()),
                   "page_digest": _digest(page.read_bytes()),
-                  "complaints_digest": _digest(complaints.read_bytes()), **last}
+                  "complaints_digest": _digest(complaints.read_bytes()),
+                  "checked_at": time.time() + 1, **last}
         (ux / LAST_FILE).write_text(json.dumps(record), encoding="utf-8")
     return tmp_path
 

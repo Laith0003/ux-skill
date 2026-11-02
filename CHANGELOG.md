@@ -54,8 +54,10 @@ project adheres to [Semantic Versioning](https://semver.org/).
   `present`, `absent`, `text-present`, `text-absent`) measured at four
   widths. It exits 3 while a complaint is open, and a probe the old page
   already passed is reported weak, since it proves nothing. A running
-  app is measured by its URL. A stop hook in the plugin reads the last
-  check and holds the session once while it is missing, stale or open.
+  app is measured by its URL, as a standalone snapshot with its styles
+  inline. A stop hook in the plugin reads the last check and holds the
+  session once while it is missing or open, or older than the page or any
+  page source in the project.
   `uxskill complaints snapshot` keeps the page before it changes.
 
 ### Changed

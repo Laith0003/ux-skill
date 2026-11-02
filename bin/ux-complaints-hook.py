@@ -5,9 +5,11 @@ When the project keeps complaints in .ux/complaints.json, the work is not
 done until `uxskill complaints check --page <page>` has measured the page
 as it is now and found every complaint fixed. This hook reads the last
 check (.ux/complaints-last.json) and, when it is missing, ran on other
-complaints or an older page, or left a complaint open, blocks the stop
+complaints, left a complaint open, or is older than the page or any page
+source in the project, blocks the stop
 once with the reason, so the session runs the check or fixes the page
-before it calls the work done. It renders nothing, so it is fast.
+before it calls the work done. It renders nothing; it walks the project's
+page sources once, up to 20000 files.
 
 It blocks once per stop: when Claude Code reports the session is already
 continuing because of a stop hook, it lets the stop through, so a page that

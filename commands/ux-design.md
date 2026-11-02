@@ -491,7 +491,7 @@ uxskill complaints check --page dist/index.html --before .ux/before.html
 uxskill complaints check --page http://localhost:3000/   # the running app
 ```
 
-Exit 0 means every complaint measures fixed. Exit 3 means one is open, or weak: its probe already passed on the old page, so it proves nothing; tighten the probe until the old page fails it. Never report a complaint fixed on a 3. A URL is loaded once and measured as that snapshot, its scripts removed after they ran. The plugin's stop hook reads the last check and holds the session once while it is missing, older than the page, or open; `UXSKILL_COMPLAINTS_GATE=0` or an empty `.ux/complaints-gate.off` turns it off.
+Exit 0 means every complaint measures fixed. Exit 3 means one is open, or weak: its probe already passed on the old page, so it proves nothing; tighten the probe until the old page fails it. Never report a complaint fixed on a 3. A URL is loaded once and measured as that snapshot: its style sheets written inline, rules added by script included, and its scripts removed after they ran. A URL that answers an HTTP error is refused, not measured. Visible text means text in a box larger than one pixel that is not hidden or faded to nothing, so a visually hidden label does not count. The plugin's stop hook reads the last check and holds the session once while it is missing, ran on other complaints, left one open, or is older than the page or any page source in the project (markup, styles, scripts or images outside hidden and dependency folders, which is how a check on a URL goes stale); `UXSKILL_COMPLAINTS_GATE=0` or an empty `.ux/complaints-gate.off` turns it off.
 
 ## SEO is mandatory for public-web outputs
 
