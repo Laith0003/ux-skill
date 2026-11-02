@@ -1,6 +1,6 @@
 """MCP (Model Context Protocol) server for ux-skill.
 
-Exposes the recommender, linter, persistence, and the 11 data manifests as
+Exposes the recommender, linter, persistence, and the data manifests as
 MCP tools over stdio so ANY MCP-capable client (Claude Desktop, Cursor,
 Windsurf, generic agents) can call into the ux-skill engine without
 installing the full plugin.

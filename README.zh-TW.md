@@ -112,7 +112,7 @@ ux-skill 是一個面向 AI 程式設計工具的**設計智慧引擎**。它以
 4. [架構，各部件如何咬合](#架構各部件如何咬合)
 5. [18 個斜線命令，詳細參考](#18-個斜線命令詳細參考)
 6. [5 個子代理](#5-個子代理)
-7. [11 份資料清單](#11-份資料清單)
+7. [12 份資料清單](#12-份資料清單)
 8. [171 條反 AI slop 規則，程式碼檢查器](#171-條反-ai-slop-規則程式碼檢查器)
 9. [160 份 DESIGN.md 品牌規範，按類別](#160-份-designmd-品牌規範按類別)
 10. [MCP 伺服器，非對稱的一著](#mcp-伺服器非對稱的一著)
@@ -228,7 +228,7 @@ Star 數最後一次透過 `gh api` 核對的時間是 **2026-05-28**。ux-skill
 - **元件庫:** 148 個帶解剖結構、狀態、所用 token 與動效規範的文件化元件。其他 8 個裡沒有任何一個發布過元件清單。
 - **動效預設:** 57 個開箱即用的堆疊層級項目(Framer Motion、GSAP、CSS),全部帶 reduced-motion 後援。其他幾家都不發布動效清單。
 - **反模式靜態檢查器：** 171 條確定性規則，能在 CI 中執行，遇 Critical/High 以非零碼結束。其他幾家沒有任何確定性檢查器。
-- **品牌規範:** 160 份真實 DESIGN.md 規範(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其餘 96 個)。其他幾家沒有品牌庫。
+- **品牌規範:** 160 份真實 DESIGN.md 規範(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude,以及其餘 146 個)。其他幾家沒有品牌庫。
 - **支援 17 個 IDE:** 同一個引擎,IDE 之間用不同的「膠水」對接。
 - **18 個斜線命令：** discovery、生成（頁面、元件、儀表板、從圖片生成）、審查、lint、polish 循環、修正循環、案例研究、工作坊、文案、動效、a11y、conductor，彼此完全打通。
 
@@ -668,7 +668,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## 11 份資料清單
+## 12 份資料清單
 
 資料層就是大腦。每個命令都從中讀取;引擎在其間合併;程式碼檢查器對其掃描。所有檔案都在 `data/` 下,項目用 `{_meta, entries}` 包裝以做 schema 版本管理。
 
@@ -779,6 +779,15 @@ ux-skill (package name: uxskill)
 | `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 完整規則清單見 [171 條反 AI slop 規則](#171-條反-ai-slop-規則程式碼檢查器)。
+
+### `landing-patterns.json`：40 種登陸頁模式
+
+| 欄位 | 描述 |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`：160 份品牌規範
 

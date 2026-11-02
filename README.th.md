@@ -112,7 +112,7 @@ README นี้คือเอกสารอ้างอิงหลัก ท
 4. [สถาปัตยกรรม ชิ้นส่วนเข้ากันได้อย่างไร](#สถาปัตยกรรม-ชิ้นส่วนเข้ากันได้อย่างไร)
 5. [18 สแลชคอมมานด์ ข้อมูลอ้างอิงโดยละเอียด](#18-สแลชคอมมานด์-ข้อมูลอ้างอิงโดยละเอียด)
 6. [5 ซับเอเจนต์](#5-ซับเอเจนต์)
-7. [11 แมนิเฟสต์ข้อมูล](#11-แมนิเฟสต์ข้อมูล)
+7. [12 แมนิเฟสต์ข้อมูล](#12-แมนิเฟสต์ข้อมูล)
 8. [171 กฎต้าน AI slop ลินเตอร์](#171-กฎต้าน-ai-slop-ลินเตอร์)
 9. [160 สเปก DESIGN.md แบรนด์ แบ่งตามหมวด](#160-สเปก-designmd-แบรนด์-แบ่งตามหมวด)
 10. [เซิร์ฟเวอร์ MCP หมากอสมมาตร](#เซิร์ฟเวอร์-mcp-หมากอสมมาตร)
@@ -228,7 +228,7 @@ ux stats
 - **ไลบรารีคอมโพเนนต์:** คอมโพเนนต์ 148 ตัวที่บันทึกไว้พร้อม anatomy สถานะ โทเค็นที่ใช้ และสเปกการเคลื่อนไหว ไม่มีใน 8 ปลั๊กอินอื่นที่ส่งแมนิเฟสต์คอมโพเนนต์
 - **พรีเซตการเคลื่อนไหว:** 57 รายการพร้อมใช้แบ่งตามสแตก (Framer Motion, GSAP, CSS) พร้อม fallback แบบ reduced-motion ไม่มีตัวอื่นที่ส่งแมนิเฟสต์การเคลื่อนไหว
 - **ลินเตอร์ anti-pattern:** 171 กฎเชิงกำหนด รันใน CI ออกด้วยรหัสไม่ใช่ศูนย์ที่ Critical/High ไม่มีตัวอื่นที่ส่งลินเตอร์เชิงกำหนด
-- **สเปกแบรนด์:** สเปก DESIGN.md จริง 160 รายการ (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude และอีก 96 แบรนด์) ไม่มีตัวอื่นที่ส่งไลบรารีแบรนด์
+- **สเปกแบรนด์:** สเปก DESIGN.md จริง 160 รายการ (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude และอีก 146 แบรนด์) ไม่มีตัวอื่นที่ส่งไลบรารีแบรนด์
 - **รองรับ 17 IDE:** เครื่องยนต์เดียวกัน กาวที่ต่างกันในแต่ละ IDE
 - **18 สแลชคอมมานด์:** discovery, generation (หน้าเว็บ คอมโพเนนต์ แดชบอร์ด จากภาพ), audit, lint, ลูป polish, ลูปแก้ไข, case study, workshop, copy, motion, a11y, conductor บูรณาการครบถ้วน
 
@@ -668,7 +668,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## 11 แมนิเฟสต์ข้อมูล
+## 12 แมนิเฟสต์ข้อมูล
 
 ชั้นข้อมูลคือสมอง ทุกคอมมานด์อ่านจากมัน เครื่องยนต์ merge ข้ามมัน ลินเตอร์สแกนกับมัน ทุกไฟล์อยู่ใต้ `data/` และห่อ entry ใน `{_meta, entries}` สำหรับ versioning schema
 
@@ -779,6 +779,15 @@ ux-skill (package name: uxskill)
 | `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 รายการกฎทั้งหมดอยู่ที่ [171 กฎต้าน AI slop](#171-กฎต้าน-ai-slop-ลินเตอร์)
+
+### `landing-patterns.json`: 40 แพทเทิร์นแลนดิ้งเพจ
+
+| ฟิลด์ | คำอธิบาย |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160 สเปกแบรนด์
 

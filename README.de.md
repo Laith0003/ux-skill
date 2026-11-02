@@ -112,7 +112,7 @@ Diese README ist die kanonische Referenz. Jeder Befehl, jeder Sub-Agent, jedes D
 4. [Architektur, wie die Teile ineinandergreifen](#architektur-wie-die-teile-ineinandergreifen)
 5. [Die 18 Slash-Befehle, detaillierte Referenz](#die-18-slash-befehle-detaillierte-referenz)
 6. [Die 5 Sub-Agents](#die-5-sub-agents)
-7. [Die 11 Datenmanifeste](#die-11-datenmanifeste)
+7. [Die 12 Datenmanifeste](#die-12-datenmanifeste)
 8. [Die 171 Anti-KI-Slop-Regeln, der Linter](#die-171-anti-ki-slop-regeln-der-linter)
 9. [Die 160 Brand-DESIGN.md-Specs, nach Kategorie](#die-160-brand-designmd-specs-nach-kategorie)
 10. [MCP-Server, der asymmetrische Zug](#mcp-server-der-asymmetrische-zug)
@@ -228,7 +228,7 @@ Die Sternzahlen wurden zuletzt am **2026-05-28** über `gh api` verifiziert. ux-
 - **Komponentenbibliothek:** 148 dokumentierte Komponenten mit Anatomie, Zuständen, verwendeten Tokens und Motion-Specs. Keine der anderen 8 liefert ein Komponentenmanifest.
 - **Motion-Presets:** 57 stack-fertige Einträge (Framer Motion, GSAP, CSS) mit reduced-motion-Fallbacks. Keine der anderen liefert ein Motion-Manifest.
 - **Anti-Pattern-Linter:** 171 deterministische Regeln, läuft in CI, beendet mit Non-Zero bei Critical/High. Keine der anderen liefert einen deterministischen Linter.
-- **Brand-Specs:** 160 echte DESIGN.md-Specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude und 96 weitere). Keine der anderen liefert eine Markenbibliothek.
+- **Brand-Specs:** 160 echte DESIGN.md-Specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude und 146 weitere). Keine der anderen liefert eine Markenbibliothek.
 - **17 unterstützte IDEs:** dieselbe Engine, anderer Klebstoff je IDE.
 - **18 Slash-Befehle:** Discovery, Generierung (Seiten, Komponenten, Dashboards, aus einem Bild), Audit, Lint, Polish-Schleife, Fix-Schleife, Case-Study, Workshop, Copy, Motion, A11y, Conductor, vollständig integriert.
 
@@ -668,7 +668,7 @@ Der aufrufende Befehl führt dann automatisch `/ux-lint` aus, bevor er sich für
 
 ---
 
-## Die 11 Datenmanifeste
+## Die 12 Datenmanifeste
 
 Die Datenschicht ist das Gehirn. Jeder Befehl liest aus ihr; die Engine merged darüber; der Linter scannt gegen sie. Alle Dateien liegen unter `data/` und kapseln ihre Einträge in `{_meta, entries}` zur Schemaversionierung.
 
@@ -779,6 +779,15 @@ Jedes Preset hat eine reduced-motion-Variante. Stack-fertiger Code für Framer M
 | `categories` | A11y (45), Inhalt (35), Layout (18), Typografie (16), Motion (14), Visuell (14), Qualität (12), Farbe (10), Performance (5), Tiefe (2) |
 
 Die vollständige Regelliste steht unter [Die 171 Anti-KI-Slop-Regeln](#die-171-anti-ki-slop-regeln-der-linter).
+
+### `landing-patterns.json`: 40 Landing-Patterns
+
+| Feld | Beschreibung |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160 Brand-Specs
 
