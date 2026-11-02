@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out des
 
 **按界面分的规则手册。** 落地页、仪表盘和组件的规则放在 `references/surfaces/`，各有一份手册。`/ux-design` 按模式只加载其中一份，所以构建仪表盘时永远不会读到 hero 的规则。
 
-测试 **9764 项通过**。离线。确定性。从不调用 LLM。
+测试 **13101 项通过**。离线。确定性。从不调用 LLM。
 
 ### v3.1 新增：忠于品牌、响应式、有生命力
 

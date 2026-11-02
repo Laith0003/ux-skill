@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 ou plus récent. Pour le serveur MCP, `pip install --upgrade 'uxskil
 
 **Playbooks de surface.** Les règles landing, dashboard et composant vivent dans `references/surfaces/`, un playbook chacune. `/ux-design` en charge exactement un, choisi selon son mode, si bien qu'une construction de dashboard ne lit jamais les règles du hero.
 
-Tests : **9764 réussis**. Hors ligne. Déterministe. Aucun LLM appelé, jamais.
+Tests : **13101 réussis**. Hors ligne. Déterministe. Aucun LLM appelé, jamais.
 
 ### Nouveau dans la v3.1 : fidèle à la marque, responsive, vivant
 

@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 atau lebih baru. Untuk server MCP, `pip install --upgrade 'uxskill[m
 
 **Playbook surface.** Aturan landing, dashboard, dan komponen ada di `references/surfaces/`, satu playbook untuk masing-masing. `/ux-design` memuat tepat satu, dipilih sesuai mode-nya, jadi build dashboard tidak pernah membaca aturan hero.
 
-Tes: **9764 lolos**. Offline. Deterministik. Tidak pernah memanggil LLM.
+Tes: **13101 lolos**. Offline. Deterministik. Tidak pernah memanggil LLM.
 
 ### Baru di v3.1: setia pada brand, responsif, hidup
 

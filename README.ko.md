@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 이상. MCP 서버는 `pip install --upgrade 'uxskill[mcp]'`. pipx�
 
 **화면별 플레이북.** 랜딩, 대시보드, 컴포넌트 규칙은 `references/surfaces/`에 각각 플레이북 하나씩 있습니다. `/ux-design`은 모드에 맞춰 정확히 하나만 불러오므로, 대시보드 빌드가 히어로 규칙을 읽을 일은 없습니다.
 
-테스트 **9764개 통과**. 오프라인. 결정론적. LLM은 절대 호출하지 않습니다.
+테스트 **13101개 통과**. 오프라인. 결정론적. LLM은 절대 호출하지 않습니다.
 
 ### v3.1의 새 기능: 브랜드에 충실, 반응형, 생동감
 
