@@ -54,6 +54,13 @@ project adheres to [Semantic Versioning](https://semver.org/).
   unstyled checkbox or radio pass. The accessibility guide now gives 24px
   as the floor and 44px as the touch default, rather than calling 44px
   the minimum.
+- Four more render checks. `text-low-contrast`: neutral text under what
+  WCAG 1.4.3 asks on the ground the visitor sees, read with the page
+  scrolled into view and confirmed at a second position, so a ground a
+  script swaps in on scroll is measured, not the one at rest; accent
+  text is read the same way now. `input-text-zooms`: a field under 16px
+  at phone widths. `image-broken` and `image-distorted`: an image that
+  failed to load, and one stretched more than 3% off its own shape.
 - `uxskill complaints check --page <file or URL> [--before <file>]`:
   what the person said is wrong with a page, kept in
   `.ux/complaints.json` as probes from a closed list (`rule-clear`,

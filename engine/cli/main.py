@@ -989,9 +989,10 @@ else:
 
     from engine.io.read import CHOICES as _FORMATS
 
-    def _io(ctx, fn, *args, figma_modes=(), **kwargs) -> None:
+    def _io(ctx, fn, *args, figma_modes=(), exits=None, **kwargs) -> None:
         """Run a command from engine.io.commands: JSON on stdout, the exit
-        code by status, a bad input as a usage error naming the flag."""
+        code by status (exits adds a command's own statuses), a bad input as
+        a usage error naming the flag."""
         from engine.foundations.emit import InputError
         from engine.io.commands import EXIT, parse_modes
         try:
@@ -1005,8 +1006,9 @@ else:
             click.echo(f"Error: {result['message']}\n", err=True, nl=False)
         elif result["status"] == "open":
             click.echo(f"{result['message']}\n", err=True, nl=False)
-        if EXIT[result["status"]]:
-            sys.exit(EXIT[result["status"]])
+        codes = {**EXIT, **(exits or {})}
+        if codes[result["status"]]:
+            sys.exit(codes[result["status"]])
 
     _FROM = click.option(
         "--from", "source", required=True, multiple=True,
@@ -1212,7 +1214,7 @@ else:
         from engine.complaints import check_complaints
         from engine.render import RenderUnavailable
         try:
-            _io(ctx, check_complaints, page, file=file, before=before)
+            _io(ctx, check_complaints, page, file=file, before=before, exits={"open": 3})
         except RenderUnavailable as exc:
             click.echo(f"Error: {exc}", err=True)
             sys.exit(2)

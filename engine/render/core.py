@@ -227,6 +227,51 @@ _MEASURE_JS = r"""(tol) => {
     out.push({rule: 'first-screen-covered', sel: sel(e), cls: e.className || '',
               text: text(e).slice(0, 60), drift: share, why, dir});
   }
+  // Phone widths: a text field set under 16px, which iOS Safari zooms the
+  // page into on focus.
+  if (vw <= 430) {
+    let zooms = 0;
+    for (const f of document.querySelectorAll('input,textarea,select')) {
+      if (f.tagName === 'INPUT' && /^(hidden|checkbox|radio|range|color|file|submit|button|reset|image)$/.test(f.type)) continue;
+      const q = f.getBoundingClientRect(), fs = getComputedStyle(f);
+      if (q.width < 1 || q.height < 1 || fs.visibility === 'hidden' || f.disabled) continue;
+      const px = parseFloat(fs.fontSize);
+      if (px >= 16 || ++zooms > 6) continue;
+      const nm = f.getAttribute('name') || f.id || f.getAttribute('aria-label') || '';
+      out.push({rule: 'input-text-zooms', sel: sel(f) + (nm ? '[' + nm.slice(0, 24) + ']' : ''),
+                cls: typeof f.className === 'string' ? f.className : '', text: '', drift: 0,
+                px: Math.round(px * 10) / 10, dir});
+    }
+  }
+
+  const seenEl = el => { const cs = getComputedStyle(el);
+    return cs.visibility !== 'hidden' && cs.display !== 'none' && parseFloat(cs.opacity) > 0; };
+  // Images that failed to load, and images drawn at a shape their pixels are
+  // not (object-fit fill, the default, stretching them).
+  for (const im of document.images) {
+    const q = im.getBoundingClientRect();
+    // A broken image shrinks to its alt text, so any visible box counts.
+    if (q.width < 1 || q.height < 1 || !seenEl(im)) continue;
+    const src = im.currentSrc || im.src || '';
+    const nm = (im.getAttribute('alt') || src.split('/').pop() || '').slice(0, 40);
+    const base = {sel: sel(im), cls: typeof im.className === 'string' ? im.className : '',
+                  text: nm, drift: 0, dir};
+    // A root-relative path on a page opened from disk points at the disk's
+    // root, not the site's: it cannot be judged here.
+    const rootRel = location.protocol === 'file:' && /^\/(?!\/)/.test(im.getAttribute('src') || '');
+    if (im.complete && im.naturalWidth === 0 && src && !rootRel) {
+      const shown = im.getAttribute('src') || src;
+      out.push({...base, rule: 'image-broken', src: shown.length > 80 ? '...' + shown.slice(-77) : shown});
+      continue;
+    }
+    if (!im.naturalWidth || /\.svgz?(\?|#|$)/i.test(src) || src.startsWith('data:image/svg')) continue;
+    if (q.width < 32 || q.height < 32 || getComputedStyle(im).objectFit !== 'fill') continue;
+    const want = im.naturalWidth / im.naturalHeight, got = q.width / q.height;
+    const off = Math.abs(got / want - 1);
+    if (off > 0.03) out.push({...base, rule: 'image-distorted', pct: Math.round(off * 100),
+      nat: im.naturalWidth + 'x' + im.naturalHeight, box: Math.round(q.width) + 'x' + Math.round(q.height)});
+  }
+
   // A target smaller than 24 by 24 CSS pixels whose 24px circle, centred on
   // it, meets another target or another small target's circle (WCAG 2.5.8,
   // with its spacing exception). A link inside a sentence and a checkbox or
@@ -289,6 +334,23 @@ _RULES = {
              "wider column, min-width: 0 on a grid or flex child) or let long strings break "
              "(overflow-wrap: anywhere)."),
         what="text is {drift}px wider than its box ({dir}, {vw}px viewport)"),
+    "input-text-zooms": dict(
+        name="A text field under 16px on a phone", severity="medium", category="Forms",
+        fix=("Set form fields to 16px or larger at phone widths (font-size: max(16px, 1rem)); "
+             "below that, iOS Safari zooms the page in when the field takes focus and leaves "
+             "the visitor to pinch back out."),
+        what="the field's text is {px}px ({vw}px viewport)"),
+    "image-broken": dict(
+        name="An image that failed to load", severity="high", category="Imagery",
+        fix=("Fix the path or ship the file: the page shows a broken image where a "
+             "photograph belongs. Check the URL, the case of the filename and the build "
+             "step that copies assets."),
+        what="{src} did not load ({vw}px viewport)"),
+    "image-distorted": dict(
+        name="An image stretched out of its shape", severity="medium", category="Imagery",
+        fix=("Keep the photograph's own proportions: give it object-fit: cover (or contain) "
+             "with a set aspect-ratio, or set only one of width and height."),
+        what="{nat} pixels drawn at {box}, {pct}% off its shape ({vw}px viewport)"),
     "target-too-small": dict(
         name="A small target crowded by another", severity="high", category="A11y",
         fix=("The control is under 24 by 24 CSS pixels and a 24px circle centred on it meets "
