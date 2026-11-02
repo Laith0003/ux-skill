@@ -22,7 +22,7 @@ def test_it_skips_a_tag_that_exists_and_a_version_without_notes():
 def test_the_current_version_has_its_notes():
     # A regex, not tomllib: tomllib is 3.11 and later, and CI runs 3.10.
     pyproject = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
-    version = re.search(r'^version\s*=\s*"([^"]+)"', pyproject, re.M).group(1)
+    version = re.search(r'^version\s*=\s*"([^"]+)"', pyproject, re.MULTILINE).group(1)
     notes = ROOT / "docs" / "launch" / f"release-{version}.md"
     assert notes.is_file(), f"write the release notes for {version} at {notes.relative_to(ROOT)}"
     assert notes.read_text(encoding="utf-8").startswith(f"# ux-skill {version}")
