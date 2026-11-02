@@ -143,6 +143,50 @@ _MEASURE_JS = r"""(tol) => {
     out.push({rule: 'text-overflows-its-box', sel: sel(e), cls: e.className || '',
               text: text(e).slice(0, 60), drift: Math.round(over), dir});
   }
+
+  // A fixed panel over the first screen at rest: a cookie card, a consent
+  // wall, a bar over the form. It is reported when it covers the page's
+  // heading or a form's first control, covers 30% or more of the screen, or
+  // is a wide panel floating clear of both edges over text or an image. A
+  // thin bar docked to an edge over nothing key, a narrow widget, and an
+  // overlay that paints nothing or takes no pointer pass.
+  const vh = window.innerHeight, area = vw * vh;
+  const alpha = c => { const m = c.match(/rgba?\(([^)]*)\)/); if (!m) return 0;
+    const p = m[1].split(/[\s,\/]+/).filter(Boolean); return p.length > 3 ? parseFloat(p[3]) : 1; };
+  const painted = cs => alpha(cs.backgroundColor) >= 0.5 || cs.backgroundImage !== 'none';
+  const fixedIn = e => { for (let a = e.parentElement; a; a = a.parentElement)
+    if (getComputedStyle(a).position === 'fixed') return true; return false; };
+  const keys = [document.querySelector('h1'),
+    document.querySelector('form input:not([type=hidden]), form select, form textarea, form button')]
+    .filter(k => k && !fixedIn(k) && k.getClientRects().length);
+  const media = new Set(['IMG', 'PICTURE', 'VIDEO', 'CANVAS', 'SVG', 'svg']);
+  const ownText = el => [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim());
+  const beneath = (e, x, y) => document.elementsFromPoint(x, y).some(el =>
+    !e.contains(el) && !el.contains(e) && (media.has(el.tagName) || ownText(el)));
+  for (const e of document.body.querySelectorAll('*')) {
+    const cs = getComputedStyle(e);
+    if (cs.position !== 'fixed' || !visible(e, cs) || cs.pointerEvents === 'none'
+        || parseFloat(cs.opacity) === 0 || !painted(cs) || fixedIn(e)) continue;
+    const b = e.getBoundingClientRect();
+    const r = {left: Math.max(0, b.left), top: Math.max(0, b.top),
+               right: Math.min(vw, b.right), bottom: Math.min(vh, b.bottom)};
+    const w = r.right - r.left, h = r.bottom - r.top;
+    if (w <= 0 || h <= 0) continue;
+    const share = Math.round(100 * w * h / area);
+    const key = keys.find(k => { if (e.contains(k)) return false;
+      const q = k.getBoundingClientRect(), cx = (q.left + q.right) / 2, cy = (q.top + q.bottom) / 2;
+      return cx >= r.left && cx <= r.right && cy >= r.top && cy <= r.bottom; });
+    const docked = r.top <= 1 || r.bottom >= vh - 1;
+    const floating = !docked && w >= vw / 2 && [[0.5, 0.5], [0.2, 0.3], [0.8, 0.7], [0.5, 0.15], [0.5, 0.85]]
+      .some(([fx, fy]) => beneath(e, r.left + fx * w, r.top + fy * h));
+    let why = '';
+    if (key) why = 'covers the page\'s ' + (key.tagName === 'H1' ? 'heading' : 'form');
+    else if (share >= 30) why = 'covers ' + share + '% of the first screen';
+    else if (floating) why = 'floats over the content, clear of both edges';
+    if (!why) continue;
+    out.push({rule: 'first-screen-covered', sel: sel(e), cls: e.className || '',
+              text: text(e).slice(0, 60), drift: share, why, dir});
+  }
   return {vw, findings: out};
 }"""
 
@@ -167,6 +211,13 @@ _RULES = {
              "wider column, min-width: 0 on a grid or flex child) or let long strings break "
              "(overflow-wrap: anywhere)."),
         what="text is {drift}px wider than its box ({dir}, {vw}px viewport)"),
+    "first-screen-covered": dict(
+        name="A fixed panel covers the first screen", severity="high", category="Layout",
+        fix=("A cookie notice, banner or popup sits over the page at rest. Dock it to the top "
+             "or bottom edge as a thin bar that covers neither the heading nor the form, or "
+             "open it as a real dialog only when the visitor asks; never leave a wide card "
+             "floating over the content."),
+        what="{why} ({vw}px viewport)"),
     "render-failed": dict(
         name="Page could not be rendered", severity="medium", category="Layout",
         fix=("The render check could not load or measure this page, so its layout is "

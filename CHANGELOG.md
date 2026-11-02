@@ -39,6 +39,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
   (a real h1 to h6 inside a Stageshow stage, which joins the host page's
   outline) and `illustration-loop-without-pause` (a scripted Stage left on
   its default loop in a file with no pause control).
+- The render check's `first-screen-covered`: a fixed panel over the first
+  screen at rest, at every width. It fires when the panel covers the page's
+  heading or a form's first control, covers 30% or more of the viewport, or
+  is a wide panel floating clear of both edges over text or an image (a
+  cookie card left over the content). A thin bar docked to an edge, a
+  narrow widget and an overlay that paints nothing pass.
 
 ### Changed
 - The landing playbook's interface-fragment patterns point at the new guide.
