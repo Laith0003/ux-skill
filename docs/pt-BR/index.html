@@ -84,7 +84,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --black:#06070a; --ink:#f4f5f7; --body:#a6abb3; --muted:#717783;
+    --black:#06070a; --ink:#f4f5f7; --body:#a6abb3; --muted:#8a909b; --muted-lite:#535a66;
     --lite:#f6f7f9; --lite-ink:#10131a; --lite-body:#535b69; --lite-line:rgba(0,0,0,.10);
     /* cool spectrum, cyan-led, for DARK zones, blooms, the hero dot-field */
     --cyan:#22d3ee; --blue:#5b9cff; --green:#3ddc97; --teal:#2dd4bf;
@@ -314,7 +314,7 @@
   .zone--lite .ztxt p{color:var(--lite-body)}
   .zone--dark .ztxt p{color:var(--body)}
   .ztxt .k{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;display:flex;justify-content:center;align-items:center;gap:9px;margin-bottom:14px}
-  .zone--lite .ztxt .k{color:#6a7283} .zone--dark .ztxt .k{color:#9aa3b2}
+  .zone--lite .ztxt .k{color:var(--muted-lite)} .zone--dark .ztxt .k{color:#9aa3b2}
   .pcard{background:#0a0b10;border-radius:22px;padding:clamp(26px,4vw,52px);min-width:0;width:100%;max-width:560px;margin-inline:auto;min-height:clamp(300px,42vh,440px);
     display:flex;align-items:center;justify-content:center;box-shadow:0 60px 110px -55px rgba(20,30,60,.5);overflow:hidden;border:1px solid rgba(255,255,255,.05)}
 
@@ -347,8 +347,10 @@
   .zone--lite .flow .step{color:var(--lite-ink)} .zone--dark .flow .step{color:var(--ink)}
 
   .badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;margin-top:16px}
-  .zone--lite .badge{color:#6a7283} .zone--dark .badge{color:#9aa3b2}
+  .zone--lite .badge{color:var(--muted-lite)} .zone--dark .badge{color:#9aa3b2}
   .badge b{color:var(--green);font-weight:500}
+  .zone--lite .badge b{color:#0b6e45}
+  .zone--lite .eyebrow{color:var(--muted-lite)}
 
   /* ===== TURN, cinematic snap section ===== */
   /* scroll-snap: proximity = only snaps when close, doesn't hijack the whole page */
@@ -416,7 +418,7 @@
   .pbeat-sub em{color:var(--blue-d);font-style:italic}
   /* tokens.css dark frame */
   .tok-frame{width:100%;max-width:400px;border-radius:14px;background:#0e1016;overflow:hidden;box-shadow:0 24px 60px -20px rgba(0,0,0,.28)}
-  .tok-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#15171f;font-family:var(--mono);font-size:10px;color:#717783}
+  .tok-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:#15171f;font-family:var(--mono);font-size:10px;color:#8a909b}
   .tok-dot{width:8px;height:8px;border-radius:50%;background:#2a2f3a;flex:none}
   .tok-title{margin-left:6px}
   .tok-body{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
@@ -432,7 +434,7 @@
     @keyframes tokLine{to{opacity:1;transform:translateX(0)}}
   }
   @media(prefers-reduced-motion:reduce){.tok-row{opacity:1;transform:none}}
-  .tok-k{color:#717783;flex:none}
+  .tok-k{color:#8a909b;flex:none}
   .tok-v{font-weight:500}
   .tok-light{color:#f6f7f9}.tok-dark{color:#a6abb3}.tok-num{color:#22d3ee}.tok-accent{color:#5b9cff}.tok-str{color:#3ddc97}
   .tok-pass{color:#3ddc97}
@@ -795,7 +797,7 @@
             <rect width="460" height="320" rx="14" fill="#0e1016" stroke="rgba(255,255,255,.10)"/>
             <rect width="460" height="30" rx="14" fill="#15171f"/><rect y="16" width="460" height="14" fill="#15171f"/>
             <circle cx="18" cy="15" r="4" fill="#2a2f3a"/><circle cx="32" cy="15" r="4" fill="#2a2f3a"/><circle cx="46" cy="15" r="4" fill="#2a2f3a"/>
-            <text x="74" y="19" font-family="JetBrains Mono,monospace" font-size="10" fill="#717783">corpus.manifest</text>
+            <text x="74" y="19" font-family="JetBrains Mono,monospace" font-size="10" fill="#8a909b">corpus.manifest</text>
             <g font-family="JetBrains Mono,monospace" font-size="13">
               <text x="30" y="78" fill="#9aa3b2">styles</text><text x="200" y="78" fill="#e7e9ee" text-anchor="end">84</text>
               <text x="30" y="110" fill="#9aa3b2">palettes</text><text x="200" y="110" fill="#e7e9ee" text-anchor="end">176</text>
@@ -816,7 +818,7 @@
             <g font-family="JetBrains Mono,monospace" font-size="11">
               <circle cx="36" cy="252" r="5" fill="#1a9f6a"/>
               <text x="50" y="256" fill="#3ddc97">1,262 entries</text>
-              <text x="50" y="284" fill="#717783">deterministic &#183; offline &#183; no LLM</text>
+              <text x="50" y="284" fill="#8a909b">deterministic &#183; offline &#183; no LLM</text>
             </g>
           </svg>
         </div>
