@@ -70,6 +70,13 @@ project adheres to [Semantic Versioning](https://semver.org/).
 - A phrase inside a longer quotation on its line now counts as a mention
   for the text rules, as a phrase wrapped in quotation marks already did,
   and the numeric HTML apostrophe is read as a quotation mark.
+- Two guides from the research: `references/laws/nielsen-heuristics.md`
+  turns the ten heuristics into checks on a built page and names the
+  ux-skill check behind each, walked by `/ux-audit`; and
+  `references/foundations/ai-interfaces.md` sets what an AI feature's
+  interface must do (say what it is, stream with a stop control, cite
+  sources, keep a person in charge of actions), loaded by `/ux-design`
+  beside the playbook.
 - `uxskill complaints check --page <file or URL> [--before <file>]`:
   what the person said is wrong with a page, kept in
   `.ux/complaints.json` as probes from a closed list (`rule-clear`,

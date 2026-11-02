@@ -374,6 +374,8 @@ Surface-specific rules live in playbooks under `references/surfaces/`. The mode 
 
 Load only the playbook you picked. Never load two surface playbooks. The one-playbook rule applies to surface playbooks only: component contracts (`references/foundations/component-behaviors.md`, `references/components/library.md`, `references/foundations/components.md`) and the shared foundations still load when a build needs them, so a landing page with a quote form or a comparison table reads the form and data table contracts. A brief that straddles two surfaces gets its mode from the Modes rules, and the mode decides the playbook; there is no second pick. Record it as `surface` in the state file of the build mode: `.ux/last-design.json`, `.ux/last-component.json` or `.ux/last-dashboard.json`.
 
+A product with an AI feature (a chat, an assistant, generated content, an agent that acts) also loads `references/foundations/ai-interfaces.md`, a foundation like the contracts above, not a second playbook.
+
 ### 2. Read the references
 
 Before writing a single line of code, read:
