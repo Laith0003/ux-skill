@@ -2656,3 +2656,8 @@ POST_CHECKS.update(TASTE_CHECKS)
 from engine.linter.components import COMPONENT_CHECKS  # noqa: E402
 
 POST_CHECKS.update(COMPONENT_CHECKS)
+
+# The checks for product illustrations live in engine/linter/illustration.py.
+from engine.linter.illustration import ILLUSTRATION_CHECKS  # noqa: E402
+
+POST_CHECKS.update(ILLUSTRATION_CHECKS)

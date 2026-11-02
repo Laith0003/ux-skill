@@ -33,6 +33,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
   and a forced write backs each one up first. `--look-only` rewrites just
   the look when the system changes, leaving kit files the project edited.
   The kit needs react, react-dom and lucide-react in the project.
+- Three lint rules for product illustrations, 174 in all:
+  `focusable-inside-aria-hidden` (a control a keyboard can reach inside an
+  aria-hidden subtree that is not inert), `heading-in-illustration-stage`
+  (a real h1 to h6 inside a Stageshow stage, which joins the host page's
+  outline) and `illustration-loop-without-pause` (a scripted Stage left on
+  its default loop in a file with no pause control).
 
 ### Changed
 - The landing playbook's interface-fragment patterns point at the new guide.
