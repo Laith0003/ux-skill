@@ -7,4 +7,5 @@ lake-canoe.jpg
   Source:   https://unsplash.com/photos/7BjmDICVloE (served by Lorem Picsum as image 1011)
   License:  Unsplash License, https://unsplash.com/license
             (free to use, including commercially; attribution not required but given here)
-  Edits:    cropped to 16:10, resized to 1600x1000 and recompressed as JPEG
+  Edits:    cropped to 16:10, resized to 1600x1000 and recompressed as JPEG;
+            lake-canoe.webp is the same picture re-encoded as WebP

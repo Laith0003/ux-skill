@@ -10,6 +10,7 @@
   gtag('config', 'G-Z371T0DBW5');
 </script>
 <meta charset="UTF-8">
+<script>document.documentElement.classList.add('js')</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>uxskill v4.0 · 讓您的AI程式碼不再看起來是生成的。為氛圍編碼而生的設計大腦。</title>
 <meta name="description" content="uxskill v4.0 用一個品牌色和一段需求說明建立設計系統：九大基礎，每組顏色搭配都在淺色、深色與高對比模式下依 WCAG 檢查，內建阿拉伯文與由右至左排版，並附帶 171 條規則的 linter。離線執行，無 LLM。">
@@ -187,17 +188,66 @@
   .footer__wordmark{font-size:22px}
   .wordmark__dot{display:inline-block;width:7px;height:7px;border-radius:2px;background:#5b9cff}
 
-  /* ===== HERO: black -> full white; the 3.2 glows hard then disappears ===== */
-  .hero{position:relative;min-height:118svh;overflow:hidden;text-align:center}
-  .hero__sticky{position:relative;height:100svh;display:flex;align-items:center;justify-content:center}
+  /* ===== HERO: the 4.0 numeral. The hero is pinned while --p runs 0 to 1:
+     the copy steps back, the digits brighten, a band of light crosses them,
+     they part and tilt away into depth, and the next section takes over.
+     Every moving property is a transform or an opacity. ===== */
+  .hero{position:relative;min-height:185svh;text-align:center}
+  /* hand-off: the next section rises over the last stretch of the pinned hero */
+  .hero + .zone{margin-top:-50svh}
+  .hero__sticky{position:sticky;top:0;height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
   .hero__dots{position:absolute;inset:0;z-index:0;width:100%;height:100%;opacity:calc(1 - var(--p) * 1.15)}
-  .three{position:absolute;z-index:1;left:50%;top:50%;translate:-50% -50%;font-family:var(--disp);font-weight:800;
-    font-size:clamp(13rem,54vw,42rem);line-height:.76;letter-spacing:-.05em;pointer-events:none;color:#fff;
-    opacity:clamp(0, calc(0.18 + var(--p) * 1.8 - (var(--p) * var(--p)) * 2.1), 1);
-    scale:calc(1 + var(--p) * 0.4);
-    text-shadow:0 0 calc(10px + var(--p) * 120px) rgba(255,255,255, calc(0.12 + var(--p) * 0.88)), 0 0 calc(5px + var(--p) * 50px) rgba(34,211,238, calc(var(--p) * 0.85))}
-  @media(max-width:560px){.three{font-size:clamp(11rem,72vw,22rem)}}
-  .hero__c{position:relative;z-index:2;opacity:calc(1 - var(--p) * 2.0);translate:0 calc(var(--p) * -30px)}
+  .hero__grain{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:calc(.07 - var(--p) * .07);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .hero__floor{position:absolute;inset-inline:0;bottom:0;height:38%;z-index:1;pointer-events:none;
+    background:radial-gradient(60% 90% at 50% 100%,rgba(34,211,238,.16),transparent 70%);
+    opacity:calc(var(--p) * 2.2 - var(--p) * var(--p) * 2.2);transform:translateY(calc((1 - var(--p)) * 12%))}
+  .three{position:absolute;z-index:1;left:50%;top:50%;direction:ltr;white-space:nowrap;text-align:left;
+    font-family:var(--disp);font-weight:800;font-size:clamp(13rem,54vw,42rem);line-height:.76;letter-spacing:-.05em;
+    pointer-events:none;color:#fff;
+    --q:max(0, var(--p) - 0.1);
+    opacity:clamp(0, calc(0.24 + var(--q) * 4.4 - var(--q) * var(--q) * 5.8), 1);
+    transform:translate3d(-50%, calc(-50% - var(--p) * var(--p) * 9vh), 0) perspective(1200px) rotateX(calc(var(--p) * var(--p) * 58deg)) scale(calc(1 + var(--p) * 0.5 - var(--p) * var(--p) * 0.72));
+    will-change:transform,opacity}
+  @media(max-width:560px){.three{font-size:clamp(9rem,60vw,22rem)}}
+  .three__base,.three__glow{display:block}
+  .three__glow,.three__sweep{position:absolute;inset:0}
+  .three .g{display:inline-block;vertical-align:top;will-change:transform}
+  /* the digits part as they recede: the 4 drifts left, the 0 right, the point drops away */
+  .three .g1{transform:translate3d(calc(var(--p) * var(--p) * -0.2em), 0, 0)}
+  .three .g2{transform:translate3d(0, calc(var(--p) * var(--p) * 0.22em), 0) scale(calc(1 - var(--p) * var(--p) * 0.5))}
+  .three .g3{transform:translate3d(calc(var(--p) * var(--p) * 0.2em), 0, 0)}
+  /* each digit rises out of its own mask on arrival */
+  .three .gm{display:block;overflow:hidden;padding:.12em .14em;margin:-.12em -.14em}
+  .three .gi{display:block;background:linear-gradient(180deg,#ffffff 6%,#b9c6d4 55%,#58697b 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  /* the glow is a still, pre-blurred copy; only its opacity follows the scroll */
+  .three__glow{color:rgba(120,230,250,.9);opacity:clamp(0, calc(var(--q) * 5.2 - var(--q) * var(--q) * 7), 1)}
+  .three__glow .g{filter:blur(.045em)}
+  /* the light sweep: a soft window crosses the digits while the copy inside it
+     moves the other way, so the bright digits stay put and only the band travels */
+  .three__win{position:absolute;top:-.1em;bottom:-.1em;left:0;width:34%;overflow:hidden;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 42%,#000 58%,transparent);mask-image:linear-gradient(90deg,transparent,#000 42%,#000 58%,transparent);
+    --s:calc(var(--p) * 3.4 - 1.06);
+    transform:translate3d(calc(var(--s) * 294.118%), 0, 0);will-change:transform}
+  .three__copy{position:absolute;top:.1em;left:0;width:294.118%;
+    transform:translate3d(calc(var(--s) * -100%), 0, 0);will-change:transform}
+  .three__copy .g{background:linear-gradient(180deg,#ffffff 20%,#bdf4ff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  @media(prefers-reduced-motion:no-preference){
+    .js .three .gi{transform:translateY(105%)}
+    .js .three.is-in .gi{transform:none;transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
+    .js .three.is-in .g2 .gi{transition-delay:.09s}
+    .js .three.is-in .g3 .gi{transition-delay:.18s}
+  }
+  .hero__c{position:relative;z-index:2;opacity:calc(1 - var(--p) * 5);transform:translate3d(0, calc(var(--p) * -60px), 0) scale(calc(1 - var(--p) * 0.04))}
+  /* reduced motion: no pin, no scroll link, the numeral rests in one finished state */
+  @media(prefers-reduced-motion:reduce){
+    .hero{min-height:100svh}
+    .hero + .zone{margin-top:0}
+    .three{opacity:.38;transform:translate3d(-50%,-50%,0)}
+    .three .g{transform:none}
+    .three__glow{opacity:.22}
+    .three__sweep,.hero__floor{display:none}
+  }
   .hero__c::before{content:"";position:absolute;z-index:-1;inset:-9% -8%;background:radial-gradient(circle at 50% 50%, rgba(6,7,10,.84), rgba(6,7,10,.5) 52%, transparent 74%)}
   .pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:26px}
   .pill{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--body);border:1px solid var(--hair);border-radius:999px;padding:7px 14px}
@@ -477,7 +527,9 @@
   .io{display:grid;gap:clamp(28px,4vw,56px);margin:clamp(44px,7vh,84px) auto 0;max-width:1080px;align-items:start}
   @media(min-width:900px){.io{grid-template-columns:1fr 1fr}}
   .io__photo{position:relative;margin:0;min-width:0;border-radius:22px;overflow:hidden;box-shadow:0 0 0 1px rgba(34,211,238,.18),0 40px 120px -40px rgba(34,211,238,.35)}
-  .io__photo img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:46% 50%}
+  .io__pic{display:block;overflow:hidden}
+  .io__photo img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:46% 50%;transform:scale(1.1) translate3d(0,var(--py,0px),0);will-change:transform}
+  @media(prefers-reduced-motion:reduce){.io__photo img{transform:none}}
   .io__photo figcaption{position:absolute;inset-inline:0;bottom:0;padding:clamp(18px,3vw,28px);padding-top:96px;font-size:14px;line-height:1.5;color:#e9ecf1;background:linear-gradient(180deg,transparent,rgba(6,7,10,.86))}
   .io__photo figcaption b{color:#fff;font-weight:600}
   .io__term{position:absolute;top:clamp(14px,2.4vw,24px);inset-inline-start:clamp(14px,2.4vw,24px);inset-inline-end:clamp(14px,2.4vw,24px);max-width:420px;border-radius:12px;background:rgba(10,11,16,.9);border:1px solid rgba(255,255,255,.1);padding:12px 14px;font-family:var(--mono);font-size:12px;line-height:1.6;color:#c9ced6;direction:ltr;text-align:left}
@@ -586,7 +638,13 @@
   <section class="hero" id="hero">
     <div class="hero__sticky">
       <canvas class="hero__dots" aria-hidden="true"></canvas>
-      <div class="three" aria-hidden="true">4.0</div>
+      <div class="hero__floor" aria-hidden="true"></div>
+      <div class="three" aria-hidden="true">
+        <span class="three__glow"><span class="g g1">4</span><span class="g g2">.</span><span class="g g3">0</span></span>
+        <span class="three__base"><span class="g g1"><span class="gm"><span class="gi">4</span></span></span><span class="g g2"><span class="gm"><span class="gi">.</span></span></span><span class="g g3"><span class="gm"><span class="gi">0</span></span></span></span>
+        <span class="three__sweep"><span class="three__win"><span class="three__copy"><span class="g g1">4</span><span class="g g2">.</span><span class="g g3">0</span></span></span></span>
+      </div>
+      <div class="hero__grain" aria-hidden="true"></div>
       <div class="wrap hero__c">
         <div class="pills">
           <span class="pill"><span class="d"></span>v4.0.0&nbsp;·&nbsp;基礎&nbsp;·&nbsp;實時</span>
@@ -613,8 +671,8 @@
       </div>
       <div class="io">
         <figure class="io__photo">
-          <img src="/media/photos/lake-canoe.jpg" width="1600" height="1000" alt="黃昏時分，一位長髮女子在平靜的碧綠湖面上划著獨木舟，遠岸是一片幽暗的針葉林。" loading="lazy" decoding="async">
-          <div class="io__term" aria-hidden="true"><div><span class="pr">$</span> uxskill system build --brand '#0E7490' --out design-system</div><div class="ok">WCAG gate passed: 852 checks, 0 failing</div><div>button #0E7490 exact, white text 5.35:1</div></div>
+          <picture class="io__pic"><source srcset="/media/photos/lake-canoe.webp" type="image/webp"><img src="/media/photos/lake-canoe.jpg" width="1600" height="1000" alt="黃昏時分，一位長髮女子在平靜的碧綠湖面上划著獨木舟，遠岸是一片幽暗的針葉林。" loading="lazy" decoding="async"></picture>
+          <div class="io__term" aria-hidden="true"><div><span class="pr">$</span> uxskill system build --brand '#0E7490' --out design-system</div><div class="ok">WCAG gate passed: 1308 checks, 0 failing</div><div>button #0E7490 exact, white text 5.35:1</div></div>
           <figcaption><b>影像也是一項基礎。</b>每套系統都會規定頁面所用照片的方向（光線、色溫、顆粒、構圖），並統一成同一種調色。</figcaption>
         </figure>
         <div>
@@ -835,7 +893,7 @@
     </div>
   </section></div>
 
-  <footer class="foot">[預覽] uxskill v4.0 &middot; 確定性 &middot; 品牌真實 &middot; 行動裝置門控 &middot; 離線，無LLM，無遙測</footer>
+  <footer class="foot">uxskill v4.0 &middot; 確定性 &middot; 品牌真實 &middot; 行動裝置門控 &middot; 離線，無LLM，無遙測</footer>
 
 <script>
 (function(){
@@ -855,8 +913,14 @@
     var sx=d.x+Math.cos(d.ang)*d.dist*p*1.05,sy=d.y+Math.sin(d.ang)*d.dist*p*1.05;
     d.tw+=0.018;var al=(1-p*1.05)*(0.45+0.45*Math.sin(d.tw));if(al<0)al=0;
     ctx.globalAlpha=al;ctx.fillStyle=d.c;ctx.beginPath();ctx.arc(sx,sy,d.r,0,6.2832);ctx.fill();}ctx.globalAlpha=1;requestAnimationFrame(frame);}
-  function on滾動(){var span=window.innerHeight*0.92;p=Math.min(Math.max(window.scrollY,0),span)/span;root.style.setProperty('--p',p.toFixed(3));paintBg();}
-  window.addEventListener('scroll',on滾動,{passive:true});
+  /* --p runs 0 to 1 across the pinned stretch of the hero; under reduced motion it stays 0 */
+  var three=document.querySelector('.three');
+  function on滾動(){if(!reduce){var span=Math.max(hero.offsetHeight-window.innerHeight,window.innerHeight*0.6);p=Math.min(Math.max(window.scrollY,0),span)/span;root.style.setProperty('--p',p.toFixed(4));}paintBg();}
+  requestAnimationFrame(function(){requestAnimationFrame(function(){if(three)three.classList.add('is-in');});});
+  var ticking=false;
+  function on滾動Frame(){ticking=false;on滾動();}
+  function queue滾動(){if(ticking)return;ticking=true;requestAnimationFrame(on滾動Frame);}
+  window.addEventListener('scroll',queue滾動,{passive:true});
   window.addEventListener('resize',function(){resize();measure();on滾動();});
   window.addEventListener('load',function(){measure();paintBg();});
   resize();on滾動();if(animate)requestAnimationFrame(frame);
@@ -908,31 +972,26 @@
   }
   measure(); paintBg();
 
-  /* ----- cinematic turn: trigger entrance when sticky panel enters view ----- */
+  /* the foundations photograph drifts a little slower than the page (transform only) */
   (function(){
-    var scene=document.getElementById('turnScene');
-    var sticky=document.getElementById('turnSticky');
-    if(!scene||!sticky)return;
-    var fired=false, locked=false;
-    var tz=document.getElementById('turnZone');
-    function no滾動(e){if(locked)e.preventDefault();}
-    function lock滾動(){locked=true;document.addEventListener('wheel',no滾動,{passive:false});document.addEventListener('touchmove',no滾動,{passive:false});}
-    function unlock滾動(){locked=false;document.removeEventListener('wheel',no滾動);document.removeEventListener('touchmove',no滾動);}
-    function activate(){
-      if(fired)return; fired=true;
-      /* 1. Snap to exact position instantly */
-      window.scrollTo({top:tz.offsetTop,behavior:'instant'});
-      /* 2. Lock scroll immediately */
-      lock滾動();
-      /* 3. Fire animation 400ms after snap */
-      setTimeout(function(){scene.classList.add('turn-in');},400);
-      /* 4. Unlock 600ms after text animation ends
-            text = 400ms delay-to-start + 1000ms anim-delay + 2200ms duration = 3600ms
-            unlock = 3600 + 600 = 4200ms */
-      setTimeout(unlock滾動,4200);
-    }
+    var img=document.querySelector('.io__photo img');
+    if(!img||reduce)return;
+    var busy=false;
+    function drift(){busy=false;var r=img.parentNode.getBoundingClientRect(),vh=window.innerHeight;
+      if(r.bottom<0||r.top>vh)return;
+      var k=((r.top+r.height/2)-vh/2)/(vh/2+r.height/2);
+      img.style.setProperty('--py',(k*-4).toFixed(2)+'%');}
+    function queueDrift(){if(!busy){busy=true;requestAnimationFrame(drift);}}
+    window.addEventListener('scroll',queueDrift,{passive:true});
+    drift();
+  })();
+
+  /* ----- the turn: its entrance plays once the panel is in view; scrolling is never held ----- */
+  (function(){
+    var scene=document.getElementById('turnScene'), tz=document.getElementById('turnZone');
+    if(!scene||!tz||!('IntersectionObserver' in window)){if(scene)scene.classList.add('turn-in');return;}
     var pullIo=new IntersectionObserver(function(es){
-      es.forEach(function(e){if(e.isIntersecting){activate();pullIo.unobserve(tz);}});
+      es.forEach(function(e){if(e.isIntersecting){scene.classList.add('turn-in');pullIo.unobserve(tz);}});
     },{threshold:0.4});
     pullIo.observe(tz);
   })();
