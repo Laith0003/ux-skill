@@ -828,3 +828,19 @@ def test_h_screen_only_counts_the_class_attribute(tmp_path):
               'aria-label="Link to rule #h-screen-no-dvh-fallback">link</a>')
     assert "h-screen-no-dvh-fallback" not in _ids(tmp_path, "a.html", anchor)
     assert "h-screen-no-dvh-fallback" in _ids(tmp_path, "b.html", '<section class="hero h-screen">x</section>')
+
+
+def test_the_lowercase_copy_keeps_every_offset():
+    """str.lower() turns the Turkish capital dotted I into two code points,
+    which would shift every element's end after it; the linter's lowercase
+    copy keeps the text's length so offsets found in it hold in the text."""
+    from pathlib import Path
+
+    from engine.linter.structure import FileContext
+    from engine.linter.views import FileViews
+    text = "<p>İstanbul</p><span aria-hidden=\"true\"></span><a href=\"/\">Ana sayfa</a>"
+    ctx = FileContext(Path("page.html"), text, FileViews("page.html", text))
+    assert len(ctx.low) == len(text)
+    tags, ends, _ = ctx.tree()
+    span = next(i for i, t in enumerate(tags) if t.name == "span")
+    assert text[ends[span]:].startswith("</span>")

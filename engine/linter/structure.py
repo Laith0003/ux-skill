@@ -69,8 +69,14 @@ class FileContext:
 
     @property
     def low(self) -> str:
+        """The text in lowercase, the same length as the text, so an offset
+        found in it holds in the text. str.lower() turns a few characters
+        into two (the Turkish capital dotted I); those stay as they are."""
         if self._low is None:
-            self._low = self.text.lower()
+            low = self.text.lower()
+            if len(low) != len(self.text):
+                low = "".join(c if len(c.lower()) != 1 else c.lower() for c in self.text)
+            self._low = low
         return self._low
 
     def cached(self, key: str, build: Callable[[], object]) -> object:

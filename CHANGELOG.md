@@ -49,6 +49,14 @@ project adheres to [Semantic Versioning](https://semver.org/).
   figure or panel the eye takes in first, and equal panels in matching
   borders are a fault.
 
+### Fixed
+- The linter's lowercase copy of a file keeps the file's length. Python
+  turns the Turkish capital dotted I into two characters when it lowers it,
+  so every element's end after one was found in the wrong place, and rules
+  that read an element's contents misjudged Turkish pages.
+- The commands page generator's site menu is inert while closed, so a
+  keyboard can no longer land on its links when it is hidden.
+
 ## [4.0.0] - 2026-11-01 - **FOUNDATIONS**
 
 ux-skill 4.0 builds a design system from one brand color and a brief, reads
