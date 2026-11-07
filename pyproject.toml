@@ -40,7 +40,7 @@ dependencies = [
 # Optional MCP transport. The upper bound holds until the server moves to
 # the mcp 2.x API, which removed the decorators it uses.
 mcp = [
-  "mcp>=1.28.1,<2"
+  "mcp>=1.28.1,<3"
 ]
 # Render check (`uxskill lint --render`): measures the real layout in
 # headless Chromium. Uses installed Google Chrome, else run
@@ -57,7 +57,7 @@ dev = [
   # Dev only, never a runtime dependency: the contract reader's parity
   # test compares it with a full YAML reader, and skips without one.
   "pyyaml>=6.0.1",
-  "mcp>=1.28.1,<2"
+  "mcp>=1.28.1,<3"
 ]
 
 [project.urls]
