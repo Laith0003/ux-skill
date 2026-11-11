@@ -12,7 +12,8 @@
 | Landscape and standards | research/5.0/landscape.md | 2026 AI tells, modern CSS, platform changes that retire rules, compliance dates |
 | Running unattended | research/5.0/stability.md | Dependency risks, CI gaps, release hardening, versioning policy |
 | Curriculum (742 links) | research/curriculum/ | Lessons, proposed checks, guidance by target file, corrections, ledger |
-| Book library (96 books) | research/library/ | Per-book lessons with pages, cross-book topics, conflicts, measurable checks, gaps |
+| Book library (96 books) | research/library/ | Lessons normalized by topic (merged across books, weighted, no quotations, no names in lesson text), conflicts, measurable checks, gaps against the engine, and ACKNOWLEDGEMENTS.md thanking every author and book |
+| The owner's product method | research/5.0/method.md | How real multi-role back offices were designed: personas, goals, every route to each goal, conceptual model, IA, flows with failure paths, prototyping inside the design system, walking every goal by every route, the one-page case. Method only, no client facts |
 | 4.1 backlog | PLAN-4.1.md "Next, ranked" | Twelve ranked items, most of them render checks |
 
 Where two inputs disagree, the primary source wins; the conflict and its resolution go in research/curriculum/corrections.md.
@@ -22,6 +23,8 @@ Where two inputs disagree, the primary source wins; the conflict and its resolut
 - **Measure before claiming.** A new rule starts advisory. It moves to blocking only when the benchmark shows precision of at least 0.95 with a Wilson 95 percent lower bound of at least 0.90.
 - **Prove on our own pages first.** Every render check runs over the site's pages before it ships, as in 4.1.
 - **A rule change never silently changes a score.** Reports carry the ruleset version and digest; `--ruleset` scores with an earlier minor's rules.
+- **Users before screens.** Product work starts from personas, goals and every route to each goal; screens mirror the site map and the flows. The engine teaches this order and checks it (Phase 6).
+- **Judge the engine by outcomes, not only by rules.** Every phase reports its effect on the benchmark: per-rule precision, recall on seeded defects, and the method outcome scores (goal recall, route coverage, walk pass rate, dead ends, role leakage). A guide or rule that moves none of them in two releases is trimmed or merged.
 - **The house rules hold:** looks are continuous functions of axes, brand and brief; pages use photographs; WCAG is cited only for what each criterion says; every error names the field and the fix; ASCII in new files; no client or vendor names in shipped docs.
 
 ## Phase 1. The benchmark (ux-bench)
@@ -33,8 +36,10 @@ Build the frozen corpus and the per-rule precision report. Spec: eval.md recomme
 - `python -m bench run`, `python -m bench report` (precision, Wilson interval, tier per rule) and `bench/diff.py` (new and lost findings per rule between two engine versions).
 - Labels: two independent passes and a tiebreak per finding; Krippendorff alpha per rule; a script that samples 50 findings for a human check. Labels are marked model-made until a human confirms the sample.
 - A larger pool of 1,000 to 2,000 pages for rules that fire rarely, labelled up to 60 findings per rule.
+- Recall, not only precision: a seeded-defect set where each planted fault is known, so the report also says what the engine misses. Each new check adds its fault to the set.
+- An ablation run: the engine with and without each guidance pack on the fixed briefs, so the report shows which guidance changes the output and which only adds weight.
 
-**Exit:** report.md lists every rule with counts, precision and tier; every page renders identically twice; engine crashes found on the corpus are fixed or filed in the report.
+**Exit:** report.md lists every rule with counts, precision, recall on the seeded set and tier; every page renders identically twice; engine crashes found on the corpus are fixed or filed in the report.
 
 ## Phase 2. The finding contract and score honesty
 
@@ -93,17 +98,51 @@ Core set for 5.0:
 
 **Exit:** each core check has its fixtures, its site run with zero false positives, and a measured row in bench/report.md.
 
-## Phase 6. Guidance that teaches
+## Phase 6. Method: users before screens
+
+Spec: research/5.0/method.md. The engine learns the order that real product work follows and checks each artifact, so a builder gets a product people can use, not only a page that lints clean. Runs after Phase 5 (it needs `lint --render --url` and the `task` and `reach` probes) and absorbs navigation-ia.md and journeys-and-flows.md from Phase 7, so they are written once, with their checks.
+
+The method, in order:
+
+1. **Check what exists.** Audit the current build against how its shipped pages compose the kit, not only the component files. Reduce the spec to actors, jobs, objects, states, gaps and contradictions.
+2. **Research mature tools for the same jobs.** How each leads a person to each kind of data; evidence strength recorded.
+3. **Personas.** Who, the job, what they fear, what each may not see or do.
+4. **Goals per persona,** every one of them.
+5. **The route matrix.** Every goal against every entry point (navigation, home, search, filters, tabs, links between records, report drill-down, deep link, notification), each marked must, should or not needed with a reason.
+6. **Conceptual model, IA and site map.** Objects, relations, states and who acts next, what can be undone; page structure decisions with the rejected options; the site map and its indexes.
+7. **Flows.** One shared rule set (undo, reasons, denied, stale, focus, keyboard), then every flow with its click count, decision points, failure paths and exits.
+8. **Prototype inside the design system.** Compose the way the shipped pages compose; a missing piece widens the kit, never forks it.
+9. **Walk every goal by every route as each persona.** Rough recordings, one per route; each route reached, trouble, blocked or missing.
+10. **The one-page case,** decided by the standard where the standard answers, then build, then walk the whole matrix again and list what was not walked.
+
+No new command. `/ux-discover` gains a `method` mode (the router picks it for briefs with more than one role, or for admin, back office, portal and console projects); `/ux-design` gains a `structure` mode; `/ux-audit` gains a `walk` mode. CLI `uxskill method check|walk` and MCP `ux_method_check`, `ux_method_walk` mirror them. A single-role dashboard keeps its one-audience rule; several roles route to method mode.
+
+| # | Task | Done when |
+|---|---|---|
+| M1 | JSON Schemas for personas, goals, routes, model, sitemap, flows, walks and decisions under `engine/method/schemas/`; loader errors name the file, the path and the fix | a broken fixture per artifact gives one error per fault, each naming field and fix |
+| M2 | Guidance: references/process/users-before-screens.md (the method, with its failure modes), references/foundations/navigation-ia.md, references/process/journeys-and-flows.md; dashboard.md gains a back-office section (home as role-scoped queues, numbers that open their rows, saved views named by the work left) | every IA and flow row marked missing guide in the gap lists is written or parked with a reason |
+| M3 | `/ux-discover` method mode and router rule | the router picks method mode on the multi-role briefs and not on the single-role ones |
+| M4 | `/ux-design` structure mode, with the compose-from-the-shipped-kit step: per pattern, the kit piece and its call site in the project's own pages, or a proposal to widen the kit | on the back-office brief every page in the site map lists its patterns with a call site or a widen proposal |
+| M5 | Static checks, advisory, with the fixture standard: every must route lands on a site-map page and no page is orphaned; every flow has a failure path, a cancel exit, a success exit and a focus target; every goal has at least one must route; undo in flows matches the model | each check has fixtures and a measured row in the method report |
+| M6 | Walk harness on a running URL: scripted and generated walks per persona, goal and route, recordings, statuses, and a weak-walk guard (a walk that also passes on the old build counts as weak) | two runs on one build give the same statuses; a seeded missing route is reported missing |
+| M7 | Live checks on the harness, advisory: each number on home equals the rows its link opens; each role sees only its own navigation; a disabled action says who can do it; deep links round-trip; focus lands on a named target after an action | each runs on the seeded-defect apps with precision and recall measured |
+| M8 | Case page generated from the artifacts and walks, every finding linked to its recording | renders at 390 and 1280, light and dark |
+| M9 | Method outcome benchmark in bench/method/: six fixed briefs (a multi-role marketplace back office, a field team's role-switching mobile app, SaaS settings and billing, a two-role case-management tool, a single-owner shop dashboard as the control, a support desk), gold sets, three seeded-defect apps, a scoring script; each brief built with and without the method modes | bench/method/report.md gives goal recall, route coverage, flow completeness, walk pass rate, dead ends, role leakage, number-to-list parity, click cost against gold, and the added cost on the control brief |
+
+**Exit:** the six briefs run end to end through method, structure, build and walk modes and produce a case page; the method modes beat the plain engine on route coverage and walk pass rate without adding weight to the control brief; every check is advisory with a measured row; gold sets are marked model-made until the owner confirms them; no client, vendor or person names in shipped files.
+
+## Phase 7. Guidance that teaches
 
 Spec: research/curriculum/guidance.md and research/library/topics.md and gaps.md (rows marked missing guide).
 
-- New files: references/foundations/navigation-ia.md (the four IA systems, how people look for information, tree testing), references/process/journeys-and-flows.md (flow before screens, success and failure ends), references/foundations/voice-and-multimodal.md, references/surfaces/portfolio.md, references/surfaces/checkout.md, references/process/design-sprint.md.
+- New files: references/foundations/voice-and-multimodal.md, references/surfaces/portfolio.md, references/surfaces/checkout.md, references/process/design-sprint.md.
 - Additions: ai-interfaces.md (process versus result, agent control levels, repair moves, one AI marker, the error types), color.md (harmony models and the seven contrasts), dashboard.md (chart rules), components (toasts that hold an action wait), /ux-research numbers (sample sizes, SUS scoring, pilots, task wording), /ux-audit as independent passes with severity factors and stable finding ids.
-- Every claim carries a source id from the curriculum ledger or the library; the book library's lessons are paraphrased with page references, never quoted at length.
+- Every claim carries a source id from the curriculum ledger or the library. Book lessons ship normalized: rewritten, merged across books, no quotations and no person names in the text; research/library/ACKNOWLEDGEMENTS.md thanks every author and book.
+- Navigation and IA, and journeys and flows, are written in Phase 6 with their checks.
 
 **Exit:** every missing-guide row in both gap lists is either written or marked park with a reason.
 
-## Phase 7. Compliance evidence
+## Phase 8. Compliance evidence
 
 Spec: landscape.md recommendations 2, 3 and 10.
 
@@ -112,7 +151,7 @@ Spec: landscape.md recommendations 2, 3 and 10.
 
 **Exit:** the report for the site's own pages lists every WCAG 2.2 AA criterion as measured, needs a person, or not applicable, and nothing is claimed beyond what each criterion says.
 
-## Phase 8. Interop
+## Phase 9. Interop
 
 Spec: landscape.md recommendation 8.
 
@@ -122,7 +161,7 @@ Spec: landscape.md recommendation 8.
 
 **Exit:** round trips through DESIGN.md and DTCG with no mismatch, in release_checks.
 
-## Phase 9. The taste test
+## Phase 10. The taste test
 
 Spec: eval.md recommendations 7 and 8.
 
@@ -133,7 +172,7 @@ Spec: eval.md recommendations 7 and 8.
 
 **Exit:** the harness, the pair set and the model-judged pre-filter result are in the repo; the release notes say plainly that the human round is pending if it has not run.
 
-## Phase 10. Running unattended
+## Phase 11. Running unattended
 
 Spec: stability.md sections 1 to 5.
 
@@ -149,7 +188,7 @@ Spec: stability.md sections 1 to 5.
 
 **Exit:** a fresh clone passes CI with zero skipped render tests; the canary has run green once; the policy is written.
 
-## Phase 11. Release 5.0.0
+## Phase 12. Release 5.0.0
 
 - Remove the seven 4.0 command aliases (they were due in 4.1).
 - Migration guide docs/migrating-to-5.md; release notes docs/launch/release-5.0.0.md; CHANGELOG; README and the 16 translations; site figures regenerated; compare page refreshed with current facts; the precision report published as a page.
@@ -160,6 +199,7 @@ Spec: stability.md sections 1 to 5.
 
 ## Who does what
 
-- Phases 1, 5 and 9 are the heavy ones and run in a separate session on the owner's API credit, one phase per PR into feat/4.1-stageshow.
-- The cloud session reviews each PR, runs the full suite, merges, and does Phases 2, 3, 4, 6, 7, 8, 10 and 11 between them.
-- Owner decisions, the only ones left: turn on registry publishing; run the human taste round; confirm the 50-finding label sample.
+- Phases 1, 5, 6 and 10 are the heavy ones and run in a separate session on the owner's API credit, one phase per PR into feat/4.1-stageshow.
+- The cloud session reviews each PR, runs the full suite, merges, and does Phases 2, 3, 4, 7, 8, 9, 11 and 12 between them.
+- Owner decisions, the only ones left: turn on registry publishing; run the human taste round; confirm the 50-finding label sample; confirm the gold sets for the six method briefs.
+- Every push, release and registry upload passes the release gate first: a leak and confidentiality scan of the source and of the unpacked artifacts. Nothing private, no client facts, no book text.
