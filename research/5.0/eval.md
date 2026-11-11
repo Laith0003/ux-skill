@@ -512,9 +512,9 @@ build ux-bench, and also a contribution worth publishing.
 
 ### B3. Labelling protocol
 
-- Nielsen severity scale 0 to 4 (0 not a problem, 1 cosmetic, 2 minor, 3 major, 4
-  catastrophe); severity combines frequency, impact and persistence; a single evaluator's
-  severity ratings are "too unreliable to be trusted", and the mean of three evaluators is
+- A five-step severity scale from 0 (no problem) through cosmetic, minor and major to 4
+  (catastrophic), weighing how often, how hard and how persistently a problem bites; one
+  evaluator's ratings are unreliable on their own, and the mean of three evaluators is
   satisfactory for most purposes; rate independently.
   https://www.nngroup.com/articles/how-to-rate-the-severity-of-usability-problems/
 - Heuristic evaluation: three to five people should evaluate independently, then
