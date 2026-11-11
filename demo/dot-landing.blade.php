@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dot — The internet of what people actually do</title>
-    <meta name="description" content="MENA-first loyalty. Show your phone. Earn. Spend. Used by Northwind Hardware, Harbor Café, Cedar Outdoors.">
+    <meta name="description" content="MENA-first loyalty. Show your phone. Earn. Spend. Used by Northwind Books, Harbor Café, Cedar Outdoors.">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -330,7 +330,7 @@
                             </div>
 
                             <p class="mt-1 text-[14px] text-zinc-500">
-                                Northwind Hardware, Mecca Street
+                                Northwind Books, Old Town
                             </p>
 
                             <div class="mt-7 h-px bg-zinc-100"></div>
@@ -625,7 +625,7 @@
                 </div>
                 <div class="col-span-12 lg:col-span-5 lg:col-start-8 lg:text-end">
                     <p class="text-[15px] text-zinc-600 max-w-[30rem] lg:ms-auto">
-                        From Mecca Street tools to Wadi Rum gift shops. Pilot live since February 2026.
+                        From corner bookshops to desert gift shops. One wallet across them all.
                     </p>
                 </div>
             </div>
@@ -633,7 +633,7 @@
             {{-- Asymmetric brand strip — 5 items with deliberate uneven widths --}}
             <div class="grid grid-cols-12 gap-y-10 lg:gap-x-10 items-center">
                 <div class="col-span-6 sm:col-span-4 lg:col-span-3">
-                    <p class="brand-wordmark text-[22px] lg:text-[26px]">Northwind<span class="text-zinc-400 font-normal"> Hardware</span></p>
+                    <p class="brand-wordmark text-[22px] lg:text-[26px]">Northwind<span class="text-zinc-400 font-normal"> Books</span></p>
                 </div>
                 <div class="col-span-6 sm:col-span-4 lg:col-span-2">
                     <p class="brand-wordmark text-[20px] lg:text-[22px] italic">Harbor Café</p>
@@ -675,7 +675,7 @@
                                         <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-zinc-950 text-white text-[12px] font-medium">BK</span>
                                         <div>
                                             <p class="text-[14px] text-zinc-950"><span class="font-medium">Bashar Kuzbari</span> earned 50 pts</p>
-                                            <p class="text-[12px] text-zinc-500">Northwind Hardware — 14 sec ago</p>
+                                            <p class="text-[12px] text-zinc-500">Northwind Books — 14 sec ago</p>
                                         </div>
                                     </div>
                                     <span class="text-[13px] num-tabular text-emerald-700">+50</span>
@@ -810,7 +810,7 @@
                     </div>
                     <h3 class="text-[20px] font-semibold tracking-tight text-zinc-950">Spend anywhere on the network.</h3>
                     <p class="mt-3 text-[15px] leading-[1.6] text-zinc-600 max-w-[18rem]">
-                        Cup of coffee at Harbor Café. Drill bits at Northwind. Tier perks at Cedar Outdoors. One wallet, every shop.
+                        Cup of coffee at Harbor Café. Paperbacks at Northwind. Tier perks at Cedar Outdoors. One wallet, every shop.
                     </p>
                 </li>
             </ol>
