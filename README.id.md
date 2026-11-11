@@ -63,7 +63,7 @@ Python 3.10 atau lebih baru. Untuk server MCP, `pip install --upgrade 'uxskill[m
 
 **Playbook surface.** Aturan landing, dashboard, dan komponen ada di `references/surfaces/`, satu playbook untuk masing-masing. `/ux-design` memuat tepat satu, dipilih sesuai mode-nya, jadi build dashboard tidak pernah membaca aturan hero.
 
-Tes: **13101 lolos**. Offline. Deterministik. Tidak pernah memanggil LLM.
+Tes: **13276 lolos**. Offline. Deterministik. Tidak pernah memanggil LLM.
 
 ### Baru di v3.1: setia pada brand, responsif, hidup
 
