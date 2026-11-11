@@ -51,7 +51,7 @@
 ## Examples
 
 ### Button (canonical)
-**Use when**: Every clickable action (submit, save, cancel, navigate).
+**Use when**: An action on the current page (submit, save, cancel, open a dialog). Buttons act, links navigate: going to another page or URL is a link (`<a href>`), styled as a button only when it is the primary call to action, and still a link in code (HTML spec; B26 p.622-623; B80 p.42-45).
 **Variants**: primary, secondary, tertiary, danger, ghost, outline, icon-only.
 **Required states**:
 - **Default**: visible at rest, clearly affords interaction
@@ -224,8 +224,8 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Active state visually highlighted on current page
 - Hover state on links (underline, weight, color shift)
 - Focus rings on every interactive element
-- Mobile collapse: hamburger menu under 768px
-- Mega-menu hover-revealed with multi-column groupings (organized by job-to-be-done, not alphabetical)
+- Mobile: keep 3 to 5 primary destinations visible (a bottom tab bar or inline links); hidden navigation is found far less often (B02 p.534-535; B07 p.198-201). Secondary items go behind a button labeled Menu, never an unlabeled icon
+- Mega-menu with multi-column groupings: task or topic groups for people exploring, alphabetical order inside each group or as an alternate A to Z index for people who know the item's name (B93 p.127-131; B46 p.350-352)
 
 **Sticky behavior**:
 - Sticky from start, OR
@@ -244,7 +244,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Height: 60 to 72px (slim) for marketing; 48 to 64px for product
 - Padding: matches outer container insets
 - Items: 4 to 7 links + 1 to 2 action buttons (Sign in + primary CTA)
-- Mobile: hamburger left or right; full-screen overlay on tap with staggered nav reveal
+- Mobile: primary destinations stay visible; a labeled Menu button opens the secondary items in a full-screen overlay
 
 ### Bottom Nav (mobile native)
 **Use when**: Mobile native or PWA top-level navigation.
@@ -372,7 +372,14 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Tabs that hide critical content (use cards or sections instead)
 
 ### Dropdown / Select (canonical)
-**Use when**: User picks one value from a known set.
+**Use when**: User picks one value from a known set and space is short. When the options must be compared, show them: visible radio buttons were faster and more accurate than a drop-down in measured tests (B46 p.497-500; B14 p.47-48).
+
+| Options | Space allows | Control |
+|---|---|---|
+| up to about 7 | yes | radio group, all options visible |
+| up to about 7 | no | select (drop-down) |
+| long list | any | combobox (search as you type) |
+
 **Required affordances**:
 - Visible label above
 - Click toggles open
@@ -513,7 +520,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 ### Navbar specs
 - Height: 60 to 72px (marketing); 48 to 64px (product)
 - Items: 4 to 7 links + 1 to 2 action buttons
-- Mobile collapse threshold: ≤768px → hamburger
+- Mobile (768px and under): 3 to 5 primary destinations stay visible; secondary items behind a labeled Menu button
 - Sticky behavior: from-start OR transparent-to-opaque on scroll (150 to 200ms transition)
 
 ### Bottom nav specs (mobile native)
