@@ -15,7 +15,7 @@ The work ran in two halves with a review gate between them:
 4. Decide and present: the one-page case, decisions taken by the standard, a short presentation. Gate: the owner says go.
 5. Build inside the design system: shared contracts first, then parallel page lanes, fresh review, then the full walk again as a matrix at desktop and phone widths, then "what was not walked".
 
-The first attempt skipped 1 to 4: it built pages straight from the spec's section list and a stakeholder's clickable prototype. It was rejected in full ("we don't start like that"). Everything below is what the owner approved after the restart, and the owner later named it the standing method for every surface.
+A common failure is to skip steps 1 to 4: pages get built straight from a spec's section list or a clickable prototype, and the structure has to be redone. The method exists to prevent that.
 
 ### 1.1 Check what exists
 
@@ -58,7 +58,7 @@ This matrix is the test plan the build is walked against.
 - **Objects** the users open, decide on or read: term, code name, standing (first-class with its own index or record sheet, or "inside" its parent), parent.
 - **What is deliberately not an object.** A "task" or "decision" is a view over objects in a waiting state, never a stored object, so there is one record and one place to act. An internal handoff becomes an attribute, not an object.
 - **Relations** as a diagram.
-- **States per object with the work left in each**, naming who must act next; the states that wait on the operator team are marked, because they feed Home. State machines drawn per key object.
+- **States per object with the work left in each**, naming who must act next; the states that wait on staff are marked, because they feed Home. State machines drawn per key object.
 - **Vocabulary**: one term per concept, in both languages.
 - **Action inventory**: object, action, who may, reversible (and its inverse), reason required, source. "Reversible" means the system gives a direct inverse; anything whose notice reaches an outside party counts as irreversible for the undo rule.
 
@@ -93,8 +93,8 @@ What "prototype in the DS" meant concretely:
 - A scripted browser walk on the running build, one script per goal and route, signed in as the persona's role, at desktop width, and the phone width where the route matters on a phone.
 - Each walk clicks what a reasonable user would click (highlighting each target), records every click, typed text, key, dialog text, toasts, console errors and the final address, asserts what should be seen, and ends with a status: **reached**, **reached with trouble**, **blocked**, or **route missing**. A route a reasonable user would try and cannot find is recorded as missing, even with nothing to record.
 - **Evidence is rough on purpose**: one short video per goal and route, a still of the end state, a frame strip. Polish is waste. Every finding in the case points at a recording id.
-- The walk found the joins, not the pages: dead home numbers, a quick search that only knew one identifier, checks that failed after the confirm instead of before, approvals with no undo, a role whose home was all dead ends, late items with no way to sort or filter for them, duplicate toasts.
-- **After the build, walk every flow as a matrix** at both widths with its role, pass or fail per flow, then write down what was not re-walked (reject branches, stale record, network failure, denied-role variants, keyboard-only end to end, screen reader, the other language, dark). A sampled walk had passed; the full matrix then failed several flows, all at the joins (a back link, a kept period, focus after a decision).
+- Walks find the joins, not the pages. Typical failures: numbers on home that open nothing, a quick search that knows only one identifier, checks that fail after the confirm instead of before, approvals with no undo, a role whose home is all dead ends, late items with no way to sort or filter for them, duplicate toasts.
+- **After the build, walk every flow as a matrix** at both widths with its role, pass or fail per flow, then write down what was not re-walked (reject branches, stale record, network failure, denied-role variants, keyboard-only end to end, screen reader, the other language, dark). A sampled walk can pass while the full matrix fails, almost always at the joins (a back link, a kept period, focus after a decision).
 - For every number on a home or overview that links to a list, check that the number equals the rows the link opens.
 
 ### 1.11 The one-page case, decisions, presentation
@@ -131,17 +131,17 @@ Proposed home: `.ux/method/` in the project, one file per artifact, YAML for any
 
 ```yaml
 personas:
-  - id: P-ops
-    name: Operations lead                # a role label, never a person's name
-    covers_roles: [operations]           # permission roles this persona stands for
-    day: "Clears pending requests and watches records close to a deadline."
-    measured_on: ["time from request to decision (assumption)"]
-    fears: ["a record expires on its clock while nobody looked"]
+  - id: P-officer
+    name: Case officer                # a role label, never a person's name
+    covers_roles: [case_officer]           # permission roles this persona stands for
+    day: "Works through the application queue and watches cases near their statutory clock."
+    measured_on: ["days from application to decision (assumption)"]
+    fears: ["a case passes its statutory deadline unseen"]
     opens: {frequency: "all day", devices: [desktop, phone], when: "start of shift"}
     may_not:
-      pages: [settings.general]
-      hidden_fields: [partner.balance]
-      denied_actions: [record.cancel]
+      pages: [settings.fees]
+      hidden_fields: [applicant.tax_number]
+      denied_actions: [case.reassign]
     density: high                        # low | medium | high
     assumptions: [measured_on, opens]    # which fields are assumed
     source: "spec section and page"
@@ -151,16 +151,16 @@ personas:
 
 ```yaml
 goals:
-  - id: G-ops-request
-    persona: P-ops
-    statement: "Decide a pending request before the requester waits too long"
-    trigger: "a new request arrives"
-    data_to_decide: [attached documents with their state, related records, history]
-    outcome: "the requester can start working"
-    risk_if_wrong: "a request with invalid documents goes live"
+  - id: G-officer-decide
+    persona: P-officer
+    statement: "Decide a permit application before its statutory clock runs out"
+    trigger: "an application is submitted"
+    data_to_decide: [the application form, inspection results, earlier permits for the same site]
+    outcome: "the applicant knows the answer and the reason"
+    risk_if_wrong: "a permit is granted on a failed inspection"
     frequency: daily                     # or "not stated"
     urgency: "not stated"                # a clock only when the spec sets one
-    object: request
+    object: application
     state: submitted
     jobs: [J1, J2]
     launch_critical: true
@@ -178,19 +178,19 @@ reasons:                                # the legend, so every mark is explained
   search.must: "the persona arrives holding an identifier from outside the product"
   notification.must: "a hard clock with a consequence if missed"
 routes:
-  - id: R-ops-request-home_queue
-    persona: P-ops
-    goal: G-ops-request
+  - id: R-officer-decide-home_queue
+    persona: P-officer
+    goal: G-officer-decide
     entry: home_queue
     mark: must                           # must | should | not_needed
     reason: home_queue.must
     via: null                            # parent record name for related_record
-    target: sheet.request            # a page or sheet id from sitemap.yaml
+    target: sheet.application        # a page or sheet id from sitemap.yaml
     # filled by the walk
     status: reached                      # reached | trouble | blocked | missing | not_walked
     clicks: 3
-    walk: walks/g02-r1-home-queue.json
-    evidence: [videos/g02-r1-home-queue.mp4, stills/g02-r1-home-queue.png]
+    walk: walks/g01-r1-home-queue.json
+    evidence: [videos/g01-r1-home-queue.mp4, stills/g01-r1-home-queue.png]
     findings: [F-07]
 ```
 
@@ -200,60 +200,61 @@ Status meanings: **reached** completes with no friction worth a finding; **troub
 
 ```yaml
 objects:
-  - {id: request, term: {ar: "...", en: "request"}, standing: first_class,
-     parent: partner, home_index: requests.index}
-  - {id: lineItem, term: {...}, standing: inside, parent: record}
+  - {id: application, term: {ar: "...", en: "application"}, standing: first_class,
+     parent: applicant, home_index: applications.index}
+  - {id: inspection, term: {...}, standing: inside, parent: application}
 not_objects:
   - {name: task, why: "a view over waiting states; a stored task would drift from its record"}
 relations:
-  - {from: partner, to: request, cardinality: "1..n"}
+  - {from: applicant, to: application, cardinality: "1..n"}
 states:
-  - {object: request, state: submitted, waits_on: operator, clock: null, source: "spec section"}
-  - {object: entry, state: pending_review, waits_on: operator, clock: {length: "as the spec sets it", source: "spec section"}}
+  - {object: application, state: submitted, waits_on: officer, clock: {length: "as the law sets it", source: "brief"}}
+  - {object: inspection, state: scheduled, waits_on: inspector, clock: null, source: "brief"}
 actions:
-  - {object: request, action: accept, from: submitted, to: accepted,
-     roles: [P-lead, P-ops], reversible: false, inverse: null,
+  - {object: application, action: approve, from: under_review, to: approved,
+     roles: [P-supervisor, P-officer], reversible: false, inverse: null,
      reason: none, notifies_outside: true, source: "spec section"}
-  - {object: link, action: verify, from: pending, to: verified,
-     roles: [P-lead, P-ops], reversible: true, inverse: unlink, reason: none}
+  - {object: case, action: assign, from: unassigned, to: assigned,
+     roles: [P-supervisor], reversible: true, inverse: unassign, reason: none}
 vocabulary:
-  - {concept: entry, use: "entry", never: ["synonyms the spec does not use"]}
+  - {concept: application, use: "application", never: ["synonyms the brief does not use"]}
 ```
 
 ### 2.5 Site map (`sitemap.yaml`)
 
 ```yaml
 nav:
-  order: [home, requests, records, finance, reports]
+  order: [home, applications, inspections, reports]
   foot: [settings]
   visibility: "an item shows when the role can open at least one of its pages"
 pages:
-  - {id: requests.index, route: /requests, label: "...", parent: requests,
-     kind: index, roles: [P-lead, P-ops], phase: launch,
-     views: [{id: waiting, label: "...", default_for: [P-ops]}],
-     default_sort: deadline_then_oldest, status_counts: [waiting, returned]}
+  - {id: applications.index, route: /applications, label: "...", parent: applications,
+     kind: index, roles: [P-supervisor, P-officer], phase: launch,
+     views: [{id: waiting, label: "...", default_for: [P-officer]}],
+     default_sort: deadline_then_oldest, status_counts: [waiting, overdue]}
 sheets:
-  - {id: sheet.request, object: request, home_index: requests.index,
-     address: "/requests?open={id}", opened_from: [home_queue, parent_page, search, deep_link]}
+  - {id: sheet.application, object: application, home_index: applications.index,
+     address: "/applications?open={id}", opened_from: [home_queue, parent_page, search, deep_link]}
 decisions_ref: decisions.yaml        # IA decisions that shaped the map
 ```
 
 ### 2.6 Flow (`flows/FL-<id>.yaml`)
 
 ```yaml
-id: FL-request
-goals: [G-ops-request]
-personas: [P-lead, P-ops]
-entries: [R-ops-request-home_queue, R-ops-request-view, R-ops-request-deep_link]
+id: FL-decide
+goals: [G-officer-decide]
+personas: [P-supervisor, P-officer]
+entries: [R-officer-decide-home_queue, R-officer-decide-view, R-officer-decide-deep_link]
 steps:
   - place: home
-    links: [{label: "queue row", to: requests.index, view: waiting}, {label: "item row", to: sheet.request}]
-  - place: sheet.request
-    shows: [documents with state, related records, history]
+    links: [{label: "queue row", to: applications.index, view: waiting}, {label: "item row", to: sheet.application}]
+  - place: sheet.application
+    shows: [application form, inspection results, earlier permits]
     actions:
-      - {id: accept, opens: panel.accept}
-      - {id: reject, opens: dialog.reason}
-decision_points: ["accept, reject or ask for a document", "accept with or without a condition"]
+      - {id: approve, opens: panel.approve}
+      - {id: refuse, opens: dialog.reason}
+      - {id: order_inspection, opens: panel.inspection}
+decision_points: ["approve, refuse or order an inspection", "refuse needs a legal ground"]
 happy_path: {from: home_queue, clicks: 3}
 failures:
   - {kind: denied_action, sees: "action disabled with the role that can", exit: "read only, back to queue"}
@@ -264,8 +265,8 @@ exits:
   success: "next item in the same view; after the last, focus on the empty-state heading"
   cancel: "Escape closes the top layer; focus returns to the row"
 undo: irreversible                  # must match model.actions
-reason: {reject: preset_required, accept: none}
-keyboard: "search, Enter; Tab to accept, Enter; Tab to confirm, Enter"
+reason: {refuse: preset_required, approve: none}
+keyboard: "search, Enter; Tab to approve, Enter; Tab to confirm, Enter"
 shared_rules: rules.yaml            # only differences are written here
 ```
 
@@ -275,23 +276,23 @@ shared_rules: rules.yaml            # only differences are written here
 
 ```json
 {
-  "id": "g02-r1-home-queue",
-  "route": "R-ops-request-home_queue",
-  "persona": "P-ops", "role": "operations",
+  "id": "g01-r1-home-queue",
+  "route": "R-officer-decide-home_queue",
+  "persona": "P-officer", "role": "case_officer",
   "viewport": "1280x900", "locale": "ar", "theme": "light",
   "build": {"ref": "<commit>", "url": "http://localhost:3000"},
   "steps": [
     {"do": "goto", "target": "/"},
-    {"do": "click", "target": "home queue row 'pending requests'", "ok": true},
-    {"do": "see", "expect": "request sheet title", "ok": true}
+    {"do": "click", "target": "home queue row 'waiting applications'", "ok": true},
+    {"do": "see", "expect": "application sheet title", "ok": true}
   ],
   "clicks": 3,
   "status": "reached",
-  "final_url": "/requests?open=r-1",
+  "final_url": "/applications?open=a-1",
   "notes": [],
   "console_errors": [],
   "toasts": ["..."],
-  "evidence": {"video": "videos/g02-r1-home-queue.mp4", "still": "stills/g02-r1-home-queue.png"},
+  "evidence": {"video": "videos/g01-r1-home-queue.mp4", "still": "stills/g01-r1-home-queue.png"},
   "run_at": "<ISO8601>"
 }
 ```
@@ -322,7 +323,7 @@ Two families. **Static** checks read `.ux/method/*.yaml` (cheap, no app). **Live
 | 1 | `goal-route-coverage` | goals, routes | Every goal has at least 2 routes marked must or should, at least one of them a cold-start route (nav or search); every must mark carries a reason from the legend | 2 routes; 0 must marks without reason | Pure YAML pass | Low. A rare, one-door goal (a setting) can legitimately have one; allow a `single_route_ok` reason |
 | 2 | `matrix-sitemap-closure` | routes, sitemap | Every route's target is a page or sheet in the site map; every page is the target of at least one route (no orphan); every page is reachable from nav for at least one role that may open it | 0 dangling targets, 0 orphans | Graph pass over ids | Low. Orphans can be intentional (an error page); allow `kind: system` |
 | 3 | `one-place-to-decide` | model, sitemap, routes | Every object with a waiting state has exactly one sheet; every route to a goal on that object targets that sheet; live: every entry lands on the same canonical address | 1 sheet per waiting object | YAML pass; live: compare final URLs across the route's walks | Medium. Inline quick actions on a row are a deliberate exception; mark them `also_inline` |
-| 4 | `waiting-state-surfaced` | model, sitemap | Every state with `waits_on: operator` appears in at least one queue (home row or a saved view) for a role allowed to act | 100 percent | YAML pass | Low |
+| 4 | `waiting-state-surfaced` | model, sitemap | Every state with `waits_on` set to a staff role appears in at least one queue (home row or a saved view) for a role allowed to act | 100 percent | YAML pass | Low |
 | 5 | `flow-completeness` | flows, rules, model | Every flow has a success exit, a cancel exit, a focus-after, a counted happy path, and a failure entry for each applicable kind (denied action when any role lacks the action, stale when two roles can act, validation when there is input, network always); undo class matches the model's `reversible`; a `reason: required` action has a reason step | 0 missing exits; failure kinds per applicability | YAML pass with applicability derived from model and personas | Low to medium; applicability rules need tuning on real briefs |
 | 6 | `role-nav-scope` | personas, sitemap, live app | Live, per role: nav shows exactly the spaces where the role can open a page; a direct link to a denied page shows a page that names who can and a way back; no 404 and no blank | 0 leaks, 0 bare denials | Playwright per role (role switch via a test hook or test accounts), read nav links, visit denied routes | Medium. Needs a reliable role switch; apps without one are `unmeasured` |
 | 7 | `denied-action-says-who` | live app | Every disabled control has a visible or programmatic reason; a role-denied main action is shown disabled with the role that can; a state-disallowed action is absent | 0 silent disabled controls | DOM scan of `[disabled]`, `aria-disabled`, nearby text or `aria-describedby` | Medium. Disabled-while-loading is legitimate; re-check after network idle |
@@ -392,7 +393,7 @@ Spec: this brief, sections 1 to 3. One PR into feat/4.1-stageshow.
 | # | Task | Done when |
 |---|---|---|
 | M1 | Schemas for the seven artifacts as JSON Schema under `engine/method/schemas/`, with a loader whose errors name the file, the path and the fix | A broken fixture for each artifact produces one error per fault, each naming field and fix; ASCII only |
-| M2 | Guidance: `references/process/users-before-screens.md` (the method in order, with the corrections table as "failure modes"), `references/foundations/navigation-ia.md` and `references/process/journeys-and-flows.md` from Phase 6, every claim with a source id; the dashboard playbook gains a back-office section (home as role-scoped queues, numbers that open rows, one sheet per pending item, saved views named by work left) | Every missing-guide row for IA and flows in the gap lists is written or parked with a reason |
+| M2 | Guidance: `references/process/users-before-screens.md` (the method in order, with its common failure modes), `references/foundations/navigation-ia.md` and `references/process/journeys-and-flows.md` from Phase 6, every claim with a source id; the dashboard playbook gains a back-office section (home as role-scoped queues, numbers that open rows, one sheet per pending item, saved views named by work left) | Every missing-guide row for IA and flows in the gap lists is written or parked with a reason |
 | M3 | `/ux-discover` method mode and router rule | On the three method briefs (section 6) the router picks method mode; on single-role briefs it does not |
 | M4 | `/ux-design` structure mode, including the "compose from the shipped kit" step: record, per pattern, the kit piece and its canonical call site in the project's own shipped pages; a missing piece is proposed as a widening of the kit, never a new component | On the back-office brief, every page in the site map lists its patterns with a call site or an explicit "widen" proposal |
 | M5 | Static checks 1 to 5 and 12 from section 3, advisory, with the fixture standard (3 fail, 3 near-miss pass, 1 inapplicable, 1 right-to-left pass) | Each check has fixtures, runs clean on the method briefs' gold artifacts, and has a row in the method benchmark report |
@@ -407,7 +408,7 @@ Spec: this brief, sections 1 to 3. One PR into feat/4.1-stageshow.
 - Every static and live check is advisory with a measured precision row; none is blocking without the Phase 1 rule (precision at least 0.95, Wilson lower bound at least 0.90) measured on the method benchmark.
 - `routes.yaml` round-trips: plan written by discover, walk columns written by audit, no manual edit needed.
 - No new top-level command; the README command table changes only by the new modes.
-- No client, vendor or person names in shipped files; examples use a generic multi-vendor back office.
+- No client, vendor or person names in shipped files; examples use a generic multi-role back office.
 
 
 ## 6. Testing the engine on outcomes
@@ -416,7 +417,7 @@ Lint precision says whether a rule is right about a page. It cannot say whether 
 
 **Fixed briefs.** Six briefs with fixed copy and fixture data, frozen in `bench/method/briefs/`:
 
-1. A multi-vendor marketplace back office with at least four staff roles that differ in pages, hidden fields and denied actions, and several deadline-bound queues.
+1. A back office with at least four staff roles that differ in pages, hidden fields and denied actions, and several deadline-bound queues.
 2. A field team's mobile app with a manager and a field role sharing one app by role switch.
 3. A self-serve SaaS settings and billing area (single role, deep settings).
 4. A case-management tool for a public office (two roles, a long state machine, reasons required on rejections).
@@ -442,7 +443,7 @@ Each brief has a **gold set** written by a person: personas, goals, must routes,
 | Joins | Failures of `deep-link-roundtrip` and `focus-after-action` |
 | Control brief cost | On brief 5, artifacts produced and time added: the method must stay light where one role and one goal dominate |
 
-**Seeded-defect apps.** Three small fixture apps built from the back-office brief, each with planted defects drawn from the corrections table: a search that knows only one identifier, home numbers that do not open, a pending item decidable in two places with different actions, a sheet with no address, a disabled action with no reason, checks that fail after confirm, a filter that resets on back, focus dropped to the page body after an action. The harness and live checks are scored on recall and precision against the plant list, and every planted defect must make its walk fail (the weak-walk guard).
+**Seeded-defect apps.** Three small fixture apps built from brief 1, each with planted defects drawn from common back-office failures: a search that knows only one identifier, home numbers that do not open, a pending item decidable in two places with different actions, a sheet with no address, a disabled action with no reason, checks that fail after confirm, a filter that resets on back, focus dropped to the page body after an action. The harness and live checks are scored on recall and precision against the plant list, and every planted defect must make its walk fail (the weak-walk guard).
 
 **Human round.** Pairwise comparison of the two case pages and the two built apps per brief by designers, as in Phase 9's taste harness (randomised sides, repeated pairs, gold pairs), reported apart from the measured metrics. A model judge is a pre-filter only.
 
