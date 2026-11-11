@@ -150,7 +150,7 @@ Honor at every level. Never assume the user "will be fine."
 **How**:
 - Diverging scales: blue → gray → red (not red → green)
 - Sequential: single-hue gradient (light to dark)
-- Qualitative: max 7 to 8 distinct hues; use perceptually uniform palettes
+- Qualitative: 6 distinct hues at most, 4 to 5 for reliable identification; group the rest as Other (B46 p.193-194)
 - Always supplement with patterns, textures, shapes, or icons
 - Always supplement with text labels
 - Validate using a color-blindness simulator (deuteranopia, protanopia, tritanopia)

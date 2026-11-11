@@ -329,7 +329,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Colorblind-safe palettes (Viridis, Cividis, Magma: perceptually uniform)
 - Diverging: blue → gray → red (never red → green)
 - Sequential: single-hue gradient
-- Qualitative: max 7 to 8 distinct hues
+- Qualitative: 6 distinct hues at most, then group the rest as Other (B46 p.193-194)
 - Pattern/texture supplements color
 - Data lines: 3:1 contrast minimum; text labels 4.5:1
 
@@ -532,7 +532,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 
 ### Chart specs
 - Color: diverging (blue-gray-red), sequential, or colorblind-safe qualitative
-- Max 7 to 8 distinct hues
+- 6 distinct hues at most, then group the rest as Other
 - Pattern / texture supplement
 - Tooltip: hover + tap + keyboard accessible
 - Legend: visible near chart, clickable to toggle series
