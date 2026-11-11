@@ -63,7 +63,7 @@ Python 3.10 o posterior. Para el servidor MCP, `pip install --upgrade 'uxskill[m
 
 **Playbooks de superficie.** Las reglas de landing, dashboard y componente viven en `references/surfaces/`, un playbook cada una. `/ux-design` carga exactamente uno, elegido según su modo, así que un build de dashboard nunca lee reglas de hero.
 
-Tests: **13101 superados**. Sin conexión. Determinista. Nunca se llama a un LLM.
+Tests: **13276 superados**. Sin conexión. Determinista. Nunca se llama a un LLM.
 
 ### Novedades de v3.1: fiel a la marca, responsive, vivo
 

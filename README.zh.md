@@ -63,7 +63,7 @@ uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out des
 
 **按界面分的规则手册。** 落地页、仪表盘和组件的规则放在 `references/surfaces/`，各有一份手册。`/ux-design` 按模式只加载其中一份，所以构建仪表盘时永远不会读到 hero 的规则。
 
-测试 **13101 项通过**。离线。确定性。从不调用 LLM。
+测试 **13276 项通过**。离线。确定性。从不调用 LLM。
 
 ### v3.1 新增：忠于品牌、响应式、有生命力
 

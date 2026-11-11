@@ -63,7 +63,7 @@ uxskill system build --brand '#3366FF' --brief .ux/last-discovery.json --out des
 
 **依介面分類的規則手冊。** 著陸頁、儀表板與元件的規則放在 `references/surfaces/`，各有一份手冊。`/ux-design` 依模式只載入其中一份，所以建置儀表板時永遠不會讀到 hero 的規則。
 
-測試 **13101 項通過**。離線。確定性。從不呼叫 LLM。
+測試 **13276 項通過**。離線。確定性。從不呼叫 LLM。
 
 ### v3.1 新增：忠於品牌、響應式、有生命力
 

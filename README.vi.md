@@ -63,7 +63,7 @@ Python 3.10 trở lên. Với máy chủ MCP, `pip install --upgrade 'uxskill[mc
 
 **Playbook theo bề mặt.** Quy tắc cho landing, dashboard và component nằm trong `references/surfaces/`, mỗi loại một playbook. `/ux-design` nạp đúng một playbook, chọn theo chế độ của nó, nên build dashboard không bao giờ đọc quy tắc hero.
 
-Test: **13101 đạt**. Ngoại tuyến. Xác định. Không bao giờ gọi LLM.
+Test: **13276 đạt**. Ngoại tuyến. Xác định. Không bao giờ gọi LLM.
 
 ### Mới trong v3.1: đúng thương hiệu, responsive, sống động
 

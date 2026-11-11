@@ -63,7 +63,7 @@ Python 3.10 oder neuer. Für den MCP-Server `pip install --upgrade 'uxskill[mcp]
 
 **Surface-Playbooks.** Die Regeln für Landing, Dashboard und Komponenten liegen in `references/surfaces/`, je ein Playbook. `/ux-design` lädt genau eines, gewählt nach seinem Modus, sodass ein Dashboard-Build nie Hero-Regeln liest.
 
-Tests **13101 bestanden**. Offline. Deterministisch. Es wird nie ein LLM aufgerufen.
+Tests **13276 bestanden**. Offline. Deterministisch. Es wird nie ein LLM aufgerufen.
 
 ### Neu in v3.1: markentreu, responsiv, lebendig
 
