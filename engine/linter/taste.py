@@ -1032,14 +1032,39 @@ _LAYOUT_PROP = re.compile(r"(?<![\w-])((?:min|max)-(?:width|height|inline-size|b
                           r"|margin(?:-[a-z]+)*|padding(?:-[a-z]+)*)(?![\w-])", re.I)
 _INDICATOR = re.compile(r"indicator|underline|ink-?bar|highlight|thumb|selection", re.I)
 _SIZE_ONLY = {"width", "inline-size"}
+_BLOCK_ONLY = {"height", "block-size"}
+_DETAILS_CONTENT = re.compile(r"::details-content\b", re.I)
+_KEYWORD_SIZE = re.compile(r"interpolate-size\s*:\s*allow-keywords|calc-size\(", re.I)
+_DISCLOSURE = re.compile(r"\bdetails\b|\[open\]|aria-expanded|accordion|disclosure|collaps|expand",
+                         re.I)
+
+
+def _platform_disclosure(ctx: FileContext, view: View, block) -> bool:
+    """A height that opens a disclosure through the platform: the block
+    styles ::details-content or itself lets sizes interpolate to keywords
+    (interpolate-size: allow-keywords, calc-size()), or the page's root
+    does and the block's selector names a disclosure."""
+    if block is None:
+        return False
+    if any(_DETAILS_CONTENT.search(s) for s in block.selectors) or _KEYWORD_SIZE.search(block.body):
+        return True
+    if not any(_DISCLOSURE.search(s) for s in block.selectors):
+        return False
+    return any(_KEYWORD_SIZE.search(b.body) and any(s.strip().lower() in (":root", "html")
+                                                    for s in b.selectors)
+               for b in css_blocks(view.text))
 
 
 def layout_transition_reflows(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
     """A transition on a layout property is a finding unless its only
     layout property is the inline size of a moving indicator (a selector
     naming an indicator, or an element taken out of flow with position
-    absolute or fixed), which reflows nothing beside it."""
+    absolute or fixed), which reflows nothing beside it, or a height or
+    block size that opens a disclosure through the platform
+    (_platform_disclosure)."""
     props = {m.group(1).lower() for m in _LAYOUT_PROP.finditer(match.group(0).split(":", 1)[-1])}
+    if props and props <= _BLOCK_ONLY:
+        return not _platform_disclosure(ctx, view, block_at(ctx, view, match.start()))
     if not props or not props <= _SIZE_ONLY:
         return True
     block = block_at(ctx, view, match.start())

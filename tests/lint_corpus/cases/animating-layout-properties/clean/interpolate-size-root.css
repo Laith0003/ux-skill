@@ -1,0 +1,4 @@
+:root { interpolate-size: allow-keywords; }
+.accordion__panel { height: 0; overflow: clip; transition: height 240ms ease-out; }
+.accordion__item[open] .accordion__panel { height: auto; }
+.faq-answer { height: 0; transition: height calc-size(auto, size) 240ms; }

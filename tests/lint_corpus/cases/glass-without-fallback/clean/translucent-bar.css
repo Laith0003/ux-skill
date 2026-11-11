@@ -1,5 +1,5 @@
-/* A frosted header: the translucent background is the fallback where the
-   blur is not drawn, so the header never turns see-through. */
+/* A frosted header: the high-alpha background keeps the text on it
+   legible whatever scrolls behind the blur. */
 .site-header {
   position: sticky;
   top: 0;

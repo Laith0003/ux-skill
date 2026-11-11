@@ -912,7 +912,7 @@ The rules are sourced from `data/anti-patterns.json` (v2 preferred) with a `refe
 
 | Severity | Rule ID | Name |
 |---|---|---|
-| high | `h-screen-no-dvh-fallback` | 100vh without 100dvh fallback for mobile |
+| high | `h-screen-no-dvh-fallback` | 100vh or h-screen on a full-height section |
 | high | `three-equal-card-grid` | Three equal cards in a row |
 | medium | `aspect-ratio-1-1-default` | Square aspect-ratio as default everywhere |
 | medium | `avatar-stack-overlapping` | Generic overlapping avatar stack |
@@ -1017,7 +1017,7 @@ The rules are sourced from `data/anti-patterns.json` (v2 preferred) with a `refe
 | high | `gradient-on-text-rainbow` | Rainbow gradient on display text |
 | high | `purple-to-blue-gradient` | Default purple-to-blue AI gradient |
 | medium | `card-glow-purple-shadow` | Purple glow shadow on cards |
-| medium | `glass-without-fallback` | backdrop-filter blur without background fallback |
+| medium | `glass-without-fallback` | backdrop-filter blur with no background behind its text |
 | medium | `gradient-mesh-purple-pink` | Purple-pink mesh gradient hero |
 | medium | `gradient-text-rainbow` | Multi-stop gradient text |
 | medium | `navy-to-purple-gradient` | Navy to purple gradient |

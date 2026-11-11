@@ -51,7 +51,7 @@ EXPECTED = {
     "the-full-type-ladder", "imported-sets-pass", "phone-order-in-both-scripts",
     "phone-accepts-local-input", "one-label-per-action",
     "lint-reads-the-system", "motion-lint-times-the-curve", "photograph-required-in-lint", "eyebrows-follow-formality", "layouts-repeat-at-most-twice", "splits-run-at-most-two", "one-marquee-per-page", "three-cards-read-by-content", "ink-text-keeps-its-alpha", "loops-stop-under-reduced-motion",
-    "color-budget-on-the-page", "grade-lock-on-the-page", "accent-text-on-every-ground", "moving-content-pauses", "layout-transitions-that-reflow", "inner-pages-one-family",
+    "color-budget-on-the-page", "grade-lock-on-the-page", "accent-text-on-every-ground", "moving-content-pauses", "layout-transitions-that-reflow", "layout-transitions-through-the-platform", "inner-pages-one-family",
     "display-leading-floor-in-lint", "capitals-follow-the-signal",
     "states-answer-on-motion", "one-indicator-per-control", "hidden-controls-leave-the-tab-order",
     "states-name-themselves", "render-drives-the-page", "sections-are-contracts",
@@ -119,7 +119,8 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "layout-bounds": "measures-count-characters",
               "motion-roles": "motion-roles-by-pace",
               "score-tells-heavy-pages-apart": "score-weighs-repeats-past-the-knee",
-              "accent-text-on-every-ground": "all-text-measured-as-seen"}
+              "accent-text-on-every-ground": "all-text-measured-as-seen",
+              "layout-transitions-that-reflow": "layout-transitions-through-the-platform"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

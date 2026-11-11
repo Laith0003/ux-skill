@@ -1111,13 +1111,13 @@
         <span class="ap-id">#h-screen-no-dvh-fallback</span>
         <span class="ap-sev ap-sev--high">HIGH</span>
         <span class="ap-cat">Layout</span>
-        <h2 class="ap-name">100vh without 100dvh fallback for mobile</h2>
+        <h2 class="ap-name">100vh or h-screen on a full-height section</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>100vh on mobile includes the browser chrome that retracts on scroll, so the layout jumps as the address bar collapses - dynamic viewport units (dvh) fix this.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use height: 100dvh or h-[100dvh] as the primary, with h-screen / 100vh as the legacy fallback for browsers that lack dvh.</p></div>
-      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])(?:min-|max-)?height\s*:\s*100vh(?![^}]*100dvh)</code></pre>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>On phones 100vh is the largest viewport, measured with the browser toolbars retracted, so a full-height section runs under the address bar: its bottom edge is hidden at load and jumps as the bar collapses. The small, large and dynamic viewport units (svh, lvh, dvh) are Baseline widely available since 2025-06-05, so a 100vh fallback is not needed.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use 100svh (Tailwind h-svh or min-h-svh) for heroes and full-height sections: it never sits under the toolbars and never jumps. Use 100dvh (h-dvh) only where the section should resize as the toolbars move. A 100vh line kept beside one of them is harmless.</p></div>
+      <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])(?:min-|max-)?height\s*:\s*100vh(?![^}]*100[sdl]vh)</code></pre>
       <div class="ap-examples">
         
         
@@ -1155,8 +1155,8 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Animating width, height, top, left, margin or padding lays the page out again on every frame, and everything beside the element moves with it: the dropped-frame jank that makes a UI feel cheap. Two cases reflow nothing beside them and pass: the inline size of a moving indicator (a selector naming an indicator, or an element taken out of flow), and grid-template-rows on a single disclosure, which this rule does not read.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Animate transform and opacity: scale instead of width, translate instead of top or left. Open a disclosure with grid-template-rows from 0fr to 1fr, and slide an indicator on transform with its inline size on the system&#x27;s indicator role (--motion-indicator-duration).</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Animating width, height, top, left, margin or padding lays the page out again on every frame, and everything beside the element moves with it: the dropped-frame jank that makes a UI feel cheap. Three cases pass: the inline size of a moving indicator (a selector naming an indicator, or an element taken out of flow), grid-template-rows on a single disclosure, which this rule does not read, and a height or block size that opens a disclosure through the platform (a ::details-content selector, interpolate-size: allow-keywords, or calc-size()).</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Animate transform and opacity: scale instead of width, translate instead of top or left. Open a disclosure with grid-template-rows from 0fr to 1fr, or on details::details-content with interpolate-size: allow-keywords (Chromium only; elsewhere it opens without the move), and slide an indicator on transform with its inline size on the system&#x27;s indicator role (--motion-indicator-duration).</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])transition(?:-property)?\s*:[^;{}]*(?&lt;![\w-])(?:(?:min|max)-(?:width|height|inline-size|block-size)|width|height|top|left|right|bottom|inline-size|block-size|inset(?:-[a-z]+)*|margin(?:-[a-z]+)*|padding(?:-[a-z]+)*)(?![\w-])</code></pre>
       <div class="ap-examples">
         
@@ -1751,12 +1751,12 @@
         <span class="ap-id">#glass-without-fallback</span>
         <span class="ap-sev ap-sev--medium">MED</span>
         <span class="ap-cat">Color</span>
-        <h2 class="ap-name">backdrop-filter blur without background fallback</h2>
+        <h2 class="ap-name">backdrop-filter blur with no background behind its text</h2>
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>backdrop-filter is unsupported on Firefox and older Safari - without a translucent background fallback, the surface renders fully transparent and content underneath bleeds through.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Always pair backdrop-filter: blur with a background-color (e.g. background: rgba(255,255,255,0.7)). The bg is the fallback; the blur is the upgrade.</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>backdrop-filter is Baseline since 2024-09-16, so the blur draws in every current browser; the problem is legibility. A blur with no background is as light or as dark as whatever scrolls behind it, so the text on it passes contrast over one part of the page and fails over the next.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair backdrop-filter: blur with an opaque or high-alpha background-color (background: rgb(255 255 255 / 0.82)) so the text contrast holds over any content behind it. Optionally go solid under @media (prefers-reduced-transparency: reduce), which only Chromium supports today.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])backdrop-filter\s*:\s*blur</code></pre>
       <div class="ap-examples">
         
@@ -2635,8 +2635,8 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <!-- ux-lint-off round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>A raw &lt;img&gt; with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. The fact that &lt;picture&gt;+&lt;source type=&quot;image/avif&quot;&gt; has been universal since 2023 means this is now a generator-default tell.</p></div><!-- ux-lint-on -->
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Wrap in &lt;picture&gt; with AVIF first, WebP next, JPG fallback: &lt;picture&gt;&lt;source srcset=&quot;hero.avif&quot; type=&quot;image/avif&quot;&gt;&lt;source srcset=&quot;hero.webp&quot; type=&quot;image/webp&quot;&gt;&lt;img src=&quot;hero.jpg&quot; alt=&quot;...&quot; width=&quot;...&quot; height=&quot;...&quot;&gt;&lt;/picture&gt;. For framework images (next/image, astro:assets), the conversion is automatic - use them.</p></div>
+      <!-- ux-lint-off round-number-stats --><div class="ap-why"><span class="ap-sub">Why bad</span><p>A raw &lt;img&gt; with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. AVIF has been Baseline since 2024-01-25 and widely available since 2026-07-25, and WebP for longer, so a JPG-only image is now a generator-default tell.</p></div><!-- ux-lint-on -->
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Wrap in &lt;picture&gt; with AVIF first, WebP next, JPG fallback: &lt;picture&gt;&lt;source srcset=&quot;hero.avif&quot; type=&quot;image/avif&quot;&gt;&lt;source srcset=&quot;hero.webp&quot; type=&quot;image/webp&quot;&gt;&lt;img src=&quot;hero.jpg&quot; alt=&quot;...&quot; width=&quot;...&quot; height=&quot;...&quot;&gt;&lt;/picture&gt;. A bare &lt;img&gt; that points straight at an .avif or .webp file also passes. For framework images (next/image, astro:assets), the conversion is automatic - use them.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>&lt;img\s[^&gt;]*src\s*=\s*[&#x27;&quot;][^&#x27;&quot;]+\.(?:jpg|jpeg|png)[&#x27;&quot;][^&gt;]*&gt;</code></pre>
       <div class="ap-examples">
         
@@ -2676,7 +2676,7 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>z-index: 9999 is the &#x27;I gave up on the stacking system&#x27; value - signals there&#x27;s no z-scale token map and stacking bugs are coming.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Put overlays (menus, dialogs, toasts) in the top layer with popover or &lt;dialog&gt; and showModal(): the top layer sits above every z-index, which ends the race. For what stays in the page, define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>z-index:\s*(?:9999+|99999+|2147483647)\b|\bz-\[(?:9999+|99999+)\]</code></pre>
       <div class="ap-examples">
         
@@ -3236,7 +3236,7 @@
       </header>
       <p class="ap-desc"></p>
       <div class="ap-why"><span class="ap-sub">Why bad</span><p>A popover or menu that fades on a transition but sets display: none in its closed state disappears at the first frame of its exit: the fade the system&#x27;s motion.dismiss role defines never shows.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep the exit running until it ends: transition display with allow-discrete (transition: opacity 200ms, display 200ms allow-discrete), or set hidden or inert from script when transitionend fires.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Keep the exit running until it ends: let display wait with allow-discrete (transition: opacity 200ms, display 200ms allow-discrete, or transition-behavior: allow-discrete), add overlay to the list for a popover or dialog in the top layer, and set the entry&#x27;s first frame in @starting-style. Or set hidden or inert from script when transitionend fires.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>display\s*:\s*none</code></pre>
       <div class="ap-examples">
         
@@ -3535,8 +3535,8 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Browsers justify by stretching word-spacing, opening uneven &#x27;rivers&#x27; of whitespace and hurting readability: CSS has none of the hyphenation or microtypography a print justifier relies on.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use text-align: left (or start) for body copy. If justification is a hard brand requirement, pair it with hyphens: auto and test at the real line length.</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>Justified text at web measures still opens uneven rivers of word space, worst in narrow columns and when the width changes with the window.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Use text-align: start for body copy. If a brand requires justification, pair it with hyphens: auto and a correct lang attribute (hyphens is Baseline widely available since 2026-03-18) and test at the real line length.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>text-align:\s*justify</code></pre>
       <div class="ap-examples">
         
