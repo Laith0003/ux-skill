@@ -109,7 +109,7 @@ A 4-step checkout where each step has one focus: address, delivery, payment, rev
 
 ---
 
-## The Third Law: Get Rid of Half the Words on Each Page. Then Get Rid of Half of What's Left.
+## The Third Law: Cut the Words in Half, Then Cut Again
 
 ### Definition
 
