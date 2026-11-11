@@ -1,0 +1,62 @@
+# career-portfolio
+
+Input rows: 157. Merged rows: 42.
+
+Most sources here are tier 3 practitioner books, so most rows score low; treat them as defaults, not rules.
+
+## Case study content
+
+- **Make each case study reviewable in minutes, with the summary first.** Reviewers give a portfolio about a minute, then perhaps five more if it earns them, at roughly 10 seconds per page; a hiring manager decides in 5 to 10 minutes. Keep each project to 1 or 2 pages or screens of core story, write long and then cut at least half. Confidence: medium. Sources: B30 p.326-327; B29 p.210, 231; B95 p.247-248
+- **Tell each project as problem, process and result.** State the client and the problem in one or two sentences, add 2 or 3 insights from research, state the big idea briefly, show how the solution answered the problem, and close with metrics or testimonials. Confidence: medium. Sources: B29 p.210-213; B05 p.151-152, 182, 272-273, 279; B84 p.18, 49, 97; B25 p.7-10
+- **State your exact role and credit the team.** The same group project may appear in several portfolios, so say up front what you personally did, the team, timeframe and ways of working; misrepresentation gets caught in a small industry. Confidence: low. Sources: B05 p.200, 278; B84 p.49, 98; B29 p.210-213
+- **Show the thinking, not only the screens.** Explain why you chose each approach (why personas, how you used them), include roughs and intermediate artifacts as evidence, and connect design to business goals and measured outcomes; most junior portfolios show only UI. Confidence: low. Sources: B29 p.12, 15, 38-39, 284-285; B84 p.18, 49, 97; B25 p.7-10
+- **Never invent or inflate results, and label concept work as concept.** Report real outcomes for users and the business, mark self-initiated or speculative work as a practice run, and separate what you did from what you would do with more resources. Confidence: low. Sources: B29 p.210-213, 220-221; B05 p.151-152, 182
+- **Add a short reflection.** Close each case with what you learned and would change. Confidence: low. Sources: B29 p.210-213
+- **Use real visuals; avoid stock photos and pasted-on mockup templates.** Stock pictures of sticky notes are spotted instantly, and a logo dropped into an unmodified template reads as low effort; build mockups with consistent shadows, contrast and sizing. Confidence: low. Sources: B29 p.210-212; B05 p.214-215
+- **Clear permissions and do not gate work behind passwords.** Get written permission before showing client work, avoid work under NDA, and never make reviewers request a password to see a case. Confidence: low. Sources: B29 p.193-199, 210-212; B84 p.51
+- **Storyboard the case before writing it.** Dump every element, group by affinity, then sketch a 2x3 or 3x3 frame grid covering the old experience, the new one and how you delivered it. Confidence: low. Sources: B29 p.229-230
+
+## Portfolio selection and structure
+
+- **Show a few strong, relevant projects; the weakest piece sets the bar.** For UX roles show 1 to 3 case studies as a junior; graphic portfolios run about 15 to 20 pieces (4 or 5 campaigns of 4 or 5 pieces). Quantity earns nothing, and range without quality reads as scattered. Confidence: low. Sources: B29 p.210, 244; B05 p.133, 146, 159; B84 p.15, 18, 27, 49
+- **Screen each piece with stated criteria.** Include only work with flawless execution, a clear message, goals it actually met, and a fit with the work you want to do next; drop work older than about 5 years unless reframed as a case study. Confidence: low. Sources: B84 p.15; B05 p.145
+- **Open strong, close with the strongest, and never place similar projects side by side.** The last piece lingers longest, so end on the knockout and open with an outstanding second. Confidence: low. Sources: B05 p.202; B84 p.15
+- **Tailor the selection to each reader's industry.** Research the target employer and lead with what matters to them, such as results, assembling each submission from a larger library of cases. Confidence: low. Sources: B84 p.18; B29 p.210, 233-240, 244; B95 p.247-248
+- **Include at least one self-initiated project at full quality.** Personal work shows initiative and gives interviewers a conversation starter. Confidence: low. Sources: B05 p.133, 148
+- **Keep a site plus a tailored PDF.** A site on your own domain is expected, while a modular PDF of 2 or 3 projects (8 to 10 pages) can be tailored per application; showcase networks suit visual networking more than UX hiring, and print leave-behinds should carry your URL. Confidence: medium. Sources: B29 p.233-240; B05 p.196; B95 p.247-248; B84 p.53-55, 126, 130
+- **Make contact details effortless to find.** Use an email on your own domain, never bury contact information, and link only social channels you keep active. Confidence: low. Sources: B05 p.199-200
+- **Document projects from day one and back them up.** Keep the same folder layout on every project (administration, then phases numbered in order), capture notes, photos and recordings with permission, store backups in 3 places with 1 off-site, and refresh the portfolio about every 6 months while keeping earlier versions. Confidence: medium. Sources: B29 p.175-176, 193-199; B05 p.129; B30 p.328
+- **Know the portfolio carries the most weight in creative hiring.** In one survey of 250 executives, 63 percent named the portfolio most important, far ahead of interview, references and resume. Confidence: low. Sources: B84 p.9
+
+## Applications and interviews
+
+- **Make the resume simple, machine-readable and focused on achievements.** Heavily designed resumes confuse tracking software and slow human readers; list quantified achievements, describe skill levels in words rather than progress bars, keep a plain-text version with keywords from the job ad, and use 1 page within 5 years of graduating, 2 beyond. Confidence: low. Sources: B29 p.254-256; B05 p.283, 285, 292
+- **Send a brief cover letter written for each role.** Two or three paragraphs a reader can finish in a minute or two, covering who you are, where you fit the role, and a reason to open the portfolio. Confidence: low. Sources: B29 p.258-259
+- **Pass the one-minute skim.** A screen runs roughly a minute: a few seconds on the email, about 10 on resume design, about 20 reading it, and 30 to 60 on the portfolio. Confidence: low. Sources: B95 p.247-248
+- **Present work in two to three minutes per project and talk before you show.** Lead with questions about the client's needs before revealing work, then steer to their future needs; admit what you do not know rather than bluff. Confidence: low. Sources: B05 p.272-273, 279; B84 p.95, 97-98; B29 p.214-218
+- **Be able to describe your process in one breath.** Many candidates cannot; anchor it in a known model so non-designers follow it. Confidence: low. Sources: B29 p.47
+- **In design exercises, clarify, assume out loud and spend half the time solving.** Confirm the deliverable and format, state assumptions, think aloud when stuck, name pros, cons, blind spots and how you would validate risky assumptions, outline flows from a task list, and give the solution step at least half the time (about 30 of 60 minutes). Confidence: low. Sources: B25 p.21-23, 26, 46, 49, 54-57
+- **Know the exercise formats and their costs.** Recruiter screens run 10 to 20 minutes, portfolio panels 3 to 5 people, whiteboarding 15 to 40 minutes, on-sites about an hour plus a 10 to 15 minute presentation, take-homes 4 to 8 hours over 2 to 7 days; accept one only when it can double as a case study, the employer is a favorite, or it takes a couple of hours at most. Confidence: low. Sources: B25 p.14, 16, 116; B29 p.286
+- **Prepare at least ten questions per interview.** Ask about the role, UX maturity, practices and business goals, and close by asking whether the interviewers have any reservations. Confidence: low. Sources: B29 p.295-300; B05 p.298, 319
+- **When you hire, probe the candidate's weakest area first and set problems from outside your product.** Using your own product invites bias toward your past choices and turns the exercise into unpaid consulting. Confidence: low. Sources: B25 p.115-119
+- **Hire for most of the skills and close the rest with a plan.** Candidates with about 70 percent of the required skills can close the gap through a learning plan. Confidence: low. Sources: B11 p.144
+
+## Growth and networking
+
+- **Network by giving value and making small, specific asks.** Introduce yourself briefly, offer something, ask one concrete question or for a 30-minute call, follow up once after about two weeks, and aim for 2 or 3 solid contacts per event; most roles are filled through networks, and specific asks succeed far more often than generic ones. Confidence: medium. Sources: B29 p.140-147, 272, 275, 320; B13 p.135-136, 142-145, 153, 156-157, 218-220; B84 p.106
+- **Earn real experience before the job.** Side projects, freelance work and unpaid work for real businesses count if they include real research; join communities and start projects in your target field long before you move. Confidence: low. Sources: B29 p.173-174; B13 p.149-151
+- **Build a support network with distinct roles.** List at least 5 people who support you and 5 you support, covering a person who understands your situation, one who challenges you, and one who has already walked your path; mentors advise while sponsors act on your behalf. Confidence: low. Sources: B13 p.122-125, 151-152, 217-218
+- **Build people skills on purpose.** Communication, teamwork and service count for much of a design career beyond craft. Confidence: low. Sources: B95 p.22-23
+- **Invest mostly in strengths and fix only the weaknesses that block you.** Spend about 80 percent of development effort on strengths; people who use strengths are measurably more engaged. Ask "when am I at my best?" and look for the strength mirrored in a weakness. Confidence: low. Sources: B13 p.38-43, 61
+- **Identify strengths specifically and test them.** Ask three people from different parts of life for three words, list skills as specific whats and hows, and score about 6 candidates out of 10 on success, frequency, openness and happiness, starting with happiness. Confidence: low. Sources: B13 p.44-46, 53-58
+- **Use a core strength daily and shape the role around it.** If the role cannot increase how often you use it, treat that as a fit signal; reshape the job with your manager over several conversations, and make strengths visible in your profile. Confidence: low. Sources: B13 p.56, 60, 62-63
+- **Find 3 to 5 core values by pairwise ranking and define them in your words.** Shortlist ten, merge synonyms, compare every pair, keep the top four, chart past highs and lows for must-haves and must-nots, then score options against the values before chasing title or salary. Confidence: low. Sources: B13 p.70-71, 73, 75-76, 79-85, 90, 234
+- **Test confidence doubts with small actions.** Ask why three times to find the root fear, share it with someone you trust, take one small step within a week, and log one success a day for a week. Confidence: low. Sources: B13 p.106, 113-116, 120-122
+- **Explore several possible futures instead of one fixed plan.** Write an obvious, an ambitious, a dream and a pivot option, list what you need to learn and who can help, and stay while you are both happy and learning. Confidence: low. Sources: B13 p.167-172, 222, 233-235
+- **Own your learning with few, explicit objectives.** Keep 1 to 3 learning goals at a time, practice daily (15 to 45 minutes), read and attend meetups regularly, and review your personal manifesto roughly twice a year. Confidence: low. Sources: B13 p.22-25, 181, 194, 197, 224; B29 p.133, 153-154, 204
+- **Rate your competencies on a shared scale.** Self-rate across core UX competencies from 0 to 5 (1 novice, 3 independently competent, 5 develops new methods) to target growth. Confidence: low. Sources: B30 p.309-310
+
+## Freelance practice
+
+- **Price from your real costs.** Compute an hourly burn rate as annual overhead divided by annual production hours (about 2,080 hours less 10 percent admin), take 25 to 50 percent upfront, and hold 3 to 6 months of costs in reserve. Confidence: low. Sources: B95 p.260-265, 327, 332-333, 346
+- **Keep a capabilities presentation in short, medium and long cuts (3, 10 and 15 minutes).** Roughly three examples for each service lets you fit any meeting. Confidence: low. Sources: B95 p.311-312
