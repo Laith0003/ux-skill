@@ -63,7 +63,7 @@ Python 3.10 veya daha yenisi. MCP sunucusu için `pip install --upgrade 'uxskill
 
 **Yüzey playbook'ları.** Landing, dashboard ve component kuralları `references/surfaces/` altında, her biri için bir playbook olarak durur. `/ux-design` moduna göre seçilen tam olarak birini yükler; böylece bir dashboard build'i hero kurallarını hiç okumaz.
 
-Testler: **13101 geçiyor**. Çevrimdışı. Deterministik. Hiçbir zaman LLM çağrılmaz.
+Testler: **13276 geçiyor**. Çevrimdışı. Deterministik. Hiçbir zaman LLM çağrılmaz.
 
 ### v3.1'de yeni: markaya sadık, duyarlı, canlı
 
