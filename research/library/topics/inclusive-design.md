@@ -1,0 +1,60 @@
+# inclusive-design
+Input rows: 126. Output rows: 35.
+
+Confidence note: scored with the sources.md weight table; rule 5 then lifts any lesson that three or more independent books support to high (two books by the same author count once).
+
+## Framing exclusion
+
+- **Read disability as a gap between what the design asks and what a person can do, and shrink what it asks.** Model each task as sensory, cognitive and motor demands; when a demand exceeds someone's capability they are excluded, and just below it they struggle, so the fix is to reduce the feature's demand rather than to label the person. Confidence: high. Sources: B18 p.22; B32 p.22, 32; B69 p.186-187
+- **There is no average user: design for the extremes and make things adjustable.** A 95th percentile target still excludes 5 percent (about 15 million people in the US alone), so offer adjustable font size, contrast and layout and let devices remember each person's preferences. Confidence: high. Sources: B79 p.241-245; B69 p.206-207, 253-254; B32 p.116
+- **Design for permanent, temporary and situational limits together.** Someone missing an arm, someone with a broken arm and someone carrying an infant all face the same constraint; turbulence, a moving train, bright sun and small screens degrade pointing and reading for everyone, so a fix for the permanent case serves far more people. Confidence: high. Sources: B91 p.28, 47; B32 p.24; B22 p.71
+- **Expect disability to grow with age across your whole audience.** Fewer than 20 percent of disabled people are born with a disability while most people will have one by their mid-80s; capability loss in one survey rose from about 7 percent at ages 16 to 49 to nearly 60 percent at 75 and over. Confidence: medium. Sources: B02 p.44; B32 p.162
+- **Cut first the demand that excludes the most people.** Counting who is excluded can reveal that easing visual load slightly brings in many more people than easing dexterity load by an equal step (a 15 N door force excludes about 15 percent of adults, 12 N about 7 percent), so prioritize by population impact, not by designer intuition. Confidence: medium. Sources: B69 p.211, 222; B32 p.115
+- **Never let one step exclude anyone, and audit the whole life cycle.** A single task that some people cannot complete, even an infrequent one like initial setup, can bar them from the whole product; check purchase, packaging, setup, instructions, daily use, support and disposal, since two in three people in one survey gave up on a product that seemed too complex to set up. Confidence: medium. Sources: B69 p.37, 186, 188, 208-209, 216
+
+## Strategy
+
+- **Build one universal design before any separate accessible version.** Prefer, in order: one design that works for all, then equivalent alternatives within it, and only as a last resort a separate stripped-down version; when dedicated formats exist (audio-described or signed listings), signpost them inside normal search and listings rather than in a silo, and never presume all blind users prefer one format. Confidence: high. Sources: B18 p.62, 64; B91 p.195-196; B80 p.24-25
+- **Put inclusive features inside mainstream styling and sell them as better for everyone.** Aids that look medical are rejected; products positioned as simply better (easy-grip kitchen tools) grew strongly, and fixes requested by disabled users, such as saved favorites or a next-episode control, helped all users (the curb-cut effect). Confidence: high. Sources: B79 p.242-244; B69 p.33, 44, 90; B32 p.21, 68; B80 p.28-29; B44 p.138
+- **Write the full range of user capability into the spec and the recruit.** Unstated assumptions default to the design team's own young, healthy profile and test recruits mirror it; decide deliberately to include people with access needs and people unlike the team, and involve the target group in ideation. Confidence: high. Sources: B32 p.22-23; B65 p.86; B17 p.48; B71 p.50, 78
+- **Design for accessibility, not just for an audit pass.** One page cleared an automated audit yet failed screen reader users, since its main navigation came late in reading order and repeated links cluttered it; test with assistive technology. Confidence: low. Sources: B80 p.20-23
+- **Remove unnecessary demands first, then add specific aids.** Strip demands from the mainstream product bottom-up, then add voice output, captions or other aids where they fit. Confidence: low. Sources: B32 p.43-45
+- **Review designs against the seven universal design principles.** Fair use for all, flexible use, simple and intuitive operation, information people can perceive, forgiveness of errors, little physical effort, and adequate size and room to approach and use. Confidence: low. Sources: B69 p.45
+- **Define the real target group first, then widen access.** Inclusion is not designing for the largest possible share; meet the defined users' needs in context and then enable wider use. Confidence: low. Sources: B69 p.150, 254
+- **When resources force a starting point, begin with screen reader support.** A large share of reported accessibility issues relate to blindness, so it is the highest-yield first step, though it never replaces covering the full standard. Confidence: low. Sources: B91 p.107
+- **Ask whether an edge case is really rare.** Dialect speakers, people repairing misunderstandings and marginalized users are frequent; run stress-case reviews and assign a designated dissenter to look for harm. Confidence: low. Sources: B63 p.296-301
+
+## Older adults
+
+- **Size and color for aging eyes and hands.** Make touch targets at least about 9.6 mm diagonal (about 44 CSS px) and pointer targets about 11 mm for older users, at least 2 mm apart when used in sequence; use 12 to 14 pt sans serif body with 14 to 16 pt headings or larger, strong dark-on-light contrast, and avoid blue for important elements because blues fade with age; near focus declines from about 40 and people need about 50 percent more light by 50; avoid double-click. Confidence: high. Sources: B80 p.106, 137-139; B46 p.126-127, 678; B32 p.116; B22 p.71
+- **Reduce memory and attention demands for older users.** Seniors succeeded about 53 versus 78 percent of the time and made several times more errors than younger users; reveal features step by step, keep any steps that rely on memory together on a single screen, display progress during long tasks, extend inactivity timeouts and avoid split attention. Confidence: high. Sources: B80 p.143-146; B46 p.126-127, 677; B69 p.134-139
+- **Never presume familiarity with interfaces or a particular stage of life.** Certain older participants had not encountered scrollbars or search boxes before, and security questions such as a first car presume a particular life. Confidence: medium. Sources: B80 p.142-143; B69 p.134, 137-139
+- **Allow older test participants about 25 percent more time.** Recruit through personal networks, confirm by phone, schedule people in their 70s in the morning, skip technical terms, and anticipate that they will fault themselves for the product's problems. Confidence: medium. Sources: B28 p.333-336
+- **Put people in charge of their own targets and of what gets tracked.** Older adults relied on trackers more when they chose the activities, targets and who sees the data, and rejected proactive devices that threatened their control. Confidence: medium. Sources: B21 p.277, 283
+
+## Language and literacy
+
+- **Design for low literacy because it lifts everyone.** A low-literacy redesign raised success from 46 to 82 percent and cut task time by more than half, while high-literacy users also improved (68 to 93 percent); do not rely on text-only feedback when hundreds of millions of adults cannot read. Confidence: medium. Sources: B46 p.676-677; B14 p.110
+- **Write plain, literal interface copy.** For autistic, deaf and dyslexic readers skip idioms and metaphor, use short sentences and name each button after what it does. Confidence: low. Sources: B91 p.114-118
+
+## Choice and control
+
+- **Let people choose their input mode and media behavior.** People differ in preference, privacy needs and surroundings, so offer more than one modality, make autoplay a choice users can switch on or off (it drowns out screen readers) and remember the choice. Confidence: low. Sources: B73 p.94-96, 103; B80 p.27
+- **In immersive products, warn before intense content and make pausing easy.** Flag phobia triggers before they appear so people can opt out, and support instant suspend and resume, since pushing through discomfort builds aversion. Confidence: low. Sources: B36 p.58, 281-284
+
+## Representation and identity
+
+- **Represent people across a range and avoid loaded symbols.** Never name one skin tone nude or flesh, offer a range of tones with neutral names, and steer clear of hand signs, animal emblems and faith symbols (for example as chart markers) whose meaning changes by culture. Confidence: high. Sources: B37 p.114-115; B08 p.191-193, 199-202, 210; B36 p.279-280
+- **Do not default bodies to the average adult male.** Hardware and avatar defaults for height and eye spacing fit many people poorly; prompt for a profile, support per-eye offsets, adapt reach thresholds to body size, swap two-handed layouts for left-handed users and provide avatars that span gender, skin color, age and body type. Confidence: medium. Sources: B36 p.147, 279-280; B83 p.638-639
+- **Never make people pick from two genders or a short fixed list of races.** Let people self-describe and do not infer identity; most automated gender detection treats gender as binary and erases trans and nonbinary people. Confidence: medium. Sources: B65 p.140-142, 147, 153
+- **Write personas as archetypes, never stereotypes.** Base demographics on observed data, favor variety when the evidence is unclear or the attribute is irrelevant to the design, and note possible disability for each persona rather than isolating disability in a single dedicated persona. Confidence: low. Sources: B01 p.8; B50 p.33, 46, 59
+- **Expect taste in form to shift with culture, social class and temperament.** Collectivist audiences lean to rounded, symmetric, balanced forms and individualist ones to novelty; broad audiences respond best to moderate stimulation. Confidence: low. Sources: B72 p.342, 351
+
+## Fairness in automated systems
+
+- **Audit error rates across groups before deploying any automated judgment.** Speech recognition error rates were nearly double for Black speakers versus white speakers, caption accuracy differed by gender, and emotion scoring read Black faces as angrier at equal smiles. Confidence: medium. Sources: B65 p.179, 186; B63 p.51
+- **Remove proxy inputs that smuggle in protected traits.** Postcode, social ties and shopping venues stand in for race and class; judge people on their own behavior, hide names and places when assessing skill, and accept a small accuracy loss to drop an unfair signal. Confidence: medium. Sources: B56 p.76, 96-101, 122, 142
+- **Audit training labels before a model copies past decisions.** Models trained on historic human choices reproduce their bias, and majority-vote labeling erases minority views; prefer systems that present several perspectives or state their limits. Confidence: medium. Sources: B56 p.98-99; B75 p.438, 440
+- **Use risk predictions to route help, not punishment.** The same model that flags someone struggling can offer support services instead of penalties. Confidence: low. Sources: B56 p.99-100, 178-179
+- **Specify diversity explicitly in generative outputs and consult the people represented.** Defaults skew toward a narrow norm even after many regenerations, loaded keywords pull stereotypes and appropriated imagery, so name the range you need, review results and test with members of the culture depicted. Confidence: low. Sources: B75 p.320-339, 441, 485
+- **Ground technology in the community's own knowledge.** Combining provider data, sensors and community feedback, and building on local values, reveals needs of underrepresented groups that a single dataset misses. Confidence: low. Sources: B45 p.23-25, 47-49
