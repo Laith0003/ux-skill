@@ -1034,24 +1034,26 @@ _INDICATOR = re.compile(r"indicator|underline|ink-?bar|highlight|thumb|selection
 _SIZE_ONLY = {"width", "inline-size"}
 _BLOCK_ONLY = {"height", "block-size"}
 _DETAILS_CONTENT = re.compile(r"::details-content\b", re.I)
-_KEYWORD_SIZE = re.compile(r"interpolate-size\s*:\s*allow-keywords|calc-size\(", re.I)
+_KEYWORD_SIZE = re.compile(r"interpolate-size\s*:\s*allow-keywords", re.I)
+_CALC_SIZE = re.compile(r"calc-size\(", re.I)
 _DISCLOSURE = re.compile(r"\bdetails\b|\[open\]|aria-expanded|accordion|disclosure|collaps|expand",
                          re.I)
 
 
 def _platform_disclosure(ctx: FileContext, view: View, block) -> bool:
     """A height that opens a disclosure through the platform: the block
-    styles ::details-content or itself lets sizes interpolate to keywords
-    (interpolate-size: allow-keywords, calc-size()), or the page's root
-    does and the block's selector names a disclosure."""
+    styles ::details-content or itself sets interpolate-size:
+    allow-keywords, or its selector names a disclosure and the page opts
+    in (interpolate-size on :root or html, or a calc-size() open state)."""
     if block is None:
         return False
     if any(_DETAILS_CONTENT.search(s) for s in block.selectors) or _KEYWORD_SIZE.search(block.body):
         return True
     if not any(_DISCLOSURE.search(s) for s in block.selectors):
         return False
-    return any(_KEYWORD_SIZE.search(b.body) and any(s.strip().lower() in (":root", "html")
-                                                    for s in b.selectors)
+    return any(_CALC_SIZE.search(b.body)
+               or (_KEYWORD_SIZE.search(b.body)
+                   and any(s.strip().lower() in (":root", "html") for s in b.selectors))
                for b in css_blocks(view.text))
 
 
