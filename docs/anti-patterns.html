@@ -1755,8 +1755,8 @@
         <div class="ap-applies"></div>
       </header>
       <p class="ap-desc"></p>
-      <div class="ap-why"><span class="ap-sub">Why bad</span><p>backdrop-filter is Baseline since 2024-09-16, so the blur draws in every current browser; the problem is legibility. A blur with no background is as light or as dark as whatever scrolls behind it, so the text on it passes contrast over one part of the page and fails over the next.</p></div>
-      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair backdrop-filter: blur with an opaque or high-alpha background-color (background: rgb(255 255 255 / 0.82)) so the text contrast holds over any content behind it. Optionally go solid under @media (prefers-reduced-transparency: reduce), which only Chromium supports today.</p></div>
+      <div class="ap-why"><span class="ap-sub">Why bad</span><p>backdrop-filter is Baseline since 2024-09-16, so the blur draws in every current browser; the problem is legibility. A blur with no background, or one whose background is transparent or under 0.6 alpha, is as light or as dark as whatever scrolls behind it, so the text on it passes contrast over one part of the page and fails over the next. A background the lint cannot measure (a var(), an image) passes.</p></div>
+      <div class="ap-fix"><span class="ap-sub">Fix</span><p>Pair backdrop-filter: blur with an opaque background-color or one of 0.6 alpha or more (background: rgb(255 255 255 / 0.82)) so the text contrast holds over any content behind it. Optionally go solid under @media (prefers-reduced-transparency: reduce), which only Chromium supports today.</p></div>
       <pre class="ap-pre ap-pre--rx"><code>(?&lt;![\w-])backdrop-filter\s*:\s*blur</code></pre>
       <div class="ap-examples">
         

@@ -1,0 +1,5 @@
+/* A transparent background is no background behind the text. */
+.chip {
+  background-color: transparent;
+  backdrop-filter: blur(6px);
+}

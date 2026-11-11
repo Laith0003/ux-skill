@@ -2615,20 +2615,66 @@ def one_action_several_labels(ctx: FileContext, view: View, match: re.Match, sta
 # glass-without-fallback
 # ---------------------------------------------------------------------------
 
-_BACKGROUND_DECL = re.compile(r"(?<![\w-])background(?:-color)?\s*:", re.I)
+_BACKGROUND_DECL = re.compile(r"(?<![\w-])background(?:-color)?\s*:([^;{}]*)", re.I)
+# The least background alpha behind text on a blur: below it, the surface
+# takes its lightness from whatever scrolls behind and text contrast is left
+# to chance.
+GLASS_ALPHA_FLOOR = 0.6
+_FUNC_ALPHA = re.compile(r"\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(([^()]*)\)", re.I)
+_HEX_ALPHA = re.compile(r"#(?:[0-9a-f]{3}([0-9a-f])|[0-9a-f]{6}([0-9a-f]{2}))(?![0-9a-f])", re.I)
+
+
+def _alpha_number(text: str) -> float:
+    text = text.strip()
+    return float(text[:-1]) / 100 if text.endswith("%") else float(text)
+
+
+def background_alpha(value: str) -> Optional[float]:
+    """The alpha of a background value when it can be read: 0 for
+    transparent, the alpha of a single color function or a hex with alpha,
+    1 for any other plain color. None for what cannot be measured (var(),
+    images, gradients, color-mix() and the like)."""
+    v = value.replace("!important", "").strip().lower()
+    if not v or re.search(r"var\(|url\(|gradient\(|color-mix\(|image|inherit|initial|unset|"
+                          r"revert|currentcolor", v):
+        return None
+    if re.fullmatch(r"transparent|none", v):
+        return 0.0
+    funcs = _FUNC_ALPHA.findall(v)
+    if len(funcs) == 1:
+        args = funcs[0]
+        try:
+            if "/" in args:
+                return _alpha_number(args.split("/")[-1])
+            parts = [a for a in re.split(r"[\s,]+", args.strip()) if a]
+            return _alpha_number(parts[3]) if len(parts) == 4 else 1.0
+        except ValueError:
+            return None
+    if len(funcs) > 1:
+        return None
+    m = _HEX_ALPHA.search(v)
+    if m:
+        digits = m.group(1) * 2 if m.group(1) else m.group(2)
+        return int(digits, 16) / 255
+    return 1.0 if re.fullmatch(r"#[0-9a-f]{3,8}|[a-z]+", v) else None
 
 
 def blur_without_background(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
-    """A backdrop blur is a finding only inside a rule block that sets no
-    background or background-color, before or after the blur. The finding
-    sits on the blur's own line."""
+    """A backdrop blur is a finding inside a rule block that sets no
+    background or background-color, before or after the blur, or whose
+    every background is measured below GLASS_ALPHA_FLOOR (transparent
+    included). A background that cannot be measured (a var(), an image)
+    passes. The finding sits on the blur's own line."""
     text, pos = view.text, match.start()
     opened = max(text.rfind("{", 0, pos), text.rfind("}", 0, pos))
     if opened == -1 or text[opened] != "{":
         return False
     ends = [i for i in (text.find("{", pos), text.find("}", pos)) if i != -1]
     body = text[opened + 1:min(ends) if ends else len(text)]
-    return _BACKGROUND_DECL.search(body) is None
+    alphas = [background_alpha(m.group(1)) for m in _BACKGROUND_DECL.finditer(body)]
+    if not alphas:
+        return True
+    return all(a is not None and a < GLASS_ALPHA_FLOOR for a in alphas)
 
 
 SHADOW_LAYERS = 5

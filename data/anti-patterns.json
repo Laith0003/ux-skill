@@ -1341,8 +1341,8 @@
         ],
         "target": "css"
       },
-      "why": "backdrop-filter is Baseline since 2024-09-16, so the blur draws in every current browser; the problem is legibility. A blur with no background is as light or as dark as whatever scrolls behind it, so the text on it passes contrast over one part of the page and fails over the next.",
-      "fix": "Pair backdrop-filter: blur with an opaque or high-alpha background-color (background: rgb(255 255 255 / 0.82)) so the text contrast holds over any content behind it. Optionally go solid under @media (prefers-reduced-transparency: reduce), which only Chromium supports today."
+      "why": "backdrop-filter is Baseline since 2024-09-16, so the blur draws in every current browser; the problem is legibility. A blur with no background, or one whose background is transparent or under 0.6 alpha, is as light or as dark as whatever scrolls behind it, so the text on it passes contrast over one part of the page and fails over the next. A background the lint cannot measure (a var(), an image) passes.",
+      "fix": "Pair backdrop-filter: blur with an opaque background-color or one of 0.6 alpha or more (background: rgb(255 255 255 / 0.82)) so the text contrast holds over any content behind it. Optionally go solid under @media (prefers-reduced-transparency: reduce), which only Chromium supports today."
     },
     {
       "id": "placeholder-as-pricing",
