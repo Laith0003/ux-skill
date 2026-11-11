@@ -143,9 +143,9 @@ If a theme is interesting but not actionable, demote it to a **Strategic note** 
 ### 10. Sample size and statistical literacy
 
 - Interview studies under n=5: directional only, never definitive
-- Surveys under n=30: directional only
+- Surveys: state the margin of error for the actual n instead of a cutoff (about plus or minus 18 points at n=30, about 5 points at n=385, 95 percent confidence; B94 p.36-37)
 - A/B tests under significance threshold: report the lift AND the confidence interval; don't ship on a 51% / 49% split
-- Funnel deltas under 5%: noise; ignore unless the absolute volume is huge
+- Funnel deltas: run a two-proportion test or read the interval on the difference, then judge the practical size; a small relative change can be real at scale and a large one can be noise at small counts (B94 p.82-83)
 
 When the sample is too small for a conclusion, say so and recommend the next study.
 

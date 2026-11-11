@@ -133,7 +133,7 @@ These five artifacts fit on one wall. Not in one binder. The wall is the contrac
 
 The lone designer who emerges from a cave with a perfect comp is finished. Not because design is unimportant, because the cave is wrong. The work is better when the team makes it together.
 
-The core technique is the **design studio**. It is a time-boxed working session, usually two to three hours, with a mixed group: designers, engineers, product, sometimes a partner-facing voice. Everyone sketches. Engineers sketch. Product managers sketch. The sketches are bad and that is fine. The point is to get every idea into the open before anyone commits to one.
+The core technique is the **design studio**. It is a time-boxed working session of at least about three hours (B34 p.76-81), with a mixed group: designers, engineers, product, sometimes a partner-facing voice. Everyone sketches. Engineers sketch. Product managers sketch. The sketches are bad and that is fine. The point is to get every idea into the open before anyone commits to one.
 
 The studio runs in rounds. First round: each person, alone, sketches three to six ideas for the problem on paper. Second round: each person presents their sketches to the group in three minutes, no defending. Third round: the group critiques, picks elements, recombines. Fourth round: each person sketches one refined concept. Fifth round: the group converges on one direction to prototype.
 
@@ -191,7 +191,7 @@ A few specific integrations.
 
 **Story mapping.** Before the team commits sprint scope, lay out the end-to-end user journey on a wall, story by story. Prioritize the top row (the spine) and slice horizontally to define each release. Story mapping replaces the requirements document and beats it on every axis.
 
-**Design at story-time.** Designers do not work a sprint ahead of engineers in a separate track. Design happens at the moment a story is picked up, with the engineer and the designer pairing on the screen for an hour, with the user research from last week still fresh. Decisions get made together. Implementation starts the same day.
+**Design at story-time, on a short lead.** Design stays ahead of the story being built: a few days of design time raised at planning, or up to a sprint, depending on the team (B34 p.153; B20 p.662-677). Zero lead is not enough. The detailed work still happens when a story is picked up, with the engineer and the designer pairing on the screen for an hour, with the user research from last week still fresh. Decisions get made together. Implementation starts the same day.
 
 **Design debt as a tracked item.** Some decisions are deferred. You ship a quick version because the priority is learning, not polish. Those deferrals are tickets in the backlog like any other technical debt item. They are visible. They get scheduled. They do not pile up silently and then ambush the team six months later.
 

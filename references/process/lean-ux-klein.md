@@ -136,7 +136,7 @@ A few biases to refuse.
 
 **Leading questions.** "How satisfied are you with our excellent new feature?" leads. "Tell us about your experience with the new feature" does not. Phrase every question neutrally. If a question has a tone, rewrite it.
 
-**Satisficing.** Users on surveys take the path of least cognitive effort. They will click "agree" on a long scale to be done with it. The defense is short surveys, mandatory open-ended answers on critical questions, and removing the option that lets them coast (the middle position on a five-point scale, the "neither agree nor disagree").
+**Satisficing.** Users on surveys take the path of least cognitive effort. They will click "agree" on a long scale to be done with it. The defense is short surveys, mandatory open-ended answers on critical questions, and attention checks. Keep the neutral midpoint: agreement scales use an odd count (5 or 7) with a balanced middle, and standardized instruments such as SUS lose their norms if the midpoint is removed (B03 p.331, 355; B28 p.235-236).
 
 **Sample bias.** The users who fill out your survey are different from the ones who don't. They are more engaged, more opinionated, more invested. Caveat every finding with the awareness that you heard from the loud, not the silent. Cross-check with behavior data.
 
@@ -346,7 +346,7 @@ The team's job is to surface the finding clearly and to support the conversation
 
 **Surface early, not late.** The earlier the stakeholder learns about a contrary finding, the easier it is to adjust. Late surprises produce defensive reactions. Build a rhythm where stakeholders see the research as it emerges, not only when the team has a fully formed contrary view.
 
-**Lead with evidence, not interpretation.** Present what was observed before presenting what the team thinks it means. "In seven of eight sessions, users took longer than two minutes to find the rules-setup option. Six of eight users reported they couldn't tell what 'rules' referred to." The numbers and behaviors come first; the team's recommendation follows.
+**Lead with the conclusion, then the evidence.** Open with the one sentence the stakeholder must take away, then the counted observations that support it (B03 p.553; B28 p.307-309). "In seven of eight sessions, users took longer than two minutes to find the rules-setup option. Six of eight users reported they couldn't tell what 'rules' referred to." The conclusion comes first, the numbers and behaviors right behind it, and the team's recommendation follows.
 
 **Distinguish observations from extrapolations.** Some findings are direct observations of behavior; others are extrapolations the team made from limited data. Be transparent about which is which. A stakeholder who pushes back is more likely to be pushing back on an extrapolation than on an observation.
 

@@ -34,7 +34,7 @@ A workshop runs better or worse based on what you prepare before anyone walks in
 
 **People.** The room contains end users, key stakeholders, business leads, and the IT or engineering voice that will eventually build whatever this workshop produces. End users matter most; if the room has no end users in it, the workshop is talking about people who are not in the room, and the resulting plan will reflect the absent users' interests poorly.
 
-Size the group to 6 to 12. Larger groups produce one or two loud voices and many silent passengers. Smaller groups miss the diversity of viewpoint that the protocol relies on. If the natural stakeholder list is larger than 12, you either run multiple workshops or you pick the 12 who are most essential and consult the others afterward.
+Size each working group to about 5 to 7, and no more than 8 (B93 p.341; B39 p.40). Larger groups produce one or two loud voices and many silent passengers. Smaller groups miss the diversity of viewpoint that the protocol relies on. If the natural stakeholder list is larger, split the room into working groups of that size, run multiple workshops, or pick the most essential people and consult the others afterward.
 
 Cast the room with care. An end user who has the problem on a daily basis. A stakeholder who controls the budget. A business lead who understands the commercial constraints. An engineer who can speak to feasibility. A designer who can speak to user experience. A skeptic: someone who is not already sold on the project, whose questions will keep the room honest. Avoid filling the room with people who already agree; agreement is a side effect of the protocol, not a starting condition.
 
