@@ -361,7 +361,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - [ ] Tabular figures enabled on data tables, dashboards, prices, timers (severity: Medium)
 - [ ] Curly quotes used; no straight quotes, em dashes or double hyphens as punctuation (severity: Cosmetic)
 - [ ] `font-display: swap` configured to avoid invisible text during load (severity: High)
-- [ ] Variable font weight respected: reduce by ~50 units in dark mode (severity: Cosmetic)
+- [ ] Variable font weight respected; any dark-mode reduction is limited to display weights of 600 and up (severity: Cosmetic)
 - [ ] No more than two display fonts paired together (severity: High)
 - [ ] Numbered "SECTION 01" / "CHAPTER 03" meta-labels removed (severity: High)
 - [ ] No 6-line wrapped headings under any breakpoint (severity: Critical)

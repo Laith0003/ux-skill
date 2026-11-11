@@ -42,7 +42,7 @@
 | Honor `prefers-reduced-motion: reduce` | Force motion on users who opted out |
 | Provide alt text for every meaningful image | Leave alt text blank on content-bearing images |
 | Mark decorative images with `alt=""` | Mark decorative images with `alt="image"` |
-| Auto-focus first invalid field on submit failure | Drop user at top of form with no indication of what failed |
+| On submit failure, focus the error summary on a long form, or the first invalid field on a short one | Drop user at top of form with no indication of what failed |
 | On long or multi-section forms, add an error summary at top with anchor links, on top of the inline errors | List errors silently at the bottom |
 | Use `aria-live` region for dynamic error announcements | Add errors silently to the DOM with no screen reader announcement |
 | Use `role="alert"` for critical state announcements | Rely on visual color change alone for screen reader users |
@@ -67,7 +67,7 @@ The focus state is not just `:focus-visible`: actually visible. `:focus-visible`
 1. Each field shows its own inline error below the input (always)
 2. On a long or multi-section form, render an error summary at the top with anchor links to each invalid field, and move focus to it
 3. On a short form, auto-focus the first invalid field
-4. Wrap the summary in `<div role="alert" aria-live="polite">` so screen readers announce
+4. Give the summary a heading and `tabindex="-1"` so focus can land on it. Do not add `role="alert"` to a summary that receives focus, or screen readers announce it twice
 5. Error messages name the cause AND the fix: "Phone number needs a country code" not "Invalid input"
 
 ### Pattern: Inline error with cause + fix
@@ -292,7 +292,7 @@ Honor at every level. Never assume the user "will be fine."
 - Helper text via `aria-describedby`
 - Error text below field via `aria-describedby`
 - Validation on `blur`, not on every keystroke
-- Auto-focus first invalid field on submit failure
+- On submit failure, focus the error summary on a long form, or the first invalid field on a short one
 - Multi-error summary at top with anchor links on long or multi-section forms, never in place of the inline errors
 - `role="alert"` or `aria-live="polite"` on the error region
 - `autocomplete` attribute on form inputs for system autofill
@@ -384,7 +384,7 @@ Honor at every level. Never assume the user "will be fine."
 - [ ] `prefers-reduced-motion: reduce` honored at every level (severity: Critical)
 - [ ] Error messages state cause AND fix (severity: High)
 - [ ] No "form contains errors" or "invalid input" copy (severity: High)
-- [ ] Auto-focus first invalid field on submit failure (severity: High)
+- [ ] On submit failure, focus the error summary on a long form, or the first invalid field on a short one (severity: High)
 - [ ] Every invalid field has its own inline error; long or multi-section forms add a summary with anchor links (severity: Medium)
 - [ ] `aria-live` region or `role="alert"` on form error region (severity: High)
 - [ ] Validation runs on `blur`, not on every keystroke (severity: High)
