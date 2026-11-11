@@ -335,7 +335,7 @@
       "compatible_styles": ["apple-liquid-glass", "glassmorphism", "monochrome-precise", "saas-stripe-modern", "vercel-precision"],
       "exemplars": ["apple.com", "stripe.com", "linear.app"],
       "ai_slop_risk": "high",
-      "notes": "Backdrop-filter falls back ungracefully in older browsers — keep the fallback as a faint solid tint, not a missing nav. Test on Safari, Firefox, and Chrome."
+      "notes": "Backdrop-filter draws in every current browser; give the nav a high-alpha background so its text stays legible over any content scrolling behind it."
     },
     {
       "id": "navigation-wordmark-hamburger",
