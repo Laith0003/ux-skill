@@ -687,7 +687,7 @@ The notification patterns. Each communicates at a different intensity and persis
 
 **Required behaviors.**
 - Appears in a corner of the viewport (typically top-right or bottom-right).
-- Auto-dismisses after 4-6 seconds.
+- Success toasts may fade after about 5 seconds and pause on hover and focus; errors and toasts with an action persist (WCAG 2.2 SC 2.2.1).
 - Dismissible by user (X button or swipe).
 - Queue up to 3-4 toasts; beyond that, the queue is unreadable.
 

@@ -43,7 +43,7 @@
 | Provide alt text for every meaningful image | Leave alt text blank on content-bearing images |
 | Mark decorative images with `alt=""` | Mark decorative images with `alt="image"` |
 | Auto-focus first invalid field on submit failure | Drop user at top of form with no indication of what failed |
-| Provide error summary at top with anchor links | List errors silently at the bottom |
+| On long or multi-section forms, add an error summary at top with anchor links, on top of the inline errors | List errors silently at the bottom |
 | Use `aria-live` region for dynamic error announcements | Add errors silently to the DOM with no screen reader announcement |
 | Use `role="alert"` for critical state announcements | Rely on visual color change alone for screen reader users |
 | Reserve high contrast (7:1 AAA) for primary copy | Drift to 3:1 "stylish but unreadable" body text |
@@ -61,12 +61,12 @@
 The focus state is not just `:focus-visible`: actually visible. `:focus-visible` should style the focus, but never rely on it without ensuring the style is genuinely perceivable.
 
 ### Pattern: Error summary with anchor links
-**Use when**: Forms with multiple potential errors.
-**Anti-pattern**: Errors scattered inline only, with no aggregated summary at the top.
+**Use when**: Long or multi-section forms, where some invalid fields sit out of view after submit. A short form with every field in view needs no summary; its inline messages are enough. No WCAG criterion requires a summary (B18 p.92-93; B86 p.525-526).
+**Anti-pattern**: A summary at the top with no message beside each field. The inline message is mandatory; the summary only supplements it, and people often miss it.
 **How**: After submit failure:
-1. Auto-focus the first invalid field
-2. Render an error summary at the top of the form with anchor links to each invalid field
-3. Each field shows its own inline error below the input
+1. Each field shows its own inline error below the input (always)
+2. On a long or multi-section form, render an error summary at the top with anchor links to each invalid field, and move focus to it
+3. On a short form, auto-focus the first invalid field
 4. Wrap the summary in `<div role="alert" aria-live="polite">` so screen readers announce
 5. Error messages name the cause AND the fix: "Phone number needs a country code" not "Invalid input"
 
@@ -109,7 +109,7 @@ Validation on `blur`, not on every keystroke. The user finishes typing, then see
 ### Pattern: Form labels
 **Use when**: Every input field.
 **Anti-pattern**: Placeholder-only labels that disappear when the user starts typing.
-**How**: Every input has a visible `<label for="email">Email</label>` linked by `for` and `id`. Required fields marked with an asterisk or "(required)" inline. Helper text below the input via `aria-describedby`. Error text below the field, also referenced via `aria-describedby`. Floating labels are tolerated but the label must remain visible after the user types.
+**How**: Every input has a visible `<label for="email">Email</label>` linked by `for` and `id`. Required fields say so in text ("(required)", or an asterisk explained above the form) and in code with the `required` attribute (WCAG 2.2 SC 3.3.2, 1.3.1). Helper text below the input via `aria-describedby`. Error text below the field, also referenced via `aria-describedby`. Floating labels are tolerated but the label must remain visible after the user types.
 
 ### Pattern: Alt text discipline
 **Use when**: Every `<img>` or meaningful visual.
@@ -167,7 +167,7 @@ Honor at every level. Never assume the user "will be fine."
 - `aria-live="polite"` for non-urgent updates (toasts, status changes)
 - `aria-live="assertive"` for urgent errors only
 - `role="alert"` for critical state announcements (form submission failures)
-- Auto-dismiss toasts in 3 to 5 seconds; never steal focus
+- Timing: informational success toasts may fade after about 5 seconds, pausing while hovered or focused; error toasts and toasts with an action (Undo, Retry) stay until the person acts or dismisses them (WCAG 2.2 SC 2.2.1). Never steal focus
 - Provide a manual dismiss control for screen reader users who need more time
 
 ### Pattern: Keyboard shortcut documentation
@@ -220,7 +220,8 @@ Honor at every level. Never assume the user "will be fine."
 - Up/Down arrow keys when item is focused
 - Cut/paste via Ctrl+X / Ctrl+V on items
 - A reorder dialog with explicit numeric position input
-- `aria-grabbed` and `aria-dropeffect` for screen readers during drag
+- Announce each pick-up, move and drop in a polite live region ("Item 3 of 8, moved to position 5"); do not use `aria-grabbed` or `aria-dropeffect`, which WAI-ARIA 1.1 deprecated
+- Every drag has a single-pointer alternative such as the move buttons above (WCAG 2.2 SC 2.5.7)
 
 ### Pattern: Multi-language and RTL support
 **Use when**: Building for international audiences.
@@ -231,7 +232,7 @@ Honor at every level. Never assume the user "will be fine."
 - Stagger animations are direction-aware: mirror on RTL
 - Number formatting locale-aware
 - Date formatting locale-aware
-- Text expansion: translations may be 30 to 50% longer; layouts must flex
+- Text expansion depends on length: up to 10 characters can grow 100 to 200%, 11 to 20 about 80 to 100%, 21 to 50 about 40 to 80%, 51 to 70 about 31 to 40%, longer text about 30% (B46 p.657-662; B23 p.603-604). Size buttons, tabs and labels for the short-string figure, and test with pseudo-localization before real translations arrive
 - Test in RTL languages and large-text mode in the same pass
 
 ### Pattern: Focus outline with high contrast
@@ -292,7 +293,7 @@ Honor at every level. Never assume the user "will be fine."
 - Error text below field via `aria-describedby`
 - Validation on `blur`, not on every keystroke
 - Auto-focus first invalid field on submit failure
-- Multi-error summary at top with anchor links
+- Multi-error summary at top with anchor links on long or multi-section forms, never in place of the inline errors
 - `role="alert"` or `aria-live="polite"` on the error region
 - `autocomplete` attribute on form inputs for system autofill
 - Semantic input types (`email`, `tel`, `number`, `url`, `date`) so mobile keyboards adapt
@@ -333,7 +334,7 @@ Honor at every level. Never assume the user "will be fine."
 - Validation on every keystroke (user typing "j" sees "must be valid email")
 - Skipping heading levels for visual reasons (h1 → h4)
 - Errors only at top of form with no inline indication
-- Errors only inline with no aggregated summary
+- A long, multi-section form whose off-screen errors are not linked from a summary
 - Modal with no Escape key handler
 - Modal blocks primary flow with no escape
 - Auto-play audio without consent
@@ -384,14 +385,14 @@ Honor at every level. Never assume the user "will be fine."
 - [ ] Error messages state cause AND fix (severity: High)
 - [ ] No "form contains errors" or "invalid input" copy (severity: High)
 - [ ] Auto-focus first invalid field on submit failure (severity: High)
-- [ ] Error summary at top of form with anchor links to each field (severity: Medium)
+- [ ] Every invalid field has its own inline error; long or multi-section forms add a summary with anchor links (severity: Medium)
 - [ ] `aria-live` region or `role="alert"` on form error region (severity: High)
 - [ ] Validation runs on `blur`, not on every keystroke (severity: High)
 - [ ] Modals offer Escape key dismissal, visible close button, scrim click (severity: Critical)
 - [ ] Focus returns to trigger after modal close (severity: High)
 - [ ] Focus moves to main content after route change (severity: High)
 - [ ] Toasts use `aria-live="polite"`, do not steal focus (severity: High)
-- [ ] Toasts auto-dismiss in 3 to 5 seconds (severity: Medium)
+- [ ] Error toasts and toasts with an action never auto-dismiss; a fading success toast pauses on hover and focus (severity: High)
 - [ ] Pinch-zoom preserved in viewport meta (severity: Critical)
 - [ ] `touch-action: manipulation` removes 300ms tap delay on web (severity: Medium)
 - [ ] Color-blind safe palettes in charts and status indicators (severity: Critical)

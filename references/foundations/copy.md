@@ -186,7 +186,7 @@ Sometimes preceded by a 6 to 8px colored dot. Replaces decorative section divide
 ### Pattern: Toast accessibility
 **Use when**: Toast notifications for system feedback.
 **Anti-pattern**: Toast appears visually only; screen reader users miss it entirely.
-**How**: Use `aria-live="polite"` for non-urgent toasts (most cases). Use `aria-live="assertive"` or `role="alert"` for urgent errors only. Auto-dismiss in 3 to 5 seconds. Never steal focus. Provide a visible dismiss control for users who need more time. Toast copy stays brief: "Profile saved." "Invite sent." "Connection paused."
+**How**: Use `aria-live="polite"` for non-urgent toasts (most cases). Use `aria-live="assertive"` or `role="alert"` for urgent errors only. Timing: informational success toasts may fade after about 5 seconds, pausing while hovered or focused; error toasts and toasts with an action (Undo, Retry) stay until the person acts or dismisses them (WCAG 2.2 SC 2.2.1). Never steal focus. Provide a visible dismiss control for users who need more time. Toast copy stays brief: "Profile saved." "Invite sent." "Connection paused."
 
 ### Pattern: Confirmation dialog
 **Use when**: Destructive actions, irreversible operations.
@@ -433,7 +433,7 @@ Resist the temptation to make each layer do the others' jobs.
 - [ ] No replacement framing ("our AI writes for you") (severity: Medium)
 - [ ] Validation runs on `blur`, not on every keystroke (severity: High)
 - [ ] Toast uses `aria-live="polite"`, does not steal focus (severity: High)
-- [ ] Toast auto-dismisses in 3 to 5 seconds (severity: Medium)
+- [ ] Error toasts and toasts with an action never auto-dismiss; a fading success toast pauses on hover and focus (severity: High)
 - [ ] Confirmation dialog before destructive actions, with both confirm and cancel visible (severity: Critical)
 - [ ] Curly quotes used; no straight quotes (severity: Cosmetic)
 - [ ] No em dashes, en dashes or double hyphens as punctuation (severity: Cosmetic)

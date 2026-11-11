@@ -16,13 +16,13 @@
 
 6. **Cards earn their elevation**: Use cards only when elevation communicates hierarchy. Otherwise, alignment and spacing carry the structure. In dense data UI, replace cards with `border-t`, `divide-y`, or pure negative space.
 
-7. **Forms validate on `blur`, not on every keystroke**: Show the error after the user finishes the input. Auto-focus the first invalid field on submit failure. Provide both inline errors and an aggregated summary.
+7. **Forms validate on `blur`, not on every keystroke**: Show the error after the user finishes the input. Auto-focus the first invalid field on submit failure. Every invalid field shows its own inline error; add an aggregated summary with links only on long or multi-section forms.
 
 8. **Modals and sheets offer a clear escape**: Escape key, visible close button, click-on-scrim. Confirm before dismissing with unsaved changes. Focus returns to the trigger after close.
 
 9. **Tables use tabular numerals and consistent alignment**: Numbers right-aligned with `font-mono` and `font-variant-numeric: tabular-nums`. Action columns right-aligned. Sticky headers on long tables. Empty rows show an empty state across the full width.
 
-10. **Toasts speak to screen readers**: `aria-live="polite"` for non-urgent updates. Auto-dismiss in 3 to 5 seconds. Never steal focus.
+10. **Toasts speak to screen readers**: `aria-live="polite"` for non-urgent updates. Only informational success toasts fade on a timer; errors and toasts with Undo or Retry stay until acknowledged (WCAG 2.2 SC 2.2.1). Never steal focus.
 
 11. **Disabled states are programmatically disabled**: Reduced opacity, cursor change, AND the semantic `disabled` attribute. Looks disabled AND refuses input.
 
@@ -268,15 +268,15 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 
 **Behavior**:
 - Validation on `blur` (not on every keystroke)
-- Required indicator inline (`*` or "(required)")
+- Required state in text and code: "(optional)" on optional fields, or an asterisk explained above the form, plus the `required` attribute (WCAG 2.2 SC 3.3.2, 1.3.1)
 - Auto-focus first invalid field on submit failure
-- Multi-error summary at top of form with anchor links
+- On long or multi-section forms, a multi-error summary at top with anchor links (an addition to the inline errors)
 - Each anchor link scrolls to and focuses the corresponding field
 
 **Anti-patterns**:
 - Placeholder as label
 - Errors only at top with no inline marker
-- Errors only inline with no aggregated summary
+- A long, multi-section form whose off-screen errors are not linked from a summary
 - "Form contains errors" or "Invalid input" copy
 - Validation messages that disappear when user starts typing
 
@@ -285,7 +285,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 **Required affordances**:
 - `aria-live="polite"` for non-urgent (most cases)
 - `aria-live="assertive"` or `role="alert"` for urgent errors only
-- Auto-dismiss in 3 to 5 seconds
+- Timing: informational success toasts may fade after about 5 seconds, pausing while hovered or focused; error toasts and toasts with an action (Undo, Retry) stay until the person acts or dismisses them (WCAG 2.2 SC 2.2.1)
 - Visible dismiss button for users who need more time
 - Stacks if multiple toasts queued; oldest at top
 - Never steals focus from current control
@@ -293,7 +293,8 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 
 **Anti-patterns**:
 - Toast covers primary CTA
-- Toast persists indefinitely (use a banner or alert instead)
+- Error or action toast that disappears on a timer before the person can read or act on it
+- Long-lived status shown as a toast (use a banner or inline alert instead)
 - Toast steals keyboard focus
 - Toast with destructive action: destructive needs confirmation, not a transient
 
@@ -512,7 +513,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Width: 320 to 480px
 - Padding: 16 to 24px
 - Background: surface color with shadow
-- Auto-dismiss: 3 to 5 seconds
+- Timing: success may fade after about 5 seconds and pauses on hover and focus; errors and action toasts persist
 - `aria-live="polite"` default; `aria-live="assertive"` for urgent only
 - Position: top, top-right, or bottom (consistent within product)
 - Never overlaps primary CTA
@@ -629,7 +630,7 @@ Every component documents:
 - [ ] Navbar persistent and reachable from deep pages (severity: Medium)
 - [ ] Active nav state visually highlighted (severity: Medium)
 - [ ] Toast uses `aria-live="polite"`, does not steal focus (severity: High)
-- [ ] Toast auto-dismisses in 3 to 5 seconds (severity: Medium)
+- [ ] Error toasts and toasts with an action never auto-dismiss; a fading success toast pauses on hover and focus (severity: High)
 - [ ] Chart tooltip works on hover, tap, AND keyboard focus (severity: Critical)
 - [ ] Chart has empty / loading / error states (severity: High)
 - [ ] Chart has `aria-label` summary AND data table alternative (severity: Critical)
