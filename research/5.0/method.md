@@ -27,7 +27,7 @@ A common failure is to skip steps 1 to 4: pages get built straight from a spec's
 
 ### 1.2 Research mature tools for the same jobs
 
-- Pick two mature products that serve the same kind of user and job (for a back office: a commerce admin and an accounting product).
+- Pick two mature products that serve the same kind of user and job (for a back office: a mature admin product and an accounting product).
 - Research how each **routes a user to each kind of data and goal**, not how it looks: global routes (search, nav, notifications), index pages (views, filters, sort, bulk), then per data type (home, one record, a list filtered by state, a balance, a statement over a period, this period against the last, a ranking, a history of who did what, a setting's current value).
 - Tag every claim by evidence: primary page read, excerpt only, community or third party, inference. Keep an explicit "could not verify" list; nothing is "seen in the product" unless a live session was used.
 - Output three tables: patterns both share (conventions the user already knows), our objects mapped to the closest pattern with what to borrow, and patterns to avoid with the reason. Recommendation is kept apart from the facts.
