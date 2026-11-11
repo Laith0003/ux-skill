@@ -82,8 +82,8 @@
 
 ### Pattern: Dark-mode weight compensation
 **Use when**: Building a dark variant of the same typography system.
-**Anti-pattern**: Reusing the same weight on light and dark and watching dark mode read as too thick.
-**How**: Reduce font weight by roughly 50 units when going from light to dark for the same size (e.g., 600 in light becomes 550 in dark). This compensates for the apparent thickening of light type on dark background. Line-height stays the same across modes. Letter-spacing can loosen by 1 to 2% on body in dark mode.
+**Anti-pattern**: Thinning body and small text in dark mode, so light-on-dark text breaks up and loses contrast.
+**How**: Keep body and small text at the same weight or heavier on dark grounds (400 or more), and add slight positive tracking (+0.01 to +0.02em) to small reversed text (B88 p.139; B18 p.135-136). A reduction is allowed only on display weights of 600 and up, where large light type can read heavy (for example 700 in light becomes 650 in dark). Line-height stays the same across modes.
 
 ### Pattern: Numerical specificity as typographic ornament
 **Use when**: The page's persuasion is a measured figure the client gives, and the brand is formal.
@@ -133,7 +133,7 @@
 ### Pattern: Three-weight system across the brand
 **Use when**: Establishing the typographic system for an entire product.
 **Anti-pattern**: A 6+ weight ladder where the differences between adjacent weights are imperceptible.
-**How**: Collapse weight choices to three roles: bold or semibold for display (600 to 700), regular for body (400), light for support / metadata (300). The gap between 400 and 600 is intentional: it makes hierarchy unmissable. Italic and light weights stay out unless the brief explicitly demands them.
+**How**: Collapse weight choices to three roles: bold or semibold for display (600 to 700), medium for UI labels (500), regular for body and for support and metadata (400). De-emphasize metadata with a muted color or a smaller size, never a weight under 400 (B47 p.40-41; B31 p.92). The gap between 400 and 600 is intentional: it makes hierarchy unmissable. Italic and light weights stay out unless the brief explicitly demands them.
 
 ### Pattern: Numerals as editorial folios
 **Use when**: Section numbering, step indicators, or chapter markers.
@@ -161,7 +161,7 @@
 - Subhead / UI label: 500 to 600
 - Body: 400 to 450
 - Caption / metadata / disabled: 400, sometimes paired with reduced opacity
-- Reduce by ~50 units in dark mode for matching perceived weight
+- Dark mode: body and small text keep their weight or go heavier, with +0.01 to +0.02em tracking on small sizes; only display weights of 600 and up may drop, by about 50 units
 
 ### Line-height
 - Display: 1.12 at 40px down to 1.0 (muted) or 0.92 (bold) at 160px and up; floor 0.88
@@ -375,7 +375,7 @@ The default LLM output reaches for typography that signals AI generation. Overri
 - [ ] Big stat numerals at 96 to 144px with sized-down unit labels (severity: Cosmetic)
 - [ ] Editorial column width clamps body to 55 to 75 characters (severity: Medium)
 - [ ] No 900-weight display headlines (cluster at 500 to 700) (severity: Medium)
-- [ ] Display weight reduced by ~50 units in dark mode (severity: Cosmetic)
+- [ ] Body and small text keep 400 or more in dark mode; any weight drop is limited to display weights of 600 and up (severity: Cosmetic)
 - [ ] No reflexive reach for Inter when a more distinctive face would serve the brand (severity: Medium)
 - [ ] Display optical variant used for hero, text optical variant for body where variable fonts support `opsz` (severity: Cosmetic)
 - [ ] Mono used for literal values (versions, regions, percentages) inside otherwise-sans copy (severity: Cosmetic)
