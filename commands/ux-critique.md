@@ -24,7 +24,7 @@ One of: a URL, a screenshot, a file path, a code snippet, a Figma link, or a des
 
 ### 1. Read the surface like a designer, not an auditor
 
-Look at the whole thing first. Do not enumerate. Do not start a list. Notice what your eye does — where it lands first, what it skips, what it returns to, what it ignores entirely. Record that first read as your reaction, not as evidence: you are not the user. Test it against the audience and outcome below before it becomes a miss, and settle taste disputes by watching users (B77 p.116-120; B09 p.23-28).
+Look at the whole thing first. Do not enumerate. Do not start a list. Notice what your eye does: where it lands first, what it skips, what it returns to, what it ignores entirely. Record that first read as your reaction, not as evidence: you are not the user. Test it against the audience and outcome below before it becomes a miss, and settle taste disputes by watching users (B77 p.116-120; B09 p.23-28).
 
 If `.ux/last-frame.json` exists, hold the audience and outcome in mind — your judgment is relative to who this is for, not absolute. A surface that is "minimal and elegant" for a luxury brand is "cold and untrusting" for a kids' product.
 

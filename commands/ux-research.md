@@ -54,11 +54,11 @@ Smoke tests and fake doors are valid for binary problem-existence checks before 
 
 Build the deliverable for the chosen method:
 
-- **Interview script** — open-ended + behavior-focused questions, no leading wording. Structure: warm-up (2-3 q), context (current behavior), specific (past experience with the problem), reflection (what a good day with this task would have looked like, or the last time it went badly), wrap-up. Never ask the participant to design the fix: when they offer one, ask what problem it would solve (B26 p.81-85; B89 p.84-85). Never ask "would you use" — ask about past behavior.
-- **Survey** — anti-bias structure. Randomize answer order. Mix 5-point Likert with open-ended. Screen out professionals/insiders. Attention check question.
-- **Usability test plan** — tasks framed as goals not steps. Time-box per task. Define success criteria upfront. State the protocol per task: think-aloud for untimed formative tasks, silent for any task whose time is measured (narration slows people; B28 p.92, 118).
-- **Diary study brief** — daily prompt, max 5 min effort, end-of-study debrief interview.
-- **Screener questionnaire** — disqualifying criteria first, then qualifying. Stated incentive, time commitment, schedule.
+- **Interview script**: open-ended + behavior-focused questions, no leading wording. Structure: warm-up (2-3 q), context (current behavior), specific (past experience with the problem), reflection (what a good day with this task would have looked like, or the last time it went badly), wrap-up. Never ask the participant to design the fix: when they offer one, ask what problem it would solve (B26 p.81-85; B89 p.84-85). Never ask "would you use"; ask about past behavior.
+- **Survey**: anti-bias structure. Randomize answer order. Mix 5-point Likert with open-ended. Screen out professionals/insiders. Attention check question.
+- **Usability test plan**: tasks framed as goals not steps. Time-box per task. Define success criteria upfront. State the protocol per task: think-aloud for untimed formative tasks, silent for any task whose time is measured (narration slows people; B28 p.92, 118).
+- **Diary study brief**: daily prompt, max 5 min effort, end-of-study debrief interview.
+- **Screener questionnaire**: disqualifying criteria first, then qualifying. Stated incentive, time commitment, schedule.
 
 ### 4. Recruitment plan
 
