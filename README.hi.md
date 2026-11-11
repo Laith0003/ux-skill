@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-180-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13276_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 या उससे नया। MCP सर्वर के लि�
 
 **सरफ़ेस प्लेबुक।** लैंडिंग, डैशबोर्ड और कंपोनेंट के नियम `references/surfaces/` में हैं, हर एक की अपनी प्लेबुक। `/ux-design` अपने मोड के हिसाब से ठीक एक प्लेबुक लोड करता है, इसलिए डैशबोर्ड बिल्ड कभी हीरो के नियम नहीं पढ़ता।
 
-टेस्ट **9764 पास**। ऑफ़लाइन। डिटरमिनिस्टिक। कभी कोई LLM नहीं बुलाया जाता।
+टेस्ट **13101 पास**। ऑफ़लाइन। डिटरमिनिस्टिक। कभी कोई LLM नहीं बुलाया जाता।
 
 ### v3.1 में नया: ब्रांड के प्रति सच्चा, रिस्पॉन्सिव, जीवंत
 
@@ -112,7 +112,7 @@ ux-skill AI कोडिंग टूल्स के लिए एक **डि�
 4. [आर्किटेक्चर, टुकड़े कैसे जुड़ते हैं](#आर्किटेक्चर-टुकड़े-कैसे-जुड़ते-हैं)
 5. [18 स्लैश कमांड, विस्तृत संदर्भ](#18-स्लैश-कमांड-विस्तृत-संदर्भ)
 6. [5 सब-एजेंट](#5-सब-एजेंट)
-7. [11 डेटा मैनिफ़ेस्ट](#11-डेटा-मैनिफ़ेस्ट)
+7. [12 डेटा मैनिफ़ेस्ट](#12-डेटा-मैनिफ़ेस्ट)
 8. [180 एंटी-AI-स्लॉप नियम, लिंटर](#180-एंटी-ai-स्लॉप-नियम-लिंटर)
 9. [160 ब्रांड DESIGN.md स्पेक, श्रेणी के अनुसार](#160-ब्रांड-designmd-स्पेक-श्रेणी-के-अनुसार)
 10. [MCP सर्वर, असममित चाल](#mcp-सर्वर-असममित-चाल)
@@ -228,7 +228,7 @@ ux stats
 - **कंपोनेंट लाइब्रेरी:** एनाटॉमी, स्टेट, उपयोग किए गए टोकन, और मोशन स्पेक के साथ 148 डॉक्यूमेंटेड कंपोनेंट। अन्य 8 में से कोई भी एक कंपोनेंट मैनिफ़ेस्ट नहीं भेजता।
 - **मोशन प्रीसेट:** रिड्यूस्ड-मोशन फ़ॉलबैक के साथ 57 स्टैक-तैयार एंट्री (Framer Motion, GSAP, CSS)। अन्य में से कोई भी मोशन मैनिफ़ेस्ट नहीं भेजता।
 - **एंटी-पैटर्न लिंटर:** 180 डिटरमिनिस्टिक नियम, CI में चलते हैं, Critical/High पर non-zero exit करते हैं। अन्य में से कोई भी डिटरमिनिस्टिक लिंटर नहीं भेजता।
-- **ब्रांड स्पेक:** 160 असली DESIGN.md स्पेक (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, और 96 और)। अन्य में से कोई भी ब्रांड लाइब्रेरी नहीं भेजता।
+- **ब्रांड स्पेक:** 160 असली DESIGN.md स्पेक (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, और 146 और)। अन्य में से कोई भी ब्रांड लाइब्रेरी नहीं भेजता।
 - **17 IDE समर्थित:** एक ही इंजन, प्रति IDE अलग गोंद।
 - **18 स्लैश कमांड:** डिस्कवरी, जेनरेशन (पेज, कंपोनेंट, डैशबोर्ड, इमेज से), ऑडिट, लिंट, पॉलिश लूप, फ़िक्स लूप, केस-स्टडी, वर्कशॉप, कॉपी, मोशन, a11y, कंडक्टर, पूरी तरह एकीकृत।
 
@@ -668,7 +668,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## 11 डेटा मैनिफ़ेस्ट
+## 12 डेटा मैनिफ़ेस्ट
 
 डेटा परत मस्तिष्क है। हर कमांड इससे पढ़ता है; इंजन इसके पार मर्ज करता है; लिंटर इसके विरुद्ध स्कैन करता है। सभी फ़ाइलें `data/` के तहत रहती हैं और स्कीमा संस्करण के लिए अपनी एंट्री को `{_meta, entries}` में लपेटती हैं।
 
@@ -779,6 +779,15 @@ Recommender (`/ux-discover`) द्वारा पहली समानां�
 | `categories` | A11y (50), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 पूरी नियम सूची [180 एंटी-AI-स्लॉप नियम](#180-एंटी-ai-स्लॉप-नियम-लिंटर) में है।
+
+### `landing-patterns.json`: 40 लैंडिंग पैटर्न
+
+| फ़ील्ड | विवरण |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160 ब्रांड स्पेक
 

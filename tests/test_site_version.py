@@ -43,6 +43,16 @@ def test_a_stale_version_is_caught():
     assert [v for _, v in sv.claims(stale) if not sv.agrees(v)] == ["3.1.0", "3.1"]
 
 
+def test_a_stale_glyph_in_the_split_numeral_is_caught():
+    glyphs = lambda s: "".join(f'<span class="g">{c}</span>' for c in s)
+    html = ('<div class="three" aria-hidden="true">\n'
+            f'<span class="three__glow">{glyphs("3.2")}</span>'
+            f'<span class="three__base">{glyphs("3.2")}</span>'
+            '<span class="three__sweep"><span class="three__win">'
+            f'<span class="three__copy">{glyphs("3.2")}</span></span></span>\n</div>')
+    assert [v for label, v in sv.claims(html) if label == "hero numeral"] == ["3.2"] * 3
+
+
 @pytest.mark.parametrize("page", PAGES, ids=lambda p: str(p.relative_to(ROOT / "docs")))
 def test_page_states_only_the_pyproject_version(page):
     html = page.read_text(encoding="utf-8")

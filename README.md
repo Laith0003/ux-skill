@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-180-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13276_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 or newer. For the MCP server, `pip install --upgrade 'uxskill[mcp]'`
 
 **Surface playbooks.** Landing, dashboard and component rules live in `references/surfaces/`, one playbook each. `/ux-design` loads exactly one, picked by its mode, so a dashboard build never reads hero rules.
 
-Tests **9764 passing**. Offline. Deterministic. No LLM ever called.
+Tests **13101 passing**. Offline. Deterministic. No LLM ever called.
 
 ### New in v3.1: brand-true, responsive, alive
 
@@ -112,7 +112,7 @@ This README is the canonical reference. Every command, every sub-agent, every da
 4. [Architecture, how the pieces fit](#architecture-how-the-pieces-fit)
 5. [The 18 slash commands, detailed reference](#the-18-slash-commands-detailed-reference)
 6. [The 5 sub-agents](#the-5-sub-agents)
-7. [The 11 data manifests](#the-11-data-manifests)
+7. [The 12 data manifests](#the-12-data-manifests)
 8. [The 180 anti-AI-slop rules, the linter](#the-180-anti-ai-slop-rules-the-linter)
 9. [The 160 brand DESIGN.md specs, by category](#the-160-brand-designmd-specs-by-category)
 10. [MCP server, the asymmetric move](#mcp-server-the-asymmetric-move)
@@ -228,7 +228,7 @@ Star counts last verified via `gh api` on **2026-05-28**. ux-skill (Laith0003/ux
 - **Component library:** 148 documented components with anatomy, states, tokens used, and motion specs. None of the other 8 ship a component manifest.
 - **Motion presets:** 57 stack-ready entries (Framer Motion, GSAP, CSS) with reduced-motion fallbacks. None of the others ship a motion manifest.
 - **Anti-pattern linter:** 180 deterministic rules, runs in CI, exits non-zero on Critical/High. None of the others ship a deterministic linter.
-- **Brand specs:** 160 real DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, and 96 more). None of the others ship a brand library.
+- **Brand specs:** 160 real DESIGN.md specs (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, and 146 more). None of the others ship a brand library.
 - **17 IDEs supported:** same engine, different glue per IDE.
 - **18 slash commands:** discovery, generation (pages, components, dashboards, from an image), audit, lint, polish loop, fix loop, case-study, workshop, copy, motion, a11y, conductor, fully integrated.
 
@@ -668,7 +668,7 @@ The calling command then runs `/ux-lint` automatically before declaring done.
 
 ---
 
-## The 11 data manifests
+## The 12 data manifests
 
 The data layer is the brain. Every command reads from it; the engine merges across it; the linter scans against it. All files live under `data/` and wrap their entries in `{_meta, entries}` for schema versioning.
 
@@ -779,6 +779,15 @@ Every preset has a reduced-motion variant. Stack-ready code for Framer Motion, G
 | `categories` | A11y (50), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 The full rule list is in [The 180 anti-AI-slop rules](#the-180-anti-ai-slop-rules-the-linter).
+
+### `landing-patterns.json`: 40 landing patterns
+
+| Field | Description |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160 brand specs
 

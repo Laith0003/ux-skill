@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-180-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13276_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 ou mais recente. Para o servidor MCP, `pip install --upgrade 'uxskil
 
 **Playbooks de superfície.** As regras de landing, dashboard e componente ficam em `references/surfaces/`, um playbook para cada. `/ux-design` carrega exatamente um, escolhido pelo modo, então uma build de dashboard nunca lê regras de hero.
 
-Testes: **9764 passando**. Offline. Determinístico. Nenhum LLM é chamado, nunca.
+Testes: **13101 passando**. Offline. Determinístico. Nenhum LLM é chamado, nunca.
 
 ### Novo na v3.1: fiel à marca, responsivo, vivo
 
@@ -112,7 +112,7 @@ Este README é a referência canônica. Cada comando, cada sub-agent, cada manif
 4. [Arquitetura, como as peças se encaixam](#arquitetura-como-as-peças-se-encaixam)
 5. [Os 18 comandos slash, referência detalhada](#os-18-comandos-slash-referência-detalhada)
 6. [Os 5 sub-agents](#os-5-sub-agents)
-7. [Os 11 manifests de dados](#os-11-manifests-de-dados)
+7. [Os 12 manifests de dados](#os-12-manifests-de-dados)
 8. [As 180 regras anti-AI-slop, o linter](#as-180-regras-anti-ai-slop-o-linter)
 9. [As 160 specs de marca DESIGN.md, por categoria](#as-160-specs-de-marca-designmd-por-categoria)
 10. [Servidor MCP, a jogada assimétrica](#servidor-mcp-a-jogada-assimétrica)
@@ -228,7 +228,7 @@ As contagens de estrelas foram verificadas pela última vez via `gh api` em **20
 - **Biblioteca de componentes:** 148 componentes documentados com anatomia, estados, tokens usados e especificações de motion. Nenhum dos outros 8 distribui um manifest de componentes.
 - **Presets de motion:** 57 entradas prontas para o stack (Framer Motion, GSAP, CSS) com fallbacks de reduced-motion. Nenhum dos outros distribui um manifest de motion.
 - **Linter de anti-pattern:** 180 regras determinísticas, roda em CI, sai com código não-zero em Critical/High. Nenhum dos outros distribui um linter determinístico.
-- **Specs de marca:** 160 specs DESIGN.md reais (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude e mais 96). Nenhum dos outros distribui uma biblioteca de marca.
+- **Specs de marca:** 160 specs DESIGN.md reais (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude e mais 146). Nenhum dos outros distribui uma biblioteca de marca.
 - **17 IDEs suportados:** mesmo motor, cola diferente por IDE.
 - **18 comandos slash:** discovery, geração (páginas, componentes, dashboards, a partir de uma imagem), auditoria, lint, loop de polish, loop de fix, case-study, workshop, copy, motion, a11y, conductor, totalmente integrados.
 
@@ -668,7 +668,7 @@ O comando que chama então roda `/ux-lint` automaticamente antes de declarar pro
 
 ---
 
-## Os 11 manifests de dados
+## Os 12 manifests de dados
 
 A camada de dados é o cérebro. Cada comando lê dela; o motor mescla através dela; o linter escaneia contra ela. Todos os arquivos vivem em `data/` e envolvem suas entradas em `{_meta, entries}` para versionamento de schema.
 
@@ -779,6 +779,15 @@ Cada preset tem uma variante reduced-motion. Código pronto pro stack para Frame
 | `categories` | A11y (50), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 A lista completa de regras está em [As 180 regras anti-AI-slop](#as-180-regras-anti-ai-slop-o-linter).
+
+### `landing-patterns.json`: 40 padrões de landing page
+
+| Campo | Descrição |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160 specs de marca
 

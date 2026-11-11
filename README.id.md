@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-180-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13276_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 atau lebih baru. Untuk server MCP, `pip install --upgrade 'uxskill[m
 
 **Playbook surface.** Aturan landing, dashboard, dan komponen ada di `references/surfaces/`, satu playbook untuk masing-masing. `/ux-design` memuat tepat satu, dipilih sesuai mode-nya, jadi build dashboard tidak pernah membaca aturan hero.
 
-Tes: **9764 lolos**. Offline. Deterministik. Tidak pernah memanggil LLM.
+Tes: **13101 lolos**. Offline. Deterministik. Tidak pernah memanggil LLM.
 
 ### Baru di v3.1: setia pada brand, responsif, hidup
 
@@ -112,7 +112,7 @@ README ini adalah referensi kanonis. Setiap command, setiap sub-agent, setiap da
 4. [Arsitektur, bagaimana semuanya cocok](#arsitektur-bagaimana-semuanya-cocok)
 5. [18 slash command, referensi detail](#18-slash-command-referensi-detail)
 6. [5 sub-agent](#5-sub-agent)
-7. [11 data manifest](#11-data-manifest)
+7. [12 data manifest](#12-data-manifest)
 8. [180 aturan anti-AI-slop, linter-nya](#180-aturan-anti-ai-slop-linter-nya)
 9. [160 spec brand DESIGN.md, per kategori](#160-spec-brand-designmd-per-kategori)
 10. [Server MCP, langkah asimetris](#server-mcp-langkah-asimetris)
@@ -228,7 +228,7 @@ Hitungan star terakhir diverifikasi via `gh api` pada **2026-05-28**. ux-skill (
 - **Library komponen:** 148 komponen yang didokumentasikan dengan anatomi, state, token yang dipakai, dan spec motion. Tidak ada dari 8 yang lain mengirim manifest komponen.
 - **Preset motion:** 57 entri siap-stack (Framer Motion, GSAP, CSS) dengan fallback reduced-motion. Tidak ada dari yang lain mengirim manifest motion.
 - **Linter anti-pattern:** 180 aturan deterministik, berjalan di CI, exit non-zero pada Critical/High. Tidak ada dari yang lain mengirim linter deterministik.
-- **Brand spec:** 160 spec DESIGN.md asli (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, dan 96 lainnya). Tidak ada dari yang lain mengirim library brand.
+- **Brand spec:** 160 spec DESIGN.md asli (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, dan 146 lainnya). Tidak ada dari yang lain mengirim library brand.
 - **17 IDE didukung:** engine yang sama, perekat berbeda per IDE.
 - **18 slash command:** discovery, generation (halaman, komponen, dashboard, dari gambar), audit, lint, loop polish, fix loop, case-study, workshop, copy, motion, a11y, conductor, terintegrasi sepenuhnya.
 
@@ -668,7 +668,7 @@ Command pemanggil kemudian menjalankan `/ux-lint` otomatis sebelum menyatakan se
 
 ---
 
-## 11 data manifest
+## 12 data manifest
 
 Lapisan data adalah otaknya. Setiap command membaca darinya; engine bergabung melintasinya; linter memindai terhadapnya. Semua file ada di bawah `data/` dan membungkus entri mereka di `{_meta, entries}` untuk versioning skema.
 
@@ -779,6 +779,15 @@ Setiap preset punya varian reduced-motion. Code siap-stack untuk Framer Motion, 
 | `categories` | A11y (50), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 Daftar aturan lengkap ada di [180 aturan anti-AI-slop](#180-aturan-anti-ai-slop-linter-nya).
+
+### `landing-patterns.json`: 40 pola landing page
+
+| Field | Deskripsi |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160 spec brand
 

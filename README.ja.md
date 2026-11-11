@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-180-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13276_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 以降が必要です。MCP サーバーには `pip install --upgrad
 
 **画面別プレイブック。** ランディング、ダッシュボード、コンポーネントのルールは `references/surfaces/` にそれぞれひとつずつのプレイブックとして置かれています。`/ux-design` はモードに応じてちょうどひとつだけを読み込むので、ダッシュボードのビルドがヒーローのルールを読むことはありません。
 
-テスト **9764 件合格**。オフライン。決定論的。LLM は一切呼び出しません。
+テスト **13101 件合格**。オフライン。決定論的。LLM は一切呼び出しません。
 
 ### v3.1 の新機能：ブランドに忠実、レスポンシブ、生き生き
 
@@ -112,7 +112,7 @@ ux-skill は AI コーディングツールのための**デザイン知能エ�
 4. [アーキテクチャ、各部品がどう噛み合うか](#アーキテクチャ各部品がどう噛み合うか)
 5. [18 のスラッシュコマンド、詳細リファレンス](#18-のスラッシュコマンド詳細リファレンス)
 6. [5 つのサブエージェント](#5-つのサブエージェント)
-7. [11 のデータマニフェスト](#11-のデータマニフェスト)
+7. [12 のデータマニフェスト](#12-のデータマニフェスト)
 8. [180 の反 AI スロップルール、リンター](#180-の反-ai-スロップルールリンター)
 9. [160 のブランド DESIGN.md 仕様、カテゴリ別](#160-のブランド-designmd-仕様カテゴリ別)
 10. [MCP サーバー、非対称な一手](#mcp-サーバー非対称な一手)
@@ -228,7 +228,7 @@ ux stats
 - **コンポーネントライブラリ:** 148 個のドキュメント化されたコンポーネント。解剖、ステート、使用 token、モーション仕様付き。他の 8 つはどれもコンポーネントマニフェストを同梱していません。
 - **モーションプリセット:** 57 個のスタック対応エントリ(Framer Motion、GSAP、CSS)、reduced-motion フォールバック付き。他のどこもモーションマニフェストを同梱していません。
 - **アンチパターンリンター:** 180 個の決定論的ルール、CI で実行し Critical/High で非ゼロ終了。他のどこも決定論的リンターを同梱していません。
-- **ブランド仕様:** 160 個の実在 DESIGN.md 仕様(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude ほか 96 件)。他のどこもブランドライブラリを同梱していません。
+- **ブランド仕様:** 160 個の実在 DESIGN.md 仕様(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude ほか 146 件)。他のどこもブランドライブラリを同梱していません。
 - **17 IDE 対応:** 同じエンジン、IDE ごとに違う糊。
 - **18 のスラッシュコマンド:** discovery、生成(ページ、コンポーネント、ダッシュボード、画像から)、監査、lint、ポリッシュループ、修正ループ、ケーススタディ、ワークショップ、コピー、モーション、a11y、コンダクター、完全に統合済み。
 
@@ -668,7 +668,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## 11 のデータマニフェスト
+## 12 のデータマニフェスト
 
 データ層が脳です。すべてのコマンドはそこから読み、エンジンはそれを横断してマージし、リンターはそれに対してスキャンします。すべてのファイルは `data/` 下にあり、エントリを `{_meta, entries}` で包んでスキーマバージョニングを行います。
 
@@ -779,6 +779,15 @@ ux-skill (package name: uxskill)
 | `categories` | A11y (50), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 ルールの全一覧は [180 の反 AI スロップルール](#180-の反-ai-スロップルールリンター)にあります。
+
+### `landing-patterns.json`：40 のランディングパターン
+
+| フィールド | 説明 |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`、`name`、`category`、`purpose`、`anatomy`、`states`、`tokens_used`、`motion`、`anti_slop_checks`、`compatible_styles`、`exemplars`、`ai_slop_risk`、`notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`：160 のブランド仕様
 

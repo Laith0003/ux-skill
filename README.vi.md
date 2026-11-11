@@ -28,7 +28,7 @@ pip install uxskill
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
 [![Linter](https://img.shields.io/badge/anti--patterns-180-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-9764_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Tests](https://img.shields.io/badge/tests-13276_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -63,7 +63,7 @@ Python 3.10 trở lên. Với máy chủ MCP, `pip install --upgrade 'uxskill[mc
 
 **Playbook theo bề mặt.** Quy tắc cho landing, dashboard và component nằm trong `references/surfaces/`, mỗi loại một playbook. `/ux-design` nạp đúng một playbook, chọn theo chế độ của nó, nên build dashboard không bao giờ đọc quy tắc hero.
 
-Test: **9764 đạt**. Ngoại tuyến. Xác định. Không bao giờ gọi LLM.
+Test: **13101 đạt**. Ngoại tuyến. Xác định. Không bao giờ gọi LLM.
 
 ### Mới trong v3.1: đúng thương hiệu, responsive, sống động
 
@@ -112,7 +112,7 @@ README này là tài liệu tham chiếu chính thức. Mọi command, mọi sub
 4. [Kiến trúc, các mảnh ghép khớp với nhau thế nào](#kiến-trúc-các-mảnh-ghép-khớp-với-nhau-thế-nào)
 5. [18 slash command, tham chiếu chi tiết](#18-slash-command-tham-chiếu-chi-tiết)
 6. [5 sub-agent](#5-sub-agent)
-7. [11 data manifest](#11-data-manifest)
+7. [12 data manifest](#12-data-manifest)
 8. [180 quy tắc chống AI-slop, bộ linter](#180-quy-tắc-chống-ai-slop-bộ-linter)
 9. [160 spec DESIGN.md thương hiệu, theo danh mục](#160-spec-designmd-thương-hiệu-theo-danh-mục)
 10. [Máy chủ MCP, nước cờ bất đối xứng](#máy-chủ-mcp-nước-cờ-bất-đối-xứng)
@@ -228,7 +228,7 @@ Số sao được xác minh lần cuối qua `gh api` vào **2026-05-28**. ux-sk
 - **Thư viện component:** 148 component được tài liệu hóa với anatomy, state, token sử dụng, và spec chuyển động. Không có cái nào trong 8 plugin kia ship được manifest component.
 - **Preset chuyển động:** 57 entry sẵn sàng theo stack (Framer Motion, GSAP, CSS) với fallback reduced-motion. Không có ai trong số còn lại ship manifest chuyển động.
 - **Linter anti-pattern:** 180 quy tắc xác định, chạy trong CI, exit khác 0 ở mức Critical/High. Không có ai trong số còn lại ship một linter xác định.
-- **Spec thương hiệu:** 160 spec DESIGN.md thật (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, và 96 thương hiệu khác). Không có ai trong số còn lại ship một thư viện thương hiệu.
+- **Spec thương hiệu:** 160 spec DESIGN.md thật (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude, và 146 thương hiệu khác). Không có ai trong số còn lại ship một thư viện thương hiệu.
 - **17 IDE được hỗ trợ:** cùng một bộ máy, keo dán khác nhau cho mỗi IDE.
 - **18 slash command:** discovery, generation (trang, component, dashboard, từ một hình ảnh), audit, lint, vòng lặp polish, vòng lặp fix, case study, workshop, copy, motion, a11y, conductor, tích hợp đầy đủ.
 
@@ -668,7 +668,7 @@ Command gọi sau đó tự động chạy `/ux-lint` trước khi tuyên bố h
 
 ---
 
-## 11 data manifest
+## 12 data manifest
 
 Lớp dữ liệu là bộ não. Mọi command đọc từ nó; bộ máy merge xuyên qua nó; linter quét đối chiếu nó. Mọi file sống dưới `data/` và bọc entry của chúng trong `{_meta, entries}` cho versioning schema.
 
@@ -779,6 +779,15 @@ Mọi preset đều có biến thể reduced-motion. Code sẵn sàng theo stack
 | `categories` | A11y (50), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
 Danh sách quy tắc đầy đủ nằm ở [180 quy tắc chống AI-slop](#180-quy-tắc-chống-ai-slop-bộ-linter).
+
+### `landing-patterns.json`: 40 mẫu trang landing
+
+| Trường | Mô tả |
+|---|---|
+| `entries` | 40 |
+| `keys per entry` | `id`, `name`, `category`, `purpose`, `anatomy`, `states`, `tokens_used`, `motion`, `anti_slop_checks`, `compatible_styles`, `exemplars`, `ai_slop_risk`, `notes` |
+| `categories` | Hero (8), Features (6), Social Proof (5), CTA (5), Pricing (4), Footer (4), Navigation (4), Trust (2), Onboarding (2) |
+| `sample entry` | `hero-split-screen-typewriter` |
 
 ### `brands/*.json`: 160 spec thương hiệu
 

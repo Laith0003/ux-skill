@@ -1,0 +1,48 @@
+name: release
+
+# Tags and publishes a release when a version lands on main. The version is
+# read from pyproject.toml. A release is made only when its notes exist at
+# docs/launch/release-<version>.md and the tag v<version> does not exist yet,
+# so every push after the first is a no-op. The notes' first heading is the
+# release title; a version with a hyphen (4.1.0-beta.1) is a prerelease.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Tag and publish when the version is new
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          version=$(python3 -c "import tomllib;print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          tag="v${version}"
+          notes="docs/launch/release-${version}.md"
+          if git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null; then
+            echo "${tag} exists; nothing to release"
+            exit 0
+          fi
+          if [ ! -f "${notes}" ]; then
+            echo "${notes} is missing; write the release notes there to publish ${tag}"
+            exit 0
+          fi
+          title=$(sed -n 's/^# //p' "${notes}" | head -n 1)
+          flags=()
+          case "${version}" in *-*) flags+=(--prerelease) ;; esac
+          gh release create "${tag}" --target "${GITHUB_SHA}" --title "${title:-${tag}}" \
+            --notes-file "${notes}" "${flags[@]}"
+          echo "published ${tag}"
