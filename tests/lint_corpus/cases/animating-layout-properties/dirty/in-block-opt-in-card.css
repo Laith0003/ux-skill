@@ -1,0 +1,3 @@
+/* An opt-in inside the card's own block does not make a card a
+   disclosure. */
+.card { interpolate-size: allow-keywords; transition: height 300ms ease; }

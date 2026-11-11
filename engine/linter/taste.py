@@ -1036,25 +1036,51 @@ _BLOCK_ONLY = {"height", "block-size"}
 _DETAILS_CONTENT = re.compile(r"::details-content\b", re.I)
 _KEYWORD_SIZE = re.compile(r"interpolate-size\s*:\s*allow-keywords", re.I)
 _CALC_SIZE = re.compile(r"calc-size\(", re.I)
-_DISCLOSURE = re.compile(r"\bdetails\b|\[open\]|aria-expanded|accordion|disclosure|collaps|expand",
-                         re.I)
+_DISCLOSURE = re.compile(r"(?:^|[\s>+~(])details(?![\w-])|\[open\]|aria-expanded|accordion"
+                         r"|disclosure|collaps|expand", re.I)
+_ROOTS = (":root", "html")
+
+
+def _base(selector: str) -> str:
+    """The first simple selector of a selector's last compound: the element
+    a rule styles, with its states stripped (.collapse-body in
+    `.faq .is-open .collapse-body`, .sidebar in `.sidebar.collapsed`)."""
+    parts = compounds(selector)
+    last = parts[-1] if parts else selector
+    m = re.match(r"\s*([a-z][\w-]*|[.#][\w-]+)", last, re.I)
+    return m.group(1).lower() if m else ""
+
+
+def _opts_in_above(opt_in: str, selectors) -> bool:
+    """Whether a rule that sets interpolate-size reaches the transitioning
+    element by inheritance: it is the root, or its selector is a prefix of
+    the transitioning selector (.accordion before .accordion__panel)."""
+    s = " ".join(opt_in.split()).lower()
+    return s in _ROOTS or any(" ".join(t.split()).lower().startswith(s) for t in selectors)
 
 
 def _platform_disclosure(ctx: FileContext, view: View, block) -> bool:
     """A height that opens a disclosure through the platform: the block
-    styles ::details-content or itself sets interpolate-size:
-    allow-keywords, or its selector names a disclosure and the page opts
-    in (interpolate-size on :root or html, or a calc-size() open state)."""
+    styles ::details-content, or its selector names a disclosure and
+    interpolate-size: allow-keywords reaches it (in its own block, on the
+    root or on an ancestor whose selector prefixes its own) or a calc-size()
+    open state styles the same element."""
     if block is None:
         return False
-    if any(_DETAILS_CONTENT.search(s) for s in block.selectors) or _KEYWORD_SIZE.search(block.body):
+    if any(_DETAILS_CONTENT.search(s) for s in block.selectors):
         return True
     if not any(_DISCLOSURE.search(s) for s in block.selectors):
         return False
-    return any(_CALC_SIZE.search(b.body)
-               or (_KEYWORD_SIZE.search(b.body)
-                   and any(s.strip().lower() in (":root", "html") for s in b.selectors))
-               for b in css_blocks(view.text))
+    if _KEYWORD_SIZE.search(block.body):
+        return True
+    bases = {_base(s) for s in block.selectors} - {""}
+    for b in css_blocks(view.text):
+        if _KEYWORD_SIZE.search(b.body) and any(_opts_in_above(s, block.selectors)
+                                                for s in b.selectors):
+            return True
+        if _CALC_SIZE.search(b.body) and any(_base(s) in bases for s in b.selectors):
+            return True
+    return False
 
 
 def layout_transition_reflows(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
