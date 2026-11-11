@@ -11,7 +11,7 @@ superseded_by: null
 
 ## Context
 
-Real briefs used words the engine did not read: fast, clear, practical, solid, modern, reliable, simple. The host AI then swapped a word for one the engine knew, and a plain construction brief read "practical" as "professional" and got a formal serif. Four industries a client named had no seed: construction and building materials, a B2B marketplace or wholesale, security, and pharmacy or medical supply.
+Real briefs used words the engine did not read: fast, clear, practical, solid, modern, reliable, simple. The host AI then swapped a word for one the engine knew, and a plain construction brief read "practical" as "professional" and got a formal serif. Four industries had no seed: construction and building materials, a B2B marketplace or wholesale, security, and pharmacy or medical supply.
 
 ## Decision
 
