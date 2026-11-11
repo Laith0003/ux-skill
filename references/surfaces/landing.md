@@ -233,7 +233,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **Interactive product demo.** A real, manipulable instance of the product running inline. The user can drag, type and click, and the product responds with actual logic, not a video loop. The strongest "designed by designers" signal available. Affordances: subtle pulsing dots, ghost hand-cursor hints, a "try it" label on the first interactable element.
 
-**Animated metric callouts.** Numbers tick up from 0 on entry over 800-1500ms. Restricted to 2-3 stats; more dilutes the effect. The counter triggers once per page entry, then stays static. Numbers use tabular figures, so the layout does not shift during the count, and a label under each figure names what it counts.
+**Animated metric callouts.** Numbers tick up from 0 on entry over 600 to 1000ms. Restricted to 2-3 stats; more dilutes the effect. The counter triggers once per page entry, then stays static. Numbers use tabular figures, so the layout does not shift during the count, and a label under each figure names what it counts.
 
 **Kinetic headline reveal.** Hero text appears almost instantly; the heavier interactive demo or 3D render fades in 200-400ms behind it. Never make users wait for first meaningful paint.
 

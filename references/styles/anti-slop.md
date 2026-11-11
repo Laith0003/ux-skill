@@ -193,7 +193,7 @@ Landing-page proof and CTA rules (testimonials, logo walls, press logos, stat ca
 | Horizontal scroll hijack as a default | Reserved for galleries or storytelling sequences with a real reason; never the default flow |
 | Pinned-3d-element scroll-controlled video scrubbing as decoration | When scrub motion appears, it carries a real demo or sequence |
 | Auto-playing background video with sound | Muted, looped, with a pause control. Sound is opt-in |
-| Auto-rotating carousels under 4 seconds per slide | Either one continuous marquee (no pagination dots, a slow loop, a pause control, stopped under reduced motion) or scroll-snap horizontal lists with visible affordance |
+| Carousels that advance on their own, at any speed | Either one continuous marquee (no pagination dots, a slow loop, a pause control, stopped under reduced motion) or scroll-snap horizontal lists with visible affordance |
 | Number counters that animate on every scroll past | Once per page entry. Settling jitter on the final number is a tell |
 | Bouncy spring animations on type | Spring physics on draggable UI elements (toggles, modals, drag handles), not on headline reveals |
 | Page-load animations that loop endlessly on the wordmark | Once-on-load is the rule. Looping brand-mark animation in nav reads as distracting |
@@ -375,7 +375,7 @@ Run any output against the test below. If three or more apply, the surface is ge
 - Section labels like "SECTION 01" or "OUR PROCESS"
 - Title Case headlines
 - Inter at default weight with no tracking adjustment
-- Auto-rotating carousel under 4 seconds
+- Auto-rotating carousel at any speed without a pause control (WCAG 2.2 SC 2.2.2)
 - Floating chatbot bubble blocking the CTA
 - 6-line wrapped H1
 - Body type at 14px

@@ -607,7 +607,7 @@ Motion is restrained in premium cohorts. The premium ones tend to be slower and 
 
 **Hover on cards**: border or background shift, 150-250ms ease. Hover, focus and press never change a card's elevation; only a drag lifts. Reserved for clickable cards.
 
-**Number counters**: animate on enter-view (800-1500ms ease-out). Once, not on every scroll past.
+**Number counters**: animate on enter-view (600 to 1000ms ease-out). Once, not on every scroll past.
 
 **Code/terminal types itself**: a code block or terminal cursors a single line into existence on entry, then holds still. Once, not on loop.
 
@@ -649,8 +649,8 @@ Motion is restrained in premium cohorts. The premium ones tend to be slower and 
 - Looping animations on the wordmark in the nav. Read as distracting.
 - Device orientation / motion permission prompts for parallax. Pointer events only.
 - Custom mouse cursors on the page (acceptable inside a scoped interactive demo surface).
-- Auto-rotating carousels under 4 seconds per slide. Either continuous marquees or scroll-snap with visible affordance.
-- Animation durations under 100ms or over 1500ms. Too fast = invisible; too slow = stuck.
+- Carousels that advance on their own, at any speed. Either continuous marquees or scroll-snap with visible affordance.
+- One-shot animation durations under 100ms or over 1000ms. Too fast = invisible; too slow = stuck.
 
 ### Reduced-motion behavior
 
