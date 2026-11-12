@@ -75,13 +75,34 @@ def _vendor(css_url: str, page_url: str, patterns: List[str]) -> bool:
     return any(re.search(p, name) for p in pats)
 
 
-_SCRIPT = re.compile(r"<script\b[^>]*>.*?</script\s*>|<script\b[^>]*/>", re.S | re.I)
+_FONT_HOSTS = ("fonts.googleapis.com", "use.typekit.net", "use.typekit.com", "p.typekit.net")
+
+
+def _font_host(css_url: str) -> bool:
+    """A hosted font stylesheet, matched on the parsed host and never on a
+    substring of the address."""
+    return (urllib.parse.urlparse(css_url).hostname or "").lower() in _FONT_HOSTS
+
+
+# An end tag may carry spaces or junk before its ">" (browsers accept
+# "</script foo>"), and a script that is never closed runs to the end.
+_SCRIPT = re.compile(
+    r"<script\b[^>]*>.*?</script\b[^>]*>|<script\b[^>]*/>|<script\b[^>]*>.*\Z",
+    re.S | re.I,
+)
 
 
 def strip_scripts(html: str) -> Tuple[str, int]:
     """Every script element removed, inline and external, so a stored page
-    can never load or run third-party code (tag managers, analytics, CDNs)."""
-    return _SCRIPT.subn("", html)
+    can never load or run third-party code (tag managers, analytics, CDNs).
+    Repeats until nothing is left, so removing one element cannot join two
+    halves into a new one."""
+    total = 0
+    while True:
+        html, n = _SCRIPT.subn("", html)
+        if not n:
+            return html, total
+        total += n
 
 
 def css_name(url: str, body: bytes) -> str:
@@ -109,7 +130,7 @@ def freeze_html(
         if not href or not _is_stylesheet(tag) or href.startswith("data:"):
             return tag
         css_url = urllib.parse.urljoin(page_url, href)
-        if "fonts.googleapis.com" in css_url or "use.typekit" in css_url:
+        if _font_host(css_url):
             notes.append(f"font stylesheet left remote and blocked at render: {css_url}")
             return tag
         try:

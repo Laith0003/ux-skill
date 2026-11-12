@@ -4,7 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    # The 5.0 integration branch takes one PR per phase; each gets the same checks.
+    branches: [main, "feat/4.1-stageshow"]
   schedule:
     # Weekly, Monday 05:23 UTC — catches newly-published CodeQL queries.
     - cron: "23 5 * * 1"

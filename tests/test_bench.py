@@ -423,3 +423,25 @@ def test_render_pass_is_deterministic_on_a_seeded_page():
     keys = [[f["key"] for f in core.key_findings("p", rf)] for rf, _ in runs]
     assert keys[0] == keys[1]
     assert "text-low-contrast" in {f["rule"] for f in runs[0][0]}
+
+
+def test_strip_scripts_takes_loose_end_tags_and_unclosed_scripts():
+    from bench import capture
+
+    html = (
+        "<p>a</p><script>one()</script foo ><p>b</p>"
+        "<SCRIPT src=x></SCRIPT\t\n><scr<script>x</script>ipt>two()</script>"
+        "<p>c</p><script>never closed"
+    )
+    out, n = capture.strip_scripts(html)
+    assert "<script" not in out.lower() and "one()" not in out and "never closed" not in out
+    assert "<p>a</p>" in out and "<p>b</p>" in out and "<p>c</p>" in out and n >= 4
+
+
+def test_font_host_matches_the_host_not_a_substring():
+    from bench import capture
+
+    assert capture._font_host("https://fonts.googleapis.com/css2?family=Inter")
+    assert capture._font_host("https://use.typekit.net/abc.css")
+    assert not capture._font_host("https://evil.example/fonts.googleapis.com/a.css")
+    assert not capture._font_host("https://fonts.googleapis.com.evil.example/a.css")
