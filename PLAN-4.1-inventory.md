@@ -144,7 +144,7 @@ Sources (short names): WCAG22 = W3C WCAG 2.2 Recommendation (normative text fetc
 | E22 | Cliche icons (sparkles, rocket, lightbulb, zap, shield) and mixed icon families | SLOP, anti-slop.md | B-LINT | guidance anti-slop.md; imports of Sparkles/Rocket/Lightbulb/Zap from lucide-react in feature grids; imports from two icon packages |
 | E23 | Numbered 1-2-3 "how it works" step row as default | SLOP | C | styles/anti-slop.md (composition fingerprint) |
 | E24 | Purple gradient, Inter-only, centered hero, glass, rounded everything | SLOP | COVERED | `purple-to-blue-gradient`, `default-font-only`, `centered-everything-hero`, `glass-morphism-default`, `border-radius-2xl-default` |
-| E25 | Pseudo-localized (+30 to 40%) strings still fit | i18n canon (HEND i18n section), accessibility.md text expansion | B-RENDER | guidance accessibility.md; pad text nodes 40%, re-run overflow checks |
+| E25 | Pseudo-localized strings still fit, padded by length band (short strings up to 200 to 300%, long text about 30%; see accessibility.md) | i18n canon (HEND i18n section), accessibility.md text expansion | B-RENDER | guidance accessibility.md; pad text nodes by length band, re-run overflow checks |
 | E26 | Dashboard fits one screen for its overview | Few pitfall 1 | C | surfaces/dashboard.md (optionally measure page height at 1280x800) |
 
 ## F. Interaction, feedback, navigation
