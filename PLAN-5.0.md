@@ -8,17 +8,17 @@
 
 5.0.0 ships when every row holds. No row can be cut. Only the items on the cut line below can move to 5.1, and none of them is a row here.
 
-| Claim | Measured by | Bar | Today (2026-11-12, bench v1 on its own branch) |
+| Claim | Measured by | Bar | Today (2026-11-12, bench v1 on this branch) |
 |---|---|---|---|
 | A rule that blocks is right | Per-rule precision on ux-bench, person-confirmed label sample | Precision at least 0.95, Wilson 95 lower bound at least 0.90, findings on at least 5 pages; at least 20 rules hold the tier | No rule qualifies yet; labels are model-made |
 | The whole ruleset is right | Micro precision, dev and holdout | At least 0.90 on dev, holdout within 0.05 of dev | 0.80 (0.78 to 0.82) on dev |
 | The engine finds faults | Recall on the seeded-defect set; recall on a 60-page subsample annotated in full by three raters | At least 0.95 on seeded faults, every miss filed; real-page recall reported | 0.92 on seeded faults (49 of 53); real pages not annotated |
-| Same input, same output | Two runs per page; two machines per score | 0 pages differ; identical score | 2 of 53 pages differ (wall-clock timing) |
+| Same input, same output | Two runs per page; two machines per score | 0 pages differ; identical score | 3 of 53 pages differ (wall-clock timing) |
 | It does not fall over | Corpus run and a malformed-input set | 0 crashes, 0 silent skips | 0 crashes on 53 pages; no malformed set yet |
 | It leads to a product people can use | Method benchmark on six briefs | Method modes beat the plain engine on route coverage and walk pass rate; the control brief gains no artifact | Not built |
 | Arabic is first class | Right-to-left twins and Arabic pages on the bench | Twin pages get the same verdicts; at least 30 right-to-left pages, 20 of them written in Arabic | 7 right-to-left pages |
 | An agent follows the skill | Scripted grading of fixed tasks in two tools | Process conformance at least 0.90 | Not built |
-| Every figure is checkable | Source-id test over references/ and data/ | 0 unsourced figures that are not marked house practice | 38 corrections applied, 5 parked; the full audit is open |
+| Every figure is checkable | Source-id test over references/ and data/ | 0 unsourced figures that are not marked house practice | Every listed correction applied; the full audit is open |
 | It stays light | Tokens loaded per command, lint time per page | Budgets set from the Phase 2 measurement and held in release_checks | Not measured |
 | It runs unattended | CI and the weekly canary | Zero skipped render tests; canary green twice | No canary |
 
@@ -27,9 +27,9 @@
 | Phase | State |
 |---|---|
 | 4.0.1 | Live on GitHub, PyPI and npm; 3.2.0 removed from both registries |
-| 1. Benchmark | v1 built: 53 pages, 2,025 findings, every measured rule with a tier, seeded set, diff, ablation hook. Open: a rerun on the integration branch, corpus to 200, a clean AI-built set, the person-confirmed sample |
-| 3. Corrections | 38 rows fixed (contradicted guidance, platform-outdated rules, dark text keeps its weight). Open: 5 rows parked until the curriculum is merged, the full citation audit and its test |
-| Curriculum | Four raw reports. The merge into one deduplicated set was never run; Phases 3, 5 and 9 need it |
+| 1. Benchmark | v1 built and rerun on this branch: 53 pages, 2,024 findings, every measured rule with a tier, seeded set, diff, ablation hook. Open: corpus to 200, a clean AI-built set, the person-confirmed sample |
+| 3. Corrections | Every listed correction applied (contradicted guidance, platform-outdated rules, dark text keeps its weight, the rows the curriculum added). Open: the full citation audit and its test |
+| Curriculum | Merged: 742 links in a ledger, 323 lessons, 85 proposed checks, 76 guidance items, 14 corrections |
 | Inputs | Landed: eval, landscape, stability, method, curriculum, book library with acknowledgements |
 | Everything else | Not started |
 
@@ -42,7 +42,7 @@
 | Running unattended | research/5.0/stability.md | Dependency risks, CI gaps, release hardening, versioning policy |
 | The owner's product method | research/5.0/method.md | Personas, goals, every route to each goal, conceptual model, IA, flows with failure paths, prototyping inside the design system, walking every goal by every route, the one-page case. Method only, no client facts |
 | The owner's craft rules | research/5.0/craft.md (written in Phase 8) | The taste and working rules behind the owner's shipped work, normalized: ranked rules with a check for each, the Arabic rules, the design-file habits, the pre-flight list. The dated evidence stays private |
-| Curriculum (742 links) | research/curriculum/raw/ | Four raw reports today. Merged in Phase 3 into lessons, proposed checks, guidance by target file, corrections and a ledger |
+| Curriculum (742 links) | research/curriculum/ | Lessons, proposed checks ranked, guidance by target file, corrections, and a ledger row per link; the raw reports stay in raw/ |
 | Book library (96 books) | research/library/ | Lessons by topic (merged, weighted, no quotations, no names in lesson text), conflicts, measurable checks, gaps against the engine, corrections applied, acknowledgements |
 | Benchmark v1 | bench/report.md | Per-rule precision and recall today, and six filed engine faults |
 | 4.1 backlog | PLAN-4.1.md "Next, ranked" | Twelve ranked items; each is placed in a phase below |
@@ -71,12 +71,12 @@ Four stages. Each ends in a gate the benchmark can show, and a pre-release tag o
 
 | Stage | Phases | Gate |
 |---|---|---|
-| A. Measure | 3 (curriculum merge first, then the audit), 1 (to v2), 2, 4, and the CI items of 14 that every later phase leans on | Scores repeat across runs and machines; no rule blocks without a measured tier; modern CSS reads true |
+| A. Measure | 3 (the audit), 1 (to v2), 2, 4, and the CI items of 14 that every later phase leans on | Scores repeat across runs and machines; no rule blocks without a measured tier; modern CSS reads true |
 | B. See and walk | 5, 6, 7 | Each new check has a measured row; the six method briefs run end to end; right-to-left twins agree |
 | C. Craft and conduct | 8, 9, 10 | Pre-flight runs on our own pages; every missing-guide row is written or parked; agent conformance at least 0.90 |
 | D. Prove and ship | 11, 12, 13, rest of 14, 15 | The release bar |
 
-What depends on what: the curriculum merge in 3 before 5 and 9. 2 before 5 (checks need the finding contract). 5 item 16 before 6 (the walk harness drives a running URL). 7 runs beside 5. 8 needs 2 and 6. 10 needs 6 and 8. 13 needs 5 to 8 landed, so the build it judges is the build that ships.
+What depends on what: 2 before 5 (checks need the finding contract). 5 item 16 before 6 (the walk harness drives a running URL). 7 runs beside 5. 8 needs 2 and 6. 10 needs 6 and 8. 13 needs 5 to 8 landed, so the build it judges is the build that ships.
 
 **The cut line.** If 5.0 is late, these move to 5.1 by name and nothing else does: the 1,000-page pool, the human taste round, the EN 301 549 and ADA Title II report formats, the DTCG resolver document, the AI interfaces pack (Phase 5 item 15, and with it the Article 50 heading in Phase 11), the design-files guide. Everything else in every phase is fixed.
 
@@ -88,7 +88,6 @@ Built in v1: bench/ with manifest, capture, run, report (precision, Wilson inter
 
 Left for v2:
 
-- First: merge v1 into the integration branch and rerun it there, so every figure in this plan describes the engine that ships.
 - Recall on real pages: a 60-page subsample annotated in full by three raters, marked model-made where a model rated.
 - Corpus to 200 pages: 50 generated from 10 fixed briefs by at least three tools that have never read this repository, 50 found AI-built, 100 designer-built from openly licensed sources. At least 60 percent redistributable; the rest stored as url, date, hash, findings and labels only. Split 140 dev and 60 holdout, page families kept together.
 - At least 30 right-to-left pages, 20 written in Arabic (Phase 7).
@@ -121,16 +120,14 @@ Spec: eval.md A2; stability.md changes 5 to 7; the faults filed in bench/report.
 
 ## Phase 3. Correct what the sources contradict
 
-Spec: research/library/corrections-applied.md, research/curriculum/README.md, landscape.md recommendation 7. 38 corrections are applied.
+Spec: research/library/corrections-applied.md, research/curriculum/corrections.md, landscape.md recommendation 7. The corrections are applied and the curriculum is merged.
 
 Left:
 
-- Merge the four raw curriculum reports into lessons.md, checks.md, guidance.md, corrections.md and ledger.tsv, deduplicated against the rules, the 4.1 inventory and the library. Phases 5 and 9 read these files; this is the first task of stage A.
-- Apply the five rows parked for the merge: card sorting and tree testing sizes, the 60-30-10 credit, the scrim alpha inside color.md, the streaming-scroll rule in ai-interfaces.md, the case-study grayscale and section order for portfolios.
 - Audit every number and citation in references/ and data/ against its source. A number with no source a reader could check is removed or marked as house practice.
 - A test fails if a reference cites a source id that the ledger does not hold.
 
-**Exit:** the merged curriculum files exist; corrections.md and corrections-applied.md have no open or parked row; the source-id test is in CI.
+**Exit:** corrections.md and corrections-applied.md have no open or parked row (met); the source-id test is in CI.
 
 ## Phase 4. Read modern CSS
 
