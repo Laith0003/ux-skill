@@ -15,7 +15,7 @@ Load it beside the surface playbook (`references/surfaces/landing.md`, `dashboar
 ## Show the work while it happens
 
 - Answer the send at once: the message appears in the thread and the send control changes state within about 100ms.
-- Stream long answers as they arrive, and keep the reading position stable: new text must not push what the person is reading off screen. Auto-scroll only while the person is already at the bottom.
+- Stream long answers as they arrive, and keep the reading position stable: new text must not push what the person is reading off screen. When a new answer starts, bring its first line to the top of the view once, then stop following: a long answer is read from its start, not chased to its end. Follow the bottom only for short answers, and only while the person is already there.
 - Give every running answer a visible **Stop** control that keeps what has arrived so far.
 - For a long task, show which step it is on in words ("Reading 3 of 12 files"), not only a spinner.
 - When it fails, say what failed and offer the next move (retry, shorten, rephrase), keeping the person's prompt in the box.

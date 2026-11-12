@@ -110,6 +110,8 @@ The default case study has seven sections, in this order:
 
 A case study may use a different section set, but the alphabetic codes still march. If a case study has five sections (say About, Process, Outcomes, Lessons, Future), it codes them (A) through (E).
 
+A designer's portfolio piece uses the process preset instead: (A) Summary (role, team, duration and the outcome, in the first 150 words), (B) Problem, (C) Research, (D) Users and Journey, (E) Flows and Wireframes, (F) Visual Design, (G) Testing, (H) Outcome and Reflection. The A to G default suits a product launch write-up; the process preset shows how the designer worked.
+
 Section titles are noun phrases, set in title case. "About," not "About the product." "Outcomes," not "Our Outcomes." The title is the system; the body is the content.
 
 ---
@@ -148,6 +150,8 @@ Photos and screenshots are full-bleed.
 - Captions are short: route, viewport, date. "Member dashboard, mobile, December 2026." That is enough.
 
 If a screenshot has chromatic content, convert to grayscale before placement. This is the case-study rule and only the case-study rule.
+
+Portfolio mode is the exception. A design portfolio is judged on visual craft, so the work itself (screens, flows, motion) appears in its real colors, at full resolution, with a recording where motion matters. The document around it stays monochrome: type, rules, captions and charts.
 
 Product photos are unframed. Lifestyle photos are unframed. No "device frame" mockups (no laptop chrome, no phone bezel). The image is the artifact.
 
@@ -193,15 +197,15 @@ When delivering Markdown, the file renders cleanly in any Markdown previewer. Ta
 
 Before the case study is delivered, verify every item.
 
-- [ ] Monochrome verified: no chromatic content, no hue with non-zero saturation.
+- [ ] Monochrome verified: no chromatic content, no hue with non-zero saturation (portfolio mode: outside the work images).
 - [ ] Section codes present: alphabetic, in order, no gaps.
 - [ ] Hairline separators only: no boxes, no cards, no shadows.
 - [ ] Two-tone body emphasis used: black for important phrases, gray for context.
 - [ ] No marketing language: no "elevate," "unleash," "seamless," "robust."
-- [ ] No source attributions inside the content: no name-checked authorities, no inline citations.
+- [ ] No source attributions inside the content: no name-checked authorities, no inline citations. Portfolio mode may cite the standard a design decision rests on (a WCAG criterion, a platform guideline), because there the standard is part of the argument.
 - [ ] RTL tested: document renders correctly under `dir="rtl"` with mirrored margins and section codes.
 - [ ] Typography stack specified: Latin and Arabic faces both named.
-- [ ] Images are full-bleed, unframed, grayscale.
+- [ ] Images are full-bleed, unframed, grayscale (portfolio mode: the work in its real colors, everything else grayscale).
 - [ ] Captions are short, italic, gray.
 - [ ] Length is honest: the case study runs as long as it needs to and no longer.
 - [ ] No emoji.

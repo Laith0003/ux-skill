@@ -66,9 +66,9 @@ research/curriculum/ named in PLAN-5.0 does not exist in this checkout, so nothi
 
 | id | engine location | before | after | source | status |
 |---|---|---|---|---|---|
-| K-card-sort | commands/ux-research.md:49 and the method table | Card sort n=15-25 | unchanged | curriculum only | parked: curriculum absent; the library row is partial (conflicts.md A6), not contradicts |
-| K-60-30-10 | data/ux-guidelines.json 60-30-10-rule source field | Credited to a color-theory tradition | unchanged | curriculum only | parked: curriculum absent; no library lesson covers the credit |
+| K-card-sort | commands/ux-research.md:49 method table | Card sort n=15-25 | 15 or more for a qualitative sort, 30 to 50 for cluster analysis, 30 to 50 cards; a tree test row added | curriculum part-b IA6, IA7 (primary: the research group's card sorting and tree testing guidance) | fixed |
+| K-60-30-10 | data/ux-guidelines.json 60-30-10-rule source field | Credited to a 1961 color-theory book | Interior decorating convention; a starting proportion, not a research finding | curriculum part-a C3 | fixed |
 | K-color-blindness | data/ux-guidelines.json:603; references/foundations/accessibility.md:149 | About 8 percent of men | unchanged | B46 p.726-727 | agrees already; no change needed |
-| K-scrim-alpha | references/foundations/color.md | Scrim alpha | unchanged | curriculum only | parked: curriculum absent |
-| K-streaming-scroll | references/foundations/ai-interfaces.md | Streaming scroll rule | unchanged | curriculum only | parked: curriculum absent |
-| K-case-study | portfolio case-study grayscale and section order | unchanged | unchanged | curriculum only | parked: curriculum absent |
+| K-scrim-alpha | references/foundations/color.md:312 | Checklist says 40 to 60 percent black; tokens say page background at 60 to 80 percent alpha | Checklist points at the token: page background at 60 to 80 percent alpha | curriculum part-a (internal inconsistency; house value) | fixed |
+| K-streaming-scroll | references/foundations/ai-interfaces.md:18 | Auto-scroll only while the person is at the bottom | First line of a new answer to the top once, then stop following; follow the bottom only for short answers | curriculum part-c section 12 | fixed |
+| K-case-study | references/output/case-study-style.md (Required Sections, Image Handling, checklist) | Every screenshot grayscale, no cited standards, A to G sections only | Portfolio mode: the work in real color, a cited standard allowed, a designer-process section preset | curriculum part-d P14, P25 and the checklist conflict | fixed |
