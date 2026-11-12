@@ -1,0 +1,747 @@
+{
+ "a-gen-02|static|repeated-action-same-name|a-gen-02/index.html|80|3d61dabd7f#1": {
+  "label": "TP",
+  "why": "five View buttons with no order in their names"
+ },
+ "a-gen-07|static|one-action-several-labels|a-gen-07/index.html|57|6030612b53#1": {
+  "label": "TP",
+  "why": "two labels for the one preorder anchor"
+ },
+ "a-gen-08|static|imagery-mandatory-missing|a-gen-08/index.html|1|d1848aa7b5#1": {
+  "label": "FP",
+  "why": "a pricing or service page, not a landing page"
+ },
+ "a-gen-09|static|repeated-action-same-name|a-gen-09/index.html|81|13c7188a51#1": {
+  "label": "TP",
+  "why": "Renew and Cancel repeat per row with no title in their names"
+ },
+ "a-gen-09|static|repeated-action-same-name|a-gen-09/index.html|94|e5d7cb07a3#1": {
+  "label": "TP",
+  "why": "Renew and Cancel repeat per row with no title in their names"
+ },
+ "anchor-no-href-as-button|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "animating-layout-properties|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "animation-duration-too-long|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "arbitrary-z-index-9999|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "aria-hidden-on-interactive|TP>FP": {
+  "follow": "b",
+  "why": "reading the pages: the context view saw what decides it (a hidden sprite, a title that repeats the alt, a muted loop, the hidden attribute)"
+ },
+ "aspect-ratio-1-1-default|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "body-font-weight-bold-or-700-keyword|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "body-text-shadow-on-prose|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "border-radius-2xl-default|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "button-no-type|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "card-glow-purple-shadow|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "cta-arrow-rightward-bouncing|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "cta-text-read-more|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "cta-text-tap-continue-go|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "d-bs-blog-rtl|static|repeated-action-same-name|d-bs-blog-rtl/index.html|14|baade7cdcc#1": {
+  "label": "FP",
+  "why": "links with the same name go to the same place, or the names differ"
+ },
+ "d-bs-pricing|static|imagery-mandatory-missing|d-bs-pricing/index.html|1|b4406d7d8b#1": {
+  "label": "FP",
+  "why": "a pricing or service page, not a landing page"
+ },
+ "d-h5-dimension|static|focusable-at-opacity-zero|_css/45c38a6ccdb4-main.css|1551|438a6d5409#1": {
+  "label": "FP",
+  "why": "articles are display: none until opened"
+ },
+ "d-h5-dimension|static|outline-none-no-focus-visible|_css/45c38a6ccdb4-main.css|1026|0ac3d16c1a#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-h5-dimension|static|repeated-action-same-name|d-h5-dimension/index.html|166|8ca346c935#1": {
+  "label": "TP",
+  "why": "repeated Default and Icon buttons with one name"
+ },
+ "d-h5-dimension|static|repeated-action-same-name|d-h5-dimension/index.html|170|8ca346c935#1": {
+  "label": "TP",
+  "why": "repeated Default and Icon buttons with one name"
+ },
+ "d-h5-dimension|static|repeated-action-same-name|d-h5-dimension/index.html|281|3c4404a4cc#1": {
+  "label": "TP",
+  "why": "repeated Default and Icon buttons with one name"
+ },
+ "d-h5-dimension|static|transition-duration-500ms-or-longer|_css/45c38a6ccdb4-main.css|1137|8fd2fd65fa#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-editorial|static|outline-none-no-focus-visible|_css/98057b0a864e-main.css|1969|b06cb1da68#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-h5-editorial|static|transition-duration-500ms-or-longer|_css/98057b0a864e-main.css|1930|bd310f036b#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-editorial|static|transition-duration-500ms-or-longer|_css/98057b0a864e-main.css|1962|a2af283f02#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-forty|static|focusable-at-opacity-zero|_css/475f2a1032fe-main.css|3530|438a6d5409#1": {
+  "label": "FP",
+  "why": "a preload start state"
+ },
+ "d-h5-forty|static|transition-duration-500ms-or-longer|_css/475f2a1032fe-main.css|2744|669f1fdc9a#1": {
+  "label": "TP",
+  "why": "a hover filter that takes a second"
+ },
+ "d-h5-forty|static|transition-duration-500ms-or-longer|_css/475f2a1032fe-main.css|3247|44a8225fea#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-forty|static|transition-duration-500ms-or-longer|_css/475f2a1032fe-main.css|3407|44a8225fea#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-forty|static|transition-duration-500ms-or-longer|_css/475f2a1032fe-main.css|3433|f918efbad0#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-massively|static|all-caps-large|_css/4ae70399262c-main.css|3570|07c62e62ce#1": {
+  "label": "TP",
+  "why": "uppercase at 1.5rem or larger"
+ },
+ "d-h5-massively|static|cta-text-tap-continue-go|d-h5-massively/index.html|27|f161f066ac#1": {
+  "label": "TP",
+  "why": "Continue says nothing about where it goes"
+ },
+ "d-h5-massively|static|outline-none-no-focus-visible|_css/4ae70399262c-main.css|3715|f8b3fa5e63#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3224|88779c21ad#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3308|7fd0090136#1": {
+  "label": "FP",
+  "why": "an intro or panel movement on page load or menu open, not a hover or press answer"
+ },
+ "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3422|46e25a3c3a#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3564|ec5dbcdd84#1": {
+  "label": "FP",
+  "why": "an intro or panel movement on page load or menu open, not a hover or press answer"
+ },
+ "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3617|b5e856691a#1": {
+  "label": "FP",
+  "why": "an intro or panel movement on page load or menu open, not a hover or press answer"
+ },
+ "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|4562|4fa95a3c3d#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-phantom|static|transition-duration-500ms-or-longer|_css/9e258999c36c-main.css|2583|ca647f0b38#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-phantom|static|transition-duration-500ms-or-longer|_css/9e258999c36c-main.css|2593|50da936f9c#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-phantom|static|transition-duration-500ms-or-longer|_css/9e258999c36c-main.css|2611|88661d9349#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-phantom|static|transition-duration-500ms-or-longer|_css/9e258999c36c-main.css|2629|a75bcb49c6#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|162|633c9cca55#1": {
+  "label": "cantTell",
+  "why": "the icon link collapsed to 2px because its icon font is not stored with the frozen page"
+ },
+ "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|163|7042a16da5#1": {
+  "label": "cantTell",
+  "why": "the icon link collapsed to 2px because its icon font is not stored with the frozen page"
+ },
+ "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|164|71ce9d94e4#1": {
+  "label": "cantTell",
+  "why": "the icon link collapsed to 2px because its icon font is not stored with the frozen page"
+ },
+ "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|165|36fd228398#1": {
+  "label": "cantTell",
+  "why": "the icon link collapsed to 2px because its icon font is not stored with the frozen page"
+ },
+ "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|166|edf9216e64#1": {
+  "label": "cantTell",
+  "why": "the icon link collapsed to 2px because its icon font is not stored with the frozen page"
+ },
+ "d-h5-stellar|static|one-action-several-labels|d-h5-stellar/index.html|134|75aaa0b17e#1": {
+  "label": "TP",
+  "why": "Get Started and Learn More go to the same page"
+ },
+ "d-h5-stellar|static|transition-duration-500ms-or-longer|_css/2941dfa9497d-main.css|3100|35c575913e#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-h5-stellar|static|transition-duration-500ms-or-longer|_css/2941dfa9497d-main.css|3112|3016627030#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-sb-agency|static|outline-none-no-focus-visible|_css/36e30dedf27c-styles.css|5267|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-agency|static|outline-none-no-focus-visible|_css/36e30dedf27c-styles.css|5320|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-agency|static|transition-duration-500ms-or-longer|_css/36e30dedf27c-styles.css|5959|558df8c816#1": {
+  "label": "TP",
+  "why": "carousel indicators answer a click in 600ms"
+ },
+ "d-sb-business-frontpage|static|one-action-several-labels|d-sb-business-frontpage/index.html|134|3395839af9#1": {
+  "label": "FP",
+  "why": "every button has the same label"
+ },
+ "d-sb-business-frontpage|static|one-action-several-labels|d-sb-business-frontpage/index.html|184|6d223dadba#1": {
+  "label": "FP",
+  "why": "every button has the same label"
+ },
+ "d-sb-business-frontpage|static|one-action-several-labels|d-sb-business-frontpage/index.html|232|3395839af9#1": {
+  "label": "FP",
+  "why": "every button has the same label"
+ },
+ "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|5266|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|5319|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-business-frontpage|static|transition-duration-500ms-or-longer|_css/daf8b6dc487a-styles.css|5958|558df8c816#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|5027|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-clean-blog|static|transition-duration-500ms-or-longer|_css/186bc930a1ac-styles.css|5680|558df8c816#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-sb-creative|static|outline-none-no-focus-visible|_css/5caca2c3ace3-styles.css|5267|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-creative|static|outline-none-no-focus-visible|_css/5caca2c3ace3-styles.css|5320|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-creative|static|transition-duration-500ms-or-longer|_css/5caca2c3ace3-styles.css|5959|558df8c816#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-sb-freelancer|static|outline-none-no-focus-visible|_css/8ac9f7035a99-styles.css|5267|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-freelancer|static|outline-none-no-focus-visible|_css/8ac9f7035a99-styles.css|5320|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-freelancer|static|transition-duration-500ms-or-longer|_css/8ac9f7035a99-styles.css|5959|558df8c816#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-sb-grayscale|static|outline-none-no-focus-visible|_css/9fd76ca3867d-styles.css|5384|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-grayscale|static|outline-none-no-focus-visible|_css/9fd76ca3867d-styles.css|5437|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-grayscale|static|transition-duration-500ms-or-longer|_css/9fd76ca3867d-styles.css|6076|558df8c816#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-sb-modern-business|static|outline-none-no-focus-visible|_css/c97338db14e6-styles.css|5266|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-modern-business|static|outline-none-no-focus-visible|_css/c97338db14e6-styles.css|5319|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-modern-business|static|transition-duration-500ms-or-longer|_css/c97338db14e6-styles.css|5958|558df8c816#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|5267|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|5320|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-new-age|static|transition-duration-500ms-or-longer|_css/5799bae46006-styles.css|5959|558df8c816#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-sb-resume|static|all-caps-large|_css/786f6fecadce-styles.css|10865|df7479a574#1": {
+  "label": "TP",
+  "why": "uppercase at 1.5rem or larger"
+ },
+ "d-sb-resume|static|outline-none-no-focus-visible|_css/786f6fecadce-styles.css|5268|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-resume|static|outline-none-no-focus-visible|_css/786f6fecadce-styles.css|5321|22ec06b4ef#1": {
+  "label": "TP",
+  "why": "outline removed and no ring in the block; for dialog containers usefulness is low"
+ },
+ "d-sb-resume|static|transition-duration-500ms-or-longer|_css/786f6fecadce-styles.css|5960|558df8c816#1": {
+  "label": "FP",
+  "why": "an intro, preload or panel movement, not a hover or press answer"
+ },
+ "d-sb-sb-admin-2|static|animated-grain-noise-no-perf-class|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1": {
+  "label": "FP",
+  "why": "a glitch text effect, not a grain or noise layer"
+ },
+ "d-sb-sb-admin-2|static|decorative-accent-ruler|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1": {
+  "label": "FP",
+  "why": "a popover arrow or a list marker, not an ornament"
+ },
+ "d-uk-1|static|cursor-not-allowed-no-visual|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1": {
+  "label": "FP",
+  "why": "the design system gives the disabled state its own visual (opacity or colour) in a nearby rule"
+ },
+ "d-uk-1|static|decorative-accent-ruler|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1": {
+  "label": "FP",
+  "why": "a popover arrow or a list marker, not an ornament"
+ },
+ "d-uk-1|static|focusable-at-opacity-zero|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1": {
+  "label": "TP",
+  "why": "a button kept invisible until a script runs stays focusable"
+ },
+ "d-uk-2|static|cursor-not-allowed-no-visual|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1": {
+  "label": "FP",
+  "why": "the design system gives the disabled state its own visual (opacity or colour) in a nearby rule"
+ },
+ "d-uk-2|static|decorative-accent-ruler|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1": {
+  "label": "FP",
+  "why": "a popover arrow or a list marker, not an ornament"
+ },
+ "d-uk-2|static|imagery-mandatory-missing|d-uk-2/index.html|1|da39a3ee5e#1": {
+  "label": "FP",
+  "why": "a pricing or service page, not a landing page"
+ },
+ "d-uk-3|static|decorative-accent-ruler|_css/8cbde850d95f-21f364aaaf3bb80a096e0e675732b1a877da.css|1|616ebf4a0a#1": {
+  "label": "FP",
+  "why": "a popover arrow or a list marker, not an ornament"
+ },
+ "d-uk-4|static|cursor-not-allowed-no-visual|_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css|1|ef189b81a3#1": {
+  "label": "FP",
+  "why": "the design system gives the disabled state its own visual (opacity or colour) in a nearby rule"
+ },
+ "d-uk-5|static|cursor-not-allowed-no-visual|_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css|1|ef189b81a3#1": {
+  "label": "FP",
+  "why": "the design system gives the disabled state its own visual (opacity or colour) in a nearby rule"
+ },
+ "d-uk-5|static|repeated-action-same-name|d-uk-5/index.html|1469|69f405165f#1": {
+  "label": "FP",
+  "why": "links with the same name go to the same place, or the names differ"
+ },
+ "d-us-1|static|cursor-not-allowed-no-visual|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1": {
+  "label": "FP",
+  "why": "the design system gives the disabled state its own visual (opacity or colour) in a nearby rule"
+ },
+ "d-us-2|static|cursor-not-allowed-no-visual|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1": {
+  "label": "FP",
+  "why": "the design system gives the disabled state its own visual (opacity or colour) in a nearby rule"
+ },
+ "d-us-2|static|repeated-action-same-name|d-us-2/index.html|4687|16d7058656#1": {
+  "label": "FP",
+  "why": "links with the same name go to the same place, or the names differ"
+ },
+ "d-us-2|static|repeated-action-same-name|d-us-2/index.html|4728|97277c5333#1": {
+  "label": "FP",
+  "why": "links with the same name go to the same place, or the names differ"
+ },
+ "d-us-2|static|repeated-action-same-name|d-us-2/index.html|4902|73c461e7e7#1": {
+  "label": "FP",
+  "why": "links with the same name go to the same place, or the names differ"
+ },
+ "d-us-2|static|repeated-action-same-name|d-us-2/index.html|5188|1d5cbc38bf#1": {
+  "label": "FP",
+  "why": "links with the same name go to the same place, or the names differ"
+ },
+ "d-us-3|static|cursor-not-allowed-no-visual|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1": {
+  "label": "FP",
+  "why": "the design system gives the disabled state its own visual (opacity or colour) in a nearby rule"
+ },
+ "d-us-3|static|fixed-height-text-block|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1": {
+  "label": "FP",
+  "why": "a 44px tile around one letter cannot overflow"
+ },
+ "d-us-4|static|cursor-not-allowed-no-visual|_css/ac2b79723a77-main.css|1|05fd5e5070#1": {
+  "label": "FP",
+  "why": "the design system gives the disabled state its own visual (opacity or colour) in a nearby rule"
+ },
+ "d-us-4|static|layout-family-repeated|d-us-4/index.html|574|116528c54f#1": {
+  "label": "FP",
+  "why": "footer columns share a layout by design"
+ },
+ "d-us-4|static|scroll-to-top-button-everywhere|_css/ac2b79723a77-main.css|1|05fd5e5070#1": {
+  "label": "FP",
+  "why": "a modal overlay, not a scroll-to-top button"
+ },
+ "d-us-4|static|text-ink-at-low-alpha|_css/ac2b79723a77-main.css|1|05fd5e5070#1": {
+  "label": "FP",
+  "why": "a transparent colour in a focus-ring workaround, not faint text"
+ },
+ "d-us-5|static|focusable-at-opacity-zero|d-us-5/index.html|113|f14155bc0e#1": {
+  "label": "TP",
+  "why": "menus of links at opacity 0 stay in the tab order"
+ },
+ "d-us-5|static|focusable-at-opacity-zero|d-us-5/index.html|136|f14155bc0e#1": {
+  "label": "TP",
+  "why": "menus of links at opacity 0 stay in the tab order"
+ },
+ "d-us-5|static|focusable-at-opacity-zero|d-us-5/index.html|197|a6f1a1fe4b#1": {
+  "label": "TP",
+  "why": "menus of links at opacity 0 stay in the tab order"
+ },
+ "d-us-5|static|focusable-at-opacity-zero|d-us-5/index.html|222|f14155bc0e#1": {
+  "label": "TP",
+  "why": "menus of links at opacity 0 stay in the tab order"
+ },
+ "d-us-5|static|focusable-at-opacity-zero|d-us-5/index.html|68|f14155bc0e#1": {
+  "label": "TP",
+  "why": "menus of links at opacity 0 stay in the tab order"
+ },
+ "d-us-6|static|all-caps-large|_css/69c5358e9d0e-sLJfPEL8iYcm7ov4eKwkCiN9Ua7kEKLKybkY.css|2|21edc77468#1": {
+  "label": "TP",
+  "why": "uppercase at 1.5rem or larger"
+ },
+ "d-us-6|static|layout-family-repeated|d-us-6/index.html|786|6c78550620#1": {
+  "label": "FP",
+  "why": "footer columns share a layout by design"
+ },
+ "d-us-6|static|transition-duration-500ms-or-longer|_css/69c5358e9d0e-sLJfPEL8iYcm7ov4eKwkCiN9Ua7kEKLKybkY.css|2|21edc77468#1": {
+  "label": "TP",
+  "why": "a button hover in 500ms"
+ },
+ "dark-text-on-dark-card|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "display-line-height-under-floor|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "display-table-for-layout|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "display-table-for-layout|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "emoji-bullet-marker|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "event-listener-no-passive-on-scroll|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "fake-name-john-doe|FP>TP": {
+  "follow": "a",
+  "why": "the name is an example in a placeholder hint, not shipped data"
+ },
+ "flex-center-center-default|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "focus-ring-clipped|TP>cantTell": {
+  "follow": "a",
+  "why": "the clipping ancestor and the ring are CSS; reading the pages, the scripts do not open or move them"
+ },
+ "focus-ring-missing|TP>FP": {
+  "follow": "b",
+  "why": "the usa-focus demo class already shows the ring at rest"
+ },
+ "focusable-at-opacity-zero|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "focusable-inside-aria-hidden|TP>FP": {
+  "follow": "b",
+  "why": "the aria-hidden subtree is a closed modal, display: none until opened, so nothing in it takes focus"
+ },
+ "font-family-monospace-fallback-default|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "footer-built-with-love-coffee|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "full-viewport-width-overflow|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "full-viewport-width-overflow|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "generic-cta-text|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "grid-cols-3-1fr-default|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "h-screen-no-dvh-fallback|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "hairline-border-heavy-shadow|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "heading-skip-h1-h3|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "hero-text-arbitrary-90px|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "horizontal-overflow|TP>cantTell": {
+  "follow": "a",
+  "why": "rows with gutters wider than their container's padding, and a navigation row, overflow without any script"
+ },
+ "hover-only-card-actions|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "href-empty-hash|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "image-format-jpg-no-webp-avif|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "imagery-mandatory-missing|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "imagery-mandatory-missing|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "img-no-dimensions|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "infinite-animation-without-reduced-motion|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "inline-style-attribute|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "inline-style-display-none-no-aria|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "inline-svg-no-aria|TP>FP": {
+  "follow": "b",
+  "why": "reading the pages: the context view saw what decides it (a hidden sprite, a title that repeats the alt, a muted loop, the hidden attribute)"
+ },
+ "inline-svg-no-aria|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "input-purpose-missing|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "input-text-zooms|TP>cantTell": {
+  "follow": "a",
+  "why": "the field's font size is CSS, unchanged by the blocked scripts"
+ },
+ "letterspacing-tracking-tight-display|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "link-without-href|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "loader-spinner-border-default|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "lorem-ipsum-leak|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "nav-equal-hamburger-desktop|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "negative-margin-pull-left-right|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "note": "Model-made tiebreaks. Keys: a finding key, rule|pattern, rule|A>B or rule|*. See bench/label.py.",
+ "numbered-placeholder-classname|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "outline-none-no-focus-visible|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "outline-none-no-focus-visible|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "padding-shorthand-4-vals-zero-first|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "placeholder-as-label|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "placeholder-token-shipped|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "purple-to-blue-gradient|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "scale-1-1-on-card-hover|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "state-answers-late|TP>cantTell": {
+  "follow": "a",
+  "why": "the timing comes from CSS transitions, which the blocked scripts do not change"
+ },
+ "target-blank-no-noopener|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "target-too-small|TP>cantTell": {
+  "follow": "a",
+  "why": "plain text links and buttons packed tighter than 24px, with or without scripts"
+ },
+ "testimonial-fake-five-stars|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "text-align-justify-web|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "text-ink-at-low-alpha|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "text-ink-at-low-alpha|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "text-low-contrast|TP>FP": {
+  "follow": "b",
+  "why": "the caption sits on a dark slide; the engine measured the page behind it"
+ },
+ "text-low-contrast|TP>cantTell": {
+  "follow": "b",
+  "why": "faded by a preload state, or on a photo that is not stored"
+ },
+ "text-overflows-its-box|TP>cantTell": {
+  "follow": "b",
+  "why": "the page's web fonts are blocked, so the measured width is the fallback font's"
+ },
+ "timing-300ms-default|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "title-case-headlines|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "tooltip-on-required-info|TP>FP": {
+  "follow": "b",
+  "why": "reading the pages: the context view saw what decides it (a hidden sprite, a title that repeats the alt, a muted loop, the hidden attribute)"
+ },
+ "tooltip-on-required-info|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "transition-duration-500ms-or-longer|cantTell>FP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "transition-duration-500ms-or-longer|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "transition-property-all|cantTell>TP": {
+  "follow": "b",
+  "why": "the excerpt shows only the start of the line, so pass A could not see the match; reading a sample of these findings in their pages agreed with the context view"
+ },
+ "video-without-captions|TP>FP": {
+  "follow": "b",
+  "why": "reading the pages: the context view saw what decides it (a hidden sprite, a title that repeats the alt, a muted loop, the hidden attribute)"
+ }
+}

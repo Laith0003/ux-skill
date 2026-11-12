@@ -1,0 +1,229 @@
+{
+ "page": "a-gen-08",
+ "findings": [
+  {
+   "key": "a-gen-08|render|horizontal-overflow|a-gen-08/index.html|0|c3ee137d4f#1",
+   "pass": "render",
+   "rule": "horizontal-overflow",
+   "severity": "high",
+   "file": "a-gen-08/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-08|render|text-low-contrast|a-gen-08/index.html|70|9497b6f093#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-08/index.html",
+   "line": 70
+  },
+  {
+   "key": "a-gen-08|static|border-radius-2xl-default|a-gen-08/index.html|44|1374b584f0#1",
+   "pass": "static",
+   "rule": "border-radius-2xl-default",
+   "severity": "low",
+   "file": "a-gen-08/index.html",
+   "line": 44
+  },
+  {
+   "key": "a-gen-08|static|button-no-type|a-gen-08/index.html|56|80e1307998#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 56
+  },
+  {
+   "key": "a-gen-08|static|card-glow-purple-shadow|a-gen-08/index.html|23|4235d4aa3d#1",
+   "pass": "static",
+   "rule": "card-glow-purple-shadow",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 23
+  },
+  {
+   "key": "a-gen-08|static|default-font-only|a-gen-08/index.html|10|82ed1d51d0#1",
+   "pass": "static",
+   "rule": "default-font-only",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 10
+  },
+  {
+   "key": "a-gen-08|static|generic-cta-text|a-gen-08/index.html|59|c1b8ae1ea1#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "a-gen-08/index.html",
+   "line": 59
+  },
+  {
+   "key": "a-gen-08|static|generic-cta-text|a-gen-08/index.html|60|a2a95e7687#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "a-gen-08/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-08|static|generic-cta-text|a-gen-08/index.html|61|b75bbb56e9#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "a-gen-08/index.html",
+   "line": 61
+  },
+  {
+   "key": "a-gen-08|static|glow-shadow-zero-offset|a-gen-08/index.html|23|4235d4aa3d#1",
+   "pass": "static",
+   "rule": "glow-shadow-zero-offset",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 23
+  },
+  {
+   "key": "a-gen-08|static|hairline-border-heavy-shadow|a-gen-08/index.html|23|4235d4aa3d#1",
+   "pass": "static",
+   "rule": "hairline-border-heavy-shadow",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 23
+  },
+  {
+   "key": "a-gen-08|static|heading-skip-h1-h3|a-gen-08/index.html|54|788fee4256#1",
+   "pass": "static",
+   "rule": "heading-skip-h1-h3",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 54
+  },
+  {
+   "key": "a-gen-08|static|href-empty-hash|a-gen-08/index.html|52|1dabe037d9#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 52
+  },
+  {
+   "key": "a-gen-08|static|href-empty-hash|a-gen-08/index.html|59|c1b8ae1ea1#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 59
+  },
+  {
+   "key": "a-gen-08|static|href-empty-hash|a-gen-08/index.html|60|a2a95e7687#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-08|static|href-empty-hash|a-gen-08/index.html|61|b75bbb56e9#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 61
+  },
+  {
+   "key": "a-gen-08|static|href-empty-hash|a-gen-08/index.html|85|6cda97f648#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 85
+  },
+  {
+   "key": "a-gen-08|static|imagery-mandatory-missing|a-gen-08/index.html|1|d1848aa7b5#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "a-gen-08/index.html",
+   "line": 1
+  },
+  {
+   "key": "a-gen-08|static|inline-style-attribute|a-gen-08/index.html|52|1dabe037d9#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 52
+  },
+  {
+   "key": "a-gen-08|static|inline-style-attribute|a-gen-08/index.html|59|c1b8ae1ea1#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 59
+  },
+  {
+   "key": "a-gen-08|static|inline-style-attribute|a-gen-08/index.html|60|a2a95e7687#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-08|static|inline-style-attribute|a-gen-08/index.html|61|b75bbb56e9#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 61
+  },
+  {
+   "key": "a-gen-08|static|inline-style-attribute|a-gen-08/index.html|84|b53d96e1c4#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 84
+  },
+  {
+   "key": "a-gen-08|static|purple-to-blue-gradient|a-gen-08/index.html|19|063a2e117d#1",
+   "pass": "static",
+   "rule": "purple-to-blue-gradient",
+   "severity": "high",
+   "file": "a-gen-08/index.html",
+   "line": 19
+  },
+  {
+   "key": "a-gen-08|static|purple-to-blue-gradient|a-gen-08/index.html|24|900551b2e4#1",
+   "pass": "static",
+   "rule": "purple-to-blue-gradient",
+   "severity": "high",
+   "file": "a-gen-08/index.html",
+   "line": 24
+  },
+  {
+   "key": "a-gen-08|static|purple-to-blue-gradient|a-gen-08/index.html|32|c21a5dad06#1",
+   "pass": "static",
+   "rule": "purple-to-blue-gradient",
+   "severity": "high",
+   "file": "a-gen-08/index.html",
+   "line": 32
+  },
+  {
+   "key": "a-gen-08|static|timing-300ms-default|a-gen-08/index.html|31|1958abd543#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "a-gen-08/index.html",
+   "line": 31
+  },
+  {
+   "key": "a-gen-08|static|transition-property-all|a-gen-08/index.html|31|1958abd543#1",
+   "pass": "static",
+   "rule": "transition-property-all",
+   "severity": "medium",
+   "file": "a-gen-08/index.html",
+   "line": 31
+  }
+ ]
+}

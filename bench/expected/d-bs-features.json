@@ -1,0 +1,133 @@
+{
+ "page": "d-bs-features",
+ "findings": [
+  {
+   "key": "d-bs-features|render|image-broken|d-bs-features/index.html|20|3d98aa3d3e#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "d-bs-features/index.html",
+   "line": 20
+  },
+  {
+   "key": "d-bs-features|render|state-answers-late|d-bs-features/index.html|0|dccca835e8#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-features|render|state-answers-late|d-bs-features/index.html|0|c9f14cbd18#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-features|render|state-answers-late|d-bs-features/index.html|0|5b5262dca4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-features|static|heading-skip-h1-h3|d-bs-features/index.html|20|12159637cc#1",
+   "pass": "static",
+   "rule": "heading-skip-h1-h3",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 20
+  },
+  {
+   "key": "d-bs-features|static|href-empty-hash|d-bs-features/index.html|8|d56b92810e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-features|static|href-empty-hash|d-bs-features/index.html|10|358fd050e6#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-features|static|href-empty-hash|d-bs-features/index.html|12|358fd050e6#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 12
+  },
+  {
+   "key": "d-bs-features|static|href-empty-hash|d-bs-features/index.html|14|003c6a719a#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-features|static|href-empty-hash|d-bs-features/index.html|16|c96bc79fd3#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 16
+  },
+  {
+   "key": "d-bs-features|static|href-empty-hash|d-bs-features/index.html|18|c96bc79fd3#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 18
+  },
+  {
+   "key": "d-bs-features|static|href-empty-hash|d-bs-features/index.html|20|12159637cc#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 20
+  },
+  {
+   "key": "d-bs-features|static|image-format-jpg-no-webp-avif|d-bs-features/index.html|20|12159637cc#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 20
+  },
+  {
+   "key": "d-bs-features|static|inline-style-attribute|d-bs-features/index.html|20|12159637cc#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-bs-features/index.html",
+   "line": 20
+  },
+  {
+   "key": "d-bs-features|static|inline-svg-no-aria|d-bs-features/index.html|2|3c9744a534#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-features/index.html",
+   "line": 2
+  },
+  {
+   "key": "d-bs-features|static|inline-svg-no-aria|d-bs-features/index.html|8|d56b92810e#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-features/index.html",
+   "line": 8
+  }
+ ]
+}

@@ -1,0 +1,445 @@
+{
+ "page": "d-h5-forty",
+ "findings": [
+  {
+   "key": "d-h5-forty|render|text-low-contrast|d-h5-forty/index.html|0|86f7e437fa#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-h5-forty|static|css-import-render-blocking|_css/475f2a1032fe-main.css|1|2221711735#1",
+   "pass": "static",
+   "rule": "css-import-render-blocking",
+   "severity": "medium",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-h5-forty|static|css-import-render-blocking|_css/475f2a1032fe-main.css|2|5c1456e75d#1",
+   "pass": "static",
+   "rule": "css-import-render-blocking",
+   "severity": "medium",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2
+  },
+  {
+   "key": "d-h5-forty|static|flex-center-center-default|_css/475f2a1032fe-main.css|2971|7c20dc61c8#1",
+   "pass": "static",
+   "rule": "flex-center-center-default",
+   "severity": "low",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2971
+  },
+  {
+   "key": "d-h5-forty|static|focusable-at-opacity-zero|_css/475f2a1032fe-main.css|3286|438a6d5409#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 3286
+  },
+  {
+   "key": "d-h5-forty|static|focusable-at-opacity-zero|_css/475f2a1032fe-main.css|3530|438a6d5409#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 3530
+  },
+  {
+   "key": "d-h5-forty|static|generic-class-container-wrapper-only|d-h5-forty/index.html|44|0809072f70#1",
+   "pass": "static",
+   "rule": "generic-class-container-wrapper-only",
+   "severity": "low",
+   "file": "d-h5-forty/index.html",
+   "line": 44
+  },
+  {
+   "key": "d-h5-forty|static|generic-class-container-wrapper-only|d-h5-forty/index.html|121|68c693750a#1",
+   "pass": "static",
+   "rule": "generic-class-container-wrapper-only",
+   "severity": "low",
+   "file": "d-h5-forty/index.html",
+   "line": 121
+  },
+  {
+   "key": "d-h5-forty|static|generic-class-container-wrapper-only|d-h5-forty/index.html|136|0809072f70#1",
+   "pass": "static",
+   "rule": "generic-class-container-wrapper-only",
+   "severity": "low",
+   "file": "d-h5-forty/index.html",
+   "line": 136
+  },
+  {
+   "key": "d-h5-forty|static|generic-class-container-wrapper-only|d-h5-forty/index.html|189|0809072f70#1",
+   "pass": "static",
+   "rule": "generic-class-container-wrapper-only",
+   "severity": "low",
+   "file": "d-h5-forty/index.html",
+   "line": 189
+  },
+  {
+   "key": "d-h5-forty|static|generic-cta-text|d-h5-forty/index.html|37|0417d3193e#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 37
+  },
+  {
+   "key": "d-h5-forty|static|generic-cta-text|d-h5-forty/index.html|52|810588e0e8#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 52
+  },
+  {
+   "key": "d-h5-forty|static|generic-cta-text|d-h5-forty/index.html|127|0c2972920f#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 127
+  },
+  {
+   "key": "d-h5-forty|static|h-screen-no-dvh-fallback|_css/475f2a1032fe-main.css|3826|5b4eb31ea5#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 3826
+  },
+  {
+   "key": "d-h5-forty|static|heading-skip-h1-h3|d-h5-forty/index.html|46|7b873e0af2#1",
+   "pass": "static",
+   "rule": "heading-skip-h1-h3",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 46
+  },
+  {
+   "key": "d-h5-forty|static|hover-only-card-actions|_css/475f2a1032fe-main.css|1994|d4a8bd7983#1",
+   "pass": "static",
+   "rule": "hover-only-card-actions",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 1994
+  },
+  {
+   "key": "d-h5-forty|static|hover-only-card-actions|_css/475f2a1032fe-main.css|2641|7d6ad119ea#1",
+   "pass": "static",
+   "rule": "hover-only-card-actions",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2641
+  },
+  {
+   "key": "d-h5-forty|static|hover-only-card-actions|_css/475f2a1032fe-main.css|3220|897834993d#1",
+   "pass": "static",
+   "rule": "hover-only-card-actions",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 3220
+  },
+  {
+   "key": "d-h5-forty|static|hover-only-card-actions|_css/475f2a1032fe-main.css|3921|7d6ad119ea#1",
+   "pass": "static",
+   "rule": "hover-only-card-actions",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 3921
+  },
+  {
+   "key": "d-h5-forty|static|href-empty-hash|d-h5-forty/index.html|37|0417d3193e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 37
+  },
+  {
+   "key": "d-h5-forty|static|href-empty-hash|d-h5-forty/index.html|38|4cb31d9f13#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 38
+  },
+  {
+   "key": "d-h5-forty|static|href-empty-hash|d-h5-forty/index.html|164|1fa637123b#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 164
+  },
+  {
+   "key": "d-h5-forty|static|href-empty-hash|d-h5-forty/index.html|191|76e893ae1a#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 191
+  },
+  {
+   "key": "d-h5-forty|static|href-empty-hash|d-h5-forty/index.html|192|c842bf7bd5#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 192
+  },
+  {
+   "key": "d-h5-forty|static|href-empty-hash|d-h5-forty/index.html|193|c3ae93b4a3#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 193
+  },
+  {
+   "key": "d-h5-forty|static|href-empty-hash|d-h5-forty/index.html|194|d71620d516#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 194
+  },
+  {
+   "key": "d-h5-forty|static|href-empty-hash|d-h5-forty/index.html|195|c48883811e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 195
+  },
+  {
+   "key": "d-h5-forty|static|image-format-jpg-no-webp-avif|d-h5-forty/index.html|65|4f8ab81ec7#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 65
+  },
+  {
+   "key": "d-h5-forty|static|image-format-jpg-no-webp-avif|d-h5-forty/index.html|74|01392c626b#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 74
+  },
+  {
+   "key": "d-h5-forty|static|image-format-jpg-no-webp-avif|d-h5-forty/index.html|83|239ab7b279#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 83
+  },
+  {
+   "key": "d-h5-forty|static|image-format-jpg-no-webp-avif|d-h5-forty/index.html|92|762bf29ff5#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 92
+  },
+  {
+   "key": "d-h5-forty|static|image-format-jpg-no-webp-avif|d-h5-forty/index.html|101|57bac441e5#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 101
+  },
+  {
+   "key": "d-h5-forty|static|image-format-jpg-no-webp-avif|d-h5-forty/index.html|110|779d4b22bd#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 110
+  },
+  {
+   "key": "d-h5-forty|static|img-no-dimensions|d-h5-forty/index.html|65|4f8ab81ec7#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 65
+  },
+  {
+   "key": "d-h5-forty|static|img-no-dimensions|d-h5-forty/index.html|74|01392c626b#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 74
+  },
+  {
+   "key": "d-h5-forty|static|img-no-dimensions|d-h5-forty/index.html|83|239ab7b279#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 83
+  },
+  {
+   "key": "d-h5-forty|static|img-no-dimensions|d-h5-forty/index.html|92|762bf29ff5#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 92
+  },
+  {
+   "key": "d-h5-forty|static|img-no-dimensions|d-h5-forty/index.html|101|57bac441e5#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 101
+  },
+  {
+   "key": "d-h5-forty|static|img-no-dimensions|d-h5-forty/index.html|110|779d4b22bd#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 110
+  },
+  {
+   "key": "d-h5-forty|static|input-purpose-missing|d-h5-forty/index.html|146|06c0611137#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-h5-forty/index.html",
+   "line": 146
+  },
+  {
+   "key": "d-h5-forty|static|lang-attribute-missing|d-h5-forty/index.html|7|0fe0bb445f#1",
+   "pass": "static",
+   "rule": "lang-attribute-missing",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 7
+  },
+  {
+   "key": "d-h5-forty|static|lorem-ipsum-leak|d-h5-forty/index.html|125|872603ee87#1",
+   "pass": "static",
+   "rule": "lorem-ipsum-leak",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 125
+  },
+  {
+   "key": "d-h5-forty|static|padding-shorthand-4-vals-zero-first|_css/475f2a1032fe-main.css|2463|8b3d5e56b6#1",
+   "pass": "static",
+   "rule": "padding-shorthand-4-vals-zero-first",
+   "severity": "low",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2463
+  },
+  {
+   "key": "d-h5-forty|static|placeholder-token-shipped|d-h5-forty/index.html|125|872603ee87#1",
+   "pass": "static",
+   "rule": "placeholder-token-shipped",
+   "severity": "high",
+   "file": "d-h5-forty/index.html",
+   "line": 125
+  },
+  {
+   "key": "d-h5-forty|static|text-ink-at-low-alpha|_css/475f2a1032fe-main.css|2059|d4ef69dad2#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2059
+  },
+  {
+   "key": "d-h5-forty|static|text-ink-at-low-alpha|_css/475f2a1032fe-main.css|2064|d4ef69dad2#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2064
+  },
+  {
+   "key": "d-h5-forty|static|text-ink-at-low-alpha|_css/475f2a1032fe-main.css|2069|d4ef69dad2#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2069
+  },
+  {
+   "key": "d-h5-forty|static|text-ink-at-low-alpha|_css/475f2a1032fe-main.css|2074|d4ef69dad2#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2074
+  },
+  {
+   "key": "d-h5-forty|static|text-ink-at-low-alpha|_css/475f2a1032fe-main.css|3718|f702145fe7#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 3718
+  },
+  {
+   "key": "d-h5-forty|static|transition-duration-500ms-or-longer|_css/475f2a1032fe-main.css|2744|669f1fdc9a#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2744
+  },
+  {
+   "key": "d-h5-forty|static|transition-duration-500ms-or-longer|_css/475f2a1032fe-main.css|2789|35ce3e5a49#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 2789
+  },
+  {
+   "key": "d-h5-forty|static|transition-duration-500ms-or-longer|_css/475f2a1032fe-main.css|3247|44a8225fea#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 3247
+  },
+  {
+   "key": "d-h5-forty|static|transition-duration-500ms-or-longer|_css/475f2a1032fe-main.css|3407|44a8225fea#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 3407
+  },
+  {
+   "key": "d-h5-forty|static|transition-duration-500ms-or-longer|_css/475f2a1032fe-main.css|3433|f918efbad0#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/475f2a1032fe-main.css",
+   "line": 3433
+  },
+  {
+   "key": "d-h5-forty|static|viewport-no-zoom|d-h5-forty/index.html|11|0950ceb857#1",
+   "pass": "static",
+   "rule": "viewport-no-zoom",
+   "severity": "critical",
+   "file": "d-h5-forty/index.html",
+   "line": 11
+  }
+ ]
+}

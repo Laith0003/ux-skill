@@ -1,0 +1,101 @@
+{
+ "page": "d-bs-product",
+ "findings": [
+  {
+   "key": "d-bs-product|render|accent-text-low-contrast|d-bs-product/index.html|10|890508a000#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "d-bs-product/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-product|render|state-answers-late|d-bs-product/index.html|0|5b5262dca4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-product/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-product|static|heading-skip-h1-h3|d-bs-product/index.html|10|766be0de1f#1",
+   "pass": "static",
+   "rule": "heading-skip-h1-h3",
+   "severity": "medium",
+   "file": "d-bs-product/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-product|static|href-empty-hash|d-bs-product/index.html|8|dee345f145#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-product/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-product|static|href-empty-hash|d-bs-product/index.html|10|766be0de1f#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-product/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-product|static|href-empty-hash|d-bs-product/index.html|12|9a3c18dcae#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-product/index.html",
+   "line": 12
+  },
+  {
+   "key": "d-bs-product|static|href-empty-hash|d-bs-product/index.html|14|0087ab09c7#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-product/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-product|static|imagery-mandatory-missing|d-bs-product/index.html|1|b4406d7d8b#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "d-bs-product/index.html",
+   "line": 1
+  },
+  {
+   "key": "d-bs-product|static|inline-style-attribute|d-bs-product/index.html|14|0087ab09c7#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-bs-product/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-product|static|inline-svg-no-aria|d-bs-product/index.html|2|3c9744a534#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-product/index.html",
+   "line": 2
+  },
+  {
+   "key": "d-bs-product|static|inline-svg-no-aria|d-bs-product/index.html|8|dee345f145#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-product/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-product|static|inline-svg-no-aria|d-bs-product/index.html|14|0087ab09c7#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-product/index.html",
+   "line": 14
+  }
+ ]
+}

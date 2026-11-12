@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إعدادات الحساب - مكتبة المدينة العامة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Tajawal', sans-serif; background: #f5f3ee; color: #2b2622; }
+  header { background: #1f4e5f; color: #fff; padding: 18px 32px; display: flex; justify-content: space-between; align-items: center; }
+  header .brand { font-size: 22px; font-weight: 700; }
+  header nav a { color: #d6e6ea; text-decoration: none; margin-right: 24px; }
+  .app { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
+  .app h1 { font-size: 30px; margin-bottom: 24px; }
+  .section { background: #fff; border-radius: 14px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+  .section h2 { font-size: 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; color: #1f4e5f; }
+  .profile { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .avatar { width: 60px; height: 60px; border-radius: 50%; background: #c7dde3; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: #1f4e5f; }
+  .card-no { font-size: 14px; color: #8b8178; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field label { display: block; font-size: 14px; color: #6b625a; margin-bottom: 6px; }
+  .field input, .field select { width: 100%; padding: 11px 14px; border: 1px solid #ddd6cc; border-radius: 10px; font-family: inherit; font-size: 15px; }
+  .btn { background: #1f4e5f; color: #fff; border: none; padding: 10px 22px; border-radius: 10px; font-family: inherit; font-weight: 700; cursor: pointer; transition: all 0.3s ease; }
+  .btn:hover { background: #163a47; }
+  .btn.small { padding: 6px 14px; font-size: 13px; }
+  .btn.outline { background: transparent; color: #1f4e5f; border: 1px solid #1f4e5f; }
+  .btn.danger { background: #c0392b; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: right; color: #8b8178; font-weight: 500; padding: 10px 8px; border-bottom: 1px solid #eee6dc; }
+  td { padding: 12px 8px; border-bottom: 1px solid #f3eee7; }
+  .badge { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+  .badge.ready { background: #dff3e4; color: #2e7d45; }
+  .badge.waiting { background: #fdf0d5; color: #a46a00; }
+  .badge.returned { background: #eee; color: #777; }
+  .badge.late { background: #fbe0dd; color: #b03a2e; }
+  .note { font-size: 13px; color: #a39a90; margin-top: 10px; }
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f3eee7; }
+  .row:last-child { border-bottom: none; }
+  .hint { font-size: 13px; color: #a39a90; margin-top: 2px; }
+  .switch { position: relative; width: 48px; height: 26px; display: inline-block; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; inset: 0; background: #ccc; border-radius: 26px; cursor: pointer; transition: 0.3s; }
+  .slider::before { content: ""; position: absolute; width: 20px; height: 20px; right: 3px; top: 3px; background: #fff; border-radius: 50%; transition: 0.3s; }
+  .switch input:checked + .slider { background: #1f4e5f; }
+  .switch input:checked + .slider::before { transform: translateX(-22px); }
+  .danger-zone { border: 1px solid #f2c4bf; background: #fffaf9; }
+  .danger-zone h2 { color: #c0392b; }
+  @media (max-width: 700px) { .grid { grid-template-columns: 1fr; } header nav { display: none; } }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand">مكتبة المدينة العامة</div>
+    <nav><a href="#">الفهرس</a><a href="#">الفعاليات</a><a href="#">حسابي</a></nav>
+  </header>
+
+  <div class="app">
+    <h1>إعدادات الحساب</h1>
+
+    <div class="section">
+      <h2>&#128100; الملف الشخصي</h2>
+      <div class="profile">
+        <div class="avatar">ل</div>
+        <div><div><strong>ليلى حداد</strong></div><div class="card-no" dir="ltr">Card 2048-7713-09</div></div>
+      </div>
+      <div class="grid">
+        <div class="field"><label>الاسم الكامل</label><input type="text" value="ليلى حداد"></div>
+        <div class="field"><label>الفرع المفضل للاستلام</label>
+          <select><option>الفرع الرئيسي</option><option>فرع الحديقة</option><option>فرع الجامعة</option></select>
+        </div>
+      </div>
+      <button class="btn" style="margin-top: 16px;">حفظ التغييرات</button>
+    </div>
+
+    <div class="section">
+      <h2>&#128218; الكتب المستعارة حاليا</h2>
+      <table>
+        <thead><tr><th>العنوان</th><th>تاريخ الإرجاع</th><th>التجديد</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>ظل الريح</td><td>14 تشرين الثاني</td><td>1 من 2</td><td><button class="btn small outline">تجديد</button></td></tr>
+          <tr><td>تاريخ المدن القديمة</td><td>20 تشرين الثاني</td><td>0 من 2</td><td><button class="btn small outline">تجديد</button></td></tr>
+          <tr><td>أطلس الطيور</td><td><span class="badge late">متأخر يومين</span></td><td>2 من 2</td><td><button class="btn small outline" disabled>تجديد</button></td></tr>
+        </tbody>
+      </table>
+      <p class="note">مدة الإعارة ثلاثة أسابيع، ويمكن التجديد مرتين.</p>
+    </div>
+
+    <div class="section">
+      <h2>&#128278; الحجوزات</h2>
+      <table>
+        <thead><tr><th>العنوان</th><th>فرع الاستلام</th><th>الحالة</th><th></th></tr></thead>
+        <tbody>
+          <tr><td>مئة عام من العزلة</td><td>الفرع الرئيسي</td><td><span class="badge ready">جاهز للاستلام</span></td><td><a href="#" style="color:#c0392b;text-decoration:none;">إلغاء</a></td></tr>
+          <tr><td>الخيميائي</td><td>فرع الحديقة</td><td><span class="badge waiting">الترتيب 3 في الانتظار</span></td><td><a href="#" style="color:#c0392b;text-decoration:none;">إلغاء</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>&#128340; سجل الإعارة</h2>
+      <table>
+        <thead><tr><th>العنوان</th><th>تاريخ الاستعارة</th><th>تاريخ الإرجاع</th><th>الحالة</th></tr></thead>
+        <tbody>
+          <tr><td>رجال في الشمس</td><td>2 أيلول</td><td>20 أيلول</td><td><span class="badge returned">أعيد</span></td></tr>
+          <tr><td>موسم الهجرة إلى الشمال</td><td>15 آب</td><td>3 أيلول</td><td><span class="badge returned">أعيد</span></td></tr>
+          <tr><td>كتاب الطبخ الشامي</td><td>1 آب</td><td>22 آب</td><td><span class="badge returned">أعيد</span></td></tr>
+        </tbody>
+      </table>
+      <a href="#" style="display:inline-block;margin-top:12px;color:#1f4e5f;">عرض السجل كاملا</a>
+    </div>
+
+    <div class="section">
+      <h2>&#128276; الإشعارات</h2>
+      <div class="row"><div><div>تذكير بموعد الإرجاع</div><div class="hint">قبل يومين من تاريخ الإرجاع</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="row"><div><div>الحجز جاهز للاستلام</div><div class="hint">نحتفظ بالكتاب لك سبعة أيام</div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+      <div class="row"><div><div>وصول كتب جديدة</div><div class="hint">مرة في الأسبوع</div></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+    </div>
+
+    <div class="section danger-zone">
+      <h2>&#9888;&#65039; إغلاق بطاقة المكتبة</h2>
+      <p style="margin-bottom: 14px; color: #6b625a;">لا يمكن إغلاق البطاقة قبل إرجاع كل الكتب المستعارة ودفع أي غرامات.</p>
+      <button class="btn danger">إغلاق البطاقة</button>
+    </div>
+  </div>
+</body>
+</html>

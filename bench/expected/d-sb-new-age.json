@@ -1,0 +1,549 @@
+{
+ "page": "d-sb-new-age",
+ "findings": [
+  {
+   "key": "d-sb-new-age|render|image-broken|d-sb-new-age/index.html|53|978ea7af39#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 53
+  },
+  {
+   "key": "d-sb-new-age|render|image-broken|d-sb-new-age/index.html|53|ad13f61366#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 53
+  },
+  {
+   "key": "d-sb-new-age|render|image-broken|d-sb-new-age/index.html|184|e8b686815f#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 184
+  },
+  {
+   "key": "d-sb-new-age|render|state-answers-late|d-sb-new-age/index.html|0|8bd36f5189#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-sb-new-age/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-sb-new-age|render|text-low-contrast|d-sb-new-age/index.html|51|fa3edde38e#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 51
+  },
+  {
+   "key": "d-sb-new-age|static|animating-layout-properties|_css/5799bae46006-styles.css|3174|bcaf7211f7#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 3174
+  },
+  {
+   "key": "d-sb-new-age|static|animating-layout-properties|_css/5799bae46006-styles.css|3184|7a1d9a4ba2#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 3184
+  },
+  {
+   "key": "d-sb-new-age|static|button-no-type|d-sb-new-age/index.html|34|249eb9e8f2#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-sb-new-age/index.html",
+   "line": 34
+  },
+  {
+   "key": "d-sb-new-age|static|focusable-at-opacity-zero|_css/5799bae46006-styles.css|3164|9a57a12715#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 3164
+  },
+  {
+   "key": "d-sb-new-age|static|focusable-at-opacity-zero|_css/5799bae46006-styles.css|5336|9a57a12715#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5336
+  },
+  {
+   "key": "d-sb-new-age|static|focusable-inside-aria-hidden|d-sb-new-age/index.html|226|8abaf4cbae#1",
+   "pass": "static",
+   "rule": "focusable-inside-aria-hidden",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 226
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|5331|33ded3f45e#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5331
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|5410|33ded3f45e#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5410
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|5430|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5430
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|5450|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5450
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|5470|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5470
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|5490|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5490
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|5510|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5510
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|6569|33ded3f45e#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6569
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|7285|32a947d0b8#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 7285
+  },
+  {
+   "key": "d-sb-new-age|static|full-viewport-width-overflow|_css/5799bae46006-styles.css|7289|cc8e48f198#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 7289
+  },
+  {
+   "key": "d-sb-new-age|static|h-screen-no-dvh-fallback|_css/5799bae46006-styles.css|5332|5b58cfa397#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5332
+  },
+  {
+   "key": "d-sb-new-age|static|h-screen-no-dvh-fallback|_css/5799bae46006-styles.css|6570|5b58cfa397#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6570
+  },
+  {
+   "key": "d-sb-new-age|static|h-screen-no-dvh-fallback|_css/5799bae46006-styles.css|7317|076fc62420#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 7317
+  },
+  {
+   "key": "d-sb-new-age|static|h-screen-no-dvh-fallback|_css/5799bae46006-styles.css|7321|1c923a8e82#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 7321
+  },
+  {
+   "key": "d-sb-new-age|static|heading-skip-h1-h3|d-sb-new-age/index.html|50|a2b93cd752#1",
+   "pass": "static",
+   "rule": "heading-skip-h1-h3",
+   "severity": "medium",
+   "file": "d-sb-new-age/index.html",
+   "line": 50
+  },
+  {
+   "key": "d-sb-new-age|static|img-no-dimensions|d-sb-new-age/index.html|53|6dde5cc7db#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 53
+  },
+  {
+   "key": "d-sb-new-age|static|img-no-dimensions|d-sb-new-age/index.html|54|e4bdcf8f54#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 54
+  },
+  {
+   "key": "d-sb-new-age|static|img-no-dimensions|d-sb-new-age/index.html|95|61e6893f99#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 95
+  },
+  {
+   "key": "d-sb-new-age|static|img-no-dimensions|d-sb-new-age/index.html|184|3c7c062acf#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 184
+  },
+  {
+   "key": "d-sb-new-age|static|img-no-dimensions|d-sb-new-age/index.html|207|54c50010d3#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 207
+  },
+  {
+   "key": "d-sb-new-age|static|img-no-dimensions|d-sb-new-age/index.html|208|6742b62c5e#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 208
+  },
+  {
+   "key": "d-sb-new-age|static|infinite-animation-without-reduced-motion|_css/5799bae46006-styles.css|6630|959297de0f#1",
+   "pass": "static",
+   "rule": "infinite-animation-without-reduced-motion",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6630
+  },
+  {
+   "key": "d-sb-new-age|static|infinite-animation-without-reduced-motion|_css/5799bae46006-styles.css|6643|7ab8516c06#1",
+   "pass": "static",
+   "rule": "infinite-animation-without-reduced-motion",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6643
+  },
+  {
+   "key": "d-sb-new-age|static|inline-style-attribute|d-sb-new-age/index.html|95|61e6893f99#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-sb-new-age/index.html",
+   "line": 95
+  },
+  {
+   "key": "d-sb-new-age|static|inline-svg-no-aria|d-sb-new-age/index.html|61|878c669120#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 61
+  },
+  {
+   "key": "d-sb-new-age|static|inline-svg-no-aria|d-sb-new-age/index.html|69|0f0c0d960e#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 69
+  },
+  {
+   "key": "d-sb-new-age|static|inline-svg-no-aria|d-sb-new-age/index.html|72|888768f028#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 72
+  },
+  {
+   "key": "d-sb-new-age|static|inline-svg-no-aria|d-sb-new-age/index.html|147|878c669120#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 147
+  },
+  {
+   "key": "d-sb-new-age|static|inline-svg-no-aria|d-sb-new-age/index.html|155|0f0c0d960e#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 155
+  },
+  {
+   "key": "d-sb-new-age|static|inline-svg-no-aria|d-sb-new-age/index.html|158|888768f028#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 158
+  },
+  {
+   "key": "d-sb-new-age|static|input-purpose-missing|d-sb-new-age/index.html|250|b2a9f30bc3#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-sb-new-age/index.html",
+   "line": 250
+  },
+  {
+   "key": "d-sb-new-age|static|input-purpose-missing|d-sb-new-age/index.html|257|f57838945a#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-sb-new-age/index.html",
+   "line": 257
+  },
+  {
+   "key": "d-sb-new-age|static|loader-spinner-border-default|_css/5799bae46006-styles.css|5992|471e70a447#1",
+   "pass": "static",
+   "rule": "loader-spinner-border-default",
+   "severity": "low",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5992
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|2080|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 2080
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|3840|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 3840
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|5267|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5267
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|5320|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5320
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|6079|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6079
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|6167|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6167
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|6255|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6255
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|6343|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6343
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|6431|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6431
+  },
+  {
+   "key": "d-sb-new-age|static|outline-none-no-focus-visible|_css/5799bae46006-styles.css|6518|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6518
+  },
+  {
+   "key": "d-sb-new-age|static|target-blank-no-noopener|d-sb-new-age/index.html|198|868c7d4dc6#1",
+   "pass": "static",
+   "rule": "target-blank-no-noopener",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 198
+  },
+  {
+   "key": "d-sb-new-age|static|text-ink-at-low-alpha|_css/5799bae46006-styles.css|8099|eaca8c6f87#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 8099
+  },
+  {
+   "key": "d-sb-new-age|static|text-ink-at-low-alpha|_css/5799bae46006-styles.css|8104|76257cdf8b#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 8104
+  },
+  {
+   "key": "d-sb-new-age|static|text-ink-at-low-alpha|_css/5799bae46006-styles.css|11071|7cc6ff953a#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 11071
+  },
+  {
+   "key": "d-sb-new-age|static|timing-300ms-default|_css/5799bae46006-styles.css|6080|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6080
+  },
+  {
+   "key": "d-sb-new-age|static|timing-300ms-default|_css/5799bae46006-styles.css|6168|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6168
+  },
+  {
+   "key": "d-sb-new-age|static|timing-300ms-default|_css/5799bae46006-styles.css|6256|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6256
+  },
+  {
+   "key": "d-sb-new-age|static|timing-300ms-default|_css/5799bae46006-styles.css|6344|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6344
+  },
+  {
+   "key": "d-sb-new-age|static|timing-300ms-default|_css/5799bae46006-styles.css|6432|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6432
+  },
+  {
+   "key": "d-sb-new-age|static|timing-300ms-default|_css/5799bae46006-styles.css|6519|9c1ce25446#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 6519
+  },
+  {
+   "key": "d-sb-new-age|static|transition-duration-500ms-or-longer|_css/5799bae46006-styles.css|5814|088c804c89#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5814
+  },
+  {
+   "key": "d-sb-new-age|static|transition-duration-500ms-or-longer|_css/5799bae46006-styles.css|5959|558df8c816#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/5799bae46006-styles.css",
+   "line": 5959
+  },
+  {
+   "key": "d-sb-new-age|static|video-without-captions|d-sb-new-age/index.html|80|4d3bd18584#1",
+   "pass": "static",
+   "rule": "video-without-captions",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 80
+  },
+  {
+   "key": "d-sb-new-age|static|video-without-captions|d-sb-new-age/index.html|166|4d3bd18584#1",
+   "pass": "static",
+   "rule": "video-without-captions",
+   "severity": "high",
+   "file": "d-sb-new-age/index.html",
+   "line": 166
+  }
+ ]
+}

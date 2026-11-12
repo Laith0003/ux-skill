@@ -1,0 +1,349 @@
+{
+ "page": "d-sb-clean-blog",
+ "findings": [
+  {
+   "key": "d-sb-clean-blog|render|state-answers-late|d-sb-clean-blog/index.html|0|6ab63020fd#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-sb-clean-blog/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-sb-clean-blog|render|text-low-contrast|d-sb-clean-blog/index.html|108|6ab63020fd#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-clean-blog/index.html",
+   "line": 108
+  },
+  {
+   "key": "d-sb-clean-blog|static|animating-layout-properties|_css/186bc930a1ac-styles.css|3127|bcaf7211f7#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 3127
+  },
+  {
+   "key": "d-sb-clean-blog|static|animating-layout-properties|_css/186bc930a1ac-styles.css|3137|7a1d9a4ba2#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 3137
+  },
+  {
+   "key": "d-sb-clean-blog|static|cta-arrow-rightward-bouncing|d-sb-clean-blog/index.html|108|8f86028d0c#1",
+   "pass": "static",
+   "rule": "cta-arrow-rightward-bouncing",
+   "severity": "medium",
+   "file": "d-sb-clean-blog/index.html",
+   "line": 108
+  },
+  {
+   "key": "d-sb-clean-blog|static|focusable-at-opacity-zero|_css/186bc930a1ac-styles.css|5095|9a57a12715#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5095
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|5090|33ded3f45e#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5090
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|5165|33ded3f45e#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5165
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|5180|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5180
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|5195|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5195
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|5210|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5210
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|5225|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5225
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|5240|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5240
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|6290|33ded3f45e#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6290
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|7006|32a947d0b8#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 7006
+  },
+  {
+   "key": "d-sb-clean-blog|static|full-viewport-width-overflow|_css/186bc930a1ac-styles.css|7010|cc8e48f198#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 7010
+  },
+  {
+   "key": "d-sb-clean-blog|static|h-screen-no-dvh-fallback|_css/186bc930a1ac-styles.css|5091|5b58cfa397#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5091
+  },
+  {
+   "key": "d-sb-clean-blog|static|h-screen-no-dvh-fallback|_css/186bc930a1ac-styles.css|6291|5b58cfa397#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6291
+  },
+  {
+   "key": "d-sb-clean-blog|static|h-screen-no-dvh-fallback|_css/186bc930a1ac-styles.css|7038|076fc62420#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 7038
+  },
+  {
+   "key": "d-sb-clean-blog|static|h-screen-no-dvh-fallback|_css/186bc930a1ac-styles.css|7042|1c923a8e82#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 7042
+  },
+  {
+   "key": "d-sb-clean-blog|static|infinite-animation-without-reduced-motion|_css/186bc930a1ac-styles.css|6351|959297de0f#1",
+   "pass": "static",
+   "rule": "infinite-animation-without-reduced-motion",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6351
+  },
+  {
+   "key": "d-sb-clean-blog|static|infinite-animation-without-reduced-motion|_css/186bc930a1ac-styles.css|6364|7ab8516c06#1",
+   "pass": "static",
+   "rule": "infinite-animation-without-reduced-motion",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6364
+  },
+  {
+   "key": "d-sb-clean-blog|static|loader-spinner-border-default|_css/186bc930a1ac-styles.css|5713|471e70a447#1",
+   "pass": "static",
+   "rule": "loader-spinner-border-default",
+   "severity": "low",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5713
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|2078|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 2078
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|3756|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 3756
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|5027|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5027
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|5079|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5079
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|5800|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5800
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|5888|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5888
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|5976|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5976
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|6064|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6064
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|6152|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6152
+  },
+  {
+   "key": "d-sb-clean-blog|static|outline-none-no-focus-visible|_css/186bc930a1ac-styles.css|6239|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6239
+  },
+  {
+   "key": "d-sb-clean-blog|static|text-ink-at-low-alpha|_css/186bc930a1ac-styles.css|7820|eaca8c6f87#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 7820
+  },
+  {
+   "key": "d-sb-clean-blog|static|text-ink-at-low-alpha|_css/186bc930a1ac-styles.css|7825|76257cdf8b#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 7825
+  },
+  {
+   "key": "d-sb-clean-blog|static|timing-300ms-default|_css/186bc930a1ac-styles.css|5801|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5801
+  },
+  {
+   "key": "d-sb-clean-blog|static|timing-300ms-default|_css/186bc930a1ac-styles.css|5889|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5889
+  },
+  {
+   "key": "d-sb-clean-blog|static|timing-300ms-default|_css/186bc930a1ac-styles.css|5977|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5977
+  },
+  {
+   "key": "d-sb-clean-blog|static|timing-300ms-default|_css/186bc930a1ac-styles.css|6065|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6065
+  },
+  {
+   "key": "d-sb-clean-blog|static|timing-300ms-default|_css/186bc930a1ac-styles.css|6153|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6153
+  },
+  {
+   "key": "d-sb-clean-blog|static|timing-300ms-default|_css/186bc930a1ac-styles.css|6240|9c1ce25446#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 6240
+  },
+  {
+   "key": "d-sb-clean-blog|static|transition-duration-500ms-or-longer|_css/186bc930a1ac-styles.css|5535|088c804c89#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5535
+  },
+  {
+   "key": "d-sb-clean-blog|static|transition-duration-500ms-or-longer|_css/186bc930a1ac-styles.css|5680|558df8c816#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/186bc930a1ac-styles.css",
+   "line": 5680
+  }
+ ]
+}

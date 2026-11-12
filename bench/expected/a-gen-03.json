@@ -1,0 +1,237 @@
+{
+ "page": "a-gen-03",
+ "findings": [
+  {
+   "key": "a-gen-03|render|accent-text-low-contrast|a-gen-03/index.html|66|47886a34bd#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 66
+  },
+  {
+   "key": "a-gen-03|render|accent-text-low-contrast|a-gen-03/index.html|99|d21be49eca#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 99
+  },
+  {
+   "key": "a-gen-03|render|image-broken|a-gen-03/index.html|57|aa7ea296f0#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 57
+  },
+  {
+   "key": "a-gen-03|render|image-broken|a-gen-03/index.html|59|589e4c8325#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 59
+  },
+  {
+   "key": "a-gen-03|render|image-broken|a-gen-03/index.html|60|978ea7af39#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-03|render|state-answers-late|a-gen-03/index.html|0|7d9dbcc250#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "a-gen-03/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-03|render|text-low-contrast|a-gen-03/index.html|0|89f6229a11#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-03|render|text-low-contrast|a-gen-03/index.html|0|6325f8c630#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-03|render|text-low-contrast|a-gen-03/index.html|89|c156a3b893#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 89
+  },
+  {
+   "key": "a-gen-03|static|aspect-ratio-1-1-default|a-gen-03/index.html|15|0d012d61e5#1",
+   "pass": "static",
+   "rule": "aspect-ratio-1-1-default",
+   "severity": "medium",
+   "file": "a-gen-03/index.html",
+   "line": 15
+  },
+  {
+   "key": "a-gen-03|static|button-no-type|a-gen-03/index.html|79|d7fdd6fc31#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-03/index.html",
+   "line": 79
+  },
+  {
+   "key": "a-gen-03|static|button-no-type|a-gen-03/index.html|80|aad94107c7#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-03/index.html",
+   "line": 80
+  },
+  {
+   "key": "a-gen-03|static|emoji-in-ui|a-gen-03/index.html|53|738419c82e#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 53
+  },
+  {
+   "key": "a-gen-03|static|heading-skip-h1-h3|a-gen-03/index.html|65|4de5067f3a#1",
+   "pass": "static",
+   "rule": "heading-skip-h1-h3",
+   "severity": "medium",
+   "file": "a-gen-03/index.html",
+   "line": 65
+  },
+  {
+   "key": "a-gen-03|static|heading-skip-h1-h3|a-gen-03/index.html|85|d7a528c8ee#1",
+   "pass": "static",
+   "rule": "heading-skip-h1-h3",
+   "severity": "medium",
+   "file": "a-gen-03/index.html",
+   "line": 85
+  },
+  {
+   "key": "a-gen-03|static|img-no-dimensions|a-gen-03/index.html|57|e64ac27d91#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 57
+  },
+  {
+   "key": "a-gen-03|static|img-no-dimensions|a-gen-03/index.html|59|f4c6b43056#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 59
+  },
+  {
+   "key": "a-gen-03|static|img-no-dimensions|a-gen-03/index.html|60|66ab26e2e2#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-03|static|img-no-dimensions|a-gen-03/index.html|61|120aa645ba#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 61
+  },
+  {
+   "key": "a-gen-03|static|lone-emoji-as-icon|a-gen-03/index.html|53|738419c82e#1",
+   "pass": "static",
+   "rule": "lone-emoji-as-icon",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 53
+  },
+  {
+   "key": "a-gen-03|static|testimonial-fake-five-stars|a-gen-03/index.html|66|092a979e8f#1",
+   "pass": "static",
+   "rule": "testimonial-fake-five-stars",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 66
+  },
+  {
+   "key": "a-gen-03|static|testimonial-fake-five-stars|a-gen-03/index.html|99|21a9d47524#1",
+   "pass": "static",
+   "rule": "testimonial-fake-five-stars",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 99
+  },
+  {
+   "key": "a-gen-03|static|testimonial-fake-five-stars|a-gen-03/index.html|100|d6acfbe3cc#1",
+   "pass": "static",
+   "rule": "testimonial-fake-five-stars",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 100
+  },
+  {
+   "key": "a-gen-03|static|timing-300ms-default|a-gen-03/index.html|17|737db9a04c#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "a-gen-03/index.html",
+   "line": 17
+  },
+  {
+   "key": "a-gen-03|static|timing-300ms-default|a-gen-03/index.html|32|86d03ebbeb#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "a-gen-03/index.html",
+   "line": 32
+  },
+  {
+   "key": "a-gen-03|static|transition-property-all|a-gen-03/index.html|25|efbe5bd262#1",
+   "pass": "static",
+   "rule": "transition-property-all",
+   "severity": "medium",
+   "file": "a-gen-03/index.html",
+   "line": 25
+  },
+  {
+   "key": "a-gen-03|static|unsplash-photo-id-no-alt|a-gen-03/index.html|59|f4c6b43056#1",
+   "pass": "static",
+   "rule": "unsplash-photo-id-no-alt",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 59
+  },
+  {
+   "key": "a-gen-03|static|unsplash-photo-id-no-alt|a-gen-03/index.html|60|66ab26e2e2#1",
+   "pass": "static",
+   "rule": "unsplash-photo-id-no-alt",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-03|static|unsplash-photo-id-no-alt|a-gen-03/index.html|61|120aa645ba#1",
+   "pass": "static",
+   "rule": "unsplash-photo-id-no-alt",
+   "severity": "high",
+   "file": "a-gen-03/index.html",
+   "line": 61
+  }
+ ]
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Create your account - Riverside Community Clinic</title>
+<style>
+  body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+  .card { background: #fff; width: 100%; max-width: 440px; padding: 40px; border-radius: 16px; box-shadow: 0 20px 50px rgba(15, 118, 110, 0.15); }
+  .logo { text-align: center; font-weight: 700; color: #0f766e; font-size: 20px; margin-bottom: 8px; }
+  h1 { text-align: center; font-size: 24px; color: #134e4a; margin: 0 0 8px; }
+  .subtitle { text-align: center; color: #64748b; font-size: 14px; margin-bottom: 28px; }
+  .field { margin-bottom: 18px; }
+  .field input { width: 100%; padding: 14px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 15px; box-sizing: border-box; transition: border-color 0.2s; }
+  .field input:focus { outline: none; border-color: #14b8a6; box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2); }
+  .field input.error { border-color: #ef4444; }
+  .help { font-size: 12px; color: #94a3b8; margin-top: 6px; }
+  .error-msg { font-size: 12px; color: #ef4444; margin-top: 6px; }
+  .row { display: flex; gap: 12px; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #475569; margin: 20px 0; }
+  .btn { width: 100%; padding: 15px; background: #0f766e; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+  .btn:hover { background: #115e59; }
+  .btn:disabled { background: #94a3b8; }
+  .signin { text-align: center; margin-top: 20px; font-size: 14px; color: #64748b; }
+  .signin a { color: #0f766e; font-weight: 600; text-decoration: none; }
+  .alert { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; padding: 12px; border-radius: 10px; font-size: 13px; margin-bottom: 18px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">Riverside Community Clinic</div>
+    <h1>Create your patient account</h1>
+    <p class="subtitle">We use your phone to send appointment reminders.</p>
+    <div class="alert">Please fix the errors below.</div>
+    <form>
+      <div class="field">
+        <input type="text" placeholder="Full name">
+      </div>
+      <div class="field">
+        <input type="tel" placeholder="Phone number" class="error">
+        <div class="error-msg">Invalid phone number</div>
+      </div>
+      <div class="field">
+        <input type="text" placeholder="Date of birth (MM/DD/YYYY)">
+      </div>
+      <div class="field">
+        <input type="password" placeholder="Password">
+        <div class="help">At least 8 characters, one number and one symbol.</div>
+      </div>
+      <div class="field">
+        <input type="password" placeholder="Confirm password">
+      </div>
+      <label class="consent">
+        <input type="checkbox">
+        <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>, and consent to receive text messages about my care.</span>
+      </label>
+      <button class="btn">Create account</button>
+    </form>
+    <p class="signin">Already have an account? <a href="#">Sign in</a></p>
+  </div>
+</body>
+</html>

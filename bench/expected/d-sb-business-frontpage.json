@@ -1,0 +1,405 @@
+{
+ "page": "d-sb-business-frontpage",
+ "findings": [
+  {
+   "key": "d-sb-business-frontpage|render|state-answers-late|d-sb-business-frontpage/index.html|0|dccca835e8#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-sb-business-frontpage|render|state-answers-late|d-sb-business-frontpage/index.html|0|2e8b2d3fcf#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-sb-business-frontpage|static|animating-layout-properties|_css/daf8b6dc487a-styles.css|3173|bcaf7211f7#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 3173
+  },
+  {
+   "key": "d-sb-business-frontpage|static|animating-layout-properties|_css/daf8b6dc487a-styles.css|3183|7a1d9a4ba2#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 3183
+  },
+  {
+   "key": "d-sb-business-frontpage|static|focusable-at-opacity-zero|_css/daf8b6dc487a-styles.css|5335|9a57a12715#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5335
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|5330|33ded3f45e#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5330
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|5409|33ded3f45e#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5409
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|5429|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5429
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|5449|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5449
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|5469|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5469
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|5489|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5489
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|5509|61d2220b58#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5509
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|6568|33ded3f45e#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6568
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|7284|32a947d0b8#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 7284
+  },
+  {
+   "key": "d-sb-business-frontpage|static|full-viewport-width-overflow|_css/daf8b6dc487a-styles.css|7288|cc8e48f198#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 7288
+  },
+  {
+   "key": "d-sb-business-frontpage|static|generic-cta-text|d-sb-business-frontpage/index.html|41|584197ead7#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 41
+  },
+  {
+   "key": "d-sb-business-frontpage|static|generic-cta-text|d-sb-business-frontpage/index.html|42|006c3670cd#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 42
+  },
+  {
+   "key": "d-sb-business-frontpage|static|h-screen-no-dvh-fallback|_css/daf8b6dc487a-styles.css|5331|5b58cfa397#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5331
+  },
+  {
+   "key": "d-sb-business-frontpage|static|h-screen-no-dvh-fallback|_css/daf8b6dc487a-styles.css|6569|5b58cfa397#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6569
+  },
+  {
+   "key": "d-sb-business-frontpage|static|h-screen-no-dvh-fallback|_css/daf8b6dc487a-styles.css|7316|076fc62420#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 7316
+  },
+  {
+   "key": "d-sb-business-frontpage|static|h-screen-no-dvh-fallback|_css/daf8b6dc487a-styles.css|7320|1c923a8e82#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 7320
+  },
+  {
+   "key": "d-sb-business-frontpage|static|imagery-mandatory-missing|d-sb-business-frontpage/index.html|1|d1848aa7b5#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 1
+  },
+  {
+   "key": "d-sb-business-frontpage|static|infinite-animation-without-reduced-motion|_css/daf8b6dc487a-styles.css|6629|959297de0f#1",
+   "pass": "static",
+   "rule": "infinite-animation-without-reduced-motion",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6629
+  },
+  {
+   "key": "d-sb-business-frontpage|static|infinite-animation-without-reduced-motion|_css/daf8b6dc487a-styles.css|6642|7ab8516c06#1",
+   "pass": "static",
+   "rule": "infinite-animation-without-reduced-motion",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6642
+  },
+  {
+   "key": "d-sb-business-frontpage|static|input-purpose-missing|d-sb-business-frontpage/index.html|302|b2a9f30bc3#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 302
+  },
+  {
+   "key": "d-sb-business-frontpage|static|input-purpose-missing|d-sb-business-frontpage/index.html|309|f57838945a#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 309
+  },
+  {
+   "key": "d-sb-business-frontpage|static|loader-spinner-border-default|_css/daf8b6dc487a-styles.css|5991|471e70a447#1",
+   "pass": "static",
+   "rule": "loader-spinner-border-default",
+   "severity": "low",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5991
+  },
+  {
+   "key": "d-sb-business-frontpage|static|one-action-several-labels|d-sb-business-frontpage/index.html|134|3395839af9#1",
+   "pass": "static",
+   "rule": "one-action-several-labels",
+   "severity": "medium",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 134
+  },
+  {
+   "key": "d-sb-business-frontpage|static|one-action-several-labels|d-sb-business-frontpage/index.html|184|6d223dadba#1",
+   "pass": "static",
+   "rule": "one-action-several-labels",
+   "severity": "medium",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 184
+  },
+  {
+   "key": "d-sb-business-frontpage|static|one-action-several-labels|d-sb-business-frontpage/index.html|232|3395839af9#1",
+   "pass": "static",
+   "rule": "one-action-several-labels",
+   "severity": "medium",
+   "file": "d-sb-business-frontpage/index.html",
+   "line": 232
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|2079|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 2079
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|3839|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 3839
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|5266|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5266
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|5319|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5319
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|6078|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6078
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|6166|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6166
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|6254|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6254
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|6342|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6342
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|6430|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6430
+  },
+  {
+   "key": "d-sb-business-frontpage|static|outline-none-no-focus-visible|_css/daf8b6dc487a-styles.css|6517|22ec06b4ef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6517
+  },
+  {
+   "key": "d-sb-business-frontpage|static|text-ink-at-low-alpha|_css/daf8b6dc487a-styles.css|8098|eaca8c6f87#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 8098
+  },
+  {
+   "key": "d-sb-business-frontpage|static|text-ink-at-low-alpha|_css/daf8b6dc487a-styles.css|8103|76257cdf8b#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 8103
+  },
+  {
+   "key": "d-sb-business-frontpage|static|timing-300ms-default|_css/daf8b6dc487a-styles.css|6079|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6079
+  },
+  {
+   "key": "d-sb-business-frontpage|static|timing-300ms-default|_css/daf8b6dc487a-styles.css|6167|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6167
+  },
+  {
+   "key": "d-sb-business-frontpage|static|timing-300ms-default|_css/daf8b6dc487a-styles.css|6255|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6255
+  },
+  {
+   "key": "d-sb-business-frontpage|static|timing-300ms-default|_css/daf8b6dc487a-styles.css|6343|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6343
+  },
+  {
+   "key": "d-sb-business-frontpage|static|timing-300ms-default|_css/daf8b6dc487a-styles.css|6431|fec71156ba#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6431
+  },
+  {
+   "key": "d-sb-business-frontpage|static|timing-300ms-default|_css/daf8b6dc487a-styles.css|6518|9c1ce25446#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 6518
+  },
+  {
+   "key": "d-sb-business-frontpage|static|transition-duration-500ms-or-longer|_css/daf8b6dc487a-styles.css|5813|088c804c89#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5813
+  },
+  {
+   "key": "d-sb-business-frontpage|static|transition-duration-500ms-or-longer|_css/daf8b6dc487a-styles.css|5958|558df8c816#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/daf8b6dc487a-styles.css",
+   "line": 5958
+  }
+ ]
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Installation - imgshrink docs</title>
+<style>
+  :root { --accent: #0ea5e9; --border: #e5e7eb; --code-bg: #0f172a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, sans-serif; color: #111827; line-height: 1.7; }
+  .topbar { position: sticky; top: 0; z-index: 9999; display: flex; align-items: center; gap: 24px; height: 60px; padding: 0 24px; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+  .topbar .name { font-weight: 700; font-size: 18px; }
+  .topbar .version { font-size: 12px; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 999px; }
+  .topbar input { margin-left: auto; width: 260px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; }
+  .layout { display: grid; grid-template-columns: 260px 1fr; max-width: 1280px; margin: 0 auto; }
+  .sidenav { padding: 24px; border-right: 1px solid var(--border); height: calc(100vh - 60px); position: sticky; top: 60px; overflow-y: auto; }
+  .sidenav h4 { font-size: 12px; text-transform: uppercase; color: #6b7280; letter-spacing: 0.08em; margin: 20px 0 8px; }
+  .sidenav a { display: block; padding: 6px 10px; color: #374151; text-decoration: none; border-radius: 6px; font-size: 14px; }
+  .sidenav a.active { background: #f0f9ff; color: var(--accent); font-weight: 600; }
+  article { padding: 40px 56px; max-width: 860px; }
+  article h1 { font-size: 40px; margin: 0 0 12px; }
+  article h2 { font-size: 26px; margin-top: 48px; padding-top: 12px; }
+  pre { background: var(--code-bg); color: #e2e8f0; padding: 18px 20px; border-radius: 10px; overflow-x: auto; font-size: 14px; }
+  code { font-family: 'Fira Code', Menlo, monospace; }
+  p code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  th { background: #f9fafb; }
+  .callout { display: flex; gap: 12px; padding: 16px 18px; border-radius: 10px; background: #fffbeb; border-left: 4px solid #f59e0b; margin: 24px 0; }
+  .callout strong { color: #b45309; }
+  .pager { display: flex; justify-content: space-between; margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .pager a { display: block; padding: 14px 18px; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: #111827; }
+  .pager small { display: block; color: #6b7280; }
+  @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } .sidenav { display: none; } article { padding: 24px; } }
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <span class="name">imgshrink</span><span class="version">v2.3.0</span>
+    <input type="search" placeholder="Search docs..." aria-label="Search docs">
+  </div>
+  <div class="layout">
+    <nav class="sidenav">
+      <h4>Getting started</h4>
+      <a href="#" class="active">Installation</a>
+      <a href="#">Quick start</a>
+      <a href="#">Configuration</a>
+      <h4>Guides</h4>
+      <a href="#">Batch resizing</a>
+      <a href="#">Formats and quality</a>
+      <a href="#">CI usage</a>
+      <h4>Reference</h4>
+      <a href="#">CLI options</a>
+      <a href="#">Exit codes</a>
+    </nav>
+    <article>
+      <h1>Installation</h1>
+      <p>imgshrink resizes and compresses images from the terminal. It runs on macOS, Linux and Windows with Python 3.9 or newer.</p>
+      <h2 id="install">Install with pip</h2>
+      <pre><code>pip install imgshrink</code></pre>
+      <p>Check that it works with <code>imgshrink --version</code>.</p>
+      <div class="callout"><span>&#9888;&#65039;</span><div><strong>Warning:</strong> imgshrink overwrites files in place unless you pass <code>--out</code>. Keep a backup the first time you run it on a folder.</div></div>
+      <h2 id="usage">Basic usage</h2>
+      <pre><code>imgshrink photos/ --width 1600 --quality 82 --out resized/</code></pre>
+      <h2 id="options">Common options</h2>
+      <table>
+        <thead><tr><th>Option</th><th>Default</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>--width</code></td><td>none</td><td>Resize to this width, keeping the aspect ratio.</td></tr>
+          <tr><td><code>--quality</code></td><td>85</td><td>JPEG and WebP quality from 1 to 100.</td></tr>
+          <tr><td><code>--format</code></td><td>same</td><td>Convert to jpg, png, webp or avif.</td></tr>
+          <tr><td><code>--out</code></td><td>in place</td><td>Write results to this folder.</td></tr>
+        </tbody>
+      </table>
+      <div class="pager">
+        <a href="#"><small>Previous</small>Introduction</a>
+        <a href="#"><small>Next</small>Quick start</a>
+      </div>
+    </article>
+  </div>
+</body>
+</html>

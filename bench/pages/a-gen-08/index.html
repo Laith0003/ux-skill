@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing - Quietstat</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0b0f19; color: #e5e7eb; }
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+  header { padding: 24px 0; display: flex; justify-content: space-between; align-items: center; }
+  .brand { font-weight: 700; font-size: 20px; color: #fff; }
+  .hero { text-align: center; padding: 72px 0 40px; }
+  .hero h1 { font-size: 52px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+  .hero p { color: #9ca3af; font-size: 18px; }
+  .toggle { display: inline-flex; background: #111827; border: 1px solid #1f2937; border-radius: 999px; padding: 4px; margin-top: 32px; }
+  .toggle button { background: none; border: none; color: #9ca3af; padding: 10px 22px; border-radius: 999px; cursor: pointer; font-weight: 600; }
+  .toggle button.active { background: linear-gradient(90deg, #7c3aed, #2563eb); color: #fff; }
+  .save { color: #34d399; font-size: 12px; margin-left: 6px; }
+  .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin: 48px 0 80px; }
+  .plan { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 36px; backdrop-filter: blur(12px); position: relative; }
+  .plan.popular { border: 1px solid #7c3aed; box-shadow: 0 0 40px rgba(124, 58, 237, 0.35); }
+  .plan .tag { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, #7c3aed, #2563eb); color: #fff; font-size: 12px; font-weight: 700; padding: 4px 14px; border-radius: 999px; }
+  .plan h3 { font-size: 20px; color: #fff; }
+  .plan .amount { font-size: 48px; font-weight: 700; color: #fff; margin: 16px 0 4px; }
+  .plan .amount span { font-size: 16px; color: #9ca3af; font-weight: 400; }
+  .plan ul { list-style: none; margin: 24px 0 32px; }
+  .plan li { padding: 8px 0; color: #d1d5db; }
+  .plan li::before { content: "\2713"; color: #34d399; margin-right: 10px; }
+  .plan a { display: block; text-align: center; padding: 14px; border-radius: 12px; text-decoration: none; font-weight: 600; background: #1f2937; color: #fff; transition: all 0.3s; }
+  .plan.popular a { background: linear-gradient(90deg, #7c3aed, #2563eb); }
+  .compare { margin-bottom: 80px; }
+  .compare h2, .faq h2 { font-size: 32px; color: #fff; text-align: center; margin-bottom: 32px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 14px 16px; border-bottom: 1px solid #1f2937; text-align: center; }
+  th:first-child, td:first-child { text-align: left; color: #d1d5db; }
+  thead th { color: #fff; }
+  .yes { color: #34d399; } .no { color: #4b5563; }
+  .faq { max-width: 760px; margin: 0 auto 80px; }
+  details { border-bottom: 1px solid #1f2937; padding: 18px 0; }
+  summary { cursor: pointer; font-weight: 600; color: #fff; }
+  details p { color: #9ca3af; margin-top: 10px; line-height: 1.7; }
+  .final { text-align: center; padding: 72px 24px; border-radius: 24px; background: radial-gradient(circle at top, #312e81, #0b0f19 70%); margin-bottom: 80px; }
+  .final h2 { font-size: 40px; color: #fff; margin-bottom: 16px; }
+  .final a { display: inline-block; margin-top: 20px; padding: 16px 36px; border-radius: 12px; background: #fff; color: #0b0f19; font-weight: 700; text-decoration: none; }
+  @media (max-width: 860px) { .plans { grid-template-columns: 1fr; } .hero h1 { font-size: 36px; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header><div class="brand">Quietstat</div><a href="#" style="color:#9ca3af;text-decoration:none;">Sign in</a></header>
+    <section class="hero">
+      <h1>Simple pricing. No cookies. No creepiness.</h1>
+      <p>Privacy-first analytics that respects your visitors and your budget.</p>
+      <div class="toggle"><button class="active">Monthly</button><button>Yearly <span class="save">2 months free</span></button></div>
+    </section>
+    <section class="plans">
+      <div class="plan"><h3>Starter</h3><div class="amount">$9<span>/mo</span></div><p style="color:#9ca3af">For personal sites</p><ul><li>10k pageviews</li><li>1 website</li><li>Email reports</li></ul><a href="#">Get started</a></div>
+      <div class="plan popular"><span class="tag">Most popular</span><h3>Growth</h3><div class="amount">$29<span>/mo</span></div><p style="color:#9ca3af">For growing teams</p><ul><li>100k pageviews</li><li>10 websites</li><li>Goals and funnels</li><li>Team access</li></ul><a href="#">Get started</a></div>
+      <div class="plan"><h3>Business</h3><div class="amount">$79<span>/mo</span></div><p style="color:#9ca3af">For larger traffic</p><ul><li>1M pageviews</li><li>50 websites</li><li>Priority support</li><li>Data export API</li></ul><a href="#">Get started</a></div>
+    </section>
+    <section class="compare">
+      <h2>Compare plans</h2>
+      <table>
+        <thead><tr><th>Feature</th><th>Starter</th><th>Growth</th><th>Business</th></tr></thead>
+        <tbody>
+          <tr><td>Monthly pageviews</td><td>10k</td><td>100k</td><td>1M</td></tr>
+          <tr><td>Websites</td><td>1</td><td>10</td><td>50</td></tr>
+          <tr><td>Goals and funnels</td><td class="no">&#10007;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+          <tr><td>Team members</td><td class="no">&#10007;</td><td class="yes">&#10003;</td><td class="yes">&#10003;</td></tr>
+          <tr><td>Data export API</td><td class="no">&#10007;</td><td class="no">&#10007;</td><td class="yes">&#10003;</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="faq">
+      <h2>Frequently asked questions</h2>
+      <details><summary>Do you use cookies?</summary><p>No. Quietstat counts visits without cookies or personal data, so you do not need a consent banner for it.</p></details>
+      <details><summary>What happens if I go over my pageviews?</summary><p>We never cut you off. If you go over two months in a row we will suggest the next plan.</p></details>
+      <details><summary>Can I cancel anytime?</summary><p>Yes, cancel from your account page. Yearly plans are refunded for unused months.</p></details>
+    </section>
+    <section class="final">
+      <h2>Start your free 30-day trial</h2>
+      <p style="color:#c7d2fe">No credit card required.</p>
+      <a href="#">Start free trial</a>
+    </section>
+  </div>
+</body>
+</html>

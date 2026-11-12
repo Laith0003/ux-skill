@@ -1,0 +1,57 @@
+.paragraph--type--uswds-card-group-regular .usa-card-group,
+.paragraph--type--uswds-card-group-flag .usa-card-group {
+  justify-content: center;
+}
+.paragraph--type--uswds-card-group-regular .usa-card__container.make-link:focus-within,
+.paragraph--type--uswds-card-group-flag .usa-card__container.make-link:focus-within {
+  outline: 0.25rem solid #2491ff;
+}
+
+.paragraph--type--uswds-card-group-regular .usa-card__container.make-link:focus-within,
+.paragraph--type--uswds-card-group-flag .usa-card__container.make-link:focus-within,
+.paragraph--type--uswds-card-group-flag .usa-card__container.make-link:hover,
+.paragraph--type--uswds-card-group-regular .usa-card__container.make-link:hover {
+  box-shadow: 0 7px 20px -3px #333;
+}
+
+.paragraph--type--uswds-card-group-regular .usa-card__container .usa-card__img div,
+.paragraph--type--uswds-card-group-flag .usa-card__container .usa-card__img div {
+  display: inline;
+}
+
+.paragraph--type--uswds-card-group-regular .usa-card__container .usa-card__header,
+.paragraph--type--uswds-card-group-flag .usa-card__container .usa-card__header {
+  order: 0;
+}
+
+.paragraph--type--uswds-card-group-regular .usa-card__container .usa-card__header .card-link,
+.paragraph--type--uswds-card-group-flag .usa-card__container .usa-card__header .card-link {
+  text-decoration: none;
+}
+
+.paragraph--type--uswds-card-group-regular .usa-card__container .usa-card__header .card-link:focus,
+.paragraph--type--uswds-card-group-flag .usa-card__container .usa-card__header .card-link:focus {
+  outline: none;
+}
+
+.paragraph--type--uswds-card-group-regular .usa-card__container .usa-card__header .card-link::after,
+.paragraph--type--uswds-card-group-flag .usa-card__container .usa-card__header .card-link::after,
+.paragraph--type--uswds-card-group-regular .usa-card__container .usa-card__body.make-link .card-link::after,
+.paragraph--type--uswds-card-group-flag .usa-card__container .usa-card__body.make-link .card-link::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  content: "";
+}
+
+.paragraph--type--uswds-card-group-regular .usa-card__container .usa-card__body,
+.paragraph--type--uswds-card-group-flag .usa-card__container .usa-card__body {
+  order: 1;
+}
+
+.paragraph--type--uswds-card-group-regular .usa-card__container .usa-card__footer,
+.paragraph--type--uswds-card-group-flag .usa-card__container .usa-card__footer {
+  order: 2;
+}

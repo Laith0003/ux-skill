@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elena Varga Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: #1c1c1c; background: #f7f5f2; font-weight: 300; }
+  nav { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; padding: 28px 60px; z-index: 10; mix-blend-mode: difference; color: #fff; }
+  nav a { color: #fff; text-decoration: none; margin-left: 32px; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; }
+  .hero { height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 60px; background: url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1800') center/cover; color: #fff; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: 96px; font-weight: 400; line-height: 1; }
+  .hero p { font-size: 20px; max-width: 520px; margin-top: 20px; opacity: 0.9; }
+  section { padding: 120px 60px; }
+  .section-label { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #8a7f72; margin-bottom: 40px; }
+  .projects { display: grid; grid-template-columns: repeat(2, 1fr); gap: 60px 40px; }
+  .project img { width: 100%; height: 480px; object-fit: cover; filter: grayscale(30%); transition: filter 0.6s ease, transform 0.6s ease; }
+  .project:hover img { filter: grayscale(0); transform: scale(1.02); }
+  .project h3 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; margin-top: 18px; }
+  .project p { color: #6b635a; margin-top: 6px; }
+  .about { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about h2 { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 400; line-height: 1.15; }
+  .about p { font-size: 18px; line-height: 1.9; color: #4a443d; margin-bottom: 18px; }
+  .services { background: #1c1c1c; color: #f7f5f2; }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .service { border-top: 1px solid #444; padding-top: 24px; }
+  .service h3 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 400; margin-bottom: 12px; }
+  .service p { color: #b5ada3; line-height: 1.8; }
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .contact h2 { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 400; }
+  form input, form textarea { width: 100%; background: transparent; border: none; border-bottom: 1px solid #c9c2b8; padding: 16px 0; font-family: inherit; font-size: 16px; margin-bottom: 24px; outline: none; }
+  form button { background: #1c1c1c; color: #fff; border: none; padding: 18px 44px; letter-spacing: 2px; text-transform: uppercase; font-size: 13px; cursor: pointer; }
+  footer { padding: 40px 60px; font-size: 13px; color: #8a7f72; display: flex; justify-content: space-between; }
+  .fade-in { animation: fadeUp 1.2s ease forwards; opacity: 0; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 900px) { .projects, .about, .services-grid, .contact { grid-template-columns: 1fr; } .hero h1 { font-size: 56px; } nav, section, .hero { padding-left: 24px; padding-right: 24px; } }
+</style>
+</head>
+<body>
+  <nav><div>ELENA VARGA</div><div><a href="#work">Work</a><a href="#about">About</a><a href="#contact">Contact</a></div></nav>
+  <header class="hero">
+    <h1 class="fade-in">Buildings that<br>hold the light.</h1>
+    <p class="fade-in">Residential and small civic architecture, designed and built along the coast.</p>
+  </header>
+  <section id="work">
+    <div class="section-label">Selected Projects</div>
+    <div class="projects">
+      <div class="project"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200" alt="Harbor House exterior"><h3>Harbor House</h3><p>Private residence, 2025</p></div>
+      <div class="project"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200" alt="Library interior"><h3>Northside Library</h3><p>Civic, 2024</p></div>
+      <div class="project"><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200" alt="Courtyard house"><h3>Courtyard House</h3><p>Private residence, 2023</p></div>
+      <div class="project"><img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=1200" alt="Pavilion"><h3>Dune Pavilion</h3><p>Public pavilion, 2022</p></div>
+    </div>
+  </section>
+  <section id="about" class="about">
+    <h2>Quiet buildings for the people who use them every day.</h2>
+    <div>
+      <p>Elena Varga founded the studio in 2014 after a decade designing schools and libraries. The practice now works on homes and small public buildings, usually within an hour of the coast.</p>
+      <p>Every project starts with how the light moves through the site across a year.</p>
+    </div>
+  </section>
+  <section class="services">
+    <div class="section-label">Services</div>
+    <div class="services-grid">
+      <div class="service"><h3>New homes</h3><p>From site visit to handover, with a single architect throughout.</p></div>
+      <div class="service"><h3>Renovation</h3><p>Careful additions and repairs to older houses.</p></div>
+      <div class="service"><h3>Civic work</h3><p>Libraries, pavilions and community spaces for local councils.</p></div>
+    </div>
+  </section>
+  <section id="contact" class="contact">
+    <h2>Let's talk about your project.</h2>
+    <form>
+      <input type="text" placeholder="Name">
+      <input type="email" placeholder="Email">
+      <textarea rows="4" placeholder="Tell me about your project"></textarea>
+      <button type="submit">Send message</button>
+    </form>
+  </section>
+  <footer><span>&copy; 2026 Elena Varga Architecture</span><span>Instagram &middot; LinkedIn</span></footer>
+</body>
+</html>

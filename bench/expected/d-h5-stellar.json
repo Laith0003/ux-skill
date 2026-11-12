@@ -1,0 +1,461 @@
+{
+ "page": "d-h5-stellar",
+ "findings": [
+  {
+   "key": "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|162|633c9cca55#1",
+   "pass": "render",
+   "rule": "target-too-small",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 162
+  },
+  {
+   "key": "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|163|7042a16da5#1",
+   "pass": "render",
+   "rule": "target-too-small",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 163
+  },
+  {
+   "key": "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|164|71ce9d94e4#1",
+   "pass": "render",
+   "rule": "target-too-small",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 164
+  },
+  {
+   "key": "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|165|36fd228398#1",
+   "pass": "render",
+   "rule": "target-too-small",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 165
+  },
+  {
+   "key": "d-h5-stellar|render|target-too-small|d-h5-stellar/index.html|166|edf9216e64#1",
+   "pass": "render",
+   "rule": "target-too-small",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 166
+  },
+  {
+   "key": "d-h5-stellar|render|text-overflows-its-box|d-h5-stellar/index.html|154|f7e6632892#1",
+   "pass": "render",
+   "rule": "text-overflows-its-box",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 154
+  },
+  {
+   "key": "d-h5-stellar|static|animating-layout-properties|_css/2941dfa9497d-main.css|3217|882a25ba2e#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3217
+  },
+  {
+   "key": "d-h5-stellar|static|animating-layout-properties|_css/2941dfa9497d-main.css|3274|6f8517ed22#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3274
+  },
+  {
+   "key": "d-h5-stellar|static|css-import-render-blocking|_css/2941dfa9497d-main.css|1|2221711735#1",
+   "pass": "static",
+   "rule": "css-import-render-blocking",
+   "severity": "medium",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-h5-stellar|static|css-import-render-blocking|_css/2941dfa9497d-main.css|2|e79c729eb2#1",
+   "pass": "static",
+   "rule": "css-import-render-blocking",
+   "severity": "medium",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 2
+  },
+  {
+   "key": "d-h5-stellar|static|focusable-at-opacity-zero|_css/2941dfa9497d-main.css|2066|d4a8bd7983#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 2066
+  },
+  {
+   "key": "d-h5-stellar|static|focusable-at-opacity-zero|_css/2941dfa9497d-main.css|3201|438a6d5409#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3201
+  },
+  {
+   "key": "d-h5-stellar|static|generic-cta-text|d-h5-stellar/index.html|34|42fdbe2ac2#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 34
+  },
+  {
+   "key": "d-h5-stellar|static|generic-cta-text|d-h5-stellar/index.html|52|1b5d7837c4#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 52
+  },
+  {
+   "key": "d-h5-stellar|static|generic-cta-text|d-h5-stellar/index.html|83|c2699e2130#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 83
+  },
+  {
+   "key": "d-h5-stellar|static|generic-cta-text|d-h5-stellar/index.html|120|c2699e2130#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 120
+  },
+  {
+   "key": "d-h5-stellar|static|generic-cta-text|d-h5-stellar/index.html|134|75aaa0b17e#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 134
+  },
+  {
+   "key": "d-h5-stellar|static|generic-cta-text|d-h5-stellar/index.html|135|c2699e2130#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 135
+  },
+  {
+   "key": "d-h5-stellar|static|generic-cta-text|d-h5-stellar/index.html|148|dcb5ed34d2#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 148
+  },
+  {
+   "key": "d-h5-stellar|static|href-empty-hash|d-h5-stellar/index.html|159|a4c6ec8748#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-stellar/index.html",
+   "line": 159
+  },
+  {
+   "key": "d-h5-stellar|static|href-empty-hash|d-h5-stellar/index.html|162|87b776c51b#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-stellar/index.html",
+   "line": 162
+  },
+  {
+   "key": "d-h5-stellar|static|href-empty-hash|d-h5-stellar/index.html|163|599a32b908#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-stellar/index.html",
+   "line": 163
+  },
+  {
+   "key": "d-h5-stellar|static|href-empty-hash|d-h5-stellar/index.html|164|69121e03cb#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-stellar/index.html",
+   "line": 164
+  },
+  {
+   "key": "d-h5-stellar|static|href-empty-hash|d-h5-stellar/index.html|165|f347ea1ba8#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-stellar/index.html",
+   "line": 165
+  },
+  {
+   "key": "d-h5-stellar|static|href-empty-hash|d-h5-stellar/index.html|166|9406a3722a#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-stellar/index.html",
+   "line": 166
+  },
+  {
+   "key": "d-h5-stellar|static|image-format-jpg-no-webp-avif|d-h5-stellar/index.html|55|18421993df#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-stellar/index.html",
+   "line": 55
+  },
+  {
+   "key": "d-h5-stellar|static|img-no-dimensions|d-h5-stellar/index.html|22|b33a3927d4#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 22
+  },
+  {
+   "key": "d-h5-stellar|static|img-no-dimensions|d-h5-stellar/index.html|55|18421993df#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 55
+  },
+  {
+   "key": "d-h5-stellar|static|lang-attribute-missing|d-h5-stellar/index.html|7|0fe0bb445f#1",
+   "pass": "static",
+   "rule": "lang-attribute-missing",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 7
+  },
+  {
+   "key": "d-h5-stellar|static|lorem-ipsum-leak|d-h5-stellar/index.html|48|0260baac40#1",
+   "pass": "static",
+   "rule": "lorem-ipsum-leak",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 48
+  },
+  {
+   "key": "d-h5-stellar|static|lorem-ipsum-leak|d-h5-stellar/index.html|49|95610a76d4#1",
+   "pass": "static",
+   "rule": "lorem-ipsum-leak",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 49
+  },
+  {
+   "key": "d-h5-stellar|static|lorem-ipsum-leak|d-h5-stellar/index.html|50|da4e64e6f8#1",
+   "pass": "static",
+   "rule": "lorem-ipsum-leak",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 50
+  },
+  {
+   "key": "d-h5-stellar|static|lorem-ipsum-leak|d-h5-stellar/index.html|146|8d81ab89ef#1",
+   "pass": "static",
+   "rule": "lorem-ipsum-leak",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 146
+  },
+  {
+   "key": "d-h5-stellar|static|one-action-several-labels|d-h5-stellar/index.html|134|75aaa0b17e#1",
+   "pass": "static",
+   "rule": "one-action-several-labels",
+   "severity": "medium",
+   "file": "d-h5-stellar/index.html",
+   "line": 134
+  },
+  {
+   "key": "d-h5-stellar|static|padding-shorthand-4-vals-zero-first|_css/2941dfa9497d-main.css|2733|8b3d5e56b6#1",
+   "pass": "static",
+   "rule": "padding-shorthand-4-vals-zero-first",
+   "severity": "low",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 2733
+  },
+  {
+   "key": "d-h5-stellar|static|placeholder-token-shipped|d-h5-stellar/index.html|48|0260baac40#1",
+   "pass": "static",
+   "rule": "placeholder-token-shipped",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 48
+  },
+  {
+   "key": "d-h5-stellar|static|placeholder-token-shipped|d-h5-stellar/index.html|49|95610a76d4#1",
+   "pass": "static",
+   "rule": "placeholder-token-shipped",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 49
+  },
+  {
+   "key": "d-h5-stellar|static|placeholder-token-shipped|d-h5-stellar/index.html|50|da4e64e6f8#1",
+   "pass": "static",
+   "rule": "placeholder-token-shipped",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 50
+  },
+  {
+   "key": "d-h5-stellar|static|placeholder-token-shipped|d-h5-stellar/index.html|146|8d81ab89ef#1",
+   "pass": "static",
+   "rule": "placeholder-token-shipped",
+   "severity": "high",
+   "file": "d-h5-stellar/index.html",
+   "line": 146
+  },
+  {
+   "key": "d-h5-stellar|static|text-align-justify-web|_css/2941dfa9497d-main.css|193|f7509154cb#1",
+   "pass": "static",
+   "rule": "text-align-justify-web",
+   "severity": "low",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 193
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|124|1813881c19#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 124
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|1952|22cf9b2c0a#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 1952
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|2175|1813881c19#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 2175
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|2198|fc8ae1ff39#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 2198
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|2202|fc8ae1ff39#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 2202
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|2206|fc8ae1ff39#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 2206
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|2210|fc8ae1ff39#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 2210
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|2214|fc8ae1ff39#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 2214
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|3406|066e705aa7#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3406
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|3499|57a718838e#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3499
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|3503|57a718838e#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3503
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|3507|57a718838e#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3507
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|3511|57a718838e#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3511
+  },
+  {
+   "key": "d-h5-stellar|static|text-ink-at-low-alpha|_css/2941dfa9497d-main.css|3515|57a718838e#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3515
+  },
+  {
+   "key": "d-h5-stellar|static|transition-duration-500ms-or-longer|_css/2941dfa9497d-main.css|3100|35c575913e#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3100
+  },
+  {
+   "key": "d-h5-stellar|static|transition-duration-500ms-or-longer|_css/2941dfa9497d-main.css|3112|3016627030#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/2941dfa9497d-main.css",
+   "line": 3112
+  },
+  {
+   "key": "d-h5-stellar|static|viewport-no-zoom|d-h5-stellar/index.html|11|0950ceb857#1",
+   "pass": "static",
+   "rule": "viewport-no-zoom",
+   "severity": "critical",
+   "file": "d-h5-stellar/index.html",
+   "line": 11
+  }
+ ]
+}
