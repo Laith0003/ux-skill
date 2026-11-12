@@ -1,0 +1,4 @@
+/* The open state sizes to its content with calc-size(); browsers without
+   it open the panel at once with no move. */
+.faq .collapse-body { block-size: 0; overflow: clip; transition: block-size 240ms ease-out; }
+.faq .is-open .collapse-body { block-size: calc-size(auto, size); }

@@ -1,10 +1,10 @@
 ---
 id: layout-transitions-that-reflow
 title: A layout transition is flagged when it moves what sits beside it
-status: active
+status: superseded
 areas: [motion]
 supersedes: null
-superseded_by: null
+superseded_by: layout-transitions-through-the-platform
 ---
 
 # A layout transition is flagged when it moves what sits beside it

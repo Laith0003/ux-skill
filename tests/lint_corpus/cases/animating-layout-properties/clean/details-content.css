@@ -1,0 +1,6 @@
+/* A disclosure opened by the platform: the height of ::details-content
+   moves to auto, and browsers without keyword interpolation open it with
+   no move at all. */
+details { interpolate-size: allow-keywords; }
+details::details-content { block-size: 0; overflow: clip; transition: block-size 240ms ease-out, content-visibility 240ms allow-discrete; }
+details[open]::details-content { block-size: auto; }

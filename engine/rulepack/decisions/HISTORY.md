@@ -122,6 +122,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [The logo keeps the brand color, and decoration has a visibility floor of ours](logo-and-decoration.md)
 - [High contrast sets text one weight heavier](high-contrast-weights.md)
 - [In dark mode a variable face sets text a little lighter, and high contrast keeps its own weights](dark-text-sets-lighter.md)
+- [In dark mode text keeps its weight, only heavy display styles set lighter, and high contrast keeps its own weights](dark-text-keeps-its-weight.md)
 - [Links read on every status soft fill](links-on-status-soft-fills.md)
 - [A contrast pairing the gate cannot resolve is a failure it reports, and contracts report it too](unresolved-pairing.md)
 
@@ -201,6 +202,7 @@ A router, not a story. Each line opens one record; the record says what was deci
 - [What the person says is wrong closes only when the page measures fixed](complaints-close-by-measurement.md)
 - [Anything that moves on its own stops under reduced motion and can be paused](moving-content-pauses.md)
 - [A layout transition is flagged when it moves what sits beside it](layout-transitions-that-reflow.md)
+- [A layout transition is flagged when it moves what sits beside it, and a disclosure may open its height through the platform](layout-transitions-through-the-platform.md)
 - [Inner pages have their own sequences and share one header, closing band and footer](inner-pages-one-family.md)
 - [The lint holds a display line height to the least the engine builds for its size](display-leading-floor-in-lint.md)
 - [The system says how far it leans to capitals, and the lint reads it](capitals-follow-the-signal.md)

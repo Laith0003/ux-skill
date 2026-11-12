@@ -16,13 +16,13 @@
 
 6. **Cards earn their elevation**: Use cards only when elevation communicates hierarchy. Otherwise, alignment and spacing carry the structure. In dense data UI, replace cards with `border-t`, `divide-y`, or pure negative space.
 
-7. **Forms validate on `blur`, not on every keystroke**: Show the error after the user finishes the input. Auto-focus the first invalid field on submit failure. Provide both inline errors and an aggregated summary.
+7. **Forms validate on `blur`, not on every keystroke**: Show the error after the user finishes the input. Auto-focus the first invalid field on submit failure. Every invalid field shows its own inline error; add an aggregated summary with links only on long or multi-section forms.
 
 8. **Modals and sheets offer a clear escape**: Escape key, visible close button, click-on-scrim. Confirm before dismissing with unsaved changes. Focus returns to the trigger after close.
 
 9. **Tables use tabular numerals and consistent alignment**: Numbers right-aligned with `font-mono` and `font-variant-numeric: tabular-nums`. Action columns right-aligned. Sticky headers on long tables. Empty rows show an empty state across the full width.
 
-10. **Toasts speak to screen readers**: `aria-live="polite"` for non-urgent updates. Auto-dismiss in 3 to 5 seconds. Never steal focus.
+10. **Toasts speak to screen readers**: `aria-live="polite"` for non-urgent updates. Only informational success toasts fade on a timer; errors and toasts with Undo or Retry stay until acknowledged (WCAG 2.2 SC 2.2.1). Never steal focus.
 
 11. **Disabled states are programmatically disabled**: Reduced opacity, cursor change, AND the semantic `disabled` attribute. Looks disabled AND refuses input.
 
@@ -51,7 +51,7 @@
 ## Examples
 
 ### Button (canonical)
-**Use when**: Every clickable action (submit, save, cancel, navigate).
+**Use when**: An action on the current page (submit, save, cancel, open a dialog). Buttons act, links navigate: going to another page or URL is a link (`<a href>`), styled as a button only when it is the primary call to action, and still a link in code (HTML spec; B26 p.622-623; B80 p.42-45).
 **Variants**: primary, secondary, tertiary, danger, ghost, outline, icon-only.
 **Required states**:
 - **Default**: visible at rest, clearly affords interaction
@@ -224,8 +224,8 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Active state visually highlighted on current page
 - Hover state on links (underline, weight, color shift)
 - Focus rings on every interactive element
-- Mobile collapse: hamburger menu under 768px
-- Mega-menu hover-revealed with multi-column groupings (organized by job-to-be-done, not alphabetical)
+- Mobile: keep 3 to 5 primary destinations visible (a bottom tab bar or inline links); hidden navigation is found far less often (B02 p.534-535; B07 p.198-201). Secondary items go behind a button labeled Menu, never an unlabeled icon
+- Mega-menu with multi-column groupings: task or topic groups for people exploring, alphabetical order inside each group or as an alternate A to Z index for people who know the item's name (B93 p.127-131; B46 p.350-352)
 
 **Sticky behavior**:
 - Sticky from start, OR
@@ -244,7 +244,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Height: 60 to 72px (slim) for marketing; 48 to 64px for product
 - Padding: matches outer container insets
 - Items: 4 to 7 links + 1 to 2 action buttons (Sign in + primary CTA)
-- Mobile: hamburger left or right; full-screen overlay on tap with staggered nav reveal
+- Mobile: primary destinations stay visible; a labeled Menu button opens the secondary items in a full-screen overlay
 
 ### Bottom Nav (mobile native)
 **Use when**: Mobile native or PWA top-level navigation.
@@ -268,15 +268,15 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 
 **Behavior**:
 - Validation on `blur` (not on every keystroke)
-- Required indicator inline (`*` or "(required)")
+- Required state in text and code: "(optional)" on optional fields, or an asterisk explained above the form, plus the `required` attribute (WCAG 2.2 SC 3.3.2, 1.3.1)
 - Auto-focus first invalid field on submit failure
-- Multi-error summary at top of form with anchor links
+- On long or multi-section forms, a multi-error summary at top with anchor links (an addition to the inline errors)
 - Each anchor link scrolls to and focuses the corresponding field
 
 **Anti-patterns**:
 - Placeholder as label
 - Errors only at top with no inline marker
-- Errors only inline with no aggregated summary
+- A long, multi-section form whose off-screen errors are not linked from a summary
 - "Form contains errors" or "Invalid input" copy
 - Validation messages that disappear when user starts typing
 
@@ -285,7 +285,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 **Required affordances**:
 - `aria-live="polite"` for non-urgent (most cases)
 - `aria-live="assertive"` or `role="alert"` for urgent errors only
-- Auto-dismiss in 3 to 5 seconds
+- Timing: informational success toasts may fade after about 5 seconds, pausing while hovered or focused; error toasts and toasts with an action (Undo, Retry) stay until the person acts or dismisses them (WCAG 2.2 SC 2.2.1)
 - Visible dismiss button for users who need more time
 - Stacks if multiple toasts queued; oldest at top
 - Never steals focus from current control
@@ -293,7 +293,8 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 
 **Anti-patterns**:
 - Toast covers primary CTA
-- Toast persists indefinitely (use a banner or alert instead)
+- Error or action toast that disappears on a timer before the person can read or act on it
+- Long-lived status shown as a toast (use a banner or inline alert instead)
 - Toast steals keyboard focus
 - Toast with destructive action: destructive needs confirmation, not a transient
 
@@ -329,7 +330,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Colorblind-safe palettes (Viridis, Cividis, Magma: perceptually uniform)
 - Diverging: blue → gray → red (never red → green)
 - Sequential: single-hue gradient
-- Qualitative: max 7 to 8 distinct hues
+- Qualitative: 6 distinct hues at most, then group the rest as Other (B46 p.193-194)
 - Pattern/texture supplements color
 - Data lines: 3:1 contrast minimum; text labels 4.5:1
 
@@ -372,7 +373,14 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Tabs that hide critical content (use cards or sections instead)
 
 ### Dropdown / Select (canonical)
-**Use when**: User picks one value from a known set.
+**Use when**: User picks one value from a known set and space is short. When the options must be compared, show them: visible radio buttons were faster and more accurate than a drop-down in measured tests (B46 p.497-500; B14 p.47-48).
+
+| Options | Space allows | Control |
+|---|---|---|
+| up to about 7 | yes | radio group, all options visible |
+| up to about 7 | no | select (drop-down) |
+| long list | any | combobox (search as you type) |
+
 **Required affordances**:
 - Visible label above
 - Click toggles open
@@ -505,7 +513,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 - Width: 320 to 480px
 - Padding: 16 to 24px
 - Background: surface color with shadow
-- Auto-dismiss: 3 to 5 seconds
+- Timing: success may fade after about 5 seconds and pauses on hover and focus; errors and action toasts persist
 - `aria-live="polite"` default; `aria-live="assertive"` for urgent only
 - Position: top, top-right, or bottom (consistent within product)
 - Never overlaps primary CTA
@@ -513,7 +521,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 ### Navbar specs
 - Height: 60 to 72px (marketing); 48 to 64px (product)
 - Items: 4 to 7 links + 1 to 2 action buttons
-- Mobile collapse threshold: ≤768px → hamburger
+- Mobile (768px and under): 3 to 5 primary destinations stay visible; secondary items behind a labeled Menu button
 - Sticky behavior: from-start OR transparent-to-opaque on scroll (150 to 200ms transition)
 
 ### Bottom nav specs (mobile native)
@@ -532,7 +540,7 @@ For high-end product surfaces, cards use the double-bezel pattern, outer shell w
 
 ### Chart specs
 - Color: diverging (blue-gray-red), sequential, or colorblind-safe qualitative
-- Max 7 to 8 distinct hues
+- 6 distinct hues at most, then group the rest as Other
 - Pattern / texture supplement
 - Tooltip: hover + tap + keyboard accessible
 - Legend: visible near chart, clickable to toggle series
@@ -622,7 +630,7 @@ Every component documents:
 - [ ] Navbar persistent and reachable from deep pages (severity: Medium)
 - [ ] Active nav state visually highlighted (severity: Medium)
 - [ ] Toast uses `aria-live="polite"`, does not steal focus (severity: High)
-- [ ] Toast auto-dismisses in 3 to 5 seconds (severity: Medium)
+- [ ] Error toasts and toasts with an action never auto-dismiss; a fading success toast pauses on hover and focus (severity: High)
 - [ ] Chart tooltip works on hover, tap, AND keyboard focus (severity: Critical)
 - [ ] Chart has empty / loading / error states (severity: High)
 - [ ] Chart has `aria-label` summary AND data table alternative (severity: Critical)

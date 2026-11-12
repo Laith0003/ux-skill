@@ -1,0 +1,5 @@
+/* interpolate-size inherits: an opt-in on the accordion reaches its
+   panels. */
+.accordion { interpolate-size: allow-keywords; }
+.accordion__panel { block-size: 0; overflow: clip; transition: block-size 240ms ease-out; }
+.accordion__panel.is-open { block-size: auto; }

@@ -1,10 +1,10 @@
 ---
 id: dark-text-sets-lighter
 title: In dark mode a variable face sets text a little lighter, and high contrast keeps its own weights
-status: active
+status: superseded
 areas: [type]
 supersedes: null
-superseded_by: null
+superseded_by: dark-text-keeps-its-weight
 ---
 
 # In dark mode a variable face sets text a little lighter, and high contrast keeps its own weights

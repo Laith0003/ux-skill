@@ -1,0 +1,5 @@
+/* The longhand form lets display wait as well, with overlay for a popover
+   in the top layer and @starting-style for the entry frame. */
+.menu { opacity: 1; transition-property: opacity, display, overlay; transition-duration: 200ms; transition-behavior: allow-discrete; }
+.menu:not(:popover-open) { opacity: 0; display: none; }
+@starting-style { .menu:popover-open { opacity: 0; } }

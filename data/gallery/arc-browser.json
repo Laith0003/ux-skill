@@ -27,8 +27,8 @@
     },
     "radius_control": "9px",
     "state_duration": "200ms",
-    "tokens": 730,
-    "tokens_sha256": "37a596a5a8a22911"
+    "tokens": 723,
+    "tokens_sha256": "cd38085f17b08ce1"
   },
   "id": "arc-browser",
   "name": "Arc Browser",

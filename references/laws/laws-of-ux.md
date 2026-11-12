@@ -94,7 +94,7 @@ Too many options cause decision paralysis, longer decision time, and lower satis
 ### When it applies
 
 - Pricing pages with more than three plans.
-- Menus with more than seven items.
+- Long menus with no grouping or order. A visible menu is scanned by recognition, so length alone is not overload: group it, keep drop-downs near 8 items and cascades at 2 levels (B02 p.141-142; B46 p.402-408).
 - Search results with no default sort or filter.
 - Onboarding flows that offer "configure your dashboard" before the user has used the product.
 
@@ -412,14 +412,14 @@ Decision time grows logarithmically with the number and complexity of choices. M
 
 ### How to use it in design
 
-- Cap the number of visible choices. Aim for under seven; ideally under five.
+- Order before you cut. Use the natural order when the options have one (dates, sizes, steps), then frequency, then alphabetical (B46 p.347-352; B93 p.141-143).
 - Categorize and progressively disclose. Group related options under a parent.
-- Sort by frequency or recommendation. The most likely choice is first.
+- Trim options nobody uses. There is no fixed cap: choice time grows with the log of the count, so a well ordered, grouped list of twenty costs little more than one of ten.
 - Use defaults to remove the choice when possible.
 
 ### Violation pattern
 
-- A nav bar with twelve top-level items.
+- A nav bar with twelve top-level items in no order and no grouping.
 - A dropdown with fifty unsorted options.
 - A "configure your account" wizard with fifteen toggles, none recommended.
 
@@ -455,7 +455,7 @@ Users spend most of their time on sites other than yours. They expect your site 
 ### How to use it in design
 
 - Follow conventions by default. Search top-right, account top-right, logo top-left, footer at the bottom.
-- Adopt patterns that have won across major products. A hamburger on mobile, a sticky CTA at the bottom, a tab bar for primary navigation.
+- Adopt patterns that have won across major products. A visible tab bar for 3 to 5 primary destinations on mobile, a sticky CTA at the bottom, a labeled Menu button for secondary items. Navigation hidden behind an icon is found far less often (B02 p.534-535; B07 p.198-201).
 - Deviate only when you have a tested reason and the benefit clearly exceeds the cost.
 
 ### Violation pattern
@@ -466,7 +466,7 @@ Users spend most of their time on sites other than yours. They expect your site 
 
 ### Fix example
 
-Use the cart icon for the cart. The hamburger for the menu. The gear for settings. The magnifying glass for search. Save your inventiveness for features that have no convention yet.
+Use the cart icon for the cart. The three-line icon, with the word Menu beside it, for secondary navigation. The gear for settings. The magnifying glass for search. Save your inventiveness for features that have no convention yet.
 
 ---
 
@@ -712,29 +712,30 @@ Externalize state. A sync indicator, a saved indicator, a "last updated" timesta
 
 The average person can hold about seven items (plus or minus two) in working memory at one time. Beyond that, performance degrades.
 
+This is a limit on what people hold in mind, not on what they can see. The figure is now usually restated lower, at about 3 to 5 chunks. A visible menu is scanned and recognized, not memorized, so the law does not cap navigation (B93 p.141; B02 p.141-142; B46 p.107).
+
 ### When it applies
 
-- Navigation menus.
-- Lists of options the user must compare.
-- Tabs.
-- Items in a single field's autocomplete.
+- Information the user must carry from one screen or step to the next (a code, a price, an earlier answer).
+- Options the user must compare when they are not all in view at once.
+- Instructions given before the task instead of during it.
 
 ### How to use it in design
 
-- Cap visible items at five to nine. Above that, group or paginate.
-- For navigation, prefer five to seven top-level items.
-- For comparing options, group attributes so the user can hold the groups in memory rather than each item.
-- For autocomplete, show no more than seven results at a time.
+- Plan for 3 to 5 chunks of held information. Keep the rest on screen: repeat context at the point of decision.
+- Do not cap a visible menu by this law. Group it instead: about 4 to 8 items work ungrouped, and grouped menus scale to about 24 (B46 p.347-349; B79 p.102-103).
+- For comparing options, group attributes so the user can compare groups rather than recall each item.
+- Order long lists (natural order, then frequency, then alphabetical) so scanning stays fast.
 
 ### Violation pattern
 
-- A nav bar with twelve top-level items. The user has to scan.
-- A comparison table with ten rows and seven columns. The user cannot hold any of it.
-- An autocomplete that lists thirty results. The user picks from the first three.
+- A nav bar with twenty ungrouped items in no order. The problem is the missing grouping and order, not the count.
+- A comparison table with ten rows and seven columns split across screens. The user has to remember the first screen to read the second.
+- A confirmation step that asks the user to recall a code shown two screens earlier.
 
 ### Fix example
 
-Group a nav with twelve items into five categories of two to three each. The user reads the categories at a glance and dives in.
+Group a nav with twenty items into labeled categories and order each one. The user reads the categories at a glance and dives in.
 
 For a comparison table, group attributes into "Features," "Pricing," "Support." The user reads the groups, then the rows within each group.
 

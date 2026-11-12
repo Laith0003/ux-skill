@@ -188,7 +188,7 @@ Design for satisficing:
 
 ### Muddling through
 
-Users do not figure out the system. They muddle through. They click things and see what happens. They are not building a mental model; they are looking for the next action.
+Users do not figure out the system. They muddle through. They click things and see what happens. They do not study the system, but they still build a mental model from what they see, and a wrong one causes errors that only visible state and visible cause correct (B02 p.151-152; B20 p.335-339; B79 p.42-46). They are looking for the next action.
 
 Design for muddling:
 

@@ -27,8 +27,8 @@
     },
     "radius_control": "7px",
     "state_duration": "150ms",
-    "tokens": 729,
-    "tokens_sha256": "a9983d14dcc470cb"
+    "tokens": 721,
+    "tokens_sha256": "8c220def3acea9fd"
   },
   "id": "reddit",
   "name": "Reddit",

@@ -373,7 +373,7 @@ The component-level patterns and anti-patterns that come up in real builds.
 
 **Patterns:**
 - Triggered via the library's hook. Queue is built in.
-- Auto-dismiss after 4-6 seconds for success; do not auto-dismiss errors.
+- Success may fade after about 5 seconds and pauses on hover and focus; do not auto-dismiss errors or toasts with an action (WCAG 2.2 SC 2.2.1).
 - Position: top-right or bottom-right typically. Pick one and be consistent.
 - One toast at a time on mobile; stacked toasts on desktop.
 

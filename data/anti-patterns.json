@@ -799,7 +799,7 @@
         ]
       },
       "why": "z-index: 9999 is the 'I gave up on the stacking system' value - signals there's no z-scale token map and stacking bugs are coming.",
-      "fix": "Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999."
+      "fix": "Put overlays (menus, dialogs, toasts) in the top layer with popover or <dialog> and showModal(): the top layer sits above every z-index, which ends the race. For what stays in the page, define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999."
     },
     {
       "id": "infinite-scroll-no-pagination",
@@ -936,12 +936,12 @@
     },
     {
       "id": "h-screen-no-dvh-fallback",
-      "name": "100vh without 100dvh fallback for mobile",
+      "name": "100vh or h-screen on a full-height section",
       "severity": "high",
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "(?<![\\w-])(?:min-|max-)?height\\s*:\\s*100vh(?![^}]*100dvh)",
+        "pattern": "(?<![\\w-])(?:min-|max-)?height\\s*:\\s*100vh(?![^}]*100[sdl]vh)",
         "flags": "i",
         "scope": [
           "css",
@@ -956,13 +956,13 @@
         "target": "css",
         "also": [
           {
-            "pattern": "(?<![\\w:/-])(?:min-|max-)?h-screen(?![\\w-])(?![^\\\"]*(?<![\\w-])(?:min-|max-)?h-(?:dvh|svh|\\[100dvh\\])(?![\\w-]))",
+            "pattern": "(?<![\\w:/-])(?:min-|max-)?h-screen(?![\\w-])(?![^\\\"]*(?<![\\w-])(?:min-|max-)?h-(?:dvh|svh|lvh|\\[100[sdl]vh\\])(?![\\w-]))",
             "target": "classes"
           }
         ]
       },
-      "why": "100vh on mobile includes the browser chrome that retracts on scroll, so the layout jumps as the address bar collapses - dynamic viewport units (dvh) fix this.",
-      "fix": "Use height: 100dvh or h-[100dvh] as the primary, with h-screen / 100vh as the legacy fallback for browsers that lack dvh."
+      "why": "On phones 100vh is the largest viewport, measured with the browser toolbars retracted, so a full-height section runs under the address bar: its bottom edge is hidden at load and jumps as the bar collapses. The small, large and dynamic viewport units (svh, lvh, dvh) are Baseline widely available since 2025-06-05, so a 100vh fallback is not needed.",
+      "fix": "Use 100svh (Tailwind h-svh or min-h-svh) for heroes and full-height sections: it never sits under the toolbars and never jumps. Use 100dvh (h-dvh) only where the section should resize as the toolbars move. A 100vh line kept beside one of them is harmless."
     },
     {
       "id": "title-case-headlines",
@@ -1168,8 +1168,8 @@
         "target": "css",
         "post": "layout-transition-reflows"
       },
-      "why": "Animating width, height, top, left, margin or padding lays the page out again on every frame, and everything beside the element moves with it: the dropped-frame jank that makes a UI feel cheap. Two cases reflow nothing beside them and pass: the inline size of a moving indicator (a selector naming an indicator, or an element taken out of flow), and grid-template-rows on a single disclosure, which this rule does not read.",
-      "fix": "Animate transform and opacity: scale instead of width, translate instead of top or left. Open a disclosure with grid-template-rows from 0fr to 1fr, and slide an indicator on transform with its inline size on the system's indicator role (--motion-indicator-duration)."
+      "why": "Animating width, height, top, left, margin or padding lays the page out again on every frame, and everything beside the element moves with it: the dropped-frame jank that makes a UI feel cheap. Three cases pass: the inline size of a moving indicator (a selector naming an indicator, or an element taken out of flow), grid-template-rows on a single disclosure, which this rule does not read, and a height or block size that opens a disclosure through the platform (a ::details-content selector, interpolate-size: allow-keywords, or calc-size()).",
+      "fix": "Animate transform and opacity: scale instead of width, translate instead of top or left. Open a disclosure with grid-template-rows from 0fr to 1fr, or on details::details-content with interpolate-size: allow-keywords (Chromium only; elsewhere it opens without the move), and slide an indicator on transform with its inline size on the system's indicator role (--motion-indicator-duration)."
     },
     {
       "id": "img-no-dimensions",
@@ -1323,7 +1323,7 @@
     },
     {
       "id": "glass-without-fallback",
-      "name": "backdrop-filter blur without background fallback",
+      "name": "backdrop-filter blur with no background behind its text",
       "severity": "medium",
       "category": "Color",
       "detection": {
@@ -1341,8 +1341,8 @@
         ],
         "target": "css"
       },
-      "why": "backdrop-filter is unsupported on Firefox and older Safari - without a translucent background fallback, the surface renders fully transparent and content underneath bleeds through.",
-      "fix": "Always pair backdrop-filter: blur with a background-color (e.g. background: rgba(255,255,255,0.7)). The bg is the fallback; the blur is the upgrade."
+      "why": "backdrop-filter is Baseline since 2024-09-16, so the blur draws in every current browser; the problem is legibility. A blur with no background, or one whose background is transparent or under 0.6 alpha, is as light or as dark as whatever scrolls behind it, so the text on it passes contrast over one part of the page and fails over the next. A background the lint cannot measure (a var(), an image) passes.",
+      "fix": "Pair backdrop-filter: blur with an opaque background-color or one of 0.6 alpha or more (background: rgb(255 255 255 / 0.82)) so the text contrast holds over any content behind it. Optionally go solid under @media (prefers-reduced-transparency: reduce), which only Chromium supports today."
     },
     {
       "id": "placeholder-as-pricing",
@@ -2187,8 +2187,8 @@
         ],
         "target": "markup"
       },
-      "why": "A raw <img> with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. The fact that <picture>+<source type=\"image/avif\"> has been universal since 2023 means this is now a generator-default tell.",
-      "fix": "Wrap in <picture> with AVIF first, WebP next, JPG fallback: <picture><source srcset=\"hero.avif\" type=\"image/avif\"><source srcset=\"hero.webp\" type=\"image/webp\"><img src=\"hero.jpg\" alt=\"...\" width=\"...\" height=\"...\"></picture>. For framework images (next/image, astro:assets), the conversion is automatic - use them."
+      "why": "A raw <img> with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. AVIF has been Baseline since 2024-01-25 and widely available since 2026-07-25, and WebP for longer, so a JPG-only image is now a generator-default tell.",
+      "fix": "Wrap in <picture> with AVIF first, WebP next, JPG fallback: <picture><source srcset=\"hero.avif\" type=\"image/avif\"><source srcset=\"hero.webp\" type=\"image/webp\"><img src=\"hero.jpg\" alt=\"...\" width=\"...\" height=\"...\"></picture>. A bare <img> that points straight at an .avif or .webp file also passes. For framework images (next/image, astro:assets), the conversion is automatic - use them."
     },
     {
       "id": "font-weight-numeric-100-or-900-on-body",
@@ -3359,8 +3359,8 @@
         ],
         "target": "css"
       },
-      "why": "Browsers justify by stretching word-spacing, opening uneven 'rivers' of whitespace and hurting readability — CSS has none of the hyphenation or microtypography a print justifier relies on.",
-      "fix": "Use text-align: left (or start) for body copy. If justification is a hard brand requirement, pair it with hyphens: auto and test at the real line length."
+      "why": "Justified text at web measures still opens uneven rivers of word space, worst in narrow columns and when the width changes with the window.",
+      "fix": "Use text-align: start for body copy. If a brand requires justification, pair it with hyphens: auto and a correct lang attribute (hyphens is Baseline widely available since 2026-03-18) and test at the real line length."
     },
     {
       "id": "css-import-render-blocking",
@@ -3873,7 +3873,7 @@
         "post": "exit-cut-short"
       },
       "why": "A popover or menu that fades on a transition but sets display: none in its closed state disappears at the first frame of its exit: the fade the system's motion.dismiss role defines never shows.",
-      "fix": "Keep the exit running until it ends: transition display with allow-discrete (transition: opacity 200ms, display 200ms allow-discrete), or set hidden or inert from script when transitionend fires."
+      "fix": "Keep the exit running until it ends: let display wait with allow-discrete (transition: opacity 200ms, display 200ms allow-discrete, or transition-behavior: allow-discrete), add overlay to the list for a popover or dialog in the top layer, and set the entry's first frame in @starting-style. Or set hidden or inert from script when transitionend fires."
     },
     {
       "id": "theme-switch-animates-everything",

@@ -1,0 +1,4 @@
+/* Opting the page into keyword sizes does not excuse a sidebar that
+   animates its width. */
+:root { interpolate-size: allow-keywords; }
+.sidebar { transition: width 300ms ease; }

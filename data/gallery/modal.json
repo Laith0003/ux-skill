@@ -27,8 +27,8 @@
     },
     "radius_control": "3px",
     "state_duration": "150ms",
-    "tokens": 728,
-    "tokens_sha256": "9b1f4e3470be8926"
+    "tokens": 721,
+    "tokens_sha256": "b0321fdb1351723c"
   },
   "id": "modal",
   "name": "Modal",

@@ -30,7 +30,7 @@ This file is the handoff for finishing 4.1 on `feat/4.1-stageshow`. A session th
 - Publish 4.0.0 to PyPI and npm.
 - Run a TypeScript check on the vendored kit (`engine/kits/stageshow`) in a project that has react, react-dom and lucide-react, before 4.1 ships.
 - The figures for the investment section of the 4.0 launch post (marked in docs/blog/ux-skill-4-foundations.html).
-- One existing post names a real client: docs/blog/redesign-existing-website-with-ux-skill.html. Decide whether to keep it.
+- One existing post names a real business used as a test target: docs/blog/redesign-existing-website-with-ux-skill.html. Decide whether to keep it.
 
 ## Next, ranked
 

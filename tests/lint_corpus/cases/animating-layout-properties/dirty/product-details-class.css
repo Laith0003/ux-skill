@@ -1,0 +1,3 @@
+/* "details" inside a class name is not the details element. */
+:root { interpolate-size: allow-keywords; }
+.product-details { transition: height 300ms ease; }

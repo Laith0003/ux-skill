@@ -27,8 +27,8 @@
     },
     "radius_control": "6px",
     "state_duration": "150ms",
-    "tokens": 730,
-    "tokens_sha256": "399818aba2b3a5e0"
+    "tokens": 722,
+    "tokens_sha256": "d709ec358dee08a8"
   },
   "id": "plaid",
   "name": "Plaid",

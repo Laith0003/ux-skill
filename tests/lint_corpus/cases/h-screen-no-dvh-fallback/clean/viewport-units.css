@@ -1,0 +1,5 @@
+/* Small, large and dynamic viewport units are widely available: any of
+   them beside 100vh, or alone, passes. */
+.hero { min-height: 100vh; min-height: 100svh; }
+.stage { height: 100vh; height: 100lvh; }
+.sheet { height: 100dvh; }

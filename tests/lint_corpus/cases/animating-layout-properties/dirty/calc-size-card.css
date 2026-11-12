@@ -1,0 +1,4 @@
+/* A calc-size() open state elsewhere on the page does not excuse a card
+   that grows its height in flow. */
+.faq .is-open .collapse-body { block-size: calc-size(auto, size); }
+.card { transition: height 300ms ease; }

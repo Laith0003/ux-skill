@@ -54,11 +54,11 @@ Smoke tests and fake doors are valid for binary problem-existence checks before 
 
 Build the deliverable for the chosen method:
 
-- **Interview script** — open-ended + behavior-focused questions, no leading wording. Structure: warm-up (2-3 q), context (current behavior), specific (past experience with the problem), reflection (what would solve this), wrap-up. Never ask "would you use" — ask about past behavior.
-- **Survey** — anti-bias structure. Randomize answer order. Mix 5-point Likert with open-ended. Screen out professionals/insiders. Attention check question.
-- **Usability test plan** — tasks framed as goals not steps. Time-box per task. Define success criteria upfront. Think-aloud protocol stated to participant.
-- **Diary study brief** — daily prompt, max 5 min effort, end-of-study debrief interview.
-- **Screener questionnaire** — disqualifying criteria first, then qualifying. Stated incentive, time commitment, schedule.
+- **Interview script**: open-ended + behavior-focused questions, no leading wording. Structure: warm-up (2-3 q), context (current behavior), specific (past experience with the problem), reflection (what a good day with this task would have looked like, or the last time it went badly), wrap-up. Never ask the participant to design the fix: when they offer one, ask what problem it would solve (B26 p.81-85; B89 p.84-85). Never ask "would you use"; ask about past behavior.
+- **Survey**: anti-bias structure. Randomize answer order. Mix 5-point Likert with open-ended. Screen out professionals/insiders. Attention check question.
+- **Usability test plan**: tasks framed as goals not steps. Time-box per task. Define success criteria upfront. State the protocol per task: think-aloud for untimed formative tasks, silent for any task whose time is measured (narration slows people; B28 p.92, 118).
+- **Diary study brief**: daily prompt, max 5 min effort, end-of-study debrief interview.
+- **Screener questionnaire**: disqualifying criteria first, then qualifying. Stated incentive, time commitment, schedule.
 
 ### 4. Recruitment plan
 
@@ -71,7 +71,7 @@ Build the deliverable for the chosen method:
 State upfront how findings will be synthesized:
 - Affinity mapping for interviews
 - Cross-tabs + chi-square for surveys
-- Task completion + time-on-task + System Usability Scale (SUS) for usability
+- Task completion + System Usability Scale (SUS) for usability; time-on-task only for tasks run silently, never for think-aloud tasks
 - Tag taxonomy for diary studies
 
 ## Process (synthesis mode)
@@ -130,7 +130,7 @@ Write to `.ux/last-research.json`:
 ## Hard rules
 
 - Never ask "would you use" — ask about past behavior. Stated intent is a noise channel.
-- Never recommend n<5 for qual; never recommend n<30 for quant; never recommend n<100 for segmentation surveys.
+- Sample size comes from the design, not a fixed floor. Qual: 5 or more per user group for a standalone round; 2 to 4 per round is fine in a recurring or RITE series whose cumulative total meets the goal (B34 p.123-124; B77 p.125-130). Quant: compute n from the metric, the precision or effect size needed and the design (within-subjects needs far fewer than between-subjects); state the margin of error or the smallest effect the chosen n can detect. When no calculation is done, about 20 per group is a labeled default, never a floor (B94 p.27, 133-134). Segmentation surveys: size them from the margin of error each segment needs.
 - Screen out product professionals (designers, PMs, UXers) unless they ARE the target user.
 - Randomize answer order in surveys. No order-bias artifacts.
 - Attention check questions on every survey.
@@ -153,7 +153,7 @@ Write to `.ux/last-research.json`:
 | Conflicting research goals (study tries to learn 3+ things) | List the goals, ask the user to pick the primary one; offer to split into separate studies |
 | Recruitment channel unclear | Propose channels matched to the audience (Respondent.io / UserInterviews / Prolific / customer list / community / DM intercept) |
 | Synthesis mode: raw input files missing or unreadable | Ask for the file path or pasted transcript; stop until provided |
-| Sample size requested below floor (n<5 qual, n<30 quant) | Refuse and explain the floor; offer the minimum viable design |
+| Sample size smaller than the question needs | Do not refuse: compute the margin of error or the detectable effect for the stated n, say what it can and cannot show, and offer the n that would answer the question |
 | Voice/leading wording in interview script | Rewrite and flag the bias risk before delivery |
 
 For path issues: see references/process/discovery-protocol.md for state file location (.ux/ in project root). Report bugs at https://github.com/Laith0003/ux-skill/issues.

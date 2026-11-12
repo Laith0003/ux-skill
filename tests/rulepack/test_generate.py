@@ -532,9 +532,10 @@ def test_a_latin_only_pack_says_nothing_about_arabic_or_right_to_left_type():
         text = LATIN_PACK[f"{PACK}/type/{name}"]
         for words in ("right to left", "right-to-left", "rtl", "both directions"):
             assert words not in text, (name, words)
-    # type varies on scheme too: dark mode sets a variable face lighter
+    # text keeps its weight in dark mode and this brief has no display at
+    # 600 or more, so type varies on contrast only
     assert _vary_line(LATIN_PACK[f"{PACK}/type/architecture.md"]) == \
-        "Roles vary on scheme, contrast."
+        "Roles vary on contrast."
     assert "## Arabic type" not in LATIN_PACK[f"{PACK}/direction.md"]
     assert "## Arabic type" in PACK_FILES[f"{PACK}/direction.md"]
     assert "- direction (ltr, rtl): dir=\"rtl\" on the html element" in \

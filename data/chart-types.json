@@ -20,7 +20,7 @@
         "vega-lite": "mark: bar with x: nominal, y: quantitative",
         "chartjs": "type: 'bar' with indexAxis: 'x'"
       },
-      "a11y": ["always include axis labels and units", "pair with a data table for screen readers", "use sufficient bar-to-gap ratio (>=0.4)"]
+      "a11y": ["always include axis labels and units", "pair with a data table for screen readers", "keep the gap between bars at most half the bar width (bar width at least twice the gap; B46 p.306-307)"]
     },
     {
       "id": "bar-horizontal",
