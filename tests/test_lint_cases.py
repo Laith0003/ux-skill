@@ -132,11 +132,13 @@ def test_picture_lookup_is_linear(tmp_path):
     must lint in well under the hook's timeout."""
     import time
 
+    # CPU time, not wall time: the suite runs in parallel in CI, and a busy
+    # runner must not fail a guard that exists to catch quadratic work.
     body = "".join(f'<img src="p{i}.jpg" alt="Photo {i}">\n' for i in range(20000))
     text = f"<!doctype html><html><body>\n<picture><img src=\"a.jpg\" alt=\"a\"></picture>\n{body}</body></html>\n"
-    start = time.perf_counter()
+    start = time.process_time()
     findings = lint_text("big.html", text)
-    elapsed = time.perf_counter() - start
+    elapsed = time.process_time() - start
     hits = [f for f in findings if f.rule_id == "image-format-jpg-no-webp-avif"]
     assert len(hits) == 20000, f"expected one finding per bare <img>, got {len(hits)}"
     assert elapsed < 5, f"linting 20,000 images took {elapsed:.1f} s; skip_inside must use a precomputed range lookup"
@@ -155,9 +157,9 @@ def test_outline_check_scales_with_many_rings(shape):
     else:
         rules = [".c%d input{outline:none;}\n.c%d:focus-within{box-shadow:0 0 0 2px red}\n" % (i, i) for i in range(2000)]
     text = "".join(rules) + "".join(".f%d{color:red;padding:4px}\n" % i for i in range(5000))
-    start = time.perf_counter()
+    start = time.process_time()
     findings = [f for f in lint_text("big.css", text) if f.rule_id == "outline-none-no-focus-visible"]
-    elapsed = time.perf_counter() - start
+    elapsed = time.process_time() - start
     assert len(findings) == (0 if shape == "anchor" else 2000)
     assert elapsed < 2, f"{shape}: outline check took {elapsed:.1f} s on 2,000 removals and 2,000 rings; index the rings"
 
