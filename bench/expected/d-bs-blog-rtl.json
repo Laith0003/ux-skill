@@ -1,0 +1,141 @@
+{
+ "page": "d-bs-blog-rtl",
+ "findings": [
+  {
+   "key": "d-bs-blog-rtl|render|accent-text-low-contrast|d-bs-blog-rtl/index.html|1|86f7e437fa#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 1
+  },
+  {
+   "key": "d-bs-blog-rtl|render|focus-ring-clipped|d-bs-blog-rtl/index.html|8|e9f674c12f#1",
+   "pass": "render",
+   "rule": "focus-ring-clipped",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-blog-rtl|render|focus-ring-clipped|d-bs-blog-rtl/index.html|8|e4c4f884a0#1",
+   "pass": "render",
+   "rule": "focus-ring-clipped",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-blog-rtl|render|horizontal-overflow|d-bs-blog-rtl/index.html|12|e893cde545#1",
+   "pass": "render",
+   "rule": "horizontal-overflow",
+   "severity": "high",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 12
+  },
+  {
+   "key": "d-bs-blog-rtl|render|state-answers-late|d-bs-blog-rtl/index.html|0|5b5262dca4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-blog-rtl|static|anchor-no-href-as-button|d-bs-blog-rtl/index.html|14|baade7cdcc#1",
+   "pass": "static",
+   "rule": "anchor-no-href-as-button",
+   "severity": "high",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-blog-rtl|static|heading-skip-h1-h3|d-bs-blog-rtl/index.html|8|dee345f145#1",
+   "pass": "static",
+   "rule": "heading-skip-h1-h3",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-blog-rtl|static|heading-skip-h1-h3|d-bs-blog-rtl/index.html|14|baade7cdcc#1",
+   "pass": "static",
+   "rule": "heading-skip-h1-h3",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-blog-rtl|static|href-empty-hash|d-bs-blog-rtl/index.html|8|dee345f145#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-blog-rtl|static|href-empty-hash|d-bs-blog-rtl/index.html|10|8f58d265d6#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-blog-rtl|static|href-empty-hash|d-bs-blog-rtl/index.html|14|baade7cdcc#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-blog-rtl|static|imagery-mandatory-missing|d-bs-blog-rtl/index.html|1|209acc4d72#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 1
+  },
+  {
+   "key": "d-bs-blog-rtl|static|inline-style-attribute|d-bs-blog-rtl/index.html|14|baade7cdcc#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-blog-rtl|static|inline-svg-no-aria|d-bs-blog-rtl/index.html|2|3c9744a534#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 2
+  },
+  {
+   "key": "d-bs-blog-rtl|static|inline-svg-no-aria|d-bs-blog-rtl/index.html|8|dee345f145#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-blog-rtl|static|link-without-href|d-bs-blog-rtl/index.html|14|baade7cdcc#1",
+   "pass": "static",
+   "rule": "link-without-href",
+   "severity": "high",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-blog-rtl|static|repeated-action-same-name|d-bs-blog-rtl/index.html|14|baade7cdcc#1",
+   "pass": "static",
+   "rule": "repeated-action-same-name",
+   "severity": "medium",
+   "file": "d-bs-blog-rtl/index.html",
+   "line": 14
+  }
+ ]
+}

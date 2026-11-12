@@ -100,9 +100,31 @@ _FOCUS_JS = r"""() => {
     if (ring.l < ar.left - 0.5 || ring.t < ar.top - 0.5 || ring.r > ar.right + 0.5
         || ring.b > ar.bottom + 0.5) { clip = u.sel(a); break; }
   }
+  // Hidden by author content (2.4.11): every point of the focused box that
+  // is on screen lands on a fixed or sticky element that is not it.
+  let cover = null;
+  const vw = innerWidth, vh = innerHeight;
+  const pts = [[0.5, 0.5], [0.15, 0.15], [0.85, 0.15], [0.15, 0.85], [0.85, 0.85]]
+    .map(([fx, fy]) => [r.left + fx * r.width, r.top + fy * r.height])
+    .filter(([x, y]) => x >= 0 && y >= 0 && x < vw && y < vh);
+  if (pts.length && r.width > 0 && r.height > 0) {
+    let by = null, all = true;
+    for (const [x, y] of pts) {
+      const t = document.elementFromPoint(x, y);
+      if (!t || e.contains(t) || t.contains(e)) { all = false; break; }
+      let pinned = null;
+      for (let a = t; a; a = a.parentElement) {
+        const p = getComputedStyle(a).position;
+        if (p === 'fixed' || p === 'sticky') { pinned = a; break; }
+      }
+      if (!pinned || pinned.contains(e)) { all = false; break; }
+      by = by || pinned;
+    }
+    if (all && by) cover = u.sel(by);
+  }
   return {sel: u.sel(e), cls: typeof e.className === 'string' ? e.className : '',
           text: (e.innerText || e.getAttribute('aria-label') || '').trim().slice(0, 60),
-          visible: changed, clip};
+          visible: changed, clip, cover};
 }"""
 
 _PRESSABLES_JS = r"""(limit) => {
@@ -156,6 +178,10 @@ async def _focus_pass(page) -> List[Dict[str, Any]]:
             hits.append(_hit("focus-ring-clipped", info["sel"],
                              f"its focus ring is cut off by {info['clip']}, which clips its "
                              "overflow", info["cls"], info["text"]))
+        if info.get("cover"):
+            hits.append(_hit("focus-obscured", info["sel"],
+                             f"takes focus entirely hidden under {info['cover']}",
+                             info["cls"], info["text"]))
     return hits
 
 
@@ -270,6 +296,13 @@ RULES = {
         fix=("Keep the ring inside the clipping box: draw it inset (a negative outline-offset or "
              "an inset shadow), add padding to the scroller, or move overflow clipping off the "
              "ancestor."),
+        what="{detail} ({vw}px viewport)"),
+    "focus-obscured": dict(
+        name="Focused control hidden under fixed content", severity="high", category="A11y",
+        fix=("Keep a focused control in view: give the page scroll-padding-top and "
+             "scroll-padding-bottom equal to the sticky header and any bar fixed at the bottom, "
+             "or shorten the bar; 2.4.11 asks that focus is not entirely hidden by author "
+             "content."),
         what="{detail} ({vw}px viewport)"),
     "state-answers-late": dict(
         name="Hover or press answers late", severity="medium", category="Motion",

@@ -223,7 +223,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 ### Hero media
 
-**Large product mock.** The canonical hero image is the actual UI: a dashboard, a workflow, a chat interface. Cropped close, with extreme detail visible and real-looking data inside it. Soft drop shadow and subtle rounded corners (12-24px). Box-shadow at low opacity and high blur (for example `0 24px 64px rgba(0,0,0,0.08)`). The screenshot floats above the page without harsh edges.
+**Large product mock.** The canonical hero image is the actual UI: a dashboard, a workflow, a chat interface. Cropped close, with real words on what the story is about and quiet placeholders around it, running off an edge rather than floating whole. Soft drop shadow and subtle rounded corners (12-24px). Box-shadow at low opacity and high blur (for example `0 24px 64px rgba(0,0,0,0.08)`), on the page's own ground without harsh edges.
 
 **Cropped dashboard preview.** For a page whose product is a dashboard or an admin interface. Cropped, never full-page. The reader sees one card, one chart, a sliver of nav: enough to read "this is software," not enough to parse the dashboard. Real data shapes (sparklines, log lines, plausible numbers) instead of stock chart shapes. Cost: zero, design discipline.
 
@@ -233,7 +233,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **Interactive product demo.** A real, manipulable instance of the product running inline. The user can drag, type and click, and the product responds with actual logic, not a video loop. The strongest "designed by designers" signal available. Affordances: subtle pulsing dots, ghost hand-cursor hints, a "try it" label on the first interactable element.
 
-**Animated metric callouts.** Numbers tick up from 0 on entry over 800-1500ms. Restricted to 2-3 stats; more dilutes the effect. The counter triggers once per page entry, then stays static. Numbers use tabular figures, so the layout does not shift during the count, and a label under each figure names what it counts.
+**Animated metric callouts.** Numbers tick up from 0 on entry over 600 to 1000ms. Restricted to 2-3 stats; more dilutes the effect. The counter triggers once per page entry, then stays static. Numbers use tabular figures, so the layout does not shift during the count, and a label under each figure names what it counts.
 
 **Kinetic headline reveal.** Hero text appears almost instantly; the heavier interactive demo or 3D render fades in 200-400ms behind it. Never make users wait for first meaningful paint.
 
@@ -247,7 +247,7 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **Two-column hero with metaphor image.** The text does the heavy lifting; the image carries a metaphor. Works when the product is a feeling more than a screen. The image is atmospheric, not literal product UI: water, light, fabric or sky as a metaphor for the feeling the product evokes.
 
-**Synthetic screenshot composition.** When the product is too abstract to screenshot (a workflow, an agent conversation, a queue of work), the hero becomes a stylized composition of UI fragments: a card, a notification, a chat bubble, a status pill, floating against a soft background.
+**Synthetic screenshot composition.** When the product is too abstract to screenshot (a workflow, an agent conversation, a queue of work), the hero becomes a stylized composition of UI fragments: a card, a notification, a chat bubble, a status pill, composed on the section's own ground with one fragment leading and the others straddling its edge, never floating on a plate.
 
 **Narrative chat thread.** A multi-turn conversation between an agent and a person, shown inline. The reader absorbs the capability through the conversation instead of prose explaining it. Fits a product that works through conversation.
 
@@ -255,7 +255,9 @@ Length is not the variable; what the page answers before it asks is. A light ask
 
 **Stacked-card collage.** Two to four UI fragments (a panel, an overlay, a tooltip, a popup) layered at varying depths. The overlap is choreographed so layers imply depth without hiding meaning. Use it when the product has several distinct surfaces to show at once. Cost: medium, z-stacking, crop and shadow management.
 
-**Tilted product frame.** Product shots tilted 6-12 degrees on the Y axis with a subtle perspective shadow, floating against the section background, so the screenshot reads as a design object. For high-end maximalist and creative-tool styles. Cost: low, a CSS transform plus a shadow.
+**Tilted product frame.** Product shots tilted 6-12 degrees on the Y axis with a subtle perspective shadow, so the screenshot reads as a design object. For high-end maximalist and creative-tool styles, and only when it reads better than the straight shot at its final size. Cost: low, a CSS transform plus a shadow.
+
+Build any of these interface visuals by `references/styles/product-illustration.md`: what is real and what is a placeholder, the crop, the satellites and the motion. The page keeps its photographs beside them.
 
 ### Hero bans
 

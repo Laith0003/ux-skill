@@ -261,7 +261,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 ### Color-blind safe palette specs
 - Diverging: blue → gray → red (negative-positive scales); never red → green
 - Sequential: single-hue gradient (light to dark) for ordered data
-- Qualitative: maximum 7 to 8 distinct hues; perceptually uniform
+- Qualitative: 6 distinct hues at most, 4 to 5 when readers must identify each one; group the rest as Other (B46 p.193-194, 746-747)
 - Colorblind-safe families: Viridis, Cividis, Magma (perceptually uniform across colorblind variants)
 - Validate using a color-blindness simulator (deuteranopia, protanopia, tritanopia)
 - Always supplement color with patterns, textures, shapes, or icons
@@ -309,7 +309,7 @@ ux-skill's `data/palettes.json` already includes 176 palettes verified for AAA c
 - [ ] Light and dark variants designed together, not inferred from one (severity: High)
 - [ ] Chart palettes use diverging (blue-gray-red) or qualitative options that survive color-blindness (severity: Critical)
 - [ ] Red-green-only chart palettes avoided (severity: Critical)
-- [ ] Modal scrim opacity strong enough to isolate foreground (40 to 60% black) (severity: High)
+- [ ] Modal scrim strong enough to isolate the foreground: the overlay scrim token, page background at 60 to 80% alpha (severity: High)
 - [ ] Disabled states use reduced opacity (0.38 to 0.5) + cursor change (severity: Medium)
 - [ ] Border and divider colors visible in both light and dark modes (severity: High)
 - [ ] Brand mark color preserved through redesigns (equity preservation) (severity: Medium)

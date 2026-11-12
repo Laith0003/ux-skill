@@ -374,6 +374,8 @@ Surface-specific rules live in playbooks under `references/surfaces/`. The mode 
 
 Load only the playbook you picked. Never load two surface playbooks. The one-playbook rule applies to surface playbooks only: component contracts (`references/foundations/component-behaviors.md`, `references/components/library.md`, `references/foundations/components.md`) and the shared foundations still load when a build needs them, so a landing page with a quote form or a comparison table reads the form and data table contracts. A brief that straddles two surfaces gets its mode from the Modes rules, and the mode decides the playbook; there is no second pick. Record it as `surface` in the state file of the build mode: `.ux/last-design.json`, `.ux/last-component.json` or `.ux/last-dashboard.json`.
 
+A product with an AI feature (a chat, an assistant, generated content, an agent that acts) also loads `references/foundations/ai-interfaces.md`, a foundation like the contracts above, not a second playbook.
+
 ### 2. Read the references
 
 Before writing a single line of code, read:
@@ -382,6 +384,7 @@ Before writing a single line of code, read:
 - `references/foundations/wow.md`: derive the **WOW LAYER**: 2-3 coordinated signature moments (one hero moment + a motion signature + an optional section moment; component and dashboard modes skip the hero moment) from the brand's own page style, the brief's structured fields and the goal, never from the industry. The page must do something a visitor remembers, not just be clean. Derived + varied to THIS brand, never a stamped recipe.
 - `references/foundations/responsive.md` and `references/foundations/component-behaviors.md`: mobile-first mechanics and the component contracts (card grid, form, data table, modal and drawer). The build is verified at 360px (no horizontal scroll, no wrapping nav/wordmark/label, sticky chrome <= ~96px).
 - The surface playbook picked in step 1c, if any. Its rules are as binding as the ban list.
+- `references/styles/product-illustration.md`, when the build shows the product's interface as imagery (an interface-fragment hero, a feature card, a bento tile, a cursor demo). It loads beside the playbook, not instead of it, and it keeps the page's photographs.
 
 These are non-negotiable. The output's distinction from generic AI output IS the value of this command.
 
@@ -462,6 +465,35 @@ Write to `.ux/last-design.json` in the project root:
 ```
 
 This lets `/ux-next` and downstream commands pick up where you left off.
+
+### 7. What the person says is wrong is a complaint, closed only by measurement
+
+When the person names something wrong with a page ("the cookie banner covers everything", "there is no photo on mobile", "the filler text is still there"), write it into `.ux/complaints.json` before changing anything: an `id`, their words in `said`, and a `probe` of one of five kinds.
+
+| kind | reads | passes when |
+|---|---|---|
+| `rule-clear` | `rule` | the lint or render check reports no finding of that rule, such as `first-screen-covered` or `text-overflows-its-box` |
+| `present` | `selector` | a visible element matches at 390, 430, 768 and 1280 px |
+| `absent` | `selector` | no visible element matches at any of those widths |
+| `text-present` | `text` | the visible text holds the words at every width |
+| `text-absent` | `text` | the visible text holds them at no width |
+
+```json
+{"complaints": [
+  {"id": "cookie-banner", "said": "the cookie banner covers the page",
+   "probe": {"kind": "rule-clear", "rule": "first-screen-covered"}}
+]}
+```
+
+Keep the page as it is before you change it, then, after the change, run the check against the page and that copy:
+
+```bash
+uxskill complaints snapshot --page http://localhost:3000/ --out .ux/before.html
+uxskill complaints check --page dist/index.html --before .ux/before.html
+uxskill complaints check --page http://localhost:3000/   # the running app
+```
+
+Exit 0 means every complaint measures fixed. Exit 3 means one is open, or weak: its probe already passed on the old page, so it proves nothing; tighten the probe until the old page fails it. Never report a complaint fixed on a 3. A URL is loaded once and measured as that snapshot: its style sheets written inline, rules added by script included, and its scripts removed after they ran. A URL that answers an HTTP error is refused, not measured. Visible text means text in a box larger than one pixel that is not hidden or faded to nothing, so a visually hidden label does not count. The plugin's stop hook reads the last check and holds the session once while it is missing, ran on other complaints, left one open, or is older than the page or any page source in the project (markup, styles, scripts or images outside hidden and dependency folders, which is how a check on a URL goes stale); `UXSKILL_COMPLAINTS_GATE=0` or an empty `.ux/complaints-gate.off` turns it off.
 
 ## SEO is mandatory for public-web outputs
 
@@ -657,7 +689,7 @@ Exit code non-zero means a high+ finding landed in your output. Fix before decla
 - **(d) Header-bar children do not collide/overlap** — `nowrap` (the fix for (c)) does not always cause horizontal scroll; inside a flex bar it can instead make the wordmark **overlap the CTA** while `scrollWidth == innerWidth` AND each label still measures one line — so (a), (b), and (c) ALL pass on a visibly-broken bar (observed). Catch it directly: no two of the header bar's one-row children's rects may intersect, i.e. each child's `right` must stay within the next child's `left` (and within the bar's content box). When the wordmark cannot fit beside the logo + CTA without colliding, the fix is to shrink it or **collapse to the logomark** (hide the words) — never overlap, never two lines.
 - **(e) The sticky/fixed top chrome is not too tall** — sum the `offsetHeight` of every **top-anchored** `position:sticky` / `position:fixed` element, **de-duped for nesting** (drop any element contained by another in the set; count the OUTERMOST only, so a sticky child inside a sticky parent is not double-counted). "Top-anchored" means it pins at the top: computed `position` is sticky/fixed AND computed `top` ≈ 0. **Do NOT also require resting `getBoundingClientRect().top` ≈ 0** — when a non-sticky utility bar sits ABOVE a `sticky; top:0` header, that header's rest `rect.top` equals the bar's height (e.g. ~26px), so a rest-rect check would wrongly EXCLUDE the very header this gate exists to measure. A bottom-fixed bar (`bottom:0`, so `top:auto`) yields `NaN` for `top` and is excluded; a `top:80px` side rail is excluded by `|top| > 1`. **FAIL if the sum exceeds ~96px (hard ceiling) OR > ~20% of `window.innerHeight`.** This is the bug observed on a real phone: a tall sticky header (~168px — a utility bar stacked to four centered lines, pinned together with the nav) crushes the viewport and reads as broken. The page TARGET is ≤72px (one nav row); the 96px is the absolute gate ceiling. An over-tall sticky header is a failure — report it and fix it (drop decorative bars out of the sticky container so only the nav stays pinned, trim padding) before declaring done. Note: a sticky element is bounded by its containing block, so the correct fix is to keep the sticky wrapper around the nav ALONE — a utility bar left inside the sticky `<header>` both inflates this number AND lets the nav unstick once the header box scrolls past.
 
-- **(f) The primary action is on the first phone screen, uncovered.** Load the page with every fixed or sticky element it ships present at load, including a consent banner, a promo bar and a chat launcher. The chrome pinned to the top and to the bottom together leaves a band of the first viewport; the primary action's box must intersect that band, and `document.elementFromPoint` at its center must return the action or something inside it, so nothing covers it. **FAIL if the action sits below the band or under an overlay, or if two overlays other than the nav's own bar are on the first screen together** (a consent banner and a chat launcher, a promo bar at the top and a sticky bar at the bottom). Only what is on the first screen at load counts: a sticky table header further down the page is not an overlay. Responsive means the layout reflows; this checks that the ask survived the reflow.
+- **(f) The primary action is on the first phone screen, uncovered.** Load the page with every fixed or sticky element it ships present at load, including a consent banner, a promo bar and a chat launcher. The chrome pinned to the top and to the bottom together leaves a band of the first viewport; the primary action's box must intersect that band, and `document.elementFromPoint` at its center must return the action or something inside it, so nothing covers it. **FAIL if the action sits below the band or under an overlay, or if two overlays other than the nav's own bar are on the first screen together** (a consent banner and a chat launcher, a promo bar at the top and a sticky bar at the bottom). Only what is on the first screen at load counts: a sticky table header further down the page is not an overlay. Responsive means the layout reflows; this checks that the ask survived the reflow. `uxskill lint --render` reports, at every width, a fixed panel on top of the page's h1 or a form's first control, over 30% of the screen above text or images, or floating wide over the content, as `first-screen-covered`; run it, then still check the primary action itself by its selector, which that rule does not know.
 
 **Point the selectors at the page under test: they are named per page, NOT auto-detected.** The snippet has three constants at the top (`NAV_ROW`, `WORDMARK`, `LABELS`), defaulted to this page's (skiphire) real values as a worked example. Set them to the page you are checking: the *innermost* nav row (NOT the whole `<header>`: the utility/announcement topbar is a separate bar, so policing the whole header false-flags it as "wrapped"), the brand wordmark element, and the *isolated* label spans (a label that has been wrapped in its own `<span>` away from any icon/chip). A fourth constant, `PRIMARY`, names the page's primary action as it renders at load, for check (f). The sticky-height check (e) needs NO selector: it auto-discovers every top-anchored sticky/fixed element. Do NOT replace these with generic `header [class*=nav]` / "first link in header" structural guesses: that was tried and it mis-resolves the whole header instead of the nav row and the topbar mailto link instead of the wordmark, producing a false-positive storm. The operator running this gate just built the page and can read its markup; aiming three selectors is the contract. **Non-resolution is LOUD, not silent:** if any target resolves nothing, the snippet prints a `WARNING` and the gate is DEGRADED to horizontal-scroll-only: which is exactly the blind spot this gate exists to close, so treat a degraded run as unverified until the selectors are fixed. Any button without an isolated label span is reported "unmeasured" (never false-flagged by measuring button+chip): wrap its label in a span or eyeball it.
 

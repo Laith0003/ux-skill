@@ -1,0 +1,1466 @@
+{
+ "version": 1,
+ "pages": [
+  {
+   "id": "a-gen-01",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-01.md",
+   "page_type": "landing",
+   "direction": "ltr",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-01/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "1c55a0ff18da06d793d7df4bddf8355d4dc7f9c2b8d5699c6380a3fa38d564c6",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-01",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "a-gen-02",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-02.md",
+   "page_type": "dashboard",
+   "direction": "ltr",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-02/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "18b23c8808d60abcefc27ec5796cb9bba8b6dd231ee30f0e5ece9212a241e959",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-02",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "a-gen-03",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-03.md",
+   "page_type": "ecommerce",
+   "direction": "ltr",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-03/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "a5594e9ad73b9090c1f486d50bd2a2d71da5ce6b447778fd38eb98c0875f3efd",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-03",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "a-gen-04",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-04.md",
+   "page_type": "form",
+   "direction": "ltr",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-04/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "8d8931e53b04765652e7d75f2cab226cc6f8003016798b3abff114c0a9238568",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-04",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "a-gen-05",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-05.md",
+   "page_type": "docs",
+   "direction": "ltr",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-05/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "c842f5f4053b10ed0efaa038a298b5e5c04a55da2a4075657299df0a04caa828",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-05",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "a-gen-06",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-06.md",
+   "page_type": "article",
+   "direction": "ltr",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-06/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "5179d288a4d4978247402e6f3bd964e3f728253f0f27a5cbbf2b590149f8d493",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-06",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "a-gen-07",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-07.md",
+   "page_type": "landing",
+   "direction": "rtl",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-07/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "3e6d641b6bde2013bcf29a45d9842f247ce31e26cad517f505683c145bcae0d7",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-07",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "a-gen-08",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-08.md",
+   "page_type": "pricing",
+   "direction": "ltr",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-08/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "f43f18fd854e20d4b3ca8411449eb6c06a00e024b53407d662a099509c5d52b6",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-08",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "a-gen-09",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-09.md",
+   "page_type": "settings",
+   "direction": "rtl",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-09/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "f1cdb10b76afbde2da598b57a1dd8f5ffbe36fae8b3ab1ca6493dd32398a5ef6",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-09",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render",
+    "regenerated from the replaced brief-09 (a public library account settings page)"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "a-gen-10",
+   "origin": "ai-generated",
+   "licence": "MIT (this repository)",
+   "attribution": "Generated for ux-bench.",
+   "redistributable": true,
+   "storage": "A",
+   "url": "bench/briefs/brief-10.md",
+   "page_type": "portfolio",
+   "direction": "ltr",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "a-gen-10/index.html",
+    "own": [],
+    "vendor": []
+   },
+   "sha256": "d5e074b3b5c2b1d5bf71d5a0ade31122f45ba09ddcc31fc438af1cf5e25ad536",
+   "generator": {
+    "tool": "AI coding agent, one-shot, single file",
+    "model": "claude-opus-5-5",
+    "date": "2026-11-12",
+    "brief": "brief-10",
+    "prompt": "the quoted prompt in the brief file",
+    "caveat": "Generated inside the session that built the bench, after it had read the ux-skill plan and research files, so this is not a clean without-ux-skill condition. One tool and one run per brief."
+   },
+   "notes": [
+    "self-contained page; remote fonts and images are blocked at render"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-bs-album",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/album/",
+   "page_type": "gallery",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-album/index.html",
+    "own": [],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "01850e3c5e3dc6c4f3b9fb2885056c63faa68084b44d026b12f31229c758cfcb",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-album-rtl",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/album-rtl/",
+   "page_type": "gallery",
+   "direction": "rtl",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-album-rtl/index.html",
+    "own": [],
+    "vendor": [
+     "_css/9eaaeda632b9-bootstrap.rtl.min.css"
+    ]
+   },
+   "sha256": "0e69f6159215376088592e658f2d9ed4470c848d86acc150adcfa3789671c81f",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-blog",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/blog/",
+   "page_type": "article",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-blog/index.html",
+    "own": [
+     "_css/4bf74b1b2013-blog.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "d33bff64877b3a3dd5a5aea907b5574159d3c3065df54f7f056339390afaad5e",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Playfair+Display:700,900&display=swap",
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-blog-rtl",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/blog-rtl/",
+   "page_type": "article",
+   "direction": "rtl",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-blog-rtl/index.html",
+    "own": [
+     "_css/bbf3ffd363cf-blog.rtl.css"
+    ],
+    "vendor": [
+     "_css/9eaaeda632b9-bootstrap.rtl.min.css"
+    ]
+   },
+   "sha256": "4e9a5f2981525d1ff2fac6af8424954ed3c660a2d8265785aa09ad7c3d714809",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Amiri:wght@400;700&display=swap",
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-carousel",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/carousel/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-carousel/index.html",
+    "own": [
+     "_css/dab0f441b45b-carousel.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "c670e4025f0c846bebf110f07d50bdeff0292cdc8e52395c7095e95fe1f8bc60",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-carousel-rtl",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/carousel-rtl/",
+   "page_type": "landing",
+   "direction": "rtl",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-carousel-rtl/index.html",
+    "own": [
+     "_css/ed13d93e7416-carousel.rtl.css"
+    ],
+    "vendor": [
+     "_css/9eaaeda632b9-bootstrap.rtl.min.css"
+    ]
+   },
+   "sha256": "5e1952d9d64d3bcf62d8eb17fe5a83a95cf3e7add6930efe2ee0e21a56d13257",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-checkout",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/checkout/",
+   "page_type": "form",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-checkout/index.html",
+    "own": [
+     "_css/fa1096271eef-checkout.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "73f2fddb95371a5ced34945fcf846d5ef9130d0e23a2171700e6813e7ee2acc1",
+   "notes": [
+    "removed 3 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-checkout-rtl",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/checkout-rtl/",
+   "page_type": "form",
+   "direction": "rtl",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-checkout-rtl/index.html",
+    "own": [
+     "_css/fa1096271eef-checkout.css"
+    ],
+    "vendor": [
+     "_css/9eaaeda632b9-bootstrap.rtl.min.css"
+    ]
+   },
+   "sha256": "a21bdea3e8a9b4aa98b03189c554e85d4894d228fa5d640e71377e46835e3248",
+   "notes": [
+    "removed 3 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-cover",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/cover/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-cover/index.html",
+    "own": [
+     "_css/b377b53d01bd-cover.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "952fc464ff96114be8170b804a1f45255ce5af4889916324980f2c339a3737f0",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-dashboard",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/dashboard/",
+   "page_type": "dashboard",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-dashboard/index.html",
+    "own": [
+     "_css/36c0b73e2cfa-dashboard.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "00ccdd0276d77839825e11fce1fc27587852600852dcfe21e24e30626e0f8172",
+   "notes": [
+    "removed 4 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-dashboard-rtl",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/dashboard-rtl/",
+   "page_type": "dashboard",
+   "direction": "rtl",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-dashboard-rtl/index.html",
+    "own": [
+     "_css/0c6407524470-dashboard.rtl.css"
+    ],
+    "vendor": [
+     "_css/9eaaeda632b9-bootstrap.rtl.min.css"
+    ]
+   },
+   "sha256": "e0f44aa89e5fdb74aa56ebd41f9ea43357646b8be6837349d77d5ec58521eb85",
+   "notes": [
+    "removed 4 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-features",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/features/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-features/index.html",
+    "own": [
+     "_css/8bfd1570d136-features.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "715beb2914c4fcc7eb0e1bf4bdf9fa4e4a4f2f5a5e7c461af894d126b9504654",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-heroes",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/heroes/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-heroes/index.html",
+    "own": [
+     "_css/dcc64d33842b-heroes.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "c347e7b3f8708f87b1280f23e1f4a1801f4998a21b1f0aee34f02cb476f112f9",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-pricing",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/pricing/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-pricing/index.html",
+    "own": [
+     "_css/b4058af51de9-pricing.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "87a2fb98502d36b00450cb33daf6f78afe4b5af3a0216d82983089206e5c5c8e",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-product",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/product/",
+   "page_type": "ecommerce",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-product/index.html",
+    "own": [
+     "_css/3f6e18b2d3b1-product.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "63df06710487e89d128eed163ea93476ca5a8d246bd446853dbb36165543d43c",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-bs-sign-in",
+   "origin": "designer",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "url": "https://getbootstrap.com/docs/5.3/examples/sign-in/",
+   "page_type": "form",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-bs-sign-in/index.html",
+    "own": [
+     "_css/e194a1d10f71-sign-in.css"
+    ],
+    "vendor": [
+     "_css/9caac977a0af-bootstrap.min.css"
+    ]
+   },
+   "sha256": "5eb5e5084ce34bae178114eae364c4b4952a1a5028c2a0bb9834cc0d3d5242e0",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-h5-dimension",
+   "origin": "designer",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "url": "https://html5up.net/dimension",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-h5-dimension/index.html",
+    "own": [
+     "_css/45c38a6ccdb4-main.css",
+     "_css/4709006f6a32-noscript.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "23e615b2c484f61b2a09494d6b3222cee862dede1573f76b7cee7aadcea97428",
+   "notes": [
+    "removed 5 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-h5-editorial",
+   "origin": "designer",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "url": "https://html5up.net/editorial",
+   "page_type": "article",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-h5-editorial/index.html",
+    "own": [
+     "_css/98057b0a864e-main.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "6dae09f611a0c7b86db9d2129c8390559cec016bfaf127afcbc9bd29fc889d81",
+   "notes": [
+    "removed 5 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-h5-forty",
+   "origin": "designer",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "url": "https://html5up.net/forty",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-h5-forty/index.html",
+    "own": [
+     "_css/475f2a1032fe-main.css",
+     "_css/c38e731a5189-noscript.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "caec5fe7795911777c6b776c1e469632b5c3d475c942ec98983757c1367b3bf1",
+   "notes": [
+    "removed 7 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-h5-massively",
+   "origin": "designer",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "url": "https://html5up.net/massively",
+   "page_type": "article",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-h5-massively/index.html",
+    "own": [
+     "_css/4ae70399262c-main.css",
+     "_css/9881bbc2654c-noscript.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "b1b69d60891230379318eb9b95e43c093900c470b5f096372f79031923099857",
+   "notes": [
+    "removed 7 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-h5-phantom",
+   "origin": "designer",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "url": "https://html5up.net/phantom",
+   "page_type": "portfolio",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-h5-phantom/index.html",
+    "own": [
+     "_css/9e258999c36c-main.css",
+     "_css/df4ce768d79d-noscript.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "2bb2f98043e2b7674f9d3395d2eab1410c227189e231565e50092b82ed0dbd70",
+   "notes": [
+    "removed 5 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-h5-stellar",
+   "origin": "designer",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "url": "https://html5up.net/stellar",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-h5-stellar/index.html",
+    "own": [
+     "_css/2941dfa9497d-main.css",
+     "_css/f22765cc7959-noscript.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "200393afd588e26047ddced8c73e94bf478155a996484b6198d7fe723f324119",
+   "notes": [
+    "removed 7 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-sb-agency",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-agency/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-agency/index.html",
+    "own": [
+     "_css/36e30dedf27c-styles.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "ee15b66202a68b3a8ae159f0d7f8b52d11bb5ad44f1ed36b70d272c2ca962428",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Montserrat:400,700",
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700",
+    "removed 4 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-sb-business-frontpage",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-business-frontpage/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-business-frontpage/index.html",
+    "own": [
+     "_css/daf8b6dc487a-styles.css"
+    ],
+    "vendor": [
+     "_css/412edd2008e5-bootstrap-icons.css"
+    ]
+   },
+   "sha256": "bb00a9a2a60cc305aa7968e346964f3cc594d7f685b96d11426f58c3abcd7dcf",
+   "notes": [
+    "removed 3 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-sb-clean-blog",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-clean-blog/",
+   "page_type": "article",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-clean-blog/index.html",
+    "own": [
+     "_css/186bc930a1ac-styles.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "7405258b4cd90696d6ded784055e7b089c5bd450bbd524685844093ef2d7dc35",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic",
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800",
+    "removed 3 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-sb-creative",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-creative/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-creative/index.html",
+    "own": [
+     "_css/5caca2c3ace3-styles.css"
+    ],
+    "vendor": [
+     "_css/3c325075337b-bootstrap-icons.css",
+     "_css/3512254c44de-simpleLightbox.min.css"
+    ]
+   },
+   "sha256": "a9b4c79b795ecf0bb479568cfbe476f8112a7ef93999d78abf61563bc37902ce",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700",
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic",
+    "removed 4 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-sb-freelancer",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-freelancer/",
+   "page_type": "portfolio",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-freelancer/index.html",
+    "own": [
+     "_css/8ac9f7035a99-styles.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "7b7f6b5ab48957560b0487dbd21ed8069fbd96710fd8907227d3e0a31ae67893",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Montserrat:400,700",
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic",
+    "removed 4 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-sb-grayscale",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-grayscale/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-grayscale/index.html",
+    "own": [
+     "_css/9fd76ca3867d-styles.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "34071a88c087364858022eb2b93f2079a0b1024ae8c9cfc4fd23e85a2052bca5",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Varela+Round",
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i",
+    "removed 4 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-sb-modern-business",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-modern-business/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-modern-business/index.html",
+    "own": [
+     "_css/c97338db14e6-styles.css"
+    ],
+    "vendor": [
+     "_css/3c325075337b-bootstrap-icons.css"
+    ]
+   },
+   "sha256": "efa1977b41d0711bb281ce117158478212c776f4ed966589f2cd2e9136162777",
+   "notes": [
+    "removed 2 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-sb-new-age",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-new-age/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-new-age/index.html",
+    "own": [
+     "_css/5799bae46006-styles.css"
+    ],
+    "vendor": [
+     "_css/3c325075337b-bootstrap-icons.css"
+    ]
+   },
+   "sha256": "679d8381cc982e4dc70355bcbd54189cbfef4bbab3b99ea1a6b5d316c1504146",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap",
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap",
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap",
+    "removed 3 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-sb-resume",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-resume/",
+   "page_type": "portfolio",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-resume/index.html",
+    "own": [
+     "_css/786f6fecadce-styles.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "d38bf2c1b969d3efabbcf847c5a1ddc518379093d97c5a9b4858895769ef8605",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700",
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i",
+    "removed 3 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-sb-sb-admin-2",
+   "origin": "designer",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "url": "https://startbootstrap.github.io/startbootstrap-sb-admin-2/",
+   "page_type": "dashboard",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-sb-sb-admin-2/index.html",
+    "own": [
+     "_css/0832dfb004ca-sb-admin-2.min.css"
+    ],
+    "vendor": [
+     "_css/d87ddf917b7a-all.min.css"
+    ]
+   },
+   "sha256": "00d19702803df689f9a237c2be0d321e1173276413072536f99327555146ae83",
+   "notes": [
+    "font stylesheet left remote and blocked at render: https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i",
+    "removed 7 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-uk-1",
+   "origin": "designer",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "url": "https://www.gov.uk/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-uk-1/index.html",
+    "own": [
+     "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+     "_css/13c8c3302921-af4fc215bd086f63d464f44372f72ad6d92b.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "ff1661d293084700fe7aacf9dbf1eafe45c66512d25b9d386da9bf172b086fc8",
+   "notes": [
+    "removed 1 match(es) of '<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>': OGL v3 excludes departmental logos and crests",
+    "removed 1 match(es) of '<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>' from the frozen copy: OGL v3 excludes crests",
+    "removed 7 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-uk-2",
+   "origin": "designer",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "url": "https://www.gov.uk/vehicle-tax",
+   "page_type": "form",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-uk-2/index.html",
+    "own": [
+     "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "9fa3e4dbf805b2ce5b836e6dd41937d0c3f8a9c2d20d54cfd8459b413629682b",
+   "notes": [
+    "removed 1 match(es) of '<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>': OGL v3 excludes departmental logos and crests",
+    "removed 1 match(es) of '<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>' from the frozen copy: OGL v3 excludes crests",
+    "removed 10 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-uk-3",
+   "origin": "designer",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "url": "https://www.gov.uk/browse/driving",
+   "page_type": "docs",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-uk-3/index.html",
+    "own": [
+     "_css/8cbde850d95f-21f364aaaf3bb80a096e0e675732b1a877da.css",
+     "_css/ecfd4d1d8640-29c7f2c716f198e5763057a51a65ed6ad90c.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "b0061aafc3af014bdee2e9ffb169a9b5b42d07f0c3d38f2ca557258b2b38bd44",
+   "notes": [
+    "removed 1 match(es) of '<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>': OGL v3 excludes departmental logos and crests",
+    "removed 1 match(es) of '<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>' from the frozen copy: OGL v3 excludes crests",
+    "removed 8 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-uk-4",
+   "origin": "designer",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "url": "https://design-system.service.gov.uk/",
+   "page_type": "docs",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-uk-4/index.html",
+    "own": [
+     "_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "065ae42cdb13989fc4e9272fb8f0c917875ed1e7a8010082711140f52070b6a0",
+   "notes": [
+    "removed 1 match(es) of '<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>': OGL v3 excludes departmental logos and crests",
+    "removed 1 match(es) of '<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>' from the frozen copy: OGL v3 excludes crests",
+    "removed 4 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-uk-5",
+   "origin": "designer",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "url": "https://design-system.service.gov.uk/components/button/",
+   "page_type": "docs",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-uk-5/index.html",
+    "own": [
+     "_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "c3e8adcc39b490adf53d12b17fedfa6b709b2e4865754c452b21a7f282a5517f",
+   "notes": [
+    "removed 1 match(es) of '<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>': OGL v3 excludes departmental logos and crests",
+    "removed 1 match(es) of '<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>' from the frozen copy: OGL v3 excludes crests",
+    "removed 4 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-us-1",
+   "origin": "designer",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "url": "https://designsystem.digital.gov/",
+   "page_type": "docs",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-us-1/index.html",
+    "own": [
+     "_css/4172a2386ddb-styles.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "859e9d4ca3f08db878919141007c65617b3e269c6ffb45d490bd59d2120ee511",
+   "notes": [
+    "removed 10 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-us-2",
+   "origin": "designer",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "url": "https://designsystem.digital.gov/components/button/",
+   "page_type": "docs",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-us-2/index.html",
+    "own": [
+     "_css/4172a2386ddb-styles.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "6bce153fd1d58e166de3796b009cf4f8f34af38833dec709fae7398867455b0f",
+   "notes": [
+    "removed 11 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "holdout"
+  },
+  {
+   "id": "d-us-3",
+   "origin": "designer",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "url": "https://www.usa.gov/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-us-3/index.html",
+    "own": [
+     "_css/72781d5e5cd8-tfV6Y9-ZLMagJGgY8buu08kHNQiqvwN8i4d8.css",
+     "_css/b86d94383cbc-uswds-paragraph-components-cards.css",
+     "_css/601e057e49f3-wQqIwoRPH6O_AkguIilaq6MUuET8Vla3OYJo.css",
+     "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "cdfda76c92c71f7df2b72fa20cdf7a327a64916cd3292686f91195a2f8697b04",
+   "notes": [
+    "removed 14 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-us-4",
+   "origin": "designer",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "url": "https://login.gov/",
+   "page_type": "landing",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-us-4/index.html",
+    "own": [
+     "_css/ac2b79723a77-main.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "24a51a8ba66a54dcf2f5c190707d58aef129b4b5201069e8cc1640aee9c5d476",
+   "notes": [
+    "removed 6 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-us-5",
+   "origin": "designer",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "url": "https://www.weather.gov/",
+   "page_type": "dashboard",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-us-5/index.html",
+    "own": [
+     "_css/d4d26d3d993b-weatherstyle.css",
+     "_css/f0bb7e874bda-template.css",
+     "_css/4c93252f2943-myfcst.css",
+     "_css/b7c27b9a340f-ForecastSearch.css",
+     "_css/2858e9ce4bf0-pointforecast.css",
+     "_css/ece4cd294abe-wwamap.css"
+    ],
+    "vendor": [
+     "_css/76e0c3ac1f05-jquery-ui-1.10.3.custom.min.css"
+    ]
+   },
+   "sha256": "7e130d891e1478fbd923718fd30ce4e03ee61f7b723f14f57fa7be6da2bd993e",
+   "notes": [
+    "removed 17 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  },
+  {
+   "id": "d-us-6",
+   "origin": "designer",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "url": "https://digital.gov/",
+   "page_type": "article",
+   "direction": "ltr",
+   "storage": "A",
+   "capture_date": "2026-11-12",
+   "files": {
+    "html": "d-us-6/index.html",
+    "own": [
+     "_css/7faa6ff93b8c-fyMFvV0YsPkkQq8noVl8dJQD5MevurTrDDxE.css",
+     "_css/69c5358e9d0e-sLJfPEL8iYcm7ov4eKwkCiN9Ua7kEKLKybkY.css"
+    ],
+    "vendor": []
+   },
+   "sha256": "5be8afad446964de1550789f3e1a6d7ef4e80b7e3b704120407fc681b15f94c1",
+   "notes": [
+    "removed 5 script element(s), inline and external, from the frozen copy",
+    "images and web fonts not stored; render runs with the network blocked"
+   ],
+   "split": "dev"
+  }
+ ]
+}

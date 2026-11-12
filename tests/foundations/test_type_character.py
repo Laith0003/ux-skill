@@ -316,15 +316,30 @@ DARK, LIGHT = "scheme:dark,contrast:standard,direction:ltr", \
     "scheme:light,contrast:standard,direction:ltr"
 
 
-def test_dark_body_text_in_a_variable_face_is_20_to_50_lighter():
+def test_dark_body_and_text_roles_keep_their_weight_and_never_go_under_400():
+    # Light text on a dark ground needs equal or more weight (B88 p.139;
+    # B18 p.135-136), so no text role is lighter in dark mode.
+    from engine.foundations.typography import ROLES
     ts = build_system(MID, "#3366FF").tokens
     assert fonts.BY_FAMILY[ts.resolve("type.face.text")[0]].variable
-    light = ts.resolve("type.text.body", LIGHT)["fontWeight"]
-    dark = ts.resolve("type.text.body", DARK)["fontWeight"]
-    assert 20 <= light - dark <= 50
-    big = ts.resolve("type.text.display", LIGHT)["fontWeight"] - \
-        ts.resolve("type.text.display", DARK)["fontWeight"]
-    assert 0 < big <= 20
+    for role, spec in ROLES.items():
+        if spec[1] == "display":
+            continue
+        light = ts.resolve(role, LIGHT)["fontWeight"]
+        dark = ts.resolve(role, DARK)["fontWeight"]
+        assert dark >= light, role
+        assert dark >= 400 or light < 400, role
+    body = ts.resolve("type.text.body", DARK)["fontWeight"]
+    assert body == ts.resolve("type.text.body", LIGHT)["fontWeight"] and body >= 400
+
+
+def test_only_a_display_weight_of_600_or_more_may_drop_in_dark_mode():
+    from engine.foundations.typography import dark_weight
+    face = next(f for f in fonts.BY_FAMILY.values() if f.variable and f.weights[0] <= 300)
+    assert 660 <= dark_weight(700, 96, face, display=True) < 700
+    assert dark_weight(500, 96, face, display=True) == 500
+    assert dark_weight(700, 16, face) == 700
+    assert dark_weight(400, 16, face) == 400
 
 
 def test_a_static_face_keeps_its_weights_in_dark_mode():

@@ -8248,45 +8248,9 @@
           }
         }
       },
-      "360": {
-        "$type": "fontWeight",
-        "$value": 360,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
       "400": {
         "$type": "fontWeight",
         "$value": 400,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "460": {
-        "$type": "fontWeight",
-        "$value": 460,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "480": {
-        "$type": "fontWeight",
-        "$value": 480,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "490": {
-        "$type": "fontWeight",
-        "$value": 490,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -8302,36 +8266,9 @@
           }
         }
       },
-      "520": {
-        "$type": "fontWeight",
-        "$value": 520,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
       "550": {
         "$type": "fontWeight",
         "$value": 550,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "560": {
-        "$type": "fontWeight",
-        "$value": 560,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "570": {
-        "$type": "fontWeight",
-        "$value": 570,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -8649,23 +8586,7 @@
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic",
-            "modes": {
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.10}",
-                "fontWeight": "{type.weight.490}",
-                "letterSpacing": "{type.tracking.step-10}",
-                "lineHeight": "{type.leading.latin.step-10}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.10}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.step-10}",
-                "lineHeight": "{type.leading.latin.step-10}"
-              }
-            }
+            "layer": "semantic"
           }
         }
       },
@@ -8680,23 +8601,7 @@
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic",
-            "modes": {
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.10}",
-                "fontWeight": "{type.weight.490}",
-                "letterSpacing": "{type.tracking.caps}",
-                "lineHeight": "{type.leading.latin.step-10}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.10}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.caps}",
-                "lineHeight": "{type.leading.latin.step-10}"
-              }
-            }
+            "layer": "semantic"
           }
         }
       },
@@ -8726,23 +8631,7 @@
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic",
-            "modes": {
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.9}",
-                "fontWeight": "{type.weight.480}",
-                "letterSpacing": "{type.tracking.step-9}",
-                "lineHeight": "{type.leading.latin.step-9}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.9}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.step-9}",
-                "lineHeight": "{type.leading.latin.step-9}"
-              }
-            }
+            "layer": "semantic"
           }
         }
       },
@@ -8757,23 +8646,7 @@
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic",
-            "modes": {
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.8}",
-                "fontWeight": "{type.weight.480}",
-                "letterSpacing": "{type.tracking.step-8}",
-                "lineHeight": "{type.leading.latin.step-8}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.8}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.step-8}",
-                "lineHeight": "{type.leading.latin.step-8}"
-              }
-            }
+            "layer": "semantic"
           }
         }
       },
@@ -8788,23 +8661,7 @@
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic",
-            "modes": {
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.7}",
-                "fontWeight": "{type.weight.520}",
-                "letterSpacing": "{type.tracking.step-7}",
-                "lineHeight": "{type.leading.latin.1}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.7}",
-                "fontWeight": "{type.weight.550}",
-                "letterSpacing": "{type.tracking.step-7}",
-                "lineHeight": "{type.leading.latin.1}"
-              }
-            }
+            "layer": "semantic"
           }
         }
       },
@@ -8819,23 +8676,7 @@
         },
         "$extensions": {
           "io.github.laith0003.ux-skill": {
-            "layer": "semantic",
-            "modes": {
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.8}",
-                "fontWeight": "{type.weight.480}",
-                "letterSpacing": "{type.tracking.step-8}",
-                "lineHeight": "{type.leading.latin.step-8}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.8}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.step-8}",
-                "lineHeight": "{type.leading.latin.step-8}"
-              }
-            }
+            "layer": "semantic"
           }
         }
       },
@@ -8853,20 +8694,6 @@
             "layer": "semantic",
             "modes": {
               "contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.5}",
-                "fontWeight": "{type.weight.700}",
-                "letterSpacing": "{type.tracking.step-5}",
-                "lineHeight": "{type.leading.latin.1}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.5}",
-                "fontWeight": "{type.weight.570}",
-                "letterSpacing": "{type.tracking.step-5}",
-                "lineHeight": "{type.leading.latin.1}"
-              },
-              "scheme:dark,contrast:high": {
                 "fontFamily": "{type.face.text}",
                 "fontSize": "{type.size.latin.5}",
                 "fontWeight": "{type.weight.700}",
@@ -8896,20 +8723,6 @@
                 "fontWeight": "{type.weight.700}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.4}",
-                "fontWeight": "{type.weight.560}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.4}",
-                "fontWeight": "{type.weight.700}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
               }
             }
           }
@@ -8929,20 +8742,6 @@
             "layer": "semantic",
             "modes": {
               "contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.3}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.3}",
-                "fontWeight": "{type.weight.360}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark,contrast:high": {
                 "fontFamily": "{type.face.text}",
                 "fontSize": "{type.size.latin.3}",
                 "fontWeight": "{type.weight.500}",
@@ -8972,20 +8771,6 @@
                 "fontWeight": "{type.weight.500}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.360}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
               }
             }
           }
@@ -9010,20 +8795,6 @@
                 "fontWeight": "{type.weight.600}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.460}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
               }
             }
           }
@@ -9043,20 +8814,6 @@
             "layer": "semantic",
             "modes": {
               "contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.3}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.3}",
-                "fontWeight": "{type.weight.460}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark,contrast:high": {
                 "fontFamily": "{type.face.text}",
                 "fontSize": "{type.size.latin.3}",
                 "fontWeight": "{type.weight.600}",
@@ -9110,20 +8867,6 @@
                 "fontWeight": "{type.weight.500}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.1}",
-                "fontWeight": "{type.weight.360}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.1}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
               }
             }
           }
@@ -9161,9 +8904,7 @@
         "io.github.laith0003.ux-skill": {
           "layer": "semantic",
           "modes": {
-            "scheme:dark": "{type.weight.560}",
-            "contrast:high": "{type.weight.700}",
-            "scheme:dark,contrast:high": "{type.weight.700}"
+            "contrast:high": "{type.weight.700}"
           }
         }
       }

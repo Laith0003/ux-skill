@@ -1,0 +1,245 @@
+{
+ "page": "d-us-4",
+ "findings": [
+  {
+   "key": "d-us-4|render|focus-ring-clipped|d-us-4/index.html|260|86f7e437fa#1",
+   "pass": "render",
+   "rule": "focus-ring-clipped",
+   "severity": "medium",
+   "file": "d-us-4/index.html",
+   "line": 260
+  },
+  {
+   "key": "d-us-4|render|horizontal-overflow|d-us-4/index.html|497|2864e41264#1",
+   "pass": "render",
+   "rule": "horizontal-overflow",
+   "severity": "high",
+   "file": "d-us-4/index.html",
+   "line": 497
+  },
+  {
+   "key": "d-us-4|static|arbitrary-z-index-9999|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "arbitrary-z-index-9999",
+   "severity": "medium",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|aspect-ratio-1-1-default|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "aspect-ratio-1-1-default",
+   "severity": "medium",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|body-font-weight-bold-or-700-keyword|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "body-font-weight-bold-or-700-keyword",
+   "severity": "medium",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|button-no-type|d-us-4/index.html|128|f4bd235ae1#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-us-4/index.html",
+   "line": 128
+  },
+  {
+   "key": "d-us-4|static|button-no-type|d-us-4/index.html|181|19983289db#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-us-4/index.html",
+   "line": 181
+  },
+  {
+   "key": "d-us-4|static|button-no-type|d-us-4/index.html|269|c653d52d8a#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-us-4/index.html",
+   "line": 269
+  },
+  {
+   "key": "d-us-4|static|button-no-type|d-us-4/index.html|274|dfca5566dc#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-us-4/index.html",
+   "line": 274
+  },
+  {
+   "key": "d-us-4|static|cursor-not-allowed-no-visual|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "cursor-not-allowed-no-visual",
+   "severity": "high",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|display-table-for-layout|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "display-table-for-layout",
+   "severity": "medium",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|emoji-bullet-marker|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "emoji-bullet-marker",
+   "severity": "high",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|font-family-monospace-fallback-default|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "font-family-monospace-fallback-default",
+   "severity": "low",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|h-screen-no-dvh-fallback|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|iframe-without-title|d-us-4/index.html|97|701499cbf7#1",
+   "pass": "static",
+   "rule": "iframe-without-title",
+   "severity": "high",
+   "file": "d-us-4/index.html",
+   "line": 97
+  },
+  {
+   "key": "d-us-4|static|image-format-jpg-no-webp-avif|d-us-4/index.html|114|726e3db2ce#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-us-4/index.html",
+   "line": 114
+  },
+  {
+   "key": "d-us-4|static|img-no-dimensions|d-us-4/index.html|114|726e3db2ce#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-4/index.html",
+   "line": 114
+  },
+  {
+   "key": "d-us-4|static|img-no-dimensions|d-us-4/index.html|142|726e3db2ce#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-4/index.html",
+   "line": 142
+  },
+  {
+   "key": "d-us-4|static|img-no-dimensions|d-us-4/index.html|157|726e3db2ce#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-4/index.html",
+   "line": 157
+  },
+  {
+   "key": "d-us-4|static|img-no-dimensions|d-us-4/index.html|261|726e3db2ce#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-4/index.html",
+   "line": 261
+  },
+  {
+   "key": "d-us-4|static|img-no-dimensions|d-us-4/index.html|275|c5ce7b0922#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-4/index.html",
+   "line": 275
+  },
+  {
+   "key": "d-us-4|static|img-no-dimensions|d-us-4/index.html|612|2934378adf#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-4/index.html",
+   "line": 612
+  },
+  {
+   "key": "d-us-4|static|layout-family-repeated|d-us-4/index.html|574|116528c54f#1",
+   "pass": "static",
+   "rule": "layout-family-repeated",
+   "severity": "medium",
+   "file": "d-us-4/index.html",
+   "line": 574
+  },
+  {
+   "key": "d-us-4|static|negative-margin-pull-left-right|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "negative-margin-pull-left-right",
+   "severity": "medium",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|outline-none-no-focus-visible|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|screen-reader-only-without-class|d-us-4/index.html|104|6c10df2ec4#1",
+   "pass": "static",
+   "rule": "screen-reader-only-without-class",
+   "severity": "medium",
+   "file": "d-us-4/index.html",
+   "line": 104
+  },
+  {
+   "key": "d-us-4|static|scroll-to-top-button-everywhere|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "scroll-to-top-button-everywhere",
+   "severity": "low",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|text-align-justify-web|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "text-align-justify-web",
+   "severity": "low",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|text-ink-at-low-alpha|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-4|static|transition-property-all|_css/ac2b79723a77-main.css|1|05fd5e5070#1",
+   "pass": "static",
+   "rule": "transition-property-all",
+   "severity": "medium",
+   "file": "_css/ac2b79723a77-main.css",
+   "line": 1
+  }
+ ]
+}

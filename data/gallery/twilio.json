@@ -27,8 +27,8 @@
     },
     "radius_control": "10px",
     "state_duration": "150ms",
-    "tokens": 730,
-    "tokens_sha256": "d1042db4f5669b47"
+    "tokens": 722,
+    "tokens_sha256": "0fb161850e392451"
   },
   "id": "twilio",
   "name": "Twilio",

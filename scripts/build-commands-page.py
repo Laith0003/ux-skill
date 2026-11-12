@@ -584,7 +584,7 @@ __JSONLD__
   </div>
 </header>
 
-<div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
+<div class="nav__drawer" id="nav-drawer" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true" inert>
   <button type="button" class="nav__drawer-close" aria-label="Close menu" id="nav-drawer-close">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
   </button>
@@ -703,12 +703,14 @@ __BODY__
   function openDrawer() {
     drawer.classList.add('is-open');
     drawer.setAttribute('aria-hidden', 'false');
+    drawer.inert = false;
     menuBtn.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
   }
   function closeDrawer() {
     drawer.classList.remove('is-open');
     drawer.setAttribute('aria-hidden', 'true');
+    drawer.inert = true;
     menuBtn.setAttribute('aria-expanded', 'false');
     document.body.style.overflow = '';
   }

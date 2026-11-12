@@ -1,0 +1,725 @@
+{
+ "page": "d-h5-massively",
+ "findings": [
+  {
+   "key": "d-h5-massively|render|focus-ring-missing|d-h5-massively/index.html|0|86f7e437fa#1",
+   "pass": "render",
+   "rule": "focus-ring-missing",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-h5-massively|render|input-text-zooms|d-h5-massively/index.html|0|18f089f0a5#1",
+   "pass": "render",
+   "rule": "input-text-zooms",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-h5-massively|render|input-text-zooms|d-h5-massively/index.html|0|b43c8e0503#1",
+   "pass": "render",
+   "rule": "input-text-zooms",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-h5-massively|render|input-text-zooms|d-h5-massively/index.html|0|6e796fdd24#1",
+   "pass": "render",
+   "rule": "input-text-zooms",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-h5-massively|render|text-low-contrast|d-h5-massively/index.html|0|86f7e437fa#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-h5-massively|render|text-low-contrast|d-h5-massively/index.html|0|516b9783fc#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-h5-massively|render|text-low-contrast|d-h5-massively/index.html|153|9ff01ef6db#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 153
+  },
+  {
+   "key": "d-h5-massively|render|text-low-contrast|d-h5-massively/index.html|169|64c65374db#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 169
+  },
+  {
+   "key": "d-h5-massively|static|all-caps-large|_css/4ae70399262c-main.css|3570|07c62e62ce#1",
+   "pass": "static",
+   "rule": "all-caps-large",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3570
+  },
+  {
+   "key": "d-h5-massively|static|css-import-render-blocking|_css/4ae70399262c-main.css|1|2221711735#1",
+   "pass": "static",
+   "rule": "css-import-render-blocking",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-h5-massively|static|css-import-render-blocking|_css/4ae70399262c-main.css|2|afc31aa2b6#1",
+   "pass": "static",
+   "rule": "css-import-render-blocking",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 2
+  },
+  {
+   "key": "d-h5-massively|static|css-import-render-blocking|_css/9881bbc2654c-noscript.css|1|fc36abbeef#1",
+   "pass": "static",
+   "rule": "css-import-render-blocking",
+   "severity": "medium",
+   "file": "_css/9881bbc2654c-noscript.css",
+   "line": 1
+  },
+  {
+   "key": "d-h5-massively|static|cta-text-tap-continue-go|d-h5-massively/index.html|27|f161f066ac#1",
+   "pass": "static",
+   "rule": "cta-text-tap-continue-go",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 27
+  },
+  {
+   "key": "d-h5-massively|static|cta-text-tap-continue-go|d-h5-massively/index.html|157|1f692e7b48#1",
+   "pass": "static",
+   "rule": "cta-text-tap-continue-go",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 157
+  },
+  {
+   "key": "d-h5-massively|static|display-line-height-under-floor|_css/4ae70399262c-main.css|3390|1a2f00e982#1",
+   "pass": "static",
+   "rule": "display-line-height-under-floor",
+   "severity": "low",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3390
+  },
+  {
+   "key": "d-h5-massively|static|focusable-at-opacity-zero|_css/4ae70399262c-main.css|2398|d4a8bd7983#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 2398
+  },
+  {
+   "key": "d-h5-massively|static|focusable-at-opacity-zero|_css/4ae70399262c-main.css|3441|438a6d5409#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3441
+  },
+  {
+   "key": "d-h5-massively|static|focusable-at-opacity-zero|_css/4ae70399262c-main.css|3449|7d6ad119ea#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3449
+  },
+  {
+   "key": "d-h5-massively|static|full-viewport-width-overflow|_css/4ae70399262c-main.css|3247|83f74afa8d#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3247
+  },
+  {
+   "key": "d-h5-massively|static|glow-shadow-zero-offset|_css/4ae70399262c-main.css|4685|c7c1ed09cc#1",
+   "pass": "static",
+   "rule": "glow-shadow-zero-offset",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 4685
+  },
+  {
+   "key": "d-h5-massively|static|h-screen-no-dvh-fallback|_css/4ae70399262c-main.css|3248|0922511424#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3248
+  },
+  {
+   "key": "d-h5-massively|static|h-screen-no-dvh-fallback|_css/4ae70399262c-main.css|3313|f7f652b0f8#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3313
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|44|34eeb6c36d#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 44
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|45|0aca433b7d#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 45
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|46|36e6abe8f4#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 46
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|47|370161ff42#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 47
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|58|ff00f0391e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 58
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|64|82d602f0ae#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 64
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|66|7521bb1f65#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 66
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|75|8ec90d8021#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 75
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|78|519c21b42c#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 78
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|81|58531947f0#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 81
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|87|af2904cb8a#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 87
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|90|0a1a1c139c#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 90
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|93|58531947f0#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 93
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|99|2da748fc8f#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 99
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|102|a1678713a1#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 102
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|105|58531947f0#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 105
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|111|e5c5103de3#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 111
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|114|91d0413c1c#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 114
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|117|58531947f0#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 117
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|123|a3c07bc05b#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 123
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|126|b53d223ba6#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 126
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|129|58531947f0#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 129
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|135|1b5cb5897c#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 135
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|138|466416059f#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 138
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|141|58531947f0#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 141
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|150|a7877bd2bd#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 150
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|151|1f509f74b4#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 151
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|152|82f56d2f11#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 152
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|154|2cc2960c88#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 154
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|155|c15f882838#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 155
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|156|4a2c325150#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 156
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|157|1f692e7b48#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 157
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|194|69239e8ccd#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 194
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|198|5db59431be#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 198
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|203|669d0055b7#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 203
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|204|7adb5db2c6#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 204
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|205|388e9fa88b#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 205
+  },
+  {
+   "key": "d-h5-massively|static|href-empty-hash|d-h5-massively/index.html|206|ff081fb085#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 206
+  },
+  {
+   "key": "d-h5-massively|static|image-format-jpg-no-webp-avif|d-h5-massively/index.html|64|82d602f0ae#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 64
+  },
+  {
+   "key": "d-h5-massively|static|image-format-jpg-no-webp-avif|d-h5-massively/index.html|78|519c21b42c#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 78
+  },
+  {
+   "key": "d-h5-massively|static|image-format-jpg-no-webp-avif|d-h5-massively/index.html|90|0a1a1c139c#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 90
+  },
+  {
+   "key": "d-h5-massively|static|image-format-jpg-no-webp-avif|d-h5-massively/index.html|102|a1678713a1#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 102
+  },
+  {
+   "key": "d-h5-massively|static|image-format-jpg-no-webp-avif|d-h5-massively/index.html|114|91d0413c1c#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 114
+  },
+  {
+   "key": "d-h5-massively|static|image-format-jpg-no-webp-avif|d-h5-massively/index.html|126|b53d223ba6#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 126
+  },
+  {
+   "key": "d-h5-massively|static|image-format-jpg-no-webp-avif|d-h5-massively/index.html|138|466416059f#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 138
+  },
+  {
+   "key": "d-h5-massively|static|img-no-dimensions|d-h5-massively/index.html|64|82d602f0ae#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 64
+  },
+  {
+   "key": "d-h5-massively|static|img-no-dimensions|d-h5-massively/index.html|78|519c21b42c#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 78
+  },
+  {
+   "key": "d-h5-massively|static|img-no-dimensions|d-h5-massively/index.html|90|0a1a1c139c#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 90
+  },
+  {
+   "key": "d-h5-massively|static|img-no-dimensions|d-h5-massively/index.html|102|a1678713a1#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 102
+  },
+  {
+   "key": "d-h5-massively|static|img-no-dimensions|d-h5-massively/index.html|114|91d0413c1c#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 114
+  },
+  {
+   "key": "d-h5-massively|static|img-no-dimensions|d-h5-massively/index.html|126|b53d223ba6#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 126
+  },
+  {
+   "key": "d-h5-massively|static|img-no-dimensions|d-h5-massively/index.html|138|466416059f#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 138
+  },
+  {
+   "key": "d-h5-massively|static|input-purpose-missing|d-h5-massively/index.html|174|9af9ede282#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-h5-massively/index.html",
+   "line": 174
+  },
+  {
+   "key": "d-h5-massively|static|lang-attribute-missing|d-h5-massively/index.html|7|0fe0bb445f#1",
+   "pass": "static",
+   "rule": "lang-attribute-missing",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 7
+  },
+  {
+   "key": "d-h5-massively|static|lorem-ipsum-leak|d-h5-massively/index.html|61|65519054a9#1",
+   "pass": "static",
+   "rule": "lorem-ipsum-leak",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 61
+  },
+  {
+   "key": "d-h5-massively|static|outline-none-no-focus-visible|_css/4ae70399262c-main.css|3715|f8b3fa5e63#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3715
+  },
+  {
+   "key": "d-h5-massively|static|padding-shorthand-4-vals-zero-first|_css/4ae70399262c-main.css|3031|4d413e5f13#1",
+   "pass": "static",
+   "rule": "padding-shorthand-4-vals-zero-first",
+   "severity": "low",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3031
+  },
+  {
+   "key": "d-h5-massively|static|placeholder-token-shipped|d-h5-massively/index.html|61|65519054a9#1",
+   "pass": "static",
+   "rule": "placeholder-token-shipped",
+   "severity": "high",
+   "file": "d-h5-massively/index.html",
+   "line": 61
+  },
+  {
+   "key": "d-h5-massively|static|text-align-justify-web|_css/4ae70399262c-main.css|179|1c53e4119a#1",
+   "pass": "static",
+   "rule": "text-align-justify-web",
+   "severity": "low",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 179
+  },
+  {
+   "key": "d-h5-massively|static|text-ink-at-low-alpha|_css/4ae70399262c-main.css|4388|b481333957#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 4388
+  },
+  {
+   "key": "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3224|88779c21ad#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3224
+  },
+  {
+   "key": "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3256|9440016a29#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3256
+  },
+  {
+   "key": "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3308|7fd0090136#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3308
+  },
+  {
+   "key": "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3422|46e25a3c3a#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3422
+  },
+  {
+   "key": "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3564|ec5dbcdd84#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3564
+  },
+  {
+   "key": "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|3617|b5e856691a#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 3617
+  },
+  {
+   "key": "d-h5-massively|static|transition-duration-500ms-or-longer|_css/4ae70399262c-main.css|4562|4fa95a3c3d#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/4ae70399262c-main.css",
+   "line": 4562
+  },
+  {
+   "key": "d-h5-massively|static|viewport-no-zoom|d-h5-massively/index.html|11|0950ceb857#1",
+   "pass": "static",
+   "rule": "viewport-no-zoom",
+   "severity": "critical",
+   "file": "d-h5-massively/index.html",
+   "line": 11
+  }
+ ]
+}

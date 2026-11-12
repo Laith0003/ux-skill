@@ -4,7 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    # The 5.0 integration branch takes one PR per phase; each gets the same checks.
+    branches: [main, "feat/4.1-stageshow"]
 
 # Least privilege: every job here only checks out and runs tests.
 permissions:
@@ -28,7 +29,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e ".[dev]"
       - name: Run pytest
-        run: pytest -v --tb=short
+        # In parallel: 13,000 tests took 33 minutes on one core.
+        run: pytest -q --tb=short -n auto
       - name: Engine stats sanity
         run: python -m engine.cli.main stats || true
 

@@ -1,0 +1,317 @@
+{
+ "page": "d-us-3",
+ "findings": [
+  {
+   "key": "d-us-3|static|animating-layout-properties|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|arbitrary-z-index-9999|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "arbitrary-z-index-9999",
+   "severity": "medium",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|body-font-weight-bold-or-700-keyword|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "body-font-weight-bold-or-700-keyword",
+   "severity": "medium",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|button-no-type|d-us-3/index.html|175|dfca5566dc#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-us-3/index.html",
+   "line": 175
+  },
+  {
+   "key": "d-us-3|static|button-no-type|d-us-3/index.html|334|477dc44741#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-us-3/index.html",
+   "line": 334
+  },
+  {
+   "key": "d-us-3|static|button-no-type|d-us-3/index.html|366|2f242c8d3a#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-us-3/index.html",
+   "line": 366
+  },
+  {
+   "key": "d-us-3|static|cursor-not-allowed-no-visual|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "cursor-not-allowed-no-visual",
+   "severity": "high",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|display-table-for-layout|_css/72781d5e5cd8-tfV6Y9-ZLMagJGgY8buu08kHNQiqvwN8i4d8.css|4|6c6ab36a62#1",
+   "pass": "static",
+   "rule": "display-table-for-layout",
+   "severity": "medium",
+   "file": "_css/72781d5e5cd8-tfV6Y9-ZLMagJGgY8buu08kHNQiqvwN8i4d8.css",
+   "line": 4
+  },
+  {
+   "key": "d-us-3|static|display-table-for-layout|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "display-table-for-layout",
+   "severity": "medium",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|emoji-bullet-marker|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "emoji-bullet-marker",
+   "severity": "high",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|fixed-height-text-block|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "fixed-height-text-block",
+   "severity": "medium",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|flex-center-center-default|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "flex-center-center-default",
+   "severity": "low",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|full-viewport-width-overflow|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|h-screen-no-dvh-fallback|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|image-format-jpg-no-webp-avif|d-us-3/index.html|102|fa9db231cf#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-us-3/index.html",
+   "line": 102
+  },
+  {
+   "key": "d-us-3|static|image-format-jpg-no-webp-avif|d-us-3/index.html|323|297ddcdb47#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-us-3/index.html",
+   "line": 323
+  },
+  {
+   "key": "d-us-3|static|img-no-dimensions|d-us-3/index.html|102|fa9db231cf#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 102
+  },
+  {
+   "key": "d-us-3|static|img-no-dimensions|d-us-3/index.html|125|0774634512#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 125
+  },
+  {
+   "key": "d-us-3|static|img-no-dimensions|d-us-3/index.html|134|5f80551664#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 134
+  },
+  {
+   "key": "d-us-3|static|img-no-dimensions|d-us-3/index.html|195|3d22f8aae8#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 195
+  },
+  {
+   "key": "d-us-3|static|img-no-dimensions|d-us-3/index.html|323|297ddcdb47#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 323
+  },
+  {
+   "key": "d-us-3|static|img-no-dimensions|d-us-3/index.html|357|3d22f8aae8#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 357
+  },
+  {
+   "key": "d-us-3|static|img-no-dimensions|d-us-3/index.html|367|40c4dd22ff#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 367
+  },
+  {
+   "key": "d-us-3|static|img-no-dimensions|d-us-3/index.html|543|ed8bd5a34f#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 543
+  },
+  {
+   "key": "d-us-3|static|img-no-dimensions|d-us-3/index.html|551|c67442a8c6#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 551
+  },
+  {
+   "key": "d-us-3|static|inline-style-attribute|d-us-3/index.html|339|abd2f16b85#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-us-3/index.html",
+   "line": 339
+  },
+  {
+   "key": "d-us-3|static|inline-svg-no-aria|d-us-3/index.html|108|b661beb387#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 108
+  },
+  {
+   "key": "d-us-3|static|inline-svg-no-aria|d-us-3/index.html|115|0864d060db#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 115
+  },
+  {
+   "key": "d-us-3|static|inline-svg-no-aria|d-us-3/index.html|170|a724f9889a#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 170
+  },
+  {
+   "key": "d-us-3|static|inline-svg-no-aria|d-us-3/index.html|176|a724f9889a#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-us-3/index.html",
+   "line": 176
+  },
+  {
+   "key": "d-us-3|static|numbered-placeholder-classname|d-us-3/index.html|799|61afdcaf4a#1",
+   "pass": "static",
+   "rule": "numbered-placeholder-classname",
+   "severity": "low",
+   "file": "d-us-3/index.html",
+   "line": 799
+  },
+  {
+   "key": "d-us-3|static|outline-none-no-focus-visible|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|outline-none-no-focus-visible|_css/b86d94383cbc-uswds-paragraph-components-cards.css|34|8d3a886103#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/b86d94383cbc-uswds-paragraph-components-cards.css",
+   "line": 34
+  },
+  {
+   "key": "d-us-3|static|text-align-justify-web|_css/72781d5e5cd8-tfV6Y9-ZLMagJGgY8buu08kHNQiqvwN8i4d8.css|2|cdc5fcb0cc#1",
+   "pass": "static",
+   "rule": "text-align-justify-web",
+   "severity": "low",
+   "file": "_css/72781d5e5cd8-tfV6Y9-ZLMagJGgY8buu08kHNQiqvwN8i4d8.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|text-align-justify-web|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "text-align-justify-web",
+   "severity": "low",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|text-ink-at-low-alpha|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|timing-300ms-default|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|transition-duration-500ms-or-longer|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  },
+  {
+   "key": "d-us-3|static|transition-property-all|_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css|2|fddbb96ae6#1",
+   "pass": "static",
+   "rule": "transition-property-all",
+   "severity": "medium",
+   "file": "_css/92c2eec85367-kxAKVlYtiIn6qpAq__BevSHCXAmcrTugppls.css",
+   "line": 2
+  }
+ ]
+}

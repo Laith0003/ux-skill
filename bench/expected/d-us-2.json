@@ -1,0 +1,261 @@
+{
+ "page": "d-us-2",
+ "findings": [
+  {
+   "key": "d-us-2|render|focus-ring-missing|d-us-2/index.html|3284|e2a00d64ac#1",
+   "pass": "render",
+   "rule": "focus-ring-missing",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 3284
+  },
+  {
+   "key": "d-us-2|render|focus-ring-missing|d-us-2/index.html|3307|fbbbcc06bb#1",
+   "pass": "render",
+   "rule": "focus-ring-missing",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 3307
+  },
+  {
+   "key": "d-us-2|render|focus-ring-missing|d-us-2/index.html|3347|1a91f28771#1",
+   "pass": "render",
+   "rule": "focus-ring-missing",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 3347
+  },
+  {
+   "key": "d-us-2|render|focus-ring-missing|d-us-2/index.html|3387|42e4ee2c01#1",
+   "pass": "render",
+   "rule": "focus-ring-missing",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 3387
+  },
+  {
+   "key": "d-us-2|render|target-too-small|d-us-2/index.html|3520|2bbab8c9a3#1",
+   "pass": "render",
+   "rule": "target-too-small",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 3520
+  },
+  {
+   "key": "d-us-2|static|animating-layout-properties|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|arbitrary-z-index-9999|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "arbitrary-z-index-9999",
+   "severity": "medium",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|aspect-ratio-1-1-default|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "aspect-ratio-1-1-default",
+   "severity": "medium",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|body-font-weight-bold-or-700-keyword|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "body-font-weight-bold-or-700-keyword",
+   "severity": "medium",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|cursor-not-allowed-no-visual|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "cursor-not-allowed-no-visual",
+   "severity": "high",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|display-line-height-under-floor|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "display-line-height-under-floor",
+   "severity": "low",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|emoji-bullet-marker|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "emoji-bullet-marker",
+   "severity": "high",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|h-screen-no-dvh-fallback|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|href-javascript-void|d-us-2/index.html|5693|fcda1550d3#1",
+   "pass": "static",
+   "rule": "href-javascript-void",
+   "severity": "medium",
+   "file": "d-us-2/index.html",
+   "line": 5693
+  },
+  {
+   "key": "d-us-2|static|image-format-jpg-no-webp-avif|d-us-2/index.html|106|726e3db2ce#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-us-2/index.html",
+   "line": 106
+  },
+  {
+   "key": "d-us-2|static|img-no-dimensions|d-us-2/index.html|106|726e3db2ce#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 106
+  },
+  {
+   "key": "d-us-2|static|img-no-dimensions|d-us-2/index.html|135|726e3db2ce#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 135
+  },
+  {
+   "key": "d-us-2|static|img-no-dimensions|d-us-2/index.html|151|726e3db2ce#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 151
+  },
+  {
+   "key": "d-us-2|static|img-no-dimensions|d-us-2/index.html|207|19d69a6d1a#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 207
+  },
+  {
+   "key": "d-us-2|static|img-no-dimensions|d-us-2/index.html|2328|6413b5df9e#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 2328
+  },
+  {
+   "key": "d-us-2|static|inline-style-attribute|d-us-2/index.html|3465|c42ed437c3#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-us-2/index.html",
+   "line": 3465
+  },
+  {
+   "key": "d-us-2|static|inline-svg-no-aria|d-us-2/index.html|2357|a87529924c#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-us-2/index.html",
+   "line": 2357
+  },
+  {
+   "key": "d-us-2|static|nav-equal-hamburger-desktop|d-us-2/index.html|201|7040f3f2d2#1",
+   "pass": "static",
+   "rule": "nav-equal-hamburger-desktop",
+   "severity": "low",
+   "file": "d-us-2/index.html",
+   "line": 201
+  },
+  {
+   "key": "d-us-2|static|outline-none-no-focus-visible|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|repeated-action-same-name|d-us-2/index.html|4687|16d7058656#1",
+   "pass": "static",
+   "rule": "repeated-action-same-name",
+   "severity": "medium",
+   "file": "d-us-2/index.html",
+   "line": 4687
+  },
+  {
+   "key": "d-us-2|static|repeated-action-same-name|d-us-2/index.html|4728|97277c5333#1",
+   "pass": "static",
+   "rule": "repeated-action-same-name",
+   "severity": "medium",
+   "file": "d-us-2/index.html",
+   "line": 4728
+  },
+  {
+   "key": "d-us-2|static|repeated-action-same-name|d-us-2/index.html|4902|73c461e7e7#1",
+   "pass": "static",
+   "rule": "repeated-action-same-name",
+   "severity": "medium",
+   "file": "d-us-2/index.html",
+   "line": 4902
+  },
+  {
+   "key": "d-us-2|static|repeated-action-same-name|d-us-2/index.html|5188|1d5cbc38bf#1",
+   "pass": "static",
+   "rule": "repeated-action-same-name",
+   "severity": "medium",
+   "file": "d-us-2/index.html",
+   "line": 5188
+  },
+  {
+   "key": "d-us-2|static|screen-reader-only-without-class|d-us-2/index.html|97|07747b29ac#1",
+   "pass": "static",
+   "rule": "screen-reader-only-without-class",
+   "severity": "medium",
+   "file": "d-us-2/index.html",
+   "line": 97
+  },
+  {
+   "key": "d-us-2|static|text-align-justify-web|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "text-align-justify-web",
+   "severity": "low",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|text-ink-at-low-alpha|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  },
+  {
+   "key": "d-us-2|static|timing-300ms-default|_css/4172a2386ddb-styles.css|1|7e1a7d2fdf#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "_css/4172a2386ddb-styles.css",
+   "line": 1
+  }
+ ]
+}

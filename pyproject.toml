@@ -51,6 +51,7 @@ render = [
 dev = [
   "pytest>=9.1.1",
   "pytest-cov>=7.1.0",
+  "pytest-xdist>=3.6",
   "ruff>=0.15.20",
   "mypy>=2.1.0",
   "black>=25.11.0",
@@ -76,7 +77,11 @@ where = ["."]
 include = ["engine*"]
 
 [tool.setuptools.package-data]
-"engine" = ["../data/**/*.json"]
+"engine" = [
+  "../data/**/*.json",
+  "kits/stageshow/**/*.ts", "kits/stageshow/**/*.tsx", "kits/stageshow/**/*.css",
+  "kits/stageshow/**/*.md", "kits/stageshow/LICENSE",
+]
 "engine.contracts" = ["seed/*.yaml", "seed/sections/*.yaml"]
 "engine.rulepack" = ["decisions/*.md", "guidance/*.md"]
 "engine.io" = ["figma/*.js"]

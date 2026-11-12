@@ -51,7 +51,7 @@ EXPECTED = {
     "the-full-type-ladder", "imported-sets-pass", "phone-order-in-both-scripts",
     "phone-accepts-local-input", "one-label-per-action",
     "lint-reads-the-system", "motion-lint-times-the-curve", "photograph-required-in-lint", "eyebrows-follow-formality", "layouts-repeat-at-most-twice", "splits-run-at-most-two", "one-marquee-per-page", "three-cards-read-by-content", "ink-text-keeps-its-alpha", "loops-stop-under-reduced-motion",
-    "color-budget-on-the-page", "grade-lock-on-the-page", "accent-text-on-every-ground", "moving-content-pauses", "layout-transitions-that-reflow", "inner-pages-one-family",
+    "color-budget-on-the-page", "grade-lock-on-the-page", "accent-text-on-every-ground", "moving-content-pauses", "layout-transitions-that-reflow", "layout-transitions-through-the-platform", "inner-pages-one-family",
     "display-leading-floor-in-lint", "capitals-follow-the-signal",
     "states-answer-on-motion", "one-indicator-per-control", "hidden-controls-leave-the-tab-order",
     "states-name-themselves", "render-drives-the-page", "sections-are-contracts",
@@ -64,13 +64,15 @@ EXPECTED = {
     "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",
     "sections-meet-by-a-seam",
     "motion-roles-by-pace", "moves-answer-at-once", "press-scale-and-glide",
-    "dark-text-sets-lighter",
+    "dark-text-sets-lighter", "dark-text-keeps-its-weight",
     "bands-follow-energy", "lines-in-ink", "bottom-anchored-hero", "faces-cost-their-ubiquity",
     "photo-direction",
     "own-system-rebuilt-in-place", "extension-carried-forward", "type-size-names",
     "tailwind-spacing-steps",
     "figma-modes-on-one-axis", "bare-sizes-read-as-px",
     "gallery-from-spec-facts",
+    "all-text-measured-as-seen", "first-screen-stays-clear", "targets-meet-the-floor",
+    "complaints-close-by-measurement",
 }
 # Records a later record replaced; each names its replacement.
 SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-edge",
@@ -116,7 +118,10 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "landing-gap": "landing-rhythm-follows-the-brand",
               "layout-bounds": "measures-count-characters",
               "motion-roles": "motion-roles-by-pace",
-              "score-tells-heavy-pages-apart": "score-weighs-repeats-past-the-knee"}
+              "score-tells-heavy-pages-apart": "score-weighs-repeats-past-the-knee",
+              "accent-text-on-every-ground": "all-text-measured-as-seen",
+              "layout-transitions-that-reflow": "layout-transitions-through-the-platform",
+              "dark-text-sets-lighter": "dark-text-keeps-its-weight"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

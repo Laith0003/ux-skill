@@ -69,8 +69,14 @@ class FileContext:
 
     @property
     def low(self) -> str:
+        """The text in lowercase, the same length as the text, so an offset
+        found in it holds in the text. str.lower() turns a few characters
+        into two (the Turkish capital dotted I); those stay as they are."""
         if self._low is None:
-            self._low = self.text.lower()
+            low = self.text.lower()
+            if len(low) != len(self.text):
+                low = "".join(c if len(c.lower()) != 1 else c.lower() for c in self.text)
+            self._low = low
         return self._low
 
     def cached(self, key: str, build: Callable[[], object]) -> object:
@@ -165,6 +171,74 @@ def attr_values(text: str, tag: Tag) -> Dict[str, Tuple[str, str]]:
     for a in tag.attrs:
         out.setdefault(a.name.lower(), (a.kind, text[a.vstart:a.vend].strip()))
     return out
+
+
+# Elements a keyboard reaches without a tabindex, and the form controls a
+# disabled attribute (or a disabled fieldset around them) takes out of reach.
+FOCUSABLE_TAGS = {"a", "button", "input", "select", "textarea", "summary", "iframe"}
+FORM_CONTROLS = {"button", "input", "select", "textarea"}
+
+
+def bound_attr(a: Dict[str, Tuple[str, str]], name: str) -> Optional[str]:
+    """An attribute's value as written or bound (name, :name, v-bind:name),
+    without JSX braces or quotes; None when the element does not carry it."""
+    for key in (name, ":" + name, "v-bind:" + name):
+        if key in a:
+            v = a[key][1].strip()
+            if v.startswith("{") and v.endswith("}"):
+                v = v[1:-1].strip()
+            return v.strip("'\"`").strip()
+    return None
+
+
+def _off(value: Optional[str]) -> bool:
+    """A boolean attribute that is present and not written false."""
+    return value is not None and value.lower() not in ("false", "undefined", "null")
+
+
+def shut(ctx: "FileContext", i: int) -> bool:
+    """The element or an ancestor is hidden or inert in the markup, so
+    nothing inside it takes focus."""
+    tags, _ends, parents = ctx.tree()
+    k = i
+    while k >= 0:
+        a = attr_values(ctx.text, tags[k])
+        if "inert" in a or "hidden" in a:
+            return True
+        k = parents[k]
+    return False
+
+
+def takes_focus(ctx: "FileContext", i: int) -> bool:
+    """A keyboard reaches the element itself (its ancestors aside: see shut).
+    A disabled form control, or one inside a disabled fieldset, never does,
+    whatever its tabindex; a link ignores disabled. A tabindex of -1 takes
+    an element out of the tab order; one bound to an expression is not
+    counted, since it may be."""
+    tags, _ends, parents = ctx.tree()
+    t = tags[i]
+    name = t.name.lower()
+    a = attr_values(ctx.text, t)
+    if name in FORM_CONTROLS:
+        if _off(bound_attr(a, "disabled")):
+            return False
+        k = parents[i]
+        while k >= 0:
+            if tags[k].name.lower() == "fieldset" and _off(
+                    bound_attr(attr_values(ctx.text, tags[k]), "disabled")):
+                return False
+            k = parents[k]
+    tabindex = bound_attr(a, "tabindex")
+    if tabindex is not None:
+        return bool(re.fullmatch(r"\d+", tabindex))
+    if name in ("a", "area"):
+        return "href" in a or ":href" in a or "v-bind:href" in a
+    if name == "input":
+        return (bound_attr(a, "type") or "").lower() != "hidden"
+    if name in FOCUSABLE_TAGS:
+        return True
+    editable = bound_attr(a, "contenteditable")
+    return editable is not None and editable.lower() != "false"
 
 
 def _dynamic(name: str, kind: str) -> bool:
@@ -2541,20 +2615,66 @@ def one_action_several_labels(ctx: FileContext, view: View, match: re.Match, sta
 # glass-without-fallback
 # ---------------------------------------------------------------------------
 
-_BACKGROUND_DECL = re.compile(r"(?<![\w-])background(?:-color)?\s*:", re.I)
+_BACKGROUND_DECL = re.compile(r"(?<![\w-])background(?:-color)?\s*:([^;{}]*)", re.I)
+# The least background alpha behind text on a blur: below it, the surface
+# takes its lightness from whatever scrolls behind and text contrast is left
+# to chance.
+GLASS_ALPHA_FLOOR = 0.6
+_FUNC_ALPHA = re.compile(r"\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch)\(([^()]*)\)", re.I)
+_HEX_ALPHA = re.compile(r"#(?:[0-9a-f]{3}([0-9a-f])|[0-9a-f]{6}([0-9a-f]{2}))(?![0-9a-f])", re.I)
+
+
+def _alpha_number(text: str) -> float:
+    text = text.strip()
+    return float(text[:-1]) / 100 if text.endswith("%") else float(text)
+
+
+def background_alpha(value: str) -> Optional[float]:
+    """The alpha of a background value when it can be read: 0 for
+    transparent, the alpha of a single color function or a hex with alpha,
+    1 for any other plain color. None for what cannot be measured (var(),
+    images, gradients, color-mix() and the like)."""
+    v = value.replace("!important", "").strip().lower()
+    if not v or re.search(r"var\(|url\(|gradient\(|color-mix\(|image|inherit|initial|unset|"
+                          r"revert|currentcolor", v):
+        return None
+    if re.fullmatch(r"transparent|none", v):
+        return 0.0
+    funcs = _FUNC_ALPHA.findall(v)
+    if len(funcs) == 1:
+        args = funcs[0]
+        try:
+            if "/" in args:
+                return _alpha_number(args.split("/")[-1])
+            parts = [a for a in re.split(r"[\s,]+", args.strip()) if a]
+            return _alpha_number(parts[3]) if len(parts) == 4 else 1.0
+        except ValueError:
+            return None
+    if len(funcs) > 1:
+        return None
+    m = _HEX_ALPHA.search(v)
+    if m:
+        digits = m.group(1) * 2 if m.group(1) else m.group(2)
+        return int(digits, 16) / 255
+    return 1.0 if re.fullmatch(r"#[0-9a-f]{3,8}|[a-z]+", v) else None
 
 
 def blur_without_background(ctx: FileContext, view: View, match: re.Match, start: int) -> bool:
-    """A backdrop blur is a finding only inside a rule block that sets no
-    background or background-color, before or after the blur. The finding
-    sits on the blur's own line."""
+    """A backdrop blur is a finding inside a rule block that sets no
+    background or background-color, before or after the blur, or whose
+    every background is measured below GLASS_ALPHA_FLOOR (transparent
+    included). A background that cannot be measured (a var(), an image)
+    passes. The finding sits on the blur's own line."""
     text, pos = view.text, match.start()
     opened = max(text.rfind("{", 0, pos), text.rfind("}", 0, pos))
     if opened == -1 or text[opened] != "{":
         return False
     ends = [i for i in (text.find("{", pos), text.find("}", pos)) if i != -1]
     body = text[opened + 1:min(ends) if ends else len(text)]
-    return _BACKGROUND_DECL.search(body) is None
+    alphas = [background_alpha(m.group(1)) for m in _BACKGROUND_DECL.finditer(body)]
+    if not alphas:
+        return True
+    return all(a is not None and a < GLASS_ALPHA_FLOOR for a in alphas)
 
 
 SHADOW_LAYERS = 5
@@ -2656,3 +2776,8 @@ POST_CHECKS.update(TASTE_CHECKS)
 from engine.linter.components import COMPONENT_CHECKS  # noqa: E402
 
 POST_CHECKS.update(COMPONENT_CHECKS)
+
+# The checks for product illustrations live in engine/linter/illustration.py.
+from engine.linter.illustration import ILLUSTRATION_CHECKS  # noqa: E402
+
+POST_CHECKS.update(ILLUSTRATION_CHECKS)

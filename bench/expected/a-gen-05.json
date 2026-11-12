@@ -1,0 +1,117 @@
+{
+ "page": "a-gen-05",
+ "findings": [
+  {
+   "key": "a-gen-05|render|accent-text-low-contrast|a-gen-05/index.html|45|f6f9fe8ab9#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-05/index.html",
+   "line": 45
+  },
+  {
+   "key": "a-gen-05|render|horizontal-overflow|a-gen-05/index.html|0|565cecd7e8#1",
+   "pass": "render",
+   "rule": "horizontal-overflow",
+   "severity": "high",
+   "file": "a-gen-05/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-05|render|input-text-zooms|a-gen-05/index.html|0|848ad0872a#1",
+   "pass": "render",
+   "rule": "input-text-zooms",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-05|static|arbitrary-z-index-9999|a-gen-05/index.html|11|01be1c279d#1",
+   "pass": "static",
+   "rule": "arbitrary-z-index-9999",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 11
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|45|f9d43c3cc1#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 45
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|46|20509efee7#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 46
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|47|d927858369#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 47
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|49|d31546b6b0#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 49
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|50|df49ec3a81#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 50
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|51|777e114044#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 51
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|53|ffded8b22c#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 53
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|54|dcf556cbfa#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 54
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|76|00c20998cf#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 76
+  },
+  {
+   "key": "a-gen-05|static|href-empty-hash|a-gen-05/index.html|77|b1aae0cf25#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-05/index.html",
+   "line": 77
+  }
+ ]
+}

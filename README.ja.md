@@ -14,7 +14,7 @@ pip install uxskill
 
 *ビフォー：ありがちなストックフォトの SEO スロップ。アフター：暗いスクリムを敷いた本物の建設現場写真のヒーロー、琥珀色のアクセントを効かせたエディトリアルな見出し、ヒーロー内の見積もりフォーム。同じ AI コーディングツール、同じプロンプトでも、ux-skill が制約を与えると結果が変わります。*
 
-> **v4.0、FOUNDATIONS：コマンドひとつで、WCAG で検証された完全なデザインシステムを構築。アラビア語と右から左への表記にも標準対応。** AI コーディング向け最強の UX プラグイン。決定論的な 7 軸シンセサイザーを備えた Python の推論コア、12 個のクエリ可能な JSON マニフェスト(84 のスタイル、176 のパレット、70 のタイプペアリング、148 のコンポーネント、184 の業種、35 のチャートタイプ、57 のモーションプリセット、112 の UX ロー、171 のアンチパターンルール、25 の技術スタック、160 のブランド仕様)、18 のスラッシュコマンド、5 つのサブエージェント、25 の MCP ツール、そして決定論的な反 AI スロップリンター。クロス IDE：Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer、Roo Cline に導入できます。
+> **v4.0、FOUNDATIONS：コマンドひとつで、WCAG で検証された完全なデザインシステムを構築。アラビア語と右から左への表記にも標準対応。** AI コーディング向け最強の UX プラグイン。決定論的な 7 軸シンセサイザーを備えた Python の推論コア、12 個のクエリ可能な JSON マニフェスト(84 のスタイル、176 のパレット、70 のタイプペアリング、148 のコンポーネント、184 の業種、35 のチャートタイプ、57 のモーションプリセット、112 の UX ロー、180 のアンチパターンルール、25 の技術スタック、160 のブランド仕様)、18 のスラッシュコマンド、5 つのサブエージェント、25 の MCP ツール、そして決定論的な反 AI スロップリンター。クロス IDE：Claude Code、Cursor、Windsurf、GitHub Copilot、Gemini CLI、Codex、Kiro、Cline、Continue、Aider、Zed、JetBrains AI、Pieces、Tabby、Tabnine、CodeWhisperer、Roo Cline に導入できます。
 
 > **ブランド名は `ux-skill`。** PyPI / npm のパッケージ名は `uxskill` のままです。GitHub リポジトリは [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill) にあります。
 
@@ -27,8 +27,8 @@ pip install uxskill
 [![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-180-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-13276_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -57,13 +57,13 @@ Python 3.10 以降が必要です。MCP サーバーには `pip install --upgrad
 
 **コンポーネントとセクション。** 23 のコンポーネントコントラクトが、コントロールの各パーツがどの状態でどのトークンに結び付くか、各状態がどう動くかを定めます。状態の変化は `motion.state` で遷移し、押下は `motion.press.scale` で拡縮し(動きを減らす設定では静止)、タブ、メニュー、セグメンテッドコントロールはひとつのインジケーターをスライドさせます。14 のセクションコントラクト(ヒーロー、料金、FAQ、フッターなど)は、各セクションの役割、スロットに入るコンポーネント、必要な裏付け、スマートフォンでの積み重ね方を定めます。これらで組んだページは写真を使います。インターフェースの断片はあくまで追加のイメージで、写真の代わりにはなりません。
 
-**ページを読むリンター。** 171 のルールの多くは、パース済みの CSS とマークアップに対する検査を伴い、ページ自身のシステムを読み取ります。モーションはそのカーブからタイミングを測り、ディスプレイ見出しの行の高さはエンジンの下限を守らせ、非表示のコントロールはタブ順から外れていなければなりません。`uxskill lint --render` は各ページをヘッドレス Chromium でデスクトップ幅とスマートフォン幅で開いて実際に操作し、表示されない、または切れているフォーカスリング、反応の遅いホバーと押下、Escape 後に失われるフォーカス、動きを減らす設定でもまだ動く押下を検出します。
+**ページを読むリンター。** 180 のルールの多くは、パース済みの CSS とマークアップに対する検査を伴い、ページ自身のシステムを読み取ります。モーションはそのカーブからタイミングを測り、ディスプレイ見出しの行の高さはエンジンの下限を守らせ、非表示のコントロールはタブ順から外れていなければなりません。`uxskill lint --render` は各ページをヘッドレス Chromium でデスクトップ幅とスマートフォン幅で開いて実際に操作し、表示されない、または切れているフォーカスリング、反応の遅いホバーと押下、Escape 後に失われるフォーカス、動きを減らす設定でもまだ動く押下を検出します。
 
 **コマンドを整理。** 25 のスラッシュコマンドが 18 になりました。`/ux-discover` は `--frame` と `--recommend` を、`/ux-design` は `--component`、`--dashboard`、`--from-image` を受け付け、`/ux-polish` はスコアが 90 に達するか 3 ラウンド経つまで lint、修正、再 lint を繰り返し、`/ux-init` は `--stats` を受け付けます。古い 7 つの名前はエイリアスとして引き続き使え、4.1 で廃止されます。[エイリアス](#エイリアス41-で廃止)を参照してください。
 
 **画面別プレイブック。** ランディング、ダッシュボード、コンポーネントのルールは `references/surfaces/` にそれぞれひとつずつのプレイブックとして置かれています。`/ux-design` はモードに応じてちょうどひとつだけを読み込むので、ダッシュボードのビルドがヒーローのルールを読むことはありません。
 
-テスト **13101 件合格**。オフライン。決定論的。LLM は一切呼び出しません。
+テスト **13276 件合格**。オフライン。決定論的。LLM は一切呼び出しません。
 
 ### v3.1 の新機能：ブランドに忠実、レスポンシブ、生き生き
 
@@ -98,7 +98,7 @@ Python 3.10 以降が必要です。MCP サーバーには `pip install --upgrad
 
 ux-skill は AI コーディングツールのための**デザイン知能エンジン**です。Python パッケージとして(`pip install uxskill`)、Claude Code プラグインとして、そして 17 IDE 向けマルチインストーラーとして動作します。エンジンはプロジェクトのブリーフ(業種、オーディエンス、トーン、必須項目、禁止事項、スタック、地域)を取り込み、推奨デザインシステム一式を返します:スタイル、パレット、タイプペア、モーションプリセット、コンポーネント、研究すべきブランド事例、そして守らねばならないアンチパターンのガードレール。推奨は決定論的です、同じ入力は常に同じ出力を生みます。
 
-このプラグインはあなたと AI コーディングツールの間に入ります。Claude Code、Cursor、その他の AI アシスタントに「フィンテックのランディングページを作って」と頼むと、アシスタントはたいてい即興で作り、その結果は 5 秒で AI 生成と見抜かれます(紫から青のグラデーション、等大の 3 枚カード、ディスプレイサイズの Inter、推薦文の「John Doe」、デフォルト 300ms のトランジション、中央寄せのヒーロー、CTA で跳ねる矢印)。ux-skill は即興を**構造化された制約**に置き換えます。`/ux-discover` でブリーフを取り込んでシステムを選び、`/ux-design` でコードを生成し、`/ux-lint` でコミット前に 171 の決定論的な反 AI スロップルールを通過することを確かめます。
+このプラグインはあなたと AI コーディングツールの間に入ります。Claude Code、Cursor、その他の AI アシスタントに「フィンテックのランディングページを作って」と頼むと、アシスタントはたいてい即興で作り、その結果は 5 秒で AI 生成と見抜かれます(紫から青のグラデーション、等大の 3 枚カード、ディスプレイサイズの Inter、推薦文の「John Doe」、デフォルト 300ms のトランジション、中央寄せのヒーロー、CTA で跳ねる矢印)。ux-skill は即興を**構造化された制約**に置き換えます。`/ux-discover` でブリーフを取り込んでシステムを選び、`/ux-design` でコードを生成し、`/ux-lint` でコミット前に 180 の決定論的な反 AI スロップルールを通過することを確かめます。
 
 この README が正典のリファレンスです。すべてのコマンド、すべてのサブエージェント、すべてのデータマニフェスト、すべてのインストール経路、すべてのブランド仕様、すべてのアンチパターンカテゴリ、すべてここに記録されています。Claude Code のデザインプラグインを探している、または Cursor、Windsurf、Codex 向けの AI デザインツールを比較しているなら、これを最初から最後まで読み、[compare.html](https://uxskill.laithjunaidy.com/compare.html) と並べてご覧ください。
 
@@ -113,7 +113,7 @@ ux-skill は AI コーディングツールのための**デザイン知能エ�
 5. [18 のスラッシュコマンド、詳細リファレンス](#18-のスラッシュコマンド詳細リファレンス)
 6. [5 つのサブエージェント](#5-つのサブエージェント)
 7. [12 のデータマニフェスト](#12-のデータマニフェスト)
-8. [171 の反 AI スロップルール、リンター](#171-の反-ai-スロップルールリンター)
+8. [180 の反 AI スロップルール、リンター](#180-の反-ai-スロップルールリンター)
 9. [160 のブランド DESIGN.md 仕様、カテゴリ別](#160-のブランド-designmd-仕様カテゴリ別)
 10. [MCP サーバー、非対称な一手](#mcp-サーバー非対称な一手)
 11. [17 IDE 向けインストーラー](#17-ide-向けインストーラー)
@@ -190,14 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 171,
+#     "anti-patterns": 180,
 #     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-これらの件数を合計すると 1,262 エントリになります。いずれかの件数が 0 を返したら JSON ファイルが欠けているので、[github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues) に issue を立ててください。
+これらの件数を合計すると 1,271 エントリになります。いずれかの件数が 0 を返したら JSON ファイルが欠けているので、[github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues) に issue を立ててください。
 
 ---
 
@@ -215,7 +215,7 @@ ux stats
 | dominikmartn/nothing-design-skill | **2,391** | 単一美学スキル | 1 | - |、| 0 | 0 | 1 |
 | Nutlope/hallmark | **2,164** | 反スロップデザインスキル | 1 | - |、| 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | MD3 コンポーネント + 監査 | 1 | - | (MD3 のみ) | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Python エンジン + 12 マニフェスト + 18 コマンド + 5 サブエージェント + CI リンター** | **18** | **171 の決定論的ルール** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Python エンジン + 12 マニフェスト + 18 コマンド + 5 サブエージェント + CI リンター** | **18** | **180 の決定論的ルール** | **160** | **148** | **57** | **17** |
 
 ### 負けているところ
 
@@ -227,7 +227,7 @@ ux stats
 
 - **コンポーネントライブラリ:** 148 個のドキュメント化されたコンポーネント。解剖、ステート、使用 token、モーション仕様付き。他の 8 つはどれもコンポーネントマニフェストを同梱していません。
 - **モーションプリセット:** 57 個のスタック対応エントリ(Framer Motion、GSAP、CSS)、reduced-motion フォールバック付き。他のどこもモーションマニフェストを同梱していません。
-- **アンチパターンリンター:** 171 個の決定論的ルール、CI で実行し Critical/High で非ゼロ終了。他のどこも決定論的リンターを同梱していません。
+- **アンチパターンリンター:** 180 個の決定論的ルール、CI で実行し Critical/High で非ゼロ終了。他のどこも決定論的リンターを同梱していません。
 - **ブランド仕様:** 160 個の実在 DESIGN.md 仕様(Apple、Stripe、Linear、Figma、Tesla、BMW、Notion、Spotify、Airbnb、Vercel、Supabase、Cursor、Raycast、Claude ほか 146 件)。他のどこもブランドライブラリを同梱していません。
 - **17 IDE 対応:** 同じエンジン、IDE ごとに違う糊。
 - **18 のスラッシュコマンド:** discovery、生成(ページ、コンポーネント、ダッシュボード、画像から)、監査、lint、ポリッシュループ、修正ループ、ケーススタディ、ワークショップ、コピー、モーション、a11y、コンダクター、完全に統合済み。
@@ -251,7 +251,7 @@ ux-skill (package name: uxskill)
 │   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
 │   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
-│   ├── anti-patterns.json             171 rules (CI-safe linter source)
+│   ├── anti-patterns.json             180 rules (CI-safe linter source)
 │   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
 ├── engine/                            Python, the reasoning
@@ -327,9 +327,9 @@ ux-skill (package name: uxskill)
    - **スタック → コンポーネントの互換性 + モーションプリセット** (tech-stacks.json, motion-presets.json)
    - **禁止事項 + 地域 → ガードレール + ブランド事例の候補** (anti-patterns.json, brands/)
 3. **統合。** 決定論的なマージャーが候補を順位付けし、競合を解決し(たとえば必須のダークモードがパレットのモードを決める)、推奨システムをひとつ出力します。
-4. **出力。** 選ばれたスタイル、パレット、タイプペア、上位 5 つのモーションプリセット、上位 12 のコンポーネント、上位 5 つのブランド事例、そして有効な 171 のアンチパターンガードレールすべてを含む JSON ドキュメント。加えて、各選択の理由を説明するブロック。
+4. **出力。** 選ばれたスタイル、パレット、タイプペア、上位 5 つのモーションプリセット、上位 12 のコンポーネント、上位 5 つのブランド事例、そして有効な 180 のアンチパターンガードレールすべてを含む JSON ドキュメント。加えて、各選択の理由を説明するブロック。
 5. **生成。** 後続のコマンド(ページ、コンポーネント、ダッシュボード、画像の各モードの `/ux-design` と `/ux-system`)が推奨を使い、サブエージェントを通じて実際のコードを生成します。
-6. **検証。** `/ux-lint` が生成されたコードを 171 のルールで再スキャンします。CI で Critical/High があれば非ゼロ終了。
+6. **検証。** `/ux-lint` が生成されたコードを 180 のルールで再スキャンします。CI で Critical/High があれば非ゼロ終了。
 
 **v3 での追加。** レコメンダーは `.ux/decisions.jsonl` を使って `engine/decisions/` から候補を並べ替えます(`lint_score >= 80` かつ `user_accepted = true` の決定だけを数え、過去の決定が 3 件未満ならコールドスタートとして安全に扱います)。生成の経路は `engine/synthesizer/` に回すこともできます。これは決定論的な 7 軸コンパイラーで、カタログからテンプレートを選ぶのではなく、ブリーフごとに新しいパレット + タイプ + 余白 + 角丸 + モーションのトークンを生み出します。詳しくは [ブレイン、v3.0 とは何か](#ブレインv30-とは何か) を参照してください。
 
@@ -383,7 +383,7 @@ ux-skill (package name: uxskill)
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **出力:** `.ux/last-discovery.json`(10 フィールドのブリーフ)、`.ux/last-recommendation.json`(選ばれたスタイル、パレット、タイプペア、上位 5 つのモーションプリセット、上位 12 のコンポーネント、上位 5 つのブランド事例、有効な 171 のアンチパターンガードレールすべて、加えて理由)、`--frame` を付けた場合は `.ux/last-frame.json`(`{audience, outcome, hypothesis, success_signal}`)。
+- **出力:** `.ux/last-discovery.json`(10 フィールドのブリーフ)、`.ux/last-recommendation.json`(選ばれたスタイル、パレット、タイプペア、上位 5 つのモーションプリセット、上位 12 のコンポーネント、上位 5 つのブランド事例、有効な 180 のアンチパターンガードレールすべて、加えて理由)、`--frame` を付けた場合は `.ux/last-frame.json`(`{audience, outcome, hypothesis, success_signal}`)。
 - **次に繋がる:** `/ux-design [extra brief]` → 推奨に基づくフロントエンドコード。`/ux-design --component <name>` → 判明した制約に沿ったコンポーネントひとつ。`/ux-system` → 推奨からの完全なデザインシステム。`/ux-lint` → 生成されたコードを検証。
 
 ### 生成
@@ -423,7 +423,7 @@ ux-skill (package name: uxskill)
 
 #### `/ux-lint`：決定論的な正規表現ベースのリンター(LLM なし、CI 安全)
 
-- **何をするか:** あなたのコードに対して 171 のルールを実行します。LLM 呼び出しなし。CI で Critical / High に当たると非ゼロ終了。ソース:`data/anti-patterns.json`。ルールカバレッジ:A11y(45)、コンテンツ(35)、レイアウト(18)、タイポ(16)、モーション(14)、ビジュアル(14)、品質(12)、色(10)、パフォーマンス(5)、デプス(2)。
+- **何をするか:** あなたのコードに対して 180 のルールを実行します。LLM 呼び出しなし。CI で Critical / High に当たると非ゼロ終了。ソース:`data/anti-patterns.json`。ルールカバレッジ:A11y(50)、コンテンツ(38)、レイアウト(18)、タイポ(16)、モーション(15)、ビジュアル(14)、品質(12)、色(10)、パフォーマンス(5)、デプス(2)。
 - **使うタイミング:** プリコミットフック。CI ゲート。`/ux-audit` のコストを払う前の大規模コードベースへの素早い初回パス。どのモードでも `/ux-design` の後の生成検証。
 - **スキップするタイミング:** 修正ループが欲しい(リンターは報告のみ、編集しません、`/ux-polish --fix` か `/ux-fix` にチェーン)。審美的判断が欲しい(`/ux-critique` を使う)。
 - **呼び出し方(slash):** `/ux-lint src/`。
@@ -655,7 +655,7 @@ ux-skill (package name: uxskill)
 
 1. ブリーフ / 推奨(`.ux/` からロード)。
 2. 関連するマニフェストスライス(例:`frontend-engineer` は選定スタイル + パレット + コンポーネントを得る;`motion-engineer` は選定モーションプリセットを得る)。
-3. 171 のアンチパターンガードレール(常に有効)。
+3. 180 のアンチパターンガードレール(常に有効)。
 4. 成功基準(アーティファクトは何を満たすべきか)。
 
 サブエージェントが返すもの:
@@ -770,15 +770,15 @@ ux-skill (package name: uxskill)
 
 各プリセットに reduced-motion バリアントがあります。Framer Motion、GSAP、純 CSS 向けのスタック対応コード。
 
-### `anti-patterns.json`：171 のルール
+### `anti-patterns.json`：180 のルール
 
 | フィールド | 説明 |
 |---|---|
-| `entries` | 171 |
+| `entries` | 180 |
 | `keys per entry` | `id`、`name`、`severity`(critical/high/medium/low)、`category`、`detection`(種類、パターン、フラグ、スコープ、多くのルールではパース済みファイルに対する `post` 検査)、`why`、`fix` |
-| `categories` | A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
+| `categories` | A11y (50), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2) |
 
-ルールの全一覧は [171 の反 AI スロップルール](#171-の反-ai-スロップルールリンター)にあります。
+ルールの全一覧は [180 の反 AI スロップルール](#180-の反-ai-スロップルールリンター)にあります。
 
 ### `landing-patterns.json`：40 のランディングパターン
 
@@ -801,7 +801,7 @@ ux-skill (package name: uxskill)
 
 ---
 
-## 171 の反 AI スロップルール：リンター
+## 180 の反 AI スロップルール：リンター
 
 ux-skill は決定論的なリンターを同梱しています。各ルールはパターンで、多くはパース済みの CSS とマークアップに対する検査を加えるため、一致はルールが示す文脈でのみ数えられます。**LLM なし。** **API なし。** **ネットワークなし。** 一般的な Next.js アプリなら CI で ~200ms で動きます。`--fail-on high` を設定すると、Critical / High の指摘で非ゼロ終了します。
 
@@ -809,7 +809,7 @@ ux-skill は決定論的なリンターを同梱しています。各ルール�
 
 ### カテゴリ別ルール
 
-171 のルールすべてをカテゴリ別、続いて重大度順に並べたカタログは、`data/anti-patterns.json` から[英語版 README](README.md#rules-by-category) に生成されます。ルール ID と名前はリンターが出力するとおりに載っています。ルールカバレッジ:A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2)。
+180 のルールすべてをカテゴリ別、続いて重大度順に並べたカタログは、`data/anti-patterns.json` から[英語版 README](README.md#rules-by-category) に生成されます。ルール ID と名前はリンターが出力するとおりに載っています。ルールカバレッジ:A11y (50), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2)。
 
 ### リンターの使用
 
@@ -1106,7 +1106,7 @@ python3 -m engine.cli.main persist save --project-root .
 | コンポーネント | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | モーションプリセット | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | ブランド仕様 | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| アンチパターンルール | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| アンチパターンルール | **180** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | CI 安全な決定論的リンター | **はい** | いいえ | いいえ | いいえ | いいえ | いいえ | いいえ | いいえ | いいえ |
 | 対応 IDE | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Discovery ゲート | **10 フィールド** | 暗黙 | 暗黙 | 暗黙 | 暗黙 | 暗黙 | 暗黙 | 暗黙 | 暗黙 |

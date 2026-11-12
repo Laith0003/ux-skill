@@ -698,25 +698,31 @@ def emphasis_italic(axes: AxisValues, face: fonts.Face) -> bool:
     return face.italic and character.emphasis_contrast(axes) >= ITALIC_FROM
 
 
-# In dark mode light text on a dark page reads heavier, so a variable face
-# sets it lighter: by DARK_LIGHTER[0] at body size, falling on a log scale
-# to DARK_LIGHTER[1] at DARK_LIGHTER_PX and above, never under the face's
-# lightest weight or DARK_FLOOR. A static face keeps its weights; high
-# contrast keeps its own, heavier weights.
+# In dark mode light text on a dark ground needs equal or more weight, so
+# body and text roles keep their light-mode weight
+# (B88 p.139; B18 p.135-136). Only a display role at DARK_DISPLAY_FROM or heavier, where
+# large light type can read heavy, may set lighter in a variable face: by
+# DARK_LIGHTER[0] at body size, falling on a log scale to DARK_LIGHTER[1] at
+# DARK_LIGHTER_PX and above, never under DARK_DISPLAY_FROM or the face's
+# lightest weight. A static face keeps its weights; high contrast keeps its
+# own, heavier weights.
 DARK_LIGHTER = (40.0, 10.0)
 DARK_LIGHTER_PX = 96.0
-DARK_FLOOR = 300
+DARK_DISPLAY_FROM = 600
 
 
-def dark_weight(weight: int, px: float, face: fonts.Face, body_px: float = BODY_PX) -> int:
-    """The weight a style takes in dark mode at standard contrast: lighter
-    by DARK_LIGHTER in a variable face, in tens, never heavier and never
-    under the face's lightest weight or DARK_FLOOR."""
-    if not face.variable:
+def dark_weight(weight: int, px: float, face: fonts.Face, body_px: float = BODY_PX,
+                display: bool = False) -> int:
+    """The weight a style takes in dark mode at standard contrast: its
+    light-mode weight, except a display role at DARK_DISPLAY_FROM or more in
+    a variable face, which sets lighter by DARK_LIGHTER, in tens, never
+    heavier and never under DARK_DISPLAY_FROM or the face's lightest
+    weight."""
+    if not (display and face.variable and weight >= DARK_DISPLAY_FROM):
         return weight
     t = character.log_position(max(px, body_px), body_px, DARK_LIGHTER_PX)
     less = DARK_LIGHTER[0] + (DARK_LIGHTER[1] - DARK_LIGHTER[0]) * t
-    return min(weight, max(round((weight - less) / 10) * 10, face.weights[0], DARK_FLOOR))
+    return min(weight, max(round((weight - less) / 10) * 10, face.weights[0], DARK_DISPLAY_FROM))
 
 
 def tracking_em(axes: AxisValues, px: float, hero_px: float) -> float:
@@ -761,8 +767,8 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
     composition's, HEADLINE_COLUMNS; 12 when not given) and `words` the
     letters of the page's longest headline word per script, when known
     (FIT_WORD otherwise). With `dark_scheme` (the system builds color, so
-    it has a dark scheme) the styles take lighter weights there
-    (dark_weight)."""
+    it has a dark scheme) text keeps its weight there and only heavy display
+    styles set lighter (dark_weight)."""
     choice = fonts.choose(axes, book_depth)
     columns = GRID_COLUMNS if columns is None else columns
     fit_words = dict(FIT_WORD, **(words or {}))
@@ -801,7 +807,8 @@ def generate_type(axes: AxisValues, arabic: bool = True, body_px: int = BODY_PX,
 
     def dark(role: str, weight: int, rtl: bool) -> int:
         sizes = arabic_sizes_all if rtl and role not in KEEP_FACE else latin
-        return dark_weight(weight, sizes[_step(role, axes) - 1], face_of(role, rtl), body_px)
+        return dark_weight(weight, sizes[_step(role, axes) - 1], face_of(role, rtl), body_px,
+                           display=ROLES[role][1] == "display")
 
     std_dark = {r: dark(r, w, False) if dark_scheme else w for r, w in std.items()}
     rtl_dark = {r: dark(r, in_arabic(r, w) if r not in KEEP_FACE else w, True)

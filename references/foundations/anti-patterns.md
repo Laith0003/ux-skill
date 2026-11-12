@@ -533,9 +533,9 @@ height:\s*100vh\b
 min-height:\s*100vh\b
 ```
 
-Allow `100vh` only when paired with a fallback to `100dvh`.
+Allow `100vh` when the same rule also sets `100svh`, `100lvh` or `100dvh`.
 
-**Better alternative**: Use `100dvh` (dynamic viewport height) which excludes the collapsing UI. Or `min-h-dvh` in Tailwind. Provide a fallback to `100vh` for older browsers.
+**Better alternative**: Use `100svh` (small viewport height) for heroes: it never sits under the toolbars and never jumps. Use `100dvh` only where the section should resize as the toolbars move. In Tailwind, `min-h-svh` or `min-h-dvh`. The viewport unit variants are Baseline widely available since 2025-06-05, so a `100vh` fallback is not needed.
 
 **Severity**: High
 **Mode**: both
@@ -549,7 +549,7 @@ Allow `100vh` only when paired with a fallback to `100dvh`.
 **Example good**:
 
 ```html
-<section class="hero min-h-[100vh] min-h-dvh">
+<section class="hero min-h-svh">
 ```
 
 ---
@@ -597,7 +597,7 @@ Allow `100vh` only when paired with a fallback to `100dvh`.
 
 #### 15. Fixed `100vh` on mobile container
 
-**Why it's bad**: Same root cause as `h-screen` but applied to any container, not just hero. `100vh` on a sticky panel, sidebar, or full-page wrapper causes the same jump-on-scroll issue on iOS Safari. The fix is `100dvh`, which respects the dynamic viewport.
+**Why it's bad**: Same root cause as `h-screen` but applied to any container, not just hero. `100vh` on a sticky panel, sidebar, or full-page wrapper causes the same jump-on-scroll issue on iOS Safari. The fix is `100svh`, or `100dvh` where the panel should follow the toolbars.
 
 **How to detect**:
 
@@ -609,18 +609,17 @@ Allow `100vh` only when paired with a fallback to `100dvh`.
 \b(?:min-h-\[100vh\]|h-\[100vh\])\b
 ```
 
-Flag unless paired with a `100dvh` fallback or applied inside a media query that gates it to desktop.
+Flag unless the rule also sets `100svh`, `100lvh` or `100dvh`, or a media query gates it to desktop.
 
 **Better alternative**:
 
 ```css
 .fullscreen-panel {
-  min-height: 100vh; /* fallback */
-  min-height: 100dvh;
+  min-height: 100svh;
 }
 ```
 
-Or Tailwind: `min-h-[100vh] min-h-dvh`.
+Or Tailwind: `min-h-svh`.
 
 **Severity**: Medium
 **Mode**: both
@@ -635,7 +634,6 @@ Or Tailwind: `min-h-[100vh] min-h-dvh`.
 
 ```css
 .sidebar {
-  height: 100vh;
   height: 100dvh;
 }
 ```

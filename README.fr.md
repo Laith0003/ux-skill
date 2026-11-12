@@ -14,7 +14,7 @@ pip install uxskill
 
 *Avant : du slop SEO générique en photo de banque d'images. Après : un hero avec une vraie photo de chantier sous un voile sombre, un titre éditorial avec un accent ambre, un formulaire de devis dans le hero. Même outil de codage par IA, même prompt, résultat différent quand ux-skill fournit les contraintes.*
 
-> **v4.0, FOUNDATIONS : une seule commande construit un design system complet, contrôlé selon les WCAG, avec l'arabe et la droite à gauche intégrés.** Le plugin UX le plus puissant pour le codage par IA. Un noyau de raisonnement Python avec un synthétiseur déterministe à 7 axes, 12 manifestes JSON interrogeables (84 styles, 176 palettes, 70 appariements typographiques, 148 composants, 184 secteurs, 35 types de graphique, 57 préréglages de motion, 112 lois UX, 171 règles d'anti-patterns, 25 stacks techniques, 160 spécifications de marque), 18 commandes slash, 5 sous-agents, 25 outils MCP et un linter déterministe anti-slop IA. Multi-IDE : se distribue dans Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer et Roo Cline.
+> **v4.0, FOUNDATIONS : une seule commande construit un design system complet, contrôlé selon les WCAG, avec l'arabe et la droite à gauche intégrés.** Le plugin UX le plus puissant pour le codage par IA. Un noyau de raisonnement Python avec un synthétiseur déterministe à 7 axes, 12 manifestes JSON interrogeables (84 styles, 176 palettes, 70 appariements typographiques, 148 composants, 184 secteurs, 35 types de graphique, 57 préréglages de motion, 112 lois UX, 180 règles d'anti-patterns, 25 stacks techniques, 160 spécifications de marque), 18 commandes slash, 5 sous-agents, 25 outils MCP et un linter déterministe anti-slop IA. Multi-IDE : se distribue dans Claude Code, Cursor, Windsurf, GitHub Copilot, Gemini CLI, Codex, Kiro, Cline, Continue, Aider, Zed, JetBrains AI, Pieces, Tabby, Tabnine, CodeWhisperer et Roo Cline.
 
 > **Le nom de marque est `ux-skill`.** Le nom du paquet PyPI / npm reste `uxskill`. Le dépôt GitHub vit à [`Laith0003/ux-skill`](https://github.com/Laith0003/ux-skill).
 
@@ -27,8 +27,8 @@ pip install uxskill
 [![README languages](https://img.shields.io/badge/README-17_languages-cc785c.svg)](#)
 [![Brands](https://img.shields.io/badge/brand_specs-160-cc785c.svg)](data/brands/_index.json)
 [![Components](https://img.shields.io/badge/components-148-cc785c.svg)](data/components.json)
-[![Linter](https://img.shields.io/badge/anti--patterns-171-181715.svg)](data/anti-patterns.json)
-[![Tests](https://img.shields.io/badge/tests-13101_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
+[![Linter](https://img.shields.io/badge/anti--patterns-180-181715.svg)](data/anti-patterns.json)
+[![Tests](https://img.shields.io/badge/tests-13276_passing-cc785c.svg)](https://github.com/Laith0003/ux-skill/actions)
 [![Motion](https://img.shields.io/badge/motion_presets-57-181715.svg)](data/motion-presets.json)
 [![GitHub stars](https://img.shields.io/github/stars/Laith0003/ux-skill?style=social)](https://github.com/Laith0003/ux-skill/stargazers)
 [![PyPI downloads](https://img.shields.io/pypi/dm/uxskill.svg)](https://pypi.org/project/uxskill/)
@@ -57,13 +57,13 @@ Python 3.10 ou plus récent. Pour le serveur MCP, `pip install --upgrade 'uxskil
 
 **Composants et sections.** 23 contrats de composants indiquent quels tokens chaque partie d'un contrôle utilise dans chaque état et comment chaque état s'anime : un changement d'état transite sur `motion.state`, un appui se met à l'échelle sur `motion.press.scale` (et reste immobile en mouvement réduit), et les onglets, menus et contrôles segmentés font glisser un seul indicateur. 14 contrats de sections (hero, tarifs, FAQ, pied de page et les autres) nomment le rôle de chaque section, les composants que prennent ses emplacements, la preuve qu'elle exige et la façon dont elle s'empile sur mobile. Les pages construites avec eux utilisent des photographies ; les fragments d'interface sont une imagerie en plus, jamais un remplacement.
 
-**Un linter qui lit la page.** 171 règles, dont beaucoup ajoutent un contrôle sur le CSS et le balisage analysés, lisent le propre système de la page : le mouvement est minuté d'après sa courbe, la hauteur de ligne des titres display est tenue au plancher du moteur, et un contrôle masqué doit sortir de l'ordre de tabulation. `uxskill lint --render` ouvre chaque page dans Chromium headless en largeur desktop et mobile et la pilote : anneaux de focus invisibles ou rognés, survol et appui qui répondent en retard, focus perdu après Échap, et appui qui bouge encore en mouvement réduit.
+**Un linter qui lit la page.** 180 règles, dont beaucoup ajoutent un contrôle sur le CSS et le balisage analysés, lisent le propre système de la page : le mouvement est minuté d'après sa courbe, la hauteur de ligne des titres display est tenue au plancher du moteur, et un contrôle masqué doit sortir de l'ordre de tabulation. `uxskill lint --render` ouvre chaque page dans Chromium headless en largeur desktop et mobile et la pilote : anneaux de focus invisibles ou rognés, survol et appui qui répondent en retard, focus perdu après Échap, et appui qui bouge encore en mouvement réduit.
 
 **Moins de commandes.** 25 commandes slash deviennent 18. `/ux-discover` prend `--frame` et `--recommend`, `/ux-design` prend `--component`, `--dashboard` et `--from-image`, `/ux-polish` enchaîne lint, fix, re-lint jusqu'à ce que le score atteigne 90 ou que trois tours soient passés, et `/ux-init` prend `--stats`. Les sept anciens noms fonctionnent encore comme alias et disparaissent en 4.1 ; voir [les alias](#alias-retirés-en-41).
 
 **Playbooks de surface.** Les règles landing, dashboard et composant vivent dans `references/surfaces/`, un playbook chacune. `/ux-design` en charge exactement un, choisi selon son mode, si bien qu'une construction de dashboard ne lit jamais les règles du hero.
 
-Tests : **13101 réussis**. Hors ligne. Déterministe. Aucun LLM appelé, jamais.
+Tests : **13276 réussis**. Hors ligne. Déterministe. Aucun LLM appelé, jamais.
 
 ### Nouveau dans la v3.1 : fidèle à la marque, responsive, vivant
 
@@ -98,7 +98,7 @@ Détails complets dans [CHANGELOG.md](CHANGELOG.md#300--2026-05-28--the-brain).
 
 ux-skill est un **moteur d'intelligence de design** pour les outils de codage par IA. Il s'exécute comme paquet Python (`pip install uxskill`), comme plugin Claude Code et comme installateur multi-IDE pour 17 environnements. Le moteur ingère un brief de projet (secteur, audience, ton, indispensables, mouvements interdits, stack, région) et renvoie un système de design recommandé complet : style, palette, paire typographique, préréglages de motion, composants, marques exemplaires à étudier et les garde-fous d'anti-patterns qui doivent tenir. La recommandation est déterministe, la même entrée produit toujours la même sortie.
 
-Le plugin se place entre vous et l'outil de codage par IA. Quand vous demandez à Claude Code, Cursor ou tout autre assistant IA de « construire une landing fintech », l'assistant improvise typiquement, et le résultat se lit comme généré par IA en cinq secondes (dégradés violet-à-bleu, trois cartes égales, Inter en taille display, « John Doe » dans les témoignages, transitions par défaut à 300 ms, hero centré, flèches rebondissantes sur les CTA). ux-skill remplace l'improvisation par des **contraintes structurées** : vous lancez `/ux-discover` pour capturer le brief et choisir le système, `/ux-design` pour générer le code et `/ux-lint` pour vérifier qu'il passe les 171 règles déterministes anti-slop IA avant le commit.
+Le plugin se place entre vous et l'outil de codage par IA. Quand vous demandez à Claude Code, Cursor ou tout autre assistant IA de « construire une landing fintech », l'assistant improvise typiquement, et le résultat se lit comme généré par IA en cinq secondes (dégradés violet-à-bleu, trois cartes égales, Inter en taille display, « John Doe » dans les témoignages, transitions par défaut à 300 ms, hero centré, flèches rebondissantes sur les CTA). ux-skill remplace l'improvisation par des **contraintes structurées** : vous lancez `/ux-discover` pour capturer le brief et choisir le système, `/ux-design` pour générer le code et `/ux-lint` pour vérifier qu'il passe les 180 règles déterministes anti-slop IA avant le commit.
 
 Ce README est la référence canonique. Chaque commande, chaque sous-agent, chaque manifeste de données, chaque chemin d'installation, chaque spécification de marque, chaque catégorie d'anti-pattern, tout est documenté ici. Si vous cherchez un plugin de design pour Claude Code ou comparez des outils de design par IA pour Cursor, Windsurf ou Codex, lisez ceci de bout en bout et [compare.html](https://uxskill.laithjunaidy.com/compare.html) en parallèle.
 
@@ -113,7 +113,7 @@ Ce README est la référence canonique. Chaque commande, chaque sous-agent, chaq
 5. [Les 18 commandes slash, référence détaillée](#les-18-commandes-slash--référence-détaillée)
 6. [Les 5 sous-agents](#les-5-sous-agents)
 7. [Les 12 manifestes de données](#les-12-manifestes-de-données)
-8. [Les 171 règles anti-slop IA, le linter](#les-171-règles-anti-slop-ia--le-linter)
+8. [Les 180 règles anti-slop IA, le linter](#les-180-règles-anti-slop-ia--le-linter)
 9. [Les 160 spécifications de marque DESIGN.md, par catégorie](#les-160-spécifications-de-marque-designmd-par-catégorie)
 10. [Serveur MCP, le coup asymétrique](#serveur-mcp-le-coup-asymétrique)
 11. [L'installateur pour 17 IDEs](#linstallateur-pour-17-ides)
@@ -190,14 +190,14 @@ ux stats
 #     "tech-stacks": 25,
 #     "ux-guidelines": 112,
 #     "motion-presets": 57,
-#     "anti-patterns": 171,
+#     "anti-patterns": 180,
 #     "landing-patterns": 40,
 #     "brands": 160
 #   }
 # }
 ```
 
-Les douze compteurs totalisent 1 262 entrées. Si l'un des compteurs renvoie 0, c'est qu'un fichier JSON manque : ouvrez une issue sur [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
+Les douze compteurs totalisent 1 271 entrées. Si l'un des compteurs renvoie 0, c'est qu'un fichier JSON manque : ouvrez une issue sur [github.com/Laith0003/ux-skill/issues](https://github.com/Laith0003/ux-skill/issues).
 
 ---
 
@@ -215,7 +215,7 @@ Les compteurs d'étoiles ont été vérifiés pour la dernière fois via `gh api
 | dominikmartn/nothing-design-skill | **2 391** | Skill mono-esthétique | 1 | - |, | 0 | 0 | 1 |
 | Nutlope/hallmark | **2 164** | Skill de design anti-slop | 1 | - |, | 0 | 0 | 1 |
 | hamen/material-3-skill | **955** | Composants MD3 + audit | 1 | - |, | 0 | 0 | 1 |
-| **Laith0003/ux-skill (ux-skill)** | **14** | **Moteur Python + 12 manifestes + 18 commandes + 5 sous-agents + linter CI** | **18** | **171 règles déterministes** | **160** | **148** | **57** | **17** |
+| **Laith0003/ux-skill (ux-skill)** | **14** | **Moteur Python + 12 manifestes + 18 commandes + 5 sous-agents + linter CI** | **18** | **180 règles déterministes** | **160** | **148** | **57** | **17** |
 
 ### Où nous perdons
 
@@ -227,7 +227,7 @@ Les compteurs d'étoiles ont été vérifiés pour la dernière fois via `gh api
 
 - **Bibliothèque de composants :** 148 composants documentés avec anatomie, états, tokens utilisés et specs de motion. Aucun des 8 autres ne livre de manifeste de composants.
 - **Préréglages de motion :** 57 entrées prêtes par stack (Framer Motion, GSAP, CSS) avec fallbacks reduced-motion. Aucun des autres ne livre de manifeste de motion.
-- **Linter d'anti-patterns :** 171 règles déterministes, tourne en CI, sort en non-zéro sur Critical/High. Aucun des autres ne livre de linter déterministe.
+- **Linter d'anti-patterns :** 180 règles déterministes, tourne en CI, sort en non-zéro sur Critical/High. Aucun des autres ne livre de linter déterministe.
 - **Specs de marque :** 160 véritables specs DESIGN.md (Apple, Stripe, Linear, Figma, Tesla, BMW, Notion, Spotify, Airbnb, Vercel, Supabase, Cursor, Raycast, Claude et 146 autres). Aucun des autres ne livre de bibliothèque de marques.
 - **17 IDEs pris en charge :** même moteur, glue différente par IDE.
 - **18 commandes slash :** discovery, génération (pages, composants, dashboards, à partir d'une image), audit, lint, boucle de polish, boucle de fix, étude de cas, atelier, copy, motion, a11y, conductor, intégrées de bout en bout.
@@ -251,7 +251,7 @@ ux-skill (package name: uxskill)
 │   ├── tech-stacks.json               25 stacks (Next, Astro, SvelteKit, Blade...)
 │   ├── ux-guidelines.json             112 named UX laws (Hick, Fitts, Miller...)
 │   ├── motion-presets.json            57 motion presets (entry, exit, hover...)
-│   ├── anti-patterns.json             171 rules (CI-safe linter source)
+│   ├── anti-patterns.json             180 rules (CI-safe linter source)
 │   └── brands/*.json                  160 brand DESIGN specs + _index.json
 │
 ├── engine/                            Python, the reasoning
@@ -327,9 +327,9 @@ ux-skill (package name: uxskill)
    - **Stack → compatibilité des composants + préréglages de motion** (tech-stacks.json, motion-presets.json)
    - **Interdits + région → garde-fous + shortlist de marques exemplaires** (anti-patterns.json, brands/)
 3. **Fusion.** Un fusionneur déterministe classe les candidats, résout les conflits (par ex. un mode sombre indispensable impose le mode de la palette) et émet un seul système recommandé.
-4. **Sortie.** Un document JSON avec le style choisi, la palette, la paire typographique, les 5 meilleurs préréglages de motion, les 12 meilleurs composants, les 5 meilleures marques exemplaires et les 171 garde-fous d'anti-patterns actifs. Plus un bloc de justification qui explique chaque choix.
+4. **Sortie.** Un document JSON avec le style choisi, la palette, la paire typographique, les 5 meilleurs préréglages de motion, les 12 meilleurs composants, les 5 meilleures marques exemplaires et les 180 garde-fous d'anti-patterns actifs. Plus un bloc de justification qui explique chaque choix.
 5. **Génération.** Les commandes en aval (`/ux-design` dans ses modes page, composant, dashboard et image, et `/ux-system`) consomment la recommandation pour générer du vrai code via les sous-agents.
-6. **Vérification.** `/ux-lint` rescanne le code généré au regard des 171 règles. Sort en non-zéro sur Critical/High en CI.
+6. **Vérification.** `/ux-lint` rescanne le code généré au regard des 180 règles. Sort en non-zéro sur Critical/High en CI.
 
 **Apports de la v3.** Le recommandeur re-classe désormais les candidats depuis `engine/decisions/` en s'appuyant sur `.ux/decisions.jsonl` (seules comptent les décisions avec `lint_score >= 80` ET `user_accepted = true` ; sûr au démarrage à froid en dessous de 3 antécédents). Le chemin de génération peut passer par `engine/synthesizer/`, un compilateur déterministe à 7 axes qui produit pour chaque brief de nouveaux tokens de palette + typographie + espacement + rayon + motion au lieu de choisir des templates dans un catalogue. Détails dans [Le cerveau, ce qu'est la v3.0](#le-cerveau-ce-quest-la-v30).
 
@@ -383,7 +383,7 @@ Les commandes sont regroupées en sept familles : **amorçage & inventaire**, **
     --stack=nextjs-15-app-router \
     --region=mena
   ```
-- **Sortie :** `.ux/last-discovery.json` (le brief à 10 champs), `.ux/last-recommendation.json` (style choisi, palette, paire typographique, 5 meilleurs préréglages de motion, 12 meilleurs composants, 5 meilleures marques exemplaires, les 171 garde-fous d'anti-patterns actifs, plus justification) et, avec `--frame`, `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
+- **Sortie :** `.ux/last-discovery.json` (le brief à 10 champs), `.ux/last-recommendation.json` (style choisi, palette, paire typographique, 5 meilleurs préréglages de motion, 12 meilleurs composants, 5 meilleures marques exemplaires, les 180 garde-fous d'anti-patterns actifs, plus justification) et, avec `--frame`, `.ux/last-frame.json` (`{audience, outcome, hypothesis, success_signal}`).
 - **Enchaîne avec :** `/ux-design [extra brief]` → code frontend ancré sur la recommandation. `/ux-design --component <name>` → un composant aligné sur les contraintes découvertes. `/ux-system` → design system complet à partir de la recommandation. `/ux-lint` → vérifier le code généré.
 
 ### Génération
@@ -423,7 +423,7 @@ Les commandes sont regroupées en sept familles : **amorçage & inventaire**, **
 
 #### `/ux-lint`: linter déterministe à base de regex (sans LLM, compatible CI)
 
-- **Quoi :** Lance 171 règles sur votre code. Aucun appel LLM. Sort en non-zéro sur Critical / High en CI. Source : `data/anti-patterns.json`. Les règles couvrent A11y (45), Contenu (35), Layout (18), Typographie (16), Motion (14), Visuel (14), Qualité (12), Couleur (10), Performance (5), Profondeur (2).
+- **Quoi :** Lance 180 règles sur votre code. Aucun appel LLM. Sort en non-zéro sur Critical / High en CI. Source : `data/anti-patterns.json`. Les règles couvrent A11y (50), Contenu (38), Layout (18), Typographie (16), Motion (15), Visuel (14), Qualité (12), Couleur (10), Performance (5), Profondeur (2).
 - **Quand l'utiliser :** Hook pre-commit. Porte de CI. Première passe rapide sur une grosse codebase avant de payer le coût d'`/ux-audit`. Après `/ux-design` dans n'importe quel mode pour vérifier la génération.
 - **Quand passer :** Vous voulez une boucle de fix (le linter rapporte, il n'édite pas, enchaînez sur `/ux-polish --fix` ou `/ux-fix`). Vous voulez un jugement de goût (utilisez `/ux-critique`).
 - **Invocation (slash) :** `/ux-lint src/`.
@@ -655,7 +655,7 @@ Quand une commande dépêche un sous-agent, elle passe :
 
 1. Le brief / la recommandation (chargés depuis `.ux/`).
 2. La tranche de manifeste pertinente (par ex. `frontend-engineer` reçoit le style + la palette + les composants choisis ; `motion-engineer` reçoit les préréglages de motion choisis).
-3. Les 171 garde-fous d'anti-patterns (toujours actifs).
+3. Les 180 garde-fous d'anti-patterns (toujours actifs).
 4. Un critère de succès (ce que l'artefact doit faire).
 
 Les sous-agents renvoient :
@@ -770,15 +770,15 @@ Utilisé par `/ux-audit` (scoring à 6 lentilles) et `/ux-critique` (ancre de go
 
 Chaque préréglage a une variante reduced-motion. Code prêt par stack pour Framer Motion, GSAP et CSS pur.
 
-### `anti-patterns.json` : 171 règles
+### `anti-patterns.json` : 180 règles
 
 | Champ | Description |
 |---|---|
-| `entries` | 171 |
+| `entries` | 180 |
 | `keys per entry` | `id`, `name`, `severity` (critical/high/medium/low), `category`, `detection` (type, motif, flags, portée et, pour beaucoup de règles, un contrôle `post` sur le fichier analysé), `why`, `fix` |
-| `categories` | A11y (45), Contenu (35), Layout (18), Typographie (16), Motion (14), Visuel (14), Qualité (12), Couleur (10), Performance (5), Profondeur (2) |
+| `categories` | A11y (50), Contenu (38), Layout (18), Typographie (16), Motion (15), Visuel (14), Qualité (12), Couleur (10), Performance (5), Profondeur (2) |
 
-La liste complète des règles se trouve dans [Les 171 règles anti-slop IA](#les-171-règles-anti-slop-ia--le-linter).
+La liste complète des règles se trouve dans [Les 180 règles anti-slop IA](#les-180-règles-anti-slop-ia--le-linter).
 
 ### `landing-patterns.json`: 40 modèles de landing page
 
@@ -801,7 +801,7 @@ Liste complète dans [Les 160 spécifications DESIGN.md de marque](#les-160-spé
 
 ---
 
-## Les 171 règles anti-slop IA : le linter
+## Les 180 règles anti-slop IA : le linter
 
 ux-skill livre un linter déterministe : chaque règle est un motif, et beaucoup ajoutent un contrôle sur le CSS et le balisage analysés, si bien qu'une correspondance ne compte que dans le contexte qu'elle nomme. **Pas de LLM.** **Pas d'API.** **Pas de réseau.** Tourne en CI en ~200 ms sur une app Next.js typique. Sort en non-zéro sur les constats Critical / High quand `--fail-on high` est défini.
 
@@ -809,7 +809,7 @@ Les règles proviennent de `data/anti-patterns.json` (v2, préféré) avec `refe
 
 ### Règles par catégorie
 
-Le catalogue complet des 171 règles, par catégorie puis par sévérité, est généré depuis `data/anti-patterns.json` dans le [README anglais](README.md#rules-by-category) ; les identifiants et les noms des règles y figurent tels que le linter les affiche. Les règles couvrent A11y (45), Content (35), Layout (18), Typography (16), Motion (14), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
+Le catalogue complet des 180 règles, par catégorie puis par sévérité, est généré depuis `data/anti-patterns.json` dans le [README anglais](README.md#rules-by-category) ; les identifiants et les noms des règles y figurent tels que le linter les affiche. Les règles couvrent A11y (50), Content (38), Layout (18), Typography (16), Motion (15), Visual (14), Quality (12), Color (10), Performance (5), Depth (2).
 
 ### Utilisation du linter
 
@@ -1106,7 +1106,7 @@ Table récapitulative courte. La comparaison complète côte à côte est sur [u
 | Composants | **148** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | (MD3) |
 | Préréglages motion | **57** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Specs de marque | **160** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| Règles d'anti-patterns | **171** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Règles d'anti-patterns | **180** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | Linter déterministe compatible CI | **oui** | non | non | non | non | non | non | non | non |
 | IDEs pris en charge | **17** | 18 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Porte de discovery | **10 champs** | implicite | implicite | implicite | implicite | implicite | implicite | implicite | implicite |

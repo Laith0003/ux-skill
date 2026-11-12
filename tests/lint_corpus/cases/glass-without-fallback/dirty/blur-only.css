@@ -1,5 +1,5 @@
-/* A blur with nothing behind it: where backdrop-filter is not drawn, the
-   panel is fully transparent and the text under it shows through. */
+/* A blur with no background: the panel is as light or as dark as the
+   content scrolling behind it, so its text contrast is left to chance. */
 .panel {
   border: 1px solid rgb(0 0 0 / 0.1);
   backdrop-filter: blur(16px);

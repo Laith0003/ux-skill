@@ -1,0 +1,85 @@
+ux-bench corpus: third-party notices
+
+The pages in this folder were captured from openly licensed sources for
+measuring ux-skill's linter. Each page's source, licence and attribution are
+in bench/manifest.json. Every script element, inline and external, was
+removed from the stored pages, so no stored page loads or runs code; inline
+event-handler attributes and javascript: links remain only as markup.
+Images and web fonts were not stored. Logos and crests a licence excludes
+were removed. The pages generated for the bench
+(a-gen-*) are part of this repository and under its MIT License.
+
+-----------------------------------------------------------------------------
+MIT-licensed sources
+-----------------------------------------------------------------------------
+
+The following are used under the MIT License, reproduced once below.
+
+- Bootstrap example pages and stylesheets (d-bs-*; bootstrap.min.css,
+  bootstrap.rtl.min.css): Copyright (c) 2011-2025 The Bootstrap Authors.
+  https://getbootstrap.com. Bootstrap's documentation text is under
+  CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/).
+- Bootstrap Icons stylesheet (bootstrap-icons.css):
+  Copyright (c) 2019-2024 The Bootstrap Authors. https://icons.getbootstrap.com
+- Start Bootstrap themes (d-sb-*): Copyright (c) 2013-2023 Start Bootstrap LLC.
+  https://startbootstrap.com
+- GOV.UK Frontend code in the GOV.UK pages (d-uk-*):
+  Copyright (c) 2018 Government Digital Service.
+  https://github.com/alphagov/govuk-frontend
+- Font Awesome Free stylesheet (all.min.css): code Copyright (c) Fonticons, Inc.
+  under MIT; Font Awesome fonts are under the SIL Open Font License 1.1 and
+  icons under CC BY 4.0 (https://fontawesome.com/license/free). No fonts or
+  icon files are stored here.
+- jQuery UI stylesheet (jquery-ui-1.10.3.custom.min.css):
+  Copyright jQuery Foundation and other contributors. https://jqueryui.com
+- SimpleLightbox stylesheet (simpleLightbox.min.css): Copyright (c) the
+  SimpleLightbox authors. https://www.npmjs.com/package/simplelightbox
+
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-----------------------------------------------------------------------------
+GOV.UK content (d-uk-*)
+-----------------------------------------------------------------------------
+
+Contains public sector information licensed under the Open Government
+Licence v3.0. https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
+The OGL does not cover departmental or public sector logos and crests; the
+GOV.UK header logo and footer crown were removed from every stored page.
+Personal data and third-party rights on the pages are outside the OGL.
+
+-----------------------------------------------------------------------------
+US federal pages (d-us-*), including the U.S. Web Design System
+-----------------------------------------------------------------------------
+
+Works of the United States Government are not subject to copyright in the
+United States (17 U.S.C. 105). The U.S. Web Design System code is in the
+public domain in the United States and dedicated worldwide under CC0 1.0
+(https://creativecommons.org/publicdomain/zero/1.0/). Third-party content on
+these pages keeps its own rights.
+
+-----------------------------------------------------------------------------
+HTML5 UP templates (d-h5-*)
+-----------------------------------------------------------------------------
+
+Templates by HTML5 UP (https://html5up.net), used under the Creative Commons
+Attribution 3.0 License (https://creativecommons.org/licenses/by/3.0/;
+https://html5up.net/license). Demo images were not stored. The stored pages
+keep the template's own credit lines.

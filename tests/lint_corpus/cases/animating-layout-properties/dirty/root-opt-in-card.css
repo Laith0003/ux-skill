@@ -1,0 +1,4 @@
+/* Opting the page into keyword sizes does not excuse a card that grows
+   its height in flow. */
+:root { interpolate-size: allow-keywords; }
+.card { transition: height 300ms ease; }

@@ -1,0 +1,61 @@
+{
+ "page": "d-bs-cover",
+ "findings": [
+  {
+   "key": "d-bs-cover|render|state-answers-late|d-bs-cover/index.html|0|5b5262dca4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-cover/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-cover|static|body-text-shadow-on-prose|_css/b377b53d01bd-cover.css|19|9734fe114e#1",
+   "pass": "static",
+   "rule": "body-text-shadow-on-prose",
+   "severity": "medium",
+   "file": "_css/b377b53d01bd-cover.css",
+   "line": 19
+  },
+  {
+   "key": "d-bs-cover|static|generic-cta-text|d-bs-cover/index.html|8|fbe656384d#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-bs-cover/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-cover|static|href-empty-hash|d-bs-cover/index.html|8|fbe656384d#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-cover/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-cover|static|imagery-mandatory-missing|d-bs-cover/index.html|1|e3014baa98#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "d-bs-cover/index.html",
+   "line": 1
+  },
+  {
+   "key": "d-bs-cover|static|inline-svg-no-aria|d-bs-cover/index.html|2|5a91abc968#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-cover/index.html",
+   "line": 2
+  },
+  {
+   "key": "d-bs-cover|static|text-ink-at-low-alpha|_css/b377b53d01bd-cover.css|34|4b389c38c5#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/b377b53d01bd-cover.css",
+   "line": 34
+  }
+ ]
+}

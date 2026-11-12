@@ -1,0 +1,653 @@
+{
+ "page": "d-sb-sb-admin-2",
+ "findings": [
+  {
+   "key": "d-sb-sb-admin-2|render|accent-text-low-contrast|d-sb-sb-admin-2/index.html|384|f2256c6f9e#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 384
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|accent-text-low-contrast|d-sb-sb-admin-2/index.html|472|dab228cac5#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 472
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|image-broken|d-sb-sb-admin-2/index.html|147|85117c7887#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 147
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|image-broken|d-sb-sb-admin-2/index.html|334|13f9a3c84d#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 334
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|image-broken|d-sb-sb-admin-2/index.html|664|87e2874ca4#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 664
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|state-answers-late|d-sb-sb-admin-2/index.html|0|06fa37f580#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|state-answers-late|d-sb-sb-admin-2/index.html|0|e982f0065f#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|state-answers-late|d-sb-sb-admin-2/index.html|0|a7e9ff0701#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|text-low-contrast|d-sb-sb-admin-2/index.html|149|06fa37f580#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 149
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|text-low-contrast|d-sb-sb-admin-2/index.html|216|74c7883ca3#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 216
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|text-low-contrast|d-sb-sb-admin-2/index.html|333|5bdc89fb82#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 333
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|text-low-contrast|d-sb-sb-admin-2/index.html|371|e982f0065f#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 371
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|text-low-contrast|d-sb-sb-admin-2/index.html|381|a6e1638b96#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 381
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|text-low-contrast|d-sb-sb-admin-2/index.html|591|13d422c979#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 591
+  },
+  {
+   "key": "d-sb-sb-admin-2|render|text-low-contrast|d-sb-sb-admin-2/index.html|639|2994e69fa4#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 639
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|animated-grain-noise-no-perf-class|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "animated-grain-noise-no-perf-class",
+   "severity": "low",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|animating-layout-properties|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|animation-duration-too-long|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "animation-duration-too-long",
+   "severity": "medium",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|button-no-type|d-sb-sb-admin-2/index.html|142|5ffa41c3fa#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 142
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|button-no-type|d-sb-sb-admin-2/index.html|165|b0d8d3009c#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 165
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|cta-arrow-rightward-bouncing|d-sb-sb-admin-2/index.html|671|10ff5073c6#1",
+   "pass": "static",
+   "rule": "cta-arrow-rightward-bouncing",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 671
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|dark-text-on-dark-card|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "dark-text-on-dark-card",
+   "severity": "high",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|decorative-accent-ruler|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "decorative-accent-ruler",
+   "severity": "high",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|focusable-at-opacity-zero|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|focusable-inside-aria-hidden|d-sb-sb-admin-2/index.html|722|723e87700d#1",
+   "pass": "static",
+   "rule": "focusable-inside-aria-hidden",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 722
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|full-viewport-width-overflow|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|h-screen-no-dvh-fallback|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|61|9030121590#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 61
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|77|2986119c0d#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 77
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|104|7d533b0f93#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 104
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|188|295aa6ce77#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 188
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|212|dcb6f091aa#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 212
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|224|d483f77e2e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 224
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|235|d483f77e2e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 235
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|246|d483f77e2e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 246
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|257|fa9bbb5248#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 257
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|263|621fe31084#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 263
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|275|d483f77e2e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 275
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|287|d483f77e2e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 287
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|299|d483f77e2e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 299
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|311|d483f77e2e#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 311
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|323|a28e17be73#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 323
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|331|fabc33268c#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 331
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|340|648e6bf9f1#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 340
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|344|648e6bf9f1#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 344
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|348|648e6bf9f1#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 348
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|353|f643866642#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 353
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|371|0eceefe992#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 371
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|474|697da49622#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 474
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|481|c56edec1de#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 481
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|482|161c04d0cd#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 482
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|484|6e9698020d#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 484
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|505|697da49622#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 505
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|512|c56edec1de#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 512
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|513|161c04d0cd#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 513
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|href-empty-hash|d-sb-sb-admin-2/index.html|515|6e9698020d#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 515
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|img-no-alt|d-sb-sb-admin-2/index.html|334|08df694122#1",
+   "pass": "static",
+   "rule": "img-no-alt",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 334
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|img-no-dimensions|d-sb-sb-admin-2/index.html|147|6b84763462#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 147
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|img-no-dimensions|d-sb-sb-admin-2/index.html|277|5aa55f4acd#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 277
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|img-no-dimensions|d-sb-sb-admin-2/index.html|289|678c5a8d3e#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 289
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|img-no-dimensions|d-sb-sb-admin-2/index.html|301|b6013a08fd#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 301
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|img-no-dimensions|d-sb-sb-admin-2/index.html|313|f89205a9e2#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 313
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|img-no-dimensions|d-sb-sb-admin-2/index.html|334|08df694122#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 334
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|img-no-dimensions|d-sb-sb-admin-2/index.html|664|0f8322e858#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 664
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|infinite-animation-without-reduced-motion|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "infinite-animation-without-reduced-motion",
+   "severity": "high",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|inline-style-attribute|d-sb-sb-admin-2/index.html|428|8d4142080e#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 428
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|inline-style-attribute|d-sb-sb-admin-2/index.html|555|33376f29db#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 555
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|inline-style-attribute|d-sb-sb-admin-2/index.html|561|ba6e8b166e#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 561
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|inline-style-attribute|d-sb-sb-admin-2/index.html|567|11169cedf0#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 567
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|inline-style-attribute|d-sb-sb-admin-2/index.html|573|33acac875b#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 573
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|inline-style-attribute|d-sb-sb-admin-2/index.html|579|e2250b8876#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 579
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|inline-style-attribute|d-sb-sb-admin-2/index.html|664|0f8322e858#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 664
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|loader-spinner-border-default|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "loader-spinner-border-default",
+   "severity": "low",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|nav-equal-hamburger-desktop|d-sb-sb-admin-2/index.html|474|697da49622#1",
+   "pass": "static",
+   "rule": "nav-equal-hamburger-desktop",
+   "severity": "low",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 474
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|nav-equal-hamburger-desktop|d-sb-sb-admin-2/index.html|505|697da49622#1",
+   "pass": "static",
+   "rule": "nav-equal-hamburger-desktop",
+   "severity": "low",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 505
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|outline-none-no-focus-visible|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|target-blank-no-noopener|d-sb-sb-admin-2/index.html|667|ee0c9b9768#1",
+   "pass": "static",
+   "rule": "target-blank-no-noopener",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 667
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|target-blank-no-noopener|d-sb-sb-admin-2/index.html|671|10ff5073c6#1",
+   "pass": "static",
+   "rule": "target-blank-no-noopener",
+   "severity": "high",
+   "file": "d-sb-sb-admin-2/index.html",
+   "line": 671
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|text-align-justify-web|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "text-align-justify-web",
+   "severity": "low",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|text-ink-at-low-alpha|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "text-ink-at-low-alpha",
+   "severity": "high",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  },
+  {
+   "key": "d-sb-sb-admin-2|static|transition-duration-500ms-or-longer|_css/0832dfb004ca-sb-admin-2.min.css|10|71c3a72cef#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/0832dfb004ca-sb-admin-2.min.css",
+   "line": 10
+  }
+ ]
+}

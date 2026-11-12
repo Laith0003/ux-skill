@@ -86,7 +86,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 ### Pattern: Cinematic scroll entry (premium)
 **Use when**: High-end marketing surfaces where motion is part of the experience.
 **Anti-pattern**: Same fade-up everywhere on every section, with no escalation.
-**How**: Combine `translate-y-16`, `blur-md`, `opacity-0` resolving to `translate-y-0`, `blur-0`, `opacity-100` over 800ms or longer. Apply only to hero and feature deep-dives; reserve for moments that earn the runtime. Drop the blur portion under `prefers-reduced-motion: reduce`.
+**How**: Combine `translate-y-16`, `blur-md`, `opacity-0` resolving to `translate-y-0`, `blur-0`, `opacity-100` over 600 to 1000ms, never longer: one-shot motion past 1 second reads as waiting (B42 p.73-76; B26 p.297). Apply only to hero and feature deep-dives; reserve for moments that earn the runtime. Drop the blur portion under `prefers-reduced-motion: reduce`.
 
 ### Pattern: Staggered list orchestration
 **Use when**: Lists, grids, bento cards entering the viewport.
@@ -116,7 +116,7 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 ### Pattern: Animated number counter
 **Use when**: Hero stats, dashboard metrics that benefit from the count-up effect.
 **Anti-pattern**: Counter that ticks endlessly, or that overshoots and settles.
-**How**: Tick from 0 to target over 800 to 1500ms with `ease-out`. Triggers once on enter view, not on every scroll. Ends exactly on the target number with no settling jitter. Use sparingly: 2 to 3 counters max per section.
+**How**: Tick from 0 to target over 600 to 1000ms with `ease-out`. Triggers once on enter view, not on every scroll. Ends exactly on the target number with no settling jitter. Use sparingly: 2 to 3 counters max per section.
 
 ### Pattern: Infinite logo marquee
 **Use when**: Customer logo strips that need to feel alive without forcing attention.
@@ -198,11 +198,11 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - Page transition: the system's `motion.page`, 300 to 600ms; an opt-in treatment that drops to a cut under reduced motion
 - Scroll-triggered reveal: the system's `motion.reveal`, 200 to 450ms by the brand
 - Entrance: the system's `motion.arrive`, 350 to 800ms, half done within 140ms
-- Number counter: 800 to 1500ms
-- Stat ticker on enter: 800 to 1500ms with ease-out
+- Number counter: 600 to 1000ms
+- Stat ticker on enter: 600 to 1000ms with ease-out
 - Logo marquee full loop: 20 to 60 seconds, with a pause control and stopped under reduced motion
 - Ambient background motion: 4 to 8 second loops, stopped under reduced motion; anything moving more than 5 seconds beside other content gets a pause control (2.2.2)
-- Brand mark on first load: 600 to 1200ms (skip on return visits)
+- Brand mark on first load: 600 to 1000ms (skip on return visits)
 - Exit duration: 60 to 70% of enter duration
 
 ### Easing curves
@@ -285,9 +285,9 @@ For motion principles beyond the engine choice (timing, easing, restraint), see 
 - DeviceOrientation / DeviceMotion APIs for tilt or parallax (cursor-only via pointer events)
 - Custom mouse cursors (accessibility hostile, performance hit)
 - Looping animations on brand wordmark in nav (once on load, then static)
-- Carousels under 4 seconds per slide
+- Carousels that advance on their own. Default to manual advance; if a carousel must rotate, it starts paused under reduced motion and has a visible pause control, since anything that moves for more than 5 seconds beside other content must be pausable (WCAG 2.2 SC 2.2.2)
 - Auto-rotating carousels with manual pagination dots
-- Animation durations under 100ms or over 1500ms (other than ambient loops)
+- One-shot animation durations under 100ms or over 1000ms (ambient loops excepted)
 
 ### Motion library defaults (when present)
 - Spring physics: `duration: 0.35, bounce: 0.2`, the role's duration and the brand's overshoot

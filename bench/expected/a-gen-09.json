@@ -1,0 +1,293 @@
+{
+ "page": "a-gen-09",
+ "findings": [
+  {
+   "key": "a-gen-09|render|accent-text-low-contrast|a-gen-09/index.html|94|d08ae42898#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 94
+  },
+  {
+   "key": "a-gen-09|render|accent-text-low-contrast|a-gen-09/index.html|95|8d8d0e71ef#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 95
+  },
+  {
+   "key": "a-gen-09|render|input-text-zooms|a-gen-09/index.html|0|140f86aae5#1",
+   "pass": "render",
+   "rule": "input-text-zooms",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-09|render|input-text-zooms|a-gen-09/index.html|0|81448fe273#1",
+   "pass": "render",
+   "rule": "input-text-zooms",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-09|render|state-answers-late|a-gen-09/index.html|0|afe17203b9#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-09|render|text-low-contrast|a-gen-09/index.html|65|d3249fc6a6#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 65
+  },
+  {
+   "key": "a-gen-09|render|text-low-contrast|a-gen-09/index.html|86|398941b69d#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 86
+  },
+  {
+   "key": "a-gen-09|render|text-low-contrast|a-gen-09/index.html|105|0eb7752ae1#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 105
+  },
+  {
+   "key": "a-gen-09|static|button-no-type|a-gen-09/index.html|73|4d78dc25bd#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 73
+  },
+  {
+   "key": "a-gen-09|static|button-no-type|a-gen-09/index.html|81|13c7188a51#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 81
+  },
+  {
+   "key": "a-gen-09|static|button-no-type|a-gen-09/index.html|82|6e4ecbceea#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 82
+  },
+  {
+   "key": "a-gen-09|static|button-no-type|a-gen-09/index.html|83|2b5f4ce327#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 83
+  },
+  {
+   "key": "a-gen-09|static|button-no-type|a-gen-09/index.html|123|448c936b93#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 123
+  },
+  {
+   "key": "a-gen-09|static|emoji-in-ui|a-gen-09/index.html|62|4c45266404#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 62
+  },
+  {
+   "key": "a-gen-09|static|emoji-in-ui|a-gen-09/index.html|77|91eed4af24#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 77
+  },
+  {
+   "key": "a-gen-09|static|emoji-in-ui|a-gen-09/index.html|90|61696a4d83#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 90
+  },
+  {
+   "key": "a-gen-09|static|emoji-in-ui|a-gen-09/index.html|101|d88b49e1c8#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 101
+  },
+  {
+   "key": "a-gen-09|static|emoji-in-ui|a-gen-09/index.html|114|d27db10e96#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 114
+  },
+  {
+   "key": "a-gen-09|static|focusable-at-opacity-zero|a-gen-09/index.html|42|658300ca1d#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 42
+  },
+  {
+   "key": "a-gen-09|static|href-empty-hash|a-gen-09/index.html|55|b986c3e7be#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 55
+  },
+  {
+   "key": "a-gen-09|static|href-empty-hash|a-gen-09/index.html|94|e5d7cb07a3#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 94
+  },
+  {
+   "key": "a-gen-09|static|href-empty-hash|a-gen-09/index.html|95|51161be020#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 95
+  },
+  {
+   "key": "a-gen-09|static|href-empty-hash|a-gen-09/index.html|110|c58bad5dba#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 110
+  },
+  {
+   "key": "a-gen-09|static|imagery-mandatory-missing|a-gen-09/index.html|1|d1848aa7b5#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 1
+  },
+  {
+   "key": "a-gen-09|static|inline-style-attribute|a-gen-09/index.html|73|4d78dc25bd#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 73
+  },
+  {
+   "key": "a-gen-09|static|inline-style-attribute|a-gen-09/index.html|94|e5d7cb07a3#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 94
+  },
+  {
+   "key": "a-gen-09|static|inline-style-attribute|a-gen-09/index.html|95|51161be020#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 95
+  },
+  {
+   "key": "a-gen-09|static|inline-style-attribute|a-gen-09/index.html|110|c58bad5dba#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 110
+  },
+  {
+   "key": "a-gen-09|static|inline-style-attribute|a-gen-09/index.html|122|1d30f43106#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 122
+  },
+  {
+   "key": "a-gen-09|static|repeated-action-same-name|a-gen-09/index.html|81|13c7188a51#1",
+   "pass": "static",
+   "rule": "repeated-action-same-name",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 81
+  },
+  {
+   "key": "a-gen-09|static|repeated-action-same-name|a-gen-09/index.html|94|e5d7cb07a3#1",
+   "pass": "static",
+   "rule": "repeated-action-same-name",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 94
+  },
+  {
+   "key": "a-gen-09|static|select-without-label|a-gen-09/index.html|70|3e98ac8b7d#1",
+   "pass": "static",
+   "rule": "select-without-label",
+   "severity": "high",
+   "file": "a-gen-09/index.html",
+   "line": 70
+  },
+  {
+   "key": "a-gen-09|static|timing-300ms-default|a-gen-09/index.html|24|7ac323f2b5#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "a-gen-09/index.html",
+   "line": 24
+  },
+  {
+   "key": "a-gen-09|static|timing-300ms-default|a-gen-09/index.html|43|67ac6a8850#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "a-gen-09/index.html",
+   "line": 43
+  },
+  {
+   "key": "a-gen-09|static|timing-300ms-default|a-gen-09/index.html|44|cd4200cfeb#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "a-gen-09/index.html",
+   "line": 44
+  },
+  {
+   "key": "a-gen-09|static|transition-property-all|a-gen-09/index.html|24|7ac323f2b5#1",
+   "pass": "static",
+   "rule": "transition-property-all",
+   "severity": "medium",
+   "file": "a-gen-09/index.html",
+   "line": 24
+  }
+ ]
+}

@@ -73,6 +73,17 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/bin/ux-complaints-hook.py\"",
+            "timeout": 10
+          }
+        ]
+      }
     ]
   }
 }

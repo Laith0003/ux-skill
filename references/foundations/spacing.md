@@ -77,7 +77,7 @@
 ### Pattern: Z-index scale
 **Use when**: Layering sticky nav, modals, drawers, tooltips, toasts.
 **Anti-pattern**: `z-50`, `z-[9999]`, `z-[99999]` spammed arbitrarily.
-**How**: Document a scale and stick to it:
+**How**: Put dialogs, popovers, menus and toasts in the top layer first (`<dialog>` with `showModal()`, the `popover` attribute): the top layer sits above every z-index, so those layers need no number at all. For what stays in the page, document a scale and stick to it:
 - 0: default flow
 - 10: sticky elements (nav, sticky table headers)
 - 20: dropdowns, popovers

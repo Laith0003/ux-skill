@@ -1,0 +1,229 @@
+{
+ "page": "a-gen-02",
+ "findings": [
+  {
+   "key": "a-gen-02|render|accent-text-low-contrast|a-gen-02/index.html|69|9071d7d45d#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-02/index.html",
+   "line": 69
+  },
+  {
+   "key": "a-gen-02|render|focus-obscured|a-gen-02/index.html|80|afe17203b9#1",
+   "pass": "render",
+   "rule": "focus-obscured",
+   "severity": "high",
+   "file": "a-gen-02/index.html",
+   "line": 80
+  },
+  {
+   "key": "a-gen-02|render|horizontal-overflow|a-gen-02/index.html|58|1d876005f8#1",
+   "pass": "render",
+   "rule": "horizontal-overflow",
+   "severity": "high",
+   "file": "a-gen-02/index.html",
+   "line": 58
+  },
+  {
+   "key": "a-gen-02|render|image-broken|a-gen-02/index.html|62|978ea7af39#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "a-gen-02/index.html",
+   "line": 62
+  },
+  {
+   "key": "a-gen-02|render|input-text-zooms|a-gen-02/index.html|0|140f86aae5#1",
+   "pass": "render",
+   "rule": "input-text-zooms",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-02|render|text-low-contrast|a-gen-02/index.html|80|afe17203b9#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-02/index.html",
+   "line": 80
+  },
+  {
+   "key": "a-gen-02|static|button-no-type|a-gen-02/index.html|80|3d61dabd7f#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 80
+  },
+  {
+   "key": "a-gen-02|static|button-no-type|a-gen-02/index.html|81|56f8fbd704#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 81
+  },
+  {
+   "key": "a-gen-02|static|button-no-type|a-gen-02/index.html|82|76264e6d75#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 82
+  },
+  {
+   "key": "a-gen-02|static|button-no-type|a-gen-02/index.html|83|fce06ba5dc#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 83
+  },
+  {
+   "key": "a-gen-02|static|button-no-type|a-gen-02/index.html|84|a57f33a1d0#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 84
+  },
+  {
+   "key": "a-gen-02|static|button-no-type|a-gen-02/index.html|95|1819683eac#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 95
+  },
+  {
+   "key": "a-gen-02|static|fake-name-john-doe|a-gen-02/index.html|84|a57f33a1d0#1",
+   "pass": "static",
+   "rule": "fake-name-john-doe",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 84
+  },
+  {
+   "key": "a-gen-02|static|font-system-only|a-gen-02/index.html|9|add545c5dd#1",
+   "pass": "static",
+   "rule": "font-system-only",
+   "severity": "low",
+   "file": "a-gen-02/index.html",
+   "line": 9
+  },
+  {
+   "key": "a-gen-02|static|h-screen-no-dvh-fallback|a-gen-02/index.html|9|add545c5dd#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "a-gen-02/index.html",
+   "line": 9
+  },
+  {
+   "key": "a-gen-02|static|h-screen-no-dvh-fallback|a-gen-02/index.html|10|cd76b71ada#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "a-gen-02/index.html",
+   "line": 10
+  },
+  {
+   "key": "a-gen-02|static|href-empty-hash|a-gen-02/index.html|49|a253d7e518#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 49
+  },
+  {
+   "key": "a-gen-02|static|href-empty-hash|a-gen-02/index.html|50|6000969fc6#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 50
+  },
+  {
+   "key": "a-gen-02|static|href-empty-hash|a-gen-02/index.html|51|42c5588caa#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 51
+  },
+  {
+   "key": "a-gen-02|static|href-empty-hash|a-gen-02/index.html|52|9647b1bc70#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 52
+  },
+  {
+   "key": "a-gen-02|static|href-empty-hash|a-gen-02/index.html|53|8b2ef35c73#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 53
+  },
+  {
+   "key": "a-gen-02|static|href-empty-hash|a-gen-02/index.html|54|9651c2fb3a#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 54
+  },
+  {
+   "key": "a-gen-02|static|href-empty-hash|a-gen-02/index.html|55|4501ab8dcb#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 55
+  },
+  {
+   "key": "a-gen-02|static|img-no-dimensions|a-gen-02/index.html|63|532ba4b24b#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-02/index.html",
+   "line": 63
+  },
+  {
+   "key": "a-gen-02|static|inline-style-attribute|a-gen-02/index.html|95|1819683eac#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 95
+  },
+  {
+   "key": "a-gen-02|static|inline-style-attribute|a-gen-02/index.html|98|ddb01a2b33#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 98
+  },
+  {
+   "key": "a-gen-02|static|placeholder-as-label|a-gen-02/index.html|60|5d4b278117#1",
+   "pass": "static",
+   "rule": "placeholder-as-label",
+   "severity": "high",
+   "file": "a-gen-02/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-02|static|repeated-action-same-name|a-gen-02/index.html|80|3d61dabd7f#1",
+   "pass": "static",
+   "rule": "repeated-action-same-name",
+   "severity": "medium",
+   "file": "a-gen-02/index.html",
+   "line": 80
+  }
+ ]
+}

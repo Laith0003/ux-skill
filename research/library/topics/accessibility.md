@@ -1,0 +1,82 @@
+# accessibility
+Input rows: 203. Output rows: 55.
+
+Confidence note: scored with the sources.md weight table; rule 5 then lifts any lesson that three or more independent books support to high (two books by the same author count once).
+
+Rule 1 applies throughout: WCAG 2.2 (and platform guidelines) override any book threshold. Where a book's number differs, the rule states the current standard value and the Sources line notes the superseded book value.
+
+## Perceivable: contrast, color, text
+
+- **Meet WCAG 2.2 contrast: 4.5:1 for body text, 3:1 for large text (24px regular or about 18.7px bold and up), 3:1 for UI component boundaries, focus indicators and meaningful graphics.** Check text over images, tinted panels and logos, and recheck in every theme, since thin weights and small sizes lower effective legibility. A book rule of thumb of 80 percent contrast is superseded by these ratios (WCAG 1.4.3, 1.4.11). Confidence: high. Sources: B59 p.4, 6, 9; B47 p.162-165; B85 p.75, 135; B69 p.173, 216; B76 p.70, 124-126; B26 p.401, 440 (superseded value)
+- **Never let color alone carry meaning or state.** Around one in twelve men has a color vision deficiency; add text, icons, underline, weight or position to status, links, selected states, chart series and errors (WCAG 1.4.1). Confidence: high. Sources: B22 p.55-56, 70; B47 p.166-168; B80 p.34; B52 p.215-216; B23 p.268; B37 p.18; B85 p.135; B68 p.32; B53 p.386-387; B88 p.170
+- **Underline or box inline text links so they are distinguishable without color.** If links rely on color, they need 3:1 contrast with surrounding text plus a non-color cue on hover and focus. Confidence: high. Sources: B59 p.11; B46 p.387-389; B44 p.182-183
+- **Avoid risky hue pairs and vivid complements edge to edge.** Red and green, green and brown, blue and purple fail for color-blind users, and saturated complements vibrate where they meet; separate with a neutral or vary lightness. Confidence: high. Sources: B85 p.135; B68 p.31, 111; B47 p.166-168
+- **Judge contrast by measured luminance, not by eye or hue.** Saturated hues differ widely in lightness (yellow is light, violet dark), people misjudge value, and perceived lightness shifts in dim light; use a contrast calculator. Confidence: high. Sources: B70 p.42-43; B68 p.89; B53 p.59
+- **Let text resize to 200 percent and reflow at 320 CSS px width without loss or two-way scrolling, and never bake text into images.** Fixed sizes block magnifiers and image text pixelates (WCAG 1.4.4, 1.4.10, 1.4.5). Confidence: high. Sources: B18 p.140-141; B58 p.622-623; B52 p.120-121; B77 p.184
+- **Choose typefaces with distinct glyphs and avoid shrinking labels for sleekness.** Look-alike characters (B and 8, p and q) confuse low-vision readers, and smaller keys and legends push more people past their limit; larger print helps everyone within reason. Confidence: high. Sources: B88 p.150-151; B69 p.189; B32 p.43, 51
+- **Support dark and high-contrast modes and OS text scaling, and keep contrast valid in each.** Confidence: high. Sources: B52 p.215-216; B53 p.59; B37 p.180-181; B85 p.136-137
+- **Do not let house style override readability.** Pale gray labels and tiny instructions hide the very features meant to help. Confidence: medium. Sources: B69 p.73, 173, 216; B80 p.118-120
+- **Prefer a light tinted background with dark colored text over white text on a saturated fill when contrast is tight.** This passes 4.5:1 while looking calmer. Confidence: low. Sources: B47 p.162-165
+- **Avoid one-size orthodoxies; test with real users.** No single color pair or font is always best; validate choices with people who have low vision. Confidence: low. Sources: B69 p.125
+
+## Text alternatives and media
+
+- **Write each image's alt attribute according to the job the image does.** Informative images get a description of what and where, linked images describe the destination, decorative ones get empty alt, and never use file names, image, photo or icon as alt text (WCAG 1.1.1). Confidence: high. Sources: B18 p.174-176; B91 p.48, 58, 241; B80 p.60-65; B39 p.105; B35 p.159; B58 p.387-390; B77 p.191-192
+- **Give icon-only buttons an accessible name and hide decorative icons.** Use visible or visually hidden text or aria-label on icon buttons, and aria-hidden on icons that sit beside a text label. Confidence: high. Sources: B07 p.138, 178; B80 p.59-60; B22 p.70; B58 p.387-390
+- **Caption every video and place a transcript beside the player.** Captions should cover relevant sounds and mark who is speaking; treat automatic captions (as low as 50 to 80 percent accurate) as a draft to correct (WCAG 1.2.2, 1.2.4). Confidence: high. Sources: B91 p.90-94; B18 p.176, 180-182; B88 p.170; B32 p.160
+- **Describe meaning carried by animation, canvas and SVG.** Provide text alternatives and announce injected text through a live region. Confidence: medium. Sources: B42 p.238
+
+## Operable: keyboard, focus, targets
+
+- **Make every function work from the keyboard with a logical focus order and no traps.** Tab and Shift Tab follow reading order from source order rather than positive tabindex, arrows move inside composite widgets, Enter activates, and drag, hover menus and double-click each need a keyboard path (WCAG 2.1.1, 2.1.2, 2.4.3). Confidence: high. Sources: B18 p.94-97; B46 p.667-669, 777; B86 p.44-45, 380; B26 p.431-433; B59 p.14-15; B77 p.191-192; B02 p.494
+- **Never remove the focus outline without a stronger replacement, and keep the focused element visible.** Focus must be visible (2.4.7 AA), not hidden under sticky headers or overlays (2.4.11 Focus Not Obscured, AA in WCAG 2.2), and ideally meet Focus Appearance (2.4.13): an indicator at least as large as a 2 CSS px perimeter with 3:1 change contrast. Sharing the hover style is a reasonable start. Confidence: high. Sources: B91 p.41, 130-131, 243, 265; B18 p.96
+- **Make targets at least 24 by 24 CSS px, or space smaller ones so 24 px circles do not overlap (WCAG 2.2 2.5.8 AA); aim for 44 by 44 (2.5.5 AAA, Apple HIG 44 pt, Material 48 dp).** A book minimum of 16 by 16 px is superseded. Keep unrelated targets apart to prevent tremor and speed slips. Confidence: high. Sources: B20 p.715-717, 799-800; B58 p.622-623; B32 p.127; B59 p.15 (superseded value)
+- **Give every drag interaction a single-pointer alternative.** Reordering, sliders and drag and drop need buttons or inputs that do the same job (WCAG 2.2 2.5.7 Dragging Movements, AA). Confidence: high. Sources: B18 p.94-97; B46 p.667-669
+- **Never make hover the only way to reveal function or content.** Support touch, mouse and keyboard; content shown on hover or focus must be dismissible, hoverable and persistent (WCAG 1.4.13). Confidence: high. Sources: B59 p.15; B18 p.94-97; B22 p.70
+- **Provide a skip link and put primary content and navigation early in source order.** Without it screen reader users hear global navigation on every page for 20 seconds or more; how long it takes to reach the main content is itself a usability metric (WCAG 2.4.1). Confidence: high. Sources: B77 p.191-192; B18 p.75-76; B32 p.87, 92-93; B80 p.20, 33; B58 p.387-390; B91 p.189-193
+- **Manage focus in dialogs and dynamic loads.** Modals use role dialog with a label, move focus in, keep it there, close on Esc and a labeled close button, and return focus to the trigger; after load more, announce new content and focus its first item. Confidence: medium. Sources: B07 p.127, 210, 217; B18 p.94-97
+- **Put critical access features one press away.** Subtitles buried in a language submenu failed every tester while a dedicated button worked. Confidence: medium. Sources: B32 p.165, 170
+
+## Motion, flashing and time
+
+- **Nothing may flash more than three times in any one second (WCAG 2.3.1).** Books cite 2 Hz or a 2 to 55 Hz band; the current standard threshold is three flashes per second, below the general and red flash limits. Also avoid shimmering thin lines and glaring full-white scenes in immersive views. Confidence: high. Sources: B42 p.237, 239; B26 p.402 (superseded value); B46 p.670-672 (superseded value); B36 p.177, 273; B52 p.120-121
+- **Give moving, blinking, auto-advancing or auto-updating content that lasts over 5 seconds a pause, stop or hide control, and pause on interaction (WCAG 2.2.2).** Carousels and streams need keyboard-operable play and pause; autoplaying audio over 3 seconds needs a stop control (1.4.2). Confidence: high. Sources: B42 p.170, 229, 237-239; B59 p.15; B58 p.622-623
+- **Treat large, parallax and long-travel motion as vestibular triggers and honor reduced motion.** Respect prefers-reduced-motion, offer a visible global control on motion-heavy sites, and warn before large motion (WCAG 2.3.3). Confidence: high. Sources: B42 p.233-236; B26 p.431-433
+- **Let people switch off, lengthen (by a factor of at least 10) or extend time limits with at least 20 seconds' warning (WCAG 2.2.1).** Keep transient notices visible long enough or until dismissed. Confidence: high. Sources: B26 p.402, 431-433; B46 p.670-672; B18 p.251
+- **Layer animation as progressive enhancement.** Content must stay readable and meaningful without CSS or script; never leave content hidden at an off-screen start position if animation fails. Confidence: high. Sources: B42 p.240-243; B62 p.249; B58 p.389, 392-394
+
+## Understandable and robust: structure and semantics
+
+- **Use native HTML elements before ARIA, and never use div or span as controls.** Native buttons, links, labels and landmarks expose role, name and state to the accessibility tree; add ARIA roles and states only for widgets with no native equivalent (WCAG 4.1.2). Confidence: high. Sources: B18 p.89-90, 120; B91 p.56-57, 62-63; B80 p.10, 13-15; B32 p.92-93, 99
+- **Use genuine heading elements, h1 through h6, in a logical outline.** Most screen reader users scan headings first; use one h1 that matches the page purpose, do not skip levels going down, keep extra links out of headings, and style variants with classes rather than changing tags (WCAG 1.3.1 and 2.4.6; single h1 and no skipping are best practice, not a WCAG requirement). Confidence: high. Sources: B18 p.72, 79; B91 p.55, 57, 250; B88 p.168-169; B77 p.191-192
+- **Wrap page regions in landmarks.** Use header, nav, main, aside and footer so assistive technology can jump between regions; landmarks cost nothing visually. Confidence: high. Sources: B18 p.76, 114-115, 120; B91 p.56-57; B59 p.14; B88 p.168-169
+- **Give each page a unique descriptive title and declare its language.** Titles orient screen reader users; a declared lang lets speech engines pronounce text (WCAG 2.4.2, 3.1.1). Confidence: high. Sources: B91 p.48, 58; B58 p.398; B88 p.170
+- **Keep the accessible name containing the visible label text.** Voice control users speak what they see (WCAG 2.5.3 Label in Name). Confidence: high. Sources: B91 p.96
+- **Set a linear reading order that matches the intended meaning for non-linear layouts and documents.** If a headline sits visually below body text, tag the source so assistive technology meets it first (WCAG 1.3.2), including in PDFs. Confidence: high. Sources: B88 p.169-170, 218; B18 p.75-76; B58 p.389
+- **Announce dynamic changes through live regions.** Loading states, result counts and errors must be announced, and the live region must exist before content is injected (WCAG 4.1.3). Confidence: high. Sources: B07 p.127; B42 p.238; B91 p.68; B80 p.98-100
+- **Label every input and support authentication without memory tests.** See forms topic for label, redundant entry (3.3.7) and accessible authentication (3.3.8) rules. Confidence: high. Sources: B22 p.70; B58 p.387-390; B77 p.191-192
+- **Collapse repeated links that point to one place into a single link.** A card with separate thumbnail and title links doubles announcements; make the card one link with the key information first. Confidence: medium. Sources: B91 p.191, 202, 204; B80 p.20-21, 32
+- **Front-load the distinguishing words of links and lines.** Screen reader users skim by ear and hear only the first words before skipping. Confidence: medium. Sources: B77 p.190; B39 p.106
+- **Keep heading structure and navigation consistent across pages, and keep help in the same place.** A repeated pattern lets users jump to the same spot every time (WCAG 3.2.3, and 3.2.6 Consistent Help in WCAG 2.2). Confidence: medium. Sources: B80 p.27, 32
+- **Avoid visual CAPTCHAs; they rank among the top screen reader barriers.** Confidence: medium. Sources: B80 p.59; B91 p.75-78
+
+## Multimodal and physical access
+
+- **Let every key task be completed through more than one modality.** Voice-only fails deaf users and screen-only fails blind users; offer text, tap, keypad, captions and visual status indicators so a blocked channel (noise, glare, motor limits) never blocks the task. Confidence: high. Sources: B63 p.215-218; B41 p.90-91; B32 p.75; B83 p.607; B02 p.494
+- **Fit reach, posture and force to the smallest and least mobile user.** Keep primary interactions within comfortable reach, below eye height and close to the body; lowering hands or moving them about 10 cm closer can double comfortable endurance. Confidence: high. Sources: B83 p.129, 170-171, 657-659; B48 p.64, 164; B36 p.262-263, 274-275
+- **Design for motor limits and combined minor impairments, not only blindness.** Motor loss affects more adults than sensory loss, and many older people combine small vision, hearing and dexterity losses into a serious barrier. Confidence: medium. Sources: B32 p.36, 40-41; B58 p.622-623
+- **Make voice interactions time-efficient with barge-in.** Ask for a full answer in one turn, front-load key information, and let users interrupt lists. Confidence: medium. Sources: B41 p.84-87, 113
+- **Let people move complex kiosk tasks onto their own device.** Their phone already carries their screen reader, text size and language. Confidence: low. Sources: B25 p.112-113
+- **Build access in rather than relying on third-party add-ons.** Add-ons cost users money, fail when the platform updates, and add another interaction model on top of the product's own. Confidence: low. Sources: B32 p.46-47
+- **Make manuals, packaging and support channels as accessible as the product.** Confidence: low. Sources: B32 p.79; B69 p.216
+
+## Process and testing
+
+- **Treat automated checkers as necessary but never sufficient.** A tool can see that alt text is present but cannot judge whether it is meaningful, and miss keyboard, script and icon-button failures; add manual keyboard and screen reader passes plus testing with disabled users. Confidence: high. Sources: B32 p.86-87, 95; B80 p.65-71; B91 p.80, 83, 104; B58 p.389, 392-394
+- **Run the keyboard-only pass on every page first.** Move through with Tab, checking that every focused element shows a clear highlight and that your position is always obvious; this cheap test catches many barriers. Confidence: high. Sources: B91 p.41; B85 p.136-137; B59 p.14
+- **Write accessibility (WCAG 2.2 AA) into requirements and generative prompts.** Scope it up front, specify fallbacks before building components, and make generated UI carry the same contrast constraints as hand-built UI. Confidence: high. Sources: B35 p.139; B62 p.249; B16 p.210-212; B21 p.184, 203
+- **Design for situational, temporary and permanent limits together.** Noise, an injury and deafness are one design problem; roughly one in five to one in six people has a disability, so access is not a niche cost. Confidence: high. Sources: B29 p.49-50; B44 p.135-137; B40 p.25; B48 p.182, 310
+- **Test whole tasks, and compare steps, errors and time per user group.** Compliance per component is not task success; if a screen reader user needs ten times the actions others need, the interaction model is broken. Confidence: medium. Sources: B32 p.96, 143-145; B91 p.189-193
+- **Automate accessibility regression checks in QA.** Scripted checks for alt, labels, unique titles and frame names stop later edits from silently stripping access. Confidence: medium. Sources: B58 p.398, 628-629
+- **Recruit disabled participants early and test on their own setups.** Allow extra weeks, use their preferred channel, and run sessions where their assistive technology lives. Confidence: medium. Sources: B28 p.331-333; B44 p.135-137
+- **Test assistive technology on production-grade markup, starting from an accessible component base.** Typical prototypes do not match final markup. Confidence: low. Sources: B74 p.34, 176, 181

@@ -1,0 +1,197 @@
+{
+ "page": "a-gen-07",
+ "findings": [
+  {
+   "key": "a-gen-07|render|image-broken|a-gen-07/index.html|59|978ea7af39#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 59
+  },
+  {
+   "key": "a-gen-07|static|border-radius-2xl-default|a-gen-07/index.html|19|5c2eb6873a#1",
+   "pass": "static",
+   "rule": "border-radius-2xl-default",
+   "severity": "low",
+   "file": "a-gen-07/index.html",
+   "line": 19
+  },
+  {
+   "key": "a-gen-07|static|emoji-in-ui|a-gen-07/index.html|54|b7ded3400b#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 54
+  },
+  {
+   "key": "a-gen-07|static|emoji-in-ui|a-gen-07/index.html|74|d464d5f2c8#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 74
+  },
+  {
+   "key": "a-gen-07|static|emoji-in-ui|a-gen-07/index.html|75|41a1ca704d#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 75
+  },
+  {
+   "key": "a-gen-07|static|emoji-in-ui|a-gen-07/index.html|76|5e7eca3437#1",
+   "pass": "static",
+   "rule": "emoji-in-ui",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 76
+  },
+  {
+   "key": "a-gen-07|static|generic-class-container-wrapper-only|a-gen-07/index.html|88|ff66de7349#1",
+   "pass": "static",
+   "rule": "generic-class-container-wrapper-only",
+   "severity": "low",
+   "file": "a-gen-07/index.html",
+   "line": 88
+  },
+  {
+   "key": "a-gen-07|static|generic-class-container-wrapper-only|a-gen-07/index.html|89|12ed37708c#1",
+   "pass": "static",
+   "rule": "generic-class-container-wrapper-only",
+   "severity": "low",
+   "file": "a-gen-07/index.html",
+   "line": 89
+  },
+  {
+   "key": "a-gen-07|static|grid-cols-3-1fr-default|a-gen-07/index.html|29|732afb2c77#1",
+   "pass": "static",
+   "rule": "grid-cols-3-1fr-default",
+   "severity": "low",
+   "file": "a-gen-07/index.html",
+   "line": 29
+  },
+  {
+   "key": "a-gen-07|static|icon-emoji-stamp|a-gen-07/index.html|54|b7ded3400b#1",
+   "pass": "static",
+   "rule": "icon-emoji-stamp",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 54
+  },
+  {
+   "key": "a-gen-07|static|icon-emoji-stamp|a-gen-07/index.html|74|d464d5f2c8#1",
+   "pass": "static",
+   "rule": "icon-emoji-stamp",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 74
+  },
+  {
+   "key": "a-gen-07|static|icon-emoji-stamp|a-gen-07/index.html|75|41a1ca704d#1",
+   "pass": "static",
+   "rule": "icon-emoji-stamp",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 75
+  },
+  {
+   "key": "a-gen-07|static|icon-emoji-stamp|a-gen-07/index.html|76|5e7eca3437#1",
+   "pass": "static",
+   "rule": "icon-emoji-stamp",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 76
+  },
+  {
+   "key": "a-gen-07|static|img-no-dimensions|a-gen-07/index.html|59|5944163380#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 59
+  },
+  {
+   "key": "a-gen-07|static|img-no-dimensions|a-gen-07/index.html|65|7756b09fc1#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 65
+  },
+  {
+   "key": "a-gen-07|static|img-no-dimensions|a-gen-07/index.html|66|3902b8853b#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 66
+  },
+  {
+   "key": "a-gen-07|static|img-no-dimensions|a-gen-07/index.html|67|d4f3f33579#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 67
+  },
+  {
+   "key": "a-gen-07|static|inline-style-attribute|a-gen-07/index.html|71|377e867cba#1",
+   "pass": "static",
+   "rule": "inline-style-attribute",
+   "severity": "medium",
+   "file": "a-gen-07/index.html",
+   "line": 71
+  },
+  {
+   "key": "a-gen-07|static|lone-emoji-as-icon|a-gen-07/index.html|74|d464d5f2c8#1",
+   "pass": "static",
+   "rule": "lone-emoji-as-icon",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 74
+  },
+  {
+   "key": "a-gen-07|static|lone-emoji-as-icon|a-gen-07/index.html|75|41a1ca704d#1",
+   "pass": "static",
+   "rule": "lone-emoji-as-icon",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 75
+  },
+  {
+   "key": "a-gen-07|static|lone-emoji-as-icon|a-gen-07/index.html|76|5e7eca3437#1",
+   "pass": "static",
+   "rule": "lone-emoji-as-icon",
+   "severity": "high",
+   "file": "a-gen-07/index.html",
+   "line": 76
+  },
+  {
+   "key": "a-gen-07|static|one-action-several-labels|a-gen-07/index.html|57|6030612b53#1",
+   "pass": "static",
+   "rule": "one-action-several-labels",
+   "severity": "medium",
+   "file": "a-gen-07/index.html",
+   "line": 57
+  },
+  {
+   "key": "a-gen-07|static|timing-300ms-default|a-gen-07/index.html|14|b8026eea2d#1",
+   "pass": "static",
+   "rule": "timing-300ms-default",
+   "severity": "low",
+   "file": "a-gen-07/index.html",
+   "line": 14
+  },
+  {
+   "key": "a-gen-07|static|transition-property-all|a-gen-07/index.html|14|b8026eea2d#1",
+   "pass": "static",
+   "rule": "transition-property-all",
+   "severity": "medium",
+   "file": "a-gen-07/index.html",
+   "line": 14
+  }
+ ]
+}

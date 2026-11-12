@@ -989,9 +989,10 @@ else:
 
     from engine.io.read import CHOICES as _FORMATS
 
-    def _io(ctx, fn, *args, figma_modes=(), **kwargs) -> None:
+    def _io(ctx, fn, *args, figma_modes=(), exits=None, **kwargs) -> None:
         """Run a command from engine.io.commands: JSON on stdout, the exit
-        code by status, a bad input as a usage error naming the flag."""
+        code by status (exits adds a command's own statuses), a bad input as
+        a usage error naming the flag."""
         from engine.foundations.emit import InputError
         from engine.io.commands import EXIT, parse_modes
         try:
@@ -1003,8 +1004,11 @@ else:
         _emit(result, ctx.obj["pretty"])
         if result["status"] in ("error", "refused"):
             click.echo(f"Error: {result['message']}\n", err=True, nl=False)
-        if EXIT[result["status"]]:
-            sys.exit(EXIT[result["status"]])
+        elif result["status"] == "open":
+            click.echo(f"{result['message']}\n", err=True, nl=False)
+        codes = {**EXIT, **(exits or {})}
+        if codes[result["status"]]:
+            sys.exit(codes[result["status"]])
 
     _FROM = click.option(
         "--from", "source", required=True, multiple=True,
@@ -1122,9 +1126,10 @@ else:
     @_FORMAT
     @_FIGMA
     @click.option("--to", "to", required=True,
-                  type=click.Choice(("css", "tailwind", "figma", "dtcg")),
+                  type=click.Choice(("css", "tailwind", "figma", "dtcg", "stageshow")),
                   help="css (tokens.css), tailwind (a Tailwind 4 theme), figma (variables and "
-                       "the script that applies them) or dtcg (tokens.json).")
+                       "the script that applies them), dtcg (tokens.json) or stageshow (a look "
+                       "for the Stageshow kit, so product illustrations wear the system).")
     @click.option("--scheme", "scheme", default=None,
                   type=click.Choice(("system", "light", "dark")),
                   help="The scheme the CSS or Tailwind file opens in. A stylesheet keeps its "
@@ -1139,6 +1144,35 @@ else:
         from engine.io.commands import run_export
         _io(ctx, run_export, list(source), fmt=fmt, to=to, scheme=scheme, out=out, force=force,
             figma_modes=figma_modes)
+
+    @cli.group("kit")
+    def kit_grp() -> None:
+        """Kits ux-skill carries, written into a project."""
+
+    @kit_grp.command("stageshow")
+    @click.option("--out", "out", required=True,
+                  help="Folder in the project to write the kit into, for example "
+                       "src/stageshow.")
+    @click.option("--from", "source", multiple=True,
+                  help="The system, to write its look (stageshow-look.css) beside the kit: "
+                       "tokens.json or any source system import reads.")
+    @_FORMAT
+    @_FIGMA
+    @click.option("--force", is_flag=True,
+                  help="Replace files in --out that differ from the kit's, your own included; "
+                       "each is copied into --out/.uxskill/backup first.")
+    @click.option("--look-only", "look_only", is_flag=True,
+                  help="Write only the --from system's look, replacing the one in --out after "
+                       "a backup and leaving every kit file as it is.")
+    @click.pass_context
+    def kit_stageshow_cmd(ctx, out, source, fmt, figma_modes, force, look_only) -> None:
+        """Write the Stageshow kit (MIT; product illustrations in React) into
+        --out, with the system's look beside it when --from names one. A file
+        that differs from the kit's is never replaced without --force, and a
+        forced write backs each one up first."""
+        from engine.io.stageshow_kit import run_kit
+        _io(ctx, run_kit, out, source=list(source) or None, fmt=fmt, force=force,
+            look_only=look_only, figma_modes=figma_modes)
 
     @cli.group("contracts")
     def contracts_grp() -> None:
@@ -1159,6 +1193,50 @@ else:
         mode. Exit 1 when a contract has a problem."""
         from engine.io.commands import run_contracts_check
         _io(ctx, run_contracts_check, folder, list(tokens), fmt=fmt, mapping=mapping)
+
+    @cli.group("complaints")
+    def complaints_grp() -> None:
+        """What the person said is wrong with the page, each kept as a probe."""
+
+    @complaints_grp.command("check")
+    @click.option("--page", "page", required=True,
+                  help="The page to measure: an HTML file, or the running app's http(s) URL.")
+    @click.option("--file", "file", default=".ux/complaints.json", show_default=True,
+                  help="The complaints, each an id, the words said and a probe.")
+    @click.option("--before", "before", default=None,
+                  help="The page as it was when the person complained: a probe that passes "
+                       "there too proves nothing, and its complaint stays open as weak.")
+    @click.pass_context
+    def complaints_check_cmd(ctx, page, file, before) -> None:
+        """Measure --page against every complaint at four widths. Exit 0 when
+        every complaint is fixed, 3 while any is open or weak, 2 when the
+        page cannot be measured."""
+        from engine.complaints import check_complaints
+        from engine.render import RenderUnavailable
+        try:
+            _io(ctx, check_complaints, page, file=file, before=before, exits={"open": 3})
+        except RenderUnavailable as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(2)
+
+    @complaints_grp.command("snapshot")
+    @click.option("--page", "page", required=True,
+                  help="The page to keep: an HTML file, or the running app's http(s) URL.")
+    @click.option("--out", "out", default=".ux/before.html", show_default=True,
+                  help="Where to keep it.")
+    @click.option("--force", is_flag=True, help="Replace another page already at --out.")
+    @click.pass_context
+    def complaints_snapshot_cmd(ctx, page, out, force) -> None:
+        """Keep the page as it is before it changes, to pass to complaints
+        check as --before. A URL is loaded once and kept with its scripts
+        removed after they ran."""
+        from engine.complaints import snapshot_page
+        from engine.render import RenderUnavailable
+        try:
+            _io(ctx, snapshot_page, page, out, force=force)
+        except RenderUnavailable as exc:
+            click.echo(f"Error: {exc}", err=True)
+            sys.exit(2)
 
     # -------- ux version -------------------------------------------------
 

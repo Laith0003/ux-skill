@@ -10,7 +10,7 @@ from typing import Dict, List, Optional, Set
 
 from engine.linter.structure import (
     Block, FileContext, _blocks, _children, _focus_kind, _same_container, _shares,
-    _tag_tokens, attr_values, block_at, compounds, css_unescape, tokens,
+    _tag_tokens, attr_values, block_at, compounds, css_unescape, shut, takes_focus, tokens,
 )
 from engine.linter.views import View
 
@@ -25,7 +25,6 @@ _GONE = re.compile(r"visibility\s*:\s*hidden|display\s*:\s*none|content-visibili
 _TRANSITION_CLASS = re.compile(r"(?:\.|-)(?:v-)?(?:enter|leave|exit|appear)"
                                r"(?:-(?:from|to|active|done))?(?![\w-])", re.I)
 _KEYFRAME = re.compile(r"^(?:from|to|\d+(?:\.\d+)?%)$", re.I)
-FOCUSABLE_TAGS = {"a", "button", "input", "select", "textarea", "summary", "iframe"}
 # With no markup to read, a selector that names a control or a panel that
 # holds controls.
 _CONTROL_WORD = re.compile(r"(?<![\w-])(?:a|button|input|select|textarea|summary)(?![\w-])"
@@ -113,29 +112,12 @@ def _outside_styles(ctx: FileContext) -> str:
 
 
 def _focusable(ctx: FileContext, i: int) -> bool:
-    tags = ctx.tree()[0]
-    t = tags[i]
-    a = attr_values(ctx.text, t)
-    name = t.name.lower()
-    if "tabindex" in a:
-        return a["tabindex"][1].strip() != "-1"
-    if name == "a":
-        return "href" in a
-    if name == "input":
-        return a.get("type", ("", ""))[1].lower() != "hidden"
-    return name in FOCUSABLE_TAGS or "contenteditable" in a
+    return takes_focus(ctx, i)
 
 
 def _shut(ctx: FileContext, i: int) -> bool:
     """The element or an ancestor is hidden or inert in the markup."""
-    tags, _ends, parents = ctx.tree()
-    k = i
-    while k >= 0:
-        a = attr_values(ctx.text, tags[k])
-        if "inert" in a or "hidden" in a:
-            return True
-        k = parents[k]
-    return False
+    return shut(ctx, i)
 
 
 def _holds_focusable(ctx: FileContext, i: int) -> bool:

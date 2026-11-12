@@ -349,7 +349,8 @@ class UxSystemExtendInput(UxSystemEnhanceInput):
 class UxSystemExportInput(UxSystemImportInput):
     to: Any = Field(default=None, description="Required: css (tokens.css), tailwind (a "
                     "Tailwind 4 theme), figma (Figma variables and the script that applies "
-                    "them) or dtcg (tokens.json).")
+                    "them), dtcg (tokens.json) or stageshow (a look for the Stageshow kit, "
+                    "so product illustrations wear the system).")
     scheme: Any = Field(default=None, description="Optional: system, light or dark, the scheme "
                         "the css or tailwind file opens in. A stylesheet keeps its own; "
                         "tokens.json holds none, so it opens in system when left out.")
@@ -374,7 +375,8 @@ _MCP_LABELS = {"from": "source", "format": "format", "out": "out", "force": "for
                "mapping": "mapping", "add": "add", "add_role": "add_role", "to": "to",
                "brand": "brand", "axes": "axes", "brief": "brief", "tokens": "tokens",
                "latin_only": "latin_only", "scheme": "scheme", "figma_mode": "figma_modes",
-               "import": "ux_system_import", "add_mode": "add_modes", "scan": "scan"}
+               "import": "ux_system_import", "add_mode": "add_modes", "scan": "scan",
+               "build": "ux_system_build"}
 # The most folded problem lines a contract check returns over MCP.
 _PROBLEM_CAP = 40
 
@@ -573,7 +575,7 @@ def handle_ux_system_export(args: Dict[str, Any]) -> Dict[str, Any]:
     def run() -> Dict[str, Any]:
         source = _source(payload.source, "tokens.json")
         if payload.to is None:
-            raise InputError("to is missing; pass css, tailwind, figma or dtcg")
+            raise InputError("to is missing; pass css, tailwind, figma, dtcg or stageshow")
         include = parse_switch(payload.include_files, "include_files", "return the file texts",
                                "return only their sizes")
         return run_export(source, to=payload.to, include_files=include, scheme=payload.scheme,
@@ -1105,8 +1107,8 @@ TOOLS: Dict[str, ToolEntry] = {
         handle_ux_system_export,
         UxSystemExportInput,
         "Write a system as tokens.css, a Tailwind 4 theme, Figma variables with the script "
-        "that applies them, or tokens.json, into out only, never over the source. Without out "
-        "it returns each file's size; include_files returns the texts.",
+        "that applies them, tokens.json or a Stageshow look, into out only, never over the "
+        "source. Without out it returns each file's size; include_files returns the texts.",
     ),
     "ux_contracts_check": (
         handle_ux_contracts_check,

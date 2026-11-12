@@ -1,7 +1,7 @@
 {
   "_meta": {
     "version": "2.0.0",
-    "entries": 171,
+    "entries": 180,
     "last_updated": "2026-09-30",
     "source": "ux-skill v2 - Python pivot (ported from bin/ux-lint.sh)",
     "schema_version": "1.0"
@@ -799,7 +799,7 @@
         ]
       },
       "why": "z-index: 9999 is the 'I gave up on the stacking system' value - signals there's no z-scale token map and stacking bugs are coming.",
-      "fix": "Define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999."
+      "fix": "Put overlays (menus, dialogs, toasts) in the top layer with popover or <dialog> and showModal(): the top layer sits above every z-index, which ends the race. For what stays in the page, define a z-scale token set (z-base: 0, z-dropdown: 10, z-sticky: 20, z-modal: 50, z-toast: 60). Use the tokens, never a raw 9999."
     },
     {
       "id": "infinite-scroll-no-pagination",
@@ -936,12 +936,12 @@
     },
     {
       "id": "h-screen-no-dvh-fallback",
-      "name": "100vh without 100dvh fallback for mobile",
+      "name": "100vh or h-screen on a full-height section",
       "severity": "high",
       "category": "Layout",
       "detection": {
         "type": "regex",
-        "pattern": "(?<![\\w-])(?:min-|max-)?height\\s*:\\s*100vh(?![^}]*100dvh)",
+        "pattern": "(?<![\\w-])(?:min-|max-)?height\\s*:\\s*100vh(?![^}]*100[sdl]vh)",
         "flags": "i",
         "scope": [
           "css",
@@ -956,13 +956,13 @@
         "target": "css",
         "also": [
           {
-            "pattern": "(?<![\\w:/-])(?:min-|max-)?h-screen(?![\\w-])(?![^\\\"]*(?<![\\w-])(?:min-|max-)?h-(?:dvh|svh|\\[100dvh\\])(?![\\w-]))",
+            "pattern": "(?<![\\w:/-])(?:min-|max-)?h-screen(?![\\w-])(?![^\\\"]*(?<![\\w-])(?:min-|max-)?h-(?:dvh|svh|lvh|\\[100[sdl]vh\\])(?![\\w-]))",
             "target": "classes"
           }
         ]
       },
-      "why": "100vh on mobile includes the browser chrome that retracts on scroll, so the layout jumps as the address bar collapses - dynamic viewport units (dvh) fix this.",
-      "fix": "Use height: 100dvh or h-[100dvh] as the primary, with h-screen / 100vh as the legacy fallback for browsers that lack dvh."
+      "why": "On phones 100vh is the largest viewport, measured with the browser toolbars retracted, so a full-height section runs under the address bar: its bottom edge is hidden at load and jumps as the bar collapses. The small, large and dynamic viewport units (svh, lvh, dvh) are Baseline widely available since 2025-06-05, so a 100vh fallback is not needed.",
+      "fix": "Use 100svh (Tailwind h-svh or min-h-svh) for heroes and full-height sections: it never sits under the toolbars and never jumps. Use 100dvh (h-dvh) only where the section should resize as the toolbars move. A 100vh line kept beside one of them is harmless."
     },
     {
       "id": "title-case-headlines",
@@ -1168,8 +1168,8 @@
         "target": "css",
         "post": "layout-transition-reflows"
       },
-      "why": "Animating width, height, top, left, margin or padding lays the page out again on every frame, and everything beside the element moves with it: the dropped-frame jank that makes a UI feel cheap. Two cases reflow nothing beside them and pass: the inline size of a moving indicator (a selector naming an indicator, or an element taken out of flow), and grid-template-rows on a single disclosure, which this rule does not read.",
-      "fix": "Animate transform and opacity: scale instead of width, translate instead of top or left. Open a disclosure with grid-template-rows from 0fr to 1fr, and slide an indicator on transform with its inline size on the system's indicator role (--motion-indicator-duration)."
+      "why": "Animating width, height, top, left, margin or padding lays the page out again on every frame, and everything beside the element moves with it: the dropped-frame jank that makes a UI feel cheap. Three cases pass: the inline size of a moving indicator (a selector naming an indicator, or an element taken out of flow), grid-template-rows on a single disclosure, which this rule does not read, and a height or block size that opens a disclosure through the platform (a ::details-content selector, interpolate-size: allow-keywords, or calc-size()).",
+      "fix": "Animate transform and opacity: scale instead of width, translate instead of top or left. Open a disclosure with grid-template-rows from 0fr to 1fr, or on details::details-content with interpolate-size: allow-keywords (Chromium only; elsewhere it opens without the move), and slide an indicator on transform with its inline size on the system's indicator role (--motion-indicator-duration)."
     },
     {
       "id": "img-no-dimensions",
@@ -1323,7 +1323,7 @@
     },
     {
       "id": "glass-without-fallback",
-      "name": "backdrop-filter blur without background fallback",
+      "name": "backdrop-filter blur with no background behind its text",
       "severity": "medium",
       "category": "Color",
       "detection": {
@@ -1341,8 +1341,8 @@
         ],
         "target": "css"
       },
-      "why": "backdrop-filter is unsupported on Firefox and older Safari - without a translucent background fallback, the surface renders fully transparent and content underneath bleeds through.",
-      "fix": "Always pair backdrop-filter: blur with a background-color (e.g. background: rgba(255,255,255,0.7)). The bg is the fallback; the blur is the upgrade."
+      "why": "backdrop-filter is Baseline since 2024-09-16, so the blur draws in every current browser; the problem is legibility. A blur with no background, or one whose background is transparent or under 0.6 alpha, is as light or as dark as whatever scrolls behind it, so the text on it passes contrast over one part of the page and fails over the next. A background the lint cannot measure (a var(), an image) passes.",
+      "fix": "Pair backdrop-filter: blur with an opaque background-color or one of 0.6 alpha or more (background: rgb(255 255 255 / 0.82)) so the text contrast holds over any content behind it. Optionally go solid under @media (prefers-reduced-transparency: reduce), which only Chromium supports today."
     },
     {
       "id": "placeholder-as-pricing",
@@ -2149,7 +2149,7 @@
       "category": "Performance",
       "detection": {
         "type": "regex",
-        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*(?:true|false))[^)])*\\)",
+        "pattern": "addEventListener\\s*\\(\\s*['\"](?:scroll|touchmove|touchstart|wheel|mousewheel)['\"]\\s*,(?:(?!passive\\s*:\\s*(?:true|false))(?:\\((?:[^()]|\\((?:[^()]|\\([^()]*\\))*\\))*\\)|[^()]))*\\)",
         "flags": "i",
         "scope": [
           "ts",
@@ -2187,8 +2187,8 @@
         ],
         "target": "markup"
       },
-      "why": "A raw <img> with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. The fact that <picture>+<source type=\"image/avif\"> has been universal since 2023 means this is now a generator-default tell.",
-      "fix": "Wrap in <picture> with AVIF first, WebP next, JPG fallback: <picture><source srcset=\"hero.avif\" type=\"image/avif\"><source srcset=\"hero.webp\" type=\"image/webp\"><img src=\"hero.jpg\" alt=\"...\" width=\"...\" height=\"...\"></picture>. For framework images (next/image, astro:assets), the conversion is automatic - use them."
+      "why": "A raw <img> with a .jpg or .png source ships 3-10x more bytes than the same image as AVIF or WebP. On a hero photo this is 800KB vs 80KB - directly hurts LCP, mobile data, and Core Web Vitals. AVIF has been Baseline since 2024-01-25 and widely available since 2026-07-25, and WebP for longer, so a JPG-only image is now a generator-default tell.",
+      "fix": "Wrap in <picture> with AVIF first, WebP next, JPG fallback: <picture><source srcset=\"hero.avif\" type=\"image/avif\"><source srcset=\"hero.webp\" type=\"image/webp\"><img src=\"hero.jpg\" alt=\"...\" width=\"...\" height=\"...\"></picture>. A bare <img> that points straight at an .avif or .webp file also passes. For framework images (next/image, astro:assets), the conversion is automatic - use them."
     },
     {
       "id": "font-weight-numeric-100-or-900-on-body",
@@ -3359,8 +3359,8 @@
         ],
         "target": "css"
       },
-      "why": "Browsers justify by stretching word-spacing, opening uneven 'rivers' of whitespace and hurting readability — CSS has none of the hyphenation or microtypography a print justifier relies on.",
-      "fix": "Use text-align: left (or start) for body copy. If justification is a hard brand requirement, pair it with hyphens: auto and test at the real line length."
+      "why": "Justified text at web measures still opens uneven rivers of word space, worst in narrow columns and when the width changes with the window.",
+      "fix": "Use text-align: start for body copy. If a brand requires justification, pair it with hyphens: auto and a correct lang attribute (hyphens is Baseline widely available since 2026-03-18) and test at the real line length."
     },
     {
       "id": "css-import-render-blocking",
@@ -3873,7 +3873,7 @@
         "post": "exit-cut-short"
       },
       "why": "A popover or menu that fades on a transition but sets display: none in its closed state disappears at the first frame of its exit: the fade the system's motion.dismiss role defines never shows.",
-      "fix": "Keep the exit running until it ends: transition display with allow-discrete (transition: opacity 200ms, display 200ms allow-discrete), or set hidden or inert from script when transitionend fires."
+      "fix": "Keep the exit running until it ends: let display wait with allow-discrete (transition: opacity 200ms, display 200ms allow-discrete, or transition-behavior: allow-discrete), add overlay to the list for a popover or dialog in the top layer, and set the entry's first frame in @starting-style. Or set hidden or inert from script when transitionend fires."
     },
     {
       "id": "theme-switch-animates-everything",
@@ -3943,6 +3943,213 @@
       },
       "why": "A menu row disabled with the disabled attribute drops out of the arrow keys' path, so a keyboard user never learns it exists; one marked aria-disabled with no reason leaves the person guessing why it cannot be used.",
       "fix": "Keep the row in place with aria-disabled=\"true\" instead of disabled, and give its reason in words beside the label, tied to the row with aria-describedby."
+    },
+    {
+      "id": "focusable-inside-aria-hidden",
+      "name": "A focusable control inside an aria-hidden subtree",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\baria-hidden\\s*=\\s*(?:[\"']true[\"']|\\{\\s*true\\s*\\})",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "focusable-in-hidden-subtree"
+      },
+      "why": "aria-hidden=\"true\" takes an element and everything inside it out of the accessibility tree, yet a button, a link with an href, a field or anything with a tabindex inside it still takes keyboard focus: a keyboard user lands on a control a screen reader does not announce (4.1.2). A product illustration drawn with real controls and hidden as decoration is the common case. It passes when the subtree, or an element around it, is inert, or when each control inside is disabled or has tabindex=\"-1\". aria-hidden on the control itself is aria-hidden-on-interactive.",
+      "fix": "Draw a decorative illustration's buttons and fields with plain elements (a div styled as a button), or put inert on the hidden subtree. If the controls really work, drop aria-hidden instead."
+    },
+    {
+      "id": "heading-in-illustration-stage",
+      "name": "A real heading inside a product illustration",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<h[1-6]\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro"
+        ],
+        "target": "markup",
+        "post": "heading-in-stage"
+      },
+      "why": "A faux window's title written as h1 to h6 inside a Stageshow stage joins the host page's outline: a heading list and the document outline show an app screen's labels as if they were the page's own sections. The illustration is imagery inside someone else's page (references/styles/product-illustration.md).",
+      "fix": "Write the faux title as a div or span styled like a heading, and keep the page's real headings outside the stage."
+    },
+    {
+      "id": "illustration-loop-without-pause",
+      "name": "A looping product demo with no pause control",
+      "severity": "high",
+      "category": "Motion",
+      "detection": {
+        "type": "regex",
+        "pattern": "<Stage\\b",
+        "flags": "",
+        "scope": [
+          "tsx",
+          "jsx"
+        ],
+        "target": "markup",
+        "post": "stage-loops-unpaused"
+      },
+      "why": "Stageshow's Stage plays a scripted demo on a loop for as long as it is on screen, and it draws no pause control of its own. Beside the page's copy, motion that starts by itself and lasts more than 5 seconds needs a way to pause, stop or hide it (2.2.2). It passes when play is once or hover, when play is bound to state the page controls, or when the file holds a pause control.",
+      "fix": "Set play=\"once\" (it plays when first seen and holds its last frame) or play=\"hover\", or put a pause control beside the stage that stops it."
+    },
+    {
+      "id": "title-is-a-framework-default",
+      "name": "Page title left at the framework's default",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<title\\b[^>]*>\\s*(?:Vite\\s*\\+\\s*(?:React|Vue|Svelte|Preact|Lit|TS)(?:\\s*\\+\\s*TS)?|React App|Vite App|Svelte App|Vue App|Create Next App|Create T3 App|Nuxt App|Astro|Document|Untitled(?: Document)?|My App|Home Page)\\s*</title>|\\btitle\\s*:\\s*[\"'](?:Create Next App|Create T3 App|React App|Vite App|Nuxt App)[\"']",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte",
+          "ts",
+          "js"
+        ],
+        "target": "code"
+      },
+      "why": "The title names the tab, the bookmark, the search result and what a screen reader announces first. A starter's default (Vite + React, Create Next App, Document) describes nothing, which WCAG 2.4.2 (Page Titled) asks a title to do, and it is one of the surest signs a page was generated and never finished.",
+      "fix": "Write a title that names the page and the product, most specific part first: 'Pricing, Acme' rather than 'Acme'. In Next.js set it in metadata.title; in a Vite app, in index.html."
+    },
+    {
+      "id": "consent-prechecked",
+      "name": "Marketing consent box ticked in advance",
+      "severity": "high",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "<input\\b(?=[^>]*\\btype\\s*=\\s*[\"']?checkbox)(?=[^>]*\\b(?:checked|defaultChecked)(?:\\s*=\\s*(?:[\"']?(?:checked|true)[\"']?|\\{\\s*true\\s*\\}))?(?=[\\s/>]))[^>]*>(?:(?!<input\\b|</label>|</p>|</div>|</li>)[\\s\\S]){0,200}?\\b(?:newsletter|marketing|promotional|promotions|special offers|offers and updates|partners|third[- ]part(?:y|ies))\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "markup"
+      },
+      "why": "A box already ticked to sign the visitor up for marketing is consent they did not give. European data law does not count a pre-ticked box as consent, and visitors read it as a trick played on them at the moment they trusted the form.",
+      "fix": "Leave the box unticked and let the visitor tick it. Say plainly what they get and how often, and keep it apart from the terms they must accept."
+    },
+    {
+      "id": "fake-urgency",
+      "name": "Urgency written into the page as fixed copy",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:only\\s+\\d{1,3}\\s+(?:left|remaining)\\b|\\d{1,4}\\s+(?:people|others|shoppers|visitors)\\s+(?:are\\s+)?(?:viewing|looking at|watching)\\b|hurry,?\\s+(?:only|offer|sale|ends)\\b|offer\\s+ends\\s+in\\s+\\d)",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "text"
+      },
+      "why": "A stock count, a crowd of viewers or a countdown typed into the copy is the same on every visit, so it is not true on most of them. Visitors who notice stop trusting every other claim on the page, and generated pages reach for it by default.",
+      "fix": "Show urgency only from live data (render the real stock or the real end date from your data), or cut it and let the offer stand on its own."
+    },
+    {
+      "id": "confirmshaming",
+      "name": "Decline option worded to shame",
+      "severity": "medium",
+      "category": "Content",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\b(?:no,?\\s+thanks,?\\s+)?i\\s+(?:don(?:'|’|&rsquo;|&#39;|&#x27;)?t|do\\s+not)\\s+(?:want|like|need|care\\s+about)\\s+(?:to\\s+)?(?:save|saving|savings|money|deals|discounts|free\\s+\\w+|better\\s+\\w+)\\b|\\b(?:no,?\\s+thanks,?\\s+)?i(?:\\s+(?:prefer|would\\s+rather)|(?:'|’|&rsquo;|&#39;|&#x27;)d\\s+rather)\\s+(?:to\\s+)?(?:pay(?:ing)?\\s+(?:more|full\\s+price)|miss(?:ing)?\\s+out|lose\\s+\\w+|losing\\s+\\w+)\\b|\\bi(?:'|’|&rsquo;|&#39;|&#x27;)ll\\s+pay\\s+full\\s+price\\b|\\bno,?\\s+thanks,?\\s+i\\s+(?:hate|enjoy|love)\\s+(?:saving|money|deals|discounts|paying\\s+more|missing\\s+out)\\b",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "text"
+      },
+      "why": "A way out written as an insult ('No thanks, I don't like saving money') pressures by guilt instead of value. It is a named dark pattern, and the visitor who closes the popup remembers the brand that mocked them.",
+      "fix": "Word the decline as a plain choice of equal weight: 'No thanks' or 'Not now'. If the offer needs guilt to work, change the offer."
+    },
+    {
+      "id": "input-purpose-missing",
+      "name": "Personal-data field without autocomplete",
+      "severity": "medium",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "<input\\b(?=[^>]*\\b(?:name|id)\\s*=\\s*[\"'](?:e-?mail|email[-_]?address|phone|tel|telephone|mobile|first[-_]?name|last[-_]?name|full[-_]?name|given[-_]?name|family[-_]?name|postal[-_]?code|post[-_]?code|zip(?:[-_]?code)?|street[-_]?address|address[-_]?line[-_]?1|cc[-_]?number|card[-_]?number|cc[-_]?name|cardholder|bday|birthday|username|new[-_]?password|current[-_]?password)[\"'])(?![^>]*\\bautoComplete\\s*=)(?![^>]*\\bautocomplete\\s*=)(?![^>]*\\btype\\s*=\\s*[\"']?hidden)[^>]*>",
+        "flags": "i",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte"
+        ],
+        "target": "markup"
+      },
+      "why": "A field for the person's own email, phone, name, address, card or password with no autocomplete token makes them type it again on every form, and leaves its purpose unknown to browsers and assistive technology. WCAG 1.3.5 (Identify Input Purpose) asks that such a field's purpose can be determined in code, which the autocomplete attribute does.",
+      "fix": "Add the matching token: autocomplete=\"email\", \"tel\", \"given-name\", \"family-name\", \"postal-code\", \"street-address\", \"cc-number\", \"username\", \"current-password\" or \"new-password\", with the matching type (email, tel) and inputmode."
+    },
+    {
+      "id": "paste-blocked",
+      "name": "Paste blocked in a field",
+      "severity": "high",
+      "category": "A11y",
+      "detection": {
+        "type": "regex",
+        "pattern": "\\bon[Pp]aste\\s*=\\s*(?:[\"']\\s*(?:return\\s+false|(?:event|e)\\.preventDefault\\(\\))|\\{\\s*(?:\\(?\\s*(?:e|ev|event)\\s*\\)?\\s*=>\\s*\\{?\\s*(?:e|ev|event)\\.preventDefault\\(\\)|\\(\\)\\s*=>\\s*false))|addEventListener\\s*\\(\\s*[\"']paste[\"']\\s*,\\s*(?:function\\s*\\(\\s*(\\w+)\\s*\\)|\\(?\\s*(\\w+)\\s*\\)?\\s*=>)\\s*\\{?\\s*\\w+\\.preventDefault\\(\\)",
+        "flags": "",
+        "scope": [
+          "tsx",
+          "jsx",
+          "vue",
+          "html",
+          "blade",
+          "astro",
+          "svelte",
+          "ts",
+          "js"
+        ],
+        "target": "code"
+      },
+      "why": "Blocking paste stops password managers from filling a password and forces people to retype long codes, emails and account numbers, which is slow, error prone and hardest for people who rely on assistive tools. It adds no security.",
+      "fix": "Remove the paste handler. To confirm an email or a password, let the person see what they typed (a show control) instead of making them type it twice."
     }
   ]
 }

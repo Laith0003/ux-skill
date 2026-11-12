@@ -132,34 +132,53 @@ def test_picture_lookup_is_linear(tmp_path):
     must lint in well under the hook's timeout."""
     import time
 
+    # CPU time, not wall time: the suite runs in parallel in CI, and a busy
+    # runner must not fail a guard that exists to catch quadratic work.
     body = "".join(f'<img src="p{i}.jpg" alt="Photo {i}">\n' for i in range(20000))
     text = f"<!doctype html><html><body>\n<picture><img src=\"a.jpg\" alt=\"a\"></picture>\n{body}</body></html>\n"
-    start = time.perf_counter()
+    start = time.process_time()
     findings = lint_text("big.html", text)
-    elapsed = time.perf_counter() - start
+    elapsed = time.process_time() - start
     hits = [f for f in findings if f.rule_id == "image-format-jpg-no-webp-avif"]
     assert len(hits) == 20000, f"expected one finding per bare <img>, got {len(hits)}"
     assert elapsed < 5, f"linting 20,000 images took {elapsed:.1f} s; skip_inside must use a precomputed range lookup"
 
 
+def _ring_rules(shape, n):
+    if shape == "unrelated":
+        rules = [".r%d input{outline:none;}\n.k%d:focus-visible{outline:2px solid red}\n" % (i, i) for i in range(n)]
+    elif shape == "shared-subject":
+        rules = [".r%d input{outline:none;}\n.k%d input:focus-visible{outline:2px solid red}\n" % (i, i) for i in range(n)]
+    else:
+        rules = [".c%d input{outline:none;}\n.c%d:focus-within{box-shadow:0 0 0 2px red}\n" % (i, i) for i in range(n)]
+    return "".join(rules) + "".join(".f%d{color:red;padding:4px}\n" % i for i in range(n * 5 // 2))
+
+
+def _outline_seconds(shape, n):
+    import time
+
+    text = _ring_rules(shape, n)
+    start = time.process_time()
+    findings = [f for f in lint_text("big.css", text) if f.rule_id == "outline-none-no-focus-visible"]
+    elapsed = time.process_time() - start
+    assert len(findings) == (0 if shape == "anchor" else n)
+    return elapsed
+
+
 @pytest.mark.parametrize("shape", ["unrelated", "shared-subject", "anchor"])
 def test_outline_check_scales_with_many_rings(shape):
     """2,000 removals against 2,000 rings: rings are indexed once per file,
-    so the check stays well under the hook's timeout."""
-    import time
-
-    if shape == "unrelated":
-        rules = [".r%d input{outline:none;}\n.k%d:focus-visible{outline:2px solid red}\n" % (i, i) for i in range(2000)]
-    elif shape == "shared-subject":
-        rules = [".r%d input{outline:none;}\n.k%d input:focus-visible{outline:2px solid red}\n" % (i, i) for i in range(2000)]
-    else:
-        rules = [".c%d input{outline:none;}\n.c%d:focus-within{box-shadow:0 0 0 2px red}\n" % (i, i) for i in range(2000)]
-    text = "".join(rules) + "".join(".f%d{color:red;padding:4px}\n" % i for i in range(5000))
-    start = time.perf_counter()
-    findings = [f for f in lint_text("big.css", text) if f.rule_id == "outline-none-no-focus-visible"]
-    elapsed = time.perf_counter() - start
-    assert len(findings) == (0 if shape == "anchor" else 2000)
-    assert elapsed < 2, f"{shape}: outline check took {elapsed:.1f} s on 2,000 removals and 2,000 rings; index the rings"
+    so the check stays well under the hook's timeout. A slow runner may miss
+    the 2 s bound, so the guard is the growth: doubling the input must not
+    quadruple the time, which is what an unindexed check does."""
+    full = _outline_seconds(shape, 2000)
+    if full < 2:
+        return
+    half = min(_outline_seconds(shape, 1000) for _ in range(2))
+    assert full < 3 * half, (
+        f"{shape}: outline check took {full:.1f} s on 2,000 removals and 2,000 rings, "
+        f"{full / half:.1f} times the 1,000 case; index the rings"
+    )
 
 
 def test_a_three_layer_glow_is_caught_by_the_glow_rule(tmp_path):

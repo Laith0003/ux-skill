@@ -1,0 +1,85 @@
+{
+ "page": "d-uk-4",
+ "findings": [
+  {
+   "key": "d-uk-4|static|aria-hidden-on-interactive|d-uk-4/index.html|145|6860779b35#1",
+   "pass": "static",
+   "rule": "aria-hidden-on-interactive",
+   "severity": "critical",
+   "file": "d-uk-4/index.html",
+   "line": 145
+  },
+  {
+   "key": "d-uk-4|static|cursor-not-allowed-no-visual|_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css|1|ef189b81a3#1",
+   "pass": "static",
+   "rule": "cursor-not-allowed-no-visual",
+   "severity": "high",
+   "file": "_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-4|static|display-line-height-under-floor|_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css|1|ef189b81a3#1",
+   "pass": "static",
+   "rule": "display-line-height-under-floor",
+   "severity": "low",
+   "file": "_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-4|static|display-table-for-layout|_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css|1|ef189b81a3#1",
+   "pass": "static",
+   "rule": "display-table-for-layout",
+   "severity": "medium",
+   "file": "_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-4|static|full-viewport-width-overflow|_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css|1|ef189b81a3#1",
+   "pass": "static",
+   "rule": "full-viewport-width-overflow",
+   "severity": "medium",
+   "file": "_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-4|static|imagery-mandatory-missing|d-uk-4/index.html|1|d1848aa7b5#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "d-uk-4/index.html",
+   "line": 1
+  },
+  {
+   "key": "d-uk-4|static|img-no-dimensions|d-uk-4/index.html|1205|13e2a19605#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-uk-4/index.html",
+   "line": 1205
+  },
+  {
+   "key": "d-uk-4|static|negative-margin-pull-left-right|_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css|1|ef189b81a3#1",
+   "pass": "static",
+   "rule": "negative-margin-pull-left-right",
+   "severity": "medium",
+   "file": "_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-4|static|outline-none-no-focus-visible|_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css|1|ef189b81a3#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/27e67ede8dcd-ain-206763ef36517e2a2f1a37045d34db0a.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-4|static|screen-reader-only-without-class|d-uk-4/index.html|97|bc277b4ee3#1",
+   "pass": "static",
+   "rule": "screen-reader-only-without-class",
+   "severity": "medium",
+   "file": "d-uk-4/index.html",
+   "line": 97
+  }
+ ]
+}

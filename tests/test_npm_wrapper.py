@@ -7,6 +7,7 @@ last stable release. These tests pin the version mapping and the pin itself.
 import json
 import shutil
 import site
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -53,7 +54,11 @@ def test_the_wrapper_runs_through_a_symlink(tmp_path):
     link.symlink_to(WRAPPER)
     out = subprocess.run(["node", str(link), "--version"], capture_output=True, text=True,
                          cwd=tmp_path, timeout=60)
-    assert "version" in (out.stdout + out.stderr).lower()
+    # The command ran: it printed a version, in either form ("uxskill,
+    # version 4.0.1" from the engine, or a bare "4.0.1" when another
+    # uxskill on PATH answers first).
+    said = (out.stdout + out.stderr).lower()
+    assert "version" in said or re.search(r"\b\d+\.\d+\.\d+\b", said), said
 
 
 # ------------------------------------------------ the pip last resort

@@ -1,0 +1,2637 @@
+{
+ "note": "Model-made labelling criteria, one per rule and pass. Read bench/label.py for the method.",
+ "rules": {
+  "href-empty-hash": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "href=[\\\"']#[\\\"']",
+      "label": "TP",
+      "why": "bare # link"
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><a\\b[^>]*href=[\\\"']#[\\\"']",
+      "label": "TP",
+      "why": "the link at the match points at a bare #"
+     },
+     {
+      "match": "<<<HERE>>>[^<]*href=[\\\"']#[\\\"']",
+      "label": "TP",
+      "why": "bare # link at the match"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "img-no-dimensions": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "<img\\b(?=[^>]*\\bwidth=)(?=[^>]*\\bheight=)[^>]*>",
+      "label": "FP",
+      "why": "both attributes in the tag"
+     },
+     {
+      "match": "<img\\b(?![^>]*\\bwidth=)[^>]*>|<img\\b(?![^>]*\\bheight=)[^>]*>",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><img\\b(?=[^>]*\\bwidth=)(?=[^>]*\\bheight=)[^>]*>",
+      "label": "FP",
+      "why": "the tag has width and height"
+     },
+     {
+      "match": "<<<HERE>>><img\\b[^>]*>",
+      "label": "TP",
+      "why": "the tag lacks width or height"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "image-format-jpg-no-webp-avif": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "<img\\b[^>]*\\.(jpe?g|png)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<picture\\b(?:(?!</picture>).)*<<<HERE>>>",
+      "label": "FP",
+      "why": "inside a picture element"
+     },
+     {
+      "match": "<<<HERE>>><img\\b[^>]*src=[\\\"'][^\\\"']*\\.(jpe?g|png)",
+      "label": "TP",
+      "why": "a jpg or png img outside picture; the rule covers both"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "outline-none-no-focus-visible": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": ":focus-visible",
+      "label": "FP",
+      "why": "focus-visible in the excerpt"
+     },
+     {
+      "match": ":focus[^{]*\\{[^}]*outline:\\s*(0|none)[^}]*box-shadow",
+      "label": "FP",
+      "why": "a box-shadow ring replaces it"
+     },
+     {
+      "match": ":focus(?!-visible)[^{]*\\{[^}]*outline:\\s*(0|none)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": ":focus-visible[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "the selector is focus-visible"
+     },
+     {
+      "match": ":focus(?!-visible)[^{}]*\\{[^{}]*<<<HERE>>>[^{}]*box-shadow:\\s*(?!none)",
+      "label": "FP",
+      "why": "a box-shadow ring in the same focus block replaces the outline"
+     },
+     {
+      "match": ":focus(?!-visible)[^{}]*\\{[^{}]*box-shadow:\\s*(?!none)[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a box-shadow ring in the same focus block replaces the outline"
+     },
+     {
+      "match": ":focus(?!-visible)[^{}]*\\{[^{}]*<<<HERE>>>[^{}]*(border-color|background|text-decoration:\\s*underline)",
+      "label": "FP",
+      "why": "a visible focus change in the same block"
+     },
+     {
+      "match": ":focus(?!-visible)[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "TP",
+      "why": "a :focus rule removes the outline with no ring in its block"
+     },
+     {
+      "match": "[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "TP",
+      "why": "the outline is removed for every state of a focusable element and nothing in the block replaces it; often a dialog that takes programmatic focus, so usefulness is low"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "full-viewport-width-overflow": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "position:\\s*fixed[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a fixed element does not widen the page"
+     },
+     {
+      "match": "<<<HERE>>>[^{}]*position:\\s*fixed",
+      "label": "FP",
+      "why": "a fixed element does not widen the page"
+     },
+     {
+      "match": "modal-fullscreen[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a dialog inside a fixed, scrolling modal"
+     },
+     {
+      "match": "(vw-100|min-vw-100)[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a utility class no element on the page uses"
+     },
+     {
+      "match": "<<<HERE>>>[^{}]*position:\\s*relative[^{}]*left:\\s*calc\\(-50vw",
+      "label": "TP",
+      "why": "a full-bleed element at 100vw, which overflows by the scrollbar width"
+     },
+     {
+      "match": "<<<HERE>>>;?\\s*(min-)?width:\\s*100vw",
+      "label": "TP",
+      "why": "an element at 100vw, which overflows by the scrollbar width"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "inline-style-attribute": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "style=[\\\"']\\s*--[\\w-]+:[^;\\\"']*;?\\s*[\\\"']",
+      "label": "FP",
+      "why": "only a custom property"
+     },
+     {
+      "match": "style=[\\\"']",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>[^>]*style=[\\\"']\\s*(--[\\w-]+:[^;\\\"']*;?\\s*)+[\\\"']",
+      "label": "FP",
+      "why": "only custom properties, which the rule allows"
+     },
+     {
+      "match": "<<<HERE>>>[^>]*style=",
+      "label": "TP",
+      "why": "a static inline style"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "timing-300ms-default": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "(?<![\\d.])0?\\.3s\\b|\\b300ms\\b",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>[^;}]*((?<![\\d.])0?\\.3s\\b|\\b300ms\\b)",
+      "label": "TP",
+      "why": "a 300ms transition or animation"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "FP",
+      "why": "no 300ms value at the match"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "h-screen-no-dvh-fallback": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "100dvh",
+      "label": "FP",
+      "why": "dvh in the excerpt"
+     },
+     {
+      "match": "100vh",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "100dvh[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "the block also sets 100dvh"
+     },
+     {
+      "match": "<<<HERE>>>[^{}]*100dvh",
+      "label": "FP",
+      "why": "the block also sets 100dvh"
+     },
+     {
+      "match": "<<<HERE>>>[^;}]*100vh",
+      "label": "TP",
+      "why": "100vh with no dvh in its block"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "cantTell",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "text-ink-at-low-alpha": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "rgba?\\([^)]*,\\s*0?\\.[0-6]\\d*\\s*\\)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "(:disabled|\\[disabled\\]|\\.disabled|aria-disabled)[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "disabled controls are outside the contrast requirement"
+     },
+     {
+      "match": "<<<HERE>>>color:\\s*rgba?\\(",
+      "label": "TP",
+      "why": "text color at low alpha"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "button-no-type": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "^\\s*<button\\b[^>]*\\btype=",
+      "label": "FP",
+      "why": "type set"
+     },
+     {
+      "match": "<button\\b(?![^>]*\\btype=)[^>]*>",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><button\\b[^>]*\\btype=",
+      "label": "FP",
+      "why": "type is set"
+     },
+     {
+      "match": "<<<HERE>>><button\\b",
+      "label": "TP",
+      "why": "no type attribute"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "transition-duration-500ms-or-longer": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "position:\\s*fixed[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a fixed control sliding in, not a hover or press answer"
+     },
+     {
+      "match": "<<<HERE>>>.{0,500}:hover",
+      "label": "TP",
+      "why": "a hover rule for the same component follows, so the hover answers late"
+     },
+     {
+      "match": "(carousel|modal|offcanvas|collapse|toast|progress|fade|slide|panel|menu|nav)[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a panel or slide movement, not a hover or press answer"
+     },
+     {
+      "match": "(:hover|:focus|:active|button|\\.btn|\\ba\\b)[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "TP",
+      "why": "a state change that answers late"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "cantTell",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "lorem-ipsum-leak": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "lorem\\s+ipsum",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,40}lorem",
+      "label": "TP",
+      "why": "lorem ipsum copy"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "placeholder-token-shipped": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "lorem\\s+ipsum|\\{\\{[^}]*\\}\\}|\\{TODO",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,40}(lorem|\\{\\{|\\{TODO)",
+      "label": "TP",
+      "why": "the rule's pattern lists lorem ipsum as a placeholder token"
+     }
+    ]
+   },
+   "note": "duplicates lorem-ipsum-leak on lorem copy"
+  },
+  "tooltip-on-required-info": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "alt=\\\"([^\\\"]+)\\\"[^>]*title=\\\"\\1\\\"|title=\\\"([^\\\"]+)\\\"[^>]*alt=\\\"\\2\\\"",
+      "label": "FP",
+      "why": "title repeats the alt"
+     },
+     {
+      "match": "title=",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "alt=\\\"([^\\\"]+)\\\"[^>]*title=\\\"\\1\\\"|title=\\\"([^\\\"]+)\\\"[^>]*alt=\\\"\\2\\\"",
+      "label": "FP",
+      "why": "the title repeats the alt text, so nothing is hidden in it"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "TP",
+      "why": "copy only in title"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "focusable-at-opacity-zero": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "(backdrop|is-preload|\\.fade)[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a backdrop, a preload start state or a faded panel that is also display: none"
+     },
+     {
+      "match": "input[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a native checkbox or radio kept focusable under a custom control, the accessible pattern"
+     },
+     {
+      "match": "(checkbox|radio)[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a native checkbox or radio kept focusable under a custom control"
+     },
+     {
+      "match": ":hover[^{}]*<<<HERE>>>|<<<HERE>>>.{0,400}:hover",
+      "label": "FP",
+      "why": "revealed on hover: the rule leaves that to hover-only-card-actions"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "cantTell",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "inline-svg-no-aria": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "^\\s*<svg\\b[^>]*aria-hidden",
+      "label": "FP",
+      "why": "aria-hidden set"
+     },
+     {
+      "match": "<svg\\b(?![^>]*aria-)(?![^>]*role=)[^>]*>",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><svg\\b[^>]*(aria-hidden|aria-label|role=\\\"img\\\")",
+      "label": "FP",
+      "why": "named or hidden"
+     },
+     {
+      "match": "<<<HERE>>><svg\\b[^>]*class=\\\"[^\\\"]*d-none",
+      "label": "FP",
+      "why": "a hidden sprite of symbols"
+     },
+     {
+      "match": "<<<HERE>>><svg\\b[^>]*>\\s*<title",
+      "label": "FP",
+      "why": "has a title"
+     },
+     {
+      "match": "<<<HERE>>><svg\\b",
+      "label": "TP",
+      "why": "an svg with no name and not hidden"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "animating-layout-properties": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "transition:[^;]*\\b(width|height|top|left|right|bottom|margin|padding|max-height)\\b",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>transition:[^;}]*\\b(width|height|top|left|right|bottom|margin|padding|max-height)\\b",
+      "label": "TP",
+      "why": "transitions a layout property"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "input-purpose-missing": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "^\\s*<input\\b[^>]*autocomplete=",
+      "label": "FP",
+      "why": "autocomplete set"
+     },
+     {
+      "match": "<input\\b(?![^>]*autocomplete)[^>]*type=\\\"(email|tel)\\\"",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><input\\b[^>]*autocomplete=",
+      "label": "FP",
+      "why": "autocomplete is set"
+     },
+     {
+      "match": "<<<HERE>>><input\\b[^>]*type=[\\\"']?(checkbox|radio|submit|button|search)",
+      "label": "FP",
+      "why": "not a personal-data field"
+     },
+     {
+      "match": "<<<HERE>>><input\\b",
+      "label": "TP",
+      "why": "a personal-data field with no autocomplete"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "generic-cta-text": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": ">\\s*(learn more|get started|click here|read more)\\s*<",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,200}?>\\s*(learn more|get started|click here)\\s*<",
+      "label": "TP",
+      "why": "generic call to action"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "target-blank-no-noopener": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "rel=[\\\"'][^\\\"']*noopener",
+      "label": "FP",
+      "why": "noopener set"
+     },
+     {
+      "match": "target=[\\\"']_blank",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><a\\b[^>]*rel=[\\\"'][^\\\"']*noopener",
+      "label": "FP",
+      "why": "noopener set"
+     },
+     {
+      "match": "<<<HERE>>><a\\b[^>]*target=[\\\"']_blank",
+      "label": "TP",
+      "why": "no noopener; browsers now imply it, so the risk is low"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "imagery-mandatory-missing": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<title>[^<]*(dashboard|checkout|sign.?in|log.?in|account|settings|docs|documentation|installation|album|blog|product|pour-over|create your|\\u0627\\u0644\\u0625\\u0639\\u062f\\u0627\\u062f\\u0627\\u062a)",
+      "label": "FP",
+      "why": "not a landing page"
+     },
+     {
+      "match": "<title>[^<]*pricing",
+      "label": "cantTell",
+      "why": "a pricing page; the rule names landing pages"
+     },
+     {
+      "match": "<title>",
+      "label": "TP",
+      "why": "a landing page with no photograph"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "display-line-height-under-floor": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the measured line height sits under the engine's display floor; the floor is house taste",
+    "unless": []
+   },
+   "note": ""
+  },
+  "infinite-animation-without-reduced-motion": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "infinite",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>[^;}]*infinite",
+      "label": "TP",
+      "why": "an infinite animation with no reduced-motion override found"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "placeholder-as-label": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "<(input|textarea)\\b(?![^>]*aria-label)[^>]*placeholder=",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><(input|textarea)\\b[^>]*aria-label",
+      "label": "FP",
+      "why": "named by aria-label"
+     },
+     {
+      "match": "<<<HERE>>><(input|textarea)\\b[^>]*\\bid=\\\"([^\\\"]+)\\\".{0,300}for=\\\"\\2\\\"",
+      "label": "FP",
+      "why": "a label for it follows"
+     },
+     {
+      "match": "for=\\\"([^\\\"]+)\\\"[^<]*</label>\\s*<<<HERE>>><(input|textarea)\\b[^>]*\\bid=\\\"\\1\\\"",
+      "label": "FP",
+      "why": "a label for it precedes"
+     },
+     {
+      "match": "<<<HERE>>><(input|textarea)\\b",
+      "label": "TP",
+      "why": "placeholder is the only name"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "heading-skip-h1-h3": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "<h[12]\\b",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><h[12]\\b",
+      "label": "TP",
+      "why": "a lower heading follows with the level between missing"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "negative-margin-pull-left-right": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "margin-(left|right):\\s*-(?:[0-3]?\\d)px",
+      "label": "FP",
+      "why": "a small gutter offset"
+     },
+     {
+      "match": "margin-(left|right):\\s*-(?:[4-9]\\d|\\d{3,})px",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>margin-(left|right):\\s*-(?:[4-9]\\d|\\d{3,})px",
+      "label": "TP",
+      "why": "a large negative side margin"
+     },
+     {
+      "match": "<<<HERE>>>margin-(left|right):\\s*-",
+      "label": "FP",
+      "why": "a small gutter offset, not a pull"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "generic-class-container-wrapper-only": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "class=\\\"(inner|wrapper|box|container)\\\"",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><div class=\\\"(inner|wrapper|box)\\\"",
+      "label": "TP",
+      "why": "only a generic class"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "css-import-render-blocking": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "@import",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>@import",
+      "label": "TP",
+      "why": "an @import"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "hover-only-card-actions": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "#menu[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a menu close control shown with the menu, not on hover"
+     },
+     {
+      "match": "<<<HERE>>>.{0,600}:hover[^{}]*opacity:\\s*1",
+      "label": "cantTell",
+      "why": "an overlay revealed on hover; whether it holds an action needs the page"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "FP",
+      "why": "not revealed by hover"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "focusable-inside-aria-hidden": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "aria-hidden=\\\"true\\\"",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<div\\b[^>]*class=\\\"[^\\\"]*\\bmodal\\b[^>]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a closed modal is display: none, so nothing inside it takes focus"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "body-font-weight-bold-or-700-keyword": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "(^|[},;])\\s*(body|p|li)\\s*\\{[^{}]*<<<HERE>>>",
+      "label": "TP",
+      "why": "a bare body, p or li rule set bold"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "FP",
+      "why": "a classed, nested or marker selector (a title, a date line, a callout, a list counter), not body copy"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "emoji-in-ui": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "&#1[23]\\d{4};|&#9\\d{3};|[\\u2600-\\u27bf]|[\\U0001F300-\\U0001FAFF]",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,60}(&#1[23]\\d{4};|&#9\\d{3};|[\\U0001F300-\\U0001FAFF])",
+      "label": "TP",
+      "why": "an emoji used as an icon"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "lone-emoji-as-icon": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "&#1[23]\\d{4};|&#9\\d{3};|[\\u2600-\\u27bf]|[\\U0001F300-\\U0001FAFF]",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,60}(&#1[23]\\d{4};|&#9\\d{3};|[\\U0001F300-\\U0001FAFF])",
+      "label": "TP",
+      "why": "an emoji used as an icon"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "icon-emoji-stamp": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "&#1[23]\\d{4};|&#9\\d{3};|[\\u2600-\\u27bf]|[\\U0001F300-\\U0001FAFF]",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,60}(&#1[23]\\d{4};|&#9\\d{3};|[\\U0001F300-\\U0001FAFF])",
+      "label": "TP",
+      "why": "an emoji used as an icon"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "emoji-bullet-marker": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "content:\\s*\\\"\\u2714\\\"",
+      "label": "FP",
+      "why": "a print-only check mark drawn in CSS, not an emoji bullet"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "cantTell",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "padding-shorthand-4-vals-zero-first": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "padding:\\s*0\\s+(\\S+)\\s+\\S+\\s+\\1",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>padding:\\s*0\\s+(\\S+)\\s+\\S+\\s+\\1\\b",
+      "label": "TP",
+      "why": "right equals left, so three values do"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "FP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "display-table-for-layout": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>\\}?\\s*\\.display-table",
+      "label": "FP",
+      "why": "a utility class no element on the page uses"
+     },
+     {
+      "match": "<<<HERE>>>.{0,300}display:\\s*table-cell",
+      "label": "TP",
+      "why": "table cells used to lay out a row of boxes"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "FP",
+      "why": "a clearfix, a legend that must wrap or a shrink-to-fit box, not table layout"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "repeated-action-same-name": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": []
+   },
+   "note": ""
+  },
+  "text-align-justify-web": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "\\.text-(align-)?justify\\s*\\{",
+      "label": "FP",
+      "why": "a utility class"
+     },
+     {
+      "match": "text-align:\\s*justify",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "\\.text-(align-)?justify[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a utility class no element on the page uses"
+     },
+     {
+      "match": "<<<HERE>>>text-align:\\s*justify",
+      "label": "TP",
+      "why": "justified text"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "loader-spinner-border-default": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "spinner",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,200}spinner-border",
+      "label": "TP",
+      "why": "the border-spin recipe"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "cantTell",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "grid-cols-3-1fr-default": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "repeat\\(3,\\s*1fr\\)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,80}repeat\\(3,\\s*1fr\\)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "screen-reader-only-without-class": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "(govuk-skip-link|usa-skipnav)",
+      "label": "FP",
+      "why": "the design system's own skip-link class hides it until focus"
+     },
+     {
+      "match": "skip",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><a\\b[^>]*(govuk-skip-link|usa-skipnav|skip-link|visually-hidden|sr-only)",
+      "label": "FP",
+      "why": "a skip-link class that hides it until focus"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "cursor-not-allowed-no-visual": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "disabled[^{}]*\\{[^{}]*<<<HERE>>>.{0,600}disabled[^{}]*\\{[^}]*(opacity|color|background)",
+      "label": "FP",
+      "why": "the disabled state has a visual change"
+     },
+     {
+      "match": "(opacity|color|background)[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "the block changes the look"
+     },
+     {
+      "match": "<<<HERE>>>[^{}]*(opacity|color|background)",
+      "label": "FP",
+      "why": "the block changes the look"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "cantTell",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "transition-property-all": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "transition:\\s*all",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,40}transition:\\s*all",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "viewport-no-zoom": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "user-scalable\\s*=\\s*no|maximum-scale\\s*=\\s*1(\\.0)?\\b",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "the viewport blocks zoom",
+    "unless": []
+   },
+   "note": ""
+  },
+  "arbitrary-z-index-9999": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "z-index:\\s*9{4,}",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>z-index:\\s*9{4,}",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "lang-attribute-missing": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "<html(?![^>]*\\blang=)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><html(?![^>]*\\blang=)",
+      "label": "TP",
+      "why": ""
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "FP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "unsplash-photo-id-no-alt": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "unsplash[^\\\"]*\\\"\\s*alt=\\\"\\\"|alt=\\\"\\\"[^>]*unsplash",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><img\\b[^>]*alt=\\\"\\\"",
+      "label": "TP",
+      "why": "an empty alt on a stock photo"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "aspect-ratio-1-1-default": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "FP",
+    "why": "one square image or a utility among several ratios, not square everywhere",
+    "unless": []
+   },
+   "note": ""
+  },
+  "one-action-several-labels": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": []
+   },
+   "note": ""
+  },
+  "nav-equal-hamburger-desktop": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "FP",
+    "why": "the menu button is hidden at desktop widths by the page's own CSS, or the match is a dropdown",
+    "unless": []
+   },
+   "note": ""
+  },
+  "select-without-label": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "<select\\b(?![^>]*aria-label)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><select\\b[^>]*aria-label",
+      "label": "FP",
+      "why": "named by aria-label"
+     },
+     {
+      "match": "<<<HERE>>><select\\b[^>]*\\bid=\\\"([^\\\"]+)\\\".{0,300}for=\\\"\\1\\\"|for=\\\"([^\\\"]+)\\\".{0,300}<<<HERE>>><select\\b[^>]*\\bid=\\\"\\2\\\"",
+      "label": "FP",
+      "why": "a label points at it"
+     },
+     {
+      "match": "<<<HERE>>><select\\b",
+      "label": "TP",
+      "why": "no label is tied to the select"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "img-no-alt": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "<img\\b(?![^>]*\\balt=)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><img\\b(?![^>]*\\balt=)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "link-without-href": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><a\\b[^>]*(disabled|aria-disabled)",
+      "label": "FP",
+      "why": "a disabled link, which has no href on purpose"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "decorative-accent-ruler": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "(popover|document-list-child|tooltip|arrow)[^{}]*\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a list marker or popover arrow, not an ornament"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "cantTell",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "glow-shadow-zero-offset": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "box-shadow:\\s*0\\s+0\\s+\\d",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>box-shadow:\\s*0\\s+0\\s+\\d",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "flex-center-center-default": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "flex with both axes centred",
+    "unless": []
+   },
+   "note": ""
+  },
+  "all-caps-large": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": []
+   },
+   "note": ""
+  },
+  "font-family-monospace-fallback-default": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "monospace",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "monospace with no named face",
+    "unless": []
+   },
+   "note": ""
+  },
+  "href-javascript-void": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "href=\\\"javascript:",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "a javascript: link",
+    "unless": []
+   },
+   "note": ""
+  },
+  "default-font-only": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "font-family:\\s*['\\\"]?(Inter|Geist)",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "Inter alone on the page",
+    "unless": []
+   },
+   "note": ""
+  },
+  "fake-name-john-doe": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "placeholder=\\\"(John|Jane) Doe\\\"",
+      "label": "FP",
+      "why": "an example in a placeholder hint, not shipped data"
+     },
+     {
+      "match": ">\\s*(John|Jane) Doe\\s*<",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>>[^<>]{0,40}placeholder=\\\"(John|Jane) Doe\\\"|placeholder=\\\"(John|Jane) Doe\\\"[^<>]{0,10}<<<HERE>>>",
+      "label": "FP",
+      "why": "a placeholder hint"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "TP",
+      "why": "a placeholder name shipped as data"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "animation-duration-too-long": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "animation:[^;]*\\b1\\.\\d+s",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "prefers-reduced-motion[^@]*<<<HERE>>>",
+      "label": "FP",
+      "why": "slows a spinner under reduced motion on purpose"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "anchor-no-href-as-button": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><a\\b[^>]*(disabled|aria-disabled)",
+      "label": "FP",
+      "why": "a disabled link"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "cta-text-tap-continue-go": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><a\\b[^>]*class=\\\"next\\\"",
+      "label": "FP",
+      "why": "pagination; Next is clear there"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "cantTell",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "cta-arrow-rightward-bouncing": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "FP",
+    "why": "an arrow with no bounce animation",
+    "unless": []
+   },
+   "note": ""
+  },
+  "footer-built-with-love-coffee": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "FP",
+    "why": "a feature card, not a footer credit",
+    "unless": []
+   },
+   "note": ""
+  },
+  "video-without-captions": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "<video\\b[^>]*muted",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><video\\b[^>]*muted",
+      "label": "FP",
+      "why": "a muted product demo loop has no speech to caption"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "aria-hidden-on-interactive": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "\\bhidden\\b[^>]*aria-hidden|aria-hidden[^>]*\\bhidden\\b",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<<<HERE>>><\\w+\\b[^>]*\\shidden\\s[^>]*aria-hidden",
+      "label": "FP",
+      "why": "the hidden attribute removes it from the focus order"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "iframe-without-title": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "<noscript><iframe[^>]*googletagmanager",
+      "label": "FP",
+      "why": "a tag-manager fallback inside noscript"
+     },
+     {
+      "match": "<noscript>",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "<noscript>\\s*<<<HERE>>>",
+      "label": "FP",
+      "why": "a hidden tag-manager fallback, never shown"
+     },
+     {
+      "match": "<<<HERE>>>",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "note": ""
+  },
+  "layout-family-repeated": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": []
+   },
+   "note": ""
+  },
+  "font-system-only": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": [
+     {
+      "match": "font-family:\\s*-apple-system",
+      "label": "TP",
+      "why": ""
+     }
+    ]
+   },
+   "b": {
+    "default": "TP",
+    "why": "a system stack and nothing chosen",
+    "unless": []
+   },
+   "note": ""
+  },
+  "card-glow-purple-shadow": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "hairline-border-heavy-shadow": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "hero-text-arbitrary-90px": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "body-text-shadow-on-prose": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "letterspacing-tracking-tight-display": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "scale-1-1-on-card-hover": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "cta-text-read-more": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "title-case-headlines": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "event-listener-no-passive-on-scroll": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "purple-to-blue-gradient": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "testimonial-fake-five-stars": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "border-radius-2xl-default": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the condition is present at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "animated-grain-noise-no-perf-class": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "a glitch text effect named noise, not a grain layer",
+    "unless": []
+   },
+   "note": ""
+  },
+  "dark-text-on-dark-card": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "FP",
+    "why": "utility class definitions, no card at the match",
+    "unless": []
+   },
+   "note": ""
+  },
+  "fixed-height-text-block": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": [
+     {
+      "match": "li div\\{[^{}]*<<<HERE>>>",
+      "label": "FP",
+      "why": "a 44px tile around one letter cannot overflow"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "numbered-placeholder-classname": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "FP",
+    "why": "a class generated by the CMS, not a placeholder name",
+    "unless": []
+   },
+   "note": ""
+  },
+  "scroll-to-top-button-everywhere": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "context does not decide it",
+    "unless": []
+   },
+   "note": ""
+  },
+  "inline-style-display-none-no-aria": {
+   "a": {
+    "default": "cantTell",
+    "why": "excerpt does not show the match",
+    "unless": []
+   },
+   "b": {
+    "default": "FP",
+    "why": "display: none already removes it from assistive technology",
+    "unless": []
+   },
+   "note": ""
+  },
+  "text-low-contrast": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "flat colours on both sides of the measurement",
+    "unless": [
+     {
+      "match": "#ffffff on #ffffff",
+      "label": "FP",
+      "why": "white on white: the engine measured the page behind a caption, not the slide it sits on"
+     },
+     {
+      "match": "^p\\.text-white-75.*<title>Creative",
+      "label": "cantTell",
+      "why": "masthead text on a background photo that is not stored"
+     },
+     {
+      "match": "^\\S*\\.text-(black|white)-(50|75)\\b",
+      "label": "TP",
+      "why": "text set at low alpha on purpose by a utility class"
+     },
+     {
+      "match": "computed:faded-text",
+      "label": "cantTell",
+      "why": "the measured ratio is well under what the two colours give, so the text was measured faded, as in a preload state a blocked script would lift"
+     },
+     {
+      "match": "^\\S*\\b(masthead|hero|banner|cover)\\b.*<<<HERE>>>.{0,6000}background(-image)?:[^;]*url\\(",
+      "label": "cantTell",
+      "why": "hero text on a photo that is not stored"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "accent-text-low-contrast": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "flat colours on both sides of the measurement",
+    "unless": [
+     {
+      "match": "#ffffff on #ffffff",
+      "label": "FP",
+      "why": "white on white: the engine measured the page behind a caption, not the slide it sits on"
+     },
+     {
+      "match": "^p\\.text-white-75.*<title>Creative",
+      "label": "cantTell",
+      "why": "masthead text on a background photo that is not stored"
+     },
+     {
+      "match": "^\\S*\\.text-(black|white)-(50|75)\\b",
+      "label": "TP",
+      "why": "text set at low alpha on purpose by a utility class"
+     },
+     {
+      "match": "computed:faded-text",
+      "label": "cantTell",
+      "why": "the measured ratio is well under what the two colours give, so the text was measured faded, as in a preload state a blocked script would lift"
+     },
+     {
+      "match": "^\\S*\\b(masthead|hero|banner|cover)\\b.*<<<HERE>>>.{0,6000}background(-image)?:[^;]*url\\(",
+      "label": "cantTell",
+      "why": "hero text on a photo that is not stored"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "text-overflows-its-box": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "system fonts only, so the measured width holds",
+    "unless": [
+     {
+      "match": "<<<HERE>>>.{0,6000}(fonts\\.googleapis|@font-face|use\\.typekit|<link[^>]*stylesheet)",
+      "label": "cantTell",
+      "why": "the page loads web fonts, blocked in the frozen render; fallback fonts change widths"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "image-broken": {
+   "a": {
+    "default": "cantTell",
+    "why": "images are not stored with the frozen pages",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "images are not stored with the frozen pages",
+    "unless": []
+   },
+   "note": ""
+  },
+  "photo-grade-off": {
+   "a": {
+    "default": "cantTell",
+    "why": "images are not stored with the frozen pages",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "images are not stored with the frozen pages",
+    "unless": []
+   },
+   "note": ""
+  },
+  "image-distorted": {
+   "a": {
+    "default": "cantTell",
+    "why": "images are not stored with the frozen pages",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "images are not stored with the frozen pages",
+    "unless": []
+   },
+   "note": ""
+  },
+  "render-failed": {
+   "a": {
+    "default": "cantTell",
+    "why": "the page did not render",
+    "unless": []
+   },
+   "b": {
+    "default": "cantTell",
+    "why": "the page did not render",
+    "unless": []
+   },
+   "note": ""
+  },
+  "focus-ring-missing": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "^\\S*\\.usa-focus\\b",
+      "label": "FP",
+      "why": "the usa-focus class shows the focused style at rest, as a demo, so focus adds no change"
+     },
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts; they were removed from the frozen copy"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "target-too-small": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "target is [0-4]x[0-4]px",
+      "label": "cantTell",
+      "why": "an icon link collapsed because its icon font is not stored"
+     },
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts; they were removed from the frozen copy"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "state-answers-late": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "press-moves-under-reduced-motion": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "focus-ring-clipped": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "focus-obscured": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "focus-lost-after-escape": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "input-text-zooms": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "horizontal-overflow": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "centered-text-off-center": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "first-screen-covered": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "color-over-budget": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "infinite-animation-under-reduced-motion": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  },
+  "moving-content-without-pause": {
+   "a": {
+    "default": "TP",
+    "why": "the measured message states the condition",
+    "unless": []
+   },
+   "b": {
+    "default": "TP",
+    "why": "the original page had no scripts, so the frozen render is the page",
+    "unless": [
+     {
+      "match": "<<<HERE>>>ux-bench: script elements removed",
+      "label": "cantTell",
+      "why": "the original page ran scripts, removed from the frozen copy, which can change this measurement"
+     }
+    ]
+   },
+   "note": ""
+  }
+ }
+}

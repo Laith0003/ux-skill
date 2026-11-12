@@ -27,8 +27,8 @@
     },
     "radius_control": "5px",
     "state_duration": "200ms",
-    "tokens": 727,
-    "tokens_sha256": "807178b87f7e9059"
+    "tokens": 720,
+    "tokens_sha256": "c788249cd2808af5"
   },
   "id": "hashicorp",
   "name": "HashiCorp",

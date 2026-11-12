@@ -1,0 +1,5 @@
+/* An 8-digit hex with alpha 0x66 (0.4) is under the 0.6 floor. */
+.badge {
+  background-color: #ffffff66;
+  backdrop-filter: blur(4px);
+}

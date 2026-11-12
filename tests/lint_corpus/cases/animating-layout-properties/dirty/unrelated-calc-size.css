@@ -1,0 +1,4 @@
+/* A calc-size() on an unrelated element does not excuse a collapsing
+   sidebar that animates its height. */
+.x { width: calc-size(auto, size); }
+.sidebar.collapsed { transition: height 300ms ease; }

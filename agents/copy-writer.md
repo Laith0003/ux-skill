@@ -124,9 +124,9 @@ NEVER restate the label. NEVER use helper text for marketing. NEVER write more t
 |---|---|
 | "Please enter your phone number:" | "Phone" |
 | "What is your email address?" | "Email" |
-| "Your Full Name *" | "Full name" (mark required visually, not in the label) |
+| "Your Full Name *" | "Full name" (and mark the optional fields "(optional)" instead) |
 
-Required-field indicators belong in the visual treatment (a dot, an asterisk, a "Required" pill), not the label string.
+A required field must say so in text and in code (WCAG 2.2 SC 3.3.2 and 1.3.1). Mark the fewer group in words: "(optional)" on optional fields, or an asterisk explained once above the form ("* required"). A bare dot, color or unexplained asterisk is not enough, and every required control carries the `required` attribute (or `aria-required="true"`) so assistive technology announces it (B86 p.494-495; B23 p.564).
 
 ### 8. Toast / notification accessibility
 
@@ -135,7 +135,7 @@ Every toast:
 - `aria-live="polite"` for success and informational
 - `aria-live="assertive"` for critical errors only (rare)
 - NEVER steals focus
-- Auto-dismisses after 4–6 seconds for success; persists with a dismiss button for errors
+- Success may fade after about 5 seconds and pauses on hover and focus; errors and toasts with Undo or Retry persist with a dismiss button (WCAG 2.2 SC 2.2.1)
 - Includes an action when the user might want to undo or retry: "Saved. Undo"
 
 ### 9. Banned filler words
@@ -183,7 +183,7 @@ Across every state, four principles override everything else:
 When writing for multiple locales:
 
 - **Never machine-translate microcopy.** Hand the strings to a native speaker.
-- **Length varies.** Arabic and German often run 30% longer than English; design needs room.
+- **Length varies, most for short strings.** A label of 10 characters or fewer can grow 100 to 200% in translation, long text about 30% (B46 p.657-662). Leave room for the short-string figure on buttons, tabs and labels, and test with pseudo-localization.
 - **Date and number formats.** Arabic uses Arabic-Indic digits in some contexts; the user's locale setting decides.
 - **RTL means more than direction.** Punctuation, parentheses, and inline numbers behave differently. Test in the target locale, not as flipped English.
 
