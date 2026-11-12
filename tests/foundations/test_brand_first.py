@@ -1,5 +1,5 @@
 """Brand first: a supplied brand color is the identity. Three brands with
-briefs like real client work (industry and tone words only) show that the
+briefs like real work (industry and tone words only) show that the
 brand leads the role, the text on a saturated mid tone reads naturally, the
 neutrals take the brand's temperature, the supporting accent never forms a
 pairing anti-slop bans, and every control fill is measured on every surface

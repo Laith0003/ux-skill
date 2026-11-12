@@ -9,6 +9,12 @@ project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [4.0.1] - 2026-11-12
+
+- The package summary states the 4.0 figures (171 rules, the design system generator, 25 MCP tools, 18 commands); 4.0.0 still carried the 3.x summary.
+- The demo landing page and the case-study example use fictional names and details.
+- 3.2.0 is withdrawn from PyPI and npm.
+
 ## [4.0.0] - 2026-11-01 - **FOUNDATIONS**
 
 ux-skill 4.0 builds a design system from one brand color and a brief, reads

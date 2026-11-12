@@ -59,7 +59,7 @@ Rules:
 
 Example (rendered as plain text here; the actual styling is `<span class="text-zinc-500">`):
 
-> The Northwind pilot launched in Q4 2026 (across three branches in Amman). Redemption rose 41% in the first six weeks, with no observed change in fraud attempts.
+> The pilot ran for six weeks (across three stores). Redemption rose 41% over that time, with no observed change in fraud attempts. (Illustrative figures.)
 
 The black words carry the claim. The gray words frame it.
 

@@ -31,7 +31,7 @@ def _ids(seq):
 @pytest.mark.parametrize("brief", [
     {"primary_goal": "Book a demo"}, {"description": "commercial skip hire quote"},
     {"audience": "B2B finance teams", "description": "a stored value wallet for payments at shops"},
-    {"primary_goal": "download the app"}, {"description": "wholesale pharmacy supply marketplace"},
+    {"primary_goal": "download the app"}, {"description": "wholesale building supplies marketplace"},
 ])
 def test_no_word_of_the_brief_picks_a_sequence(brief):
     seq = select_for_brief(brief)
