@@ -254,7 +254,7 @@ Honor at every level. Never assume the user "will be fine."
 ### Touch target sizes
 - iOS minimum: 44x44pt
 - Android minimum: 48x48dp
-- Web minimum: 44x44px
+- Web: 24x24 CSS px is the WCAG 2.5.8 AA floor; 44x44px is the house target on touch
 - Mobile input field height: ≥44px
 - Touch spacing: ≥8px gap between adjacent targets
 - Extend hit area beyond visual bounds via `hitSlop` or padding for smaller icons
