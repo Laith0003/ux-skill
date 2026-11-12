@@ -64,7 +64,7 @@ EXPECTED = {
     "landing-rhythm-follows-the-brand", "measures-count-characters", "full-width-landing-frame",
     "sections-meet-by-a-seam",
     "motion-roles-by-pace", "moves-answer-at-once", "press-scale-and-glide",
-    "dark-text-sets-lighter",
+    "dark-text-sets-lighter", "dark-text-keeps-its-weight",
     "bands-follow-energy", "lines-in-ink", "bottom-anchored-hero", "faces-cost-their-ubiquity",
     "photo-direction",
     "own-system-rebuilt-in-place", "extension-carried-forward", "type-size-names",
@@ -120,7 +120,8 @@ SUPERSEDED = {"status-hues": "status-harmony", "fill-edge-page-only": "primary-e
               "motion-roles": "motion-roles-by-pace",
               "score-tells-heavy-pages-apart": "score-weighs-repeats-past-the-knee",
               "accent-text-on-every-ground": "all-text-measured-as-seen",
-              "layout-transitions-that-reflow": "layout-transitions-through-the-platform"}
+              "layout-transitions-that-reflow": "layout-transitions-through-the-platform",
+              "dark-text-sets-lighter": "dark-text-keeps-its-weight"}
 
 
 def test_every_shipped_record_is_valid_and_routed():

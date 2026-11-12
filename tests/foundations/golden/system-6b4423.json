@@ -8277,42 +8277,6 @@
           }
         }
       },
-      "360": {
-        "$type": "fontWeight",
-        "$value": 360,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "370": {
-        "$type": "fontWeight",
-        "$value": 370,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "380": {
-        "$type": "fontWeight",
-        "$value": 380,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "390": {
-        "$type": "fontWeight",
-        "$value": 390,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
       "400": {
         "$type": "fontWeight",
         "$value": 400,
@@ -8322,27 +8286,9 @@
           }
         }
       },
-      "420": {
-        "$type": "fontWeight",
-        "$value": 420,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
       "450": {
         "$type": "fontWeight",
         "$value": 450,
-        "$extensions": {
-          "io.github.laith0003.ux-skill": {
-            "layer": "primitive"
-          }
-        }
-      },
-      "460": {
-        "$type": "fontWeight",
-        "$value": 460,
         "$extensions": {
           "io.github.laith0003.ux-skill": {
             "layer": "primitive"
@@ -8855,34 +8801,6 @@
                 "fontWeight": "{type.weight.400}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.step-10}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.10}",
-                "fontWeight": "{type.weight.380}",
-                "letterSpacing": "{type.tracking.step-10}",
-                "lineHeight": "{type.leading.latin.step-10}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.10}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.step-10}",
-                "lineHeight": "{type.leading.latin.step-10}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.10}",
-                "fontWeight": "{type.weight.390}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-10}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.10}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-10}"
               }
             }
           }
@@ -8902,34 +8820,6 @@
             "layer": "semantic",
             "modes": {
               "direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.10}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-10}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.10}",
-                "fontWeight": "{type.weight.380}",
-                "letterSpacing": "{type.tracking.caps}",
-                "lineHeight": "{type.leading.latin.step-10}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.10}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.caps}",
-                "lineHeight": "{type.leading.latin.step-10}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.10}",
-                "fontWeight": "{type.weight.390}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-10}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic-display}",
                 "fontSize": "{type.size.arabic.10}",
                 "fontWeight": "{type.weight.400}",
@@ -8983,34 +8873,6 @@
                 "fontWeight": "{type.weight.400}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.step-9}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.9}",
-                "fontWeight": "{type.weight.370}",
-                "letterSpacing": "{type.tracking.step-9}",
-                "lineHeight": "{type.leading.latin.step-9}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.9}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.step-9}",
-                "lineHeight": "{type.leading.latin.step-9}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.9}",
-                "fontWeight": "{type.weight.370}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-9}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.9}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-9}"
               }
             }
           }
@@ -9030,34 +8892,6 @@
             "layer": "semantic",
             "modes": {
               "direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.8}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-8}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.8}",
-                "fontWeight": "{type.weight.370}",
-                "letterSpacing": "{type.tracking.step-8}",
-                "lineHeight": "{type.leading.latin.step-8}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.8}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.step-8}",
-                "lineHeight": "{type.leading.latin.step-8}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.8}",
-                "fontWeight": "{type.weight.370}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-8}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic-display}",
                 "fontSize": "{type.size.arabic.8}",
                 "fontWeight": "{type.weight.400}",
@@ -9087,34 +8921,6 @@
                 "fontWeight": "{type.weight.450}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.1}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.7}",
-                "fontWeight": "{type.weight.420}",
-                "letterSpacing": "{type.tracking.step-7}",
-                "lineHeight": "{type.leading.latin.1}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.7}",
-                "fontWeight": "{type.weight.450}",
-                "letterSpacing": "{type.tracking.step-7}",
-                "lineHeight": "{type.leading.latin.1}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.7}",
-                "fontWeight": "{type.weight.420}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.1}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.7}",
-                "fontWeight": "{type.weight.450}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.1}"
               }
             }
           }
@@ -9134,34 +8940,6 @@
             "layer": "semantic",
             "modes": {
               "direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.8}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-8}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.8}",
-                "fontWeight": "{type.weight.370}",
-                "letterSpacing": "{type.tracking.step-8}",
-                "lineHeight": "{type.leading.latin.step-8}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.display}",
-                "fontSize": "{type.size.latin.8}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.step-8}",
-                "lineHeight": "{type.leading.latin.step-8}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic-display}",
-                "fontSize": "{type.size.arabic.8}",
-                "fontWeight": "{type.weight.370}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.step-8}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic-display}",
                 "fontSize": "{type.size.arabic.8}",
                 "fontWeight": "{type.weight.400}",
@@ -9199,35 +8977,7 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.1}"
               },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.5}",
-                "fontWeight": "{type.weight.460}",
-                "letterSpacing": "{type.tracking.step-5}",
-                "lineHeight": "{type.leading.latin.1}"
-              },
               "contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.5}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.1}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.5}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.step-5}",
-                "lineHeight": "{type.leading.latin.1}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.5}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.1}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.5}",
                 "fontWeight": "{type.weight.600}",
@@ -9265,35 +9015,7 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.4}",
-                "fontWeight": "{type.weight.460}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
               "contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.4}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.2}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.4}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.4}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.2}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.4}",
                 "fontWeight": "{type.weight.600}",
@@ -9331,35 +9053,7 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.3}"
               },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.3}",
-                "fontWeight": "{type.weight.360}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
               "contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.3}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.3}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.3}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.3}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.3}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.3}",
                 "fontWeight": "{type.weight.500}",
@@ -9397,35 +9091,7 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.3}"
               },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.360}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
               "contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.2}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.3}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.2}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.3}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.2}",
                 "fontWeight": "{type.weight.500}",
@@ -9463,35 +9129,7 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.460}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
               "contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.2}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.2}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.2}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.2}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.2}",
                 "fontWeight": "{type.weight.600}",
@@ -9529,35 +9167,7 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.3}",
-                "fontWeight": "{type.weight.460}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
               "contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.3}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.2}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.3}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.3}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.2}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.3}",
                 "fontWeight": "{type.weight.600}",
@@ -9595,35 +9205,7 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.2}"
               },
-              "scheme:dark": {
-                "fontFamily": "{type.face.mono}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.460}",
-                "letterSpacing": "{type.tracking.label}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
               "contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.2}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.2}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.mono}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.600}",
-                "letterSpacing": "{type.tracking.label}",
-                "lineHeight": "{type.leading.latin.2}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.2}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.2}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.2}",
                 "fontWeight": "{type.weight.600}",
@@ -9661,35 +9243,7 @@
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.arabic.3}"
               },
-              "scheme:dark": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.1}",
-                "fontWeight": "{type.weight.360}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
               "contrast:high,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.1}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.3}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.text}",
-                "fontSize": "{type.size.latin.1}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark,direction:rtl": {
-                "fontFamily": "{type.face.arabic}",
-                "fontSize": "{type.size.arabic.1}",
-                "fontWeight": "{type.weight.400}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.arabic.3}"
-              },
-              "scheme:dark,contrast:high,direction:rtl": {
                 "fontFamily": "{type.face.arabic}",
                 "fontSize": "{type.size.arabic.1}",
                 "fontWeight": "{type.weight.500}",
@@ -9719,20 +9273,6 @@
                 "fontWeight": "{type.weight.500}",
                 "letterSpacing": "{type.tracking.0}",
                 "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark": {
-                "fontFamily": "{type.face.mono}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.360}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
-              },
-              "scheme:dark,contrast:high": {
-                "fontFamily": "{type.face.mono}",
-                "fontSize": "{type.size.latin.2}",
-                "fontWeight": "{type.weight.500}",
-                "letterSpacing": "{type.tracking.0}",
-                "lineHeight": "{type.leading.latin.3}"
               }
             }
           }
@@ -9746,11 +9286,7 @@
         "io.github.laith0003.ux-skill": {
           "layer": "semantic",
           "modes": {
-            "scheme:dark": "{type.weight.460}",
-            "contrast:high": "{type.weight.700}",
-            "scheme:dark,contrast:high": "{type.weight.700}",
-            "scheme:dark,direction:rtl": "{type.weight.500}",
-            "scheme:dark,contrast:high,direction:rtl": "{type.weight.700}"
+            "contrast:high": "{type.weight.700}"
           }
         }
       }
