@@ -445,6 +445,6 @@ Each brief has a **gold set** written by a person: personas, goals, must routes,
 
 **Seeded-defect apps.** Three small fixture apps built from brief 1, each with planted defects drawn from common back-office failures: a search that knows only one identifier, home numbers that do not open, a pending item decidable in two places with different actions, a sheet with no address, a disabled action with no reason, checks that fail after confirm, a filter that resets on back, focus dropped to the page body after an action. The harness and live checks are scored on recall and precision against the plant list, and every planted defect must make its walk fail (the weak-walk guard).
 
-**Human round.** Pairwise comparison of the two case pages and the two built apps per brief by designers, as in Phase 9's taste harness (randomised sides, repeated pairs, gold pairs), reported apart from the measured metrics. A model judge is a pre-filter only.
+**Human round.** Pairwise comparison of the two case pages and the two built apps per brief by designers, as in the taste test phase's harness (randomised sides, repeated pairs, gold pairs), reported apart from the measured metrics. A model judge is a pre-filter only.
 
-**Drift.** The weekly canary from Phase 10 reruns the method benchmark; a drop in walk pass rate or route coverage opens the drift issue.
+**Drift.** The weekly canary (the running-unattended phase) reruns the method benchmark; a drop in walk pass rate or route coverage opens the drift issue.
