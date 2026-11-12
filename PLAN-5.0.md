@@ -6,20 +6,20 @@
 
 ## The release bar
 
-5.0.0 ships when every row holds. A row that cannot be met is cut by name in the release notes, never dropped quietly.
+5.0.0 ships when every row holds. No row can be cut. Only the items on the cut line below can move to 5.1, and none of them is a row here.
 
-| Claim | Measured by | Bar | Today (2026-11-12) |
+| Claim | Measured by | Bar | Today (2026-11-12, bench v1 on its own branch) |
 |---|---|---|---|
-| A rule that blocks is right | Per-rule precision on ux-bench, person-confirmed label sample | Precision at least 0.95, Wilson 95 lower bound at least 0.90, findings on at least 5 pages | No rule qualifies yet; labels are model-made |
+| A rule that blocks is right | Per-rule precision on ux-bench, person-confirmed label sample | Precision at least 0.95, Wilson 95 lower bound at least 0.90, findings on at least 5 pages; at least 20 rules hold the tier | No rule qualifies yet; labels are model-made |
 | The whole ruleset is right | Micro precision, dev and holdout | At least 0.90 on dev, holdout within 0.05 of dev | 0.80 (0.78 to 0.82) on dev |
-| The engine finds planted faults | Recall on the seeded-defect set | At least 0.95, every miss filed | 0.92 |
+| The engine finds faults | Recall on the seeded-defect set; recall on a 60-page subsample annotated in full by three raters | At least 0.95 on seeded faults, every miss filed; real-page recall reported | 0.92 on seeded faults (49 of 53); real pages not annotated |
 | Same input, same output | Two runs per page; two machines per score | 0 pages differ; identical score | 2 of 53 pages differ (wall-clock timing) |
 | It does not fall over | Corpus run and a malformed-input set | 0 crashes, 0 silent skips | 0 crashes on 53 pages; no malformed set yet |
-| It leads to a product people can use | Method benchmark on six briefs | Method modes beat the plain engine on route coverage and walk pass rate; the control brief gains no more than one artifact | Not built |
+| It leads to a product people can use | Method benchmark on six briefs | Method modes beat the plain engine on route coverage and walk pass rate; the control brief gains no artifact | Not built |
 | Arabic is first class | Right-to-left twins and Arabic pages on the bench | Twin pages get the same verdicts; at least 30 right-to-left pages, 20 of them written in Arabic | 7 right-to-left pages |
 | An agent follows the skill | Scripted grading of fixed tasks in two tools | Process conformance at least 0.90 | Not built |
-| Every figure is checkable | Source-id test over references/ and data/ | 0 unsourced figures that are not marked house practice | Phase 3 landed; the full audit is open |
-| It stays light | Tokens loaded per command, lint time per page | Budget table in release_checks; static lint under 1 s, render under 20 s per page at p95 | Not measured |
+| Every figure is checkable | Source-id test over references/ and data/ | 0 unsourced figures that are not marked house practice | 38 corrections applied, 5 parked; the full audit is open |
+| It stays light | Tokens loaded per command, lint time per page | Budgets set from the Phase 2 measurement and held in release_checks | Not measured |
 | It runs unattended | CI and the weekly canary | Zero skipped render tests; canary green twice | No canary |
 
 ## Where it stands
@@ -27,8 +27,9 @@
 | Phase | State |
 |---|---|
 | 4.0.1 | Live on GitHub, PyPI and npm; 3.2.0 removed from both registries |
-| 1. Benchmark | v1 built: 53 pages, 2,033 findings, every rule with a tier, seeded set, diff, ablation hook. Open: corpus to 200, a clean AI-built set, the person-confirmed sample |
-| 3. Corrections | Landed: 31 contradicted rows fixed, platform-outdated rules rewritten, dark text keeps its weight. Open: the full citation audit and its test |
+| 1. Benchmark | v1 built: 53 pages, 2,025 findings, every measured rule with a tier, seeded set, diff, ablation hook. Open: a rerun on the integration branch, corpus to 200, a clean AI-built set, the person-confirmed sample |
+| 3. Corrections | 38 rows fixed (contradicted guidance, platform-outdated rules, dark text keeps its weight). Open: 5 rows parked until the curriculum is merged, the full citation audit and its test |
+| Curriculum | Four raw reports. The merge into one deduplicated set was never run; Phases 3, 5 and 9 need it |
 | Inputs | Landed: eval, landscape, stability, method, curriculum, book library with acknowledgements |
 | Everything else | Not started |
 
@@ -41,7 +42,7 @@
 | Running unattended | research/5.0/stability.md | Dependency risks, CI gaps, release hardening, versioning policy |
 | The owner's product method | research/5.0/method.md | Personas, goals, every route to each goal, conceptual model, IA, flows with failure paths, prototyping inside the design system, walking every goal by every route, the one-page case. Method only, no client facts |
 | The owner's craft rules | research/5.0/craft.md (written in Phase 8) | The taste and working rules behind the owner's shipped work, normalized: ranked rules with a check for each, the Arabic rules, the design-file habits, the pre-flight list. The dated evidence stays private |
-| Curriculum (742 links) | research/curriculum/ | Lessons, proposed checks, guidance by target file, corrections, ledger |
+| Curriculum (742 links) | research/curriculum/raw/ | Four raw reports today. Merged in Phase 3 into lessons, proposed checks, guidance by target file, corrections and a ledger |
 | Book library (96 books) | research/library/ | Lessons by topic (merged, weighted, no quotations, no names in lesson text), conflicts, measurable checks, gaps against the engine, corrections applied, acknowledgements |
 | Benchmark v1 | bench/report.md | Per-rule precision and recall today, and six filed engine faults |
 | 4.1 backlog | PLAN-4.1.md "Next, ranked" | Twelve ranked items; each is placed in a phase below |
@@ -70,23 +71,25 @@ Four stages. Each ends in a gate the benchmark can show, and a pre-release tag o
 
 | Stage | Phases | Gate |
 |---|---|---|
-| A. Measure | 1 (to v2), 2, 3 (audit), 4, and the CI items of 14 that every later phase leans on | Scores repeat across runs and machines; no rule blocks without a measured tier; modern CSS reads true |
+| A. Measure | 3 (curriculum merge first, then the audit), 1 (to v2), 2, 4, and the CI items of 14 that every later phase leans on | Scores repeat across runs and machines; no rule blocks without a measured tier; modern CSS reads true |
 | B. See and walk | 5, 6, 7 | Each new check has a measured row; the six method briefs run end to end; right-to-left twins agree |
 | C. Craft and conduct | 8, 9, 10 | Pre-flight runs on our own pages; every missing-guide row is written or parked; agent conformance at least 0.90 |
 | D. Prove and ship | 11, 12, 13, rest of 14, 15 | The release bar |
 
-What depends on what: 2 before 5 (checks need the finding contract). 5 item 16 before 6 (the walk harness drives a running URL). 7 runs beside 5. 8 needs 2 and 6. 10 needs 6 and 8. 13 needs 5 to 8 landed, so the build it judges is the build that ships.
+What depends on what: the curriculum merge in 3 before 5 and 9. 2 before 5 (checks need the finding contract). 5 item 16 before 6 (the walk harness drives a running URL). 7 runs beside 5. 8 needs 2 and 6. 10 needs 6 and 8. 13 needs 5 to 8 landed, so the build it judges is the build that ships.
 
-**The cut line.** If 5.0 is late, these move to 5.1 by name and nothing else does: the 1,000-page pool, the human taste round, the EN 301 549 and ADA Title II report formats, the DTCG resolver document, the AI interfaces pack, the design-files guide. Phases 1, 2, 5 (items 1 to 12 and 16), 6, 7, 8 (checks and practices), 10, 14 and 15 are not cuttable.
+**The cut line.** If 5.0 is late, these move to 5.1 by name and nothing else does: the 1,000-page pool, the human taste round, the EN 301 549 and ADA Title II report formats, the DTCG resolver document, the AI interfaces pack (Phase 5 item 15, and with it the Article 50 heading in Phase 11), the design-files guide. Everything else in every phase is fixed.
 
 ## Phase 1. The benchmark (ux-bench)
 
-Spec: eval.md recommendations 1, 2, 5, 6, 9 and 10. v1 is built; this phase now means v2.
+Spec: eval.md A1, A2, A3, A4, A7 and A8. v1 is built; this phase now means v2.
 
 Built in v1: bench/ with manifest, capture, run, report (precision, Wilson interval, tier per rule), diff between two engine versions, the seeded-defect set with near-miss twins, the ablation hook, two-pass labels with a tiebreak and Krippendorff alpha, the 50-finding sample script. 53 redistributable pages, every script stripped.
 
 Left for v2:
 
+- First: merge v1 into the integration branch and rerun it there, so every figure in this plan describes the engine that ships.
+- Recall on real pages: a 60-page subsample annotated in full by three raters, marked model-made where a model rated.
 - Corpus to 200 pages: 50 generated from 10 fixed briefs by at least three tools that have never read this repository, 50 found AI-built, 100 designer-built from openly licensed sources. At least 60 percent redistributable; the rest stored as url, date, hash, findings and labels only. Split 140 dev and 60 holdout, page families kept together.
 - At least 30 right-to-left pages, 20 written in Arabic (Phase 7).
 - The owner confirms the 50-finding sample; until then every label is marked model-made and gates only demote.
@@ -99,7 +102,7 @@ Left for v2:
 
 ## Phase 2. The finding contract and score honesty
 
-Spec: eval.md 3 and 4; stability.md changes 5 to 7; the faults filed in bench/report.md.
+Spec: eval.md A2; stability.md changes 5 to 7; the faults filed in bench/report.md.
 
 - `Finding` gains `outcome` (violation or review), `selector`, `viewport` and `page_type`. Render checks over images, gradients and video return review. Review findings never count toward the score.
 - Excerpts show the match, not the first 200 characters of the line.
@@ -114,18 +117,20 @@ Spec: eval.md 3 and 4; stability.md changes 5 to 7; the faults filed in bench/re
 - A malformed-input set (broken HTML, half a stylesheet, a 5 MB line, mixed encodings) runs in CI; each case ends in a finding or a named error, never a traceback.
 - The four seeded misses are closed in the rules that should have caught them: an image with a width and no height, a textarea named only by its placeholder, a transition with no property, an SVG image stretched out of shape.
 
-**Exit:** the same page and ruleset give the same score on two machines; two runs of the corpus differ on 0 pages; no rule is blocking without a measured tier; lint time per page is in the report.
+**Exit:** the same page and ruleset give the same score on two machines; two runs of the corpus differ on 0 pages; no rule is blocking without a measured tier; lint and render time per page are in the report, and the budgets are set from them.
 
 ## Phase 3. Correct what the sources contradict
 
-Spec: research/library/corrections-applied.md, research/curriculum/corrections.md, landscape.md recommendation 7. The corrections are landed.
+Spec: research/library/corrections-applied.md, research/curriculum/README.md, landscape.md recommendation 7. 38 corrections are applied.
 
 Left:
 
+- Merge the four raw curriculum reports into lessons.md, checks.md, guidance.md, corrections.md and ledger.tsv, deduplicated against the rules, the 4.1 inventory and the library. Phases 5 and 9 read these files; this is the first task of stage A.
+- Apply the five rows parked for the merge: card sorting and tree testing sizes, the 60-30-10 credit, the scrim alpha inside color.md, the streaming-scroll rule in ai-interfaces.md, the case-study grayscale and section order for portfolios.
 - Audit every number and citation in references/ and data/ against its source. A number with no source a reader could check is removed or marked as house practice.
 - A test fails if a reference cites a source id that the ledger does not hold.
 
-**Exit:** corrections.md has no open row marked verified; the source-id test is in CI.
+**Exit:** the merged curriculum files exist; corrections.md and corrections-applied.md have no open or parked row; the source-id test is in CI.
 
 ## Phase 4. Read modern CSS
 
@@ -139,7 +144,7 @@ Spec: landscape.md recommendations 5 and 6.
 
 ## Phase 5. New checks, each measured as it lands
 
-Every check ships with the fixture standard (at least 3 fail, 3 near-miss pass, 1 inapplicable, 1 right-to-left pass), runs over the site's pages, runs on the benchmark, adds its fault to the seeded set, and starts advisory. Ranked by impact on how well the page works and how un-generic it looks; the full ranked list with sources lives in research/curriculum/checks.md and research/library/checks.md.
+Every check ships with the fixture standard (at least 3 fail, 3 near-miss pass, 1 inapplicable, 1 right-to-left pass), runs over the site's pages, runs on the benchmark, adds its fault to the seeded set, and starts advisory. Before a check is written, the existing rules and render checks are searched; where one already covers the fault it is tuned on the benchmark, not duplicated. Known overlaps to tune, not rebuild: template tokens (`placeholder-token-shipped`), eyebrows, capitals, equal card grids and link arrows (`eyebrows-over-budget`, `capitals-outside-system`, `three-equal-card-grid`, `cta-arrow-rightward-bouncing`), type-size drift (`size-outside-system`). The stored corpus pages carry no scripts, so the interact checks and `js-only-content` are measured on the seeded-defect apps and running-app fixtures, and the report says so. Ranked by impact on how well the page works and how un-generic it looks; the full ranked list with sources lives in research/curriculum/checks.md and research/library/checks.md.
 
 Core set for 5.0:
 
@@ -151,7 +156,7 @@ Core set for 5.0:
 6. Reflow at 320 px and text spacing (WCAG 1.4.10, 1.4.12), zoom to 200 percent (1.4.4).
 7. Control edges at 3:1 against the ground beside them (1.4.11).
 8. `disclosure-state-missing`: a button that shows or hides content without `aria-expanded` or `aria-pressed` (4.1.2).
-9. The 2026 AI-default looks: cream with serif and terracotta, near-black with one acid accent, newspaper layout, uniform card kit, stock decoration (all-caps eyebrows, middle-dot meta lines, arrows appended to links). The purple-gradient rules are demoted so avoiding purple alone no longer scores well.
+9. The 2026 AI-default looks: cream with serif and terracotta, near-black with one acid accent, newspaper layout, uniform card kit, stock decoration (all-caps eyebrows, middle-dot meta lines, arrows appended to links). Each look is a combination of signals; no single trait (one accent, a serif, a dark ground) fires alone. The purple-gradient rules are demoted so avoiding purple alone no longer scores well.
 10. Hierarchy: the largest first-screen text is the h1; one filled button per group; `heading-size-inversion`; `emphasis-over-budget`.
 11. Reading measure and leading on body text; type-size drift; near-miss alignment and off-scale spacing.
 12. `button-style-sprawl`: more than three looks for filled buttons. Tabular figures and right alignment in numeric table cells.
@@ -160,7 +165,7 @@ Core set for 5.0:
 15. AI interfaces (opt-in pack, cuttable): chat with no AI disclosure by first interaction, the "may make mistakes" note far from the input, more than one assistant launcher, generic progress text.
 16. `lint --render --url` for running apps, and the complaint probes `task` and `reach`.
 
-**Exit:** each core check has its fixtures, its site run with zero false positives, and a measured row in bench/report.md.
+**Exit:** each core check that ships has its fixtures, its site run with zero false positives, and a measured row in bench/report.md or the seeded-app report.
 
 ## Phase 6. Method: users before screens
 
@@ -197,12 +202,12 @@ No new command. `/ux-discover` gains a `method` mode (the router picks it for br
 
 ## Phase 7. Arabic and right to left, first class
 
-Spec: research/5.0/craft.md (Arabic section), references/foundations/typography.md. Today four of the 180 rules and thirteen lines in the foundation guides touch right to left. Most tools build Arabic as a mirrored afterthought; this phase makes it a design of its own. Runs beside Phase 5.
+Spec: the Arabic section of research/5.0/craft.md, written first in this phase and passed through the release gate before it is pushed; references/foundations/typography.md. Today four rules and thirteen lines in the foundation guides touch right to left. Most tools build Arabic as a mirrored afterthought; this phase makes it a design of its own. Runs beside Phase 5.
 
-- **Guide:** references/foundations/arabic-rtl.md. Design the Arabic first and as the hero. Mirror the glyph, not the container: direction arrows and progress swap; logos, media controls, clocks, digits and charts on a time axis do not. Never letter-space Arabic. Arabic sets a step larger than Latin at the same role, with more leading; display and body faces are separate roles; diacritics and descenders are checked at the real line height. Mixed-direction runs are isolated. An Arabic word is never split for a per-letter or per-word reveal. Copy is written in Arabic in the product's register, not translated line by line.
+- **Guide:** references/foundations/arabic-rtl.md. Arabic is designed first and leads the layout. Mirror the glyph, not the container: direction arrows and progress swap; logos, media controls, clocks, digits and charts on a time axis do not. Never letter-space Arabic. Arabic sets a step larger than Latin at the same role, with more leading; display and body faces are separate roles; diacritics and descenders are checked at the real line height. Mixed-direction runs are isolated. An Arabic word is never split for a per-letter or per-word reveal. Copy is written in Arabic in the product's register, not translated line by line.
 - **Brief and tokens:** the brief gains `languages`, `primary_language`, `digits` (one digit system per product) and `register`. The generator emits `dir` and `lang`, logical properties only, and a paired Arabic face per type role with its size and leading offsets as tokens.
 - **Checks,** advisory, each with the fixture standard:
-  1. `arabic-letter-spacing`: computed letter spacing other than zero on Arabic text.
+  1. `arabic-letter-spacing`: computed letter spacing other than zero on Arabic text. Extends the existing tracking rules to read the script.
   2. `arabic-face-fallback` (render): Arabic text drawn in a fallback face because the declared face did not load or lacks the glyphs. The check reads the rendered face, never the declaration.
   3. `physical-property-in-rtl`: left and right margins, padding, positions or text alignment on a page that serves a right-to-left language.
   4. `directional-icon-not-mirrored` and `mirrored-what-must-not`.
@@ -219,28 +224,28 @@ Spec: research/5.0/craft.md (Arabic section), references/foundations/typography.
 
 ## Phase 8. Craft: the house taste, measured
 
-Spec: research/5.0/craft.md, written first in this phase from the owner's recorded rules. It is normalized the way the book library was: rules and checks only, no client, project or person, no dated incidents. It passes the release gate before it is pushed. Where a craft rule is a preference and not a standard, it ships as a house rule a project can turn off, and it is labelled so in every finding.
+Spec: research/5.0/craft.md, completed first in this phase from the owner's recorded rules (its Arabic section lands in Phase 7). It is normalized the way the book library was: rules and checks only, no client, project or person, no dated incidents. It passes the release gate before it is pushed. Where a craft rule is a preference and not a standard, it ships as a house rule a project can turn off, and it is labelled so in every finding.
 
 **Checks,** advisory, measured like any other. Where a rule already exists it is tuned on the benchmark, not duplicated:
 
-1. `accent-over-one`: more than one accent hue outside the status colours. Greys carry hierarchy.
+1. One accent: tune the existing `color-over-budget` so more than one accent hue outside the status colors is reported. Greys carry hierarchy.
 2. `theme-role-unchanged`: a role that keeps one value in light and dark where its ground changes. Every render check runs in both themes.
 3. `proximity-inverted`: items inside a group sit further apart than the group sits from its neighbour.
-4. `badge-acts` and `action-looks-like-badge`: a state chip that is clickable, or a control drawn as a chip; any target under 44 px.
-5. `effect-clipped`: a shadow, glow, chip or badge cut by an ancestor's overflow.
+4. `badge-acts` and `action-looks-like-badge`: a state chip that is clickable, or a control drawn as a chip. Target size stays with the existing `target-too-small` (24 px, WCAG 2.5.8); 44 px is reported as the house target for touch.
+5. `effect-clipped`: a shadow, glow, chip or badge cut by an ancestor's overflow. Built on the existing `focus-ring-clipped`.
 6. `logo-as-text`: the brand is typed while the brief supplies a mark.
-7. `drawn-stand-in`: a device, product or face built from shapes or generated where the brief asks for the real thing.
-8. `figure-not-in-facts`: a number, name or claim in the copy that the brief's facts file does not hold.
+7. `drawn-stand-in`: a device frame built from styled boxes, or an image the asset manifest does not hold. Runs only when the project has an asset manifest.
+8. `figure-not-in-facts`: a statistic, customer count, rating or testimonial name in marketing copy that the brief's facts file does not hold. Runs only when the brief has a facts file; dates, prices and contact details are out of scope.
 9. `reveal-delays-reading`: a blanket fade on every section, or text that is not readable within its budget after it enters the view.
-10. `motion-breaks-continuity`: an element that leaves one state and enters the next with no shared position, or a state change that snaps where its neighbours ease.
-11. `sections-repeat`: three or more consecutive sections with the same composition.
+10. `state-snaps`: an interactive state that changes instantly while the same component's other states transition.
+11. Repeated sections: tune the existing `layout-family-repeated` and `split-sections-in-a-row`.
 
 **Working practices,** built into the commands:
 
 - **Approved is locked.** `uxskill baseline lock` records the approved structure: section order, headings, navigation, flow steps and tokens. `baseline diff` reports drift. `/ux-polish` and `/ux-fix` change execution only; a structure change comes back as a proposal.
-- **A correction fixes the class.** A correction is recorded in `.ux/decisions.yaml` with before, after, why and scope. Every later command reads it. `uxskill decisions audit` finds the remaining instances. A rejected option never returns.
+- **A correction fixes the class.** A correction is recorded in the existing decision ledger (`.ux/decisions.jsonl`) with before, after, why and scope. Every later command reads it. `uxskill decisions audit` finds the remaining instances. A rejected option never returns.
 - **Open questions are asked.** When two recorded decisions conflict, the command stops, shows both, and records the answer. It does not guess.
-- **References first.** `/ux-design` gathers references before generating and records what is borrowed (style, layout, motion, interaction) and what stays the product's own. It shows a few reference-backed directions before converging.
+- **References first.** `/ux-design` gathers references before generating and records which style, layout, motion and interaction choices come from references and which belong to the product. It shows a few reference-backed directions before converging.
 - **Real things only.** An asset manifest holds the source and licence of every logo, photo, device frame and screen. A missing asset is named in the output as a gap.
 - **Meaning before geometry.** `/ux-critique` opens with a cold read: a reader with no context states the takeaway in one sentence, and the command compares it with the brief's. Each image is judged with its real title on it.
 - **Computed, then checked by eye.** Proportions are shown with their maths, then rendered at real size and compared for optical weight. The report says which one decided.
@@ -248,7 +253,7 @@ Spec: research/5.0/craft.md, written first in this phase from the owner's record
 - **The deliverable is a page.** Audits, cases and findings render as a designed page with a link and a name for every screen, never a raw file or a bare id.
 - **Pre-flight.** `uxskill preflight` runs the craft checklist before anything is shown. Each line comes back pass, fail or not checked, with its evidence.
 
-**Design files** (cuttable): references/process/design-files.md. Auto layout everywhere; layer names that match the code components; radius and colour bound to variables; spacing as named objects; numbered pages behind a cover; light and dark as one collection; both languages as pages; archive, never delete. Applied design outranks the document: `uxskill system drift` compares the tokens in code, DESIGN.md and exported design-file variables, reports the drift and never overwrites the applied one.
+**Design files** (cuttable): references/process/design-files.md. Auto layout everywhere; layer names that match the code components; radius and color bound to variables; spacing as named objects; numbered pages behind a cover; light and dark as one collection; both languages as pages; archive, never delete. Applied design outranks the document: `uxskill system drift` compares the tokens in code, DESIGN.md and exported design-file variables, reports the drift and never overwrites the applied one.
 
 **Exit:** craft.md is public and passed the gate; each check has a measured row; pre-flight runs clean on the site's pages; `baseline diff` catches a seeded structure change; `decisions audit` finds a seeded repeat.
 
@@ -282,7 +287,7 @@ A guide nobody loads and a rule the agent skips are worth nothing. This phase me
 Spec: landscape.md recommendations 2, 3 and 10.
 
 - `uxskill audit --standard wcag22-aa` writes a dated, reproducible report: ruleset and data versions, the criteria measured, the findings per criterion, and the criteria that still need a person, listed by name. `en301549-4.1.1` and `ada-title-ii` are the same report under their own clause maps (cuttable).
-- The AI Act Article 50 pack from Phase 5 reports under its own heading with the dates it rests on.
+- If the AI interfaces pack ships, its AI Act Article 50 findings report under their own heading with the dates they rest on.
 
 **Exit:** the report for the site's own pages lists every WCAG 2.2 AA criterion as measured, needs a person, or not applicable, and nothing is claimed beyond what each criterion says.
 
@@ -298,7 +303,7 @@ Spec: landscape.md recommendation 8.
 
 ## Phase 13. The taste test
 
-Spec: eval.md recommendations 7 and 8. Runs last among the build phases, so it judges the build that ships.
+Spec: eval.md A5 and A6. Runs last among the build phases, so it judges the build that ships.
 
 - 30 briefs with fixed copy, six of them Arabic; each built with and without ux-skill by the same tool; screenshots at 1280 and 390.
 - The harness randomises sides, repeats pairs and seeds gold pairs, and computes a Bradley-Terry estimate with bootstrap intervals.
@@ -311,13 +316,15 @@ Spec: eval.md recommendations 7 and 8. Runs last among the build phases, so it j
 
 Spec: stability.md sections 1 to 5. The CI items land in stage A.
 
-- **CI (stage A).** test.yml on Python 3.11 to 3.15 on a pinned runner image; a Playwright job that installs Chromium and fails if any render test is skipped; an MCP stdio test; a Windows job for the hook and the npm wrapper; the malformed-input set; the twin parity test.
+- **CI (stage A).** test.yml on Python 3.11 to 3.15 on a pinned runner image; a Playwright job that installs Chromium and fails if any render test is skipped; an MCP stdio test; a Windows job for the hook and the npm wrapper; the malformed-input set; a tested constraints file used by every leg; actions pinned by commit with least privilege per job. The twin parity test joins in stage B.
 - **Release.** release.yml runs only after tests pass on the same commit; builds once; attaches an SBOM; publishes the GitHub release from a draft; every step is safe to re-run. After a release, a job compares the version on GitHub, PyPI and npm and opens an issue when they differ.
 - **Registries.** Trusted publishing to PyPI and npm (no stored tokens) is written but switched off until the owner turns it on. Until then the owner uploads by hand and nothing is published without an explicit yes.
 - **Packaging.** SPDX license, capped build backend, `requires-python >=3.11`, `playwright>=1.63,<2`, the missing image extra. The package summary and every README figure are generated from `uxskill stats`, with a test.
 - **Dependencies.** dependabot ignores majors for mcp and playwright, with cooldowns and grouped updates.
 - **Canary.** Weekly, against the latest dependencies, the frozen corpus, the method benchmark and the twin parity test. It opens or updates one issue on drift and closes it when green.
-- **Hooks and MCP.** The hook launcher tries `UXSKILL_PYTHON`, python3, python and `py -3`; MultiEdit leaves the matcher. The MCP server checks its SDK and names the installed version and the right pin when it cannot start.
+- **Hooks, wrapper and MCP.** The hook launcher tries `UXSKILL_PYTHON`, python3, python and `py -3`; MultiEdit leaves the matcher. The npm wrapper finds the right Python and says why an install failed. Install hints fit the environment that runs the check. The MCP server checks its SDK and names the installed version and the right pin when it cannot start. The installer stops writing a stub plugin file into user projects.
+- **Plugin and repository.** The plugin manifest is validated strictly in the canary and its stale descriptions are fixed. Immutable releases, branch protection on main and private vulnerability reporting are switched on by the owner.
+- **Breaking layout changes, possible only in a major** (owner decision in stage A, stability.md changes 16 and 17): move the plugin to a subdirectory, and rename the import package from `engine` to `uxskill` with `data/` inside it. If declined, both are recorded as declined for the 5.x line.
 - **Policy** in CONTRIBUTING.md: what semver covers (CLI flags, MCP tool names and shapes, token names, exit codes, rule ids, method schemas), deprecation windows, rule and score versioning.
 - **The release gate in CI.** A leak scan of the source and of the unpacked wheel, sdist and npm tarball runs on every PR and before every release.
 
@@ -327,7 +334,7 @@ Spec: stability.md sections 1 to 5. The CI items land in stage A.
 
 - Remove the seven 4.0 command aliases (they were due in 4.1).
 - Migration guide docs/migrating-to-5.md; release notes docs/launch/release-5.0.0.md; CHANGELOG; README and the 16 translations, the Arabic one written, not translated; site figures regenerated; compare page refreshed with current facts; the precision report, the method report and the conformance report published as pages.
-- Full suite clean, release_checks clean, every row of the release bar filled with its measured value or its named cut.
+- Full suite clean, release_checks clean, every row of the release bar filled with its measured value.
 - Merge feat/4.1-stageshow into main; the release workflow tags v5.0.0 and publishes the GitHub release; the owner uploads to PyPI and npm.
 - Seen, not assumed: the GitHub release, the PyPI page, the npm page and the site are each opened and read after the upload.
 
@@ -352,4 +359,4 @@ Spec: stability.md sections 1 to 5. The CI items land in stage A.
 
 - One working session at a time carries a phase from plan to PR, with at most two agents and one fresh review per PR. Opus-class models for anything with judgment.
 - Every push, release and registry upload passes the release gate first: a leak and confidentiality scan of the source and of the unpacked artifacts. Nothing private, no client facts, no book text.
-- Owner decisions, the only ones left: confirm the 50-finding label sample; confirm the gold sets for the six method briefs; read craft.md before it goes public; agree or decline the pre-release tags; approve each capped batch of agent runs; run or skip the human taste round; turn on registry publishing; say yes to 5.0.0.
+- Owner decisions, the only ones left: confirm the 50-finding label sample; confirm the gold sets for the six method briefs; read craft.md before it goes public; agree or decline the pre-release tags; decide the two breaking layout changes; approve each capped batch of agent runs; run or skip the human taste round; turn on registry publishing; say yes to 5.0.0.
