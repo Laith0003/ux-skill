@@ -21,6 +21,6 @@ The four raw reports are merged into one deduplicated set, checked against data/
 | lessons.md | Lessons merged by topic across the parts, paraphrased, with status against this branch and engine location | 323 lessons from 363 raw: agrees 108, partial 22, missing-guide 112, missing-check 74, contradicts 7 |
 | checks.md | Proposed checks ranked by impact on a working, un-generic page | 85 rows: new 66, tune existing 8, drop as duplicate 11 |
 | guidance.md | Missing guidance grouped by target file | 76 items across 34 files, 6 of them new |
-| corrections.md | Every place the reports say ux-skill text is wrong, verified on this branch | 14 rows: open 9, already-fixed 5 |
+| corrections.md | Every place the reports say ux-skill text is wrong, verified on this branch | 14 rows: open 0, already-fixed 14 |
 
 Ledger read status: read covers pages read and tool pages read for what they do; summarized-from-list covers videos, books and tool pages noted from the list's description or metadata; blocked covers pages that refused the fetcher, JavaScript-only pages, dead links and the unofficial mirrors of paid books, which were never opened and whose links stay withheld. Primary sources the reports checked outside the list (standards, research pages) are named in words in corrections.md because the ledger holds only the list's own links.
