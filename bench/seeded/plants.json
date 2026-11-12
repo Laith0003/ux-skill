@@ -1,0 +1,670 @@
+{
+ "note": "Written by python -m bench seed from bench/seeded.py; do not edit by hand.",
+ "pages": [
+  {
+   "id": "base",
+   "file": "base.html",
+   "kind": "base",
+   "rule": null,
+   "pass": "both"
+  },
+  {
+   "id": "href-empty-hash.fault1",
+   "file": "href-empty-hash.fault1.html",
+   "kind": "fault",
+   "rule": "href-empty-hash",
+   "pass": "static"
+  },
+  {
+   "id": "href-empty-hash.twin1",
+   "file": "href-empty-hash.twin1.html",
+   "kind": "twin",
+   "rule": "href-empty-hash",
+   "pass": "static"
+  },
+  {
+   "id": "href-empty-hash.fault2",
+   "file": "href-empty-hash.fault2.html",
+   "kind": "fault",
+   "rule": "href-empty-hash",
+   "pass": "static"
+  },
+  {
+   "id": "href-empty-hash.fault3",
+   "file": "href-empty-hash.fault3.html",
+   "kind": "fault",
+   "rule": "href-empty-hash",
+   "pass": "static"
+  },
+  {
+   "id": "href-empty-hash.twin2",
+   "file": "href-empty-hash.twin2.html",
+   "kind": "twin",
+   "rule": "href-empty-hash",
+   "pass": "static"
+  },
+  {
+   "id": "img-no-dimensions.fault1",
+   "file": "img-no-dimensions.fault1.html",
+   "kind": "fault",
+   "rule": "img-no-dimensions",
+   "pass": "static"
+  },
+  {
+   "id": "img-no-dimensions.twin1",
+   "file": "img-no-dimensions.twin1.html",
+   "kind": "twin",
+   "rule": "img-no-dimensions",
+   "pass": "static"
+  },
+  {
+   "id": "img-no-dimensions.fault2",
+   "file": "img-no-dimensions.fault2.html",
+   "kind": "fault",
+   "rule": "img-no-dimensions",
+   "pass": "static"
+  },
+  {
+   "id": "placeholder-as-label.fault1",
+   "file": "placeholder-as-label.fault1.html",
+   "kind": "fault",
+   "rule": "placeholder-as-label",
+   "pass": "static"
+  },
+  {
+   "id": "placeholder-as-label.twin1",
+   "file": "placeholder-as-label.twin1.html",
+   "kind": "twin",
+   "rule": "placeholder-as-label",
+   "pass": "static"
+  },
+  {
+   "id": "placeholder-as-label.fault2",
+   "file": "placeholder-as-label.fault2.html",
+   "kind": "fault",
+   "rule": "placeholder-as-label",
+   "pass": "static"
+  },
+  {
+   "id": "placeholder-as-label.twin2",
+   "file": "placeholder-as-label.twin2.html",
+   "kind": "twin",
+   "rule": "placeholder-as-label",
+   "pass": "static"
+  },
+  {
+   "id": "button-no-type.fault1",
+   "file": "button-no-type.fault1.html",
+   "kind": "fault",
+   "rule": "button-no-type",
+   "pass": "static"
+  },
+  {
+   "id": "button-no-type.twin1",
+   "file": "button-no-type.twin1.html",
+   "kind": "twin",
+   "rule": "button-no-type",
+   "pass": "static"
+  },
+  {
+   "id": "button-no-type.fault2",
+   "file": "button-no-type.fault2.html",
+   "kind": "fault",
+   "rule": "button-no-type",
+   "pass": "static"
+  },
+  {
+   "id": "viewport-no-zoom.fault1",
+   "file": "viewport-no-zoom.fault1.html",
+   "kind": "fault",
+   "rule": "viewport-no-zoom",
+   "pass": "static"
+  },
+  {
+   "id": "viewport-no-zoom.twin1",
+   "file": "viewport-no-zoom.twin1.html",
+   "kind": "twin",
+   "rule": "viewport-no-zoom",
+   "pass": "static"
+  },
+  {
+   "id": "lang-attribute-missing.fault1",
+   "file": "lang-attribute-missing.fault1.html",
+   "kind": "fault",
+   "rule": "lang-attribute-missing",
+   "pass": "static"
+  },
+  {
+   "id": "lang-attribute-missing.twin1",
+   "file": "lang-attribute-missing.twin1.html",
+   "kind": "twin",
+   "rule": "lang-attribute-missing",
+   "pass": "static"
+  },
+  {
+   "id": "outline-none-no-focus-visible.fault1",
+   "file": "outline-none-no-focus-visible.fault1.html",
+   "kind": "fault",
+   "rule": "outline-none-no-focus-visible",
+   "pass": "static"
+  },
+  {
+   "id": "outline-none-no-focus-visible.twin1",
+   "file": "outline-none-no-focus-visible.twin1.html",
+   "kind": "twin",
+   "rule": "outline-none-no-focus-visible",
+   "pass": "static"
+  },
+  {
+   "id": "outline-none-no-focus-visible.fault2",
+   "file": "outline-none-no-focus-visible.fault2.html",
+   "kind": "fault",
+   "rule": "outline-none-no-focus-visible",
+   "pass": "static"
+  },
+  {
+   "id": "outline-none-no-focus-visible.twin2",
+   "file": "outline-none-no-focus-visible.twin2.html",
+   "kind": "twin",
+   "rule": "outline-none-no-focus-visible",
+   "pass": "static"
+  },
+  {
+   "id": "target-blank-no-noopener.fault1",
+   "file": "target-blank-no-noopener.fault1.html",
+   "kind": "fault",
+   "rule": "target-blank-no-noopener",
+   "pass": "static"
+  },
+  {
+   "id": "target-blank-no-noopener.twin1",
+   "file": "target-blank-no-noopener.twin1.html",
+   "kind": "twin",
+   "rule": "target-blank-no-noopener",
+   "pass": "static"
+  },
+  {
+   "id": "target-blank-no-noopener.fault2",
+   "file": "target-blank-no-noopener.fault2.html",
+   "kind": "fault",
+   "rule": "target-blank-no-noopener",
+   "pass": "static"
+  },
+  {
+   "id": "emoji-in-ui.fault1",
+   "file": "emoji-in-ui.fault1.html",
+   "kind": "fault",
+   "rule": "emoji-in-ui",
+   "pass": "static"
+  },
+  {
+   "id": "emoji-in-ui.twin1",
+   "file": "emoji-in-ui.twin1.html",
+   "kind": "twin",
+   "rule": "emoji-in-ui",
+   "pass": "static"
+  },
+  {
+   "id": "emoji-in-ui.fault2",
+   "file": "emoji-in-ui.fault2.html",
+   "kind": "fault",
+   "rule": "emoji-in-ui",
+   "pass": "static"
+  },
+  {
+   "id": "lorem-ipsum-leak.fault1",
+   "file": "lorem-ipsum-leak.fault1.html",
+   "kind": "fault",
+   "rule": "lorem-ipsum-leak",
+   "pass": "static"
+  },
+  {
+   "id": "lorem-ipsum-leak.twin1",
+   "file": "lorem-ipsum-leak.twin1.html",
+   "kind": "twin",
+   "rule": "lorem-ipsum-leak",
+   "pass": "static"
+  },
+  {
+   "id": "lorem-ipsum-leak.fault2",
+   "file": "lorem-ipsum-leak.fault2.html",
+   "kind": "fault",
+   "rule": "lorem-ipsum-leak",
+   "pass": "static"
+  },
+  {
+   "id": "generic-cta-text.fault1",
+   "file": "generic-cta-text.fault1.html",
+   "kind": "fault",
+   "rule": "generic-cta-text",
+   "pass": "static"
+  },
+  {
+   "id": "generic-cta-text.twin1",
+   "file": "generic-cta-text.twin1.html",
+   "kind": "twin",
+   "rule": "generic-cta-text",
+   "pass": "static"
+  },
+  {
+   "id": "generic-cta-text.fault2",
+   "file": "generic-cta-text.fault2.html",
+   "kind": "fault",
+   "rule": "generic-cta-text",
+   "pass": "static"
+  },
+  {
+   "id": "heading-skip-h1-h3.fault1",
+   "file": "heading-skip-h1-h3.fault1.html",
+   "kind": "fault",
+   "rule": "heading-skip-h1-h3",
+   "pass": "static"
+  },
+  {
+   "id": "heading-skip-h1-h3.twin1",
+   "file": "heading-skip-h1-h3.twin1.html",
+   "kind": "twin",
+   "rule": "heading-skip-h1-h3",
+   "pass": "static"
+  },
+  {
+   "id": "heading-skip-h1-h3.fault2",
+   "file": "heading-skip-h1-h3.fault2.html",
+   "kind": "fault",
+   "rule": "heading-skip-h1-h3",
+   "pass": "static"
+  },
+  {
+   "id": "inline-style-attribute.fault1",
+   "file": "inline-style-attribute.fault1.html",
+   "kind": "fault",
+   "rule": "inline-style-attribute",
+   "pass": "static"
+  },
+  {
+   "id": "inline-style-attribute.twin1",
+   "file": "inline-style-attribute.twin1.html",
+   "kind": "twin",
+   "rule": "inline-style-attribute",
+   "pass": "static"
+  },
+  {
+   "id": "h-screen-no-dvh-fallback.fault1",
+   "file": "h-screen-no-dvh-fallback.fault1.html",
+   "kind": "fault",
+   "rule": "h-screen-no-dvh-fallback",
+   "pass": "static"
+  },
+  {
+   "id": "h-screen-no-dvh-fallback.twin1",
+   "file": "h-screen-no-dvh-fallback.twin1.html",
+   "kind": "twin",
+   "rule": "h-screen-no-dvh-fallback",
+   "pass": "static"
+  },
+  {
+   "id": "h-screen-no-dvh-fallback.fault2",
+   "file": "h-screen-no-dvh-fallback.fault2.html",
+   "kind": "fault",
+   "rule": "h-screen-no-dvh-fallback",
+   "pass": "static"
+  },
+  {
+   "id": "transition-property-all.fault1",
+   "file": "transition-property-all.fault1.html",
+   "kind": "fault",
+   "rule": "transition-property-all",
+   "pass": "static"
+  },
+  {
+   "id": "transition-property-all.twin1",
+   "file": "transition-property-all.twin1.html",
+   "kind": "twin",
+   "rule": "transition-property-all",
+   "pass": "static"
+  },
+  {
+   "id": "transition-property-all.fault2",
+   "file": "transition-property-all.fault2.html",
+   "kind": "fault",
+   "rule": "transition-property-all",
+   "pass": "static"
+  },
+  {
+   "id": "arbitrary-z-index-9999.fault1",
+   "file": "arbitrary-z-index-9999.fault1.html",
+   "kind": "fault",
+   "rule": "arbitrary-z-index-9999",
+   "pass": "static"
+  },
+  {
+   "id": "arbitrary-z-index-9999.twin1",
+   "file": "arbitrary-z-index-9999.twin1.html",
+   "kind": "twin",
+   "rule": "arbitrary-z-index-9999",
+   "pass": "static"
+  },
+  {
+   "id": "purple-to-blue-gradient.fault1",
+   "file": "purple-to-blue-gradient.fault1.html",
+   "kind": "fault",
+   "rule": "purple-to-blue-gradient",
+   "pass": "static"
+  },
+  {
+   "id": "purple-to-blue-gradient.twin1",
+   "file": "purple-to-blue-gradient.twin1.html",
+   "kind": "twin",
+   "rule": "purple-to-blue-gradient",
+   "pass": "static"
+  },
+  {
+   "id": "text-align-justify-web.fault1",
+   "file": "text-align-justify-web.fault1.html",
+   "kind": "fault",
+   "rule": "text-align-justify-web",
+   "pass": "static"
+  },
+  {
+   "id": "text-align-justify-web.twin1",
+   "file": "text-align-justify-web.twin1.html",
+   "kind": "twin",
+   "rule": "text-align-justify-web",
+   "pass": "static"
+  },
+  {
+   "id": "text-align-justify-web.fault2",
+   "file": "text-align-justify-web.fault2.html",
+   "kind": "fault",
+   "rule": "text-align-justify-web",
+   "pass": "static"
+  },
+  {
+   "id": "fake-name-john-doe.fault1",
+   "file": "fake-name-john-doe.fault1.html",
+   "kind": "fault",
+   "rule": "fake-name-john-doe",
+   "pass": "static"
+  },
+  {
+   "id": "fake-name-john-doe.twin1",
+   "file": "fake-name-john-doe.twin1.html",
+   "kind": "twin",
+   "rule": "fake-name-john-doe",
+   "pass": "static"
+  },
+  {
+   "id": "fake-name-john-doe.fault2",
+   "file": "fake-name-john-doe.fault2.html",
+   "kind": "fault",
+   "rule": "fake-name-john-doe",
+   "pass": "static"
+  },
+  {
+   "id": "testimonial-fake-five-stars.fault1",
+   "file": "testimonial-fake-five-stars.fault1.html",
+   "kind": "fault",
+   "rule": "testimonial-fake-five-stars",
+   "pass": "static"
+  },
+  {
+   "id": "testimonial-fake-five-stars.twin1",
+   "file": "testimonial-fake-five-stars.twin1.html",
+   "kind": "twin",
+   "rule": "testimonial-fake-five-stars",
+   "pass": "static"
+  },
+  {
+   "id": "infinite-animation-without-reduced-motion.fault1",
+   "file": "infinite-animation-without-reduced-motion.fault1.html",
+   "kind": "fault",
+   "rule": "infinite-animation-without-reduced-motion",
+   "pass": "static"
+  },
+  {
+   "id": "infinite-animation-without-reduced-motion.twin1",
+   "file": "infinite-animation-without-reduced-motion.twin1.html",
+   "kind": "twin",
+   "rule": "infinite-animation-without-reduced-motion",
+   "pass": "static"
+  },
+  {
+   "id": "animating-layout-properties.fault1",
+   "file": "animating-layout-properties.fault1.html",
+   "kind": "fault",
+   "rule": "animating-layout-properties",
+   "pass": "static"
+  },
+  {
+   "id": "animating-layout-properties.twin1",
+   "file": "animating-layout-properties.twin1.html",
+   "kind": "twin",
+   "rule": "animating-layout-properties",
+   "pass": "static"
+  },
+  {
+   "id": "input-purpose-missing.fault1",
+   "file": "input-purpose-missing.fault1.html",
+   "kind": "fault",
+   "rule": "input-purpose-missing",
+   "pass": "static"
+  },
+  {
+   "id": "input-purpose-missing.twin1",
+   "file": "input-purpose-missing.twin1.html",
+   "kind": "twin",
+   "rule": "input-purpose-missing",
+   "pass": "static"
+  },
+  {
+   "id": "inline-svg-no-aria.fault1",
+   "file": "inline-svg-no-aria.fault1.html",
+   "kind": "fault",
+   "rule": "inline-svg-no-aria",
+   "pass": "static"
+  },
+  {
+   "id": "inline-svg-no-aria.twin1",
+   "file": "inline-svg-no-aria.twin1.html",
+   "kind": "twin",
+   "rule": "inline-svg-no-aria",
+   "pass": "static"
+  },
+  {
+   "id": "inline-svg-no-aria.twin2",
+   "file": "inline-svg-no-aria.twin2.html",
+   "kind": "twin",
+   "rule": "inline-svg-no-aria",
+   "pass": "static"
+  },
+  {
+   "id": "default-font-only.fault1",
+   "file": "default-font-only.fault1.html",
+   "kind": "fault",
+   "rule": "default-font-only",
+   "pass": "static"
+  },
+  {
+   "id": "default-font-only.twin1",
+   "file": "default-font-only.twin1.html",
+   "kind": "twin",
+   "rule": "default-font-only",
+   "pass": "static"
+  },
+  {
+   "id": "default-font-only.fault2",
+   "file": "default-font-only.fault2.html",
+   "kind": "fault",
+   "rule": "default-font-only",
+   "pass": "static"
+  },
+  {
+   "id": "placeholder-token-shipped.fault1",
+   "file": "placeholder-token-shipped.fault1.html",
+   "kind": "fault",
+   "rule": "placeholder-token-shipped",
+   "pass": "static"
+  },
+  {
+   "id": "placeholder-token-shipped.twin1",
+   "file": "placeholder-token-shipped.twin1.html",
+   "kind": "twin",
+   "rule": "placeholder-token-shipped",
+   "pass": "static"
+  },
+  {
+   "id": "glow-shadow-zero-offset.fault1",
+   "file": "glow-shadow-zero-offset.fault1.html",
+   "kind": "fault",
+   "rule": "glow-shadow-zero-offset",
+   "pass": "static"
+  },
+  {
+   "id": "glow-shadow-zero-offset.twin1",
+   "file": "glow-shadow-zero-offset.twin1.html",
+   "kind": "twin",
+   "rule": "glow-shadow-zero-offset",
+   "pass": "static"
+  },
+  {
+   "id": "hairline-border-heavy-shadow.fault1",
+   "file": "hairline-border-heavy-shadow.fault1.html",
+   "kind": "fault",
+   "rule": "hairline-border-heavy-shadow",
+   "pass": "static"
+  },
+  {
+   "id": "hairline-border-heavy-shadow.twin1",
+   "file": "hairline-border-heavy-shadow.twin1.html",
+   "kind": "twin",
+   "rule": "hairline-border-heavy-shadow",
+   "pass": "static"
+  },
+  {
+   "id": "focusable-at-opacity-zero.fault1",
+   "file": "focusable-at-opacity-zero.fault1.html",
+   "kind": "fault",
+   "rule": "focusable-at-opacity-zero",
+   "pass": "static"
+  },
+  {
+   "id": "focusable-at-opacity-zero.twin1",
+   "file": "focusable-at-opacity-zero.twin1.html",
+   "kind": "twin",
+   "rule": "focusable-at-opacity-zero",
+   "pass": "static"
+  },
+  {
+   "id": "horizontal-overflow.fault1",
+   "file": "horizontal-overflow.fault1.html",
+   "kind": "fault",
+   "rule": "horizontal-overflow",
+   "pass": "render"
+  },
+  {
+   "id": "horizontal-overflow.twin1",
+   "file": "horizontal-overflow.twin1.html",
+   "kind": "twin",
+   "rule": "horizontal-overflow",
+   "pass": "render"
+  },
+  {
+   "id": "text-overflows-its-box.fault1",
+   "file": "text-overflows-its-box.fault1.html",
+   "kind": "fault",
+   "rule": "text-overflows-its-box",
+   "pass": "render"
+  },
+  {
+   "id": "text-overflows-its-box.twin1",
+   "file": "text-overflows-its-box.twin1.html",
+   "kind": "twin",
+   "rule": "text-overflows-its-box",
+   "pass": "render"
+  },
+  {
+   "id": "input-text-zooms.fault1",
+   "file": "input-text-zooms.fault1.html",
+   "kind": "fault",
+   "rule": "input-text-zooms",
+   "pass": "render"
+  },
+  {
+   "id": "input-text-zooms.twin1",
+   "file": "input-text-zooms.twin1.html",
+   "kind": "twin",
+   "rule": "input-text-zooms",
+   "pass": "render"
+  },
+  {
+   "id": "text-low-contrast.fault1",
+   "file": "text-low-contrast.fault1.html",
+   "kind": "fault",
+   "rule": "text-low-contrast",
+   "pass": "render"
+  },
+  {
+   "id": "text-low-contrast.twin1",
+   "file": "text-low-contrast.twin1.html",
+   "kind": "twin",
+   "rule": "text-low-contrast",
+   "pass": "render"
+  },
+  {
+   "id": "target-too-small.fault1",
+   "file": "target-too-small.fault1.html",
+   "kind": "fault",
+   "rule": "target-too-small",
+   "pass": "render"
+  },
+  {
+   "id": "target-too-small.twin1",
+   "file": "target-too-small.twin1.html",
+   "kind": "twin",
+   "rule": "target-too-small",
+   "pass": "render"
+  },
+  {
+   "id": "image-distorted.fault1",
+   "file": "image-distorted.fault1.html",
+   "kind": "fault",
+   "rule": "image-distorted",
+   "pass": "render"
+  },
+  {
+   "id": "image-distorted.twin1",
+   "file": "image-distorted.twin1.html",
+   "kind": "twin",
+   "rule": "image-distorted",
+   "pass": "render"
+  },
+  {
+   "id": "focus-ring-missing.fault1",
+   "file": "focus-ring-missing.fault1.html",
+   "kind": "fault",
+   "rule": "focus-ring-missing",
+   "pass": "render"
+  },
+  {
+   "id": "focus-ring-missing.twin1",
+   "file": "focus-ring-missing.twin1.html",
+   "kind": "twin",
+   "rule": "focus-ring-missing",
+   "pass": "render"
+  },
+  {
+   "id": "infinite-animation-under-reduced-motion.fault1",
+   "file": "infinite-animation-under-reduced-motion.fault1.html",
+   "kind": "fault",
+   "rule": "infinite-animation-under-reduced-motion",
+   "pass": "render"
+  },
+  {
+   "id": "infinite-animation-under-reduced-motion.twin1",
+   "file": "infinite-animation-under-reduced-motion.twin1.html",
+   "kind": "twin",
+   "rule": "infinite-animation-under-reduced-motion",
+   "pass": "render"
+  }
+ ]
+}

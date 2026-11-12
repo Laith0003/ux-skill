@@ -1,0 +1,117 @@
+{
+ "page": "d-bs-checkout-rtl",
+ "findings": [
+  {
+   "key": "d-bs-checkout-rtl|render|accent-text-low-contrast|d-bs-checkout-rtl/index.html|0|86f7e437fa#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-checkout-rtl|render|state-answers-late|d-bs-checkout-rtl/index.html|0|5b5262dca4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-checkout-rtl|render|state-answers-late|d-bs-checkout-rtl/index.html|0|f251b554df#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-checkout-rtl|render|state-answers-late|d-bs-checkout-rtl/index.html|0|4ab95ba6d4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|href-empty-hash|d-bs-checkout-rtl/index.html|32|289df37519#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 32
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|inline-svg-no-aria|d-bs-checkout-rtl/index.html|2|fdf022cab9#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 2
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|input-purpose-missing|d-bs-checkout-rtl/index.html|8|ebf80f10ac#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|input-purpose-missing|d-bs-checkout-rtl/index.html|10|22d442f339#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|input-purpose-missing|d-bs-checkout-rtl/index.html|12|e5bdd27bf5#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 12
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|input-purpose-missing|d-bs-checkout-rtl/index.html|14|3e644a023d#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|input-purpose-missing|d-bs-checkout-rtl/index.html|22|7d06b50e69#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 22
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|input-purpose-missing|d-bs-checkout-rtl/index.html|24|598a9f886b#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 24
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|input-purpose-missing|d-bs-checkout-rtl/index.html|26|06a1cfb298#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 26
+  },
+  {
+   "key": "d-bs-checkout-rtl|static|placeholder-as-label|d-bs-checkout-rtl/index.html|8|ebf80f10ac#1",
+   "pass": "static",
+   "rule": "placeholder-as-label",
+   "severity": "high",
+   "file": "d-bs-checkout-rtl/index.html",
+   "line": 8
+  }
+ ]
+}

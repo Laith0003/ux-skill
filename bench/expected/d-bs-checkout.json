@@ -1,0 +1,125 @@
+{
+ "page": "d-bs-checkout",
+ "findings": [
+  {
+   "key": "d-bs-checkout|render|accent-text-low-contrast|d-bs-checkout/index.html|8|742935f7f1#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "d-bs-checkout/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-checkout|render|horizontal-overflow|d-bs-checkout/index.html|8|e893cde545#1",
+   "pass": "render",
+   "rule": "horizontal-overflow",
+   "severity": "high",
+   "file": "d-bs-checkout/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-checkout|render|state-answers-late|d-bs-checkout/index.html|0|5b5262dca4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-checkout|render|state-answers-late|d-bs-checkout/index.html|0|f251b554df#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-checkout|render|state-answers-late|d-bs-checkout/index.html|0|4ab95ba6d4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-checkout|static|href-empty-hash|d-bs-checkout/index.html|32|37b4a66fb8#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 32
+  },
+  {
+   "key": "d-bs-checkout|static|inline-svg-no-aria|d-bs-checkout/index.html|2|fdf022cab9#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-checkout/index.html",
+   "line": 2
+  },
+  {
+   "key": "d-bs-checkout|static|input-purpose-missing|d-bs-checkout/index.html|8|ebf80f10ac#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-checkout|static|input-purpose-missing|d-bs-checkout/index.html|10|e1216e8092#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-checkout|static|input-purpose-missing|d-bs-checkout/index.html|12|81d470b758#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 12
+  },
+  {
+   "key": "d-bs-checkout|static|input-purpose-missing|d-bs-checkout/index.html|14|fff48ec72b#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-checkout|static|input-purpose-missing|d-bs-checkout/index.html|22|77803e14c3#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 22
+  },
+  {
+   "key": "d-bs-checkout|static|input-purpose-missing|d-bs-checkout/index.html|24|c67e6f453e#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 24
+  },
+  {
+   "key": "d-bs-checkout|static|input-purpose-missing|d-bs-checkout/index.html|26|ab940afbbd#1",
+   "pass": "static",
+   "rule": "input-purpose-missing",
+   "severity": "medium",
+   "file": "d-bs-checkout/index.html",
+   "line": 26
+  },
+  {
+   "key": "d-bs-checkout|static|placeholder-as-label|d-bs-checkout/index.html|8|ebf80f10ac#1",
+   "pass": "static",
+   "rule": "placeholder-as-label",
+   "severity": "high",
+   "file": "d-bs-checkout/index.html",
+   "line": 8
+  }
+ ]
+}

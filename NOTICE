@@ -3,6 +3,9 @@ Copyright (c) 2026 Laith Aljunaidy. Licensed under the MIT License (see LICENSE)
 
 Third-party notices
 
+The benchmark pages under bench/pages/ come from openly licensed third-party
+sources; their licence notices are in bench/pages/NOTICE.
+
 Parts of the design guidance in this repository (the design dials model and
 some pattern vocabulary in commands/, agents/ and references/) were derived
 from taste-skill (https://github.com/Leonxlnx/taste-skill), used under the

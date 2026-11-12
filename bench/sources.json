@@ -1,0 +1,475 @@
+{
+ "note": "Designer-built sources for ux-bench. Only openly licensed pages; licence and attribution per source. capture.py reads this file.",
+ "sources": [
+  {
+   "id": "d-bs-pricing",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/pricing/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-album",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/album/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "gallery",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-album-rtl",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/album-rtl/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "gallery",
+   "direction": "rtl"
+  },
+  {
+   "id": "d-bs-blog",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/blog/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "article",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-blog-rtl",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/blog-rtl/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "article",
+   "direction": "rtl"
+  },
+  {
+   "id": "d-bs-carousel",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/carousel/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-carousel-rtl",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/carousel-rtl/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "rtl"
+  },
+  {
+   "id": "d-bs-checkout",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/checkout/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "form",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-checkout-rtl",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/checkout-rtl/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "form",
+   "direction": "rtl"
+  },
+  {
+   "id": "d-bs-cover",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/cover/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-dashboard",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/dashboard/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "dashboard",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-dashboard-rtl",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/dashboard-rtl/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "dashboard",
+   "direction": "rtl"
+  },
+  {
+   "id": "d-bs-heroes",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/heroes/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-product",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/product/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "ecommerce",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-sign-in",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/sign-in/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "form",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-bs-features",
+   "origin": "designer",
+   "url": "https://getbootstrap.com/docs/5.3/examples/features/",
+   "licence": "MIT (code); docs text CC-BY-3.0",
+   "attribution": "Copyright (c) 2011-2025 The Bootstrap Authors. Code released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-sb-agency",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-agency/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-sb-creative",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-creative/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-sb-freelancer",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-freelancer/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "portfolio",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-sb-grayscale",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-grayscale/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-sb-resume",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-resume/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "portfolio",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-sb-clean-blog",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-clean-blog/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "article",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-sb-sb-admin-2",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-sb-admin-2/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "dashboard",
+   "direction": "ltr",
+   "vendor": [
+    "^all\\.min\\.css$"
+   ]
+  },
+  {
+   "id": "d-sb-new-age",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-new-age/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-sb-business-frontpage",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-business-frontpage/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-sb-modern-business",
+   "origin": "designer",
+   "url": "https://startbootstrap.github.io/startbootstrap-modern-business/",
+   "licence": "MIT",
+   "attribution": "Copyright (c) 2013-2023 Start Bootstrap LLC. Released under the MIT License.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-h5-massively",
+   "origin": "designer",
+   "url": "https://html5up.net/massively",
+   "zip": "https://html5up.net/massively/download",
+   "member": "index.html",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "page_type": "article",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-h5-forty",
+   "origin": "designer",
+   "url": "https://html5up.net/forty",
+   "zip": "https://html5up.net/forty/download",
+   "member": "index.html",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-h5-stellar",
+   "origin": "designer",
+   "url": "https://html5up.net/stellar",
+   "zip": "https://html5up.net/stellar/download",
+   "member": "index.html",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-h5-dimension",
+   "origin": "designer",
+   "url": "https://html5up.net/dimension",
+   "zip": "https://html5up.net/dimension/download",
+   "member": "index.html",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-h5-editorial",
+   "origin": "designer",
+   "url": "https://html5up.net/editorial",
+   "zip": "https://html5up.net/editorial/download",
+   "member": "index.html",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "page_type": "article",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-h5-phantom",
+   "origin": "designer",
+   "url": "https://html5up.net/phantom",
+   "zip": "https://html5up.net/phantom/download",
+   "member": "index.html",
+   "licence": "CC-BY-3.0",
+   "attribution": "Template by HTML5 UP (html5up.net), CC BY 3.0. Demo images not stored.",
+   "redistributable": true,
+   "page_type": "portfolio",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-uk-1",
+   "origin": "designer",
+   "url": "https://www.gov.uk/",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr",
+   "strip": [
+    "<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>",
+    "<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>"
+   ],
+   "strip_reason": "OGL v3 excludes departmental logos and crests (header logo and footer crown)"
+  },
+  {
+   "id": "d-uk-2",
+   "origin": "designer",
+   "url": "https://www.gov.uk/vehicle-tax",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "page_type": "form",
+   "direction": "ltr",
+   "strip": [
+    "<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>",
+    "<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>"
+   ],
+   "strip_reason": "OGL v3 excludes departmental logos and crests (header logo and footer crown)"
+  },
+  {
+   "id": "d-uk-3",
+   "origin": "designer",
+   "url": "https://www.gov.uk/browse/driving",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "page_type": "docs",
+   "direction": "ltr",
+   "strip": [
+    "<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>",
+    "<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>"
+   ],
+   "strip_reason": "OGL v3 excludes departmental logos and crests (header logo and footer crown)"
+  },
+  {
+   "id": "d-uk-4",
+   "origin": "designer",
+   "url": "https://design-system.service.gov.uk/",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "page_type": "docs",
+   "direction": "ltr",
+   "strip": [
+    "<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>",
+    "<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>"
+   ],
+   "strip_reason": "OGL v3 excludes departmental logos and crests (header logo and footer crown)"
+  },
+  {
+   "id": "d-uk-5",
+   "origin": "designer",
+   "url": "https://design-system.service.gov.uk/components/button/",
+   "licence": "OGL-3.0 (content); MIT (code)",
+   "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Logo and crest removed: OGL v3 excludes them.",
+   "redistributable": true,
+   "page_type": "docs",
+   "direction": "ltr",
+   "strip": [
+    "<svg[^>]*(?:govuk-header__logotype|govuk-logo)[^>]*>.*?</svg>",
+    "<svg[^>]*govuk-footer__crown[^>]*>.*?</svg>"
+   ],
+   "strip_reason": "OGL v3 excludes departmental logos and crests (header logo and footer crown)"
+  },
+  {
+   "id": "d-us-1",
+   "origin": "designer",
+   "url": "https://designsystem.digital.gov/",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "page_type": "docs",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-us-2",
+   "origin": "designer",
+   "url": "https://designsystem.digital.gov/components/button/",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "page_type": "docs",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-us-3",
+   "origin": "designer",
+   "url": "https://www.usa.gov/",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-us-4",
+   "origin": "designer",
+   "url": "https://login.gov/",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "page_type": "landing",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-us-5",
+   "origin": "designer",
+   "url": "https://www.weather.gov/",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "page_type": "dashboard",
+   "direction": "ltr"
+  },
+  {
+   "id": "d-us-6",
+   "origin": "designer",
+   "url": "https://digital.gov/",
+   "licence": "Public domain (US federal work, 17 USC 105); third-party content on the page keeps its own rights",
+   "attribution": "US federal government work, public domain.",
+   "redistributable": true,
+   "page_type": "article",
+   "direction": "ltr"
+  }
+ ]
+}

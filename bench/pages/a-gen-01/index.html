@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clockwise - Time tracking for agencies</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --bg: #ffffff;
+    --bg-alt: #f9fafb;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+  .logo { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  nav ul { display: flex; gap: 32px; list-style: none; }
+  nav a { color: var(--muted); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+  nav a:hover { color: var(--primary); }
+  .btn { display: inline-block; padding: 14px 32px; border-radius: 12px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; }
+  .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5); }
+  .btn-secondary { background: white; color: var(--text); border: 1px solid #e5e7eb; }
+  .hero { padding: 100px 0; text-align: center; background: linear-gradient(180deg, #eef2ff 0%, #ffffff 100%); }
+  .hero h1 { font-size: 64px; font-weight: 800; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.02em; }
+  .hero h1 span { background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 20px; color: var(--muted); max-width: 600px; margin: 0 auto 40px; }
+  .hero-buttons { display: flex; gap: 16px; justify-content: center; }
+  section { padding: 80px 0; }
+  .section-title { text-align: center; font-size: 40px; font-weight: 700; margin-bottom: 16px; }
+  .section-subtitle { text-align: center; color: var(--muted); font-size: 18px; margin-bottom: 60px; }
+  .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .feature-card { padding: 40px; border-radius: 20px; background: white; box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.08); transition: transform 0.3s ease; }
+  .feature-card:hover { transform: translateY(-8px); }
+  .feature-icon { width: 56px; height: 56px; border-radius: 16px; background: linear-gradient(135deg, #6366f1, #a855f7); display: flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 24px; }
+  .feature-card h3 { font-size: 22px; margin-bottom: 12px; }
+  .feature-card p { color: var(--muted); }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; counter-reset: step; }
+  .step { text-align: center; }
+  .step-number { width: 64px; height: 64px; border-radius: 50%; background: var(--primary); color: white; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+  .pricing-teaser { background: var(--bg-alt); text-align: center; border-radius: 24px; padding: 60px; }
+  .price { font-size: 56px; font-weight: 800; color: var(--primary); }
+  .testimonials { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+  .testimonial { padding: 32px; border-radius: 20px; background: white; border: 1px solid #e5e7eb; }
+  .testimonial p { font-style: italic; margin-bottom: 20px; }
+  .author { display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #f472b6, #6366f1); }
+  footer { background: #111827; color: #9ca3af; padding: 60px 0 30px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; }
+  footer h4 { color: white; margin-bottom: 16px; }
+  footer a { color: #9ca3af; text-decoration: none; display: block; margin-bottom: 8px; }
+  .copyright { border-top: 1px solid #374151; margin-top: 40px; padding-top: 20px; text-align: center; font-size: 14px; }
+  @media (max-width: 768px) {
+    .hero h1 { font-size: 40px; }
+    .features, .steps, .testimonials, .footer-grid { grid-template-columns: 1fr; }
+    nav ul { display: none; }
+  }
+</style>
+</head>
+<body>
+  <header class="container">
+    <nav>
+      <div class="logo">Clockwise</div>
+      <ul>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+      <a href="#" class="btn btn-primary">Get Started</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <h1>Track every billable hour <span>without the spreadsheet</span></h1>
+      <p>Clockwise helps small agencies capture time, bill clients accurately, and finally stop chasing timesheets on Friday afternoon.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary">Start your 14-day trial</a>
+        <a href="#" class="btn btn-secondary">Watch demo</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="container">
+      <h2 class="section-title">Why agencies love Clockwise</h2>
+      <p class="section-subtitle">Everything you need to turn time into revenue.</p>
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">&#9201;</div>
+          <h3>One-click timers</h3>
+          <p>Start and stop timers from any project. Forgot to start one? Add time in seconds.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128202;</div>
+          <h3>Real-time reports</h3>
+          <p>See profitability by client and project, updated the moment your team logs time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128176;</div>
+          <h3>Invoices in minutes</h3>
+          <p>Turn tracked hours into polished invoices and get paid faster.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" style="background: #f9fafb;">
+    <div class="container">
+      <h2 class="section-title">How it works</h2>
+      <p class="section-subtitle">Up and running in under five minutes.</p>
+      <div class="steps">
+        <div class="step"><div class="step-number">1</div><h3>Add your clients</h3><p>Import from a CSV or add them by hand.</p></div>
+        <div class="step"><div class="step-number">2</div><h3>Invite your team</h3><p>Everyone gets a timer on web, desktop and mobile.</p></div>
+        <div class="step"><div class="step-number">3</div><h3>Bill with confidence</h3><p>Export invoices backed by every logged minute.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="container">
+      <div class="pricing-teaser">
+        <h2 class="section-title">Simple, transparent pricing</h2>
+        <p class="section-subtitle">Plans from</p>
+        <div class="price">$8<span style="font-size: 20px; color: #6b7280;">/seat/month</span></div>
+        <p style="margin: 20px 0 32px; color: #6b7280;">No setup fees. Cancel anytime.</p>
+        <a href="#" class="btn btn-primary">See all plans</a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2 class="section-title">Loved by agency owners</h2>
+      <p class="section-subtitle">Don't just take our word for it.</p>
+      <div class="testimonials">
+        <div class="testimonial">
+          <p>"We recovered 12 hours of unbilled work in our first month. Clockwise paid for itself immediately."</p>
+          <div class="author"><div class="avatar"></div><div><strong>Sarah Johnson</strong><br><small>Founder, Pixel and Co.</small></div></div>
+        </div>
+        <div class="testimonial">
+          <p>"Finally a time tracker my designers actually use. The timers are effortless."</p>
+          <div class="author"><div class="avatar"></div><div><strong>Michael Chen</strong><br><small>Studio Lead, Northwind</small></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div><div class="logo">Clockwise</div><p style="margin-top: 16px;">Time tracking built for small agencies.</p></div>
+        <div><h4>Product</h4><a href="#">Features</a><a href="#">Pricing</a><a href="#">Integrations</a></div>
+        <div><h4>Company</h4><a href="#">About</a><a href="#">Blog</a><a href="#">Careers</a></div>
+        <div><h4>Support</h4><a href="#">Help Center</a><a href="#">Contact</a><a href="#">Status</a></div>
+      </div>
+      <div class="copyright">&copy; 2026 Clockwise. All rights reserved.</div>
+    </div>
+  </footer>
+</body>
+</html>

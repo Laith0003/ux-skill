@@ -1,0 +1,69 @@
+{
+ "page": "d-bs-carousel-rtl",
+ "findings": [
+  {
+   "key": "d-bs-carousel-rtl|render|state-answers-late|d-bs-carousel-rtl/index.html|0|fb9d41bab2#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-carousel-rtl/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-carousel-rtl|render|state-answers-late|d-bs-carousel-rtl/index.html|0|5b5262dca4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-carousel-rtl/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-carousel-rtl|render|text-low-contrast|d-bs-carousel-rtl/index.html|0|ac4ae97285#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-bs-carousel-rtl/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-carousel-rtl|static|href-empty-hash|d-bs-carousel-rtl/index.html|8|21e55d1868#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-carousel-rtl/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-carousel-rtl|static|href-empty-hash|d-bs-carousel-rtl/index.html|9|83c1eb24c2#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-carousel-rtl/index.html",
+   "line": 9
+  },
+  {
+   "key": "d-bs-carousel-rtl|static|imagery-mandatory-missing|d-bs-carousel-rtl/index.html|1|209acc4d72#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "d-bs-carousel-rtl/index.html",
+   "line": 1
+  },
+  {
+   "key": "d-bs-carousel-rtl|static|inline-svg-no-aria|d-bs-carousel-rtl/index.html|2|3c9744a534#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-carousel-rtl/index.html",
+   "line": 2
+  },
+  {
+   "key": "d-bs-carousel-rtl|static|link-without-href|d-bs-carousel-rtl/index.html|8|21e55d1868#1",
+   "pass": "static",
+   "rule": "link-without-href",
+   "severity": "high",
+   "file": "d-bs-carousel-rtl/index.html",
+   "line": 8
+  }
+ ]
+}

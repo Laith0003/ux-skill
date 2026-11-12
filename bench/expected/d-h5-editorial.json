@@ -1,0 +1,677 @@
+{
+ "page": "d-h5-editorial",
+ "findings": [
+  {
+   "key": "d-h5-editorial|render|accent-text-low-contrast|d-h5-editorial/index.html|45|18c7bf7a84#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 45
+  },
+  {
+   "key": "d-h5-editorial|render|image-broken|d-h5-editorial/index.html|49|978ea7af39#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 49
+  },
+  {
+   "key": "d-h5-editorial|render|text-low-contrast|d-h5-editorial/index.html|25|6ed3216b14#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 25
+  },
+  {
+   "key": "d-h5-editorial|static|animating-layout-properties|_css/98057b0a864e-main.css|1930|bd310f036b#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1930
+  },
+  {
+   "key": "d-h5-editorial|static|animating-layout-properties|_css/98057b0a864e-main.css|1962|a2af283f02#1",
+   "pass": "static",
+   "rule": "animating-layout-properties",
+   "severity": "high",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1962
+  },
+  {
+   "key": "d-h5-editorial|static|css-import-render-blocking|_css/98057b0a864e-main.css|1|2221711735#1",
+   "pass": "static",
+   "rule": "css-import-render-blocking",
+   "severity": "medium",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1
+  },
+  {
+   "key": "d-h5-editorial|static|css-import-render-blocking|_css/98057b0a864e-main.css|2|2181a0aa8d#1",
+   "pass": "static",
+   "rule": "css-import-render-blocking",
+   "severity": "medium",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 2
+  },
+  {
+   "key": "d-h5-editorial|static|focusable-at-opacity-zero|_css/98057b0a864e-main.css|1099|9a57a12715#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1099
+  },
+  {
+   "key": "d-h5-editorial|static|generic-class-container-wrapper-only|d-h5-editorial/index.html|21|0809072f70#1",
+   "pass": "static",
+   "rule": "generic-class-container-wrapper-only",
+   "severity": "low",
+   "file": "d-h5-editorial/index.html",
+   "line": 21
+  },
+  {
+   "key": "d-h5-editorial|static|generic-class-container-wrapper-only|d-h5-editorial/index.html|152|0809072f70#1",
+   "pass": "static",
+   "rule": "generic-class-container-wrapper-only",
+   "severity": "low",
+   "file": "d-h5-editorial/index.html",
+   "line": 152
+  },
+  {
+   "key": "d-h5-editorial|static|generic-cta-text|d-h5-editorial/index.html|45|b620d7f728#1",
+   "pass": "static",
+   "rule": "generic-cta-text",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 45
+  },
+  {
+   "key": "d-h5-editorial|static|glow-shadow-zero-offset|_css/98057b0a864e-main.css|2023|bad1f30ecc#1",
+   "pass": "static",
+   "rule": "glow-shadow-zero-offset",
+   "severity": "medium",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 2023
+  },
+  {
+   "key": "d-h5-editorial|static|h-screen-no-dvh-fallback|_css/98057b0a864e-main.css|1844|4e160c3253#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1844
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|27|f66982bb5f#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 27
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|28|adbd03f74c#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 28
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|29|f19a4fd4be#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 29
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|30|1bc089a589#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 30
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|31|568fdecfd3#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 31
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|45|b620d7f728#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 45
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|97|a72c77b9d4#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 97
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|101|4015440e34#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 101
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|105|beeff5547c#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 105
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|109|4015440e34#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 109
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|113|cababe77fa#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 113
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|117|4015440e34#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 117
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|121|465cd79566#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 121
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|125|4015440e34#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 125
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|129|e25e2db985#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 129
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|133|4015440e34#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 133
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|137|90a0b7d4ba#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 137
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|141|4015440e34#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 141
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|173|2d9ab6ecb8#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 173
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|174|64d676a4bb#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 174
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|175|0d942babe9#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 175
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|176|e54faf5494#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 176
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|179|014e77a26d#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 179
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|180|3cb7c55144#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 180
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|184|2d9ab6ecb8#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 184
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|185|64d676a4bb#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 185
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|186|0d942babe9#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 186
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|187|e54faf5494#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 187
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|190|330b3b7778#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 190
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|191|0d8d943f38#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 191
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|192|6e7810a99b#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 192
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|203|b954df83ed#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 203
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|207|6551a369b7#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 207
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|211|748cbee0fe#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 211
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|216|23be0dfbca#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 216
+  },
+  {
+   "key": "d-h5-editorial|static|href-empty-hash|d-h5-editorial/index.html|227|4adad91100#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 227
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|49|51071c0c9b#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 49
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|97|a72c77b9d4#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 97
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|105|beeff5547c#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 105
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|113|cababe77fa#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 113
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|121|465cd79566#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 121
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|129|e25e2db985#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 129
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|137|90a0b7d4ba#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 137
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|203|b954df83ed#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 203
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|207|6551a369b7#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 207
+  },
+  {
+   "key": "d-h5-editorial|static|image-format-jpg-no-webp-avif|d-h5-editorial/index.html|211|748cbee0fe#1",
+   "pass": "static",
+   "rule": "image-format-jpg-no-webp-avif",
+   "severity": "medium",
+   "file": "d-h5-editorial/index.html",
+   "line": 211
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|49|51071c0c9b#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 49
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|97|a72c77b9d4#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 97
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|105|beeff5547c#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 105
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|113|cababe77fa#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 113
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|121|465cd79566#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 121
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|129|e25e2db985#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 129
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|137|90a0b7d4ba#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 137
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|203|b954df83ed#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 203
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|207|6551a369b7#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 207
+  },
+  {
+   "key": "d-h5-editorial|static|img-no-dimensions|d-h5-editorial/index.html|211|748cbee0fe#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 211
+  },
+  {
+   "key": "d-h5-editorial|static|lang-attribute-missing|d-h5-editorial/index.html|7|0fe0bb445f#1",
+   "pass": "static",
+   "rule": "lang-attribute-missing",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 7
+  },
+  {
+   "key": "d-h5-editorial|static|lorem-ipsum-leak|d-h5-editorial/index.html|43|10ff006b31#1",
+   "pass": "static",
+   "rule": "lorem-ipsum-leak",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 43
+  },
+  {
+   "key": "d-h5-editorial|static|lorem-ipsum-leak|d-h5-editorial/index.html|76|d57f1f91c4#1",
+   "pass": "static",
+   "rule": "lorem-ipsum-leak",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 76
+  },
+  {
+   "key": "d-h5-editorial|static|outline-none-no-focus-visible|_css/98057b0a864e-main.css|1969|b06cb1da68#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1969
+  },
+  {
+   "key": "d-h5-editorial|static|padding-shorthand-4-vals-zero-first|_css/98057b0a864e-main.css|1460|aef6694a7e#1",
+   "pass": "static",
+   "rule": "padding-shorthand-4-vals-zero-first",
+   "severity": "low",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1460
+  },
+  {
+   "key": "d-h5-editorial|static|padding-shorthand-4-vals-zero-first|_css/98057b0a864e-main.css|1858|d869e392e1#1",
+   "pass": "static",
+   "rule": "padding-shorthand-4-vals-zero-first",
+   "severity": "low",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1858
+  },
+  {
+   "key": "d-h5-editorial|static|padding-shorthand-4-vals-zero-first|_css/98057b0a864e-main.css|1868|de002acd68#1",
+   "pass": "static",
+   "rule": "padding-shorthand-4-vals-zero-first",
+   "severity": "low",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1868
+  },
+  {
+   "key": "d-h5-editorial|static|padding-shorthand-4-vals-zero-first|_css/98057b0a864e-main.css|1873|b93a41fc6b#1",
+   "pass": "static",
+   "rule": "padding-shorthand-4-vals-zero-first",
+   "severity": "low",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1873
+  },
+  {
+   "key": "d-h5-editorial|static|padding-shorthand-4-vals-zero-first|_css/98057b0a864e-main.css|1878|125dd20b44#1",
+   "pass": "static",
+   "rule": "padding-shorthand-4-vals-zero-first",
+   "severity": "low",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1878
+  },
+  {
+   "key": "d-h5-editorial|static|placeholder-as-label|d-h5-editorial/index.html|157|54a42f6bd9#1",
+   "pass": "static",
+   "rule": "placeholder-as-label",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 157
+  },
+  {
+   "key": "d-h5-editorial|static|placeholder-token-shipped|d-h5-editorial/index.html|43|10ff006b31#1",
+   "pass": "static",
+   "rule": "placeholder-token-shipped",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 43
+  },
+  {
+   "key": "d-h5-editorial|static|placeholder-token-shipped|d-h5-editorial/index.html|76|d57f1f91c4#1",
+   "pass": "static",
+   "rule": "placeholder-token-shipped",
+   "severity": "high",
+   "file": "d-h5-editorial/index.html",
+   "line": 76
+  },
+  {
+   "key": "d-h5-editorial|static|transition-duration-500ms-or-longer|_css/98057b0a864e-main.css|1930|bd310f036b#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1930
+  },
+  {
+   "key": "d-h5-editorial|static|transition-duration-500ms-or-longer|_css/98057b0a864e-main.css|1962|a2af283f02#1",
+   "pass": "static",
+   "rule": "transition-duration-500ms-or-longer",
+   "severity": "medium",
+   "file": "_css/98057b0a864e-main.css",
+   "line": 1962
+  },
+  {
+   "key": "d-h5-editorial|static|viewport-no-zoom|d-h5-editorial/index.html|11|0950ceb857#1",
+   "pass": "static",
+   "rule": "viewport-no-zoom",
+   "severity": "critical",
+   "file": "d-h5-editorial/index.html",
+   "line": 11
+  }
+ ]
+}

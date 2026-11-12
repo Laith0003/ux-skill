@@ -1,0 +1,157 @@
+{
+ "page": "d-bs-dashboard",
+ "findings": [
+  {
+   "key": "d-bs-dashboard|render|accent-text-low-contrast|d-bs-dashboard/index.html|10|b3601041cf#1",
+   "pass": "render",
+   "rule": "accent-text-low-contrast",
+   "severity": "high",
+   "file": "d-bs-dashboard/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-dashboard|render|focus-ring-clipped|d-bs-dashboard/index.html|8|127c78c328#1",
+   "pass": "render",
+   "rule": "focus-ring-clipped",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-dashboard|render|focus-ring-clipped|d-bs-dashboard/index.html|10|b3601041cf#1",
+   "pass": "render",
+   "rule": "focus-ring-clipped",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-dashboard|render|state-answers-late|d-bs-dashboard/index.html|0|5b5262dca4#1",
+   "pass": "render",
+   "rule": "state-answers-late",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 0
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|8|dd710a89b2#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 8
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|10|e2a31c5461#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 10
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|12|2b89bb27e5#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 12
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|14|df8317a494#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 14
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|16|533ff3fcac#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 16
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|18|5b3ccc1b9c#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 18
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|20|71818dd713#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 20
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|22|697f460fc5#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 22
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|24|697f460fc5#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 24
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|26|697f460fc5#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 26
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|28|b2b95c5a47#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 28
+  },
+  {
+   "key": "d-bs-dashboard|static|href-empty-hash|d-bs-dashboard/index.html|30|8ce20272cc#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "d-bs-dashboard/index.html",
+   "line": 30
+  },
+  {
+   "key": "d-bs-dashboard|static|imagery-mandatory-missing|d-bs-dashboard/index.html|1|b4406d7d8b#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "d-bs-dashboard/index.html",
+   "line": 1
+  },
+  {
+   "key": "d-bs-dashboard|static|inline-svg-no-aria|d-bs-dashboard/index.html|2|3c9744a534#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-dashboard/index.html",
+   "line": 2
+  },
+  {
+   "key": "d-bs-dashboard|static|inline-svg-no-aria|d-bs-dashboard/index.html|8|dd710a89b2#1",
+   "pass": "static",
+   "rule": "inline-svg-no-aria",
+   "severity": "high",
+   "file": "d-bs-dashboard/index.html",
+   "line": 8
+  }
+ ]
+}

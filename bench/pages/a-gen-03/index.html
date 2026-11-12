@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pour-Over Dripper | Kiln &amp; Kettle</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Poppins', sans-serif; color: #2d2a26; background: #faf8f5; }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; background: #fff; border-bottom: 1px solid #eee; }
+  header .logo { font-weight: 700; font-size: 22px; letter-spacing: 1px; }
+  header .cart { position: relative; font-size: 22px; cursor: pointer; }
+  .product { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; max-width: 1200px; margin: 50px auto; padding: 0 40px; }
+  .gallery .main-img { width: 100%; border-radius: 16px; background: #eae4dc; aspect-ratio: 1; object-fit: cover; }
+  .thumbs { display: flex; gap: 12px; margin-top: 16px; }
+  .thumbs img { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; cursor: pointer; opacity: 0.7; transition: opacity 0.3s; }
+  .thumbs img:hover, .thumbs img.active { opacity: 1; border: 2px solid #2d2a26; }
+  .info h1 { font-size: 38px; font-weight: 700; margin-bottom: 10px; }
+  .rating { color: #f5a623; margin-bottom: 16px; }
+  .rating span { color: #777; font-size: 14px; margin-left: 8px; }
+  .price { font-size: 30px; font-weight: 600; margin-bottom: 24px; }
+  .variants h3, .qty h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; color: #777; }
+  .swatches { display: flex; gap: 12px; margin-bottom: 24px; }
+  .swatch { width: 44px; height: 44px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: all 0.2s; }
+  .swatch.selected { border-color: #2d2a26; transform: scale(1.1); }
+  .swatch.chalk { background: #f2efe9; } .swatch.moss { background: #7a8b5a; } .swatch.charcoal { background: #3a3a3a; }
+  .qty-row { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; }
+  .qty-picker { display: flex; border: 1px solid #ccc; border-radius: 10px; overflow: hidden; }
+  .qty-picker button { width: 44px; height: 48px; border: none; background: #fff; font-size: 20px; cursor: pointer; }
+  .qty-picker input { width: 50px; text-align: center; border: none; font-size: 16px; }
+  .add-to-cart { flex: 1; padding: 16px; background: #2d2a26; color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.3s ease; }
+  .add-to-cart:hover { background: #4a4540; }
+  .shipping { font-size: 14px; color: #5a7a3a; margin-bottom: 30px; }
+  .tabs { margin-top: 30px; border-top: 1px solid #e5e0d8; padding-top: 24px; }
+  .tabs h2 { font-size: 20px; margin: 20px 0 10px; }
+  .tabs p { color: #555; line-height: 1.8; }
+  .specs { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .specs td { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+  .specs td:first-child { color: #888; width: 40%; }
+  .reviews { max-width: 1200px; margin: 60px auto; padding: 0 40px; }
+  .reviews h2 { font-size: 28px; margin-bottom: 24px; }
+  .review { background: #fff; padding: 24px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+  .review .stars { color: #f5a623; }
+  .review h4 { margin: 8px 0; }
+  .review small { color: #999; }
+  @media (max-width: 900px) { .product { grid-template-columns: 1fr; } header { padding: 20px; } }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">KILN &amp; KETTLE</div>
+    <div class="cart">&#128722;</div>
+  </header>
+  <main class="product">
+    <div class="gallery">
+      <img class="main-img" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900" alt="Ceramic pour-over dripper">
+      <div class="thumbs">
+        <img class="active" src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200" alt="">
+        <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=200" alt="">
+        <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=200" alt="">
+      </div>
+    </div>
+    <div class="info">
+      <h1>Ceramic Pour-Over Dripper</h1>
+      <div class="rating">&#9733;&#9733;&#9733;&#9733;&#9733; <span>4.9 (128 reviews)</span></div>
+      <div class="price">$42.00</div>
+      <div class="variants">
+        <h3>Glaze: Chalk</h3>
+        <div class="swatches">
+          <div class="swatch chalk selected" title="Chalk"></div>
+          <div class="swatch moss" title="Moss"></div>
+          <div class="swatch charcoal" title="Charcoal"></div>
+        </div>
+      </div>
+      <div class="qty">
+        <h3>Quantity</h3>
+        <div class="qty-row">
+          <div class="qty-picker"><button>-</button><input type="number" value="1" min="1"><button>+</button></div>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      <p class="shipping">&#10003; Ships in 2 business days. Free shipping over $60.</p>
+      <div class="tabs">
+        <h2>Description</h2>
+        <p>Hand-thrown in small batches, our dripper brings out the sweetness of light roasts. The single large hole lets you control the flow with your pour, and the ribbed walls keep the filter from sticking.</p>
+        <h2>Specifications</h2>
+        <table class="specs">
+          <tr><td>Material</td><td>Stoneware, food-safe glaze</td></tr>
+          <tr><td>Fits</td><td>#2 cone filters</td></tr>
+          <tr><td>Capacity</td><td>1 to 4 cups</td></tr>
+          <tr><td>Care</td><td>Dishwasher safe</td></tr>
+        </table>
+      </div>
+    </div>
+  </main>
+  <section class="reviews">
+    <h2>Customer Reviews</h2>
+    <div class="review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><h4>Beautiful and functional</h4><p>The moss glaze is even nicer in person. Makes a clean, bright cup.</p><small>Jessica M. - Verified Buyer</small></div>
+    <div class="review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div><h4>Great dripper</h4><p>Pours a little fast with a coarse grind, but I adjusted and love it.</p><small>Daniel R. - Verified Buyer</small></div>
+  </section>
+</body>
+</html>

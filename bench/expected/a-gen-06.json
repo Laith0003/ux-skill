@@ -1,0 +1,149 @@
+{
+ "page": "a-gen-06",
+ "findings": [
+  {
+   "key": "a-gen-06|render|image-broken|a-gen-06/index.html|50|978ea7af39#1",
+   "pass": "render",
+   "rule": "image-broken",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 50
+  },
+  {
+   "key": "a-gen-06|render|input-text-zooms|a-gen-06/index.html|0|140f86aae5#1",
+   "pass": "render",
+   "rule": "input-text-zooms",
+   "severity": "medium",
+   "file": "a-gen-06/index.html",
+   "line": 0
+  },
+  {
+   "key": "a-gen-06|render|text-low-contrast|a-gen-06/index.html|43|94c8263f6c#1",
+   "pass": "render",
+   "rule": "text-low-contrast",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 43
+  },
+  {
+   "key": "a-gen-06|static|button-no-type|a-gen-06/index.html|69|ded073962c#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "a-gen-06/index.html",
+   "line": 69
+  },
+  {
+   "key": "a-gen-06|static|generic-class-container-wrapper-only|a-gen-06/index.html|57|c26702a537#1",
+   "pass": "static",
+   "rule": "generic-class-container-wrapper-only",
+   "severity": "low",
+   "file": "a-gen-06/index.html",
+   "line": 57
+  },
+  {
+   "key": "a-gen-06|static|href-empty-hash|a-gen-06/index.html|38|2cd8ad6cea#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-06/index.html",
+   "line": 38
+  },
+  {
+   "key": "a-gen-06|static|href-empty-hash|a-gen-06/index.html|60|b76a518be2#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-06/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-06|static|href-empty-hash|a-gen-06/index.html|61|3de8a019e8#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-06/index.html",
+   "line": 61
+  },
+  {
+   "key": "a-gen-06|static|href-empty-hash|a-gen-06/index.html|62|790c9e4669#1",
+   "pass": "static",
+   "rule": "href-empty-hash",
+   "severity": "medium",
+   "file": "a-gen-06/index.html",
+   "line": 62
+  },
+  {
+   "key": "a-gen-06|static|img-no-dimensions|a-gen-06/index.html|50|1480b725f7#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 50
+  },
+  {
+   "key": "a-gen-06|static|img-no-dimensions|a-gen-06/index.html|60|b76a518be2#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-06|static|img-no-dimensions|a-gen-06/index.html|61|3de8a019e8#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 61
+  },
+  {
+   "key": "a-gen-06|static|img-no-dimensions|a-gen-06/index.html|62|790c9e4669#1",
+   "pass": "static",
+   "rule": "img-no-dimensions",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 62
+  },
+  {
+   "key": "a-gen-06|static|placeholder-as-label|a-gen-06/index.html|69|ded073962c#1",
+   "pass": "static",
+   "rule": "placeholder-as-label",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 69
+  },
+  {
+   "key": "a-gen-06|static|text-align-justify-web|a-gen-06/index.html|18|fe57c2baa7#1",
+   "pass": "static",
+   "rule": "text-align-justify-web",
+   "severity": "low",
+   "file": "a-gen-06/index.html",
+   "line": 18
+  },
+  {
+   "key": "a-gen-06|static|unsplash-photo-id-no-alt|a-gen-06/index.html|60|b76a518be2#1",
+   "pass": "static",
+   "rule": "unsplash-photo-id-no-alt",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 60
+  },
+  {
+   "key": "a-gen-06|static|unsplash-photo-id-no-alt|a-gen-06/index.html|61|3de8a019e8#1",
+   "pass": "static",
+   "rule": "unsplash-photo-id-no-alt",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 61
+  },
+  {
+   "key": "a-gen-06|static|unsplash-photo-id-no-alt|a-gen-06/index.html|62|790c9e4669#1",
+   "pass": "static",
+   "rule": "unsplash-photo-id-no-alt",
+   "severity": "high",
+   "file": "a-gen-06/index.html",
+   "line": 62
+  }
+ ]
+}

@@ -1,0 +1,245 @@
+.figure {
+	width:800px;
+	border:solid 1px gray;
+	padding:0px;
+	height: 500px;
+	margin-top: 0px;
+	margin-right: 5px;
+	margin-bottom: 0px;
+	margin-left: 5px;
+}
+#uswwamap {
+	position: relative;
+}
+#akwwamap {
+	position: absolute;
+	top: 498px;
+	width: 115px;
+	margin-left: 6px;
+	border-top: solid 1px gray;
+	border-right: solid 1px gray;
+	height: 130px;
+}
+#hiwwamap {
+	position: absolute;
+	top: 519px;
+	width: 115px;
+	margin-left: 122px;
+	border-top: solid 1px gray;
+	border-right: solid 1px gray;
+	height: 109px;
+}
+#oceanlinks {
+	position: relative;
+	left: 250px;
+	top: -20px;
+	padding: 0px;
+	width: 400px;
+}
+#wwa {
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+}
+/*fixing small map legend - will stay inside of the box now in IE6*/
+#wwasmall {
+	margin-left: auto;
+	margin-right: auto;
+	position: relative;
+	width: 525px;
+	height: auto;
+}
+/*end of fixing small map legend - will stay inside of the box now in IE6*/
+.wwabox {
+	width: 15px;
+	border: solid 1px black;
+	margin-right: 2px;
+	float: left;
+}
+#wwa li {
+	list-style-type: none;
+	margin: .5em .5em 0 -3.4em;
+	font-size: 10px;
+	text-align: left;
+}
+#wwaleft {
+	width:195px;
+	float: left;
+	height:auto;
+	margin: 0px;
+	padding: 0px;
+}
+#wwacenter_l {
+	width:195px;
+	height:auto;
+	float:left;
+	margin: 0px;
+	padding: 0px;
+}
+#wwacenter_r {
+	width:195px;
+	height:auto;
+	float:left;
+	margin: 0px;
+	padding: 0px;
+}
+#wwaright {
+	width:195px;
+	height:auto;
+	float:left;
+	margin: 0px;
+	padding: 0px;	
+}
+#whitebox {
+	background: #FFFFFF;
+	background-color: #FFFFFF;
+	width: 800px;
+	border-left: solid gray 1px;
+	border-right: solid gray 1px;
+	margin-top: 0px;
+	margin-right: 5px;
+	margin-bottom: 0px;
+	margin-left: 5px;
+	padding-top:5px;
+}
+#blue {
+	background-color: #003399;
+	background: #003399;
+	width:810px;
+	margin: 0px;
+	padding: 0px;
+}
+.wwamaplegend {
+	border: 1px solid #CCCCCC;
+	font-size: 8px;
+	background-color: White;
+}
+#wwa_c1 {
+	width: 175px;
+	float:left;
+	margin: 0px;
+	padding: 0px;
+}
+#wwa_c2  {
+	width: 175px;
+	float:left;
+	margin: 0px;
+	padding: 0px;
+}
+#wwa_c3  {
+	width: 175px;
+	float:left;
+	margin: 0px;
+	padding: 0px;
+}
+
+/*wwa colors*/
+#z00FFFF {background-color:#00FFFF;}
+#zFFE4C4 {background-color:#FFE4C4;}
+#z8A2BE2 {background-color:#8A2BE2;}
+#zDEB887 {background-color:#DEB887;}
+#z5F9EA0 {background-color:#5F9EA0;}
+#z7FFF00 {background-color:#7FFF00;}
+#zFF7F50 {background-color:#FF7F50;}
+#z6495ED {background-color:#6495ED;}
+#zDC143C {background-color:#DC143C;}
+#z00FFFF {background-color:#00FFFF;}
+#z00008B {background-color:#00008B;}
+#z008B8B {background-color:#008B8B;}
+#zB8860B {background-color:#B8860B;}
+#zA9A9A9 {background-color:#A9A9A9;}
+#zBDB76B {background-color:#BDB76B;}
+#z8B008B {background-color:#8B008B;}
+#z9932CC {background-color:#9932CC;}
+#z8B0000 {background-color:#8B0000;}
+#zE9967A {background-color:#E9967A;}
+#z8FBC8F {background-color:#8FBC8F;}
+#z9400D3 {background-color:#9400D3;}
+#zFF1493 {background-color:#FF1493;}
+#z00BFFF {background-color:#00BFFF;}
+#z696969 {background-color:#696969;}
+#z1E90FF {background-color:#1E90FF;}
+#zB22222 {background-color:#B22222;}
+#z228B22 {background-color:#228B22;}
+#zFF00FF {background-color:#FF00FF;}
+#zDAA520 {background-color:#DAA520;}
+#zFFD700 {background-color:#FFD700;}
+#z808080 {background-color:#808080;}
+#zADFF2F {background-color:#ADFF2F;}
+#zFF69B4 {background-color:#FF69B4;}
+#z4B0082 {background-color:#4B0082;}
+#zF0E68C {background-color:#F0E68C;}
+#zADD8E6 {background-color:#ADD8E6;}
+#zF08080 {background-color:#F08080;}
+#z90EE90 {background-color:#90EE90;}
+#zFFB6C1 {background-color:#FFB6C1;}
+#zFFA07A {background-color:#FFA07A;}
+#zB0C4DE {background-color:#B0C4DE;}
+#z00FF00 {background-color:#00FF00;}
+#z32CD32 {background-color:#32CD32;}
+#zFF00FF {background-color:#FF00FF;}
+#z800000 {background-color:#800000;}
+#z66CDAA {background-color:#66CDAA;}
+#z6699CC {background-color:#6699CC;}
+#zBA55D3 {background-color:#BA55D3;}
+#z9370DB {background-color:#9370DB;}
+#z7B68EE {background-color:#7B68EE;}
+#z48D1CC {background-color:#48D1CC;}
+#zC71585 {background-color:#C71585;}
+#zFFE4B5 {background-color:#FFE4B5;}
+#zFFDEAD {background-color:#FFDEAD;}
+#z000080 {background-color:#000080;}
+#z6B8E23 {background-color:#6B8E23;}
+#zFFA500 {background-color:#FFA500;}
+#zFF4500 {background-color:#FF4500;}
+#zEEE8AA {background-color:#EEE8AA;}
+#zAFEEEE {background-color:#AFEEEE;}
+#zDB7093 {background-color:#DB7093;}
+#zCD853F {background-color:#CD853F;}
+#zDDA0DD {background-color:#DDA0DD;}
+#zB0E0E6 {background-color:#B0E0E6;}
+#zFF0000 {background-color:#FF0000;}
+#z8B4513 {background-color:#8B4513;}
+#zFA8072 {background-color:#FA8072;}
+#zF4A460 {background-color:#F4A460;}
+#z2E8B57 {background-color:#2E8B57;}
+#zA0522D {background-color:#A0522D;}
+#zC0C0C0 {background-color:#C0C0C0;}
+#z87CEEB {background-color:#87CEEB;}
+#z6A5ACD {background-color:#6A5ACD;}
+#z708090 {background-color:#708090;}
+#z00FF7F {background-color:#00FF7F;}
+#zD2B48C {background-color:#D2B48C;}
+#z008080 {background-color:#008080;}
+#zD8BFD8 {background-color:#D8BFD8;}
+#zFD6347 {background-color:#FD6347;}
+#zCD5C5C {background-color:#CD5C5C;}
+#zFFFF00 {background-color:#FFFF00;}
+#z9ACD32 {background-color:#9ACD32;}
+#z4682B4 {background-color:#4682B4;}
+#z4169E1 {background-color:#4169E1;}
+#zF0FFFF {background-color:#F0FFFF;}
+#z0000FF {background-color:#0000FF;}
+#zA52A2A {background-color:#A52A2A;}
+#zD2691E {background-color:#D2691E;}
+#z7CFC00 {background-color:#7CFC00;}
+#z87CDFA {background-color:#87CDFA;} /*Lake Effect Snow Watch (lightskyblue) */
+#z98FB98 {background-color:#98FB98;}
+#zFFDAB9 {background-color:#FFDAB9;}
+#zFFFFFF {background-color:#FFFFFF;}
+/*Added on June 09 2008*/
+#zFF8C00 {background-color:#FF8C00;} /*Extreme Wind Warning (Darkorange) */
+#zFFC0CB {background-color:#FFC0CB;} /*Gale Watch (Pink)*/
+#z483D8B {background-color:#483D8B;} /*Hazardous Seas Watch (Darkslateblue)*/
+#zBC8F8F {background-color:#BC8F8F;} /*Heavy Freezing Spray Watch (Rosybrown)*/
+#z87CEFA {background-color:#87CEFA;} /*Lake Effect Snow Watch (Lightskyblue)*/
+#zEE82EE {background-color:#EE82EE;} /*Storm Watch (Violet)*/
+/*added on Dec 23, 2008*/
+#zDA70D6 {background-color:#DA70D6;} /*Freezing Rain Advisory */
+/*added on Mar 17, 2009*/
+#z2F4F4F {background-color:#2F4F4F;} /*Volcano Warning (darkslategray)*/
+/*added on May 25, 2010*/
+#z40E0D0 {background-color:#40E0D0;} /*Rip Current (turquoise)*/
+
+
+/*=============================*/

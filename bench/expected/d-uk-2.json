@@ -1,0 +1,157 @@
+{
+ "page": "d-uk-2",
+ "findings": [
+  {
+   "key": "d-uk-2|static|arbitrary-z-index-9999|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "arbitrary-z-index-9999",
+   "severity": "medium",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|body-font-weight-bold-or-700-keyword|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "body-font-weight-bold-or-700-keyword",
+   "severity": "medium",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|button-no-type|d-uk-2/index.html|124|8d86b66cac#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-uk-2/index.html",
+   "line": 124
+  },
+  {
+   "key": "d-uk-2|static|button-no-type|d-uk-2/index.html|654|5f340b5af7#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-uk-2/index.html",
+   "line": 654
+  },
+  {
+   "key": "d-uk-2|static|button-no-type|d-uk-2/index.html|659|091e6a55b5#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-uk-2/index.html",
+   "line": 659
+  },
+  {
+   "key": "d-uk-2|static|button-no-type|d-uk-2/index.html|671|a0e57de2a4#1",
+   "pass": "static",
+   "rule": "button-no-type",
+   "severity": "medium",
+   "file": "d-uk-2/index.html",
+   "line": 671
+  },
+  {
+   "key": "d-uk-2|static|cursor-not-allowed-no-visual|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "cursor-not-allowed-no-visual",
+   "severity": "high",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|decorative-accent-ruler|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "decorative-accent-ruler",
+   "severity": "high",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|display-line-height-under-floor|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "display-line-height-under-floor",
+   "severity": "low",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|display-table-for-layout|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "display-table-for-layout",
+   "severity": "medium",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|focusable-at-opacity-zero|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "focusable-at-opacity-zero",
+   "severity": "medium",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|font-family-monospace-fallback-default|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "font-family-monospace-fallback-default",
+   "severity": "low",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|grid-cols-3-1fr-default|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "grid-cols-3-1fr-default",
+   "severity": "low",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|h-screen-no-dvh-fallback|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "h-screen-no-dvh-fallback",
+   "severity": "high",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|hover-only-card-actions|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "hover-only-card-actions",
+   "severity": "high",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|imagery-mandatory-missing|d-uk-2/index.html|1|da39a3ee5e#1",
+   "pass": "static",
+   "rule": "imagery-mandatory-missing",
+   "severity": "high",
+   "file": "d-uk-2/index.html",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|negative-margin-pull-left-right|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "negative-margin-pull-left-right",
+   "severity": "medium",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|outline-none-no-focus-visible|_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css|1|616ebf4a0a#1",
+   "pass": "static",
+   "rule": "outline-none-no-focus-visible",
+   "severity": "critical",
+   "file": "_css/cff0ab96ab80-c8e15439427843360d44fb88cfdac0fadfe1.css",
+   "line": 1
+  },
+  {
+   "key": "d-uk-2|static|screen-reader-only-without-class|d-uk-2/index.html|134|ae3390286f#1",
+   "pass": "static",
+   "rule": "screen-reader-only-without-class",
+   "severity": "medium",
+   "file": "d-uk-2/index.html",
+   "line": 134
+  }
+ ]
+}

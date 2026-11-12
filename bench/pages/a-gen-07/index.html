@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حلويات بيت الجدة - اطلب حلويات العيد مسبقا</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Cairo', sans-serif; background: #fffaf3; color: #3b2a1a; }
+  header { display: flex; justify-content: space-between; align-items: center; padding: 18px 48px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 26px; font-weight: 900; color: #b45309; }
+  header nav a { margin-left: 28px; color: #5b4636; text-decoration: none; font-weight: 600; }
+  .cta { background: #b45309; color: #fff; padding: 12px 28px; border-radius: 30px; text-decoration: none; font-weight: 700; transition: all 0.3s ease; }
+  .cta:hover { background: #92400e; transform: translateY(-2px); }
+  .hero { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 48px; padding: 80px 48px; background: linear-gradient(135deg, #fef3c7 0%, #fffaf3 100%); }
+  .hero h1 { font-size: 56px; font-weight: 900; line-height: 1.3; margin-bottom: 20px; letter-spacing: -1px; }
+  .hero p { font-size: 20px; color: #6b5444; margin-bottom: 32px; line-height: 1.8; }
+  .hero img { width: 100%; border-radius: 24px; box-shadow: 0 30px 60px rgba(180, 83, 9, 0.2); }
+  .badge { display: inline-block; background: #fde68a; color: #92400e; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+  section { padding: 80px 48px; }
+  h2 { font-size: 38px; text-align: center; margin-bottom: 48px; }
+  .products { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .product { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+  .product img { width: 100%; height: 220px; object-fit: cover; }
+  .product .body { padding: 20px; }
+  .product h3 { font-size: 22px; margin-bottom: 6px; }
+  .product .price { color: #b45309; font-weight: 700; font-size: 18px; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; text-align: center; }
+  .step .icon { font-size: 44px; margin-bottom: 12px; }
+  .areas { background: #fff; text-align: center; }
+  .areas ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; list-style: none; }
+  .areas li { background: #fef3c7; padding: 10px 22px; border-radius: 30px; font-weight: 600; }
+  .contact { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .contact .box { background: #fff; padding: 32px; border-radius: 20px; }
+  footer { background: #3b2a1a; color: #e7d8c9; text-align: center; padding: 32px; }
+  @media (max-width: 800px) { .hero, .products, .steps, .contact { grid-template-columns: 1fr; } header nav { display: none; } .hero h1 { font-size: 38px; } }
+</style>
+</head>
+<body>
+  <header>
+    <div class="logo">بيت الجدة</div>
+    <nav>
+      <a href="#products">منتجاتنا</a>
+      <a href="#how">طريقة الطلب</a>
+      <a href="#areas">مناطق التوصيل</a>
+      <a href="#contact">تواصل معنا</a>
+    </nav>
+    <a href="#order" class="cta">اطلب الآن</a>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="badge">&#127769; عروض العيد</span>
+      <h1>حلويات العيد كما تصنعها الجدة</h1>
+      <p>معمول وكعك وغريبة طازجة من مطبخ عائلتنا في عمّان. اطلب مسبقا واستلم طلبك قبل العيد. يغلق باب الطلب المسبق قبل العيد بثلاثة أيام.</p>
+      <a href="#order" class="cta">اطلب حلويات العيد</a>
+    </div>
+    <img src="https://images.unsplash.com/photo-1607920591413-4ec007e70023?w=900" alt="صينية معمول">
+  </section>
+
+  <section id="products">
+    <h2>منتجاتنا المميزة</h2>
+    <div class="products">
+      <div class="product"><img src="https://images.unsplash.com/photo-1599599810694-b5b37304c041?w=600" alt="معمول بالتمر"><div class="body"><h3>معمول بالتمر</h3><p>علبة كيلو</p><div class="price">12 دينار</div></div></div>
+      <div class="product"><img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600" alt="كعك العيد"><div class="body"><h3>كعك العيد</h3><p>علبة كيلو</p><div class="price">10 دنانير</div></div></div>
+      <div class="product"><img src="https://images.unsplash.com/photo-1600617953089-1b2c4a8b0d58?w=600" alt="غريبة"><div class="body"><h3>غريبة بالفستق</h3><p>علبة نصف كيلو</p><div class="price">8 دنانير</div></div></div>
+    </div>
+  </section>
+
+  <section id="how" style="background:#fff7ed;">
+    <h2>كيف يعمل الطلب المسبق؟</h2>
+    <div class="steps">
+      <div class="step"><div class="icon">&#128221;</div><h3>اختر حلوياتك</h3><p>اختر الأصناف والكميات.</p></div>
+      <div class="step"><div class="icon">&#128222;</div><h3>أكد طلبك</h3><p>نتصل بك لتأكيد الموعد.</p></div>
+      <div class="step"><div class="icon">&#128666;</div><h3>استلم قبل العيد</h3><p>نوصل الطلب إلى بابك.</p></div>
+    </div>
+  </section>
+
+  <section id="areas" class="areas">
+    <h2>مناطق التوصيل داخل عمّان</h2>
+    <ul><li>عبدون</li><li>الشميساني</li><li>خلدا</li><li>دابوق</li><li>الجبيهة</li><li>طبربور</li><li>مرج الحمام</li></ul>
+  </section>
+
+  <section id="contact">
+    <h2>تواصل معنا</h2>
+    <div class="contact">
+      <div class="box"><h3>ساعات العمل</h3><p>يوميا من 9 صباحا حتى 10 مساء</p><p>في الأيام العشرة الأخيرة من رمضان حتى منتصف الليل</p></div>
+      <div class="box"><h3>اتصل بنا</h3><p>هاتف وواتساب: 0790000000</p><p>عمّان، جبل اللويبدة</p></div>
+    </div>
+  </section>
+
+  <footer>&copy; 2026 حلويات بيت الجدة. جميع الحقوق محفوظة.</footer>
+</body>
+</html>

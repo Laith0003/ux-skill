@@ -1,0 +1,4 @@
+/* @license GPL-2.0-or-later https://www.drupal.org/licensing/faq */
+.views-align-left{text-align:left;}.views-align-right{text-align:right;}.views-align-center{text-align:center;}.views-view-grid .views-col{float:left;}.views-view-grid .views-row{float:left;clear:both;width:100%;}.views-display-link + .views-display-link{margin-left:0.5em;}
+.paragraph--unpublished{background-color:#fff4f4;}
+#block-usagov-local-tasks a[href$="/translations"]{display:none;}#block-claro-primary-local-tasks a[href$="/translations"]{display:none;}#edit-field-benefits-category--wrapper .fieldset__wrapper--group{column-width:180px;column-rule-width:2px;}

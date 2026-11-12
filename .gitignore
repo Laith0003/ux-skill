@@ -41,3 +41,10 @@ ruvector.db
 
 # Local-only Claude vault pointer (not part of the public repo)
 /CLAUDE.md
+
+# Local virtualenv for the worktree
+.venv/
+
+# ux-bench: runs and snapshots that may not be redistributed
+bench/out/
+bench/private/
