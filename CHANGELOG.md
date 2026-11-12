@@ -118,6 +118,11 @@ project adheres to [Semantic Versioning](https://semver.org/).
   that read an element's contents misjudged Turkish pages.
 - The commands page generator's site menu is inert while closed, so a
   keyboard can no longer land on its links when it is hidden.
+## [4.0.1] - 2026-11-12
+
+- The package summary states the 4.0 figures (171 rules, the design system generator, 25 MCP tools, 18 commands); 4.0.0 still carried the 3.x summary.
+- The demo landing page and the case-study example use fictional names and details.
+- 3.2.0 is withdrawn from PyPI and npm.
 
 ## [4.0.0] - 2026-11-01 - **FOUNDATIONS**
 
