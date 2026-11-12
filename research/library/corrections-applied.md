@@ -25,7 +25,7 @@ One row per gaps.md row marked contradicts, then the Phase 3 platform list and t
 |---|---|---|---|---|---|
 | B-chart-hues | references/foundations/color.md:264; references/foundations/accessibility.md:153 (also components.md:332, 535) | Qualitative palettes up to 7 to 8 hues | 6 at most, 4 to 5 for identification, the rest grouped as Other | B46 p.193-194, 746-747 | fixed |
 | B-bar-gap | data/chart-types.json:23 | Bar-to-gap ratio of 0.4 or more | Gap at most half the bar width | B46 p.306-307 | fixed |
-| B-dark-weight | references/foundations/typography.md:86, 164, 378 | Drop weight about 50 units in dark mode | Body and small text keep 400 or more with +0.01 to +0.02em tracking; only display weights of 600 and up may drop | B88 p.139; B18 p.135-136 | fixed in guidance; generator parked: engine/foundations/typography.py dark_weight still sets body 40 lighter in dark mode under decision record dark-text-sets-lighter. Changing generated tokens needs a superseding record and an owner call on that record |
+| B-dark-weight | references/foundations/typography.md:86, 164, 378 | Drop weight about 50 units in dark mode | Body and small text keep 400 or more with +0.01 to +0.02em tracking; only display weights of 600 and up may drop | B88 p.139; B18 p.135-136 | fixed: guidance, and the generator (typography.dark_weight keeps text weight in dark mode; only display styles at 600 or more may drop, never under 600; decision record dark-text-keeps-its-weight supersedes dark-text-sets-lighter, owner decision 2026-11-12) |
 | B-metadata-300 | references/foundations/typography.md:136 | Light 300 for support and metadata | Metadata at 400, muted by color or size | B47 p.40-41; B31 p.92 | fixed |
 
 ## Cluster C: interaction, content, access and AI
