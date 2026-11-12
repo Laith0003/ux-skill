@@ -4,7 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    # The 5.0 integration branch takes one PR per phase; each gets the same checks.
+    branches: [main, "feat/4.1-stageshow"]
 
 # Least privilege: every job here only checks out and runs tests.
 permissions:
