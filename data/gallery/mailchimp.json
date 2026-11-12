@@ -27,8 +27,8 @@
     },
     "radius_control": "4px",
     "state_duration": "200ms",
-    "tokens": 729,
-    "tokens_sha256": "fddb5355d0fb8be4"
+    "tokens": 722,
+    "tokens_sha256": "99b64672154811ab"
   },
   "id": "mailchimp",
   "name": "Mailchimp",

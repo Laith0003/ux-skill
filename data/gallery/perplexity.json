@@ -27,8 +27,8 @@
     },
     "radius_control": "9px",
     "state_duration": "150ms",
-    "tokens": 728,
-    "tokens_sha256": "5c8c48d31965e6bc"
+    "tokens": 721,
+    "tokens_sha256": "c95ea0990e6074d4"
   },
   "id": "perplexity",
   "name": "Perplexity",

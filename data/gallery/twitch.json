@@ -27,8 +27,8 @@
     },
     "radius_control": "9px",
     "state_duration": "240ms",
-    "tokens": 729,
-    "tokens_sha256": "99ad9d621db820cd"
+    "tokens": 722,
+    "tokens_sha256": "63392251d3049898"
   },
   "id": "twitch",
   "name": "Twitch",

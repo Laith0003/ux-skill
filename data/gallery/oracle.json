@@ -27,8 +27,8 @@
     },
     "radius_control": "3px",
     "state_duration": "150ms",
-    "tokens": 728,
-    "tokens_sha256": "780177d1d17352e0"
+    "tokens": 721,
+    "tokens_sha256": "3746867817cab5fb"
   },
   "id": "oracle",
   "name": "Oracle",

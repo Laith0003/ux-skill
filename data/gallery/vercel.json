@@ -27,8 +27,8 @@
     },
     "radius_control": "5px",
     "state_duration": "200ms",
-    "tokens": 728,
-    "tokens_sha256": "2117c0a4540f59ab"
+    "tokens": 720,
+    "tokens_sha256": "788a51a1a2d14ae7"
   },
   "id": "vercel",
   "name": "Vercel",

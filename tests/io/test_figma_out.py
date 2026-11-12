@@ -68,8 +68,9 @@ def test_one_collection_per_foundation_with_its_modes():
         ("border", ["standard", "high"]), ("elevation", ["default"]),
         ("motion", ["ltr standard", "ltr reduced", "rtl standard", "rtl reduced"]),
         ("layout", ["comfortable", "compact"]),
-        ("type", ["light standard ltr", "light standard rtl", "light high ltr", "light high rtl",
-                  "dark standard ltr", "dark standard rtl", "dark high ltr", "dark high rtl"]),
+        # text keeps its weight in dark mode, so type varies on contrast and
+        # direction only for this brief
+        ("type", ["standard ltr", "standard rtl", "high ltr", "high rtl"]),
         ("imagery", ["standard", "high"])]
 
 
@@ -108,13 +109,13 @@ def test_sizes_are_pixels_with_the_scope_that_binds_them():
         assert _variable(layout, name)["scopes"] == ["GAP"], name
     assert _variable(layout, "layout/container/max")["scopes"] == ["WIDTH_HEIGHT"]
     size = _variable(_collection(payload, "type"), "type/size/latin/3")
-    assert size["values"] == {f"{s} {c} {d}": 16 for s in ("light", "dark")
-                              for c in ("standard", "high") for d in ("ltr", "rtl")}
+    assert size["values"] == {f"{c} {d}": 16 for c in ("standard", "high")
+                              for d in ("ltr", "rtl")}
     icon = _variable(_collection(payload, "type"), "type/icon/size/control")
     assert icon["scopes"] == ["WIDTH_HEIGHT"]
     # A rem size is given in px.
     assert _variable(_collection(payload, "type"), "type/icon/control")["values"][
-        "light standard ltr"] == 20
+        "standard ltr"] == 20
     assert _variable(_collection(payload, "border"), "border/outline")["scopes"] == [
         "STROKE_FLOAT"]
     imagery = _collection(payload, "imagery")
@@ -133,20 +134,18 @@ def test_typography_roles_become_one_variable_per_field():
     size = _variable(t, "type/text/body/font-size")
     latin, arabic = {"alias": "type:type/size/latin/3"}, {"alias": "type:type/size/arabic/3"}
     assert (size["scopes"], size["values"]) == (
-        ["FONT_SIZE"], {f"{s} {c} {d}": latin if d == "ltr" else arabic
-                        for s in ("light", "dark") for c in ("standard", "high")
-                        for d in ("ltr", "rtl")})
+        ["FONT_SIZE"], {f"{c} {d}": latin if d == "ltr" else arabic
+                        for c in ("standard", "high") for d in ("ltr", "rtl")})
     assert _variable(t, "type/text/body/line-height")["scopes"] == []
     assert _variable(t, "type/text/body/letter-spacing")["scopes"] == ["LETTER_SPACING"]
     assert _variable(t, "type/text/body/font-family")["scopes"] == ["FONT_FAMILY"]
     weight = _variable(t, "type/text/body/font-weight")
     assert weight["scopes"] == ["FONT_WEIGHT"]
-    assert weight["values"]["light high ltr"] == {"alias": "type:type/weight/500"}
-    # dark mode sets a variable face lighter at standard contrast
-    assert weight["values"]["dark standard ltr"] == {"alias": "type:type/weight/360"}
-    assert weight["values"]["dark high ltr"] == {"alias": "type:type/weight/500"}
+    assert weight["values"]["high ltr"] == {"alias": "type:type/weight/500"}
+    # body text keeps its weight in dark mode, so there is no scheme mode
+    assert weight["values"]["standard ltr"] == {"alias": "type:type/weight/400"}
     face = _variable(t, "type/face/text")
-    assert (face["type"], face["values"]["light standard ltr"]) == ("STRING", "Noto Sans")
+    assert (face["type"], face["values"]["standard ltr"]) == ("STRING", "Noto Sans")
     assert (face["hidden"], face["scopes"]) == (True, [])
 
 

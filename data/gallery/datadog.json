@@ -27,8 +27,8 @@
     },
     "radius_control": "6px",
     "state_duration": "150ms",
-    "tokens": 729,
-    "tokens_sha256": "1f06955dc28b9863"
+    "tokens": 722,
+    "tokens_sha256": "3291285e3cb15b54"
   },
   "id": "datadog",
   "name": "Datadog",

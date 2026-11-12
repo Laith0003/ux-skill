@@ -27,8 +27,8 @@
     },
     "radius_control": "8px",
     "state_duration": "200ms",
-    "tokens": 729,
-    "tokens_sha256": "bdb831c70e9bc853"
+    "tokens": 721,
+    "tokens_sha256": "09fbdfc5ecf6f434"
   },
   "id": "sourcegraph",
   "name": "Sourcegraph",
