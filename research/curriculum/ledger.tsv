@@ -1,0 +1,743 @@
+id	part	section	title	url	read_status	used_in
+K001	A	What is UX Design?	UX For Dummies	https://www.goodreads.com/book/show/18763906-ux-for-dummies	summarized-from-list	
+K002	A	What is UX Design?	UX For Dummies (Mirror)	(unofficial mirror, link withheld)	blocked	
+K003	A	What is UX Design?	UX Fundamentals for Non-UX Professionals: User Experience Principles for Managers, Writers.	https://www.goodreads.com/book/show/40645097-ux-fundamentals-for-non-ux-professionals	summarized-from-list	L001,L002,L003,L004
+K004	A	What is UX Design?	UX Fundamentals for Non-UX Professionals: User Experience Principles for Managers, Writers. (Mirror)	(unofficial mirror, link withheld)	blocked	
+K005	A	What is UX Design?	Smashing UX Design: Foundations for Designing Online User Experiences	https://www.goodreads.com/book/show/8675550-smashing-ux-design	summarized-from-list	
+K006	A	What is UX Design?	Smashing UX Design: Foundations for Designing Online User Experiences (Mirror)	(unofficial mirror, link withheld)	blocked	
+K007	A	What is UX Design?	The Design of Everyday Things: Revised and Expanded Edition	https://www.goodreads.com/book/show/840.The_Design_of_Everyday_Things	summarized-from-list	
+K008	A	What is UX Design?	The Design of Everyday Things: Revised and Expanded Edition (Mirror)	(unofficial mirror, link withheld)	blocked	
+K009	A	What is UX Design?	What is UX Design?	https://uxplanet.org/what-is-ux-design-bb02fc45aba5	blocked	
+K010	A	What is UX Design?	What is user experience (UX) design?	https://www.lyssna.com/blog/what-is-user-experience-design/	read	L004,L005
+K011	A	What is UX Design?	What is User Experience (UX) Design?	https://ixdf.org/literature/topics/ux-design	read	L001,L002,L010
+K012	A	What is UX Design?	An Introduction to User Experience Design	https://medium.com/beakerandflint/an-introduction-user-experience-design-2a7f8167bf03	blocked	
+K013	A	What is UX Design?	Laws of UX	https://lawsofux.com/	read	
+K014	A	What is UX Design?	UI, UX: Who Does What? A Designer's Guide To The Tech Industry.	https://www.fastcompany.com/3032719/ui-ux-who-does-what-a-designers-guide-to-the-tech-industry	blocked	
+K015	A	What is UX Design?	An Introduction to User Experience Design.	https://hackdesign.org/lessons#user-experience	read	
+K016	A	What is UX Design?	UX Crash Course: Getting Started in User Experience Design	https://www.youtube.com/watch?v=_lyzy-vChh4	summarized-from-list	
+K017	A	What is UX Design?	What Is UX Design?: An Introduction (Full Guide For 2023)	https://www.youtube.com/watch?v=ziQEqGZB8GE	summarized-from-list	
+K018	A	What is UX Design?	The Laws of UX: 19 Psychological Design Principles	https://www.youtube.com/watch?v=fYs2Mdyasuc	summarized-from-list	
+K019	A	What is UX Design?	UX Design vs UI Design: What's The Difference? (2023)	https://www.youtube.com/watch?v=5CxXhyhT6Fc	summarized-from-list	
+K020	A	The Importance of UX Design	The UX Book: Process and Guidelines for Ensuring a Quality User Experience	https://shop.elsevier.com/books/the-ux-book/hartson/978-0-12-385241-0	summarized-from-list	
+K021	A	The Importance of UX Design	The UX Book: Process and Guidelines for Ensuring a Quality User Experience (Mirror)	(unofficial mirror, link withheld)	blocked	
+K022	A	The Importance of UX Design	The Basics of User Experience Design	https://www.goodreads.com/book/show/40408061-the-basics-of-user-experience-design	summarized-from-list	
+K023	A	The Importance of UX Design	The Basics of User Experience Design (Mirror)	(unofficial mirror, link withheld)	blocked	
+K024	A	The Importance of UX Design	What is UX Design? 15 user experience design to weigh in	https://www.usertesting.com/blog/what-is-ux-design-15-user-experience-experts-weigh-in	read	L001,L004,L008,L009
+K025	A	The Importance of UX Design	The Importance of UX Design	https://www.rocket55.com/lab-note/the-importance-of-user-experience	blocked	
+K026	A	The Importance of UX Design	The Importance of User Experience Design	https://uxplanet.org/the-importance-of-user-experience-design-988faf6ddca2	blocked	
+K027	A	The Importance of UX Design	What is UX (User Experience) and why is it important?	https://www.workshopper.com/post/what-is-ux-and-why-is-it-important	blocked	
+K028	A	The Importance of UX Design	Why Is UX Design Important: 5 Important Arguments	https://www.resolutesoftware.com/news/why-is-ux-design-important/	blocked	L001
+K029	A	The Importance of UX Design	Why UX is IMPORTANT!	https://medium.com/the-ui-girl/why-ux-is-important-a6d9b9abb378	blocked	
+K030	A	The Importance of UX Design	Why UX Design is Important	https://www.youtube.com/watch?v=-XvfcBpwVGY	summarized-from-list	
+K031	A	The Importance of UX Design	Humans, not Users: Why UX is a Problem	https://www.youtube.com/watch?v=dpXBV3COwJM	summarized-from-list	
+K032	A	The Importance of UX Design	The Importance of UX Design	https://www.youtube.com/watch?v=mhYkfcEhHVA	summarized-from-list	
+K033	A	User-Centered Design	Fundamentals of User-Centered Design	https://www.goodreads.com/book/show/41427300-fundamentals-of-user-centered-design	summarized-from-list	
+K034	A	User-Centered Design	Fundamentals of User-Centered Design (Mirror)	(unofficial mirror, link withheld)	blocked	
+K035	A	User-Centered Design	User-centered design: A developer's guide to building user-friendly applications	https://www.goodreads.com/book/show/16173753-user-centered-design	summarized-from-list	
+K036	A	User-Centered Design	User-centered design: A developer's guide to building user-friendly applications (Mirror)	(unofficial mirror, link withheld)	blocked	
+K037	A	User-Centered Design	User-Centered Design Stories: Real-World UCD Case Studies	https://shop.elsevier.com/books/user-centered-design-stories/righi/978-0-12-370608-9	summarized-from-list	
+K038	A	User-Centered Design	User-Centered Design Stories: Real-World UCD Case Studies (Mirror)	(unofficial mirror, link withheld)	blocked	
+K039	A	User-Centered Design	User Centered Design	https://en.wikipedia.org/wiki/User-centered_design	read	L003
+K040	A	User-Centered Design	What is User Centered Design?n	https://ixdf.org/literature/topics/user-centered-design	read	L003,L004
+K041	A	User-Centered Design	User-Centered Design Basics?	https://uxplanet.org/what-is-user-centered-design-1b0e1e5e2e2	blocked	
+K042	A	User-Centered Design	User Centered Design Principles & Methods	https://xd.adobe.com/ideas/principles/human-computer-interaction/user-centered-design/	read	
+K043	A	User-Centered Design	What Is User-Centered Design? [Beginner's Guide]?	https://careerfoundry.com/en/blog/ux-design/user-centered-design/	read	L003
+K044	A	User-Centered Design	How to Conduct User-Centered Design [Step-by-Step Guide]	https://careerfoundry.com/en/blog/ux-design/user-centered-design-how-to-guide/	read	L003
+K045	A	User-Centered Design	What is User Centred Design	https://www.youtube.com/watch?v=BTVLmf0Z6EY	summarized-from-list	
+K046	A	User-Centered Design	What is Human-Centered Design?	https://www.youtube.com/playlist?list=PLlgPXNRcnX3EwTKcoml8ybuu3RqQIXoiN	summarized-from-list	
+K047	A	What is UI Design?	Designing Interfaces	https://www.goodreads.com/book/show/16673909-designing-interfaces	summarized-from-list	
+K048	A	What is UI Design?	Designing Interfaces (Mirror)	(unofficial mirror, link withheld)	blocked	
+K049	A	What is UI Design?	Don't Make Me Think, Revisited: A Common Sense Approach to Web Usability	https://sensible.com/dont-make-me-think/	read	
+K050	A	What is UI Design?	Don't Make Me Think, Revisited: A Common Sense Approach to Web Usability (Mirror)	(unofficial mirror, link withheld)	blocked	
+K051	A	What is UI Design?	Designing with the Mind in Mind: Simple Guide to Understanding User Interface Design Rules	https://shop.elsevier.com/books/designing-with-the-mind-in-mind/johnson/978-0-12-818202-4	read	L023,L097,L098
+K052	A	What is UI Design?	Designing with the Mind in Mind: Simple Guide to Understanding User Interface Design Rules (Mirror)	(unofficial mirror, link withheld)	blocked	
+K053	A	What is UI Design?	UI Design Fundamentals	https://www.slideshare.net/slideshow/svcc12-designfundamentals/14656530	blocked	
+K054	A	What is UI Design?	What is UI Design?	https://en.wikipedia.org/wiki/User_interface_design	read	L006
+K055	A	What is UI Design?	User Interface (UI) Design	https://ixdf.org/literature/topics/ui-design	read	L008,L011,L019,L020,L021,L022,L023,L024,L064
+K056	A	What is UI Design?	What is UI Design?	https://www.uxdesigninstitute.com/blog/what-is-ui-design/	read	L012,L026,L032,L094
+K057	A	What is UI Design?	What Is UI Design? Definition, Tips, Best Practices	https://www.coursera.org/articles/ui-design	read	L011,L049,L095
+K058	A	What is UI Design?	What is UI Design?	https://careerfoundry.com/en/blog/ui-design/what-is-ui-design-guide/	read	L012,L019,L029,L091,L095
+K059	A	What is UI Design?	What is Design Thinking?	https://www.ideou.com/blogs/inspiration/what-is-design-thinking	read	L003,L004,L007
+K060	A	What is UI Design?	What Is Design Thinking? A Comprehensive Beginner's Guide	https://careerfoundry.com/en/blog/ux-design/what-is-design-thinking-everything-you-need-to-know-to-get-started/	read	
+K061	A	What is UI Design?	What Is User Interface (UI)?	https://www.youtube.com/watch?v=Z-BO6IYTgJg	summarized-from-list	
+K062	A	What is UI Design?	User Interface (UI) Design Principles Series Introduction	https://www.youtube.com/watch?v=FmSjtWTIx1o	summarized-from-list	
+K063	A	What is UI Design?	The 2019 UI Design Crash Course for Beginners	https://www.youtube.com/watch?v=_Hp_dI0DzY4	summarized-from-list	
+K064	A	What is UI Design?	UI Design Tutorial For Beginners	https://www.youtube.com/watch?v=_K06Dni-RE4	summarized-from-list	
+K065	A	What is UI Design?	Design Thinking Full Course, Design Thinking Process, Design Thinking For Beginners	https://www.youtube.com/watch?v=_r0VX-aU_T8	summarized-from-list	
+K066	A	What is UI Design?	Design Thinking Tutorial	https://www.youtube.com/watch?v=4nTh3AP6knM	summarized-from-list	
+K067	A	UI Design Best Practices	The Essential Guide to User Interface Design	https://www.goodreads.com/book/show/2390999	summarized-from-list	
+K068	A	UI Design Best Practices	The Essential Guide to User Interface Design (Mirror)	(unofficial mirror, link withheld)	blocked	
+K069	A	UI Design Best Practices	Web UI Design Best Practices	https://www.uxpin.com/studio/ebooks/web-ui-design-best-practices/	read	
+K070	A	UI Design Best Practices	Web UI Design Best Practices (Mirror)	(unofficial mirror, link withheld)	blocked	
+K071	A	UI Design Best Practices	User Interface Design Basics	https://digital.gov/topics/usability/	read	
+K072	A	UI Design Best Practices	The 4 Golden Rules of UI Design	https://uxplanet.org/ui-design-best-practices-1d10d73d2d9b	blocked	
+K073	A	UI Design Best Practices	10 Fundamental UI Design Principles You Need to Know	https://dribbble.com/resources/education/ui-design-principles	read	L011,L012,L013,L015,L016,L017,L018,L024,L076
+K074	A	UI Design Best Practices	27 UI/UX Design Principles and Best Practices 2021	https://729solutions.com/ux-ui-best-practices/	read	L012,L024,L025,L029,L062
+K075	A	UI Design Best Practices	UI Design Best Practices and Common Mistakes	https://www.toptal.com/designers/ui/most-common-ui-design-mistakes	read	L014,L027,L028,L056,L097
+K076	A	UI Design Best Practices	4 Foundational UI Design Principles: C.R.A.P.	https://www.youtube.com/watch?v=uwNClNmekGU	summarized-from-list	L087
+K077	A	UI Design Best Practices	9 Tips for Becoming a GREAT UI Designer	https://www.youtube.com/watch?v=_J1Le-4aXhE	summarized-from-list	
+K078	A	UI Design Best Practices	UI Design Principles: Everything You Need To Know	https://www.youtube.com/watch?v=NTmh8l-Xl4c	blocked	
+K079	A	UI Design Best Practices	UX/UI BEST PRACTICES FOR WEB DESIGN: Free Web Design Course	https://www.youtube.com/watch?v=Cn2KgB_01mE	summarized-from-list	L011
+K080	A	Designing for Mobile	Mobile Design Pattern Gallery: UI Patterns for Smartphone App	https://www.goodreads.com/book/show/13073411-mobile-design-pattern-gallery	summarized-from-list	
+K081	A	Designing for Mobile	Mobile Design Pattern Gallery: UI Patterns for Smartphone App (Mirror)	(unofficial mirror, link withheld)	blocked	
+K082	A	Designing for Mobile	Usability Matters: Mobile-first UX for developers and other accidental designers	https://www.manning.com/books/usability-matters	read	L045
+K083	A	Designing for Mobile	Usability Matters: Mobile-first UX for developers and other accidental designers (Mirror)	(unofficial mirror, link withheld)	blocked	
+K084	A	Designing for Mobile	How to Design a Mobile App User Interface Like a Pro	https://careerfoundry.com/en/blog/ui-design/how-to-design-a-mobile-app-using-user-interface-design-principles/	read	L016,L039,L044,L046,L047
+K085	A	Designing for Mobile	A Comprehensive Guide To Mobile App Design	https://www.smashingmagazine.com/2018/02/comprehensive-guide-to-mobile-app-design/	read	L030,L031,L032,L033,L034,L035,L036,L037,L038,L039,L040,L041,L042,L043,L044,L045,L076
+K086	A	Designing for Mobile	8 rules of mobile design	https://uxdesign.cc/8-rules-of-mobile-design-1b8d9936c241	blocked	
+K087	A	Designing for Mobile	10 Do's and Dont's of Mobile App Design	https://xd.adobe.com/ideas/principles/app-design/10-dos-donts-mobile-app-design/	read	L022,L030,L032,L035,L036,L038,L039,L041,L042,L043,L044,L048
+K088	A	Designing for Mobile	How to design a mobile app tutorial: a step by step guide	https://www.youtube.com/watch?v=0ul5UATkUiA	summarized-from-list	
+K089	A	Designing for Mobile	Revamping 3 Mobile Designs: Rapid ReDesigns	https://www.youtube.com/watch?v=k44OFRWvul8	summarized-from-list	
+K090	A	Design Tools Overview	Figma	https://www.figma.com/	summarized-from-list	L049,L050,L051,L096
+K091	A	Design Tools Overview	Adobe XD	https://helpx.adobe.com/xd/get-started.html	summarized-from-list	L053
+K092	A	Design Tools Overview	Sketch	https://www.sketch.com/	read	
+K093	A	Design Tools Overview	InVision	https://www.invisionapp.com/	blocked	L053
+K094	A	Design Tools Overview	ProtoPie	https://www.protopie.io/	read	L044,L052
+K095	A	Design Tools Overview	Marvel	https://marvelapp.com/	read	
+K096	A	Design Tools Overview	Principle	https://principleformac.com/	read	
+K097	A	Design Tools Overview	Framer	https://www.framer.com/	read	
+K098	A	Design Tools Overview	Adobe Photoshop	https://www.adobe.com/products/photoshop.html	summarized-from-list	
+K099	A	Getting Started with Figma, Sketch or XD	The Figma Design Tool Handbook	https://designcode.io/tutorials/figma-handbook	blocked	
+K100	A	Getting Started with Figma, Sketch or XD	The Figma Learning Guide	https://www.figma.com/resource-library/design-basics/	read	L050,L051
+K101	A	Getting Started with Figma, Sketch or XD	Get Started with Adobe XD: Design.	https://www.adobe.com/products/xd/learn/get-started-xd-design.html	blocked	
+K102	A	Getting Started with Figma, Sketch or XD	New to Figma? Get started with "Figma for beginners" tutorials	https://www.youtube.com/playlist?list=PLXDU_eVOJTx7QHLShNqIXL1Cgbxj7HlN4	summarized-from-list	
+K103	A	Getting Started with Figma, Sketch or XD	Figma UI Design Tutorial: Get Started in Just 24 Minutes!	https://www.youtube.com/watch?v=tdy1bo5eAgA	summarized-from-list	
+K104	A	Getting Started with Figma, Sketch or XD	Figma Tutorial for Beginners	https://www.youtube.com/watch?v=3q3FV65ZrUs	summarized-from-list	
+K105	A	Getting Started with Figma, Sketch or XD	Figma tutorial for Beginners: Complete Website from Start to Finish	https://www.youtube.com/watch?v=HZuk6Wkx_Eg	summarized-from-list	
+K106	A	Getting Started with Figma, Sketch or XD	UI Design Live: UI Patterns, Visual Hierarchy and Iterations	https://www.youtube.com/watch?v=D1pO4AQTfes&t=68s	summarized-from-list	
+K107	A	Getting Started with Figma, Sketch or XD	Learn Adobe XD in 2021 by Example (Crash Course)	https://www.youtube.com/watch?v=3rQ-eTmWah0	summarized-from-list	
+K108	A	Getting Started with Figma, Sketch or XD	Adobe XD Tutorials	https://www.youtube.com/playlist?list=PLkiM1tZke4mivrZRPcqp_8oHFxlD8-IP5	summarized-from-list	
+K109	A	Getting Started with Figma, Sketch or XD	Free Adobe XD Tutorial: User Experience Design Course with Adobe XD Course	https://www.youtube.com/watch?v=68w2VwalD5w	summarized-from-list	
+K110	A	Getting Started with Figma, Sketch or XD	Figma Course	https://learnux.io/course/figma	blocked	
+K111	A	Getting Started with Figma, Sketch or XD	Figma for Beginners	https://www.coursera.org/specializations/beginnerfigmauiuxdesignessentials	read	
+K112	A	Getting Started with Figma, Sketch or XD	XD for Beginners	(unofficial mirror, link withheld)	blocked	
+K113	A	Getting Started with Figma, Sketch or XD	Figma Mastery	(unofficial mirror, link withheld)	blocked	
+K114	A	Getting Started with Figma, Sketch or XD	Learn Figma for UI UX Design (with a Design Project)	https://www.udemy.com/course/learn-figma-ui-ux-design-project/	blocked	
+K115	A	Getting Started with Figma, Sketch or XD	9 Best FREE Figma Courses (2023)	https://www.untitledui.com/blog/best-free-figma-courses	read	L049,L050,L051,L054,L055
+K116	A	Getting Started with Figma, Sketch or XD	Free Adobe XD Courses	https://www.udemy.com/course/figma-for-beginners/	blocked	
+K117	A	Getting Started with Figma, Sketch or XD	Sketch App Course	https://learnux.io/course/sketch	blocked	
+K118	A	Getting Started with Figma, Sketch or XD	9 Best Sketch Courses to Take in 2023	https://www.classcentral.com/report/best-sketch-courses/	blocked	
+K119	A	Typography	The New Web Typography: Create a Visual Hierarchy with Responsive Web Design	https://books.google.com/books/about/The_New_Web_Typography.html?id=hIOKDQAAQBAJ	summarized-from-list	
+K120	A	Typography	The New Web Typography: Create a Visual Hierarchy with Responsive Web Design (Mirror)	(unofficial mirror, link withheld)	blocked	
+K121	A	Typography	Thinking with Type: A Critical Guide for Designers, Writers, Editors, & Students	https://www.chroniclebooks.com/products/thinking-with-type-1	read	
+K122	A	Typography	Thinking with Type: A Critical Guide for Designers, Writers, Editors, & Students (Mirror)	(unofficial mirror, link withheld)	blocked	
+K123	A	Typography	The Anatomy of Type: A Graphic Guide to 100 Typefaces	https://typeanatomy.com/	blocked	L067
+K124	A	Typography	The Anatomy of Type: A Graphic Guide to 100 Typefaces (Mirror)	(unofficial mirror, link withheld)	blocked	
+K125	A	Typography	Why Fonts Matter	https://gingkopress.com/shop/why-fonts-matter/	summarized-from-list	L070
+K126	A	Typography	Why Fonts Matter (Mirror)	(unofficial mirror, link withheld)	blocked	
+K127	A	Typography	Designing with Type: The Essential Guide to Typography	https://www.penguinrandomhouse.com/books/33163/designing-with-type-5th-edition-by-james-craig-and-irene-korol-scala/9780823014132/	summarized-from-list	
+K128	A	Typography	Designing with Type: The Essential Guide to Typography (Mirror)	(unofficial mirror, link withheld)	blocked	
+K129	A	Typography	What Is Typography, and Why Is It Important? [2023 Guide]	https://careerfoundry.com/en/blog/ui-design/beginners-guide-to-typography/	read	L056,L062,L063,L064,L067,L069,L070,L084
+K130	A	Typography	The Principles of Design and Their Importance	https://www.toptal.com/designers/ui/principles-of-design	read	L013,L063,L086,L090,L092
+K131	A	Typography	Breaking Down the Principles of Design (with Infographic)	https://www.toptal.com/designers/ui/principles-of-design	read	
+K132	A	Typography	Typography for Developers	https://css-tricks.com/typography-for-developers/	read	L057,L058,L059,L060,L061,L062,L063,L064,L065,L066,L067,L068
+K133	A	Typography	Understanding typography	https://m2.material.io/design/typography/understanding-typography.html	summarized-from-list	L058
+K134	A	Typography	Typography design 101: a guide to rules and terms	https://99designs.com/blog/tips/typography-design/	blocked	
+K135	A	Typography	The Ultimate Guide to Typography: FREE COURSE	https://www.skillshare.com/classes/Typography-for-Beginners/1031507771	blocked	
+K136	A	Typography	Typography for Developers Tutorial: Full Course	https://www.youtube.com/watch?v=agbh1wbfJt8	summarized-from-list	
+K137	A	Typography	Understanding Visual Hierarchy in UI Design: Live Project Follow-Along	https://www.youtube.com/watch?v=ZYs0_t_Gdhk	summarized-from-list	
+K138	A	Color Theory	The Elements of Color	https://www.goodreads.com/book/show/967309.The_Elements_of_Color	summarized-from-list	L073,L074
+K139	A	Color Theory	The Elements of Color (Mirror)	(unofficial mirror, link withheld)	blocked	
+K140	A	Color Theory	Color: A Natural History of the Palette	https://www.penguinrandomhouse.com/books/49699/color-by-victoria-finlay/	summarized-from-list	
+K141	A	Color Theory	Color: A Natural History of the Palette (Mirror)	(unofficial mirror, link withheld)	blocked	
+K142	A	Color Theory	The Secret Lives of Color	https://www.penguinrandomhouse.com/books/552503/the-secret-lives-of-color-by-kassia-st-clair/	summarized-from-list	L077
+K143	A	Color Theory	The Secret Lives of Color (Mirror)	(unofficial mirror, link withheld)	blocked	
+K144	A	Color Theory	Color: A Course in Mastering the Art of Mixing Colors	https://www.penguinrandomhouse.com/books/288688/color-by-betty-edwards/	summarized-from-list	
+K145	A	Color Theory	Color: A Course in Mastering the Art of Mixing Colors (Mirror)	(unofficial mirror, link withheld)	blocked	
+K146	A	Color Theory	Interaction of Color	https://yalebooks.yale.edu/book/9780300179354/interaction-of-color/	read	L081
+K147	A	Color Theory	Interaction of Color (Mirror)	(unofficial mirror, link withheld)	blocked	
+K148	A	Color Theory	Best Practices for Graphic Designers, Color Works: Right Ways of Applying Color in Branding	https://www.goodreads.com/book/show/21419175-best-practices-for-graphic-designers-color-works	summarized-from-list	
+K149	A	Color Theory	Best Practices for Graphic Designers, Color Works: Right Ways of Applying Color in Branding (Mirror)	(unofficial mirror, link withheld)	blocked	
+K150	A	Color Theory	What is Color Theory?	https://ixdf.org/literature/topics/color-theory	read	L071,L072,L075,L076,L077
+K151	A	Color Theory	The Science Behind Color and Emotion	https://designshack.net/articles/graphics/the-science-behind-color-and-emotion/	blocked	
+K152	A	Color Theory	An Introduction to Color Theory and Color Palettes	https://careerfoundry.com/en/blog/ui-design/introduction-to-color-theory-and-color-palettes/	read	L014,L071,L077,L083,L084
+K153	A	Color Theory	Color Theory for Designers : A Crash Course (with Infographic)	https://www.toptal.com/designers/graphic/color-theory-for-designers	read	L077,L078,L079,L080,L081,L082
+K154	A	Color Theory	Color Theory for Designers, Part 1: The Meaning of Color	https://www.smashingmagazine.com/2010/01/color-theory-for-designers-part-1-the-meaning-of-color/	read	L077,L078
+K155	A	Color Theory	The Ultimate UX Guide to Color Design	https://medium.muz.li/the-ultimate-ux-guide-to-color-design-4d0a18a706ed	blocked	
+K156	A	Color Theory	Color Theory: Brief Guide For Designers	https://blog.tubikstudio.com/color-theory-brief-guide-for-designers/	read	L071,L072
+K157	A	Color Theory	Color Theory for UI Design	https://www.youtube.com/watch?v=_2LLXnUdUIc	summarized-from-list	
+K158	A	Color Theory	How To Use Color : Color Basics	https://www.youtube.com/watch?v=QkCVrNoqcBU	summarized-from-list	
+K159	A	Color Theory	How to Choose Colors (Easy 3-Step Process)	https://www.youtube.com/watch?v=KMS3VwGh3HY	summarized-from-list	
+K160	A	Color Theory	ADVANCED Colour Theory Makes Designs SUPERIOR! (With Real Examples)	https://www.youtube.com/watch?v=XNkV6m4fosw	summarized-from-list	
+K161	A	Color Theory	Super Practical Guide to Color Theory, Color Models and Perfect Color Palettes: UI Design	https://www.youtube.com/watch?v=GyVMoejbGFg	summarized-from-list	L079
+K162	A	Color Theory	How to Apply a Color Palette to Your Design : Tutorial	https://www.youtube.com/watch?v=eXcKOqviLE0	summarized-from-list	
+K163	A	Color Theory	Bad at Picking COLORS? Let's fix that: RAPID Color Scheming	https://www.youtube.com/watch?v=s9p3nF4rFaU	summarized-from-list	
+K164	A	Color Theory	60-30-10 Color Rule	https://www.youtube.com/watch?v=UWwNIMHFdW4	summarized-from-list	L073
+K165	A	Layout and Composition	Design School: Layout: A Practical Guide for Students and Designers	https://www.richardpoulin.net/books/design-school-layout	read	
+K166	A	Layout and Composition	Design School: Layout: A Practical Guide for Students and Designers (Mirror)	(unofficial mirror, link withheld)	blocked	
+K167	A	Layout and Composition	Web Design Style Guide	https://apps.carleton.edu/campus/web-group/assets/Web_Design_Style_Guide_1.0.pdf	blocked	
+K168	A	Layout and Composition	Best Practices for Graphic Designers, Grids and Page Layouts: An Essential Guide for Understanding and Applying Page Design Principles	https://www.goodreads.com/book/show/13195713-best-practices-for-graphic-designers-grids-and-page-layouts	summarized-from-list	
+K169	A	Layout and Composition	Best Practices for Graphic Designers, Grids and Page Layouts: An Essential Guide for Understanding and Applying Page Design Principles (Mirror)	(unofficial mirror, link withheld)	blocked	
+K170	A	Layout and Composition	Modular Design Frameworks : A Projects-based Guide for UI/UX Designers	https://www.goodreads.com/en/book/show/33607155-modular-design-frameworks	summarized-from-list	
+K171	A	Layout and Composition	Modular Design Frameworks : A Projects-based Guide for UI/UX Designers (Mirror)	(unofficial mirror, link withheld)	blocked	
+K172	A	Layout and Composition	Fundamentals of layout in user interface design (UI)	https://uxdesign.cc/fundamentals-of-layout-in-interface-design-ui-3a9dba31f1	blocked	
+K173	A	Layout and Composition	9 Rules of Composition For UX/UI Designers	https://inkbotdesign.com/rules-of-composition/	blocked	
+K174	A	Layout and Composition	Understanding Layout	https://m2.material.io/design/layout/understanding-layout.html	summarized-from-list	L088,L089
+K175	A	Layout and Composition	The 5 rules of design composition and layout	https://99designs.com/blog/tips/design-composition-and-layout/	blocked	L093
+K176	A	Layout and Composition	Composition and its rules in the design of interfaces	https://uxplanet.org/composition-and-its-rules-in-the-design-of-interfaces-65a86e4d09a7	blocked	
+K177	A	Layout and Composition	Key Principles for Better Design Composition	https://xd.adobe.com/ideas/process/ui-design/design-composition-key-principles/	read	L013,L067,L069,L088,L090,L091
+K178	A	Layout and Composition	Create scalable web page layouts in Figma	https://uxdesign.cc/create-scalable-web-page-layouts-in-figma-e7e6e580dd67	blocked	
+K179	A	Layout and Composition	Layout Grid & Auto Layout in Figma	https://designcode.io/tutorials/figma-handbook/figma-handbook-auto-layout	blocked	
+K180	A	Layout and Composition	Layout Grid & Auto Layout in Figma	https://designcode.io/tutorials/figma-handbook/figma-handbook-layout-grid	blocked	
+K181	A	Layout and Composition	Beginning Graphic Design: Layout & Composition	https://www.youtube.com/watch?v=a5KYlHNKQB8	summarized-from-list	
+K182	A	Layout and Composition	5 laws of design layout & composition *golden rules	https://www.youtube.com/watch?v=eEWRbpDu6CU	summarized-from-list	L093
+K183	A	Layout and Composition	Master LAYOUT & COMPOSITION Design: Why Layout Is SO IMPORTANT	https://www.youtube.com/watch?v=N8TQfE1qKeE	summarized-from-list	
+K184	A	Layout and Composition	Figma Tutorial: Setup a Responsive Grid Layout for UI & Web Design (IN 11 MINUTES)	https://www.youtube.com/watch?v=_w-iYiEXrl0	summarized-from-list	L049,L096
+K185	A	Layout and Composition	Figma in 5: Auto Layout	https://www.youtube.com/watch?v=TyaGpGDFczw	summarized-from-list	L049,L096
+K186	A	Layout and Composition	Figma Tutorial: Layout Grids	https://www.youtube.com/watch?v=zd8wrAdURN0	summarized-from-list	
+K187	A	Layout and Composition	#Exploration: Fashion Website	https://dribbble.com/shots/14836845--Exploration-Fashion-Website	blocked	L099
+K188	A	Layout and Composition	#Exploration: E-commerce Website	https://dribbble.com/shots/14865120--Exploration-More-Screens-Fashion-Mobile-App	blocked	L099
+K189	B	Introduction to User Research	Think Like a UX Researcher: How to Observe Users, Influence Design, and Shape Business Str	https://www.goodreads.com/book/show/123871628-think-like-a-ux-researcher	summarized-from-list	
+K190	B	Introduction to User Research	Think Like a UX Researcher: How to Observe Users, Influence Design, and Shape Business Str	(unofficial mirror, link withheld)	blocked	
+K191	B	Introduction to User Research	Researching UX: User Research	https://www.goodreads.com/book/show/34497740-researching-ux	summarized-from-list	
+K192	B	Introduction to User Research	Researching UX: User Research	(unofficial mirror, link withheld)	blocked	
+K193	B	Introduction to User Research	Quantifying the User Experience. Practical Statistics for User Research	https://shop.elsevier.com/books/quantifying-the-user-experience/sauro/978-0-12-802308-2	summarized-from-list	L115,L116
+K194	B	Introduction to User Research	Quantifying the User Experience. Practical Statistics for User Research	(unofficial mirror, link withheld)	blocked	
+K195	B	Introduction to User Research	Observing the User Experience, Second Edition: A Practitioner's Guide to User Research	https://shop.elsevier.com/books/observing-the-user-experience/goodman/978-0-12-384869-7	summarized-from-list	
+K196	B	Introduction to User Research	Observing the User Experience, Second Edition: A Practitioner's Guide to User Research	(unofficial mirror, link withheld)	blocked	
+K197	B	Introduction to User Research	Starter questions for User research interviews	https://projects.iq.harvard.edu/files/harvarduxgroup/files/ux-research-guide-sample-questions-for-user-interviews.pdf	blocked	L107
+K198	B	Introduction to User Research	Introduction To UX Research ( User Research)	https://uxplanet.org/introduction-to-ux-research-user-research-a2f27a6413ff	blocked	L102,L107
+K199	B	Introduction to User Research	The UX Research Methods You Need To Know	https://careerfoundry.com/en/tutorials/ux-research-for-beginners/an-introduction-to-ux-research-methods/	blocked	
+K200	B	Introduction to User Research	Intro to UX research	https://blog.optimalworkshop.com/intro-to-ux-research/	blocked	L117
+K201	B	Introduction to User Research	What is User Research?	https://ixdf.org/literature/topics/user-research	read	L101,L102,L103,L104,L107
+K202	B	Introduction to User Research	User Research Introduction	https://medium.com/user-research/user-research-introduction-126ce1e4e546	blocked	L101,L102
+K203	B	Introduction to User Research	What is UX Research?	https://www.youtube.com/watch?v=kQ_6faxhyIw	summarized-from-list	
+K204	B	Introduction to User Research	UX Research: Get Started With Qualitative User Research (2023)	https://www.youtube.com/watch?v=bAARmsv1tms	summarized-from-list	L107
+K205	B	Introduction to User Research	Great Design With User Research: Design a Mobile App Using Figma	https://www.youtube.com/watch?v=YD0egXpd-Y0	summarized-from-list	
+K206	B	Introduction to User Research	UXtweaks	https://www.uxtweak.com/	summarized-from-list	L117,L157
+K207	B	Introduction to User Research	Hotjar	https://contentsquare.com/hotjar/	summarized-from-list	L179
+K208	B	Introduction to User Research	UserTesting	https://www.usertesting.com/	summarized-from-list	L121
+K209	B	Introduction to User Research	Userbrain	https://www.userbrain.com/en/	summarized-from-list	L111,L121
+K210	B	Introduction to User Research	UserZoom	https://www.usertesting.com/platform/userzoom	summarized-from-list	
+K211	B	Introduction to User Research	UsabilityHub	https://www.lyssna.com/	summarized-from-list	L117,L157
+K212	B	Creating User Personas	Personas: User Focused Design	https://books.google.com/books/about/Personas_User_Focused_Design.html?id=NoBgC0NEInEC	summarized-from-list	
+K213	B	Creating User Personas	Personas: User Focused Design	(unofficial mirror, link withheld)	blocked	
+K214	B	Creating User Personas	Modeling Users: Personas and Goals	(unofficial mirror, link withheld)	summarized-from-list	L134,L135,L136,L139,L168,L169
+K215	B	Creating User Personas	Personas: A Simple Introduction	https://ixdf.org/literature/article/personas-why-and-how-you-should-use-them	read	L127,L135,L138,L141
+K216	B	Creating User Personas	What Are User Personas and Why Are They Important?	https://xd.adobe.com/ideas/process/user-research/putting-personas-to-work-in-ux-design/	read	L127,L134,L135,L136,L137,L138
+K217	B	Creating User Personas	How to Define a User Persona	https://careerfoundry.com/en/blog/ux-design/how-to-define-a-user-persona/	read	L137,L138
+K218	B	Creating User Personas	Introduction to Developing User Personas	https://miro.com/blog/introduction-user-personas/	read	L127,L136,L137,L138,L141
+K219	B	Creating User Personas	What Are User Personas? How to Create Personas in 4 Steps	https://uxplanet.org/how-to-create-user-personas-2f9d5e3a0e2b	blocked	L127,L134,L135,L136,L137
+K220	B	Creating User Personas	An Overview of User Personas	https://uxplanet.org/an-overview-of-user-personas-b26e9c543be5	blocked	L127,L134,L135,L136,L137
+K221	B	Creating User Personas	Intro to Personas in UX Design	https://www.youtube.com/watch?v=An2qbKbyY6g	summarized-from-list	
+K222	B	Creating User Personas	What are Personas?	https://www.youtube.com/watch?v=XnG4c4gXaQY	summarized-from-list	
+K223	B	Creating User Personas	How To Create A User Persona (Video Guide)	https://www.youtube.com/watch?v=DvV7ZcRVQ4g	summarized-from-list	
+K224	B	Creating User Personas	Creating Personas for User Experience Research	https://www.youtube.com/watch?v=u44pBnAn7cM	summarized-from-list	
+K225	B	Creating User Personas	User Forge	https://userforge.com/	summarized-from-list	L127,L137
+K226	B	Creating User Personas	Xtensio	https://xtensio.com/how-to-create-a-persona/	read	L127,L135,L137,L139,L140,L141
+K227	B	User Journey Mapping	Mapping Experiences: A Complete Guide to Creating Value through Journeys, Blueprints, and	https://www.goodreads.com/work/editions/46787723-mapping-experiences-a-complete-guide-to-creating-value-through-journeys	summarized-from-list	L143
+K228	B	User Journey Mapping	Mapping Experiences: A Complete Guide to Creating Value through Journeys, Blueprints, and	(unofficial mirror, link withheld)	blocked	
+K229	B	User Journey Mapping	User Journey Mapping	https://www.goodreads.com/book/show/61051829-user-journey-mapping	summarized-from-list	
+K230	B	User Journey Mapping	User Journey Mapping	(unofficial mirror, link withheld)	blocked	
+K231	B	User Journey Mapping	User journey map	https://www.optimizely.com/optimization-glossary/user-journey-map	read	L142,L143,L144
+K232	B	User Journey Mapping	Journey Mapping 101	https://www.nngroup.com/articles/journey-mapping-101/	read	L142,L143,L144,L145
+K233	B	User Journey Mapping	A Beginner's Guide To User Journey Mapping	https://marvelapp.com/blog/beginners-guide-user-journey-mapping/	read	L142,L144,L145,L146
+K234	B	User Journey Mapping	What are User Flows in User Experience (UX) Design?	https://careerfoundry.com/en/blog/ux-design/what-are-user-flows/	read	L146,L147
+K235	B	User Journey Mapping	How to create a UX Sitemap: a simple guideline	https://uxdesign.cc/how-to-create-a-ux-sitemap-a-simple-guideline-8786c16f85c1	blocked	L148
+K236	B	User Journey Mapping	Customer Journey Mapping 101	https://www.youtube.com/watch?v=2W13ext26kQ	summarized-from-list	L142
+K237	B	User Journey Mapping	Customer Journey Mapping 101	https://www.youtube.com/watch?v=2W13ext26kQ	summarized-from-list	
+K238	B	User Journey Mapping	Customer Journey Map Workshop	https://www.youtube.com/watch?v=X7iXcP-wIkk	summarized-from-list	L145
+K239	B	User Journey Mapping	Customer Journey Mapping Tutorial	https://www.youtube.com/watch?v=3iwL2OEeWiw	summarized-from-list	
+K240	B	User Journey Mapping	How to do User Story Mapping	https://www.youtube.com/watch?v=k_4SchJgAI4	summarized-from-list	L143
+K241	B	User Journey Mapping	UX Design: Why you NEED to know User Flows!	https://www.youtube.com/watch?v=4uHxJMCzeGg	summarized-from-list	L146
+K242	B	User Journey Mapping	Create User Flow Diagrams From Customer Journey Maps	https://www.youtube.com/watch?v=pcCUP23X9g8	summarized-from-list	L146,L147
+K243	B	User Journey Mapping	Whimsical	https://whimsical.com/	summarized-from-list	L150
+K244	B	User Journey Mapping	Miro	https://miro.com/	summarized-from-list	L150
+K245	B	User Journey Mapping	Figjam	https://www.figma.com/figjam/	summarized-from-list	L150
+K246	B	User Journey Mapping	Lucidchart	https://lucid.co/lucidchart	summarized-from-list	L150
+K247	B	User Journey Mapping	Cacoo	https://nulab.com/cacoo/	summarized-from-list	L150
+K248	B	User Journey Mapping	Drawio	https://app.diagrams.net/	summarized-from-list	L150
+K249	B	User Testing and Heuristics Evaluation	Handbook of Usability Testing: Howto Plan, Design, and Conduct Effective Tests	https://www.goodreads.com/book/show/2203883	summarized-from-list	
+K250	B	User Testing and Heuristics Evaluation	Handbook of Usability Testing: Howto Plan, Design, and Conduct Effective Tests	(unofficial mirror, link withheld)	blocked	
+K251	B	User Testing and Heuristics Evaluation	Usability Inspection Methods	https://www.nngroup.com/books/usability-inspection-methods/	summarized-from-list	L004,L128
+K252	B	User Testing and Heuristics Evaluation	Usability Inspection Methods	(unofficial mirror, link withheld)	blocked	
+K253	B	User Testing and Heuristics Evaluation	What is User Testing?: Learn UX: Keep It Usable	https://www.keepitusable.com/blog/what-is-user-testing/	read	L114,L119
+K254	B	User Testing and Heuristics Evaluation	6 Simple Steps to Conduct User Testing Successfully	https://adamfard.com/blog/conduct-user-testing	read	L101,L108,L109,L110,L111,L112,L113,L118,L156
+K255	B	User Testing and Heuristics Evaluation	How to Conduct a Heuristic Evaluation	https://uxplanet.org/how-to-conduct-heuristic-evaluation-85548a355dca	blocked	L128,L129,L130,L131
+K256	B	User Testing and Heuristics Evaluation	Usability Testing 101	https://www.nngroup.com/articles/usability-testing-101/	read	L105,L108,L110,L111,L112,L113,L118
+K257	B	User Testing and Heuristics Evaluation	8 Usability Testing Methods That Work	https://contentsquare.com/guides/usability-testing/methods/	read	L104,L113,L117,L156
+K258	B	User Testing and Heuristics Evaluation	An Overview of Expert Heuristic Evaluations	https://www.uxmatters.com/mt/archives/2014/06/an-overview-of-expert-heuristic-evaluations.php	read	L004,L128,L130,L131,L132
+K259	B	User Testing and Heuristics Evaluation	The A to Z of UX: H is for Heuristics: 9 steps to carry out a heuristic evaluation	https://uxdesign.cc/the-a-to-z-of-ux-h-is-for-heuristics-9-steps-to-carry-out-a-heuristic-evaluation-a1f5225c4e83	blocked	L128,L129,L130,L131
+K260	B	User Testing and Heuristics Evaluation	User & Usability Testing: Methods & Tips	https://xd.adobe.com/ideas/process/user-testing/	read	L101,L114
+K261	B	User Testing and Heuristics Evaluation	Heuristic Evaluation: GoodReads, LibraryThing, Litsy	https://uxplanet.org/heuristic-evaluation-goodreads-librarything-litsy-a3a4d8373255	blocked	
+K262	B	User Testing and Heuristics Evaluation	Uncovering Secrets of User Testing in 5 Minutes!	https://www.youtube.com/watch?v=CU_tfEGwit8	summarized-from-list	
+K263	B	User Testing and Heuristics Evaluation	You need to know Usability Testing (with Maze)	https://www.youtube.com/watch?v=ID0fwi2q028	summarized-from-list	
+K264	B	User Testing and Heuristics Evaluation	Intro to Usability Testing and Heuristic Evaluations	https://www.youtube.com/watch?v=-PxgUK9u3Rk	summarized-from-list	
+K265	B	User Testing and Heuristics Evaluation	Usability Testing Tips & Tools: Powerful UX Research Method	https://www.youtube.com/watch?v=RyGFEmimwoM	summarized-from-list	
+K266	B	User Testing and Heuristics Evaluation	The 10 Usability Heuristics	https://www.youtube.com/playlist?list=PLJOFJ3Ok_idtb2YeifXlG1-TYoMBLoG6I	summarized-from-list	
+K267	B	User Testing and Heuristics Evaluation	Maze	https://maze.co/	summarized-from-list	L120
+K268	B	User Testing and Heuristics Evaluation	UserTesting	https://www.usertesting.com/	summarized-from-list	
+K269	B	User Testing and Heuristics Evaluation	UserZoom	https://www.usertesting.com/platform/userzoom	summarized-from-list	
+K270	B	User Testing and Heuristics Evaluation	Userlytics	https://www.userlytics.com/	summarized-from-list	L121
+K271	B	User Testing and Heuristics Evaluation	Userfeel	https://www.userfeel.com/	summarized-from-list	L121
+K272	B	Information Architecture	Information Architecture and UX Design: The Integration of Information Spaces	https://link.springer.com/book/10.1007/978-3-031-72138-0	summarized-from-list	
+K273	B	Information Architecture	Information Architecture and UX Design: The Integration of Information Spaces	(unofficial mirror, link withheld)	blocked	
+K274	B	Information Architecture	Information Architecture: For the Web and Beyond	https://www.goodreads.com/book/show/25908623-information-architecture	summarized-from-list	L151,L153
+K275	B	Information Architecture	Information Architecture: For the Web and Beyond	(unofficial mirror, link withheld)	blocked	
+K276	B	Information Architecture	Information Architecture for the World Wide Web	https://www.goodreads.com/book/show/70132.Information_Architecture_for_the_World_Wide_Web	summarized-from-list	L151
+K277	B	Information Architecture	Information Architecture for the World Wide Web	(unofficial mirror, link withheld)	blocked	
+K278	B	Information Architecture	A Beginner's Guide To Information Architecture in UX [2023]	https://careerfoundry.com/en/blog/ux-design/a-beginners-guide-to-information-architecture/	read	L035,L148,L151,L152,L153,L154,L156,L157,L158,L159,L160
+K279	B	Information Architecture	Information Architecture Guide for UX Architects & Designers	https://xd.adobe.com/ideas/process/information-architecture/information-ux-architect/	read	L148,L151,L154,L155,L156,L158,L160
+K280	B	Information Architecture	The UX Process for Information Architecture	https://www.toptal.com/designers/ia/guide-to-information-architecture	blocked	L151,L158
+K281	B	Information Architecture	Information Architecture. Basics for Designers.	https://uxplanet.org/information-architecture-basics-for-designers-b5d43df62e20	blocked	L151
+K282	B	Information Architecture	Information Architecture Design: A Step-By-Step Guide	https://uxplanet.org/information-architecture-design-a-step-by-step-guide-41dcd4405ee3	blocked	L151,L156,L157
+K283	B	Information Architecture	A Beginner's Guide To Information Architecture	https://www.youtube.com/watch?v=Ij4WquJaRTc	summarized-from-list	
+K284	B	Information Architecture	What Is Information Architecture? (UX Design Guide)	https://www.youtube.com/watch?v=OJLfjgVlwDo	summarized-from-list	
+K285	B	Information Architecture	Information Architecture (IA)	https://www.youtube.com/playlist?list=PLJOFJ3Ok_idv3UGVmUktgRrVbl0X45RTY	summarized-from-list	
+K286	B	Information Architecture	Information Architecture & Sketching for UI/UX Projects	https://www.youtube.com/watch?v=CkQ3q0gewrQ	summarized-from-list	
+K287	B	Interaction Design	About Face: The Essentials of Interaction Design	https://www.goodreads.com/book/show/18737922	summarized-from-list	L004,L131,L132,L168
+K288	B	Interaction Design	About Face: The Essentials of Interaction Design	(unofficial mirror, link withheld)	blocked	
+K289	B	Interaction Design	Seductive Interaction Design: Creating Playful, Fun, and Effective User Experiences (Voice	https://www.peachpit.com/store/seductive-interaction-design-creating-playful-fun-and-9780321725523	summarized-from-list	L040
+K290	B	Interaction Design	Seductive Interaction Design: Creating Playful, Fun, and Effective User Experiences (Voice	(unofficial mirror, link withheld)	blocked	
+K291	B	Interaction Design	Interaction Design: Beyond Human-Computer Interaction	https://www.id-book.com/	read	L165
+K292	B	Interaction Design	Interaction Design: Beyond Human-Computer Interaction	(unofficial mirror, link withheld)	blocked	
+K293	B	Interaction Design	What is Interaction Design?	https://ixdf.org/literature/article/what-is-interaction-design	read	L032,L164,L166,L169
+K294	B	Interaction Design	What is Interaction Design?	https://www.uxpin.com/studio/blog/interaction-design-its-origin-and-principles/	read	L147,L165,L166,L167,L185
+K295	B	Interaction Design	What Is Interaction Design in UX Development?	https://www.indeed.com/career-advice/career-development/what-is-interaction-design	blocked	
+K296	B	Interaction Design	Basics of Interaction Design	https://www.youtube.com/watch?v=U7rS_2ch_Ps	summarized-from-list	L164
+K297	B	Interaction Design	What is Interaction Design	https://www.youtube.com/watch?v=KWtWqbJSP5E	summarized-from-list	L165
+K298	B	Interaction Design	User Experience Design vs Interaction Design	https://www.youtube.com/watch?v=UsV_UBkiKSk	summarized-from-list	L165
+K299	B	Interaction Design	What is Interaction Design? Learn Interaction Design in Product Design like a Pro!	https://www.youtube.com/watch?v=DlQ75eTM_AM	summarized-from-list	L165
+K300	B	Interaction Design	Interaction Design and Tasks	https://www.youtube.com/watch?v=_vsbkvm1w4w	summarized-from-list	L168
+K301	B	Microinteractions	Microinteractions: Full Color Edition: Designing with Details	https://www.goodreads.com/book/show/17239285-microinteractions	summarized-from-list	L170,L177
+K302	B	Microinteractions	Microinteractions: Full Color Edition: Designing with Details	(unofficial mirror, link withheld)	blocked	
+K303	B	Microinteractions	Designing Interface Animation: Improving the User Experience	https://www.goodreads.com/book/show/30826231-designing-interface-animation	summarized-from-list	L178
+K304	B	Microinteractions	Designing Interface Animation: Improving the User Experience	(unofficial mirror, link withheld)	blocked	
+K305	B	Microinteractions	Better UX Through Microinteractions	https://www.toptal.com/designers/product-design/microinteractions-better-ux	blocked	L170,L171,L172,L173,L174
+K306	B	Microinteractions	10 Micro-interactions Examples and How They Boost UX	https://www.vev.design/blog/micro-interaction-examples/	read	L170,L174
+K307	B	Microinteractions	Microinteractions in User Experience	https://www.nngroup.com/articles/microinteractions/	read	L147,L170,L171,L172,L173,L174,L175,L176
+K308	B	Microinteractions	How Micro Interactions have become an essential part of great products.	https://uxplanet.org/how-micro-interactions-have-become-an-essential-part-of-great-products-2ac8e02b5f2	blocked	L174
+K309	B	Microinteractions	Micro-interactions: why, when and how to use them to improve the user experience	https://uxdesign.cc/micro-interactions-why-when-and-how-to-use-them-to-boost-the-ux-17094b3baaa0	blocked	L174
+K310	B	Microinteractions	Creating meaningful micro-interactions	https://uxplanet.org/creating-meaningful-micro-interactions-99cbde1fbee7	blocked	L174
+K311	B	Microinteractions	Micro-interactions in Figma under 9 mins-UI Animation Series: 09	https://www.youtube.com/watch?v=l0EkLsZiWUg	summarized-from-list	L178
+K312	B	Microinteractions	Awesome Micro Animations With Figma Tutorial	https://www.youtube.com/watch?v=0YIovQXnwBY	summarized-from-list	L178
+K313	B	Microinteractions	How to create complex micro interactions in Figma!	https://www.youtube.com/watch?v=moLF7t3HwYk	summarized-from-list	L178
+K314	B	Microinteractions	UI Animation Series in Figma	https://www.youtube.com/playlist?list=PLtU8M9giqjPuObPhJrS6z54hMEZRZfws3	summarized-from-list	L178
+K315	B	Introduction to Prototyping	Designing UX: Prototyping: Because Modern Design is Never Static	https://www.goodreads.com/book/show/43077265-designing-ux	summarized-from-list	
+K316	B	Introduction to Prototyping	Designing UX: Prototyping: Because Modern Design is Never Static	(unofficial mirror, link withheld)	blocked	
+K317	B	Introduction to Prototyping	How to Prototype: The Rapid Prototyping Process	https://www.uxpin.com/studio/ebooks/guide-to-prototyping/	read	L180,L184
+K318	B	Introduction to Prototyping	How to Prototype: The Rapid Prototyping Process	(unofficial mirror, link withheld)	blocked	
+K319	B	Introduction to Prototyping	An Introduction to Prototyping in UX Design	https://medium.com/design-bootcamp/an-introduction-to-prototyping-in-ux-design-e19455eccb5e	blocked	L180,L181
+K320	B	Introduction to Prototyping	Guide to prototyping in Figma	https://help.figma.com/hc/en-us/articles/360040314193-Guide-to-prototyping-in-Figma	read	
+K321	B	Introduction to Prototyping	5 Common Low-Fidelity Prototypes and Their Best Practices	https://ixdf.org/literature/article/prototyping-learn-eight-common-methods-and-best-practices	read	L106,L180,L181,L182,L183,L184
+K322	B	Introduction to Prototyping	Perfect Your UX Design Process: A Guide to Prototype Design	https://www.toptal.com/designers/prototype/guide-to-prototype-design	blocked	L180,L181
+K323	B	Introduction to Prototyping	Figma Tutorial: Prototyping in Figma	https://www.youtube.com/watch?v=iBkXf6u8htI	blocked	
+K324	B	Introduction to Prototyping	What is prototyping?	https://www.youtube.com/watch?v=_1bOaNSy5XY	summarized-from-list	
+K325	B	Introduction to Prototyping	Figma Tutorial: Prototyping & Transitions	https://www.youtube.com/watch?v=-d6zNGeF59M	summarized-from-list	
+K326	B	Wireframing and Low-Fidelity Prototyping	Wireframing essentials : An Introduction to User Experience Design	https://www.goodreads.com/book/show/20718118-wireframing-essentials	summarized-from-list	
+K327	B	Wireframing and Low-Fidelity Prototyping	Wireframing essentials : An Introduction to User Experience Design	(unofficial mirror, link withheld)	blocked	
+K328	B	Wireframing and Low-Fidelity Prototyping	What Is A Wireframe? Your Best Guide	https://careerfoundry.com/en/blog/ux-design/what-is-a-wireframe-guide/	read	L100,L181,L182,L183
+K329	B	Wireframing and Low-Fidelity Prototyping	What is wireframing	https://www.experienceux.co.uk/faqs/what-is-wireframing/	read	L186
+K330	B	Wireframing and Low-Fidelity Prototyping	What Are Wireframes?	https://balsamiq.com/blog/what-are-wireframes/	read	L181,L183
+K331	B	Wireframing and Low-Fidelity Prototyping	Low-Fidelity Prototypes	https://tillerdigital.com/glossary/low-fidelity/	read	L183
+K332	B	Wireframing and Low-Fidelity Prototyping	Prototyping vs Wireframing: What's The Difference?	https://tillerdigital.com/glossary/wireframing/	read	
+K333	B	Wireframing and Low-Fidelity Prototyping	Wireframing: Low Fidelity vs. High Fidelity	https://www.youtube.com/watch?v=J3FXDVe-6ws	summarized-from-list	
+K334	B	Wireframing and Low-Fidelity Prototyping	Build Wireframes and Low-Fidelity Prototypes	https://www.youtube.com/watch?v=wJ3vof9Er5c	summarized-from-list	
+K335	B	Wireframing and Low-Fidelity Prototyping	Free Figma Tutorial: Designing Wireframes with Figma	https://www.youtube.com/watch?v=6t_dYhXyYjI	blocked	
+K336	B	Wireframing and Low-Fidelity Prototyping	Build Wireframes and Low-Fidelity Prototypes	https://www.coursera.org/learn/wireframes-low-fidelity-prototypes	read	L146,L149
+K337	B	High-Fidelity Prototyping	Prototyping for Designers: Developing the Best Digital and Physical Products	https://www.goodreads.com/book/show/30014108-prototyping-for-designers	summarized-from-list	
+K338	B	High-Fidelity Prototyping	Prototyping for Designers: Developing the Best Digital and Physical Products	(unofficial mirror, link withheld)	blocked	
+K339	B	High-Fidelity Prototyping	High-fidelity prototyping: What, When, Why and How?	https://blog.prototypr.io/high-fidelity-prototyping-what-when-why-and-how-f5bbde6a7fd4	blocked	L181
+K340	B	High-Fidelity Prototyping	What is a high-fidelity prototype?	https://www.educative.io/answers/what-is-a-high-fidelity-prototype	read	L181,L182
+K341	B	High-Fidelity Prototyping	High-Fidelity Prototype: Why & When to Create Them	https://www.locofy.ai/blog/high-fidelity-prototype	read	L052,L181,L185,L186
+K342	B	High-Fidelity Prototyping	Low-fidelity vs. High-fidelity Design Prototypes (and when to use which)	https://www.netsolutions.com/insights/low-fidelity-vs-high-fidelity-prototypes/	read	L180,L181
+K343	B	High-Fidelity Prototyping	What are High Fidelity Prototypes?Types and Examples.	https://www.youtube.com/watch?v=O3FyvQq068U	summarized-from-list	
+K344	B	High-Fidelity Prototyping	High-Fidelity Prototyping Demand is GROWING! (Don't Miss Out)	https://www.youtube.com/watch?v=cbhxy4OOReU	summarized-from-list	
+K345	B	High-Fidelity Prototyping	Food App Design: UX/UI ( Wireframe, Prototype, Export)	https://www.youtube.com/watch?v=195RY7jCuZg	summarized-from-list	
+K346	B	High-Fidelity Prototyping	Figma Mobile App Design Tutorial	https://www.youtube.com/watch?v=PeGfX7W1mJk	summarized-from-list	
+K347	C	Design Thinking Process	Basics Design 08: Design Thinking (Ambrose, Harris)	https://www.goodreads.com/book/show/20594015-basics-design-08	summarized-from-list	
+K348	C	Design Thinking Process	Mirror: Basics Design 08	(unofficial mirror, link withheld)	blocked	
+K349	C	Design Thinking Process	Design Thinking: NPD Essentials from the PDMA (Luchs, Swan, Griffin)	https://www.goodreads.com/book/show/27270256-design-thinking	summarized-from-list	
+K350	C	Design Thinking Process	Mirror: PDMA Design Thinking	(unofficial mirror, link withheld)	blocked	
+K351	C	Design Thinking Process	What is Design Thinking? (IxDF)	https://ixdf.org/literature/topics/design-thinking	read	L003,L187,L188
+K352	C	Design Thinking Process	The 5 Phases of Design Thinking (AMA)	https://www.ama.org/marketing-news/the-5-phases-of-design-thinking/	read	L003,L187
+K353	C	Design Thinking Process	The 5 Stages in the Design Thinking Process (IxDF)	https://ixdf.org/literature/article/5-stages-in-the-design-thinking-process	read	L003,L188
+K354	C	Design Thinking Process	A Complete Guide to the Design Thinking Process (CareerFoundry)	https://careerfoundry.com/en/blog/ux-design/design-thinking-process/	read	L003,L187
+K355	C	Design Thinking Process	5 Stages of the Design Thinking Process (listed as InVision)	https://www.youtube.com/watch?v=Vg8koqyQ52E	summarized-from-list	
+K356	C	Design Thinking Process	Design Thinking Full Course (Simplilearn)	https://www.youtube.com/watch?v=4nTh3AP6knM	summarized-from-list	
+K357	C	Design Thinking Process	ADVANCED DESIGN PROCESS: MUST KNOW!! (Satori Graphics)	https://www.youtube.com/watch?v=YzSooKa1PwM	summarized-from-list	
+K358	C	Design Thinking Process	UX Design Process: Empathize, Define, Ideate (My Lesson)	https://www.youtube.com/watch?v=7V8k4uwAll8	summarized-from-list	
+K359	C	Design Thinking Process	The Design Thinking Process, Explained by an Expert (CareerFoundry)	https://www.youtube.com/watch?v=FrsQSplB_Cg	summarized-from-list	
+K360	C	Design Critique	Discussing Design (Connor, Irizarry)	https://www.goodreads.com/book/show/25173297-discussing-design	summarized-from-list	L189
+K361	C	Design Critique	Mirror: Discussing Design	(unofficial mirror, link withheld)	blocked	
+K362	C	Design Critique	Productive design critique guide (Toptal)	https://www.toptal.com/designers/product-design/productive-design-critique-guide	read	L189,L190,L191
+K363	C	Design Critique	Design Critiques (NN/g, Gibbons)	https://www.nngroup.com/articles/design-critiques/	read	L189,L190,L192
+K364	C	Design Critique	What is a Design Critique (UXPin)	https://www.uxpin.com/studio/blog/what-is-design-critique/	read	L189,L191,L192
+K365	C	Design Critique	5 Do's and Don'ts of Design Critique (Adobe XD Ideas)	https://xd.adobe.com/ideas/process/ui-design/design-critique-tips/	read	L189,L190
+K366	C	Design Critique	Design critiques at Figma (Levin)	https://www.figma.com/blog/design-critiques-at-figma/	read	L191
+K367	C	Design Critique	A practical guide for design critiques (UX Planet, Galvan)	https://uxplanet.org/a-practical-guide-for-design-critiques-ea72028de8bb	blocked	
+K368	C	Design Critique	Design Feedback in Action (Grow with Google)	https://www.youtube.com/watch?v=VLwZc0JNAT8	summarized-from-list	
+K369	C	Design Critique	Websites Design Critique: Student Work (Flux Academy)	https://www.youtube.com/watch?v=E84GpsDuaS0	summarized-from-list	
+K370	C	Design Critique	UX Design Critique live (DareIT)	https://www.youtube.com/watch?v=2AHNGaVg02w	summarized-from-list	
+K371	C	Design Critique	Behance: Fridge Recipes App case study	https://www.behance.net/gallery/153624479/Fridge-Recipes-App-UX-UI-Case-Study	blocked	
+K372	C	Design Critique	Behance: Fitness Mobile App	https://www.behance.net/gallery/120589209/Fitness-Mobile-App	blocked	
+K373	C	Foundations of AI for Designers	UX for AI (Nudelman, Kempka)	https://www.wiley.com/en-us/UX+for+AI:+A+Framework+for+Designing+AI-Driven+Products-p-9781394345922	summarized-from-list	
+K374	C	Foundations of AI for Designers	Mirror: UX for AI	(unofficial mirror, link withheld)	blocked	
+K375	C	Foundations of AI for Designers	AI and UX (Lew, Schumacher)	https://link.springer.com/book/10.1007/978-1-4842-5775-3	summarized-from-list	
+K376	C	Foundations of AI for Designers	Mirror: AI and UX	(unofficial mirror, link withheld)	blocked	
+K377	C	Foundations of AI for Designers	AI Snake Oil (Narayanan, Kapoor)	https://press.princeton.edu/books/hardcover/9780691249131/ai-snake-oil	summarized-from-list	L252
+K378	C	Foundations of AI for Designers	Mirror: AI Snake Oil	(unofficial mirror, link withheld)	blocked	
+K379	C	Foundations of AI for Designers	People + AI Guidebook (Google PAIR)	https://pair.withgoogle.com/guidebook/	summarized-from-list	
+K380	C	Foundations of AI for Designers	AI: First New UI Paradigm in 60 Years (Nielsen)	https://www.nngroup.com/articles/ai-paradigm/	read	L196,L197
+K381	C	Foundations of AI for Designers	A Concrete Definition of an AI Agent (NN/g)	https://www.nngroup.com/articles/definition-ai-agent/	read	L198,L226,L241
+K382	C	Foundations of AI for Designers	Building Effective Agents (Anthropic)	https://www.anthropic.com/engineering/building-effective-agents	read	L198,L199
+K383	C	Foundations of AI for Designers	AI Is Your New Design Material (Josh Clark, AIGA)	https://www.youtube.com/watch?v=Hu5Jc1yIfas	summarized-from-list	L201
+K384	C	Foundations of AI for Designers	Software Is Changing (Again) (Karpathy, YC)	https://www.youtube.com/watch?v=LCEmiRjPEtQ	summarized-from-list	L200,L238,L241
+K385	C	Setting Expectations and Mental Models	Designing Human-Centric AI Experiences (Kore)	https://link.springer.com/book/10.1007/978-1-4842-8088-1	summarized-from-list	
+K386	C	Setting Expectations and Mental Models	Mirror: Designing Human-Centric AI Experiences	(unofficial mirror, link withheld)	blocked	
+K387	C	Setting Expectations and Mental Models	Human-Centered AI (Shneiderman)	https://books.google.com/books/about/Human_centered_AI.html?id=YS9VEAAAQBAJ	summarized-from-list	L238
+K388	C	Setting Expectations and Mental Models	Mirror: Human-Centered AI	(unofficial mirror, link withheld)	blocked	
+K389	C	Setting Expectations and Mental Models	Guidelines for Human-AI Interaction (Microsoft HAX)	https://www.microsoft.com/en-us/haxtoolkit/ai-guidelines/	read	L206
+K390	C	Setting Expectations and Mental Models	HAX Design Library (Microsoft)	https://www.microsoft.com/en-us/haxtoolkit/library/	read	L206,L212,L213,L225,L239
+K391	C	Setting Expectations and Mental Models	HIG: Generative AI (Apple)	https://developer.apple.com/design/human-interface-guidelines/generative-ai	read	L202,L206,L209,L210,L211,L214,L219,L227,L234,L237,L243,L247,L250,L251
+K392	C	Setting Expectations and Mental Models	Durable Patterns in AI Product Design (LukeW)	https://www.lukew.com/ff/2145/durable-patterns-in-ai-product-design	read	L207,L208,L216,L218,L222,L223,L229
+K393	C	Setting Expectations and Mental Models	The Shape of AI	https://www.shapeof.ai/	read	L085,L197,L200,L207,L213,L216,L218,L221,L222,L232,L234,L236,L242,L244,L249,L250
+K394	C	Setting Expectations and Mental Models	Claude Console	https://platform.claude.com/	summarized-from-list	L202
+K395	C	Explainability, Grounding and Trust	Sentient Design (Clark, Kindred)	https://rosenfeldmedia.com/books/sentient-design/	summarized-from-list	L201
+K396	C	Explainability, Grounding and Trust	Mirror: Sentient Design	(unofficial mirror, link withheld)	blocked	
+K397	C	Explainability, Grounding and Trust	Designing AI Interfaces (Macfadyen)	https://www.oreilly.com/library/view/designing-ai-interfaces/9798341639812/	summarized-from-list	
+K398	C	Explainability, Grounding and Trust	Mirror: Designing AI Interfaces	(unofficial mirror, link withheld)	blocked	
+K399	C	Explainability, Grounding and Trust	Explainable AI in Chat Interfaces (NN/g)	https://www.nngroup.com/articles/explainable-ai/	read	L211,L216,L217,L218,L219
+K400	C	Explainability, Grounding and Trust	Design Patterns for AI Interfaces (Smashing, Friedman)	https://www.smashingmagazine.com/2025/07/design-patterns-ai-interfaces/	read	L197,L230,L231,L232,L233
+K401	C	Explainability, Grounding and Trust	Design for AI: Everyday Ethics (IBM)	https://www.ibm.com/design/ai/ethics/	read	L251,L252
+K402	C	Explainability, Grounding and Trust	IBM Carbon AI Label	https://www.carbondesignsystem.com/building-blocks/core/components/ai-label/guidelines	blocked	L221
+K403	C	Explainability, Grounding and Trust	PAIR Explorables	https://pair.withgoogle.com/explorables/	read	L220,L251
+K404	C	Designing for Errors, Uncertainty and Hallucination	Conversations with Things (Deibel, Evanhoe)	https://rosenfeldmedia.com/books/conversations-with-things/	summarized-from-list	L235
+K405	C	Designing for Errors, Uncertainty and Hallucination	Mirror: Conversations with Things	(unofficial mirror, link withheld)	blocked	
+K406	C	Designing for Errors, Uncertainty and Hallucination	Conversational Design (Erika Hall)	https://abookapart.com/products/conversational-design	summarized-from-list	L235
+K407	C	Designing for Errors, Uncertainty and Hallucination	Mirror: Conversational Design	(unofficial mirror, link withheld)	blocked	
+K408	C	Designing for Errors, Uncertainty and Hallucination	Errors + Graceful Failure (Google PAIR)	https://pair.withgoogle.com/chapter/errors-failing/	read	L214,L215,L224,L225,L226,L227
+K409	C	Designing for Errors, Uncertainty and Hallucination	Why Chatbots Are Not the Future (Wattenberger)	https://wattenberger.com/thoughts/boo-chatbots/	read	L196,L197,L200,L245
+K410	C	Designing for Errors, Uncertainty and Hallucination	10 Guidelines for Site AI Chatbots (NN/g)	https://www.nngroup.com/articles/ai-chatbots-design-guidelines/	read	L206,L207,L215,L228,L229,L230,L231
+K411	C	Designing Agentic Interfaces	Designing Agentive Technology (Noessel)	https://rosenfeldmedia.com/books/designing-agentive-technology/	summarized-from-list	L245
+K412	C	Designing Agentic Interfaces	Mirror: Designing Agentive Technology	(unofficial mirror, link withheld)	blocked	
+K413	C	Designing Agentic Interfaces	Designing Assistant Technology (Noessel)	https://rosenfeldmedia.com/books/designing-assistant-technology/	summarized-from-list	L245
+K414	C	Designing Agentic Interfaces	Mirror: Designing Assistant Technology	(unofficial mirror, link withheld)	blocked	
+K415	C	Designing Agentic Interfaces	Designing for Agentic AI (Smashing, Yocco)	https://www.smashingmagazine.com/2026/02/designing-agentic-ai-practical-ux-patterns/	read	L220,L226,L236,L238,L239,L240
+K416	C	Designing Agentic Interfaces	Say Hello to Sentient Design (Big Medium)	https://bigmedium.com/ideas/hello-sentient-design.html	read	L201
+K417	C	Designing Agentic Interfaces	Salesforce SLDS 2 Agentic Patterns	https://www.lightningdesignsystem.com/2e1ef8501/p/03c548-agentic-patterns	summarized-from-list	L246
+K418	C	Designing Agentic Interfaces	Vercel AI Elements	https://elements.ai-sdk.dev/	read	L216,L218,L222,L234,L236,L240,L244
+K419	C	Designing Agentic Interfaces	Voiceflow	https://www.voiceflow.com/	summarized-from-list	L235
+K420	C	Responsible AI, Disclosure and Compliance	Weapons of Math Destruction (O'Neil)	https://www.penguinrandomhouse.com/books/241363/weapons-of-math-destruction-by-cathy-oneil/	summarized-from-list	L252
+K421	C	Responsible AI, Disclosure and Compliance	Mirror: Weapons of Math Destruction	(unofficial mirror, link withheld)	blocked	
+K422	C	Responsible AI, Disclosure and Compliance	Atlas of AI (Crawford)	https://yalebooks.yale.edu/book/9780300264630/atlas-of-ai/	summarized-from-list	
+K423	C	Responsible AI, Disclosure and Compliance	Mirror: Atlas of AI	(unofficial mirror, link withheld)	blocked	
+K424	C	Responsible AI, Disclosure and Compliance	Rethink Design (Giaccardi, Bendor, eds.)	https://books.open.tudelft.nl/home/catalog/book/110	summarized-from-list	
+K425	C	Responsible AI, Disclosure and Compliance	EU AI Act Article 50	https://artificialintelligenceact.eu/article/50/	read	L247,L248,L249,L253
+K426	C	Responsible AI, Disclosure and Compliance	EC Guidelines on transparency of AI-generated content	https://digital-strategy.ec.europa.eu/en/policies/guidelines-ai-transparency-obligations	read	L249
+K427	C	AI in the Design Workflow	Creative Prototyping with Generative AI (Pennefather)	https://link.springer.com/book/10.1007/978-1-4842-9579-3	summarized-from-list	
+K428	C	AI in the Design Workflow	Mirror: Creative Prototyping with Generative AI	(unofficial mirror, link withheld)	blocked	
+K429	C	AI in the Design Workflow	Review of Experiments with Synthetic Users (MeasuringU)	https://measuringu.com/review-of-experiments-with-synthetic-users/	read	L127
+K430	C	AI in the Design Workflow	Evals FAQ (Hamel Husain)	https://hamel.dev/blog/posts/evals-faq/	read	L202,L254
+K431	C	AI in the Design Workflow	Figma Make	https://www.figma.com/make/	summarized-from-list	L255
+K432	C	AI in the Design Workflow	Google Stitch	https://stitch.withgoogle.com/	summarized-from-list	L255
+K433	C	AI in the Design Workflow	v0 by Vercel	https://v0.app/	summarized-from-list	L255
+K434	C	AI in the Design Workflow	Lovable	https://lovable.dev/	summarized-from-list	L255
+K435	C	AI in the Design Workflow	Builder.io design to code	https://www.builder.io/use-cases/design-to-code	summarized-from-list	L255
+K436	C	AI in the Design Workflow	Dovetail	https://dovetail.com/	summarized-from-list	L122,L127
+K437	C	AI in the Design Workflow	Looppanel	https://www.looppanel.com/	summarized-from-list	L122
+K438	C	AI in the Design Workflow	Maze	https://maze.co/	summarized-from-list	L122,L250
+K439	C	AI in the Design Workflow	Recraft	https://www.recraft.ai/	summarized-from-list	L256
+K440	C	AI in the Design Workflow	Krea	https://www.krea.ai/	summarized-from-list	L256
+K441	C	Designing for Accessibility	Practical Approaches for Designing Accessible Websites (Smashing)	https://www.smashingmagazine.com/ebooks/practical-approaches-for-designing-accessible-websites/	summarized-from-list	
+K442	C	Designing for Accessibility	Mirror: Practical Approaches for Designing Accessible Websites	(unofficial mirror, link withheld)	blocked	
+K443	C	Designing for Accessibility	Designing for Accessibility (Keates)	https://books.google.com/books/about/Designing_for_Accessibility.html?id=gXqHUN8g4FcC	summarized-from-list	
+K444	C	Designing for Accessibility	Mirror: Designing for Accessibility	(unofficial mirror, link withheld)	blocked	
+K445	C	Designing for Accessibility	Inclusive Design for a Digital World (Gilbert)	https://books.google.com/books/about/Inclusive_Design_for_a_Digital_World.html?id=OfqTEQAAQBAJ	summarized-from-list	
+K446	C	Designing for Accessibility	Mirror: Inclusive Design for a Digital World	(unofficial mirror, link withheld)	blocked	
+K447	C	Designing for Accessibility	A Web for Everyone (Horton, Quesenbery)	https://www.goodreads.com/book/show/20640233-a-web-for-everyone	summarized-from-list	
+K448	C	Designing for Accessibility	Mirror: A Web for Everyone	(unofficial mirror, link withheld)	blocked	
+K449	C	Designing for Accessibility	Design for Inclusivity (Coleman et al.)	https://www.goodreads.com/book/show/3295983-design-for-inclusivity	summarized-from-list	
+K450	C	Designing for Accessibility	Mirror: Design for Inclusivity	(unofficial mirror, link withheld)	blocked	
+K451	C	Designing for Accessibility	Refactoring UI (Schoger, Wathan)	https://refactoringui.com/	summarized-from-list	
+K452	C	Designing for Accessibility	Mirror: Refactoring UI	(unofficial mirror, link withheld)	blocked	
+K453	C	Designing for Accessibility	What is Accessible Design? (Adobe XD Ideas)	https://xd.adobe.com/ideas/principles/web-design/what-is-accessible-design/	read	L030,L126
+K454	C	Designing for Accessibility	How to build an accessible design system (LogRocket)	https://blog.logrocket.com/ux-design/how-to-build-accessible-design-system/	read	L019,L076,L261,L272
+K455	C	Designing for Accessibility	What is Accessibility? (IxDF; README credits CareerFoundry)	https://ixdf.org/literature/topics/accessibility	read	L257,L258,L263
+K456	C	Designing for Accessibility	Accessibility guidelines for UX Designers (uxdesign.cc, Kaur)	https://uxdesign.cc/accessibility-guidelines-for-a-ux-designer-c3ba775539be	blocked	
+K457	C	Designing for Accessibility	Accessibility for UX designers (digital.gov)	https://digital.gov/guides/accessibility-for-teams/ux-design	read	L032,L033,L037,L126,L258,L259,L260,L261,L262
+K458	C	Designing for Accessibility	Accessibility in UX: radical empathy (UX Magazine)	https://uxmag.com/articles/accessibility-in-ux-the-case-for-radical-empathy	read	L257,L263
+K459	C	Designing for Accessibility	Accessibility in UX Design (Ramotion)	https://www.ramotion.com/blog/accessibility-in-ux-design/	read	L126,L257
+K460	C	Designing for Accessibility	7 Things Every Designer Needs to Know about Accessibility (Salesforce UX)	https://medium.com/salesforce-ux/7-things-every-designer-needs-to-know-about-accessibility-64f105f0881b	blocked	
+K461	C	Designing for Accessibility	Designing for Accessibility: Top 3 Strategies (Liz Brown UX)	https://www.youtube.com/watch?v=hAoZI-yT4aU	summarized-from-list	
+K462	C	Designing for Accessibility	Accessible Web Design (Flux Academy)	https://www.youtube.com/watch?v=-ao_Kc_8rpE	summarized-from-list	
+K463	C	Designing for Accessibility	Designing for Accessibility: Overview (Trillium)	https://www.youtube.com/watch?v=dJfhi2P60Xo	summarized-from-list	
+K464	C	Designing for Accessibility	Design for Accessibility (Canva webinar)	https://www.youtube.com/watch?v=GGR8UDCdi14	summarized-from-list	
+K465	C	Designing for Accessibility	Design for Accessibility (UX Loop)	https://www.youtube.com/watch?v=4OuI6Qsh1D0	summarized-from-list	
+K466	C	Designing for Accessibility	Designing for Accessibility (UA Technology Accessibility)	https://www.youtube.com/watch?v=Ww2wddAZUdU	summarized-from-list	
+K467	C	Designing for Internationalization	Usability and Internationalization of IT (Aykin)	https://books.google.com/books/about/Usability_and_Internationalization_of_In.html?id=Fyd50AEACAAJ	summarized-from-list	
+K468	C	Designing for Internationalization	Mirror: Usability and Internationalization of IT	(unofficial mirror, link withheld)	blocked	
+K469	C	Designing for Internationalization	Intercultural User Interface Design (Heimgartner)	https://books.google.com/books/about/Intercultural_User_Interface_Design.html?id=J0efDwAAQBAJ	summarized-from-list	
+K470	C	Designing for Internationalization	Mirror: Intercultural User Interface Design	(unofficial mirror, link withheld)	blocked	
+K471	C	Designing for Internationalization	Design for internationalization (Dropbox Design, Saito)	https://medium.com/dropbox-design/design-for-internationalization-24c12ea6b38f	blocked	
+K472	C	Designing for Internationalization	Internationalization and Localization (UX Knowledge Base)	https://uxknowledgebase.com/internationalization-localization-d84795b7962c	blocked	
+K473	C	Designing for Internationalization	UX Localization (Phrase)	https://phrase.com/blog/posts/app-localization-developers-guide-to-user-experience/	read	L077,L264,L265,L266,L268,L269,L270
+K474	C	Designing for Internationalization	Internationalization vs Localization (UXPin)	https://www.uxpin.com/studio/blog/internationalization-vs-localization-in-app-design/	read	L077,L259,L264,L265,L267,L268,L269
+K475	C	Designing for Internationalization	Localization in UX (uxdesign.cc, Conte)	https://uxdesign.cc/beyond-text-translation-ux-design-and-localization-77b337b1f686	blocked	
+K476	C	Designing for Internationalization	What Is Internationalization (Localization Academy)	https://www.youtube.com/watch?v=CIwNjfTlmgA	summarized-from-list	
+K477	C	Designing for Internationalization	How to make design really inclusive (Florence Okoye, TEDx)	https://www.youtube.com/watch?v=7M-VSI9RuPU	summarized-from-list	
+K478	C	Designing for Internationalization	51. Designing for Internationalization: UI Design (ADF Architecture TV)	https://www.youtube.com/watch?v=ARx0hRNGfcU	summarized-from-list	
+K479	C	Designing for Internationalization	50. Understanding Internationalization (ADF Architecture TV)	https://www.youtube.com/watch?v=wxwKxZW2edQ	summarized-from-list	
+K480	C	Design Systems	Practical UI Patterns for Design Systems (MacDonald)	https://books.google.com/books?id=E0efDwAAQBAJ	summarized-from-list	
+K481	C	Design Systems	Mirror: Practical UI Patterns for Design Systems	(unofficial mirror, link withheld)	blocked	
+K482	C	Design Systems	Laying the Foundations (Couldwell)	https://designsystemfoundations.com/	summarized-from-list	L050,L051
+K483	C	Design Systems	Mirror: Laying the Foundations	(unofficial mirror, link withheld)	blocked	
+K484	C	Design Systems	Modular Web Design (Curtis)	https://www.oreilly.com/library/view/modular-web-design/9780321638311	summarized-from-list	
+K485	C	Design Systems	Mirror: Modular Web Design	(unofficial mirror, link withheld)	blocked	
+K486	C	Design Systems	Everything you need to know about Design Systems (Hacq)	https://uxdesign.cc/everything-you-need-to-know-about-design-systems-54b109851969	blocked	
+K487	C	Design Systems	Design Systems 101 (NN/g)	https://www.nngroup.com/articles/design-systems-101/	read	L051,L271
+K488	C	Design Systems	Design Systems (IxDF)	https://ixdf.org/literature/topics/design-systems	read	L050,L271
+K489	C	Design Systems	What is a Design System? (DesignCourse)	https://www.youtube.com/watch?v=wc5krC28ynQ	summarized-from-list	
+K490	C	Design Systems	Create a Design System with Figma (freeCodeCamp)	https://www.youtube.com/watch?v=RYDiDpW2VkM	summarized-from-list	
+K491	C	Design Systems	Build it in Figma: Create a Design System (Figma)	https://www.youtube.com/watch?v=EK-pHkc5EL4	summarized-from-list	
+K492	C	Design Systems	Design Systems, Pattern Libraries and Style Guides (Showalter)	https://www.youtube.com/watch?v=rO5dBA-avfw	summarized-from-list	L271
+K493	C	Design Systems	5 Best Design Systems (DesignerUp)	https://www.youtube.com/watch?v=BISC15OPeGA	summarized-from-list	
+K494	C	Design Systems	Design System Series playlist (Mizko)	https://www.youtube.com/playlist?list=PLvnhVb8yYRQ1rvEFiPEyNbVPiJxvuCbgL	summarized-from-list	
+K495	C	Design Systems	Design System Checklist	https://www.designsystemchecklist.com/	read	L062,L273,L274
+K496	C	Design Systems	Airbnb: Building a visual language	https://medium.com/airbnb-design/building-a-visual-language-behind-the-scenes-of-our-airbnb-design-system-224748775e4e	blocked	
+K497	C	Design Systems	Atlassian Design System	https://atlassian.design/	read	L246
+K498	C	Design Systems	IBM Design Language	https://www.ibm.com/design/language/	summarized-from-list	
+K499	C	Design Systems	Material Design 3	https://m3.material.io/	summarized-from-list	
+K500	C	Design Systems	Microsoft Fluent 2	https://fluent2.microsoft.design/	read	L046
+K501	C	Design Systems	Polaris (Shopify)	https://shopify.dev/docs/api/polaris	read	
+K502	C	Design Systems	Primer (GitHub)	https://primer.style/	read	L050
+K503	C	Design Systems	Salesforce Lightning Design System	https://www.lightningdesignsystem.com/2e1ef8501	summarized-from-list	
+K504	C	Design Systems	Ant Design	https://ant.design/	read	L050
+K505	C	Design Systems	Apple Design Resources	https://developer.apple.com/design/resources/	read	L062,L275
+K506	C	Design Systems	AtlasKit	https://atlaskit.atlassian.com/	read	
+K507	C	Design Systems	Carbon Design System	https://www.carbondesignsystem.com/	read	L085,L221,L246
+K508	C	Design Systems	Atomize	https://atomizecode.com/	read	
+K509	D	Voice User Interface Design	Designing Voice User Interfaces: Principles of Conversational Experiences	https://books.google.com/books/about/Designing_Voice_User_Interfaces.html?id=MmnEDQAAQBAJ	summarized-from-list	L235,L276,L277,L278,L279,L280,L281,L288
+K510	D	Voice User Interface Design	Designing Voice User Interfaces: Principles of Conversational Experiences	(unofficial mirror, link withheld)	blocked	
+K511	D	Voice User Interface Design	Voice User Interface Design: Moving from GUI to Mixed Modal Interaction	https://books.google.com/books/about/Voice_User_Interface_Design.html?id=Q3B_DwAAQBAJ	summarized-from-list	L276
+K512	D	Voice User Interface Design	Voice User Interface Design: Moving from GUI to Mixed Modal Interaction	(unofficial mirror, link withheld)	blocked	
+K513	D	Voice User Interface Design	Conversational UX Design: A Practitioner's Guide to the Natural Conversation Framework	https://dl.acm.org/doi/book/10.1145/3304087	blocked	L235,L284
+K514	D	Voice User Interface Design	Conversational UX Design: A Practitioner's Guide to the Natural Conversation Framework	(unofficial mirror, link withheld)	blocked	
+K515	D	Voice User Interface Design	A Definitive Guide to Voice User Interface Design	https://userguiding.com/blog/voice-user-interface	read	L280,L285,L286
+K516	D	Voice User Interface Design	What are Voice User Interfaces?	https://ixdf.org/literature/topics/voice-user-interfaces	read	L277,L284,L285
+K517	D	Voice User Interface Design	Everything You Want To Know About Creating Voice User Interfaces	https://www.smashingmagazine.com/2022/02/voice-user-interfaces-guide/	read	L235,L276,L277,L278,L279,L280,L281,L282,L283,L284,L285,L286,L287,L289
+K518	D	Voice User Interface Design	Voice User Interface Design, Examples & Advantages of VUI	https://www.boldare.com/blog/what-is-voice-user-interface/	read	L289
+K519	D	Voice User Interface Design	VUI: Designing for Voice UI	https://www.uxpin.com/studio/blog/voice-user-interface/	read	L277,L278,L279,L280,L283,L285,L289
+K520	D	Voice User Interface Design	Designing a VUI to Voice User Interface	https://www.toptal.com/designers/ui/designing-a-vui	read	L235,L276,L277,L281,L283,L286,L288
+K521	D	Voice User Interface Design	Designing Voice Experience	https://uxdesign.cc/voice-user-experience-design-and-prototyping-for-mere-mortals-ef080c843640	blocked	
+K522	D	Voice User Interface Design	The Voice Design Process For Voice User Interfaces (VUIs)	https://www.youtube.com/watch?v=8OXN0ZDpwrM	summarized-from-list	L286,L287
+K523	D	Voice User Interface Design	How to Improve Voice User Interface Design	https://www.youtube.com/watch?v=vKM4OMz8qmQ	summarized-from-list	
+K524	D	Voice User Interface Design	Designing Voice User Interfaces"	https://www.youtube.com/watch?v=RdCmMMwaFRs	summarized-from-list	
+K525	D	Virtual and Augmented Reality Design	3D User Interfaces: Theory and Practice	https://books.google.com/books/about/3D_User_Interfaces.html?id=fxWSDgAAQBAJ	summarized-from-list	L291,L292,L293
+K526	D	Virtual and Augmented Reality Design	3D User Interfaces: Theory and Practice	(unofficial mirror, link withheld)	blocked	
+K527	D	Virtual and Augmented Reality Design	Virtual & Augmented Reality for Dummies	https://books.google.com/books/about/Virtual_Augmented_Reality_For_Dummies.html?id=KrBfDwAAQBAJ	summarized-from-list	
+K528	D	Virtual and Augmented Reality Design	Virtual & Augmented Reality for Dummies	(unofficial mirror, link withheld)	blocked	
+K529	D	Virtual and Augmented Reality Design	Learning Virtual Reality: Developing Immersive Experiences and Applications for Desktop, Web, and Mobile	https://books.google.com/books/about/Learning_Virtual_Reality.html?id=T5XtrQEACAAJ	summarized-from-list	L297
+K530	D	Virtual and Augmented Reality Design	Learning Virtual Reality: Developing Immersive Experiences and Applications for Desktop, Web, and Mobile	(unofficial mirror, link withheld)	blocked	
+K531	D	Virtual and Augmented Reality Design	Oculus Rift in Action	https://www.manning.com/books/oculus-rift-in-action	summarized-from-list	
+K532	D	Virtual and Augmented Reality Design	Oculus Rift in Action	(unofficial mirror, link withheld)	blocked	
+K533	D	Virtual and Augmented Reality Design	A Design Model and Methodology for Developing Virtual Reality Interfaces	http://www.cs.tufts.edu/~jacob/papers/vrst01.tanriverdi.pdf	read	L295,L297
+K534	D	Virtual and Augmented Reality Design	Leap Into VR/AR Design	https://www.toptal.com/designers/ui/vr-ar-design-guide	read	L291,L292,L293,L296
+K535	D	Virtual and Augmented Reality Design	Introduction - The Design of Virtual and Augmented Reality	https://aliheston.gitbook.io/the-design-of-virtual-and-augmented-reality	read	
+K536	D	Virtual and Augmented Reality Design	UI/UX: Designing for AR & VR	https://uxplanet.org/ui-ux-designing-for-ar-vr-8c695caccc5e	blocked	
+K537	D	Virtual and Augmented Reality Design	The hierarchy of needs in virtual reality development	https://medium.com/@beaucronin/the-hierarchy-of-needs-in-virtual-reality-development-4333a4833acc	blocked	L290
+K538	D	Virtual and Augmented Reality Design	Speculations on neuro-motivated design for VR	https://medium.com/@beaucronin/speculations-on-neuro-motivated-design-for-vr-3f26685c5c40	blocked	
+K539	D	Virtual and Augmented Reality Design	From Product Design to Virtual Reality	https://medium.com/google-design/from-product-design-to-virtual-reality-be46fa793e9b	blocked	
+K540	D	Virtual and Augmented Reality Design	Immersive Design	https://medium.com/backchannel/immersive-design-76499204d5f6#.rw8u2q3gp	blocked	
+K541	D	Virtual and Augmented Reality Design	5 Lessons I Learned From Designing the VRUI of Beloola	https://medium.com/beloola-all-our-news-updates/5-lessons-i-learned-from-designing-the-vrui-of-beloola-754f16062c0b#.evgt1cepa	blocked	
+K542	D	Virtual and Augmented Reality Design	The UX of VR	https://www.creativebloq.com/ux/the-user-experience-of-virtual-reality-31619635	read	L290,L291,L292,L293,L294,L298
+K543	D	Virtual and Augmented Reality Design	Designing VR UI in Figma and testing it with no code	https://uxdesign.cc/lets-design-xr-ui-in-figma-and-bring-it-to-xr-with-no-code-a123b9b647ab	blocked	L296,L298
+K544	D	Virtual and Augmented Reality Design	VR Interface Design Pre-Visualisation Methods	https://www.youtube.com/watch?v=id86HeV-Vb8	summarized-from-list	L296,L298
+K545	D	Virtual and Augmented Reality Design	UI/UX design for WebVR	https://www.youtube.com/watch?v=ZOaOYTOpwyM	summarized-from-list	L297
+K546	D	Virtual and Augmented Reality Design	Google I/O 2015 - Designing for virtual reality	https://www.youtube.com/watch?v=Qwh1LBzz3AU&t=488s	summarized-from-list	L290
+K547	D	Virtual and Augmented Reality Design	Oculus Connect 2: Navigating New Worlds: Designing UI and UX in VR	https://www.youtube.com/watch?v=braV_c4M8oI	summarized-from-list	L290
+K548	D	Virtual and Augmented Reality Design	How to Prototype AR and VR UI/UX with FIGMA and UNITY! (Tutorial)	https://www.youtube.com/watch?v=mW8tRQRQD74	summarized-from-list	L296,L298
+K549	D	Virtual and Augmented Reality Design	Designing for AR - UX/UI Case Study	https://www.youtube.com/watch?v=v0c5P3prpMM	summarized-from-list	
+K550	D	Virtual and Augmented Reality Design	Building a VR app in Figma	https://www.youtube.com/watch?v=nmlWiK9AokE	summarized-from-list	L296,L298
+K551	D	Virtual and Augmented Reality Design	Unity	https://unity.com/	read	
+K552	D	Designing for AI and Machine Learning	Machine Learning Design Patterns	https://books.google.com/books/about/Machine_Learning_Design_Patterns.html?id=dDwDEAAAQBAJ	summarized-from-list	L205
+K553	D	Designing for AI and Machine Learning	Machine Learning Design Patterns	(unofficial mirror, link withheld)	blocked	
+K554	D	Designing for AI and Machine Learning	Designing Human-Centric AI Experiences: Applied UX Design for Artificial Intelligence (Design Thinking)	https://www.goodreads.com/en/book/show/61514121-designing-human-centric-ai-experiences	summarized-from-list	L213
+K555	D	Designing for AI and Machine Learning	Designing Human-Centric AI Experiences: Applied UX Design for Artificial Intelligence (Design Thinking)	(unofficial mirror, link withheld)	blocked	
+K556	D	Designing for AI and Machine Learning	Design for AI: What should people who design AI know?	https://uxdesign.cc/design-for-ai-what-should-people-who-design-ai-know-761e78fdabb	blocked	
+K557	D	Designing for AI and Machine Learning	ML+DESIGN	https://machinelearning.design/	read	
+K558	D	Designing for AI and Machine Learning	The Present and Future of AI in Design (with Infographic)	https://www.toptal.com/designers/product-design/infographic-ai-in-design	read	L203,L243,L246
+K559	D	Designing for AI and Machine Learning	7 Ways to Get Started Designing for AI/ML Products	https://uxplanet.org/7-ways-to-get-started-designing-for-ai-ml-products-bef764ca1b27	blocked	
+K560	D	Designing for AI and Machine Learning	Machine Learning for Designers	https://www.oreilly.com/radar/machine-learning-for-designers/	read	L201,L203
+K561	D	Designing for AI and Machine Learning	Design for Machine Learning	https://uxdesign.cc/becoming-a-machine-learning-designer-42920afeeb28	blocked	
+K562	D	Designing for AI and Machine Learning	AI & Machine Learning Will Change UX Research & Design	https://www.youtube.com/watch?v=mBu_LmD69tc	summarized-from-list	
+K563	D	Designing for AI and Machine Learning	Designing AI Experiences	https://www.youtube.com/watch?v=AAJ2vQXm5HQ	summarized-from-list	
+K564	D	Designing for AI and Machine Learning	Amazing New UX/UI Design Tools + AI Tools - August 2022	https://www.youtube.com/watch?v=0uvu3TCyZN4	summarized-from-list	
+K565	D	User Research and Analysis	Starter Questions for User Research	https://projects.iq.harvard.edu/files/harvarduxgroup/files/ux-research-guide-sample-questions-for-user-interviews.pdf	blocked	L107
+K566	D	User Research and Analysis	UX Strategy: How to Devise Innovative Digital Products that People Want	https://jaimelevy.com/ux-strategy-book/	read	L123,L194
+K567	D	User Research and Analysis	UX Strategy: How to Devise Innovative Digital Products that People Want	(unofficial mirror, link withheld)	blocked	
+K568	D	User Research and Analysis	Designing Search: UX Strategies for eCommerce Success	https://www.wiley.com/en-ae/Designing+Search%3A+UX+Strategies+for+eCommerce+Success-p-9781118109953	summarized-from-list	L162
+K569	D	User Research and Analysis	Designing Search: UX Strategies for eCommerce Success	(unofficial mirror, link withheld)	blocked	
+K570	D	User Research and Analysis	Lean UX: Designing Great Products with Agile Teams	https://leanuxbook.com/	summarized-from-list	L009,L125
+K571	D	User Research and Analysis	Lean UX: Designing Great Products with Agile Teams	(unofficial mirror, link withheld)	blocked	
+K572	D	User Research and Analysis	How to nail your UX research strategy	https://maze.co/guides/ux-research/ux-research-strategy/	read	L101
+K573	D	User Research and Analysis	How to Conduct User Experience Research Like a Professional	https://careerfoundry.com/en/blog/ux-design/how-to-conduct-user-experience-research-like-a-professional/	read	L104,L124
+K574	D	User Research and Analysis	The Ultimate Guide to UX Research Strategy	https://www.userinterviews.com/blog/the-ultimate-guide-to-ux-research-strategy	read	L101
+K575	D	User Research and Analysis	How To Do A UX Competitor Analysis: A Step By Step Guide	https://usabilitygeek.com/how-to-do-ux-competitor-analysis/	read	L123
+K576	D	User Research and Analysis	UX analysis: best methods and key tools	https://contentsquare.com/guides/ux/analysis/	read	L009,L104,L133
+K577	D	User Research and Analysis	Strategic & Reactionary User Research	https://www.youtube.com/watch?v=Kj16KEqHsy4	summarized-from-list	L101
+K578	D	User Research and Analysis	What's UX Strategy? And Why You Should Have It In Place?	https://www.youtube.com/watch?v=iTYulrROJP8	summarized-from-list	L194
+K579	D	User Research and Analysis	How to create a UX Research Report to free template included!	https://www.youtube.com/watch?v=esg5iUALAJM	summarized-from-list	
+K580	D	Information Architecture and Content Strategy	Content Strategy for the Web	https://www.peachpit.com/store/content-strategy-for-the-web-9780132883238	summarized-from-list	L163
+K581	D	Information Architecture and Content Strategy	Content Strategy for the Web	(unofficial mirror, link withheld)	blocked	
+K582	D	Information Architecture and Content Strategy	Content Strategy at Work. Real-world Stories to Strengthen Every Interactive Project	https://shop.elsevier.com/books/content-strategy-at-work/bloomstein/978-0-12-391922-9	summarized-from-list	L163
+K583	D	Information Architecture and Content Strategy	Content Strategy at Work. Real-world Stories to Strengthen Every Interactive Project	(unofficial mirror, link withheld)	blocked	
+K584	D	Information Architecture and Content Strategy	Content 101: Information Architecture	https://www.bynder.com/en/blog/content-101-information-architecture/	blocked	L161
+K585	D	Information Architecture and Content Strategy	What is Content Strategy in UX?	https://technicalwriterhq.com/content/content-strategy/content-strategy-in-ux/	read	L163
+K586	D	Information Architecture and Content Strategy	The Comprehensive Guide to Information Architecture	https://www.toptal.com/designers/ia/guide-to-information-architecture	read	L161
+K587	D	Information Architecture and Content Strategy	Full Workshop: Content Strategy & Information Architecture	https://www.youtube.com/watch?v=j0y8YBhDjIA	summarized-from-list	L161,L163
+K588	D	Information Architecture and Content Strategy	Plan Before You Build: Information Architecture & Content Strategy	https://www.youtube.com/watch?v=OPHfDVWyuZU	summarized-from-list	L163
+K589	D	Information Architecture and Content Strategy	Case Study: The Role of Information Architecture in Adaptive Content Strategy	https://www.youtube.com/watch?v=6yVDY3bGxz8	summarized-from-list	L163
+K590	D	Design Sprints	Design Sprint: A Practical Guidebook for Creating Great Digital Products	https://books.google.com/books/about/Design_Sprint.html?id=mCKsAQAACAAJ	summarized-from-list	L195
+K591	D	Design Sprints	Design Sprint: A Practical Guidebook for Creating Great Digital Products	(unofficial mirror, link withheld)	blocked	
+K592	D	Design Sprints	Sprint: How to Solve Big Problems and Test New Ideas in Just Five Days	https://www.character.vc/sprint	summarized-from-list	L195
+K593	D	Design Sprints	Sprint: How to Solve Big Problems and Test New Ideas in Just Five Days	(unofficial mirror, link withheld)	blocked	
+K594	D	Design Sprints	UX for Lean Startups: Faster, Smarter User Experience Research and Design	https://www.goodreads.com/book/show/16128986-ux-for-lean-startups	summarized-from-list	L125
+K595	D	Design Sprints	UX for Lean Startups: Faster, Smarter User Experience Research and Design	(unofficial mirror, link withheld)	blocked	
+K596	D	Design Sprints	What's a Design Sprint and why is it important?	https://uxplanet.org/whats-a-design-sprint-and-why-is-it-important-f7b826651e09	blocked	L195
+K597	D	Design Sprints	Design Sprints	https://ixdf.org/literature/topics/design-sprints	read	L195
+K598	D	Design Sprints	What Are Design Sprints?	https://careerfoundry.com/en/blog/ux-design/what-are-design-sprints/	read	L195
+K599	D	Design Sprints	I ran a one-person Design Sprint to create my UX/UI design portfolio	https://sprintstories.com/i-ran-a-one-person-google-design-sprint-to-create-my-ux-ui-design-portfolio-4661c3e97858	blocked	L107,L312
+K600	D	Design Sprints	How to Conduct an Effective Design Sprint	https://www.toptal.com/designers/product-design/effective-design-sprint	read	L195
+K601	D	Design Sprints	The UX Sprint	https://boanastudio.com/blog/ux-design-sprint-digital-products	read	L195
+K602	D	Design Sprints	UX vs Design Thinking vs Design Sprint	https://www.youtube.com/watch?v=Kma42sfOZds	summarized-from-list	L195
+K603	D	Design Sprints	An Introduction To Design Thinking & Design Sprints	https://www.youtube.com/watch?v=9lljOVfOi6o	summarized-from-list	L195
+K604	D	Design Sprints	What is a Design Sprint?	https://www.youtube.com/watch?v=xVvVaIWTuck	summarized-from-list	L195
+K605	D	Design Sprints	Design Sprint 2.0: Every Excercise	https://www.youtube.com/playlist?list=PLxk9zj3EDi0X5CgoFckoheIFAx-uT2i7j	read	L195
+K606	D	Building Projects for your UX/UI Design Portfolio	Burn Your Portfolio	https://michaeljanda.com/burnyourportfolio/	read	L310
+K607	D	Building Projects for your UX/UI Design Portfolio	Burn Your Portfolio	(unofficial mirror, link withheld)	blocked	
+K608	D	Building Projects for your UX/UI Design Portfolio	Design Matters: Portfolios 01: An Essential Primer for Today's Competitive Market	https://books.google.com/books/about/Design_Matters.html?id=AEdMzQEACAAJ	summarized-from-list	
+K609	D	Building Projects for your UX/UI Design Portfolio	Design Matters: Portfolios 01: An Essential Primer for Today's Competitive Market	(unofficial mirror, link withheld)	blocked	
+K610	D	Building Projects for your UX/UI Design Portfolio	Stand Out: Design a personal brand. Build a killer portfolio. Find a great design job.	https://www.peachpit.com/store/stand-out-design-a-personal-brand.-build-a-killer-portfolio-9780134134086	summarized-from-list	L299
+K611	D	Building Projects for your UX/UI Design Portfolio	Stand Out: Design a personal brand. Build a killer portfolio. Find a great design job.	(unofficial mirror, link withheld)	blocked	
+K612	D	Building Projects for your UX/UI Design Portfolio	The Squiggly Career: Ditch the ladder, discover opportunity, design your career: The five skills you need to succeed in work today	https://www.penguin.co.uk/books/312993/the-squiggly-career-by-ellis-helen-tupper-and-sarah/9780241385845	blocked	
+K613	D	Building Projects for your UX/UI Design Portfolio	The Squiggly Career: Ditch the ladder, discover opportunity, design your career: The five skills you need to succeed in work today	(unofficial mirror, link withheld)	blocked	
+K614	D	Building Projects for your UX/UI Design Portfolio	Tips For Your First Great UX Portfolio	https://careerfoundry.com/en/tutorials/ux-design-for-beginners/tips-for-your-first-great-ux-portfolio/	blocked	
+K615	D	Building Projects for your UX/UI Design Portfolio	The Best UX Designer Portfolios to Inspiring Case Studies and Examples	https://www.toptal.com/designers/ux/ux-designer-portfolios	read	L300,L302,L303,L305,L308,L309,L314,L316,L320
+K616	D	Building Projects for your UX/UI Design Portfolio	How To Build a UI Portfolio [2023 Career Guide]	https://www.springboard.com/blog/design/ui-portfolio/	blocked	L314
+K617	D	Building Projects for your UX/UI Design Portfolio	110+ Essential User Experience Portfolios for Inspiration	https://uxplanet.org/110-curated-ux-portfolios-for-inspiration-492e6156ed2b	blocked	
+K618	D	Building Projects for your UX/UI Design Portfolio	How to Create Your UX/UI Portfolio (Without Much Experience)	https://www.learnui.design/blog/how-create-ux-ui-portfolio-without-much-experience.html	read	L302,L303,L304,L312,L318
+K619	D	Building Projects for your UX/UI Design Portfolio	My First UX Design Portfolio - Advice for Beginners	https://www.youtube.com/watch?v=NGiQCBsVayI	summarized-from-list	L302
+K620	D	Building Projects for your UX/UI Design Portfolio	How to prepare your design portfolio / Design Tutorial	https://www.youtube.com/watch?v=emSv9TTHZVY	summarized-from-list	L301
+K621	D	Building Projects for your UX/UI Design Portfolio	How to Build a UX Design Portfolio Website with Notion for FREE [Step-by-Step Tutorial]	https://www.youtube.com/watch?v=t5OYI-IEkgU	summarized-from-list	
+K622	D	Building Projects for your UX/UI Design Portfolio	Notion	https://www.notion.com/	blocked	
+K623	D	Building Projects for your UX/UI Design Portfolio	Dribbble	https://dribbble.com/	blocked	L322
+K624	D	Building Projects for your UX/UI Design Portfolio	Behance	https://www.behance.net/	blocked	
+K625	D	Building Projects for your UX/UI Design Portfolio	Adobe Portfolio	https://www.adobe.com/products/portfolio.html	blocked	
+K626	D	Building Projects for your UX/UI Design Portfolio	Rama Krushna	https://app.notion.com/p/Hey-I-m-Rama-Krushna-53ebad1b8bb04bd491108cac9c293be9	blocked	
+K627	D	Building Projects for your UX/UI Design Portfolio	Cofolios - UX portfolios of interns at FAANG	https://www.cofolios.com/	read	L311
+K628	D	Building Projects for your UX/UI Design Portfolio	Lisa Fisher	https://www.lisasuefischer.com/	read	L303
+K629	D	Building Projects for your UX/UI Design Portfolio	Sasha	https://saschas.ai/	read	L299,L301
+K630	D	Building Projects for your UX/UI Design Portfolio	Gloria Lo	https://www.glorialo.design/	read	L299
+K631	D	Building Projects for your UX/UI Design Portfolio	Moritz Oesterlau	https://www.moritzoesterlau.de/	read	L306,L307
+K632	D	Building Projects for your UX/UI Design Portfolio	Elizabeth Lin	https://www.elizabethylin.com/	read	L306
+K633	D	Building Projects for your UX/UI Design Portfolio	Olivia Truong	https://www.oliviatruong.design/	read	L301
+K634	D	Building Projects for your UX/UI Design Portfolio	Priyanka Gupta (Medium profile)	https://medium.com/@priyankagupta.rj	blocked	
+K635	D	Building Projects for your UX/UI Design Portfolio	Priyanka Gupta (site)	https://priyanka.io/	read	L299,L301,L304
+K636	D	Building Projects for your UX/UI Design Portfolio	Lola Jiang	https://lolajiang.com/index.html	read	L299,L301,L314
+K637	D	Building Projects for your UX/UI Design Portfolio	Druids	https://dribbble.com/druids01	read	L311,L322
+K638	D	Building Projects for your UX/UI Design Portfolio	Daniel Autry	https://danielautry.com/#portfolio	read	L260
+K639	D	Building Projects for your UX/UI Design Portfolio	Sara Soueidan (SVG demo)	https://svg-animations.surge.sh/	read	
+K640	D	Building Projects for your UX/UI Design Portfolio	Sara Soueidan (site)	https://www.sarasoueidan.com/	read	L299
+K641	D	Building Projects for your UX/UI Design Portfolio	Vera Chen	https://www.verachen.me/	read	L306
+K642	D	Building Projects for your UX/UI Design Portfolio	Daniel Abayomi	https://pixeldahn.com/	read	L260
+K643	D	Building Projects for your UX/UI Design Portfolio	Jan Mraz	https://janmraz.com/	read	L311
+K644	D	Building Projects for your UX/UI Design Portfolio	Michael Ajah	https://dribbble.com/naijatechguy	read	L311,L322
+K645	D	Building Projects for your UX/UI Design Portfolio	Zara Drei	https://zaradrei.com/	read	L299
+K646	D	Case Studies and Presentations	Understanding Your Users, Second Edition: A Practical Guide to User Research Methods	https://shop.elsevier.com/books/understanding-your-users/baxter/978-0-12-800232-2	summarized-from-list	L107
+K647	D	Case Studies and Presentations	Understanding Your Users, Second Edition: A Practical Guide to User Research Methods	(unofficial mirror, link withheld)	blocked	
+K648	D	Case Studies and Presentations	A UI Design Case Study and a Prototype of a Travel Search Engine Project Report	(unofficial mirror, link withheld)	blocked	L323
+K649	D	Case Studies and Presentations	What are UX Case Studies?	https://ixdf.org/literature/topics/ux-case-studies	read	L314,L317
+K650	D	Case Studies and Presentations	How to write a UX case study	https://uxdesign.cc/how-to-write-a-case-study-1b1b5f5e3e2c	blocked	L317
+K651	D	Case Studies and Presentations	8 step guide to write an amazing UX Case study	https://www.linkedin.com/pulse/8-step-guide-write-amazing-ux-case-study-reetika-gupta-1c/	read	L314,L316,L321
+K652	D	Case Studies and Presentations	UX Portfolio Case Study template (plus examples from successful hires)	https://uxplanet.org/ux-portfolio-case-study-template-plus-examples-from-successful-hires-86d5b0faa2d6	blocked	L323
+K653	D	Case Studies and Presentations	How to Craft an Outstanding Case Study for Your UX Portfolio	https://careerfoundry.com/en/blog/ux-design/ux-case-study/	read	L314,L315,L316,L317,L318
+K654	D	Case Studies and Presentations	How To Write a UX Case Study in 5 Steps	https://uxcel.com/blog/how-to-write-a-ux-case-study-in-5-steps	read	L187,L314
+K655	D	Case Studies and Presentations	How to Write a UX Case Study: Template and Examples	https://xd.adobe.com/ideas/perspectives/leadership-insights/ux-case-study-template/	read	L300,L302,L308,L314,L318,L320
+K656	D	Case Studies and Presentations	How to build your own case study	https://uxdesign.cc/case-study-template-8832941a9d1b	blocked	L316
+K657	D	Case Studies and Presentations	How to Present a UX Case Study in a Job Interview	https://www.youtube.com/watch?v=ZVZfWfqmRBY	summarized-from-list	L193,L322
+K658	D	Case Studies and Presentations	How to Write & Structure Your UX Case Study - Website Presentation Design	https://www.youtube.com/watch?v=hx7XyA8RNIw	summarized-from-list	L322,L323
+K659	D	Case Studies and Presentations	UX case study that got me hired - A walkthrough	https://www.youtube.com/watch?v=ptnYGRPlzN8	summarized-from-list	L317
+K660	D	Case Studies and Presentations	How to Outline & Write your UX Case Study	https://www.youtube.com/watch?v=M5HC58tTC2U	summarized-from-list	L323
+K661	D	Case Studies and Presentations	UX Portfolio - How to Create a UX Case Study	https://www.youtube.com/watch?v=mWnfc0Lm_F4	summarized-from-list	L323
+K662	D	Case Studies and Presentations	Writing the Perfect UI/UX Case Study!	https://www.youtube.com/watch?v=d8FtsgQyGXw	summarized-from-list	L316
+K663	D	Case Studies and Presentations	Health Wise Case Study	(unofficial mirror, link withheld)	blocked	L317
+K664	D	Case Studies and Presentations	Google Mentor Case Study	https://www.behance.net/gallery/90958309/Google-Mentor-Design-Case-Study	blocked	L320
+K665	D	Case Studies and Presentations	Money transfer - A Better Way to Handle Your Money	https://www.behance.net/gallery/95491533/Money-transfer-A-Better-Way-to-Handle-Your-Money	blocked	L320
+K666	D	Case Studies and Presentations	Medico - Case Study	https://www.behance.net/gallery/91410737/Medico-Online-Medical-Services-Case-Study	blocked	L320
+K667	D	Case Studies and Presentations	Case study: Designing an in-app messaging feature	https://medium.com/design-bootcamp/a-ux-case-study-on-carbon-an-in-app-messaging-feature-7b5c819982aa	blocked	
+K668	D	Case Studies and Presentations	Case Studies Curated List	https://www.bestfolios.com/casestudy	read	L260
+K669	D	Case Studies and Presentations	Behance: Case Study List	https://www.behance.net/search/projects/?sort=appreciations&time=week&search=case+study	blocked	
+K670	D	Case Studies and Presentations	Figma case study template (Project Tasks #4, task one)	https://www.figma.com/community/file/1067428863353945820	blocked	
+K671	D	Case Studies and Presentations	Figma Case Study Template (Project Tasks #4, task two)	https://www.figma.com/community/file/1015129345947090766/Case-Study-Template	read	L314,L323
+K672	D	Case Studies and Presentations	Figma Case Study Template, Creative Ferry (Project Tasks #4)	https://www.figma.com/community/file/949395060452790372/Case-Study-Template---Creative-Ferry	read	L323
+K673	D	Case Studies and Presentations	Figma Behance Presentation Template (Project Tasks #4)	https://www.figma.com/community/file/1079111124242711698/Behance-Presentation-Template-UI%2FUX-Case-study	blocked	
+K674	D	Case Studies and Presentations	Design System Checklist (Project Tasks #5; linked twice, lines 2090 and 2119)	https://www.designsystemchecklist.com/	read	L273
+K675	D	Case Studies and Presentations	Design System Checklist (Project Tasks #5; linked twice, lines 2090 and 2119)	https://www.designsystemchecklist.com/	read	
+K676	D	Job Search and Interviewing	Solving Product Design Exercises: Questions & Answers	https://productdesigninterview.com/solving-product-design-exercises	summarized-from-list	L190,L193
+K677	D	Job Search and Interviewing	Solving Product Design Exercises: Questions & Answers	(unofficial mirror, link withheld)	blocked	
+K678	D	Job Search and Interviewing	Get Into UX: A Foolproof Guide to Getting Your First User Experience Job	https://www.goodreads.com/en/book/show/59024821	summarized-from-list	L193
+K679	D	Job Search and Interviewing	Get Into UX: A Foolproof Guide to Getting Your First User Experience Job	(unofficial mirror, link withheld)	blocked	
+K680	D	Job Search and Interviewing	21 Essential UX Interview Questions & How to Answer Them	https://dribbble.com/resources/career/ux-interview-questions	read	L310,L311,L317,L319,L322
+K681	D	Job Search and Interviewing	The 4 Types of UX Interview Questions to Master	https://uxbeginner.com/the-4-types-of-ux-interview-questions-to-master/	read	L190
+K682	D	Job Search and Interviewing	46 Interview Questions for User Experience Researchers at Google, Amazon, Microsoft and Facebook	https://medium.com/@eleonorazucconi/46-interview-questions-for-user-experience-researchers-at-google-amazon-microsoft-and-facebook-c582827267b9	blocked	
+K683	D	Job Search and Interviewing	11 UX Design Interview Questions You Should Be Able to Answer	https://careerfoundry.com/en/blog/ux-design/make-sure-you-can-answer-these-11-ux-design-interview-questions/	read	L317
+K684	D	Job Search and Interviewing	Cracking the UX Design Interview	https://medium.com/interactive-mind/cracking-the-ux-design-interview-3ea6407093f5	blocked	
+K685	D	Job Search and Interviewing	12 UX Designer Interview Questions and Answers	https://www.coursera.org/articles/ux-designer-interview-questions-and-answers	read	L190,L193,L312
+K686	D	Job Search and Interviewing	UX Design Job Interview Tips for Global Candidates: Landing Your Dream Role in the US	https://www.toptal.com/designers/ux/ux-design-job-interview-tips	read	L299,L308,L314,L319
+K687	D	Job Search and Interviewing	The Essential UX Interview Questions (And How To Answer Them!)	https://www.youtube.com/watch?v=vu3xcQm7cEo	summarized-from-list	
+K688	D	Job Search and Interviewing	UX Design: How to ACE Your Next UX Job Interview	https://www.youtube.com/watch?v=I00LwSMABtk	summarized-from-list	
+K689	D	Job Search and Interviewing	10 CRUCIAL Questions You MUST Ask Your Interviewer (as a UX/UI Designer)	https://www.youtube.com/watch?v=ygMvS7RLUGs	summarized-from-list	
+K690	D	Job Search and Interviewing	UI/UX Design Job Interview Questions and Answers - Ace Your Next UX Design Interview!	https://www.youtube.com/watch?v=2OzTi0iUMlE	summarized-from-list	
+K691	D	Job Search and Interviewing	Microsoft Interview Questions and Process - UIUX Design - TIPS to crack Microsoft Interview rounds	https://www.youtube.com/watch?v=feP6wiDor5U	summarized-from-list	
+K692	D	Job Search and Interviewing	Bestfolios resumes (resume examples box)	https://www.bestfolios.com/resumes	read	L260,L313
+K693	D	Job Search and Interviewing	UI/UX Cover Letter Template	(unofficial mirror, link withheld)	blocked	L313
+K694	D	Job Search and Interviewing	UX Jobs	https://www.uxjobsboard.com/	blocked	
+K695	D	Job Search and Interviewing	UI/UX Jobs Board	https://uiuxjobsboard.com/	blocked	
+K696	D	Job Search and Interviewing	Dribbble Jobs	https://dribbble.com/jobs	blocked	
+K697	D	Job Search and Interviewing	Behance Jobs	https://www.behance.net/joblist	blocked	
+K698	D	Job Search and Interviewing	LinkedIn Jobs	https://www.linkedin.com/jobs/	blocked	
+K699	D	Job Search and Interviewing	AngelList Jobs	https://wellfound.com/jobs	blocked	
+K700	D	Job Search and Interviewing	Glassdoor Jobs	https://www.glassdoor.com/index.htm	blocked	
+K701	D	Job Search and Interviewing	Indeed Jobs	https://www.indeed.com/	blocked	
+K702	D	Job Search and Interviewing	YC Jobs	https://www.ycombinator.com/jobs/	blocked	
+K703	D	Job Search and Interviewing	Remotive Jobs	https://remotive.com/	blocked	
+K704	D	Job Search and Interviewing	Remote Jobs	https://remote.co/remote-jobs/	blocked	
+K705	D	Job Search and Interviewing	Facebook Jobs	https://www.facebook.com/careers/	blocked	
+K706	D	Job Search and Interviewing	Google Jobs	https://www.google.com/about/careers/applications/	blocked	
+K707	D	Job Search and Interviewing	Twitter Jobs	https://careers.twitter.com/	blocked	
+K708	D	Job Search and Interviewing	Microsoft Jobs	https://careers.microsoft.com/v2/global/en/home.html	blocked	
+K709	D	Freelancing and Entrepreneurship	Upwork	https://www.upwork.com/	blocked	
+K710	D	Freelancing and Entrepreneurship	Fiverr	https://www.fiverr.com/	blocked	
+K711	D	Freelancing and Entrepreneurship	Freelancer	https://www.freelancer.com/	blocked	
+K712	D	Freelancing and Entrepreneurship	99Designs	https://99designs.com/	blocked	
+K713	D	Freelancing and Entrepreneurship	DesignCrowd	https://www.designcrowd.com/	blocked	
+K714	D	Freelancing and Entrepreneurship	CrowdSpring	https://www.crowdspring.com/	blocked	
+K715	D	Freelancing and Entrepreneurship	Designhill	https://www.designhill.com/	blocked	
+K716	D	Freelancing and Entrepreneurship	DesignContest	https://www.designcontest.com/	blocked	
+K717	D	Freelancing and Entrepreneurship	PeoplePerHour	https://www.peopleperhour.com/	blocked	
+K718	D	Freelancing and Entrepreneurship	Toptal	https://www.toptal.com/	blocked	
+K719	D	Professional Development and Networking	Jupiter Design Community	https://chat.whatsapp.com/Ku4SUjSmc4zIAg5XzffEcs	blocked	
+K720	D	Professional Development and Networking	UX Design Hangout	https://designerhangout.co/?mwr=3a1f1519/	blocked	
+K721	D	Professional Development and Networking	Figma Africa	https://foflagos.slack.com/	blocked	
+K722	D	Professional Development and Networking	UX Guide	https://ux.guide/	blocked	
+K723	D	Professional Development and Networking	UX Her	https://uxher.com/	blocked	
+K724	D	Professional Development and Networking	Designer Slack Communities	https://www.designerslack.community/	blocked	
+K725	D	Professional Development and Networking	Jared Spool	https://twitter.com/jmspool	blocked	
+K726	D	Professional Development and Networking	Luke Wroblewski	https://twitter.com/lukew	blocked	
+K727	D	Professional Development and Networking	Chris Do	https://twitter.com/thechrisdo	blocked	
+K728	D	Professional Development and Networking	Zander Whitehurst	https://twitter.com/zander_supafast	blocked	
+K729	D	Professional Development and Networking	Grace Ling	https://twitter.com/graceleaf_	blocked	
+K730	D	Professional Development and Networking	Timothy Achumba	https://twitter.com/timothyachumba	blocked	
+K731	D	Professional Development and Networking	Daniel Abayomi	https://twitter.com/pixelDahn	blocked	
+K732	D	Professional Development and Networking	Oyindamola Ajibike	https://twitter.com/MystiqueDammy	blocked	
+K733	D	Professional Development and Networking	Jan Mrazek	https://twitter.com/janm_uiux	blocked	
+K734	D	Professional Development and Networking	Hammed Taiwo	https://twitter.com/rapzzyofficial	blocked	
+K735	D	Professional Development and Networking	Victor Onazi	https://twitter.com/VictorOnazi_	blocked	
+K736	D	Professional Development and Networking	Tunbosun Tobilola	https://twitter.com/Futureio	blocked	
+K737	D	Professional Development and Networking	Druids	https://twitter.com/druids01	blocked	
+K738	D	Professional Development and Networking	Josiah Endurance	https://twitter.com/hendurhance	blocked	
+K739	D	Professional Development and Networking	UX Collective	https://twitter.com/uxdesigncc	blocked	
+K740	D	Professional Development and Networking	UX Planet	https://twitter.com/uxplanet	blocked	
+K741	D	Professional Development and Networking	[Buy me a coffee](https://buymeacoffee.com/hendurhance)	https://buymeacoffee.com/hendurhance	blocked	
+K742	D	Professional Development and Networking	[GitHub Sponsors](https://github.com/sponsors/hendurhance)	https://github.com/sponsors/hendurhance	blocked	

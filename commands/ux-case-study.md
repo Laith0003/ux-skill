@@ -40,6 +40,8 @@ Read `references/output/case-study-style.md` before writing. Internalize: pure m
 
 ### 3. Build the seven sections
 
+For a designer's portfolio piece, use the process preset and portfolio mode from `references/output/case-study-style.md` instead: a summary first (role, team, duration, outcome), then problem, research, users and journey, flows and wireframes, visual design, testing, outcome and reflection, with the work shown in its real colors. The seven sections below are the default for a product write-up.
+
 Use these exact section codes and headers:
 
 - **(A) About** — what is this project, in two sentences. Plain, declarative.

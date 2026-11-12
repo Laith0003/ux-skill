@@ -11,18 +11,16 @@ Four reports cover every link in a large public curated list of UX and UI learni
 
 Method: pages were read where they loaded; videos, books and pages that refused automated fetches were summarized from the list's own descriptions and marked so. Paywalls were not bypassed and links to unofficial copies of paid books were not opened.
 
-## Still to do
+## Merged set
 
-The four reports are raw. The planned merge into one deduplicated set (lessons.md, checks.md, guidance.md, corrections.md, ledger.tsv) was not run. PLAN-5.0.md Phases 3, 5 and 6 expect it. Do that merge first, deduplicating against data/anti-patterns.json, PLAN-4.1-inventory.md and research/library/, then apply the corrections a primary source supports.
+The four raw reports are merged into one deduplicated set, checked against data/anti-patterns.json, the render and linter rule ids in engine/, PLAN-4.1-inventory.md and research/library/.
 
-Corrections the reports already found against current ux-skill text, each to verify before applying:
+| File | What it holds | Count |
+|---|---|---|
+| ledger.tsv | One row per link: id (K001 to K742), part, list section, title, url, read status, lessons that use it | 742 rows: read 199, summarized-from-list 277, blocked 266; 624 unique urls, 108 withheld mirror links, 10 repeat occurrences |
+| lessons.md | Lessons merged by topic across the parts, paraphrased, with status against this branch and engine location | 323 lessons from 363 raw: agrees 108, partial 22, missing-guide 112, missing-check 74, contradicts 7 |
+| checks.md | Proposed checks ranked by impact on a working, un-generic page | 85 rows: new 66, tune existing 8, drop as duplicate 11 |
+| guidance.md | Missing guidance grouped by target file | 76 items across 34 files, 6 of them new |
+| corrections.md | Every place the reports say ux-skill text is wrong, verified on this branch | 14 rows: open 0, already-fixed 14 |
 
-- references/laws/laws-of-ux.md uses Miller's law to cap navigation at five to seven items; the law's own summary warns against that use. Move the cap under Hick's law and scanning cost.
-- commands/ux-research.md sets a quantitative sample floor of 30; NN/g recommends 20, and the margin of error should size it.
-- Card sorting at 15 to 25 people fits only a qualitative sort; a quantitative sort needs 30 to 50. Tree testing and pilot sessions are missing.
-- data/ux-guidelines.json credits the 60-30-10 rule to Itten (1961); the rule comes from interior decorating.
-- The 30 to 50 percent translation expansion understates short strings, which grow to 200 to 300 percent (W3C, citing IBM).
-- Color blindness affects 8 percent of men, not 8 percent of people.
-- references/foundations/color.md gives the modal scrim as 60 to 80 percent alpha in tokens and 40 to 60 percent in its checklist.
-- ai-interfaces.md allows following the bottom of a streaming answer; NN/g says keep the start of a new answer in view.
-- case-study-style.md turns screenshots grayscale and bans citing standards, which suits documents but hides the work in a designer's portfolio.
+Ledger read status: read covers pages read and tool pages read for what they do; summarized-from-list covers videos, books and tool pages noted from the list's description or metadata; blocked covers pages that refused the fetcher, JavaScript-only pages, dead links and the unofficial mirrors of paid books, which were never opened and whose links stay withheld. Primary sources the reports checked outside the list (standards, research pages) are named in words in corrections.md because the ledger holds only the list's own links.

@@ -46,7 +46,8 @@ A research question that fits two categories is too broad. Split it.
 | Solution validation | Concept test (n=5-8) + structured interview | Fake door (n=∞ via traffic) |
 | Usability testing | Moderated task-based test (n=5-8) | Unmoderated remote (n=15+) |
 | Preference / desirability | Within-subjects preference test (n=8-12) | A/B test (n=large, traffic-dependent) |
-| Segmentation | Survey (n=100+) | Card sort + cluster analysis (n=15-25) |
+| Segmentation | Survey (n=100+) | Card sort: 15 or more people for a qualitative sort, 30 to 50 for cluster analysis; 30 to 50 cards |
+| Navigation and labels | Open card sort to find the groups (ask for group names after grouping; no word repeated across cards) | Tree test of the resulting hierarchy: success, directness, time and first choice; tasks never reuse a label word |
 
 Smoke tests and fake doors are valid for binary problem-existence checks before deeper qual work.
 
